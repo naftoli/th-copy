@@ -17,6 +17,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <html>
   <head>
     <meta charset="utf8" />
+    <meta http-equiv="refresh" content="60">
     <style>
       tr, th, td {
         font-size: 14px;
@@ -48,9 +49,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           $row = mysql_fetch_assoc( $result );
           $numberPeople = $row['number'];
 
-          $sql2 = "select count(*) as number from mashpia_charidy.donations where year = 5779 and donor_id in (
-                  select donor_id from charidy_donors_callers where year = 5779 and charidy_caller_id = " . $caller['charidy_caller_id'] . ") 
-                  group by donor_id";
+          $sql2 = "select count(distinct donor_id) as number from mashpia_charidy.donations where year = 5779 and donor_id in (
+                  select donor_id from charidy_donors_callers where year = 5779 and charidy_caller_id = " . $caller['charidy_caller_id'] . ")";
           $result = mysql_query( $sql2 );
           $row = mysql_fetch_assoc( $result );
           $numberGave = $row['number'];
