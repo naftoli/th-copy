@@ -2,9 +2,21 @@
 ini_set('display_errors',1);
 require_once 'classes/charidyEmails.php';
 
+$testEmails = [
+  'shimmy@tzivoshashem.org', 
+  'cth@tzivoshashem.org', 
+  'mushka@tzivoshashem.org', 
+  'naftoli@tzivoshashem.org', 
+  'pessi@tzivoshashem.org', 
+  'chidon@tzivoshashem.org',
+  'hakhel@tzivoshashem.org',
+  'design@tzivoshashem.org',
+  'chayazirkind@gmail.com'
+];
+
 $e = new charidyEmails();
-$e->setEmailNum( 2 );
-$e->setRecipients();
+$e->setEmailNum( 3 );
+$e->setRecipients( $testEmails );
 $e->sendEmails();
 
 $errors = $e->getErrors();
