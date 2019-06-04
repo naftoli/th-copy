@@ -106,6 +106,7 @@ class CharidyEmails {
       case 5:
       case 7:
       case 9:
+      case 11:
         // all donors that haven't donated yet this yr
         $sql = "
           SELECT 
@@ -124,6 +125,7 @@ class CharidyEmails {
       case 6:
       case 8:
       case 10:
+      case 12:
         // all donors that have already donated this yr
         $sql = "
           SELECT 
@@ -655,6 +657,76 @@ class CharidyEmails {
         Your gift will enable us to continue growing and innovating our programs, transforming the lives of thousands of children across the globe.
         <br /><br />
         There\'s still time to get your friends on board! <a href="http://charidy.com/th>www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 11:
+        $subject = "We won! Bonus round begins now!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        Victory! With your support and the generosity of our amazing campaign sponsors, we\'ve succeeded in raising $1M for Tzivos Hashem! 
+        <br /><br />
+        If you haven\'t given yet, don\'t worry! There’s still time to transform the world with Tzivos Hashem. Entering the bonus round, you can help us continue to grow even more!
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 12:
+        $subject = "We won! Bonus round begins now!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        Victory! With your support and the generosity of our amazing campaign sponsors, we\'ve succeeded in raising $1M for Tzivos Hashem! 
+        <br /><br />
+        But wait! There\'s still time to get others to help transform the world with Tzivos Hashem. Entering the bonus round, you can help us continue to grow even more!
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
         <br /><br />    
         Spread the word!<br /> 
         web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
