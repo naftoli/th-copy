@@ -17,6 +17,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <html>
   <head>
     <meta charset="utf8" />
+    <meta http-equiv="refresh" content="60">
     <style>
       tr, th, td {
         font-size: 14px;
