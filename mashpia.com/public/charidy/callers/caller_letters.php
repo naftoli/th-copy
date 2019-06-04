@@ -62,7 +62,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 Caller: <?= $caller->fullName(); ?>
             </div>
             <h1 class="donor-name"><?= $donor->fullName(); ?></h1>
-            <h1 class="donor-number"><?= $donor->phone ? $donor->phoneNumber() : $donor->mashpiaPhoneNumber(); ?></h1>
+            <h1 class="donor-number"><?= $donor->phone ? $donor->phoneNumber() : $donor->mashpiaPhoneNumber(); ?> / <?= $donor->email(); ?></h1>
             <div><?= $donor->address(); ?></div>
 
             <h2 class="heading">Donor Information</h2>

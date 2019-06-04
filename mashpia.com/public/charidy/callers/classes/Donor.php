@@ -134,6 +134,10 @@ class Donor {
         return $this->address . "<br />" . $this->city . ", " . $this->state . " " . $this->zip . "<br />" . $this->country;
     }
 
+    public function email() {
+        return $this->email;
+    }
+
     /**
      * getDonated
      * 
