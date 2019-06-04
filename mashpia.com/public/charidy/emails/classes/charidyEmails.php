@@ -109,9 +109,8 @@ class CharidyEmails {
       case 6:
         // all donors that have already donated this yr
     }
-    if ( !empty( $onlyThese ) ) $sql .= " AND email IN (" . implode(',', $onlyThese) . ") ";
+    if ( !empty( $onlyThese ) ) $sql .= " AND email IN ('" . implode("','", $onlyThese) . "') ";
     $sql .= "GROUP BY email";
-    echo $sql; exit;
     $result = $this->db->query( $sql );
     if ( $result ) {
       $rows = $result->fetchAll();
