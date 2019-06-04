@@ -39,29 +39,76 @@ class CharidyEmails {
    * other emails are sent to those that have donated in the past
    */
   public function setRecipients( $onlyThese = [] ) {
-    if ( $this->emailNum == 2 ) {
-      $sql = "
-          SELECT 
-              first_name, last_name, email, MAX(amount) AS highest  
-          FROM
-              mashpia_charidy.donors
-                  JOIN
-              mashpia_charidy.donations USING (donor_id)
-          WHERE
-              email != '' 
-          GROUP BY email
-        ";
-    } else {
-      $sql = "
+    switch ( $this->emailNum ) {
+      case 2:
+        // only those that have donated in past
+        $sql = "
+            SELECT 
+                first_name, last_name, email, MAX(amount) AS highest  
+            FROM
+                mashpia_charidy.donors
+                    JOIN
+                mashpia_charidy.donations USING (donor_id)
+            WHERE
+                email != ''";
+        break;
+      case 1:
+        // all donors in database
+        $sql = "
+            SELECT 
+                first_name, last_name, email
+            FROM
+                mashpia_charidy.donors
+            WHERE
+                email != '' ";
+        break;
+      case 3:
+        // all donors except parents with registered children
+        $sql = "
           SELECT 
               first_name, last_name, email
           FROM
               mashpia_charidy.donors
           WHERE
-              email != '' ";
-      if ( !empty( $onlyThese ) ) $sql .= " AND email IN (" . implode(',', $onlyThese) . ") ";
-      $sql .= "GROUP BY email";
+              email != ''
+                  AND (parent_admin_id IS NULL
+                  OR parent_admin_id NOT IN (SELECT 
+                      admin_id
+                  FROM
+                      admin_auths aa
+                          JOIN
+                      users u ON u.user_id = aa.id
+                  WHERE
+                      aa.auth = 'user'
+                          AND u.user_registered > 0))";
+        break;
+      case 4:
+        // all parents with registered children
+        $sql = "
+          SELECT 
+              first_name, last_name, email, parent_admin_id 
+          FROM
+              mashpia_charidy.donors
+          WHERE
+              email != ''
+                  AND parent_admin_id IN (SELECT 
+                      admin_id
+                  FROM
+                      admin_auths aa
+                          JOIN
+                      users u ON u.user_id = aa.id
+                  WHERE
+                      aa.auth = 'user'
+                          AND u.user_registered > 0)";
+        break;
+      case 5:
+        // all donors that haven't donated yet this yr
+        break;
+      case 6:
+        // all donors that have already donated this yr
     }
+    if ( !empty( $onlyThese ) ) $sql .= " AND email IN (" . implode(',', $onlyThese) . ") ";
+    $sql .= "GROUP BY email";
     $result = $this->db->query( $sql );
     if ( $result ) {
       $rows = $result->fetchAll();
@@ -72,6 +119,7 @@ class CharidyEmails {
             'name'  => $row['first_name'] . ' ' . $row['last_name']
           ];
           if ( isset( $row['highest'] ) ) $info['highest'] = $row['highest'];
+          if ( isset( $row['parent_admin_id'] ) ) $info['admin_id'] = $row['parent_admin_id'];
           $this->emails[] = $info;
         }
       }
@@ -95,7 +143,7 @@ class CharidyEmails {
       $to = $email['to'];
       $name = $email['name'];
       // update message with personalized info
-      $message = str_replace('FULL_NAME', $name, $message);
+      if ( $this->emailNum != 4 ) $message = str_replace('FULL_NAME', $name, $message);
       $message = str_replace('EMAIL_ADDRESS', $to, $message);
 
       if ( isset( $email['highest'] ) ) {
@@ -133,6 +181,23 @@ class CharidyEmails {
         $message = str_replace('NEW_RANK', $next_rank, $message);
         $message = str_replace('AMOUNT', $new_amount, $message);
       }
+
+      if ( isset( $email['admin_id'] ) ) {
+        $children = [];
+        // get list of registered children
+        $sql = "select first from users u 
+                join admin_auths aa using (user_id) 
+                where u.user_registered > 0 
+                and aa.auth = 'user' 
+                and aa.admin_id = " . $email['admin_id'];
+        $result = mysql_query( $sql );
+        while ( $row = mysql_fetch_assoc( $result ) ) {
+          $children[] = $row['first'];
+        }
+        $message = str_replace('CHAYOLIM', implode("<br />", $children), $message);
+      }
+      echo $message;
+      continue;
 
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
@@ -249,7 +314,7 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, to Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
+        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
         <br /><br />
         Today, join us at <b>#THTransforms!</b><br />
         <a href="http://charidy.com/th">Donate now</a> and quadruple your contribution in Hashem\'s army and your impact on the world.
@@ -309,6 +374,59 @@ class CharidyEmails {
         ';
         break;
       case 4:
+        $subject = "Help your child win a Rebbe dollar";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear Mommy and Tatty,
+        <br /><br />
+        It’s easy. Please go to <a href="http://charidy.com/th">Charidy.com/TH</a> and make a donation in my honor. Make sure to use this email address EMAIL_ADDRESS so that my name will be entered into the raffle.
+        <br /><br />
+        Thank you for all your support for Tzivos Hashem, so that I (and my fellow soldiers) can be true chayolim of the Rebbe and all together, we can fulfill our mission of bringing Moshiach, now.
+        <br /><br />
+        Love,
+
+        ______________________
+        CHAYOLIM
+        <br /><br />
+        Rabbi Moshe Kotlarsky <br />
+        Vice Chairman, Merkos L\'inyonei Chinuch 
+        <br /><br />
+        Rabbi Yerachmiel Benjaminson <br />
+        Executive Director of Tzivos Hashem 
+        <br /><br />
+        Rabbi Sholom Ber Baumgarten <br />
+        Director of Tzivos Hashem 
+        <br /><br />
+        Rabbi Zalman Glick <br />
+        Editor-in-chief, Living Lessons 
+        <br /><br />
+        Rabbi Shimmy and Zelda Weinbaum  <br />
+        Generals of the Chayolei Tzivos Hashem Brigade  
+        <br /><br />
+        <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
         break;
     }
     return [
