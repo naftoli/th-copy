@@ -105,9 +105,31 @@ class CharidyEmails {
         break;
       case 5:
         // all donors that haven't donated yet this yr
+        $sql = "
+          SELECT 
+              first_name, last_name, email
+          FROM
+              mashpia_charidy.donors d
+          WHERE
+              email != ''
+                  AND donor_id NOT IN (SELECT 
+                      donor_id
+                  FROM
+                      mashpia_charidy.donations
+                  WHERE
+                      year = 5779)";
         break;
       case 6:
         // all donors that have already donated this yr
+        $sql = "
+          SELECT 
+              first_name, last_name, email
+          FROM
+              mashpia_charidy.donors d
+                  JOIN
+              mashpia_charidy.donations dd USING (donor_id)
+          WHERE
+              email != '' AND dd.year = 5779";
     }
     if ( !empty( $onlyThese ) ) $sql .= " AND email IN ('" . implode("','", $onlyThese) . "') ";
     $sql .= "GROUP BY email";
@@ -389,6 +411,94 @@ class CharidyEmails {
         Love,<br />
         CHAYOLIM
         <br />
+        <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 5:
+        $subject = " We’ve reached 25%";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We just passed 25%!
+        <br /><br />
+        Today, we need YOU so we can continue to provide cutting-edge educational materials and programs that engage, inspire, and unite Jewish children of all backgrounds in a united cause: to make this world a better place and bring Moshiach.
+        <br /><br />
+        Every dollar quadrupled!
+        <br /><br />
+        Every $1 is $4<br />
+        A Private\'s donation of $18 = $72<br />
+        A Sergeant\'s donation of $126 = $504<br />
+        A General\'s donation of $3,600 = $14,400
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />
+        <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 6:
+        $subject = " We’ve reached 25%";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We just passed 25%!
+        <br /><br />
+        Thanks to YOU, we can continue to provide cutting-edge educational materials and programs that engage, inspire, and unite Jewish children of all backgrounds in a united cause: to make this world a better place and bring Moshiach.
+        <br /><br />
+        But we still have a ways to go. Get your friends, coworkers, mekuravim and family to join! Every dollar quadrupled!
+        <br /><br />
+        Every $1 is $4<br />
+        A Private\'s donation of $18 = $72<br />
+        A Sergeant\'s donation of $126 = $504<br />
+        A General\'s donation of $3,600 = $14,400
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />
         <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
         <br /><br />    
         Spread the word!<br /> 

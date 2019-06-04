@@ -16,12 +16,12 @@ $testEmails = [
   'shimmyweinbaum@gmail.com'
 ];
 
-$emailNums = [3,4];
+$emailNums = [5,6];
 foreach ( $emailNums as $num ) {
   echo "Sending Email #:" . $num . "<br />";
   $e = new charidyEmails();
   $e->setEmailNum( $num );
-  $e->setRecipients();
+  $e->setRecipients( $testEmails );
   $e->sendEmails();
 
   $errors = $e->getErrors();
