@@ -195,7 +195,7 @@ class CharidyEmails {
         $result = $this->db->query( $sql );
         if ( $result ) {
           $rows = $result->fetchAll();
-          foreach ( $rows as $row ) $children[] = $row['first'];
+          foreach ( $rows as $row ) $children[] = ucwords( $row['first'] );
         }
         $message = str_replace('CHAYOLIM', implode("<br />", $children), $message);
       }
