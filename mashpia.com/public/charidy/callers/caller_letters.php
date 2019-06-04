@@ -63,6 +63,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             </div>
             <h1 class="donor-name"><?= $donor->fullName(); ?></h1>
             <h1 class="donor-number"><?= $donor->phone ? $donor->phoneNumber() : $donor->mashpiaPhoneNumber(); ?></h1>
+            <div><?= $donor->address(); ?></div>
 
             <h2 class="heading">Donor Information</h2>
             <div class="donor-info">

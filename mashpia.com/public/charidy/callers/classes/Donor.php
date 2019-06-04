@@ -130,6 +130,10 @@ class Donor {
         return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $this->mashpiaPhone). "\n";
     }
 
+    public function address() {
+        return $this->address . "<br />" . $this->city . ", " . $this->state . " " . $this->zip . "<br />" . $this->country;
+    }
+
     /**
      * getDonated
      * 
