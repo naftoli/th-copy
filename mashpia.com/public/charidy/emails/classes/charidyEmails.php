@@ -315,7 +315,7 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
+        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it\'s all or nothing!</b>
         <br /><br />
         Today, join us at <b>#THTransforms!</b><br />
         <a href="http://charidy.com/th">Donate now</a> and quadruple your contribution in Hashem\'s army and your impact on the world.
@@ -334,7 +334,7 @@ class CharidyEmails {
         A Sergeant\'s donation of $126 = $504<br />
         A General\'s donation of $3,600 = $14,400
         <br /><br />
-        Our future—the future of our children—depends on you,
+        Our future - the future of our children - depends on you,
         <br /><br />
         Rabbi Moshe Kotlarsky <br />
         Vice Chairman, Merkos L\'inyonei Chinuch 
