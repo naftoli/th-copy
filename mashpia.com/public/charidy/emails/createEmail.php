@@ -20,19 +20,37 @@ $testEmails = [
 <html>
   <head>
     <title>Send Charidy Emails</title>
+    <style>
+      * {
+        font-family: Arial;
+      }
+      body {
+        margin: 50px;
+      }
+      input[type='submit'] {
+        padding: 10px;
+      }
+      .inputs {
+        margin-left: 25px;
+      }
+    </style>
   </head>
   <body>
     <form action="createEmail.php" method="post">
       Please choose which email you would like to send out:<br /><br />
-      <input type="radio" name="email" value="50" />50% Email<br /><br />
-      <input type="radio" name="email" value="75" />75% Email<br /><br />
-      <input type="radio" name="email" value="bonus" />Bonus Round Email<br /><br />
-      <input type="radio" name="email" value="success" />Successful Campaign Email<br /><br />
-      <input type="radio" name="email" value="reschedule" />Campaign Rescheduled Email<br /><br />
+      <div class="inputs">
+        <input type="radio" name="email" value="50" />50% Email<br /><br />
+        <input type="radio" name="email" value="75" />75% Email<br /><br />
+        <input type="radio" name="email" value="bonus" />Bonus Round Email<br /><br />
+        <input type="radio" name="email" value="success" />Successful Campaign Email<br /><br />
+        <input type="radio" name="email" value="reschedule" />Campaign Rescheduled Email<br /><br />
+      </div>
 
       Please choose if you would like to send a test email (to a few select individuals), or a real actual email to everyone:<br /><br />
-      <input type="radio" name="type" value="test" /> Test Email<br /><br />
-      <input type="radio" name="type" value="real" /> Real Email<br /><br />
+      <div class="inputs">
+        <input type="radio" name="type" value="test" /> Test Email<br /><br />
+        <input type="radio" name="type" value="real" /> Real Email<br /><br />
+      </div>
 
       <input type="submit" name="submit" value="Send Email" />
     </form>
