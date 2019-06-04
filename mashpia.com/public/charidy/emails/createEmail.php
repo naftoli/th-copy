@@ -21,7 +21,7 @@ foreach ( $emailNums as $num ) {
   echo "Sending Email #:" . $num . "<br />";
   $e = new charidyEmails();
   $e->setEmailNum( $num );
-  $e->setRecipients( $testEmails );
+  $e->setRecipients();
   $e->sendEmails();
 
   $errors = $e->getErrors();
