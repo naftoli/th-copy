@@ -188,7 +188,7 @@ class CharidyEmails {
         $children = [];
         // get list of registered children
         $sql = "select first from users u 
-                join admin_auths aa using (user_id) 
+                join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
                 and aa.auth = 'user' 
                 and aa.admin_id = " . $email['admin_id'];
