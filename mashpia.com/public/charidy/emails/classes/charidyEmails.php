@@ -603,6 +603,80 @@ class CharidyEmails {
         </html>
         ';
         break;
+      case 9:
+        $subject = "Almost there! 75% complete!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        All teams reporting in - we\'re at 75%!
+        <br /><br />
+        Quadruple your impact. Invest in our troops.
+        <br /><br />
+        Your gift will enable us to continue growing and innovating our programs, transforming the lives of thousands of children across the globe.
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 10:
+        $subject = "Almost there! 75% complete!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        All teams reporting in - we\'re at 75%!
+        <br /><br />
+        Thanks to you, we are almost there!
+        <br /><br />
+        Your gift will enable us to continue growing and innovating our programs, transforming the lives of thousands of children across the globe.
+        <br /><br />
+        There\'s still time to get your friends on board! <a href="http://charidy.com/th>www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
     }
     return [
       'subject' =>  $subject, 
