@@ -1,4 +1,6 @@
 <?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 class CharidyEmails {
@@ -107,7 +109,7 @@ class CharidyEmails {
       case 6:
         // all donors that have already donated this yr
     }
-    if ( !empty( $onlyThese ) ) $sql .= " AND email IN (" . implode(',', $onlyThese) . ") ";
+    if ( !empty( $onlyThese ) ) $sql .= " AND email IN ('" . implode("','", $onlyThese) . "') ";
     $sql .= "GROUP BY email";
     $result = $this->db->query( $sql );
     if ( $result ) {
@@ -186,13 +188,14 @@ class CharidyEmails {
         $children = [];
         // get list of registered children
         $sql = "select first from users u 
-                join admin_auths aa using (user_id) 
+                join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
                 and aa.auth = 'user' 
                 and aa.admin_id = " . $email['admin_id'];
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-          $children[] = $row['first'];
+        $result = $this->db->query( $sql );
+        if ( $result ) {
+          $rows = $result->fetchAll();
+          foreach ( $rows as $row ) $children[] = ucwords( $row['first'] );
         }
         $message = str_replace('CHAYOLIM', implode("<br />", $children), $message);
       }
@@ -312,9 +315,9 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
+        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it\'s all or nothing!</b>
         <br /><br />
-        Today, join us at <b>#THTransforms!</b><br />
+        Today, join us as <b>#THTransforms!</b><br />
         <a href="http://charidy.com/th">Donate now</a> and quadruple your contribution in Hashem\'s army and your impact on the world.
         <br /><br />
         Here\'s how:
@@ -331,7 +334,7 @@ class CharidyEmails {
         A Sergeant\'s donation of $126 = $504<br />
         A General\'s donation of $3,600 = $14,400
         <br /><br />
-        Our future—the future of our children—depends on you,
+        Our future - the future of our children - depends on you,
         <br /><br />
         Rabbi Moshe Kotlarsky <br />
         Vice Chairman, Merkos L\'inyonei Chinuch 
@@ -383,26 +386,9 @@ class CharidyEmails {
         <br /><br />
         Thank you for all your support for Tzivos Hashem, so that I (and my fellow soldiers) can be true chayolim of the Rebbe and all together, we can fulfill our mission of bringing Moshiach, now.
         <br /><br />
-        Love,
-
-        ______________________
+        Love,<br />
         CHAYOLIM
-        <br /><br />
-        Rabbi Moshe Kotlarsky <br />
-        Vice Chairman, Merkos L\'inyonei Chinuch 
-        <br /><br />
-        Rabbi Yerachmiel Benjaminson <br />
-        Executive Director of Tzivos Hashem 
-        <br /><br />
-        Rabbi Sholom Ber Baumgarten <br />
-        Director of Tzivos Hashem 
-        <br /><br />
-        Rabbi Zalman Glick <br />
-        Editor-in-chief, Living Lessons 
-        <br /><br />
-        Rabbi Shimmy and Zelda Weinbaum  <br />
-        Generals of the Chayolei Tzivos Hashem Brigade  
-        <br /><br />
+        <br />
         <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
         <br /><br />    
         Spread the word!<br /> 

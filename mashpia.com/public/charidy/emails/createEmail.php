@@ -12,7 +12,8 @@ $testEmails = [
   'hakhel@tzivoshashem.org',
   'design@tzivoshashem.org',
   'chayazirkind@gmail.com', 
-  'emmegreene@tzivoshashem.org'
+  'emmegreene@tzivoshashem.org', 
+  'shimmyweinbaum@gmail.com'
 ];
 
 $emailNums = [3,4];
@@ -20,7 +21,7 @@ foreach ( $emailNums as $num ) {
   echo "Sending Email #:" . $num . "<br />";
   $e = new charidyEmails();
   $e->setEmailNum( $num );
-  $e->setRecipients( $testEmails );
+  $e->setRecipients();
   $e->sendEmails();
 
   $errors = $e->getErrors();
