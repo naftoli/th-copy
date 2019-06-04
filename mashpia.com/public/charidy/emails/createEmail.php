@@ -30,7 +30,7 @@ $testEmails = [
       <input type="radio" name="email" value="success" />Successful Campaign Email<br /><br />
       <input type="radio" name="email" value="reschedule" />Campaign Rescheduled Email<br /><br />
 
-      Please choose if you would like to send the test email (to a few select individuals) or the actual email to everyone:<br /><br />
+      Please choose if you would like to send a test email (to a few select individuals), or a real actual email to everyone:<br /><br />
       <input type="radio" name="type" value="test" /> Test Email<br /><br />
       <input type="radio" name="type" value="real" /> Real Email<br /><br />
 
