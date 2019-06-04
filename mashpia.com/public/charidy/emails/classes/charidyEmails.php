@@ -1,4 +1,6 @@
 <?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 class CharidyEmails {
@@ -109,6 +111,7 @@ class CharidyEmails {
     }
     if ( !empty( $onlyThese ) ) $sql .= " AND email IN (" . implode(',', $onlyThese) . ") ";
     $sql .= "GROUP BY email";
+    echo $sql; exit;
     $result = $this->db->query( $sql );
     if ( $result ) {
       $rows = $result->fetchAll();
