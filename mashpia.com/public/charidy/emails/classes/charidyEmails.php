@@ -190,18 +190,17 @@ class CharidyEmails {
                 where u.user_registered > 0 
                 and aa.auth = 'user' 
                 and aa.admin_id = " . $email['admin_id'];
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-          $children[] = $row['first'];
+        $result = $this->db->query( $sql );
+        if ( $result ) {
+          $rows = $result->fetchAll();
+          foreach ( $rows as $row ) $children[] = $row['first'];
         }
         $message = str_replace('CHAYOLIM', implode("<br />", $children), $message);
       }
-      echo $message;
-      continue;
 
-      // if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
-      //   $this->errors[] = "Error sending email to " . $to;
-      // }
+      if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
+        $this->errors[] = "Error sending email to " . $to;
+      }
     }
   }
 
