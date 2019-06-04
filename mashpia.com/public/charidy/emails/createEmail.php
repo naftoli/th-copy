@@ -12,7 +12,8 @@ $testEmails = [
   'hakhel@tzivoshashem.org',
   'design@tzivoshashem.org',
   'chayazirkind@gmail.com', 
-  'emmegreene@tzivoshashem.org'
+  'emmegreene@tzivoshashem.org', 
+  'shimmyweinbaum@gmail.com'
 ];
 
 $emailNums = [3,4];
