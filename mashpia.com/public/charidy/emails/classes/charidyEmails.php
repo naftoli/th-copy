@@ -386,25 +386,8 @@ class CharidyEmails {
         <br /><br />
         Thank you for all your support for Tzivos Hashem, so that I (and my fellow soldiers) can be true chayolim of the Rebbe and all together, we can fulfill our mission of bringing Moshiach, now.
         <br /><br />
-        Love,
-
-        ______________________
+        Love,<br />
         CHAYOLIM
-        <br /><br />
-        Rabbi Moshe Kotlarsky <br />
-        Vice Chairman, Merkos L\'inyonei Chinuch 
-        <br /><br />
-        Rabbi Yerachmiel Benjaminson <br />
-        Executive Director of Tzivos Hashem 
-        <br /><br />
-        Rabbi Sholom Ber Baumgarten <br />
-        Director of Tzivos Hashem 
-        <br /><br />
-        Rabbi Zalman Glick <br />
-        Editor-in-chief, Living Lessons 
-        <br /><br />
-        Rabbi Shimmy and Zelda Weinbaum  <br />
-        Generals of the Chayolei Tzivos Hashem Brigade  
         <br /><br />
         <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
         <br /><br />    
