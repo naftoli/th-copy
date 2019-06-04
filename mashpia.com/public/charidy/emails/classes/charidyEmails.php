@@ -388,7 +388,7 @@ class CharidyEmails {
         <br /><br />
         Love,<br />
         CHAYOLIM
-        <br /><br />
+        <br />
         <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
         <br /><br />    
         Spread the word!<br /> 
