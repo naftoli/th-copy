@@ -317,7 +317,7 @@ class CharidyEmails {
         <br /><br />
         The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, until Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it\'s all or nothing!</b>
         <br /><br />
-        Today, join us at <b>#THTransforms!</b><br />
+        Today, join us as <b>#THTransforms!</b><br />
         <a href="http://charidy.com/th">Donate now</a> and quadruple your contribution in Hashem\'s army and your impact on the world.
         <br /><br />
         Here\'s how:
