@@ -14,16 +14,20 @@ $testEmails = [
   'chayazirkind@gmail.com'
 ];
 
-$e = new charidyEmails();
-$e->setEmailNum( 3 );
-$e->setRecipients( $testEmails );
-$e->sendEmails();
+$emailNums = [3,4];
+foreach ( $emailNums as $num ) {
+  echo "Sending Email #:" . $num . "<br />";
+  $e = new charidyEmails();
+  $e->setEmailNum( $num );
+  $e->setRecipients( $testEmails );
+  $e->sendEmails();
 
-$errors = $e->getErrors();
-if ( $errors ) {
-  foreach ( $errors as $error ) {
-    echo $error . "<br />";
+  $errors = $e->getErrors();
+  if ( $errors ) {
+    foreach ( $errors as $error ) {
+      echo $error . "<br />";
+    }
+  } else {
+    echo "done.<br />";
   }
-} else {
-  echo "done";
 }
