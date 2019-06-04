@@ -196,8 +196,6 @@ class CharidyEmails {
         }
         $message = str_replace('CHAYOLIM', implode("<br />", $children), $message);
       }
-      echo $message;
-      continue;
 
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
