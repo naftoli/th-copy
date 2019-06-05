@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors',1);
-//require_once 'classes/charidyEmails.php';
+ini_set('display_errors',1);
+require_once 'classes/charidyEmails.php';
 
 $testEmails = [
   'shimmy@tzivoshashem.org', 
