@@ -55,6 +55,7 @@ class CharidyEmails {
                 email != ''";
         break;
       case 1:
+      case 16:
         // all donors in database
         $sql = "
             SELECT 
@@ -863,6 +864,50 @@ class CharidyEmails {
         </html>
         ';
         break;
+      case 16:
+        $subject = "Last Call, It's All or Nothing";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        <b>It\'s ALL or NOTHING. </b>
+        <br /><br />
+        ONE hour left
+        <br /><br />
+        Hashem\'s Army still needs $100,000 not matched. 
+        <br /><br />
+        A total of $400,000 in the next hour. 
+        <br /><br />
+        <b>If not they will not get ANYTHING. </b>
+        <br /><br />
+        If you know anyone that can help please ask them to help. 
+        <br /><br />
+        It\'s for the kids who will bring Moshiach.
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
     }
     return [
       'subject' =>  $subject, 
