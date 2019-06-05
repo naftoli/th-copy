@@ -107,6 +107,7 @@ class CharidyEmails {
       case 7:
       case 9:
       case 11:
+      case 14:
         // all donors that haven't donated yet this yr
         $sql = "
           SELECT 
@@ -126,6 +127,8 @@ class CharidyEmails {
       case 8:
       case 10:
       case 12:
+      case 13:
+      case 15:
         // all donors that have already donated this yr
         $sql = "
           SELECT 
@@ -725,6 +728,117 @@ class CharidyEmails {
         Victory! With your support and the generosity of our amazing campaign sponsors, we\'ve succeeded in raising $1M for Tzivos Hashem! 
         <br /><br />
         But wait! There\'s still time to get others to help transform the world with Tzivos Hashem. Entering the bonus round, you can help us continue to grow even more!
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 13:
+        $subject = "Thank YOU!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We are profoundly grateful for your gift, and of all who came to support the next generation of children in Tzivos Hashem. It is only because of people like you, who care so much about our future, that we are able to have such a successful army.
+        <br /><br />
+        With your generosity, and the generosity of our sponsors, $1,000,000 has been raised to grow, child by child, mission by mission.
+        <br /><br />
+        Your contribution will enable Tzivos Hashem to make the world better and brighter for the children of today and tomorrow.
+        <br /><br />
+        We could never have done it without you!
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 14:
+        $subject = "Not Yet, but we'll get there!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We are so grateful to all of those who came to support us for our campaign. Unfortunately, despite the generosity of our sponsors, we were not able to raise $1,000,000 for Tzivos Hashem.
+        <br /><br />
+        We have scheduled a new campaign for next week, <b>Tuesday, 8 Sivan,</b> because for Hashem\'s army, failure is not an option. Please take the opportunity now to help us reach our goal.
+        <br /><br />
+        We cannot do it without you!
+        <br /><br />
+        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 15:
+        $subject = "Not Yet, but we'll get there!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We are so grateful for your gift, and of all who came to support us. Unfortunately, despite your generosity, and the generosity of our sponsors, we were not able to raise $1,000,000 for Tzivos Hashem.
+        <br /><br />
+        We have scheduled a new campaign for next week, <b>Tuesday, 8 Sivan,</b> because for Hashem\'s army, failure is not an option. Please contact us to let us know that we can rely on your pledge for our next campaign - or if you can, increase it (and encourage others to do so), to ensure our success.
+        <br /><br />
+        We cannot do it without you.
         <br /><br />
         Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
         <br /><br />    
