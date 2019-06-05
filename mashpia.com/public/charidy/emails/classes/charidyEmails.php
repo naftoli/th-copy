@@ -865,7 +865,7 @@ class CharidyEmails {
         ';
         break;
       case 16:
-        $subject = "Last Call, It's All or Nothing";
+        $subject = "It's all or nothing & only 1 hour remains.";
         $message = '
         <html><head></head><body>
         <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
@@ -874,17 +874,11 @@ class CharidyEmails {
         <br /><br />
         <b>It\'s ALL or NOTHING. </b>
         <br /><br />
-        ONE hour left
+        Tzivos Hashem has had its most successful year yet and it cannot fail! We have just one hour left to our 28-hour fundraising campaign, and need to raise another $100,000.
         <br /><br />
-        Hashem\'s Army still needs $100,000 not matched. 
+        It\'s that time when we cry "all hands on deck!" Can we count on you?
         <br /><br />
-        A total of $400,000 in the next hour. 
-        <br /><br />
-        <b>If not they will not get ANYTHING. </b>
-        <br /><br />
-        If you know anyone that can help please ask them to help. 
-        <br /><br />
-        It\'s for the kids who will bring Moshiach.
+        If you\'ve already donated, can you reach out to your coworker, relative or friend to give too?
         <br /><br />
         Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
         <br /><br />    
