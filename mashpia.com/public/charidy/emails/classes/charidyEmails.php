@@ -872,8 +872,6 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        <b>It\'s ALL or NOTHING. </b>
-        <br /><br />
         Tzivos Hashem has had its most successful year yet and it cannot fail! We have just one hour left to our 28-hour fundraising campaign, and need to raise another $100,000.
         <br /><br />
         It\'s that time when we cry "all hands on deck!" Can we count on you?
