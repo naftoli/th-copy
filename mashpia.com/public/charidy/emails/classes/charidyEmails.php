@@ -878,7 +878,7 @@ class CharidyEmails {
         <br /><br />
         If you\'ve already donated, can you reach out to your coworker, relative or friend to give too?
         <br /><br />
-        Donate: <a href="http://charidy.com/th">www.charidy.com/th</a>
+        Donate now at <a href="http://charidy.com/th">www.charidy.com/th</a> and watch the transformation unfold!
         <br /><br />    
         Spread the word!<br /> 
         web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
