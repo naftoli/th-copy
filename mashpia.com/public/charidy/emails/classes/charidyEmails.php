@@ -693,7 +693,7 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        Victory! With your support and the generosity of our amazing campaign sponsors, we\'ve succeeded in raising $1M for Tzivos Hashem! 
+        Victory! With your support and the generosity of our amazing campaign sponsors, not once but TWICE, we\'ve succeeded in raising <b>$1 Million for Tzivos Hashem!</b>
         <br /><br />
         If you haven\'t given yet, don\'t worry! There’s still time to transform the world with Tzivos Hashem. Entering the bonus round, you can help us continue to grow even more!
         <br /><br />
@@ -728,7 +728,7 @@ class CharidyEmails {
         <br /><br />
         Dear FULL_NAME,
         <br /><br />
-        Victory! With your support and the generosity of our amazing campaign sponsors, we\'ve succeeded in raising $1M for Tzivos Hashem! 
+        Victory! With your support and the generosity of all our amazing campaign sponsors, not once but TWICE, we’ve succeeded in raising <b>$1M for Tzivos Hashem!</b>
         <br /><br />
         But wait! There\'s still time to get others to help transform the world with Tzivos Hashem. Entering the bonus round, you can help us continue to grow even more!
         <br /><br />
