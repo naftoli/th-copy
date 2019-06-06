@@ -58,6 +58,7 @@ class CharidyEmails {
       case 16:
       case 17:
       case 18:
+      case 19:
         // all donors in database
         $sql = "
             SELECT 
@@ -969,6 +970,25 @@ class CharidyEmails {
         <br />
         <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
         </div>
+        </body>
+        </html>
+        ';
+        break;
+      case 19:
+        $subject = "Dear Hero, Thank YOU!";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        We are profoundly grateful for your gift, and of all who came to support the next generation of children in Tzivos Hashem. Yesterday, we didn\'t think we would make it. But people like you, who care so much about our future, became our heroes and ensured the success of our army, child by child, mission by mission.
+        <br /><br />
+        Together with you, we have raised $1,004,152, enabling Tzivos Hashem to make the world better and brighter for the children of today and tomorrow.
+        <br /><br />
+        We could never have done it without you!
+        <br /><br />
+        General Rabbi Shimmy Weinbaum
         </body>
         </html>
         ';
