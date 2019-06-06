@@ -21,7 +21,11 @@ class GlobalSettings {
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        $year = self::getChidonYear();
+        $sql = "select `val` from global_settings where `key` = 'registration_year'";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $year =  $row['val'];
+
         if ( self::isAustralian( $school_id ) ) {
             // find out current month
             $month = date('m');
@@ -132,8 +136,8 @@ class GlobalSettings {
     public static function getChidonCost( $school_id = false ) {
         // Anash kinder has $40 fee
         if ( in_array( $school_id, [ 269 ] ) )
-            return 40;
-        return 5;
+            return 45;
+        return 7.5;
     }
 
     /**

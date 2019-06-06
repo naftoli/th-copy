@@ -173,6 +173,10 @@ var registrationApp = function() {
     /*********************** FORM HANDLERS ***********************/
     function confirmUser( event ) {
         event.preventDefault();
+        // check that book was selected
+        if ( $("select#chidon-book").val() == 0 ) {
+            return showError("You must choose which book is being studied.");
+        }
         // update the user's information
         var postData = {};  var user_changed = false;
         var current_index = parseInt( $("#current_index").val() );
@@ -239,7 +243,8 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
-                    size: $("select#chidon-sweater-size").val()
+                    size: $("select#chidon-sweater-size").val(), 
+                    book: $("select#chidon-book").val()
                 }
             });
         }

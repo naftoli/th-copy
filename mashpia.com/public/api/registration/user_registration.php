@@ -195,7 +195,8 @@ class UserRegistrationRouter {
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
-                        if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
+                        $year = GlobalSettings::getChidonYear();
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                     // other registrations
                     } else {
