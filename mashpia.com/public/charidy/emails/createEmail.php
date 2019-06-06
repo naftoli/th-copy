@@ -45,6 +45,7 @@ $testEmails = [
         <input type="radio" name="email" value="success" />Successful Campaign Email<br /><br />
         <input type="radio" name="email" value="reschedule" />Campaign Rescheduled Email<br /><br />
         <input type="radio" name="email" value="wakeup" />Wakeup Call<br /><br />
+        <input type="radio" name="email" value="redo" />Emergency Redo<br /><br />
       </div>
 
       Please choose if you would like to send a test email (to a few select individuals), or a real actual email to everyone:<br /><br />
@@ -93,6 +94,10 @@ $testEmails = [
           case 'wakeup':
             echo "Sendin Wakeup Call Email...<br />";
             $emailNums = [16];
+            break;
+          case 'redo':
+            echo "Sending Redo Emails...<br />";
+            $emailNums = [17];
             break;
         }
 

@@ -56,6 +56,7 @@ class CharidyEmails {
         break;
       case 1:
       case 16:
+      case 17:
         // all donors in database
         $sql = "
             SELECT 
@@ -900,6 +901,42 @@ class CharidyEmails {
         </body>
         </html>
         ';
+        break;
+      case 17:
+        $subject = "When the battle’s nearly lost, the army needs a HERO";
+        $message = '
+        <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        Dear FULL_NAME,
+        <br /><br />
+        While we all sit here in shock, trying to absorb that we were more than 90% there, moments before the end. Even with that extra - generous boost from our sponsors (many of you who gave a second time as we edged closer), we were still not able to raise $1,000,000 for Tzivos Hashem. We said "all or nothing" and we ended up with nothing.
+        <br /><br />
+        But we are Hashem\'s army and failure is not an option. We have scheduled a new campaign for tomorrow for just six hours on Thursday, 3 Sivan from 12 pm to 6 pm. <b>You do not need to reenter your contribution;</b> if you will allow, we will use the information you provided in the previous campaign to process your donation. If this is not possible, please email <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a> and we will refund your card. If you would like to increase your gift, please make an additional payment.
+        <br /><br />
+        We must recruit fresh reserves to surmount the last 10% of our goal. Help us spread the word to your acquaintances, coworkers, neighbors, friends and relatives to visit <a href="http://charidy.com/th">www.charidy.com/th</a> and donate. Together, we will transform the world for our chayolim - a world where those on Hashem\'s side are never defeated.
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+        ';
+        break;
     }
     return [
       'subject' =>  $subject, 
