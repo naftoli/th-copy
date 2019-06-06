@@ -85,7 +85,7 @@ $testEmails = [
             break;
           case 'success':
             echo "Sending Successful Campaign Emails...<br />";
-            $emailNums = [13];
+            $emailNums = [19];
             break;
           case 'wakeup':
             echo "Sendin Wakeup Call Email...<br />";
