@@ -41,10 +41,11 @@ $testEmails = [
       <div class="inputs">
         <input type="radio" name="email" value="50" />50% Email<br /><br />
         <input type="radio" name="email" value="75" />75% Email<br /><br />
-        <input type="radio" name="email" value="bonus" />Bonus Round Email<br /><br />
+        <input type="radio" name="email" value="roundTwo" />Round Two Email<br /><br />
         <input type="radio" name="email" value="success" />Successful Campaign Email<br /><br />
         <input type="radio" name="email" value="wakeup" />Wakeup Call<br /><br />
         <input type="radio" name="email" value="redo" />Emergency Redo<br /><br />
+        <input type="radio" name="email" value="bonus" />Bonus Round Email<br /><br />
       </div>
 
       Please choose if you would like to send a test email (to a few select individuals), or a real actual email to everyone:<br /><br />
@@ -78,8 +79,8 @@ $testEmails = [
             echo "Sending 75% Reached Emails...<br />";
             $emailNums = [9,10];
             break;
-          case 'bonus':
-            echo "Sending Bonus Round Emails...<br />";
+          case 'roundTwo':
+            echo "Sending Round Two Emails...<br />";
             $emailNums = [18];
             break;
           case 'success':
@@ -93,6 +94,10 @@ $testEmails = [
           case 'redo':
             echo "Sending Redo Emails...<br />";
             $emailNums = [17];
+            break;
+          case 'bonus':
+            echo "Sending Bonus Round Emails...<br />";
+            $emailNums = [11,12];
             break;
         }
 
