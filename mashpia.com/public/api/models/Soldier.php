@@ -351,7 +351,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getRegistrationYear();
+        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, chayolei, th_chidon_id, chidon FROM users u "
@@ -371,7 +371,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         
         // only add th_chidon_id if the user is in grade 4+ and we are before October 16, 2018 12:00am
-        if ( unixtojd() < 2458409 && $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
+        if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
@@ -429,7 +429,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param integer $parent_id
      * @return void
      */
-    public function registerChidon( $year, $size, $parent_id = 0, $amount = null, $trans_id = '' ){
+    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '' ){
         global $MASHPIA_DB;
 
         // save the charge
@@ -438,10 +438,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         $chidon_query = $MASHPIA_DB->prepare(
-            "INSERT INTO th_chidon (year, school_id, user_id, size, parent_id) VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id) VALUES (?, ?, ?, ?, ?, ?)"
         );
 
-        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $parent_id ] );
+        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id ] );
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
