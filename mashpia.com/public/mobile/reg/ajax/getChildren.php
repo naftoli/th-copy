@@ -122,21 +122,14 @@ if ( !empty( $users ) ) {
 			$children[$row['user_id']]['reg_types']['chayolei'] = true;
 		} 
 		
-		// chidon regustration
-		// only relevant until 10/16/2018 12:00am then close down chidon reg
-		// if ( unixtojd() < 2458409 ) {
-		// 	if ( !$row['reg_chidon'] // if not in chidon
-		// 		&& $row['class_grade'] >= 4 // and in grade 4+
-		// 		&& $row['chidon'] // make sure the kid is in chidon
-		// 		//&& in_array( $row['school_id'], $australia ) // and not in australia..
-		// 	) {
-		// 		$children[ $row['user_id'] ]['needsReg'] = 1;
-		// 		$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-		// 	}
-		// }
-		if ( $row['user_id'] == 8273 ) {
-			$children[$row['user_id']]['needsReg'] = 1;
-			$children[$row['user_id']]['reg_types']['chidon'] = true;
+		// chidon registration
+		if ( !$row['reg_chidon'] // if not in chidon
+			&& $row['class_grade'] >= 3 // and in grade 3+
+			&& $row['chidon'] // make sure the kid is in chidon
+			//&& in_array( $row['school_id'], $australia ) // and not in australia..
+		) {
+			$children[ $row['user_id'] ]['needsReg'] = 1;
+			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
 		}
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;

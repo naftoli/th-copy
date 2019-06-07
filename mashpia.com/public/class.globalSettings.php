@@ -137,7 +137,7 @@ class GlobalSettings {
         // Anash kinder has $40 fee
         if ( in_array( $school_id, [ 269 ] ) )
             return 45;
-        return 7.5;
+        return 8;
     }
 
     /**
