@@ -314,7 +314,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
         // add chidon if user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade >= 4 )
+        if ( $this->platoon && $this->platoon->class_grade >= 3 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
@@ -370,8 +370,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
         
-        // only add th_chidon_id if the user is in grade 4+ and we are before October 16, 2018 12:00am
-        if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
+        // only add th_chidon_id if the user is in grade 3+ 
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
