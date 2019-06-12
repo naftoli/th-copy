@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' ); 
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getChidonYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
