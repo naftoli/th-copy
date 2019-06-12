@@ -102,9 +102,18 @@ var registrationApp = function() {
 
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
+
+        // change grade based on book
+        $('#step-2 form #chidon-book').change( function() {
+            var book = parseInt( $(this).val() );
+            if ( book > 0 ) {
+                var grade = book + 3;
+                document.getElementById('chidon-grade').value = grade;
+            }
+        });
         
         // yahadus registration
-        $( '#step-2 form #chidon-registration input').change( function( event ) {
+        $('#step-2 form #chidon-registration input').change( function( event ) {
             if ( event.target.checked ) {
                 if ( !australian.includes( school_id ) ) $( '#step-2 form #yahadus-registration').show();
             } else {
