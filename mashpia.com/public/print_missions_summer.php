@@ -79,6 +79,9 @@ if (isset($_POST['action'])) {
 		header("Location: mission_report/newSchoolPrintSummer.php?user=$user_id&school=$school_id&grade=$class_id&showDate=$showDate&dblSided=$dblSided");
 		exit;
 	}
+} else {
+    get_classes_select($school_id, 0);
+    get_users_select($school_id, 0, 0);
 }
 
 function get_users_select($school_id, $class_id, $user_id) {
@@ -375,8 +378,8 @@ $year = $row['val'];
         $(".submit").click( function(e) {
         	e.stopPropagation();
         	e.preventDefault();
-        	if ($("#user_id").val() == -1) {
-        		alert('You must choose a class and student.');
+        	if ($("#class_id").val() == -1) {
+        		alert('You must choose a class.');
         		return false;
         	} else {
         		$("#date_tasks_report").submit();
