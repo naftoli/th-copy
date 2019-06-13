@@ -199,7 +199,7 @@ $year = $row['val'];
 
 	            	<div class="infobox noprint">
 		                Summer missions include 10 weeks worth of missions. Shlach until Re'eh.<br />
-		                <!-- You can only print for each child individually.<br /> -->
+		                You can only print for each child individually.<br />
 		            </div>
 					
 					<div class="module clearfix" style="clear:both;">
@@ -378,8 +378,8 @@ $year = $row['val'];
         $(".submit").click( function(e) {
         	e.stopPropagation();
         	e.preventDefault();
-        	if ($("#class_id").val() == -1) {
-        		alert('You must choose a class.');
+        	if ($("#user_id").val() == -1) {
+        		alert('You must choose a class and a child.');
         		return false;
         	} else {
         		$("#date_tasks_report").submit();
