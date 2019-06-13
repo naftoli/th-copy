@@ -199,7 +199,7 @@ $year = $row['val'];
 
 	            	<div class="infobox noprint">
 		                Summer missions include 10 weeks worth of missions. Shlach until Re'eh.<br />
-		                You can only print for each child individually.<br />
+		                <!-- You can only print for each child individually.<br /> -->
 		            </div>
 					
 					<div class="module clearfix" style="clear:both;">
