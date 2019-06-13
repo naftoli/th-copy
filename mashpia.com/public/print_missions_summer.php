@@ -79,6 +79,9 @@ if (isset($_POST['action'])) {
 		header("Location: mission_report/newSchoolPrintSummer.php?user=$user_id&school=$school_id&grade=$class_id&showDate=$showDate&dblSided=$dblSided");
 		exit;
 	}
+} else {
+    get_classes_select($school_id, 0);
+    get_users_select($school_id, 0, 0);
 }
 
 function get_users_select($school_id, $class_id, $user_id) {
@@ -196,7 +199,7 @@ $year = $row['val'];
 
 	            	<div class="infobox noprint">
 		                Summer missions include 10 weeks worth of missions. Shlach until Re'eh.<br />
-		                You can only print for each child individually.<br />
+		                <!-- You can only print for each child individually.<br /> -->
 		            </div>
 					
 					<div class="module clearfix" style="clear:both;">
@@ -375,8 +378,8 @@ $year = $row['val'];
         $(".submit").click( function(e) {
         	e.stopPropagation();
         	e.preventDefault();
-        	if ($("#user_id").val() == -1) {
-        		alert('You must choose a class and student.');
+        	if ($("#class_id").val() == -1) {
+        		alert('You must choose a class.');
         		return false;
         	} else {
         		$("#date_tasks_report").submit();
