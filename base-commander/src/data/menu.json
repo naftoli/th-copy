@@ -31,6 +31,7 @@
     "user_types": [ "HQ", "INST", "BC", "TEACHER" ],
     "items": [
       { "label": "Print", "path": "/missions/print" },
+      { "label": "Print Summer Missions", "path": "/../print_missions_summer.php" },
       { "label": "Mark", "path": "/missions/mark" },
       { "label": "Personalize", "path": "/missions/personalize" },
       { "label": "Tasks", "path": "/missions/tasks", "user_types": [ "HQ", "INST", "BC" ] },

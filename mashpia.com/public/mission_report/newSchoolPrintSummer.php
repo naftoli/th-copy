@@ -16,9 +16,9 @@ if (isset($_GET['school'])) {
 	exit;
 }
 
-//summer 5778
-$start = 2458285;
-$end = 2458361; // August 30, 2018
+//summer 5779
+$start = 2458663;
+$end = 2458732; // September 5, 2019
 
 $dates = array();
 do {
