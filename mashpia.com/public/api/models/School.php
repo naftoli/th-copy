@@ -89,19 +89,19 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         if ( $this->attribute_is_dirty('allow_parent_tasks') ){
             $update = "$update_sql SET u.allow_parent_tasks = :v, c.allow_parent_tasks = :v $filter_sql";
             $update = $MASHPIA_DB->prepare( $update );
-            $update->execute([ ':v' => $this->allow_parent_tasks, ':id' => $this->school_id ]);
+            $update->execute([ ':v' => intval( $this->allow_parent_tasks ), ':id' => intval( $this->school_id ) ]);
         }
         // print_parent_tasks
         if ( $this->attribute_is_dirty('print_parent_tasks') ){
             $update = "$update_sql SET u.print_parent_tasks = :v, c.print_parent_tasks = :v $filter_sql";
             $update = $MASHPIA_DB->prepare( $update );
-            $update->execute([ ':v' => $this->print_parent_tasks, ':id' => $this->school_id ]);
+            $update->execute([ ':v' => intval( $this->print_parent_tasks ), ':id' => intval( $this->school_id ) ]);
         }
         // pic_mission_type
         if ( $this->attribute_is_dirty('pic_mission_type') ){
             $update = "$update_sql SET u.pic_mission_type = :v, c.pic_mission_type = :v $filter_sql";
             $update = $MASHPIA_DB->prepare( $update );
-            $update->execute([ ':v' => $this->pic_mission_type, ':id' => $this->school_id ]);
+            $update->execute([ ':v' => $this->pic_mission_type, ':id' => intval( $this->school_id ) ]);
         }
         // save the platoon to the dbs
         return true;
