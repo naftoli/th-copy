@@ -116,10 +116,6 @@ Array [
         "path": "/missions/print",
       },
       Object {
-        "label": "Print Summer Missions",
-        "path": "/print_missions_summer",
-      },
-      Object {
         "label": "Mark",
         "path": "/missions/mark",
       },
