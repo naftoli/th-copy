@@ -198,6 +198,24 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonYear();
                         if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
+                        // add book purchased info to db
+                        if ( intval( $registration['purchased'] ) > 0 ) {
+                            $location = $registration['purchasedWhere'];
+                            $store_name = $registration['store']['store_name'];
+                            $store_city = $registration['store']['store_city'];
+                            $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                        }
+                    // Yahadus purchase
+                    } else if ( $registration['registration_type'] == 'yahadus' ) {
+                        $year = GlobalSettings::getChidonYear();
+                        // add the registration charge
+                        $user->registrationCharge(
+                            $registration['registration_type'],
+                            floatval( $amount ),
+                            $trans_id, $year
+                        );
+                        // add book purchase to db
+                        $user->addBookPurchase( $year, $user->user_id, 'parent_account', $trans_id );
                     // other registrations
                     } else {
                         // add the registration charge
