@@ -445,6 +445,41 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id ] );
     }
 
+    /**
+     * addBookPurchase
+     * 
+     * adds book purchase info to db
+     * 
+     * @param int $year
+     * @param int $user_id
+     * @param string $location
+     * @param string $trans_id 
+     * @param string $store_name
+     * @param string $store_city
+     */
+    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '' ) {
+        global $MASHPIA_DB;
+        $qry = $MASHPIA_DB->prepare(
+            "insert into yahadus_book_purchases 
+            set year = :year, 
+            user_id = :user, 
+            location = :location, 
+            trans_id = :trans_id, 
+            store_name = :store_name, 
+            store_city = :store_city"
+        );
+        $qry->execute([
+            ':year' =>  $year, 
+            ':user' =>  $user_id, 
+            ':location' =>  $location, 
+            ':trans_id' =>  $trans_id, 
+            ':store_name'   =>  $store_name, 
+            ':store_city'   =>  $store_city
+        ]);
+        $qry->debugDumpParams();
+        echo 1;
+    }
+
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
     public function enrollInCampaigns() {
         try {

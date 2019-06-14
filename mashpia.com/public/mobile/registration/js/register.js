@@ -113,13 +113,21 @@ var registrationApp = function() {
         });
         
         // yahadus registration
-        $('#step-2 form #chidon-registration input').change( function( event ) {
-            if ( event.target.checked ) {
+        $('#step-2 form .book-bought').click( function() {
+            if ( $(this).val() == 0 ) {
                 if ( !australian.includes( school_id ) ) $( '#step-2 form #yahadus-registration').show();
+                $('#step-2 form #book-purchase').hide();
             } else {
                 $( '#step-2 form #yahadus-registration input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration').hide();
+                $('#step-2 form #book-purchase').show();
             } 
+        });
+
+        $('#step-2 form .book-purchase').change( function() {
+            var purchaseValue = $(this).val();
+            if ( purchaseValue == 'store' ) $("#step-2 form #book-purchase-details").show();
+            else $("#step-2 form #book-purchase-details").hide();
         });
     }
 
@@ -186,6 +194,9 @@ var registrationApp = function() {
         if ( $("select#chidon-book").val() == 0 ) {
             return showError("You must choose which book is being studied.");
         }
+        if ( !$(".book-bought").is(":checked") ) {
+            return showError("You must indicate if you have already purchased a book or not.");
+        }
         // update the user's information
         var postData = {};  var user_changed = false;
         var current_index = parseInt( $("#current_index").val() );
@@ -221,6 +232,13 @@ var registrationApp = function() {
             );
         } 
 
+        // make sure that if they bought a book from a store, that the store info is filled out
+        if ( $(".book-bought:checked").val() == '1' && $(".book-purchase:checked").val() == 'store' ) {
+            if ( $("#store-name").val().trim() == '' || $("#store-city").val().trim() == '' ) {
+                return showError("You must enter the store information for your book purchase.");
+            }
+        }
+
         // validate that they have accepted to be used in media campaigns
         if ( $(event.target).find( "#media" )[0].checked ){
             $(event.target).find( "#media" )[0].checked = false;
@@ -253,7 +271,13 @@ var registrationApp = function() {
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
                     size: $("select#chidon-sweater-size").val(), 
-                    book: $("select#chidon-book").val()
+                    book: $("select#chidon-book").val(), 
+                    purchased: $(".book-bought:checked").val(),
+                    purchasedWhere: $(".book-purchase:checked").val(), 
+                    store: {
+                        store_name: $("#store-name").val(), 
+                        store_city: $("#store-city").val()
+                    }
                 }
             });
         }
@@ -507,6 +531,11 @@ var templates = function(){
             } else {
                 $( '#chidon-text' ).text( 'and you will receive a Study Guide from you school when school begins!' );
             }
+            // reset the book field
+            $("#step-2 form #chidon-book").val(0);
+            // reset book bought info
+            $("#step-2 form input.book-bought").prop('checked', false);
+            $("#step-2 form #book-purchase").hide();
             // yahadus
             $( '#step-2 form #yahadus-registration input' )[0].checked = false;
             // $( '#step-2 form #yahadus-book-number' ).text( user.class_grade - 4 );
