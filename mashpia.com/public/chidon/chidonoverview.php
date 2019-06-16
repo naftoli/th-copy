@@ -104,9 +104,9 @@ body,td,th {
 				<h4><strong>Test Dates</strong></h4>
 
 				<p class="page-top">
-					Test 1: Tuesday, Hey Kislev (Nov 13)<br />
-					Test 2: Wednesday, Yud Ches Teves (Dec 26)<br />
-					Test 3: Wednesday, Aleph Adar 1 (Feb 6)<br />
+					Test 1: Tuesday, Chof Aleph Cheshvan (Nov. 19)<br />
+					Test 2: Monday, Tes Teves (Jan. 6)<br />
+					Test 3: Monday, Tes Vov Shvat (Feb. 10)<br />
 				</p>
 
                 <h4><strong>Yahadus books 1 - 5</strong></h4>			

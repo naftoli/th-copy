@@ -94,24 +94,22 @@ body,td,th {
                 
                 <h4>Dates:</h4>
 				<div class="indent">
-					Girls Shabbaton: Thursday, Chof Aleph Adar Beis (March 28) -Sunday Chof Daled Adar Beis (March 31)<br />
-					Boys Shabbaton: Thursday, Chof Ches Adar Beis (April 4) - Sunday, Beis Nissan (April 7)
+					Girls Shabbaton: Thursday, Chof Gimmel Adar (March 19) – Sunday, Chof Vov Adar (March 22)<br />
+					Boys Shabbaton: Thursday, Aleph Nissan (March 26) – Sunday, Daled Nissan (March 29)
 				</div>
 				<br />
                 
                 <h4>Enrollment Deadline</h4>
                 <div class="indent">
-					<span style="font-weight: bold">Shabbaton Enrollment</span> will begin on <span style="font-weight: bold">
-					Monday, Yud Gimmel Adar 1 (Feb 18) at 7:00 PM EST</span> 
-					and end <span style="font-weight: bold">Monday, Chof Adar 1 (Feb 25) at 7:00 PM EST.</span>.
-					Enrollment and payment information must be submitted before <span style="font-weight: bold">Wednesday, Tes Vov Adar 1 (February 20) at 11:59 p.m.</span> 
+					Shabbaton Registration</span> opens on <span style="font-weight: bold">Wednesday, Yud Zayin Shvat (February 12)</span>.<br />
+					Enrollment and payment information must be submitted before <span style="font-weight: bold">Thursday, Chof Hey Shvat (February 20) at 11:59 p.m.</span><br />
 					We apologize in advance that there will be no exceptions. 
                 </div>
                 <br />
                 
                 <h4>Fee</h4>
                 <div class="indent">
-                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child to $150.<br />
+                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child to $150 per child.<br />
                     Please note: Fees do not include transportation to and from New York.
 				</div><br />
 				
