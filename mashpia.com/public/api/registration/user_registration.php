@@ -178,6 +178,9 @@ class UserRegistrationRouter {
                     if ( !($user->user_id == $registration['user_id']) )
                         continue;
 
+                    // set trans_id to empty string if false
+                    if ( !$trans_id ) $trans_id = '';
+
                     // set the year based on the school id for chayolei only
                     $year = $registration['registration_type'] == 'chayolei' ? 
                         GlobalSettings::getRegistrationYear( $user->school_id ) : 
@@ -189,14 +192,14 @@ class UserRegistrationRouter {
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount
+                            $current_user->admin_id, $year, $amount, $trans_id
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
                         $year = GlobalSettings::getChidonYear();
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         // add book purchased info to db
                         if ( intval( $registration['purchased'] ) > 0 ) {
