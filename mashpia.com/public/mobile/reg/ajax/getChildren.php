@@ -70,7 +70,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
 		$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 		$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
-		$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && intval($row['class_grade']) > 3 && intval($row['class_grade']) < 8 ? 1 : 0;
+		$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) >= 3) && (intval($row['class_grade']) < 8) ? 1 : 0;
 		$children[$row['user_id']]['chidonRegistered'] = 0;
 		$children[$row['user_id']]['chayolei'] = 1;
 		$children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -89,6 +89,7 @@ if ( !empty( $users ) ) {
 		);
 		$row = array_merge( $row, mysql_fetch_assoc( $reg_query ) );
 		$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
+		if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
 
 		// mivtza lulav 5779
 		// $children[$row['user_id']]['mivtzaLulav'] = 0;
