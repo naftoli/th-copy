@@ -285,12 +285,12 @@ var registrationApp = function() {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
             state.cart.push({
                 description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
-                price: shipping_included ? 50 : 45,
+                price: shipping_included ? 45 : 40,
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'yahadus',
-                    paid: shipping_included ? 50 : 45,
+                    paid: shipping_included ? 45 : 40,
                 }
             });
         }
@@ -543,11 +543,11 @@ var templates = function(){
             $( '#step-2 form #yahadus-registration').hide();
             if ( user.school.shipping_method === 'pickup' ) {
                 $( '#step-2 form #yahadus-cost' ).text( '$55' );
-                $( '#step-2 form #yahadus-real-cost' ).text( 45 )
+                $( '#step-2 form #yahadus-real-cost' ).text( 40 )
                 $( '#step-2 form #yahadus-text').text( '' );
             } else { 
                 $( '#step-2 form #yahadus-cost' ).text( '$60' );
-                $( '#step-2 form #yahadus-real-cost' ).text( 50 )
+                $( '#step-2 form #yahadus-real-cost' ).text( 45 )
                 $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             }
         },
