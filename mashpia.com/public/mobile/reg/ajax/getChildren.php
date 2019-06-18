@@ -118,10 +118,10 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['allowRemove'] = 0;
 		$children[$row['user_id']]['reg_types'] = [];
 		
-		if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
-			$children[$row['user_id']]['needsReg'] = 1;
-			$children[$row['user_id']]['reg_types']['chayolei'] = true;
-		} 
+		// if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
+		// 	$children[$row['user_id']]['needsReg'] = 1;
+		// 	$children[$row['user_id']]['reg_types']['chayolei'] = true;
+		// } 
 		
 		// chidon registration
 		$exceptions = [483,482,544,584,583,588,430,577,13,220];
