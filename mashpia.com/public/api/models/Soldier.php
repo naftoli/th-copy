@@ -428,9 +428,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $year
      * @param string $size
      * @param integer $parent_id
+     * @param float $amount
+     * @param string $trans_id
+     * @param boolean $recruited
+     * @param int $recruited_by
      * @return void
      */
-    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '' ){
+    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0 ){
         global $MASHPIA_DB;
 
         // save the charge
@@ -438,11 +442,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $this->registrationCharge( 'chidon', $amount, $trans_id );
         }
 
-        $chidon_query = $MASHPIA_DB->prepare(
-            "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id) VALUES (?, ?, ?, ?, ?, ?)"
-        );
-
-        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id ] );
+        if ( $recruited && $recruited_by > 0 ) {
+            $chidon_query = $MASHPIA_DB->prepare(
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $recruited_by ] );
+        } else {
+            $chidon_query = $MASHPIA_DB->prepare(
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id) VALUES (?, ?, ?, ?, ?, ?)"
+            );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id ] );
+        }
     }
 
     /**
@@ -476,8 +486,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':store_name'   =>  $store_name, 
             ':store_city'   =>  $store_city
         ]);
-        $qry->debugDumpParams();
-        echo 1;
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
