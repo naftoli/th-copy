@@ -256,7 +256,7 @@ class UserRegistrationRouter {
         if ( count( $errors ) > 0 )
             mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
-        json_response( false );
+        json_response( "Successfully Registered." );
     }
 
     // serializer for getUsers()
