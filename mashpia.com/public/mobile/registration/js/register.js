@@ -377,7 +377,7 @@ var registrationApp = function() {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'yahadus',
-                    paid: shipping_included ? 45 : 40,
+                    paid: shipping_included ? 45 : 40
                 }
             });
         }
