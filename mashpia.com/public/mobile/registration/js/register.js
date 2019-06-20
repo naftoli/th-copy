@@ -7,6 +7,7 @@ $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
+var myshliach = 61;
 var anash_kinder = 269;
 
 var registrationApp = function() {
@@ -95,7 +96,7 @@ var registrationApp = function() {
         var current_index = parseInt( $("#current_index").val() );
         var selected_user = state.selected_users[ current_index ];
         var school_id = selected_user.school.school_id;
-        var australian = [ 55, 66, 110, 112, 180, 256, 61 ]; // include myshliach in hiding of booklets and yahadus book
+        var australian = [ 55, 66, 110, 112, 180, 256 ]; 
 
         // show study guides info for all non Australian schools
         if ( !australian.includes( school_id ) ) $("#study-guides").show();
@@ -371,16 +372,27 @@ var registrationApp = function() {
         }
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
-            state.cart.push({
-                description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
-                price: shipping_included ? 45 : 40,
-                meta: {
-                    type: 'registration',
-                    user_id: selected_user.user_id,
-                    registration_type: 'yahadus',
-                    paid: shipping_included ? 45 : 40
-                }
-            });
+            var shipping_charge = 5;
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                shipping_included = true; // override for anash kinder to make sure shipping is being charged
+                shipping_charge = 15;
+            }
+            // don't add to cart if anash kinder / myshliach and not in USA
+            if ( 
+                ! [ 269, 61 ].includes( selected_user.school.school_id ) || 
+                ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) 
+            ) {
+                state.cart.push({
+                    description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
+                    price: shipping_included ? (40 + shipping_charge) : 40,
+                    meta: {
+                        type: 'registration',
+                        user_id: selected_user.user_id,
+                        registration_type: 'yahadus',
+                        paid: shipping_included ? (40 + shipping_charge) : 40
+                    }
+                });
+            }
         }
 
         current_index += 1;
@@ -614,10 +626,9 @@ var templates = function(){
             // setup the payment options - chayolei
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
-            if ( user.registrationRates.chidon && user.school.school_id == anash_kinder ) {
-                $( '#chidon-text' ).text( '. This fee includes a chidon coordinator and study guide.' );
-            } else {
-                $( '#chidon-text' ).text( 'and you will receive a Study Guide from you school when school begins!' );
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                $("#non-usa").html("<b>You will only receive a study guide if your shipping address is within the USA.</b><br />");
+                $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.<br />You can only purchase a yahadus book if your shipping address is within the USA.</b>");
             }
             $("#step-2 form .chidon-reg").hide();
             // reset the book field
@@ -651,6 +662,7 @@ var templates = function(){
             //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
             //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             // }
+            console.log( user );
         },
         toggleRates: function( user, rateType ){
             $( '#step-2 form #' + rateType + '-registration input' )[0].checked = false;

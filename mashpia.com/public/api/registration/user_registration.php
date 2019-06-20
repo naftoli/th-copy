@@ -27,8 +27,10 @@ class UserRegistrationRouter {
             if ( !$user->school_id ) continue;
             $reg_info = $user->school->registration();
             // make sure they paid for this year
-            if ( $reg_info && $reg_info->date_paid )
+            if ( $reg_info && $reg_info->date_paid ) {
+                // get parent info to use later
                 $available_users[] = $user;
+            }
         }
 
         json_response([
@@ -267,7 +269,7 @@ class UserRegistrationRouter {
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial',
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount' ],
                 'include' => [ 
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]

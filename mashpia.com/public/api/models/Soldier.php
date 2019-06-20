@@ -31,6 +31,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     private $store_miles; // miles available for the store
     private $rank; // the users current rank
     private $missions = [];
+    public $parent; // needed for chidon registration
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -262,7 +263,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function parentAccount() {
         global $MASHPIA_DB;
         $query = $MASHPIA_DB->prepare(
-            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email, admin_country '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
@@ -315,9 +316,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
         // add chidon if user is in grade 3+
-        if ( $this->platoon && $this->platoon->class_grade >= 3 && 
-            ( !in_array( $this->school_id, [ 61, 269 ] ) || ( in_array( $this->school_id, [ 61, 269 ] ) && $current_user->admin_country == 'USA' ) ) )
-                $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
+        if ( $this->platoon && $this->platoon->class_grade >= 3 )
+            $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
 
@@ -377,9 +377,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // only add th_chidon_id if the user is in grade 3+ 
         // if user is in myshliach or anash kinder, only add if in usa
         $exceptions = [483,482,544,584,583,588,430,577,13,220];
-        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) 
-            && ( !in_array( $this->school_id, [ 61, 269 ] ) || ( in_array( $this->school_id, [ 61, 269 ] ) && $current_user->admin_country == 'USA' ) ) 
-        )
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
