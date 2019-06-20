@@ -105,6 +105,7 @@ var registrationApp = function() {
         
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
+            $("#step-2 form .chidon-reg").show();
             if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
             if ( $(this).val() == 0 ) {
                 if ( !australian.includes( school_id ) ) {
@@ -618,6 +619,7 @@ var templates = function(){
             } else {
                 $( '#chidon-text' ).text( 'and you will receive a Study Guide from you school when school begins!' );
             }
+            $("#step-2 form .chidon-reg").hide();
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
             // reset book bought info

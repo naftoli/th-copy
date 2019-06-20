@@ -311,11 +311,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* REGISTRATION *******************************
     // returns array of registration rates. Call $this->registrationStatus() to get each ones status
     public function registrationRates() {
+        global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
         // add chidon if user is in grade 3+
-        if ( $this->platoon && $this->platoon->class_grade >= 3 )
-            $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && 
+            ( !in_array( $this->school_id, [ 61, 269 ] ) || ( in_array( $this->school_id, [ 61, 269 ] ) && $current_user->admin_country == 'USA' ) ) )
+                $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
 
@@ -350,6 +352,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
+        global $current_user;
+        
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
@@ -371,8 +375,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         
         // only add th_chidon_id if the user is in grade 3+ 
+        // if user is in myshliach or anash kinder, only add if in usa
         $exceptions = [483,482,544,584,583,588,430,577,13,220];
-        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) 
+            && ( !in_array( $this->school_id, [ 61, 269 ] ) || ( in_array( $this->school_id, [ 61, 269 ] ) && $current_user->admin_country == 'USA' ) ) 
+        )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
