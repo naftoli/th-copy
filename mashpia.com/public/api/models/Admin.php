@@ -97,7 +97,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         $selector = bin2hex(random_bytes(8));
         $token = random_bytes(32);
 
-        $url = sprintf('%s/api/password_reset?%s', MASHPIA_ABS_URL, http_build_query([
+        $url = sprintf('%s/api/password_reset?%s', "https://mashpia.com", http_build_query([
             'selector' => $selector,
             'validator' => bin2hex($token)
         ]));
