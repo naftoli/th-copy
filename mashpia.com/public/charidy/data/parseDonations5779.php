@@ -1,31 +1,34 @@
 <?php
-
-// upload cvs file and create json objects
+chdir('files');
 $info = [];
-if ( isset( $_FILES['donations'] ) ) {
-  if ( ( $handle = fopen($_FILES['donations']['tmp_name'], "r") ) !== FALSE ) {
-    while ( ( $data = fgetcsv($handle, 0, ",") ) !== FALSE ) {
-      $json = json_decode( stripslashes( $data[6] ) );
-      if ( !$json->donor_id ) $info[] = $json;
+
+// create json objects from files
+if ( ( $handle = fopen("Donations.csv", "r") ) !== FALSE ) {
+  while ( ( $data = fgetcsv($handle, 0, ",") ) !== FALSE ) {
+    $row = [];
+    foreach ( $data as $column ) {
+      $json = json_decode( stripslashes( $column ) );
+      $row[] = $json;
+    }
+    $ref_id = $row[0];
+    $json_id = $row[1]->get_data;
+    //if ( !$json->donor_id ) $info[] = $json;
+    $info[$ref_id] = $json_id;
+  }
+}
+
+if ( ( $handle = fopen("KidsTH.csv", "r") ) !== FALSE ) {
+  while ( ( $data = fgetcsv($handle, 0, ",") ) !== FALSE ) {
+    $row = [];
+    foreach ( $data as $column ) {
+      $json = json_decode( stripslashes( $column ) );
+      $row[] = $json;
     }
   }
 }
 
-echo count( $info );
+// echo count( $info );
 echo "<pre>";
 // output to screen json objects
-print_r( $info );
+print_r( $donations );
 echo "</pre>";
-?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf8" />
-  </head>
-  <body>
-    <form method="post" action="parseDonations5779.php" enctype="multipart/form-data">
-      <input type="file" name="donations" /><br /><br />
-      <input type="submit" name="submit" value="upload" />
-    </form>
-  </body>
-</html>
