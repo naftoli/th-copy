@@ -16,7 +16,7 @@ class MashpiaEmails {
         $message .= '<p>Best Regards,</p>'
 		.'<p>Chayolei Tzivos Hashem.</p>';
 
-        return self::sendEmail( 'noreply@mashpia.com', $email, $subject, $message );
+        return self::sendEmail( 'cth@mashpia.com', $email, $subject, $message );
     }
 
     public static function passwordChanged( $to, $name ) {

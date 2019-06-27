@@ -18,9 +18,11 @@ class ProfilesRouter {
         $admin = \Admin::find_by_email( $email );
         // if we have an admin, reset the password
         if ( $admin && $admin instanceof \Admin )
-            $admin->resetPassword();
-        // tell the client that we sent the email regardless
-        return json_response('Account Reset Email Sent');
+            if ( $admin->resetPassword() )
+                // tell the client that we sent the email
+                return json_response('Account Reset Email Sent');
+            else 
+                return json_error('Error sending email.');
     }
 
 }
