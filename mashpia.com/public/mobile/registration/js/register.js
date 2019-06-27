@@ -375,13 +375,14 @@ var registrationApp = function() {
             var shipping_charge = 5;
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
-                shipping_charge = 15;
+                if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
+                else shipping_charge = 30;
             }
-            // don't add to cart if anash kinder / myshliach and not in USA
-            if ( 
-                ! [ 269, 61 ].includes( selected_user.school.school_id ) || 
-                ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) 
-            ) {
+            // // don't add to cart if anash kinder / myshliach and not in USA
+            // if ( 
+            //     ! [ 269, 61 ].includes( selected_user.school.school_id ) || 
+            //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) 
+            // ) {
                 state.cart.push({
                     description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
                     price: shipping_included ? (40 + shipping_charge) : 40,
@@ -392,7 +393,7 @@ var registrationApp = function() {
                         paid: shipping_included ? (40 + shipping_charge) : 40
                     }
                 });
-            }
+            //}
         }
 
         current_index += 1;
@@ -627,8 +628,8 @@ var templates = function(){
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-                $("#non-usa").html("<b>You will only receive a study guide if your shipping address is within the USA.</b><br />");
-                $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.<br />You can only purchase a yahadus book if your shipping address is within the USA.</b>");
+                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b><br />");
+                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
             $("#step-2 form .chidon-reg").hide();
             // reset the book field
