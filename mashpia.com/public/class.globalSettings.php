@@ -79,12 +79,13 @@ class GlobalSettings {
      */
     public static function getRegCost( $type ) {
         if ( $type == 1 ) { // In Tuition
-            return 45.0;
-        } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount ($45, calculated elsewhere )
-            return 55.0;
-        }
+            return 50;
+        } 
+        // else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount 
+        //     return 50;
+        // }
         // everyone else / default return
-        return 55.0;
+        return 60;
     }
 
     /**

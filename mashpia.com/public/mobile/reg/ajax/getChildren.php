@@ -11,7 +11,7 @@ $year = mysql_real_escape_string( $_POST['year'] );
 require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
-require 'regFeeSchools.php';
+//require 'regFeeSchools.php';
 require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
 $yearly_raffle = new YearlyRaffle();
@@ -117,6 +117,11 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['needsReg'] = 0;
 		$children[$row['user_id']]['allowRemove'] = 0;
 		$children[$row['user_id']]['reg_types'] = [];
+
+		if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
+			$children[$row['user_id']]['needsReg'] = 1;
+			$children[$row['user_id']]['reg_types']['chayolei'] = true;
+		}
 		
 		// if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
 		// 	$children[$row['user_id']]['needsReg'] = 1;
