@@ -37,7 +37,6 @@ if ( ( $handle = fopen("Charidy5779.csv", "r") ) !== FALSE ) {
   while ( ( $data = fgetcsv($handle, 0, ",") ) !== FALSE ) {
     $row = [];
     foreach ( $data as $column ) {
-      //$json = json_decode( stripslashes( $column ) );
       $row[] = $column;
     }
     $donations[$row[0]]['info'] = $row;
@@ -46,10 +45,10 @@ if ( ( $handle = fopen("Charidy5779.csv", "r") ) !== FALSE ) {
 
 
 // echo count( $info );
-echo "<pre>";
-// output to screen json objects
-print_r( $donations );
-echo "</pre>";
+// echo "<pre>";
+// // output to screen json objects
+// print_r( $donations );
+// echo "</pre>";
 
 $year = GlobalSettings::getCharidyYear();
 $donations_created = 0;
@@ -214,3 +213,6 @@ foreach ( $donations as $key => $donation ) {
     }
   } 
 }
+
+echo "Donations Created: " . $donations_created . "<br />";
+echo "Child Donations Created: " . $child_donations_created;
