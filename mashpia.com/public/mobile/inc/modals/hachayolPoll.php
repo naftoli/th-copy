@@ -12,7 +12,6 @@
                 Here's your chance to tell the Hachayol editors your favorite part(s) of the magazine. For each page described below, 
                 choose the answer you feel is best. You can also add the reasons for your answers in the "notes" section below.
               </p>
-              <br />
               <?php
               $parts = ['Parshifier', 'Veholachto Bidrochov', 'Roots', 'Comics', 'Shine Back Page & Game', 'Dubbie\'s Diary', 'Yom Tov Poems'];
               foreach ( $parts as $part ) {
