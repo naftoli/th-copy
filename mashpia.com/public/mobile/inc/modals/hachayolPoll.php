@@ -7,21 +7,23 @@
                 <h4 class="modal-title">Hachayol Poll</h4>
             </div>
             <div class="modal-body">
-              <h4>Why do you open Hachayol?</h4>
+              <h1>Why do you open Hachayol?</h1>
               <p>
                 Here's your chance to tell the Hachayol editors your favorite part(s) of the magazine. For each page described below, 
                 choose the answer you feel is best. You can also add the reasons for your answers in the "notes" section below.
               </p>
+              <br />
               <?php
               $parts = ['Parshifier', 'Veholachto Bidrochov', 'Roots', 'Comics', 'Shine Back Page & Game', 'Dubbie\'s Diary', 'Yom Tov Poems'];
               foreach ( $parts as $part ) {
-                echo "<h5>" . $part . "</h5>";
+                echo "<h4>" . $part . "</h4>";
                 $name = str_replace("'", "", $part);
                 echo "<div><input type='radio' name='" . strtolower($name) . "' value='1' /> I love it<br />";
                 echo "<input type='radio' name='" . strtolower($name) . "' value='2' /> Not my Favorite<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div>";
+                echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div><br />";
               }
               ?>
+              <br />
               <textarea name="notes">Notes...</textarea>
             </div>
             <div class="modal-footer">
