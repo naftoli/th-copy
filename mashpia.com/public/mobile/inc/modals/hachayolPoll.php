@@ -22,7 +22,7 @@
                 echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div>";
               }
               ?>
-              <textarea name="notes" rows="6" cols="50"></textarea>
+              <textarea name="notes">Notes...</textarea>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" id="submit-poll" style="background-color: #5e1c77;border-color:#834999;">Submit</button>
