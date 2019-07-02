@@ -106,7 +106,7 @@ var registrationApp = function() {
             $("#anash_kinder_text").show();
             $(".shabbaton-cost").html("<b>$250</b>");
         }
-        
+
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
             $("#step-2 form .chidon-reg").show();
@@ -401,6 +401,33 @@ var registrationApp = function() {
 
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
+            // if myshliach / anash kinder need to confirm address
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
+                $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+                $("#ship-city").val( selected_user.parentAccount.admin_city );
+                $("#ship-state").val( selected_user.parentAccount.admin_state);
+                $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+                $("#ship-country").val( selected_user.parentAccount.admin_country );
+                $("#shipping-modal").modal('show');
+                $("#update-shipping").click( function() {
+                    var info = {};
+                    info.address1 = $("#ship-address1").val();
+                    info.address2 = $("#ship-address2").val();
+                    info.city = $("#ship-city").val();
+                    info.state = $("#ship-state").val();
+                    info.zip = $("#ship-zip").val();
+                    info.country = $("#ship-country").val();
+                    $.post("js/updateAddress.php", { info: info }, function( res ) {
+                        if ( res.success ) {
+                            alert( res.data );
+                            $("#shipping-modal").modal('hide');
+                        } else {
+                            alert( res.error );
+                        }
+                    });
+                });
+            }
             step3();
         } else {
             templates.showUser( state.selected_users[ current_index ], current_index );
