@@ -883,6 +883,8 @@ $he_chars = array(
 
 <?php include ("inc/modals/updateMedalRanks.php"); ?>
 
+<?php include ("inc/modals/hachayolPoll.php"); ?>
+
 <style>
 	.slick-prev, .slick-next {
 		color: #000;
@@ -900,6 +902,16 @@ $he_chars = array(
 	.slick-next {
 		right: 0px;
 	}
+	textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
+}
 </style>
 
 <script src="/js/utils/browser_detect.js"></script>
@@ -910,6 +922,8 @@ $he_chars = array(
 	
 	/******************* SCREEN SIZE *******************/
 	var screenSize = $(".container").width();
+
+	$("#hachayolPoll").modal('show');
 
 	//$( function() {
 		//$(".checkAll").hide();

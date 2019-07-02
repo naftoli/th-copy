@@ -134,16 +134,20 @@
 			.dailyBoxesLine {clear: both;border: 1px solid #eee;}
             div.quota {font-size: 1.6em;}
             .page-missions .navbar-header .item, .page-missions .navbar-header .slick-slider {color: #fff;}
-			#pollModal .modal-header {
+			/* #pollModal .modal-header {
 				text-align: center;
-			}
+			} */
+			/*			Some modal Styles*/
+			.modal-header {border-top-left-radius: 4px;border-top-right-radius: 4px;background: #5e1c77; color: #fff;}
+			.modal-header span, .modal-header{color: #fff;}
+			.modal-header .close{opacity: 1;font-size: 2em;width: 20px;font-weight: 100;}
         </style>
 	</head>
 	<body class="page-missions" id="main">
 		<div id="spinner"></div>
 	</body>
 	<!-- modal to find out which rally children liked the most -->
-	<div class="modal" tabindex="-1" role="dialog" id="pollModal">
+	<!-- <div class="modal" tabindex="-1" role="dialog" id="pollModal">
 		<div class="modal-dialog " role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -163,7 +167,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 <!--	The help modal (hardocoded in HTML?)-->
 	<div class="modal fade" tabindex="-1" role="dialog" id="myModal" style="display: none">
 		<div class="modal-dialog" role="document">
@@ -241,39 +245,39 @@
 				// update the missions for the user_id...
 				$.post('reg/ajax/updateMissions.php', { user_id : id });
 
-				var d1 = new Date();
-				var d2 = new Date('April 12, 2019 23:59:59');
-				if ( d2 > d1 ) {
-					$.post('ajax/checkPoll.php', { user: id }, function( result ) {
-						if ( result == 'true' ) {
-							$("#pollModal").modal('show');
-						} else {
-							continueLoading();
-						}
-					});
-				} else {
-					continueLoading();
-				}
+				// var d1 = new Date();
+				// var d2 = new Date('April 12, 2019 23:59:59');
+				// if ( d2 > d1 ) {
+				// 	$.post('ajax/checkPoll.php', { user: id }, function( result ) {
+				// 		if ( result == 'true' ) {
+				// 			$("#pollModal").modal('show');
+				// 		} else {
+				// 			continueLoading();
+				// 		}
+				// 	});
+				// } else {
+				// 	continueLoading();
+				// }
 
-				$("#pollModal .submit").click( function() {
-					var poll = $("#pollModal .rally:checked").val();
-					if ( poll === undefined ) {
-						alert('You must choose one of the options.');
-						return;
-					}
-					$.post('ajax/poll.php', { user: id, poll_number: poll }, function( result ) {
-						if ( result == 'true' ) {
-							alert('Thank you.');
-							continueLoading();
-						} else {
-							alert('There was an error submiting your answer.');
-							continueLoading();
-						}
-					});
-				});
+				// $("#pollModal .submit").click( function() {
+				// 	var poll = $("#pollModal .rally:checked").val();
+				// 	if ( poll === undefined ) {
+				// 		alert('You must choose one of the options.');
+				// 		return;
+				// 	}
+				// 	$.post('ajax/poll.php', { user: id, poll_number: poll }, function( result ) {
+				// 		if ( result == 'true' ) {
+				// 			alert('Thank you.');
+				// 			continueLoading();
+				// 		} else {
+				// 			alert('There was an error submiting your answer.');
+				// 			continueLoading();
+				// 		}
+				// 	});
+				// });
 
-				function continueLoading() {
-					$("#pollModal").remove();
+				//function continueLoading() {
+				//$("#pollModal").remove();
 					// options for the loading spinner....
 					var opts = {
 						lines: 8, 		// The number of lines to draw
@@ -345,7 +349,7 @@
 							$(".personalImg").append( html );
 						}); // end the user image
 					}); // end the AJAX loading of the Missions Page
-				}
+				//}
 			}); // end anynomus function
 		}); // end on page loaded listener
 	</script>
