@@ -212,6 +212,26 @@ class UserRegistrationRouter {
                             $store_city = $registration['store']['store_city'];
                             $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
                         }
+                        // send email to parents
+                        $headers[] = 'MIME-Version: 1.0';
+                        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                        $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+
+                        $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780. We hope you will take full advantage from the resources 
+                        available for this phenomenal journey, and utilize the opportunities to study and bond with your child.<br />
+                        In order to begin learning, your child will need the Yahadus book corresponding to their grade 
+                        (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
+                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.<br />
+                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)<br />
+                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
+
+                        $to = $current_user->admin_email;
+                        if ( !mail( $to, $subject, $message, $headers ) ) {
+                            $to = "naftoli@tzivoshashem.org";
+                            $subject = "Error in chidon email";
+                            $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                            mail( $to, $subject, $message, $headers );
+                        }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
                         $year = GlobalSettings::getChidonYear();

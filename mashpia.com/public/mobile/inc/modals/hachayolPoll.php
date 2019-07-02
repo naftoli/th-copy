@@ -18,7 +18,7 @@
                 echo "<h4>" . $part . "</h4>";
                 $name = str_replace("'", "", $part);
                 echo "<div><input type='radio' name='" . strtolower($name) . "' value='1' /> I love it<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='2' /> Not my Favorite<br />";
+                echo "<input type='radio' name='" . strtolower($name) . "' value='2' /> Not my favorite<br />";
                 echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div><br />";
               }
               ?>
