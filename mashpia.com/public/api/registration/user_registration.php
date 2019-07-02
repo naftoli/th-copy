@@ -226,11 +226,11 @@ class UserRegistrationRouter {
                         To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
 
                         $to = $current_user->admin_email;
-                        if ( !mail( $to, $subject, $message, $headers ) ) {
+                        if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
                             $to = "naftoli@tzivoshashem.org";
                             $subject = "Error in chidon email";
                             $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
-                            mail( $to, $subject, $message, $headers );
+                            mail( $to, $subject, $message, implode("\r\n", $headers) );
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
