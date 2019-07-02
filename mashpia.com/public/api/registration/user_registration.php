@@ -230,7 +230,7 @@ class UserRegistrationRouter {
                             $to = "naftoli@tzivoshashem.org";
                             $subject = "Error in chidon email";
                             $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
-                            mail( $to, $subject, $message, implode("\r\n", $headers) );
+                            @mail( $to, $subject, $message, implode("\r\n", $headers) );
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
