@@ -617,6 +617,45 @@
         </div>
     </div>
 
+    <div class="modal fade" id="shipping-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Please confirm your shipping address!</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        The shipping address we have on file is:<br />
+                        <div id="shipping-address" class="container">
+                            <div class="row" style="margin-bottom: 10px;">
+                                <input type="text" id="ship-address1" class="form-control col-md-6 col-sm-12" placeholder="address line 1" />
+                                <input type="text" id="ship-address2" class="form-control col-md-6 col-sm-12" placeholder="address line 2" />
+                            </div>
+                            <div class="row" style="margin-bottom: 10px;">
+                                <input type="text" id="ship-city" class="form-control col-md-6 col-sm-12" placeholder="city" /> 
+                                <input type="text" id="ship-state" class="form-control col-md-2 col-sm-4" placeholder="state" /> 
+                                <input type="text" id="ship-zip" class="form-control col-md-4 col-sm-8" placeholder="zip" />
+                            </div>
+                            <div class="row">
+                                <input type="text" id="ship-country" class="form-control col-12" placeholder="country" />
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        To change it, just update the fields and click "Update", otherwise click on "Confirm"
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="update-shipping" style="background-color: #2c539e; border-color:#2c419e;">Update</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #2c539e; border-color:#2c419e;">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="scripts">
         <!-- Jquery, Popper.js and Bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
