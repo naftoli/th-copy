@@ -102,7 +102,10 @@ var registrationApp = function() {
         if ( !australian.includes( school_id ) ) $("#study-guides").show();
 
         // show anash kinder text if anash kinder school
-        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
+        if ( school_id == anash_kinder ) {
+            $("#anash_kinder_text").show();
+            $("#shabbaton-cost").html("<b>$250</b>");
+        }
         
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
