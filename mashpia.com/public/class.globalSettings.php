@@ -136,8 +136,10 @@ class GlobalSettings {
      */
     public static function getChidonCost( $school_id = false ) {
         // Anash kinder and MyShliach has $12 fee
-        if ( in_array( $school_id, [ 61, 269 ] ) )
-            return 12;
+        if ( in_array( $school_id, [ 61, 269 ] ) ) {
+            if ( $school_id == 269 ) return 45;
+            else return 12;
+        }
         else return 8;
     }
 

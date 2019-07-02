@@ -104,7 +104,7 @@ var registrationApp = function() {
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
             $("#anash_kinder_text").show();
-            $("#shabbaton-cost").html("<b>$250</b>");
+            $(".shabbaton-cost").html("<b>$250</b>");
         }
         
         // yahadus registration
