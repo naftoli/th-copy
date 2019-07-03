@@ -428,7 +428,7 @@ var registrationApp = function() {
                         alert("The address, city, state, zip and country fields cannot be left blank!");
                         return false;
                     }
-                    $.post("js/updateAddress.php", { info: info }, function( res ) {
+                    $.post("updateAddress.php", { info: info }, function( res ) {
                         if ( res.success ) {
                             alert( res.data );
                             $("#shipping-modal").modal('hide');

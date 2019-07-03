@@ -148,7 +148,7 @@ class UserRegistrationRouter {
                 $current_user->admin_id, $description, $payment_info['total'], 
                 ( $total - $shipping_charges ), $shipping_charges,
                 $current_user->admin_postal, implode( ', ', $user_ids ),
-                json_encode( $payment_response )
+                //json_encode( $payment_response )
             ]);
             $trans_id = $MASHPIA_DB->lastInsertId();
         } else {
@@ -203,7 +203,7 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         // add book purchased info to db
                         if ( intval( $registration['purchased'] ) == 1 ) {

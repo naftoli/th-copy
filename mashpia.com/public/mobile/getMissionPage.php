@@ -885,6 +885,14 @@ $he_chars = array(
 
 <?php include ("inc/modals/hachayolPoll.php"); ?>
 
+<?php
+// find out if we should show poll
+$show = 1;
+$sql = "select * from hachayol_poll where user_id = " . $user_id;
+$result = mysql_query( $sql );
+if ( mysql_num_rows( $result ) > 0 ) $show = 0;
+?>
+
 <style>
 	.slick-prev, .slick-next {
 		color: #000;
@@ -923,7 +931,8 @@ $he_chars = array(
 	/******************* SCREEN SIZE *******************/
 	var screenSize = $(".container").width();
 
-	//$("#hachayolPoll").modal('show');
+	var showPoll = <?=$show?>;
+	if ( showPoll ) $("#hachayolPoll").modal('show');
 
 	//$( function() {
 		//$(".checkAll").hide();
