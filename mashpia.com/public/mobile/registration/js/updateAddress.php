@@ -20,7 +20,8 @@ $stmt = $MASHPIA_DB->prepare("
     admin_state = :state, 
     admin_city = :city, 
     admin_postal = :zip, 
-    admin_country = :country
+    admin_country = :country 
+    where admin_id = :admin
 ");
 $res = $stmt->execute([
     ':address1' =>  $info['address1'], 
@@ -28,7 +29,8 @@ $res = $stmt->execute([
     ':city'     =>  $info['city'], 
     ':state'    =>  $info['state'], 
     ':zip'      =>  $info['zip'], 
-    ':country'  =>  $info['country']
+    ':country'  =>  $info['country'], 
+    ':admin'    =>  $admin_id
 ]);
 if ( $res ) {
     json_response("Address Updated.");

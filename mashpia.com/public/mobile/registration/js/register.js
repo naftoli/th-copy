@@ -316,6 +316,11 @@ var registrationApp = function() {
                 }
             }
 
+            var poll = $("#yahadus-poll").val();
+            if ( !poll.length ) {
+                return showError("You must indicate how you will be learning for chidon.");
+            }
+
             // make sure shabbaton button was checked as well
             if ( !$("#shabbaton").is(":checked") ) {
                 return showError("You must indicate your acknowledgment of the Shabbaton fee.");
@@ -369,7 +374,8 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     }, 
                     recruited: $(".recruit:checked").val(), 
-                    recruitedBy: $("#user").val()
+                    recruitedBy: $("#user").val(), 
+                    poll: poll
                 }
             });
         }
@@ -662,7 +668,7 @@ var templates = function(){
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b><br />");
+                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
             $("#step-2 form .chidon-reg").hide();
