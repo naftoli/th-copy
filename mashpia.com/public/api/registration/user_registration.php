@@ -277,7 +277,7 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 )
-            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+            @mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
         json_response( "Successfully Registered." );
     }
