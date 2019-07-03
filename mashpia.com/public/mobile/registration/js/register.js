@@ -418,6 +418,10 @@ var registrationApp = function() {
                     info.state = $("#ship-state").val();
                     info.zip = $("#ship-zip").val();
                     info.country = $("#ship-country").val();
+                    if ( !(info.address1 && info.city && info.state && info.zip && info.country) ) {
+                        alert("The address, city, state, zip and country fields cannot be left blank!");
+                        return false;
+                    }
                     $.post("js/updateAddress.php", { info: info }, function( res ) {
                         if ( res.success ) {
                             alert( res.data );
