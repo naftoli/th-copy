@@ -923,7 +923,7 @@ $he_chars = array(
 	/******************* SCREEN SIZE *******************/
 	var screenSize = $(".container").width();
 
-	$("#hachayolPoll").modal('show');
+	//$("#hachayolPoll").modal('show');
 
 	//$( function() {
 		//$(".checkAll").hide();
