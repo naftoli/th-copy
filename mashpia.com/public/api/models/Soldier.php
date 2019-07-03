@@ -451,12 +451,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
             return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $recruited_by, $poll ] );
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, poll) VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
             return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $poll ] );
         }

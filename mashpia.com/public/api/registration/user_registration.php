@@ -148,7 +148,7 @@ class UserRegistrationRouter {
                 $current_user->admin_id, $description, $payment_info['total'], 
                 ( $total - $shipping_charges ), $shipping_charges,
                 $current_user->admin_postal, implode( ', ', $user_ids ),
-                //json_encode( $payment_response )
+                json_encode( $payment_response )
             ]);
             $trans_id = $MASHPIA_DB->lastInsertId();
         } else {
