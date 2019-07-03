@@ -14,16 +14,16 @@
               </p>
               <?php
               $parts = ['Parshifier', 'Veholachto Bidrochov', 'Roots', 'Comics', 'Shine Back Page & Game', 'Dubbie\'s Diary', 'Yom Tov Poems'];
-              foreach ( $parts as $part ) {
+              foreach ( $parts as $k => $part ) {
                 echo "<h4>" . $part . "</h4>";
                 $name = str_replace("'", "", $part);
-                echo "<div><input type='radio' name='" . strtolower($name) . "' value='1' /> I love it<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='2' /> Not my favorite<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div><br />";
+                echo "<div id='" . ($k + 1) . "'><input type='radio' class='poll' name='" . strtolower($name) . "' value='1' /> I love it<br />";
+                echo "<input type='radio' class='poll' name='" . strtolower($name) . "' value='2' /> Not my favorite<br />";
+                echo "<input type='radio' class='poll' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div><br />";
               }
               ?>
-              <br />
-              <textarea name="notes">Notes...</textarea>
+              <h4>Notes</h4>
+              <textarea name="notes" id="poll-notes"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" id="submit-poll" style="background-color: #5e1c77;border-color:#834999;">Submit</button>
@@ -32,3 +32,22 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script>
+  $("#submit-poll").click( function() {
+    var user_id = <?= $user_id ?>;
+    var poll_result = {};
+    var parts = ['Parshifier', 'Veholachto Bidrochov', 'Roots', 'Comics', 'Shine Back Page & Game', 'Dubbie\'s Diary', 'Yom Tov Poems'];
+    for (var i in [1,2,3,4,5,6,7]) {
+      var val = $("#" + i + " .poll:checked").val();
+      if ( val ) {
+        poll_result[ parts[i-1] ] = val;
+      }
+    }
+    poll_result.notes = $("#poll-notes").val();
+    console.log( poll_result );
+    $.post("registration/submitPoll.php", { user: user_id, poll_info: JSON.stringify(poll_result) }, function( res ) {
+      alert(res);
+      $("#hachayolPoll").modal('hide');
+    });
+  });
+</script>
