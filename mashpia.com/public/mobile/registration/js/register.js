@@ -671,7 +671,11 @@ var templates = function(){
                 if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
+
+            $("#step-2 form select#yahadus-poll option").prop('selected', false);
+
             $("#step-2 form .chidon-reg").hide();
+            
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
             // reset book bought info
