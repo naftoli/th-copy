@@ -39,7 +39,7 @@ if ( $poll_id ) {
     if ( $question != "notes" ) {
       $qry = "insert into hachayol_poll_details  
               set hachayol_poll_id = " . $poll_id . ",  
-              question = '" . $question . "', 
+              question = \"" . $question . "\", 
               answer = '" . get_answer( $answer ) . "'";
       if ( !mysql_query( $qry ) ) {
         $success = false;
