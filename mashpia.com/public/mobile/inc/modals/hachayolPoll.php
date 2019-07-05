@@ -16,14 +16,14 @@
               $parts = ['Parshifier', 'Veholachto Bidrochov', 'Roots', 'Comics', 'Shine Back Page & Game', 'Dubbie\'s Diary', 'Yom Tov Poems'];
               foreach ( $parts as $part ) {
                 echo "<h4>" . $part . "</h4>";
-                $name = str_replace("'", "", $part);
-                echo "<div><input type='radio' name='" . strtolower($name) . "' value='1' /> I love it<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='2' /> Not my Favorite<br />";
-                echo "<input type='radio' name='" . strtolower($name) . "' value='3' /> I never read it<br /></div><br />";
+                $name = strtolower( str_replace("'", "", $part) );
+                echo "<div><input type='radio' class='" . $name . "' name='" . $name . "' value='1' /> I love it<br />";
+                echo "<input type='radio' class='" . $name . "'  name='" . $name . "' value='2' /> Not my Favorite<br />";
+                echo "<input type='radio' class='" . $name . "' name='" . $name . "' value='3' /> I never read it<br /></div><br />";
               }
               ?>
               <br />
-              <textarea name="notes">Notes...</textarea>
+              <textarea id="notes" name="notes">Notes...</textarea>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" id="submit-poll" style="background-color: #5e1c77;border-color:#834999;">Submit</button>
@@ -32,3 +32,21 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script>
+  $(function() {
+    $("#submit-poll").click( function( e ) {
+      e.preventDefault();
+      // gather info
+      var parts = <?=$parts?>;
+      for ( p in parts ) {
+        var part = "." + parts[p];
+        if ( $(part).is(":checked") ) {
+          alert( $(part).val() );
+        }
+      }
+      var notes = $("#notes").val();
+      alert( notes );
+    });
+  });
+</script>
