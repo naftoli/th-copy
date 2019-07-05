@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require_once '../../vendor/autoload.php';
 
-$transport = (new Swift_SmtpTransport('mail.mashpia.com', 587))
+$transport = (new Swift_SmtpTransport('mashpia.com', 465))
   ->setUsername('mashpia@mashpia.com')
   ->setPassword('9pGftnyx;yvczPx6')
 ;
