@@ -203,7 +203,7 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         // add book purchased info to db
                         if ( intval( $registration['purchased'] ) == 1 ) {
@@ -211,6 +211,27 @@ class UserRegistrationRouter {
                             $store_name = $registration['store']['store_name'];
                             $store_city = $registration['store']['store_city'];
                             $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                        }
+                        // send email to parents
+                        $headers[] = 'MIME-Version: 1.0';
+                        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                        $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+
+                        $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780. We hope you will take full advantage from the resources 
+                        available for this phenomenal journey, and utilize the opportunities to study and bond with your child.<br />
+                        In order to begin learning, your child will need the Yahadus book corresponding to their grade 
+                        (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
+                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.<br />
+                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)<br />
+                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
+                        if ( $user->school_id == 61 ) $message .= "<br />To signup for online classes please click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>here</a>.";
+
+                        $to = $current_user->admin_email;
+                        if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
+                            $to = "naftoli@tzivoshashem.org";
+                            $subject = "Error in chidon email";
+                            $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                            @mail( $to, $subject, $message, implode("\r\n", $headers) );
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
@@ -256,7 +277,7 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 )
-            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+            @mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
         json_response( "Successfully Registered." );
     }

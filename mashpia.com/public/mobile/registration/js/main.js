@@ -25,6 +25,8 @@ function handleAPIResponse( callback ){
     return function( response ){
         if ( typeof response == 'string' )
             return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
+        if ( response == undefined ) 
+            return callback( false ); // IE bug
         if ( !response.success ){
             return showError( response.message );
         } else {

@@ -20,11 +20,11 @@ require_once( __DIR__ . "/../../classes/authorize/PaymentProfile.php" );
 include_once( __DIR__ . '/../../class.globalSettings.php');
 
 // set headers
+header("Content-Type: text/html; charset=utf-8;");
 header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
 header('Access-Control-Allow-Credentials: true');
 header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS, DELETE");
 header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization, login');
-header("Content-Type: text/html; charset=utf-8;");
 
 if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "OPTIONS")
     json_response( false );

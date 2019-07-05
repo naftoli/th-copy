@@ -102,8 +102,11 @@ var registrationApp = function() {
         if ( !australian.includes( school_id ) ) $("#study-guides").show();
 
         // show anash kinder text if anash kinder school
-        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
-        
+        if ( school_id == anash_kinder ) {
+            $("#anash_kinder_text").show();
+            $(".shabbaton-cost").html("<b>$250</b>");
+        }
+
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
             $("#step-2 form .chidon-reg").show();
@@ -313,6 +316,11 @@ var registrationApp = function() {
                 }
             }
 
+            var poll = $("#yahadus-poll").val();
+            if ( !poll.length ) {
+                return showError("You must indicate how you will be learning for chidon.");
+            }
+
             // make sure shabbaton button was checked as well
             if ( !$("#shabbaton").is(":checked") ) {
                 return showError("You must indicate your acknowledgment of the Shabbaton fee.");
@@ -366,7 +374,8 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     }, 
                     recruited: $(".recruit:checked").val(), 
-                    recruitedBy: $("#user").val()
+                    recruitedBy: $("#user").val(), 
+                    poll: poll
                 }
             });
         }
@@ -398,6 +407,37 @@ var registrationApp = function() {
 
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
+            // if myshliach / anash kinder need to confirm address
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
+                $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+                $("#ship-city").val( selected_user.parentAccount.admin_city );
+                $("#ship-state").val( selected_user.parentAccount.admin_state);
+                $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+                $("#ship-country").val( selected_user.parentAccount.admin_country );
+                $("#shipping-modal").modal('show');
+                $("#update-shipping").click( function() {
+                    var info = {};
+                    info.address1 = $("#ship-address1").val();
+                    info.address2 = $("#ship-address2").val();
+                    info.city = $("#ship-city").val();
+                    info.state = $("#ship-state").val();
+                    info.zip = $("#ship-zip").val();
+                    info.country = $("#ship-country").val();
+                    if ( !(info.address1 && info.city && info.state && info.zip && info.country) ) {
+                        alert("The address, city, state, zip and country fields cannot be left blank!");
+                        return false;
+                    }
+                    $.post("updateAddress.php", { info: info }, function( res ) {
+                        if ( res.success ) {
+                            alert( res.data );
+                            $("#shipping-modal").modal('hide');
+                        } else {
+                            alert( res.error );
+                        }
+                    });
+                });
+            }
             step3();
         } else {
             templates.showUser( state.selected_users[ current_index ], current_index );
@@ -628,10 +668,14 @@ var templates = function(){
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b><br />");
+                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
+
+            $("#step-2 form select#yahadus-poll option").prop('selected', false);
+
             $("#step-2 form .chidon-reg").hide();
+            
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
             // reset book bought info
