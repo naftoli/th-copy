@@ -23,6 +23,8 @@ function showError( message ){
 
 function handleAPIResponse( callback ){
     return function( response ){
+        console.log( typeof response );
+        console.log( response );
         if ( typeof response == 'string' )
             //return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
             return callback( false ); // previous line causing bugs
