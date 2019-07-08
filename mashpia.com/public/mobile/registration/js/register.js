@@ -9,6 +9,7 @@ hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right plac
 
 var myshliach = 61;
 var anash_kinder = 269;
+var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
@@ -135,6 +136,43 @@ var registrationApp = function() {
         // make sure only one of the book purchase inputs are checked
         $("#yahadus").click( function() {
             if ( $(this).is(":checked") && $("#no_yahadus").is(":checked") ) $("#no_yahadus").trigger('click');
+            if ( $(this).is(":checked") ) {
+                // if myshliach / anash kinder need to confirm address
+                if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                    $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
+                    $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+                    $("#ship-city").val( selected_user.parentAccount.admin_city );
+                    $("#ship-state").val( selected_user.parentAccount.admin_state);
+                    $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+                    $("#ship-country").val( selected_user.parentAccount.admin_country );
+                    $("#shipping-modal").modal('show');
+                    $("#update-shipping").click( function() {
+                        var info = {};
+                        info.address1 = $("#ship-address1").val();
+                        info.address2 = $("#ship-address2").val();
+                        info.city = $("#ship-city").val();
+                        info.state = $("#ship-state").val();
+                        info.zip = $("#ship-zip").val();
+                        info.country = $("#ship-country").val();
+                        if ( !(info.address1 && info.city && info.state && info.zip && info.country) ) {
+                            alert("The address, city, state, zip and country fields cannot be left blank!");
+                            return false;
+                        }
+                        var current_user = selected_user; // needed for scope
+                        $.post("updateAddress.php", { info: info }, function( res ) {
+                            if ( res.success ) {
+                                alert( res.data );
+                                current_user.parentAccount.admin_country = info.country;
+                                if ( current_user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+                                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
+                                $("#shipping-modal").modal('hide');
+                            } else {
+                                alert( res.error );
+                            }
+                        });
+                    });
+                }
+            }
         });
         $("#no_yahadus").click( function() {
             if ( $(this).is(":checked") && $("#yahadus").is(":checked") ) $("#yahadus").trigger('click');
@@ -357,6 +395,7 @@ var registrationApp = function() {
         } 
         if ( selected_charges.chidon ) {
             var anash = selected_user.school.school_id === anash_kinder;
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
                 description: 'Chidon Registration ' + selected_user.first + ( anash ? ' (includes coordinator and study guide)' : ''),
                 price: selected_user.registrationRates.chidon,
@@ -375,7 +414,7 @@ var registrationApp = function() {
                     }, 
                     recruited: $(".recruit:checked").val(), 
                     recruitedBy: $("#user").val(), 
-                    poll: poll
+                    poll: poll 
                 }
             });
         }
@@ -407,37 +446,6 @@ var registrationApp = function() {
 
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
-            // if myshliach / anash kinder need to confirm address
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
-                $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
-                $("#ship-city").val( selected_user.parentAccount.admin_city );
-                $("#ship-state").val( selected_user.parentAccount.admin_state);
-                $("#ship-zip").val( selected_user.parentAccount.admin_postal );
-                $("#ship-country").val( selected_user.parentAccount.admin_country );
-                $("#shipping-modal").modal('show');
-                $("#update-shipping").click( function() {
-                    var info = {};
-                    info.address1 = $("#ship-address1").val();
-                    info.address2 = $("#ship-address2").val();
-                    info.city = $("#ship-city").val();
-                    info.state = $("#ship-state").val();
-                    info.zip = $("#ship-zip").val();
-                    info.country = $("#ship-country").val();
-                    if ( !(info.address1 && info.city && info.state && info.zip && info.country) ) {
-                        alert("The address, city, state, zip and country fields cannot be left blank!");
-                        return false;
-                    }
-                    $.post("updateAddress.php", { info: info }, function( res ) {
-                        if ( res.success ) {
-                            alert( res.data );
-                            $("#shipping-modal").modal('hide');
-                        } else {
-                            alert( res.error );
-                        }
-                    });
-                });
-            }
             step3();
         } else {
             templates.showUser( state.selected_users[ current_index ], current_index );
@@ -585,9 +593,12 @@ var registrationApp = function() {
             postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
             postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
-            
+
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function() { 
+            if ( showClasses ) {
+                $("#successModal #success").append("<p>To Register for Myshliach online weekly classes please visit <a href='http://myshliach.com/classes'>myshliach.com/classes</a></p>");
+            }
             $("#successModal").modal('show'); 
         });
     }
