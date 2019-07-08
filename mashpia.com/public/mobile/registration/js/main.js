@@ -24,7 +24,8 @@ function showError( message ){
 function handleAPIResponse( callback ){
     return function( response ){
         if ( typeof response == 'string' )
-            return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
+            //return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
+            return callback( false ); // previous line causing bugs
         if ( response == undefined ) 
             return callback( false ); // IE bug
         if ( !response.success ){
