@@ -1268,7 +1268,7 @@ if ( mysql_num_rows( $result ) > 0 ) $show = 0;
 		
 		$(".parsha-navigator").click(function(event){
 			var date = event.target.dataset.d;
-			if (date >= toJulian( new Date() )) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
+			if (date >= ToJulian( new Date() )) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
 			else var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
 			window.location.href = url;
 		});
