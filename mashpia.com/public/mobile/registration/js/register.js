@@ -100,7 +100,7 @@ var registrationApp = function() {
         var australian = [ 55, 66, 110, 112, 180, 256 ]; 
 
         // show study guides info for all non Australian schools
-        if ( !australian.includes( school_id ) ) $("#study-guides").show();
+        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
 
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
