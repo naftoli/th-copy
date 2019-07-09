@@ -1257,10 +1257,19 @@ if ( mysql_num_rows( $result ) > 0 ) $show = 0;
 			//$(this).parent().parent().find('.dInfo').toggle();
 			//$(this).parent().parent().find('.dMark').toggle();
 		});
+
+		Date.prototype.ToJulian = function() {
+			var d = this.getDate();
+			var y = this.getFullYear();
+			var m = this.getMonth() + 1;
+
+			return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
+		};
 		
 		$(".parsha-navigator").click(function(event){
 			var date = event.target.dataset.d;
-			var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
+			if (date >= new Date().toJulian()) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
+			else var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
 			window.location.href = url;
 		});
 		
