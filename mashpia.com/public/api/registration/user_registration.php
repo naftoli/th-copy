@@ -217,13 +217,14 @@ class UserRegistrationRouter {
                         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                         $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
 
+                        $subject = "Chidon Registration Confirmation";
                         $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780. We hope you will take full advantage from the resources 
-                        available for this phenomenal journey, and utilize the opportunities to study and bond with your child.<br />
-                        In order to begin learning, your child will need the Yahadus book corresponding to their grade 
-                        (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
-                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.<br />
-                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)<br />
-                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
+                                    available for this phenomenal journey, and utilize the opportunities to study and bond with your child.<br />
+                                    In order to begin learning, your child will need the Yahadus book corresponding to their grade 
+                                    (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
+                                    along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.<br />
+                                    Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)<br />
+                                    To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
                         if ( $user->school_id == 61 ) $message .= "<br />To signup for online classes please click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>here</a>.";
 
                         $to = $current_user->admin_email;
