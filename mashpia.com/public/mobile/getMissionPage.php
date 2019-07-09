@@ -924,7 +924,7 @@ if ( mysql_num_rows( $result ) > 0 ) $show = 0;
 
 <script src="/js/utils/browser_detect.js"></script>
 <script>
-	function ToJulian = function( date ) {
+	function ToJulian( date ) {
 		var d = date.getDate();
 		var y = date.getFullYear();
 		var m = date.getMonth() + 1;
