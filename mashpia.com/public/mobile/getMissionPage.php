@@ -924,14 +924,14 @@ if ( mysql_num_rows( $result ) > 0 ) $show = 0;
 
 <script src="/js/utils/browser_detect.js"></script>
 <script>
-	Date.prototype.ToJulian = function() {
-		var d = this.getDate();
-		var y = this.getFullYear();
-		var m = this.getMonth() + 1;
+	function ToJulian = function( date ) {
+		var d = date.getDate();
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
 
 		return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
 	};
-	
+
 	/******************* DATE SLIDER *******************/
 	var currentSlide = <?=$jd-$start?>;
 	var bSlid = localStorage.getItem('achos-missions-slid');
@@ -1268,7 +1268,7 @@ if ( mysql_num_rows( $result ) > 0 ) $show = 0;
 		
 		$(".parsha-navigator").click(function(event){
 			var date = event.target.dataset.d;
-			if (date >= new Date().toJulian()) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
+			if (date >= toJulian( new Date() )) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
 			else var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
 			window.location.href = url;
 		});
