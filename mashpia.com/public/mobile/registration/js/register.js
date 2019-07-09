@@ -597,7 +597,7 @@ var registrationApp = function() {
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function() { 
             if ( showClasses ) {
-                $("#successModal #success").append("<p>To Register for Myshliach online weekly classes please click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>here</a></p>");
+                $("#successModal #success").append("<p>To Register for MyShliach's online weekly classes please click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>here</a></p>");
             }
             $("#successModal").modal('show'); 
         });
