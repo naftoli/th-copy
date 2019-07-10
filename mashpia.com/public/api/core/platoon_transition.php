@@ -74,14 +74,11 @@ class PlatoonTransitionRouter {
     }
 
     function removeFromBase(){
-        // get the current year to log the information.
-        $year = GlobalSettings::getCurrentYear();
-
         $user_ids = $_POST['user_ids'];
         if ( !$user_ids )
             json_error('Invalid Request', false, 200);
 
-        $this->moveOrCreate( $user_ids, null, null, $year );
+        $this->remove( $user_ids ); 
 
         json_response( false );
     }
@@ -143,6 +140,30 @@ class PlatoonTransitionRouter {
                     $user_id, $current_user->admin_id, 
                     $school_id, $class_id, $year
                 ]);
+            }
+        }
+    }
+
+    private function remove( $user_ids ) {
+        global $MASHPIA_DB;
+
+        $old_grade = $MASHPIA_DB->prepare("select class_grade from users u join classes c on u.class_id = c.class_id where user_id = ?");
+        $new_grade = $MASHPIA_DB->prepare("select class_id from classes where school_id = ? and class_grade = ?");
+        $remove = $MASHPIA_DB->prepare("update users set user_registered = null, school_id = ?, class_id = ? where user_id = ?");
+
+        // deleting moves them to unassigned students school
+        $school_id = 612;
+        foreach ( $user_ids as $user_id ) {
+            // find grade user was in and find corresponding class id in unassigned students school
+            $result = $old_grade->execute([ $user_id ]);
+            if ( $result ) {
+                $class_grade = $old_grade->fetch()['class_grade'];
+            }
+            else $class_grade = 'Pre1a'; // put them in pre1a if there's an error
+            $res = $new_grade->execute([ $school_id, $class_grade ]);
+            if ( $res ) {
+                $class_id = $new_grade->fetch()['class_id'];
+                $remove->execute([ $school_id, $class_id, $user_id ]);
             }
         }
     }
