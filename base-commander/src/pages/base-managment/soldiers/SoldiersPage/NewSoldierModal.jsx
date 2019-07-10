@@ -69,7 +69,7 @@ class NewSoldierModal extends Component {
       .then( () => this.setState({ saving: false }), 
             err => { 
               alert( err.error ); 
-              this.setState({ saving: false})
+              this.setState({ saving: false })
             });
   }
 
