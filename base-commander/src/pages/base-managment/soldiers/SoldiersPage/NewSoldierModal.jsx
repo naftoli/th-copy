@@ -68,8 +68,7 @@ class NewSoldierModal extends Component {
     Promise.resolve( this.props.onSubmit( soldier ) )
       .then( () => this.setState({ saving: false }), 
             err => { 
-              alert( err.error ),
-              this.setState({ saving: false })
+              alert( err.error )
             });
   }
 
