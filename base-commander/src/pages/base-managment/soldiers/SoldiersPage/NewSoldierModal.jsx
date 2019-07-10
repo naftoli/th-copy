@@ -9,6 +9,7 @@ import { MissionTypeSelect } from 'components/selects';
 import { 
   NameRow, DobCol, ProfileRow, BasePlatoonRow 
 } from '../components';
+import { toast } from 'react-toastify';
 
 const initialSoldier = {
   first: '', last: '', first_he: '',
@@ -66,7 +67,11 @@ class NewSoldierModal extends Component {
     this.setState({ saving: true });
 
     Promise.resolve( this.props.onSubmit( soldier ) )
-      .then( () => this.setState({ saving: false }) );
+      .then( () => this.setState({ saving: false }), 
+            err => { 
+              toast.error( err.error ); 
+              this.setState({ saving: false })
+            });
   }
 
   render() {
