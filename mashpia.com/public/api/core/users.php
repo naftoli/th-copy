@@ -84,6 +84,9 @@ class UsersRouter {
     public function create() {
         global $current_user;
         $user = Soldier::build( $_POST );
+
+        // make sure soldier with this first and last name and date of birth doesn't exist
+
         // if it is a teacher, set the school id to the platoons school id
         if ( $current_user->login->code === 'TEACHER' ) {
             $user->school_id = $current_user->login->model->school_id;
