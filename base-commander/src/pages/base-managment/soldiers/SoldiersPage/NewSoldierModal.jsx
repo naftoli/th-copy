@@ -66,7 +66,10 @@ class NewSoldierModal extends Component {
     this.setState({ saving: true });
 
     Promise.resolve( this.props.onSubmit( soldier ) )
-      .then( () => this.setState({ saving: false }) );
+      .then( () => this.setState({ saving: false }) )
+      .catch( e => {
+        return Promise.reject( e );
+      });
   }
 
   render() {
