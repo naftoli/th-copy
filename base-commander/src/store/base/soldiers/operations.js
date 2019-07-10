@@ -18,7 +18,10 @@ export const getSoldiers = () => dispatch => {
 // create new soldier
 export const createSoldier = data => dispatch => {
   return API.post( '/core/users', data )
-    .then( soldier => dispatch( actions.addSoldier( soldier ) ) );
+    .then( soldier => dispatch( actions.addSoldier( soldier ) ) )
+    .catch( e => {
+      return Promise.reject( e );
+    });
 }
 
 // update a single soldier
