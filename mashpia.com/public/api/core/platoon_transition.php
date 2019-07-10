@@ -149,7 +149,7 @@ class PlatoonTransitionRouter {
 
         $old_grade = $MASHPIA_DB->prepare("select class_grade from users u join classes c on u.class_id = c.class_id where user_id = ?");
         $new_grade = $MASHPIA_DB->prepare("select class_id from classes where school_id = ? and class_grade = ?");
-        $remove = $MASHPIA_DB->prepare("update users set user_registered = null, school_id = ?, class_id = ?");
+        $remove = $MASHPIA_DB->prepare("update users set user_registered = null, school_id = ?, class_id = ? where user_id = ?");
 
         // deleting moves them to unassigned students school
         $school_id = 612;
@@ -159,7 +159,7 @@ class PlatoonTransitionRouter {
             if ( !$class_grade ) $class_grade = 'Pre1a'; // put them in pre1a if there's an error
             $class_id = $new_grade->execute([ $school_id, $class_grade ])['class_id'];
             if ( $class_id ) {
-                $remove->execute([ $school_id, $class_id ]);
+                $remove->execute([ $school_id, $class_id, $user_id ]);
             }
         }
     }
