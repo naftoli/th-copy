@@ -155,10 +155,14 @@ class PlatoonTransitionRouter {
         $school_id = 612;
         foreach ( $user_ids as $user_id ) {
             // find grade user was in and find corresponding class id in unassigned students school
-            $class_grade = $old_grade->execute([ $user_id ])['class_grade'];
-            if ( !$class_grade ) $class_grade = 'Pre1a'; // put them in pre1a if there's an error
-            $class_id = $new_grade->execute([ $school_id, $class_grade ])['class_id'];
-            if ( $class_id ) {
+            $result = $old_grade->execute([ $user_id ]);
+            if ( $result ) {
+                $class_grade = $old_grade->fetch()['class_grade'];
+            }
+            else $class_grade = 'Pre1a'; // put them in pre1a if there's an error
+            $res = $new_grade->execute([ $school_id, $class_grade ]);
+            if ( $res ) {
+                $class_id = $new_grade->fetch()['class_id'];
                 $remove->execute([ $school_id, $class_id, $user_id ]);
             }
         }
