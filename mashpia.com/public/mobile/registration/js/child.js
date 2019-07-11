@@ -135,11 +135,13 @@ var childApp = function(){
         // }
 
         $.post("/api/core/users", postData, function( response ){
+            //console.log( response );
             if( response.success ){
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
             } else {
+                response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).";
                 showError( response.message || response );
             }
         });

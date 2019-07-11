@@ -92,7 +92,7 @@ class UsersRouter {
         $dob = $_POST['dob'];
         $existing_user =  Soldier::find('all',array('conditions' => array('school_id = ? and first = ? and last = ? and dob = ?', $school_id, $first, $last, $dob)));
         if ( $existing_user ) {
-            json_error('A child with this name and dob already exists in your school.');
+            json_error('A child with this name and dob already exists.');
         }
 
         // if it is a teacher, set the school id to the platoons school id

@@ -1,6 +1,7 @@
 <?php
 chdir('../../../');
 require 'db.php';
+
 $user_id = mysql_real_escape_string(  $_POST['user_id'] );
 $first = mysql_real_escape_string( $_POST['fname'] );
 $last = mysql_real_escape_string( $_POST['last'] );
@@ -17,13 +18,22 @@ $dob = $dobArr[2] . '-' . $dobArr[0] . '-' . $dobArr[1];
 $gender = mysql_real_escape_string( $_POST['gender'] );
 $photo = mysql_real_escape_string( $_POST['photo'] );
 $lang = mysql_real_escape_string( $_POST['lang'] );
+$school_type_id = mysql_real_escape_string( $_POST['type'] );
 
-// need to check if dob changed
-$sql = "select dob from users where user_id = " . $user_id;
+// make sure we have correct school type id
+if ( strtolower($gender) == 'f' ) {
+	if ( $school_type_id == 2 ) $school_type_id = 3;
+	else if ( $school_type_id == 12 ) $school_type_id = 13;
+}
+
+// need to check if dob or school type id changed
+$dobChanged = false;
+$missionTypeChanged = false;
+$sql = "select dob, school_type_id from users where user_id = " . $user_id;
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 if ($dob != $row['dob']) $dobChanged = true;
-else $dobChanged = false;
+if ($school_type_id != $row['school_type_id']) $missionTypeChanged = true;
 
 /*
 $sql = "update users set 
@@ -54,11 +64,8 @@ if ($grade > 0) {
 	$sql .= ", class_id = $grade";
 }
 // update the gender and the school type ID
-if ($gender == 'm' || $gender == 'f') {
-	$sql .= ", gender = '" . $gender . "'";
-	$school_type_id = $gender == 'm' ? 2 : 3;
-	$sql .= ", school_type_id = '$school_type_id'";
-}
+$sql .= ", gender = '" . $gender . "'";
+$sql .= ", school_type_id = $school_type_id";
 
 if (strpos($photo, "img/") !== false) {
 	$sql .= ", mobile_pic = '" . $photo . "'";
@@ -67,23 +74,35 @@ $sql .= " WHERE user_id = " . $user_id;
 $success = mysql_query( $sql );
 
 //need to run birthday mission creator if dob changed
-if ($success && $dobChanged) {
-	// delete all existing birthday tasks
-	$sql = "delete from birthdays where user_id = " . $user_id;
-	mysql_query($sql);
-	
-	//update birthday
-	require 'class.birthday.php';
-	$b = new Birthday( $user_id );
-	$b->setBirthday();
-	require 'class.birthdayYi.php';
-	$b = new BirthdayYi( $user_id );
-	$b->setBirthday();
-	
-	//set dob for syncing with wp
-	require 'class.heDob.php';
-	$hdob = new HeDob( $user_id );
-	$hdob->setHeDob();
+if ( $success ) {
+	if ( $dobChanged ) {
+		// delete all existing birthday tasks
+		$sql = "delete from birthdays where user_id = " . $user_id;
+		mysql_query($sql);
+		
+		//update birthday
+		require 'class.birthday.php';
+		$b = new Birthday( $user_id );
+		$b->setBirthday();
+		require 'class.birthdayYi.php';
+		$b = new BirthdayYi( $user_id );
+		$b->setBirthday();
+		
+		//set dob for syncing with wp
+		require 'class.heDob.php';
+		$hdob = new HeDob( $user_id );
+		$hdob->setHeDob();
+	}
+	if ( $missionTypeChanged ) {
+		// update campaign enrollment
+		require_once 'class.campaignEnrollment.php';	
+		try {
+			$c = new CampaignEnrollment($user_id);
+			$c->enroll();
+		} catch (EnrollmentException $e) {
+			$success = false;
+		}
+	}
 }
 echo $success;
 ?>
