@@ -47,7 +47,7 @@ export class BulkUploadModal extends Component {
             <Callout color='primary' title='Directions:'>
               <p id='warning'>
                 Warning! Do not add any Soldiers that are switching from another Tzivos Hashem base. 
-                Please contact <a href='cth@tizvoshashem.org'>Headquarters</a> with a list of names, dob's and base's they came from to be transferred to your base. 
+                Please contact <a href='mailto:cth@tizvoshashem.org' target="_top">Headquarters</a> with a list of names, dob's and base's they came from to be transferred to your base. 
                 Leaving them in your spreadsheet will reset them back to a private.
               </p>
               <ol style={{ paddingLeft: '0px' }}>
