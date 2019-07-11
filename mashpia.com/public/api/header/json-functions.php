@@ -31,7 +31,7 @@ function json_response( $data, $success = true, $parseNumbers = false, $die = tr
  */
 function json_error( $msg, $data = false, $code = 400, $die = true ) {
     // set the correct headers
-    http_response_code( $code );
+    //http_response_code( $code ); // seems to create bugs where the browser ignores the response b/c it's set to 400
     header("Content-Type: application/json; charset=utf-8;");
     // set success to false
     echo json_encode([
