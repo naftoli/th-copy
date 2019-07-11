@@ -71,13 +71,31 @@ class CampaignEnrollment {
     
     private function setYear() {
         // figure out age / year
-        $d1 = new DateTime();
-        $d2 = new DateTime($this->userInfo['dob']);
-        $age = $d2->diff($d1);
-        $level = $age->format('%y');
-        if ($level < 6) $level = 6;
-        if ($level > 14) $level = 14;
-        $this->year = $level;
+        // $d1 = new DateTime();
+        // $d2 = new DateTime($this->userInfo['dob']);
+        // $age = $d2->diff($d1);
+        // $level = $age->format('%y');
+        // if ($level < 6) $level = 6;
+        // if ($level > 14) $level = 14;
+        // $this->year = $level;
+
+        // changed to deciding year by grade
+        $sql = "select class_grade from users u join classes c on u.class_id = c.class_id where u.user_id = " . $this->user_id;
+        $result = mysql_query( $sql );
+        if ( mysql_num_rows( $result ) > 0 ) {
+            $row = mysql_fetch_assoc( $result );
+            $grade = $row['class_grade'];
+        } else {
+            $grade = 'pre1a'; // put in lowest grade
+        }
+        switch ( $grade ) {
+            case 'pre1a':
+                $this->year = 6;
+                break;
+            default:
+                $this->year = intval( $grade ) + 6;
+                break;
+        }
     }
     
     private function resetTracks() {

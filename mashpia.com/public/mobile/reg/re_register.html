@@ -230,6 +230,20 @@
 		                  </div>
 		              </div>
 		          </div>
+					</div>
+					
+					<div class="row">
+		      	<div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divclass">
+		                  <div class="input-group" id="type_select">
+		                      <span class="input-group-addon"><img src="/mobile/img_new/arrow-2-color-gray-svg.svg"/></span>
+		                      <select id="type" name="type" class="selectpicker show-tick form-control" data-style="btn-default" required>
+		                      	<option value="2">Chabad Missions</option>
+		                      	<option value="12">Frum Missions</option>
+		                      </select>
+		                  </div>
+		              </div>
+		          </div>
 		      </div>
 					
 					<div class="row reg">
@@ -485,6 +499,7 @@
 						window.location = "parent_detail.html";
 					} else {
 						var info = $.parseJSON( success );
+						console.log( info );
 						
 						if (info.mobile_pic != null) {
 							$("#imgchild").attr('src', info.mobile_pic);
@@ -523,6 +538,15 @@
 						$("#lang_select button span.filter-option").text( // update the text for the dropdown...
 							$("#lang_select li[data-original-index='" + (lang - 1) + "']").text() // set it to the value of the selected item...
 						);
+
+						// set mission type
+						var school_type_id = info.school_type_id;
+						if ( school_type_id == 2 || school_type_id == 3 ) {
+							$("#type option").eq(0).attr('selected', true);
+						} else if ( school_type_id == 12 || school_type_id == 13 ) {
+							$("#type option").eq(1).attr('selected', true);
+						}
+						$("#type").selectpicker('refresh');
 						
 						$.post('ajax/getSchools.php', function( success ) {
 							var schools = $.parseJSON( success );
@@ -663,6 +687,7 @@
 					//return false;
 				}
 				var lang = $("#lang").val();
+				var type = $("#type").val();
 				/*
 				var ch = p.indexOf('=');
 				if (ch != -1) {
@@ -777,7 +802,8 @@
 								dob : dob, 
 								gender : gender, 
 								photo : photo, 
-								lang : lang 
+								lang : lang, 
+								type : type 
 							}, function( success ) {
 								var result = parseInt(success);
 								if ( !result ) {
