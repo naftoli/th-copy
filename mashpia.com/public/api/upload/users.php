@@ -18,7 +18,7 @@ class UsersUploadRouter {
         // columns to create users
         $columnNames = [
             "*First Name",  "*Last Name", 
-            "*First Name Hebrew",  "*Last Name Hebrew",
+            "First Name Hebrew",  "Last Name Hebrew",
             "*Gender", "*English Date of Birth", 
             "Address 1", "Address 2", "City", "State", "Zip", "Country", 
             "Phone", "Parents Email", "*Mission Type"
