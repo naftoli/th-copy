@@ -98,7 +98,8 @@ class PlatoonTransitionPage extends Component {
           soldiers={ soldiers }
           selection={ selection } 
           updateSelection={ this.updateSelection }
-          loading={ loading } />
+          loading={ loading } 
+          discharge={ this.discharge } />
 
         <Step3 { ...to } 
           selectChange={ this.selectChange('to') }

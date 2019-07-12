@@ -78,6 +78,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a> -->
         </div>
+        <h2>Posters</h2>
+        <div id="action-links">
+            <a href="/raffles/posters/weekly.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                    <span class="link-text">Weekly Raffle Winners Posters</span>
+                </div>
+            </a>
+        </div>
         <?if ($admin_user['auth'] == 'super') {?>
             <h2>Administration Forms</h2>
             <div id="action-links">

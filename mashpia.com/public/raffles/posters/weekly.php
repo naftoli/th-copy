@@ -102,7 +102,7 @@ foreach ($schools as $school_id => $school) {
             } */
             <?php
             // generate 26 different ids with different background pics
-            for ( $i = 1; $i <= 26; $i++ ) {
+            for ( $i = 1; $i <= 43; $i++ ) {
                 $urls[$i] = "Weekly-Prize-Poster-Template_Part$i.jpg";
             }
             foreach ( $urls as $i => $url ) {
@@ -124,14 +124,14 @@ foreach ($schools as $school_id => $school) {
                 echo "<div class='winner' id='week" . $weeks[$raffle] . "'><div class='names'>";
                 $j = 0;
                 foreach ($names as $name) {                    
-                    echo "<div class='name'>" . strtoupper($name['first'] . ' ' . $name['last']) . "</div>";
                     // after 4 names create new page
-                    if (++$j > 3) {
+                    if (++$j > 4) {
                         echo "</div></div>";
                         echo "<div class='schoolInfo'>" . $schools[$school] . "</div>";
                         echo "<div class='winner' id='week" . $weeks[$raffle] . "'><div class='names'>";
                         $j = 0;
                     }
+                    echo "<div class='name'>" . strtoupper($name['first'] . ' ' . $name['last']) . "</div>";
                 }
                 echo "</div></div>";
                 //echo "<div class='schoolInfo'><img src='" . $_SERVER['SERVER_NAME'] . "/mission_report/schoolLogos/" . $logos[$school] . "' width=80 /><br />" . $schools[$school] . "</div>";

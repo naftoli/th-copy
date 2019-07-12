@@ -59,7 +59,7 @@ foreach ($teachers as $school => $info) { ?>
             <th>Teacher Name (Mission Sheets)</th>
             <th>Email</th>
             <th>Cell Phone</th>
-			<!-- <th></th> -->
+			<th></th>
         </tr>
         <?
         foreach ($info as $class_id => $row) { ?>
@@ -71,20 +71,17 @@ foreach ($teachers as $school => $info) { ?>
                     <?=$row['class_sub']?>
                 </td>
                 <td>
-                    <!-- <input type='text' class='class_teacher' value='<?=$row['class_teacher']?>' /> -->
-                    <?=$row['class_teacher']?>
+                    <input type='text' class='class_teacher' value='<?=$row['class_teacher']?>' />
                 </td>
                 <td>
-                    <!-- <input type='email' class='email' value='<?=$row['email']?>' /> -->
-                    <?=$row['email']?>
+                    <input type='email' class='email' value='<?=$row['email']?>' />
                 </td>
                 <td>
-                    <!-- <input type='text' size='10' class='cell' value='<?=$row['cell']?>' /> -->
-                    <?=$row['cell']?>
+                    <input type='text' size='10' class='cell' value='<?=$row['cell']?>' />
                 </td>
-                <!-- <td>
+                <td>
                     <button class='update' data-class_id="<?=$class_id?>">Update</button>
-                </td> -->
+                </td>
             </tr>
         <?php
 		}
