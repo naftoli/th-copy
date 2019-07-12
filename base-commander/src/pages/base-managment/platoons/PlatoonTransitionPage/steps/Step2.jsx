@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 // components
-import { SelectTable } from 'components/ui';
+import { SelectTable, ButtonBar, FontAwesome } from 'components/ui';
+import { Button } from 'reactstrap';
 
 class Step2 extends Component {
   // refs
@@ -25,7 +26,7 @@ class Step2 extends Component {
   toggle = ( selection ) => this.props.updateSelection( selection );
   // render
   render() {
-    const { soldiers, loading, selection } = this.props;
+    const { soldiers, loading, selection, discharge } = this.props;
 
     return (
       <div id='step-2'>
@@ -41,6 +42,13 @@ class Step2 extends Component {
           maxSelectionSize={ soldiers.length }
           toggleRow={ this.toggle }
           toggleAll={ this.toggle } />
+        
+        <ButtonBar>
+          <Button color='danger' onClick={ discharge }>
+            <FontAwesome icon="trash-alt" />{' '}
+            Discharge (Delete) Soldiers 
+          </Button>
+        </ButtonBar>
       </div>
     );
   }

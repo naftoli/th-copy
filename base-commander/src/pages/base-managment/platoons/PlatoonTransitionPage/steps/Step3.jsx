@@ -29,10 +29,10 @@ const Step3 = ({
               <FontAwesome icon="exchange-alt" />{' '}
               Transition (Move) Soldiers
             </Button>
-            <Button color='danger' onClick={ discharge }>
+            {/* <Button color='danger' onClick={ discharge }>
               <FontAwesome icon="trash-alt" />{' '}
               Discharge (Delete) Soldiers 
-            </Button>
+            </Button> */}
           </ButtonBar>
         </Col>
       </Row>
