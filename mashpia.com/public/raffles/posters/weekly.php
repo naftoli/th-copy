@@ -102,7 +102,7 @@ foreach ($schools as $school_id => $school) {
             } */
             <?php
             // generate 26 different ids with different background pics
-            for ( $i = 1; $i <= 26; $i++ ) {
+            for ( $i = 1; $i <= 43; $i++ ) {
                 $urls[$i] = "Weekly-Prize-Poster-Template_Part$i.jpg";
             }
             foreach ( $urls as $i => $url ) {
