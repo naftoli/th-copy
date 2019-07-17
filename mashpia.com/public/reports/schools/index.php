@@ -72,6 +72,19 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Teacher Logins</span>
                 </div>
             </a>
+            <br />
+            <a href="/teacher_information_no_edits.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/icon_control.png" height="32" alt="tickets"/>
+                    <span class="link-text">Teacher Info</span>
+                </div>
+            </a>
+            <a href="/teacher_information.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/Teachers resources icon.jpg" height="32" alt="tickets"/>
+                    <span class="link-text">Teacher Info (Editable)</span>
+                </div>
+            </a>
         </div>
 
         <h2>Teacher Certificates</h2>
