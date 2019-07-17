@@ -37,7 +37,6 @@ foreach ( $schools as $id => $school ) {
 //   ksort($kids[$school]);
 // }
 // ksort($kids);
-$superTotal = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,21 +59,40 @@ $superTotal = 0;
           <th>Student</th>
         </tr>
         <?php
-        $schoolTotal = 0;
         foreach ( $more as $grade => $students ) {
+          $totals[$school][$grade] = 0;
           $total = 0;
           foreach ( $students as $student ) {
             echo "<tr><td>" . $grade . "</td><td>" . $student . "</td></tr>";
             $total++;
           }
-          echo "<tr><th>Total:</th><th>" . $total . "</th>";
-          $schoolTotal += $total;
+          $totals[$school][$grade] += $total;
         }
-        echo "<tr><th>School Total:</th><th>" . $schoolTotal . "</th>";
-        $superTotal += $schoolTotal;
         ?>
       </table>
     <?php endforeach; ?>
-    <h2>Grand Total: <?= $superTotal ?></h2>
+    <h2>Totals</h2>
+    <?php 
+    $grandTotal = 0;
+    foreach ( $totals as $school => $more ) {
+      echo "<h3>" . $school . "</h3>";
+      ?>
+      <table>
+        <tr>
+          <th>Grade</th>
+          <th>Total</th>
+        </tr>
+        <?php
+        $schoolTotal = 0;
+        foreach ( $more as $grade => $total ) {
+          echo "<tr><td>" . $grade . "</td><td>" . $total . "</td></tr>";
+          $schoolTotal += $total;
+        }
+        echo "<tr><th>School Total:</th><th>" . $schoolTotal . "</th></tr>";
+        $grandTotal += $schoolTotal;
+      echo "</table>";
+    }
+    echo "<h2>Grand Total: " . $grandTotal . "</h2>";
+    ?>
   </body>
 </html>
