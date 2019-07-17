@@ -37,6 +37,7 @@ foreach ( $schools as $id => $school ) {
 //   ksort($kids[$school]);
 // }
 // ksort($kids);
+$superTotal = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -70,8 +71,10 @@ foreach ( $schools as $id => $school ) {
           $schoolTotal += $total;
         }
         echo "<tr><th>School Total:</th><th>" . $schoolTotal . "</th>";
+        $superTotal += $schoolTotal;
         ?>
       </table>
     <?php endforeach; ?>
+    <h2>Grand Total: <?= $superTotal ?></h2>
   </body>
 </html>
