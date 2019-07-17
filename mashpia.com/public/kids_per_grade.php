@@ -6,6 +6,7 @@ require_once 'class.adminSchools.php';
 require_once 'class.schoolClasses.php';
 
 $kids = [];
+$totalsPerGrade = [];
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 foreach ( $schools as $id => $school ) {
@@ -16,7 +17,9 @@ foreach ( $schools as $id => $school ) {
     $sql = "select first, last from users where user_registered > 0 and class_id = " . $grade['class_id'];
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
-      $kids[$schools[$id]][$class][] = $row['first'] . ' ' . $row['last'];
+      $kids[$school][$class][] = $row['first'] . ' ' . $row['last'];
+      if ( isset( $totalsPerGrade[$grade['class_grade']] ) ) $totalsPerGrade[$grade['class_grade']]++;
+      else $totalsPerGrade[$grade['class_grade']] = 1;
     }
   }
 }
@@ -92,6 +95,16 @@ foreach ( $schools as $id => $school ) {
         $grandTotal += $schoolTotal;
       echo "</table>";
     }
+    ?>
+    <table>
+      <tr>
+        <th>Army Wide Grade</th><th>Total</th>
+      </tr>
+      <?php
+      foreach ( $totalsPerGrade as $grade => $total ) {
+        echo "<tr><td>" . $grade . "</td><td>" . $total . "</td></tr>";
+      }
+    echo "</table>";
     echo "<h2>Grand Total: " . $grandTotal . "</h2>";
     ?>
   </body>
