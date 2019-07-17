@@ -141,7 +141,7 @@ var childApp = function(){
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
             } else {
-                response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).";
+                response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
                 showError( response.message || response );
             }
         });
