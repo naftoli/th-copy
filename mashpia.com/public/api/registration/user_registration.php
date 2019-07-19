@@ -25,12 +25,11 @@ class UserRegistrationRouter {
         $available_users = [];
         foreach( $users as $user ){
             if ( !$user->school_id ) continue;
-            $reg_info = $user->school->registration();
+            //$reg_info = $user->school->registration();
             // make sure they paid for this year
-            if ( $reg_info && $reg_info->date_paid ) {
-                // get parent info to use later
+            //if ( $reg_info && $reg_info->date_paid ) {
                 $available_users[] = $user;
-            }
+            //}
         }
 
         json_response([
