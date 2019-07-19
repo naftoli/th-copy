@@ -139,6 +139,8 @@ if ( !empty( $users ) ) {
 		) {
 			$children[ $row['user_id'] ]['needsReg'] = 1;
 			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
+			// if chidon registration is on, make sure to show even if school hasn't registered yet for new year
+			$children[$row['user_id']]['schoolTypeRegistered'] = 1;
 		}
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;

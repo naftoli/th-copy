@@ -381,6 +381,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
         if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
+
+        // turn off chayolei reg if school has not registered yet
+        if ( $result['chayolei'] == false ) {
+            $school_registered = false;
+            $reg_info = $this->school->school_registrations;
+            foreach ( $reg_info as $reg ) {
+                if ( $reg->year == $year ) {
+                    $school_registered = true;
+                    break;
+                }
+            }
+            if ( !$school_registered ) $result['chayolei'] = true; // disable chayolei reg if school is not registered
+        }
+
         return $result;
     }
     /**
