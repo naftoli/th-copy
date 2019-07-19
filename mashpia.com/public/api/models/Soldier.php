@@ -383,7 +383,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
         // turn off chayolei reg if school has not registered yet
-        if ( $result['chayolei'] == false ) {
+        if ( $result['chayolei'] == false && !in_array( $this->user_id, [8273, 13159] ) ) {
             $school_registered = false;
             $reg_info = $this->school->school_registrations;
             foreach ( $reg_info as $reg ) {
