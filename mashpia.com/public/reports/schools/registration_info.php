@@ -103,6 +103,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                 <th colspan='2'>Base</th>
                 <th>Registration Type</th>
                 <th>Chayolei Fee</th>
+                <th>Chidon Fee</th>
                 <th>Balance</th>
                 <th>Soldier Chayolei Fee</th>
                 <th>Early Bird</th>
@@ -127,6 +128,10 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                     <td>
                         <input type='number' name='chayolei_fee'
                             value='<?= $base->chayolei_fee ?>' />
+                    </td>
+                    <td>
+                        <input type='number' name='chidon_fee'
+                            value='<?= $base->chidon_fee ?>' />
                     </td>
                     <td>
                         <input type='number' name='balance'
