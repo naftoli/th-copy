@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { Row, Col, UncontrolledTooltip } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
 // functions
 import julian from 'julian';
