@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TabPane } from 'reactstrap';
-import { BaseRow } from '../../rows';
+import { BaseRow, AccountingRow } from '../../rows';
 import { Form } from 'components/inputs';
 import { AddressRow } from 'components/rows';
 import { NavigationRow } from '../../rows/registration/NavigationRow';
@@ -32,8 +32,15 @@ export class BaseTab extends React.Component {
             required
             showPhone
             { ...base }
-            title={ false }
+            title='Address Info'
             prefix='school_'
+            onChange={ onChange } />
+          
+          <AccountingRow
+            required
+            { ...base } 
+            title='Accounting Info'
+            prefix='accounting_'
             onChange={ onChange } />
 
           <NavigationRow next />

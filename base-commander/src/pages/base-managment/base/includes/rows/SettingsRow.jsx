@@ -10,6 +10,10 @@ import { onCheckboxChange, onInputChange, onNumberChange } from 'functions/event
 
 export class SettingsRow extends Component {
 
+  state = {
+    disabled: false
+  };
+
   onChange = onInputChange( this.props.onUpdate );
   handleCheckbox = onCheckboxChange( this.props.onUpdate );
   onNumberChange = onNumberChange( this.props.onUpdate );
@@ -20,6 +24,13 @@ export class SettingsRow extends Component {
   disableSchoolReset = () => {
     const store_reset = this.props.base.store_reset > 0 ? 0 : toJulian( moment() );
     this.props.onUpdate({ store_reset });
+    this.setState({ disabled: true });
+  }
+
+  enableSchoolReset = event => {
+    const store_reset = event.target.value;
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: false });
   }
 
   render () {
@@ -30,6 +41,7 @@ export class SettingsRow extends Component {
     } = base;
 
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
+
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
@@ -83,20 +95,48 @@ export class SettingsRow extends Component {
           </Checkbox>
         </Col>
 
-        <Col xs={12} sm={6} className='special-options'>
+        <Col sm={12} className='special-options'>
+          <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
+
+          <Radio value='2458650' name='store_miles_reset' onChange={ this.enableSchoolReset } required>
+            Beis Tammuz / June 15 (Chayolim can use the points they earned from summer missions and on)
+          </Radio>
+
+          <Radio value='2458712' name='store_miles_reset' onChange={ this.enableSchoolReset }>
+            Hey Elul / Aug 16 (Chayolim will not be able to use the points they earned from the majority of summer missions)
+          </Radio>
+
+          <Radio name='store_miles_reset' id='store_reset' onChange={ this.disableSchoolReset }>
+            Never (This includes all miles from previous years)
+          </Radio>
+          <br />
+
+          <Radio name='store_miles_reset' onChange={ this.enableSchoolReset } value={ toJulian( moment() ) }>
+            Custom Date:
+          </Radio>
+          <br />
+
           <Date value={ store_reset }
-            disabled = { !store_reset }
+            disabled = { this.state.disabled }
             onChange={ this.onDateChage } />
+
+          {/* <Date value={ store_reset }
+            disabled = { !store_reset }
+            onChange={ this.onDateChage } /> */}
+          
+          {/* <Radio name='store_miles_reset' checked={ !store_reset } id='store_reset' onChange={ this.disableSchoolReset }>
+            Never (Points will continue accumulating from last year)
+          </Radio> */}
             
-          <Checkbox checked={ !store_reset }
+          {/* <Checkbox checked={ !store_reset }
               id='store_reset' onChange={ this.disableSchoolReset }>
             Allow soldiers to spend all their miles.
-          </Checkbox>
+          </Checkbox> */}
 
-          <UncontrolledTooltip placement="top" target="store_reset" autohide={ false }>
+          {/* <UncontrolledTooltip placement="top" target="store_reset" autohide={ false }>
             This includes all miles from previous years
-          </UncontrolledTooltip>
+          </UncontrolledTooltip> */}
         </Col>
       </Row>
     );
