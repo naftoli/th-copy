@@ -57,10 +57,16 @@ export class ModulesTab extends React.Component {
         <div className='modules'>
 
           <div className={`module ${ !modules.chayolei ? 'paid' : '' }`}>
-            <Checkbox name='chayolei'
+            {/* <Checkbox name='chayolei'
                 onChange={ onChange }
                 checked={ !!chayolei }
                 disabled={ !modules.chayolei }>
+              Chayolei Tzivos Hashem (CTH)
+            </Checkbox> */}
+            <Checkbox name='chayolei'
+                onChange={ onChange }
+                checked={ !!chayolei }
+                disabled={ true }>
               Chayolei Tzivos Hashem (CTH)
             </Checkbox>
 
@@ -80,7 +86,7 @@ export class ModulesTab extends React.Component {
 
             <div className='price'>
               <span>
-                Total Value: <CurrencyDisplay value={ 1000 } />
+                Total Value: <CurrencyDisplay value={ 2000 } />
               </span>
               <span>
                 Your Price: <CurrencyDisplay value={ chayolei_fee } />
@@ -89,10 +95,16 @@ export class ModulesTab extends React.Component {
           </div>
 
           <div className={`module ${ !modules.chidon ? 'paid' : '' }`}>
-            <Checkbox name='chidon'
+            {/* <Checkbox name='chidon'
                 onChange={ onChange }
                 checked={ !!chidon }
                 disabled={ !modules.chidon}>
+              Chidon
+            </Checkbox> */}
+            <Checkbox name='chidon'
+                onChange={ onChange }
+                checked={ !!chidon }
+                disabled={ true }>
               Chidon
             </Checkbox>
 
@@ -109,7 +121,7 @@ export class ModulesTab extends React.Component {
 
             <div className='price'>
               <span>
-                Total Value: <CurrencyDisplay value={ 250 } />
+                Total Value: <CurrencyDisplay value={ 600 } />
               </span>
               <span>
                 Your Price: <CurrencyDisplay value={ chidon_fee } />
@@ -118,10 +130,16 @@ export class ModulesTab extends React.Component {
           </div>
 
           <div className={`module ${ !modules.tanya ? 'paid' : '' }`}>
-            <Checkbox name='tanya'
+            {/* <Checkbox name='tanya'
                 onChange={ onChange }
                 checked={ !!tanya }
                 disabled={ !modules.tanya}>
+              Tanya Program
+            </Checkbox> */}
+            <Checkbox name='tanya'
+                onChange={ onChange }
+                checked={ !!tanya }
+                disabled={ true }>
               Tanya Program
             </Checkbox>
 
@@ -131,7 +149,7 @@ export class ModulesTab extends React.Component {
               </p>
               <ul className='checkboxes'>
                 <li>Your School featured on OurBirthdayGift.com</li>
-                <li>Compeate with other schools all over the world for the top spot on the public leaderboard</li>
+                <li>Compete with other schools all over the world for the top spot on the public leaderboard</li>
               </ul>
             </div>
 
@@ -146,10 +164,16 @@ export class ModulesTab extends React.Component {
           </div>
 
           <div className={`module ${ !modules.rewards ? 'paid' : '' }`}>
-            <Checkbox name='rewards'
+            {/* <Checkbox name='rewards'
                 onChange={ onChange }
                 checked={ !!rewards }
                 disabled={ !modules.rewards}>
+              Rewards Program
+            </Checkbox> */}
+            <Checkbox name='rewards'
+                onChange={ onChange }
+                checked={ !!rewards }
+                disabled={ true }>
               Rewards Program
             </Checkbox>
 

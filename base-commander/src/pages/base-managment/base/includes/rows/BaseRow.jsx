@@ -51,7 +51,7 @@ export class BaseRow extends Component {
         </Col>
 
         <Col xs={12} sm={6}>
-          <label>Hachayol Name</label>
+          <label>Hachayol Name (For Hachayol Publications)</label>
           <Input { ...inputProps }  name='hachayol_name'
             pattern='^.{3,65}$'     value={ hachayol_name || '' }
             title="3 to 65 letters" maxLength={ 65 } />

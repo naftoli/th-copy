@@ -23,14 +23,14 @@ import { showError } from 'functions/notifications';
 import { getCurrentUser } from 'store/login/operations';
 import { onInputChange, onCheckboxChange } from 'functions/events';
 import { getTotal, getCart } from './includes/tabs/registration/functions';
-import { getBase, getDefaults, registerBase } from 'store/base/bases/operations';
+import { getBase, getDefaults, registerBase, updateBase } from 'store/base/bases/operations';
 
 class RegistrationPage extends Component {
   // initial state
   state = {
     cc: {},       base: {},
     valid: {},    terms: false,
-    activeTab: 1, currentTab: 1
+    activeTab: 1, currentTab: 1 
   }
   // props
   static propTypes = {
@@ -100,6 +100,10 @@ class RegistrationPage extends Component {
   // handle when a tab is submitted
   submitTab = memoize( tabId => e => {
     e.preventDefault();
+    
+    // update base with info
+    updateBase( this.props.login.id, this.state.base ); // not working? need to ask Menachem
+
     const nextTab = tabId + 1;
     // set the active tab
     this.setState({ activeTab: nextTab });
