@@ -204,53 +204,56 @@ class UserRegistrationRouter {
                         $recruited_by = intval( $registration['recruitedBy'] );
                         if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
-                        // add book purchased info to db
-                        if ( intval( $registration['purchased'] ) == 1 ) {
-                            $location = $registration['purchasedWhere'];
-                            $store_name = $registration['store']['store_name'];
-                            $store_city = $registration['store']['store_city'];
-                            $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
-                        }
-                        // send email to parents
-                        $headers[] = 'MIME-Version: 1.0';
-                        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                        $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
 
-                        $subject = "Chidon Registration Confirmation";
-                        $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
-                                    <br /><br/>
-                                    We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
-                                    <br /><br />
-                                    In order to begin learning, your child will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
-                                    along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.
-                                    <br /><br />
-                                    Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
-                                    <br /><br />
-                                    To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
-                        if ( $user->school_id == 61 ) {
-                            $message = "
-                            Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for 5780.
-                            <br /><br />
-                            We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
-                            <br /><br />
-                            This is also an opportunity to have a Bubby or Zaidy learn with your child weekly. 
-                            <br /><br />
-                            MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>Here</a> to sign up for the classes.
-                            In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids. 
-                            <br /><br />
-                            Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.chidon613.com'>www.chidon613.com</a>.
-                            <br /><br /><br />
-                            Wishing you Much Hatzlocho!
-                            <br /><br />
-                            For any questions throughout the duration of the Chidon Zman please be in touch with your Chidon Coordinator at MyShliach.";
-                        }
+                        else {
+                            // add book purchased info to db
+                            if ( intval( $registration['purchased'] ) == 1 ) {
+                                $location = $registration['purchasedWhere'];
+                                $store_name = $registration['store']['store_name'];
+                                $store_city = $registration['store']['store_city'];
+                                $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                            }
+                            // send email to parents
+                            $headers[] = 'MIME-Version: 1.0';
+                            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
 
-                        $to = $current_user->admin_email;
-                        if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
-                            $to = "naftoli@tzivoshashem.org";
-                            $subject = "Error in chidon email";
-                            $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
-                            @mail( $to, $subject, $message, implode("\r\n", $headers) );
+                            $subject = "Chidon Registration Confirmation";
+                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
+                                        <br /><br/>
+                                        We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
+                                        <br /><br />
+                                        In order to begin learning, your child will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
+                                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.
+                                        <br /><br />
+                                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
+                                        <br /><br />
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
+                            if ( $user->school_id == 61 ) {
+                                $message = "
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for 5780.
+                                <br /><br />
+                                We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
+                                <br /><br />
+                                This is also an opportunity to have a Bubby or Zaidy learn with your child weekly. 
+                                <br /><br />
+                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>Here</a> to sign up for the classes.
+                                In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids. 
+                                <br /><br />
+                                Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.chidon613.com'>www.chidon613.com</a>.
+                                <br /><br /><br />
+                                Wishing you Much Hatzlocho!
+                                <br /><br />
+                                For any questions throughout the duration of the Chidon Zman please be in touch with your Chidon Coordinator at MyShliach.";
+                            }
+
+                            $to = $current_user->admin_email;
+                            if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
+                                $to = "naftoli@tzivoshashem.org";
+                                $subject = "Error in chidon email";
+                                $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                                @mail( $to, $subject, $message, implode("\r\n", $headers) );
+                            }
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
