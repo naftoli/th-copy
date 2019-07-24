@@ -81,11 +81,11 @@ class NewSoldierModal extends Component {
     const { login, isOpen, image, editPicture } = this.props;
 
     // language options
-    const language_options = [
-      { value: 1, label: 'English' },
-      { value: 2, label: 'Yiddish' },
-      { value: 3, label: 'French' }
-    ];
+    // const language_options = [
+    //   { value: 1, label: 'English' },
+    //   { value: 2, label: 'Yiddish' },
+    //   { value: 3, label: 'French' }
+    // ];
 
     return (
       <Modal centered 
