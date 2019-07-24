@@ -120,6 +120,15 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             $for_type = $this->reg_type;
 
         $early_bird = $this->earlyBird() < new DateTime();
+
+        // check if hq set the chayolei fee
+        $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");
+        $result = $stmt->execute([':id' => $this->school_id]);
+        if ( $result ) {
+            $row = $stmt->fetch();
+            $child_fee = $row['child_fee'];
+            if ( $child_fee > 0 ) return $child_fee;
+        }
         
         return GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
