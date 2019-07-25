@@ -59,7 +59,7 @@ $( document ).ready( function(){
             return "bronze";
         } else if ( total <= 99) {
             return "silver";
-        } else if ( total == 100) {
+        } else if ( total <= 125) {
             return "gold";
         } else {
             return "platinum";
