@@ -4,6 +4,7 @@ require_once 'header.php';
 
 require 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+$year = 5779;
 
 /****************** CAMPAIGNS ******************/
 $campaigns_query = mysql_query( 
@@ -26,7 +27,7 @@ foreach ( $schools as $id => $school ) {
 	$schoolIDs[] = $id;
 }
 
-if ( isset( $_POST['submit'] ) ) {
+if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) {
 	$school = $_POST['school'];
 	$grade = $_POST['grade'];
 
@@ -144,7 +145,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 		<?php include('admin_header.php'); ?>
 		<h1>Edit Tanya / Mishna Lines</h1>
 
-		<?php if ( isset( $_POST['submit'] ) ) : ?>
+		<?php if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) : ?>
 		
 		<div class="infobox" style="line-height: 1.2">
 			PLEASE NOTE: The amounts which are shown under the Tanya Learned and Mishna Learned columns, will only sync onto the ourbirthdaygift.com website
@@ -153,6 +154,23 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 			If ALL amounts are correct, just click "Confirm All" on the top near the totals.
 		</div>
 		<br />
+		Change Grade to: 
+		<select name="grade" id="grade">
+				<option value='0'>All Grades</option>
+				<?php
+				require_once 'class.schoolClasses.php';
+				$sc = new SchoolClasses($school);
+				$classes2 = $sc->getClasses();
+				foreach ($classes2 as $row) {
+						$class2 = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+						echo "<option value='" . $row['class_id'] . "'";
+						if ($row['class_id'] == $grade) echo " selected";
+						echo ">" . $class2 . "</option>";
+				}
+				?>
+		</select>
+		<input type="submit" name="submit" value="change" id="changeGrade" />
+		<br /><br />						
 	<?php
 	foreach ($schools as $id => $name) {
 		$tanyaSummary = $bpsTanya->getSummary($id) ? $bpsTanya->getSummary($id) : 0;
@@ -280,6 +298,14 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	</script>
 	<script src="/js/admin/components/modal.js"></script>
 	<script src="/js/admin/editSoldierLines2.js"></script>
+	<script>
+		$("#changeGrade").click( function() {
+			var school = <?= $_POST['school'] ?>;
+			var grade = $("#grade").val();
+			var form = "<form action='editSoldierLines2.php' method='post'><input type='hidden' name='school' value='" + school + "' /><input type='hidden' name='grade' value='" + grade + "' /></form>";
+			$(form).appendTo('body').submit();
+		});
+	</script>
 
 	<? else : ?>
 		<form action='editSoldierLines2.php<?=$debug ? "?debug=true" : ""?>' method="post">				
@@ -315,11 +341,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 				<input type="submit" name="submit" value="Submit" />
 		</form>
 
-		<script>
-        $("#grade").change( function() {
-            $(this).parent().submit();
-        });
-        
+		<script>        
         $("#school").change( function() {
             var school = $(this).val();
             $.get('ajax/getClasses.php?flat=true', { id : school }, function( info ) {
@@ -331,13 +353,6 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
                 $("#grade").empty();
                 $("#grade").append( html );
             });
-        });
-        
-        $("#changeGrade").click( function() {
-            if ($("#oldGrade").val() == $("#grade").val()) {
-                alert('You have not changed the grade.');
-                return false;
-            }
         });
     </script>
 	<? endif; ?>
