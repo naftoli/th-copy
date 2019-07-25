@@ -26,29 +26,42 @@ foreach ( $schools as $id => $school ) {
 	$schoolIDs[] = $id;
 }
 
-/****************** CLASSES ******************/
-$classes = [];	$classNames = [];
-foreach ( $schoolIDs as $id ) {
-	$class_query = mysql_query(
-		"SELECT * FROM classes WHERE school_id = " . $id . " AND class_era = 0 ORDER BY class_grade, class_sub"
-	);
-	while ( $row = mysql_fetch_assoc( $class_query ) ) {
-		$classes[$id][] = $row['class_id'];
-		$classNames[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-	}
-}
+if ( isset( $_POST['submit'] ) ) {
+	$school = $_POST['school'];
+	$grade = $_POST['grade'];
 
-/****************** USERS ******************/
-$users = [];	$userNames = [];
-foreach ( $classes as $school => $grades ) {
-	foreach ( $grades as $grade ) {
-		$users_query = mysql_query(
-			"SELECT * FROM users WHERE class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
-		);
-		if (mysql_num_rows($users_query) > 0) {
-			while ($row = mysql_fetch_assoc($users_query))	{
-				$users[$school][$grade][] = $row['user_id'];
-				$userNames[$row['user_id']] = $row['first'] . ' ' . $row['last'];
+	/****************** CLASSES ******************/
+	$classes = [];	$classNames = [];
+	foreach ( $schoolIDs as $id ) {
+		if ( $id == $school ) {
+			if ( $grade == 0 ) {
+				$class_query = mysql_query(
+					"SELECT * FROM classes WHERE school_id = " . $id . " AND class_era = 0 ORDER BY class_grade, class_sub"
+				);
+			} else {
+				$class_query = mysql_query(
+					"SELECT * FROM classes WHERE school_id = " . $id . " AND class_id = " . $grade . " ORDER BY class_grade, class_sub"
+				);
+			}
+			while ( $row = mysql_fetch_assoc( $class_query ) ) {
+				$classes[$id][] = $row['class_id'];
+				$classNames[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+			}
+		}
+	}
+
+	/****************** USERS ******************/
+	$users = [];	$userNames = [];
+	foreach ( $classes as $school => $grades ) {
+		foreach ( $grades as $grade ) {
+			$users_query = mysql_query(
+				"SELECT * FROM users WHERE class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
+			);
+			if (mysql_num_rows($users_query) > 0) {
+				while ($row = mysql_fetch_assoc($users_query))	{
+					$users[$school][$grade][] = $row['user_id'];
+					$userNames[$row['user_id']] = $row['first'] . ' ' . $row['last'];
+				}
 			}
 		}
 	}
@@ -130,6 +143,8 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	<body>
 		<?php include('admin_header.php'); ?>
 		<h1>Edit Tanya / Mishna Lines</h1>
+
+		<?php if ( isset( $_POST['submit'] ) ) : ?>
 		
 		<div class="infobox" style="line-height: 1.2">
 			PLEASE NOTE: The amounts which are shown under the Tanya Learned and Mishna Learned columns, will only sync onto the ourbirthdaygift.com website
@@ -253,6 +268,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 			</div>
 		</div>
 	</div>
+
 	<script>
 		var campaigns = {
 			tanyaCampaign:  <?=$tanyaCampaign?>,
@@ -264,5 +280,67 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	</script>
 	<script src="/js/admin/components/modal.js"></script>
 	<script src="/js/admin/editSoldierLines2.js"></script>
+
+	<? else : ?>
+		<form action='editSoldierLines2.php<?=$debug ? "?debug=true" : ""?>' method="post">				
+				<select name="school" id="school">
+						<?php
+						if (count($schools) > 1) {
+								echo "<option value='0'>Choose School</option>";
+						}
+						foreach ($schools as $id => $name) {
+								echo "<option value='" . $id . "'>" . $name . "</option>";
+						}
+						?>
+				</select><br />
+				<br />				
+												
+				<select name="grade" id="grade">
+						<option value='0'>All Grades</option>
+						<?php
+						if (count($schools) == 1) {
+								$id = key($schools);
+								//echo $id;
+								require_once 'class.schoolClasses.php';
+								$sc = new SchoolClasses($id);
+								$classes = $sc->getClasses();
+								foreach ($classes as $row) {
+										$grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+										echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+								}
+						}
+						?>
+				</select>
+				<br /><br />
+				<input type="submit" name="submit" value="Submit" />
+		</form>
+
+		<script>
+        $("#grade").change( function() {
+            $(this).parent().submit();
+        });
+        
+        $("#school").change( function() {
+            var school = $(this).val();
+            $.get('ajax/getClasses.php?flat=true', { id : school }, function( info ) {
+                var grades = JSON.parse( info );
+                var html = "<option value='0'>Choose Grade</option>";
+                for (var g in grades) {
+                    html += "<option value='" + grades[g][0] + "'>" + grades[g][1] + "</option>";
+                }
+                $("#grade").empty();
+                $("#grade").append( html );
+            });
+        });
+        
+        $("#changeGrade").click( function() {
+            if ($("#oldGrade").val() == $("#grade").val()) {
+                alert('You have not changed the grade.');
+                return false;
+            }
+        });
+    </script>
+	<? endif; ?>
+
 	</body>
 </html>
