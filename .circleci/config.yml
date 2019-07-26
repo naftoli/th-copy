@@ -150,7 +150,7 @@ jobs:
       - run:
           name: Create deploy/build
           command: |
-            ssh mashtest@test.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+            ssh -p 522 mashtest@test.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
@@ -160,7 +160,7 @@ jobs:
       - run:
           name: Run the Deployment script
           command: |
-            ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+            ssh -p 522 mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
 
   # deploy build artifacts to staging
   deploy-production:
@@ -182,7 +182,7 @@ jobs:
       - run:
           name: 'Create deploy/build folder'
           command: | 
-            ssh mashpia@mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+            ssh -p 522 mashpia@mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
@@ -192,7 +192,7 @@ jobs:
       - run:
           name: Run the Deployment script
           command: |
-            ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+            ssh -p 522 mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
       
 
 workflows:
