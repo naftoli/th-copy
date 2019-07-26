@@ -116,6 +116,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
      * @param bollean $no_discount should we disable the discounts
      */
     public function soldierFee( $to_soldier = false, $for_type = false, $no_discount = false ) {
+        global $MASHPIA_DB;
+        
         if ( !$for_type )
             $for_type = $this->reg_type;
 
