@@ -20,6 +20,7 @@ class Donor {
     public $donations = [];
     public $on_shabbaton = [];
     public $caller;
+    public $children = [];
 
     /** STATIC FUNCTIONS */
     /**
@@ -36,7 +37,7 @@ class Donor {
     public static function Load( $donor_id ) {
         $donor_id = mysql_real_escape_string( $donor_id );
         $query = mysql_query(
-            "SELECT * FROM charidy_donors where donor_id = $donor_id;"
+            "SELECT * FROM mashpia_charidy.donors where donor_id = $donor_id;"
         );
         if ( mysql_num_rows( $query ) > 0 ) {
             $row = mysql_fetch_assoc( $query );
@@ -57,7 +58,7 @@ class Donor {
         $donors = [];
 
         $query = mysql_query(
-            "SELECT * FROM charidy_donors ORDER BY first_name, last_name;"
+            "SELECT * FROM mashpia_charidy.donors ORDER BY first_name, last_name;"
         );
         while ( $row = mysql_fetch_assoc( $query ) ){
             // if there's no phone number, see if it's connected to parent account and get phone from parent account
@@ -129,6 +130,14 @@ class Donor {
         return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $this->mashpiaPhone). "\n";
     }
 
+    public function address() {
+        return $this->address . "<br />" . $this->city . ", " . $this->state . " " . $this->zip . "<br />" . $this->country;
+    }
+
+    public function email() {
+        return $this->email;
+    }
+
     /**
      * getDonated
      * 
@@ -145,7 +154,7 @@ class Donor {
             return true;
 
         $query = mysql_query(
-             " SELECT SUM(amount) as amount, donation_date, year FROM charidy_donations "
+             " SELECT SUM(amount) as amount, donation_date, year FROM mashpia_charidy.donations "
             ." WHERE donor_id = '" . $this->donor_id . "'"
             .( $year ? " AND year = $year" : "" )
             ." GROUP BY donor_id, year;"
@@ -178,7 +187,7 @@ class Donor {
         $this->on_shabbaton[ $year ] = [];
         
         $query = mysql_query(
-             " SELECT first, last FROM th_chidon "
+             " SELECT first, last, bunk_number FROM th_chidon "
             ." JOIN users USING (user_id) "
             ." JOIN admin_auths ON id = user_id AND auth = 'user' "
             ." WHERE admin_id = '" . $this->parent_admin_id . "' "
@@ -216,5 +225,28 @@ class Donor {
             return true;
         };
         return false;
+    }
+
+    public function getChildren() {
+        if ( $this->parent_admin_id > 0 && empty( $this-> children ) ) {
+            $sql = "SELECT 
+                        u.user_id, u.first, MAX(rank_ord) AS rank
+                    FROM
+                        users u
+                            JOIN
+                        admin_auths aa ON aa.id = u.user_id
+                            JOIN
+                        rank_marks rm USING (user_id)
+                    WHERE
+                        aa.auth = 'user'
+                            AND u.user_registered > 0
+                            AND aa.admin_id = " . $this->parent_admin_id . " 
+                    GROUP BY u.user_id";
+            $result = mysql_query( $sql );
+            while ( $row = mysql_fetch_assoc( $result ) ) {
+                $this->children[] = $row;
+            }
+        }
+        return $this->children;
     }
 }

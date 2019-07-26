@@ -79,7 +79,7 @@ class Caller {
         $year = mysql_real_escape_string( $year );
         // get all the donor info for the year provided
         $query = mysql_query(
-             " SELECT cd.* FROM charidy_donors cd "
+             " SELECT cd.* FROM mashpia_charidy.donors cd "
             ." JOIN charidy_donors_callers cdc ON cd.donor_id = cdc.donor_id AND year = $year "
             ." WHERE charidy_caller_id = " . $this->charidy_caller_id . " "
             ." ORDER BY cd.last_name, cd.first_name;"

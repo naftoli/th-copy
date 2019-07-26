@@ -79,6 +79,9 @@ if (isset($_POST['action'])) {
 		header("Location: mission_report/newSchoolPrintSummer.php?user=$user_id&school=$school_id&grade=$class_id&showDate=$showDate&dblSided=$dblSided");
 		exit;
 	}
+} else {
+    get_classes_select($school_id, 0);
+    get_users_select($school_id, 0, 0);
 }
 
 function get_users_select($school_id, $class_id, $user_id) {
@@ -187,15 +190,15 @@ $year = $row['val'];
             <form name="date_tasks_report" id="date_tasks_report" action="print_missions_summer.php" method="post" accept-charset="UTF-8">
             
             <? if ($school_id > 0) : ?>
-				<div class"module noprint">
+				<!-- <div class"module noprint">
 					<a href="date_tasks_print.php">Take me back to the OLD STYLE mission sheets for printing!</a><br />
 					Click <a href="settings.php?admin_id=<?=$admin->admin_id?>&school_id=<?=$school_id?>">here</a> to change mission settings</a>
-				</div>
+				</div> -->
 				
 	            <div class="noprint">
 
 	            	<div class="infobox noprint">
-		                Summer missions include 11 weeks worth of missions. Korach until Ki Seitzei.<br />
+		                Summer missions include 10 weeks worth of missions. Shlach until Re'eh.<br />
 		                You can only print for each child individually.<br />
 		            </div>
 					
@@ -376,7 +379,7 @@ $year = $row['val'];
         	e.stopPropagation();
         	e.preventDefault();
         	if ($("#user_id").val() == -1) {
-        		alert('You must choose a class and student.');
+        		alert('You must choose a class and a child.');
         		return false;
         	} else {
         		$("#date_tasks_report").submit();

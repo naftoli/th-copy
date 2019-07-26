@@ -43,12 +43,12 @@ class ParentsPage extends Component {
     }
     // CSV headers
     const headers = [ 
-      'First', 'Last', 'Username', 'Cell Phone', 'E-mail', 
+      'First', 'Last', 'Username', 'Father Cell', 'Mother Cell', 'E-mail', 
       'Address', 'City', 'State', 'Zip', 'Country', 'Children'
     ];
     // generate rows
     const rows = this.props.parents.map( parent => [
-      parent.first, parent.last, parent.username, parent.cell,
+      parent.first, parent.last, parent.username, parent.cell, parent.mother_cell, 
       parent.email, (parent.admin_address1 + parent.admin_address2), parent.admin_city, parent.admin_state,
       parent.admin_postal, parent.admin_country, getChildrenString( parent )
     ]);

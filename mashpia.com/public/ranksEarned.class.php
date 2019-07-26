@@ -24,18 +24,18 @@ class RanksEarned
 		$this->setDates();
 
 		foreach ($this->dates as $year => $date) {
-            foreach ($this->ranks as $rank_ord => $rank_name) {
-                //get sum of ranks earned per year
-                $sql = "select count(user_id) as total from rank_marks 
-                        where rank_ord = $rank_ord  
-                        and date_promoted >= $date"; 
-                if (isset($this->dates[$year+1])) {
-                    $sql .= " and date_promoted < " . $this->dates[$year+1];
-                }
-                $result = mysql_query($sql);
-                $row = mysql_fetch_assoc($result);
-                $this->report[$year][$rank_ord] = $row['total'];
-            }
+			foreach ($this->ranks as $rank_ord => $rank_name) {
+					//get sum of ranks earned per year
+					$sql = "select count(user_id) as total from rank_marks 
+									where rank_ord = $rank_ord  
+									and date_promoted >= $date"; 
+					if (isset($this->dates[$year+1])) {
+							$sql .= " and date_promoted < " . $this->dates[$year+1];
+					}
+					$result = mysql_query($sql);
+					$row = mysql_fetch_assoc($result);
+					$this->report[$year][$rank_ord] = $row['total'];
+			}
 		}
 	}
 	
@@ -49,17 +49,17 @@ class RanksEarned
 	
 	private function setDates() {
 		$this->dates = array(
-			5769	=>	2454718, 
-			5770	=>	2455082, 
-			5771	=>	2455439, 
-			5772	=>	2455810, 
-			5773	=>	2456174, 
-			5774	=>	2456531, 
-			5775	=>	2456908,
-			5776	=>	2457265,
-			5777	=>	2457636,
-			//5778	=>	2457888
-            5778    =>  2457993
+			5769	=>	2454718, // Sep 8, 2008 
+			5770	=>	2455082, // Sep 7, 2009 
+			5771	=>	2455439, // Aug 30, 2010 
+			5772	=>	2455810, // Sep 5, 2011 
+			5773	=>	2456174, // Sep 3, 2012 
+			5774	=>	2456531, // Aug 26, 2013
+			5775	=>	2456908, // Sep 7, 2014
+			5776	=>	2457265, // Aug 30, 2015
+			5777	=>	2457636, // Sep 4, 2016
+			5778	=>	2457885, // May 11, 2017 - was changed to 2457993 at some point but put back to original
+			5779	=>	2458236, // April 27, 2018
 		);
 	}
 	

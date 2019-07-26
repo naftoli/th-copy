@@ -48,27 +48,45 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <!-- <h2>Yearly Raffle</h2>
+        <h2>Yearly Raffle</h2>
         <div id="action-links">
-            <a href="../../yearly/eligibility_report.php">
+            <?if ($admin_user['auth'] == 'super') {?>
+                <a href="../../yearly/eligibility_report_hq.php">
+                    <div class="button">
+                        <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                        <span class="link-text">Eligible Students only</span>
+                    </div>
+                </a>
+            <? } else { ?>
+                <a href="../../yearly/eligibility_report.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
                     <span class="link-text">Student Eligibility Report</span>
                 </div>
             </a>
-            <a href="../../yearly/eligibility_report_hq.php">
+            <? } ?>
+            <a href="../../yearly/printout/">
                 <div class="button">
                     <img src="/images/icon_auction.png" height="32" alt="tickets"/>
-                    <span class="link-text">Eligible Students only</span>
+                    <span class="link-text">Personalized Raffle Posters w/ Eligible List</span>
                 </div>
             </a>
-            <a href="../../yearly/printout/">
+            <!-- <a href="../../yearly/printout/">
                 <div class="button">
                     <img src="/images/parentIcons/Printer.gif" height="32" alt="tickets"/>
                     <span class="link-text">Print Posters</span>
                 </div>
+            </a> -->
+        </div>
+        <h2>Posters</h2>
+        <div id="action-links">
+            <a href="/raffles/posters/weekly.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                    <span class="link-text">Weekly Raffle Winners Posters</span>
+                </div>
             </a>
-        </div> -->
+        </div>
         <?if ($admin_user['auth'] == 'super') {?>
             <h2>Administration Forms</h2>
             <div id="action-links">

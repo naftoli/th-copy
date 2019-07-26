@@ -98,9 +98,12 @@
                                 
                         $.post('/api/auth/forgot', { email: email }, function( data ) {
                             if ( data.success ) {
+                                alert( data.data );
                                 $('.check_mark').show();
                                 $("#send").html("SENT");
-                                window.location.href = "http://mashpia.com/mobile/reg";
+                                setTimeout( function() {
+                                    window.location.href = "http://mashpia.com/mobile/reg";
+                                }, 1000);
                             } else {
                                 $('#error-block').show();
                                 $form.find( "input[name='forgot']" ).val('');

@@ -36,7 +36,7 @@ $yearly_raffle = new YearlyRaffle();
             page-break-after: always;
         }
         .page-generated {
-            background: #4f1853;
+            background: #0565A4;
             color: #fff;
             font-family: 'Pangolin', cursive;
             text-align: center;
@@ -59,19 +59,22 @@ $yearly_raffle = new YearlyRaffle();
 </head>
 <body>
     <div class="page">
-        <img src="Yearly Prize Poster_Page_1.png" />
+        <img src="Yearly Raffle Prize Posters 5779-1.png" />
     </div>
     <div class="page">
-        <img src="Yearly Prize Poster_Page_2.png" />
+        <img src="Yearly Raffle Prize Posters 5779-2.png" />
     </div>
     <div class="page">
-        <img src="Yearly Prize Poster_Page_3.png" />
+        <img src="Yearly Raffle Prize Posters 5779-3.png" />
     </div>
     <div class="page">
-        <img src="Yearly Prize Poster_Page_4.png" />
+        <img src="Yearly Raffle Prize Posters 5779-4.png" />
     </div>
     <div class="page">
-        <img src="Yearly Prize Poster_Page_5.png" />
+        <img src="Yearly Raffle Prize Posters 5779-5.png" />
+    </div>
+    <div class="page">
+        <img src="Yearly Raffle Prize Posters 5779-6.png" />
     </div>
     <?php 
     foreach( $schools as $school_id => $school ) {

@@ -13,9 +13,9 @@ if (isset($_GET['school'])) {
 	exit;
 }
 
-// succos 5779
-$dates['start'] = array( 2458383, 2458390 );
-$dates['end'] = array( 2458389, 2458396 );
+// pesach 5779
+$dates['start'] = array( 2458586, 2458593, 2458600 );
+$dates['end'] = array( 2458592, 2458599, 2458606 );
 ?>
 <!DOCTYPE html>
 <html>

@@ -57,6 +57,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+        <div id="action-links">
+            <a href="/types_of_schools.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">School Types</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
         </div>
         

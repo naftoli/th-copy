@@ -1,3 +1,4 @@
+var myTimer;
 
 function loadTable( caller_id ) {
     var caller_id = $("#caller_id").val();

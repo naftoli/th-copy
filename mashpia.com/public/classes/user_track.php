@@ -406,20 +406,20 @@ class user_track
 		return $completed;
 	}
 	
-	function check_missions($output = false, $delete = true) {
+	function check_missions($output = false, $delete = false) {
 		$deleted = 0;
 		$inserted = 0;
 		// get all missions until now
 		$sql = "SELECT *
-				FROM date_tasks_missions
-				JOIN date_tasks
-				USING ( date_tasks_mission_id )
-				JOIN date_tasks_marks AS dtm
-				USING ( date_task_id )
-				WHERE user_id = " . $this->user_id . " 
-				AND subject_id = " . $this->subject_id . "
-				GROUP BY date_tasks_mission_id
-				ORDER BY end_date";
+						FROM date_tasks_missions
+						JOIN date_tasks
+						USING ( date_tasks_mission_id )
+						JOIN date_tasks_marks AS dtm
+						USING ( date_task_id )
+						WHERE user_id = " . $this->user_id . " 
+						AND subject_id = " . $this->subject_id . "
+						GROUP BY date_tasks_mission_id
+						ORDER BY end_date";
 
 		//echo $sql; exit;
 		$total_completed = 0;
@@ -432,9 +432,9 @@ class user_track
 		while ($row = mysql_fetch_assoc($result)) {
 			//for each mission get the mission task(s)
 			$task_sql = "select * from date_tasks 
-						where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . " 
-						and mandatory_qty = 1 
-						order by date_task_id";
+									where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . " 
+									and mandatory_qty = 1 
+									order by date_task_id";
 			//echo $task_sql; exit;
 			
 			$task_result = mysql_query($task_sql);
@@ -470,9 +470,9 @@ class user_track
 			
 			//find out if mission was set to marked
 			$mm_sql = "select * from date_tasks_mission_marks 
-						where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . " 
-						and subject_id = " . $this->subject_id . " 
-						and user_id = " . $this->user_id;
+								where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . " 
+								and subject_id = " . $this->subject_id . " 
+								and user_id = " . $this->user_id;
 			//echo $mm_sql . "<br />";
 			$mm_result = mysql_query($mm_sql);
 			$mm_rows = mysql_num_rows($mm_result);
@@ -483,9 +483,9 @@ class user_track
 				//if not completed delete from table
 				if (!$done && $delete) {
 					$del = "delete from date_tasks_mission_marks 
-							where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . "  
-							and subject_id = " . $this->subject_id . " 
-							and user_id = " . $this->user_id;
+									where date_tasks_mission_id = " . $row['date_tasks_mission_id'] . "  
+									and subject_id = " . $this->subject_id . " 
+									and user_id = " . $this->user_id;
 					if ($output)
 						echo $del . "<br />";
 					/*
@@ -506,17 +506,17 @@ class user_track
 						$this->subject_id . ", " . 
 						$row['mission_value'] . ",'', " . 
 						$row['end_date'] . ",0,0)";
-					if ($output) 
+					//if ($output) 
 						echo $ins . "<br />";
 					if (mysql_query($ins)) {
-						if ($output) 
+						//if ($output) 
 							echo "inserted<br />";
 						$inserted++;
 					} //else
 						//echo mysql_error() . "<br />";
 				}
 			}
-			if ($output)
+			//if ($output)
 				echo "<br />";
 		}
 		if ($output) {

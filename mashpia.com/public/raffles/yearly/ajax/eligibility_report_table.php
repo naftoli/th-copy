@@ -43,8 +43,8 @@ $yearly_raffle->set_school_eligibility( $school_id );
                 <td><?= $user['user_serial'] ?></td>
                 <td><?= $user['last'] ?></td>
                 <td><?= $user['first'] ?></td>
-                <td><?= $user_eligibility && $user_eligibility >= 160 ? "YES" : "NO" ?></td>
-                <td><?= $user_eligibility ? $user_eligibility : "0" ?>/160 </td>
+                <td><?= $user_eligibility && $user_eligibility >= 180 ? "YES" : "NO" ?></td>
+                <td><?= $user_eligibility ? $user_eligibility : "0" ?>/180 </td>
             </tr>
         <?php 
         } 

@@ -2,6 +2,16 @@
 
 class MashpiaEmails {
 
+    private static $footer = '
+    <div align="center">
+    &copy; 2019 Tzivos Hashem<br />
+    <address>
+      792 Eastern Pkwy, Brooklyn, NY 11213
+    </address>
+    <br />
+    <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+    </div>';
+
     /**
      * send password reset email
      * 
@@ -14,21 +24,22 @@ class MashpiaEmails {
        		.'<p>Follow This link to Reset your Password. Please note that it expires in one hour: ';
         $message .= sprintf('<a href="%s">%s</a></p>', $url, $url);
         $message .= '<p>Best Regards,</p>'
-		.'<p>Chayolei Tzivos Hashem.</p>';
+        .'<p>Chayolei Tzivos Hashem.</p>';
+        $message .= self::$footer;
 
-        return self::sendEmail( 'noreply@mashpia.com', $email, $subject, $message );
+        return self::sendEmail( 'cth@mashpia.com', $email, $subject, $message );
     }
 
     public static function passwordChanged( $to, $name ) {
         $subject = 'Your Password has been changed.';
         $email = self::load('templates/passwordChanged.html');
-        return self::sendEmail( 'noreply@tzivoshashem.com', $to, $subject, $email );
+        return self::sendEmail( 'cth@tzivoshashem.com', $to, $subject, $email );
     }
 
     public static function newBC( $to, $base, $name, $username, $password ) {
         $subject = 'Your new Base Commander Account.';
         $email = self::load('templates/newBC.html');
-        return self::sendEmail( 'noreply@tzivoshashem.com', $to, $subject, $email );
+        return self::sendEmail( 'cth@tzivoshashem.com', $to, $subject, $email );
     }
 
     public static function sendParentEmail( $to, $username, $password ) {
@@ -49,6 +60,7 @@ class MashpiaEmails {
             ."Wishing you much Yiddishe and Chassidishe Nachas,"
             ."<br /><br />"
             ."CTH Headquarters";
+        $message .= self::$footer;
         return self::sendEmail( 'cth@tzivoshashem.org', $to, $subject, $message );
     }
 

@@ -133,7 +133,7 @@ class ParseDonation
         
         if (!$child_only && $amount > 0) {
             // insert parent donation into donations table
-            $sql = "insert into charidy_donations 
+            $sql = "insert into mashpia_charidy.donations 
                     set donor_id = " . $donor_id . ", 
                     year = " . $this->year . ", 
                     amount = " . $amount . ", 
@@ -153,7 +153,7 @@ class ParseDonation
                 $user_id = mysql_real_escape_string( $child->user_id );
                 $amount = mysql_real_escape_string( $child->amount );
                 if ($amount > 0 && is_numeric($user_id)) {
-                    $sql = "insert into charidy_donations 
+                    $sql = "insert into mashpia_charidy.donations 
                             set donor_id = " . $donor_id . ", 
                             year = " . $this->year . ", 
                             amount = " . $amount . ", 
@@ -191,7 +191,7 @@ class ParseDonation
             $donor_id = 0;
 
             // check if email already exists in donor database and use that id
-            $sql = "select donor_id from charidy_donors where email = '" . $this->info->email . "'";
+            $sql = "select donor_id from mashpia_charidy.donors where email = '" . $this->info->email . "'";
             $result = mysql_query( $sql );
             if (mysql_num_rows( $result) > 0) {
                 $row = mysql_fetch_assoc( $result );
@@ -200,7 +200,7 @@ class ParseDonation
 
             if ($donor_id == 0) {
                 // create donor in database
-                $sql = "insert into charidy_donors 
+                $sql = "insert into mashpia_charidy.donors 
                         set first_name = '" . addslashes( $first_name ) . "', 
                         last_name = '" . addslashes( $last_name ) . "', 
                         address = '" . addslashes( $address ) . "', 
@@ -234,7 +234,7 @@ class ParseDonation
             $dedication_text = isset( $this->donation->dedication_text ) ? mysql_real_escape_string( $this->donation->dedication_text ) : '';
             $donation_date = $this->extractDate();
             
-            $sql = "insert into charidy_donations 
+            $sql = "insert into mashpia_charidy.donations 
                     set donor_id = " . $donor_id . ", 
                     year = " . $this->year . ", 
                     amount = " . $amount . ", 
@@ -338,12 +338,12 @@ class ParseDonation
             $oldEmail = $row['admin_email'];
 
             // find out donor id based on old email
-            $sql = "select * from charidy_donors where email = '" . $oldEmail . "'";
+            $sql = "select * from mashpia_charidy.donors where email = '" . $oldEmail . "'";
             $result = mysql_query( $sql );
             if ($row = mysql_fetch_assoc( $result )) {
                 if ($this->donation->parent_id == $row['parent_admin_id']) {
                     $this->donation->donor_id = $row['donor_id'];
-                    $sql = "update charidy_donors set email = '" . $this->info->email . "' where donor_id = " . $this->donation->donor_id;
+                    $sql = "update mashpia_charidy.donors set email = '" . $this->info->email . "' where donor_id = " . $this->donation->donor_id;
                     //echo $sql . "<br />";
                     mysql_query( $sql );
                     $sql = "update admins set admin_email = '" . $this->info->email . "' where admin_id = " . $this->donation->parent_id;
@@ -355,7 +355,7 @@ class ParseDonation
     }
 
     private function findDonorByParentID() {
-        $sql = "select donor_id from charidy_donors where parent_admin_id = " . mysql_real_escape_string( $this->donation->parent_id );
+        $sql = "select donor_id from mashpia_charidy.donors where parent_admin_id = " . mysql_real_escape_string( $this->donation->parent_id );
         $result = mysql_query( $sql );
         if ($row = mysql_fetch_assoc( $result )) {
             $this->donation->donor_id = $row['donor_id'];

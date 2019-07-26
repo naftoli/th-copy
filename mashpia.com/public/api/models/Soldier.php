@@ -31,6 +31,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     private $store_miles; // miles available for the store
     private $rank; // the users current rank
     private $missions = [];
+    public $parent; // needed for chidon registration
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -262,7 +263,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function parentAccount() {
         global $MASHPIA_DB;
         $query = $MASHPIA_DB->prepare(
-            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
@@ -311,10 +312,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* REGISTRATION *******************************
     // returns array of registration rates. Call $this->registrationStatus() to get each ones status
     public function registrationRates() {
+        global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
-        // add chidon if user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade >= 4 )
+        // add chidon if user is in grade 3+
+        if ( $this->platoon && $this->platoon->class_grade >= 3 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
@@ -322,7 +324,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationCharge( $type, $amount, $trans_id = '', $year = false ) {
         global $MASHPIA_DB;
         // set default year.
-        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
+        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonYear() : GlobalSettings::getRegistrationYear( $this->school_id );
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
@@ -350,8 +352,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
+        global $current_user;
+        
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getRegistrationYear();
+        if ( in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $year = 5780;
+        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, chayolei, th_chidon_id, chidon FROM users u "
@@ -369,10 +374,27 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
+        // turn off chayolei reg 
+        if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
-        // only add th_chidon_id if the user is in grade 4+ and we are before October 16, 2018 12:00am
-        if ( unixtojd() < 2458409 && $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
+        // only add th_chidon_id if the user is in grade 3+ 
+        $exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
+
+        // turn off chayolei reg if school has not registered yet
+        if ( $result['chayolei'] == false && !in_array( $this->user_id, [8273, 13159] ) ) {
+            $school_registered = false;
+            $reg_info = $this->school->school_registrations;
+            foreach ( $reg_info as $reg ) {
+                if ( $reg->year == $year ) {
+                    $school_registered = true;
+                    break;
+                }
+            }
+            if ( !$school_registered ) $result['chayolei'] = true; // disable chayolei reg if school is not registered
+        }
+
         return $result;
     }
     /**
@@ -427,9 +449,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $year
      * @param string $size
      * @param integer $parent_id
+     * @param float $amount
+     * @param string $trans_id
+     * @param boolean $recruited
+     * @param int $recruited_by
      * @return void
      */
-    public function registerChidon( $year, $size, $parent_id = 0, $amount = null, $trans_id = '' ){
+    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '' ){
         global $MASHPIA_DB;
 
         // save the charge
@@ -437,11 +463,50 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $this->registrationCharge( 'chidon', $amount, $trans_id );
         }
 
-        $chidon_query = $MASHPIA_DB->prepare(
-            "INSERT INTO th_chidon (year, school_id, user_id, size, parent_id) VALUES (?, ?, ?, ?, ?)"
-        );
+        if ( $recruited && $recruited_by > 0 ) {
+            $chidon_query = $MASHPIA_DB->prepare(
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $recruited_by, $poll ] );
+        } else {
+            $chidon_query = $MASHPIA_DB->prepare(
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, poll) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $poll ] );
+        }
+    }
 
-        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $parent_id ] );
+    /**
+     * addBookPurchase
+     * 
+     * adds book purchase info to db
+     * 
+     * @param int $year
+     * @param int $user_id
+     * @param string $location
+     * @param string $trans_id 
+     * @param string $store_name
+     * @param string $store_city
+     */
+    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '' ) {
+        global $MASHPIA_DB;
+        $qry = $MASHPIA_DB->prepare(
+            "insert into yahadus_book_purchases 
+            set year = :year, 
+            user_id = :user, 
+            location = :location, 
+            trans_id = :trans_id, 
+            store_name = :store_name, 
+            store_city = :store_city"
+        );
+        $qry->execute([
+            ':year' =>  $year, 
+            ':user' =>  $user_id, 
+            ':location' =>  $location, 
+            ':trans_id' =>  $trans_id, 
+            ':store_name'   =>  $store_name, 
+            ':store_city'   =>  $store_city
+        ]);
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
@@ -497,8 +562,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
     public function generateSchoolType() {
         // if we have a school type, return it
-        if ( $this->school_type_id != 0 )
-            return $this->school_type_id;
+        if ( $this->school_type_id != 0 ) {
+            // ensure correct type id
+            $type_id = intval( $this->school_type_id );
+            if ( $this->gender == 'F' && in_array( $type_id, [2, 12] ) ) $type_id++;
+            else if ( $this->gender == 'M' && in_array( $type_id, [3, 13] ) ) $type_id--;
+            return $this->school_type_id = $type_id;
+        }
         // if it is 0, then make it 2 for boys
         if ( $this->gender == 'M' )
             return $this->school_type_id = 2;

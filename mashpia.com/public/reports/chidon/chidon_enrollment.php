@@ -10,7 +10,7 @@ $schools = $as->getSchools();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Chidon Enrollment Report</title>
+        <title>Registration Report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="../inc/css/report.css" rel="stylesheet" type="text/css">
 <!--    Rotating Spinner, grey dropdowns and fancy checkboxes... -->
@@ -36,7 +36,7 @@ $schools = $as->getSchools();
         <? // load the admin UI and JQuery 1.4
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
-        <h1>Chidon Enrollment Report</h1>
+        <h1>Registration Report</h1>
         <? if(count($schools) == 1) {?>
             <select id="school_id" name="school_id" class="hidden" disabled>
                 <option value="<?=array_keys($schools)[0]?>"><?=array_values($schools)[0]?></option>

@@ -59,7 +59,7 @@ class MissionsDone {
     
     public function setMissionsDone( $missions = array(), $children = array(), $all = false ) {
     	if ( empty( $children ) ) { 
-	        $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, SUM( mm.mission_count ) as total  
+	        $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count(*) as total  
 	                from date_tasks_mission_marks mm 
 	                join users u using (user_id) 
 	                join schools s using (school_id) 

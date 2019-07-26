@@ -25,10 +25,11 @@ class UserRegistrationRouter {
         $available_users = [];
         foreach( $users as $user ){
             if ( !$user->school_id ) continue;
-            $reg_info = $user->school->registration();
+            //$reg_info = $user->school->registration();
             // make sure they paid for this year
-            if ( $reg_info && $reg_info->date_paid )
+            //if ( $reg_info && $reg_info->date_paid ) {
                 $available_users[] = $user;
+            //}
         }
 
         json_response([
@@ -178,6 +179,9 @@ class UserRegistrationRouter {
                     if ( !($user->user_id == $registration['user_id']) )
                         continue;
 
+                    // set trans_id to empty string if false
+                    if ( !$trans_id ) $trans_id = '';
+
                     // set the year based on the school id for chayolei only
                     $year = $registration['registration_type'] == 'chayolei' ? 
                         GlobalSettings::getRegistrationYear( $user->school_id ) : 
@@ -189,14 +193,79 @@ class UserRegistrationRouter {
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount
+                            $current_user->admin_id, $year, $amount, $trans_id
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
-                        if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
+                        $year = GlobalSettings::getChidonYear();
+                        $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
+                        $recruited_by = intval( $registration['recruitedBy'] );
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
+
+                        else {
+                            // add book purchased info to db
+                            if ( intval( $registration['purchased'] ) == 1 ) {
+                                $location = $registration['purchasedWhere'];
+                                $store_name = $registration['store']['store_name'];
+                                $store_city = $registration['store']['store_city'];
+                                $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                            }
+                            // send email to parents
+                            $headers[] = 'MIME-Version: 1.0';
+                            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+
+                            $subject = "Chidon Registration Confirmation";
+                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
+                                        <br /><br/>
+                                        We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
+                                        <br /><br />
+                                        In order to begin learning, your child will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
+                                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.
+                                        <br /><br />
+                                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
+                                        <br /><br />
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.chidon613.com'>www.chidon613.com</a>.";
+                            if ( $user->school_id == 61 ) {
+                                $message = "
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for 5780.
+                                <br /><br />
+                                We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
+                                <br /><br />
+                                This is also an opportunity to have a Bubby or Zaidy learn with your child weekly. 
+                                <br /><br />
+                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>Here</a> to sign up for the classes.
+                                In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids. 
+                                <br /><br />
+                                Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.chidon613.com'>www.chidon613.com</a>.
+                                <br /><br /><br />
+                                Wishing you Much Hatzlocho!
+                                <br /><br />
+                                For any questions throughout the duration of the Chidon Zman please be in touch with your Chidon Coordinator at MyShliach.";
+                            }
+
+                            $to = $current_user->admin_email;
+                            if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
+                                $to = "naftoli@tzivoshashem.org";
+                                $subject = "Error in chidon email";
+                                $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                                @mail( $to, $subject, $message, implode("\r\n", $headers) );
+                            }
+                        }
+                    // Yahadus purchase
+                    } else if ( $registration['registration_type'] == 'yahadus' ) {
+                        $year = GlobalSettings::getChidonYear();
+                        // add the registration charge
+                        $user->registrationCharge(
+                            $registration['registration_type'],
+                            floatval( $amount ),
+                            $trans_id, $year
+                        );
+                        // add book purchase to db
+                        $user->addBookPurchase( $year, $user->user_id, 'parent_account', $trans_id );
                     // other registrations
                     } else {
                         // add the registration charge
@@ -230,9 +299,9 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 )
-            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+            @mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
-        json_response( false );
+        json_response( "Successfully Registered." );
     }
 
     // serializer for getUsers()
@@ -243,7 +312,7 @@ class UserRegistrationRouter {
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial',
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount' ],
                 'include' => [ 
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]

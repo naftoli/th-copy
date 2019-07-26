@@ -4,6 +4,7 @@
 		<style>
 			table {
 				font-size: 12px;
+				font-family: Arial;
 			}
 			th, td {
 				border: 1px solid black;
@@ -20,7 +21,10 @@
 	<body>
 <?
 require_once '../db.php';
-$auction_id = 79; 
+$sqlAuction = "select auction_id from auctions where auction_ran = 0 order by auction_id desc limit 1";
+$resultAuction = mysql_query( $sqlAuction );
+$rowAuction = mysql_fetch_assoc( $resultAuction );
+$auction_id = $rowAuction['auction_id'];
 /*
 $sql = "select s.school_name, u.user_id, u.first, u.last, p.prize_name, c.class_grade, c.class_sub  
         from auction_winners aw 

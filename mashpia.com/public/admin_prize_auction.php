@@ -191,17 +191,17 @@ if (!empty($action)) {
 				
 					<? $school_result = mq('SELECT school_id, school_name, inst_name FROM schools JOIN institutions USING (inst_id)' . ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY inst_name, school_name'); ?>
 					
+					
 					<LABEL>
 						<?=T_('Min Grade')?>
 						<BR>
 						<SELECT name="min_grade">
-							<OPTION value="">&lt;N/A&gt;
-							<? foreach(mysql_enum_values('prizes_auction', 'min_grade') as $grade) : ?>
-							<OPTION <?=$grade == $edit_row['min_grade'] ? 'SELECTED' : ''?>><?=es($grade)?></OPTION>
-							<? endforeach; ?>
+							<OPTION value="">&lt;N/A&gt;</option>
+							<? //foreach(mysql_enum_values('prizes_auction', 'min_grade') as $grade) : ?>
+							<!-- <OPTION <?=$grade == $edit_row['min_grade'] ? 'SELECTED' : ''?>><?=es($grade)?></OPTION> -->
+							<? //endforeach; ?>
 						</SELECT>
 					</LABEL>
-					
 					<BR>
 					
 					<LABEL>
@@ -209,9 +209,9 @@ if (!empty($action)) {
 						<BR>
 						<SELECT name="max_grade">
 							<OPTION value="">&lt;N/A&gt;
-							<? foreach(mysql_enum_values('prizes_auction', 'max_grade') as $grade) : ?>
-							<OPTION <?=$grade == $edit_row['max_grade'] ? 'SELECTED' : ''?>><?=es($grade)?></OPTION>
-							<? endforeach; ?>
+							<? //foreach(mysql_enum_values('prizes_auction', 'max_grade') as $grade) : ?>
+							<!-- <OPTION <?=$grade == $edit_row['max_grade'] ? 'SELECTED' : ''?>><?=es($grade)?></OPTION> -->
+							<? //endforeach; ?>
 						</SELECT>
 					</LABEL>
 					

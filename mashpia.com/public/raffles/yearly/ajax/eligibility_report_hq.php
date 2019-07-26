@@ -43,7 +43,7 @@ $users = $yearly_raffle->get_eligible_users( $realtime, $school_id );
                 <td><?= $user['user_serial'] ?></td>
                 <td><?= $user['last'] ?></td>
                 <td><?= $user['first'] ?></td>
-                <td><?= $user['days'] ?>/160 </td>
+                <td><?= $user['days'] ?>/180 </td>
             </tr>
         <?php
         } 

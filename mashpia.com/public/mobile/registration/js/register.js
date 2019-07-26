@@ -7,7 +7,9 @@ $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
+var myshliach = 61;
 var anash_kinder = 269;
+var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
@@ -95,22 +97,138 @@ var registrationApp = function() {
         var current_index = parseInt( $("#current_index").val() );
         var selected_user = state.selected_users[ current_index ];
         var school_id = selected_user.school.school_id;
-        var australian = [ 55, 66, 110, 112, 180, 256, 61 ]; // include myshliach in hiding of booklets and yahadus book
+        var australian = [ 55, 66, 110, 112, 180, 256 ]; 
 
         // show study guides info for all non Australian schools
-        if ( !australian.includes( school_id ) ) $("#study-guides").show();
+        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
 
         // show anash kinder text if anash kinder school
-        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
-        
+        if ( school_id == anash_kinder ) {
+            $("#anash_kinder_text").show();
+            $(".shabbaton-cost").html("<b>$250</b>");
+        }
+
         // yahadus registration
-        $( '#step-2 form #chidon-registration input').change( function( event ) {
-            if ( event.target.checked ) {
-                if ( !australian.includes( school_id ) ) $( '#step-2 form #yahadus-registration').show();
+        $('#step-2 form .book-bought').click( function() {
+            $("#step-2 form .chidon-reg").show();
+            if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
+            if ( $(this).val() == 0 ) {
+                if ( !australian.includes( school_id ) ) {
+                    $( '#step-2 form #yahadus-registration').show();
+                    $( '#step-2 form #yahadus-registration-no').show();
+                }
+                $('#step-2 form #book-purchase').hide();
             } else {
                 $( '#step-2 form #yahadus-registration input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration').hide();
+                $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
+                $( '#step-2 form #yahadus-registration-no').hide();
+                $('#step-2 form #book-purchase').show();
             } 
+        });
+
+        $('#step-2 form .book-purchase').change( function() {
+            var purchaseValue = $(this).val();
+            if ( purchaseValue == 'store' ) $("#step-2 form #book-purchase-details").show();
+            else $("#step-2 form #book-purchase-details").hide();
+        });
+
+        // make sure only one of the book purchase inputs are checked
+        $("#yahadus").click( function() {
+            if ( $(this).is(":checked") && $("#no_yahadus").is(":checked") ) $("#no_yahadus").trigger('click');
+            if ( $(this).is(":checked") ) {
+                // if myshliach / anash kinder need to confirm address
+                if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                    $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
+                    $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+                    $("#ship-city").val( selected_user.parentAccount.admin_city );
+                    $("#ship-state").val( selected_user.parentAccount.admin_state);
+                    $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+                    $("#ship-country").val( selected_user.parentAccount.admin_country );
+                    $("#shipping-modal").modal('show');
+                    $("#update-shipping").click( function() {
+                        var info = {};
+                        info.address1 = $("#ship-address1").val();
+                        info.address2 = $("#ship-address2").val();
+                        info.city = $("#ship-city").val();
+                        info.state = $("#ship-state").val();
+                        info.zip = $("#ship-zip").val();
+                        info.country = $("#ship-country").val();
+                        if ( !(info.address1 && info.city && info.state && info.zip && info.country) ) {
+                            alert("The address, city, state, zip and country fields cannot be left blank!");
+                            return false;
+                        }
+                        var current_user = selected_user; // needed for scope
+                        $.post("updateAddress.php", { info: info }, function( res ) {
+                            if ( res.success ) {
+                                alert( res.data );
+                                current_user.parentAccount.admin_country = info.country;
+                                if ( current_user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+                                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
+                                $("#shipping-modal").modal('hide');
+                            } else {
+                                alert( res.error );
+                            }
+                        });
+                    });
+                }
+            }
+        });
+        $("#no_yahadus").click( function() {
+            if ( $(this).is(":checked") && $("#yahadus").is(":checked") ) $("#yahadus").trigger('click');
+        });
+
+        $("input.recruit").click( function() {
+            if ( $(this).val() == '1' ) {
+                $("#recruited-by").show();
+            } else {
+                $("#recruited-by").hide();
+            }
+        });
+
+        $.post('api/tasks/getSchools.php', function( result ) {
+            if ( result.success ) {
+                var schools = result.data;
+                var html = '';
+                for ( var s in schools ) {
+                    html += "<option value=" + schools[s] + ">" + s + "</option>";
+                }
+                $("#school").append( html );
+            } else {
+                alert( success.error-div );
+            }
+        });
+
+        $("#school").change( function() {
+            $.post('api/tasks/getGrades.php', { school_id: $(this).val() }, function( result ) {
+                if ( result.success ) {
+                    var grades = result.data;
+                    var html = "<option value='0'>Select Grade</option>";
+                    for ( var g in grades ) {
+                        html += "<option value=" + g + ">" + grades[g] + "</option>";
+                    }
+                    $("#grade").empty();
+                    $("#grade").append( html );
+                } else {
+                    alert( result.error  );
+                }
+            });
+        });
+
+        $("#grade").change( function() {
+            $.post('api/tasks/getStudents.php', { class_id: $(this).val() }, function( result ) {
+                if ( result.success ) {
+                    var users = result.data;
+                    var html = "<option value='0'>Select Student</option>";
+                    for ( var u in users ) {
+                        html += "<option value=" + users[u] + ">" + u + "</option>";
+                    }
+                    $("#user").empty();
+                    $("#user").append( html );
+                } else {
+                    alert( result.error  );
+                }
+            });
         });
     }
 
@@ -173,6 +291,7 @@ var registrationApp = function() {
     /*********************** FORM HANDLERS ***********************/
     function confirmUser( event ) {
         event.preventDefault();
+        
         // update the user's information
         var postData = {};  var user_changed = false;
         var current_index = parseInt( $("#current_index").val() );
@@ -193,6 +312,7 @@ var registrationApp = function() {
                 return getUsers();
             });
         }
+
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
@@ -207,6 +327,50 @@ var registrationApp = function() {
                 'You must select at least one type of registration.'
             );
         } 
+
+        if ( selected_charges.chidon === true ) {
+            // check that book was selected
+            if ( $("select#chidon-book").val() == 0 ) {
+                return showError("You must choose which book is being studied.");
+            }
+            if ( !$(".book-bought").is(":checked") ) {
+                return showError("You must indicate if you have already purchased a book or not.");
+            }
+            
+            if ( $(".book-bought:checked").val() == '1' ) {
+                // make sure something is checked
+                if ( !$(".book-purchase").is(":checked") ) {
+                    return showError("You have not selected where you bought the book.");
+                }
+                // make sure that if they bought a book from a store, that the store info is filled out
+                console.log( $(".book-purchase:checked").val() );
+                if ( $(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '' ) ) {
+                    return showError("You must enter the store information for your book purchase.");
+                }
+            } else {
+                // make sure they checked either that they want to purchase a book or that they already have a book
+                if ( !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
+                    return showError("You must indicate whether you would like to purchase a book or not.");
+                }
+            }
+
+            var poll = $("#yahadus-poll").val();
+            if ( !poll.length ) {
+                return showError("You must indicate how you will be learning for chidon.");
+            }
+
+            // make sure shabbaton button was checked as well
+            if ( !$("#shabbaton").is(":checked") ) {
+                return showError("You must indicate your acknowledgment of the Shabbaton fee.");
+            }
+
+            // make sure we have student id if recruited by is checked off
+            if ( $(".recruit").eq(0).is(":checked") ) {
+                if ( parseInt( $("#user").val() ) == 0 ) {
+                    return showError("You must choose who recruited you.");
+                }
+            }
+        }
 
         // validate that they have accepted to be used in media campaigns
         if ( $(event.target).find( "#media" )[0].checked ){
@@ -231,6 +395,7 @@ var registrationApp = function() {
         } 
         if ( selected_charges.chidon ) {
             var anash = selected_user.school.school_id === anash_kinder;
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
                 description: 'Chidon Registration ' + selected_user.first + ( anash ? ' (includes coordinator and study guide)' : ''),
                 price: selected_user.registrationRates.chidon,
@@ -239,22 +404,44 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
-                    size: $("select#chidon-sweater-size").val()
+                    size: $("select#chidon-sweater-size").val(), 
+                    book: $("select#chidon-book").val(), 
+                    purchased: $(".book-bought:checked").val(),
+                    purchasedWhere: $(".book-purchase:checked").val(), 
+                    store: {
+                        store_name: $("#store-name").val(), 
+                        store_city: $("#store-city").val()
+                    }, 
+                    recruited: $(".recruit:checked").val(), 
+                    recruitedBy: $("#user").val(), 
+                    poll: poll 
                 }
             });
         }
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
-            state.cart.push({
-                description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
-                price: shipping_included ? 50 : 45,
-                meta: {
-                    type: 'registration',
-                    user_id: selected_user.user_id,
-                    registration_type: 'yahadus',
-                    paid: shipping_included ? 50 : 45,
-                }
-            });
+            var shipping_charge = 5;
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                shipping_included = true; // override for anash kinder to make sure shipping is being charged
+                if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
+                else shipping_charge = 30;
+            }
+            // // don't add to cart if anash kinder / myshliach and not in USA
+            // if ( 
+            //     ! [ 269, 61 ].includes( selected_user.school.school_id ) || 
+            //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) 
+            // ) {
+                state.cart.push({
+                    description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
+                    price: shipping_included ? (40 + shipping_charge) : 40,
+                    meta: {
+                        type: 'registration',
+                        user_id: selected_user.user_id,
+                        registration_type: 'yahadus',
+                        paid: shipping_included ? (40 + shipping_charge) : 40
+                    }
+                });
+            //}
         }
 
         current_index += 1;
@@ -406,9 +593,12 @@ var registrationApp = function() {
             postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
             postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
-            
+
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function() { 
+            if ( showClasses ) {
+                $("#successModal #success").append("<p>To Register for MyShliach's online weekly classes please click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>here</a></p>");
+            }
             $("#successModal").modal('show'); 
         });
     }
@@ -488,25 +678,47 @@ var templates = function(){
             // setup the payment options - chayolei
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
-            if ( user.registrationRates.chidon && user.school.school_id == anash_kinder ) {
-                $( '#chidon-text' ).text( '. This fee includes a chidon coordinator and study guide.' );
-            } else {
-                $( '#chidon-text' ).text( 'and you will receive a Study Guide from you school when school begins!' );
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
+
+            $("#step-2 form select#yahadus-poll option").prop('selected', false);
+
+            $("#step-2 form .chidon-reg").hide();
+            
+            // reset the book field
+            $("#step-2 form #chidon-book").val(0);
+            // reset book bought info
+            $("#step-2 form input.book-bought").prop('checked', false);
+            $("#step-2 form #book-purchase").hide();
             // yahadus
             $( '#step-2 form #yahadus-registration input' )[0].checked = false;
+            $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
             // $( '#step-2 form #yahadus-book-number' ).text( user.class_grade - 4 );
             // $( '#step-2 form #yahadus-cost' ).text(  ? 45 : 50 );
             $( '#step-2 form #yahadus-registration').hide();
-            if ( user.school.shipping_method === 'pickup' ) {
-                $( '#step-2 form #yahadus-cost' ).text( '$55' );
-                $( '#step-2 form #yahadus-real-cost' ).text( 45 )
-                $( '#step-2 form #yahadus-text').text( '' );
-            } else { 
-                $( '#step-2 form #yahadus-cost' ).text( '$60' );
-                $( '#step-2 form #yahadus-real-cost' ).text( 50 )
-                $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
-            }
+            $( '#step-2 form #yahadus-registration-no').hide();
+            $("#step-2 form input#shabbaton")[0].checked = false;
+            $("#step-2 form input.recruit")[0].checked = false;
+            $("#step-2 form input.recruit")[1].checked = false;
+            $("#step-2 form #recruited-by").hide();
+            $("#school").empty();
+            $("#school").html("<option value='0'>Select School</option>");
+            $("#grade").empty();
+            $("#grade").html("<option value='0'>Select Grade</option>");
+            $("#user").empty();
+            $("#user").html("<option value='0'>Select Student</option>");
+            // if ( user.school.shipping_method === 'pickup' ) {
+            //     $( '#step-2 form #yahadus-cost' ).text( '$55' );
+            //     $( '#step-2 form #yahadus-real-cost' ).text( 40 )
+            //     $( '#step-2 form #yahadus-text').text( '' );
+            // } else { 
+            //     $( '#step-2 form #yahadus-cost' ).text( '$60' );
+            //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
+            //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
+            // }
+            console.log( user );
         },
         toggleRates: function( user, rateType ){
             $( '#step-2 form #' + rateType + '-registration input' )[0].checked = false;

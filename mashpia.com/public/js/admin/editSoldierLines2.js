@@ -104,15 +104,29 @@ $( function() {
         updateLines( this, 'mishna');
     });
     // listener for "Copy Parent Entered Amount to Tanya Learned"
-    $(".copy").click( function() {
+    $(".copyTanya").click( function() {
         var confirm = window.confirm("Are you sure you want to copy all numbers (this will overwrite what has been entered by you until now)?");
         if (confirm) {
             var id = $( this ).parent().parent().find( 'table' ).attr( 'id' );
             $("#" + id).find( "tr" ).each( function() {
-                var num = $( this ).find( '.parentEntered' ).text();
+                var num = $( this ).find( '.parentTanyaEntered' ).text();
                 if ( parseInt( num ) > 0) {
                     $( this ).find( '.tlearn' ).val( num );
                     $( this ).find( '.tanya' ).trigger( 'keyup' );
+                }
+            });
+        }
+    });
+    // listener for "Copy Parent Entered Amount to Mishna Learned"
+    $(".copyMishna").click( function() {
+        var confirm = window.confirm("Are you sure you want to copy all numbers (this will overwrite what has been entered by you until now)?");
+        if (confirm) {
+            var id = $( this ).parent().parent().find( 'table' ).attr( 'id' );
+            $("#" + id).find( "tr" ).each( function() {
+                var num = $( this ).find( '.parentMishnaEntered' ).text();
+                if ( parseInt( num ) > 0) {
+                    $( this ).find( '.mlearn' ).val( num );
+                    $( this ).find( '.mishna' ).trigger( 'keyup' );
                 }
             });
         }

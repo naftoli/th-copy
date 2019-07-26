@@ -109,7 +109,7 @@ body,td,th {
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Tuesday, Hey Kislev (Nov 13)</td>
+                                <td>Tuesday, Chof Aleph Cheshvan (Nov. 19)</td>
                                 <td>Units 1-16</td>
                                 <td>Units 46-62</td>
                                 <td>Units 100-117</td>
@@ -118,7 +118,7 @@ body,td,th {
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Wednesday, Yud Ches Teves (Dec 26)</td>
+                                <td>Monday, Tes Teves (Jan. 6)</td>
                                 <td>Units 17-30</td>
                                 <td>Units 63-80</td>
                                 <td>Units 118-135</td>
@@ -127,7 +127,7 @@ body,td,th {
                             </tr>
                             <tr>
                                 <td>3</td>
-                                <td>Wednesday, Aleph Adar 1 (Feb 6)</td>
+                                <td>Monday, Tes Vov Shvat (Feb. 10)</td>
                                 <td>Units 31-45</td>
                                 <td>Units 81-99</td>
                                 <td>Units 136-156</td>
@@ -154,8 +154,8 @@ body,td,th {
 				<br /><br />
 				
 				During the Chidon Shabbaton, all chayolim take the Chidon final (this too is a straightforward yet thorough exam on the entire Yahadus book).
-				Chayolim who receive at least 70% on the Chidon final will be awarded the Chidon plaque. Chayolim who receive 85% on the Chidon final will be awarded the
-				Chidon plaque and the Chidon medal.
+				Chayolim who receive at least 80% on the Chidon final will be awarded the Chidon medal. Chayolim who receive 90% on the Chidon final will be awarded the
+				Chidon medal and the Chidon plaque.
 				<br /><br />
 				
 				<p class="page-top">

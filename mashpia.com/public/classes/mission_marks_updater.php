@@ -23,7 +23,7 @@ class mission_marks_updater {
 		{
 			$user_track = new user_track($row);
 			$user_track->set_school_type_id();
-			//$user_track->check_missions($output);	
+			$user_track->check_missions($output);	
 			//$user_track->update_missions();
 			/*
 			if ($updated == false)
