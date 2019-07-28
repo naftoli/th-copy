@@ -200,12 +200,12 @@ workflows:
   
   test-deploy:
     jobs:
-      - test-php
+      # - test-php
       - test-react
 
       - build-react:
           requires:
-            - test-php
+            # - test-php
             - test-react
           filters:
             branches:

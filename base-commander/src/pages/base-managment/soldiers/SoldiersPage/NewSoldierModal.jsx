@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { SaveButton } from 'components/buttons/index';
 import { MissionTypeSelect } from 'components/selects';
-// import { Select } from 'components/inputs'
+import { Select } from 'components/inputs'
 import { 
   NameRow, DobCol, ProfileRow, BasePlatoonRow 
 } from '../components';
@@ -80,12 +80,11 @@ class NewSoldierModal extends Component {
     const { saving, soldier } = this.state;
     const { login, isOpen, image, editPicture } = this.props;
 
-    // language options
-    // const language_options = [
-    //   { value: 1, label: 'English' },
-    //   { value: 2, label: 'Yiddish' },
-    //   { value: 3, label: 'French' }
-    // ];
+    const language_options = [
+      { value: 1, label: 'English' },
+      { value: 2, label: 'Yiddish' },
+      { value: 3, label: 'French' }
+    ];
 
     return (
       <Modal centered 
@@ -125,16 +124,16 @@ class NewSoldierModal extends Component {
               </Col>
             </Row>
 
-            {/* <Row>
+            <Row>
               <Col sm='6'>
                 <label htmlFor='mission_lang'>Mission Language</label>
                 <Select
                   required id='mission_lang'
-                  options={language_options}
-                  value={ soldier.lang_id }
+                  options={ language_options }
+                  selected={ soldier.lang_id }
                   onChange={ this.onSelectChange('lang_id') } />
               </Col>
-            </Row> */}
+            </Row>
 
             <BasePlatoonRow
               required

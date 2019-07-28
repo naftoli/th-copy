@@ -102,7 +102,7 @@ class RegistrationPage extends Component {
     e.preventDefault();
     
     // update base with info
-    updateBase( this.props.login.id, this.state.base ); // not working? need to ask Menachem
+    this.props.updateBase( this.props.login.id, this.state.base ); // not working? need to ask Menachem
 
     const nextTab = tabId + 1;
     // set the active tab
@@ -243,7 +243,7 @@ const mapStateToProps = ({ login }) => {
 }
 
 const mapDispatchToProps = {
-  getBase, getDefaults, registerBase, getCurrentUser
+  getBase, getDefaults, registerBase, getCurrentUser, updateBase
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( RegistrationPage );
