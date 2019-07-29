@@ -12,6 +12,7 @@ const Step3 = ({
   return (
     <div id='step-3'>
       <p className="title">Step 3: Select Transition for { selection.length } Soldiers</p>
+      <i>Please Note: The transition WILL NOT TAKE EFFECT until you click the BLUE BUTTON IN STEP 4</i>
       <Row>
         <Col sm={6} xl={4}>
           <label>To Base</label>
