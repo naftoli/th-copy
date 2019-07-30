@@ -64,7 +64,6 @@ class rank_updater {
 		$info = $this->getInfo( $rank, $user );
 		require_once($_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php");
 		$this->import_promotion($info);
-		@mysql_select_db("mashpiadb");
 	}
 	
 	function getInfo( $rank, $user ) {
@@ -84,7 +83,6 @@ class rank_updater {
 		$result = mysql_query($sql);
 		$row = mysql_fetch_assoc($result);
 		$rankName = $row['rank_name'];
-		@mysql_select_db("wp");
 		
 		return array(
 			'user'		=>	$user, 
@@ -105,6 +103,7 @@ class rank_updater {
 			'post_author'	=>	1 
 		);
 		
+		@mysql_select_db("wp");
 		$id = wp_insert_post( $post );
 		if ($id) {
 			add_post_meta( $id, 'user_id', $info['user'] );
@@ -120,6 +119,7 @@ class rank_updater {
 			if ( $term3 ) wp_set_object_terms( $id, (int)$term3->term_id, 'rank' );
 			*/
 		}
+		@mysql_select_db("mashpiadb");
 	}
 }
 ?>
