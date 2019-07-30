@@ -1,6 +1,4 @@
 <?php
-$admin_auth = ['school'];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 function get_answer( int $num ) {
@@ -16,7 +14,6 @@ function get_answer( int $num ) {
       break;
   }
 }
-
 
 $user_id = $_POST['user'];
 $poll_result = json_decode( $_POST['poll_info'] );
