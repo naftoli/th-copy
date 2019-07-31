@@ -19,6 +19,9 @@ class Step2 extends Component {
     { Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>,
     },
+    { Header: "DOB", accessor: 'dob',
+      Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>,
+    },
     { Header: 'Transitioning To', accessor: 'transition' },
   ];
   // functions

@@ -24,7 +24,7 @@ class PlatoonTransitionRouter {
         }
         // generate query to fetch the users and the location that they are going to
         $user_query = $MASHPIA_DB->prepare(
-            "SELECT u.user_id, u.user_serial, u.first, u.last, u.school_id AS current_school_id, "
+            "SELECT u.user_id, u.user_serial, u.first, u.last, u.dob, u.school_id AS current_school_id, "
             ."pt.school_id, pt.class_id, s.school_name, c.class_grade, c.class_sub, "
             ."!ISNULL(pt.created_at) as being_moved FROM users u "
             ."LEFT JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL $hq_filter "
