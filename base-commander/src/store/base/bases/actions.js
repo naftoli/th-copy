@@ -20,10 +20,3 @@ export const updateBase = ( id, updates ) => {
     payload: { id, updates }
   }
 };
-
-export const addBase = id => {
-  return {
-    type: types.ADD_BASE,
-    payload: id
-  }
-};

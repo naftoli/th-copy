@@ -55,7 +55,7 @@ class HeDob {
 			// if ( $this->debug ) echo $sql . "<br />";
             mysql_query($sql);
             // if ( $this->debug ) echo "Sync to wordpress... ";
-			$this->syncToWp();
+			//$this->syncToWp();
 		} else {
 			// echo $arrDOB[0] . '-' . $arrDOB[1] . '-' . $arrDOB[2] . "<br />";
 		}
@@ -106,7 +106,7 @@ class HeDob {
 			//echo "<pre>"; print_r($arrPost); echo "</pre>";
 			
 			// change db to wp
-            mysql_select_db('wp');
+			//mysql_select_db('wp');
             
 			// require_once dirname(__FILE__)."/blog/wp-blog-header.php";
 			//$id = wp_insert_post( $arrPost['post'] );
@@ -139,7 +139,7 @@ class HeDob {
 			//	mysql_query($sqlUpdate);
 			//}
 			// change db back to mashpiadb
-            mysql_select_db('mashpiadb');
+		//	mysql_select_db('mashpiadb');
 		}
 	}
 }
