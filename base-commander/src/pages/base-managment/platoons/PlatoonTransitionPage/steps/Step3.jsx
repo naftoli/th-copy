@@ -20,7 +20,7 @@ class Step3 extends Component {
 
   // render page
   render() {
-    const { school_id, class_id, selectChange, selection, move, discharge } = this.props;
+    const { school_id, class_id, selectChange, selection, move } = this.props;
 
     return (
       <div id='step-3'>
