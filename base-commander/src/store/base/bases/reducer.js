@@ -18,6 +18,11 @@ export default ( state = initialState, action ) => {
         bases: action.payload
       });
 
+    case types.ADD_BASE:
+      return Object.assign({}, state, {
+        bases: { ...state.bases, ...action.payload }
+      });
+
     case types.UPDATE_BASE:
       return {
         bases: state.bases.map(
