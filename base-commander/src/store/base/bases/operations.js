@@ -32,16 +32,6 @@ export const updateBase = ( id, data ) => dispatch => {
   });
 }
 
-// add a single base
-export const addBase = id => dispatch => {
-  return API.get( `/core/bases?id=${id}` )
-  .then( base => { 
-    dispatch( actions.addBase( id ) ); 
-    console.log( base );
-    return base;
-  });
-}
-
 // register a base
 export const registerBase = data => dispatch => {
   return API.post(`/core/bases?action=register`, data )

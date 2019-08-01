@@ -7,7 +7,6 @@ import { isAdmin } from 'functions/login';
 
 class Step1 extends Component {
 
-
   render() {
     const {
       school_id, class_id, selectChange, onSubmit, loading, login
