@@ -176,6 +176,10 @@
     "icon": "/images/icon_auction.png"
   },
   {
+    "label": "Manuals",  "legacy": true, "path": "/manuals", "module": "chayolei",
+    "icon": "/images/icon_wizard.png"
+  },
+  {
     "label": "Setup Guide",  "legacy": true, "path": "/admin_setup_guide.php", "module": "chayolei",
     "icon": "/images/icon_wizard.png"
   },
