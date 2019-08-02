@@ -37,9 +37,13 @@ export class ModulesTab extends React.Component {
   render(){
     let { tabId, base, back, onChange } = this.props;
 
+    // let {
+    //   chayolei, chayolei_fee, tanya,  tanya_fee,
+    //   rewards,  rewards_fee,  chidon, chidon_fee,
+    // } = base;
     let {
-      chayolei, chayolei_fee, tanya,  tanya_fee,
-      rewards,  rewards_fee,  chidon, chidon_fee,
+      chayolei_fee, tanya_fee,
+      rewards_fee,  chidon_fee,
     } = base;
     // check if we have one item checked
     const total = getTotal( base );
