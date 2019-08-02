@@ -105,10 +105,14 @@ if (!empty($girls)) {
 }
 */
 
+$titles = []; // make sure duplicates don't show up
 $info = array();
 $sql = "select * from wp.wp_posts where post_type = 'birthday' and post_date = '" . $today . "'";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
+	$title = $row['post_title'];
+	if ( in_array( $title, $titles ) ) continue;
+	$titles[] = $title;
 	$meta = array();
 	$sql2 = "select * from wp.wp_postmeta where post_id = " . $row['ID'];
 	$result2 = mysql_query($sql2);

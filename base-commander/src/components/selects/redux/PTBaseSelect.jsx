@@ -34,7 +34,7 @@ class PTBaseSelect extends Component {
   componentDidUpdate() {
     // add unassigned school only for this component once the bases from redux are available
     if ( !this.state.baseAdded && this.props.bases.length ) {
-      const baseList = this.props.bases.filter( base => base.school_id != 612 );
+      const baseList = this.props.bases.filter( base => base.school_id !== 612 );
       API.get( `/core/bases?id=612` )
       .then( base => {
         const bases = baseList.concat( base );
