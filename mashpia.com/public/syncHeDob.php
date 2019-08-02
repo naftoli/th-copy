@@ -21,7 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
 $arrPosts = array();
 foreach ($info as $child) {
     //figure out date of birthday
-    if (intval($child['he_mm']) > 0 && (intval($child['he_dd']) > 0 && intval($child['he_dd']) < 31) ) {
+    if (intval($child['he_mm']) > 0 && (intval($child['he_dd']) > 0 && intval($child['he_dd']) < 31) ) {            
         // jewishtojd counts tishre as 1, cheshvon as 2, etc.
         //if ($child['he_mm'] > 6) $child['he_mm'] -= 6;
         //else $child['he_mm'] += 6;
@@ -52,6 +52,7 @@ foreach ($info as $child) {
 }
 //echo "<pre>"; print_r($arrPosts); echo "</pre>"; exit;
 
+@mysql_select_db('wp');
 require "blog/wp-blog-header.php";
 foreach ($arrPosts as $arrPost) {
     //print_r($arrPost); continue;
@@ -59,6 +60,21 @@ foreach ($arrPosts as $arrPost) {
     if ( is_wp_error( $id ) ) {
         echo $id->get_error_message() . "<br />";
     } else {
+        // delete old birthday posts
+        $oldIDs = array();
+        $sql = "select * from wp_posts 
+                where post_title = '" . $arrPost['post']['post_title'] . "'
+                and post_type = 'birthday'
+                and ID != " . $id;
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $oldIDs[]  = $row['ID'];
+        }
+        //echo "<pre>"; print_r($oldIDs); echo "</pre>";
+        foreach ($oldIDs as $postID) {
+            wp_delete_post( $postID, true );
+        }
+
         $gender = strtolower($arrPost['info']['gender']);
         if ($gender == 'm') $gender = 'boy';
         else if ($gender == 'f') $gender = 'girl';
@@ -79,4 +95,4 @@ foreach ($arrPosts as $arrPost) {
         mysql_query($sqlUpdate);
     }    
 }
-echo "Done.";
+@mysql_select_db('mashpiadb');

@@ -76,10 +76,6 @@ $success = mysql_query( $sql );
 //need to run birthday mission creator if dob changed
 if ( $success ) {
 	if ( $dobChanged ) {
-		// delete all existing birthday tasks
-		$sql = "delete from birthdays where user_id = " . $user_id;
-		mysql_query($sql);
-		
 		//update birthday
 		require 'class.birthday.php';
 		$b = new Birthday( $user_id );
@@ -92,6 +88,11 @@ if ( $success ) {
 		require 'class.heDob.php';
 		$hdob = new HeDob( $user_id );
 		$hdob->setHeDob();
+		
+		// sync with wp
+		require 'class.wpBirthday.php';
+		$wpb = new WpBirthday( $user_id );
+		$wpb->syncToWp();
 	}
 	if ( $missionTypeChanged ) {
 		// update campaign enrollment

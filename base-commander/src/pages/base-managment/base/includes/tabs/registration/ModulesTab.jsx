@@ -37,9 +37,13 @@ export class ModulesTab extends React.Component {
   render(){
     let { tabId, base, back, onChange } = this.props;
 
+    // let {
+    //   chayolei, chayolei_fee, tanya,  tanya_fee,
+    //   rewards,  rewards_fee,  chidon, chidon_fee,
+    // } = base;
     let {
-      chayolei, chayolei_fee, tanya,  tanya_fee,
-      rewards,  rewards_fee,  chidon, chidon_fee,
+      chayolei_fee, tanya_fee,
+      rewards_fee,  chidon_fee,
     } = base;
     // check if we have one item checked
     const total = getTotal( base );
@@ -65,7 +69,7 @@ export class ModulesTab extends React.Component {
             </Checkbox> */}
             <Checkbox name='chayolei'
                 onChange={ onChange }
-                checked={ !!chayolei }
+                checked={ true }
                 disabled={ true }>
               Chayolei Tzivos Hashem (CTH)
             </Checkbox>
@@ -103,7 +107,7 @@ export class ModulesTab extends React.Component {
             </Checkbox> */}
             <Checkbox name='chidon'
                 onChange={ onChange }
-                checked={ !!chidon }
+                checked={ true }
                 disabled={ true }>
               Chidon
             </Checkbox>
@@ -138,7 +142,7 @@ export class ModulesTab extends React.Component {
             </Checkbox> */}
             <Checkbox name='tanya'
                 onChange={ onChange }
-                checked={ !!tanya }
+                checked={ true }
                 disabled={ true }>
               Tanya Program
             </Checkbox>
@@ -172,7 +176,7 @@ export class ModulesTab extends React.Component {
             </Checkbox> */}
             <Checkbox name='rewards'
                 onChange={ onChange }
-                checked={ !!rewards }
+                checked={ true }
                 disabled={ true }>
               Rewards Program
             </Checkbox>

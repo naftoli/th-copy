@@ -1,7 +1,7 @@
 import React from 'react';
 // components
 import { Row, Col, Button } from 'reactstrap';
-import { BaseSelect, PlatoonSelect } from 'components/inputs';
+import { PTBaseSelect, PlatoonSelect } from 'components/inputs';
 import { ButtonBar, FontAwesome } from 'components/ui';
 
 const Step3 = ({ 
@@ -16,7 +16,7 @@ const Step3 = ({
       <Row>
         <Col sm={6} xl={4}>
           <label>To Base</label>
-          <BaseSelect value={ school_id } fetchAll 
+          <PTBaseSelect value={ school_id } fetchAll 
             onChange={ selectChange('school_id') } />
         </Col>
         <Col sm={6} xl={4}>
