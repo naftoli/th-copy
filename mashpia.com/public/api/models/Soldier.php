@@ -520,10 +520,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         require_once( __DIR__ . '/../../class.birthday.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
         require_once( __DIR__ . '/../../class.heDob.php' );
+        require_once( __DIR__ . '/../../class.wpBirthday.php' );
+
         // run the functions
         $b = new Birthday( $this->user_id );      @$b->setBirthday();
         $bi = new BirthdayYi( $this->user_id );   @$bi->setBirthday();
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
+        $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();
     }
 
     // ******************************* ONCREATE FUNCTIONS *******************************

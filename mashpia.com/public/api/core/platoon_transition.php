@@ -63,7 +63,7 @@ class PlatoonTransitionRouter {
         $user_ids = $_POST['user_ids'];
         $school_id = $_POST['school_id'];
         $class_id = $_POST['class_id'];
-        $year = GlobalSettings::getCurrentYear(); // get the current year to log the information.
+        $year = GlobalSettings::getRegistrationYear(); // get the current registration year to log the information.
 
         if ( !$user_ids || !$school_id || !$class_id || !$year )
             json_error( 'Invalid Request', false, 200 );
