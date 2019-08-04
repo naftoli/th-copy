@@ -4,7 +4,6 @@ require_once 'header.php';
 
 require 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-$year = 5779;
 
 /****************** CAMPAIGNS ******************/
 $campaigns_query = mysql_query( 
@@ -56,7 +55,7 @@ if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) {
 	foreach ( $classes as $school => $grades ) {
 		foreach ( $grades as $grade ) {
 			$users_query = mysql_query(
-				"SELECT * FROM users WHERE class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
+				"SELECT * FROM users WHERE school_id = " . $id . " and class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
 			);
 			if (mysql_num_rows($users_query) > 0) {
 				while ($row = mysql_fetch_assoc($users_query))	{
