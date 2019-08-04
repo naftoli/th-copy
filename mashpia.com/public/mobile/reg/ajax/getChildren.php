@@ -113,20 +113,21 @@ if ( !empty( $users ) ) {
 		
 		//if (unixtojd() < 2457996) $children[$row['user_id']]['chidon'] = 0; // chidon registration only begins August 31, 2017
 		
-		// REGISTRATION 5779
+		// REGISTRATION 5780
 		$children[$row['user_id']]['needsReg'] = 0;
 		$children[$row['user_id']]['allowRemove'] = 0;
 		$children[$row['user_id']]['reg_types'] = [];
+		
+		if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
+			$children[$row['user_id']]['needsReg'] = 1;
+			$children[$row['user_id']]['reg_types']['chayolei'] = true;
+		} 
 
+		// for testing
 		if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
 			$children[$row['user_id']]['needsReg'] = 1;
 			$children[$row['user_id']]['reg_types']['chayolei'] = true;
 		}
-		
-		// if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
-		// 	$children[$row['user_id']]['needsReg'] = 1;
-		// 	$children[$row['user_id']]['reg_types']['chayolei'] = true;
-		// } 
 		
 		// chidon registration
 		$exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
@@ -139,8 +140,6 @@ if ( !empty( $users ) ) {
 		) {
 			$children[ $row['user_id'] ]['needsReg'] = 1;
 			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-			// if chidon registration is on, make sure to show even if school hasn't registered yet for new year
-			$children[$row['user_id']]['schoolTypeRegistered'] = 1;
 		}
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;
