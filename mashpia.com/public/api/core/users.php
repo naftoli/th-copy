@@ -145,6 +145,10 @@ class UsersRouter {
             if ( isset( $_POST['school_type_id'] ) ){
                 $user->enrollInCampaigns();
             }
+            // if tanya was turned off, remove any tanya marks from bp summary table
+            if ( isset( $_POST['yan'] ) && $_POST['yan'] == 0 ) {
+                $user->removeFromBpSummary();
+            }
         }
 
         json_response( $user->fullDetailSerialize() );

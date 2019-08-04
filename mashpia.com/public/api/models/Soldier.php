@@ -590,6 +590,23 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             )->execute([ $this->user_id, unixtojd() ]);
         }
     }
+
+    // when setting a users tanya setting to off, we need to update the summary tables so that there's no discrepancy in campaign totals
+    public function removeFromBpSummary() {
+        global $MASHPIA_DB;
+        // find current campaign id for tanya / mishna
+        require_once( __DIR__ . '/../../class.globalSettings.php');
+        $year = GlobalSettings::getCurrentYear();
+        $campaign_qry = $MASHPIA_DB->prepare( "select id from line_campaigns where year = ?" );
+        $campaign_qry->execute([ $year ]);
+        $campaigns = $campaign_qry->fetchAll();
+        // remove user from summary tables
+        $remove_qry = $MASHPIA_DB->prepare("delete from bp_user_summary where user_id = ? and campaign_id = ?");
+        foreach ( $campaigns as $campaign ) {
+            $remove_qry->execute([ $this->user_id, $campaign['id'] ]);
+        }
+    }
+
     public function afterCreate(){
         // update the enrollment info to match the school
         $this->chayolei = $this->school->chayolei;
