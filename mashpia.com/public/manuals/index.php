@@ -48,6 +48,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Tanya & Mishnayos Baal Peh</span>
                 </div>
             </a>
+</div>
+<div id="action-links">
             <a href="https://docs.google.com/document/d/1qJxAdDrhJ3QIrBixycAPmkwLuskcSRCMRvLpCvAF9vs/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
@@ -66,6 +68,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Viholachta Bidrachov</span>
                 </div>
             </a>
+</div>
+<div id="action-links">
             <a href="https://docs.google.com/document/d/1fGI4Dmd3hoD03dJhrSXOoThzEcb_IjIi22c-vLQorWg/edit#heading=h.1n4ea5c9m44g">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
@@ -84,6 +88,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Chidon</span>
                 </div>
             </a>
+</div>
+<div id="action-links">
             <a href="https://docs.google.com/document/d/1K-h4PaWRFb3y4cCNDpoRBaUngJbTpHR_ucAveA6a-GM/edit#heading=h.3i38t9cowumh">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
@@ -96,6 +102,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Contests</span>
                 </div>
             </a>
+</div>
+<div id="action-links">
             <a href="https://docs.google.com/document/d/1Swrhh85DEqtrnCrs6VwQpioL_Jq41j3rhCFbQOairtQ/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>

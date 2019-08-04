@@ -34,7 +34,7 @@ class HomePage extends Component {
 
   render() {
     const { name, img, code, active } = this.props.login;
-    const { login, home, getRegistration, current_user } = this.props;
+    const { login, home, getRegistration } = this.props;
 
     if ( isBlank( code ) ) {
       return (
@@ -86,7 +86,8 @@ class HomePage extends Component {
         <Row id='widgets'>
 
           <QuickLinks
-            beta={ !current_user.beta } />
+            //beta={ !current_user.beta }
+             />
 
           <RegistrationWidget
             login={ login }
