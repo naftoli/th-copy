@@ -187,7 +187,7 @@ function getMedals( $user, $rank ) {
             foreach ( $users as $school => $info ) {
                 foreach ( $info as $grade => $user ) {
                     foreach ( $user as $name => $rank ) {
-                        $temp[$school][$rank][$name] = $grade;
+                        $temp[$school][$rank][][$name] = $grade;
                     }
                 }
                 ksort( $temp[$school] );
@@ -207,30 +207,32 @@ function getMedals( $user, $rank ) {
              
             if ( isset( $_GET['sort'] ) && $_GET['sort'] == 'rank' ) {
                 foreach ( $info as $rank => $user ) {
-                    foreach ( $user as $name => $grade ) {
-						if ($images[$school][$grade][$name]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$name]['mobile'];
-						else if ($thumbs[$school][$grade][$name]) $img = 'thumbs/' . $thumbs[$school][$grade][$name];
-						else $img = 'file_view.php?id=' . $images[$school][$grade][$name]['regular'];
-                        echo "<tr><td><img class='image' src='" . $img . "' /></td><td>" . 
-                        	$grade . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td><td>";
-						$info = $medals[$school][$grade][$name];
-						for ($i = 1; $i <= $info['total']; $i++) {
-							$class = 'circle';
-							if ($i <= $info['done']) {
-								$class .= ' fill';
-							}
-							echo "<div class='" . $class . "'></div>";
-						}
-                        echo "</td></tr>";
-                        if ( isset( $totals[$rank] ) ) 
-                            $totals[$rank]++;
-                        else 
-                            $totals[$rank] = 1;
-                        if ( isset( $grandTotals[$rank] ) ) 
-                            $grandTotals[$rank]++;
-                        else 
-                            $grandTotals[$rank] = 1;
-                        $sum++;
+                    foreach ( $user as $names => $more ) {
+                        foreach ( $more as $name => $grade ) {
+                            if ($images[$school][$grade][$name]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$name]['mobile'];
+                            else if ($thumbs[$school][$grade][$name]) $img = 'thumbs/' . $thumbs[$school][$grade][$name];
+                            else $img = 'file_view.php?id=' . $images[$school][$grade][$name]['regular'];
+                            echo "<tr><td><img class='image' src='" . $img . "' /></td><td>" . 
+                                $grade . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td><td>";
+                            $info = $medals[$school][$grade][$name];
+                            for ($i = 1; $i <= $info['total']; $i++) {
+                                $class = 'circle';
+                                if ($i <= $info['done']) {
+                                    $class .= ' fill';
+                                }
+                                echo "<div class='" . $class . "'></div>";
+                            }
+                            echo "</td></tr>";
+                            if ( isset( $totals[$rank] ) ) 
+                                $totals[$rank]++;
+                            else 
+                                $totals[$rank] = 1;
+                            if ( isset( $grandTotals[$rank] ) ) 
+                                $grandTotals[$rank]++;
+                            else 
+                                $grandTotals[$rank] = 1;
+                            $sum++;
+                        }
                     }
                 }
             } else {
