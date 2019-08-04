@@ -355,7 +355,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $current_user;
         
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        if ( in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $year = 5780;
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
@@ -375,7 +374,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
         // turn off chayolei reg 
-        if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
+        //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
         // only add th_chidon_id if the user is in grade 3+ 
         $exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
@@ -383,7 +382,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
         // turn off chayolei reg if school has not registered yet
-        if ( $result['chayolei'] == false && !in_array( $this->user_id, [8273, 13159] ) ) {
+        if ( isset( $result[ 'chayolei' ] ) && $result[ 'chayolei' ] == false && !in_array( $this->user_id, [8273, 13159] ) ) {
             $school_registered = false;
             $reg_info = $this->school->school_registrations;
             foreach ( $reg_info as $reg ) {
