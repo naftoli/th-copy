@@ -86,7 +86,8 @@ class HomePage extends Component {
         <Row id='widgets'>
 
           <QuickLinks
-            beta={ !current_user.beta } />
+            //beta={ !current_user.beta }
+             />
 
           <RegistrationWidget
             login={ login }
