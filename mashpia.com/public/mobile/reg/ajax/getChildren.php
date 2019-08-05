@@ -124,10 +124,10 @@ if ( !empty( $users ) ) {
 		} 
 
 		// for testing
-		if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
-			$children[$row['user_id']]['needsReg'] = 1;
-			$children[$row['user_id']]['reg_types']['chayolei'] = true;
-		}
+		// if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
+		// 	$children[$row['user_id']]['needsReg'] = 1;
+		// 	$children[$row['user_id']]['reg_types']['chayolei'] = true;
+		// }
 		
 		// chidon registration
 		$exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
