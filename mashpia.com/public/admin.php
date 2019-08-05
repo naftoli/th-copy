@@ -4,8 +4,10 @@ if ( isset( $_COOKIE['admin'] ) && !isset( $_COOKIE['admin_auth'] ) ) {
 	header( "Location: /mobile/" ); // send them to the mobile site
 }
 // send them to the react app for the new homepage/login page.
-header( "Location: /new/" );
-die();
+if ( !isset( $_GET['oldsite'] ) ) {
+	header( "Location: /new/" );
+	die();
+} 
 
 // redirect to https if using http
 // if (!isset($_SERVER['HTTPS'])) {
@@ -104,9 +106,9 @@ if ($admin_user['admin_id'] > 0) {
 }
 
 $admin->check_ckids_school();
-if ( $admin->beta || $admin->ckids ) {
-	header( 'Location: /new' );
-}
+// if ( $admin->beta || $admin->ckids ) {
+// 	header( 'Location: /new' );
+// }
 // Note that T_() in the following html transalates the text if needed.
 ?>
 

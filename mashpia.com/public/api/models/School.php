@@ -121,7 +121,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         if ( !$for_type )
             $for_type = $this->reg_type;
 
-        $early_bird = $this->earlyBird() < new DateTime();
+        //$early_bird = $this->earlyBird() < new DateTime();
 
         // check if hq set the chayolei fee
         $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");
@@ -249,7 +249,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     public function earlyBird() {
         if ( $this->early_bird )
             return $this->early_bird;
-        return new DateTime( '2019-09-26 00:00:00' );
+        return new DateTime( '2019-09-27 00:00:00' );
     }
 
     // get the current registration prices, subject to change at any time
