@@ -17,7 +17,7 @@ if ( !isset( $_GET['fromMobile'] ) && !isset( $_POST['fromMobile'] ) ) {
 	require_once( __DIR__ . '/Mobile_Detect.php' );
 	$detect = new Mobile_Detect;
 	if ( $detect->isMobile() || $detect->isTablet() ) {
-		header( "Location: /new/" );
+		header( "Location: /mobile/" );
 		exit;
 	}
 }
