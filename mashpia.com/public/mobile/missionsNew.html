@@ -245,6 +245,12 @@
 				// update the missions for the user_id...
 				$.post('reg/ajax/updateMissions.php', { user_id : id });
 
+				// show popup for yearly raffle winners
+				var winners = [14545,15495,15517,16090,17069,17556,20570,22151,22394,22549,24212,24495,50435,51768,51830,52938,54041,55990,56113,56953];
+				if ( winners.includes( parseInt( id ) ) ) {
+					alert("We want to feature you! Take a pic with your prize you won in the yearly raffle and send to Hachayol@tzivoshahem.org.");
+				}
+
 				// var d1 = new Date();
 				// var d2 = new Date('April 12, 2019 23:59:59');
 				// if ( d2 > d1 ) {
