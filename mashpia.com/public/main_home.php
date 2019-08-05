@@ -380,7 +380,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 			</div>
 		</div>
 	<?php } ?>
-	<div>
+	<!-- <div>
 		<div class="inner">
 			<h3>Mashpia.com Beta</h3>
 			<p> Sections Updated </p>
@@ -416,7 +416,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 			
 			<div> <a id='joinBeta' href='/api/beta' class='button'>Join Beta</a> </div>
 		</div>
-	</div>
+	</div> -->
 	<!--
 	<div>
 		<div class="inner">
