@@ -3,11 +3,6 @@
 if ( isset( $_COOKIE['admin'] ) && !isset( $_COOKIE['admin_auth'] ) ) {
 	header( "Location: /mobile/" ); // send them to the mobile site
 }
-// send them to the react app for the new homepage/login page.
-if ( !isset( $_GET['oldsite'] ) ) {
-	header( "Location: /new/" );
-	die();
-} 
 
 // redirect to https if using http
 // if (!isset($_SERVER['HTTPS'])) {
@@ -26,6 +21,12 @@ if ( !isset( $_GET['fromMobile'] ) && !isset( $_POST['fromMobile'] ) ) {
 		exit;
 	}
 }
+
+// send them to the react app for the new homepage/login page.
+if ( !isset( $_GET['oldsite'] ) ) {
+	header( "Location: /new/" );
+	die();
+} 
 
 // set the $admin_auth for use in admin_auth.php (header.php will only require it if this variable is set)
 $admin_auth = array( 'school','user', 'class' );
