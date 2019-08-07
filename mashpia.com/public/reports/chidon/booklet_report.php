@@ -9,6 +9,16 @@ require_once ( __DIR__ . '/../../class.adminSchools.php' );
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
+if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+    if ( $_POST['date'] == 1 ) {
+        $from = '2019-06-01';
+        $to = '2019-08-12';
+    } else if ( $_POST['date'] == 2 ) {
+        $from = '2019-08-13';
+        $to = '2019-09-17';
+    }
+}
+
 $booklet_users = [];
 $qry = "SELECT amount, date, year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub "
     ."FROM registration_charges rc JOIN schools USING (school_id) "
@@ -22,8 +32,11 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
     $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
 }
+if ( isset( $from ) && isset( $to ) ) {
+    $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
+}
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
-$qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61) ";
+//$qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61) ";
 $qry .= "ORDER BY school_name, first, last, date";
 //echo $qry;
 $booklet_users_query = mysql_query( $qry );
@@ -67,13 +80,17 @@ $booklet_grand_totals = [
         <p>
             To have report based on dates, choose starting and ending dates and then click "Refresh Report"
         </p>  
+        <p>
+            <select name="date">
+                <option value="0">Choose Batch Number</option>
+                <option value="1">1st Batch (until August 12)</option>
+                <option value="2">2nd Batch (from August 13 until Sept 17)</option>
+            </select>
+        </p>
         <p>  
-            From Date: <input type="date" name="fromDate" 
-            <?php if (isset( $_POST['fromDate'] )) echo "value='" . $_POST['fromDate'] . "'"; ?>
-            /> 
-            To Date: <input type="date" name="toDate" 
-            <?php if (isset( $_POST['toDate'] )) echo "value='" . $_POST['toDate'] . "'"; ?>
-            />
+            OR 
+            From Date: <input type="date" name="fromDate" /> 
+            To Date: <input type="date" name="toDate" />
         </p>
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
