@@ -20,12 +20,13 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
 }
 
 $booklet_users = [];
-$qry = "SELECT amount, date, year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub "
+$qry = "SELECT amount, date, rc.year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub, tc.book "
     ."FROM registration_charges rc JOIN schools USING (school_id) "
     ."JOIN users USING (user_id) " 
     ."JOIN classes c ON c.class_id = users.class_id " 
+    ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
     ."WHERE type = 'chidon' " 
-    ."AND year = $year ";
+    ."AND rc.year = $year ";
 // limit to dates if limit exists
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
     $from = mysql_real_escape_string( $_POST['fromDate'] );
@@ -44,13 +45,13 @@ while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
     $booklet_users[$row['school_id']][] = $row;
 }
 
-$booklets = [
-    4   =>  1,
-    5   =>  2,
-    6   =>  3, 
-    7   =>  4, 
-    8   =>  5
-];
+// $booklets = [
+//     4   =>  1,
+//     5   =>  2,
+//     6   =>  3, 
+//     7   =>  4, 
+//     8   =>  5
+// ];
 
 $booklet_grand_totals = [
     1   =>  0,
@@ -65,7 +66,7 @@ $booklet_grand_totals = [
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Chidon Booklet Report</title>
+    <title>Chidon Study Guides</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/admin_styles.css" rel="stylesheet" type="text/css" />
     <style>
@@ -75,7 +76,7 @@ $booklet_grand_totals = [
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1>Chidon Booklet Report</h1>
+    <h1>Chidon Study Guides</h1>
     <form action="booklet_report.php" method="post">
         <p>
             To have report based on dates, choose starting and ending dates and then click "Refresh Report"
@@ -126,14 +127,14 @@ $booklet_grand_totals = [
                                 <td><?= $user[ 'first' ]; ?></td>
                                 <td><?= $user[ 'last' ]; ?></td>
                                 <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-                                <td><?= $booklets[$grade]; ?></td>
+                                <td><?= $user['book']; ?></td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                             <?php 
                             // totals per school
-                            $booklet_totals[$booklets[$grade]]++;
+                            $booklet_totals[$user['book']]++;
                             // grand totals
-                            $booklet_grand_totals[$booklets[$grade]]++;
+                            $booklet_grand_totals[$user['book']]++;
                         }
                     ?>
                 </tbody>
