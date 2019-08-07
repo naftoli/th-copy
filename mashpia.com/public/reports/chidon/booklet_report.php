@@ -66,7 +66,7 @@ $booklet_grand_totals = [
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Chidon Booklet Report</title>
+    <title>Chidon Study Guides</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/admin_styles.css" rel="stylesheet" type="text/css" />
     <style>
@@ -76,7 +76,7 @@ $booklet_grand_totals = [
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1>Chidon Booklet Report</h1>
+    <h1>Chidon Study Guides</h1>
     <form action="booklet_report.php" method="post">
         <p>
             To have report based on dates, choose starting and ending dates and then click "Refresh Report"
