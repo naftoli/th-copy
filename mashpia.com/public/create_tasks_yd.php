@@ -117,9 +117,11 @@ if (isset($_POST['submit'])) {
     // get start and end from db
     require 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
-    $defaultDates = GlobalSettings::getCurYearDates();
-	$defaultStart = $defaultDates['start'];
-    $defaultEnd = $defaultDates['start'];
+    // $defaultDates = GlobalSettings::getCurYearDates();
+	// $defaultStart = $defaultDates['start'];
+    // $defaultEnd = $defaultDates['end'];
+    $defaultStart = 2458754; 
+    $defaultEnd = 2459103;
     
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
