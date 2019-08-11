@@ -929,8 +929,8 @@ $he_chars = array(
 	/******************* SCREEN SIZE *******************/
 	var screenSize = $(".container").width();
 
-	var showPoll = <?=$show?>;
-	if ( showPoll ) $("#hachayolPoll").modal('show');
+	// var showPoll = <?=$show?>;
+	// if ( showPoll ) $("#hachayolPoll").modal('show');
 
 	//$( function() {
 		//$(".checkAll").hide();
