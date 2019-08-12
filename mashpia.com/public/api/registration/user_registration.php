@@ -151,7 +151,7 @@ class UserRegistrationRouter {
             ]);
             $trans_id = $MASHPIA_DB->lastInsertId();
         } else {
-            $payment_response = 'N/A'; $trans_id = false;
+            $payment_response = 'N/A'; $trans_id = 0;
         }
 
         try {
@@ -299,7 +299,7 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 )
-            @mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+            @mail( "support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
         json_response( "Successfully Registered." );
     }

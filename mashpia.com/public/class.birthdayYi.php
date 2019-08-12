@@ -103,7 +103,7 @@ class BirthdayYi {
 	                $jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
 	                $jewish = jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH);
 	                $j = iconv('WINDOWS-1255', 'UTF-8', $jewish);
-	                if ( empty( $user['dob_he'] ) || ( !empty( $user['dob_he'] ) && !strpos( $user['dob_he'], '"' ) ) ) 
+	                //if ( empty( $user['dob_he'] ) || ( !empty( $user['dob_he'] ) && !strpos( $user['dob_he'], '"' ) ) ) 
 					
 					//find out if user born in leap year
 					$jDate = jdtojewish($jd);

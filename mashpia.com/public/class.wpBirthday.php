@@ -1,5 +1,5 @@
 <?php
-require 'class.globalSettings.php';
+require_once 'class.globalSettings.php';
 
 class WpBirthday
 {
