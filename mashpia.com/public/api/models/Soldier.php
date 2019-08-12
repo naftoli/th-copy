@@ -406,7 +406,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $amount
      * @return array
      */
-    public function registerChayolei( $admin_id, $year, $amount, $trans_id = '' ){
+    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0 ){
         global $MASHPIA_DB;
         $errors = [];
         // Insert into user_registration
@@ -595,7 +595,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function removeFromBpSummary() {
         global $MASHPIA_DB;
         // find current campaign id for tanya / mishna
-        require_once( __DIR__ . '/../../class.globalSettings.php');
+        // require_once( __DIR__ . '/../../class.globalSettings.php');
         $year = GlobalSettings::getCurrentYear();
         $campaign_qry = $MASHPIA_DB->prepare( "select id from line_campaigns where year = ?" );
         $campaign_qry->execute([ $year ]);
