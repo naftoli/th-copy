@@ -155,7 +155,7 @@ class GlobalSettings {
     }
 
     /**
-     * getEarlyBird
+     * getGuaranteedDiscount
      * 
      * return the current early bird discount
      *
