@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<script>
-			window.location = "/mobile/reg/index.html?v=4";
+			var url = location.href;
+			if ( url.indexOf('mashpia.com') != -1 ) window.location = "https://mashpia.com/mobile/reg/index.html?v=4";
+			else window.location = "/mobile/reg/index.html?v=4";
 		</script>
 	</head>
 </html>
