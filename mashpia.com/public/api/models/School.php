@@ -132,10 +132,18 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             if ( $child_fee > 0 ) return $child_fee;
         }
         
-        return GlobalSettings::calculateChildFee(
+        $fee = GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
             $to_soldier,    $early_bird,    $no_discount
         );
+
+        if ( intval( $this->school_id ) == 61 ) {
+            if ( new DateTime() < new DateTime( '2019-09-12 00:00:00' ) ) {
+                $fee -= 5;
+            }
+        }
+
+        return $fee;
     }
 
     public function getRegStatus( $year = false ) {
