@@ -42,6 +42,7 @@ $year = GlobalSettings::getChidonYear();
         require_once 'class.adminSchools.php';       
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
         $schools = $as->getSchools();
+        //echo implode( ',', array_keys( $schools ) ); exit;
         //echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
         //if ($admin_user['auth'] == 'super') $schools[82] = "Avrohom Academy";
         
@@ -56,7 +57,6 @@ $year = GlobalSettings::getChidonYear();
                     join admins a using (admin_id) 
                     where tc.year = ". $year . " 
                     and aa.auth = 'user' 
-                    and c.class_grade in ('4','5','6','7','8') 
                     and u.school_id = " . $id;
             if ($admin_user['auth'] != 'super') $sql .= " and deleted = 0";
             //if ($admin_user['auth'] != 'super' && $shutdown && !in_array($id, $exceptions)) $sql .= " and tc.shabbaton = 1";
@@ -73,7 +73,6 @@ $year = GlobalSettings::getChidonYear();
                 }
             }
             $sql .= " order by class_grade, class_sub, u.last, u.first";
-            //echo $sql;
             $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
             while ($row = mysql_fetch_assoc($result)) {
                 $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
@@ -95,9 +94,11 @@ $year = GlobalSettings::getChidonYear();
                 */
                 $users[$id][$grade][][$name][$email][$phone1][$phone2][$phone3][$row['th_chidon_id']][$heName][$date][$chidonType] =
                     array('paid' => $row['paid'], 'deleted' => $row['deleted'], 'info' => $row);
-                $ids[] = $id;
+                if ( !array_search( $id, $ids ) ) $ids[] = $id;
             }
         }
+        //echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
+        //echo implode(',', $ids); exit;
         echo "<input type='hidden' name='numSchools' value='" . count($ids) . "'>";
         $total = 0;
         $totals = [];
@@ -238,7 +239,7 @@ $year = GlobalSettings::getChidonYear();
         if ($admin_user['auth'] == 'super') {
             // get total number of children registered in CTH but not signed up to chidon per grade
             $notSignedUp = [];
-            $grades = ['4','5','6','7','8'];
+            $grades = ['3','4','5','6','7','8'];
             foreach ( $grades as $grade ) {
                 // for boys
 
