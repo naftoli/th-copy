@@ -51,11 +51,11 @@ function createStartArray( $val, $subject_id ) {
     $arrValues = explode(':', $val);
     foreach ($arrValues as $value) {
         $arrTemp = explode(',', $value);
-        //$year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
-        $year = $missionYear;
+        $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
+        //$year = $missionYear;
         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
         $arrStart[] = $jd;
-        if ( in_array( $subject_id, [12,27] ) ) { // end date is 6 days later
+        if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
         } else { // end date is same as start date
             $arrEnd[] = $jd;
