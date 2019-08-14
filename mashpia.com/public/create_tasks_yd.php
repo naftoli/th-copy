@@ -176,6 +176,7 @@ if (isset($_POST['submit'])) {
                 'labelID'
             );
             
+            $r = 1;
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
@@ -196,8 +197,11 @@ if (isset($_POST['submit'])) {
                             break;
                         // Start Date
                         case 3:
+                            if ( strpos($val, ',') === false ) {
+                                echo "Error in spreadsheet on line " . $r . "<br />";
+                                exit;
+                            }
                             $arrStart = explode(',', $val);
-                            print_r( $arrStart ); exit;
                             $startDate = "";
                             $endDate = "";
                             break;
@@ -309,6 +313,7 @@ if (isset($_POST['submit'])) {
                 }
                 $missionName = "";
             }
+            $r++;
             //exit;
 			
 			echo "<pre>";
