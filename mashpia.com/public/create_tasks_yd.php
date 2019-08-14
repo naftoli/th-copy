@@ -197,6 +197,7 @@ if (isset($_POST['submit'])) {
                         // Start Date
                         case 3:
                             $arrStart = explode(',', $val);
+                            print_r( $arrStart ); exit;
                             $startDate = "";
                             $endDate = "";
                             break;
