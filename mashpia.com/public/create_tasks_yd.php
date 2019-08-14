@@ -117,11 +117,6 @@ if (isset($_POST['submit'])) {
     // get start and end from db
     require 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
-    // $defaultDates = GlobalSettings::getCurYearDates();
-	// $defaultStart = $defaultDates['start'];
-    // $defaultEnd = $defaultDates['end'];
-    $defaultStart = 2458754; 
-    $defaultEnd = 2459103;
     
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -201,46 +196,13 @@ if (isset($_POST['submit'])) {
                             break;
                         // Start Date
                         case 3:
-							if (strpos($val, ':') !== false) {
-								$arrValues = explode(':', $val);
-								foreach ($arrValues as $value) {
-									$arrTemp = explode(',', $value);
-                                    // this causes problems b/c the beginning of the yr tasks relate to previous yr and end or yr tasks refer to next yr
-									$year = $arrTemp[0] == 13 ? $missionYear - 1 : $missionYear;
-                                    //$year = 5778; 
-									$jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
-                    				$arrStart[] = $jd;
-									$startDate = $arrStart[0];
-								}
-							} else {
-	                            if (strpos($val, ',') !== false) {
-	                                $arrStart = explode(',', $val);
-	                                if (strlen($arrStart[0]) > 3) {
-	                                    $startDate = $arrStart[0];
-	                                    $endDate = $arrStart[1];
-	                                } else {
-	                                    $startDate = "";
-	                                    $endDate = "";
-	                                }
-	                            } else {
-									if (empty($val)) {
-										$startDate = $defaultStart;
-										$endDate = $defaultEnd;
-									} else {
-										$startDate = $val;
-									}
-	                            }
-							}
+                            $arrStart = explode(',', $val);
+                            $startDate = "";
+                            $endDate = "";
                             break;
                         // End Date
                         case 4:
-                            if (!empty($val)) {
-                                if (strpos($val, ',') !== false) {
-                                    $arrEnd = explode(',', $val);
-                                } else {
-                                    $endDate = $val;
-                                }
-                            }
+                            $arrEnd = explode(',', $val);
                             break;
                         // school types
                         case 7:
