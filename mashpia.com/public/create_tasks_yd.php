@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
                         // Start Date
                         case 3:
                             if ( strpos($val, ',') === false ) {
-                                echo "Error in spreadsheet on line " . $r . "<br />";
+                                echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
                                 exit;
                             }
                             $arrStart = explode(',', $val);
