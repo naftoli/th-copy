@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
     //echo $missionNumber;
     
     // get start and end from db
-    require 'class.globalSettings.php';
+    require_once 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
     
     $weeks = array();
