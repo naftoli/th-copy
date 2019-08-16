@@ -255,6 +255,7 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 }
+                $r++;
                 
                 // make sure we don't have incorrect yiddish label for english task or vice versa
                 if ($lang == 1) {
@@ -313,13 +314,12 @@ if (isset($_POST['submit'])) {
                 }
                 $missionName = "";
             }
-            $r++;
             //exit;
 			
-			echo "<pre>";
-			print_r($missions);
-			echo "</pre>";
-			exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
