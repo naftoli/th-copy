@@ -79,10 +79,10 @@ define('WP_DEBUG', true);
 // define('SITE_ID_CURRENT_SITE', 1);
 // define('BLOG_ID_CURRENT_SITE', 1);
 
-define('FS_METHOD', 'ssh');
-define('FTP_USER', 'mashpia');
-define('FTP_PASS', 'Naftoli8770!');
-define('FTP_HOST', 'mashpia.com');
+// define('FS_METHOD', 'ssh');
+// define('FTP_USER', 'mashpia');
+// define('FTP_PASS', 'Naftoli8770!');
+// define('FTP_HOST', 'mashpia.com');
 
 /* That's all, stop editing! Happy blogging. */
 
