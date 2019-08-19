@@ -312,7 +312,7 @@ class UserRegistrationRouter {
             return $user->to_array([
                 'only'  => [
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
-                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial',
+                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount' ],
                 'include' => [ 
