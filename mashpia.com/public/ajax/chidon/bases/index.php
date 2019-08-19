@@ -21,16 +21,15 @@ $stmt = $MASHPIA_DB->prepare("
         chidon_name,
         chidon_number,
         chidon_email,
-        COUNT(school_rep) AS finalists 
-
+        COUNT(*) AS finalists
     FROM
         schools s
             JOIN
         th_chidon_schools tcs USING (school_id)
             JOIN
-        th_chidon USING (school_id , year)
+        th_chidon tc USING (school_id , year)
     WHERE
-        tcs.year = :year
+        tcs.year = :year AND tc.date_paid > 0
     GROUP BY school_id
     ");
 $res = $stmt->execute([':year' => ($year - 1)]);
