@@ -1,7 +1,5 @@
 <?php
-$key = $_GET['key'];
-
-if ( $key != 'Chidon@5780!' ) {
+if ( !isset( $_GET['key'] ) || $_GET['key'] != 'Chidon@5780!' ) {
     echo json_encode([
         'succes'    =>  false, 
         'error'     =>  "Access Forbidden."
