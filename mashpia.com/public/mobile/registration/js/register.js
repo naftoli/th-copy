@@ -296,10 +296,11 @@ var registrationApp = function() {
         var postData = {};  var user_changed = false;
         var current_index = parseInt( $("#current_index").val() );
         var selected_user = state.selected_users[ current_index ];
+        console.log( selected_user );
         // find all changed feilds
         $( event.target ).serializeArray().forEach( function( item ) {
-            if ( selected_user[ item.name ] && 
-                selected_user[ item.name ] != item.value 
+            if ( selected_user[ item.name ] == '' || 
+                ( selected_user[ item.name ] && selected_user[ item.name ] != item.value  )
             ) {
                 user_changed = true;
                 selected_user[ item.name ] = postData[ item.name ] = item.value;
@@ -653,6 +654,8 @@ var templates = function(){
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form #gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
+            $( '#step-2 form #lang_id' ).val( user.lang_id );
+            $( '#step-2 form #non_th_school' ).val( user.non_th_school );
             // add the dropdown for naftali
             var class_select = $( '#step-2 form #class_name select' );
             class_select.html('');
@@ -668,6 +671,7 @@ var templates = function(){
                 });
             } else {
                 $( '#step-2 form #class_name' ).hide(); // hide it
+                $( '#step-2 form #non_th_school' ).hide();
             }
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );
