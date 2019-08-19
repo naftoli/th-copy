@@ -70,7 +70,7 @@ $sm->setArmyResults();
             
             ?>
 
-            <p align='center' style='font-size: 54px'>שבת מברכים <?=$sm->getHebrewMonth($key)?></p>
+            <p align='center' style='font-size: 54px'>שבת מברכים <?=$sm->getHebrewMonthFromJd($date)?></p>
     
             <div class='main' align="center">
                 <?php $sm->generateSummary( $key, $date ) ?>

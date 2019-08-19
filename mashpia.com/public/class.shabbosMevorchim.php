@@ -56,7 +56,7 @@ class ShabbosMevorchim {
     public function __construct($year = 0) {
         if ( $year == 0 ) {
             require_once( $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php" ); 
-            $year = GlobalSettings::getRegistrationYear();
+            $year = GlobalSettings::getCurrentYear();
         }
 
         require_once( $_SERVER['DOCUMENT_ROOT'] . "/tehillim_backups/class.tehillimBackup.php" ); // load the backups class
@@ -134,6 +134,7 @@ class ShabbosMevorchim {
 	public function setDebug() {
 	    $this->debug = true;
     }
+
     /**
      * getHebrewMonth
      *
@@ -143,7 +144,20 @@ class ShabbosMevorchim {
 	public function getHebrewMonth($key) {
 		$index = array_search($key, $this->months);
 		return $this->heMonths[$index];
-	}
+    }
+
+    /**
+     * getHebrewMonth
+     *
+     * @param string $key English name of month.
+     * @return string
+     */
+	public function getHebrewMonthFromJd( $jd ) {
+        $month = array_search($jd, $this->dates);
+        $index = array_search($month, $this->months);
+		return $this->heMonths[$index];
+    }    
+
     
     public function getTasks() {
         return $this->tasks;
