@@ -21,7 +21,8 @@ $stmt = $MASHPIA_DB->prepare("
         chidon_name,
         chidon_number,
         chidon_email,
-        COUNT(*) AS finalists
+        COUNT(*) AS finalists, 
+        SUM(trophy_5779) AS trophies 
     FROM
         schools s
             JOIN
