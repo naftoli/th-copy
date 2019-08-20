@@ -1,7 +1,13 @@
 <?php
-require 'db.php';
+$admin_auth = ['school'];
+require 'header.php';
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
+
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No permission to access this page.";
+    exit;
+}
 
 $info = [];
 $sql = "select * from registration_charges 
@@ -9,7 +15,9 @@ $sql = "select * from registration_charges
         where year = " . $year;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-	$info[] = $row;
+    $info[] = $row;
+    if ( isset( $totals[$row['type']] ) ) $totals[$row['type']] += $row['amount'];
+    else $totals[$row['type']] = $row['amount'];
 }
 
 $schools = [];
@@ -33,12 +41,31 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 				font-size: 14px;
                 font-family: Arial;
 			}
+            caption {
+				border-bottom: 1px solid black;
+			}
 		</style>
 	</head>
 	
 	<body>
-		<h1>Registration Report</h1>
-		        
+        <h1>Registration Report</h1>
+        
+        <table>
+            <caption>Summary</caption>
+            <tr>
+                <th>Type</th>
+                <th>Total Amount</th>
+            </tr>
+            <?php
+            $grandTotal = 0;
+            foreach ( $totals as $type => $amount ) {
+                if ( $type == 'shipping' ) continue;
+                echo "<tr><td>" . $type . "</td><td>$" . $amount . "</td></tr>";
+                $grandTotal += $amount;
+            }
+            echo "<tr><th>Total:</th><th>$" . number_format( $grandTotal ) . "</th></tr>";
+            ?>
+        </table>
         <table>
             <tr>
                 <th>School</th>
@@ -49,6 +76,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             </tr>
             <?
             foreach ( $info as $row ) {
+                if ( $row['type'] == 'shipping' ) continue;
                 echo "<tr><td>" . $schools[$row['school_id']] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['type'] . "</td><td>" . $row['amount'] . 
                     "</td><td>" . $row['date'] . "</td></tr>";
             }
