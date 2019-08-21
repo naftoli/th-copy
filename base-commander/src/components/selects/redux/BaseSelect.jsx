@@ -41,6 +41,10 @@ class BaseSelect extends Component {
       ({ school_name, school_id }) => ({ value: school_id, label: school_name })
     );
     if ( showAllOption ) options.unshift({ value: false, label: 'All Bases' });
+    // for platoon transition, add the unassigned school
+    if ( this.props.addUnassigned && this.props.bases.length ) {
+      options.push( { value: "612", label: "Unassigned Students" } );
+    }
     return options;
   }
 
