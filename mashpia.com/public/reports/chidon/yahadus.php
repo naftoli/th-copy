@@ -20,8 +20,8 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
 }
 
 $booklet_users = [];
-$qry = "SELECT amount, date, rc.year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub, tc.book "
-    ."FROM registration_charges rc JOIN schools USING (school_id) "
+$qry = "SELECT amount, date, rc.year, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book "
+    ."FROM registration_charges rc JOIN schools s USING (school_id) "
     ."JOIN users USING (user_id) " 
     ."JOIN classes c ON c.class_id = users.class_id " 
     ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
@@ -82,8 +82,12 @@ $booklet_grand_totals = [
         <p>
             <select name="date">
                 <option value="0">Choose Batch Number</option>
-                <option value="1">1st Batch (until August 12)</option>
-                <option value="2">2nd Batch (from August 13 until Sept 17)</option>
+                <option value="1" 
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                >1st Batch (until August 12)</option>
+                <option value="2"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                >2nd Batch (from August 13 until Sept 17)</option>
             </select>
         </p>
         <p>  
@@ -103,8 +107,12 @@ $booklet_grand_totals = [
                 4   =>  0, 
                 5   =>  0
             ];
-            $base = $users[0]; ?>
+            $base = $users[0]; 
+            $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" . 
+                $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
+            ?>
             <h2><?=$base[ 'school_name' ]?></h2>
+            <?= $school_address ?><br /><br />
             <table>
                 <thead>
                     <tr>
