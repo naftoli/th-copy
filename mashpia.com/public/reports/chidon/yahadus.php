@@ -113,6 +113,7 @@ $booklet_grand_totals = [
             ?>
             <h2><?=$base[ 'school_name' ]?></h2>
             <?= $school_address ?><br /><br />
+            <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
             <table>
                 <thead>
                     <tr>
