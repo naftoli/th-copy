@@ -17,7 +17,7 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
 
 $users = [];
 $qry = "SELECT count(*) as total, amount, date, school_name, u.first, u.last, c.class_grade, c.class_sub, tc.book, a.admin_address1, a.admin_address2, 
-    a.admin_city, a.admin_state, a.admin_postal, a.admin_country "
+    a.admin_city, a.admin_state, a.admin_postal, a.admin_country, a.admin_email "
     ."FROM registration_charges rc JOIN schools USING (school_id) "
     ."JOIN users u USING (user_id) " 
     ."JOIN classes c ON c.class_id = u.class_id " 
@@ -135,6 +135,7 @@ while ( $row = mysql_fetch_assoc( $users_query ) ) {
                 </tr>   
             </tbody>
         </table>
+        <p><?= $user['admin_email']; ?></p>
         <div style="page-break-after: always;"></div>
         <?php
         $booklet_totals[ $user['school_name'] ][ $user['book'] ]++;

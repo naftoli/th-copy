@@ -146,10 +146,10 @@ $booklet_grand_totals = [
                     ?>
                 </tbody>
             </table>
-            <h2>Booklet Totals for <?=$base['school_name'];?></h2>
+            <h2>Book Totals for <?=$base['school_name'];?></h2>
             <table>
                 <tr>
-                    <th>Booklet #</th>
+                    <th>Book #</th>
                     <th>Total</th>
                 </tr>
                 <?php
@@ -168,7 +168,7 @@ $booklet_grand_totals = [
         <thead>
             <tr>
                 <th>Base</th>
-                <th># of Booklets</th>
+                <th># of Book</th>
             </tr>
         </thead>
         <tbody>
@@ -187,7 +187,7 @@ $booklet_grand_totals = [
     <h2>Grand Totals</h2>
     <table>
         <tr>
-            <th>Booklet #</th>
+            <th>Book #</th>
             <th>Grand Total</th>
         </tr>
         <?php
