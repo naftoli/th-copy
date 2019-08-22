@@ -60,7 +60,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             $grandTotal = 0;
             foreach ( $totals as $type => $amount ) {
                 if ( $type == 'shipping' ) continue;
-                echo "<tr><td>" . $type . "</td><td>$" . $amount . "</td></tr>";
+                echo "<tr><td>" . $type . "</td><td>$" . number_format( $amount ) . "</td></tr>";
                 $grandTotal += $amount;
             }
             echo "<tr><th>Total:</th><th>$" . number_format( $grandTotal ) . "</th></tr>";
