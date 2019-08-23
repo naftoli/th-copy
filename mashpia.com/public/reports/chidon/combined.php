@@ -167,6 +167,7 @@ $booklet_grand_totals = [
                     ?>
                 </tbody>
             </table>
+            <div style="page-break-after: always;"></div>
             <h2>Total Study Guides for <?=$base['school_name'];?></h2>
             <table>
                 <tr>
