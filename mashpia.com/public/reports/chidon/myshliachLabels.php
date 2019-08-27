@@ -1,4 +1,5 @@
 <?php
+set_time_limit( 300 );
 $admin_auth = ['school']; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php'; 
