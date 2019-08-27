@@ -123,6 +123,7 @@ $booklet_grand_totals = [
                 $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
             ?>
             <h2><?=$base[ 'school_name' ]?></h2>
+            Shipping Type: <?= $base['shipping_method'] ?><br /><br />
             <?= $school_address ?><br /><br />
             <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
             Principal Email: <?= $base['principal_email'] ?>
@@ -194,6 +195,7 @@ $booklet_grand_totals = [
                 ?>
             </table>
             <br /><br />
+            Shipping Type: <?= $base['shipping_method'] ?><br /><br />
             <?= $school_address ?><br /><br />
             <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
             Principal Email: <?= $base['principal_email'] ?>
