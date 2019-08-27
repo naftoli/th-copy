@@ -193,6 +193,10 @@ $booklet_grand_totals = [
                 }
                 ?>
             </table>
+            <br /><br />
+            <?= $school_address ?><br /><br />
+            <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
+            Principal Email: <?= $base['principal_email'] ?>
             <div style="page-break-after: always;"></div>
         <?php
         } 
