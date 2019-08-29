@@ -61,8 +61,7 @@
       { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
       
-      { "label": "Study Guides", "legacy": true, "path": "/reports/chidon/booklet_report.php" },
-      { "label": "Yahadus Books", "legacy": true, "path": "/reports/chidon/yahadus.php" },
+      { "label": "Study Guides / Yahadus", "legacy": true, "path": "/reports/chidon/combined.php" },
 
       { "label": "Shabbaton Enrolled Report", "legacy": true, "path": "/reports/chidon/shabbaton_enrollment.php" },
       { "label": "Shabbaton Walking Report", "legacy": true, "path": "/reports/chidon/walking_groups.php" },
