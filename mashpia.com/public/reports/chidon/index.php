@@ -112,22 +112,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             </a>
         </div>
 
-        <h2>Booklets</h2>
+        <h2>Study Guides & Yahadus Report</h2>
         <div id="action-links">
-            <a href="booklet_report.php<?=$debug ? "?debug=true": "";?>">
+            <a href="combined.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
-                    <span class="link-text">Study Guide Report</span>
-                </div>
-            </a>
-        </div>
-
-        <h2>Yahadus Books</h2>
-        <div id="action-links">
-            <a href="yahadus.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
-                    <span class="link-text">Yahadus Book Purchases</span>
+                    <span class="link-text">Combined Report</span>
                 </div>
             </a>
         </div>
