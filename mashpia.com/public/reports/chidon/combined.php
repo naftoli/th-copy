@@ -35,6 +35,7 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
 if ( isset( $from ) && isset( $to ) ) {
     $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
 }
+$qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, first, last, date";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
