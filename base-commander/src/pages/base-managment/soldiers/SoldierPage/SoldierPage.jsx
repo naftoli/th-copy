@@ -114,6 +114,7 @@ class SoldierPage extends Component {
   saveChanges = ( event ) => {
     event && event.preventDefault();
     const { soldier, updates, valid } = this.state;
+    debugger;
 
     if ( this.state.saving )
       return true;
