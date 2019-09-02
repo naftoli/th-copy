@@ -60,7 +60,7 @@ class SoldierPage extends Component {
     this.props.deleteSoldier( user_id )
     .then( msg => {
       toast.info( msg );
-      this.getSoldier;
+      this.getSoldier()
     }) 
     .catch( error => {
       toast.error( error.message );
