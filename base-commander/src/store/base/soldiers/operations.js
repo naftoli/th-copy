@@ -36,7 +36,11 @@ export const updateSoldier = ( id, data ) => dispatch => {
 // we don't actually delete, rather move the child to the Unassigned School
 export const deleteSoldier = ( id ) => dispatch => {
   // return API.delete( `/core/users?id=${id}`);
-  return API.post( '/core/users?action=removeFromSchool', { id } );
+  return API.post( '/core/users?action=removeFromSchool', { user_id: id } )
+    .then( soldier => {
+      dispatch( actions.updateSoldier( id, soldier ) );  
+      return soldier;
+    });
 }
 
 /********************** NON STORE API OPERATIONS **********************/
