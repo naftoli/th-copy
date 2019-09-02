@@ -211,6 +211,69 @@ class UsersRouter {
             'rankBoard' => $soldier->rankBoard(),
         ]);
     }
+
+    public function removeFromSchool() {
+        global $MASHPIA_DB;
+
+        $soldier = \Soldier::find([ $_POST['user_id'] ]);
+        $school_id = 612;
+
+        // find current class grade
+        $success = false;
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT 
+                class_grade
+            FROM
+                classes
+            WHERE
+                class_id = :id
+        ");
+        $res = $stmt->execute([
+            ':id'   =>  $soldier->class_id
+        ]);
+        if ( $res ) {
+            $row = $stmt->fetch();
+            $class_grade = $row['class_grade'];
+
+            // get class id to switch to
+            $stmt2 = $MASHPIA_DB->prepare("
+                SELECT 
+                    class_id
+                FROM
+                    classes
+                WHERE
+                    school_id = :school AND class_grade = :grade
+            ");
+            $res2 = $stmt2->execute([
+                ':school'   =>  $school_id, 
+                ':grade'    =>  $class_grade
+            ]);
+
+            
+            if ( $res2 ) {
+                $row2 = $stmt2->fetch();
+                if ( $row2 ) {
+                    $class_id = $row2['class_id'];
+                    $moveStmt = $MASHPIA_DB->prepare("
+                        UPDATE users 
+                        SET school_id = :school, class_id = :grade 
+                        WHERE user_id = :user
+                    ");
+                    $moveStmt->execute([
+                        ':school'   =>  $school_id, 
+                        ':grade'    =>  $class_id, 
+                        ':user'     =>  $soldier->user_id
+                    ]);
+                    $success = true;
+                }
+            }
+        }
+        if ( $success ) {
+            json_response("Updated.");
+        } else {
+            json_error("Error moving student.");
+        }
+    }
 }
 
 rest_router( new UsersRouter );

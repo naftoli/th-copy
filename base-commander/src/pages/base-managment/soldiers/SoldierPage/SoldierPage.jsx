@@ -58,7 +58,13 @@ class SoldierPage extends Component {
   // delete soldier
   deleteSoldier = user_id =>
     this.props.deleteSoldier( user_id )
-    .then( this.getSoldier );
+    .then( msg => {
+      toast.info( msg );
+      this.getSoldier;
+    }) 
+    .catch( error => {
+      toast.error( error.message );
+    });
   
   createAuth = auth =>
     this.props.createAuth( auth )
