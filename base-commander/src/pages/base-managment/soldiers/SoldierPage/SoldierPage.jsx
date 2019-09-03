@@ -129,6 +129,10 @@ class SoldierPage extends Component {
     if ( isInvalid )
       return toast.error( 'Please correct all invalid feilds' );
 
+    if ( !this.state.class_id ) {
+      return toast.error('You must choose a platoon.')
+    }
+
     // update the soldier
     this.setState({ saving: true });
     // show errors from updating to the user
