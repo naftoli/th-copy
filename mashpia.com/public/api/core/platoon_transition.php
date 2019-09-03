@@ -23,6 +23,17 @@ class PlatoonTransitionRouter {
             $params['admin_id'] = $current_user->admin_id;
         }
         // generate query to fetch the users and the location that they are going to
+        // $user_query = $MASHPIA_DB->prepare(
+        //     "SELECT u.user_id, u.user_serial, u.first, u.last, u.dob, u.school_id AS current_school_id, "
+        //     ."pt.school_id, pt.class_id, s.school_name, c.class_grade, c.class_sub, "
+        //     ."!ISNULL(pt.created_at) as being_moved FROM users u "
+        //     ."LEFT JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL $hq_filter "
+        //     ."LEFT JOIN schools s ON pt.school_id = s.school_id "
+        //     ."LEFT JOIN classes c ON pt.class_id = c.class_id "
+        //     ."WHERE u.school_id = :school_id AND u.class_id ".($have_class_id ? "= :class_id ": "IS NULL ") // = null does not work. duh, that would make sense...
+        //     ."ORDER BY u.last, u.first;"
+        // );
+        // update query to show all classes if now classes were picked - naftoli 2019-09-03
         $user_query = $MASHPIA_DB->prepare(
             "SELECT u.user_id, u.user_serial, u.first, u.last, u.dob, u.school_id AS current_school_id, "
             ."pt.school_id, pt.class_id, s.school_name, c.class_grade, c.class_sub, "
@@ -30,7 +41,8 @@ class PlatoonTransitionRouter {
             ."LEFT JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL $hq_filter "
             ."LEFT JOIN schools s ON pt.school_id = s.school_id "
             ."LEFT JOIN classes c ON pt.class_id = c.class_id "
-            ."WHERE u.school_id = :school_id AND u.class_id ".($have_class_id ? "= :class_id ": "IS NULL ") // = null does not work. duh, that would make sense...
+            ."WHERE u.school_id = :school_id "
+            .($have_class_id ? "AND u.class_id = :class_id ": "") 
             ."ORDER BY u.last, u.first;"
         );
         $user_query->execute( $params );
