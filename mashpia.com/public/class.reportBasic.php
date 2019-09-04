@@ -9,9 +9,9 @@ class ReportBasic {
     protected $grades;
     
     public function __construct() {
-        $this->users = array();
+        $this->users = [];
         $this->school_id = null;
-        $this->exceptions = array(61, 82, 66, 112, 110, 180, 269);
+        $this->exceptions = [61, 82, 66, 112, 110, 180, 269];
         $this->grades = [];
 	}
     
