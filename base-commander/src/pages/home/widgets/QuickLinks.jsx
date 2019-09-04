@@ -55,7 +55,7 @@ export class Resources extends Component {
               <img src={`${LEGACY_URL}/homeIcons/tanya.png`} alt='tanya'/>
               Tanya
             </a>
-            <a href='//dropbox.com/s/9h5k3bqrvm1qrjr/CTH%20-%20BC%20Calendar%205779%20with%20bleed%20HR.pdf?dl=0' target='_blank' rel="noopener noreferrer">
+            <a href='//dropbox.com/s/r61ppyuhy1eno8y/BC%20Calendar%205780%2011x17%20D4%20English%20months%20NO%20bleed.pdf?dl=0' target='_blank' rel="noopener noreferrer">
               <img src={`${LEGACY_URL}/homeIcons/Calendar.png`} alt='calendar'/>
               Calendar
             </a>
