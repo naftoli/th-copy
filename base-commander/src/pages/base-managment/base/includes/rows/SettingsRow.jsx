@@ -99,12 +99,12 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
 
-          <Radio value='2458650' name='store_miles_reset' onChange={ this.enableSchoolReset } required>
-            Beis Tammuz / June 15 (Chayolim can use the points they earned from summer missions and on)
+          <Radio value='2458663' name='store_miles_reset' onChange={ this.enableSchoolReset } required>
+            Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio value='2458712' name='store_miles_reset' onChange={ this.enableSchoolReset }>
-            Hey Elul / Aug 16 (Chayolim will not be able to use the points they earned from the majority of summer missions)
+          <Radio value='2458733' name='store_miles_reset' onChange={ this.enableSchoolReset }>
+            Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
           <Radio name='store_miles_reset' id='store_reset' onChange={ this.disableSchoolReset }>
