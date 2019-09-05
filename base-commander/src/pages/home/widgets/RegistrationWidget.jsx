@@ -33,7 +33,7 @@ export class RegistrationWidget extends Component {
     return (
       <Col xs={12} sm={6} xl={4}>
         <div id='RegistrationWidget' className='widget'>
-          <h2>Registration { year || 5779 }</h2>
+          <h2>Registration { year || 5780 }</h2>
 
           <div>
             <p>
