@@ -70,7 +70,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
 		$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 		$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
-		$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) >= 3) && (intval($row['class_grade']) < 8) ? 1 : 0;
+		$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) > 3) && (intval($row['class_grade']) < 8) ? 1 : 0;
 		$children[$row['user_id']]['chidonRegistered'] = 0;
 		$children[$row['user_id']]['chayolei'] = 1;
 		$children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -132,7 +132,7 @@ if ( !empty( $users ) ) {
 		// chidon registration
 		$exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
 		if ( !$row['reg_chidon'] // if not in chidon
-			&& $row['class_grade'] >= 3 // and in grade 3+ 
+			&& $row['class_grade'] > 3 // and in grade 4+ 
 			&& $row['class_grade'] < 8 // not in grade 8 
 			&& $row['chidon'] // make sure the kid is in chidon
 			&& !in_array( $children[$row['user_id']]['school_id'], $exceptions ) // make sure not one of these schools
