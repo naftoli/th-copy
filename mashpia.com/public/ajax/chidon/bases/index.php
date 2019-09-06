@@ -74,8 +74,8 @@ if ( $res ) {
                         $row['gender'] = $type;
                     } else {
                         // remove any existing gender in school name and then add the one we want 
-                        str_replace( 'Boys', '', $row['school_name'] );
-                        str_replace( 'Girls', '', $row['school_name'] );
+                        $row['school_name'] = str_replace( 'Boys', '', $row['school_name'] );
+                        $row['school_name'] = str_replace( 'Girls', '', $row['school_name'] );
                         $row['school_name'] .= " " . $type; // seperate school into 2 types, boys and girls 
                         $row['finalists'] = $row2['total'];
                         $row['gender'] = $type;
