@@ -315,8 +315,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
-        // add chidon if user is in grade 3+
-        if ( $this->platoon && $this->platoon->class_grade >= 3 )
+        // add chidon if user is in grade 4+
+        if ( $this->platoon && $this->platoon->class_grade > 3 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
@@ -376,9 +376,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // turn off chayolei reg 
         //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
-        // only add th_chidon_id if the user is in grade 3+ 
+        // only add th_chidon_id if the user is in grade 4+ 
         $exceptions = [180, 483,482,544,584,583,588,430,577,13,220];
-        if ( $this->platoon && $this->platoon->class_grade >= 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
+        if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
         // turn off chayolei reg if school has not registered yet
