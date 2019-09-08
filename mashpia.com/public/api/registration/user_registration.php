@@ -286,19 +286,19 @@ class UserRegistrationRouter {
         };
 
         // insert into special myshliach/anash kinder table
-        if( count($registration_table_users) > 0 ){
-            $registration_table_query = $MASHPIA_DB->prepare(
-                "INSERT INTO registration (description, approval, year, school_id, "
-                ."admin_id, ship_option, ship_dest, users) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-            );
-            foreach( $registration_table_users as $school_id => $user_ids ){
-                $registration_table_query->execute([
-                    $description, json_encode( $payment_response ), $year, $school_id,
-                    $current_user->admin_id, $shipping_info['shipping_type'], 
-                    $current_user->admin_country, implode( ', ', $user_ids )
-                ]);
-            }
-        }
+        // if( count($registration_table_users) > 0 ){
+        //     $registration_table_query = $MASHPIA_DB->prepare(
+        //         "INSERT INTO registration (description, approval, year, school_id, "
+        //         ."admin_id, ship_option, ship_dest, users) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        //     );
+        //     foreach( $registration_table_users as $school_id => $user_ids ){
+        //         $registration_table_query->execute([
+        //             $description, json_encode( $payment_response ), $year, $school_id,
+        //             $current_user->admin_id, $shipping_info['shipping_type'], 
+        //             $current_user->admin_country, implode( ', ', $user_ids )
+        //         ]);
+        //     }
+        // }
 
         if ( count( $errors ) > 0 )
             @mail( "support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
