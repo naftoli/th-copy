@@ -38,7 +38,7 @@ export class BaseRow extends Component {
         </Col>
 
         <Col xs={12} sm={6}>
-          <label id='inst-label'>Institution</label>
+          <label id='inst-label'>Institution Type</label>
 
           <InstitutionSelect
             required
