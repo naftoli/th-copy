@@ -12,7 +12,7 @@ import { SettingsRow } from './SettingsRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { onInputChange, onSelectChange } from 'functions/events';
+import { onInputChange, onSelectChange, onCheckboxChange, onJSONChange} from 'functions/events';
 
 const initialState = {
   platoon: {
@@ -32,6 +32,10 @@ class NewPlatoonModal extends Component {
 
   onChange = onInputChange( this.onUpdate );
   onSelectChange = onSelectChange( this.onUpdate );
+
+  onJSONChange = onJSONChange( this.props.onUpdate );
+  onCheckChange = onCheckboxChange( this.props.onUpdate );
+
 
   submit = e => {
     e.preventDefault();
