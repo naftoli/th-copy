@@ -33,8 +33,8 @@ class NewPlatoonModal extends Component {
   onChange = onInputChange( this.onUpdate );
   onSelectChange = onSelectChange( this.onUpdate );
 
-  onJSONChange = onJSONChange( this.props.onUpdate );
-  onCheckChange = onCheckboxChange( this.props.onUpdate );
+  onJSONChange = onJSONChange( this.onUpdate );
+  onCheckChange = onCheckboxChange( this.onUpdate );
 
 
   submit = e => {
