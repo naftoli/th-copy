@@ -5,10 +5,12 @@ class ParshaRouter {
 
     public function index() {
 
-        $p1 = Parsha::find_by_sql('SELECT * FROM parshos WHERE year = 5779 ORDER BY id DESC LIMIT 2');
+        $year = GlobalSettings::getCurrentYear() + 1;
+
+        $p1 = Parsha::find_by_sql('SELECT * FROM parshos WHERE year = ' . ($year - 1) . ' ORDER BY id DESC LIMIT 2');
 
         $parshos = Parsha::all([
-            'conditions' => 'year = ' . (GlobalSettings::getCurrentYear() + 1),
+            'conditions' => 'year = ' . $year,
         ]);
 
         $parshos = $p1 + $parshos;
