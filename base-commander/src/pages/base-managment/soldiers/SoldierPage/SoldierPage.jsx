@@ -130,7 +130,7 @@ class SoldierPage extends Component {
       return toast.error( 'Please correct all invalid fields' );
 
     console.log(this.state)
-    if ( !this.state.soldier.class_id ) {
+    if ( !this.state.soldier.class_id && !this.state.updates.class_id ) {
       return toast.error('You must choose a platoon.')
     }
 
