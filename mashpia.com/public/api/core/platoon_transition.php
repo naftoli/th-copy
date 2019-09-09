@@ -114,6 +114,7 @@ class PlatoonTransitionRouter {
         );
         $success = $transition_query->execute();
         $transition_query->debugDumpParams();
+        exit;
         
         if ( !$success )
             json_error("Unknown Error: Could not deploy platoons. Please email bugs@tzivoshashem.org", false, 200);
