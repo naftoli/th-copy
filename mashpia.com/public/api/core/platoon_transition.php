@@ -113,7 +113,7 @@ class PlatoonTransitionRouter {
             ."u.school_id = pt.school_id, u.class_id = pt.class_id $filter;"
         );
         $success = $transition_query->execute();
-        $transition_query->debugDumpParams(); exit;
+        //$transition_query->debugDumpParams(); exit;
         
         if ( !$success )
             json_error("Unknown Error: Could not deploy platoons. Please email bugs@tzivoshashem.org", false, 200);
