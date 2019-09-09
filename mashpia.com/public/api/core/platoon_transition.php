@@ -100,9 +100,9 @@ class PlatoonTransitionRouter {
 
         $filters = [];
         if ( $current_user->login->code !== 'BC' ) {
-            $filters[] = "pt.admin_id = '$current_user->admin_id' ";
+            $filters[] = "pt.admin_id = " . $current_user->admin_id;
         } else {
-            $filters[] = "pt.school_id = ".$current_user->login->id." or pt.from_school_id = " . $current_user->login->id;
+            $filters[] = "u.school_id = " . $current_user->login->id;
         }
 
         $filter = count($filters) > 0 ? 'WHERE '.implode( ' AND ', $filters ) : '';
@@ -113,6 +113,7 @@ class PlatoonTransitionRouter {
             ."u.school_id = pt.school_id, u.class_id = pt.class_id $filter;"
         );
         $success = $transition_query->execute();
+        //$transition_query->debugDumpParams(); exit;
         
         if ( !$success )
             json_error("Unknown Error: Could not deploy platoons. Please email bugs@tzivoshashem.org", false, 200);

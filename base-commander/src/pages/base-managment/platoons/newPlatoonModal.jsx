@@ -8,10 +8,11 @@ import {
 } from 'reactstrap';
 // rows
 import { PlatoonRow } from './tabs/PlatoonRow';
+import { SettingsRow } from './SettingsRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { onInputChange, onSelectChange } from 'functions/events';
+import { onInputChange, onSelectChange, onCheckboxChange, onJSONChange} from 'functions/events';
 
 const initialState = {
   platoon: {
@@ -31,6 +32,10 @@ class NewPlatoonModal extends Component {
 
   onChange = onInputChange( this.onUpdate );
   onSelectChange = onSelectChange( this.onUpdate );
+
+  onJSONChange = onJSONChange( this.props.onUpdate );
+  onCheckChange = onCheckboxChange( this.props.onUpdate );
+
 
   submit = e => {
     e.preventDefault();
@@ -57,6 +62,7 @@ class NewPlatoonModal extends Component {
     const { platoon, saving } = this.state;
 
     const inputProps = { onChange: this.onChange, required: true };
+    const checkProps = { onChange: this.onCheckChange };
 
     let baseSelect;
     if ( isAdmin( login.code ) ) {
@@ -84,7 +90,16 @@ class NewPlatoonModal extends Component {
             inputProps={ inputProps } 
             onSelectChange={ this.onSelectChange } />
 
+          <p className='title'>Platoon Settings</p>
+
+          <SettingsRow
+            platoon={ platoon } 
+            inputProps={ inputProps }
+            checkProps={ checkProps }
+            onJSONChange={ this.onJSONChange } />            
+
           </ModalBody>
+
           <ModalFooter>
             <SaveButton show saving={ saving } />
           </ModalFooter>
