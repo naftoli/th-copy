@@ -131,6 +131,7 @@ class SoldierPage extends Component {
 
     if ( !this.state.class_id ) {
       console.log(this.state); 
+      alert(this.state);
       return toast.error('You must choose a platoon.')
     }
 
