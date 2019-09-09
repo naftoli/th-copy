@@ -9,11 +9,12 @@ class ParshaRouter {
 
         $p1 = Parsha::find_by_sql('SELECT * FROM parshos WHERE year = ' . ($year - 1) . ' ORDER BY id DESC LIMIT 2');
 
-        $parshos = Parsha::all([
-            'conditions' => 'year = ' . $year,
-        ]);
+        // $parshos = Parsha::all([
+        //     'conditions' => 'year = ' . $year,
+        // ]);
+        $p2 = Parsha::find_by_sql('SELECT * FROM parshos WHERE year = ' . $year);
 
-        $parshos = $p1 + $parshos;
+        $parshos = $p1 + $p2;
 
         json_response( $parshos, true, true );
     }
