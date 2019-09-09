@@ -127,9 +127,10 @@ class SoldierPage extends Component {
     // validate form
     const isInvalid = Object.values( valid ).includes( false );
     if ( isInvalid )
-      return toast.error( 'Please correct all invalid feilds' );
+      return toast.error( 'Please correct all invalid fields' );
 
     if ( !this.state.class_id ) {
+      console.log(this.state); 
       return toast.error('You must choose a platoon.')
     }
 
