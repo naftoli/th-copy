@@ -85,6 +85,16 @@ class NewPlatoonModal extends Component {
             onSelectChange={ this.onSelectChange } />
 
           </ModalBody>
+
+          <p className='title'>Platoon Settings</p>
+
+          <SettingsRow
+            platoon={ platoon } 
+            inputProps={ inputProps }
+            checkProps={ checkProps }
+            onJSONChange={ this.onJSONChange } />
+
+
           <ModalFooter>
             <SaveButton show saving={ saving } />
           </ModalFooter>
