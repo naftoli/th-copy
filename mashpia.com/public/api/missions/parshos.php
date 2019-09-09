@@ -1,19 +1,31 @@
 <?php
 include_once( __DIR__ . "/../header/header.php" );
+include_once( __DIR__ . "/../header/db.php" );
 
 class ParshaRouter {
 
     public function index() {
+        global $MASHPIA_DB;
 
         $year = GlobalSettings::getCurrentYear() + 1;
 
-        $p1 = Parsha::find_by_sql('SELECT * FROM parshos WHERE year = ' . ($year - 1) . ' ORDER BY id DESC LIMIT 2');
+        // get lowest parsha id
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT id FROM parshos 
+            WHERE year = :year 
+            ORDER BY id DESC 
+            LIMIT 2
+        ");
+        $res = $stmt->execute([':year' => $year - 1]);
+        if ( $res ) {
+            $rows = $stmt->fetchAll();
+            // get last row info
+            $id = $rows[1]['id'];
+        }
 
         $parshos = Parsha::all([
-            'conditions' => 'year = ' . $year,
+            'conditions' => 'id >= ' . $id,
         ]);
-
-        $parshos = $p1 + $parshos;
 
         json_response( $parshos, true, true );
     }
