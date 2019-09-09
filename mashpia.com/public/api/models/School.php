@@ -257,7 +257,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     public function earlyBird() {
         if ( $this->early_bird )
             return $this->early_bird;
-        return new DateTime( '2019-09-27 00:00:00' );
+        return new DateTime( '2019-09-26 11:59:00' );
     }
 
     // get the current registration prices, subject to change at any time
