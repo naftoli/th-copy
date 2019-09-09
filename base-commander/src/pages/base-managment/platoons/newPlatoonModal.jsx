@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 // rows
 import { PlatoonRow } from './tabs/PlatoonRow';
-import { SettingsRow } from './SettingsRow';
+import { SettingsRow } from './tabs/SettingsRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
