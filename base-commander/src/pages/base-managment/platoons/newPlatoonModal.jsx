@@ -90,11 +90,15 @@ class NewPlatoonModal extends Component {
           <PlatoonRow 
             platoon={ platoon } 
             inputProps={ inputProps } 
-            onSelectChange={ this.onSelectChange } />
+            onSelectChange={ this.onSelectChange } 
+            checkProps={ checkProps }
+            onJSONChange={ this.onJSONChange }
+            />
 
           <p className='title'>Platoon Settings</p>
 
           <SettingsRow
+            modalOnly
             platoon={ platoon } 
             inputProps={ inputProps }
             checkProps={ checkProps }

@@ -13,9 +13,12 @@ export class SettingsRow extends Component {
       print_parent_tasks, class_gender, whatsapp,
     } = this.props.platoon;
 
+    const xl = this.props.modalOnly ? 6 : 3;
+
     return (
+
       <Row>
-        <Col sm={6} xl={3}>
+        <Col sm={6} xl={xl}>
           <Label>Show on WWTC Reports</Label>
           <Toggle
             name='whatsapp'
@@ -23,7 +26,7 @@ export class SettingsRow extends Component {
             checked={ !!whatsapp } />
         </Col>
         
-        <Col sm={6} xl={3}>
+        <Col sm={6} xl={xl}>
           <Label>Class Gender</Label>
           <Radio
             required
@@ -45,7 +48,7 @@ export class SettingsRow extends Component {
           </Radio>
         </Col>
 
-        <Col sm={6} xl={3}>
+        <Col sm={6} xl={xl}>
           <Label id='customize'>Custom Parent Tasks</Label>
           <UncontrolledTooltip placement="top" target="customize" autohide={ false }>
             Allow parents to create completely custom tasks for this soldier.
@@ -68,7 +71,7 @@ export class SettingsRow extends Component {
           </Checkbox>
         </Col>
 
-        <Col sm={6} xl={3}>
+        <Col sm={6} xl={xl}>
           <Label>Mission Sheet Type</Label>
           <Radio value='1'
               name='pic_mission_type'
