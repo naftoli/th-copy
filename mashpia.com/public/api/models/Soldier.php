@@ -381,7 +381,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
-        // turn off chayolei reg if school has not registered yet
+        // turn off chayolei and chidon reg if school has not registered yet
         if ( isset( $result[ 'chayolei' ] ) && $result[ 'chayolei' ] == false && !in_array( $this->user_id, [8273, 13159] ) ) {
             $school_registered = false;
             $reg_info = $this->school->school_registrations;
@@ -391,7 +391,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     break;
                 }
             }
-            if ( !$school_registered ) $result['chayolei'] = true; // disable chayolei reg if school is not registered
+            if ( !$school_registered ) {
+                $result['chayolei'] = true; // disable chayolei reg if school is not registered
+                $result['chidon'] = true; // disable chidon reg if school is not registered
+            }
         }
 
         return $result;
