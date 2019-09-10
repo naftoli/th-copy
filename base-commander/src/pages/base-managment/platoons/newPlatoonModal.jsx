@@ -19,8 +19,7 @@ const initialState = {
   platoon: {
     class_grade: '', class_sub: '', class_teacher: '',
     email: '', cell: '', miles_balance: 1000,
-    miles_per_soldier: 100, pic_mission_type: '', allow_parent_tasks: '',
-    print_parent_tasks: '', class_gender: '', whatsapp: '',
+    miles_per_soldier: 100,
   },
   saving: false,
 }
