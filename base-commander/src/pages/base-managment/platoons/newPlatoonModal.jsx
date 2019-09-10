@@ -9,6 +9,7 @@ import {
 // rows
 import { PlatoonRow } from './tabs/PlatoonRow';
 import { SettingsRow } from './tabs/SettingsRow';
+import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
