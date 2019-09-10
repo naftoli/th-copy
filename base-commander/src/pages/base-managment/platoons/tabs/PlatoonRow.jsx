@@ -11,7 +11,8 @@ export class PlatoonRow extends Component {
     const { inputProps, onSelectChange, onDelete } = this.props;
     const { 
       class_grade, class_sub, class_teacher, cell, email,
-      soldiers, miles_per_soldier, miles_balance,
+      soldiers, miles_per_soldier, miles_balance, pic_mission_type, allow_parent_tasks,
+      print_parent_tasks, class_gender, whatsapp,
     } = this.props.platoon;
 
     let grades = [
@@ -90,6 +91,79 @@ export class PlatoonRow extends Component {
             type='number' name='miles_balance'  min='0' max='99999999999'
             value={ miles_balance } { ...inputProps } />
           <div className='invalid-message'>0 to <NumberDisplay value={ 99999999999 } /></div>
+        </Col>
+
+
+        <p className='title'>Platoon Settings</p>
+
+        <Col sm={6} xl={6}>
+          <Label>Show on WWTC Reports</Label>
+          <Toggle
+            name='whatsapp'
+            { ...checkProps }
+            checked={ !!whatsapp } />
+        </Col>
+        
+        <Col sm={6} xl={6}>
+          <Label>Class Gender</Label>
+          <Radio
+            required
+            value='m'
+            { ...inputProps }
+            name='class_gender'
+            checked={ class_gender === 'm' }>
+
+            Boys <FontAwesome icon='male' />
+          </Radio>
+
+          <Radio
+            value='f'
+            { ...inputProps }
+            name='class_gender'
+            checked={ class_gender === 'f' }>
+
+            Girls <FontAwesome icon='female' />
+          </Radio>
+        </Col>
+
+        <Col sm={6} xl={6}>
+          <Label id='customize'>Custom Parent Tasks</Label>
+          <UncontrolledTooltip placement="top" target="customize" autohide={ false }>
+            Allow parents to create completely custom tasks for this soldier.
+            Custom tasks are worth 0.5 miles per day/week
+          </UncontrolledTooltip>
+
+          <Checkbox
+            { ...checkProps }
+            name='allow_parent_tasks'
+            checked={!!allow_parent_tasks }>
+
+            Allow
+          </Checkbox>
+
+          <Checkbox { ...checkProps }
+            name='print_parent_tasks'
+            checked={!!print_parent_tasks }>
+
+            Print on Mission Sheets
+          </Checkbox>
+        </Col>
+
+        <Col sm={6} xl={6}>
+          <Label>Mission Sheet Type</Label>
+          <Radio value='1'
+              name='pic_mission_type'
+              onChange={ onJSONChange }
+              checked={ pic_mission_type === 1 } >
+            No Pictures
+          </Radio>
+
+          <Radio value='2'
+              name='pic_mission_type'
+              onChange={ onJSONChange }
+              checked={ pic_mission_type === 2 }>
+            Small Pictures
+          </Radio>
         </Col>
 
       </Row>
