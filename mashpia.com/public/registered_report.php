@@ -31,18 +31,30 @@ if( isset($_GET['debug'])){
         <? include('admin_header.php'); ?>
         <h1>Registered Report</h1>
         <? 
-        require_once 'class.adminSchools.php';
-        require_once 'class.schoolsUsers.php';         
-       
+        require_once 'class.adminSchools.php';  
+        require_once 'class.globalSettings.php';
+             
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
         $schools = $as->getSchools();
+
+        $year = globalSettings::getRegistrationYear();
         $schoolsUsers = array();
         $totals = array();
         //ksort($schools);
         foreach ( $schools as $id => $school ) {
         	//echo $id . '-' . $school . "<br />";
-            $s = new SchoolsUsers( $id );
-			$users = $s->getUsers();
+            // get users based on registration charges table 
+            $users = [];
+            $sql = "select u.* from users u 
+                    join registration_charges rc using (user_id) 
+                    where rc.type = 'chayolei' 
+                    and u.user_registered > 0 
+                    and u.school_id = " . $id . " 
+                    and rc.year = " . $year;
+            $result = mysql_query( $sql );
+            while ( $row = mysql_fetch_assoc( $result ) ) {
+                $users[] = $row;
+            }
 			if (!empty($users)) $schoolsUsers[$id] = $users;
         }
         
