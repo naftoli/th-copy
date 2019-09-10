@@ -58,6 +58,7 @@ if( isset($_GET['debug'])){
             echo "<table>";
             echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th><th>Registered this year</th></tr>";
             foreach ( $users as $user ) {
+                if ( $user['user_registered'] < '2019-09-10' ) continue;
                 $grade = $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] );
                 echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] . 
                     "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
