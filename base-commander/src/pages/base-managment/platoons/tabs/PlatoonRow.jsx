@@ -94,8 +94,11 @@ export class PlatoonRow extends Component {
           <div className='invalid-message'>0 to <NumberDisplay value={ 99999999999 } /></div>
         </Col>
 
-
-        <p className='title'>Platoon Settings</p>
+        <Col xs={12}>
+          <p className='title'>
+            Platoon Settings
+          </p>
+        </Col>
 
         <Col sm={6} xl={6}>
           <Label>Show on WWTC Reports</Label>
