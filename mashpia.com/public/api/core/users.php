@@ -117,7 +117,7 @@ class UsersRouter {
             ]);
 
         }*/
-        echo $current_user;
+        var_dump($current_user);
         // send the full soldier to the client
         json_response( $user );
 
