@@ -9,11 +9,10 @@ import {
 // rows
 import { PlatoonRow } from './tabs/PlatoonRow';
 import { SettingsRow } from './tabs/SettingsRow';
-import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { onInputChange, onSelectChange, onCheckboxChange, onJSONChange} from 'functions/events';
+import { onInputChange, onSelectChange, onCheckboxChange, onJSONChange } from 'functions/events';
 
 
 const initialState = {
@@ -78,6 +77,12 @@ class NewPlatoonModal extends Component {
           </Col>
         </Row>
       );
+    }
+
+    Col.propTypes = {
+      sm: 6,
+      xl: 6,
+      widths: PropTypes.array,
     }
 
     return (
