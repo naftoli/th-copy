@@ -44,14 +44,6 @@ export class PlatoonTab extends Component {
             inputProps={ inputProps }
             onSelectChange={ this.onSelectChange } />
 
-          <p className='title'>Platoon Settings</p>
-
-          <SettingsRow
-            platoon={ platoon } 
-            inputProps={ inputProps }
-            checkProps={ checkProps }
-            onJSONChange={ this.onJSONChange } />
-
           <SaveButton show={ updated } />
 
         </form>
