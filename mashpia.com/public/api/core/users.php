@@ -111,11 +111,16 @@ class UsersRouter {
         if ( $current_user->login->code === 'PARENT' ) {
             $auth = \AdminAuth::create([
                 'admin_id' => $current_user->admin_id,
-                'id' => $user->user_id,     'auth' => 'user'
+                'id'       => $user->user_id,     
+                'auth'     => 'user'
             ]);
+
         }
+
         // send the full soldier to the client
-        json_response( $user );
+        // json_response( $user );
+
+        echo $current_user->login->code;
     }
 
     public function update( $id ) {
