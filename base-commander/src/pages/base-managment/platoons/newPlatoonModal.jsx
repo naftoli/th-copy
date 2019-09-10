@@ -98,6 +98,7 @@ class NewPlatoonModal extends Component {
           <p className='title'>Platoon Settings</p>
 
           <SettingsRow
+            modalOnly
             platoon={ platoon } 
             inputProps={ inputProps }
             checkProps={ checkProps }
