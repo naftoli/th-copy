@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 // components
 // import { Select } from 'components/inputs';
-import { Checkbox, Toggle, Radio, Label } from 'components/inputs';
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Select, Checkbox, Toggle, Radio, Label } from 'components/inputs';
+import { Row, Col, Input, Button, UncontrolledTooltip  } from 'reactstrap';
 import { findOption } from 'functions/selects';
 import { FontAwesome, NumberDisplay } from 'components/ui';
 
 export class PlatoonRow extends Component {
 
   render() {
-    const { inputProps, onSelectChange, onDelete } = this.props;
+    const { inputProps, onSelectChange, onDelete, checkProps, onJSONChange } = this.props; 
     const { 
       class_grade, class_sub, class_teacher, cell, email,
       soldiers, miles_per_soldier, miles_balance, pic_mission_type, allow_parent_tasks,
