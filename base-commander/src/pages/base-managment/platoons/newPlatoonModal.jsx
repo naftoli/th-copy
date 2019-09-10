@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 // rows
 import { PlatoonRow } from './tabs/PlatoonRow';
-// import { SettingsRow } from './tabs/SettingsRow';
+import { SettingsRow } from './tabs/SettingsRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
@@ -79,7 +79,6 @@ class NewPlatoonModal extends Component {
       );
     }
 
-
     return (
       <Modal isOpen={ isOpen } toggle={ this.toggle } centered id='NewPlatoonModal'>
         <ModalHeader toggle={ this.toggle }>Create Platoon</ModalHeader>
@@ -91,9 +90,15 @@ class NewPlatoonModal extends Component {
           <PlatoonRow 
             platoon={ platoon } 
             inputProps={ inputProps } 
-            onSelectChange={ this.onSelectChange }
+            onSelectChange={ this.onSelectChange } />
+
+          <p className='title'>Platoon Settings</p>
+
+          <SettingsRow
+            platoon={ platoon } 
+            inputProps={ inputProps }
             checkProps={ checkProps }
-            onJSONChange={ this.onJSONChange } /> 
+            onJSONChange={ this.onJSONChange } />            
 
           </ModalBody>
 
