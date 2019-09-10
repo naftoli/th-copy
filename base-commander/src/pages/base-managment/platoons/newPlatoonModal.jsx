@@ -79,11 +79,6 @@ class NewPlatoonModal extends Component {
       );
     }
 
-    Col.propTypes = {
-      sm: 6,
-      xl: 6,
-      widths: PropTypes.array,
-    }
 
     return (
       <Modal isOpen={ isOpen } toggle={ this.toggle } centered id='NewPlatoonModal'>
@@ -100,7 +95,7 @@ class NewPlatoonModal extends Component {
 
           <p className='title'>Platoon Settings</p>
 
-          <SettingsRow
+          <SettingsRow sm={6} xl={6}
             platoon={ platoon } 
             inputProps={ inputProps }
             checkProps={ checkProps }
