@@ -13,11 +13,9 @@ export class SettingsRow extends Component {
       print_parent_tasks, class_gender, whatsapp,
     } = this.props.platoon;
 
-    let xl;
-
-    {
-       xl = this.props.modelOnly ? 6 : 3
-    }
+    const {
+       xl
+    } = this.props.modelOnly ? 6 : 3;
 
     return (
 
