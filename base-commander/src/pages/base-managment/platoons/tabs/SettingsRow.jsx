@@ -13,10 +13,11 @@ export class SettingsRow extends Component {
       print_parent_tasks, class_gender, whatsapp,
     } = this.props.platoon;
 
+    {
+      $xl = this.props.modalOnly ? 6 : 3 
+    }
+
     return (
-      {
-        $xl = this.props.modalOnly ? 6 : 3 
-      }
 
       <Row>
         <Col sm={6} xl={$xl}>
