@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // components
-import { Select } from 'components/inputs';
+// import { Select } from 'components/inputs';
+import { Checkbox, Toggle, Radio, Label } from 'components/inputs';
 import { Row, Col, Input, Button } from 'reactstrap';
 import { findOption } from 'functions/selects';
 import { FontAwesome, NumberDisplay } from 'components/ui';
