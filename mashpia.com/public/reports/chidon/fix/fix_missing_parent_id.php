@@ -14,5 +14,6 @@ foreach ( $users as $id ) {
     $result = mysql_query( $sql );
     $row = mysql_fetch_assoc( $result );
     $sql2 = "update th_chidon set parent_id = " . $row['admin_id'] . " where user_id = " . $id . " and year = 5780";
-    echo $sql2 . "<br />";
+    mysql_query( $sql2 );
 }
+echo "done.";
