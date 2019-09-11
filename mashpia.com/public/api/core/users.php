@@ -119,7 +119,7 @@ class UsersRouter {
         }
 
         // send the full soldier to the client
-        json_response( $user );
+        return json_response( $user );
     }
 
     public function update( $id ) {
