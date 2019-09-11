@@ -108,7 +108,6 @@ class UsersRouter {
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-
        if ( $current_user->login['code'] === 'PARENT' ) {
             $auth = \AdminAuth::create([
                 'admin_id' => $current_user->admin_id,
@@ -119,7 +118,8 @@ class UsersRouter {
         }
 
         // send the full soldier to the client
-        return json_response( $user );
+        // return json_response( $user );
+        return $current_user->type;
     }
 
     public function update( $id ) {
