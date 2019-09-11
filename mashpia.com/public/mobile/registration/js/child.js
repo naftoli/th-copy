@@ -100,6 +100,7 @@ var childApp = function(){
             return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
         }
 
+
         $.post( "api/tasks/addChild.php", postData, function( response ){
             // show any API errors...
             if( !response.success )
@@ -134,7 +135,35 @@ var childApp = function(){
         //     return showError( "Please upload a profile picture for your child." );
         // }
 
-        $.post("/api/core/users", postData, function( response ){
+
+        (function IsExists(pagePath) {
+            $.ajax({
+                type: "POST",
+                url: pagePath,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                },
+                success:function(response) {
+
+                    alert(response);
+                    alert(response.success);
+
+                    if( response.success ){
+                        $( "#tuition-paid" ).hide();
+                        $( "#fee-not-paid" ).show();         
+                        $( '#successModal' ).modal('show');
+                    } else {
+                        response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
+                        showError( response.message || response );
+                    }
+                }
+            });
+        })('/api/core/users');
+
+
+        /*$.post("/api/core/users", postData, function( response ){
            alert(response);
            alert(response.success);
             if( response.success ){
@@ -145,10 +174,6 @@ var childApp = function(){
                 response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
                 showError( response.message || response );
             }
-        }).fail(function(jqXHR, textStatus, errorThrown){
-            if(jqXHR.status == 404) {
-                console.log(textStatus);
-            }
-        });
+        });*/
     }
 }();
