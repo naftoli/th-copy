@@ -119,10 +119,10 @@ class UsersRouter {
 
             $sql = 'INSERT INTO admin_auths (admin_id, id, auth, role_id) VALUES(:admin_id, :id, :auth, :role_id)';
             $stmt = $MASHPIA_DB->prepare( $sql );
-            $stmt->bindValue(':admin_id', $current_user->admin_id);
-            $stmt->bindValue(':id', $user->user_id);
-            $stmt->bindValue(':auth', 'user');
-            $stmt->bindValue(':role_id', 1);
+            $stmt->bindParam(':admin_id', $current_user->admin_id);
+            $stmt->bindParam(':id', $user->user_id);
+            $stmt->bindParam(':auth', 'user');
+            $stmt->bindParam(':role_id', 1);
             $stmt->execute();
 
         }
