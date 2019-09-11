@@ -142,6 +142,7 @@ var childApp = function(){
                 url: pagePath,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
+                data: postData,
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert(textStatus);
                 },
