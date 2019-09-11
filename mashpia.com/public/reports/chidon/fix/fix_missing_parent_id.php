@@ -1,10 +1,11 @@
 <?php
+ini_set('display_errors',1);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 $users = [];
 $sql = "select * from th_chidon where parent_id = 0 and year = 5780";
 $result = mysql_query( $sql );
-while ( $row = mysql_fetcdh_assoc( $result ) ) {
+while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[] = $row['user_id'];
 }
 
