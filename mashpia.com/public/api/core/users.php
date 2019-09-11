@@ -112,7 +112,8 @@ class UsersRouter {
             $auth = \AdminAuth::create([
                 'admin_id' => $current_user->admin_id,
                 'id'       => $user->user_id,     
-                'auth'     => 'user'
+                'auth'     => 'user',
+                'role_id'  => 1
             ]);
 
         }
