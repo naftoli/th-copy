@@ -137,7 +137,7 @@ var childApp = function(){
 
         $.post("/api/core/users.php", postData, function( response ){
            alert(response);
-           alert(response.success);
+           alert(response.success); 
             if( response.success ){
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
