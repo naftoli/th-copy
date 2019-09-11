@@ -137,7 +137,7 @@ var childApp = function(){
 
         $.post("/api/core/users?action=create", postData, function( response ){
 
-            if( response.success ){
+            if( response.success ){ 
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
