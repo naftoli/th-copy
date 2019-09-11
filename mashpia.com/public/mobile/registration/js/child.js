@@ -135,7 +135,7 @@ var childApp = function(){
         //     return showError( "Please upload a profile picture for your child." );
         // }
 
-        $.post("/api/core/users?action=creation", postData, function( response ){
+        $.post("/api/core/users?action=create", postData, function( response ){
 
             if( response.success ){
                 $( "#tuition-paid" ).hide();
