@@ -144,6 +144,7 @@ if (isset($_POST['submit'])) {
     // get start and end from db
     require_once 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
+    $missionYear--;
     // $defaultDates = GlobalSettings::getCurYearDates();
 	// $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
