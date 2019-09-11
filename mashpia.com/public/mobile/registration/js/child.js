@@ -145,6 +145,10 @@ var childApp = function(){
                 response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
                 showError( response.message || response );
             }
+        }).fail(function(jqXHR, textStatus, errorThrown){
+            if(jqXHR.status == 404) {
+                console.log(textStatus);
+            }
         });
     }
 }();
