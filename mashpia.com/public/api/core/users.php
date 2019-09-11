@@ -118,8 +118,8 @@ class UsersRouter {
         }
 
         // send the full soldier to the client
-        // return json_response( $user );
-        return $current_user->type;
+        return json_response( $user );
+        //return $current_user->type;
     }
 
     public function update( $id ) {
