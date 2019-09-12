@@ -122,7 +122,7 @@ class UsersRouter {
             $roldIdVal = 1;
 
             $data = [
-                'admin_id' => $current_user->admin_id,
+                'admin_id' => $current_user,
                 'auth'     => $userVal,
                 'id'       => $user->user_id,
                 'role_id'  => $roldIdVal
