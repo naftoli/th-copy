@@ -140,6 +140,8 @@ if ( !empty( $users ) ) {
 		) {
 			$children[ $row['user_id'] ]['needsReg'] = 1;
 			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
+		} else {
+			$children[$row['user_id']]['issue'] = 1;
 		}
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;
