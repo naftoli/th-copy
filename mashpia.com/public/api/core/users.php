@@ -84,10 +84,7 @@ class UsersRouter {
     public function create() {
         global $current_user;
         global $MASHPIA_DB;
-        echo "<pre>"; print_r( $current_user ); echo "</pre>";
-
         $user = Soldier::build( $_POST );
-        echo "<pre>"; print_r( $current_user ); echo "</pre>";
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];
