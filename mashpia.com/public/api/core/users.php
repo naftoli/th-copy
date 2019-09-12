@@ -118,7 +118,7 @@ class UsersRouter {
             ]);*/
 
 
-            $userVal = 'user';
+            /*$userVal = 'user';
             $roldIdVal = 1;
 
             $data = [
@@ -130,12 +130,12 @@ class UsersRouter {
 
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
-            $stmt->execute($data);
+            $stmt->execute($data);*/
 
         //}
 
         // send the full soldier to the client
-        json_response( $user );
+        json_response( $current_user );
         //return $current_user->type;
     }
 
