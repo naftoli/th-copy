@@ -112,12 +112,13 @@ class UsersRouter {
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-       //if ( $current_user->login->code === 'PARENT' ) {
-            /*$auth = \AdminAuth::create([
-                'admin_id' => $current_user->admin_id,
+       if ( $current_user->login->code === 'PARENT' ) {
+            $auth = \AdminAuth::create([
+                'admin_id' => $current_user->login->admin_id,
                 'id'       => $user->user_id,     
-                'auth'     => 'user'
-            ]);*/
+                'auth'     => 'user',
+                'role_id'  => 1
+            ]);
 
             /*$userVal = 'user';
             $roldIdVal = 1;
@@ -133,11 +134,11 @@ class UsersRouter {
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);*/
 
-       // }
+       }
 
-       var_dump($current_user->login->code); 
+       //var_dump($current_user->login->code); 
         // send the full soldier to the client
-        //json_response( $user );
+        json_response( $user );
     }
 
     public function update( $id ) {

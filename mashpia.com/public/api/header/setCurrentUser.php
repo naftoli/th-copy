@@ -69,7 +69,6 @@ function setCurrentUser(){
   // if we are on mobile use the parent login
 
   if ( $mobile ) {
-    echo 1;
     $current_user->setLogin( 'PARENT', $current_user->admin_id, true );
   }
 

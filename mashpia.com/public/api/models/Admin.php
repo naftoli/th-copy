@@ -181,9 +181,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
 
         if ( $override ) {
             $this->login = new Login( $type, $id );
-            echo 3;
-            var_dump($this->login);
-            exit();
             $this->logins[] = $this->login;
             return $this->login;
         }
