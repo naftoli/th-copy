@@ -86,6 +86,9 @@ class UsersRouter {
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
 
+
+        //$admin_user = Admin::find([ $current_user->admin_id ]);
+ 
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];
         $first = $_POST['first'];
@@ -115,6 +118,21 @@ class UsersRouter {
                 'id'       => $user->user_id,     
                 'auth'     => 'user'
             ]);
+
+            /*$userVal = 'user';
+            $roldIdVal = 1;
+
+            $data = [
+                'admin_id' => $admin_user->admin_id,
+                'auth'     => $userVal,
+                'id'       => $user->user_id,
+                'role_id'  => $roldIdVal
+            ];
+
+            $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
+            $stmt = $MASHPIA_DB->prepare( $sql );
+            $stmt->execute($data);*/
+
         }
 
         // send the full soldier to the client

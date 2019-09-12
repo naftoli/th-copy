@@ -7,7 +7,7 @@ class ParshaRouter {
     public function index() {
         global $MASHPIA_DB;
 
-        $year = GlobalSettings::getCurrentYear() + 1;
+        $year = GlobalSettings::getCurrentYear();
 
         // get lowest parsha id
         $stmt = $MASHPIA_DB->prepare("
