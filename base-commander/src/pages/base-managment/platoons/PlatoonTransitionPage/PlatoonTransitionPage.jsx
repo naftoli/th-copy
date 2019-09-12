@@ -59,7 +59,7 @@ class PlatoonTransitionPage extends Component {
   }
   // Discharge from Tzivos Hashem
   discharge = () => {
-    if ( window.confirm('Are you sure you want to do this?') ) {
+    if ( window.confirm('Soldier will be moved to "Unassigned School", Are you sure you want to do this?') ) {
       removeSoldier( this.state.selection )
       // ( this.state.selection )
       .then( this.getSoldiers )

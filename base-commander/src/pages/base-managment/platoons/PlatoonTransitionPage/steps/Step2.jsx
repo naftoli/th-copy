@@ -49,7 +49,7 @@ class Step2 extends Component {
         <ButtonBar>
           <Button color='danger' onClick={ discharge }>
             <FontAwesome icon="trash-alt" />{' '}
-            Discharge (Delete) Soldiers 
+            Remove Soldiers from Base
           </Button>
         </ButtonBar>
       </div>
