@@ -128,7 +128,7 @@ class UsersRouter {
                 'rol_id'   => $roldIdVal
             ];
 
-            $sql = 'INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)';
+            $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);
 
