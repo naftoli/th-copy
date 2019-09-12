@@ -86,6 +86,8 @@ class UsersRouter {
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
 
+        $admin_user = Admin::find([ $current_user->admin_id ]);
+ 
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];
         $first = $_POST['first'];
@@ -109,16 +111,33 @@ class UsersRouter {
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-       if ( $current_user->login->code === 'PARENT' ) {
-            $auth = \AdminAuth::create([
+       //if ( $current_user->login->code === 'PARENT' ) {
+            /*$auth = \AdminAuth::create([
                 'admin_id' => $current_user->admin_id,
                 'id'       => $user->user_id,     
-                'auth'     => 'user'
-            ]);
-        }
+                'auth'     => 'user',
+                'role_id'  => 1
+            ]);*/
 
+            /*$userVal = 'user';
+            $roldIdVal = 1;
+
+            $data = [
+                'admin_id' => $current_user->admin_id,
+                'auth'     => $userVal,
+                'id'       => $user->user_id,
+                'role_id'  => $roldIdVal
+            ];
+
+            $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
+            $stmt = $MASHPIA_DB->prepare( $sql );
+            $stmt->execute($data);*/
+
+        //}
+
+        var_dump($admin_user);
         // send the full soldier to the client
-        json_response( $user );
+        //json_response( $user );
     }
 
     public function update( $id ) {
