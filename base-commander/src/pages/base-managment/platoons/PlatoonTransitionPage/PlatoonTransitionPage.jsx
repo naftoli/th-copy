@@ -7,7 +7,7 @@ import { Step1, Step2, Step3, Deploy } from './steps';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { 
-  getUsers, changePlatoon, transitionPlatoons 
+  getUsers, changePlatoon, transitionPlatoons, removeSoldier  
 } from 'store/base/platoons/platoon_transition';
 // styles
 import './PlatoonTransitionPage.scss';
@@ -60,7 +60,8 @@ class PlatoonTransitionPage extends Component {
   // Discharge from Tzivos Hashem
   discharge = () => {
     if ( window.confirm('Are you sure you want to do this?') ) {
-       ( this.state.selection )
+      removeSoldier( this.state.selection )
+      // ( this.state.selection )
       .then( this.getSoldiers )
       .catch( error => toast.error( error.message ) );
     }

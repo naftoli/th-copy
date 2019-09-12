@@ -26,3 +26,7 @@ export const transitionPlatoons = () => {
   const url = '/core/platoon_transition?action=transitionPlatoons';
   return API.post( url );
 }
+
+export const removeSoldier = ( id ) => {
+  return API.post( '/core/users?action=removeFromSchool', { user_id: id } )
+}
