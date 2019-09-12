@@ -100,6 +100,7 @@ var childApp = function(){
             return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
         }
 
+
         $.post( "api/tasks/addChild.php", postData, function( response ){
             // show any API errors...
             if( !response.success )
@@ -135,8 +136,8 @@ var childApp = function(){
         // }
 
         $.post("/api/core/users", postData, function( response ){
-            //console.log( response );
-            if( response.success ){
+
+            if( response.success ){ 
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
