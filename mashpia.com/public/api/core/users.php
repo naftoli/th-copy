@@ -124,7 +124,7 @@ class UsersRouter {
             $roldIdVal = 1;
 
             $data = [
-                'admin_id' => $current_user->admin_id,
+                'admin_id' => $admin_user->admin_id,
                 'auth'     => $userVal,
                 'id'       => $user->user_id,
                 'role_id'  => $roldIdVal
@@ -136,7 +136,7 @@ class UsersRouter {
 
         //}
 
-        var_dump($admin_user->admin_id);
+        var_dump($admin_user);
         // send the full soldier to the client
         //json_response( $user );
     }
