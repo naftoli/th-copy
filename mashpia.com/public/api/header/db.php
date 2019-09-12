@@ -26,15 +26,20 @@ mysqli_query($mysqli, 'SET NAMES utf8');
 mysqli_query($mysqli, 'SET CHARACTER_SET utf8');
 
 // Connect mashpiadb to PDO
-$MASHPIA_DB = new \PDO( "mysql:host=$global_db_host;dbname=mashpiadb", $global_db_user, $global_db_pass );
-$MASHPIA_DB->exec( "SET NAMES utf8" ); // fix utf8
-$MASHPIA_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+try {
+    $MASHPIA_DB = new \PDO( "mysql:host=50.28.66.228;dbname=mashpiadb", $global_db_user, $global_db_pass );
+    $MASHPIA_DB->exec( "SET NAMES utf8" ); // fix utf8
+    $MASHPIA_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-// connect to PointsDB with PDO
-$POINTS_DB =  new \PDO( "mysql:host=$global_db_host;dbname=pointsDB", $global_db_user, $global_db_pass );
-$POINTS_DB->exec( "SET NAMES utf8" ); // fix utf8
-$POINTS_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-$POINTS_DB->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
+    // connect to PointsDB with PDO
+    $POINTS_DB =  new \PDO( "mysql:host=50.28.66.228;dbname=pointsDB", $global_db_user, $global_db_pass );
+    $POINTS_DB->exec( "SET NAMES utf8" ); // fix utf8
+    $POINTS_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $POINTS_DB->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
+} catch (PDOException $e) {
+    echo 'Connection failed: ' . $e->getMessage();
+    exit;
+}
 
 // connect ActiveRecord to DBS
 ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {

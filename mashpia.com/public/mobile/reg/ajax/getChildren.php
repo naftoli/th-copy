@@ -135,14 +135,12 @@ if ( !empty( $users ) ) {
 			&& $row['class_grade'] > 3 // and in grade 4+ 
 			&& $row['class_grade'] < 8 // not in grade 8 
 			&& $row['chidon'] // make sure the kid is in chidon
-			&& !in_array( $children[$row['user_id']]['school_id'], $exceptions ) // make sure not one of these schools
+			&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
 			//&& in_array( $row['school_id'], $australia ) // and not in australia..
 		) {
 			$children[ $row['user_id'] ]['needsReg'] = 1;
 			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-		} else {
-			$children[$row['user_id']]['issue'] = 1;
-		}
+		} 
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
