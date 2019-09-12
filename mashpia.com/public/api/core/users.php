@@ -117,12 +117,11 @@ class UsersRouter {
                 'role_id'  => 1
             ]);*/
 
-
             /*$userVal = 'user';
             $roldIdVal = 1;
 
             $data = [
-                'admin_id' => $current_user,
+                'admin_id' => $current_user->admin_id,
                 'auth'     => $userVal,
                 'id'       => $user->user_id,
                 'role_id'  => $roldIdVal
@@ -134,9 +133,10 @@ class UsersRouter {
 
         //}
 
-        var_dump($current_user);
+        //var_dump($current_user);
+        echo $current_user->admin_id;
         // send the full soldier to the client
-        // json_response( $user );
+        //json_response( $user );
     }
 
     public function update( $id ) {
