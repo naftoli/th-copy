@@ -154,7 +154,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             try { $this->logins[] = new Login( 'BLANK', $this->admin_id, $this ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         }
-        echo 2;
         return $this->logins;
     }
 
