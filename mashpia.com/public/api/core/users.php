@@ -134,8 +134,9 @@ class UsersRouter {
 
         //}
 
+        var_dump($current_user);
         // send the full soldier to the client
-        json_response( $current_user );
+        // json_response( $user );
         //return $current_user->type;
     }
 
