@@ -86,6 +86,7 @@ class UsersRouter {
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
 
+        
         $admin_user = Admin::find([ $current_user->admin_id ]);
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
@@ -135,7 +136,7 @@ class UsersRouter {
 
         //}
 
-        var_dump($admin_user);
+        print_r($admin_user['admin_id']);
         // send the full soldier to the client
         //json_response( $user );
     }
