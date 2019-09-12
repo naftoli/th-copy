@@ -125,7 +125,7 @@ class UsersRouter {
                 'admin_id' => $current_user->admin_id,
                 'auth'     => $userVal,
                 'id'       => $user->user_id,
-                'rol_id'   => $roldIdVal
+                'role_id'  => $roldIdVal
             ];
 
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
