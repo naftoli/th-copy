@@ -41,7 +41,7 @@ class MissionsForm extends Component {
     const today = julianToday();
     // get the first week after the current week and select it
     const parsha = parshos.filter( parsha => parsha.end < today ).pop();
-    this.setState({ parsha_id: parsha.parsha_id });
+    this.setState({ parsha });
   }
 
   onSelectChange = key => option => this.setState({ [key]: option ? option.value : false });
