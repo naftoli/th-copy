@@ -85,6 +85,7 @@ class UsersRouter {
         global $current_user;
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
+        echo "<pre>"; print_r( $current_user ); echo "</pre>"; exit;
 
         $admin_user = Admin::find([ $current_user->admin_id ]);
  

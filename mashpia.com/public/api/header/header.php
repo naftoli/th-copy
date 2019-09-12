@@ -44,7 +44,6 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     include_once( __DIR__ . "/setCurrentUser.php" );
     // set the current user
     $current_user = setCurrentUser();
-    echo "<pre>"; print_r( $current_user ); echo "</pre>";
     // Return 401 Unauthorized if we cannot login user
     if ( !$current_user ){
         json_error( "Invalid Credentials", false, 401 );
