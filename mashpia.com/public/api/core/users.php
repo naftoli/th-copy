@@ -85,9 +85,8 @@ class UsersRouter {
         global $current_user;
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
-        echo "<pre>"; print_r( $current_user ); echo "</pre>"; exit;
 
-        $admin_user = Admin::find([ $current_user->admin_id ]);
+        //$admin_user = Admin::find([ $current_user->admin_id ]);
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];
@@ -112,9 +111,9 @@ class UsersRouter {
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-       if ( $current_user->login->login['code'] === 'PARENT' ) {
+       if ( $current_user->login->code === 'PARENT' ) {
             $auth = \AdminAuth::create([
-                'admin_id' => $current_user->login->admin_id,
+                'admin_id' => $current_user->admin_id,
                 'id'       => $user->user_id,     
                 'auth'     => 'user',
                 'role_id'  => 1
