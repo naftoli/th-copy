@@ -135,7 +135,7 @@ class UsersRouter {
 
        // }
 
-       var_dump($current_user->login->code); 
+       var_dump($current_user->setLogin()); 
         // send the full soldier to the client
         //json_response( $user );
     }
