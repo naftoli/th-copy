@@ -83,6 +83,7 @@ class UsersRouter {
 
     public function create() {
         global $current_user;
+        $cur_user = $current_user; // apparently there's a duplicate $current_user var created by WP at some point in this function which is causing bugs
         global $MASHPIA_DB;
         $user = Soldier::build( $_POST );
  
@@ -97,8 +98,8 @@ class UsersRouter {
         }
 
         // if it is a teacher, set the school id to the platoons school id
-        if ( $current_user->login->code === 'TEACHER' ) {
-            $user->school_id = $current_user->login->model->school_id;
+        if ( $cur_user->login->code === 'TEACHER' ) {
+            $user->school_id = $cur_user->login->model->school_id;
         // make sure the class is in the grade
         } else {
             $platoon_school_id = $user->platoon->school_id;
@@ -109,10 +110,9 @@ class UsersRouter {
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-        echo "<pre>"; print_r( $current_user ); echo "</pre>";
-        if ( $current_user->login->code === 'PARENT' ) {
+        if ( $cur_user->login->code === 'PARENT' ) {
             $auth = \AdminAuth::create([
-                'admin_id' => $current_user->admin_id,
+                'admin_id' => $cur_user->admin_id,
                 'id'       => $user->user_id,     
                 'auth'     => 'user',
                 'role_id'  => 1
@@ -131,7 +131,6 @@ class UsersRouter {
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);*/
-
        }
 
         // send the full soldier to the client
