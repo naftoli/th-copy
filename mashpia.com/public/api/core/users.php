@@ -97,7 +97,7 @@ class UsersRouter {
         }
 
         // if it is a teacher, set the school id to the platoons school id
-        if ( $current_user->login['code'] === 'TEACHER' ) {
+        if ( $current_user->login->code === 'TEACHER' ) {
             $user->school_id = $current_user->login->model->school_id;
         // make sure the class is in the grade
         } else {
