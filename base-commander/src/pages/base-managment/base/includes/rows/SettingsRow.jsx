@@ -51,7 +51,7 @@ export class SettingsRow extends Component {
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
     const storeResetProps = { name: 'store_reset', onChange: this.onChange }
 
-    console.log(store_reset);
+    console.log(store_reset + '...');
     
     return (
       <Row id='SettingsRow'>
