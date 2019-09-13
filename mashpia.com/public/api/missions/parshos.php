@@ -20,7 +20,7 @@ class ParshaRouter {
         if ( $res ) {
             $rows = $stmt->fetchAll();
             // get last row info
-            $id = $rows[count($rows)] - 1;
+            $id = $rows[count($rows) - 1];
         }
 
         $parshos = Parsha::all([
