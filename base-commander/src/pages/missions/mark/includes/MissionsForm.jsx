@@ -34,6 +34,7 @@ class MissionsForm extends Component {
 
   setDefaultParsha() {
     const { parshos } = this.props;
+    console.log( parshos );
     
     if ( parshos.length === 0 )
       return false;
@@ -41,6 +42,7 @@ class MissionsForm extends Component {
     const today = julianToday();
     // get the first week after the current week and select it
     const parsha = parshos.filter( parsha => parsha.end < today ).pop();
+    //this.setState({ parsha_id: parsha.id });
     this.setState({ parsha });
   }
 
