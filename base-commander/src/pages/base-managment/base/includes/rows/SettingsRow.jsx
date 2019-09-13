@@ -30,7 +30,7 @@ export class SettingsRow extends Component {
 
   enableSchoolReset = event => {
     const store_reset = event.target.value;
-    this.props.onChange({ store_reset });
+    this.props.onUpdate({ store_reset });
     this.setState({ checked: true });
   }
 
