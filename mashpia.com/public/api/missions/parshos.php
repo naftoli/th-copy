@@ -14,13 +14,13 @@ class ParshaRouter {
             SELECT id FROM parshos 
             WHERE year = :year 
             ORDER BY id DESC 
-            LIMIT 5
+            LIMIT 2
         ");
         $res = $stmt->execute([':year' => $year - 1]);
         if ( $res ) {
             $rows = $stmt->fetchAll();
             // get last row info
-            $id = $rows[1]['id'];
+            $id = $rows[count($rows)] - 1;
         }
 
         $parshos = Parsha::all([
