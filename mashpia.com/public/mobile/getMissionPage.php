@@ -185,7 +185,7 @@ if (isset($_GET['d'])) {
 	}
 }
 // only allow parents to go back 3 weeks
-$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 4";
+$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 12";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$parshos[$row['end']] = $row['name'];
