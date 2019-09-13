@@ -34,13 +34,18 @@ class MissionsForm extends Component {
 
   setDefaultParsha() {
     const { parshos } = this.props;
+    console.log( parshos );
     
     if ( parshos.length === 0 )
       return false;
     
     const today = julianToday();
     // get the first week after the current week and select it
-    const parsha = parshos.filter( parsha => parsha.end < today ).pop();
+    //const parsha = parshos.filter( parsha => parsha.end < today ).pop();
+    let parsha = parshos.filter( parsha => parsha.end < today ).pop();
+    if ( !parsha ) {
+      parsha = parshos[0]; // if we can't find a parsha, choose first one
+    }
     this.setState({ parsha_id: parsha.id });
   }
 
