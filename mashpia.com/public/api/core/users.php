@@ -83,8 +83,9 @@ class UsersRouter {
 
     public function create() {
         global $current_user;
-        $cur_user = $current_user; // apparently there's a duplicate $current_user var created by WP at some point in this function which is causing bugs
         global $MASHPIA_DB;
+        $cur_user = $current_user; // apparently there's a duplicate $current_user variable created by WP at some point in this function which is causing bugs
+
         $user = Soldier::build( $_POST );
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
