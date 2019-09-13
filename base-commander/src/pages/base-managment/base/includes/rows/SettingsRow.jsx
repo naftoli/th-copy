@@ -40,7 +40,10 @@ export class SettingsRow extends Component {
       print_parent_tasks, allow_parent_tasks,
     } = base;
 
+    const store_reset_jd = store_reset;
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
+    console.log( store_reset );
+    console.log( store_reset_jd );
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
@@ -99,15 +102,15 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
 
-          <Radio value='2458663' name='store_miles_reset' onChange={ this.enableSchoolReset } required>
+          <Radio checked={ store_reset_jd === 245866 } value='2458663' name='store_miles_reset' onChange={ this.enableSchoolReset } required>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio value='2458733' name='store_miles_reset' onChange={ this.enableSchoolReset }>
+          <Radio checked={ store_reset_jd === 2458733 } value='2458733' name='store_miles_reset' onChange={ this.enableSchoolReset }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
-          <Radio name='store_miles_reset' id='store_reset' onChange={ this.disableSchoolReset }>
+          <Radio checked={ store_reset_jd === 0 } name='store_miles_reset' id='store_reset' onChange={ this.disableSchoolReset }>
             Never (This includes all miles from previous years)
           </Radio>
           <br />
