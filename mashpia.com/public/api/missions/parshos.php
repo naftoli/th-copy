@@ -14,7 +14,7 @@ class ParshaRouter {
             SELECT id FROM parshos 
             WHERE year = :year 
             ORDER BY id DESC 
-            LIMIT 5
+            LIMIT 12
         ");
         $res = $stmt->execute([':year' => $year - 1]);
         if ( $res ) {
