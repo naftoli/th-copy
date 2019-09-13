@@ -43,6 +43,7 @@ export class SettingsRow extends Component {
     const store_reset_jd = store_reset;
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     console.log( store_reset );
+    console.log( store_reset_jd );
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
