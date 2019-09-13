@@ -50,7 +50,7 @@ class MissionsForm extends Component {
     if ( !parsha ) {
       parsha = parshos[0]; // if we can't find a parsha, choose first one
     }
-    this.setState({ parsha_id: parsha });
+    this.setState({ parsha_id: parsha.id });
   }
 
   onSelectChange = key => option => this.setState({ [key]: option ? option.value : false });
