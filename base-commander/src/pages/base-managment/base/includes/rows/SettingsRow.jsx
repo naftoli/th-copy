@@ -114,7 +114,7 @@ export class SettingsRow extends Component {
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
-          <Radio name='store_miles_reset' id='store_reset' 
+          <Radio name='store_miles_reset' id='store_reset'  
           { ...storeMilesRestProps }
           checked={ storeMilesRestProps === '0' }
           onChange={ this.disableSchoolReset }>
