@@ -99,7 +99,7 @@ class UsersRouter {
         }
 
         // if it is a teacher, set the school id to the platoons school id
-        /*if ( $cur_user->login->code === 'TEACHER' ) {
+        if ( $cur_user->login->code === 'TEACHER' ) {
             $user->school_id = $cur_user->login->model->school_id;
         // make sure the class is in the grade
         } else {
@@ -109,9 +109,9 @@ class UsersRouter {
         }
         // save and create the soldier
         if ( !$user->is_valid() || !$user->save() )
-            json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );*/
+            json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );
         // parents get auto connected to their kids
-        echo '<pre>' . print_r($current_user) . '</pre>';
+
         if ( $cur_user->login->code === 'PARENT' ) {
             $auth = \AdminAuth::create([
                 'admin_id' => $cur_user->admin_id,
