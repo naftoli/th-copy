@@ -49,7 +49,7 @@ export class SettingsRow extends Component {
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
-    const storeMilesRestProps = { name: 'store_reset', onChange: this.onNumberChange }
+    const storeMilesResetProps = { name: 'store_reset', onChange: this.onChange }
     
     return (
       <Row id='SettingsRow'>
@@ -104,30 +104,30 @@ export class SettingsRow extends Component {
           <Label>Store Miles Start From:</Label>
 
           <Radio value='2458663' name='store_reset' 
-          { ...storeMilesRestProps }
-          checked={ storeMilesRestProps === '2458663' }
+          { ...storeMilesResetProps }
+          checked={ storeMilesResetProps === '2458663' }
           onChange={ this.enableSchoolReset } required>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
           <Radio value='2458733' name='store_reset' 
-          { ...storeMilesRestProps }
-          checked={ storeMilesRestProps === '2458733' }
+          { ...storeMilesResetProps }
+          checked={ storeMilesResetProps === '2458733' }
           onChange={ this.enableSchoolReset }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
           <Radio name='store_reset' id='store_reset'  
-          { ...storeMilesRestProps }
-          checked={ storeMilesRestProps === '0' }
+          { ...storeMilesResetProps }
+          checked={ storeMilesResetProps === '0' }
           onChange={ this.disableSchoolReset }>
             Never (This includes all miles from previous years)
           </Radio>
           <br />
 
           <Radio name='store_reset' 
-          { ...storeMilesRestProps }
-          checked={ storeMilesRestProps === toJulian( moment() ) }
+          { ...storeMilesResetProps }
+          checked={ storeMilesResetProps === toJulian( moment() ) }
           onChange={ this.enableSchoolReset } value={ toJulian( moment() ) }>
             Custom Date:
           </Radio>
