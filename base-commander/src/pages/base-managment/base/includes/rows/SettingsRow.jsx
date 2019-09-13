@@ -42,7 +42,7 @@ export class SettingsRow extends Component {
 
     const store_reset_jd = store_reset;
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
-    console.log( store_reset );
+    //console.log( store_reset );
     console.log( store_reset_jd );
 
     // props for all inputs
@@ -50,6 +50,8 @@ export class SettingsRow extends Component {
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
     const storeResetProps = { name: 'store_reset', onChange: this.onChange }
+
+    console.log(store_reset);
     
     return (
       <Row id='SettingsRow'>
