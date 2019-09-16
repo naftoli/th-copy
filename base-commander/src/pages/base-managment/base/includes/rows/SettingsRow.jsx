@@ -34,7 +34,7 @@ export class SettingsRow extends Component {
     this.setState({ disabled: false });
   }
 
-  handleRadioChange = event => {
+  handleRadioChange = () => {
     this.setState({ checked: true });
   }
 
