@@ -78,6 +78,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['chidon_year'] = $chidon_year;
 		$children[$row['user_id']]['school_id'] = $row['school_id'];
 		$children[$row['user_id']]['shipping'] = $row['shipping_method'];
+		$children[$row['user_id']]['chayoleiRegistered'] = false;
 		
 		$reg_query = mysql_query(
 			"SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
@@ -121,7 +122,9 @@ if ( !empty( $users ) ) {
 		if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
 			$children[$row['user_id']]['needsReg'] = 1;
 			$children[$row['user_id']]['reg_types']['chayolei'] = true;
-		} 
+		} else {
+			$children[$row['user_id']]['chayoleiRegistered'] = true;
+		}
 
 		// for testing
 		// if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
