@@ -11,7 +11,8 @@ import { onCheckboxChange, onInputChange, onNumberChange } from 'functions/event
 export class SettingsRow extends Component {
 
   state = {
-    disabled: false
+    disabled: false,
+    checked: false
   };
 
   onChange = onInputChange( this.props.onUpdate );
@@ -34,7 +35,7 @@ export class SettingsRow extends Component {
   }
 
   handleRadioChange = event => {
-    alert(event.target.value);
+    this.setState({ checked: true });
   }
 
 
