@@ -34,7 +34,9 @@ export class SettingsRow extends Component {
   }
 
   handleRadioChange = (changeEvent) => {
-    this.setState({ disabled: true });
+    const store_reset2 = changeEvent.target.value;
+    this.props.onUpdate({ store_reset2 });
+    this.setState({ disabled: false });
   }
 
 
