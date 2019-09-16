@@ -34,7 +34,7 @@ export class SettingsRow extends Component {
   }
 
   handleRadioChange = event => {
-    console.log(event.target.value);
+    alert(event.target.value);
   }
 
 
