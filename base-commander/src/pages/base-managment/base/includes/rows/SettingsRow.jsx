@@ -6,7 +6,7 @@ import { Radio, Checkbox, Date, Label } from 'components/inputs';
 import julian from 'julian';
 import moment from 'moment';
 import { toJulian } from 'functions/dates';
-import { onCheckboxChange, onInputChange, onNumberChange, onJSONChange } from 'functions/events';
+import { onCheckboxChange, onInputChange, onNumberChange } from 'functions/events';
 
 export class SettingsRow extends Component {
 
@@ -17,8 +17,6 @@ export class SettingsRow extends Component {
   onChange = onInputChange( this.props.onUpdate );
   handleCheckbox = onCheckboxChange( this.props.onUpdate );
   onNumberChange = onNumberChange( this.props.onUpdate );
-  // handle input events
-  onInputChange = onJSONChange( this.props.handleChange );
 
   onDateChage = date =>
     this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
@@ -109,19 +107,19 @@ export class SettingsRow extends Component {
           <Label>Store Miles Start From:</Label>
 
           <Radio name='store_miles_reset' value='2458663' 
-            onChange={ this.onInputChange }
+            onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458663 }>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio name='store_miles_reset' value='2458733' 
-            onChange={ this.onInputChange }
+          <Radio name='store_miles_reset' id='store_reset' value='2458733' 
+            onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458733 }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
           <Radio name='store_miles_reset' id='store_reset' value='0'
-            oonChange={ this.onInputChange }
+            onChange={ this.disableSchoolReset } 
             checked={ store_reset_jd === 0 }>
             Never (This includes all miles from previous years) 
           </Radio>
