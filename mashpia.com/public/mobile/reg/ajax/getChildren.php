@@ -95,7 +95,7 @@ if ( !empty( $users ) ) {
 		//mivtza lulav 5780
 		$children[$row['user_id']]['mivtzaLulav'] = 0;
 		$lulavSchools = [];
-		$sqlLulav = "select school_id, allow_lulav, lulav_shipping from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0";
+		$sqlLulav = "select school_id, allow_lulav, lulav_shipping from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0 and year = " . $reg_year;
 		$resLulav = mysql_query( $sqlLulav );
 		while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
 			if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
@@ -144,7 +144,7 @@ if ( !empty( $users ) ) {
 		// }
 		
 		// chidon registration
-		$exceptions = [483,482,544,584,583,588,430,577,13];
+		$exceptions = [483,482,544,584,583,588,577,13];
 		if ( !$row['reg_chidon'] // if not in chidon
 			&& intval( $row['class_grade'] ) > 3 // and in grade 4+ 
 			&& intval( $row['class_grade'] ) <= 8 // not in grade 8 
