@@ -33,13 +33,6 @@ export class SettingsRow extends Component {
     this.setState({ disabled: false });
   }
 
-  handleRadioChange = (changeEvent) => {
-    const store_reset2 = changeEvent.target.value;
-    this.props.onUpdate({ store_reset2 });
-    this.setState({ disabled: false });
-  }
-
-
   render () {
     const { base } = this.props;
     let { 
@@ -57,7 +50,6 @@ export class SettingsRow extends Component {
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
     const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
-
 
     return (
       <Row id='SettingsRow'>
