@@ -106,8 +106,18 @@ if ( !empty( $users ) ) {
 			&& $children[$row['user_id']]['user_registered'] 
 			&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
 			) {
+			$children[$row['user_id']]['lulavPurchased'] = 0;
 			$children[$row['user_id']]['mivtzaLulav'] = 1;
 			$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
+		}
+
+		// find out if user already purchases a set
+		if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
+			$sqlPurchased = "select * from lulav_purchases where users like '%" . $row['user_id'] . "%'";
+			$resPurchased = mysql_query( $sqlPurchased );
+			if ( mysql_num_rows( $resPurchased ) ) {
+				$children[$row['user_id']]['lulavPurchased'] = 1;
+			}
 		}
 
 		// after Nov 8, 2017 registration is closed

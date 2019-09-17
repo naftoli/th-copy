@@ -17,6 +17,7 @@ if ( isset( $_POST['submit'] ) ) {
         if ( $fee >= 0 ) {
             $stmt = $MASHPIA_DB->prepare("
                 UPDATE schools SET 
+                allow_lulav = 1, 
                 lulav_shipping = :fee 
                 WHERE school_id = :id
             ");
