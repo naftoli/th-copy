@@ -113,14 +113,14 @@ export class SettingsRow extends Component {
 
           <Radio name='store_miles_reset' value='2458663' 
             { ...storeResetProps }
-            onChange={ this.handleChange }
+            onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458663 }>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
           <Radio name='store_miles_reset' id='store_reset' value='2458733' 
             { ...storeResetProps }
-            onChange={ this.handleChange }
+            onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458733 }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
