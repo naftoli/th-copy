@@ -113,7 +113,7 @@ if ( !empty( $users ) ) {
 
 		// find out if user already purchases a set
 		if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
-			$sqlPurchased = "select * from lulav_purchases where users like '%" . $row['user_id'] . "%'";
+			$sqlPurchased = "select * from lulav_purchases where users like '%" . $row['user_id'] . "%' and year = " . $reg_year;
 			$resPurchased = mysql_query( $sqlPurchased );
 			if ( mysql_num_rows( $resPurchased ) ) {
 				$children[$row['user_id']]['lulavPurchased'] = 1;
@@ -144,7 +144,7 @@ if ( !empty( $users ) ) {
 		// }
 		
 		// chidon registration
-		$exceptions = [483,482,544,584,583,588,430,577,13];
+		$exceptions = [483,482,544,584,583,588,577,13];
 		if ( !$row['reg_chidon'] // if not in chidon
 			&& intval( $row['class_grade'] ) > 3 // and in grade 4+ 
 			&& intval( $row['class_grade'] ) <= 8 // not in grade 8 
