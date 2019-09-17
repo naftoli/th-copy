@@ -92,22 +92,33 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
 		if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
 
-		// mivtza lulav 5779
-		// $children[$row['user_id']]['mivtzaLulav'] = 0;
-		// $lulavSchools = [];
-		// $sqlLulav = "select school_id from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0";
-		// $resLulav = mysql_query( $sqlLulav );
-		// while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
-		// 	$lulavSchools[] = $rowLulav['school_id'];
-		// }
+		//mivtza lulav 5780
+		$children[$row['user_id']]['mivtzaLulav'] = 0;
+		$lulavSchools = [];
+		$sqlLulav = "select school_id, allow_lulav, lulav_shipping from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0";
+		$resLulav = mysql_query( $sqlLulav );
+		while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
+			if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
+		}
 
-		// if ( $children[$row['user_id']]['schoolRegistered'] 
-		// 	&& $children[$row['user_id']]['schoolTypeRegistered'] 
-		// 	&& $children[$row['user_id']]['user_registered'] 
-		// 	&& in_array( $row['school_id'], $lulavSchools )
-		// 	) {
-		// 	$children[$row['user_id']]['mivtzaLulav'] = 1;
-		// }
+		if ( $children[$row['user_id']]['schoolRegistered'] 
+			&& $children[$row['user_id']]['schoolTypeRegistered'] 
+			&& $children[$row['user_id']]['user_registered'] 
+			&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
+			) {
+			$children[$row['user_id']]['lulavPurchased'] = 0;
+			$children[$row['user_id']]['mivtzaLulav'] = 1;
+			$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
+		}
+
+		// find out if user already purchases a set
+		if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
+			$sqlPurchased = "select * from lulav_purchases where users like '%" . $row['user_id'] . "%'";
+			$resPurchased = mysql_query( $sqlPurchased );
+			if ( mysql_num_rows( $resPurchased ) ) {
+				$children[$row['user_id']]['lulavPurchased'] = 1;
+			}
+		}
 
 		// after Nov 8, 2017 registration is closed
 		//if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
