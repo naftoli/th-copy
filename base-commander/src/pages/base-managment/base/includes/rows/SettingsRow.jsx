@@ -31,6 +31,7 @@ export class SettingsRow extends Component {
     const store_reset = event.target.value;
     this.props.onUpdate({ store_reset });
     this.setState({ disabled: false });
+    alert(event.target.value);
   }
 
   render () {
