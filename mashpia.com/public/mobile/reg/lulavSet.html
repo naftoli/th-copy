@@ -92,11 +92,10 @@
                                     <div class="child">
                                         <div style="padding: 10px; font-size: 14px;">
                                             <span>
-                                                <input type="checkbox" class="lulav" style="width: 30px;" id="{{@key}}" 
                                                 {{#if lulavPurchased}}
-                                                    disabled='disabled'
+                                                {{else}}
+                                                <input type="checkbox" class="lulav" style="width: 30px;" id="{{@key}}" />
                                                 {{/if}}
-                                                /> 
                                                 <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
                                             <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
