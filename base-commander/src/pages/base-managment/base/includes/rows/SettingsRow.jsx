@@ -50,7 +50,7 @@ export class SettingsRow extends Component {
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
-    const storeResetProps = { name: 'store_reset_jd', onChange: this.onChange } 
+    const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
 
     return (
       <Row id='SettingsRow'>
@@ -104,21 +104,21 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
 
-          <Radio name='store_reset_jd' value='2458663' 
+          <Radio name='store_miles_reset' value='2458663' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458663 }>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio name='store_reset_jd' value='2458733' 
+          <Radio name='store_miles_reset' value='2458733' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2458733 }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
-          <Radio name='store_reset_jd' id='store_reset' value='0'
+          <Radio name='store_miles_reset' id='store_reset' value='0'
             { ...storeResetProps }
             onChange={ this.disableSchoolReset } 
             checked={ store_reset_jd === 0 }>
@@ -126,7 +126,7 @@ export class SettingsRow extends Component {
           </Radio>
           <br />
 
-          <Radio name='store_reset_jd' value={ toJulian( moment() ) }
+          <Radio name='store_miles_reset' value={ toJulian( moment() ) }
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }  
             checked={ store_reset_jd === toJulian( moment() ) }>
