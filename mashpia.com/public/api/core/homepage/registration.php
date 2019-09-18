@@ -45,7 +45,7 @@ class RegistrationRouter {
         }
 
         $query = $MASHPIA_DB->prepare(
-             ' SELECT COUNT(*) AS soldiers, SUM(CASE WHEN paid > 0 THEN 1 ELSE 0 END) AS total '
+             ' SELECT COUNT(*) AS soldiers, SUM(CASE WHEN paid IS NOT NULL THEN 1 ELSE 0 END) AS total '
             ." FROM users u JOIN schools s USING (school_id) "
             ." LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = $year "
             .' WHERE u.chayolei = 1 AND ' . $filter

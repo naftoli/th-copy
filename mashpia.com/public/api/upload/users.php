@@ -97,7 +97,7 @@ class UsersUploadRouter {
                         $errors[] = "$errorString Hebrew name must be in hebrew characters.";
                     }
                     
-                    // cast gender to lower case
+                    // cast gender to upper case
                     if ( $headers[$cellIndex] == "*Gender" ) {
                         $value = strtoupper( $value );
                     }
@@ -138,6 +138,10 @@ class UsersUploadRouter {
                         }
                     }
 
+                    // cast mission type to lower case
+                    if ( $headers[$cellIndex] == "*Mission Type" ) {
+                        $value = strtolower( $value );
+                    }
                     // validate mission type
                     if ( $headers[$cellIndex] == "*Mission Type" && 
                         !in_array( $value, [ 'chabad', 'frum', 'c-kids' ] )

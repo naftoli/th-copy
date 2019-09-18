@@ -60,7 +60,7 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 84) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
@@ -185,7 +185,7 @@ if (isset($_GET['d'])) {
 	}
 }
 // only allow parents to go back 3 weeks
-$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 4";
+$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 12";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$parshos[$row['end']] = $row['name'];
