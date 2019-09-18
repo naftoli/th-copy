@@ -14,8 +14,11 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         $to = '2019-09-17';
     } else if ( $_POST['date'] == 3 ) {
         $from = '2019-09-18';
+        $to = '2019-09-25';
+    } else if ( $_POST['date'] == 4 ) {
+        $from = '2019-09-26';
         $to = '2019-10-11';
-    }
+    } 
 }
 
 $users = [];
@@ -76,7 +79,10 @@ while ( $row = mysql_fetch_assoc( $users_query ) ) {
                 >2nd Batch (from August 13 until Sept 17)</option>
                 <option value="3"
                 <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sept 18 to Oct 11)</option>
+                >3rd Batch (from Sept 18 to Sept 25)</option>
+                <option value="4"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                >3rd Batch (from Sept 26 to Oct 11)</option>
             </select>
         </p>
         <p>  
