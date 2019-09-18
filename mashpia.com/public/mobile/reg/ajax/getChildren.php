@@ -133,7 +133,7 @@ if ( !empty( $users ) ) {
 		if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
 			$children[$row['user_id']]['needsReg'] = 1;
 			$children[$row['user_id']]['reg_types']['chayolei'] = true;
-		} else {
+		} else if ( $row['reg_chayolei'] && $row['chayolei'] ) {
 			$children[$row['user_id']]['chayoleiRegistered'] = true;
 		}
 
