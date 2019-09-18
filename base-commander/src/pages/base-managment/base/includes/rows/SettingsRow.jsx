@@ -42,7 +42,7 @@ export class SettingsRow extends Component {
     } = base;
 
     //const store_reset_jd = store_reset;
-    store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
+    //store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     //console.log( store_reset );
     //console.log( store_reset_jd );
 
@@ -128,7 +128,7 @@ export class SettingsRow extends Component {
 
           {/* <Date value={ store_reset }
             disabled = { !store_reset }
-            onChange={ this.onDateChage } /> */}
+            onChange={ this.onDateChage } />
           
           {/* <Radio name='store_miles_reset' checked={ !store_reset } id='store_reset' onChange={ this.disableSchoolReset }>
             Never (Points will continue accumulating from last year)
