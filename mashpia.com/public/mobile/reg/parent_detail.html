@@ -243,7 +243,12 @@
 																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
 																	</div> -->
 																</div>
-															{{/if}}
+                                                            {{/if}}
+                                                            {{#if this.chayoleiRegistered}}
+                                                                <div class="button-spacing">
+                                                                    <div class="chidonRegInfo" style="color: #17771c">Registered for Chayolei TH {{ this.reg_year }}</div>
+                                                                </div>
+                                                            {{/if}}
 															<!--
 															{{#if this.chidon}}
 																{{#if this.chidonRegistered}}
@@ -631,8 +636,8 @@
                 });
 
                 $(document).on('click', '.lulav', function() {
-                    alert("Sorry, we are SOLD OUT!");
-                    //window.open("https://mashpia.com/mobile/reg/lulavSet.html");
+                    //alert("Sorry, we are SOLD OUT!");
+                    window.open("/mobile/reg/lulavSet.html");
                 });
             });
 		</script>
