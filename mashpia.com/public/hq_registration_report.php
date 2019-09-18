@@ -48,7 +48,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	</head>
 	
 	<body>
-        <h1>Registration Report</h1>
+        <h1>Registration Report <?= $year ?></h1>
         
         <table>
             <caption>Summary</caption>
