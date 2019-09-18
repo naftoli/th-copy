@@ -41,7 +41,7 @@ export class SettingsRow extends Component {
       print_parent_tasks, allow_parent_tasks,
     } = base;
 
-    const store_reset_jd = store_reset;
+    //const store_reset_jd = store_reset;
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     //console.log( store_reset );
     //console.log( store_reset_jd );
@@ -50,7 +50,7 @@ export class SettingsRow extends Component {
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
-    const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
+    //const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
 
     return (
       <Row id='SettingsRow'>
