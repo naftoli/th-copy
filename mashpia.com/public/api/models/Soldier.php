@@ -468,6 +468,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( !is_null( $amount ) ) {
             $this->registrationCharge( 'chidon', $amount, $trans_id );
         }
+        // make sure we have parent id
+        if ( !$parent_id ) {
+            $stmt = $MASHPIA_DB->prepare("
+                SELECT admin_id FROM admin_auths 
+                WHERE role_id = 1 AND id = :id
+            ");
+            $res = $stmt->execute([':id' => $this->user_id]);
+            if ( $res ) {
+                $row = $stmt->fetch();
+                $parent_id = $row['admin_id'];
+            }
+        }
 
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(

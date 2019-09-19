@@ -237,6 +237,12 @@ class UsersRouter {
         global $MASHPIA_DB;
 
         $soldier = \Soldier::find([ $_POST['user_id'] ]);
+        // make sure we have a class connected to student
+        if ( !$soldier->class_id ) {
+            json_error("Student needs to be assigned to a grade before he/she can be removed.");
+            return;
+        }
+
         $school_id = 612;
 
         // find current class grade
