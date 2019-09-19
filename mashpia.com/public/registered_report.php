@@ -51,7 +51,8 @@ if( isset($_GET['debug'])){
                     where rc.type = 'chayolei' 
                     and u.user_registered > 0 
                     and u.school_id = " . $id . " 
-                    and rc.year = " . $year;
+                    and rc.year = " . $year . " 
+                    order by class_grade, last, first";
             $result = mysql_query( $sql );
             while ( $row = mysql_fetch_assoc( $result ) ) {
                 $users[] = $row;
