@@ -29,8 +29,8 @@ $sql = "
         type IN ('yahadus' , 'chidon')
             AND rc.year = 5780
             AND rc.school_id = 269  
-            AND rc.date >= '2019-08-13 00:00:00' 
-            AND rc.date <= '2019-09-17 23:59:59'
+            AND rc.date >= '2019-06-01 00:00:00' 
+            AND rc.date <= '2019-08-12 23:59:59'
     GROUP BY rc.user_id
     ORDER BY first , last , date
 ";
