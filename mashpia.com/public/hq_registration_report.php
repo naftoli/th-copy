@@ -69,6 +69,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <table>
             <tr>
                 <th>School</th>
+                <th>Grade</th>
                 <th>Student</th>
                 <th>Type</th>
                 <th>Amount</th>
@@ -77,8 +78,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <?
             foreach ( $info as $row ) {
                 if ( $row['type'] == 'shipping' ) continue;
-                echo "<tr><td>" . $schools[$row['school_id']] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['type'] . "</td><td>" . $row['amount'] . 
-                    "</td><td>" . $row['date'] . "</td></tr>";
+                $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+                echo "<tr><td>" . $schools[$row['school_id']] . "</td><td> =" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . 
+                    $row['type'] . "</td><td>" . $row['amount'] . "</td><td>" . $row['date'] . "</td></tr>";
             }
             ?>
         </table>
