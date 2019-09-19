@@ -52,6 +52,7 @@ if( isset($_GET['debug'])){
                     and u.user_registered > 0 
                     and u.school_id = " . $id . " 
                     and rc.year = " . $year . " 
+                    group by u.user_id 
                     order by class_grade, class_sub, last, first";
             $result = mysql_query( $sql );
             while ( $row = mysql_fetch_assoc( $result ) ) {
