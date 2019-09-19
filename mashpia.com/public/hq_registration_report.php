@@ -11,7 +11,8 @@ if ( $admin_user['auth'] != 'super' ) {
 
 $info = [];
 $sql = "select * from registration_charges 
-        join users using (user_id) 
+        join users u using (user_id) 
+        join classes c on u.class_id = c.class_id 
         where year = " . $year;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
