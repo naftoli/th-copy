@@ -45,7 +45,7 @@ if( isset($_GET['debug'])){
         	//echo $id . '-' . $school . "<br />";
             // get users based on registration charges table 
             $users = [];
-            $sql = "select u.* from users u 
+            $sql = "select u.*, c.* from users u 
                     join classes c on u.class_id = c.class_id  
                     join registration_charges rc using (user_id) 
                     where rc.type = 'chayolei' 
