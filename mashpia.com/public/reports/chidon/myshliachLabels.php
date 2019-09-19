@@ -22,9 +22,6 @@ $sql = "
             JOIN
         users u USING (user_id)
             JOIN
-        th_chidon tc ON (tc.user_id = rc.user_id
-            AND tc.year = rc.year)
-            JOIN
         admin_auths aa ON aa.id = u.user_id
             JOIN
         admins a ON a.admin_id = aa.admin_id
