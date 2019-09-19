@@ -46,6 +46,7 @@ if( isset($_GET['debug'])){
             // get users based on registration charges table 
             $users = [];
             $sql = "select u.* from users u 
+                    join classes c using (class_id) 
                     join registration_charges rc using (user_id) 
                     where rc.type = 'chayolei' 
                     and u.user_registered > 0 
@@ -70,7 +71,7 @@ if( isset($_GET['debug'])){
             echo "<table>";
             echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th><th>Registered this year</th></tr>";
             foreach ( $users as $user ) {
-                if ( $user['user_registered'] < '2019-09-10' ) continue;
+                //if ( $user['user_registered'] < '2019-09-10' ) continue;
                 $grade = $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] );
                 echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] . 
                     "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
