@@ -25,6 +25,12 @@ $info = $stmt->fetchAll();
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Mivtzoim Settings</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
+        <style>
+            tr, th, td {
+                padding: 5px;
+                font-size: 14px;
+            }
+        </style>
     </head>
     <body>
         <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
