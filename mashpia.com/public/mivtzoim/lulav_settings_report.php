@@ -5,6 +5,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No permission to access this page.";
+    exit;
+}
+
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
