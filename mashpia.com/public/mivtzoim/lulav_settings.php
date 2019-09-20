@@ -42,6 +42,20 @@ if ( isset( $_POST['submit'] ) ) {
         $msg = "You must choose a school";
     }
 }
+
+$schoolList = implode(',', array_keys( $schools ));
+$stmt = $MASHPIA_DB->query("
+    SELECT 
+        school_id, school_name, allow_lulav, lulav_shipping
+    FROM
+        schools
+    WHERE
+        school_id IN ($schoolList)
+");
+$rows = $stmt->fetchAll();
+foreach ( $rows as $row ) {
+    $info[$row['school_id']] = $row;
+}
 ?>
 <!DOCTYPE html>
 <html>
