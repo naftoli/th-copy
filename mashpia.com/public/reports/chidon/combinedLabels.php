@@ -124,7 +124,7 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
 	<div class="no-print">
         <h1>Hachayol Report</h1>    
         <?php if ( !isset( $_POST['date'] ) ) : ?>
-        <form action="myshliachLabels.php" method="post">
+        <form action="combinedLabels.php" method="post">
             <select name="date">
                 <option value="0">Choose Batch Number</option>
                 <option value="1" 
