@@ -5,38 +5,54 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php'; 
 
-$info = [];
-$sql = "
-    SELECT 
-        u.first,
-        u.last,
-        a.admin_address1,
-        a.admin_address2,
-        a.admin_city,
-        a.admin_state,
-        a.admin_postal,
-        a.admin_country,
-        a.admin_email
-    FROM
-        registration_charges rc
-            JOIN
-        users u USING (user_id)
-            JOIN
-        admin_auths aa ON aa.id = u.user_id
-            JOIN
-        admins a ON a.admin_id = aa.admin_id
-    WHERE
-        type IN ('yahadus' , 'chidon')
-            AND rc.year = 5780
-            AND rc.school_id = 61 
-            AND rc.date >= '2019-08-13 00:00:00' 
-            AND rc.date <= '2019-09-17 23:59:59'
-    GROUP BY rc.user_id
-    ORDER BY first , last , date
-";
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-    $info[] = $row;
+if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+    if ( $_POST['date'] == 1 ) {
+        $from = '2019-06-01';
+        $to = '2019-08-12';
+    } else if ( $_POST['date'] == 2 ) {
+        $from = '2019-08-13';
+        $to = '2019-09-17';
+    } else if ( $_POST['date'] == 3 ) {
+        $from = '2019-09-18';
+        $to = '2019-09-25';
+    } else if ( $_POST['date'] == 4 ) {
+        $from = '2019-09-26';
+        $to = '2019-10-11';
+    } 
+
+    $info = [];
+    $sql = "
+        SELECT 
+            u.first,
+            u.last,
+            a.admin_address1,
+            a.admin_address2,
+            a.admin_city,
+            a.admin_state,
+            a.admin_postal,
+            a.admin_country,
+            a.admin_email
+        FROM
+            registration_charges rc
+                JOIN
+            users u USING (user_id)
+                JOIN
+            admin_auths aa ON aa.id = u.user_id
+                JOIN
+            admins a ON a.admin_id = aa.admin_id
+        WHERE
+            type IN ('yahadus' , 'chidon')
+                AND rc.year = 5780
+                AND rc.school_id in (61, 269) 
+                AND rc.date >= '" . $from . " 00:00:00' 
+                AND rc.date <= '" . $to . " 23:59:59'
+        GROUP BY rc.user_id
+        ORDER BY first , last , date
+    ";
+    $result = mysql_query( $sql );
+    while ( $row = mysql_fetch_assoc( $result ) ) {
+        $info[] = $row;
+    }
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
@@ -106,7 +122,27 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	<body>
 	<? include('admin_header.php'); ?>
 	<div class="no-print">
-        <h1>Hachayol Report</h1>        
+        <h1>Hachayol Report</h1>    
+        <?php if ( !isset( $_POST['date'] ) ) : ?>
+        <form action="combinedLabels.php" method="post">
+            <select name="date">
+                <option value="0">Choose Batch Number</option>
+                <option value="1" 
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                >1st Batch (until August 12)</option>
+                <option value="2"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                >2nd Batch (from August 13 until Sept 17)</option>
+                <option value="3"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                >3rd Batch (from Sept 18 to Sept 25)</option>
+                <option value="4"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                >3rd Batch (from Sept 26 to Oct 11)</option>
+            </select><br /><br />
+            <input type="submit" name="submit" value="submit" />
+        </form>
+        <?php else : ?>
             <div class='instructions'>
                 <b>Printing Instructions</b><br />
                 Set Scale to 90%<br />
@@ -153,5 +189,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 			}
 			?>
         </div>
+        <?php endif; ?>
 	</body>
 </html>
