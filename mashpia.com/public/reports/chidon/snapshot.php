@@ -106,11 +106,11 @@ $required = ['first_name', 'last_name', 'class', 'school'];
             <!-- <fieldset>
                 <legend>Choose the years:</legend>
                 <?php
-                for ($i = 5777; $i <= $chidonYear; $i++) {
-                    echo "<input type='checkbox' class='year' value='" . $i . "'";
-                    if ( $i == $chidonYear ) echo " checked='checked'";
-                    echo " /> " . $i . "<br />";
-                }
+                // for ($i = 5777; $i <= $chidonYear; $i++) {
+                //     echo "<input type='checkbox' class='year' value='" . $i . "'";
+                //     if ( $i == $chidonYear ) echo " checked='checked'";
+                //     echo " /> " . $i . "<br />";
+                // }
                 ?>
             </fieldset> -->
 
@@ -131,6 +131,9 @@ $required = ['first_name', 'last_name', 'class', 'school'];
         <div id="report"></div>
         
         <script>
+            var years = [<?=$chidonYear?>];
+            var ajaxData; // need to store data sent in ajax request for printed pages
+
             $(document).ready(function(){
                 $("#generate_csv").click(generate_csv);
                 $("#generate_report").click(generate_report);
@@ -140,9 +143,6 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 if ($("select#school_id").val()) {
                     generate_report();
                 }
-                
-                var years = [<?=$chidonYear?>];
-                var ajaxData; // need to store data sent in ajax request for printed pages
 
                 function generate_report() {
                     var school_id = $("select#school_id").val();
