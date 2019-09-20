@@ -1,7 +1,7 @@
 <?php $debug = false;
 /***************** DEBUGGING **********************/
 // enable debuging
-if ($_POST['debug']) {
+if (isset( $_POST['debug'] ) && $_POST['debug']) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -58,7 +58,6 @@ if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true'
     } else if ($options[1] && !$options[0]) { // show children not enrolled into cth or chidon
         $sql .= "and (u.user_registered = 0 or u.user_registered is null)"; 
     }
-
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $row['chidonReg'] = 0;
@@ -67,11 +66,11 @@ if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true'
 }
 
 /***************** LOAD DATA **********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . "/chidon/reports/class.reports.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/chidonOld/reports/class.reports.php";
 foreach( $years as $y ) {
     $r = new Reports( $y, $school_id );
     $qry = $r->createSql( $fields );
-    //echo $qry;
+    //echo $qry; exit;
     $users_query = mysql_query( $qry ) or die( mysql_error() );
 
     while( $row = mysql_fetch_assoc($users_query) ) {
