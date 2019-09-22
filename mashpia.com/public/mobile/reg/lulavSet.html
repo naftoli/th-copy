@@ -121,32 +121,32 @@
                             <h2>Checkout</h2>
                             <div class="form-group">
                                 <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-                                <input id="cc-first" name="cc-first" type="tel" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
+                                <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-                                <input id="cc-last" name="cc-last" type="tel" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+                                <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
-                                <input id="cc-number" name="cc-number" type="tel" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
+                                <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
-                                <input id="cc-exp" name="cc-exp" type="tel" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+                                <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
                                 <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
                             </div>
                             <label for="x_card_code" class="control-label mb-1">Security code</label>
                             <div class="form-group">
-                                <input id="x_card_code" name="x_card_code" type="tel" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+                                <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
                                 <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
-                                <input id="zip" name="zip" type="tel" class="form-control" placeholder="XXXXX" maxlength="12" required />
+                                <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
                                 <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
                             </div>
                         </div>
