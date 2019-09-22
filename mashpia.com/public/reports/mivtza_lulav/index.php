@@ -1,5 +1,5 @@
 <?php
-$admin_auth = array(); 	
+$admin_auth = ['school']; 	
 require_once ( __DIR__ . '/../../header.php' ); 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
