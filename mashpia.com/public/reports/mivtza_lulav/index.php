@@ -57,7 +57,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1 class="no-print"><?=$year?> Lulav Purchases</h1>
+    <?php if ( $admin_user['auth'] == 'super' ) : ?>
     <p class="no-print">Grand Total: <?= $total ?></p>
+    <?php endif; ?>
     <?php foreach ( $info as $school => $users ) : ?>
         <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
         <table>
