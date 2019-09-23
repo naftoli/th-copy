@@ -28,7 +28,7 @@ use raffles\weekly\Prize as Prize; // use the prizes for the prize form under th
 if (!isset($_GET['action']) && !isset($_POST['action'])){ // if there is no action
     $action = "list"; // default action
 } else { // action was provided
-    $action = ($_POST['action'] ? $_POST['action'] : $_GET['action']); // prefer the post action
+    $action = (isset($_POST['action']) ? $_POST['action'] : $_GET['action']); // prefer the post action
 }
 /*********** DEBUGGING **********************/
 if($debug) echo "<pre>"; // if this is in debug mode, preformmat this whole section
@@ -152,7 +152,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
             <form method="POST" action="<? echo htmlspecialchars($_SERVER["PHP_SELF"]); echo $debug ? "?debug=true" : ""; // remove params from url and add debug to perssist debug mode?>">
                 <input name="action" value="create" type="hidden"/>
                 <div class="input_group input_half">
-                    <label>Name*: <input type="text" name="name" value="<?=$raffle->name?>" required/></label>
+                    <label>Name*: <input type="text" name="name" required/></label>
                 </div>
                 <div class="input_group input_half">
                     Type*:

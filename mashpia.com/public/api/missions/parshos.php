@@ -26,8 +26,8 @@ class ParshaRouter {
         $dates = GlobalSettings::getCurYearDates();
         $parshos = Parsha::all([
             'conditions' => [
-                'start > ' . $dates['start'], 
-                'end > ' . $dates['end']
+                'start >= ' . $dates['start'], 
+                'end >= ' . $dates['end']
             ]
         ]);
 
