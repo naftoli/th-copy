@@ -245,6 +245,7 @@ class UserRegistrationRouter {
                                 Wishing you Much Hatzlocho!
                                 <br /><br />
                                 For any questions throughout the duration of the Chidon Zman please be in touch with your Chidon Coordinator at MyShliach.";
+                                $headers[] = "Cc: chidon@myshliach.com";
                             }
 
                             $to = $current_user->admin_email;
