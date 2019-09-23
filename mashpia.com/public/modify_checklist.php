@@ -185,7 +185,7 @@ while ($row = mysql_fetch_assoc($result)) {
                     <br />
                     <fieldset>
                         <legend>Select Week(s)</legend>
-                        <p><i>Option #1 - Choose from a predefined set of weeks</i></p>
+                        <!-- <p><i>Option #1 - Choose from a predefined set of weeks</i></p>
                         <p>
                             <!-- <input type="radio" name="weeks" value="set6" class='radio' />Summer 5777<br /> -->
                             <input type="radio" name="weeks" value="set1" class='radio' />1st 11 weeks of year (פרשת כִּי-תָבוֹא - תּוֹלְדֹת)<br />
@@ -197,7 +197,7 @@ while ($row = mysql_fetch_assoc($result)) {
                         <hr />
                         <p><i>Option #2 - Choose your own weeks
                             <!-- Please note: You can only choose up to a 10 week period.-->
-                            </i></p>
+                            </i></p> -->
                         From beginning of: <select name='from' id='from'>
                         <?
                         $today = unixtojd();
@@ -238,7 +238,7 @@ while ($row = mysql_fetch_assoc($result)) {
                  <form action="mission_sheets_checklist.php" method="post" onsubmit="return checkDates()">                    
                      <fieldset>
                             <legend>Select Week(s)</legend>
-                            <p><i>Option #1 - Choose from a predefined set of weeks</i></p>
+                            <!-- <p><i>Option #1 - Choose from a predefined set of weeks</i></p>
                             <p>
                                 <!--<input type="radio" name="weeks" value="set6" class='radio' />Summer 5777<br />-->
                                 <input type="radio" name="weeks" value="set1" class='radio' />1st 11 weeks of year (פרשת נִצָּבִים - תּוֹלְדֹת)<br />
@@ -249,7 +249,7 @@ while ($row = mysql_fetch_assoc($result)) {
                             </p>
                             <hr />
                             <p><i>Option #2 - Choose your own weeks<br />
-                                Please note: You can only choose up to a 10 week period.</i></p>
+                                Please note: You can only choose up to a 10 week period.</i></p> -->
                             From beginning of: <select name='from' id='from'>
                             <?
                             $today = unixtojd();
