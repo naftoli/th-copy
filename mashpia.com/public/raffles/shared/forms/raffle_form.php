@@ -58,6 +58,9 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         $error .= "Type is invalid<br/>";
         $valid = false;
     }
+    // find out year
+    $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
+    $raffle_props['year'] = $arrYear[2];
     /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
     if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
         $error .= "Run Date must be on a Wendsday<br/>";
@@ -152,7 +155,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
             <form method="POST" action="<? echo htmlspecialchars($_SERVER["PHP_SELF"]); echo $debug ? "?debug=true" : ""; // remove params from url and add debug to perssist debug mode?>">
                 <input name="action" value="create" type="hidden"/>
                 <div class="input_group input_half">
-                    <label>Name*: <input type="text" name="name" required/></label>
+                    <label>Name*: <input type="text" name="name" value="<?=$raffle->name?>" required/></label>
                 </div>
                 <div class="input_group input_half">
                     Type*:
