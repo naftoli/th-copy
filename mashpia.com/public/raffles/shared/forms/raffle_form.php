@@ -28,7 +28,7 @@ use raffles\weekly\Prize as Prize; // use the prizes for the prize form under th
 if (!isset($_GET['action']) && !isset($_POST['action'])){ // if there is no action
     $action = "list"; // default action
 } else { // action was provided
-    $action = ($_POST['action'] ? $_POST['action'] : $_GET['action']); // prefer the post action
+    $action = (isset($_POST['action']) ? $_POST['action'] : $_GET['action']); // prefer the post action
 }
 /*********** DEBUGGING **********************/
 if($debug) echo "<pre>"; // if this is in debug mode, preformmat this whole section
@@ -58,6 +58,9 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         $error .= "Type is invalid<br/>";
         $valid = false;
     }
+    // find out year
+    $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
+    $raffle_props['year'] = $arrYear[2];
     /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
     if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
         $error .= "Run Date must be on a Wendsday<br/>";

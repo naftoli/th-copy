@@ -26,6 +26,7 @@ export class SettingsRow extends Component {
     this.props.onUpdate({ store_reset });
     this.setState({ disabled: true });
   }
+<<<<<<< HEAD
 
    enableSchoolReset = event => {
      const store_reset = event.target.value;
@@ -33,7 +34,14 @@ export class SettingsRow extends Component {
      this.setState({ disabled: false });
    }
 
+=======
+>>>>>>> 53ca737ec8e3186b08ba31a499a2dd3b082f76c8
 
+  enableSchoolReset = event => {
+    const store_reset = event.target.value;
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: false });
+  }
 
   render () {
     const { base } = this.props;
@@ -41,8 +49,6 @@ export class SettingsRow extends Component {
       pic_mission_type, store_reset, school_gender,
       print_parent_tasks, allow_parent_tasks,
     } = base;
-
-
 
     //let store_reset_jd = store_reset;
 
@@ -132,14 +138,22 @@ export class SettingsRow extends Component {
 
           <Radio value={ toJulian( moment() ) } onChange={ this.disableSchoolReset }
            { ...storeResetProps }
+<<<<<<< HEAD
            checked={ store_reset !== '0' && store_reset !== '2458733' && store_reset !== '2458663' }
+=======
+           checked={ store_reset === toString( toJulian( moment() ) ) }
+>>>>>>> 53ca737ec8e3186b08ba31a499a2dd3b082f76c8
           >
             Custom Date:
           </Radio>
           <br />
 
           <Date value={ julian.toDate( store_reset ) }
+<<<<<<< HEAD
             disabled={ this.state.disabled }
+=======
+            disabled = { this.state.disabled }
+>>>>>>> 53ca737ec8e3186b08ba31a499a2dd3b082f76c8
             onChange={ this.onDateChage } />
 
           {/* <Date value={ store_reset }
