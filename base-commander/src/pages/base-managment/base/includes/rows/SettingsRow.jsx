@@ -123,8 +123,8 @@ export class SettingsRow extends Component {
             Custom Date:
           </Radio>
 
-          <Date value={ store_reset === '0' ? julian.toDate( toJulian( moment() ) ) : julian.toDate( store_reset ) }
-            disabled = { this.state.disabled }
+          <Date value={ julian.toDate( toJulian( moment() ) ) }
+            //disabled = { this.state.disabled }
             onChange={ this.onDateChage } />
 
           {/* <Date value={ store_reset }
