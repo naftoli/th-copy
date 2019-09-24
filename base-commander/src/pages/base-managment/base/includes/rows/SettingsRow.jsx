@@ -18,19 +18,9 @@ export class SettingsRow extends Component {
   handleCheckbox = onCheckboxChange( this.props.onUpdate );
   onNumberChange = onNumberChange( this.props.onUpdate );
 
-  onDateChage = date =>
+  onDateChage = date => {
     this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
-
-  disableSchoolReset = () => {
-    const store_reset = this.props.base.store_reset > 0 ? 0 : toJulian( moment() );
-    this.props.onUpdate({ store_reset });
-    this.setState({ disabled: true });
-  }
-
-  enableSchoolReset = event => {
-    const store_reset = event.target.value;
-    this.props.onUpdate({ store_reset });
-    this.setState({ disabled: false });
+    //this.setState({ disabled: false });
   }
 
   render () {
@@ -117,10 +107,11 @@ export class SettingsRow extends Component {
           >
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
+          <br />
 
           <Radio value='0' 
             { ...storeResetProps }
-            checked={ store_reset === '0' }
+            checked={ store_reset === '0' } 
           >
             Never (This includes all miles from previous years)
           </Radio>
@@ -128,13 +119,11 @@ export class SettingsRow extends Component {
 
           <Radio value={ toJulian( moment() ) }
            { ...storeResetProps }
-           checked={ store_reset === toString( toJulian( moment() ) ) }
           >
             Custom Date:
           </Radio>
-          <br />
 
-          <Date value={ julian.toDate( store_reset ) }
+          <Date value={ store_reset === '0' ? julian.toDate( toJulian( moment() ) ) : julian.toDate( store_reset ) }
             disabled = { this.state.disabled }
             onChange={ this.onDateChage } />
 
