@@ -27,7 +27,7 @@ foreach ( $info as $user => $rows ) {
             }
             $date->add( new DateInterval("P1D") );
             $sql = "udpate registration_charges set date = '" . $date->format('Y-m-d H:i:s') . "' where registration_charge_id = " . $row['registration_charge_id'];
-            mysql_query( $sql );
+            mysql_query( $sql ) or die( mysql_error() );
         }
     }
 }
@@ -40,4 +40,4 @@ echo "done.";
 //         mysql_query( $sql );
 //     }
 // }
-echo "done.";
+// echo "done.";
