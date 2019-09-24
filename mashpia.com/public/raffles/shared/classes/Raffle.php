@@ -148,6 +148,7 @@ class Raffle {
         
         // compute the keys to insert
         $sql = "INSERT INTO raffles (". implode(", ", $insert_column_keys) .") VALUES (".implode(", ", $insert_column_values).");"; // generate the sql
+        //echo $sql; exit;
         $query  = mysql_query($sql); // returns false if an error happens
         
         if($query){ // if it was inserted
