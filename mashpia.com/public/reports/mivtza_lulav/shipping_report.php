@@ -262,7 +262,7 @@ $booklet_grand_totals = [
             echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
         }
         ?> 
-    </table> 
+    </table>
     <?php endif; ?>
 </body>
 </html>
