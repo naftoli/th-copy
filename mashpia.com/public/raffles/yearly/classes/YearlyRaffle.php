@@ -17,7 +17,7 @@ class YearlyRaffle {
     private $year;
     // ends on lag baomer
     // private $deadline = 2458243; // 5778, May 4 2018
-    private $deadline = 2458994; // 5779, May 25 2019
+    private $deadline = 2458994; // 5779, May 25 2020
     private $start = 2458726;
     
     public $eligibility;
