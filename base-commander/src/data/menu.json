@@ -145,7 +145,8 @@
         "items": [
           { "label": "Marking", "legacy": true, "path": "/mivtzoim" },
           { "label": "Reports", "legacy": true, "path": "/mivtzoim/reports" }, 
-          { "label": "Mivtza Lulav Settings", "legacy": true, "path": "/mivtzoim/lulav_settings.php" }
+          { "label": "Mivtza Lulav Settings", "legacy": true, "path": "/mivtzoim/lulav_settings.php" }, 
+          { "label": "Mivtza Lulav Report", "legacy": true, "path": "/reports/mivtza_lulav/" }
         ]
       }, 
       { "label": "TH Drive", "module": "chayolei", 
