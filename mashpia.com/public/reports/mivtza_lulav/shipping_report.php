@@ -3,67 +3,27 @@ $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' ); 
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getRegistrationYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
-if ( isset( $_POST['date'] ) && $_POST['date'] ) {
-    if ( $_POST['date'] == 1 ) {
-        $from = '2019-06-01';
-        $to = '2019-08-12';
-    } else if ( $_POST['date'] == 2 ) {
-        $from = '2019-08-13';
-        $to = '2019-09-17';
-    } else if ( $_POST['date'] == 3 ) {
-        $from = '2019-09-18';
-        $to = '2019-09-25';
-    } else if ( $_POST['date'] == 4 ) {
-        $from = '2019-09-26';
-        $to = '2019-10-11';
-    } 
-}
-
 $combined_users = [];
-$qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book "
-    ."FROM registration_charges rc JOIN schools s USING (school_id) "
-    ."JOIN users USING (user_id) " 
-    ."JOIN classes c ON c.class_id = users.class_id " 
-    ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
-    ."WHERE type in ('chidon', 'yahadus') " 
-    ."AND rc.year = $year ";
-// limit to dates if limit exists
-if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
-    $from = mysql_real_escape_string( $_POST['fromDate'] );
-    $to = mysql_real_escape_string( $_POST['toDate'] );
-}
-if ( isset( $from ) && isset( $to ) ) {
-    $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
-}
-$qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
-$qry .= "GROUP BY rc.user_id ORDER BY school_name, first, last, date";
-//echo $qry; exit;
-$booklet_users_query = mysql_query( $qry );
-while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
+
+$shipping_sql = "SELECT DISTINCT a.school_name, c.first, c.last, a.school_address1, a.school_address2, a.school_city, a.school_state, ";
+$shipping_sql .= "a.school_country, a.school_postal, a.lulav_shipping, d.users ";
+$shipping_sql .= "FROM schools a ";
+$shipping_sql .= "INNER JOIN admin_auths b ON a.school_id = b.id ";
+$shipping_sql .= "INNER JOIN admins c ON c.admin_id = b.id ";
+$shipping_sql .= "INNER JOIN lulav_purchases d ON d.admin_id = b.id ";
+$shipping_sql .= "WHERE b.position = 'Base Commander' AND d.year = $year ";
+$shipping_sql .= "AND a.school_id in (" . implode(',', array_keys($schools)) . ") ";
+$shipping_query = mysql_query( $shipping_sql );
+while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     $combined_users[$row['school_id']][] = $row;
 }
 
-$book_grand_totals = [
-    1   =>  0,
-    2   =>  0,
-    3   =>  0, 
-    4   =>  0, 
-    5   =>  0
-];
-
-$booklet_grand_totals = [
-    1   =>  0,
-    2   =>  0,
-    3   =>  0, 
-    4   =>  0, 
-    5   =>  0
-];
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,57 +40,13 @@ $booklet_grand_totals = [
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1>Chidon Combined Report</h1>
+    <h1>Lulav Shipping Report</h1>
     <form action="combined.php" method="post">
-        <p>
-            To have report based on dates, choose starting and ending dates and then click "Refresh Report"
-        </p>  
-        <p>
-            <select name="date">
-                <option value="0">Choose Batch Number</option>
-                <option value="1" 
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                >1st Batch (until August 12)</option>
-                <option value="2"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                >2nd Batch (from August 13 until Sept 17)</option>
-                <option value="3"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sept 18 to Sept 25)</option>
-                <option value="4"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                >3rd Batch (from Sept 26 to Oct 11)</option>
-            </select>
-        </p>
-        <p>  
-            OR 
-            From Date: <input type="date" name="fromDate" /> 
-            To Date: <input type="date" name="toDate" />
-        </p>
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
     <div style="page-break-after: always;"></div>
     <?php
-        $totals = [];
         foreach( $combined_users as $school_id => $users ) {
-            $totals[$school_id]['booklets'] = 0;
-            $totals[$school_id]['books'] = 0;
-
-            $book_totals = [
-                1   =>  0,
-                2   =>  0,
-                3   =>  0, 
-                4   =>  0, 
-                5   =>  0
-            ];
-
-            $booklet_totals = [
-                1   =>  0,
-                2   =>  0,
-                3   =>  0, 
-                4   =>  0, 
-                5   =>  0
-            ];
             $base = $users[0]; 
             $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" . 
                 $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
@@ -138,17 +54,12 @@ $booklet_grand_totals = [
             <h2><?=$base[ 'school_name' ]?></h2>
             Shipping Type: <?= $base['shipping_method'] ?><br /><br />
             <?= $school_address ?><br /><br />
-            <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
-            Principal Email: <?= $base['principal_email'] ?>
+            Base Commander: <?= $base['first'] .' '.['last'] ?>
             <table>
                 <thead>
                     <tr>
-                        <th>First</th>
-                        <th>Last</th>
                         <th>Grade</th>
-                        <th>Study Guide #</th>
-                        <th>Book #</th>
-                        <th>Date Purchased</th>
+                        <th>Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,111 +69,23 @@ $booklet_grand_totals = [
                             //if ( !$schoolTransitioned ) $grade++;
                             ?>
                             <tr>
-                                <td><?= $user[ 'first' ]; ?></td>
-                                <td><?= $user[ 'last' ]; ?></td>
                                 <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-                                <td><?= $user['book']; ?></td>
-                                <td><?= $user['total'] > 1 ? $user['book'] : '' ?></td>
-                                <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
+                                <td><?= $user[ 'first' ] .' ' .$user[ 'last' ]; ?></td>
                             </tr>
-                            <?php 
-                            // totals of school
-                            $booklet_totals[$user['book']]++;
-                            // totals per school
-                            $totals[$school_id]['booklets']++;
-                            // grand totals
-                            $booklet_grand_totals[$user['book']]++;
-                            // add to book totals if we have more than one entry for this student
-                            if ( $user['total'] > 1 ) {
-                                $book_totals[$user['book']]++;
-                                $totals[$school_id]['books']++;
-                                $book_grand_totals[$user['book']]++;
-                            }
                         }
                     ?>
                 </tbody>
             </table>
             <div style="page-break-after: always;"></div>
             <h2>Total Study Guides for <?=$base['school_name'];?></h2>
-            <table>
-                <tr>
-                    <th>Study Guide #</th>
-                    <th>Total</th>
-                </tr>
-                <?php
-                foreach ( $booklet_totals as $booklet => $total ) {
-                    echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
-                }
-                ?>
-            </table>
-            <h2>Total Books for <?=$base['school_name'];?></h2>
-            <table>
-                <tr>
-                    <th>Book #</th>
-                    <th>Total</th>
-                </tr>
-                <?php
-                foreach ( $book_totals as $book => $total ) {
-                    echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
-                }
-                ?>
-            </table>
+
             <br /><br />
             Shipping Type: <?= $base['shipping_method'] ?><br /><br />
             <?= $school_address ?><br /><br />
-            <?= $base['shipping_requests'] ? $base['shipping_requests'] . "<br /><br />" : ''; ?>
-            Principal Email: <?= $base['principal_email'] ?>
+            Base Commander: <?= $base['first'] .' '.['last'] ?>
             <div style="page-break-after: always;"></div>
         <?php
         } 
     ?>
-    <h2>Totals</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Base</th>
-                <th># of Study Guides</th>
-                <th># of Books</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ( $totals as $school_id => $total ) {
-                ?>
-                <tr>
-                    <td><?= $schools[$school_id] ?></td>
-                    <td><?= $total['booklets'] ?></td>
-                    <td><?= $total['books'] ?></td>
-                </tr>
-            <?php 
-            } 
-        ?>
-        </tbody>
-    </table>
-    <?php if ($admin_user['auth'] == 'super') : ?>
-    <h2>Grand Totals</h2>
-    <table>
-        <tr>
-            <th>Study Guide #</th>
-            <th>Grand Total</th>
-        </tr>
-        <?php
-        foreach ( $booklet_grand_totals as $booklet => $total ) {
-            echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
-        }
-        ?>
-    </table>
-    <table>
-        <tr>
-            <th>Book #</th>
-            <th>Grand Total</th>
-        </tr>
-        <?php
-        foreach ( $book_grand_totals as $book => $total ) {
-            echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
-        }
-        ?> 
-    </table>
-    <?php endif; ?>
 </body>
 </html>
