@@ -1,32 +1,43 @@
 <?php
-$admin_auth = array('school'); 	
-require_once ( __DIR__ . '/../../header.php' ); 
+ini_set('display_errors', 1);
 
-require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
+
+$admin_auth = array('school'); 	
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php'; 
 $year = GlobalSettings::getRegistrationYear();
 
-require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php'; 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
 $combined_users = [];
 
-$shipping_sql = "SELECT DISTINCT a.school_name, c.first, c.last, a.school_address1, a.school_address2, a.school_city, a.school_state, ";
-$shipping_sql .= "a.school_country, a.school_postal, a.lulav_shipping, d.users ";
-$shipping_sql .= "FROM schools a ";
-$shipping_sql .= "INNER JOIN admin_auths b ON a.school_id = b.id ";
-$shipping_sql .= "INNER JOIN admins c ON c.admin_id = b.id ";
-$shipping_sql .= "INNER JOIN lulav_purchases d ON d.admin_id = b.id ";
-$shipping_sql .= "WHERE b.position = 'Base Commander' AND d.year = $year ";
-$shipping_sql .= "AND a.school_id in (" . implode(',', array_keys($schools)) . ") ";
+
+$users_sql = "SELECT users FROM lulav_purchases WHERE year = $year";
+$user_query = mysql_query( $users_sql );
+while ( $row = mysql_fetch_assoc( $user_query ) ) {
+    $users[] = $row['users'];
+}
+
+$shipping_sql = "SELECT s.*, e.class_grade, e.class_sub, b.first, b.last, c.users ";
+$shipping_sql .= "FROM schools s ";
+$shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id AND a.position = 'Base Commander' ";
+$shipping_sql .= "JOIN admins b ON b.admin_id = a.id ";
+$shipping_sql .= "JOIN users d ON d.school_id = s.school_id AND ";
+$shipping_sql .= "JOIN classes e ON e.class_id = d.class_id ";
+$shipping_sql .= "WHERE s.school_id IN (" . implode(',', array_keys($schools)) . ") d.user_id IN (" . implode(',', $users) . ") ";
+$shipping_sql .= "GROUP BY d.user_id ";
+$shipping_sql .= "ORDER BY school_name, d.last, d.first";
 $shipping_query = mysql_query( $shipping_sql );
 while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     $combined_users[$row['school_id']][] = $row;
 }
-
+echo '<pre>' . print_r($combined_users) . '</pre>';
 ?>
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html>  
+<html> 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,53 +50,56 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     </style>
 </head>
 <body>
-    <?php include( __DIR__ . '/../../admin_header.php'); ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
     <h1>Lulav Shipping Report</h1>
-    <form action="combined.php" method="post">
-        <input type="submit" name="submit" value="Refresh Report" />
-    </form>
-    <div style="page-break-after: always;"></div>
     <?php
-        foreach( $combined_users as $school_id => $users ) {
-            $base = $users[0]; 
-            $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" . 
-                $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
-            ?>
-            <h2><?=$base[ 'school_name' ]?></h2>
-            Shipping Type: <?= $base['shipping_method'] ?><br /><br />
-            <?= $school_address ?><br /><br />
-            Base Commander: <?= $base['first'] .' '.['last'] ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Grade</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        foreach( $users as $user ) { 
-                            $grade = $user['class_grade'];
-                            //if ( !$schoolTransitioned ) $grade++;
-                            ?>
-                            <tr>
-                                <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-                                <td><?= $user[ 'first' ] .' ' .$user[ 'last' ]; ?></td>
-                            </tr>
-                        }
-                    ?>
-                </tbody>
-            </table>
-            <div style="page-break-after: always;"></div>
-            <h2>Total Study Guides for <?=$base['school_name'];?></h2>
+    foreach( $combined_users as $school_id => $users ) {
+        $base = $users[0]; 
+        $school_address = $base['first'] . ' ' . 
+                          $base['last'] . "<br />" . 
+                          $base['school_address1'] . ' ' . 
+                          $base['school_address2'] . "<br />" . 
+                          $base['school_city'] . ', ' . 
+                          $base['school_state'] . ' ' . 
+                          $base['school_country'] . "<br />" . 
+                          $base['school_postal'];
 
-            <br /><br />
-            Shipping Type: <?= $base['shipping_method'] ?><br /><br />
-            <?= $school_address ?><br /><br />
-            Base Commander: <?= $base['first'] .' '.['last'] ?>
-            <div style="page-break-after: always;"></div>
-        <?php
-        } 
+    
+    ?>
+    <h2><?=$base['school_name']; ?></h2>
+
+    <?php if ($base['lulav_shipping'] > 0) { ?>
+        Shipping Type: Shipping <br /><br />
+    <?php } else { ?>
+        Shipping Type: Pickup <br /><br />
+    <?php } ?>
+
+    <?=$school_address; ?><br /><br />
+
+    <table>
+        <thead>
+            <tr>
+                <th>Grade</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach( $users as $user ) { 
+                $grade = $user['class_grade'];
+                ?>
+                <tr>
+                    <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
+                    <td><?= $user[ 'first' ] .' ' .$user[ 'last' ]; ?></td>
+                </tr>
+            }
+            ?>
+        </tbody>
+    </table>
+
+
+    <?php
+    }
     ?>
 </body>
 </html>
