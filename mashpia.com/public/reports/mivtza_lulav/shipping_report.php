@@ -126,7 +126,7 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
             ?>
         </tbody>
     </table>
-    
+    <div style="page-break-after: always;"></div>    
 
     <?php
     }
