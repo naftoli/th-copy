@@ -9,7 +9,7 @@ require 'header.php';
   integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
   crossorigin="anonymous"></script>
     <script>
-        var id = 615;
+        var id = 613;
         var type = 'school';
         $.post('ajax/enrollIntoCampaigns.php', { id: id, type : type });
     </script>
