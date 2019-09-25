@@ -100,7 +100,7 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
         Shipping Type: Pickup <br /><br />
     <?php } ?>
 
-    Total Sets Purchases: <?= $total ?><br />
+    Total Sets Purchases: <?= $total ?><br /><br />
     <?=$school_address; ?><br /><br />
 
     <table>
