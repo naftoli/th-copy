@@ -18,23 +18,50 @@ $combined_users = [];
 $users_sql = "SELECT users FROM lulav_purchases WHERE year = $year";
 $user_query = mysql_query( $users_sql );
 while ( $row = mysql_fetch_assoc( $user_query ) ) {
-    $users[] = $row['users'];
+    if ( strpos($row['users'], ',') ) {
+        $temp = explode(',', $row['users']);
+        foreach ( $temp as $user ) $users[] = $user;
+    } else {
+        $users[] = $row['users'];
+    }
 }
 
-$shipping_sql = "SELECT s.*, e.class_grade, e.class_sub, b.first, b.last, c.users ";
+// // we have list of users, and need to get the school info / base commander info
+// $sql = "
+//     SELECT 
+//         u.user_id, u.first AS uFirst, u.last AS uLast, s.*, a.*, c.*
+//     FROM
+//         schools s
+//             JOIN
+//         admin_auths aa ON aa.id = s.school_id
+//             JOIN
+//         admins a USING (admin_id)
+//             JOIN
+//         users u ON u.school_id = s.school_id
+//             JOIN
+//         classes c ON u.class_id = c.class_id
+//     WHERE
+//         u.user_id IN (" . implode(',', $users) . ") 
+//     GROUP BY 
+//         u.user_id
+//     ORDER BY 
+//         s.school_name, c.class_grade, c.class_sub, u.last, u.first
+// ";
+
+
+$shipping_sql = "SELECT s.*, e.class_grade, e.class_sub, b.first, b.last, d.first as uFirst, d.last as uLast ";
 $shipping_sql .= "FROM schools s ";
 $shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id AND a.position = 'Base Commander' ";
 $shipping_sql .= "JOIN admins b ON b.admin_id = a.id ";
-$shipping_sql .= "JOIN users d ON d.school_id = s.school_id AND ";
+$shipping_sql .= "JOIN users d ON d.school_id = s.school_id ";
 $shipping_sql .= "JOIN classes e ON e.class_id = d.class_id ";
-$shipping_sql .= "WHERE s.school_id IN (" . implode(',', array_keys($schools)) . ") d.user_id IN (" . implode(',', $users) . ") ";
+$shipping_sql .= "WHERE d.user_id IN (" . implode(',', $users) . ") ";
 $shipping_sql .= "GROUP BY d.user_id ";
-$shipping_sql .= "ORDER BY school_name, d.last, d.first";
+$shipping_sql .= "ORDER BY school_name, e.class_grade, e.class_sub, d.last, d.first";
 $shipping_query = mysql_query( $shipping_sql );
 while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     $combined_users[$row['school_id']][] = $row;
 }
-echo '<pre>' . print_r($combined_users) . '</pre>';
 ?>
 <!DOCTYPE html>  
 <html> 
@@ -54,6 +81,7 @@ echo '<pre>' . print_r($combined_users) . '</pre>';
     <h1>Lulav Shipping Report</h1>
     <?php
     foreach( $combined_users as $school_id => $users ) {
+        $total = count( $users );
         $base = $users[0]; 
         $school_address = $base['first'] . ' ' . 
                           $base['last'] . "<br />" . 
@@ -74,6 +102,7 @@ echo '<pre>' . print_r($combined_users) . '</pre>';
         Shipping Type: Pickup <br /><br />
     <?php } ?>
 
+    Total Sets Purchases: <?= $total ?><br />
     <?=$school_address; ?><br /><br />
 
     <table>
@@ -90,13 +119,14 @@ echo '<pre>' . print_r($combined_users) . '</pre>';
                 ?>
                 <tr>
                     <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-                    <td><?= $user[ 'first' ] .' ' .$user[ 'last' ]; ?></td>
+                    <td><?= $user[ 'uFirst' ] .' ' .$user[ 'uLast' ]; ?></td>
                 </tr>
+            <?php
             }
             ?>
         </tbody>
     </table>
-
+    
 
     <?php
     }
