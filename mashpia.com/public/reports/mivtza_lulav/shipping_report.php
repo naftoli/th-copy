@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-
-
 $admin_auth = array('school'); 	
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
 
@@ -13,7 +10,6 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 $combined_users = [];
-
 
 $users_sql = "SELECT users FROM lulav_purchases WHERE year = $year";
 $user_query = mysql_query( $users_sql );
@@ -48,11 +44,10 @@ while ( $row = mysql_fetch_assoc( $user_query ) ) {
 //         s.school_name, c.class_grade, c.class_sub, u.last, u.first
 // ";
 
-
 $shipping_sql = "SELECT s.*, e.class_grade, e.class_sub, b.first, b.last, d.first as uFirst, d.last as uLast ";
 $shipping_sql .= "FROM schools s ";
 $shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id AND a.position = 'Base Commander' ";
-$shipping_sql .= "JOIN admins b ON b.admin_id = a.id ";
+$shipping_sql .= "JOIN admins b USING (admin_id)  ";
 $shipping_sql .= "JOIN users d ON d.school_id = s.school_id ";
 $shipping_sql .= "JOIN classes e ON e.class_id = d.class_id ";
 $shipping_sql .= "WHERE d.user_id IN (" . implode(',', $users) . ") ";
@@ -74,11 +69,14 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     <style>
         table { width: 100%; }
         th, td { border: 1px solid #888; padding: 4px 8px; }
+        @media print {
+            .no-print { display: none; }
+        }
     </style>
 </head>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
-    <h1>Lulav Shipping Report</h1>
+    <h1 class="no-print">Lulav Shipping Report</h1>
     <?php
     foreach( $combined_users as $school_id => $users ) {
         $total = count( $users );
@@ -126,8 +124,7 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
             ?>
         </tbody>
     </table>
-    
-
+    <div style='page-break-after: always'></div>
     <?php
     }
     ?>
