@@ -138,7 +138,7 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
                 >3rd Batch (from Sept 18 to Sept 25)</option>
                 <option value="4"
                 <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                >3rd Batch (from Sept 26 to Oct 11)</option>
+                >4th Batch (from Sept 26 to Oct 11)</option>
             </select><br /><br />
             <input type="submit" name="submit" value="submit" />
         </form>

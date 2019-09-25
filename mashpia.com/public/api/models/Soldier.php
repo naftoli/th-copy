@@ -325,6 +325,23 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
         // set default year.
         $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonYear() : GlobalSettings::getRegistrationYear( $this->school_id );
+        // make sure we don't already have such a registration charge in system - avoid duplication
+        $check_qry = $MASHPIA_DB->prepare("
+            SELECT 
+                *
+            FROM
+                registration_charges
+            WHERE
+                user_id = :id AND year = :year
+                    AND type = :type
+        ");
+        $check_qry->execute([
+            ':id'   =>  $this->user_id, 
+            ':year' =>  $year, 
+            ':type' =>  $type
+        ]);
+        $rows = $check_qry->fetchAll();
+        if ( count( $rows ) > 0 ) return true;
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
