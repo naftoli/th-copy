@@ -11,42 +11,23 @@ $schools = $as->getSchools();
 
 $combined_users = [];
 
-$users_sql = "SELECT users FROM lulav_purchases WHERE year = $year";
+$users = [];
+$users_sql = "SELECT users FROM lulav_purchases WHERE year = " . $year;
 $user_query = mysql_query( $users_sql );
 while ( $row = mysql_fetch_assoc( $user_query ) ) {
     if ( strpos($row['users'], ',') ) {
         $temp = explode(',', $row['users']);
-        foreach ( $temp as $user ) $users[] = $user;
+        foreach ( $temp as $user ) {
+            if ( is_numeric( $user ) ) $users[] = $user;
+        }
     } else {
         $users[] = $row['users'];
     }
 }
 
-// // we have list of users, and need to get the school info / base commander info
-// $sql = "
-//     SELECT 
-//         u.user_id, u.first AS uFirst, u.last AS uLast, s.*, a.*, c.*
-//     FROM
-//         schools s
-//             JOIN
-//         admin_auths aa ON aa.id = s.school_id
-//             JOIN
-//         admins a USING (admin_id)
-//             JOIN
-//         users u ON u.school_id = s.school_id
-//             JOIN
-//         classes c ON u.class_id = c.class_id
-//     WHERE
-//         u.user_id IN (" . implode(',', $users) . ") 
-//     GROUP BY 
-//         u.user_id
-//     ORDER BY 
-//         s.school_name, c.class_grade, c.class_sub, u.last, u.first
-// ";
-
 $shipping_sql = "SELECT s.*, e.class_grade, e.class_sub, b.first, b.last, d.first as uFirst, d.last as uLast ";
 $shipping_sql .= "FROM schools s ";
-$shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id AND a.position = 'Base Commander' ";
+$shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id ";
 $shipping_sql .= "JOIN admins b USING (admin_id)  ";
 $shipping_sql .= "JOIN users d ON d.school_id = s.school_id ";
 $shipping_sql .= "JOIN classes e ON e.class_id = d.class_id ";
@@ -100,7 +81,7 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
         Shipping Type: Pickup <br /><br />
     <?php } ?>
 
-    Total Sets Purchases: <?= $total ?><br /><br />
+    Total Sets Purchased: <?= $total ?><br /><br />
     <?=$school_address; ?><br /><br />
 
     <table>
