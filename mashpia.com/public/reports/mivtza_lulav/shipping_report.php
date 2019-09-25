@@ -24,23 +24,6 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
     $combined_users[$row['school_id']][] = $row;
 }
 
-/*while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
-    $school_name     = $row['school_name'];
-    $base_commander  = $row['first'] .' '.$row['last'];
-    $shipping_type   = $row['lulav_shipping'];
-    $school_address  = $row['school_address1'] .', '. 
-                       $row['school_city'] .', ' . 
-                       $row['school_state'] .' '. 
-                       $row['school_country'] . ' ' . 
-                       $row['school_postal'];
-
-    $shipping_method = $row['lulav_shipping'];
-    $sets_purchased  = $row['users'];
-
-    echo 
-}*/
-
-
 ?>
 <!DOCTYPE html>
 <html>
