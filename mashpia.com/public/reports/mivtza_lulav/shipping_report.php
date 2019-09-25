@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' ); 
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getRegistrationYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
@@ -17,7 +17,7 @@ $shipping_sql .= "FROM schools a ";
 $shipping_sql .= "INNER JOIN admin_auths b ON a.school_id = b.id ";
 $shipping_sql .= "INNER JOIN admins c ON c.admin_id = b.id ";
 $shipping_sql .= "INNER JOIN lulav_purchases d ON d.admin_id = b.id ";
-$shipping_sql .= "WHERE b.position = 'Base Commander'";
+$shipping_sql .= "WHERE b.position = 'Base Commander' AND d.year = $year ";
 $shipping_sql .= "AND a.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $shipping_query = mysql_query( $shipping_sql );
 while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
@@ -40,13 +40,12 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1>Chidon Combined Report</h1>
+    <h1>Lulav Shipping Report</h1>
     <form action="combined.php" method="post">
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
     <div style="page-break-after: always;"></div>
     <?php
-        $totals = [];
         foreach( $combined_users as $school_id => $users ) {
             $base = $users[0]; 
             $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" . 
@@ -88,7 +87,5 @@ while ( $row = mysql_fetch_assoc( $shipping_query ) ) {
         <?php
         } 
     ?>
-    </table>
-    <?php endif; ?>
 </body>
 </html>
