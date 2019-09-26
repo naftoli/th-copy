@@ -58,12 +58,12 @@
                         Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
                         <hr />
                         <h2>Number of sets: 2600</h2>
-                        <h2>Already Sold: <span id="sold"></span></h2>
+                        <h2>Already Sold: <span class="sold"></span></h2>
                         <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
-                        Wow! <span id="purchased"></span> Chayolim bought their own lulov and esrog. <br />
+                        Wow! <span class="sold"></span> Chayolim bought their own lulov and esrog. <br />
                         Let's see who will do mivtzoim for the most amount of time!<br />
                         Let's see who will get the most shakes!<br />
                     </div>
@@ -165,77 +165,86 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
-
-            var d = new Date();
-            console.log( d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + '-' + d.getHours() );
             
             // find out how many sets have been sold
             var soldOut = false;
-            $.post('ajax/lulavPurchases.php', function( sold ) {
-                var startWith = 2600;
-                var alreadySold = 1000;
-                alreadySold += parseInt( sold );
-                var leftToSell = startWith - alreadySold;
-                $("#sold").text( alreadySold );
-                $("#leftToSell").text( leftToSell );
-                if ( leftToSell < 1 ) {
-                    soldOut = true;
-                    $("#sold-out").show();
-                    $("#purchases").hide();
-                }
-            });
-            
-            // get the current year
-            var year;
-            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
-                success: function( info ) { year = info; }
-            });
-            
-            // load children
-            $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
-                if ( success == -1 ) {
-                    window.location = "index.html";
-                } else {
-                    var data = $.parseJSON( success );
-                    var children = data.children;
-                    
-                    // sepearate registered and un-registered
-                    var registred_children = {};
-                    var unregistered_children = {};
-                    
-                    for (var c in children) {
-                        var child = children[c];
-                        if (child.mivtzaLulav) {
-                            registred_children[c] = child;
-                        } else {
-                            unregistered_children[c] = child;
-                        }
-                    }
-                                        
-                    // Grab the template script
-                    var tplScript = $("#childrenTpl").html();
-                
-                    // Compile the template
-                    var tpl = Handlebars.compile( tplScript );
+            var d = new Date();
+            var now = d.valueOf();
+            console.log( now );
+            if ( now >= 1569556800 ) {
+                soldOut = true;
+            }
 
-                    // Pass our data to the template
-                    var html = tpl( { children : registred_children } );
-                    
-                    $("#purchase_info").show();
-                    if ( $.trim( html ) === '' ) { 
-                        $("#no-children").show(); 
+            if ( !soldOut ) {
+                $.post('ajax/lulavPurchases.php', function( sold ) {
+                    var startWith = 2600;
+                    var alreadySold = 1000;
+                    alreadySold += parseInt( sold );
+                    var leftToSell = startWith - alreadySold;
+                    $(".sold").text( alreadySold );
+                    $("#leftToSell").text( leftToSell );
+                    if ( leftToSell < 1 ) {
+                        soldOut = true;
+                        $("#sold-out").show();
+                        $("#purchases").hide();
+                    }
+                });
+                
+                // get the current year
+                var year;
+                $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
+                    success: function( info ) { year = info; }
+                });
+                
+                // load children
+                $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                    if ( success == -1 ) {
+                        window.location = "index.html";
                     } else {
-                        // Add the compiled html to the page
-                        $(".chilrens").append( html );
-                        $(".year").text(year);
-                        if ( soldOut ) $("#sold-out").show();
-                        else $("#purchases").show();
-                    } 
-                }
-            });
-            
-            $(document).on('click', '.lulav', calcAmount);
-            $(document).on("click", "#purchase", purchaseSets);
+                        var data = $.parseJSON( success );
+                        var children = data.children;
+                        
+                        // sepearate registered and un-registered
+                        var registred_children = {};
+                        var unregistered_children = {};
+                        
+                        for (var c in children) {
+                            var child = children[c];
+                            if (child.mivtzaLulav) {
+                                registred_children[c] = child;
+                            } else {
+                                unregistered_children[c] = child;
+                            }
+                        }
+                                            
+                        // Grab the template script
+                        var tplScript = $("#childrenTpl").html();
+                    
+                        // Compile the template
+                        var tpl = Handlebars.compile( tplScript );
+
+                        // Pass our data to the template
+                        var html = tpl( { children : registred_children } );
+                        
+                        $("#purchase_info").show();
+                        if ( $.trim( html ) === '' ) { 
+                            $("#no-children").show(); 
+                        } else {
+                            // Add the compiled html to the page
+                            $(".chilrens").append( html );
+                            $(".year").text(year);
+                            if ( soldOut ) $("#sold-out").show();
+                            else $("#purchases").show();
+                        } 
+                    }
+                });
+                
+                $(document).on('click', '.lulav', calcAmount);
+                $(document).on("click", "#purchase", purchaseSets);
+            } else {
+                $("#sold-out").show();
+                $("#purchases").hide();
+            }
 
             function calcAmount() {
                 var total = 0;
