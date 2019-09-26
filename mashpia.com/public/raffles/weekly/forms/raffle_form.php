@@ -26,7 +26,7 @@ $parshos = get_parshos( $raffle->year );
 </div>
 
 <div class="input_group input_half">
-    Run Date* <input type="date" name="run_date" id="run_Date1" class="run_date" value="<?=$raffle->run_date->format("Y-m-d")?>">
+    Run Date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
 </div>
 
 <div class="action-links">
