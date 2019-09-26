@@ -88,11 +88,12 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     // find out year
     $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
     $raffle_props['year'] = $arrYear[2];
-    /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
-    /*if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
-        $error .= "Run Date must be on a Wendsday<br/>";
+    /********************* VALIDATE RUN DATE IS BEFORE END DATE **********************/
+
+    if($raffle_props['run_date'] < $raffle_props['end_date']) {
+        $error .= "Run date cannot be before end date<br/>";
         $valid = false;
-    }*/
+    }
     
     // preform validations on name and type
     if($_POST['name'] == ""){
@@ -135,6 +136,12 @@ if ($action == "update" && !$valid){
         $error .= "Error Updating Raffle";
         $action = 'edit'; // re render the edit page
     };
+
+    if($raffle->run_date < $raffle->end_date) { 
+        $error .= "Run date cannot be before end date<br/>";
+        $valid = false;
+    }
+
 }
 
 if ($action == "destroy"){
