@@ -88,9 +88,10 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     // find out year
     $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
     $raffle_props['year'] = $arrYear[2];
+    
+    //echo "<pre>"; print_r( $raffle_props ); echo "</pre>"; exit;
     /********************* VALIDATE RUN DATE IS BEFORE END DATE **********************/
-
-    if($raffle_props['run_date'] < $raffle_props['end_date']) {
+    if($run_date_jd < $raffle_props['end_date']) {
         $error .= "Run date cannot be before end date<br/>";
         $valid = false;
     }
