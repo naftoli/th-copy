@@ -45,52 +45,41 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     // make sure that the weeks where posted
     /********************* VALIDATE DATES **********************/
     if ($_POST['type'] == "weekly" ) { // weekly raffles
-        
         $raffle_props['type'] = 'weekly'; // set the type
         $raffle_props['start_date'] = $_POST['week_start']; // get the start date
         $raffle_props['end_date'] = $_POST['week_start'] + 6; // and add 6 to get to the end of the week
-        //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm. Add 6 to
-        
-        $run_date = $_POST['run_date'];
-        $format_run_date = date('Y-n-j', strtotime($run_date));
-        $format_run_date = explode('-', $format_run_date);
-        
-        $runYear  = $format_run_date[0];
-        $runMonth = $format_run_date[1];
-        $runDay   = $format_run_date[2]; 
-        
-        $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
-
-        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd + 6) . " 11:59 PM");
-    
+        //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm. Add 6 to    
     } else if ($_POST['type'] == "monthly") { // monthly raffles
         $raffle_props['type'] = 'monthly'; // set the type
         $raffle_props['start_date'] = $_POST['start_date'];
         $raffle_props['end_date'] = $_POST['end_date'];
         //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm
-
-        $run_date = $_POST['run_date'];
-        $format_run_date = date('Y-n-j', strtotime($run_date));
-        $format_run_date = explode('-', $format_run_date);
-        
-        $runYear  = $format_run_date[0];
-        $runMonth = $format_run_date[1];
-        $runDay   = $format_run_date[2]; 
-        
-        $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
-
-        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd + 6) . " 11:59 PM");
-
     } else {
         $error .= "Type is invalid<br/>";
         $valid = false;
     }
+
+    // set run date
+    $run_date = $_POST['run_date'];
+    $format_run_date = date('Y-n-j', strtotime($run_date));
+    $format_run_date = explode('-', $format_run_date);
+    
+    $runYear  = $format_run_date[0];
+    $runMonth = $format_run_date[1];
+    $runDay   = $format_run_date[2]; 
+    
+    $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
+
+    $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd) . " 11:59 PM");
+
     // find out year
     $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
     $raffle_props['year'] = $arrYear[2];
-    /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
-    if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
-        $error .= "Run Date must be on a Wendsday<br/>";
+    
+    //echo "<pre>"; print_r( $raffle_props ); echo "</pre>"; exit;
+    /********************* VALIDATE RUN DATE IS BEFORE END DATE **********************/
+    if($run_date_jd < $raffle_props['end_date']) {
+        $error .= "Run date cannot be before end date<br/>";
         $valid = false;
     }
     
@@ -135,6 +124,12 @@ if ($action == "update" && !$valid){
         $error .= "Error Updating Raffle";
         $action = 'edit'; // re render the edit page
     };
+
+    if($raffle->run_date < $raffle->end_date) { 
+        $error .= "Run date cannot be before end date<br/>";
+        $valid = false;
+    }
+
 }
 
 if ($action == "destroy"){
@@ -206,7 +201,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
             <div class="input_group input_half">
                 <h3>
                     Type: <?=ucfirst($raffle->type)?><br/>
-                    Run On: <?=$raffle->run_date->format("m/d/Y")?>
+
                 </h3>
             </div>
             <div id="detailed_inputs">

@@ -12,6 +12,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/db.php');
 $parshos = get_parshos( $raffle->year );
 
 ?>
+
 <input name="type" value="weekly" type="hidden"/>
 <div class="input_group input_full">
     <label>Parsha:
@@ -25,7 +26,7 @@ $parshos = get_parshos( $raffle->year );
 </div>
 
 <div class="input_group input_half">
-    Run Date* <input type="date" name="run_date">
+    Run Date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
 </div>
 
 <div class="action-links">
