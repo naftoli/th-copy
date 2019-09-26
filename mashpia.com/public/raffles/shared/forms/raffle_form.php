@@ -45,6 +45,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     // make sure that the weeks where posted
     /********************* VALIDATE DATES **********************/
     if ($_POST['type'] == "weekly" ) { // weekly raffles
+        
         $raffle_props['type'] = 'weekly'; // set the type
         $raffle_props['start_date'] = $_POST['week_start']; // get the start date
         $raffle_props['end_date'] = $_POST['week_start'] + 6; // and add 6 to get to the end of the week
