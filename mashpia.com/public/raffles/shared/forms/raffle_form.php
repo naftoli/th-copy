@@ -45,6 +45,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     // make sure that the weeks where posted
     /********************* VALIDATE DATES **********************/
     if ($_POST['type'] == "weekly" ) { // weekly raffles
+        
         $raffle_props['type'] = 'weekly'; // set the type
         $raffle_props['start_date'] = $_POST['week_start']; // get the start date
         $raffle_props['end_date'] = $_POST['week_start'] + 6; // and add 6 to get to the end of the week
@@ -61,6 +62,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
 
         $raffle_props['run_date'] = $run_date_jd;
+        echo "<pre>"; print_r( $raffle_props ); echo "</pre>"; exit;
     
     } else if ($_POST['type'] == "monthly") { // monthly raffles
         $raffle_props['type'] = 'monthly'; // set the type
