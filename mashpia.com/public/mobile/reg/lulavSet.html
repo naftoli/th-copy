@@ -58,8 +58,8 @@
                         Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
                         <hr />
                         <h2>Number of sets: 2600</h2>
-                        <h2>Already Sold: <span id="sold">600</span></h2>
-                        <h2>Currently Available: <span id="leftToSell">2000</span></h2>
+                        <h2>Already Sold: <span id="sold"></span></h2>
+                        <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
                     <!-- <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
@@ -170,7 +170,7 @@
             var soldOut = false;
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2600;
-                var alreadySold = 600;
+                var alreadySold = 1000;
                 alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $("#sold").text( alreadySold );
