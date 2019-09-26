@@ -24,6 +24,10 @@ $parshos = get_parshos( $raffle->year );
     </label>
 </div>
 
+<div class="input_group input_half">
+    Run Date* <input type="date" name="run_date">
+</div>
+
 <div class="action-links">
     <input type="submit" value="<?=$action == "add" ? "Create" : "Save"?>"/>
     <a href="/raffles/shared/forms/raffle_form.php<?=$debug ? "?debug=true" : "";?>" class="button">Cancel</a>

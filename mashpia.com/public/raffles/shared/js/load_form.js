@@ -6,7 +6,7 @@ $(document).ready(function(){
     });
     // load the default form (weekly) on page load
     load_form($("select[name='type']").val());
-    
+
 });
 
 function load_form(type) {
@@ -18,6 +18,8 @@ function load_form(type) {
         });
         // autofill the name when the page loads
         fill_name($($("select.week_start").children()[0]).text())
+
+
     });
 }
 // Handle the requested autofill function
