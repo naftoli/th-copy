@@ -205,7 +205,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
             <div class="input_group input_half">
                 <h3>
                     Type: <?=ucfirst($raffle->type)?><br/>
-                    Run On: <?=$raffle->run_date->format("m/d/Y")?>
+
                 </h3>
             </div>
             <div id="detailed_inputs">
