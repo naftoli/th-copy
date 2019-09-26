@@ -61,7 +61,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         
         $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
 
-        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd + 6) . " 11:59 PM");
+        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd) . " 11:59 PM");
     
     } else if ($_POST['type'] == "monthly") { // monthly raffles
         $raffle_props['type'] = 'monthly'; // set the type
@@ -79,7 +79,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         
         $run_date_jd = gregoriantojd($runMonth, $runDay, $runYear);
 
-        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd + 6) . " 11:59 PM");
+        $raffle_props['run_date'] = new DateTime(formatJdToDate($run_date_jd) . " 11:59 PM");
 
     } else {
         $error .= "Type is invalid<br/>";
@@ -89,10 +89,10 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     $arrYear = explode('/', jdtojewish( $raffle_props['end_date'] ));
     $raffle_props['year'] = $arrYear[2];
     /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
-    if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
+    /*if($raffle_props['run_date']->format('N') != 3) { // if the run date is not wendsday
         $error .= "Run Date must be on a Wendsday<br/>";
         $valid = false;
-    }
+    }*/
     
     // preform validations on name and type
     if($_POST['name'] == ""){
