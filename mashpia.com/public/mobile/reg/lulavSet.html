@@ -174,76 +174,71 @@
                 soldOut = true;
             }
 
-            if ( !soldOut ) {
-                $.post('ajax/lulavPurchases.php', function( sold ) {
-                    var startWith = 2600;
-                    var alreadySold = 1000;
-                    alreadySold += parseInt( sold );
-                    var leftToSell = startWith - alreadySold;
-                    $(".sold").text( alreadySold );
-                    $("#leftToSell").text( leftToSell );
-                    if ( leftToSell < 1 ) {
-                        soldOut = true;
-                        $("#sold-out").show();
-                        $("#purchases").hide();
-                    }
-                });
-                
-                // get the current year
-                var year;
-                $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
-                    success: function( info ) { year = info; }
-                });
-                
-                // load children
-                $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
-                    if ( success == -1 ) {
-                        window.location = "index.html";
-                    } else {
-                        var data = $.parseJSON( success );
-                        var children = data.children;
-                        
-                        // sepearate registered and un-registered
-                        var registred_children = {};
-                        var unregistered_children = {};
-                        
-                        for (var c in children) {
-                            var child = children[c];
-                            if (child.mivtzaLulav) {
-                                registred_children[c] = child;
-                            } else {
-                                unregistered_children[c] = child;
-                            }
-                        }
-                                            
-                        // Grab the template script
-                        var tplScript = $("#childrenTpl").html();
+            $.post('ajax/lulavPurchases.php', function( sold ) {
+                var startWith = 2600;
+                var alreadySold = 1000;
+                alreadySold += parseInt( sold );
+                var leftToSell = startWith - alreadySold;
+                $(".sold").text( alreadySold );
+                $("#leftToSell").text( leftToSell );
+                if ( soldOut || leftToSell < 1 ) {
+                    soldOut = true;
+                    $("#sold-out").show();
+                    $("#purchases").hide();
+                }
+            });
+            
+            // get the current year
+            var year;
+            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
+                success: function( info ) { year = info; }
+            });
+            
+            // load children
+            $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                if ( success == -1 ) {
+                    window.location = "index.html";
+                } else {
+                    var data = $.parseJSON( success );
+                    var children = data.children;
                     
-                        // Compile the template
-                        var tpl = Handlebars.compile( tplScript );
-
-                        // Pass our data to the template
-                        var html = tpl( { children : registred_children } );
-                        
-                        $("#purchase_info").show();
-                        if ( $.trim( html ) === '' ) { 
-                            $("#no-children").show(); 
+                    // sepearate registered and un-registered
+                    var registred_children = {};
+                    var unregistered_children = {};
+                    
+                    for (var c in children) {
+                        var child = children[c];
+                        if (child.mivtzaLulav) {
+                            registred_children[c] = child;
                         } else {
-                            // Add the compiled html to the page
-                            $(".chilrens").append( html );
-                            $(".year").text(year);
-                            if ( soldOut ) $("#sold-out").show();
-                            else $("#purchases").show();
-                        } 
+                            unregistered_children[c] = child;
+                        }
                     }
-                });
+                                        
+                    // Grab the template script
+                    var tplScript = $("#childrenTpl").html();
                 
-                $(document).on('click', '.lulav', calcAmount);
-                $(document).on("click", "#purchase", purchaseSets);
-            } else {
-                $("#sold-out").show();
-                $("#purchases").hide();
-            }
+                    // Compile the template
+                    var tpl = Handlebars.compile( tplScript );
+
+                    // Pass our data to the template
+                    var html = tpl( { children : registred_children } );
+                    
+                    $("#purchase_info").show();
+                    if ( $.trim( html ) === '' ) { 
+                        $("#no-children").show(); 
+                    } else {
+                        // Add the compiled html to the page
+                        $(".chilrens").append( html );
+                        $(".year").text(year);
+                        if ( soldOut ) $("#sold-out").show();
+                        else $("#purchases").show();
+                    } 
+                }
+            });
+            
+            $(document).on('click', '.lulav', calcAmount);
+            $(document).on("click", "#purchase", purchaseSets);
 
             function calcAmount() {
                 var total = 0;
