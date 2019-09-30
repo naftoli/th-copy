@@ -133,6 +133,8 @@ class SoldierPage extends Component {
       return toast.error('You must choose a platoon.')
     }
 
+    console.log(this.state.updates.class_id); // checking class id
+
     // update the soldier
     this.setState({ saving: true });
     // show errors from updating to the user
