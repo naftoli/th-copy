@@ -11,7 +11,8 @@ if ( $admin_user['auth'] != 'super' ) {
 
 $info = [];
 $sql = "select * from registration_charges 
-        join users using (user_id) 
+        join users u using (user_id) 
+        join classes c on u.class_id = c.class_id 
         where year = " . $year;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -48,7 +49,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	</head>
 	
 	<body>
-        <h1>Registration Report</h1>
+        <h1>Registration Report <?= $year ?></h1>
         
         <table>
             <caption>Summary</caption>
@@ -69,6 +70,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <table>
             <tr>
                 <th>School</th>
+                <th>Grade</th>
                 <th>Student</th>
                 <th>Type</th>
                 <th>Amount</th>
@@ -77,8 +79,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <?
             foreach ( $info as $row ) {
                 if ( $row['type'] == 'shipping' ) continue;
-                echo "<tr><td>" . $schools[$row['school_id']] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['type'] . "</td><td>" . $row['amount'] . 
-                    "</td><td>" . $row['date'] . "</td></tr>";
+                $grade = $row['class_grade'] . (empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub']);
+                echo "<tr><td>" . $schools[$row['school_id']] . "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . 
+                    $row['type'] . "</td><td>" . $row['amount'] . "</td><td>" . $row['date'] . "</td></tr>";
             }
             ?>
         </table>

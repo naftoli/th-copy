@@ -16,7 +16,13 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
     } else if ( $_POST['date'] == 2 ) {
         $from = '2019-08-13';
         $to = '2019-09-17';
-    }
+    } else if ( $_POST['date'] == 3 ) {
+        $from = '2019-09-18';
+        $to = '2019-09-25';
+    } else if ( $_POST['date'] == 4 ) {
+        $from = '2019-09-26';
+        $to = '2019-10-11';
+    } 
 }
 
 $combined_users = [];
@@ -88,6 +94,12 @@ $booklet_grand_totals = [
                 <option value="2"
                 <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
                 >2nd Batch (from August 13 until Sept 17)</option>
+                <option value="3"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                >3rd Batch (from Sept 18 to Sept 25)</option>
+                <option value="4"
+                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                >4th Batch (from Sept 26 to Oct 11)</option>
             </select>
         </p>
         <p>  

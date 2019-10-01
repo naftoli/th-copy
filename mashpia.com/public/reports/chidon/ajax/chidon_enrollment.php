@@ -20,9 +20,9 @@ $year = GlobalSettings::getChidonYear();
 $school_id = mysql_real_escape_string($_POST['school_id']);
 
 /***************** LOAD DATA **********************/
-$qry = "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
+$qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id, "
         ." c.class_grade, c.class_sub, s.school_name, "
-        ." a.admin_phone_mobile, a.admin_phone_mobile2 "
+        ." a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_email "
         ." FROM th_chidon th "
         ." JOIN users u USING (user_id) "
         ." JOIN classes c USING (class_id) "
@@ -49,7 +49,7 @@ if (count($users) > 0) {
             <?php if ($school_id < 0) : ?>
                 <th>School</th>
             <?php endif; ?>
-            <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th>
+            <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Serial Number</th><th>Email</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
             <?php 
@@ -69,6 +69,8 @@ if (count($users) > 0) {
                 <td><?=$user['last']?></td>
                 <td><?=$user['first_he']?></td>
                 <td><?=$user['last_he']?></td>
+                <td><?=$user['user_serial']?></td>
+                <td><?=$user['admin_email']?></td>
                 <td><?=$user['admin_phone_mobile']?></td>
                 <td><?=$user['admin_phone_mobile2']?></td>
             </tr>

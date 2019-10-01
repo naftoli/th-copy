@@ -17,7 +17,7 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$description = "Mivtza Lulav 5779 purchase - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
+$description = "Mivtza Lulav " . $year . " purchase - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
 
 if ( $amount > 0 ) {
     chdir('../../../');

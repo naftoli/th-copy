@@ -10,10 +10,28 @@ $objMissions = [];
 
 // * Get the list of parshos for the dropdown
 $year = GlobalSettings::getCurrentYear();
-$today = unixtojd();
+// $today = unixtojd();
+// $parshos = Parsha::all([
+//     'conditions' => "year = $year or year = " . --$year . " AND end < $today",
+//     'order' => 'end DESC'
+// ]);
+// set parshos to pull from before summer
+// get lowest parsha id
+$stmt = $MASHPIA_DB->prepare("
+    SELECT id FROM parshos 
+    WHERE year = :year 
+    ORDER BY id DESC 
+    LIMIT 12
+");
+$res = $stmt->execute([':year' => $year - 1]);
+if ( $res ) {
+    $rows = $stmt->fetchAll();
+    // get last row info
+    $id = $rows[count($rows) - 1]['id'];
+}
+
 $parshos = Parsha::all([
-    'conditions' => "year = $year AND end < $today",
-    'order' => 'end DESC'
+    'conditions' => 'id >= ' . $id,
 ]);
 
 if ( !isset( $_POST['user_id'] ) )

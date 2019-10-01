@@ -55,17 +55,17 @@
             <div class="container page5">   
                 <div class="row" id="purchase_info" style="display: none;">
                     <div class="col-12" style="font-size: 16px;">                   
-                        Lulav Sets cost ONLY $7.70. We will charge an additional $5.80 for shipping it to YOUR CHILD'S SCHOOL.
+                        Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
                         <hr />
-                        <h2>Number of sets: 1000</h2>
-                        <h2>Already Sold: <span id="sold">760</span></h2>
-                        <h2>Currently Available: <span id="leftToSell">240</span></h2>
+                        <h2>Number of sets: 2600</h2>
+                        <h2>Already Sold: <span class="sold"></span></h2>
+                        <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
-                        Wow! Boruch Hashem in such a short time 1000 chayolim have bought their OWN Lulov and esrog for Mivtzoim.<br />                        
-                        We have SOLD OUT for this year. Next year we hope to get more sets.<br />                        
-                        כתיבה וחתימה טובה
+                        Wow! <span class="sold"></span> Chayolim bought their own lulov and esrog. <br />
+                        Let's see who will do mivtzoim for the most amount of time!<br />
+                        Let's see who will get the most shakes!<br />
                     </div>
                     <hr />
                 </div>  
@@ -89,13 +89,19 @@
                             <div class="chilrens" id="children">
                                 <script id="childrenTpl" type="text/x-handlebars-template">
                                     {{#each children}}
-                                <div class="child">
+                                    <div class="child">
                                         <div style="padding: 10px; font-size: 14px;">
                                             <span>
+                                                {{#if lulavPurchased}}
+                                                {{else}}
                                                 <input type="checkbox" class="lulav" style="width: 30px;" id="{{@key}}" />
-                                                <b>{{rank}}</b> {{first}} {{last}} 
+                                                {{/if}}
+                                                <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
-                                            <input type="hidden" class="ship" value="{{shipping}}"
+                                            <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
+                                            {{#if lulavPurchased}}
+                                                <div style='color:red'><strong><i>Child has already purchased a lulav set.</i></strong></div>
+                                            {{/if}}
                                         </div>
                                     </div>
                                     {{/each}}
@@ -115,32 +121,32 @@
                             <h2>Checkout</h2>
                             <div class="form-group">
                                 <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-                                <input id="cc-first" name="cc-first" type="tel" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
+                                <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-                                <input id="cc-last" name="cc-last" type="tel" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+                                <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
-                                <input id="cc-number" name="cc-number" type="tel" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
+                                <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
-                                <input id="cc-exp" name="cc-exp" type="tel" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+                                <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
                                 <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
                             </div>
                             <label for="x_card_code" class="control-label mb-1">Security code</label>
                             <div class="form-group">
-                                <input id="x_card_code" name="x_card_code" type="tel" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+                                <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
                                 <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
                             </div>
                             <div class="form-group">
                                 <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
-                                <input id="zip" name="zip" type="tel" class="form-control" placeholder="XXXXX" maxlength="12" required />
+                                <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
                                 <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
                             </div>
                         </div>
@@ -162,13 +168,20 @@
             
             // find out how many sets have been sold
             var soldOut = false;
+            var now = Math.floor( new Date().getTime() / 1000);
+            console.log( now );
+            if ( now >= 1569556800 ) {
+                soldOut = true;
+            }
+
             $.post('ajax/lulavPurchases.php', function( sold ) {
-                var alreadySold = 820;
+                var startWith = 2600;
+                var alreadySold = 1000;
                 alreadySold += parseInt( sold );
-                var leftToSell = 1000 - alreadySold;
-                $("#sold").text( alreadySold );
+                var leftToSell = startWith - alreadySold;
+                $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
-                if ( leftToSell < 1 ) {
+                if ( soldOut || leftToSell < 1 ) {
                     soldOut = true;
                     $("#sold-out").show();
                     $("#purchases").hide();
@@ -229,17 +242,16 @@
 
             function calcAmount() {
                 var total = 0;
-                var cost = 7.70;
-                var ship = 5.80;
+                var cost = 10;
                 var numChildren = $(".lulav:checked").length;
 
                 if ( numChildren ) {
                     $(".lulav:checked").each( function() {
                         var id = $(this).attr('id');
-                        var shipping = $(this).parent().parent().find('.ship').val();
-                        if (shipping == 'deliver') {
-                            total += cost + ship;
-                        } else if (shipping == 'pickup') {
+                        var shipping = parseInt( $(this).parent().parent().find('.shipping-charge').text() );
+                        if (shipping > 0) {
+                            total += cost + shipping;
+                        } else {
                             total += cost;
                         }
                     });

@@ -1,8 +1,12 @@
 <?php
-$admin_auth = array(); 	
+$admin_auth = ['school']; 	
 require_once ( __DIR__ . '/../../header.php' ); 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
+
+require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$schools = $as->getSchools();
 
 $children = [];
 $query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
@@ -25,6 +29,7 @@ $sql = "SELECT u.first, u.last, c.class_grade, c.class_sub, s.school_name
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id 
         WHERE u.user_id in (" . implode(',', $children) . ") 
+        AND u.school_id in (" . implode(',', array_keys( $schools ) ) . ") 
         ORDER BY school_name, class_grade, class_sub, last, first";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -52,7 +57,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1 class="no-print"><?=$year?> Lulav Purchases</h1>
+    <?php if ( $admin_user['auth'] == 'super' ) : ?>
     <p class="no-print">Grand Total: <?= $total ?></p>
+    <?php endif; ?>
     <?php foreach ( $info as $school => $users ) : ?>
         <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
         <table>

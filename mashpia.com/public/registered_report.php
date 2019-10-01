@@ -45,12 +45,15 @@ if( isset($_GET['debug'])){
         	//echo $id . '-' . $school . "<br />";
             // get users based on registration charges table 
             $users = [];
-            $sql = "select u.* from users u 
+            $sql = "select u.*, c.* from users u 
+                    join classes c on u.class_id = c.class_id  
                     join registration_charges rc using (user_id) 
                     where rc.type = 'chayolei' 
                     and u.user_registered > 0 
                     and u.school_id = " . $id . " 
-                    and rc.year = " . $year;
+                    and rc.year = " . $year . " 
+                    group by u.user_id 
+                    order by class_grade, class_sub, last, first";
             $result = mysql_query( $sql );
             while ( $row = mysql_fetch_assoc( $result ) ) {
                 $users[] = $row;
@@ -70,8 +73,8 @@ if( isset($_GET['debug'])){
             echo "<table>";
             echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th><th>Registered this year</th></tr>";
             foreach ( $users as $user ) {
-                if ( $user['user_registered'] < '2019-09-10' ) continue;
-                $grade = $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] );
+                //if ( $user['user_registered'] < '2019-09-10' ) continue;
+                $grade = $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']);
                 echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] . 
                     "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
                     "</td><td>" . $user['user_registered'] . "</td></tr>"; 

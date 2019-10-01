@@ -325,6 +325,23 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
         // set default year.
         $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonYear() : GlobalSettings::getRegistrationYear( $this->school_id );
+        // make sure we don't already have such a registration charge in system - avoid duplication
+        $check_qry = $MASHPIA_DB->prepare("
+            SELECT 
+                *
+            FROM
+                registration_charges
+            WHERE
+                user_id = :id AND year = :year
+                    AND type = :type
+        ");
+        $check_qry->execute([
+            ':id'   =>  $this->user_id, 
+            ':year' =>  $year, 
+            ':type' =>  $type
+        ]);
+        $rows = $check_qry->fetchAll();
+        if ( count( $rows ) > 0 ) return true;
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
@@ -377,7 +394,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
         // only add th_chidon_id if the user is in grade 4+ 
-        $exceptions = [483,482,544,584,583,588,430,577,13,220];
+        $exceptions = [483,482,544,584,583,588,577,13];
         if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
@@ -467,6 +484,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // save the charge
         if ( !is_null( $amount ) ) {
             $this->registrationCharge( 'chidon', $amount, $trans_id );
+        }
+        // make sure we have parent id
+        if ( !$parent_id ) {
+            $stmt = $MASHPIA_DB->prepare("
+                SELECT admin_id FROM admin_auths 
+                WHERE role_id = 1 AND id = :id
+            ");
+            $res = $stmt->execute([':id' => $this->user_id]);
+            if ( $res ) {
+                $row = $stmt->fetch();
+                $parent_id = $row['admin_id'];
+            }
         }
 
         if ( $recruited && $recruited_by > 0 ) {

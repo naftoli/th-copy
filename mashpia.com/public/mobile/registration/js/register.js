@@ -322,7 +322,7 @@ var registrationApp = function() {
         }
         if ( selected_charges.chayolei === false 
             && selected_charges.chidon === false 
-            && selected_charges.yahadus === false
+            //&& selected_charges.yahadus === false
         ){
             return showError(
                 'You must select at least one type of registration.'
@@ -733,9 +733,14 @@ var templates = function(){
                 if ( rateType === 'chayolei') {
                     // setup chayolei fee dropdown
                     var htmlFee = '';
-                    for ( var n of [ 100, 75, 60, 55, 50 ]) {
-                        if ( n < user.registrationRates[ rateType ] ) break;
-                        htmlFee += "<option value=" + n + ">$" + n + "</option>";
+                    if ( user.registrationRates[ rateType ] == 0 ) {
+                        // just make dropdown show 0
+                        htmlFee += "<option value='0'>0</option>";
+                    } else {
+                        for ( var n of [ 100, 75, 60, 55, 50 ]) {
+                            if ( n < user.registrationRates[ rateType ] ) break;
+                            htmlFee += "<option value=" + n + ">$" + n + "</option>";
+                        }
                     }
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
