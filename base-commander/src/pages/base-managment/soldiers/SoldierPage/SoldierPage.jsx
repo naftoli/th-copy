@@ -122,7 +122,7 @@ class SoldierPage extends Component {
     const { soldier, updates, valid } = this.state;
 
     if ( this.state.saving )
-      return true;
+      return true; 
 
     // validate form
     const isInvalid = Object.values( valid ).includes( false );
