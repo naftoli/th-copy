@@ -5,7 +5,7 @@ import { Prompt } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { TabContent, Nav } from 'reactstrap';
 import { LoadingScreen, FontAwesome } from 'components/ui';
-import { NavigationTab } from 'components/navigation/Sidebar';
+import { NavigationTab } from 'components/navigation/dashboard';
 import {
   PersonalTab,  RankTab,  MedalsTab,
   SettingsTab,  RegistrationTab,
