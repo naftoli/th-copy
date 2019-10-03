@@ -1,6 +1,7 @@
 <?php
 ini_set('max_execution_time', 300);
 set_time_limit( 300 );
+ini_set('display_errors',1);
 $admin_auth = ['school']; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php'; 
@@ -49,18 +50,36 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         GROUP BY rc.user_id
         ORDER BY first , last , date
     ";
+    //echo $sql; exit;
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $info[] = $row;
     }
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
+$cols = 1; //counter for columns
+$rows = 1; //counter for rows
+function checkForBreak() {
+    global $cols, $rows;
+    if (($cols % 3) != 0) {
+        echo "<div class='space'></div>";
+    } else {
+        $cols = 0; //reset cols so that it will show new row
+        $rows++; //add row
+        if ( ($rows % 11) == 0 ) {
+            $rows = 1; //reset rows counter and add space to top of new page
+            echo "<div class='page-break'></div><div class='topSpace'></div>"; 
+        }
+    }
+    $cols++;
+}
+//chdir( $_SERVER['DOCUMENT_ROOT'] );
 ?>
 <!doctype html>
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<link href="admin_styles.css" rel="stylesheet" type="text/css">
+		<link href="/admin_styles.css" rel="stylesheet" type="text/css">
 		<style type="text/css">
             .label {
                 width: 2.15in;
@@ -120,7 +139,10 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
 	</head>
 
 	<body>
-	<? include('admin_header.php'); ?>
+    <?php 
+    include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php'); 
+    //chdir('reports/chidon/');
+    ?>
 	<div class="no-print">
         <h1>Hachayol Report</h1>    
         <?php if ( !isset( $_POST['date'] ) ) : ?>
@@ -158,10 +180,7 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         
         <div id="report_div" name="report_div">
             <div class='topSpace'></div>
-            <?
-            $cols = 1; //counter for columns
-            $rows = 1; //counter for rows
-            
+            <?php            
 			foreach ($info as $parent) {
                 $name = $parent['first'] . ' ' . $parent['last'];
                 $address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] . 
@@ -171,21 +190,6 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
                 echo "<span class='name'>";
                 echo "<b>" . $name . "</b><br />" . $address . "</span></div>";
                 checkForBreak();
-			}
-
-			function checkForBreak() {
-				global $cols, $rows;
-				if (($cols % 3) != 0) {
-                	echo "<div class='space'></div>";
-                } else {
-                    $cols = 0; //reset cols so that it will show new row
-                    $rows++; //add row
-                    if ( ($rows % 11) == 0 ) {
-                        $rows = 1; //reset rows counter and add space to top of new page
-                        echo "<div class='page-break'></div><div class='topSpace'></div>"; 
-                    }
-                }
-                $cols++;
 			}
 			?>
         </div>
