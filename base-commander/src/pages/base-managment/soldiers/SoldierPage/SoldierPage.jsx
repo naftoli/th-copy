@@ -184,7 +184,7 @@ class SoldierPage extends Component {
           </NavigationTab>
 
           { isBC ( login.code ) && 
-            <NavigationTab tab={4} icon='award' { ...navProps }> 
+            <NavigationTab tab={4} icon='award' { ...navProps }>
               Medals
             </NavigationTab>
           }
