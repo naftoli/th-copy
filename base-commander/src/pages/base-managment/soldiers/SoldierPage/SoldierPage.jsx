@@ -129,17 +129,18 @@ class SoldierPage extends Component {
     if ( isInvalid )
       return toast.error( 'Please correct all invalid fields' );
 
-    if ( !this.state.soldier.class_id ) {
+    if ( !this.state.soldier.class_id && this.state.updates.class_id === undefined ) {
       console.log(this.state.soldier);
       return toast.error('You must choose a platoon.');
-    } else if (this.state.updates.school_id !== undefined && this.state.updates.class_id === undefined) {
+    } 
+    if (this.state.updates.school_id !== undefined && this.state.updates.class_id === undefined) {
       console.log(this.state.updates);
       return toast.error('You must choose a platoon.');
-    } else if (this.state.updates.class_id === null) {
+    } 
+    if (this.state.updates.class_id !== undefined && this.state.updates.class_id === null) {
       console.log(this.state.updates);
       return toast.error('You must choose a platoon.');
     }
-
 
     // update the soldier
     this.setState({ saving: true });
