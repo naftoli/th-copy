@@ -98,7 +98,7 @@ class SoldierPage extends Component {
     .then( soldier => this.setState({ updates: {}, soldier }) );
   }
   
-  // update missions
+  // update missions 
   updateMissions = updates => {
     let { soldier } = this.state;
     // update the missions
@@ -137,7 +137,11 @@ class SoldierPage extends Component {
       return toast.error('You must choose a platoon.');
     }
 
+<<<<<<< HEAD
 
+=======
+    console.log(this.state.updates.class_id); // checking class id why message displays 
+>>>>>>> ae7468105e9ef3bfa1555f6ae7174f23d58e3db0
 
     // update the soldier
     this.setState({ saving: true });

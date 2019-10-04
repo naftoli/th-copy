@@ -322,7 +322,7 @@ var registrationApp = function() {
         }
         if ( selected_charges.chayolei === false 
             && selected_charges.chidon === false 
-            && selected_charges.yahadus === false
+            //&& selected_charges.yahadus === false
         ){
             return showError(
                 'You must select at least one type of registration.'

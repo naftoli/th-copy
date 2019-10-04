@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 $chidon_year = GlobalSettings::getChidonYear();

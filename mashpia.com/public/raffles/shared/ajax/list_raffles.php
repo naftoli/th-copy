@@ -26,15 +26,15 @@ if ( $type !== "" )
 if ( $ran_only )
     $filter[] = "date_ran IS NOT NULL";
 
-if ( $admin_user['auth'] !== 'super' )
-    $filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
+//if ( $admin_user['auth'] !== 'super' )
+    //$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
 if ( count( $filter ) > 0 ) {
     $filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
 } else {
     $filter = 'ORDER BY run_date DESC, type';
 }
-
+//echo "<pre>"; print_r( $filter ); echo "</pre>";
 
 $raffles = Raffle::loadAll($filter);
 

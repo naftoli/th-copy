@@ -58,15 +58,15 @@
                         Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
                         <hr />
                         <h2>Number of sets: 2600</h2>
-                        <h2>Already Sold: <span id="sold">600</span></h2>
-                        <h2>Currently Available: <span id="leftToSell">2000</span></h2>
+                        <h2>Already Sold: <span class="sold"></span></h2>
+                        <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
-                    <!-- <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
+                    <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
-                        Wow! Boruch Hashem in such a short time 1000 chayolim have bought their OWN Lulov and esrog for Mivtzoim.<br />                        
-                        We have SOLD OUT for this year. Next year we hope to get more sets.<br />                        
-                        כתיבה וחתימה טובה
-                    </div> -->
+                        Wow! <span class="sold"></span> Chayolim bought their own lulov and esrog. <br />
+                        Let's see who will do mivtzoim for the most amount of time!<br />
+                        Let's see who will get the most shakes!<br />
+                    </div>
                     <hr />
                 </div>  
 
@@ -168,14 +168,20 @@
             
             // find out how many sets have been sold
             var soldOut = false;
+            var now = Math.floor( new Date().getTime() / 1000);
+            console.log( now );
+            if ( now >= 1569556800 ) {
+                soldOut = true;
+            }
+
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2600;
-                var alreadySold = 600;
+                var alreadySold = 1000;
                 alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
-                $("#sold").text( alreadySold );
+                $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
-                if ( leftToSell < 1 ) {
+                if ( soldOut || leftToSell < 1 ) {
                     soldOut = true;
                     $("#sold-out").show();
                     $("#purchases").hide();
