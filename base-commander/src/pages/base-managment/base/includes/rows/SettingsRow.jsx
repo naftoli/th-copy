@@ -18,29 +18,39 @@ export class SettingsRow extends Component {
   handleCheckbox = onCheckboxChange( this.props.onUpdate );
   onNumberChange = onNumberChange( this.props.onUpdate );
 
-  onDateChage = date => {
+  onDateChage = date =>
     this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
-    //this.setState({ disabled: false });
+
+  disableSchoolReset = () => {
+    const store_reset = this.props.base.store_reset > 0 ? 0 : toJulian( moment() );
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: true });
   }
+
+  enableSchoolReset = event => {
+    const store_reset = event.target.value;
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: false });
+  }
+
 
   render () {
     const { base } = this.props;
     let { 
-      pic_mission_type, store_reset, school_gender,
+      pic_mission_type,   store_reset,  school_gender,
       print_parent_tasks, allow_parent_tasks,
     } = base;
 
-    //let store_reset_jd = store_reset;
-
-    //store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined; 
-    console.log( store_reset );
-    //console.log( store_reset_jd ); 
+    const store_reset_jd = store_reset;
+    store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
+    //console.log( store_reset );
+    //console.log( store_reset_jd );
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
-    const storeResetProps = { name: 'store_reset', onChange: this.onChange } 
+    const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
 
     return (
       <Row id='SettingsRow'>
@@ -94,42 +104,43 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
 
-          <Radio value='2458663' required 
+          <Radio name='store_miles_reset' value='2458663' 
             { ...storeResetProps }
-           checked={ store_reset === '2458663' }
-            >
+            onChange={ this.enableSchoolReset }
+            checked={ store_reset_jd === 2458663 }>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio value='2458733'
+          <Radio name='store_miles_reset' value='2458733' 
             { ...storeResetProps }
-            checked={ store_reset === '2458733' }
-          >
+            onChange={ this.enableSchoolReset }
+            checked={ store_reset_jd === 2458733 }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
-          <br />
 
-          <Radio value='0' 
+          <Radio name='store_miles_reset' id='store_reset' value='0'
             { ...storeResetProps }
-            checked={ store_reset === '0' } 
-          >
-            Never (This includes all miles from previous years)
+            onChange={ this.disableSchoolReset } 
+            checked={ store_reset_jd === 0 }>
+            Never (This includes all miles from previous years) 
           </Radio>
           <br />
 
-          <Radio value={ toJulian( moment() ) }
-           { ...storeResetProps }
-          >
+          <Radio name='store_miles_reset' value={ toJulian( moment() ) }
+            { ...storeResetProps }
+            onChange={ this.enableSchoolReset }  
+            checked={ store_reset_jd === toJulian( moment() ) }>
             Custom Date:
           </Radio>
+          <br />
 
-          <Date value={ julian.toDate( toJulian( moment() ) ) }
-            //disabled = { this.state.disabled }
+          <Date value={ store_reset }
+            disabled = { this.state.disabled }
             onChange={ this.onDateChage } />
 
           {/* <Date value={ store_reset }
             disabled = { !store_reset }
-            onChange={ this.onDateChage } />
+            onChange={ this.onDateChage } /> */}
           
           {/* <Radio name='store_miles_reset' checked={ !store_reset } id='store_reset' onChange={ this.disableSchoolReset }>
             Never (Points will continue accumulating from last year)
