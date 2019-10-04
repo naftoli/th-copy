@@ -121,7 +121,7 @@ export class SettingsRow extends Component {
           <Radio name='store_miles_reset' id='store_reset' value='0'
             { ...storeResetProps }
             onChange={ this.disableSchoolReset } 
-            checked={ store_reset_jd === '0' }>
+            checked={ store_reset_jd === 0 }>
             Never (This includes all miles from previous years) 
           </Radio>
           <br />
@@ -129,7 +129,7 @@ export class SettingsRow extends Component {
           <Radio name='store_miles_reset' value={ toJulian( moment() ) }
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }  
-            checked={ store_reset_jd === toJulian( moment() ) }>
+            checked={ store_reset_jd === "'" + toJulian( moment() ) + "'" }>
             Custom Date:
           </Radio>
           <br />
