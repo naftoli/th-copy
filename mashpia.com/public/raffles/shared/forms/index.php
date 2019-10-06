@@ -33,7 +33,28 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual
         </p>
         
-        <h2>Weekly / Monthly Raffles</h2>
+        <h2>Weekly Raffles</h2>
+        <div id="action-links">
+            <a href="eligible_form.php">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <span class="link-text">Eligible Students</span>
+                </div>
+            </a>
+            <a href="winners_form.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
+                    <span class="link-text">Winners</span>
+                </div>
+            </a>
+            <a href="/raffles/posters/weekly.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                    <span class="link-text">Weekly Raffle Winners Posters</span>
+                </div>
+            </a>
+        </div>
+        <h2>Grand Raffles</h2>
         <div id="action-links">
             <a href="eligible_form.php">
                 <div class="button">
@@ -48,45 +69,44 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <h2>Yearly Raffle</h2>
-        <div id="action-links">
+        <h2>Raffle 180</h2>
+        <div id="action-links">            
             <?if ($admin_user['auth'] == 'super') {?>
                 <a href="../../yearly/eligibility_report_hq.php">
                     <div class="button">
                         <img src="/images/icon_auction.png" height="32" alt="tickets"/>
-                        <span class="link-text">Eligible Students only</span>
+                        <span class="link-text">Eligible Students</span>
                     </div>
                 </a>
             <? } else { ?>
                 <a href="../../yearly/eligibility_report.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Student Eligibility Report</span>
+                    <span class="link-text">Eligible Students</span>
                 </div>
             </a>
             <? } ?>
-            <a href="../../yearly/printout/">
+            <a href="winners_form.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
+                    <span class="link-text">Winners</span>
+                </div>
+            </a>
+        </div>
+
+            <!-- <a href="../../yearly/printout/">
                 <div class="button">
                     <img src="/images/icon_auction.png" height="32" alt="tickets"/>
                     <span class="link-text">Personalized Raffle Posters w/ Eligible List</span>
                 </div>
-            </a>
+            </a> -->
             <!-- <a href="../../yearly/printout/">
                 <div class="button">
                     <img src="/images/parentIcons/Printer.gif" height="32" alt="tickets"/>
                     <span class="link-text">Print Posters</span>
                 </div>
             </a> -->
-        </div>
-        <h2>Posters</h2>
-        <div id="action-links">
-            <a href="/raffles/posters/weekly.php">
-                <div class="button">
-                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
-                    <span class="link-text">Weekly Raffle Winners Posters</span>
-                </div>
-            </a>
-        </div>
+
         <?if ($admin_user['auth'] == 'super') {?>
             <h2>Administration Forms</h2>
             <div id="action-links">
@@ -99,7 +119,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <a href="/admin_prize_auction.php">
                     <div class="button">
                         <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
-                        <span class="link-text">Monthly Prizes</span>
+                        <span class="link-text">Grand Prizes</span>
                     </div>
                 </a>
                 <br/>
