@@ -166,7 +166,7 @@
     ]
   },
   {
-    "label": "Raffles",  "legacy": true, "path": "/raffles/", "module": "chayolei",
+    "label": "Mission Marathon",  "legacy": true, "path": "/raffles/", "module": "chayolei",
     "icon": "/images/icon_auction.png"
   },
   {

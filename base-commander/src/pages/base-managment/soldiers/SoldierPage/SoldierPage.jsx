@@ -98,7 +98,7 @@ class SoldierPage extends Component {
     .then( soldier => this.setState({ updates: {}, soldier }) );
   }
   
-  // update missions
+  // update missions 
   updateMissions = updates => {
     let { soldier } = this.state;
     // update the missions
@@ -129,8 +129,17 @@ class SoldierPage extends Component {
     if ( isInvalid )
       return toast.error( 'Please correct all invalid fields' );
 
-    if ( !this.state.updates.class_id ) {
-      return toast.error('You must choose a platoon.')
+    if ( !this.state.soldier.class_id && this.state.updates.class_id === undefined ) {
+      console.log(this.state.soldier);
+      return toast.error('You must choose a platoon.');
+    } 
+    if (this.state.updates.school_id !== undefined && this.state.updates.class_id === undefined) {
+      console.log(this.state.updates);
+      return toast.error('You must choose a platoon.');
+    } 
+    if (this.state.updates.class_id !== undefined && this.state.updates.class_id === null) {
+      console.log(this.state.updates);
+      return toast.error('You must choose a platoon.');
     }
 
     // update the soldier
@@ -184,7 +193,7 @@ class SoldierPage extends Component {
           </NavigationTab>
 
           { isBC ( login.code ) && 
-            <NavigationTab tab={4} icon='award' { ...navProps }> 
+            <NavigationTab tab={4} icon='award' { ...navProps }>
               Medals
             </NavigationTab>
           }
