@@ -75,7 +75,7 @@ class Constants{
     }
     
     public static function get_monthly_task_requirment() {
-        return 20;
+        return 60;
     }
     
 }
