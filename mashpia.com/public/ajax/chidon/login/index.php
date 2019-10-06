@@ -19,9 +19,11 @@ if ( !$username || !$password ) {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 // authenticate user
 $stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM admins WHERE username = :username AND password = :pass
+    SELECT admin_id, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country FROM admins WHERE username = :username AND password = :pass
 ");
 $stmt->execute([
     ':username' =>  $username, 
@@ -46,30 +48,75 @@ if ( $row ) {
     // ]);
     $parent = $row;
     $admin_id = $row['admin_id'];
-    
-    $ids = [];
+
+    // get info for chidon site 
+    // make sure to only pull up children from grade 4 
+    // make sure that the school and child registered for this year
     $stmt = $MASHPIA_DB->prepare("
-        SELECT id FROM admin_auths 
-        WHERE admin_id = :id 
-        and (role_id = 1 or auth = 'user')
+        SELECT u.first, u.last, u.first_he, u.last_he, u.gender, u.dob, s.school_id, s.school_name, c.class_grade FROM users u 
+        JOIN schools s USING (school_id) 
+        JOIN classes c ON c.class_id = u.class_id  
+        WHERE u.chidon = 1 
+        AND u.user_id in (
+            SELECT id FROM admin_auths 
+            WHERE admin_id = :id 
+            AND (role_id = 1 OR auth = 'user')
+        )
     ");
-    $stmt->execute([':id' => $admin_id]);
+    $stmt->execute([
+        ':id'   => $admin_id, 
+    ]);
     $rows = $stmt->fetchAll();
+
+    $chidon_year = GlobalSettings::getChidonYear();
+
+    $children = [];
     foreach ( $rows as $row ) {
-        $ids[] = $row['id'];
+        // make sure child is in grade 4 and up
+        if ( intval( $row['class_grade'] ) < 4 ) continue;
+
+        // make sure school has already registered for the year
+        $school_id = $row['school_id'];
+        $user_id = $row['user_id'];
+
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * FROM school_registrations 
+            WHERE year = :year 
+            AND school_id = :school
+        ");
+        $stmt->execute([
+            ':year'     =>  $chidon_year,
+            ':school'   =>  $school_id 
+        ]);
+        $rows = $stmt->fetchAll();
+        if ( !$rows ) continue;
+        
+        // make sure child hasn't already registered for chidon
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * FROM registration_charges 
+            WHERE user_id = :user 
+            AND year = :year
+            AND type = 'chidon' 
+        ");
+        $stmt->execute([
+            ':user' =>  $user_id, 
+            ':year' =>  $chidon_year
+        ]);
+        $rows = $stmt->fetchAll();
+        if ( $rows ) continue;
+
+        $chidon_cost = GlobalSettings::getChidonCost( $school_id );
+        $row['chidon_cost'] = $chidon_cost;
+        $children[] = $row;
     }
 
-    // get children info 
-    $stmt = $MASHPIA_DB->query("
-        SELECT * FROM users u 
-        JOIN classes c USING (class_id) 
-        WHERE u.user_registered > 0 
-        AND u.user_id in (" . implode(',', $ids) . ")
-    ");
-    $rows = $stmt->fetchAll();
-
     $info['parent'] = $admin;
-    $info['children'] = $rows;
+    $info['children'] = $children;
+
+    echo json_encode([
+        'success'   =>  true,
+        'data'      =>  $info
+    ]);
 } else {
     echo json_encode([
         'success'   =>  false, 

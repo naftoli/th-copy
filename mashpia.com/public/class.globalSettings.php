@@ -140,7 +140,7 @@ class GlobalSettings {
             if ( $school_id == 269 ) return 45;
             else return 12;
         }
-        else return 8;
+        return 8;
     }
 
     /**
