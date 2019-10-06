@@ -31,29 +31,14 @@ $stmt->execute([
 ]);
 $row = $stmt->fetch();
 if ( $row ) {
-    // send back encrypted admin id with year
-    // require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
-    // require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-
-    // $year = GlobalSettings::getChidonYear();
-    // $admin_id = $row['admin_id'];
-    // $admin = encrypt_decrypt('encrypt', $admin_id);
-
-    // echo json_encode([
-    //     'success'   =>  true,
-    //     'data'      =>  [
-    //         'admin' =>  $admin, 
-    //         'year'  =>  $year
-    //     ]
-    // ]);
+    // get info for chidon site
     $parent = $row;
     $admin_id = $row['admin_id'];
-
-    // get info for chidon site 
+ 
     // make sure to only pull up children from grade 4 
     // make sure that the school and child registered for this year
     $stmt = $MASHPIA_DB->prepare("
-        SELECT u.first, u.last, u.first_he, u.last_he, u.gender, u.dob, s.school_id, s.school_name, c.class_grade FROM users u 
+        SELECT u.user_id, u.first, u.last, u.first_he, u.last_he, u.gender, u.dob, s.school_id, s.school_name, c.class_grade FROM users u 
         JOIN schools s USING (school_id) 
         JOIN classes c ON c.class_id = u.class_id  
         WHERE u.chidon = 1 
