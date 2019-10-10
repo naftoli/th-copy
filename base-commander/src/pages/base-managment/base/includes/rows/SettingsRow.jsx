@@ -11,7 +11,7 @@ import { onCheckboxChange, onInputChange, onNumberChange } from 'functions/event
 export class SettingsRow extends Component {
 
   state = {
-    disabled: false
+    disabled: false, 
   };
 
   onChange = onInputChange( this.props.onUpdate );
@@ -32,7 +32,6 @@ export class SettingsRow extends Component {
     this.props.onUpdate({ store_reset });
     this.setState({ disabled: false });
   }
-
 
   render () {
     const { base } = this.props;
@@ -104,21 +103,22 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Store Miles Start From:</Label>
 
-          <Radio name='store_miles_reset' value='2458663' 
+          <Radio value='2458663' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === '2458663' }>
             Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
           </Radio>
 
-          <Radio name='store_miles_reset' value='2458733' 
+          <Radio value='2458733' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === '2458733' }>
             Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
           </Radio>
 
-          <Radio name='store_miles_reset' id='store_reset' value='0'
+          <br />
+          <Radio id='store_reset' value='0'
             { ...storeResetProps }
             onChange={ this.disableSchoolReset } 
             checked={ store_reset_jd === 0 }>
@@ -126,7 +126,7 @@ export class SettingsRow extends Component {
           </Radio>
           <br />
 
-          <Radio name='store_miles_reset' value={ toJulian( moment() ) }
+          <Radio value={ toJulian( moment() ) }
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }>
             Custom Date:
