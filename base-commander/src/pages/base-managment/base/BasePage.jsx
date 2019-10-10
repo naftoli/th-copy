@@ -137,6 +137,7 @@ class BasesPage extends Component {
             base={ base }
             login={ login }
             updated={ updated }
+            updates={ this.state.updates }
             refresh={ this.loadBase }
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
