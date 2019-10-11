@@ -5,6 +5,7 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $school_id = 588; // boro park school
+$school_id = 584;
 $sql = "
     SELECT 
         user_id, admin_id, class_grade
