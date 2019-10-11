@@ -4,8 +4,9 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = [];
-$school_id = 588; // boro park school
-$school_id = 584;
+//$school_id = 588; // boro park school
+$school_id = 584; // yavne school montreal
+
 $sql = "
     SELECT 
         user_id, admin_id, class_grade
