@@ -26,7 +26,7 @@ if ( isset( $_FILES['chidon'] ) ) {
                 $info[] = $row;
             }
         }
-        echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+        //echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
         $updated = 0;
         $success = true;
