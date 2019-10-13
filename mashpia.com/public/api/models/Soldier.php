@@ -417,6 +417,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
+        // turn off chidon reg
+        $result['chidon'] = true;
 
         return $result;
     }
