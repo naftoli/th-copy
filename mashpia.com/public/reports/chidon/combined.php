@@ -21,7 +21,7 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         $to = '2019-09-25';
     } else if ( $_POST['date'] == 4 ) {
         $from = '2019-09-26';
-        $to = '2019-10-11';
+        $to = '2019-10-25';
     } 
 }
 
@@ -99,7 +99,7 @@ $booklet_grand_totals = [
                 >3rd Batch (from Sept 18 to Sept 25)</option>
                 <option value="4"
                 <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                >4th Batch (from Sept 26 to Oct 11)</option>
+                >4th Batch (from Sept 26 to Oct 25)</option>
             </select>
         </p>
         <p>  

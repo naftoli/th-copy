@@ -124,3 +124,16 @@
 // }
 // echo "<pre>"; print_r($updated); echo "</pre>";
 ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="scripts/jquery-1.8.3.js"></script>
+        <script>
+            let school = 614;
+            let type = 'school';
+            $.post('ajax/enrollIntoCampaigns.php', { type : type, id : school });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
