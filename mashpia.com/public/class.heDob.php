@@ -28,6 +28,11 @@ class HeDob {
 			$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
 			$jDate = jdtojewish($jd);
 			$arrJDate = explode("/", $jDate);
+			if ( $this->debug ) {
+				echo $this->user_id;
+				echo "<pre>"; print_r( $arrJDate ); echo "</pre>";
+				return;
+			}
 			$hMonth = $arrJDate[0];
 			$hDay = $arrJDate[1];
 			$hYear = $arrJDate[2];
@@ -40,40 +45,7 @@ class HeDob {
 			}
 
 			// update users table
-			if ( $bornInLeap ) {
-				$months = [
-					1	=>	'Tishrei', 
-					2	=>	'Cheshvon',
-					3	=>	'Kislev',
-					4	=>	'Teves',
-					5	=>	'Shevat',
-					6	=>	'Adar I', 
-					7	=>	'Adar II',
-					8	=>	'Nissan',
-					9	=>	'Iyar',
-					10	=>	'Sivan',
-					11	=>	'Tamuz',
-					12	=>	'Av',
-					13	=>	'Elul'
-				];
-			} else {
-				$months = [
-					1	=>	'Tishrei', 
-					2	=>	'Cheshvon',
-					3	=>	'Kislev',
-					4	=>	'Teves',
-					5	=>	'Shevat',
-					6	=>	'Adar', 
-					7	=>	'Adar',
-					8	=>	'Nissan',
-					9	=>	'Iyar',
-					10	=>	'Sivan',
-					11	=>	'Tamuz',
-					12	=>	'Av',
-					13	=>	'Elul'
-				];
-			}
-			$dob_he = $hday . " " . $months[$hMonth] . ", " . $hYear;
+			$dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM );
 			$sqlHe = "update users set dob_he = '" . $dob_he . "' where user_id = " . $this->user_id;
 			mysql_query( $sqlHe );
 			
