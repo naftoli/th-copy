@@ -121,7 +121,17 @@ function checkDaily( $user_id, $dates ) {
  * @param string $raffle_name
  * @return void
  */
+
+
+// check raffle eligibilities
+$yearly = checkYearly( $user );
+$monthly = checkMonthly( $user );
+$weekly = checkWeekly( $user );
+
 function formatRaffleInfo( $total, $required, $raffle_name ){
+
+	global $weekly, $monthly, $yearly;
+
     if ( $total > 0 )
         $percent_done = $total > $required ? 100 : ( $total / $required ) * 100;
     else
@@ -131,7 +141,17 @@ function formatRaffleInfo( $total, $required, $raffle_name ){
 	if ( $total >= $required ) {
 		$msg = "Eligible for $raffle_name raffle";
 	} else {
-		$msg = ( $required - intval( $total ) ) . " days of tasks needed for $raffle_name raffle";
+
+		if ($weekly) {
+			$msg = ( $required - intval( $total ) ) . " days of tasks needed to pass ($raffle_name) 5 Flag raffle weekly";
+		} else if ($monthly) {
+			// $msg = ( $required - intval( $total ) ) . " days of tasks needed to pass ($raffle_name) 5 Flag raffle monthly";
+			$msg = ( $required - intval( $total ) ) . " days of tasks needed to pass upcoming 60 flag raffle";
+		} else if ($yearly) {
+			// $msg = ( $required - intval( $total ) ) . " days of tasks needed to pass ($raffle_name) 5 Flag raffle yearly";
+			$msg = ( $required - intval( $total ) ) . " days of tasks needed to pass the 180  flag";
+		}
+
     }
 
 	return [ "percent_done" => $percent_done, "msg" => $msg, 'missed-deadline' => false ];
@@ -153,10 +173,6 @@ function getDates( $type ) {
 	);
 }
 
-// check raffle eligibilities
-$yearly = checkYearly( $user );
-$monthly = checkMonthly( $user );
-$weekly = checkWeekly( $user );
 
 if ( $weekly ) { ?>
 <div class="progress <?= $weekly['percent_done'] == 100 ? "compleate" : ""?>">

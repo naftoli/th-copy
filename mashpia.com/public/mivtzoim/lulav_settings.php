@@ -9,6 +9,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+$test = $as->setSchools();
+
 $msg = '';
 if ( isset( $_POST['submit'] ) ) {
     $school = $_POST['school'];
@@ -55,6 +57,7 @@ $stmt = $MASHPIA_DB->query("
 $rows = $stmt->fetchAll();
 foreach ( $rows as $row ) {
     $info[$row['school_id']] = $row;
+    $info[$row['lulav_shipping']] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -81,6 +84,7 @@ foreach ( $rows as $row ) {
             100+ children guaranteed = $3 shipping charge per child<br /><br />
             You can also totally opt out from allowing your children to purchase lulav sets.
         </div>
+        <?php echo 'this is a ' . $test; ?>
         <br />
         <?php 
         if ( !empty( $msg ) ) {
@@ -93,21 +97,28 @@ foreach ( $rows as $row ) {
                 if ( count( $schools ) > 1 ) {
                     echo "<select name='school'><option value='0'>Choose School</option>";
                     foreach ( $schools as $id => $name ) {
-                        echo "<option value='" . $id . "'>" . $name . "</option>";
+
+                        if ($info[$row['school_id']] == $id) {
+                            echo "<option value='" . $id . "' selected>" . $name . "</option>";
+                        } else {
+                            echo "<option value='" . $id . "'>" . $name . "</option>";
+                        }
+
                     }
                     echo "</select><br /><br />";
                 } else {
                     echo "<input type='hidden' name='school' value='" . key( $schools ) . "' />";
                 }
                 ?>
-                <input type="radio" name="shipping-fee" value="0" /> We will PICKUP FROM HEADQUARTERS = NO charge<br />
-                <input type="radio" name="shipping-fee" value="15" /> 1 - 4 children guarenteed = $15<br />
-                <input type="radio" name="shipping-fee" value="10" /> 5 - 9 children guaranteed = $10<br />
-                <input type="radio" name="shipping-fee" value="6" /> 10 - 14 children guaranteed = $6<br />
-                <input type="radio" name="shipping-fee" value="5" /> 15 - 29 children guaranteed = $5<br />
-                <input type="radio" name="shipping-fee" value="4" /> 30 - 99 children guaranteed = $4<br />
-                <input type="radio" name="shipping-fee" value="3" /> 100+ children guaranteed = $3<br /><br />
-                <input type="radio" name="shipping-fee" value="-1" /> I would like to have my school removed from list of schools offering Lulav sets.<br /><br />
+                
+                <input type="radio" name="shipping-fee" value="0" <?php if($info[$row['lulav_shipping']] == 0) { echo 'checked'; } ?> /> We will PICKUP FROM HEADQUARTERS = NO charge<br />
+                <input type="radio" name="shipping-fee" value="15" <?php if($info[$row['lulav_shipping']] == 15) { echo 'checked'; } ?> /> 1 - 4 children guarenteed = $15<br />
+                <input type="radio" name="shipping-fee" value="10" <?php if($info[$row['lulav_shipping']] == 10) { echo 'checked'; } ?> /> 5 - 9 children guaranteed = $10<br />
+                <input type="radio" name="shipping-fee" value="6" <?php if($info[$row['lulav_shipping']] == 6) { echo 'checked'; } ?> /> 10 - 14 children guaranteed = $6<br />
+                <input type="radio" name="shipping-fee" value="5" <?php if($info[$row['lulav_shipping']] == 5) { echo 'checked'; } ?> /> 15 - 29 children guaranteed = $5<br />
+                <input type="radio" name="shipping-fee" value="4" <?php if($info[$row['lulav_shipping']] == 4) { echo 'checked'; } ?> /> 30 - 99 children guaranteed = $4<br />
+                <input type="radio" name="shipping-fee" value="3" <?php if($info[$row['lulav_shipping']] == 3) { echo 'checked'; } ?> /> 100+ children guaranteed = $3<br /><br />
+                <input type="radio" name="shipping-fee" value="-1" <?php if($info[$row['lulav_shipping']] == -1) { echo 'checked'; } ?> /> I would like to have my school removed from list of schools offering Lulav sets.<br /><br />
                 <input type="submit" value="submit" name="submit" />
             </form>
         </div>
