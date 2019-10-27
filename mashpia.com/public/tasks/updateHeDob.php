@@ -2,17 +2,17 @@
 require '../db.php';
 
 $qrys = [];
-$users = [];
 $sql = "select * from users where user_registered > 0";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $heDob = $row['dob_he'];
-    if ( !preg_match('/[א-ת]/', $heDob) ) {
-        $users[] = $row['user_id'];
-        $arrDOB = explode('-', $row['dob']);
+    if ( !empty( $row['dob'] ) && !preg_match('/[א-ת]/', $heDob) ) {
+        $arrDOB = explode('-', $row['dob']); 
         $jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
-        $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM );
+        //echo "JD: " . $jd . "<br />";
+        $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
         $dobHe = iconv ('WINDOWS-1255', 'UTF-8', $dobHe);
+        //echo "HE dob: " . $dobHe . "<br />";
         $qrys[] = "update users set dob_he = '" . $dobHe . "' where user_id = " . $row['user_id'];
     }
 }
