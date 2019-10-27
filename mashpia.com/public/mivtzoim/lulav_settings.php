@@ -9,6 +9,121 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+$msg = '';
+if ( isset( $_POST['submit'] ) ) {
+    $school = $_POST['school'];
+    $fee = $_POST['shipping-fee'];
+    if ( $school > 0 ) {
+        if ( $fee >= 0 ) {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE schools SET 
+                allow_lulav = 1, 
+                lulav_shipping = :fee 
+                WHERE school_id = :id
+            ");
+            $res = $stmt->execute([
+                ':fee'  =>  $fee, 
+                ':id'   =>  $school
+            ]);
+        } else {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE schools SET 
+                allow_lulav = 0 
+                where school_id = :id
+            ");
+            $res = $stmt->execute([':id' => $school]);
+        }
+        if ( $res ) {
+            $msg = "School setting updated.";
+        } else {
+            $msg = "Error updating setting.";
+        }
+    } else {
+        $msg = "You must choose a school";
+    }
+}
+
+$schoolList = implode(',', array_keys( $schools ));
+$stmt = $MASHPIA_DB->query("
+    SELECT 
+        school_id, school_name, allow_lulav, lulav_shipping
+    FROM
+        schools
+    WHERE
+        school_id IN ($schoolList)
+");
+$rows = $stmt->fetchAll();
+foreach ( $rows as $row ) {
+    $info[$row['school_id']] = $row;
+}
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Mivtzoim Settings</title>
+        <link href="/admin_styles.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
+        <h1>Mivtza Lulav Settings</h1>
+        <div class='infobox'>
+            Use the following form to determine what the shipping charges will be for your students.<br /><br />
+            If you choose to PICK UP, your children will not be charged anything.<br /><br />
+            Otherwise, the automatic / default shipping charge is $15 per student. In order to bring down the cost, you need to choose how many sets you 
+            GUARANTEE to have purchased.<br /><br />
+            Here is the breakdown:<br /><br />
+            1 - 4 children guaranteed = $15 shipping charge per child<br />
+            5 - 9 children guaranteed = $10 shipping charge per child<br />
+            10 - 14 children guaranteed = $6 shipping charge per child<br />
+            15 - 29 children guaranteed = $5 shipping charge per child<br />
+            30 - 99 children guaranteed = $4 shipping charge per child<br />
+            100+ children guaranteed = $3 shipping charge per child<br /><br />
+            You can also totally opt out from allowing your children to purchase lulav sets.
+        </div>
+        <br />
+        <?php 
+        if ( !empty( $msg ) ) {
+            echo "<div style='color: red'>" . $msg . "</div><br />";
+        }
+        ?>
+        <div>
+            <form method="post" action="lulav_settings.php">
+                <?php
+                if ( count( $schools ) > 1 ) {
+                    echo "<select name='school'><option value='0'>Choose School</option>";
+                    foreach ( $schools as $id => $name ) {
+                        echo "<option value='" . $id . "'>" . $name . "</option>";
+                    }
+                    echo "</select><br /><br />";
+                } else {
+                    echo "<input type='hidden' name='school' value='" . key( $schools ) . "' />";
+                }
+                ?>
+                <input type="radio" name="shipping-fee" value="0" /> We will PICKUP FROM HEADQUARTERS = NO charge<br />
+                <input type="radio" name="shipping-fee" value="15" /> 1 - 4 children guarenteed = $15<br />
+                <input type="radio" name="shipping-fee" value="10" /> 5 - 9 children guaranteed = $10<br />
+                <input type="radio" name="shipping-fee" value="6" /> 10 - 14 children guaranteed = $6<br />
+                <input type="radio" name="shipping-fee" value="5" /> 15 - 29 children guaranteed = $5<br />
+                <input type="radio" name="shipping-fee" value="4" /> 30 - 99 children guaranteed = $4<br />
+                <input type="radio" name="shipping-fee" value="3" /> 100+ children guaranteed = $3<br /><br />
+                <input type="radio" name="shipping-fee" value="-1" /> I would like to have my school removed from list of schools offering Lulav sets.<br /><br />
+                <input type="submit" value="submit" name="submit" />
+            </form>
+        </div>
+    </body>
+</html>
+<!-- <?php
+ini_set('display_errors',1);
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$schools = $as->getSchools();
+
 $test = $as->setSchools();
 
 $msg = '';
@@ -123,4 +238,4 @@ foreach ( $rows as $row ) {
             </form>
         </div>
     </body>
-</html>
+</html> -->
