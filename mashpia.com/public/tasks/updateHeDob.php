@@ -13,11 +13,12 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
         $dobHe = iconv ('WINDOWS-1255', 'UTF-8', $dobHe);
         //echo "HE dob: " . $dobHe . "<br />";
-        $qrys[] = "update users set dob_he = '" . $dobHe . "' where user_id = " . $row['user_id'];
+        $qrys[] = "update users set dob_he = '" . addslashes( $dobHe ) . "' where user_id = " . $row['user_id'];
     }
 }
 
 foreach ( $qrys as $sql ) {
+    //echo $sql;
     mysql_query( $sql );
 }
 echo "done.";
