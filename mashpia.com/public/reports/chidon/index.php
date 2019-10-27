@@ -52,7 +52,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </div>
         <h2>Other Reports</h2>
         <div id="action-links">
-            <a href="/chidon/reports/registration.php<?=$debug ? "?debug=true": "";?>">
+            <a href="chidon_enrollment.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">Registration Report</span>
