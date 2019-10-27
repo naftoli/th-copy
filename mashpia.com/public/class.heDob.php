@@ -28,16 +28,27 @@ class HeDob {
 			$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
 			$jDate = jdtojewish($jd);
 			$arrJDate = explode("/", $jDate);
+			if ( $this->debug ) {
+				echo $this->user_id;
+				echo "<pre>"; print_r( $arrJDate ); echo "</pre>";
+				return;
+			}
 			$hMonth = $arrJDate[0];
 			$hDay = $arrJDate[1];
 			$hYear = $arrJDate[2];
-			
+
 			//find out if user born in leap year
 			if (((7 * $arrJDate[2] + 1) % 19) < 7) {
 				$bornInLeap = 1;
 			} else {
 				$bornInLeap = 0;
 			}
+
+			// update users table
+			// $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM );
+			// $dobHe = iconv ('WINDOWS-1255', 'UTF-8', $dobHe);
+			// $sqlHe = "update users set dob_he = '" . $dob_he . "' where user_id = " . $this->user_id;
+			// mysql_query( $sqlHe );
 			
 			$user_id = $this->user_id;
 			//find out if we are inserting or updating
@@ -45,17 +56,17 @@ class HeDob {
 			$result = mysql_query($sql);
 			if (mysql_num_rows($result) > 0) {
 				$sql = "update he_dob 
-								set he_mm = $hMonth, 
-								he_dd = $hDay, 
-								he_yy = $hYear, 
-								born_in_leap = $bornInLeap, 
-								wp_synced = 0 
-								where user_id = " . $user_id;
+						set he_mm = $hMonth, 
+						he_dd = $hDay, 
+						he_yy = $hYear, 
+						born_in_leap = $bornInLeap, 
+						wp_synced = 0 
+						where user_id = " . $user_id;
 			} else {
 				$sql = "insert into he_dob values($user_id, $hMonth, $hDay, $hYear, $bornInLeap, 0)";
 			}
 			// if ( $this->debug ) echo $sql . "<br />";
-      mysql_query($sql);
+      		mysql_query($sql);
 		}
 	}
 }
