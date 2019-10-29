@@ -3,14 +3,16 @@ $admin_auth = array('school');
 require('header.php');
 require_once('file_save.php'); 
 
+require_once 'class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
+$startEnd = GlobalSettings::getCurYearDates();
+
 //get default dates
 $dates = array();
-$sql = "SELECT * FROM reports 
-        WHERE report_type='mission_cover_sheet' 
-        AND visibility != 'none' 
-        and start_date >= 2456530 
-        and end_date <= 2456914    
-        ORDER BY start_date";   
+$sql = "SELECT * FROM parshos 
+        WHERE start >= " . $startEnd['start'] . " 
+        and end <= " . $startEnd['end'];        
+//year = " . $year;      
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;
@@ -197,12 +199,12 @@ while ($row = mysql_fetch_assoc($result)) {
                         $today = unixtojd();
                         echo $today;
                         foreach ($dates as $date) {
-                            echo "<option value='" . $date['start_date'];
-                            if ( $today >= $date['start_date'] && $today <= $date['end_date'] ) 
+                            echo "<option value='" . $date['start'];
+                            if ( $today >= $date['start'] && $today <= $date['end'] ) 
                                 echo "' selected>";
                             else 
                                 echo "'>";
-                            echo $date['report_name'] . "</option>";
+                            echo $date['name'] . "</option>";
                         }
                         ?>
                         </select><br />
@@ -210,12 +212,12 @@ while ($row = mysql_fetch_assoc($result)) {
                         <? 
                         $today += 70;
                         foreach ($dates as $date) {
-                            echo "<option value='" . $date['end_date'];
-                            if ( $today >= $date['start_date'] && $today <= $date['end_date'] ) 
+                            echo "<option value='" . $date['end'];
+                            if ( $today >= $date['start'] && $today <= $date['end'] ) 
                                 echo "' selected>";
                             else 
                                 echo "'>";
-                            echo $date['report_name'] . "</option>";
+                            echo $date['name'] . "</option>";
                         }
                         ?>
                         </select><br />
@@ -247,12 +249,12 @@ while ($row = mysql_fetch_assoc($result)) {
                             <?
                             $today = unixtojd();
                             foreach ($dates as $date) {
-                                echo "<option value='" . $date['start_date'];
-                                if ( $today >= $date['start_date'] && $today <= $date['end_date'] ) 
+                                echo "<option value='" . $date['start'];
+                                if ( $today >= $date['start'] && $today <= $date['end'] ) 
                                     echo "' selected>";
                                 else 
                                     echo "'>";
-                                echo $date['report_name'] . "</option>";
+                                echo $date['name'] . "</option>";
                             }
                             ?>
                             </select><br />
@@ -260,12 +262,12 @@ while ($row = mysql_fetch_assoc($result)) {
                             <? 
                             //$today += 70;
                             foreach ($dates as $date) {
-                                echo "<option value='" . $date['end_date'];
-                                if ( $today >= $date['start_date'] && $today <= $date['end_date'] ) 
+                                echo "<option value='" . $date['end'];
+                                if ( $today >= $date['start'] && $today <= $date['end'] ) 
                                     echo "' selected>";
                                 else 
                                     echo "'>";
-                                echo $date['report_name'] . "</option>";
+                                echo $date['name'] . "</option>";
                             }
                             ?>
                             </select><br />
@@ -340,6 +342,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 while ( $row = mysql_fetch_assoc( $result ) ) {
                     $reports[$row['report_id']] = $row['report_name'];
                 }
+                //echo "<pre>"; print_r( $reports ); echo "</pre>";
 
                 //create list
                 foreach ( $users as $grade => $names ) {                                    
