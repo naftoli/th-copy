@@ -494,13 +494,15 @@ class MivtzoimReport {
         if ( $school > 0 ) {
             $sth = $MASHPIA_DB->prepare("
                 SELECT 
-                    user_id, first, last, class_grade, class_sub, school_name 
+                    user_id, first, last, class_grade, class_sub, school_name
                 FROM
                     users u
                         JOIN
+                    schools s ON s.school_id = u.school_id
+                        JOIN
                     classes c ON c.class_id = u.class_id
                 WHERE
-                    u.school_id = :school
+                    u.school_id = :school 
                 ORDER BY class_grade , class_sub , last , first
             ");
             $sth->execute([':school' => $school]);
@@ -722,26 +724,26 @@ class MivtzoimReport {
         $this->calculateUserMarks( $school );
 
         $names = $this->m->getShortNames();
-        if ( $school > 0 ) { // if we are showing an individual school
-            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
-            echo "<th>Grade</th>";
-            echo "<th>Student</th>";
-            foreach ( $names as $name ) {
-                echo "<th>" . $name . "</th>";
-            }
-            echo "</tr></thead><tbody>";
-            foreach ( $this->users as $grade => $more ) { 
-                foreach ( $more as $user_id => $user ) {
-                    echo "<tr><td>" . $grade . "</td><td>" . $user . "</td>";
-                    foreach ( $names as $name ) {
-                        $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
-                        echo "<td>" . $mark . "</td>";
-                    }
-                    echo "</tr>";
-                }            
-            } 
-            echo "</tbody></table>";
-        } else {
+        // if ( $school > 0 ) { // if we are showing an individual school
+        //     echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+        //     echo "<th>Grade</th>";
+        //     echo "<th>Student</th>";
+        //     foreach ( $names as $name ) {
+        //         echo "<th>" . $name . "</th>";
+        //     }
+        //     echo "</tr></thead><tbody>";
+        //     foreach ( $this->users as $grade => $more ) { 
+        //         foreach ( $more as $user_id => $user ) {
+        //             echo "<tr><td>" . $grade . "</td><td>" . $user . "</td>";
+        //             foreach ( $names as $name ) {
+        //                 $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
+        //                 echo "<td>" . $mark . "</td>";
+        //             }
+        //             echo "</tr>";
+        //         }            
+        //     } 
+        //     echo "</tbody></table>";
+        // } else {
             echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
             echo "<th>School</th>";
             echo "<th>Grade</th>";
@@ -763,7 +765,7 @@ class MivtzoimReport {
                 }
             } 
             echo "</tbody></table>";     
-        }
+        //}
     }
 }
 ?>
