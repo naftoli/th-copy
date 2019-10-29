@@ -1,29 +1,32 @@
 <?
 class MissionSheet {
-	private $weeks;
+	//private $weeks;
 
 	public function __construct() {
-		$this->weeks = array();
+		//$this->weeks = array();
 	}
 
-	public function marked( $user, $week, $start = 0, $end = 0 ) {
+	public function marked( $user, $week ) {
 		//find out start and end dates of week
-		if ( $week ) {
-			if ( !array_key_exists( $week, $this->weeks ) ) {
-		        $sql = "select start_date, end_date from reports where report_id = " . $week;
-		        $result = mysql_query( $sql );
-		        $row = mysql_fetch_assoc( $result );
-		        $start = $row['start_date'];
-		        $end = $row['end_date'];
-				$this->weeks[$week]['start'] = $start;
-				$this->weeks[$week]['end'] = $end;
-			} else {
-				$start = $this->weeks[$week]['start'];
-				$end = $this->weeks[$week]['end'];
-			}
-		}
+		// if ( $week ) {
+		// 	if ( !array_key_exists( $week, $this->weeks ) ) {
+		//         $sql = "select start_date, end_date from reports where report_id = " . $week;
+		//         $result = mysql_query( $sql );
+		//         $row = mysql_fetch_assoc( $result );
+		//         $start = $row['start_date'];
+		//         $end = $row['end_date'];
+		// 		$this->weeks[$week]['start'] = $start;
+		// 		$this->weeks[$week]['end'] = $end;
+		// 	} else {
+		// 		$start = $this->weeks[$week]['start'];
+		// 		$end = $this->weeks[$week]['end'];
+		// 	}
+		// }
 		//print_r($this->weeks); exit;
 		
+		$start = $week['start'];
+		$end = $week['end'];
+
 		//only find out whether tasks were accomplished for past weeks up to and including current week
 		$today = unixtojd();
 		if ( $today >= $end || ( $today < $end && $today >= $start ) ) {        

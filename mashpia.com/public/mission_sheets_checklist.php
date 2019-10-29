@@ -6,14 +6,14 @@ require_once('file_save.php');
 // get current working year
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
+$startEnd = GlobalSettings::getCurYearDates();
 
-// get default dates
+//get default dates
 $dates = array();
 $sql = "SELECT * FROM parshos 
-        WHERE start >= 2458292 
-        and end <= 2458753";        
-//year = " . $year;
-    
+        WHERE start >= " . $startEnd['start'] . " 
+        and end <= " . $startEnd['end'];        
+//year = " . $year;      
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;
@@ -219,17 +219,22 @@ while ($row = mysql_fetch_assoc($result)) {
             $res = mysql_query( $sql );
             $r = mysql_fetch_assoc( $res );
             
-            $reports = array();
-            $sql = "select report_id, report_name from reports 
-                    where start_date >= $from 
-                    and end_date <= $to 
-                    and visibility = 'all' 
-                    order by start_date";
-            //echo $sql;
-            $result = mysql_query( $sql );
-            while ( $row = mysql_fetch_assoc( $result ) ) {
-                $reports[$row['report_id']] = $row['report_name'];
+            // $reports = array();
+            // $sql = "select report_id, report_name from reports 
+            //         where start_date >= $from 
+            //         and end_date <= $to 
+            //         and visibility = 'all' 
+            //         order by start_date";
+            // //echo $sql;
+            // $result = mysql_query( $sql );
+            // while ( $row = mysql_fetch_assoc( $result ) ) {
+            //     $reports[$row['report_id']] = $row['report_name'];
+            // }
+            $reports = [];
+            foreach ( $dates as $date ) {
+                if ( $date['start'] >= $from && $date['end'] <= $to ) $reports[] = $date;
             }
+            //echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
 
             //create list
             $commanders = array();
@@ -264,7 +269,7 @@ while ($row = mysql_fetch_assoc($result)) {
                         <th class="student">Student</th>
                         <?
                         foreach ( $reports as $report ) {
-                            echo "<th class='week'>" . $report . "</th>";
+                            echo "<th class='week'>" . $report['name'] . "</th>";
                         }
                         ?>
                     </tr>
@@ -278,21 +283,21 @@ while ($row = mysql_fetch_assoc($result)) {
                     foreach ( $names as $user ) {                       
                         echo "<tr><td>" . $user . "</td>";
                         $students++;
-                        foreach ( $reports as $rid => $report ) {
-                            if ( $m->marked( $userIDs[$grade][$i], $rid ) ) {
+                        foreach ( $reports as $report ) {
+                            if ( $m->marked( $userIDs[$grade][$i], $report ) ) {
                                 echo "<td>&#10004;</td>";
-                                if ( isset( $total[$report] ) )
-                                    $total[$report]++;
+                                if ( isset( $total[$report['name']] ) )
+                                    $total[$report['name']]++;
                                 else 
-                                    $total[$report] = 1;
-                                if ( isset( $grandTotals[$school][$grade][$report] ) )
-                                    $grandTotals[$school][$grade][$report]++;
+                                    $total[$report['name']] = 1;
+                                if ( isset( $grandTotals[$school][$grade][$report['name']] ) )
+                                    $grandTotals[$school][$grade][$report['name']]++;
                                 else 
-                                    $grandTotals[$school][$grade][$report] = 1;
+                                    $grandTotals[$school][$grade][$report['name']] = 1;
                             } else {
                                 echo "<td>&nbsp;</td>";
-                                if ( !isset( $total[$report] ) ) {
-                                    $total[$report] = 0;
+                                if ( !isset( $total[$report['name']] ) ) {
+                                    $total[$report['name']] = 0;
                                 }
                             }
                         }
@@ -302,7 +307,7 @@ while ($row = mysql_fetch_assoc($result)) {
                     
                     echo "<tr><td>Total Completed</td>";
                     foreach ( $reports as $report ) {
-                        echo "<td>" . $total[$report] . "/" . $students . "</td>";
+                        echo "<td>" . $total[$report['name']] . "/" . $students . "</td>";
                     }
                     echo "</tr>";
                     $studentTotals[$school][$grade] = $students;
@@ -331,9 +336,9 @@ while ($row = mysql_fetch_assoc($result)) {
                     echo "<tr><td>" . $grade . "</td><td>" . $commanders[$grade] . "</td>";
 					$classTotals = 0; 
 					foreach ( $reports as $report ) {
-						if ( isset( $totals[$report] ) ) {
-                        	echo "<td>" . $totals[$report] . "/" . $studentTotals[$school][$grade] . "</td>";
-							$classTotals += $totals[$report];
+						if ( isset( $totals[$report['name']] ) ) {
+                        	echo "<td>" . $totals[$report['name']] . "/" . $studentTotals[$school][$grade] . "</td>";
+							$classTotals += $totals[$report['name']];
 						} else {
 							echo "<td>0/" . $studentTotals[$school][$grade] . "</td>";
 						}
