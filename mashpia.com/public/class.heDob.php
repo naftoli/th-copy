@@ -44,11 +44,11 @@ class HeDob {
 				$bornInLeap = 0;
 			}
 
-			// update users table
-			// $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM );
-			// $dobHe = iconv ('WINDOWS-1255', 'UTF-8', $dobHe);
-			// $sqlHe = "update users set dob_he = '" . $dob_he . "' where user_id = " . $this->user_id;
-			// mysql_query( $sqlHe );
+			// update he dob in users table
+            $dobHe = jdtojewish( $jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
+            $dobHe = iconv ('WINDOWS-1255', 'UTF-8', $dobHe);
+			$sqlHe = "update users set dob_he = '" . addslashes( $dobHe ) . "' where user_id = " . $this->user_id;
+			mysql_query( $sqlHe );
 			
 			$user_id = $this->user_id;
 			//find out if we are inserting or updating
