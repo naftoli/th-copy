@@ -83,6 +83,7 @@ $posters = array(
             <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Pickup</h2>
             <div class='info'>
+                <?=$school['shipping_name']?><br />
                 <?=$school['name']?><br />
                 <?=$school['address']?><br /><br />
                 Type of School: <?=$school['type']?><br />
