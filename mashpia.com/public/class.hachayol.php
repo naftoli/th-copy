@@ -7,6 +7,7 @@ class Hachayol {
     private $schoolDetails;
     private $chidonYear;
     private $chidonNumbers;
+    private $schoolExceptions;
     
     public function __construct() {
         require_once 'class.db.php';
@@ -15,6 +16,7 @@ class Hachayol {
         $this->schoolDetails = array();
         $this->chidonYear = GlobalSettings::getChidonYear();
         $this->chidonNumbers = array();
+        $this->schoolExceptions = [180,588,612];
     }
     
     public function setSchools( $id = null ) {
@@ -29,6 +31,7 @@ class Hachayol {
             AND u.user_registered > 0
             AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
+        $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
         //echo $sql; exit;
         

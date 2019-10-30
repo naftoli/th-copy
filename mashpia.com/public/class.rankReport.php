@@ -10,7 +10,8 @@ class RankReport extends Report {
     protected $rankInfo;
     protected $userInfo;
     protected $rankOrds;
-	protected $userHeNames;
+    protected $userHeNames;
+    protected $schoolExceptions;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -18,6 +19,7 @@ class RankReport extends Report {
         $this->userInfo = array();
 		$this->userHeNames = array();
         $this->rankOrds['Private'] = 1;
+        $this->schoolExceptions = [180,588,612];
     }
     
     public function setRanks($orderType = 'byGrade') {
@@ -41,6 +43,9 @@ class RankReport extends Report {
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
         }
+        $sql .= "
+            AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+        ";
         if ($orderType == 'byGrade') {
             $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first, r.rank_ord";
 		} else {

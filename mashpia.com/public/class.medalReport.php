@@ -13,6 +13,7 @@ class MedalReport extends Report {
     private $userInfo;
     private $medalOrds;
     private $subjects;
+    private $schoolExceptions;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -20,6 +21,7 @@ class MedalReport extends Report {
         $this->userInfo = array();
         $this->medalOrds = array();
         $this->subjects = array();
+        $this->schoolExceptions = [180,588,612];
     }
     
     public function setMedalSummary() {
@@ -41,6 +43,9 @@ class MedalReport extends Report {
 			and s.subject_id != 106";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
+        $sql .= "
+            AND sch.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+        ";
         $sql .= "
             GROUP BY sch.school_name, s.subject_id, mm.medal_ord  
             ORDER BY sch.school_name, s.subject_id, mm.medal_ord
