@@ -22,7 +22,8 @@ class Hachayol {
     public function setSchools( $id = null ) {
         //get list of schools with totals per school of registered students
         $sql = "SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
-            s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests, s.school_gender 
+            s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests, s.school_gender, 
+            s.shipping_first, s.shipping_last  
             FROM schools s
             JOIN users u
             USING ( school_id )
@@ -49,6 +50,7 @@ class Hachayol {
                 $row['shipping_country'];
             $this->schools[$method][$school]['shipping_requests'] = $row['shipping_requests'];
             $this->schools[$method][$school]['type'] = $row['school_gender'] == 'M' ? 'boys' : ( $row['school_gender'] == 'F' ? 'girls' : 'mixed' );
+            $this->schools[$method][$school]['shipping_name'] = $row['shipping_first'] . ' ' . $row['shipping_last'];
             
             $sql2 = "select a.first, a.last 
                      from admins a 
