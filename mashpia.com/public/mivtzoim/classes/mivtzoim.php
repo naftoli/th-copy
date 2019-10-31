@@ -259,6 +259,12 @@ class Mivtzoim {
                                     ':user' =>  $id, 
                                     ':task' =>  $task_id
                                 ]);
+                                // if ( $id == 23015 ) {
+                                //     echo "Task: " . $task_id . "<br />";
+                                //     echo "Mark: " . $mark . "<br />";
+                                //     echo $sth3->debugDumpParams();
+                                //     exit;
+                                // }
                             }
                         } else {
                             // do an insert
