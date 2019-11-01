@@ -1,0 +1,21 @@
+# Start command: composer update --classmap-authoritative && vendor/bin/phpstan analyze
+
+includes:
+    - vendor/wpdesk/wp-wpdesk-composer/director/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/wpdesk/wp-wpdesk-composer/director/vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    level: max
+    paths:
+        - %currentWorkingDirectory%/classes/
+    autoload_files:
+        - %currentWorkingDirectory%/vendor/autoload.php
+        - %currentWorkingDirectory%/vendor/wpdesk/wp-wpdesk-composer/director/woocommerce-stubs-3.6.1.php
+    excludes_analyse:
+        - %currentWorkingDirectory%/classes/views/html-api-status.php
+        - %currentWorkingDirectory%/classes/views/html-services.php
+    ignoreErrors:
+        - '#If condition is always false.#'
+        - '#Access to an undefined property object::\$detail.#'
+        - '#Access to an undefined property object::\$CurrencyCode.#'
+        - '#expects WPDesk_Plugin_Info#'
+        - '#Cannot access offset [^ ]+ on WC_Shipping_Zone.#'

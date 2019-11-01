@@ -1,0 +1,187 @@
+# Copyright (C) 2019 ioDSGN
+# This file is distributed under the same license as the WP Bodymovin package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Bodymovin 2.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-bodymovin\n"
+"POT-Creation-Date: 2019-05-28 09:38:07+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+
+#: includes/metaboxes.php:69
+msgid "Upload your Bodymovin generated JSON Data file here."
+msgstr ""
+
+#: includes/metaboxes.php:71
+msgid "Animation loaded. Upload another file will overwrite existing animation."
+msgstr ""
+
+#: includes/metaboxes.php:99
+msgid "No animation loaded. Publish your animation to see it's preview here."
+msgstr ""
+
+#: includes/metaboxes.php:115
+msgid ""
+"This animation requires the following image assets. Make sure that these "
+"are uploaded to your media library. %s"
+msgstr ""
+
+#: includes/metaboxes.php:116
+msgid "Edit upload URL"
+msgstr ""
+
+#: includes/metaboxes.php:123
+msgid "Update/save the animation after changing the upload URL to apply changes."
+msgstr ""
+
+#: includes/metaboxes.php:145
+msgid "This animation requires no image assets."
+msgstr ""
+
+#: includes/metaboxes.php:168
+msgid "Loop animation"
+msgstr ""
+
+#: includes/metaboxes.php:169
+msgid "Lazyload"
+msgstr ""
+
+#: includes/metaboxes.php:170
+msgid "Autoplay when in viewport"
+msgstr ""
+
+#: includes/metaboxes.php:171
+msgid "Autostop when out of viewport"
+msgstr ""
+
+#: includes/metaboxes.php:172
+msgid "Element's width"
+msgstr ""
+
+#: includes/metaboxes.php:172
+msgid "px or %"
+msgstr ""
+
+#: includes/metaboxes.php:173
+msgid "Element's minimum Height"
+msgstr ""
+
+#: includes/metaboxes.php:173
+msgid "px"
+msgstr ""
+
+#: includes/metaboxes.php:175
+msgid "Element's Alignment"
+msgstr ""
+
+#: includes/metaboxes.php:177
+msgid "Left"
+msgstr ""
+
+#: includes/metaboxes.php:178
+msgid "Right"
+msgstr ""
+
+#: includes/metaboxes.php:179
+msgid "Center"
+msgstr ""
+
+#: includes/metaboxes.php:238
+msgid "There was an error uploading your file. Make sure it is a valid JSON file."
+msgstr ""
+
+#: includes/metaboxes.php:311
+msgid "Upload"
+msgstr ""
+
+#: includes/shortcode.php:87
+msgid "Invalid Animation ID"
+msgstr ""
+
+#: wp-bodymovin.php:61
+msgid "Asset not found"
+msgstr ""
+
+#: wp-bodymovin.php:62
+msgid "Ok."
+msgstr ""
+
+#: wp-bodymovin.php:75
+msgid "Animations"
+msgstr ""
+
+#: wp-bodymovin.php:76
+msgid "Animation"
+msgstr ""
+
+#: wp-bodymovin.php:77
+msgid "Add New"
+msgstr ""
+
+#: wp-bodymovin.php:78
+msgid "Add New Animation"
+msgstr ""
+
+#: wp-bodymovin.php:79
+msgid "Edit Animation"
+msgstr ""
+
+#: wp-bodymovin.php:80
+msgid "New Animation"
+msgstr ""
+
+#: wp-bodymovin.php:81
+msgid "View Animation"
+msgstr ""
+
+#: wp-bodymovin.php:82
+msgid "Search Animations"
+msgstr ""
+
+#: wp-bodymovin.php:83
+msgid "Nothing found"
+msgstr ""
+
+#: wp-bodymovin.php:84
+msgid "Nothing found in Trash"
+msgstr ""
+
+#: wp-bodymovin.php:185
+msgid "Animation data not found for id: "
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "WP Bodymovin"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "iodsgn.com/wp-bodymovin/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Use bodymovin exported JSON files in WordPress"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "ioDSGN"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "iodsgn.com"
+msgstr ""
