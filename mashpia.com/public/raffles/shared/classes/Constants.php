@@ -4,14 +4,14 @@ namespace raffles\shared;
 
 class Constants{
     
-    public static function get_raffle_school_max_winners() { // array of id => max. Sum of all maxes must equal 100
+    public static function get_raffle_school_max_winners() { // array of id => max. Sum of all maxes must equal 150
         return [
             269	=> 6,
             176	=> 1,
             162	=> 3,
             45	=> 3,
             30	=> 2,
-            54	=> 13,
+            54	=> 14,
             2	=> 2,
             7	=> 6,
             475	=> 1,
@@ -50,7 +50,7 @@ class Constants{
             9	=> 9,
             263	=> 1,
             61	=> 4,
-            255	=> 14,
+            255	=> 15,
             542	=> 1,
             48	=> 1,
             58	=> 3,
