@@ -1,3 +1,3 @@
 <?php
-header("https://vimeo.com/195384916");
+header("Location: https://vimeo.com/195384916");
 exit;
