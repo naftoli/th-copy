@@ -25,7 +25,7 @@ class Login implements \JsonSerializable {
     public $role = false;
     public $key = false;
 
-    const LEGACY_ID = 2; // School institution
+    const LEGACY_ID = [2,4]; // School institution
 
     /**
      * new Login( $type, $id[, $model ] )
@@ -103,7 +103,7 @@ class Login implements \JsonSerializable {
             $this->role = 'Institution Manager';
 
             $this->active = true;
-            $this->legacy = $this->model->inst_id === self::LEGACY_ID;
+            $this->legacy = in_array($this->model->inst_id, self::LEGACY_ID);
             
             $this->inst_id = $this->model->inst_id;
         // Tzivos Hashem Bases
@@ -114,7 +114,7 @@ class Login implements \JsonSerializable {
             $this->role = 'Base Commander';
 
             $this->active = is_null( $this->model->school_era );
-            $this->legacy = $this->model->inst_id === self::LEGACY_ID;
+            $this->legacy = in_array($this->model->inst_id, self::LEGACY_ID);
 
             $this->inst_id = $this->model->inst_id;
             $this->school_id = $this->model->school_id;
@@ -126,7 +126,7 @@ class Login implements \JsonSerializable {
             $this->role = 'Teacher';
 
             $this->active = is_null( $this->model->school->school_era );
-            $this->legacy = $this->model->school->inst_id === self::LEGACY_ID;
+            $this->legacy = in_array($this->model->school->inst_id, self::LEGACY_ID);
 
             $this->inst_id = $this->model->school->inst_id;
             $this->school_id = $this->model->school_id;
