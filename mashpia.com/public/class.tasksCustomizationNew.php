@@ -405,6 +405,7 @@ class TasksCustomizationNew {
 			//if ($this->id == 5548)echo $sql;
         } else if ($this->type == 'class') {
             $users = $this->getUsersInGrade($this->id);
+            if ( empty($users) ) return false;
             $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
