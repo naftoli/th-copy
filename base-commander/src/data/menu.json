@@ -137,7 +137,7 @@
           { "label": "Shabbos Mevorchim Report", "legacy": true, "path": "/choose_sm_report.php" },
           { "label": "Check Your Tehillim Quotas", "legacy": true, "path": "/tehillim_quotas.php" },
           { "label": "Change Tehillim Ladder/Quota", "legacy": true, "path": "/admin_users_track.php" },
-          { "label": "Shabbos Mevorchim Tutorial Video", "legacy": false, "path": "//vimeo.com/195384916" },
+          { "label": "Shabbos Mevorchim Tutorial Video", "legacy": true, "path": "/sm_video.php" },
           { "label": "Qutoa Cards", "legacy": true, "path": "/quota_cards.php" }
         ]
       },
