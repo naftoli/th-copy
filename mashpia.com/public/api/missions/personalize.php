@@ -54,6 +54,11 @@ class PersonalizeRouter {
         $this->tc->setType( $user_id, $class_id, $school_id );
 
         $tasks = $this->tc->getTasks( $subject_id, false );
+        
+        if ( !$tasks ) {
+            json_error('No children found in this grade or no tasks found for this date period.');
+            exit;
+        }
 
         // * Format the response to something sane and consistent
         $response = [];
