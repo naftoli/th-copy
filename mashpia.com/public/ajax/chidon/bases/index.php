@@ -1,4 +1,6 @@
 <?php
+require_once '../headers.php'; 
+
 if ( !isset( $_GET['key'] ) || $_GET['key'] != 'Chidon@5780!' ) {
     echo json_encode([
         'succes'    =>  false, 
