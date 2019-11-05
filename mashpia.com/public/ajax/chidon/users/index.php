@@ -8,7 +8,7 @@ if ( !isset( $_GET['key'] ) || $_GET['key'] != 'Chidon@5780!' ) {
 }
 
 $class_id = $_GET['class_id'];
-if ( !isset( $class ) || !$class_id > 0 ) {
+if ( !isset( $class_id ) || !$class_id > 0 ) {
     echo json_encode([
         'success'   =>  false, 
         'error'     =>  'You must provide a class id.'
