@@ -105,12 +105,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Mivtzoim</span>
                 </div>
             </a>
-            <a href="/mivtzoim/fixes/fixSyncing.php">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Fix Syncing/Delete Duplicates</span>
-                </div>
-            </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Managment Links</h2>
