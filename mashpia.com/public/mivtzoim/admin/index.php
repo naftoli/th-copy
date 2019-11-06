@@ -72,6 +72,10 @@ function inputDate( $julian ) {
         <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Setup Mivtzoim</h1>
 
+        <p>
+            Click <a href="/mivtzoim/fixes/fixSyncing.php">here</a> to fix syncing issues (deletes duplicates).
+        </p>
+
         <form action="index.php" method="post">
             <table>
                 <thead>
