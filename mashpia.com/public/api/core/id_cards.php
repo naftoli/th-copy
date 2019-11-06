@@ -29,6 +29,8 @@ class IdCardsRouter {
         // combine the filters
         $filters[] = 'u.user_registered IS NOT NULL';
         $filters[] = 'u.chayolei = 1 AND s.chayolei = 1';
+        // add schools exceptions
+        $filters[] = 'u.school_id not in (180,588,612)';
         $filters = implode( ' AND ', $filters );
 
         $rank_marks = "(SELECT MAX(rank_ord) max_rank, user_id FROM rank_marks GROUP BY user_id) cr USING (user_id) "
