@@ -165,7 +165,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
             	<div id="spinner"></div>
             	<div class="panel-heading">
             		<i class="glyphicon glyphicon-chevron-left"></i> <?=$campaign?>
-            		<!--<div class="pull-right small points"><?=$points?> Points Needed</div>-->
+            		<!--<div class="pull-right small points"><?//=$points?> Points Needed</div>-->
             	</div>
 
             	<div class="collapse">

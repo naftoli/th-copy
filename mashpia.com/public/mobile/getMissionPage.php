@@ -514,11 +514,8 @@ $he_chars = array(
                                     for ($j = 0; $j < $numWeekly; $j++) {
                                         if ($user->weekly_tasks[$j]->label_name == $label) {
                                             $weekly_task = $user->weekly_tasks[$j];
-                                            $date_task_mark = $weekly_task->date_task_mark; 
-                                            if ($date_task_mark->marked == true) 
-                                                $checked = true; 
-                                            else 
-                                                $checked = false;
+											$date_task_mark = $weekly_task->date_task_mark; 
+											$checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
                                             ?>
                                                 <li class="task">
                                                     <div class="row">
@@ -627,10 +624,7 @@ $he_chars = array(
                                             }
                                             */
                                             $date_task_mark = $shabbos_task->date_task_mark; 
-                                            if ($date_task_mark->marked == true) 
-                                                $checked = true; 
-                                            else 
-                                                $checked = false;
+                                            $checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
                                             ?>
                                                 <li class="task">
                                                     <div class="row">
@@ -730,10 +724,7 @@ $he_chars = array(
                                             ) continue;
                                             
                                             $date_task_mark = $no_label_task->date_task_mark; 
-                                            if ($date_task_mark->marked == true) 
-                                                $checked = true; 
-                                            else 
-                                                $checked = false;
+                                            $checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
                                             ?>
                                                 <li class="task" data="<?=$no_label_task->start_date . ':' . $no_label_task->end_date?>">
                                                     <div class="row">
@@ -929,7 +920,7 @@ $he_chars = array(
 	/******************* SCREEN SIZE *******************/
 	var screenSize = $(".container").width();
 
-	// var showPoll = <?=$show?>;
+	// var showPoll = <?//=$show?>;
 	// if ( showPoll ) $("#hachayolPoll").modal('show');
 
 	//$( function() {

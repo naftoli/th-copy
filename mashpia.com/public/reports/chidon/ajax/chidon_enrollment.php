@@ -12,6 +12,9 @@ if ($_POST['debug']) {
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
+// find out if admin is super admin
+$superAdmin = $admin_user['auth'] == 'super';
+
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
@@ -20,7 +23,7 @@ $year = GlobalSettings::getChidonYear();
 $school_id = mysql_real_escape_string($_POST['school_id']);
 
 /***************** LOAD DATA **********************/
-$qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id, "
+$qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id, u.non_th_school "
         ." c.class_grade, c.class_sub, s.school_name, "
         ." a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_email "
         ." FROM th_chidon th "
@@ -49,6 +52,9 @@ if (count($users) > 0) {
             <?php if ($school_id < 0) : ?>
                 <th>School</th>
             <?php endif; ?>
+            <?php if ($superAdmin) : ?>
+                <th>Non TH School</th>
+            <?php endif; ?>
             <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Serial Number</th><th>Email</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
@@ -62,6 +68,9 @@ if (count($users) > 0) {
                 <?php 
                 if ($school_id < 0) {
                     echo "<td>" . $user['school_name'] . "</td>";
+                }
+                if ($superAdmin) {
+                    echo "<td." . $user['non_th_school'] . "</td>";
                 }
                 ?>
                 <td><?=$grade?></td>
