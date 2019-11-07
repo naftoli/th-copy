@@ -390,7 +390,7 @@ $he_chars = array(
                                                 }
                                             }
                                             // change the $checked variable based on if the task is marked
-                                            $checked = $date_task_mark->marked == true;
+                                            $checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
                                             if($daily && !$date_task_mark) continue; // if we are generating the daily view and there is no mark for today (weekly would be false if it is not available on the last day of the week)
                                             ?>
                                             <li class="task daily">
