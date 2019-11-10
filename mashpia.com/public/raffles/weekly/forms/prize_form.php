@@ -19,9 +19,12 @@ if ($admin_user['auth'] != 'super') {
 // import the required files
 require_once(dirname(__FILE__).'/../../shared/classes/Raffle.php');
 require_once(dirname(__FILE__).'/../../shared/classes/Prize.php');
+require_once(dirname(__FILE__).'/../../shared/classes/Constants.php');
 
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 use raffles\weekly\Prize as Prize; // use the prize from its namespace
+use raffles\shared\Constants as Constants;
+$allowed = Constants::get_num_weekly_prizes();
 
 require_once(dirname(__FILE__).'/../../shared/functions.php');
 

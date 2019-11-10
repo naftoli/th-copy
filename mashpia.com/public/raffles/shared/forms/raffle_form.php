@@ -125,10 +125,10 @@ if ($action == "update" && !$valid){
         $action = 'edit'; // re render the edit page
     };
 
-    if($raffle->run_date < $raffle->end_date) { 
-        $error .= "Run date cannot be before end date<br/>";
-        $valid = false;
-    }
+    // if($raffle->run_date < $raffle->end_date) { 
+    //     $error .= "Run date cannot be before end date<br/>";
+    //     $valid = false;
+    // }
 
 }
 

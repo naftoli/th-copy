@@ -9,9 +9,12 @@ require($_SERVER["DOCUMENT_ROOT"].'/header.php');
 // import the required files
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
 require_once(dirname(__FILE__).'/../classes/Prize.php');
+require_once(dirname(__FILE__).'/../classes/Constants.php');
 
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 use raffles\weekly\Prize as Prize; // use the raffle from its namespace
+use raffles\shared\Constants as Constants;
+$allowed = Constants::get_num_weekly_prizes();
 
 require_once(dirname(__FILE__).'/../../shared/functions.php');
 
@@ -19,23 +22,23 @@ $raffle_id = mysql_real_escape_string($_POST['raffle_id']);
 
 $raffle = Raffle::load($raffle_id);
 $prize = Prize::load($_POST['prize_id']);
-$qty = $_POST['qty'];
+// for weekly set qty to number set in Constants class
+$qty = $raffle->type == "weekly" ? $allowed : $_POST['qty'];
 
-// first check that we do not have more than 100 prizes
+// first check that we do not have more than max prizes
 $sql = "SELECT sum(qty) as `total` FROM raffle_prizes where raffle_id=$raffle_id AND prize_id != ".$prize->prize_id;
 $row = mysql_fetch_assoc(mysql_query($sql)); // run the query
 $total = $row['total'] + intval($qty);
 
-
-// make sure that the total number of prizes is below 100
-if($total > 100 && $raffle->type == "weekly"){ // if it is more
+// make sure that the total number of prizes is below max number of prizes allowed
+if ( $raffle->type == "weekly" && $total > $allowed ){ // if it is more
     // get the current amount that that prize has to send back
     $total_sql = "SELECT sum(qty) as `total` FROM raffle_prizes where raffle_id=$raffle_id AND prize_id = ".$prize->prize_id;
     $current_row = mysql_fetch_assoc(mysql_query($total_sql)); // run the query
     // return the json
     echo json_encode([ // throw an error
         "success" => false,
-        "error" =>    "You cannot add more than 100 prizes to a raffle. This raffle currently has ". ($row['total'] ? $row['total'] : 0). " other prizes\n".
+        "error" =>    "You cannot add more than $allowed prizes to a raffle. This raffle currently has ". ($row['total'] ? $row['total'] : 0). " other prizes\n".
                       "Please note that the number of prizes has NOT updated",
         "total" => $current_row['total']
     ]);
