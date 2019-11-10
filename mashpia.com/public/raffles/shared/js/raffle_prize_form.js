@@ -47,13 +47,12 @@ $(document).ready(function(){
     /************************ HANDLE THE RAFFLE FORM **************************/
     function handleWeeklyPrizeCheck(event){ // weekly
         // get the params
-        var qty = 100; // weekly raffles are always set to this quantity
         var prize_id = event.target.id.split("_")[1];
         var raffle_id = $("input[name='raffle_id']").val(); // get the raffle id from the hidden input field
         // get the url
         var post_url = event.target.checked ? "/raffles/shared/ajax/add_prize.php" : "/raffles/shared/ajax/remove_prize.php";
         // bundle the data
-        var data = {prize_id: prize_id, raffle_id: raffle_id, qty: qty};
+        var data = {prize_id: prize_id, raffle_id: raffle_id};
         // set up the handlers
         hitServer(event, post_url, data);
     }
@@ -61,13 +60,12 @@ $(document).ready(function(){
     /************************ HANDLE THE PRIZE FORM **************************/
     function handleWeeklyRaffleCheck(event) { // weekly
         // get the params
-        var qty = 100; // weekly raffles are always set to this quantity
         var prize_id = $("input[name='prize_id']").val(); // get the prize id from the hidden input field
         var raffle_id = event.target.id.split("_")[1];
         // get the url
         var post_url = event.target.checked ? "/raffles/shared/ajax/add_prize.php" : "/raffles/shared/ajax/remove_prize.php";
         // bundle the data
-        var data = {prize_id: prize_id, raffle_id: raffle_id, qty: qty};
+        var data = {prize_id: prize_id, raffle_id: raffle_id};
         // set up the handlers
         hitServer(event, post_url, data);
     }
