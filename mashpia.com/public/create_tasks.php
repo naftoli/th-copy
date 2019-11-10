@@ -144,7 +144,7 @@ if (isset($_POST['submit'])) {
     // get start and end from db
     require_once 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
-    $missionYear--;
+    // $missionYear--;
     // $defaultDates = GlobalSettings::getCurYearDates();
 	// $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
@@ -431,9 +431,9 @@ if (isset($_POST['submit'])) {
                                     }
                                 }
                             }
-                            if (in_array($type, array(2,12))) {
+                            if (in_array($type, array(2,12,14))) {
                                 $pic = $pic_boys;
-                            } else if (in_array($type, array(3,13))) {
+                            } else if (in_array($type, array(3,13,15))) {
                                 $pic = $pic_girls;
                             }
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {

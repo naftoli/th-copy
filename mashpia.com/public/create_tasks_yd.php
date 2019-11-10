@@ -277,9 +277,9 @@ if (isset($_POST['submit'])) {
                 $start = $startDate;
                 $end = $endDate;
                 foreach ($types as $type) {
-                    if (in_array($type, array(2,12))) {
+                    if (in_array($type, array(2,12,14))) {
                         $pic = $pic_boys;
-                    } else if (in_array($type, array(3,13))) {
+                    } else if (in_array($type, array(3,13,15))) {
                         $pic = $pic_girls;
                     }
                     for ($level = $firstLevel; $level <= $lastLevel; $level++) {
