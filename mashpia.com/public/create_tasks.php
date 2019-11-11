@@ -160,7 +160,7 @@ if (isset($_POST['submit'])) {
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
-    //echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
+    echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
     
 	$langSheet = $_POST['lang'];
 	if ($langSheet == 1) {
@@ -367,8 +367,8 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 */
-                echo $startDate . "<br />";
-                echo $endDate . "<br />";
+                //echo $startDate . "<br />";
+                //echo $endDate . "<br />";
 				//continue;
                 
                 //make sure start and end date is greater than or equal to today
