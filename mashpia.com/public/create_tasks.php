@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) {
     // $defaultEnd = 2459103;
 
     $defaultStart = 2458740; 
-    $defaultEnd = 2458753;
+    $defaultEnd = 2459103;
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -373,15 +373,14 @@ if (isset($_POST['submit'])) {
                 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
-                /*
-                $today = unixtojd();
-                if ($startDate < $today) {
-                    $startDate = $today;
-                }
-                if ($endDate < $today) {
-                    $endDate = $today;
-                }
-                */
+                
+                // $today = unixtojd();
+                // if ($startDate < $today) {
+                //     $startDate = $today;
+                // }
+                // if ($endDate < $today) {
+                //     $endDate = $today;
+                // }
                 
                 // if no dates were entered create array based on default start and end dates
                 if (empty($arrStart)) {
@@ -393,6 +392,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
+                //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
