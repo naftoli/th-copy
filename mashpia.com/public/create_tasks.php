@@ -227,7 +227,7 @@ if (isset($_POST['submit'])) {
                 
                 foreach( $cellIterator as $cell ) { 
                     $val = trim($cell->getValue());
-					echo $val . "<br />"; continue;
+					//echo $val . "<br />"; continue;
                     switch ($i) { //$i represents the column in the row
                         case 0:
                             // set the action to add no matter what
@@ -373,7 +373,7 @@ if (isset($_POST['submit'])) {
                 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
-                /*
+                
                 $today = unixtojd();
                 if ($startDate < $today) {
                     $startDate = $today;
@@ -381,7 +381,6 @@ if (isset($_POST['submit'])) {
                 if ($endDate < $today) {
                     $endDate = $today;
                 }
-                */
                 
                 // if no dates were entered create array based on default start and end dates
                 if (empty($arrStart)) {
