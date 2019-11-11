@@ -367,8 +367,8 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 */
-                //echo $startDate . "<br />";
-                //echo $endDate . "<br />";
+                echo $startDate . "<br />";
+                echo $endDate . "<br />";
 				//continue;
                 
                 //make sure start and end date is greater than or equal to today
