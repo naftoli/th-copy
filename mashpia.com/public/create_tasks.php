@@ -160,7 +160,7 @@ if (isset($_POST['submit'])) {
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
-    echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
+    //echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
     
 	$langSheet = $_POST['lang'];
 	if ($langSheet == 1) {
@@ -374,13 +374,13 @@ if (isset($_POST['submit'])) {
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
                 
-                $today = unixtojd();
-                if ($startDate < $today) {
-                    $startDate = $today;
-                }
-                if ($endDate < $today) {
-                    $endDate = $today;
-                }
+                // $today = unixtojd();
+                // if ($startDate < $today) {
+                //     $startDate = $today;
+                // }
+                // if ($endDate < $today) {
+                //     $endDate = $today;
+                // }
                 
                 // if no dates were entered create array based on default start and end dates
                 if (empty($arrStart)) {
@@ -392,6 +392,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
+                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
