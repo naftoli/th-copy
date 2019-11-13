@@ -3,7 +3,7 @@ $admin_auth = ['school'];
 require_once 'header.php';
 require_once 'class.rankReport.php';
 $r = new RankReport;
-$r->setRanks('byRankFirst');
+$r->setRanks('byRankFirstMixedGender');
 $ranks = $r->getRanks();
 $logos = $r->getSchoolLogos();
 //echo "<pre>"; print_r( $ranks ); echo "</pre>";
@@ -71,12 +71,11 @@ define('COLS', 20);
     </head>
     <body>
         <?php 
-        $genders = ['M','F'];
-        foreach ( $genders as $gender ) {
-            echo "<h1>" . ($gender == 'M' ? 'BOYS' : 'GIRLS') . "</h1>";
-            foreach ( $ranks[$gender] as $rank => $info ) {
-                if ( $rank == 'General' ) break;
+        foreach ( $ranks as $rank => $info ) {
+            if ( $rank == 'General' ) break;
 
+            $genders = ['M','F'];
+            foreach ( $genders as $gender ) {
                 // vars to keep track of how many cols and rows there are
                 $cols = 1;
                 $rows = 0;
@@ -88,7 +87,7 @@ define('COLS', 20);
                 echo "<div class='rank'>" . $rank . "</div>";
                 echo "<div class='row'>";
                 echo "<div class='col'>";
-                foreach ( $info as $school => $users ) {                    
+                foreach ( $info[$gender] as $school => $users ) {                    
                     include 'promotion_pics_main.php';
                 }
                 echo "</div></div>";
