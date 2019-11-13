@@ -141,7 +141,8 @@ $rows = 0;
                         } else if ( $pic['user_photo_id'] ) {
                             $img = "file_view.php?id=" . $pic['user_photo_id'];
                         }
-                    }
+                    } 
+                    if ( empty( $img ) ) $img = "mobile/reg/images/profile-photo-default.jpg";
                     echo "<img class='user' src='" . $img . "' />";
                     $rows++;
                     //echo "Row: " . $rows . " Col: " . $cols . "<br />";
