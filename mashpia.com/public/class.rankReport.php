@@ -73,6 +73,8 @@ class RankReport extends Report {
                 $this->ranks[$school][$rank][$teacher][$grade][] = $user_id;
             else if ( $orderType == 'byRankFirst' ) 
                 $this->ranks[$row['gender']][$rank][$school][] = $user_id;
+            else if ( $orderType == 'byRankFirstMixedGender' ) 
+                $this->ranks[$rank][$row['gender']][$school][] = $user_id;
             
             $this->rankInfo[$user_id]['card_printed'] = $row['date_printed'];
             $this->rankInfo[$user_id]['card_shipped'] = $row['date_card_shipped'];
