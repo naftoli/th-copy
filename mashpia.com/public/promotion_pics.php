@@ -28,6 +28,9 @@ define('COLS', 20);
     <head>
         <meta charset="utf8" />
         <style>
+            html {
+                background-color: #acc6c6;
+            }
             .rank {
                 top: 77px;
                 width: 3657px;
