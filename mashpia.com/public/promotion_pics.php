@@ -64,6 +64,10 @@ $rows = 0;
                 display: flex;
                 flex-direction: row;
             }
+            hr {
+                padding-top: 100px;
+                padding-bottom: 100px;
+            }
         </style>
     </head>
     <body>
@@ -72,6 +76,7 @@ $rows = 0;
         $newRow = "</div></div></div><div class='col'><div class='row'><div class='col'>";
         $newBox = "</div></div></div></div><hr /><div class='row'><div class='col'>";
         foreach ( $ranks as $rank => $info ) {
+            if ( $rank == 'General' ) break;
             echo "<div class='rank'>" . $rank . "</div>";
             echo "<div class='row'>";
             echo "<div class='col'>";
