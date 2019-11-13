@@ -117,10 +117,15 @@ define('COLS', 20);
                     $numPicsInColumn = ceil( $numUsers / 2 );
                     if ( ($numPicsInColumn + $rows) > ROWS ) {
                         $numPicsInColumn = ROWS - $rows;
-                    } 
-
-                    if ( $logos[$school]['logo'] ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo'] . "' />"; 
+                    }
+                    
+                    if ( $logos[$school]['logo_boys'] || $logos[$school]['logo_girls'] ) {
+                        if ( $gender == 'M' ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo_boys'] . "' />"; 
+                        else if ( $gender == 'F' ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo_girls'] . "' />";
+                    }
                     else echo "<img class='school' src='file_view.php?id=" . $logos[$school]['logo_id'] . "' />"; 
+
+                    
                     // if column number is even add one (was subtracted at end of script)
                     if ( $cols % 2 == 0 ) $cols++;
 
