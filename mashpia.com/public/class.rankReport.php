@@ -29,7 +29,7 @@ class RankReport extends Report {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end']; 
         $sql = "
-            SELECT s.school_name, s.logo, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
+            SELECT s.school_name, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
             FROM rank_marks rm
             JOIN ranks r
             USING ( rank_ord )
@@ -82,9 +82,11 @@ class RankReport extends Report {
             
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
+            
             $this->schoolLogos[$school] = [
-                'logo'  =>  $row['logo'],
-                'logo_id'   =>  $row['school_logo_id']
+                'logo_boys'     =>  $row['logo_boys'],
+                'logo_girls'    =>  $row['logo_girls'],
+                'logo_id'       =>  $row['school_logo_id']
             ];
         }
     }
