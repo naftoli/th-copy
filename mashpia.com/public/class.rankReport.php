@@ -29,7 +29,7 @@ class RankReport extends Report {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end']; 
         $sql = "
-            SELECT s.school_name, s.logo, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.user_id, u.last, u.first, u.first_he, u.last_he, rm.* 
+            SELECT s.school_name, s.logo, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
             FROM rank_marks rm
             JOIN ranks r
             USING ( rank_ord )
@@ -72,7 +72,7 @@ class RankReport extends Report {
             else if ( $orderType == 'byRank' )
                 $this->ranks[$school][$rank][$teacher][$grade][] = $user_id;
             else if ( $orderType == 'byRankFirst' ) 
-                $this->ranks[$rank][$school][] = $user_id;
+                $this->ranks[$row['gender']][$rank][$school][] = $user_id;
             
             $this->rankInfo[$user_id]['card_printed'] = $row['date_printed'];
             $this->rankInfo[$user_id]['card_shipped'] = $row['date_card_shipped'];
