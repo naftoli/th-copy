@@ -107,7 +107,7 @@ define('COLS', 20);
                     if ( $cols >= 19 && $rows >= 9 ) {
                         echo $newBox;
                         $cols = 1;
-                        $rows = 0;
+                        $rows = 2;
                     }
 
                     $numUsers = count( $users );
