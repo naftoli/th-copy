@@ -22,10 +22,6 @@ function getPic( $user_id ) {
 // vars to indicate how many rows and columns should show
 define('ROWS', 11);
 define('COLS', 20);
-
-// vars to keep track of how many cols and rows there are
-$cols = 0;
-$rows = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,20 +68,24 @@ $rows = 0;
     </head>
     <body>
         <?php 
-        $newColumn = "</div><div class='col'>";
-        $newRow = "</div></div></div><div class='col'><div class='row'><div class='col'>";
-        $newBox = "</div></div></div></div><hr /><div class='row'><div class='col'>";
         $genders = ['M','F'];
         foreach ( $genders as $gender ) {
             echo "<h1>" . ($gender == 'M' ? 'BOYS' : 'GIRLS') . "</h1>";
             foreach ( $ranks[$gender] as $rank => $info ) {
                 if ( $rank == 'General' ) break;
+
+                // vars to keep track of how many cols and rows there are
+                $cols = 1;
+                $rows = 0;
+
+                $newColumn = "</div><div class='col'>";
+                $newRow = "</div></div></div><div class='col'><div class='row'><div class='col'>";
+                $newBox = "</div></div></div></div><div class='rank'>" . $rank . "</div><div class='row'><div class='col'>";
+
                 echo "<div class='rank'>" . $rank . "</div>";
                 echo "<div class='row'>";
                 echo "<div class='col'>";
-                foreach ( $info as $school => $users ) {
-                    if ( $cols == 0 ) $cols++; // first time add one to columns
-                    
+                foreach ( $info as $school => $users ) {                    
                     $rows += 2;
                     // check if adding school pic will go past max rows
                     if ( $rows > ROWS ) {
@@ -103,6 +103,13 @@ $rows = 0;
                         $cols = 1;
                     }
 
+                    // check if school will be at bottom left of page
+                    if ( $cols >= 19 && $rows >= 9 ) {
+                        echo $newBox;
+                        $cols = 1;
+                        $rows = 0;
+                    }
+
                     $numUsers = count( $users );
                     $numPicsInColumn = ceil( $numUsers / 2 );
                     if ( ($numPicsInColumn + $rows) > ROWS ) {
@@ -111,15 +118,25 @@ $rows = 0;
 
                     if ( $logos[$school]['logo'] ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo'] . "' />"; 
                     else echo "<img class='school' src='file_view.php?id=" . $logos[$school]['logo_id'] . "' />"; 
+                    // if column number is even add one (was subtracted at end of script)
+                    if ( $cols % 2 == 0 ) $cols++;
 
                     if ( $rows == ROWS ) {
-                        // we need to create new column from top of page for pics
-                        echo $newColumn;
+                        // we need to create new column from top of page for pics   
+                        echo $newColumn;       
                         $rows = 0;
                         $cols++;
                         // if column number is even add one (was subtracted at end of script)
                         if ( $cols % 2 == 0 ) $cols++;
 
+                        // if ( $cols >= COLS ) {
+                        //     // if columns is past max then create new box
+                        //     echo $newBox;
+                        //     $cols = 1;
+                        // } else {
+                        //     echo $newColumn;
+                        // }
+                        
                         $numPicsInColumn = ceil( $numUsers / 2 );
                         if ( ($numPicsInColumn + $rows) > ROWS ) {
                             $numPicsInColumn = ROWS - $rows;
@@ -146,7 +163,8 @@ $rows = 0;
                             }
                         } 
                         if ( empty( $img ) ) {
-                            $img = "mobile/reg/images/profile-photo-default.jpg";
+                            if ( $gender == 'M' ) $img = "images/avatar_boy.jpg";
+                            else if ( $gender == 'F' ) $img = "images/avatar_girl.png";
                         }
                         echo "<img class='user' src='" . $img . "' />";
                         $rows++;
