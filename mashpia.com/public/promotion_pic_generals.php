@@ -54,7 +54,7 @@ define('COLS', 20);
             .name {
                 max-width: 515px;
                 font-size: 48px;
-                color: #fff;
+                color: gold;
                 text-transform: uppercase;
                 font-family: Verdana;
                 text-align: center;
