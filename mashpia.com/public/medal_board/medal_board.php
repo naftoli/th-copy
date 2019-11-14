@@ -30,10 +30,8 @@ function getLogo( $school_id ) {
 }
 
 function getRank($user) {
-	$sql = "select rank_ord, rank_name, rank_image_id    
-			from ranks r 
-			join rank_marks rm 
-			using (rank_ord) 
+    $sql = "select rank_ord 
+            from rank_marks rm 
 			join users u 
 			using (user_id) 
 			where u.user_id = " . $user . " 
@@ -41,7 +39,7 @@ function getRank($user) {
 			limit 1";
     $result = mysql_query( $sql );
 	$row = mysql_fetch_assoc( $result );
-	return $row;
+	return $row['rank_ord'];
 }
 
 function getMedal( $subject_id, $medal ) {
@@ -86,6 +84,13 @@ $positioning = [4,45,21,100,90,42,27,13,16,41,12,1,40];
 $heDateArr = explode('/', jdtojewish( unixtojd() ) );
 $heMonths = ['','Tishrei','Cheshvon','Kislev','Teves','Shvat','Adar','Adar II','Nissan','Iyar','Sivan','Tamuz','Av','Elul'];
 $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2];
+
+$ranks = [];
+$sql = "select rank_ord, rank_name, rank_image_id from ranks";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $ranks[$row['rank_ord']] = $row;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -119,12 +124,12 @@ $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2]
                 foreach ( $line as $grade => $class ) {
                     foreach ( $class as $teacher => $info ) {
                         foreach ( $info as $user => $medals ) {
-                            $rankInfo = getRank( $user );
+                            $rank = getRank( $user );
                             $p = new Points( $user );
                             echo "<div class='slide'>";
                             echo "<div class='logo'><img src='https://mashpia.com/schoolLogos/" . getLogo( $school_id ) . "' /></div>";
                             echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
-                            echo "<div class='userInfo'><div class='user'>" . $rankInfo['rank_name'] . ' ' . $userInfo[$user] . "</div>";
+                            echo "<div class='userInfo'><div class='user'>" . $ranks[$rank]['rank_name'] . ' ' . $userInfo[$user] . "</div>";
                             echo "<div class='teacher'>Grade " . $grade . " &#9679; " . $teacher . "</div></div>";
                             echo "<div class='date'>" . $heDate . "</div>";
                             echo "<div class='numMedals'>" . getTotalMedalsEarned( $user ) . "</div>";
@@ -133,8 +138,10 @@ $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2]
                             // echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
                             // echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
                             //     $rankInfo['rank_name'] . "</div>";
-                            $rank_pos = 'rank' . $rankInfo['rank_ord'];
-                            echo "<div class='rank $rank_pos'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' /></div>";
+                            for ( $i = 1; $i <= $rank; $i++ ) {
+                                $rank_pos = 'rank' . $i;
+                                echo "<div class='rank $rank_pos'><img src='https://mashpia.com/file_view.php?id=" . $ranks[$i]['rank_image_id'] . "' /></div>";
+                            }
 
                             foreach ( $positioning as $column => $subject ) {
                                 $col_pos = "column" . ++$column;
