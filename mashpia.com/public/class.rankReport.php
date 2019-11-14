@@ -13,6 +13,7 @@ class RankReport extends Report {
     protected $userHeNames;
     protected $schoolExceptions;
     protected $schoolLogos;
+    protected $userSchool;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -22,6 +23,7 @@ class RankReport extends Report {
         $this->rankOrds['Private'] = 1;
         $this->schoolExceptions = [180,588,612];
         $this->schoolLogos = [];
+        $this->userSchool = [];
     }
     
     public function setRanks($orderType = 'byGrade') {
@@ -50,8 +52,10 @@ class RankReport extends Report {
         ";
         if ($orderType == 'byGrade') {
             $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first, r.rank_ord";
-        } else if ( $orderType == 'byRankFirst' ) {
+        } else if ( $orderType == 'byRankFirst' || $orderType == 'byRankFirstMixedGender' ) {
             $sql .= "ORDER BY r.rank_ord, s.school_name, c.class_grade, c.class_sub, u.last, u.first";
+        } else if ( $orderType == 'byGenerals' ) {
+            $sql .= "ORDER BY r.rank_ord, u.last, u.first";
 		} else {
             $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
         }
@@ -75,6 +79,10 @@ class RankReport extends Report {
                 $this->ranks[$row['gender']][$rank][$school][] = $user_id;
             else if ( $orderType == 'byRankFirstMixedGender' ) 
                 $this->ranks[$rank][$row['gender']][$school][] = $user_id;
+            else if ( $orderType == 'byGenerals' ) {
+                if ( $row['rank_ord'] < 9 ) continue;
+                $this->ranks[$rank][$row['gender']][] = $user_id;
+            }
             
             $this->rankInfo[$user_id]['card_printed'] = $row['date_printed'];
             $this->rankInfo[$user_id]['card_shipped'] = $row['date_card_shipped'];
@@ -84,7 +92,8 @@ class RankReport extends Report {
             
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
-            
+
+            $this->userSchool[$user_id] = $school;            
             $this->schoolLogos[$school] = [
                 'logo_boys'     =>  $row['logo_boys'],
                 'logo_girls'    =>  $row['logo_girls'],
@@ -131,6 +140,10 @@ class RankReport extends Report {
 
     public function getSchoolLogos() {
         return $this->schoolLogos;
+    }
+
+    public function getUserSchool() {
+        return $this->userSchool;
     }
 }
 ?>
