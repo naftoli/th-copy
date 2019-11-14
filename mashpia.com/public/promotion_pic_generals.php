@@ -39,7 +39,10 @@ define('COLS', 20);
                 border: 1px solid black;
                 height: 250px;
                 margin-bottom: 10px;
-                margin-left: 50px;
+                margin-left: auto;
+                margin-right: auto;
+                color: #fff;
+                font-size: 72px;
             }
             .school {
                 width: 392px;
