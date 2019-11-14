@@ -1,4 +1,5 @@
 <?php
+// school pic takes up 2 rows and 2 columns
 $rows += 2;
 // check if adding school pic will go past max rows
 if ( $rows > ROWS ) {
