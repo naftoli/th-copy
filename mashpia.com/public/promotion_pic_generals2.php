@@ -45,18 +45,18 @@ define('COLS', 20);
                 font-size: 72px;
             }
             .school {
-                width: 196px;
-                max-height: 204px;
+                width: 392px;
+                max-height: 407px;
             }
             .user {
-                width: 278px;
-                height: 278px;
+                width: 557px;
+                max-height: 784px;
                 margin-right: 30px;
                 margin-left: 30px;
             }
             .name {
-                max-width: 256px;
-                font-size: 32px;
+                max-width: 515px;
+                font-size: 48px;
                 color: gold;
                 text-transform: uppercase;
                 font-family: Verdana;
@@ -77,7 +77,7 @@ define('COLS', 20);
                 justify-content: center;
             }
             .inner {
-                margin-bottom: 60px;
+                margin-bottom: 90px;
             }
         </style>
     </head>
@@ -90,7 +90,6 @@ define('COLS', 20);
                 echo "<div style='page-break-after: always;'></div>";
                 echo "<div class='row'>";
                 $i = 0;
-                $j = 0;
                 foreach ( $other[$gender] as $user ) {
                     $img = '';
                     $pic = getPic( $user );
@@ -123,12 +122,8 @@ define('COLS', 20);
                     echo "</div>";
 
                     // start new row for every 6 kids
-                    if ( ++$i == 11 ) {
-                        echo "</div>";
-                        if ( ++$j == 2 ) {
-                            echo "<div style='page-break-after: always;'></div>";
-                        }
-                        echo "<div style='height: 50px;'></div><div class='row'>";
+                    if ( ++$i == 6 ) {
+                        echo "</div><div class='row'>";
                         $i = 0;
                     }
                 }

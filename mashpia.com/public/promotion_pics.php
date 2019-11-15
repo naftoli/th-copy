@@ -29,7 +29,7 @@ define('COLS', 20);
         <meta charset="utf8" />
         <style>
             html {
-                background-color: #0a0044;
+                /* background-color: #0a0044; */
             }
             .rank {
                 top: 77px;
@@ -88,6 +88,7 @@ define('COLS', 20);
                 $newBox = "</div></div></div></div><div style='page-break-after: always'></div><div class='rank'>" . $rank . "</div><div class='row'><div class='col'>";
 
                 echo "<div class='rank'>" . $rank . "</div>";
+                echo "<div style='page-break-after: always;'></div>";
                 echo "<div class='row'>";
                 echo "<div class='col'>";
                 foreach ( $info as $school => $users ) {                    
