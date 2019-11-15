@@ -45,18 +45,18 @@ define('COLS', 20);
                 font-size: 72px;
             }
             .school {
-                width: 392px;
-                max-height: 407px;
+                width: 196px;
+                max-height: 204px;
             }
             .user {
-                width: 557px;
-                max-height: 784px;
+                width: 278px;
+                height: 278px;
                 margin-right: 30px;
                 margin-left: 30px;
             }
             .name {
-                max-width: 515px;
-                font-size: 48px;
+                max-width: 256px;
+                font-size: 36px;
                 color: gold;
                 text-transform: uppercase;
                 font-family: Verdana;
@@ -121,12 +121,12 @@ define('COLS', 20);
                     echo "</div>";
 
                     // start new row for every 6 kids
-                    if ( ++$i == 6 ) {
+                    if ( ++$i == 11 ) {
                         echo "</div><div class='row'>";
                         $i = 0;
                     }
                 }
-                echo "</div>";
+                echo "</div><div style='page-break-after: always'></div>";
             }
         }
         ?>
