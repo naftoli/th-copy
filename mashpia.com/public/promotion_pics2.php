@@ -29,12 +29,11 @@ define('COLS', 20);
         <meta charset="utf8" />
         <style>
             html {
-                background-color: #0a0044;
+                background-color: #10324d;
             }
             .rank {
                 top: 77px;
                 width: 3657px;
-                border: 1px solid black;
                 height: 250px;
                 margin-bottom: 10px;
                 color: #fff;
