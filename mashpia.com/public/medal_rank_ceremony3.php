@@ -133,7 +133,7 @@ $special = array( // rare missions
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
         $schools = $as->getSchools();
         // remove a few schools (the testing ones)
-        $toRemove = array(269,61,66,110,112,180,82);
+        $toRemove = array(269,61,66,110,112,180,82,612);
         foreach ($schools as $id => $school) {
             if (in_array($id, $toRemove)) unset($schools[$id]);
         }
