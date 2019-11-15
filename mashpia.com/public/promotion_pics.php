@@ -85,7 +85,7 @@ define('COLS', 20);
 
                 $newColumn = "</div><div class='col'>";
                 $newRow = "</div></div></div><div class='col'><div class='row'><div class='col'>";
-                $newBox = "</div></div></div></div><div class='rank'>" . $rank . "</div><div class='row'><div class='col'>";
+                $newBox = "</div></div></div></div><div style='page-break-after: always'></div><div class='rank'>" . $rank . "</div><div class='row'><div class='col'>";
 
                 echo "<div class='rank'>" . $rank . "</div>";
                 echo "<div class='row'>";
