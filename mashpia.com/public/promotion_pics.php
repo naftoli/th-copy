@@ -29,14 +29,13 @@ define('COLS', 20);
         <meta charset="utf8" />
         <style>
             html {
-                background-color: #10324d;
+                background-color: #0a0044;
             }
             .rank {
                 top: 77px;
                 width: 3657px;
                 height: 250px;
                 margin-bottom: 10px;
-                color: #fff;
                 font-size: 72px;
             }
             .school {

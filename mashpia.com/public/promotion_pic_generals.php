@@ -31,7 +31,7 @@ define('COLS', 20);
         <meta charset="utf8" />
         <style>
             html {
-                background-color: #10324d;
+                background-color: #0a0044;
             }
             .rank {
                 top: 77px;
@@ -40,7 +40,6 @@ define('COLS', 20);
                 margin-bottom: 10px;
                 margin-left: auto;
                 margin-right: auto;
-                color: #fff;
                 font-size: 72px;
             }
             .school {
