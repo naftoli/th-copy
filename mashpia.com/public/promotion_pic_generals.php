@@ -31,7 +31,7 @@ define('COLS', 20);
         <meta charset="utf8" />
         <style>
             html {
-                background-color: #0a0044;
+                /* background-color: #0a0044; */
             }
             .rank {
                 top: 77px;
@@ -87,6 +87,7 @@ define('COLS', 20);
             $genders = ['M','F'];
             foreach ( $genders as $gender ) {
                 echo "<div class='rank'>" . $rank . "</div>";
+                echo "<div style='page-break-after: always;'></div>";
                 echo "<div class='row'>";
                 $i = 0;
                 $j = 0;
