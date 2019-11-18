@@ -24,7 +24,7 @@ $sql1 = "select subject_id, subject_name from subjects s
         join school_type_subjects sts using (subject_id) 
         where s.subject_type in ('', 'Tanya') 
         and sts.school_type_id in (2,3,12,13) 
-        and s.subject_id not in (1, 91)
+        and s.subject_id not in (91)
         group by s.subject_id 
         order by s.subject_id";
 $result1 = mysql_query($sql1);
@@ -641,7 +641,7 @@ if (isset($_POST['submit'])) {
         
         <div id="task_form">
             <h2>Upload File</h2>
-            <form enctype="multipart/form-data" action="create_tasks.php" method="post">
+            <form enctype="multipart/form-data" action="create_tasks_fc_tehillim.php" method="post">
                 Choose Campaign: <br />
                 <select name="subject" id='subject'>
                     <option value='0'>Choose One</option>
