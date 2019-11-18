@@ -130,6 +130,7 @@ if (isset($_POST['submit'])) {
 
     $subject_id = $_POST['subject'];
     $subjects = array(
+        1   =>  "Tehillim",
         4   =>  "Tefillah", 
         12  =>  "Mivtzoim", 
         13  =>  "Niggunim", 
