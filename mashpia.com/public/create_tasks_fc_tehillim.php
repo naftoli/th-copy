@@ -429,7 +429,7 @@ if (isset($_POST['submit'])) {
                     $start = $startDate;
                     $end = $endDate;
 					//echo $start . '-' . $end . "<br /><br />"; continue;
-                    if ($start < unixtojd()) continue;
+                    //if ($start < unixtojd()) continue;
                     
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
