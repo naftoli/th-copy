@@ -413,10 +413,8 @@ if (isset($_POST['submit'])) {
                     //     $startTemp += 7;
                     // }
                     foreach ( $sm as $month => $date ) {
-                        if ( $month != 0 ) {
-                            $arrStart[] = $date;
-                            $arrEnd[] = $date;
-                        }
+                        $arrStart[] = $date;
+                        $arrEnd[] = $date;
                     }
                 }
                 //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
