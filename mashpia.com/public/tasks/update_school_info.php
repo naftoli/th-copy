@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once '../db.php';
+require_once '../class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
 $sql1 = "
@@ -30,3 +30,5 @@ $sql2 = "
 mysql_query( $sql1 );
 mysql_query( $sql2 );
 mysql_query( $sql3 );
+
+echo "done.";
