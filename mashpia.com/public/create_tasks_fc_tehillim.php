@@ -22,7 +22,7 @@ if ($admin_user['auth'] != 'super') {
  
 $sql1 = "select subject_id, subject_name from subjects s 
         join school_type_subjects sts using (subject_id) 
-        where s.subject_type in ('', 'Tanya') 
+        where s.subject_type in ('', 'WWTC', 'Tanya') 
         and sts.school_type_id in (2,3,12,13) 
         and s.subject_id not in (91)
         group by s.subject_id 
