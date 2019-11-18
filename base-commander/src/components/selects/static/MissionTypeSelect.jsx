@@ -41,10 +41,10 @@ export class MissionTypeSelect extends Component {
   }
 
   getSelected = options => {
-    let ending = 0;
+    //let ending = 0;
 
-    if ( this.props.gender )
-      ending = this.props.gender === 'F' ? 3 : 2;
+    //if ( this.props.gender )
+    //  ending = this.props.gender === 'F' ? 3 : 2;
 
     const option = parseInt( this.props.value, 10 );
     
