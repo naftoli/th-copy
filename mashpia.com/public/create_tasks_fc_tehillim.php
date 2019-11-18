@@ -437,7 +437,7 @@ if (isset($_POST['submit'])) {
 							// 	//echo $end . "<br />";
                             //     $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
                             // } 
-                            if ( $hMonths[$k] == $hMonths[$k+1] ) continue; // not leap year, ignore adar beis
+                            if ( $arrStart[$k] == $arrStart[$k+1] ) continue; // not leap year, ignore adar beis
                             $missionName = $hMonths[$k];
                             //check if there's an array of dates for mandatory or focus
                             if (!empty($arrMandatory)) {
