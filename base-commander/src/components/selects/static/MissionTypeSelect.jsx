@@ -35,7 +35,8 @@ export class MissionTypeSelect extends Component {
     return [
       { value:  0 + offset, label: 'Chabad' },
       { value: 10 + offset, label: 'Frum' },
-      { value: 20 + offset, label: 'C-Kids' }
+      { value: 20 + offset, label: 'C-Kids' },
+      { value: 12 + offset, label: 'FC' }
     ];
   }
 
@@ -45,9 +46,9 @@ export class MissionTypeSelect extends Component {
     if ( this.props.gender )
       ending = this.props.gender === 'F' ? 3 : 2;
 
-    const option = parseInt( this.props.value / 10, 10 ) * 10;
+    const option = parseInt( this.props.value, 10 );
     
-    return findOption( options, option + ending );
+    return findOption( options, option );
   }
   
   render() {
