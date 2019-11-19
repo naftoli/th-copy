@@ -123,7 +123,7 @@ foreach ($schools as $id => $school) {
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
-            .tests input {width: 30px;}
+            .tests input {width: 35px;}
             input[disabled] {
                 color: #A9A9A9;
                 padding: 2px;
@@ -392,11 +392,11 @@ foreach ($schools as $id => $school) {
             });
             
             <? if(isset($has_chaps) && !$has_chaps) { ?>
-                $("a#next_page").click(function(event){
-                    event.preventDefault();
-                    alert('It appears that you have not setup any Chaperones yet!. Redirecting you to Chaperones page...');
-                    location.href = "/chidon_school_reg.php";
-                });
+                // $("a#next_page").click(function(event){
+                //     event.preventDefault();
+                //     alert('It appears that you have not setup any Chaperones yet!. Redirecting you to Chaperones page...');
+                //     location.href = "/chidon_school_reg.php";
+                // });
             <? }; // end if has$chaps ?>
             
         });

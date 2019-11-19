@@ -129,7 +129,7 @@
     <head>
         <script src="scripts/jquery-1.8.3.js"></script>
         <script>
-            let school = 614;
+            let school = 622;
             let type = 'school';
             $.post('ajax/enrollIntoCampaigns.php', { type : type, id : school });
         </script>
