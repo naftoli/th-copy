@@ -24,6 +24,11 @@ if ($today > $date3) {
     $shutdown3 = true;
 }
 
+// close all marking until further notice
+$shutdown1 = true;
+$shutdown2 = true;
+$shutdown3 = true;
+
 /* 
 $exceptions = [];
 // allow OT until thursday at 5pm
