@@ -42,8 +42,8 @@ if (isset($_POST['submit'])) {
         foreach ($tests as $field => $column) {
             if (isset($_POST[$field])) {
                 foreach ($_POST[$field] as $id => $mark) {
-                    if (ceil($mark) > 0) {
-                        $qrys[] = "UPDATE th_chidon SET " . $column . " = " . ceil($mark) . " WHERE th_chidon_id = " . $id;
+                    if ( $mark > 0 ) {
+                        $qrys[] = "UPDATE th_chidon SET " . $column . " = " . $mark . " WHERE th_chidon_id = " . $id;
                     } else {
                         $qrys[] = "UPDATE th_chidon SET " . $column . " = 0 WHERE th_chidon_id = " . $id;
                     }
@@ -208,12 +208,12 @@ foreach ($schools as $id => $school) {
                             foreach ($other as $user_id => $more) {
                                 foreach ($more as $name => $tests) {
                                     // get marks
-                                    $t1a = intval($tests['t1a']);
-                                    $t1b = intval($tests['t1b']);
-                                    $t2a = intval($tests['t2a']);
-                                    $t2b = intval($tests['t2b']);
-                                    $t3a = intval($tests['t3a']);
-                                    $t3b = intval($tests['t3b']);
+                                    $t1a = floatval($tests['t1a']);
+                                    $t1b = floatval($tests['t1b']);
+                                    $t2a = floatval($tests['t2a']);
+                                    $t2b = floatval($tests['t2b']);
+                                    $t3a = floatval($tests['t3a']);
+                                    $t3b = floatval($tests['t3b']);
                                     
                                     $div1 = count(array_filter([$t1a, $t2a, $t3a])); // count the number of Part 1 Tests which are actually set
                                     $div2 = count(array_filter([$t1b, $t2b, $t3b])); // count the number of Part 2 Tests which are actually set
@@ -222,8 +222,8 @@ foreach ($schools as $id => $school) {
                                     $div1 = $div2 = 3;
                                     
                                     // calculate the averages
-                                    $avg1 = $div1 ? (intval($tests['t1a']) + intval($tests['t2a']) + intval($tests['t3a'])) / $div1 : 0;
-                                    $avg2 = $div2 ? (intval($tests['t1b']) + intval($tests['t2b']) + intval($tests['t3b'])) / $div2 : 0;
+                                    $avg1 = $div1 ? (floatval($tests['t1a']) + floatval($tests['t2a']) + floatval($tests['t3a'])) / $div1 : 0;
+                                    $avg2 = $div2 ? (floatval($tests['t1b']) + floatval($tests['t2b']) + floatval($tests['t3b'])) / $div2 : 0;
                                     $avg = $div2 ? ($avg1 + $avg2) / 2 : $avg1;
                                     
                                     //if ($admin_user['auth'] != 'super') {

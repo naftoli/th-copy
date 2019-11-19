@@ -145,8 +145,8 @@ foreach ( $schoolChaps as $school_id => $chaps ) {
                     foreach ($other as $chidon_id => $more) {
                         foreach ($more as $name => $tests) {
                             // calculate the averages for each student
-                            $avg1 = (intval($tests['t1a']) + intval($tests['t2a']) + intval($tests['t3a'])) / 3;
-                            $avg2 = (intval($tests['t1b']) + intval($tests['t2b']) + intval($tests['t3b'])) / 3;
+                            $avg1 = (floatval($tests['t1a']) + floatval($tests['t2a']) + floatval($tests['t3a'])) / 3;
+                            $avg2 = (floatval($tests['t1b']) + floatval($tests['t2b']) + floatval($tests['t3b'])) / 3;
                             $avg = ($avg1 + $avg2) / 2;
                             
                             // if the grade matches the current grade... print a grey line
