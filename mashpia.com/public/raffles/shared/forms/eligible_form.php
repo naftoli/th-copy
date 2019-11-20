@@ -107,6 +107,7 @@ use raffles\shared\Constants as Constants;
                 <option value="" disabled selected >Select a Raffle Type</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
             </select>
             <span id="raffle_select_container"></span>
         </div>
