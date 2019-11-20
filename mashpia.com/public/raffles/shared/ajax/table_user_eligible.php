@@ -18,9 +18,13 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
 require_once(dirname(__FILE__).'/../classes/Constants.php');
+require_once(dirname(__FILE__).'/../../yearly/classes/YearlyRaffle.php');
+
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 use raffles\shared\Constants as Constants;
+use raffles\yearly\YearlyRaffle as YearlyRaffle;
+
 // load the required classes
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';
@@ -77,6 +81,24 @@ foreach ( $schoolsUsers as $school => $users ) {
                     echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
                     "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td>" . $msg . 
                     "</td><td><img class='flag' src='../images/60 flag.png' /></td></tr>";
+                } 
+            }
+            echo "</table></div><div style='page-break-after: always'></div>";
+        } else if ( $raffle->type == 'yearly' ) {
+            $yearly_raffle = new YearlyRaffle;
+            $required = $yearly_raffle->getDayCount();
+            $daysLeft = $yearly_raffle->getEnd() - unixtojd();
+            echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
+            echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
+            echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th><th></th></tr>";
+            foreach ( $users as $user ) {
+                $total = $yearly_raffle->set_user_eligibility( $user['user_id'] )[ $user['user_id'] ];
+                if ( $total >= $required || $daysLeft >= ( $required - $total ) ) {
+                    if ( $total >= $required ) $msg = "Already Eligible (finished " . $total . " days of missions)";
+                    else $msg = ( $required - $total ) . " more days to go";
+                    echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
+                    "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td>" . $msg . 
+                    "</td><td><img class='flag' src='../images/180 flag.png' /></td></tr>";
                 } 
             }
             echo "</table></div><div style='page-break-after: always'></div>";

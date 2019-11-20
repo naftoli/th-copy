@@ -561,7 +561,7 @@ class Raffle {
                 $end_date = $start_date + 6; // get the end date for the first week			
             }
         }
-                
+
         return $total;
     }
 
@@ -578,4 +578,3 @@ class Raffle {
         return $total;
     }
 }
-
