@@ -56,7 +56,7 @@ use raffles\shared\Constants as Constants;
             td.green{ color: green; }
             td.red{ color: red; }
             @media print {
-                .col_content > p, .col_content > h1, .col_content > h2, .col_content > .dropdowns, .col_content > .button {
+                .col_content > p, .col_content > h1, .col_content > h2, .col_content > .dropdowns, .col_content > div.print {
                     display: none;
                 }
             }
@@ -76,6 +76,11 @@ use raffles\shared\Constants as Constants;
     <BODY>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
         <h1>Raffles: Manually Eligible Students</h1>
+
+        <div class="print" align="center">
+            <a class="button" onclick="window.print();"><i class="fa fa-print" aria-hidden="true"></i> Print Report</a>
+        </div>
+        <br /><br />
         
         <p>Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual</p>
         
@@ -112,9 +117,6 @@ use raffles\shared\Constants as Constants;
         </div>
         <div class="dropdowns">
             <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate/Refresh Report</a>
-        </div>
-        <div class="dropdowns">
-            <a class="button" onclick="window.print();"><i class="fa fa-print" aria-hidden="true"></i> Print Report</a>
         </div>
         <div id="eligible_list_container"></div>
         
