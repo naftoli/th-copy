@@ -12,7 +12,7 @@ $auction_id = $rowAuction['auction_id'];
 <head>
 <link href="admin_styles.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Miles Report</title>
+<title>Auction Miles Report</title>
 <style type='text/css'>
 @media print {
 	table {
@@ -34,7 +34,7 @@ $auction_id = $rowAuction['auction_id'];
 
 <body>
 <? include('admin_header.php');?>
-<h1 class="no-print">Miles Report</h1>
+<h1 class="no-print">Auction Miles Report</h1>
 <? 
 if ($admin_auth[0] == 'school') { 
 

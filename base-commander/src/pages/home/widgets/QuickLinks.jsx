@@ -59,7 +59,7 @@ export class Resources extends Component {
               <img src={`${LEGACY_URL}/homeIcons/Calendar.png`} alt='calendar'/>
               Calendar
             </a>
-            <a href='//dropbox.com/sh/ztiltfbvpo4te9p/AABZjQmM71L5YESXllu1xjrIa?dl=0' target='_blank' rel="noopener noreferrer">
+            <a href='//thechidon.com' target='_blank' rel="noopener noreferrer">
               <img src={`${LEGACY_URL}/homeIcons/Chidon.png`} alt='chidon'/>
               Yahadus
             </a>

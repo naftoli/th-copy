@@ -73,13 +73,18 @@ class NewParentModal extends Component {
         <form onSubmit={ this.createParent }>
           <ModalBody>
             <Row>
-              <Col xs={12}>
+              <Col xs={6}>
                 <Label>E-Mail Address / Username</Label>
                 <Input required name='email' 
                   value={ email } type='email' {...inputProps} />
                 <div className='invalid-message'>
                   Please enter a valid E-mail address
                 </div>
+              </Col>
+
+              <Col xs={6}>
+                <Label>Password</Label>
+                <Input name='password' value='p1234' disabled />
               </Col>
               
               <Col xs={6}>
