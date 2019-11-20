@@ -47,7 +47,7 @@ function generate_report(event) {
     }
     
     $("#eligible_list_container").html("<div class='loader'></div>");
-    alert("Please Note: the page may take some time to load, please be patient.");
+    alert("Please Note: the report may take some time to load, please be patient.");
     
     $.post(url, {raffle_id: raffle_id, school_id: school_id, type: type}, function(data){
         $("#eligible_list_container").html(data);
