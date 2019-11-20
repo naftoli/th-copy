@@ -51,7 +51,7 @@ function checkMonthly( $user_id ) {
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_monthly_task_requirment();
 	
-	if ($total >= $required - 4) { // if it is between 60 and 48 we can check each week to see if we get 60.
+	if ($total >= $required - 12) { // if it is between 60 and 48 we can check each week to see if we get 60.
 		$start_date = $dates['start_date']; // default to this start date
 		$end_date = $dates['start_date'] + 6; // get the end date for the first week
 		// TODO, iterate and check for additional marks...
