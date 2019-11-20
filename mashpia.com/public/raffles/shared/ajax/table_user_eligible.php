@@ -17,8 +17,10 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
+require_once(dirname(__FILE__).'/../classes/Constants.php');
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
+use raffles\shared\Constants as Constants;
 // load the required classes
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';
@@ -48,30 +50,63 @@ $raffle = Raffle::load($_POST['raffle_id']);
 /***************** RENDER THE FORM **********************/
 // for each school
 foreach ( $schoolsUsers as $school => $users ) {
-    echo "<h2>" . $schools[$school] . "</h2>"; // show the school title
-    echo "<div id='table-marks'>"; // allow for the table to scroll in a div
-    echo "<table>"; // start the table
-    echo "<tr><th>Grade</th><th>Student</th>"; // start the header
-    echo "<th>" . $raffle->name . "</th>"; // show the raffle name
-    echo "</tr>"; // end the top row
-    foreach ( $users as $user ) { // for each student
-        // print the user's name and grade
-        echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
-            "</td><td>" . $user['first'] . " " . $user['last'];
-        if( $report_mode ){
-            $user_ids = $raffle->get_eligable_user_ids($user['user_id'], false, false, true); // in test mode run the full raffle check
-            echo "<td class='". ( isset($user_ids[$user['user_id']]) ? "green'>✓" : "red'>x" ) ."</td>"; // determine the class and content
-        } else {
-            $user_ids = $raffle->get_raffle_eligable_user_ids($user['user_id']); // pass the school id in to only get the students that we need
-            echo "</td><td><input class='eligible-toggle' type='checkbox' name='" .
-                $user['user_id'] . ":" . $raffle->raffle_id .
-                "' " . ( isset($user_ids[$user['user_id']]) ? "checked" : "" ) .
-                "/></td>"; // render a checkbox with the correct params and set it to checked if it has a task
+    if ( $report_mode ) {
+        if ( $raffle->type == 'weekly' ) {
+            $user_ids = $raffle->get_eligable_user_ids(false, false, false, true, $school); // get all users from school
+            echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
+            echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
+            echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th></tr>";
+            foreach ( $users as $user ) {
+                if ( isset($user_ids[$user['user_id']]) ) {
+                    echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
+                    "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td><img class='flag' src='../images/5 flag.png' /></td></tr>";
+                } 
+            }
+            echo "</table></div><div style='page-break-after: always'></div>";
+        } else if ( $raffle->type == 'monthly' ) {
+            $required = Constants::get_monthly_task_requirment();
+            $daysLeft = $raffle->end_date - unixtojd();
+            echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
+            echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
+            echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th><th></th></tr>";
+            foreach ( $users as $user ) {
+                $total = $raffle->checkMonthly( $user['user_id'] );
+                if ( $total >= $required || $daysLeft >= ( $required - $total ) ) {
+                    if ( $total >= $required ) $msg = "Already Eligible (finished " . $total . " days of missions)";
+                    else $msg = ( $required - $total ) . " more days to go";
+                    echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
+                    "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td>" . $msg . 
+                    "</td><td><img class='flag' src='../images/60 flag.png' /></td></tr>";
+                } 
+            }
+            echo "</table></div><div style='page-break-after: always'></div>";
         }
-        
-        // go to the next user
-        echo "</tr>"; 
-    } // end for each student
-    echo "</table></div><br />"; // end the table
+    } else {
+        echo "<h2>" . $schools[$school] . "</h2>"; // show the school title
+        echo "<div id='table-marks'>"; // allow for the table to scroll in a div
+        echo "<table>"; // start the table
+        echo "<tr><th>Grade</th><th>Student</th>"; // start the header
+        echo "<th>" . $raffle->name . "</th>"; // show the raffle name
+        echo "</tr>"; // end the top row
+        foreach ( $users as $user ) { // for each student
+            // print the user's name and grade
+            echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
+                "</td><td>" . $user['first'] . " " . $user['last'];
+            if( $report_mode ){
+                $user_ids = $raffle->get_eligable_user_ids($user['user_id'], false, false, true); // in report mode run the full raffle check
+                echo "<td class='". ( isset($user_ids[$user['user_id']]) ? "green'>✓" : "red'>x" ) ."</td>"; // determine the class and content
+            } else {
+                $user_ids = $raffle->get_raffle_eligable_user_ids($user['user_id']); // pass the school id in to only get the students that we need
+                echo "</td><td><input class='eligible-toggle' type='checkbox' name='" .
+                    $user['user_id'] . ":" . $raffle->raffle_id .
+                    "' " . ( isset($user_ids[$user['user_id']]) ? "checked" : "" ) .
+                    "/></td>"; // render a checkbox with the correct params and set it to checked if it has a task
+            }
+            
+            // go to the next user
+            echo "</tr>"; 
+        } // end for each student
+        echo "</table></div><br /><div style='page-break-after: always'></div>"; // end the table
+    }
 }// end for each school
 ?>

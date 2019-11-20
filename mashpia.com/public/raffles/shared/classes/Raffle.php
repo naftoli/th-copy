@@ -220,7 +220,7 @@ class Raffle {
      *
      * TODO: check even if the user is not in the table based off of doc
      */
-    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false ){
+    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false, $school_id = 0){
         $year = $this->year;
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
@@ -253,7 +253,7 @@ class Raffle {
         // get all users not marked in raffle_eligibility and who are registerd
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
             " LEFT JOIN admins a USING ( admin_id ) ".
-            " WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL ";
+            " WHERE u.user_registered IS NOT NULL AND u.school_id " . ($school_id ? "= " . $school_id : " IS NOT NULL ");
         // on reports we need to hide the soldiers who already won
         if ( !$report )
             $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
@@ -311,10 +311,10 @@ class Raffle {
                 //if($log && $total < 5) echo "uneligible\n";
                 
             } else if ($this->type == 'monthly'){ // if it is monthly, do the monthly checks.
-                if($total >= Constants::get_monthly_task_requirment()){ // we need 20 days
+                if($total >= Constants::get_monthly_task_requirment()){ // we need 60 days
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                     //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
-                } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 60 and 48 we can check each week to see if we get 60.
+                } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
                     $start_date = $this->start_date; // default to this start date
                     $end_date = $this->start_date + 6; // get the end date for the first week
                     // TODO, iterate and check for additional marks...
@@ -539,6 +539,43 @@ class Raffle {
             "from"  => $raffle_from,
             "to"    => $raffle_to
         ];
+    }
+
+    public function checkMonthly( $user_id ) {
+        $total = $this->checkDaily( $user_id );
+        $required = Constants::get_monthly_task_requirment();
+        
+        if ($total < $required) { 
+            $start_date = $this->start_date; // default to this start date
+            $end_date = $start_date + 6; // get the end date for the first week
+            // TODO, iterate and check for additional marks...
+            for ($i = 0; $i < 12; $i++) { // loop over the 12 weeks.
+                $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
+                    AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
+                    AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+                $update_total_query = mysql_query($update_total_sql);
+                $update_total_row = mysql_fetch_assoc($update_total_query);
+                if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
+                
+                $start_date = $end_date + 1; // go to the next day for the next start date
+                $end_date = $start_date + 6; // get the end date for the first week			
+            }
+        }
+                
+        return $total;
+    }
+
+    private function checkDaily( $user_id ) {
+        $daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
+                    ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
+                    ' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
+                    ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
+                    ' and dtmarks.mark_date >= '. $this->start_date .' and dtmarks.mark_date <= ' . $this->end_date .
+                    ' group by dtmarks.mark_date';
+        //echo $daily_sql."\n"; // if you want to debug...
+        $daily_query = mysql_query($daily_sql); // run the query
+        $total = mysql_num_rows( $daily_query ); // get the number of marks
+        return $total;
     }
 }
 

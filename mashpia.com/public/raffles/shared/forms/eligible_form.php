@@ -12,13 +12,14 @@ require($_SERVER["DOCUMENT_ROOT"].'/header.php');
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 // load the required files
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
+require_once(dirname(__FILE__).'/../classes/Constants.php');
 
 // load the schools
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
-
+use raffles\shared\Constants as Constants;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -54,6 +55,21 @@ use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
             }
             td.green{ color: green; }
             td.red{ color: red; }
+            @media print {
+                .col_content > p, .col_content > h1, .col_content > h2, .col_content > .dropdowns, .col_content > .button {
+                    display: none;
+                }
+            }
+            img.flag {
+                margin-top: -80px;
+                margin-bottom: -80px;
+                width: 250px;
+            }
+            img.marathonLogo {
+                margin-top: -100px; 
+                margin-bottom: -100px; 
+                width: 650px;
+            }
         </style>
     </HEAD>
 
@@ -96,6 +112,9 @@ use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
         </div>
         <div class="dropdowns">
             <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate/Refresh Report</a>
+        </div>
+        <div class="dropdowns">
+            <a class="button" onclick="window.print();"><i class="fa fa-print" aria-hidden="true"></i> Print Report</a>
         </div>
         <div id="eligible_list_container"></div>
         
