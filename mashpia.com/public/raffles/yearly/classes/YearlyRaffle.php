@@ -183,4 +183,8 @@ class YearlyRaffle {
     public function getDayCount() {
         return $this->DAY_COUNT;
     }
+
+    public function getYear() {
+        return $this->year;
+    }
 }
