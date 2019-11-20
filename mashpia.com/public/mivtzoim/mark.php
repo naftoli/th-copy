@@ -103,7 +103,7 @@ if ( $school && $grade && $mivtzoim_id ) {
 
         <div class="infobox">
             Syncs from parent accounts to this page. Whoever (parent/bc) enters an amount last, will be the amount that will show/save.<br />
-            If trying to delete a child's amount, you must write the number 0. Simply deleting the number, will not save as 0.
+            <span style="color: red; font-weight: bold;">If trying to delete a child's amount, you must write the number 0. Simply deleting the number, will not save as 0.</span>
         </div>
 
         <form action="mark.php" method="post">
