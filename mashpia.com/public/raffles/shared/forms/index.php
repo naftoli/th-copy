@@ -71,21 +71,21 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </div>
         <h2>Raffle 180</h2>
         <div id="action-links">            
-            <?if ($admin_user['auth'] == 'super') {?>
-                <a href="../../yearly/eligibility_report_hq.php">
+            <?//if ($admin_user['auth'] == 'super') {?>
+                <!-- <a href="../../yearly/eligibility_report_hq.php">
                     <div class="button">
                         <img src="/images/icon_auction.png" height="32" alt="tickets"/>
                         <span class="link-text">Eligible Students</span>
                     </div>
-                </a>
-            <? } else { ?>
-                <a href="../../yearly/eligibility_report.php">
+                </a> -->
+            <?// } else { ?>
+                <a href="eligible_form.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
                     <span class="link-text">Eligible Students</span>
                 </div>
             </a>
-            <? } ?>
+            <?// } ?>
             <a href="winners_form.php">
                 <div class="button">
                     <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
