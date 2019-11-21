@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 require_once '../db.php';
 require_once '../class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
@@ -19,7 +20,7 @@ $sql2 = "
     and ur.school_id != u.school_id
 ";
 
-$sql2 = "
+$sql3 = "
     update registration_charges ur 
     join users u using (user_id) 
     set ur.school_id = u.school_id 
