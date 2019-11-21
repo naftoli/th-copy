@@ -373,9 +373,9 @@ var registrationApp = function() {
             }
         } else if ( selected_charges.chayolei === true ) {
             // make sure non th school field is not empty
-            console.log( selected_user.school.school_id );
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) && $("#non_th_school").val() == '' ) {
-                return showError("You must enter the name of the school that you are attending.");
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                var non_th_school = $("#non_th_school").val().trim();
+                if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
             }
         }
 
