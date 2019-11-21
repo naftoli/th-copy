@@ -371,6 +371,12 @@ var registrationApp = function() {
                     return showError("You must choose who recruited you.");
                 }
             }
+        } else if ( selected_charges.chayolei === true ) {
+            // make sure non th school field is not empty
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                var non_th_school = $("#non_th_school").val().trim();
+                if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
+            }
         }
 
         // validate that they have accepted to be used in media campaigns
