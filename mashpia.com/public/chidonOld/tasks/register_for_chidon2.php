@@ -15,10 +15,13 @@ $result = mysql_query( $result );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[] = $row['user_id'];
 }
+
+$added = 0;
 foreach ( $users as $user_id ) {
     $sql = "insert ignore into admin_auths set admin_id = " . $admin_id . ", auth = 'user', role_id = 1, id = " . $user_id;
-    mysql_query( $sql );
+    if ( mysql_query( $sql ) ) $added++;
 }
+echo "Added: " . $added;
 
 $sql = "
     SELECT 
