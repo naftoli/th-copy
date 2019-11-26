@@ -7,6 +7,19 @@ $info = [];
 $school_id = 588; // boro park school
 //$school_id = 584; // yavne school montreal
 
+// add all kids in school to admin account
+$admin_id = 193349;
+$users = [];
+$sql = "select user_id from users where school_id = " . $school_id;
+$result = mysql_query( $result );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $users[] = $row['user_id'];
+}
+foreach ( $users as $user_id ) {
+    $sql = "insert ignore into admin_auths set admin_id = " . $admin_id . ", auth = 'user', role_id = 1, id = " . $user_id;
+    mysql_query( $sql );
+}
+
 $sql = "
     SELECT 
         user_id, admin_id, class_grade
@@ -48,7 +61,7 @@ foreach ( $info as $row ) {
                     amount = 0.00, 
                     date = now(), 
                     year = " . $year;
-            echo $sql . "<br />";
+            //echo $sql . "<br />";
             if ( !mysql_query( $sql ) ) {
                 $success = false;
                 break;
@@ -61,7 +74,7 @@ foreach ( $info as $row ) {
                     reg_date = now(), 
                     book = " . ($grade - 4) . ", 
                     parent_id = " . $parent;
-            echo $sql . "<br /><br />";
+            //echo $sql . "<br /><br />";
             if ( !mysql_query( $sql ) ) {
                 $success = false;
                 break;
