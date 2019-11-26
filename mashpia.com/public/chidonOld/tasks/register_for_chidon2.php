@@ -48,7 +48,7 @@ foreach ( $info as $row ) {
                     amount = 0.00, 
                     date = now(), 
                     year = " . $year;
-            //echo $sql . "<br />";
+            echo $sql . "<br />";
             if ( !mysql_query( $sql ) ) {
                 $success = false;
                 break;
@@ -61,7 +61,7 @@ foreach ( $info as $row ) {
                     reg_date = now(), 
                     book = " . ($grade - 4) . ", 
                     parent_id = " . $parent;
-            //echo $sql . "<br /><br />";
+            echo $sql . "<br /><br />";
             if ( !mysql_query( $sql ) ) {
                 $success = false;
                 break;
