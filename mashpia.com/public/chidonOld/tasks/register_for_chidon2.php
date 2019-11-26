@@ -11,7 +11,7 @@ $school_id = 588; // boro park school
 $admin_id = 193349;
 $users = [];
 $sql = "select user_id from users where school_id = " . $school_id;
-$result = mysql_query( $result );
+$result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[] = $row['user_id'];
 }
