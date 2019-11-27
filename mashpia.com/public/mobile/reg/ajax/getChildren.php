@@ -144,19 +144,19 @@ if ( !empty( $users ) ) {
 		// }
 		
 		// chidon registration
-		// $exceptions = [483,482,544,583,588];
-		// if ( !$row['reg_chidon'] // if not in chidon
-		// 	&& intval( $row['class_grade'] ) > 3 // and in grade 4+ 
-		// 	&& intval( $row['class_grade'] ) <= 8 // not in grade 8 
-		// 	&& $row['chidon'] // make sure the kid is in chidon
-		// 	&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
-		// 	//&& in_array( $row['school_id'], $australia ) // and not in australia..
-		// ) {
-		// 	$children[ $row['user_id'] ]['needsReg'] = 1;
-		// 	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-		// } 
+		$exceptions = [483,482,544,583,588];
+		if ( !$row['reg_chidon'] // if not in chidon
+			&& intval( $row['class_grade'] ) > 3 // and in grade 4+ 
+			&& intval( $row['class_grade'] ) <= 8 // not in grade 8 
+			&& $row['chidon'] // make sure the kid is in chidon
+			&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
+			//&& in_array( $row['school_id'], $australia ) // and not in australia..
+		) {
+			$children[ $row['user_id'] ]['needsReg'] = 1;
+			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
+		} 
 		// turn off chidon
-		$children[ $row['user_id'] ]['reg_types']['chidon'] = false;
+		// $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
 
 		// if school hasn't registered, turn off chayolei, chidon registration
 		if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {
