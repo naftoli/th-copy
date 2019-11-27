@@ -9,7 +9,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 $children = [];
-$query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
+$query = mysql_query("SELECT users FROM mivtzoim_purchases.lulav_purchases WHERE year = $year");
 while ( $row = mysql_fetch_assoc( $query ) ) {
     if ( strpos($row['users'], ',') !== false ) {
         $users = explode(',', $row['users']);

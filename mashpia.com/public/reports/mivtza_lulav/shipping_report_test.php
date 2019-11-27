@@ -24,7 +24,7 @@ $shipping_sql = "SELECT DISTINCT s.*, e.class_grade, e.class_sub, b.first, b.las
 $shipping_sql .= "FROM schools s ";
 $shipping_sql .= "JOIN admin_auths a ON s.school_id = a.id AND a.position = 'Base Commander' ";
 $shipping_sql .= "JOIN admins b ON b.admin_id = a.id ";
-$shipping_sql .= "JOIN lulav_purchases c ON c.users IN (" . implode(',', $users) . ") ";
+$shipping_sql .= "JOIN mivtzoim_purchases.lulav_purchases c ON c.users IN (" . implode(',', $users) . ") ";
 $shipping_sql .= "JOIN users d ON d.school_id = s.school_id ";
 $shipping_sql .= "JOIN classes e ON e.class_id = d.class_id ";
 $shipping_sql .= "WHERE s.school_id IN (" . implode(',', array_keys($schools)) . ") ";
