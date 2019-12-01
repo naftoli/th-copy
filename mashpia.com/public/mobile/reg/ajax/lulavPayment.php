@@ -31,12 +31,13 @@ if ( $amount > 0 ) {
                         $response_array[9];	
 
         $qry = $MASHPIA_DB->prepare(
-            "INSERT into mivtzoim_purchases.lulav_purchases 
+            "INSERT into mivtzoim_purchases.purchases 
             SET admin_id = :admin, 
             amount_paid = :amount, 
             authorization = :auth, 
             users = :users, 
-            year = :year"
+            year = :year, 
+            item_id = 1"
         );
         $qry->execute([
             ':admin'    => $admin_id, 

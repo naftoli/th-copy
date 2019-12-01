@@ -16,6 +16,10 @@ require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
 $yearly_raffle = new YearlyRaffle();
 
+// needed for checking about mivtzoim purchases
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSetting.php';
+
 //setup json array of information to pass back to parent_detail page
 $info = array();
 
@@ -119,6 +123,28 @@ if ( !empty( $users ) ) {
 		// 		$children[$row['user_id']]['lulavPurchased'] = 1;
 		// 	}
 		// }
+
+		// mivtza chanuka 5780
+		$children[$row['user_id']]['menorah'] = 0;
+		$children[$row['user_id']]['brochure'] = 0;
+		$chanukaSchools = MivtzoimSetting::getEnabledSchools( $year, [2, 3] );
+		foreach ( $chanukaSchools as $school ) {
+			$school_id = $school['school_id'];
+			if ( 
+				$row['school_id'] == $school_id && 
+				$children[$row['user_id']]['schoolRegistered'] &&
+				$children[$row['user_id']]['schoolTypeRegistered'] &&
+				$children[$row['user_id']]['user_registered'] 
+			) {
+				if ( $school['item_id'] == 2 ) {
+					$children[$row['user_id']]['menorah'] = 1;
+					$children[$row['user_id']]['menorah_shipping'] = $school['shipping_charge'];
+				} else if ( $school['item_id'] == 3 ) {
+					$children[$row['user_id']]['brochure'] = 1;
+					$children[$row['user_id']]['brochure'] = $school['shipping_charge'];
+				}
+			}
+		}		
 
 		// after Nov 8, 2017 registration is closed
 		//if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
