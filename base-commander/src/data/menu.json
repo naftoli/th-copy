@@ -146,7 +146,8 @@
           { "label": "Marking", "legacy": true, "path": "/mivtzoim" },
           { "label": "Reports", "legacy": true, "path": "/mivtzoim/reports" }, 
           { "label": "Mivtza Lulav Settings", "legacy": true, "path": "/mivtzoim/lulav_settings.php" },
-          { "label": "Mivtza Lulav Orders", "legacy": true, "path": "/reports/mivtza_lulav/" }
+          { "label": "Mivtza Lulav Orders", "legacy": true, "path": "/reports/mivtza_lulav/" },
+          { "label": "Mivtza Chanuka Settings", "legacy": true, "path": "/mivtzoim_purchases/chanuka_settings.php" }
         ]
       }, 
       { "label": "TH Drive", "module": "chayolei", 
