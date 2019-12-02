@@ -36,7 +36,7 @@ $fee_info = [
 
 $msg = '';
 if ( isset( $_POST['submit'] ) ) {
-    $school = $_POST['school'];
+    $school = isset( $_POST['school'] ) ? $_POST['school'] : count( $schools ) == 1 ? key( $schools ) : 0;
     if ( $school > 0 ) {
         // figure out what the shipping fee is 
         if ( isset( $_POST['menorah'] ) && isset( $_POST['brochure'] ) ) {
