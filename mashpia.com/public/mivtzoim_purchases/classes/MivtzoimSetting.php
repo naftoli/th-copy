@@ -45,7 +45,7 @@ class MivtzoimSetting {
     public function enablePurchases( $shipping_fee ) {
         // figure out if updating or adding
         $row = $this->getSettings();
-        if ( !empty( $row ) ) {
+        if ( !empty( $row ) && floatval( $row['shipping_charge'] ) != floatval( $shipping_fee ) ) {
             // update
             $stmt = $this->pdo->prepare("
                 UPDATE mivtzoim_purchases.school_settings 
@@ -56,7 +56,7 @@ class MivtzoimSetting {
                     year = :year AND school_id = :school
                         AND item_id = :item
             ");
-        } else {
+        } else if ( empty( $row ) ) {
             // add row to db
             $stmt = $this->pdo->prepare("
                 INSERT INTO mivtzoim_purchases.school_settings 
@@ -68,14 +68,16 @@ class MivtzoimSetting {
                     item_id = :item
             ");
         }
-        $success = $stmt->execute([
-            ':fee'      =>  $shipping_fee, 
-            ':year'     =>  $this->year, 
-            ':school'   =>  $this->school, 
-            ':item'     =>  $this->item
-        ]);
-        if ( !$success || $stmt->rowCount() == 0 ) {
-            return false;
+        if ( isset( $stmt ) ) {
+            $success = $stmt->execute([
+                ':fee'      =>  $shipping_fee, 
+                ':year'     =>  $this->year, 
+                ':school'   =>  $this->school, 
+                ':item'     =>  $this->item
+            ]);
+            if ( !$success || $stmt->rowCount() == 0 ) {
+                return false;
+            }
         }
         return true;
     }
@@ -87,7 +89,7 @@ class MivtzoimSetting {
      */
     public function disablePurchases() {
         $row = $this->getSettings();
-        if ( !empty( $row ) ) {
+        if ( !empty( $row ) && intval( $row['allow_purchases'] ) != 0 ) {
             // update
             $stmt = $this->pdo->prepare("
                 UPDATE mivtzoim_purchases.school_settings 
@@ -98,7 +100,7 @@ class MivtzoimSetting {
                     year = :year AND school_id = :school
                         AND item_id = :item
             ");
-        } else {
+        } else if ( empty( $row ) ) {
             // add row to db
             $stmt = $this->pdo->prepare("
                 INSERT INTO mivtzoim_purchases.school_settings 
@@ -110,13 +112,15 @@ class MivtzoimSetting {
                     item_id = :item
             ");
         }
-        $success = $stmt->execute([
-            ':year'     =>  $this->year, 
-            ':school'   =>  $this->school, 
-            ':item'     =>  $this->item
-        ]);
-        if ( !$success || $stmt->rowCount() == 0 ) {
-            return false;
+        if ( isset( $stmt ) ) {
+            $success = $stmt->execute([
+                ':year'     =>  $this->year, 
+                ':school'   =>  $this->school, 
+                ':item'     =>  $this->item
+            ]);
+            if ( !$success || $stmt->rowCount() == 0 ) {
+                return false;
+            }
         }
         return true;
     }
