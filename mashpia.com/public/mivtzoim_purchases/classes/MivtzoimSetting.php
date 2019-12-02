@@ -141,4 +141,25 @@ class MivtzoimSetting {
         ]);
         return $stmt->fetchAll();
     }
+
+    public static function getSchools( $year, $items ) {
+        global $MASHPIA_DB;
+        $items = implode(',', $items);
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * FROM mivtzoim_purchases.school_settings 
+            WHERE year = :year AND item_id in ($items) 
+        ");
+        $stmt->execute([
+            ':year'     =>  $year
+        ]);
+        $schools = [];
+        $rows = $stmt->fetchAll();
+        foreach ( $rows as $row ) {
+            $schools[$row['school_id']][$row['item_id']] = [
+                'allow'     =>  $row['allow_purchases'], 
+                'shipping'  =>  $row['shipping_charge']
+            ];
+        }
+        return $schools;
+    }
 }
