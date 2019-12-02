@@ -10,7 +10,7 @@ $today = date("Y-m-d H:i:s"); // date internal is 4 or 5 hrs ahead
     After the deadline, only HQ can enter in marks.
     
  ***************************************************/
-$date1 = "2019-11-30 05:00:00";
+$date1 = "2019-12-09 05:00:00";
 $date2 = "2020-01-26 05:00:00";
 $date3 = "2020-03-26 05:00:00";
 
