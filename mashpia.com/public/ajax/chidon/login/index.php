@@ -94,6 +94,11 @@ if ( $row ) {
 
         $chidon_cost = GlobalSettings::getChidonCost( $school_id );
         $row['chidon_cost'] = $chidon_cost;
+
+        $book = GlobalSettings::getYahadusBookFee( $school_id );
+        $row['yahadus_book_cost'] = $book['bookFee'];
+        $row['yahadus_book_shipping'] = $book['shipping'];
+        
         $children[] = $row;
     }
 

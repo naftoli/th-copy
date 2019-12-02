@@ -126,14 +126,14 @@ class MivtzoimSetting {
      */
     public static function getEnabledSchools( $year, $items ) {
         global $MASHPIA_DB;
+        $items = implode(',', $items);
         $stmt = $MASHPIA_DB->prepare("
             SELECT * FROM mivtzoim_purchases.school_settings 
             WHERE allow_purchases = 1 
-                AND year = :year AND item_id in (:items) 
+                AND year = :year AND item_id in ($items) 
         ");
         $stmt->execute([
-            ':year'     =>  $year, 
-            ':items'    =>  implode(',', $items)
+            ':year'     =>  $year
         ]);
         return $stmt->fetchAll();
     }
