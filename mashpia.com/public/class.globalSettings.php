@@ -169,5 +169,24 @@ class GlobalSettings {
         $australian = [ 55, 66, 110, 112, 180, 256 ];
         return in_array( $school_id, $australian );
     }
+
+     /**
+     * getYahadusBookCost
+     * 
+     * return the current price for yahadus book purchase including shipping cost
+     *
+     * @return int
+     */
+    public static function getYahadusBookFee( $school_id = false ) {
+        $cost = [
+            'bookFee'   =>  40, 
+            'shipping'  =>  0
+        ];
+        // Anash kinder and MyShliach has $15 shipping fee
+        if ( in_array( $school_id, [ 61, 269 ] ) ) {
+            $cost['shipping'] = 15;
+        }
+        return $cost;
+    }
 }
 ?>
