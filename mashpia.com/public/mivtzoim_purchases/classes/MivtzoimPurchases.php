@@ -27,6 +27,8 @@ class MivtzoimPurchases {
                     *
                 FROM
                     mivtzoim_purchases.purchases
+                        JOIN
+                    mivtzoim_purchases.purchase_details USING (purchase_id)
                 WHERE
                     admin_id = :admin AND year = :year
                         AND item_id = :item
@@ -44,6 +46,8 @@ class MivtzoimPurchases {
                     *
                 FROM
                     mivtzoim_purchases.purchases
+                        JOIN
+                    mivtzoim_purchases.purchase_details USING (purchase_id)
                 WHERE
                     year = :year AND item_id = :item
             ");
@@ -59,6 +63,54 @@ class MivtzoimPurchases {
     }
 
     /**
+     * gets number of purchases done for specific year / item
+     * if item doesn't exist in list of items, returns error msg
+     */
+    public function getNumPurchases( $year, $item_id, $admin_id = 0 ) {
+        if ( $admin_id > 0 ) {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    IFNULL(SUM(qty), 0) AS total
+                FROM
+                    mivtzoim_purchases.purchases
+                        JOIN
+                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                WHERE
+                    admin_id = :admin AND year = :year
+                        AND item_id = :item
+            ");
+            $success = $stmt->execute([
+                ':admin'    =>  $admin_id, 
+                ':year'     =>  $year, 
+                ':item'     =>  $item_id
+            ]);
+            if ( $success )
+                return $stmt->fetchAll();
+        } else {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    IFNULL(SUM(qty), 0) AS total
+                FROM
+                    mivtzoim_purchases.purchases
+                        JOIN
+                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                WHERE
+                    year = :year AND item_id = :item
+            ");
+            $success = $stmt->execute([
+                ':year'     =>  $year, 
+                ':item'     =>  $item_id
+            ]);
+            if ( $success ) {
+                $row = $stmt->fetch();
+                return $row['total'];
+            }
+        }
+        // if we get here there were some errors
+        return false;
+    }
+
+    /**
      * gets list of purchases done for specific year / item within specific school
      * if item doesn't exist in list of items, returns error msg
      */
@@ -68,6 +120,8 @@ class MivtzoimPurchases {
                 *
             FROM
                 mivtzoim_purchases.purchases
+                    JOIN
+                mivtzoim_purchases.purchase_details USING (purchase_id)
             WHERE
                 year = :year AND item_id = :item
                     AND admin_id IN (SELECT 
@@ -95,5 +149,63 @@ class MivtzoimPurchases {
         return false;
     }
 
+    public function createPurchase( $info, $details ) {
+        $year = $info['year'];
+        $admin = $info['admin'];
+        $amount = $info['amount'];
+        $authorization = $info['auth'];
 
+        $stmt = $this->pdo->prepare("
+            INSERT INTO mivtzoim_purchases.purchases 
+            SET 
+                year = :year, 
+                admin_id = :admin, 
+                amount_paid = :amount, 
+                authorization = :auth
+        ");
+
+        $stmt2 = $this->pdo->prepare("
+            INSERT INTO mivtzoim_purchases.purchase_details 
+            SET 
+                purchase_id = :id, 
+                user_id = :user, 
+                item_id = :item, 
+                qty = :qty
+        ");
+
+        $this->pdo->beginTransaction();
+        $res = $stmt->execute([
+            ':year'     =>  $year, 
+            ':admin'    =>  $admin, 
+            ':amount'   =>  $amount, 
+            ':auth'     =>  $authorization
+        ]);
+        // $stmt->debugDumpParams(); exit;
+        $purchase_id = $this->pdo->lastInsertId();
+        
+        $success = true;
+        foreach ( $details as $user => $items ) {
+            foreach ( $items as $item => $qty ) {
+                $res2 = $stmt2->execute([
+                    ':id'   =>  $purchase_id, 
+                    ':user' =>  $user, 
+                    ':item' =>  $item, 
+                    ':qty'  =>  $qty
+                ]);
+                // $stmt2->debugDumpParams(); exit;
+                if ( !$res2 ) {
+                    $success = false;
+                    break 2;
+                }
+            }
+        }
+
+        if ( $res && $success ) {
+            $this->pdo->commit();
+            return true;
+        } else {
+            $this->pdo->rollBack();
+            return false;
+        }
+    }
 }
