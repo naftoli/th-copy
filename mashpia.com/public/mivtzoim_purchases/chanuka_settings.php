@@ -25,11 +25,11 @@ $fee_info = [
         'id'    =>  3,
         'fee'   =>  0.2, 
         'shipping'  =>  [
-            50  =>  0.34, 
-            100 =>  0.29,
-            200 =>  0.25,
-            300 =>  0.24,
-            400 =>  0.23
+            50  =>  0.16, 
+            100 =>  0.11,
+            200 =>  0.07,
+            300 =>  0.06,
+            400 =>  0.05
         ]
     ]
 ];
@@ -102,6 +102,8 @@ if ( isset( $_POST['submit'] ) ) {
         <div class='infobox'>
             Use the following form to determine what the shipping charges will be for your students.<br /><br />
             If you choose to PICK UP, your children will not be charged anything.<br /><br />
+            Each Menorah Box costs: $<?=$fee_info['Menorah']['fee']?><br />
+            Each Brochure costs: $<?=$fee_info['Brochure']['fee']?><br /><br />
             <?php
             foreach ( $fee_info as $item => $info ) {
                 echo "<strong>Shipping Charge for " . $item . "s</strong><br />";
@@ -153,7 +155,8 @@ if ( isset( $_POST['submit'] ) ) {
                         if ( $i++ == $num ) {
                             echo "+";
                         }
-                        echo " children guaranteed = " . $charge . " per " . $item . "<br />";
+                        echo " children guaranteed = $" . $charge . " per " . $item;
+                        echo " (Totals $" . ($info['fee'] + $charge) . ")<br />";
                     }
                     echo "<br />";
                 }
