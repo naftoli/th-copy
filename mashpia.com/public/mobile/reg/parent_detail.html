@@ -310,7 +310,10 @@
 																	<button class="btn btn-info chidon">Edit Chidon </button>
 																</div>
 															{{/if}}
-															-->
+                                                            -->
+                                                            <div style="margin:10px 0px">
+                                                                <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
+                                                            </div>
 														</div>
 													</td>
 												</tr>
@@ -540,6 +543,10 @@
                 $(document).on('click', '.editChidon', function() {
                     var id = $(this).parent().parent().parent().parent().attr('id');
                     location.href = "/mobile/chidon/edit.html?id=" + id;
+                });
+
+                $(document).on('click', '.chanuka', function() {
+                	location.href = "/mobile/mivtzoim/chanuka.html";
                 });
                 
                 // $(document).on('click', '.enroll', function() {
