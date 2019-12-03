@@ -37,13 +37,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Reporting Tools</h2>
         <div id="action-links">
-            <a href="/chidon/reports/<?=$debug ? "?debug=true": "";?>">
+            <a href="/chidonOld/reports/<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_control.png" height="32" alt="tickets"/>
                     <span class="link-text">Generate (Custom) Reports</span>
                 </div>
             </a>
-            <a href="/chidon/reports/reports.php<?=$debug ? "?debug=true": "";?>">
+            <a href="/chidonOld/reports/reports.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_dashboard.png" height="32" alt="tickets"/>
                     <span class="link-text">Pre-Generated Reports</span>
@@ -86,7 +86,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Chidon Uploading</span>
                 </div>
             </a>
-            <a href="/chidon/upload/<?=$debug ? "?debug=true": "";?>">
+            <a href="/chidonOld/upload/<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
                     <span class="link-text">Chidon Sheets Uploading</span>

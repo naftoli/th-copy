@@ -37,6 +37,15 @@
             }
 
             .form-control { border: 1px solid lightgrey !important; }
+
+            input[type='text'] {
+                margin-right: 10px;
+            }
+
+            h2 {
+                margin-top: 10px;
+                font-size: 24px;
+            }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -62,14 +71,14 @@
                         <hr />
                         <h2>Number of Menorah Boxes: 5000</h2>
                         <h2>Already Sold: <span class="menorahSold"></span></h2>
-                        <h2>Currently Available: <span id="menorahLeftToSell"></span></h2>
+                        <h2>Currently Available: <span class="menorahLeft"></span></h2>
                         <h2>Number of Brochures: 5000</h2>
                         <h2>Already Sold: <span class="brochureSold"></span></h2>
-                        <h2>Currently Available: <span id="brochureLeftToSell"></span></h2>
+                        <h2>Currently Available: <span class="brochureLeft"></span></h2>
                     </div>
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
-                        Wow! <span class="sold"></span> Chayolim bought their own Menorah Boxes and Brochures. <br />
+                        Wow! <span class="sold"></span> Thousands of Chayolim bought their own Menorah Boxes and Brochures. <br />
                         Let's see who will do mivtzoim for the most amount of time!<br />
                         Let's see who will get the most Menorahs and Brochures given out!<br />
                     </div>
@@ -107,24 +116,24 @@
                                                 <div>
                                                     <table>
                                                         <tr>
-                                                            <td><input type="checkbox" class="menorah" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Menorah Box: <strong>$1.70</strong></td>
+                                                            <td><input type="text" class="menorah" style="width: 30px;" id="{{@key}}" /></td>
+                                                            <td>Menorah Box(es): <strong>$1.70</strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
-                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{menorah_shipping}}</span></strong></td>
+                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{menorah_shipping}}</span></strong>/ea</td>
                                                         </tr>
                                                     </table>
                                                 </div>
                                                 <div>
                                                     <table>
                                                         <tr>
-                                                            <td><input type="checkbox" class="brochure" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Brochure: <strong>$0.20</strong></td>
+                                                            <td><input type="text" class="brochure" style="width: 30px;" id="{{@key}}" /></td>
+                                                            <td>Brochure(s): <strong>$0.20</strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
-                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{brochure_shipping}}</span></strong></td>
+                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{brochure_shipping}}</span></strong>/ea</td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -178,7 +187,7 @@
                             </div>
                         </div>
                         <div class="row" style="padding: 20px !important; text-align: center;">
-                            <button id="purchase" class="btn btn-primray">Purchase Set(s)</button>
+                            <button id="purchase" class="btn btn-primray">Purchase</button>
                         </div>
                     </form>                    
                 </div>
@@ -201,33 +210,56 @@
             //     soldOut = true;
             // }
             
+            var menorahSoldOut = false;
+            var brochureSoldOut = false;
             var soldOut = false;
-            var items = [2, 3];
-            for ( item of items ) {
-                $.post('ajax/purchases.php', { item : item }, function( sold ) {
-                    var startWith = 2600;
-                    var alreadySold = 1000;
-                    alreadySold += parseInt( sold );
-                    var leftToSell = startWith - alreadySold;
-                    $(".sold").text( alreadySold );
-                    $("#leftToSell").text( leftToSell );
-                    if ( soldOut || leftToSell < 1 ) {
-                        soldOut = true;
-                        $("#sold-out").show();
-                        $("#purchases").hide();
-                    }
-                });
-            }
+
+            $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
+                var menorahStart = 5000;
+                var menorahSold = 0;
+                menorahSold += parseInt( sold );
+                var menorahLeft = menorahStart - menorahSold;
+                $(".menorahSold").text( menorahSold );
+                $(".menorahLeft").text( menorahLeft );
+                if ( menorahLeft <= 0 ) {
+                    menorahSoldOut = true;
+                }
+                if ( menorahSoldOut && brochureSoldOut ) {
+                    soldOut = true;
+                    $("#sold-out").show();
+                    $("#purchases").hide();
+                }   
+            });
+
+            $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
+                var brochureStart = 5000;
+                var brochureSold = 0;
+                brochureSold += parseInt( sold );
+                var brochureLeft = brochureStart - brochureSold;
+                $(".brochureSold").text( brochureSold );
+                $(".brochureLeft").text( brochureLeft );
+                if ( brochureLeft <= 0 ) {
+                    brochureSoldOut = true;
+                }
+                if ( menorahSoldOut && brochureSoldOut ) {
+                    soldOut = true;
+                    $("#sold-out").show();
+                    $("#purchases").hide();
+                }
+            });
             
             // get the current year
             var year;
-            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
-                success: function( info ) { year = info; }
+            $.ajax({ 
+                type: "POST", 
+                url: "/mobile/chidon/ajax/getYear.php", 
+                async: false, 
+                success: function( info ) { 
+                    year = info; 
+                }
             });
             
             // load children
-            var menorah_shipping;
-            var brochure_shipping;
             $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
                 if ( success == -1 ) {
                     window.location = "index.html";
@@ -243,13 +275,11 @@
                         var child = children[c];
                         if (child.menorah || child.brochure) {
                             registred_children[c] = child;
-                            menorah_shipping = parseInt( child.menorah_shipping );
-                            brochure_shipping = parseInt( child.brochure_shipping );
                         } else {
                             unregistered_children[c] = child;
                         }
                     }
-                    console.log( registred_children );
+                    // console.log( registred_children );
                                         
                     // Grab the template script
                     var tplScript = $("#childrenTpl").html();
@@ -267,14 +297,20 @@
                         // Add the compiled html to the page
                         $(".chilrens").append( html );
                         $(".year").text(year);
+
+                        if ( menorahSoldOut )
+                            $("input.menorah").attr('disabled', true);
+                        if ( brochureSoldOut )
+                            $("input.brochure").attr('disabled', true);
+
                         if ( soldOut ) $("#sold-out").show();
                         else $("#purchases").show();
                     } 
                 }
             });
             
-            $(document).on('click', '.menorah', calcAmount);
-            $(document).on('click', '.brochure', calcAmount);
+            $(document).on('keyup', '.menorah', calcAmount);
+            $(document).on('keyup', '.brochure', calcAmount);
             $(document).on("click", "#purchase", purchaseSets);
 
             function calcAmount() {
@@ -285,20 +321,16 @@
                     { type: 'brochure', cost: 0.2 }
                 ];
                 for ( t of types ) {
-                    var elem = "." + t.type + ":checked";
-                    var numChildren = $(elem).length;
+                    var elem = "." + t.type;
                     var cost = t.cost;
-                    if ( numChildren ) {
-                        $(elem).each( function() {
-                            var id = $(this).attr('id');
-                            var shipping = 0;
-                            if ( t.type == 'menorah' ) shipping = menorah_shipping;
-                            else if ( t.type == 'brochure' ) shipping = brochure_shipping;
-                            console.log( shipping );
-                            total += (cost + shipping);
-                            console.log( total );
-                        });
-                    } 
+                    $(elem).each( function() {
+                        var id = $(this).attr('id');
+                        var qty = parseInt( $(this).val() );
+                        if ( qty ) {
+                            var shipping = parseFloat( $(this).parent().parent().next().find('.shipping-charge').text() );
+                            total += (cost + shipping) * qty;
+                        }
+                    });
                 }
 
                 var amount = parseFloat(total).toFixed(2); 
@@ -339,17 +371,41 @@
                     info.cc.num = num;
                     info.cc.exp = exp;
                     info.zip = zip;
-                    info.users = [];
-                    $.each($(".lulav:checked"), function() {
-                        var id = $(this).attr('id');
-                        info.users.push( id );
+                    info.menorah = [];
+                    info.brochure = [];
+
+                    var totalMenorahs = 0;
+                    $.each($("input.menorah"), function() {
+                        var id = parseInt( $(this).attr('id') );
+                        var qty = parseInt( $(this).val() );
+                        if ( qty > 0 ) {
+                            info.menorah.push({
+                                'user': id, 
+                                'qty' : qty
+                            });
+                            totalMenorahs += qty;
+                        }
+                    });
+
+                    var totalBrochures = 0;
+                    $.each($("input.brochure"), function() {
+                        var id = parseInt( $(this).attr('id') );
+                        var qty = parseInt( $(this).val() );
+                        if ( qty > 0 ) {
+                            info.brochure.push({
+                                'user': id, 
+                                'qty' : qty
+                            });
+                            totalBrochures += qty;
+                        }
                     });
                     
-                    var num_sets = info.users.length;
-                    $.post('/mobile/reg/ajax/lulavPayment.php', { info: info }, function( info ) {
+                    $.post('ajax/payment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
-                            alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
+                            var msg = "Thank you! You have successfully purchased " + totalMenorahs + " Menorah Box(es) and " + totalBrochures + 
+                                 " Brochure(s). Your child(ren)'s school will receive them for your child(ren).";
+                            alert( msg );
                             location.reload();
                         } else {
                             alert( result.error );
@@ -357,7 +413,7 @@
                     });
 
                 } else {
-                    alert("You have not indicated how many sets you need.");
+                    alert("You have not indicated what you are purchasing.");
                 }
             }
         });
