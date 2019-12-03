@@ -4,7 +4,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	header("Location: https://mashpia.com/donate");
 	exit;
 }
-$ip = $_SERVER['SERVER_ADDR'];
+//$ip = $_SERVER['SERVER_ADDR'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,9 +156,9 @@ $ip = $_SERVER['SERVER_ADDR'];
 		<br />
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
-			var ip = "<?=$ip?>";
+			//var ip = "<?=$ip?>";
 			$( function() {
-				checkFraud();
+				//checkFraud();
 				//$(".alert").hide();
 				$('.selectpicker').selectpicker();
 				
@@ -173,10 +173,10 @@ $ip = $_SERVER['SERVER_ADDR'];
 				
 				$("#submit").click( function(e) {
 					// check if same ip has been requesting this in the past few minutes more than 3 times
-					if ( checkFraud() ) {
-						alert("You cannot submit multiple requests in such a short time span.");
-						return false;
-					}
+					// if ( checkFraud() ) {
+					// 	alert("You cannot submit multiple requests in such a short time span.");
+					// 	return false;
+					// }
 
 					var val = parseInt($("#amount").val());
 					if (val == 0) {

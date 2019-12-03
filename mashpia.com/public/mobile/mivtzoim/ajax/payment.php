@@ -11,6 +11,7 @@ $year = $info['year'];
 $amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
 $exp_date = $info['cc']['exp'];
+$cvv = $info['cc']['cvv'];
 $first_name = $info['cc']['first'];
 $last_name = $info['cc']['last'];
 $zip = $info['zip'];

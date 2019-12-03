@@ -40,8 +40,8 @@ function chargeCreditCard( $amount, $cc_info )
     if ( isset( $cc_info['address'] ) ) $customerAddress->setAddress( $cc_info['address'] );
     if ( isset( $cc_info['city'] ) ) $customerAddress->setCity( $cc_info['city'] );
     if ( isset( $cc_info['state'] ) ) $customerAddress->setState( $cc_info['state'] );
-    if ( isset( $cc_info['zip'] ) ) $customerAddress->setZip( $cc_info['zip'] );
     if ( isset( $cc_info['country'] ) ) $customerAddress->setCountry( $cc_info['country'] );
+    $customerAddress->setZip( $cc_info['zip'] );
 
     // Create a TransactionRequestType object and add the previous objects to it
     $transactionRequestType = new AnetAPI\TransactionRequestType();

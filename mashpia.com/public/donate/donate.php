@@ -64,8 +64,9 @@ $state		= $_POST['ccstate'];
 $zip		= $_POST['cczip'];
 $email 		= $_POST['email'];
 $phone		= $_POST['phone'];
+$cvv		= $_POST['cccvv'];
 
-if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city && $state && $zip && $email && $phone) ) {
+if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city && $state && $zip && $email && $phone && $cvv) ) {
 	$error = "All fields are mandatory, please try again.";
 	header("Location: https://mashpia.com/donate/index.php?error=" . urlencode( $error ));
 	exit;

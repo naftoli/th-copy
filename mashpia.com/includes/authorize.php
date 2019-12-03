@@ -32,8 +32,9 @@ $post_values = array(
  
         "x_type"                => "AUTH_CAPTURE",
         "x_method"              => "CC",
-        "x_card_num"            => $card_num ,
-        "x_exp_date"            => $exp_date ,
+        "x_card_num"            => $card_num,
+        "x_exp_date"            => $exp_date,
+        "x_card_code"           => $cvv,
 
         "x_amount"              => $amount,
         "x_description"         => "CTH " . $description,
@@ -42,7 +43,8 @@ $post_values = array(
         "x_last_name"           => $last_name,
         "x_address"             => $address,
         "x_state"               => $state,
-        "x_zip"                 => $zip
+        "x_zip"                 => $zip,
+        "x_customer_ip"         => $_SERVER["REMOTE_ADDR"]
        
         // Additional fields can be added here as outlined in the AIM integration
         // guide at: http://developer.authorize.net               
