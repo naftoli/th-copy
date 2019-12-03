@@ -82,25 +82,35 @@ if ( isset( $_POST['submit'] ) ) {
         <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Mivtza Chanuka Settings</h1>
         <div class='infobox'>
-            Use the following form to determine what the shipping charges will be for your students.<br /><br />
-            If you choose to PICK UP, your children will not be charged anything.<br /><br />
-            Each Menorah Box costs: $<?=$fee_info['Menorah']['fee']?><br />
-            Each Brochure costs: $<?=$fee_info['Brochure']['fee']?><br /><br />
-            <?php
-            foreach ( $fee_info as $item => $info ) {
-                echo "<strong>Shipping Charge for " . $item . "s</strong><br />";
-                $num = count( $info['shipping'] ); // use to find out when we are at the last amount
-                $i = 1;
-                foreach ( $info['shipping'] as $minimum => $charge ) {
-                    echo $minimum;
-                    if ( $i++ == $num ) {
-                        echo "+";
-                    }
-                    echo " children guaranteed will have a shipping charge of $" . $charge . " per " . $item . "<br />";
-                }
-                echo "<br />";
-            }
-            ?>
+        <strong>Menorah Box and Chanukah brochures price settings.</strong>
+<br /><br /> 
+Based on your selection will depend on how much your children will pay for their Chanukah Mivtzoim Ammunition.
+<br /><br />
+Each Menorah box costs $1.70 
+<br /><br />
+Each Brochure costs $0.20 
+<br /><br />
+If you chose PICK UP, your children will pay this price and will not be charged anything extra for shipping.
+<br /><br />
+<strong>Shipping charges for Menorah Boxes.</strong><br /><br />
+Each Menorah Box costs  $0.44 to ship. (Total $2.14).
+<br /><br />
+<strong>Shipping charges for Chanukah brochures.</strong><br /><br />
+The price of shipping for  brochures depends on how many you guarentee will be ordered by the  chayolim in your base 
+<br /><br />
+50 - 99 brochures cost $0.16 per brochure to ship. (Total $0.36 per brochure).
+<br /><br />
+100 - 199 brochures cost $0.11 per brochure to ship  (Total $0.31 per brochure).
+<br /><br />
+200 - 299 brochures cost $0.07 per brochure to ship  (Total $0.27 per brochure).
+<br /><br />
+300 - 399 brochures cost $0.06 per brochure to ship  (Total $0.26 per brochure).
+<br /><br />
+400 + brochures cost $0.05 per brochure to ship  (Total $0.25 per brochure).
+<br /><br />
+<strong>Important notice:</strong><br /><br />
+There is a minimum order of 50 brochures and or menorahs that a shipping schools must take. 
+<br /><br />          
         </div>
         <br />
         <?php 
@@ -121,24 +131,19 @@ if ( isset( $_POST['submit'] ) ) {
                     echo "<input type='hidden' name='school' value='" . key( $schools ) . "' />";
                 }
                 ?>
-                <input type="radio" name="shipping-fee" class='shipping-fee' value="-1" /> I would like to have my school removed from list of schools offering Menorahs and Brochures.<br />
-                <input type="radio" name="shipping-fee" class='shipping-fee' value="0" /> We will PICKUP FROM HEADQUARTERS = NO CHARGE<br /><br />
+                <input type="radio" name="shipping-fee" class='shipping-fee' value="-1" /> We would like our base to  be removed from the list of schools offering Menorah Boxes and brochures on the parents accounts.<br />
+                <input type="radio" name="shipping-fee" class='shipping-fee' value="0" /> We will pick up our Chanukah Mivtzoim Ammunition.<br /><br />
                 <?php
                 foreach ( $fee_info as $item => $info ) {
                     $item_id = $info['id'];
                     $item_cost = $info['fee'];
-                    echo "Number of children guaranteed for " . $item . "<br />";
+                    echo "The chayolim in our base will be ordering at least:<br />";
 
                     $num = count( $info['shipping'] ); // use to find out when we are at the last amount
                     $i = 1;
                     foreach ( $info['shipping'] as $minimum => $charge ) {
-                        echo "<input type='radio' name='" . strtolower( $item ) . "' value='" . $charge . "' class='" . strtolower( $item ) . "' />";
-                        echo $minimum;
-                        if ( $i++ == $num ) {
-                            echo "+";
-                        }
-                        echo " children guaranteed = $" . $charge . " per " . $item;
-                        echo " (Totals $" . ($info['fee'] + $charge) . ")<br />";
+                        echo "<input type='radio' name='" . strtolower( $item ) . "' value='" . $charge . "' class='" . strtolower( $item ) . "' /> ";
+                        echo $minimum . " " . $item . "s.<br />";
                     }
                     echo "<br />";
                 }
