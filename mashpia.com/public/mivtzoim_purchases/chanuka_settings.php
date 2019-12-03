@@ -36,7 +36,9 @@ $fee_info = [
 
 $msg = '';
 if ( isset( $_POST['submit'] ) ) {
-    $school = isset( $_POST['school'] ) ? $_POST['school'] : count( $schools ) == 1 ? key( $schools ) : 0;
+    if ( isset( $_POST['school'] ) ) $school = $_POST['school'];
+    else if ( count( $schools ) == 1 ) $school = key( $schools );
+    else $school = 0;
     if ( $school > 0 ) {
         // figure out what the shipping fee is 
         if ( isset( $_POST['menorah'] ) && isset( $_POST['brochure'] ) ) {
@@ -68,26 +70,6 @@ if ( isset( $_POST['submit'] ) ) {
     }
     if ( empty( $msg ) ) $msg = "Successfully Saved.";
 }
-
-// $schoolList = implode(',', array_keys( $schools ));
-// $items = [];
-// foreach ( $fee_info as $item => $info ) {
-//     $items[] = $info['id'];
-// }
-// $itemList = implode(',', array_keys( $items ));
-
-// $stmt = $MASHPIA_DB->query("
-//     SELECT 
-//         school_id, allow_purchases, shipping_charge 
-//     FROM
-//         mivtzoim_purchases.school_settings
-//     WHERE
-//         school_id IN ($schoolList) AND item_id in ($itemList) 
-// ");
-// $rows = $stmt->fetchAll();
-// foreach ( $rows as $row ) {
-//     $info[$row['school_id']] = $row;
-// }
 ?>
 <!DOCTYPE html>
 <html>
