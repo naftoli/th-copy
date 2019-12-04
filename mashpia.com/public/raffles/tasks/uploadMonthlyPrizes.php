@@ -10,11 +10,13 @@ if ( $admin_user['auth'] != 'super' ) {
     exit;
 }
 
+$raffle_id = 188;
+
 //load spreadsheet
 $objPHPExcel = PHPExcel_IOFactory::load("GrandRaffle1Prizes.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
-$data = [];
+$qrys = [];
 foreach ( $objWorksheet->getRowIterator() as $row ) {
     $cellIterator = $row->getCellIterator();
     $cellIterator->setIterateOnlyExistingCells(false);
@@ -27,7 +29,15 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
             $prizes[] = intval( $value );
         }
     }
-    echo "School: " . $school_id . "<br />";
-    echo "<pre>"; print_r( $prizes ); echo "</pre>";
-    echo "<br /><br />";
+    // echo "School: " . $school_id . "<br />";
+    // echo "<pre>"; print_r( $prizes ); echo "</pre>";
+    // echo "<br /><br />";
+    foreach ( $prizes as $prize ) {
+        $sql = "INSERT INTO raffles_monthly SET 
+                raffle_id = " . $raffle_id . ", 
+                prize_id = " . $prize . ", 
+                school_id = " . $school_id;
+        $qrys[] = $sql;
+        echo $sql . "<br />";
+    }
 }
