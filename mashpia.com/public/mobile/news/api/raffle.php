@@ -24,7 +24,7 @@ function getRaffle( $raffle_id ){
     // load the latest raffle id
     if ( $raffle_id == '0' ) {
         $raffle_query = mysql_query(
-            "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE show_on_mobile = 1 "
+            "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE (show_on_mobile = 1 OR date_to_show < NOW()) "
             ."UNION "
             ."SELECT CONCAT('a', auction_id) AS id, auction_name COLLATE utf8_general_ci AS name, show_mobile AS date_ran, 'auction' as type "
             ."FROM auctions WHERE show_mobile < NOW() "
