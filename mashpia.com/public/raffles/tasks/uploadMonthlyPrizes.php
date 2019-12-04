@@ -10,10 +10,10 @@ if ( $admin_user['auth'] != 'super' ) {
     exit;
 }
 
-$raffle_id = 188;
+$raffle_id = 189;
 
 //load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load("GrandRaffle1Prizes.xlsx");
+$objPHPExcel = PHPExcel_IOFactory::load("GrandRaffle2Prizes.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
 $stmt = $MASHPIA_DB->prepare("
