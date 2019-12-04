@@ -7,10 +7,10 @@ $colors: (
 .RankCard {
   // permenent cards are different
   @media print {
-    // border: 1px dashed; padding: 8px;
+    border: 1px dashed; padding: 8px;
     &.permanent{
       page-break-after: always; display: block;
-      .rank-card .top { opacity: 0; }
+      // .rank-card .top { opacity: 0; }
       border: none; padding: 0px;
     }
   }
