@@ -10,8 +10,8 @@ $colors: (
     border: 1px dashed; padding: 8px;
     &.permanent{
       page-break-after: always; display: block;
-      .rank-card .top { opacity: 0; }
-      //border: none; padding: 0px;
+      // .rank-card .top { opacity: 0; }
+      border: none; padding: 0px;
     }
   }
   
