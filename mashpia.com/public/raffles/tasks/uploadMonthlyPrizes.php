@@ -33,11 +33,13 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     // echo "<pre>"; print_r( $prizes ); echo "</pre>";
     // echo "<br /><br />";
     foreach ( $prizes as $prize ) {
-        $sql = "INSERT INTO raffles_monthly SET 
-                raffle_id = " . $raffle_id . ", 
-                prize_id = " . $prize . ", 
-                school_id = " . $school_id;
-        $qrys[] = $sql;
-        echo $sql . "<br />";
+        if ( $prize > 0 ) {
+            $sql = "INSERT INTO raffles_monthly SET 
+                    raffle_id = " . $raffle_id . ", 
+                    prize_id = " . $prize . ", 
+                    school_id = " . $school_id;
+            $qrys[] = $sql;
+            echo $sql . "<br />";
+        }
     }
 }
