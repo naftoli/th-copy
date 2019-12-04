@@ -16,7 +16,15 @@ $raffle_id = 188;
 $objPHPExcel = PHPExcel_IOFactory::load("GrandRaffle1Prizes.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
-$qrys = [];
+$stmt = $MASHPIA_DB->prepare("
+    INSERT INTO raffles_monthly SET 
+    raffle_id = :raffle, 
+    prize_id = :prize, 
+    school_id = :school
+");
+
+$success = true;
+$MASHPIA_DB->beginTransaction();
 foreach ( $objWorksheet->getRowIterator() as $row ) {
     $cellIterator = $row->getCellIterator();
     $cellIterator->setIterateOnlyExistingCells(false);
@@ -34,12 +42,22 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     // echo "<br /><br />";
     foreach ( $prizes as $prize ) {
         if ( $prize > 0 ) {
-            $sql = "INSERT INTO raffles_monthly SET 
-                    raffle_id = " . $raffle_id . ", 
-                    prize_id = " . $prize . ", 
-                    school_id = " . $school_id;
-            $qrys[] = $sql;
-            echo $sql . "<br />";
+            $res = $stmt->execute([
+                ':raffle'   =>  $raffle_id, 
+                ':prize'    =>  $prize, 
+                ':school'   =>  $school_id
+            ]);
+            if ( !$res ) {
+                $succes = false;
+                break 2;
+            }
         }
     }
+}
+if ( $success ) {
+    $MASHPIA_DB->commit();
+    echo "done.";
+} else {
+    $MASHPIA_DB->rollBack();
+    echo "errors.";
 }
