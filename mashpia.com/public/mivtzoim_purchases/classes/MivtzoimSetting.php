@@ -45,7 +45,7 @@ class MivtzoimSetting {
     public function enablePurchases( $shipping_fee ) {
         // figure out if updating or adding
         $row = $this->getSettings();
-        if ( !empty( $row ) && floatval( $row['shipping_charge'] ) != floatval( $shipping_fee ) ) {
+        if ( !empty( $row ) && (floatval( $row['shipping_charge'] ) != floatval( $shipping_fee ) || $row['allow_purchases'] == 0) ) {
             // update
             $stmt = $this->pdo->prepare("
                 UPDATE mivtzoim_purchases.school_settings 
