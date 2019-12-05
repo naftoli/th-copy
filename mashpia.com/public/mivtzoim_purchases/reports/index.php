@@ -88,7 +88,7 @@ foreach ( $rows as $row ) {
     <p class="no-print">Grand Total: <?= $total ?> purchases</p>
     <?php endif; ?>
     <?php foreach ( $info as $school => $users ) : ?>
-        <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <h2><?= $school . ' (' . count( $users ) . ' chayolim)' ?></h2>
         <table>
             <thead>
                 <th>Grade</th>
