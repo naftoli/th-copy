@@ -59,6 +59,7 @@ class Points
         $arrParams['start_date'] = $this->yearStart;
         $arrPoints = header_total_points( $arrParams );
         if ( $this->debug ) {
+            echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart) . "<br />";
             echo "<pre>";
             print_r( $arrParams );
             print_r( $arrPoints );
@@ -89,6 +90,7 @@ class Points
         $arrParams['start_date'] = $reset_date;
         $arrPoints = header_store_points( $arrParams );
         if ( $this->debug ) {
+            echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date) . "<br />";
             echo "<pre>";
             print_r( $arrParams );
             print_r( $arrPoints );
@@ -101,7 +103,7 @@ class Points
     // used in statement.php line 628
     public function getMashpiaStorePoints() {
         $reset_date = $this->getStoreResetDate();
-        $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " .$reset_date );
+        $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " . $reset_date );
         return $points;
     }
 
@@ -139,7 +141,7 @@ class Points
     public function getStorePointsDetails() {
         $details = [];
         // figure out gregorian date
-        $gregDate = jdtogregorian( $this->yearStart );
+        $gregDate = jdtogregorian( $this->getStoreResetDate() );
         $arrDate = explode('/', $gregDate);
         $gregorian = $arrDate[2] . '-' . $arrDate[0] . '-' . $arrDate[1];
         $sql = "select * from pointsDB.user_points  
