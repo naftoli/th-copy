@@ -299,9 +299,9 @@ if (isset($_POST['submit'])) {
 									$test = 0;
 									$numTests = 0;
 									foreach ($lookup[$column] as $val) {
-										if (intval($row[$val]) > 0) {
+										if (floatval($row[$val]) > 0) {
 											$numTests++;
-											$test += intval($row[$val]);
+											$test += floatval($row[$val]);
 										}
 									}
 									// now that 3 tests have been done, divide by 3
@@ -381,6 +381,7 @@ if (isset($_POST['submit'])) {
 <!--					<input type="radio" name="limitTo" value='contestant' /> Contestant / Representative<br />
 					<input type="radio" name="limitTo" value='activated' /> Shabbaton Enrollment Activated<br />-->
 					<input type="radio" name="limitTo" value='paid' /> Shabbaton Paid<br />
+					<input type="radio" name="limitTo" value='notDeleted' /> Not Deleted by BC<br />
 <!--					<input type="radio" name="limitTo" value='confirmed' /> Shabbaton Confirmed-->
 				</fieldset>
 				<fieldset style="margin-top: -20px;">

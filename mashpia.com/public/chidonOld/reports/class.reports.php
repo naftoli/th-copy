@@ -581,6 +581,9 @@ class Reports
                     case "activated":
                         $sql .= " and tc.can_enroll = 1";
                         break;
+                    case "notDeleted":
+                        $sql .= " and tc.deleted = 0";
+                        break;
                 }
             }
             if ($this->checkAvg) {
