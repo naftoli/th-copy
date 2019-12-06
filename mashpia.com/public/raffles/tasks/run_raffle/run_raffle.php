@@ -2,10 +2,9 @@
 // log errors to the page
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
+ini_set('max_execution_time', 600); // max runtime = 10 min
 
-if( empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0){
-    ini_set('max_execution_time', 600); // max runtime = 10 min
-    
+if( empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0){    
     require(dirname(__FILE__).'/../../../db.php'); // just require the database files
     $web = false; // remember that we are on the cli
 } else { // from anywhere else...
