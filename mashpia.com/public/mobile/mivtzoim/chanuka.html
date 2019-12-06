@@ -360,6 +360,9 @@
                         return false;
                     }
 
+                    // disable puchase button so that they don't accidentally or purposely click it again
+                    $("button#purchase").attr('disabled',true);
+
                     // build data
                     var info = {};
                     info.year = year;
