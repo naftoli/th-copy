@@ -50,6 +50,7 @@ function monthly_raffle($raffle){
             // if the user is not the first in the family and the school has more then it's quota to give out...
             if(!check_first_in_family($user, $winning_families)){
                 echo $user['school_id']."\t".$user['user_id'] . " is currently ineligible. Sibling (user_id: ".$winning_families[$user['admin_id']].") has already won. Removing from raffle\n";
+                unset($user_ids[$user['user_id']]); // remove the user from the array
                 continue; // try again
             }
             // now that we have an eligible winner
