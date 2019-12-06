@@ -413,6 +413,7 @@
                             location.reload();
                         } else {
                             alert( result.error );
+                            $("button#purchase").attr('disabled',false);
                         }
                     });
 
