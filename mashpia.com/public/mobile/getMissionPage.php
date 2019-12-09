@@ -92,8 +92,8 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if t
 	$curParsha['end'] = $end;
 } else { // if the date was provided by the user
 	$jd = intval($_GET['d']);
-	$jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go to far back into the future
-	$today = intval(date('w', jdtounix($jd+1)));
+	$jd = $jd < unixtojd() ? $jd : floor(unixtojd()); // make sure that they cannot go to far back into the future
+	$today = intval(date('w', jdtounix($jd)));
 	if (isset($_GET['s']) && $_GET['s'] == 1) {
 		$start = $jd;
 		$end = $start + 6;
@@ -1212,12 +1212,12 @@ $he_chars = array(
 							//only allow going back up to three weeks
 							//if ((today - start) < 28) {
 								//reload page with mission dates of the previous week
-								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (++start);
+								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (--start);
 								window.location.href = url;
 							//}						
 						} else if (currentSlide == 6 && d.currentSlide == 6) {
 							//reload page with mission dates of the next week					
-							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (--end) + "&s=1";
+							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (++end) + "&s=1";
 							window.location.href = url;
 						}
 					}
