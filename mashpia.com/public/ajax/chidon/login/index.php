@@ -25,7 +25,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 // authenticate user
 $stmt = $MASHPIA_DB->prepare("
-    SELECT admin_id, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country FROM admins WHERE username = :username AND password = :pass
+    SELECT admin_id, admin_email, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country FROM admins WHERE username = :username AND password = :pass
 ");
 $stmt->execute([
     ':username' =>  $username, 
@@ -93,10 +93,7 @@ if ( $row ) {
 
         $chidon_cost = GlobalSettings::getChidonCost( $school_id );
         $row['chidon_cost'] = $chidon_cost;
-
-        $book = GlobalSettings::getYahadusBookFee( $school_id );
-        $row['yahadus_book_cost'] = $book['bookFee'];
-        $row['yahadus_book_shipping'] = $book['shipping'];
+        $row['yahadus_book_cost'] = GlobalSettings::getYahadusBookFee( $school_id );
         
         $children[] = $row;
     }

@@ -3,6 +3,7 @@ ini_set('display_errors',1);
 require_once '../headers.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 if ( !isset( $_REQUEST['key'] ) || $_REQUEST['key'] != 'Chidon@5780!' ) {
     echo json_encode([
@@ -14,13 +15,36 @@ if ( !isset( $_REQUEST['key'] ) || $_REQUEST['key'] != 'Chidon@5780!' ) {
 
 $data = $_POST['body']['data'];
 $children = $data['children'];
+$admin_id = $data['parent']['admin_id'];
+$email = $data['parent']['admin_email'];
+$zip = $data['parent']['admin_postal'];
+$authorization = $data['parent']['authorize_conf'];
+$total = $data['totals']['grand_total'];
+$reg_total = $data['totals']['registration_total'];
+$year = GlobalSettings::getChidonYear();
+$user_ids = [];
+foreach ( $children as $child ) {
+    $user_ids[] = $child['user_id'];
+}
+
+// create transaction
+$description = "Chidon Registration " . $year . " - Parent ID: " . $admin_id;
+$transaction_query = $MASHPIA_DB->prepare(
+    "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
+    ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
+);
+$transaction_query->execute([
+    $admin_id, $description, $total, $reg_total, 0, $zip, implode( ', ', $user_ids ), $authorization
+]);
+$trans_id = $MASHPIA_DB->lastInsertId();
+
 foreach ( $children as $child ) {
     $user = \Soldier::find([ $child['user_id'] ]);
-    echo "<pre>"; print_r( $user ); echo "</pre>"; 
+    // echo "<pre>"; print_r( $user ); echo "</pre>"; 
 
-    $fields = [ 'gender', 'first', 'last', 'first_he', 'last_he', 'dob', 'non-th-school' ];
+    $fields = [ 'gender', 'first', 'last', 'first_he', 'last_he', 'dob', 'non_th_school' ];
     foreach ( $fields as $field ) {
-        $user->{ $field } = $_POST[ $field ];
+        $user->{ $field } = $child[ $field ];
     }
 
     // flag to know if we need to update the birthday missions
@@ -41,9 +65,8 @@ foreach ( $children as $child ) {
     }
 
     $year = GlobalSettings::getChidonYear();
-    $recruited_by = intval( $child['recruitedBy'] );
+    $recruited_by = intval( $child['recruited_by'] );
     $recruited = $recruited_by > 0 ? 1 : 0;
-    $trans_id = $data['totals']['trans_id'];
 
     if ( !$user->registerChidon( $year, strtolower( $child['sweater_size'] ), $child['book'], $data['parent']['admin_id'], 
             $data['totals']['grand_total'], $trans_id, $recruited, $recruited_by, $child['studying_with'] ) ) {
@@ -62,12 +85,18 @@ foreach ( $children as $child ) {
         } else if ( intval($child['purchasing_book']) ) {
             $user->registrationCharge(
                 'yahaudus',
-                floatval( $child['yahadus_book_cost'] + $child['yahadus_book_shipping'] ),
+                floatval( $child['yahadus_book_cost'] ),
                 $trans_id, $year
             );
             // add book purchase to db
             $user->addBookPurchase( $year, $user->user_id, 'parent_account', $trans_id );
         }
+        
+        echo json_encode([
+            'success'   =>  true
+        ]);
+        exit;
+
         // send email to parents
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
@@ -103,12 +132,12 @@ foreach ( $children as $child ) {
             $headers[] = "Cc: chidon@myshliach.com";
         }
 
-        $to = $current_user->admin_email;
+        $to = $email;
         if ( $to ) {
             if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
                 $to = "naftoli@tzivoshashem.org";
                 $subject = "Error in chidon email";
-                $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                $message .= "<br /><b>Sent to " . $email . "</b>";
                 @mail( $to, $subject, $message, implode("\r\n", $headers) );
             }
         }
