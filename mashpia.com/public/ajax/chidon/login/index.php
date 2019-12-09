@@ -25,7 +25,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 // authenticate user
 $stmt = $MASHPIA_DB->prepare("
-    SELECT admin_id, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country FROM admins WHERE username = :username AND password = :pass
+    SELECT admin_id, admin_email, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country FROM admins WHERE username = :username AND password = :pass
 ");
 $stmt->execute([
     ':username' =>  $username, 
@@ -54,7 +54,6 @@ if ( $row ) {
         ':id'   => $admin_id, 
     ]);
     $rows = $stmt->fetchAll();
-
     $chidon_year = GlobalSettings::getChidonYear();
 
     $children = [];
@@ -75,8 +74,8 @@ if ( $row ) {
             ':year'     =>  $chidon_year,
             ':school'   =>  $school_id 
         ]);
-        $rows = $stmt->fetchAll();
-        if ( !$rows ) continue;
+        $rows2 = $stmt->fetchAll();
+        if ( !$rows2 ) continue;
         
         // make sure child hasn't already registered for chidon
         $stmt = $MASHPIA_DB->prepare("
@@ -89,21 +88,20 @@ if ( $row ) {
             ':user' =>  $user_id, 
             ':year' =>  $chidon_year
         ]);
-        $rows = $stmt->fetchAll();
-        if ( $rows ) continue;
+        $rows3 = $stmt->fetchAll();
+        if ( $rows3 ) continue;
 
         $chidon_cost = GlobalSettings::getChidonCost( $school_id );
         $row['chidon_cost'] = $chidon_cost;
-
-        $book = GlobalSettings::getYahadusBookFee( $school_id );
-        $row['yahadus_book_cost'] = $book['bookFee'];
-        $row['yahadus_book_shipping'] = $book['shipping'];
+        $row['yahadus_book_cost'] = GlobalSettings::getYahadusBookFee( $school_id );
         
         $children[] = $row;
     }
 
-    $info['parent'] = $admin;
+    $info['parent']   = $parent;
     $info['children'] = $children;
+
+    //echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 
     echo json_encode([
         'success'   =>  true,
