@@ -54,7 +54,6 @@ if ( $row ) {
         ':id'   => $admin_id, 
     ]);
     $rows = $stmt->fetchAll();
-
     $chidon_year = GlobalSettings::getChidonYear();
 
     $children = [];
@@ -75,8 +74,8 @@ if ( $row ) {
             ':year'     =>  $chidon_year,
             ':school'   =>  $school_id 
         ]);
-        $rows = $stmt->fetchAll();
-        if ( !$rows ) continue;
+        $rows2 = $stmt->fetchAll();
+        if ( !$rows2 ) continue;
         
         // make sure child hasn't already registered for chidon
         $stmt = $MASHPIA_DB->prepare("
@@ -89,8 +88,8 @@ if ( $row ) {
             ':user' =>  $user_id, 
             ':year' =>  $chidon_year
         ]);
-        $rows = $stmt->fetchAll();
-        if ( $rows ) continue;
+        $rows3 = $stmt->fetchAll();
+        if ( $rows3 ) continue;
 
         $chidon_cost = GlobalSettings::getChidonCost( $school_id );
         $row['chidon_cost'] = $chidon_cost;
@@ -102,8 +101,10 @@ if ( $row ) {
         $children[] = $row;
     }
 
-    $info['parent'] = $admin;
+    $info['parent']   = $parent;
     $info['children'] = $children;
+
+    //echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 
     echo json_encode([
         'success'   =>  true,
