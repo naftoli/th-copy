@@ -12,7 +12,9 @@ $info = array();
 $sql = "select * from th_chidon tc 
 		join users u using (user_id)
 		join schools s on s.school_id = tc.school_id 
-		where tc.year = " . $year . "
+		where tc.year = " . $year . " 
+		and tc.deleted = 0 
+		and s.test_school = 0 
 		order by s.school_name, tc.size";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {

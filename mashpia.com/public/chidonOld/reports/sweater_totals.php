@@ -1,7 +1,6 @@
 <?php
 //echo "Needs update for this report.";
 //exit;
-
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
@@ -12,11 +11,10 @@ $sql = "SELECT s.school_name, u.gender, tc.size, COUNT(*) AS total FROM th_chido
     ." JOIN users u USING (user_id) "
     ." JOIN schools s ON tc.school_id = s.school_id "
     ." WHERE tc.year = '$year' AND s.test_school='0' "
-	." AND date_paid IS NOT NULL "
-	." AND u.gender = 'M' "
-	." GROUP BY school_name, gender, size "
+	." AND date_paid IS NOT NULL ";
+if ( isset( $gender ) ) $sql .= " AND u.gender = '" . $gender . "'";
+$sql .= " GROUP BY school_name, gender, size "
     ." ORDER BY school_name, gender, grade, last, first, size";
-
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$info[$row['school_name']][$row['gender']][] = $row;
