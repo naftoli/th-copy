@@ -69,11 +69,11 @@ foreach ( $children as $child ) {
     }
 
     $year = GlobalSettings::getChidonYear();
-    $recruited_by = intval( $child['recruited_by'] );
+    $recruited_by = !is_null( $child['recruited_by'] ) ? intval( $child['recruited_by'] ) : 0;
     $recruited = $recruited_by > 0 ? 1 : 0;
 
     if ( !$user->registerChidon( $year, strtolower( $child['sweater_size'] ), $child['book'], $data['parent']['admin_id'], 
-            $data['totals']['grand_total'], $trans_id, $recruited, $recruited_by, $child['studying_with'] ) ) {
+            $child['chidon_cost'], $trans_id, $recruited, $recruited_by, $child['studying_with'] ) ) {
         echo json_encode([
             'success'   =>  false, 
             'error'     =>  "Could not register ".$user->user_id." for chidon"
