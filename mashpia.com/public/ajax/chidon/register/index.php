@@ -69,7 +69,7 @@ foreach ( $children as $child ) {
     }
 
     $year = GlobalSettings::getChidonYear();
-    $recruited_by = !is_null( $child['recruited_by'] ) ? intval( $child['recruited_by'] ) : 0;
+    $recruited_by = isset( $child['recruited_by'] ) && !is_null( $child['recruited_by'] ) ? intval( $child['recruited_by'] ) : 0;
     $recruited = $recruited_by > 0 ? 1 : 0;
 
     if ( !$user->registerChidon( $year, strtolower( $child['sweater_size'] ), $child['book'], $data['parent']['admin_id'], 
