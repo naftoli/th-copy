@@ -13,6 +13,7 @@ if ( !isset( $_REQUEST['key'] ) || $_REQUEST['key'] != 'Chidon@5780!' ) {
     exit;
 }
 
+echo "<pre>"; print_r( $_POST ); echo "</pre>";
 $data = $_POST['body']['data'];
 $children = $data['children'];
 $admin_id = $data['parent']['admin_id'];
