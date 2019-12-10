@@ -214,10 +214,14 @@
             var brochureSoldOut = false;
             var soldOut = false;
 
+            soldOut = true;
+            $("#sold-out").show();
+            $("#purchases").hide();
+
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 5000;
-                var menorahSold = 0;
-                menorahSold += parseInt( sold );
+                var menorahSold = 5000;
+                // menorahSold += parseInt( sold );
                 var menorahLeft = menorahStart - menorahSold;
                 $(".menorahSold").text( menorahSold );
                 $(".menorahLeft").text( menorahLeft );
@@ -233,8 +237,8 @@
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
                 var brochureStart = 5000;
-                var brochureSold = 0;
-                brochureSold += parseInt( sold );
+                var brochureSold = 5000;
+                // brochureSold += parseInt( sold );
                 var brochureLeft = brochureStart - brochureSold;
                 $(".brochureSold").text( brochureSold );
                 $(".brochureLeft").text( brochureLeft );
