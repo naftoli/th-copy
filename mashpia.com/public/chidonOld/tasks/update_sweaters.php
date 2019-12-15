@@ -27,7 +27,7 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
 
 $updated = 0;
 foreach ( $info as $id => $size ) {
-    $sql = "update th_chidon set sweater_size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
+    $sql = "update th_chidon set size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
     // echo $sql . "<br />";
     if ( mysql_query( $sql ) ) {
         $updated++;
