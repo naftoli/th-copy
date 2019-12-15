@@ -17,8 +17,8 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     $cellIterator->setIterateOnlyExistingCells(true);
     foreach ( $cellIterator as $idx => $cell ) {
         $value = trim( $cell->getValue() );
-        if ( $idx > 0 ) $size = $value;
-        else $id = intval( $value );
+        if ( $idx == 0 ) $id = intval( $value );
+        else if ( $idx == 1 ) $size = $value;
         if ( $size == '' ) break 2;
     }
     $info[$id] = $size;
