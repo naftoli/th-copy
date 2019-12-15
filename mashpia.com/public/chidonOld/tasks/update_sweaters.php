@@ -18,8 +18,10 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     $i = 0;
     foreach ( $cellIterator as $cell ) {
         $value = trim( $cell->getValue() );
-        $info[$i++] = $value;
+        if ( $i++ > 0 ) $size = $value;
+        else $id = intval( $value );
     }
+    $info[$id] = $size;
 }
 
 foreach ( $info as $user => $size ) {
