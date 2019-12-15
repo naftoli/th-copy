@@ -15,16 +15,16 @@ $info = [];
 foreach ( $objWorksheet->getRowIterator() as $row ) {
     $cellIterator = $row->getCellIterator();
     $cellIterator->setIterateOnlyExistingCells(false);
-    $i = 0;
-    foreach ( $cellIterator as $cell ) {
+    foreach ( $cellIterator as $idx => $cell ) {
         $value = trim( $cell->getValue() );
-        if ( $i++ > 0 ) $size = $value;
+        if ( $idx > 0 ) $size = $value;
         else $id = intval( $value );
     }
     $info[$id] = $size;
+    echo "ID: " . $id . " Size: " . $size . "<br />";
 }
 
-foreach ( $info as $user => $size ) {
-    $sql = "update th_chidon set sweater_size = '" . strtolower( $size ) . "' where th_chidon_id = " . $user;
+foreach ( $info as $id => $size ) {
+    $sql = "update th_chidon set sweater_size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
     echo $sql . "<br />";
 }
