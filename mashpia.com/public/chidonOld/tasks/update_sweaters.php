@@ -20,12 +20,19 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         if ( $idx == 0 ) $id = intval( $value );
         else if ( $idx == 1 ) $size = $value;
     }
-    echo "ID: " . $id . " Size: " . $size . "<br />";
+    // echo "ID: " . $id . " Size: " . $size . "<br />";
     if ( $size == '' ) break;
     $info[$id] = $size;
 }
 
+$updated = 0;
 foreach ( $info as $id => $size ) {
     $sql = "update th_chidon set sweater_size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
-    echo $sql . "<br />";
+    // echo $sql . "<br />";
+    if ( mysql_query( $sql ) ) {
+        $updated++;
+    } else {
+        echo mysql_error() . "<br />" . $sql . "<br />";
+    }
 }
+echo "Done.";
