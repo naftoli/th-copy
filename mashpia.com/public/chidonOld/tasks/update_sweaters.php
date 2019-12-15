@@ -14,11 +14,12 @@ $objWorksheet = $objPHPExcel->getActiveSheet();
 $info = [];
 foreach ( $objWorksheet->getRowIterator() as $row ) {
     $cellIterator = $row->getCellIterator();
-    $cellIterator->setIterateOnlyExistingCells(false);
+    $cellIterator->setIterateOnlyExistingCells(true);
     foreach ( $cellIterator as $idx => $cell ) {
         $value = trim( $cell->getValue() );
         if ( $idx > 0 ) $size = $value;
         else $id = intval( $value );
+        if ( $size == '' ) break 2;
     }
     $info[$id] = $size;
     echo "ID: " . $id . " Size: " . $size . "<br />";
