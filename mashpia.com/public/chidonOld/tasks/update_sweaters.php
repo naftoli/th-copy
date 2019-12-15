@@ -19,10 +19,10 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         $value = trim( $cell->getValue() );
         if ( $idx == 0 ) $id = intval( $value );
         else if ( $idx == 1 ) $size = $value;
-        if ( $size == '' ) break 2;
     }
-    $info[$id] = $size;
     echo "ID: " . $id . " Size: " . $size . "<br />";
+    if ( $size == '' ) break;
+    $info[$id] = $size;
 }
 
 foreach ( $info as $id => $size ) {
