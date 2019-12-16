@@ -194,7 +194,7 @@ class date_tasks_mission {
 		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
 		$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
 		//$sql = $sql . "ORDER BY dt.date_task_id";
-        //if ($subject_id == 40 && $user_id == 15025) echo "<input type='hidden' name='No Label Sql' value='" . $sql . "' />";
+        if ($subject_id == 12) echo "<input type='hidden' name='No Label Sql' value='" . $sql . "' />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);		
