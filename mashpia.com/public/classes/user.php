@@ -491,7 +491,7 @@ class user {
 			}
 		}
 
-		// order no label tasks by task ord
+		// sort no label tasks by task ord
 		usort( $this->no_label_tasks, $this->sortByLabel() );
                 
 		// ********** DAILY TASKS ********** //
