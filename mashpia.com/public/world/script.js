@@ -55,7 +55,7 @@ $( document ).ready( function(){
             return ""; // no color
         } else if ( total <= 49 ) {
             return "red";
-        } else if ( total <= 74 ) {
+        } else if ( total <= 69 ) {
             return "bronze";
         } else if ( total <= 99) {
             return "silver";
