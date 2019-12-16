@@ -178,7 +178,7 @@ class user_track
                     
         			// ***** Weekly Tasks *****//
         			$weekly_tasks = $date_tasks_mission->get_weekly_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-        			for ($wtno = 0; $wtno < count($weekly_tasks); $wtno++) {
+					for ($wtno = 0; $wtno < count($weekly_tasks); $wtno++) {
         				array_push($this->weekly_tasks, $weekly_tasks[$wtno]);
         			}								
         			
@@ -192,7 +192,7 @@ class user_track
         			
         			// ***** No Label Tasks *****//
         			$no_label_tasks = $date_tasks_mission->get_no_label_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $date_tasks_mission->mission_name, $date_tasks_mission->mission_number, $this->user_id, $this->subject_name, $this->subject_image_id, $this->subject_id);
-        			//echo "<input type='hidden' name='no label tasks' value='" . print_r($no_label_tasks) . "'";
+					//echo "<input type='hidden' name='no label tasks' value='" . print_r($no_label_tasks) . "'";
         			for ($nltno = 0; $nltno < count($no_label_tasks); $nltno++) {
         				array_push($this->no_label_tasks, $no_label_tasks[$nltno]);
         			}

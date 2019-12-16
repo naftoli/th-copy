@@ -435,6 +435,12 @@ class user {
 	public function disablePersonalization() {
 		$this->allowPersonalization = false;
 	}
+
+	function sortByLabel() {
+		return function($a, $b) {
+			return $a->label_ord > $b->label_ord;
+		};
+	}
 	
 	function get_user_tracks($subject_id, $start_date, $end_date, $tasks = array(), $lang = 1, $printing_mode = false) {
 		if ($subject_id == -1)
@@ -484,6 +490,9 @@ class user {
 				array_push($this->no_label_tasks, $user_track->no_label_tasks[$nltno]);
 			}
 		}
+
+		// order no label tasks by task ord
+		usort( $this->no_label_tasks, $this->sortByLabel() );
                 
 		// ********** DAILY TASKS ********** //
 		for ($dtno = 0; $dtno < count($this->daily_tasks); $dtno++) {

@@ -1,6 +1,7 @@
 <?
 class no_label_task {
 	public $date_task_id;
+	public $label_ord;
 	public $label_name;
 	public $short_name;
 	public $task_name;
@@ -37,6 +38,7 @@ class no_label_task {
 		$this->focus_task = $row["focus_task"];
 		$this->medium_pic = $row["medium_pic"];
 		$this->grid_id = $row['grid_id'];
+		$this->label_ord = $row['label_ord'];
 	}
 	
 	function set_dates($start_date, $end_date) {
