@@ -90,12 +90,12 @@ define('COLS', 20);
                 echo "<div class='col'>";
                 foreach ( $info as $school => $users ) {                    
                     // check if adding school pic will go past max rows
-                    if ( $rows >= ( ROWS - 2 ) ) {
-                        // we need to create new column from top of page
-                        echo $newColumn;
-                        $rows = 0;
-                        $cols += 2;
-                    }
+                    // if ( $rows >= ( ROWS - 2 ) ) {
+                    //     // we need to create new column from top of page
+                    //     echo $newColumn;
+                    //     $rows = 0;
+                    //     $cols += 2;
+                    // }
                     
                     if ( $cols > COLS ) {
                         // end current box and start new one
@@ -135,8 +135,8 @@ define('COLS', 20);
                         // echo "Row: " . $rows . " Col: " . $cols . "<br />";
                         // echo "Num Users: " . $numUsers . " Half Point: " . $numPicsInColumn;
 
-                        // check if adding school pic will go past max rows
-                        if ( $rows >= ROWS ) {
+                        // check if adding pic will go past max rows
+                        if ( $rows > ROWS ) {
                             // we need to create new column from top of page
                             echo $newColumn;
                             $rows = 0;
@@ -151,6 +151,9 @@ define('COLS', 20);
                             $cols = 2;
                         }                    
                     }
+                    echo $newColumn;
+                    $rows = 2;
+                    $cols += 2;
                 }
                 echo "</div></div>";
             }
