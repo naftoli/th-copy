@@ -89,14 +89,6 @@ define('COLS', 20);
                 echo "<div class='row'>";
                 echo "<div class='col'>";
                 foreach ( $info as $school => $users ) {                    
-                    // check if adding school pic will go past max rows
-                    // if ( $rows >= ( ROWS - 2 ) ) {
-                    //     // we need to create new column from top of page
-                    //     echo $newColumn;
-                    //     $rows = 0;
-                    //     $cols += 2;
-                    // }
-                    
                     if ( $cols > COLS ) {
                         // end current box and start new one
                         echo $newBox;
@@ -141,8 +133,6 @@ define('COLS', 20);
                             echo $newColumn;
                             $rows = 0;
                             $cols += 2;
-                            // // if column number is even add one (was subtracted at end of script)
-                            // if ( $cols % 2 == 0 ) $cols++;
                         }
                         
                         if ( $cols > COLS ) {
