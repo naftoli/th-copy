@@ -78,8 +78,10 @@ define('COLS', 20);
                 margin-bottom: 90px;
             }
             .row:not(.inner) {
-                margin-top: 250px;
-                margin-bottom: 500px;
+                margin-top: 300px;
+                margin-bottom: 300px;
+                border: 1px solid #fff;
+                padding-top: 100px;
             }
         </style>
     </head>
