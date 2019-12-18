@@ -26,7 +26,7 @@ class RankReport extends Report {
         $this->userSchool = [];
     }
     
-    public function setRanks($orderType = 'byGrade') {
+    public function setRanks($orderType = 'byGrade', $rankOrd = 0) {
 		$this->ranks = array();
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end']; 
@@ -50,6 +50,9 @@ class RankReport extends Report {
         $sql .= "
             AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
         ";
+        if ( $rankOrd ) {
+            $sql .= "AND rm.rank_ord = " . $rankOrd . " ";
+        }
         if ($orderType == 'byGrade') {
             $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first, r.rank_ord";
         } else if ( $orderType == 'byRankFirst' || $orderType == 'byRankFirstMixedGender' ) {
