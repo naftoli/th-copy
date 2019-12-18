@@ -37,9 +37,13 @@
 .inner {
     margin-bottom: 60px;
 }
+.row:not(.inner) {
+    padding-top: 570px;
+}
 .grid {
     border: 1px solid #fff;
     margin: 150px;
     padding: 50px;
     width: 3657px;
+    height: 2057px;
 }
