@@ -1,0 +1,38 @@
+.rank {
+    top: 77px;
+    width: 3657px;
+    height: 250px;
+    margin-bottom: 10px;
+    font-size: 72px;
+}
+.school {
+    width: 360px;
+    height: 360px;
+}
+.user {
+    width: 360px;
+    height: 360px;
+}
+img {
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+.col {
+    display: flex;
+    flex-direction: column;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+hr {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+.grid {
+    border: 1px solid #fff;
+    margin: 150px;
+    padding: 50px;
+    width: 3657px;
+    height: 2057px;
+}
