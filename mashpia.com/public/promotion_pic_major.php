@@ -67,6 +67,7 @@ define('COLS', 20);
                 margin: 150px;
                 padding: 50px;
                 width: 3657px;
+                height: 1830px;
             }
         </style>
     </head>
