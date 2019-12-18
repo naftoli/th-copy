@@ -138,8 +138,6 @@ define('COLS', 20);
                             echo $newColumn;
                             $rows = 0;
                             $cols += 2;
-                            // // if column number is even add one (was subtracted at end of script)
-                            // if ( $cols % 2 == 0 ) $cols++;
                         }
                         
                         if ( $cols > COLS ) {

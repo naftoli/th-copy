@@ -3,7 +3,7 @@ $admin_auth = ['school'];
 require_once 'header.php';
 require_once 'class.rankReport.php';
 $r = new RankReport;
-$r->setRanks('byRankFirst', 2);
+$r->setRanks('byRankFirst', 5);
 $ranks = $r->getRanks();
 $logos = $r->getSchoolLogos();
 //echo "<pre>"; print_r( $ranks ); echo "</pre>";
