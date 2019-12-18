@@ -48,7 +48,8 @@ define('COLS', 20);
             }
             .user {
                 width: 557px;
-                max-height: 784px;
+                height: 557px;
+                /* max-height: 784px; */
                 margin-right: 30px;
                 margin-left: 30px;
             }
@@ -77,11 +78,17 @@ define('COLS', 20);
             .inner {
                 margin-bottom: 90px;
             }
-            .row:not(.inner) {
+            /* .row:not(.inner) {
                 margin-top: 300px;
                 margin-bottom: 300px;
                 border: 1px solid #fff;
                 padding-top: 100px;
+            } */
+            .grid {
+                border: 1px solid #fff;
+                margin: 150px;
+                padding: 50px;
+                width: 3657px;
             }
         </style>
     </head>
@@ -92,6 +99,7 @@ define('COLS', 20);
             foreach ( $genders as $gender ) {
                 echo "<div class='rank'>" . $rank . "</div>";
                 echo "<div style='page-break-after: always;'></div>";
+                echo "<div class='grid'>";
                 echo "<div class='row'>";
                 $i = 0;
                 foreach ( $other[$gender] as $user ) {
@@ -127,11 +135,11 @@ define('COLS', 20);
 
                     // start new row for every 6 kids
                     if ( ++$i == 6 ) {
-                        echo "</div><div class='row'>";
+                        echo "</div></div><div class='grid'><div class='row'>";
                         $i = 0;
                     }
                 }
-                echo "</div><div style='page-break-after: always'></div>";
+                echo "</div></div><div style='page-break-after: always'></div>";
             }
         }
         ?>
