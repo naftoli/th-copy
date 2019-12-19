@@ -19,6 +19,9 @@ $userSchool = $r->getUserSchool();
             html {
                 background-color: #d6dbde;
             }
+            .name {
+                color: #000;
+            }
         </style>
     </head>
     <body>
