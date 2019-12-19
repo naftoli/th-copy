@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 // redirect to https
 if ((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') || $_SERVER['SERVER_PORT'] != 443) {
     header("Location: https://" . $_SERVER['SERVER_NAME'] . "/chidon_school_reg2.php");
@@ -12,7 +12,6 @@ require('header.php');
 require_once 'class.adminSchools.php';       
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true );
 $schools = $as->getSchools();
-if ($admin_user['auth'] == 'super') $schools[82] = 'Avrohom Academy'; // add A Academy to test for superusers...
 
 // and get the chidon year....
 require_once 'class.globalSettings.php';

@@ -215,9 +215,6 @@
 																	{{/if}}
 																</div>
                                                             {{/if}}
-                                                            <!-- {{#if this.chidonRegistered}}
-                                                              <div class="chidonRegInfo">Registered for Chidon</div>
-															{{/if}} -->
 															
 															{{#if this.chidonRegistered}}
 																<div class="button-spacing">
@@ -233,11 +230,11 @@
 																			{{/if}} -->
 																		{{/if}}
 																	{{else}}
-																		<!-- {{#if this.enrollShabbaton}}
+																		{{#if this.enrollShabbaton}}
 																			<div class="button-spacing">
 																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
 																			</div>
-                                                                        {{/if}} -->
+                                                                        {{/if}}
                                                                         <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div>
 																	{{/if}}
 																	<!-- <div style="margin:10px 0px">
@@ -283,35 +280,6 @@
 																	<button class="btn btn-primary story">Rebbe Story Contest</button>
 																</div>
 															{{/if}}
-															<!--
-															{{#if this.shabbaton}}
-																{{#if this.schoolChapReg}}
-																	<div style="margin:10px 0px">
-																		<button class="btn btn-primary noSchoolShabbaton">Shabbaton Enrollment</button>
-																	</div>
-																{{else}}
-																	<div style="margin:10px 0px">
-																		<button class="btn btn-primary shabbaton">Shabbaton Enrollment</button>
-																	</div>
-																{{/if}}
-															{{/if}}
-															{{#if this.shabbatonEdit}}
-																<div style="margin:10px 0px">
-																	<button class="btn btn-primary shabbatonEdit">Edit Shabbaton Enrollment</button>
-																</div>
-															{{/if}}
-															{{#if this.chidon}}
-																<div style="margin:10px 0px">
-																	<button class="btn btn-primary chidon">Register Chidon </button>
-																</div>
-															{{/if}}
-
-															{{#if this.chidonRegistered}}
-																<div style="margin:10px 0px">
-																	<button class="btn btn-info chidon">Edit Chidon </button>
-																</div>
-															{{/if}}
-                                                            -->
 														</div>
 													</td>
 												</tr>
@@ -547,13 +515,14 @@
                 	location.href = "/mobile/mivtzoim/chanuka.html";
                 });
                 
-                // $(document).on('click', '.enroll', function() {
-                //     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
-                //     // var id = $(this).parent().parent().parent().parent().attr('id');
-                //     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                //     let url = "https://chidondrive.com/site/enroll.html";
-                //     location.href = url;
-                // });
+                $(document).on('click', '.enroll', function() {
+                    //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
+                    // var id = $(this).parent().parent().parent().parent().attr('id');
+                    // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+                    // set chidon_admin cookie
+                    let url = "https://chidondrive.com/site/enroll.html?a=" + Cookies.get('admin');
+                    location.href = url;
+                });
                 
                 $(document).on('click', '.editEnrollment', function() {
                     // var id = $(this).parent().parent().parent().parent().attr('id');

@@ -9,7 +9,7 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-//$year = 5778;
+// $year = 5779;
 
 // array to hold chap to student ratio per school
 $errorMsg = '';
@@ -26,7 +26,7 @@ foreach ($schools as $sid => $schoolName) {
         else $numWalkingCounselors++;
     }
     if ( $numChaps == 0 ) {
-        $errorMsg .= $schoolName . " need to have at one chaperone registered.<br />";
+        $errorMsg .= $schoolName . " needs to have at least one chaperone registered.<br />";
     }
     $sql = "SELECT tc.*, u.first, u.last, c.* "
             ."FROM th_chidon tc "
@@ -58,7 +58,7 @@ foreach ($schools as $sid => $schoolName) {
         );
     }
 }
-// echo "<pre>"; print_r($users); echo "</pre>";
+// echo "<pre>"; print_r($userInfo); echo "</pre>"; exit;
 // check which schools don't have the needed ratio of 12:1 students to chaps
 foreach ( $schoolChaps as $school_id => $chaps ) {
     foreach ( $chaps as $chapNum => $studentNum ) {
@@ -136,7 +136,7 @@ foreach ( $schoolChaps as $school_id => $chaps ) {
                     <th>Avg All</th>
                     <th>Shabbaton Eligibility</th>
                     <th>Activate Enrollment</th>
-                    <th>Enrolled</th>
+                    <th>Enrolled to Chidon</th>
                     <th>Allow Edits</th>
                 </tr>
                 <?php
@@ -184,7 +184,7 @@ foreach ( $schoolChaps as $school_id => $chaps ) {
             </table>
             <br />
         <?php } // end foreach school ?>
-        <a class='button' id="prev_page" href='/chidon_school_reg.php'><i class="fa fa-arrow-left"></i> Enroll Chaperones</a>
+        <a class='button' id="prev_page" href='/chidon_school_reg2.php'><i class="fa fa-arrow-left"></i> Enroll Chaperones</a>
         <a class='button' id="next_page" href='/review_enrollment.php'>Review Enrollment <i class="fa fa-arrow-right"></i></a>
     </body>
     <script>
