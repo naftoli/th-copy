@@ -15,7 +15,7 @@ $logos = $r->getSchoolLogos();
         <link rel="stylesheet" type="text/css" href="promotion_pics.css" />
         <style>
             html {
-                background-color: #ed1c24;
+                background-color: #c83136;
             }
         </style>
     </head>
