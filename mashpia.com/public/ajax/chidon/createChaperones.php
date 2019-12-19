@@ -145,7 +145,6 @@ function createChpaerones($chaperones, $year) {
         
         $chaperone_sql = "INSERT INTO th_chidon_chaps "
                 ." SET school_id = " . $school_id . ", "
-                ." name = '" . $first_name . ' ' . $last_name . "', "
                 ." first_name = '" . $first_name . "', "
                 ." last_name = '" . $last_name . "', "
                 ." year = '$year', "
@@ -179,6 +178,9 @@ function createChpaerones($chaperones, $year) {
             $message = "Congratulations! You are now registered as a Chaperone for the Chidon Shabbaton " . $year . "! Please be in touch with your school's Chidon Coordinator for more information.";
             $headers = 'From: chidon@tzivoshashem.org';
             @mail($to, $subject, $message, $headers);
+
+            // create entry in school chap table if none exists
+            
         }
     }
     

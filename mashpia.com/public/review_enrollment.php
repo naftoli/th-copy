@@ -9,7 +9,7 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-//$year = 5778;
+// $year = 5779;
 
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {

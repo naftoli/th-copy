@@ -105,8 +105,5 @@ if (count($chaps) > 0) { ?>
     <div class="no-report">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         <h3>No Registered Chaperones For <?=$year?></h3>
-        <p>
-            Click <a href="#">here</a> to create one.
-        </p>
     </div>
 <? } ?>
