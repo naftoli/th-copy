@@ -17,10 +17,7 @@ function getPic( $user_id ) {
 
 $genders = ['M','F'];
 foreach ( $genders as $gender ) {
-    echo "<h1>" . ($gender == 'M' ? 'BOYS' : 'GIRLS') . "</h1>";
     foreach ( $ranks[$gender] as $rank => $info ) {
-        if ( $rank == 'General' ) break;
-
         // vars to keep track of how many cols and rows there are
         $cols = 2;
         $rows = 2;
