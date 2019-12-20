@@ -1,7 +1,7 @@
 <?php
 $admin_auth = ['school'];
-require_once 'header.php';
-require_once 'class.rankReport.php';
+require_once '../../header.php';
+require_once '../../class.rankReport.php';
 $r = new RankReport;
 $r->setRanks('byRankFirst');
 $ranks = $r->getRanks();
@@ -96,10 +96,10 @@ define('COLS', 20);
                     }
                     
                     if ( $logos[$school]['logo_boys'] || $logos[$school]['logo_girls'] ) {
-                        if ( $gender == 'M' ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo_boys'] . "' />"; 
-                        else if ( $gender == 'F' ) echo "<img class='school' src='schoolLogos/" . $logos[$school]['logo_girls'] . "' />";
+                        if ( $gender == 'M' ) echo "<img class='school' src='../../schoolLogos/" . $logos[$school]['logo_boys'] . "' />"; 
+                        else if ( $gender == 'F' ) echo "<img class='school' src='../../schoolLogos/" . $logos[$school]['logo_girls'] . "' />";
                     }
-                    else echo "<img class='school' src='file_view.php?id=" . $logos[$school]['logo_id'] . "' />"; 
+                    else echo "<img class='school' src='../../file_view.php?id=" . $logos[$school]['logo_id'] . "' />"; 
                     $rows += 2;
                     
                     foreach ( $users as $idx => $user_id ) {
@@ -111,16 +111,16 @@ define('COLS', 20);
                         $pic = getPic( $user_id );
                         if ( !empty( $pic ) ) {
                             if ( $pic['mobile_pic'] ) {
-                                $img = "mobile/reg/" . $pic['mobile_pic'];
+                                $img = "../../mobile/reg/" . $pic['mobile_pic'];
                             } else if ( $pic['thumb'] ) {
-                                $img = "thumbs/" . $pic['thumb'];
+                                $img = "../../thumbs/" . $pic['thumb'];
                             } else if ( $pic['user_photo_id'] ) {
-                                $img = "file_view.php?id=" . $pic['user_photo_id'];
+                                $img = "../../file_view.php?id=" . $pic['user_photo_id'];
                             }
                         } 
                         if ( empty( $img ) ) {
-                            if ( $gender == 'M' ) $img = "images/avatar_boy.jpg";
-                            else if ( $gender == 'F' ) $img = "images/avatar_girl.png";
+                            if ( $gender == 'M' ) $img = "../../images/avatar_boy.jpg";
+                            else if ( $gender == 'F' ) $img = "../../images/avatar_girl.png";
                         }
                         echo "<img class='user' src='" . $img . "' />";
                         $rows += 2;
