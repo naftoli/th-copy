@@ -45,7 +45,7 @@
 							<p id="simple-arc">Shabbaton Cost</p>
 							<div class="bar-circle__inner">
 								<img src="img/donate/person.jpg" />
-								<span>$350</span>
+								<span>$375</span>
 							</div>
 						</div>
 						<div class="bar-bar">
@@ -54,7 +54,7 @@
 									<div class="bar-bar__circle"></div>
 									<div class="bar-bar__marker">
 										<img src="img/marker-blue.png" />
-										<p>$150<br>Registration Fee</p>
+										<p>$175<br>Registration Fee</p>
 									</div>
 								</div>
 								<div class="bar-bar__line subsidy" data-percent="75">
@@ -314,10 +314,11 @@
 					$.post('../ajax/getTotalDonation.php', function( result ) {
 						let res = JSON.parse( result );
 						if ( res.success ) {
-							let totalGoal = 2500 * 350;
+							let cost = 375;
+							let totalGoal = 2500 * cost;
 							let totalAmount = Math.round(res.total);
 							let percent = Math.round((totalAmount / totalGoal) * 100);
-							let numChildrenSponsored = Math.round(totalAmount / 350);
+							let numChildrenSponsored = Math.round(totalAmount / cost);
 							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
 							// console.log( info );
 							$("#numChildren").html( numChildrenSponsored + "/2500<br><span>children covered</span>" );

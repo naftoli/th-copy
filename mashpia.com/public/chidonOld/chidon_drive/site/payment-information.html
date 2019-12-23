@@ -226,11 +226,11 @@
 											<select class="amounts" onchange="calculateAmount()">
 										`;
 
-							let maxAmount = 350;
-							let minAmount = 250;
+							let maxAmount = 375;
+							let minAmount = 275;
 							if ( $("#rohr").is(":checked") ) {
-								maxAmount = 250;
-								minAmount = 150;
+								maxAmount = 275;
+								minAmount = 175;
 							}
 							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
 								html += "<option value='" + amount + "'>" + amount + "</option>";
@@ -238,7 +238,7 @@
 							// find out if child has raised enough to have even less registration charge
 							let regFee = parseFloat( maxAmount - child.total_donation ).toFixed(2);
 							//console.log( regFee );
-							if ( regFee < 150 ) {
+							if ( regFee < 175 ) {
 								if ( regFee < 0 ) regFee = 0;
 								html += "<option value='" + regFee + "'>" + regFee + "</option>";
 							}

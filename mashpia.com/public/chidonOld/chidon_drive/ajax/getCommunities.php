@@ -14,7 +14,7 @@ $leaderboard = [];
 try {
   foreach ( $communities as $community => $schools ) {
     $cd = new ChidonDriveCommunity( $year );
-    $cd->setAmounts( 350, 250, 100 );
+    // $cd->setAmounts( 375, 275, 100 );
     $cd->setCommunity( $community, $schools );
     $cd->setGoal();
     $goal = $cd->getGoal();
@@ -35,7 +35,7 @@ try {
         $schoolsStats = [];
         foreach ( $schools as $school ) {
           $cs = new ChidonDriveSchool( $year, $school );
-          $cs->setAmounts( 350, 250, 100 );
+          // $cs->setAmounts( 375, 275, 100 );
           $cs->setGoal();
           $goal = $cs->getGoal();
           if ( $goal > 0 ) {

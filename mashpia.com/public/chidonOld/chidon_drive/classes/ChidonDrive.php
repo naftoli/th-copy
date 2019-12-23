@@ -49,19 +49,19 @@ abstract class ChidonDrive {
   protected $year;
   protected $goal;
   protected $children = [];
-  protected $costPerChild;
-  protected $regPerChild;
-  protected $grantPerChild;
+  protected $costPerChild = 375;
+  protected $regPerChild = 275;
+  protected $grantPerChild = 100;
   
   public function __construct( $year ) {
     $this->year = $year;
   }
 
-  public function setAmounts( $costPerChild, $regPerChild, $grantPerChild ) {
-    $this->costPerChild = $costPerChild;
-    $this->regPerChild = $regPerChild;
-    $this->grantPerChild = $grantPerChild;
-  }
+  // public function setAmounts( $costPerChild, $regPerChild, $grantPerChild ) {
+  //   $this->costPerChild = $costPerChild;
+  //   $this->regPerChild = $regPerChild;
+  //   $this->grantPerChild = $grantPerChild;
+  // }
 
   abstract public function setChildren();
 
