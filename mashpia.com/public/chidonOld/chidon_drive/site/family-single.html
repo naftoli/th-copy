@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="css/family-single.css" type="text/css" />
 	</head>
 
-	<body id = "main" style="display: none;">
+	<body id = "main">
 
 		<header>
 			<div class="wrapper">
@@ -57,13 +57,13 @@
 							</div>
 							<div class="bar-bar">
 								<div class="bar-bar__wrapper">
-									<div class="bar-bar__line registration" data-percent="">
+									<!-- <div class="bar-bar__line registration" data-percent="">
 										<div class="bar-bar__circle"></div>
 										<div class="bar-bar__marker">
 											<img src="img/marker-blue.png" />
 											<p>$<span id="totalRegFee"></span><br>Registration Fee</p>
 										</div>
-									</div>
+									</div> -->
 									<div class="bar-bar__line subsidy" data-percent="">
 										<div class="bar-bar__circle"></div>
 										<div class="bar-bar__marker">
@@ -270,10 +270,10 @@
 		    	$('header nav').toggleClass('open');
 		    });
 		    $(document).ready(function(e){
-					// only show content if correct password is supplied
-					let password = prompt("Please enter the correct password to access this page.");
-					if ( password.toLowerCase().trim() == 'chidondrive5779' ) $("#main").show();
-					else alert("Incorrect password.");
+					// // only show content if correct password is supplied
+					// let password = prompt("Please enter the correct password to access this page.");
+					// if ( password.toLowerCase().trim() == 'chidondrive5779' ) $("#main").show();
+					// else alert("Incorrect password.");
 
 		    	// Round text
 					const circleType = new CircleType(document.getElementById('simple-arc'));
@@ -328,17 +328,18 @@
 									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
 									totalDonation += Math.round(info.data.children[i].total_donation); 
 								}
-								let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
-								$("#totalRegFee").text( totalReg );
-								if(totalRegPercent > 0){
-									$(".registration").attr('data-percent', totalRegPercent );									
-								} else {
-									$(".registration").hide();
-								}
+								// let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
+								// $("#totalRegFee").text( totalReg );
+								// if(totalRegPercent > 0){
+								// 	$(".registration").attr('data-percent', totalRegPercent );									
+								// } else {
+								// 	$(".registration").hide();
+								// }
+								$(".registration").hide();
 
 								let totalRohrPercent = totalRohr + totalReg ? Math.round(((totalRohr + totalReg) / familyGoal) * 100) : 0;
 								$("#totalRohrSubsidy").text( totalRohr );
-								if(totalRohrPercent < 0){
+								if(totalRohrPercent > 0){
 									$(".subsidy").attr('data-percent', totalRohrPercent );
 								} else {
 									$(".subsidy").hide();
@@ -347,7 +348,10 @@
 								let totalDonationPercent = totalReg + totalRohr + totalDonation ? Math.round(((totalReg + totalRohr + totalDonation) / familyGoal) * 100) : 0;
 								if ( totalDonationPercent > 100 ) totalDonationPercent = 100;
 								$("#totalDonation").text( totalDonation );
-								$(".donation").attr('data-percent', totalDonationPercent);
+								if ( totalDonationPercent > totalRohrPercent )
+									$(".donation").attr('data-percent', totalDonationPercent);
+								else 
+								$(".donation").hide();
 
 								let remaining = familyGoal - totalReg - totalRohr -  totalDonation;
 								if ( remaining < 0 ) remaining = 0;
