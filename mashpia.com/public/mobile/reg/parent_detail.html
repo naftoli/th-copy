@@ -111,12 +111,13 @@
                             </div>
                         </a>
                     </div>
-                    <!-- <div class="col-xs-6">
+                    <div class="col-xs-6" id="chidonDriveButton" style="display: none;">
                         <div class="button-spacing childrens-content" style="float:right;">
-                            <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
-                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
+                            <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
+                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
+                            <button class="btn btn-info chidondrive">Setup My ChidonDrive</button>
                         </div>
-                    </div> -->
+                    </div>
 				</div>
 				
 				<div class="row">
@@ -451,6 +452,11 @@
                             setSwiper();
                             $(".year").text(year);
                         } 
+
+                        // show chidondrive setup button
+                        if ( parseInt( parent_id ) == 1264 ) {
+                            $("#chidonDriveButton").show();
+                        }
                     }
                 });
                 
@@ -497,6 +503,10 @@
                 //	var id = $(this).parent().parent().parent().attr('id');
                 //	location.href = "/mobile/chidon/edit.html?id=" + id;
                 //});
+
+                $(document).on('click', '.chidondrive', function() {
+                    location.href="chidondrive.html";
+                });
                 
                 $(document).on('click', '.noSchoolShabbaton', function() {
                     alert('Your base has not yet opened registration. Please be in touch with your school for more info.');
