@@ -51,6 +51,6 @@ error_log
 mysql.log
 composer.lock
 
-public/chidon/chidon_drive/ajax/phplog
+public/chidonOld/chidon_drive/ajax/phplog
 
 public/chidon/
