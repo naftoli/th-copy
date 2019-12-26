@@ -197,8 +197,9 @@ if ( empty( $error_msg ) ) {
           subsidy_amount = :amount
     ");
     // if it was for specific child, then put the entire amount for that child
+    $regCost = 375;
     if ( $forChild ) {
-      if ( $amount > 350 ) $amount = 350;
+      if ( $amount > $regCost ) $amount = $regCost;
       $stmt->execute([
         ':donation_id'  =>  $donation_id, 
         ':year'         =>  $year, 
@@ -208,7 +209,7 @@ if ( empty( $error_msg ) ) {
     } else {
       // divide amount by number of children
       $perChildAmount = number_format($amount / count( $children ), 2);
-      if ( $perChildAmount > 350 ) $perChildAmount = 350;
+      if ( $perChildAmount > $regCost ) $perChildAmount = $regCost;
       foreach ( $children as $user_id ) {
         $stmt->execute([
           ':donation_id'  =>  $donation_id, 

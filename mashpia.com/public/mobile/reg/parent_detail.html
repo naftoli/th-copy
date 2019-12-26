@@ -371,7 +371,7 @@
                 // load children
                 var parent_id;
                 var childrenToRegister = [];
-                $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
                     if ( success == -1 ) {
                         window.location = "index.html";
                     } else {

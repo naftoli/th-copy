@@ -24,8 +24,7 @@ $qry = "
       u.user_photo_id,
       tc.paid,
       tc.rohr_subsidy, 
-      cu.chidon_donation_id,
-      SUM(cu.subsidy_amount) AS total_donation
+      cug.goal  
   FROM
       admins a
           JOIN
@@ -33,16 +32,13 @@ $qry = "
           JOIN
       users u ON u.user_id = aa.id
           JOIN
-      th_chidon tc USING (user_id)
-          LEFT JOIN
-      chidon_user_subsidies cu USING (user_id)
+      chidon_user_goals cug USING (user_id) 
+          JOIN
+      th_chidon tc USING (user_id) 
   WHERE
       aa.admin_id = :admin
-          AND (cu.chidon_year IS NULL
-          OR cu.chidon_year = :year)
-          AND aa.role_id = 1 
-          AND (tc.contestant = 1 or tc.school_rep = 1) 
-          AND tc.can_enroll = 1 
+          AND aa.role_id = 1  
+          AND cug.year = :year 
           AND tc.year = :year
 ";
 if ( $notYetPaid ) $qry .= " AND tc.date_paid is null ";
@@ -58,6 +54,21 @@ $res = $stmt->execute([
 if ( $res ) {
   $rows = $stmt->fetchAll();
   if ( $rows ) {
+    foreach ( $rows as $idx => $row ) {
+      // find out how much was raised so far
+      $stmt2 = $MASHPIA_DB->prepare("
+        SELECT IFNULL(SUM(subsidy_amount), 0) as total_donation 
+        FROM chidon_user_subsidies 
+        WHERE chidon_year = :year AND user_id = :user");
+      $res2 = $stmt2->execute([
+        ':year' =>  $year, 
+        ':user' =>  $row['user_id']
+      ]);
+      if ( $res2 ) {
+        $row2 = $stmt2->fetch();
+        $rows[$idx]['total_donation'] = $row2['total_donation'];
+      }
+    }
     $data['children'] = $rows;
   } else {
     echo json_encode([

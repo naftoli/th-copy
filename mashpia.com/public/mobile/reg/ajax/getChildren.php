@@ -1,13 +1,11 @@
 <?php
-//ini_set('display_errors',1);
+ini_set('display_errors',1);
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 $chidon_year = GlobalSettings::getChidonYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
-$year = mysql_real_escape_string( $_POST['year'] );
-
 require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
@@ -48,14 +46,11 @@ if ( !empty( $users ) ) {
 	//need to have multiple result rows to get highest rank
 	$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
 		." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, "
-		." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
+		." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
 		." FROM users u "
 		." JOIN schools s USING (school_id) "
 		." LEFT JOIN classes c ON c.class_id = u.class_id "
-		." LEFT JOIN rank_marks rm USING (user_id) "
-		." LEFT JOIN ranks r USING (rank_ord) "
-		." WHERE u.user_id IN (" . implode(',', $users) . ") "
-		." ORDER BY u.user_id, rank_ord";
+		." WHERE u.user_id IN (" . implode(',', $users) . ") ";
 
 	$result = mysql_query( $sql );
 	while ( $row = mysql_fetch_assoc($result) ) {
@@ -65,9 +60,6 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['school'] 	= $row['school_name'];
 		$children[$row['user_id']]['city'] 		= $row['school_city'];
 		$children[$row['user_id']]['photo'] 	= empty( $row['user_photo_id'] ) ? null : $row['user_photo_id'];
-		$children[$row['user_id']]['rank'] 		= $row['rank_name'] ? $row['rank_name'] : '';
-		$children[$row['user_id']]['rankOrd']	= $row['rank_ord'] ? $row['rank_ord'] : 0;
-		$children[$row['user_id']]['rankImg'] 	= $row['rank_image_id'] ? $row['rank_image_id'] : '';
 		$children[$row['user_id']]['thumb'] 	= 0;
 		$children[$row['user_id']]['mobile_pic']= empty( $row['mobile_pic'] ) ? 0 : $row['mobile_pic'];
 		$children[$row['user_id']]['grade'] 	= $row['class_grade'];
@@ -83,6 +75,18 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['school_id'] = $row['school_id'];
 		$children[$row['user_id']]['shipping'] = $row['shipping_method'];
 		$children[$row['user_id']]['chayoleiRegistered'] = false;
+
+		// find out highest rank achieved
+		$sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
+					from ranks r 
+					join rank_marks rm using (rank_ord) 
+					where rm.user_id = " . $row['user_id'] . " 
+					order by rank_ord desc limit 1";
+		$resRank = mysql_query( $sqlRank );
+		$rowRank = mysql_fetch_assoc( $resRank );
+		$children[$row['user_id']]['rank'] 		= $rowRank['rank_name'] ? $rowRank['rank_name'] : '';
+		$children[$row['user_id']]['rankOrd']	= $rowRank['rank_ord'] ? $rowRank['rank_ord'] : 0;
+		$children[$row['user_id']]['rankImg'] 	= $rowRank['rank_image_id'] ? $rowRank['rank_image_id'] : '';		
 		
 		$reg_query = mysql_query(
 			"SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
@@ -247,6 +251,15 @@ if ( !empty( $users ) ) {
 			} else {
 				$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
 			}
+		}
+
+		// get goals set for chidondrive
+		$children[$row['user_id']]['chidonDriveGoal'] = 0;
+		$sqlDrive = "select * from chidon_user_goals where user_id = " . $row['user_id'] . " and year = " . $chidon_year;
+		$resDrive = mysql_query( $sqlDrive );
+		if ( mysql_num_rows( $resDrive ) > 0 ) {
+			$rowDrive = mysql_fetch_assoc( $resDrive );
+			$children[$row['user_id']]['chidonDriveGoal'] = $rowDrive['goal'];
 		}
 		
 		//if ($row['user_id'] == 26598) {

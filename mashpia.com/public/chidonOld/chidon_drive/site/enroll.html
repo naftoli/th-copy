@@ -251,6 +251,9 @@
 							<div class="field">
 								<p><label class="checkbox"><input type="checkbox" value="5778" class="history" /><span></span></label>5778</p>
 							</div>
+							<div class="field">
+								<p><label class="checkbox"><input type="checkbox" value="5779" class="history" /><span></span></label>5779</p>
+							</div>
 						</div>
 						<p>Important Notes:</p>
 						<div class="field">
@@ -495,21 +498,26 @@
 						if ( $(this).is(":checked") ) $(this).trigger('click');
 					}); 
 
+					let options = [ 5775, 5776, 5777, 5778, 5779 ];
 					for ( h in history ) {
-						switch ( history[h] ) {
-							case '5775':
-								$(".history").eq(0).trigger('click');
-								break;
-							case '5776':
-							$(".history").eq(1).trigger('click');
-								break;
-							case '5777':
-							$(".history").eq(2).trigger('click');
-								break;
-							case '5778':
-								$(".history").eq(3).trigger('click');
-								break;
-						}
+						if ( history[h] == options[h] ) $(".history").eq(h).trigger('click');
+						// switch ( history[h] ) {
+						// 	case options[h]:
+						// 		$(".history").eq(h).trigger('click');
+						// 		break;
+						// 	case '5776':
+						// 	$(".history").eq(1).trigger('click');
+						// 		break;
+						// 	case '5777':
+						// 	$(".history").eq(2).trigger('click');
+						// 		break;
+						// 	case '5778':
+						// 		$(".history").eq(3).trigger('click');
+						// 		break;
+						// 	case '5779':
+						// 		$(".history").eq(4).trigger('click');
+						// 		break;
+						// }
 					}
 
 					$("#chidonNotes").val( child.notes );

@@ -8,7 +8,7 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $year = GlobalSettings::getChidonYear();
 
 $ids = $_POST['ids'];
-$rohr = $_POST['rohr'];
+// $rohr = $_POST['rohr'];
 
 $stmt = $MASHPIA_DB->prepare("
   UPDATE th_chidon 
@@ -16,8 +16,7 @@ $stmt = $MASHPIA_DB->prepare("
       paid = 0,
       date_paid = NOW(),
       paid_by = :admin, 
-      approval = :message, 
-      rohr_subsidy = :rohr
+      approval = :message 
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -29,8 +28,7 @@ foreach ( $ids as $id ) {
     ':admin'    =>  $admin_id, 
     ':year'     =>  $year, 
     ':user_id'  =>  $id, 
-    ':message'  =>  "Child doesn't need to pay, he/she raised enough money to cover the shabbaton fee.", 
-    ':rohr'     =>  $rohr
+    ':message'  =>  "Child doesn't need to pay, he/she raised enough money to cover the shabbaton fee." 
   ]);
   if ( !$res ) {
     $success = false;

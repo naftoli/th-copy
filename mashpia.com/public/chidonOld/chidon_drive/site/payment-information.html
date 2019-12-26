@@ -37,9 +37,9 @@
 			<div class="wrapper">
 				<h2 class="title">Payment Information</h2>
 				<div class="payment-wrap">
-					<div class="payment-box textcenter">
+					<!-- <div class="payment-box textcenter">
 						<h4><label class="checkbox"><input type="checkbox" id="rohr"><span></span></label> I would like to opt-in to the <br> George Rohr Subsidy of $100 per child</h4>
-					</div>
+					</div> -->
 					<div class="payment-box textcenter">
 						<h4>Please select the amount you would like to <br> pay for which child:</h4>
 						<div class="select-amount">
@@ -228,7 +228,7 @@
 
 							let maxAmount = 375;
 							let minAmount = 275;
-							if ( $("#rohr").is(":checked") ) {
+							if ( child.rohr_subsidy ) {
 								maxAmount = 275;
 								minAmount = 175;
 							}
@@ -266,8 +266,8 @@
 						}
 					});
 					if ( toEnroll.length ) {
-						let rohr = $("#rohr").is(":checked") ? 1 : 0;
-						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll, rohr: rohr }, function( result ) {
+						// let rohr = $("#rohr").is(":checked") ? 1 : 0;
+						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll }, function( result ) {
 							let res = JSON.parse( result );
 							if ( res.success ) {
 								alert( res.message );
@@ -318,7 +318,6 @@
 						donation.amount = totalAmount;
 						donation.name = $("#name").val();
 						donation.email = $("#email").val();
-						donation.rohr = $("#rohr").is(":checked") ? 1 : 0;
 
 						let regDetails = [];
 						$(".child").each( function() {
