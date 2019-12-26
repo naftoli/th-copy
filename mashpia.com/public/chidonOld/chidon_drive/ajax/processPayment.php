@@ -76,7 +76,6 @@ $field";
 $amount = $donation['amount'];
 $name = $donation['name'];
 $email = $donation['email'];
-$rohr = $donation['rohr'];
 
 $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
@@ -173,7 +172,6 @@ if ( !empty( $msg ) ) {
         date_paid = NOW(),
         paid_by = :admin, 
         approval = :approval, 
-        rohr_subsidy = :rohr
     WHERE
         user_id = :user AND year = :year
   ");
@@ -185,8 +183,7 @@ if ( !empty( $msg ) ) {
       ':admin'    =>  $admin_id, 
       ':user'     =>  $child['id'], 
       ':year'     =>  $year, 
-      ':approval' =>  $trans_info, 
-      ':rohr'     =>  $rohr
+      ':approval' =>  $trans_info 
     ]);
     if ( !$res ) {
       //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";

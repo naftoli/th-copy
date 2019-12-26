@@ -45,6 +45,10 @@
         #goals > input {
             margin: 5px;
         }
+
+        table, tr, td {
+            padding: 5px;
+        }
     </style>
 </head>
 <body class="rank-page">
@@ -64,12 +68,8 @@
         <div id="goals" style="font-size: 16px; padding: 10px; line-height: 1.5; max-width: 300px; margin: auto;">
             Your chidondrive page will only be ready once you setup your goals. You can only use the chidondrive site if you agree that 
             your information will be accessible to the public.<br /><br />
-            Enter your fundraising goal(s) per child:<br />
-            $<input type="text" size="5" value="375" class="child" id="8273" /> Michel <br />
-            $<input type="text" size="5" value="375" class="child" id="5555" /> Rosie <br />
-            <input type="checkbox" name="rohr" class="rohr" /> Apply $100 Rohr Grant to each child<br />
-            <input type="checkbox" name="agree" class="agree" checked /> I acknowledge that my page will be accessible to the public<br /><br />
-            <div align="center"><button id="submitGoals">Save</button></div>
+            Check off which children you want to show up your personal chidondrive page and enter your fundraising goal per child:<br />
+            <div class="children"></div>
         </div>
     </div>
 
@@ -97,17 +97,60 @@
         // make sure we have a cookie
         var admin = Cookies.get('admin');
         if (!admin) { window.location.href = "index.html"; }
+        var regCost = 375;
 
-        $(document).on('blur', '.child', function() {
-            // make sure amount is at least 375
-            var amount = parseInt( $(this).val() );
-            if ( amount < 375 ) {
-                alert("Amount cannot be less than 375.");
-                $(this).val(375);
+        // get children to show
+        $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
+            if ( success == -1 ) {
+                window.location = "index.html";
+            } else {
+                var data = $.parseJSON( success );
+                console.log( data );
+                var html = '<table>';
+                var children = data.children;
+                for ( c in children ) {
+                    if ( children[c].chidonRegistered ) {
+                        var val = regCost;
+                        var checked = false;
+                        if ( children[c].chidonDriveGoal ) {
+                            val =  parseInt( children[c].chidonDriveGoal );
+                            checked = true;
+                        }
+                        html += `
+                            <tr class="child">
+                                <td><input type="checkbox" id="${c}" class="id" ${ checked ? checked="checked" : '' } /></td>
+                                <td>${children[c].first}</td>
+                                <td>$<input type="text" size="5" value="${val}" class="childAmount" /></td>
+                            </tr>
+                        `;
+                    }
+                }
+                html += `
+                        <tr>
+                            <td><input type="checkbox" name="rohr" class="rohr" /></td>
+                            <td colspan="2">Apply $100 Rohr Grant to each child</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="agree" class="agree" checked /></td>
+                            <td colspan="2">I acknowledge that my page will be accessible to the public</td>
+                        </tr>
+                    </table>
+                    <div align="center"><button id="submitGoals">Save</button></div>
+                `;
+                $(".children").append( html );
             }
         });
 
-        $("#submitGoals").click( function() {
+        $(document).on('blur', '.childAmount', function() {
+            // make sure amount is at least 375
+            var amount = parseInt( $(this).val() );
+            if ( amount < regCost ) {
+                alert("Amount cannot be less than 375.");
+                $(this).val( regCost );
+            }
+        });
+
+        $(document).on('click', "#submitGoals", function() {
             if ( !$(".agree:checked").length ) {
                 alert("You must indicate your acceptance of having your page accessible to the public.");
                 return false;
@@ -117,20 +160,26 @@
             var children = [];
             $(".child").each( function() {
                 var child = {};
-                child.id = $(this).attr('id');
-                child.goal = parseInt( $(this).val() );
+                child.id = $(this).find('.id').attr('id');
+                child.goal = parseInt( $(this).find('.childAmount').val() );
                 child.rohr = rohr;
+                child.add = $(this).find('.id').is(":checked");
                 children.push( child );
             });
-            $.post("ajax/setupChidonDrive.php", { admin_id: admin, info : JSON.stringify( children ) }, function( res ) {
-                var result = JSON.parse( res );
-                if ( result.success ) {
-                    alert("Your settings have been saved. You will be routed back to the home page.");
-                    location.href = "parent_detail.html";
-                } else {
-                    alert( result.error );
-                }
-            });
+
+            if ( children.length > 0 ) {
+                $.post("ajax/setupChidonDrive.php", { admin_id: admin, info : JSON.stringify( children ) }, function( res ) {
+                    var result = JSON.parse( res );
+                    if ( result.success ) {
+                        alert("Your settings have been saved. You will be routed back to the home page.");
+                        //location.href = "parent_detail.html";
+                    } else {
+                        alert( result.error );
+                    }
+                });
+            } else {
+                alert('You have not checked off any children.');
+            }
         });
     });
 </script>
