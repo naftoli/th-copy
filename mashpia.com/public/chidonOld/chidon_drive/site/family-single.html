@@ -394,7 +394,7 @@
 									let donation = Math.round(child.total_donation);
 									let donationPercent = regPaid + subsidy + donation ? Math.round((( regPaid + subsidy + donation ) / cost ) * 100) : 0;
 									if ( donationPercent > 100 ) donationPercent = 100;
-									let percent = (((child.total_donation + paid) / cost) * 100).toFixed(2);
+									let percent = (((child.total_donation + child.paid) / cost) * 100).toFixed(2);
 									let balance = cost - donation - regPaid - subsidy;
 									if ( balance < 0 ) balance = 0;
 
