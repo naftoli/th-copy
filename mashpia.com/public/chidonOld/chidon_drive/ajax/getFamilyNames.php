@@ -21,12 +21,19 @@ $qry = "
   FROM
       admins a
           JOIN
-      th_chidon tc ON tc.parent_id = a.admin_id
+      chidon_user_goals cug USING (admin_id)
   WHERE
-      tc.year = :year AND a.last != '' 
-          AND (tc.contestant = 1 or tc.school_rep = 1) 
+      a.last != '' AND cug.year = :year
 ";
-if ( !empty( $schools ) ) $qry .= " AND tc.school_id in (" . implode(',', $schools) . ")";
+if ( !empty( $schools ) ) $qry .= "
+  AND cug.user_id IN (SELECT 
+          user_id
+      FROM
+          users
+      WHERE
+          school_id IN (" . implode(',', $schools) . "))
+";
+$qry .= "GROUP BY a.admin_id";
 $stmt = $MASHPIA_DB->prepare( $qry );
 $res = $stmt->execute([
   ':year' =>  $year

@@ -22,34 +22,29 @@ $qry = "
       u.last,
       u.mobile_pic,
       u.user_photo_id,
+      u.gender, 
       tc.paid,
       tc.rohr_subsidy, 
-      cug.goal  
+      tc.fundraising_goal as goal, 
+      tc.show_pic   
   FROM
       admins a
           JOIN
-      admin_auths aa USING (admin_id)
+      th_chidon tc ON tc.parent_id = a.admin_id 
           JOIN
-      users u ON u.user_id = aa.id
-          JOIN
-      chidon_user_goals cug USING (user_id) 
-          JOIN
-      th_chidon tc USING (user_id) 
+      users u USING (user_id) 
   WHERE
-      aa.admin_id = :admin
-          AND aa.role_id = 1  
-          AND cug.year = :year 
-          AND tc.year = :year
+      tc.parent_id = :admin AND tc.year = :year 
+          AND tc.fundraising_goal > 0
 ";
 if ( $notYetPaid ) $qry .= " AND tc.date_paid is null ";
-$qry .= "
-  GROUP BY u.user_id
-";
+
 $stmt = $MASHPIA_DB->prepare( $qry );
 $res = $stmt->execute([
   ':admin'  =>  $admin_id, 
   ':year'   =>  $year
 ]);
+
 //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
 if ( $res ) {
   $rows = $stmt->fetchAll();
@@ -73,7 +68,7 @@ if ( $res ) {
   } else {
     echo json_encode([
       'success' =>  false,
-      'message' =>  "Could not find any children eligible for the chidon that haven't been paid yet and have been activated by the school."
+      'message' =>  "Could not find any children that have a fundraising goal setup."
     ]);
     exit;
   }

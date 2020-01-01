@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta name="viewport" content="width=device-width">
+	  <meta charset="UTF-8">
+		<meta name="google" content="notranslate">
+		<title>Setup | ChidonDrive</title>
+		<link rel="stylesheet" href="css/font.css" type="text/css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+		<link rel="stylesheet" href="css/enroll.css" type="text/css" />
+	</head>
+
+	<body>
+
+		<header>
+			<div class="wrapper">
+				<div class="left">
+					<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+					<a href="index.html" class="logo"><h1>Chidon</h1><img src="img/chidon.png" alt="Chidon" /></a>
+					<nav>
+						<a href="index.html">Home</a>
+						<a href="donate.html">Donate</a>
+						<a href="leaderboard.html">Leaderboard</a>
+						<a href="story.html">Our Story</a>
+					</nav>
+				</div>
+				<div class="icons">
+					<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+					<a href="#"><img src="img/army.png" alt="Tzivos Hashem" /></a>
+				</div>
+			</div>
+		</header>
+		<div class="main">
+			<div class="wrapper">
+                <h2 class="title">Setup Your Family Page</h2>					
+				<div class="form personal-information">
+					<form id="personalInfo">
+                        <h5>Your ChidonDrive Family Page will only be ready once you setup your fundraising goals.</h5>
+
+                        <p>
+                            Check off which children you want to show up your ChidonDrive Family Page and enter your fundraising goal per child:
+                        </p>
+
+                        <div class="field" id="children"></div>
+
+						<div class="group save-detail">
+							<input type="submit" name="submit" value="Save" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<div class="wrapper">
+				<a href="#" id="top">Back to top</a>
+
+				<div class="credits">
+					<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+					<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+	לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+				</div>
+
+				<div class="footer-main">
+					<div class="footer-about">
+						<div class="icon-wrapper">
+							<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+						</div>
+						<div class="icon-wrapper">
+							<img src="img/army-color.png" alt="Tzavaos Hashem" />
+						</div>
+						<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+					</div>
+					<nav>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="donate.html">Donate</a></li>
+							<li><a href="leaderboard.html">Leaderboard</a></li>
+							<li><a href="story.html">Our Story</a></li>
+						</ul>
+							<ul>
+								<li><h5>Quick Links</h5></li>
+								<li><a href="family.html">Find a Family</a></li>
+								<li><a href="sponsor.html">Sponsors</a></li>
+								<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
+							</ul>
+						<ul>
+							<li><h5>Contact Us</h5></li>
+							<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+							<li><a href="tel:7189078884">718.907.8884</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="footer-bottom">
+					<div class="social">
+						<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+						<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
+					</div>
+					<p>&copy; 2019 Tzivos Hashem - All Rights Reserved</p>
+				</div>
+			</div>
+		</footer>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/circletype.min.js"></script>
+		<script src="js/jquery.nice-select.min.js"></script>
+		<script src='js/circles.min.js'></script>
+		<script src="js/js.cookie.js"></script>
+        <script type="text/javascript">
+            $( function() {
+                if ( !Cookies.get('chidon_admin') ) {
+                    location.href = "/mobile";
+                }
+                $('select').niceSelect();
+
+                $('#menu-opener').click(function(e){
+                    $('header nav').toggleClass('open');
+                });
+
+                const cost = 375;
+                $(document).on('blur', '.goal', function() {
+                    if ( $(this).val() < cost ) {
+                        alert("Your goal cannot be less than " + cost);
+                        $(this).val( cost );
+                    }
+                });
+
+                $(".save-detail input").click( function( e ) {
+                    e.preventDefault();
+                    if ( !$("#agree:checked").length ) {
+                        alert("You must indicate your acceptance of having your page accessible to the public.");
+                        return false;
+                    }
+                    const rohr = $("#rohr").is(":checked");
+                    const pic = $("#pic").is(":checked");
+
+                    let children = [];
+                    $(".child").each( function() {
+                        let child = {};
+                        child.id = $(this).find('.id').attr('id');
+                        child.goal = parseInt( $(this).find('.goal').val() );
+                        child.rohr = rohr;
+                        child.pic = pic;
+                        child.add = $(this).find('.id').is(":checked");
+                        children.push( child );
+                    });
+
+                    if ( children.length > 0 ) {
+                        $.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info : JSON.stringify( children ) }, function( res ) {
+                            var result = JSON.parse( res );
+                            if ( result.success ) {
+                                alert("Your settings have been saved.");
+                                location.href = "intro.html";
+                            } else {
+                                alert( result.error );
+                            }
+                        });
+                    } else {
+                        alert('You have not checked off any children.');
+                    }
+                });
+
+                $.post("../ajax/getChildrenForSetup.php", { admin: Cookies.get('chidon_admin') }, function( result ) {
+                    const res = JSON.parse( result );
+                    if ( res.success ) {
+                        const rohr = parseInt( res.children[0].rohr );
+                        const pic = parseInt( res.children[0].pic );
+
+                        let html = '<table>';
+                        for ( child of res.children ) {
+                            html += `
+                                <tr class="child">
+                                    <td><label class="checkbox"><input type="checkbox" class="id" id="${ child.user_id }" ${ child.goal ? checked='checked' : '' } /><span></span></label></td>
+                                    <td><label>${ child.first }</label></td>
+                                    <td style="padding-left: 20px;"><input type="text" size="5" class="goal" value="${ child.goal ? child.goal : cost }" style="width: auto !important;" /></td>
+                                </tr>
+                            `;
+                        }
+                        html += `
+                            </table>
+                            <div class="field">
+                                <p>
+                                    <label class="checkbox"><input type="checkbox" id="rohr" ${ rohr ? checked="checked" : '' } /><span></span></label>
+                                    Apply $100 Rohr Grant to each child
+                                </p>
+                            </div>
+                            <div class="field">
+                                <p>
+                                    <label class="checkbox"><input type="checkbox" id="agree" checked="checked" /><span></span></label>
+                                    I acknowledge that my page will be accessible to the public
+                                </p>
+                            </div>
+                            <div class="field">
+                                <p>
+                                    <label class="checkbox"><input type="checkbox" id="pic" ${ pic ? '' : checked="checked" } /><span></span></label>
+                                    I would like my children's picture NOT TO SHOW UP on the the Chidon Drive Family Page
+                                </p>
+                            </div>
+                        `;
+                        $("#children").append( html );
+                    } else {
+                        alert( res.error );
+                    }
+                });
+            });
+		</script>
+
+<script>
+$(function() {
+			var header = $("header");
+			$(window).scroll(function() {    
+					var scroll = $(window).scrollTop();
+			
+					if (scroll >= 100) {
+							header.addClass("header-alt");
+				console.log ('called');
+					} else {
+							header.removeClass('header-alt');
+					}
+			});
+	});
+</script>
+
+	</body>
+</html>
