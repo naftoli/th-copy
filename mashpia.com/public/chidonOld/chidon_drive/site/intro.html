@@ -179,11 +179,13 @@
                         });
 					} else {
 						alert( res.error );
-						location.href = '/mobile';
+						if ( location.href.includes('chidondrive.com') ) location.href = "https://mashpia.com/mobile";
+						else location.href = '/mobile';
 					}
 				});
 			} else {
-				location.href = '/mobile';
+				if ( location.href.includes('chidondrive.com') ) location.href = "https://mashpia.com/mobile";
+				else location.href = '/mobile';
 			}
 		});
 	</script>
