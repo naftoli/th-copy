@@ -505,8 +505,8 @@
                 //});
 
                 $(document).on('click', '.chidondrive', function() {
-                    // location.href="chidondrive.html";
-                    location.href = "/chidonOld/chidon_drive/site/intro.html?id=" + admin;
+                    if ( location.href.includes('mashpia.com') ) location.href="https://chidondrive.com/site/intro.html?id=" + admin;
+                    else location.href = "/chidonOld/chidon_drive/site/intro.html?id=" + admin;
                 });
                 
                 $(document).on('click', '.noSchoolShabbaton', function() {
