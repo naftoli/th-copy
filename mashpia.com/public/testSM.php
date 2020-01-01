@@ -1,4 +1,5 @@
 <?php
 require 'db.php';
-$sm = calculateSM( 5779 );
+require 'class.globalSettings.php';
+$sm = calculateSM( GlobalSettings::getCurrentYear() );
 echo "<pre>"; print_r($sm); echo "</pre>";
