@@ -10,14 +10,14 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 if ( $admin_id ) {
   $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        u.user_id, u.first, u.last, u.first_he, u.last_he, u.mobile_pic, u.user_photo_id, u.gender, tc.* 
+        u.user_id, u.first, tc.rohr_subsidy as rohr, tc.fundraising_goal as goal, tc.show_pic as pic   
     FROM
         users u
             JOIN
-        th_chidon tc USING (user_id) 
+        th_chidon tc using (user_id) 
     WHERE
-        tc.year = :year AND tc.parent_id = :admin
-            AND tc.can_enroll = 1 
+        tc.year = :year AND tc.parent_id = :admin 
+    ORDER BY u.first
   ");
   $res = $stmt->execute([
     ':year'   =>  $year, 
@@ -26,17 +26,10 @@ if ( $admin_id ) {
   //echo $stmt->debugDumpParams(); exit;
   if ( $res ) {
     $children = $stmt->fetchAll();
-    if ( $children ) {
-      echo json_encode([
-        'success'   =>  true,
-        'children'  =>  $children
-      ]);
-    } else {
-      echo json_encode([
-        'success'   =>  false,
-        'error'     =>  "Your child(ren)'s school needs to activate enrollment before you can enroll."
-      ]);
-    }
+    echo json_encode([
+    'success'   =>  true,
+    'children'  =>  $children
+    ]);    
   } else {
     echo json_encode([
       'success'   =>  false,

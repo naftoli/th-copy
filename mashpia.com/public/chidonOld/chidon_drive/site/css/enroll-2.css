@@ -14,7 +14,7 @@
  	text-align: center;
  }
  .main .wrapper {
- 	padding-top: 5rem;
+ 	/* padding-top: 5rem; */
  }
 
 .sub-title {
@@ -46,7 +46,7 @@
 .chidon-drive .blue-box {
 	width: 45.5%;
 	float: left;
-	min-height: 460px;
+	min-height: 410px;
 	margin: 0 20px 30px;
 	-webkit-border-radius: 10px;
 	-ms-border-radius: 10px;

@@ -69,7 +69,7 @@
 								<div class="bar-percent"><span class="bar-percent__number"></span></div>
 								<div class="bar-line">
 									<div class="bar-line__bar"><div class="bar-line__circle"></div>
-										<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number"></span> <span class="bar-line__other-number">$875,000</span></div>
+										<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number"></span> <span class="bar-line__other-number">$1,125,000</span></div>
 									</div>
 								</div>
 							</div>
@@ -77,10 +77,10 @@
 					</div>
 				</div>
 
-				<div class="event-wrapper">
+				<!-- <div class="event-wrapper">
 					<a href="https://chidon1.ticketspice.com/chidon" class="button">Purchase Tickets for Girls Chidon Event</a>
 					<a href="https://chidon1.ticketspice.com/chidon-boys-event" class="button">Purchase Tickets for Boys Chidon Event</a>
-				</div>
+				</div> -->
 
 				<div class="buttons-wrapper">
 					<!-- <a href="enroll.html" class="button">Shabbaton Enrollment <img src="img/arrow.png" /></a> -->
@@ -434,9 +434,10 @@
 						let res = JSON.parse( result );
 						if ( res.success ) {
 							let amount = res.total;
+							let budget = 1125000;
 							$('#section0 .leader').each(function(){
 								$(this).data('amount', Math.round(amount));
-								$(this).data('percent', Math.round((amount / 875000) * 100));
+								$(this).data('percent', Math.round((amount / budget) * 100));
 								var percent = $(this).data('percent');
 								$(this).find('.bar-line__bar').width(percent + '%');
 								$(this).find('.bar-line__marker-number').text('$' + formatNumber( Math.round(amount) ));

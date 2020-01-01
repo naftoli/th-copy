@@ -374,6 +374,11 @@
 									let childName = child.first + ' ' + child.last;
 									childrenNames.push( childName );
 									let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+									// if parent doesn't want to show pic, show avatar
+									if ( parseInt( child.show_pic ) == 0 ) {
+										if ( child.gender == 'M' ) childPic = "images/avatar_boy.jpg";
+                    					else if ( child.gender == 'F' ) childPic = "images/avatar_girl.png";
+									}
 
 									// create list of names
 									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {

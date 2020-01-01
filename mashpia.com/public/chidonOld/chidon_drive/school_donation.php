@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = ['school'];
 define( "MASHPIA_AUTH_REQUIRED", true );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -22,9 +23,11 @@ $stmt = $MASHPIA_DB->prepare("
       classes c ON u.class_id = c.class_id
           JOIN
       th_chidon tc USING (user_id)
+          JOIN
+      chidon_user_goals cug using (user_id) 
   WHERE
       tc.year = :year AND u.school_id IN ($school_ids)
-          AND tc.contestant = 1
+          AND cug.year = :year
   ORDER BY u.school_id, c.class_grade , c.class_sub , u.last , u.first
 ");
 $res = $stmt->execute([
@@ -39,7 +42,7 @@ if ( $res ) {
 }
 //echo "<pre>"; print_r( $users ); echo "</pre>";
 $skipAuth = 0;
-if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
+if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5780 ) {
   $skipAuth = 1;
 }
 ?>
@@ -122,6 +125,7 @@ if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
       $("form").submit( function( evt ) {
         evt.preventDefault();
 
+        let cost = 375;
         let donation = parseInt( $("#donation_amount").val() );
         if ( isNaN( donation ) ) {
           alert("Donation must be a whole number.");
@@ -132,8 +136,8 @@ if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
         let user_donation_amounts = [];
         for ( d in user_donations ) {
           let amount = parseInt( user_donations[d].value );
-          if ( amount > 350 ) {
-            alert("Maximum subsidy allowed per child is $350.");
+          if ( amount > cost ) {
+            alert("Maximum subsidy allowed per child is $" + cost = ".");
             $(user_donations[d]).focus();
             return false;
           }

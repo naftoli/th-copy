@@ -252,15 +252,6 @@ if ( !empty( $users ) ) {
 				$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
 			}
 		}
-
-		// get goals set for chidondrive
-		$children[$row['user_id']]['chidonDriveGoal'] = 0;
-		$sqlDrive = "select * from chidon_user_goals where user_id = " . $row['user_id'] . " and year = " . $chidon_year;
-		$resDrive = mysql_query( $sqlDrive );
-		if ( mysql_num_rows( $resDrive ) > 0 ) {
-			$rowDrive = mysql_fetch_assoc( $resDrive );
-			$children[$row['user_id']]['chidonDriveGoal'] = $rowDrive['goal'];
-		}
 		
 		//if ($row['user_id'] == 26598) {
 		//	$children[$row['user_id']]['chidonShow'] = 1;

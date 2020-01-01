@@ -49,10 +49,10 @@
 						<h4>$200 subsidy for 3,000 children = $600,000</h4>
 						<br />
 						<div class="percetage-image">
-							<img src="img/abc.png" alt="Percetage">
+							<img src="img/PercetageBar5780.png" alt="Percetage" style="max-width: 100%; margin-top: 10px;">
 						</div>
 						<div class="growth-image">
-							<img src="img/growth.png" alt="Growth">
+							<img src="img/growth5780.png" alt="Growth" style="max-width: 100%; margin-top: -10px; margin-bottom: -10px;">
 						</div>
 					</div>
 					<div class="enroll-wrap">
@@ -163,10 +163,20 @@
 				$.post('../ajax/checkForSetup.php', { admin : admin }, function( result ) {
 					const res = JSON.parse( result );
 					if ( res.success ) {
-						if ( res.setup ) {
-							$(".setup").empty().append("Modify the Setup of your Family Page");
-							$(".family").show();
-						}
+						const admin_info = res.info;
+                        // console.log( admin_info );
+                        if ( parseInt( admin_info.setup ) > 0 ) {
+                            $(".setup").empty().append("Modify the Setup of your Family Page");
+                            $(".family").show();
+                            $(".family").click( function( e ) {
+                                e.preventDefault();
+                                location.href = 'family-single.html?id=' + admin_info.admin_id;
+                            });
+                        } 
+                        $(".setup").click( function( e ) {
+                            e.preventDefault();
+                            location.href = 'setup.html';
+                        });
 					} else {
 						alert( res.error );
 						location.href = '/mobile';
