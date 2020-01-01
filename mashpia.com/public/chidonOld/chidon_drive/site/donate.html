@@ -315,13 +315,14 @@
 						let res = JSON.parse( result );
 						if ( res.success ) {
 							let cost = 375;
-							let totalGoal = 2500 * cost;
+							let totalChildren = 3000;
+							let totalGoal = totalChildren * cost;
 							let totalAmount = Math.round(res.total);
 							let percent = Math.round((totalAmount / totalGoal) * 100);
 							let numChildrenSponsored = Math.round(totalAmount / cost);
 							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
 							// console.log( info );
-							$("#numChildren").html( numChildrenSponsored + "/2500<br><span>children covered</span>" );
+							$("#numChildren").html( numChildrenSponsored + " / " + totalChildren + "<br><span>children covered</span>" );
 							$("#circle-chart").data('percent', percent);
 
 							var circlePercent = $('#circle-chart').data('percent');
