@@ -35,9 +35,10 @@ $qry = "
       users u USING (user_id) 
   WHERE
       tc.parent_id = :admin AND tc.year = :year 
-          AND tc.fundraising_goal > 0
+          AND tc.fundraising_goal > 0 
 ";
 if ( $notYetPaid ) $qry .= " AND tc.date_paid is null ";
+$qry .= "ORDER BY u.first";
 
 $stmt = $MASHPIA_DB->prepare( $qry );
 $res = $stmt->execute([
