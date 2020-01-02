@@ -1,13 +1,13 @@
 <?php
-ini_set('display_errors',1);
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+//ini_set('display_errors',1);
+require __DIR__ . '/../../../api/header/db.php';
+require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $admin = mysql_real_escape_string( $_POST['admin_id'] );
 $info = json_decode( $_POST['info'] );
 
-require $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
+require __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
 $stmt = $MASHPIA_DB->prepare("
