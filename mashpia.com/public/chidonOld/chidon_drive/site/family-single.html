@@ -390,7 +390,7 @@
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
 
 									// figure out amounts
-									let cost = 375;
+									let cost = child.goal;
 									let regPaid = child.paid > 0 ? Math.round(child.paid) : 0;
 									let regPercent = regPaid ? Math.round((regPaid / cost) * 100) : 0;
 									if ( regPercent > 100 ) regPercent = 100;
