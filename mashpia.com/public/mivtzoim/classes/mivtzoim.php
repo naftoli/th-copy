@@ -143,7 +143,8 @@ class Mivtzoim {
                         AND dtm.start_date >= :start
                         AND dtm.end_date <= :end
                         AND dtm.subject_id = :subject
-                        AND dtm.lang_id = :lang
+                        AND dtm.lang_id = :lang 
+                        AND dtm.school_type_id NOT IN (14,15)
                 ORDER BY start_date           
             ");
             $sth->execute([
@@ -405,7 +406,7 @@ class MivtzoimSetup {
                     AND dtm.lang_id = :lang
                     AND dtm.start_date >= :start
                     AND dtm.end_date <= :end
-                    AND dtm.personal = 0
+                    AND dtm.personal = 0 
             GROUP BY short_name 
             ORDER BY short_name
         ");
@@ -445,7 +446,8 @@ class MivtzoimSetup {
                     AND dtm.lang_id = :lang
                     AND dtm.start_date >= :start
                     AND dtm.end_date <= :end
-                    AND dtm.personal = 0
+                    AND dtm.personal = 0 
+                    AND dtm.school_type_id NOT IN (14,15)
             GROUP BY name
             ORDER BY short_name
         ");
