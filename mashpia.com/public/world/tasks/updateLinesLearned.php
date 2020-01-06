@@ -36,4 +36,5 @@ foreach ( $marks as $mark ) {
     }
 }
 
-foreach ( $qrys as $qry ) echo $qry . "<br />"; 
+foreach ( $qrys as $qry ) mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry . "<br />" );
+echo "done";
