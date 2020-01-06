@@ -2,7 +2,7 @@
 require '../../db.php';
 
 $marks = [];
-$sql = "select user_id, MAX(done_qty) as learned from date_tasks_marks dtm 
+$sql = "select user_id, MAX(done_qty) as learned, school_id, class_id from date_tasks_marks dtm 
         join date_tasks dt using (date_task_id) 
         join date_tasks_missions dtmm using (date_tasks_mission_id) 
         join users u using (user_id) 
