@@ -1,4 +1,5 @@
 <?php
+// ini_set('display_errors',1);
 $admin_auth = array('school');
 require_once 'header.php';
 
@@ -32,17 +33,25 @@ if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) {
 
 	/****************** CLASSES ******************/
 	$classes = [];	$classNames = [];
-	foreach ( $schoolIDs as $id ) {
-		if ( $id == $school ) {
-			if ( $grade == 0 ) {
-				$class_query = mysql_query(
-					"SELECT * FROM classes WHERE school_id = " . $id . " AND class_era = 0 ORDER BY class_grade, class_sub"
-				);
-			} else {
-				$class_query = mysql_query(
-					"SELECT * FROM classes WHERE school_id = " . $id . " AND class_id = " . $grade . " ORDER BY class_grade, class_sub"
-				);
-			}
+	if ( $school ) {
+		if ( $grade ) {
+			$class_query = mysql_query(
+				"SELECT * FROM classes WHERE school_id = " . $school . " AND class_id = " . $grade . " ORDER BY class_grade, class_sub"
+			);
+		} else {
+			$class_query = mysql_query(
+				"SELECT * FROM classes WHERE school_id = " . $school . " AND class_era = 0 ORDER BY class_grade, class_sub"
+			);
+		}
+		while ( $row = mysql_fetch_assoc( $class_query ) ) {
+			$classes[$school][] = $row['class_id'];
+			$classNames[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+		}
+	} else {
+		foreach ( $schoolIDs as $id ) {
+			$class_query = mysql_query(
+				"SELECT * FROM classes WHERE school_id = " . $id . " AND class_era = 0 ORDER BY class_grade, class_sub"
+			);
 			while ( $row = mysql_fetch_assoc( $class_query ) ) {
 				$classes[$id][] = $row['class_id'];
 				$classNames[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
@@ -55,7 +64,7 @@ if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) {
 	foreach ( $classes as $school => $grades ) {
 		foreach ( $grades as $grade ) {
 			$users_query = mysql_query(
-				"SELECT * FROM users WHERE school_id = " . $id . " and class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
+				"SELECT * FROM users WHERE school_id = " . $school . " and class_id = " . $grade . " AND (user_registered > 0 OR yan = 1) ORDER BY last, first"
 			);
 			if (mysql_num_rows($users_query) > 0) {
 				while ($row = mysql_fetch_assoc($users_query))	{
@@ -307,7 +316,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	</script>
 
 	<? else : ?>
-		<form action='editSoldierLines2.php<?=$debug ? "?debug=true" : ""?>' method="post">				
+		<form action='editSoldierLines2.php<?=isset( $debug ) ? "?debug=true" : ""?>' method="post">				
 				<select name="school" id="school">
 						<?php
 						if (count($schools) > 1) {
