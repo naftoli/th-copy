@@ -690,10 +690,16 @@ function add_mark($parameters, $update = true)
 
 			$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
 			if (mysql_num_rows($exists_query) > 0) {
-				$update_sql = "UPDATE lines_learned"
-						." SET mission_sheet_amount = " . $user_mark
-						." WHERE campaign_id = " . $campaign
-						." AND user_id = " . $user_id;
+				if ( $user_mark > 0 ) {
+					$update_sql = "UPDATE lines_learned"
+								." SET mission_sheet_amount = " . $user_mark
+								." WHERE campaign_id = " . $campaign
+								." AND user_id = " . $user_id;
+				} else {
+					$update_sql = "DELETE FROM lines_learned"
+								." WHERE campaign_id = " . $campaign
+								." AND user_id = " . $user_id;
+				}
 				mysql_query($update_sql);
 			} else {
 				$user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
