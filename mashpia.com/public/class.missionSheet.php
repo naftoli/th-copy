@@ -32,11 +32,9 @@ class MissionSheet {
 		if ( $today >= $end || ( $today < $end && $today >= $start ) ) {        
 			
 			 // check if there is any marks during the week period
-			$sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
-				."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
+			$sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from date_tasks_missions dtm "
 				."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
-				."where dtmarks.user_id = ".$user." and ut.user_id = ".$user." "
-				."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
+				."where dtmarks.user_id = ".$user." and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
 				."group by dtmarks.date_task_id";
 				
 			//if($this->user_id == 50628) echo $sql."<br/><br/>";
