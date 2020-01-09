@@ -2,6 +2,7 @@
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+if ( isset( $_POST['year'] ) ) $year = intval( $_POST['year'] );
 $totals = []; 
 
 $stmt = $MASHPIA_DB->prepare("
@@ -63,6 +64,18 @@ if ( $res ) {
     </style>
   </head>
   <body>
+    <form method="post">
+      <p>
+        <select name="year">
+          <?php
+          for ( $i = 5779; $i <= $year; $i++ ) {
+            echo "<option value=" . $i . ">" . $i . "</option>";
+          }
+          ?>
+        </select><br /><br />
+        <input type="submit" name="change" />
+      </p>
+    </form>
     Totals:
     <table>
       <tr>
