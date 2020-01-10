@@ -11,8 +11,8 @@ $today = date("Y-m-d H:i:s"); // date internal is 4 or 5 hrs ahead
     
  ***************************************************/
 $date1 = "2019-12-09 05:00:00";
-$date2 = "2020-01-26 05:00:00";
-$date3 = "2020-03-26 05:00:00";
+$date2 = "2020-01-10 05:00:00";
+$date3 = "2020-02-11 05:00:00";
 
 if ($today > $date1) {
     $shutdown1 = true;
@@ -25,8 +25,8 @@ if ($today > $date3) {
 }
 
 // close other marking until further notice
-$shutdown2 = true;
-$shutdown3 = true;
+// $shutdown2 = true;
+// $shutdown3 = true;
 
 /* 
 $exceptions = [];
