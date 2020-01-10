@@ -2,6 +2,7 @@
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+if ( isset( $_POST['year'] ) ) $year = intval( $_POST['year'] );
 $totals = []; 
 
 $stmt = $MASHPIA_DB->prepare("
@@ -52,7 +53,7 @@ if ( $res ) {
 <html>
   <head>
     <meta charset="utf8" />
-    <meta http-equiv="refresh" content="5"/>
+    <!-- <meta http-equiv="refresh" content="5"/> -->
     <title>Chidon Drive Reporting</title>
     <style>
       tr, th, td {
@@ -63,6 +64,20 @@ if ( $res ) {
     </style>
   </head>
   <body>
+    <form method="post">
+      <p>
+        <select name="year">
+          <?php
+          for ( $i = 5779; $i <= GlobalSettings::getChidonYear(); $i++ ) {
+            echo "<option value='" . $i . "'";
+            if ( $year == $i ) echo "selected='selected' ";
+            echo ">" . $i . "</option>";
+          }
+          ?>
+        </select>
+        <input type="submit" name="submit" value="Change" />
+      </p>
+    </form>
     Totals:
     <table>
       <tr>
@@ -88,5 +103,84 @@ if ( $res ) {
         </td>
         <td><?=$children?></td>
       </tr>
+    </table>
+    <br /><br />
+    Details:
+    <table>
+      <tr>
+        <th>Parent ID</th>
+        <th>Name</th>
+        <th>Total Raised</th>
+      </tr>
+      <?php
+      $stmt = $MASHPIA_DB->prepare("
+        SELECT 
+            for_family_id, SUM(donation_amount) as total, a.*
+        FROM
+            mashpiadb.chidon_donations d
+                LEFT JOIN
+            admins a ON a.admin_id = d.for_family_id
+        WHERE
+            chidon_year = :year
+        GROUP BY for_family_id;
+      ");
+      $res = $stmt->execute([ ':year' => $year ]);
+      if ( $res ) {
+        $families = $stmt->fetchAll();
+
+        $stmt = $MASHPIA_DB->prepare("
+          SELECT 
+              id
+          FROM
+              admin_auths
+          WHERE
+              admin_id = :id AND role_id = 1
+        ");
+
+        $stmt2 = $MASHPIA_DB->prepare("
+          SELECT 
+              u.first, IFNULL( SUM(subsidy_amount), 0 ) AS total, tc.rohr_subsidy, tc.paid 
+          FROM
+              chidon_user_subsidies 
+                JOIN 
+              users u using (user_id) 
+                JOIN
+              th_chidon tc using (user_id) 
+          WHERE
+              user_id = :id AND chidon_year = :year
+                AND tc.year = :year
+        ");        
+
+        foreach ( $families as $family ) {
+          echo "<tr><td>" . $family['admin_id'] . "</td><td>" . $family['first'] . ' ' . $family['last'] . "</td><th>" . $family['total'] . "</th></tr>";
+          if ( $family['for_family_id']  > 0 ) {
+            $res = $stmt->execute([ ':id' => $family['for_family_id'] ]);
+            if ( $res ) {
+              $children = $stmt->fetchAll();
+              if ( !empty( $children ) ) {
+                echo "<tr><td></td><td colspan='2'><table><tr><th>Child</th><th>Applied Subsidy</th><th>Rohr</th><th>Reg Paid</th></tr>";
+                $sum = 0;
+                foreach ( $children as $child ) {
+                  $res2 = $stmt2->execute([
+                    ':id'   =>  $child['id'], 
+                    ':year' =>  $year
+                  ]);
+                  if ( $res2 ) {
+                    $childInfo = $stmt2->fetch();
+                    if ( $childInfo['total'] > 0 ) {
+                      $sum += $childInfo['total'] + $childInfo['paid'] + ( $childInfo['rohr_subsidy'] ? 100 : 0 );
+                      echo "<tr><td>" . $childInfo['first'] . "</td><td>" . $childInfo['total'] . "</td><td>" . ( $childInfo['rohr_subsidy'] ? 100 : 0 ) . 
+                        "</td><td>" . $childInfo['paid'] . "</td></tr>";
+                    }
+                  }
+                }
+                echo "<tr><th align='right'>Grand Total:</th><th>" . $sum . "</th></tr></table></td></tr>";
+              }
+            } 
+          }
+        }
+      }
+      ?>
+    </table>
   </body>
 </html>
