@@ -430,10 +430,10 @@
 					$("#heFirst").val( child.first_he );
 					$("#heLast").val( child.last_he );
 
-					$("#grade").val( child.grade );
+					$("#grade").val( (parseInt( child.book ) + 3).toString() );
 					$("#grade").niceSelect('update');
 
-					$("#book").val( (parseInt( child.grade ) - 3).toString() );
+					$("#book").val( child.book );
 					$("#book").niceSelect('update');
 
 					$("#sweater").val( child.size );
@@ -745,7 +745,7 @@
 										alert('Showing form for next child.');
 										nextChild();
 									} else if ( pay ) {
-										location.href = "enroll-2.html";
+										location.href = "payment-information.html";
 										// if ( checkForms() )	location.href = "enroll-2.html";
 										// else alert("You cannot go to payment until you have completed the form for all of your children.");
 									}
