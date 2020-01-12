@@ -11,16 +11,18 @@ $today = date("Y-m-d H:i:s"); // date internal is 4 or 5 hrs ahead
     
  ***************************************************/
 $date1 = "2019-12-09 05:00:00";
-$date2 = "2020-01-10 05:00:00";
-$date3 = "2020-02-11 05:00:00";
+$date2a = "2020-01-10 05:00:00";
+$date2b = "2020-01-15 05:00:00";
+$date3a = "2020-02-11 05:00:00";
+$date3b = "2020-02-12 05:00:00";
 
 if ($today > $date1) {
     $shutdown1 = true;
 }
-if ($today > $date2) {
+if ($today < $date2a || $today > $date2b) {
     $shutdown2 = true;
 }
-if ($today > $date3) {
+if ($today < $date3a || $today > $date3b) {
     $shutdown3 = true;
 }
 
