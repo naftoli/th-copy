@@ -135,7 +135,7 @@ class ChidonDriveFamily extends ChidonDrive {
       WHERE
           aa.admin_id = :admin_id AND aa.role_id = 1
               AND tc.year = :year
-              AND tc.contestant = 1
+              AND tc.fundraising_goal > 0
     ");
     $res = $stmt->execute([
       ':admin_id' =>  $this->parent_id, 
@@ -191,7 +191,7 @@ class ChidonDriveSchool extends ChidonDrive {
       FROM
           th_chidon 
       WHERE
-          year = :year AND contestant = 1
+          year = :year AND fundraising_goal > 0
               AND school_id = :school
     ");
     $res = $stmt->execute([
@@ -233,7 +233,7 @@ class ChidonDriveCommunity extends ChidonDrive {
       FROM
           th_chidon 
       WHERE
-          year = :year AND contestant = 1
+          year = :year AND fundraising_goal > 0 
               AND school_id IN ($school_ids)
     ");
     $res = $stmt->execute([
