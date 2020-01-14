@@ -91,7 +91,6 @@ $stmt = $MASHPIA_DB->prepare("
         for_family_id = :admin
         AND chidon_year = :year
     ORDER BY donation_date DESC
-    LIMIT 5
 ");
 $res = $stmt->execute([
   ':admin'  =>  $admin_id, 
