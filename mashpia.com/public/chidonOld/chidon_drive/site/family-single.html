@@ -178,6 +178,7 @@
 								<label>Message or Dedication <span>(75 characters maximum)</span>:</label>
 								<input type="text" id="dedication" placeholder="Full Name" />
 							</div>
+							<div id="paypal-button-container"></div>
 							<h5>Payment Information</h5>
 							<div class="field">
 								<label>Card Number:</label>
@@ -239,7 +240,6 @@
 								<input type="text" id="phone" placeholder="Phone (optional)" />
 							</div>
 							<input type="submit" class="button donate" value="Donate" /><br />
-							<div id="paypal-button-container"></div>
 						</form>
 					</div>
 					<div class="activity">
@@ -316,32 +316,6 @@
 		</footer>
 
 		<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
-		<script>
-			paypal.Buttons({
-				style: {
-					shape: 'rect',
-					color: 'gold',
-					layout: 'vertical',
-					label: 'paypal',
-					
-				},
-				createOrder: function(data, actions) {
-					return actions.order.create({
-						purchase_units: [{
-							amount: {
-								value: $("#donationAmount").val()
-							}
-						}]
-					});
-				},
-				onApprove: function(data, actions) {
-					return actions.order.capture().then(function(details) {
-						alert('Transaction completed by ' + details.payer.name.given_name + '!');
-					});
-				}
-			}).render('#paypal-button-container');
-		</script>
-
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/circletype.min.js"></script>
 		<script src="js/jquery.nice-select.min.js"></script>
@@ -384,8 +358,6 @@
 					  styleWrapper:        true,
 					  styleText:           true
 					});
-					
-
 
 					// get children info 
 					let url = window.location.href;
@@ -396,6 +368,66 @@
 
 					if ( admin_id ) 
 					{
+						paypal.Buttons({
+							style: {
+								shape: 'rect',
+								color: 'gold',
+								layout: 'vertical',
+								label: 'paypal',
+								
+							},
+							createOrder: function(data, actions) {
+								const amount = $("#donationAmount").val();
+								if ( !amount ) {
+									alert("You have not entered any amount!");
+									return false;
+								}
+
+								const name = $("#name").val().trim();
+								const display_name = $("#display_name").val().trim();
+								const email = $("#email").val().trim();
+								if ( !name || !display_name || !email ) {
+									alert("Name, Display Name, and Email are mandatory fields!");
+									return false;
+								}
+
+								return actions.order.create({
+									purchase_units: [{
+										amount: {
+											value: amount
+										}
+									}]
+								});
+							},
+							onApprove: function(data, actions) {
+								// get all info together
+								let donation = {};
+								donation.family = admin_id;
+								donation.amount = $("#donationAmount").val();
+								donation.forChild = $("#childrenSelection").val();
+								donation.children = children;
+								donation.name = $("#name").val();
+								donation.display_name = $("#display_name").val();
+								donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
+								donation.email = $("#email").val();
+								donation.phone = $("#phone").val();
+								donation.dedication = $("#dedication").val();
+
+								return actions.order.capture().then(function(details) {
+									console.log( details );
+									$.post('../ajax/paypalPayment.php', { paypalInfo : JSON.stringify( details ), info : donation, type : 'family' }, function( result ) {
+										const res = JSON.parse( result );
+										if ( res.success ) {
+											alert('Transaction successfully completed!');
+											// location.href = "thank-you.html";
+										} else {
+											alert('Paypal Transaction successfully completed, however ' + res.error);
+										}
+									});
+								});
+							}
+						}).render('#paypal-button-container');
+
 						$.post('../ajax/getFamilyInfo.php', { admin: admin_id }, function( result ) {
 							let info = JSON.parse( result );
 							console.log( info );
