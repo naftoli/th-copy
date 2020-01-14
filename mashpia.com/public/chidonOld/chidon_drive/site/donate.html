@@ -46,7 +46,7 @@
 							<p id="simple-arc">Shabbaton Cost</p>
 							<div class="bar-circle__inner">
 								<img src="img/donate/person.jpg" />
-								<span>$375</span>
+								<span>$350</span>
 							</div>
 						</div>
 						<div class="bar-bar">
@@ -319,7 +319,7 @@
 					$.post('../ajax/getTotalDonation.php', function( result ) {
 						let res = JSON.parse( result );
 						if ( res.success ) {
-							let cost = 375;
+							let cost = 350;
 							let totalChildren = 3000;
 							let totalGoal = totalChildren * cost;
 							let totalAmount = Math.round(res.total);
@@ -355,7 +355,7 @@
 						let result = JSON.parse( info );
 						console.log( result );
 						if ( result.success ) {
-							let sponsorList = '';
+							let sponsorList = '<marquee behavior="scroll" direction="up" style="height:560px;">';;
 							for ( i in result.info.sponsors ) {
 								let sponsor = result.info.sponsors[i];
 								let dedication = sponsor.notes ? sponsor.notes : '';
@@ -373,6 +373,7 @@
 									</div>
 								`;
 							}
+							sponsorList += '</marquee>';
 							$(".sponsor-list").append( sponsorList );
 						} else {
 							alert( result.message );

@@ -609,7 +609,7 @@
 								});
 
 								// list of sponsors
-								let sponsorList = '';
+								let sponsorList = '<marquee behavior="scroll" direction="up" style="height:280px;">';
 								console.log( info.data.sponsors );
 								console.log(info);
 								for ( i in info.data.sponsors ) {
@@ -629,6 +629,7 @@
 										</div>
 									`;
 								}
+								sponsorList += '</marquee>';
 								$(".sponsor-list").append( sponsorList );
 
 								/* Scroll list */
