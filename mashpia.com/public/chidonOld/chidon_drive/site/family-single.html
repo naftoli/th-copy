@@ -5,8 +5,9 @@
 		<meta name="viewport" content="width=device-width">
 	  <meta charset="UTF-8">
 		<meta name="google" content="notranslate">
-		<title>Donate | Chidon</title>
-		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<title>Donate | Chidon Drive</title>
+	    <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
+		<link rel="icon" type="image/png" href="img/favicon.png" />
 		<link rel="stylesheet" href="css/font.css" type="text/css" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
@@ -43,9 +44,7 @@
 						<p><span id="childrenNames"></span> worked for months to master the 613 mitzvos. Why? So they can join an extraordinary four-day Chidon Shabbaton of fun, friendship and inspiration.</p>
 						<p>Please donate today to make their dream come true.</p>
 					</div>
-				</div>
 
-				<div class="right">
 					<!-- Progress Bar -->
 					<div class="bar-row">
 						<div class="bar">
@@ -100,6 +99,62 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- <div class="right"> -->
+					<!-- Progress Bar -->
+					<!-- <div class="bar-row">
+						<div class="bar">
+							<div class="bar-circle">
+								<p id="simple-arc">Family Goal</p>
+								<div class="bar-circle__inner">
+										$<span id="familyGoal"></span>
+								</div>
+							</div>
+							<div class="bar-bar">
+								<div class="bar-bar__wrapper"> -->
+									<!-- <div class="bar-bar__line registration" data-percent="">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker-blue.png" />
+											<p>$<span id="totalRegFee"></span><br>Registration Fee</p>
+										</div>
+									</div> -->
+<!-- 									<div class="bar-bar__line subsidy" data-percent="">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker.png" />
+											<p>$<span id="totalRohrSubsidy"></span><br>Rohr Subsidy</p>
+										</div>
+									</div>
+									<div class="bar-bar__line donation" data-percent="">
+											<div class="bar-bar__circle"></div>
+											<div class="bar-bar__marker">
+												<img src="img/marker-blue.png" />
+												<p>$<span id="totalDonation"></span><br>Donation</p>
+											</div>
+										</div>
+
+									<div class="remaining">
+										<div class="bar-bar__marker">
+											<p>$<span id="remainingFee"></span><br>Remaining</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+
+					<!-- Options -->
+<!-- 					<div class="options-wrapper">
+						<div class="option">
+							<p>I would like to donate <input type="text" id="donationAmount" size="8" /> towards the Chidon experience for</p>
+
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToAll" /><span></span></label> all children in the <span class="familyName"></span> Family</p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToOne" /><span></span></label> child 
+								<select id="childrenSelection" class="childselection"><option value="0">Select</option></select></p>
+						</div>
+					</div> -->
+				<!-- </div> -->
 
 				<div class="main-wrapper">
 					<div class="form">
@@ -216,6 +271,11 @@
 
 				<div class="footer-main">
 					<div class="footer-about">
+						<div class="icon-wrapper">
+							<a href="https://thechidon.com" target="blank">
+								<img src="img/chidon-logo.png" alt="Chidon" />
+							</a>
+						</div>
 						<div class="icon-wrapper">
 							<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
 						</div>
@@ -518,6 +578,7 @@
 								// list of sponsors
 								let sponsorList = '';
 								console.log( info.data.sponsors );
+								console.log(info);
 								for ( i in info.data.sponsors ) {
 									let sponsor = info.data.sponsors[i];
 									let dedication = sponsor.notes ? sponsor.notes : '';

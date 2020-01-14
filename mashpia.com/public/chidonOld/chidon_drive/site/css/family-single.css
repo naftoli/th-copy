@@ -17,10 +17,11 @@
  	display: flex;
  	flex-wrap: wrap;
  	padding-top: 5rem;
+    justify-content: space-between;
  }
 
  .family-info {
- 	width: 50%;
+ 	width: calc(50% - 1rem);
  }
  .family-info h3 {
  	font-size: 2rem;
@@ -38,7 +39,7 @@
  	margin-top: 5rem;
  }
  .family-info .bio-wrapper p, .family-info .bio-wrapper p strong {
- 	font-size: 1.2rem;
+ 	font-size: 1.4rem;
  	line-height: 1.4em;
  	margin-bottom: 1rem;
  }
@@ -49,7 +50,7 @@
  }
 .bar-row {
 	max-width: 900px;
-	margin: auto;
+    margin: 5rem auto;
 	display: flex;
 	position: relative;
 	justify-content: center;
@@ -292,7 +293,7 @@ input {
 	background: rgba(6, 9, 47, .8);
 	border-radius: .5rem;
 	margin-top: 4rem;
-	width: 50%;
+	width: 100%;
 	max-width: 500px;
 	padding: 2rem;
 }
@@ -304,7 +305,7 @@ input {
 	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	margin-top: 1rem;
 }
 .form label span {
@@ -316,7 +317,7 @@ input {
 }
 .form h5 {
 	color: #85abda;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	text-transform: uppercase;
 	margin-top: 3rem;
 }
@@ -352,9 +353,11 @@ input {
 }
 
 .main-wrapper {
-	width: 100%;
+	width: calc(50% - 2rem);
 	display: flex;
 	justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
 }
 .form .donate {
 	width: 10rem;
@@ -407,7 +410,7 @@ input {
 }
 
 .activity {
-	width: 50%;
+	width: 100%;
 	margin: 4rem 2rem;
 	max-width: 550px;
 }
@@ -468,7 +471,7 @@ input {
 }
 .activity .recent-chart .recent-sponsor p.sponsor-name {
 	font-weight: 600;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 }
 .activity .recent-chart .recent-sponsor .sponsor-credit {
 	font-size: .7rem;
@@ -529,7 +532,7 @@ input {
 	height: 48px;
 }
 .family-charts .bar-circle__inner span {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 .family-charts .bar-bar__wrapper {
   width: calc(100% - 60px);
@@ -574,6 +577,8 @@ input {
     margin: auto;
 	}
 	.main-wrapper {
+        width: 80%;
+        margin: auto;
 		justify-content: center;
 		flex-direction: column;
 		align-items: center;
@@ -588,4 +593,7 @@ input {
 	.activity {
 		width: 100%;
 	}
+    .main-wrapper {
+        width: 100%;
+    }
 }
