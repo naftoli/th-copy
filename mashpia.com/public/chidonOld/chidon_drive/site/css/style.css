@@ -9,7 +9,7 @@
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
-	font-family: 'Gotham Narrow', sans-serif;
+	font-family: 'bould', sans-serif;
 	box-sizing: border-box;
 }
 .wrapper {
@@ -234,7 +234,7 @@ input, textarea {
 	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	margin-top: 1rem;
 }
 .form label span {
@@ -246,7 +246,7 @@ input, textarea {
 }
 .form h5 {
 	color: #85abda;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	text-transform: uppercase;
 	margin-top: 3rem;
 }
@@ -372,7 +372,7 @@ footer {
 }
 footer p, footer a, footer h5 {
 	color: #4f78bb;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 }
 
 footer #top::after {

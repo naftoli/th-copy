@@ -15,6 +15,16 @@
  	text-align: center;
  }
 
+.checkbox {
+    width: 1.4rem;
+    height: 1.5rem;
+    background: #181c68;
+    margin: .5rem .5rem 0 1rem;
+    display: inline-block;
+    position: relative;
+    top: .2rem;
+}
+
 .bar-row {
 	margin: auto;
 	display: flex;
@@ -194,8 +204,15 @@
 	height: 2rem;
 	line-height: 1em;
 }
+.nice-select.children {
+    width: 100%;
+    margin: 1rem auto;
+}
 .nice-select .list {
   background-color: #181c68;
+}
+.nice-select.children .list {
+    width: 100%;
 }
 .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
   background-color: transparent;
@@ -210,6 +227,10 @@
   padding: 0 2rem;
   border-top: 1px solid #85abda;
   width: 100%;
+}
+
+#donation_amount {
+    margin-top: 1rem;
 }
 
 .option .button {
@@ -252,7 +273,7 @@ input {
 	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	margin-top: 1rem;
 }
 .form label span {
@@ -264,7 +285,7 @@ input {
 }
 .form h5 {
 	color: #85abda;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	text-transform: uppercase;
 	margin-top: 3rem;
 }
@@ -409,7 +430,7 @@ input {
 }
 .activity .recent-chart .recent-sponsor p.sponsor-name {
 	font-weight: 600;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 }
 .activity .recent-chart .recent-sponsor .sponsor-credit {
 	font-size: .7rem;

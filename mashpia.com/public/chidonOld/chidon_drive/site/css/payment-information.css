@@ -53,7 +53,7 @@ input {
 	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	margin-top: 1rem;
 }
 .form label span {
@@ -65,7 +65,7 @@ input {
 }
 .form h5 {
 	color: #85abda;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	text-transform: uppercase;
 	margin-top: 1rem;
 }
