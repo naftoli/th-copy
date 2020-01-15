@@ -68,9 +68,10 @@ input {
 	margin-bottom: .5rem;
 	font-size: 1.4rem;
 	margin-top: 1rem;
+	line-height: 1.4;
 }
 .form p {
-	font-weight: normal;
+	font-weight: 600;
 }
 .form label span {
 	font-weight: 200;
@@ -268,4 +269,179 @@ input {
 .group.save-detail .button {
 	width: 200px;
 	margin: 25px auto 0;
+}
+
+/* Setup */
+form#personalInfo {
+    text-align: center;
+}
+#children table {
+    margin: 5rem auto;
+}
+#children .child td:nth-child(2) label {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+#children .child .checkbox {
+	margin-top: 1.2rem;
+}
+#children form input {
+    font-size: 1.2rem;
+    position: relative;
+    top: .2rem;
+}
+div#children .field {
+    text-align: left;
+    max-width: 40rem;
+    margin: 2rem auto;
+}
+
+
+.bar-row {
+	margin: auto;
+	display: flex;
+	position: relative;
+	justify-content: space-between;
+	margin-bottom: 4rem;
+}
+.bar-row .description {
+  margin-top: 4rem;
+}
+.bar-row p {
+	color: #85abda;
+	font-size: 1.5rem;
+	line-height: 1.2em;
+	max-width: 25rem;
+}
+.bar {
+	position: relative;
+	padding-top: 2rem;
+	width: 100%;
+	max-width: 600px;
+	margin: 6rem 0;
+}
+.bar-circle {
+	position: absolute;
+	background: #afbdc4;
+	border-radius: 100%;
+	width: 84px;
+	height: 84px;
+	padding: 6px;
+	top: 0;
+	z-index: 5;
+}
+.bar-circle__inner {
+ 	background: #8fa3ad;
+ 	width: 72px;
+ 	height: 72px;
+ 	border-radius: 100%;
+ 	border: 1px solid #ffffff; 
+ 	padding: 3px;
+}
+.bar-circle__inner span {
+ 	font-weight: bold;
+ 	font-size: 2rem;
+ 	margin-left: .5rem;
+}
+.bar-circle__inner img {
+ 	display: inline-block;
+  margin-left: 1.7rem;
+  margin-top: .2rem;
+  margin-bottom: -.3rem;
+}
+#simple-arc {
+ 	color: #8fa3ad;
+ 	font-size: 1rem;
+ 	font-weight: bold;
+ 	position: absolute;
+ 	top: -20px;
+ 	left: 42px;
+}
+
+.bar-bar {
+	position: relative;
+	top: 0;
+	z-index: 1;
+}
+.bar-bar__wrapper {
+	width: 100%;
+	margin-left: 72;
+	background: #8fa3ad;
+	border: 2px solid #afbdc4;
+	border-radius: 2rem;
+	position: relative;
+	margin-top: 1rem;
+}
+.bar-bar__wrapper .bar-bar__line {
+	background: #e3b848;
+	border-radius: 2rem;
+	height: 1.5rem;
+	width: 0%;
+	position: relative;
+	transition: .5s;
+}
+.bar-bar__wrapper .bar-bar__line.registration {
+	background: #4f78bb;
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	left: 0;
+}
+.bar-bar__wrapper .bar-bar__line .bar-bar__circle {
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 100%;
+	background: #c4922c;
+	position: absolute;
+	right: 0;
+}
+.bar-bar__wrapper .bar-bar__line.registration .bar-bar__circle {
+	background: #3c65b0;
+}
+.bar-bar__wrapper .bar-bar__marker {
+	position: absolute;
+  left: calc(100% - 2.5rem);
+  top: -3rem;
+}
+.bar-bar__wrapper .bar-bar__marker p {    
+	position: absolute;
+  right: 2rem;
+  top: -1rem;
+  width: 100px;
+  font-weight: 800;
+  font-size: 90%;
+  color: #c4922c;
+  text-align: center;
+}
+.bar-bar__wrapper .registration .bar-bar__marker p {
+	color: #3c65b0;
+}
+.bar-bar__wrapper .remaining p {
+	color: #85abda;
+	right: 0;
+}
+
+.bar-row .badge {
+  width: 180px;
+  height: 180px;
+  background: url(../img/donate/badge.png) no-repeat;
+  background-size: contain;
+  padding: 13rem;
+  margin-left: -15rem;
+  margin-top: -2rem;
+  position: relative;
+}
+.bar-row .badge h6 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 2rem;
+	color: #4f78bb;
+	line-height: 1.7em;
+  margin-top: -10rem;
+  margin-left: -1rem;
+}
+.bar-row .badge h6 span {
+	font-family: 'Russo One', sans-serif;
+	display: block;
+	font-size: 5rem;
+	text-align: center;
 }
