@@ -41,11 +41,11 @@
 				<div class="family-info">
 					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
 					<div class="bio-wrapper">
-						<p>Over the past few months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. Along with thousands of other children around the world, he/she/they chose to dedicate his spare time to this incredible goal.</p>
+						<p>Over the past few months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. Along with thousands of other children around the world, <span class="grammar"></span> chose to dedicate his spare time to this incredible goal.</p>
 						<p>To reward his great work, we hope to send him/her/them to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
 						<p>Be a sponsor, and join us in showing him just how much his accomplishment means.</p>
 					</div>
-					<a href="#" class="button edit-settings">Edit your Settings</a>
+					<a href="#" class="button edit-settings" style="display:none;">Edit your Settings</a>
 
 					<!-- Progress Bar -->
 					<div class="bar-row">
@@ -349,6 +349,7 @@
 		<script src="js/circletype.min.js"></script>
 		<script src="js/jquery.nice-select.min.js"></script>
 		<script src='js/circles.min.js'></script>
+		<script src="js/js.cookie.js"></script>
 		<script type="text/javascript">
 				if ( location.protocol != 'https:' ) {
 					let url = window.location.href;
@@ -388,7 +389,12 @@
 					  styleText:           true
 					});
 					
-
+					if ( Cookies.get('chidon_admin') ) {
+						$(".edit-settings").show();
+						$(".edit-settings").click( function() {
+							location.href = "setup.html";
+						});
+					}
 
 					// get children info 
 					let url = window.location.href;
@@ -462,7 +468,7 @@
 								for ( i in info.data.children ) {
 									let child = info.data.children[i];
 									children.push( child.user_id );
-									let childName = child.first + ' ' + child.last;
+									let childName = child.first;
 									childrenNames.push( childName );
 									let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
 									// if parent doesn't want to show pic, show avatar
@@ -473,9 +479,20 @@
 
 									// create list of names
 									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {
-										html += " and ";
+										html += " and <strong>" + childName + "</strong> ";
+									} else if ( info.data.children.length > 1 && (i < info.data.children.length - 2) ) {
+										html += "<strong>" + childName + "</strong>, ";
+									} else {
+										html += "<strong>" + childName + "</strong> ";
 									}
-									html += "<strong>" + childName + "</strong>, ";
+
+									// choose correct grammar
+									if ( info.data.children.length > 1 ) {
+										$(".grammar").text('they');
+									} else {
+										if ( child.gender == 'M' ) $(".grammar").text('he');
+										else if ( child.gender == 'F' ) $(".grammer").text('she');
+									}
 									
 									// create drop down selection of names
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
@@ -586,7 +603,7 @@
 								});
 
 								// list of sponsors
-								let sponsorList = '';
+								let sponsorList = '<marquee behavior="scroll" direction="up" width="280px">';
 								console.log( info.data.sponsors );
 								console.log(info);
 								for ( i in info.data.sponsors ) {
@@ -606,6 +623,7 @@
 										</div>
 									`;
 								}
+								sponsorList += "</marquee>";
 								$(".sponsor-list").append( sponsorList );
 
 								/* Scroll list */
@@ -691,7 +709,8 @@
 							}
 						});
 					} else {
-						location.href = "site/";
+						// invalid url
+						location.href = "index.html";
 					}
 
 					$("#donationForm").submit( function( e ) {

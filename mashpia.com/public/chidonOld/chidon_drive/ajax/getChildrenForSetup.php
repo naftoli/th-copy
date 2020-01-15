@@ -27,8 +27,11 @@ if ( $admin_id ) {
   if ( $res ) {
     $children = $stmt->fetchAll();
     echo json_encode([
-    'success'   =>  true,
-    'children'  =>  $children
+      'success'   =>  true,
+      'info'      =>  [ 
+        'children' => $children, 
+        'admin'   => $admin_id
+      ]
     ]);    
   } else {
     echo json_encode([

@@ -13,7 +13,6 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon 
     SET fundraising_goal = :goal, 
-        rohr_subsidy = :subsidy, 
         show_pic = :pic 
     WHERE user_id = :user AND year = :year
 ");
@@ -24,7 +23,6 @@ foreach ( $info as $child ) {
     if ( $child->add ) {
         $res = $stmt->execute([
             ':goal'     =>  intval( $child->goal ),
-            ':subsidy'  =>  $child->rohr ? 1 : 0,
             ':pic'      =>  $child->pic ? 0 : 1, 
             ':year'     =>  $year, 
             ':user'     =>  $child->id
@@ -38,7 +36,6 @@ foreach ( $info as $child ) {
     } else {
         $res = $stmt->execute([
             ':goal'     =>  null,
-            ':subsidy'  =>  0,
             ':pic'      =>  1, 
             ':year'     =>  $year, 
             ':user'     =>  $child->id
