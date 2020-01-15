@@ -49,9 +49,9 @@ abstract class ChidonDrive {
   protected $year;
   protected $goal;
   protected $children = [];
-  protected $costPerChild = 375;
+  protected $costPerChild = 350;
   protected $regPerChild = 275;
-  protected $grantPerChild = 100;
+  protected $grantPerChild = 75;
   
   public function __construct( $year ) {
     $this->year = $year;
