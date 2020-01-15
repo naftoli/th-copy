@@ -10,7 +10,12 @@
 	padding: 0;
 	font-size: 12px;
 	font-family: 'bould', sans-serif;
+	font-weight: 800;
 	box-sizing: border-box;
+}
+span {
+	font-size: inherit;
+	font-weight: inherit;
 }
 .wrapper {
  	max-width: 1200px;
@@ -411,6 +416,7 @@ footer .footer-about .icon-wrapper {
 }
 footer .footer-about .icon-wrapper img {
 	width: auto;
+    height: 100%;
 	max-height: 100%;
 }
 footer .footer-about p {

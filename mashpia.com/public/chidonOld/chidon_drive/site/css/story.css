@@ -35,13 +35,10 @@
   margin-top: 2rem;
 }
 .form p {
-	font-weight: 600;
+	font-weight: 800;
 	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
 	font-size: 1.4rem;
 	margin-top: 1rem;
-}
-.form p {
-	font-weight: normal;
 }
