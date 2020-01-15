@@ -39,16 +39,54 @@
                 <h2 class="title">Setup Your Family Page</h2>					
 				<div class="form personal-information">
 					<form id="personalInfo">
-                        <h5>Your ChidonDrive Family Page will only be ready once you setup your fundraising goals.</h5>
+                        <h5>Please note: Your ChidonDrive Family Page will only be ready once you setup your fundraising goals.</h5>
 
-                        <p>
-                            Check off which children you want to show up your ChidonDrive Family Page and enter your fundraising goal per child:
-                        </p>
+                        <p>How it works:</p>
+                        <p>The fundraising goal for each child starts at $375.</p>
+                        <p>But it’s easier than it sounds!<br>Mr. George Rohr has generously agreed to sponsor $100 per child.<br>Apply the Rohr Grant, and the next $100 you raise will be applied towards your child’s Chidon subsidy. </p>
+                        <p>Every dollar raised after that comes off of your Shabbaton fee, up to the full $175! </p>
+
+
+						<div class="bar">
+							<div class="bar-circle">
+								<p id="simple-arc">Shabbaton Cost</p>
+								<div class="bar-circle__inner">
+									<img src="img/donate/person.jpg" />
+									<span>$350</span>
+								</div>
+							</div>
+							<div class="bar-bar">
+								<div class="bar-bar__wrapper">
+									<div class="bar-bar__line registration" data-percent="50">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker-blue.png" />
+											<p>$175<br>Registration Fee</p>
+										</div>
+									</div>
+									<div class="bar-bar__line subsidy" data-percent="75">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker.png" />
+											<p>$100<br>Rohr Subsidy</p>
+										</div>
+									</div>
+									<div class="remaining">
+										<div class="bar-bar__marker">
+											<p>$100<br>Remaining</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+                        <p>Want to be a Chidon ambassador?<br>Does your child have a large fan club?<br>Think you can raise the full $375 without the grant, or even more?</p> 
+                        <p>Up your child’s fundraising goal and contribute towards another child’s Shabbaton experience.</p>
 
                         <div class="field" id="children"></div>
 
 						<div class="group save-detail">
-							<input type="submit" name="submit" value="Save" />
+							<input type="submit" name="submit" value="Activate My Page" class="button" />
 						</div>
 					</form>
 				</div>
@@ -118,6 +156,12 @@
 		<script src="js/js.cookie.js"></script>
         <script type="text/javascript">
             $( function() {
+				// Animate bars
+		    	$('.bar-bar__line').each(function(index, i){
+		    		var percent = $(this).data('percent');
+		    		$(this).width(percent + '%');
+		    	});
+
                 if ( !Cookies.get('chidon_admin') ) {
                     location.href = "/mobile";
                 }
@@ -134,6 +178,41 @@
                         $(this).val( cost );
                     }
                 });
+
+					// find out total amount
+					$.post('../ajax/getTotalDonation.php', function( result ) {
+						let res = JSON.parse( result );
+						if ( res.success ) {
+							let cost = 350;
+							let totalChildren = 3000;
+							let totalGoal = totalChildren * cost;
+							let totalAmount = Math.round(res.total);
+							let percent = Math.round((totalAmount / totalGoal) * 100);
+							let numChildrenSponsored = Math.round(totalAmount / cost);
+							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
+							// console.log( info );
+							$("#numChildren").html( numChildrenSponsored + " / " + totalChildren + "<br><span>children covered</span>" );
+							$("#circle-chart").data('percent', percent);
+
+							var circlePercent = $('#circle-chart').data('percent');
+							var myCircle = Circles.create({
+								id:                  'circle-chart',
+								radius:              90,
+								value:               circlePercent,
+								maxValue:            100,
+								width:               20,
+								text:                function(value){return '<p>'+value + '%</p><img src="img/percent-ppl.png">';},
+								colors:              ['#8fa3ad', '#4f78bb'],
+								duration:            400,
+								wrpClass:            'circles-wrp',
+								textClass:           'circles-text',
+								valueStrokeClass:    'circles-valueStroke',
+								maxValueStrokeClass: 'circles-maxValueStroke',
+								styleWrapper:        true,
+								styleText:           true
+							});
+						}
+					});
 
                 $(".save-detail input").click( function( e ) {
                     e.preventDefault();
@@ -180,8 +259,8 @@
                         for ( child of res.children ) {
                             html += `
                                 <tr class="child">
-                                    <td><label class="checkbox"><input type="checkbox" class="id" id="${ child.user_id }" ${ child.goal ? checked='checked' : '' } /><span></span></label></td>
-                                    <td><label>${ child.first }</label></td>
+                                    <td><label class="checkbox child-check"><input type="checkbox" class="id" id="${ child.user_id }" ${ child.goal ? checked='checked' : '' } /><span></span></label></td>
+                                    <td><label>${ child.first }'s goal: </label></td>
                                     <td style="padding-left: 20px;"><input type="text" size="5" class="goal" value="${ child.goal ? child.goal : cost }" style="width: auto !important;" /></td>
                                 </tr>
                             `;
@@ -203,7 +282,7 @@
                             <div class="field">
                                 <p>
                                     <label class="checkbox"><input type="checkbox" id="pic" ${ pic ? '' : checked="checked" } /><span></span></label>
-                                    I would like my children's picture NOT TO SHOW UP on the the Chidon Drive Family Page
+                                    I would like my children's picture NOT to be shown on our Chidon Drive Family Page
                                 </p>
                             </div>
                         `;

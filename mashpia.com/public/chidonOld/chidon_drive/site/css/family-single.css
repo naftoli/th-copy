@@ -503,6 +503,7 @@ input {
 .family-charts {
 	display: flex;
 	flex-wrap: wrap;
+	margin-top: 2rem;
 }
 .family-charts .kid {
   width: 50%;
