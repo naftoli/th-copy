@@ -555,6 +555,12 @@ input {
 	width:200px;
 }
 
+.button.edit-settings {
+    margin: 2rem 0 0;
+    display: block;
+    text-align: center;
+}
+
 
 @media(max-width: 1200px){
 	.family-charts .kid {
