@@ -37,7 +37,7 @@
 		<div class="main">
 			<div class="wrapper">
 				<h2 class="title">Welcome to the Chidon Drive</h2>
-				<div class="offer">Cost per child: <span>$375</span> > You pay: <span>$175</span></div>
+				<div class="offer">Cost per child: <span>$350</span> > You pay: <span>$175</span></div>
 				<div class="chidon-drive">
 					<div class="blue-box">
 						<h3>The challenge for <br> many parents:</h3>
@@ -186,7 +186,7 @@
 						const admin_info = res.info;
                         // console.log( admin_info );
                         if ( parseInt( admin_info.setup ) > 0 ) {
-                            $(".setup").empty().append("Modify the Setup of your Family Page");
+                        	$(".setup").hide();
                             $(".family").show();
                             $(".family").click( function( e ) {
                                 e.preventDefault();

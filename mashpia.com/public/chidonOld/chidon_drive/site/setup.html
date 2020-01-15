@@ -42,8 +42,8 @@
                         <h5>Please note: Your ChidonDrive Family Page will only be ready once you setup your fundraising goals.</h5>
 
                         <p>How it works:</p>
-                        <p>The fundraising goal for each child starts at $375.</p>
-                        <p>But it’s easier than it sounds!<br>Mr. George Rohr has generously agreed to sponsor $100 per child.<br>Apply the Rohr Grant, and the next $100 you raise will be applied towards your child’s Chidon subsidy. </p>
+                        <p>The fundraising goal for each child starts at $350.</p>
+                        <p>But it’s easier than it sounds!<br>Mr. George Rohr has generously agreed to sponsor $75 per child.<br>Apply the Rohr Grant, and the next $100 you raise will be applied towards your child’s Chidon subsidy. </p>
                         <p>Every dollar raised after that comes off of your Shabbaton fee, up to the full $175! </p>
 
 
@@ -80,7 +80,7 @@
 							</div>
 						</div>
 
-                        <p>Want to be a Chidon ambassador?<br>Does your child have a large fan club?<br>Think you can raise the full $375 without the grant, or even more?</p> 
+                        <p>Want to be a Chidon ambassador?<br>Does your child have a large fan club?<br>Think you can raise the full $350 without the grant, or even more?</p> 
                         <p>Up your child’s fundraising goal and contribute towards another child’s Shabbaton experience.</p>
 
                         <div class="field" id="children"></div>
@@ -220,7 +220,6 @@
                         alert("You must indicate your acceptance of having your page accessible to the public.");
                         return false;
                     }
-                    const rohr = $("#rohr").is(":checked");
                     const pic = $("#pic").is(":checked");
 
                     let children = [];
@@ -228,7 +227,6 @@
                         let child = {};
                         child.id = $(this).find('.id').attr('id');
                         child.goal = parseInt( $(this).find('.goal').val() );
-                        child.rohr = rohr;
                         child.pic = pic;
                         child.add = $(this).find('.id').is(":checked");
                         children.push( child );
@@ -238,8 +236,8 @@
                         $.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info : JSON.stringify( children ) }, function( res ) {
                             var result = JSON.parse( res );
                             if ( result.success ) {
-                                alert("Your settings have been saved.");
-                                location.href = "intro.html";
+                                alert("Your settings have been saved.\nYou will be routed to your Family Page.");
+                                location.href = "family-single.html?id=" + admin_id;
                             } else {
                                 alert( result.error );
                             }
@@ -249,14 +247,17 @@
                     }
                 });
 
+				let activate = true;
+				let admin_id = 0;
                 $.post("../ajax/getChildrenForSetup.php", { admin: Cookies.get('chidon_admin') }, function( result ) {
                     const res = JSON.parse( result );
                     if ( res.success ) {
-                        const rohr = parseInt( res.children[0].rohr );
-                        const pic = parseInt( res.children[0].pic );
+						admin_id = res.info.admin;
+                        const pic = parseInt( res.info.children[0].pic );
 
                         let html = '<table>';
-                        for ( child of res.children ) {
+                        for ( child of res.info.children ) {
+							if ( activate && child.goal > 0 ) activate = false;
                             html += `
                                 <tr class="child">
                                     <td><label class="checkbox child-check"><input type="checkbox" class="id" id="${ child.user_id }" ${ child.goal ? checked='checked' : '' } /><span></span></label></td>
@@ -267,12 +268,6 @@
                         }
                         html += `
                             </table>
-                            <div class="field">
-                                <p>
-                                    <label class="checkbox"><input type="checkbox" id="rohr" ${ rohr ? checked="checked" : '' } /><span></span></label>
-                                    Apply $100 Rohr Grant to each child
-                                </p>
-                            </div>
                             <div class="field">
                                 <p>
                                     <label class="checkbox"><input type="checkbox" id="agree" checked="checked" /><span></span></label>
@@ -287,6 +282,9 @@
                             </div>
                         `;
                         $("#children").append( html );
+						if ( !activate ) {
+							$(".save-detail input").val("Update my Settings");
+						}
                     } else {
                         alert( res.error );
                     }
