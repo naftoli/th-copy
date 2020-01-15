@@ -1,6 +1,6 @@
 <?php
 /***************** DEBUGGING **********************/
-if ($_GET['debug']) {
+if (isset( $_GET['debug'] ) && $_GET['debug']) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -8,7 +8,7 @@ if ($_GET['debug']) {
     $debug = false;
 }
 
-//ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 $admin_auth = array('school'); 
 require('header.php');
 
@@ -75,8 +75,9 @@ foreach ($schools as $id => $school) {
         ."JOIN classes c ON u.class_id = c.class_id "
         ."WHERE tc.year = " . $year . " "
         ."AND u.school_id = " . $id;
-    if($debug) echo $sql;
     if ($admin_user['auth'] != 'super') $sql .= " AND deleted = 0";
+    if ( isset( $_POST['grade'] ) ) $sql .= " AND c.class_id = " . $_POST['grade'];
+    if($debug) echo $sql;
     //if ($admin_user['auth'] != 'super' && $shutdown && !in_array($id, $exceptions)) $sql .= " and tc.shabbaton = 1";        
     $sql .= " ORDER BY class_grade, class_sub, u.last, u.first";
     
@@ -175,8 +176,51 @@ foreach ($schools as $id => $school) {
                 <hr/>
             <? //} ?>
 
+            <?php
+            // show grade selection if school is big
+            $school_id = array_keys($schools)[0];
+            if ( in_array( $school_id, [ 54, 61, 255 ] ) ) {
+                $grades = [];
+                $gradesSql = "select * from classes where class_era = 0 and school_id = " . $school_id;
+                $gradesRes = mysql_query( $gradesSql );
+                while ( $gradeRow = mysql_fetch_assoc( $gradesRes ) ) {
+                    $grades[] = $gradeRow;
+                }
+            }
+            if ( !isset( $_POST['grade'] ) ) {
+                ?>
+                Please choose a grade:
+                <form method="post" action="chidon_tests.php">
+                    <input type="hidden" name="school" value="<?= $school_id ?>" />
+                    <select name="grade">
+                        <?php 
+                        foreach ( $grades as $grade ) {
+                            echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
+                            . "</option>";
+                        }
+                        ?>
+                    </select><br />
+                    <input type="submit" name="submit" value="submit" />
+                </form>
+                <?php
+            } else {
+            ?>
+
             <form method="post" action="chidon_tests.php">
                 <input type="submit" name="submit" value="Save Updated Marks" id="submit_marks_button" /><br />
+                <?php 
+                if ( isset( $_POST['grade'] ) ) {
+                    echo "<select name='grade'>";
+                    foreach ( $grades as $grade ) {
+                        echo "<option value='" . $grade['class_id'] . "'";
+                        if ( $grade['class_id'] == $_POST['grade'] ) echo " selected ";
+                        echo ">" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : '')) . "</option>";
+                    }
+                    echo "</select><br />";
+                    if ($admin_user['auth'] == 'super') echo "<input type='hidden' name='school' value='" . $school_id . " />";
+                    echo "<input type='submit' name='submit' value='Change Grade' />";
+                }
+                ?>
                 <!--
                 <? if ($admin_user['auth'] != 'super') { ?>
                     <input type="checkbox" name="conf" id="conf" /> I have reviewed all the information and confirm that it is accurate.
@@ -314,6 +358,7 @@ foreach ($schools as $id => $school) {
 
             <a class='button' id="prev_page" href='/chidon_school_reg.php'><i class="fa fa-arrow-left"></i> Register Chaperones</a>
             <a class='button' id="next_page" href='/enrollment.php'>Activate Enrollment <i class="fa fa-arrow-right"></i></a>
+            <?php } ?>
 
         <?php endif; ?>
     </body>
