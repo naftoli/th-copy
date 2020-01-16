@@ -24,8 +24,8 @@ if ($admin_user['auth'] == 'super') {
 if ( count($schools) > 1 ) $allSchools = $schools;
 
 if (isset($_POST['submit'])) {
-    //echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
-    if (isset($_POST['school'])) {
+    // echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+    if (isset($_POST['school']) && $_POST['submit'] != 'Save Updated Marks') {
         $allSchools = $schools;
         $school_name = $schools[$_POST['school']];
         $schools = array($_POST['school'] => $school_name);
@@ -51,10 +51,11 @@ if (isset($_POST['submit'])) {
             }
         }
     
-        //echo "<pre>"; print_r($qrys); echo "</pre>";
+        // echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         foreach ($qrys as $qry) {
             mysql_query($qry);
         }
+        $saved = true;
     }
 }
 
@@ -165,6 +166,8 @@ foreach ($schools as $id => $school) {
                 <input type="submit" name="submit" value="Go To School" />
             </form>
         <? } // end if user is superuser ?>
+
+        <?php if ( $saved ) echo "<div style='margin: auto; color: red'>Saved</div>"; ?>
         
         <?php if (count($schools) == 1) : ?>
         
