@@ -181,6 +181,10 @@
 								<input type="text" id="email" placeholder="Email" required />
 							</div>
 							<div class="field">
+								<label>Phone:</label>
+								<input type="text" id="phone" placeholder="Phone (optional)" />
+							</div>
+							<div class="field">
 								<label>Message or Dedication <span>(75 characters maximum)</span>:</label>
 								<input type="text" id="dedication" placeholder="Full Name" />
 							</div>
@@ -244,11 +248,7 @@
 									<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
 								</div>							
 							</div>
-							<div class="field">
-								<label>Phone:</label>
-								<input type="text" id="phone" placeholder="Phone (optional)" />
-							</div>
-							<input type="submit" class="button donate" value="Donate" /><br />
+							<input type="submit" class="button donate" value="Donate" style="margin-top: 10px;" /><br />
 						</form>
 					</div>
 					<div class="activity">
@@ -433,7 +433,7 @@
 										const res = JSON.parse( result );
 										if ( res.success ) {
 											alert('Transaction successfully completed!');
-											// location.href = "thank-you.html";
+											location.href = "thank-you.html";
 										} else {
 											alert('Paypal Transaction successfully completed, however ' + res.error);
 										}

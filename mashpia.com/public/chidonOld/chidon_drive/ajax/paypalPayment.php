@@ -90,7 +90,7 @@ if ( $type == 'family' ) {
             ]);
         }
     }
-} else {
+} else if ( $type == 'donation' ) {
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO chidon_donations 
         SET 
