@@ -68,7 +68,7 @@ if ( $type == 'family' ) {
             subsidy_amount = :amount
     ");
     // if it was for specific child, then put the entire amount for that child
-    $regCost = 375;
+    $regCost = 350;
     if ( $forChild ) {
         if ( $amount > $regCost ) $amount = $regCost;
         $stmt->execute([
@@ -90,7 +90,7 @@ if ( $type == 'family' ) {
             ]);
         }
     }
-} else {
+} else if ( $type == 'donation' ) {
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO chidon_donations 
         SET 
