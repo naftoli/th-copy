@@ -223,7 +223,7 @@ $he_chars = array(
 					for ($from = 1; $from < 8; $from++) {
 						//get hebrew date
 						$timestamp = jdtounix($start + $from);
-						$jdate = substr(jdtojewish(($start + ($from-1)), true, CAL_JEWISH_ADD_GERESHAYIM),0,-7);
+						$jdate = substr(jdtojewish(($start + ($from-1)), true, CAL_JEWISH_ADD_GERESHAYIM),0,-6);
 						$jdate = iconv ('windows-1255', 'utf-8', $jdate);
 						?>
 						<div class="item" data-date="<?=date('y-m-d', $timestamp)?>">
@@ -247,12 +247,12 @@ $he_chars = array(
 				} else {
 					// the current date
 					$timestamp = time();
-					$jdate = substr(jdtojewish(unixtojd(), true, CAL_JEWISH_ADD_GERESHAYIM),0,-7);
+					$jdate = substr(jdtojewish(unixtojd(), true, CAL_JEWISH_ADD_GERESHAYIM),0,-6);
 					$jdate = iconv ('windows-1255', 'utf-8', $jdate);
 					// jewish start and end dates
-					$j_start_date = substr(jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM),0,-7);
+					$j_start_date = substr(jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM),0,-6);
 					$j_start_date = iconv ('windows-1255', 'utf-8', $j_start_date);
-					$j_end_date = substr(jdtojewish($start + 6, true, CAL_JEWISH_ADD_GERESHAYIM),0,-7);
+					$j_end_date = substr(jdtojewish($start + 6, true, CAL_JEWISH_ADD_GERESHAYIM),0,-6);
 					$j_end_date = iconv ('windows-1255', 'utf-8', $j_end_date);
 					
 					$start_date = date('M j', jdtounix($start));
