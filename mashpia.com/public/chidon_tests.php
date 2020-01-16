@@ -186,23 +186,23 @@ foreach ($schools as $id => $school) {
                 while ( $gradeRow = mysql_fetch_assoc( $gradesRes ) ) {
                     $grades[] = $gradeRow;
                 }
-                if ( !isset( $_POST['grade'] ) ) {
-                    ?>
-                    Please choose a grade:
-                    <form method="post" action="chidon_tests.php">
-                        <input type="hidden" name="school" value="<?= $school_id ?>" />
-                        <select name="grade">
-                            <?php 
-                            foreach ( $grades as $grade ) {
-                                echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
-                                . "</option>";
-                            }
-                            ?>
-                        </select><br />
-                        <input type="submit" name="submit" value="submit" />
-                    </form>
-                <?php
-                }
+            }
+            if ( in_array( $school_id, [ 54, 61, 255 ] ) && !isset( $_POST['grade'] ) ) {
+                ?>
+                Please choose a grade:
+                <form method="post" action="chidon_tests.php">
+                    <input type="hidden" name="school" value="<?= $school_id ?>" />
+                    <select name="grade">
+                        <?php 
+                        foreach ( $grades as $grade ) {
+                            echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
+                            . "</option>";
+                        }
+                        ?>
+                    </select><br />
+                    <input type="submit" name="submit" value="submit" />
+                </form>
+            <?php
             } else {
             ?>
 
@@ -217,7 +217,7 @@ foreach ($schools as $id => $school) {
                         echo ">" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : '')) . "</option>";
                     }
                     echo "</select><br />";
-                    if ($admin_user['auth'] == 'super') echo "<input type='hidden' name='school' value='" . $school_id . " />";
+                    if ($admin_user['auth'] == 'super') echo "<input type='hidden' name='school' value='" . $school_id . "' />";
                     echo "<input type='submit' name='submit' value='Change Grade' />";
                 }
                 ?>
