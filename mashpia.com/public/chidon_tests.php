@@ -186,30 +186,30 @@ foreach ($schools as $id => $school) {
                 while ( $gradeRow = mysql_fetch_assoc( $gradesRes ) ) {
                     $grades[] = $gradeRow;
                 }
-            }
-            if ( !isset( $_POST['grade'] ) ) {
-                ?>
-                Please choose a grade:
-                <form method="post" action="chidon_tests.php">
-                    <input type="hidden" name="school" value="<?= $school_id ?>" />
-                    <select name="grade">
-                        <?php 
-                        foreach ( $grades as $grade ) {
-                            echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
-                            . "</option>";
-                        }
-                        ?>
-                    </select><br />
-                    <input type="submit" name="submit" value="submit" />
-                </form>
+                if ( !isset( $_POST['grade'] ) ) {
+                    ?>
+                    Please choose a grade:
+                    <form method="post" action="chidon_tests.php">
+                        <input type="hidden" name="school" value="<?= $school_id ?>" />
+                        <select name="grade">
+                            <?php 
+                            foreach ( $grades as $grade ) {
+                                echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
+                                . "</option>";
+                            }
+                            ?>
+                        </select><br />
+                        <input type="submit" name="submit" value="submit" />
+                    </form>
                 <?php
+                }
             } else {
             ?>
 
             <form method="post" action="chidon_tests.php">
                 <input type="submit" name="submit" value="Save Updated Marks" id="submit_marks_button" /><br />
                 <?php 
-                if ( isset( $_POST['grade'] ) ) {
+                if ( in_array( $school_id, [ 54, 61, 255 ] ) && isset( $_POST['grade'] ) ) {
                     echo "<select name='grade'>";
                     foreach ( $grades as $grade ) {
                         echo "<option value='" . $grade['class_id'] . "'";
