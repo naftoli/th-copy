@@ -31,7 +31,7 @@ $qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id,
         ." JOIN classes c USING (class_id) "
         ." JOIN admins a ON parent_id = admin_id "
         ." JOIN schools s ON s.school_id = u.school_id " 
-        ." WHERE th.year = " . $year;
+        ." WHERE deleted = 0 AND th.year = " . $year;
 if ( $school_id > 0 ) $qry .= " AND th.school_id = $school_id ";
 $qry .= " ORDER BY s.school_name, c.class_grade, c.class_sub, u.last ";
 $users_query = mysql_query( $qry );
