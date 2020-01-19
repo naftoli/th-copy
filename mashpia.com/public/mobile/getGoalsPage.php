@@ -391,11 +391,11 @@ include 'inc/modals/enrollChild.php';
         }
         // save updates to the tasks....
         $(document).on("click", ".save", function() {
-        	var panel = $(this).parent().parent().parent().parent().parent();
+            var panel = $(this).parent().parent().parent().parent().parent();
 
-			$(panel).removeClass('open');
-			$(panel).find('.collapse').removeClass('in');
-			$(panel).find('.collapse').css({"height": "0px"});
+			// $(panel).removeClass('open');
+			// $(panel).find('.collapse').removeClass('in');
+			// $(panel).find('.collapse').css({"height": "0px"});
 
 			var id = $(this).attr('id');
 			if (id == 'save') { //mishna saving
@@ -413,22 +413,57 @@ include 'inc/modals/enrollChild.php';
 					}
 				});
 			} else {
-				$.post('../ajax/customize.php', {
-					tasks : tasks,
-					tasksAdded : tasksAdded,
-					user : <?=$user_id?>,
-					start : <?=$start?>,
-					end : <?=$end?>,
-					lang : <?=$lang?>
-				}, function( data ) {
-					//alert( data );
-					console.log( data );
-					//alert( "Customized Tasks Saved." );
-					//history.go(0);
-					//window.location = 'goals.php';
-					//window.location.href = "goalsNew.html";
-				});
-			}
+                var opts = {
+                    lines: 8, 		// The number of lines to draw
+                    length: 26, 	// The length of each line
+                    width: 12, 		// The line thickness
+                    radius: 26, 	// The radius of the inner circle
+                    scale: 0.75, 		// Scales overall size of the spinner
+                    corners: 1, 	// Corner roundness (0..1)
+                    color: '#888', 	// #rgb or #rrggbb or array of colors
+                    opacity: 0.25, 	// Opacity of the lines
+                    rotate: 0, 		// The rotation offset
+                    direction: 1, 	// 1: clockwise-1: counterclockwise
+                    speed: 1.25, 		// Rounds per second
+                    trail: 60, 		// Afterglow percentage
+                    fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
+                    zIndex: 2e9, 	// The z-index (defaults to 2000000000)
+                    className: 'spinner', // The CSS class to assign to the spinner
+                    top: '50%', 	// Top position relative to parent
+                    left: '50%', 	// Left position relative to parent
+                    shadow: false, 	// Whether to render a shadow
+                    hwaccel: true, 	// Whether to use hardware acceleration
+                    position: 'relative' // Element positioning
+                };
+                $(panel).find(".panel-spinner").css({"height": "150px"});
+                var target = $(panel).find(".panel-spinner")[0];
+                //var target = document.getElementById('spinner');
+                new Spinner(opts).spin(target);
+
+                $(panel).find('.collapse').css({"height": '350px'}); // dropdown and show the spinner...
+                $(panel).siblings().find('.collapse').css({"height": '0px'}); // colpase any other open dropdowns...
+
+                $.post('../ajax/customize.php', {
+                    tasks: tasks,
+                    tasksAdded: tasksAdded,
+                    user: <?=$user_id?>,
+                    start: <?=$start?>,
+                    end: <?=$end?>,
+                    lang: <?=$lang?>
+                }, function (data) {
+                    //alert( data );
+                    console.log(data);
+                    alert("Saved.");
+                    //history.go(0);
+                    //window.location = 'goals.php';
+                    //window.location.href = "goalsNew.html";
+                    $(".panel-spinner").empty(); // remove the spinner....
+                    $(".panel-spinner").css({"height": "0"});
+                    $(panel).removeClass('open');
+                    $(panel).find('.collapse').removeClass('in');
+                    $(panel).find('.collapse').css({"height": "0px"});
+                });
+            }
         });
         // change levels....
         $(document).on("change", ".userLevel", function() {
