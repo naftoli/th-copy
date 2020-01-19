@@ -1071,8 +1071,7 @@ $he_chars = array(
 			        			
 			var parameters = [user_id, date_task_id, mark_date];
             url += "?function_name=" + function_name + "&parameters=" + parameters;
-
-            $.getJSON(url, function(success) {  
+            $.getJSON(url, function(success) {
                 if (success == false) {
                     alert("Update not performed.");
                 } else {
@@ -1139,7 +1138,7 @@ $he_chars = array(
                 var parameters = [user_id, task, date, val];
                 url = "../add_functions.php?function_name=add_mark&parameters=" + parameters + "&update=1";
                 $.getJSON(url, function(success) {
-					return;
+					// return;
 					if (success == false) {
 						alert("Update not performed.");
 					} else {
