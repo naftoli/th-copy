@@ -40,8 +40,8 @@
 				<div class="login">
 					<form id="login">
                         <p>Please sign in with your mashpia.com credentials</p>
-                        <p><input type="text" name="username" placeholder="Username" /></p>
-                        <p><input type="password" name="password" placeholder="Password" /></p>
+                        <p><input type="text" id="username" name="username" placeholder="Username" /></p>
+                        <p><input type="password" id="password" name="password" placeholder="Password" /></p>
                         <input type="submit" value="Go" class="button"/>
 					</form>
 				</div>
@@ -105,6 +105,7 @@
 		</footer>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/js.cookie.js"></script>
 
 <script>
 $(function() {
@@ -118,6 +119,21 @@ $(function() {
 					} else {
 							header.removeClass('header-alt');
 					}
+			});
+			$("#login").submit( function( evt ) {
+				evt.preventDefault();
+				const username = $("#username").val();
+				const password = $("#password").val();
+				$.post('../ajax/login.php', { username: username, password: password }, function( success ) {
+					const result = JSON.parse( success );
+					if ( result.success ) {
+						const admin = result.admin;
+						Cookies.set('chidon_admin', admin);
+						location.href = "intro.html";
+					} else {
+						alert( result.error );
+					}
+				});
 			});
 	});
 </script>
