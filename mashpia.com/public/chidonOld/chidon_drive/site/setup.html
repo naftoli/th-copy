@@ -85,7 +85,7 @@
 						<div class="group save-detail">
 							<input type="submit" name="submit" value="Save and continue to my page" class="button" />
 						</div>
-						<p>Your custom page link: <span class="custom-link">www.chidondrive.com/weinbaum/5849</span></p>
+						<p>Your custom page link: <span class="custom-link"></span></p>
 					</form>
 				</div>
 			</div>
@@ -284,6 +284,7 @@
 						if ( !activate ) {
 							$(".save-detail input").val("Update my Settings");
 						}
+						$(".custom-link").text("https://chidondrive.com/" + res.info.children[0].last + "/" + admin_id);
                     } else {
                         alert( res.error );
                     }
