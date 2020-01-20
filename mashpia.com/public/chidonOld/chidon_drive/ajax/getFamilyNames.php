@@ -21,12 +21,13 @@ $qry = "
   FROM
       admins a
           JOIN
-      chidon_user_goals cug USING (admin_id)
+      th_chidon tc on tc.parent_id = a.admin_id 
   WHERE
-      a.last != '' AND cug.year = :year
+      a.last != '' AND tc.year = :year
+        AND tc.fundraising_goal > 0
 ";
 if ( !empty( $schools ) ) $qry .= "
-  AND cug.user_id IN (SELECT 
+  AND th.user_id IN (SELECT 
           user_id
       FROM
           users
