@@ -2,11 +2,61 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/temp" />
-      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/authorizenet/authorizenet" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/dshafik/php7-mysql-shim" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/google/apiclient" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/google/apiclient-services" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/google/auth" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/monolog/monolog" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/php-activerecord/php-activerecord" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/type-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpseclib/phpseclib" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpspec/prophecy" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-token-stream" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/picqer/php-barcode-generator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/swiftmailer/swiftmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-iconv" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-php72" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/webmozart/assert" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
