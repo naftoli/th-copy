@@ -184,8 +184,8 @@
 	color: #85abda;
 	text-align: center;
 	padding: 2rem;
-	width: 30%;
-	max-width: 300px;
+	width: 50%;
+    max-width: calc(50% - 6rem);
 }
 .options-wrapper .option p {
 	font-family: 'Russo One', sans-serif;
@@ -457,6 +457,71 @@ input {
   position: relative;
   top: 10px;
   left: 5px;
+}
+
+
+.thermometer-wrapper {
+	position: relative;
+	width: 50%;
+	float: left;
+	display: flex;
+	justify-content: center;
+}
+.thermometer-image {
+	width: auto;
+	margin-top: -2rem;
+}
+.thermometer-image .bar .bar-percent {
+	top: -4px;
+	padding: 8px 8px 5px 8px;
+}
+.thermometer-image .bar .bar-percent .bar-percent__number {
+	width: 6rem;
+	height: 6rem;
+	text-align: center;
+	padding-top: 20px;
+}
+.thermometer-image .bar .bar-line {
+	border-width: 4px;
+}
+.thermometer-image .bar .bar-line__bar {
+	height: 25px;
+}
+.thermometer-image .bar .bar-line__circle {
+	width: 2rem;
+	height: 2rem;
+}
+.thermometer-image .bar .bar-line__marker-number {
+	font-size: 18px;
+	font-weight: 700;
+	color: #6988c5;
+	top: 3px;
+	/*override style.css*/
+	right:300%;
+}
+.thermometer-image .bar-line__other-number {
+	position: absolute;
+	top: 3px;
+	/* right: -150px; */
+	right: -90px;
+	font-size: 18px;
+	font-weight: 700;
+	color: #6988c5;
+	z-index: 1;
+}
+.thermometer-wrapper .thermometer-image .bar .bar-line__marker-number {
+	right: -230%;
+	top: 0;
+}
+.thermometer-wrapper .thermometer-image .bar-line__other-number {
+	position: absolute;
+	top: 70px;
+	/* right: -150px; */
+	right: -250%;	
+}
+.thermometer-wrapper .thermometer-image .bar .bar-line {
+	width: 350px;
+	margin-left: 6rem;
 }
 
 @media(max-width: 1200px){

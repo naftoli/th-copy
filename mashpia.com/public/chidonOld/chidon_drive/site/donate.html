@@ -39,8 +39,25 @@
 				<h2 class="title">Support Chidon</h2>
 				<div class="bar-row">
 					<div class="description">
-						<p>Thousands of children are studying Torah passionately all year long in anticipation of the Chidon Shabbaton. Help us with that last $100 to make it a reality for them.</p>
+						<p>Thousands of children are studying Torah passionately all year long in anticipation of the Chidon Shabbaton. Help us make it a reality for them.</p>
 					</div>
+
+
+					<div class="thermometer-wrapper">
+						<div class="thermometer-image">
+							<div class="leader" data-percent="" data-amount="">
+								<div class="bar">
+									<div class="bar-percent"><span class="bar-percent__number"></span></div>
+									<div class="bar-line">
+										<div class="bar-line__bar"><div class="bar-line__circle"></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number"></span> <span class="bar-line__other-number">$1,125,000</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- 
 					<div class="bar">
 						<div class="bar-circle">
 							<p id="simple-arc">Shabbaton Cost</p>
@@ -72,14 +89,11 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="badge">
-						<h6>The<span>$100</span>Difference</h6>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="options-wrapper">
-					<div class="option">
+					<!-- <div class="option">
 						<p><label class="checkbox"><input type="radio" name="donation_type" class="donation_type" value="1" /><span></span></label> Sponsor the full $100:</p>
 							<select class="children">
 								<option>Choose number of children</option>
@@ -96,9 +110,9 @@
 															
 							</select> 
 							 
-					</div>
+					</div> -->
 					<div class="option">
-						<p><label class="checkbox"><input type="radio"  name="donation_type" class="donation_type" value="2" /><span></span></label>Give any amount</p><input type="text" id="donation_amount" value="$"> 
+						<p><label class="checkbox"><input type="radio"  name="donation_type" class="donation_type" value="2" /><span></span></label>Donate to Chidon</p><input type="text" id="donation_amount" value="$"> 
 					</div>
 					<div class="option">
 						<p><label class="checkbox"><input type="radio"  name="donation_type" class="donation_type" value="3" /><span></span></label>Contribute to a family</p>
@@ -293,14 +307,14 @@
 					// $(".children").append( selection );
 					
 		    	// Round text
-					const circleType = new CircleType(document.getElementById('simple-arc'));
-					circleType.radius(60);
+					// const circleType = new CircleType(document.getElementById('simple-arc'));
+					// circleType.radius(60);
 
-					// Animate bars
-		    	$('.bar-bar__line').each(function(index, i){
-		    		var percent = $(this).data('percent');
-		    		$(this).width(percent + '%');
-		    	});
+					// // Animate bars
+		   //  	$('.bar-bar__line').each(function(index, i){
+		   //  		var percent = $(this).data('percent');
+		   //  		$(this).width(percent + '%');
+		   //  	});
 
 				paypal.Buttons({
 					style: {
@@ -408,6 +422,23 @@
 								styleWrapper:        true,
 								styleText:           true
 							});
+
+
+							let amount = res.total;
+							let budget = 1125000;
+							$('.thermometer-wrapper .leader').each(function(){
+								$(this).data('amount', Math.round(amount));
+								$(this).data('percent', Math.round((amount / budget) * 100));
+								var percent = $(this).data('percent');
+								console.log('Percent' + percent);
+								$(this).find('.bar-line__bar').width(percent + '%');
+								$(this).find('.bar-line__marker-number').text('$' +  Math.round(amount) );
+								$(this).find('.bar-percent__number').text(percent + '%');
+
+					    		var percent = $(this).data('percent');
+					    		$(this).find('.bar-line__bar').width(percent + '%');
+					    		console.log(percent);
+							});	
 						}
 					});
 
