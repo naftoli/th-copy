@@ -42,8 +42,8 @@
 					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
 					<div class="bio-wrapper">
 						<p>Over the past few months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. Along with thousands of other children around the world, <span class="grammar"></span> chose to dedicate his spare time to this incredible goal.</p>
-						<p>To reward his great work, we hope to send him/her/them to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
-						<p>Be a sponsor, and join us in showing him just how much his accomplishment means.</p>
+						<p>To reward his great work, we hope to send <span class="grammar2"></span> to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
+						<p>Be a sponsor, and join us in showing <span class="grammar2"></span> just how much his accomplishment means.</p>
 					</div>
 					<a href="#" class="button edit-settings" style="display:none;">Edit your Settings</a>
 
@@ -526,9 +526,16 @@
 									// choose correct grammar
 									if ( info.data.children.length > 1 ) {
 										$(".grammar").text('they');
+										$(".grammar2").text('them');
 									} else {
-										if ( child.gender == 'M' ) $(".grammar").text('he');
-										else if ( child.gender == 'F' ) $(".grammer").text('she');
+										if ( child.gender == 'M' ) {
+											$(".grammar").text('he');
+											$(".grammar2").text('him');
+										}
+										else if ( child.gender == 'F' ) {
+											$(".grammer").text('she');
+											$(".grammar2").text('her');
+										}
 									}
 									
 									// create drop down selection of names
