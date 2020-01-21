@@ -14,61 +14,63 @@ $zip = mysql_real_escape_string($_POST['cczip']);
 $info = $_POST['info'];
 
 // check if school is already registered
-$sql = "select th_chidon_schools_id from th_chidon_schools
-        where school_id = " . $school . "
-        and year = " . $year . "
-        and registered = 1";
-$result = mysql_query($sql);
-if (mysql_num_rows($result) == 0) {
-    $sql = "insert into th_chidon_schools
-            set school_id = " . $school . ",
-            year = " . $year . ",
-            registered = 1";
-    mysql_query($sql);
-}
+// $sql = "select th_chidon_schools_id from th_chidon_schools
+//         where school_id = " . $school . "
+//         and year = " . $year . "
+//         and registered = 1";
+// $result = mysql_query($sql);
+// if (mysql_num_rows($result) == 0) {
+//     $sql = "insert into th_chidon_schools
+//             set school_id = " . $school . ",
+//             year = " . $year . ",
+//             registered = 1";
+//     mysql_query($sql);
+// }
 
-if ($amount) {
-    // run through authorize first
-    $first_name ='';
-    $last_name = '';
-    $address = '';
-    $state = '';
-    $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school . "; Number of Chaperones paid for: " . count($info);
+// if ($amount) {
+//     // run through authorize first
+//     $first_name ='';
+//     $last_name = '';
+//     $address = '';
+//     $state = '';
+//     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school . "; Number of Chaperones paid for: " . count($info);
     
-    if ($school != 82 || ($school == 82 && $card_num != 11111111)) {
-        require 'authorize.php';
-        if ($response_array[0] == 1) {
-            // success
-            $strResponse =  $response_array[3] . ':' . 
-                            $response_array[4] . ':' . 
-                            $response_array[6] . ':' . 
-                            $response_array[9];
+//     if ($school != 82 || ($school == 82 && $card_num != 11111111)) {
+//         require 'authorize.php';
+//         if ($response_array[0] == 1) {
+//             // success
+//             $strResponse =  $response_array[3] . ':' . 
+//                             $response_array[4] . ':' . 
+//                             $response_array[6] . ':' . 
+//                             $response_array[9];
                 
-            $chaps = create_chaps($school, $info, $year);
-            $description .= " Chap IDs: " . implode(',', $chaps);
-            $sql = "insert into th_chidon_chap_payments
-                    set school_id = " . $school . ", 
-                    paid = " . $amount . ",
-                    approval = '" . $strResponse . "',
-                    description = '" . $description . "'";
-            mysql_query($sql);
-        } else {
-            echo $response_array[3];
-            exit;
-        }
-    } else {
-        $chaps = create_chaps($school, $info, $year);
-        $description .= " Chap IDs: " . implode(',', $chaps);
-        $sql = "insert into th_chidon_chap_payments
-                set school_id = " . $school . ", 
-                paid = " . $amount . ",
-                approval = '" . $strResponse . "',
-                description = '" . $description . "'";
-        mysql_query($sql);
-    }
-} else {
-    create_chaps($school, $info, $year);
-}
+//             $chaps = create_chaps($school, $info, $year);
+//             $description .= " Chap IDs: " . implode(',', $chaps);
+//             $sql = "insert into th_chidon_chap_payments
+//                     set school_id = " . $school . ", 
+//                     paid = " . $amount . ",
+//                     approval = '" . $strResponse . "',
+//                     description = '" . $description . "'";
+//             mysql_query($sql);
+//         } else {
+//             echo $response_array[3];
+//             exit;
+//         }
+//     } else {
+//         $chaps = create_chaps($school, $info, $year);
+//         $description .= " Chap IDs: " . implode(',', $chaps);
+//         $sql = "insert into th_chidon_chap_payments
+//                 set school_id = " . $school . ", 
+//                 paid = " . $amount . ",
+//                 approval = '" . $strResponse . "',
+//                 description = '" . $description . "'";
+//         mysql_query($sql);
+//     }
+// } else {
+//     create_chaps($school, $info, $year);
+// }
+
+create_chaps($school, $info, $year);
 
 function create_chaps($school_id, $info, $year = false) {
     $chapIDs = array();
@@ -118,4 +120,3 @@ function create_chaps($school_id, $info, $year = false) {
 }
 
 echo 0;
-

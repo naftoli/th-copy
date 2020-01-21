@@ -10,7 +10,7 @@ $can_enroll = mysql_real_escape_string($_POST['can_enroll']);
 $chap_school_id_query = mysql_query("SELECT school_id FROM th_chidon WHERE th_chidon_id = " . $chidon_id); // get the school id as it is not sent it
 $chap_school_id = mysql_fetch_assoc($chap_school_id_query)['school_id'];
 
-$chap_check = mysql_query("SELECT * FROM th_chidon_schools WHERE year = " . $year . " AND school_id = " . $chap_school_id);
+$chap_check = mysql_query("SELECT * FROM th_chidon_chaps WHERE chap_type = 1 and year = " . $year . " AND school_id = " . $chap_school_id);
 if(mysql_num_rows($chap_check) == 0){
     echo json_encode([
         "success"   => false,

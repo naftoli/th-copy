@@ -18,12 +18,12 @@ $schoolChaps = [];
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {
     $numChaps = 0;
-    $numWalkingCounselors = 0;
+    // $numWalkingCounselors = 0;
     $chap_check = "select * from th_chidon_chaps where school_id = " . $sid . " and year = " . $year;
     $chap_res = mysql_query( $chap_check );
     while ( $chap_row = mysql_fetch_assoc( $chap_res ) ) {
         if ( $chap_row['chap_type'] == 1 ) $numChaps++;
-        else $numWalkingCounselors++;
+        // else $numWalkingCounselors++;
     }
     if ( $numChaps == 0 ) {
         $errorMsg .= $schoolName . " needs to have at least one chaperone registered.<br />";
@@ -60,15 +60,15 @@ foreach ($schools as $sid => $schoolName) {
 }
 // echo "<pre>"; print_r($userInfo); echo "</pre>"; exit;
 // check which schools don't have the needed ratio of 12:1 students to chaps
-foreach ( $schoolChaps as $school_id => $chaps ) {
-    foreach ( $chaps as $chapNum => $studentNum ) {
-        $needed = floor( $studentNum / 12 );
-        if ( $studentNum % 12 != 0 ) $needed++;
-        if ( $chapNum < $needed ) {
-            $errorMsg .= $schools[$school_id] . " needs to have " . $needed . " walking counselors(s) but only has " . $chapNum . " walking counselor(s).<br />";
-        }
-    }
-}
+// foreach ( $schoolChaps as $school_id => $chaps ) {
+//     foreach ( $chaps as $chapNum => $studentNum ) {
+//         $needed = floor( $studentNum / 12 );
+//         if ( $studentNum % 12 != 0 ) $needed++;
+//         if ( $chapNum < $needed ) {
+//             $errorMsg .= $schools[$school_id] . " needs to have " . $needed . " walking counselors(s) but only has " . $chapNum . " walking counselor(s).<br />";
+//         }
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <HTML>

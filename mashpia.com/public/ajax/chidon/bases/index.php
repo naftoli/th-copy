@@ -28,8 +28,6 @@ $stmt = $MASHPIA_DB->prepare("
     FROM
         schools s
             JOIN
-        th_chidon_schools tcs USING (school_id)
-            JOIN
         th_chidon tc USING (school_id , year)
     WHERE
         tcs.year = :year AND tc.date_paid > 0

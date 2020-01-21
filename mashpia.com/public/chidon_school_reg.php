@@ -81,20 +81,22 @@ $year = GlobalSettings::getChidonYear();
 
         <div id="school_shabbaton">
             <h2>School Responsibilities</h2>
-            In order for your school to be able to participate in the shabbaton, you need to be aware of the following:
+            In order to participate in Shabbaton, you will need to fulfill the following requirements:
             <ul>
-              <li>You must have 1 Chaperone enrolled before parent enrollment opens.</li>
-              <li>You must have 1 Walking Counselor enrolled for every 12 students that are "contestants".</li>
-              <li>If some "contestants" are not coming, you need to "delete" them to lower the number of walking counselors needed.</li>
-              <li>There is a $100 fee PER DAY PER CHAPERONE / WALKING COUNSELOR in the event that my chaperone / walking counselor is not by the program on time or does not follow their responsibilities. The fee will be charged to 
-                the credit card on file, or the one you provide us in the form below.</li>
+              <li>Confirm the status of all Chidon participants in your school, and remove any students who will not be attending the Shabbaton from the system. 
+              You currently have <span id="numStudents">0</span> students enrolled. Please <a href="review_enrollment.php">review them here</a> to confirm that only students who qualify AND plan to attend Shabbaton are in the system.</li>
+              <li>Attend the Chidon Shabbaton Conference call on Monday, March 16 / 20 Adar (for girls), or Monday, March 23 / 27 Adar (for the boys).</li>
+              <li>Provide a chaperone who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit">here</a>.</li>
+              <li>Provide a walking counselor who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit">here</a>.</li>
+              <li>In the event that a chaperone is not at the program on time or does not complete their responsibilities, a $100 fee PER DAY PER CHAPERONE will be applied. 
+              The fee will be charged to the credit card on file, or the one provided in the form below.</li>
             </ul>
             
             <form>
               <h2>Bus Home</h2>
               <div class="input_group input_full">
                 Please choose one of the following options:<br />
-                <input type="radio" name="bus" class="bus" value="1" /> My bus is leaving from the Chidon Event Venue to Newark Airport after the event.<br />
+                <input type="radio" name="bus" class="bus" value="1" /> My bus is leaving from the Chidon Event Venue to JFK/LGA/Newark Airport after the event.<br />
                 <input type="radio" name="bus" class="bus" value="2" /> My bus is leaving from the Chidon Event Venue to Crown Heights drop off location; President and Kingston after the event.<br />
                 <input type="radio" name="bus" class="bus" value="0" /> My bus is leaving from the Chidon Event Venue to our school and we dont need a bus from the Chidon Event.
               </div>
@@ -139,8 +141,12 @@ $year = GlobalSettings::getChidonYear();
     <script>
       $( function() {
         getCCInfo();
+        getNumChidonChildren();
 
-        $("#school_id").change( getCCInfo );
+        $("#school_id").change( function() {
+          getCCInfo();
+          getNumChidonChildren();
+        });
 
         $("#next_page").click( function( evt ) {
           evt.preventDefault();
@@ -215,6 +221,23 @@ $year = GlobalSettings::getChidonYear();
           } else {
             $("#ccOnFile").hide();
             $(".cc_info").eq(1).attr('checked', true);
+          }
+        }
+
+        function getNumChidonChildren() {
+          const year = <?= $year ?>;
+          const school_id = $("#school_id").val();
+          if ( school_id > 0 ) {
+            $.post('ajax/chidon/getNumChildren.php', { school_id : school_id, year : year }, function( res ) {
+              const result = JSON.parse( res );
+              if ( result.success ) {
+                $("#numStudents").text( result.num );
+              } else {
+                console.log( result.error );
+              }
+            });
+          } else {
+            $("#numStudents").text( '0' );
           }
         }
       });

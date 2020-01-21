@@ -20,7 +20,7 @@ $year = GlobalSettings::getChidonYear();
 // check if school is registered for chidon already if not super user
 $errorMsg = '';
 if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
-    $chidon_school = "select * from th_chidon_schools where year = " . $year . " and school_id = " . array_keys( $schools )[0];
+    $chidon_school = "select * from th_chidon_chaps where chap_type = 1 and year = " . $year . " and school_id = " . key( $schools );
     $chidon_school_res = mysql_query( $chidon_school );
     if ( mysql_num_rows( $chidon_school_res ) == 0 ) {
         $errorMsg .= "You have not yet enrolled your school for the Shabbaton. You need to go back to the Shabatton Enrollment page.";
@@ -74,7 +74,6 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                 width: 95%;
                 margin-left: 5%;
                 margin-top: 10px;
-                display: none;
             }
             .s-size select {
                 width: auto;
@@ -104,8 +103,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         ?>
         
         <p class="warning">
-            <i>Disclaimer: Your students will not be able to enroll for shabbaton before you complete registration for your school's chaperones.<br/>You need to have at least 
-                1 Full Time Chaperone, and Walking Counselors with a ratio of 1:12 (one counselor per 12 children).</i>
+            <i>Please note: You must complete registration for your school's chaperones before your students can enroll in Shabbaton.</i>
         </p>
         
         <? if(count($schools) == 1) { ?>
@@ -161,8 +159,8 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                     <h3>Chaperone Type</h3>
                     <div class="input_group input_half">
                         <label>
-                            <input type="radio" class="chap_type chap_type_1" name="chap_type" value="1" /> Chaperone<br />
-                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" checked /> Walking Counsellor
+                            <input type="radio" class="chap_type chap_type_1" name="chap_type" value="1" checked /> Chaperone<br />
+                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" /> Walking Counsellor
                         </label>
                     </div>
 
@@ -217,13 +215,13 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                         <label>
                             Chidon Type<br/>
                             <select name="chidon_type" class="chidon_type">
-                                <option value="boys"> Boys </option>
+                                <option value="boys">Boys</option>
                                 <option value="girls">Girls</option>
                             </select>
                         </label>
                     </div>
                     
-                    <h3>Accomodation Info</h3>
+                    <h3>Accommodation Info</h3>
                     <div class="input_group input_half">
                         <label>
                             Name<br/>
@@ -273,69 +271,27 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                     <div class="create_chidon_info">
                         <h3>Chidon Info</h3>
                         <div class="input_group input_full">
-                            <i>Chaperones get a sweater for free, Walking Counselors need to pay $20 for a sweater.</i>
-                        </div>
-                        <!-- <div class="fullProgram">
-                            <strong>The full Chidon program includes:</strong><br />
-                            Trips, Meals, Transportation and an awesome Sweatshirt!<br />
+                            <i>Chaperones will be required to wear their Chidon sweaters throughout the Shabbaton.</i>
                         </div>
                         <div class="input_group input_full">
                             <label>
-                                Will you be joining us for the full chidon program (4th and 5th Grade, Thursday and Friday)?<br/><br/>
-                                <input type="radio" name="full" class="full full_1" value="1" />
-                                YES, I would like to join the program and pay $100.<br />
+                                <input type="hidden" name="sweater" class="sweater" value="1" />
                                 <div class="s-size">
-                                    My Sweater size is:
-                                    <select name="s_size_yes" class="s_size_yes">
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">XLarge</option>
-                                        <option value="xxl">XXLarge</option>
-                                    </select>
-                                </div>
-                            </label>
-                        </div>
-
-                        <div class="input_group input_full">
-                            <label>
-                                <input type="radio" name="full" class="full full_0" value="0" />
-                                NO, I will not be attending the full Chidon program with my students. However I understand that I will be on call in NY throughout the entire Shabbaton.
-                                
-                                <div class="s-size">
-                                    <input type="checkbox" name="sweater" class="sweater" />
-                                    Although I am not joining the program, I would like to purchase a sweater for $20.<br />
-                                    My Sweater size is:
-                                    <select name="s_size_no" class="s_size_no">
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">XLarge</option>
-                                        <option value="xxl">XXLarge</option>
-                                    </select> 
-                                </div>
-
-                            </label>
-                        </div> -->
-                        <div class="input_group input_full">
-                            <label>
-                                <input type="radio" name="sweater" class="sweater" />
-                                I would like to order a Sweater.<br />
-                                <div class="s-size" style="display: none;">
-                                    My Sweater size is:
+                                    Sweater size:
                                     <select name="s_size" class="s_size">
                                         <option value="s">Small</option>
                                         <option value="m">Medium</option>
                                         <option value="l">Large</option>
                                         <option value="xl">XLarge</option>
                                         <option value="xxl">XXLarge</option>
+                                        <option value="xxxl">XXXLarge</option>
                                     </select>
                                 </div>
                             </label>
                         </div>
-                        <div class="input_group input_full">
+                        <!-- <div class="input_group input_full">
                             <strong>Total Due: $<span class="total">0</span></strong>
-                        </div>
+                        </div> -->
                         <!-- <h3>Credit Card Info</h3>
                         <div class="showAgree">
                             <div class="input_group input_full">
@@ -361,26 +317,34 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                                 </label>
                             </div>
                         </div> -->
-                        <div class="input_group input_full">
-                            <input type="checkbox" name="terms" id="terms" /> 
-                            I have read <a href="https://docs.google.com/document/d/1W7n8J_tbGh1hYTdIJTN5QBPMtUCF0Caxsano5MEXeIQ/edit?usp=sharing" target="_blank">this page</a> and accept the responsibilities of the chaperone as well as pay any charges indicated above.
-                        </div>
-                        
-                        <div class="input_group input_full" style="text-align: center">
-                            <a class="button" id="chap_prev" style="float: left; display: none;">
-                                <i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Chaperone
-                            </a>
-                            <a class="button" id="chap_add">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Another Chaperone
-                            </a>
-                            <a class="button" id="chap_next" style="float: right; display: none;">
-                                Next Chaperone <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                        <div style="clear: both"></div>
                     </div>
+                    
+                    <div class="input_group input_full" style="line-height: 1.4">
+                        <h3>Terms</h3>
+                        <input type="checkbox" name="terms" id="terms" />
+                        I have read and provided my chaperone with this document and understand and accept the responsibilities of the chaperone. <br />
+                        <input type="checkbox" name="terms" id="terms2" />
+                        I understand that the chaperone will be responsible to take a group of chayolim home on Thursday night, Friday afternoon, and Motzei Shabbos after the program. 
+                        If the chaperone will be unable to do this, you will need to provide another dedicated walking counselor to do so instead. 
+                        <a class="button" id="walk_add">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Add a Walking Counselor
+                        </a>
+                    </div>
+                    
                     <div class="input_group input_full" style="text-align: center">
-                        <input type="submit" name="submit" class="submit" value="Add Chaperone" />
+                        <a class="button" id="chap_prev" style="float: left; display: none;">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Chaperone
+                        </a>
+                        <a class="button" id="chap_add">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Add Another Chaperone
+                        </a>
+                        <a class="button" id="chap_next" style="float: right; display: none;">
+                            Next Chaperone <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div class="input_group input_full" style="text-align: center">
+                        <a class="button"><input type="submit" name="submit" class="submit" value="Add Chaperone" /></a>
                     </div>
                 </form>
             </div>

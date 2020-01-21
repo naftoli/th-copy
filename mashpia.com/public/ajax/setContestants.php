@@ -10,7 +10,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $students[] = $row;
 }
 
-$chap_check = mysql_query("SELECT * FROM th_chidon_schools WHERE year = " . $year . " AND school_id = " . $school);
+$chap_check = mysql_query("SELECT * FROM th_chidon_chaps WHERE chap_type = 1 and year = " . $year . " AND school_id = " . $school);
 if(mysql_num_rows($chap_check) == 0){
     echo json_encode([
         "success"   => false,
