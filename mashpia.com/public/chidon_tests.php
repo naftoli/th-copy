@@ -60,10 +60,10 @@ if (isset($_POST['submit'])) {
 }
 
 // check if the school has a chaperone in the chidon
-if(count($schools) == 1){
-    $chap_check = mysql_query("SELECT * FROM th_chidon_schools WHERE year = " . $year . " AND school_id = ". array_keys($schools)[0]);
-    $has_chaps  = mysql_num_rows($chap_check) != 0;
-}
+// if(count($schools) == 1){
+//     $chap_check = mysql_query("SELECT * FROM th_chidon_chaps WHERE chap_type = 1 and year = " . $year . " AND school_id = ". array_keys($schools)[0]);
+//     $has_chaps  = mysql_num_rows($chap_check) != 0;
+// }
 
 require_once('chidon_shutdown_vars.php'); // get the deadlines
 // $exceptions = array(13,61,269);
@@ -439,13 +439,13 @@ foreach ($schools as $id => $school) {
                 $.post('ajax/setReps.php', { year : year, school : school }, handleSetResponse);
             });
             
-            <? if(isset($has_chaps) && !$has_chaps) { ?>
+            <? //if(isset($has_chaps) && !$has_chaps) { ?>
                 // $("a#next_page").click(function(event){
                 //     event.preventDefault();
                 //     alert('It appears that you have not setup any Chaperones yet!. Redirecting you to Chaperones page...');
                 //     location.href = "/chidon_school_reg.php";
                 // });
-            <? }; // end if has$chaps ?>
+            <? //}; // end if has$chaps ?>
             
         });
     </script>

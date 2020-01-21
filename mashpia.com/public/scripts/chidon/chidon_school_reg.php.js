@@ -7,12 +7,10 @@ $(document).ready(function(){
     $("#generate_chaps_report").click(getChapsTable);
     $("select#school_id").change(getChapsTable);
     //$(".full").click(toggleSSize);
-    $("#chap_modal input.chap_type").click(updateTotal);
-    $("input.sweater").change(updateTotal);
-    $(".sweater").click(showSweater);
     $("#chap_modal .close").click(hideChapModal);
     $("a#create_chaperone").click(showChapModal);
     $("#chap_modal form").submit(submitChaperone);
+    $("#chap_modal #walk_add").click(addWalking);
     $("#chap_modal #chap_add").click(addChaperone);
     $("#chap_modal #chap_prev").click(prevChaperone);
     $("#chap_modal #chap_next").click(nextChaperone);
@@ -69,34 +67,18 @@ $(document).ready(function(){
         // disable the sweater size if none was selected/paid for.
         //$("#chap_modal select.s_size").attr("disabled", !chap.sweater_size);
         $("#chap_modal select.chidon_type").val(chap.chidon_type);
-        // update the Accomidation info...
+        // update the Accommodation info...
         $("#chap_modal input#accName").val(chap.acc_name);
         $("#chap_modal input#accAddress").val(chap.acc_address);
         //$("#chap_modal input#accCrossSt").val(chap.acc_cross_st);
         $("#chap_modal input#accPhone").val(chap.acc_phone);
-
-        let type = chap.chidon_type;
-        $("#chap_modal input.chap_type_" + type).trigger('click');
         let vehicle = chap.vehicle;
         $("#chap_modal input.vehicle_" + vehicle).trigger('click');
 
         if (chap.chap_id) {
             $("#chap_modal input#chap_id").val(chap.chap_id);
         }
-        
-        // if ($("input#action").val() == "create") {
-        //     $('#chap_modal .full_' + chap.full_program).attr("checked", true);
-        //     $('#chap_modal .full_' + chap.full_program).change();
-        //     $("input.sweater").attr("checked", (chap.sweater && chap.full_program === 0)); // persist the swater check
-        //     $("input.sweater").change();
-        //     //set the correct sweater size...
-        //     if (chap.sweater && chap.full_program === 0) {
-        //         $("select.s_size_no").val(chap.sweater_size);
-        //     } else if (chap.full_program == 1) {
-        //         $("select.s_size_yes").val(chap.sweater_size);
-        //     }
-        // }
-        
+                
         // show the modal...
         modal($("#chap_modal")).show(); // show the modal...
     }
@@ -117,6 +99,7 @@ $(document).ready(function(){
             $.post("/ajax/chidon/createChaperones.php", state, function(raw_response) {
                 response = JSON.parse(raw_response);
                 if (!response.success) {
+                    
                     alert(response.error);
                 } else {
                     alert(response.message);
@@ -144,16 +127,16 @@ $(document).ready(function(){
         }
         
         state.chaperones[state.index] = current_chaperone;
-        
+              
         return true;
     }
     // read the form in the modal....
     function readChaperoneForm(skip_validation) {
         var action = $("input#action").val();
-        if ( !$("#chap_modal input.chap_type:checked").length ) {
-            alert("You must indicate what type of chaperone you are creating (chaperone / walking counselor).");
-            return false;
-        }
+        // if ( !$("#chap_modal input.chap_type:checked").length ) {
+        //     alert("You must indicate what type of chaperone you are creating (chaperone / walking counselor).");
+        //     return false;
+        // }
         // setup the initial data block...
         var data = {
             school_id:      $("select#school_id").val(),
@@ -168,39 +151,20 @@ $(document).ready(function(){
             acc_address:    $("#chap_modal input#accAddress").val(),
             //acc_cross_st:   $("#chap_modal select#accCrossSt").val(),
             acc_phone:      $("#chap_modal input#accPhone").val(),
-            vehicle:        $("#chap_modal input.vehicle:checked").val(),
-            total:          calcTotal() // get the total for just this chaperone and set it to the total when we are reading the form.
+            vehicle:        $("#chap_modal input.vehicle:checked").val()
         };
 
         // get the sweater size...
         if (action == "edit") {
             data.sweater_size = $(".edit_chidon_info select.s_size").val();
-            if ( data.sweater_size ) data.sweater = 1;
-            else data.sweater = 0;
             data.chap_id        = $("input#chap_id").val();
             return data; // we have all the information needed at this point for editing.. so lets just return the data....
         } else {
-            if ($("input.sweater").is(":checked")) {
-                data.sweater = 1;
-                data.sweater_size = $(".create_chidon_info select.s_size").val();
-            } else {
-                data.sweater = 0;
-            }
+            data.sweater_size = $(".create_chidon_info select.s_size").val();
         }
         
         //data.full_program = parseInt($('#chap_modal .full:checked').val());
         data.full_program = 1; // automatically part of full program as of 2019
-        
-        // create a new chaperone...
-        // if ($(".full:checked").val() == "0" && $("input.sweater").attr("checked")) { // if they are not signing up and are buying a sweater...
-        //     data.sweater_size = $("select.s_size_no").val();
-        //     data.sweater = 1;
-        // } else if ($(".full:checked").val() == "1") {
-        //     data.sweater_size = $("select.s_size_yes").val();
-        //     data.sweater = 1;
-        // } else {
-        //     data.sweater = 0;
-        // }
         
         // validate that all fields are filled out.
         for (var field in data) {
@@ -214,21 +178,17 @@ $(document).ready(function(){
             alert('You must select if you have a vehicle or not for the record.'); return false;
         }
         
-        // if (isNaN(data.full_program)) { // since this is parsed as an int we get NaN rather then undefined.
-        //     alert('You must select if you will be a part of the full program or not for the record.'); return false;
-        // }
-        
         if (!skip_validation) { // if we are not skipping the validations...
             if (!$('#chap_modal input#terms').attr("checked")) { // make sure that they aggree to the charge...
                 alert('You must indicate your acceptance of the terms' + (amount > 0 ? " and charges" : "") + "."); return false;
             }
         }
         
-        state.cc_info = {};
-        var amount = calcTotal(true);
-        if ( amount ) {
-            state.cc_info.amount = amount;
-        }
+        // state.cc_info = {};
+        // var amount = calcTotal(true);
+        // if ( amount ) {
+        //     state.cc_info.amount = amount;
+        // }
         // if (amount > 0) {
         //     state.cc_info.amount = amount;
         //     state.cc_info.ccnum = $("#chap_modal input#cardnumber").val().replace(/\D+/g, ""); // remove all non digit characters (whitespace and letters)
@@ -259,11 +219,22 @@ $(document).ready(function(){
     }
 
     /********************** ALLOW FOR MORE THEN ONE CHAPERONE ********************/
+    function addWalking() {
+        if (saveChaperone()){
+            state.chaperones.push({});
+            state.index = state.chaperones.length - 1;
+            clearChapModal();
+            $("#chap_modal input.chap_type").eq(1).trigger('click');
+            $("#chap_prev").show();
+            $("#chap_next").hide();
+        }
+    }
     function addChaperone() {
         if (saveChaperone()){
             state.chaperones.push({});
             state.index = state.chaperones.length - 1;
             clearChapModal();
+            $("#chap_modal input.chap_type").eq(0).trigger('click');
             $("#chap_prev").show();
             $("#chap_next").hide();
         }
@@ -318,7 +289,7 @@ $(document).ready(function(){
         } else {
             $("span#heading").text("Create");   $("input#action").val("create");
             $(".create_chidon_info").show(); $("div.edit_chidon_info").hide();
-            $("#chap_modal .submit").val("Create Chaperone(s)");
+            $("#chap_modal .submit").val("Create Chaperone(s) and Open Enrollment");
             modal($("#chap_modal")).show(); // show the modal...
         }
     }
@@ -349,45 +320,44 @@ $(document).ready(function(){
     //     updateTotal();
     // }
 
-    function showSweater() {
-        $(".s-size").show();
-    }
+    // function showSweater() {
+    //     $(".s-size").show();
+    // }
     
     /********************** HANDLE THE MONEY ********************/
     // update the total on the page...
-    function updateTotal() {
-        var total = calcTotal(true);
-        $("span.total").text(total); //calculate the total and update the page with that info...
-        // show the CC info if there is money required
-        //if (total) {
-            var message = (total ? "Pay for and " : "") + "Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)"
-            // $("#chap_modal .showAgree input").attr('required', true);
-            // $("#chap_modal .showAgree").show();
-            $("#chap_modal .submit").val( message );
-        // } else {
-        //     $("#chap_modal .showAgree input").attr('required', false);
-        //     $("#chap_modal .showAgree").hide();
-        //     $("#chap_modal .submit").val("Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
-        // }
-    }
+    // function updateTotal() {
+    //     var total = calcTotal(true);
+    //     $("span.total").text(total); //calculate the total and update the page with that info...
+    //     // show the CC info if there is money required
+    //     //if (total) {
+    //         var message = (total ? "Pay for and " : "") + "Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)"
+    //         // $("#chap_modal .showAgree input").attr('required', true);
+    //         // $("#chap_modal .showAgree").show();
+    //         $("#chap_modal .submit").val( message );
+    //     // } else {
+    //     //     $("#chap_modal .showAgree input").attr('required', false);
+    //     //     $("#chap_modal .showAgree").hide();
+    //     //     $("#chap_modal .submit").val("Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
+    //     // }
+    // }
     // calculate the total payment...
-    function calcTotal(grand_total) {
-        var total = 0;
-        //add all other chaperones to the newly computed total...
-        if (grand_total === true) {
-            for(var i = 0; i < state.chaperones.length; i++) {
-                if (i == state.index) {continue;}
-                total += state.chaperones[i].total;
-            }
-        }
-        // check if they are attending the chidon
-        // if ($(".full:checked").val() === "1") {
-        //     total += 100;
-        // } else 
-        if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
-            if ( $("#chap_modal input.chap_type:checked").val() == 2 ) total += 20;
-        }
-        return total; // return 0 by default....
-    }
-
+    // function calcTotal(grand_total) {
+    //     var total = 0;
+    //     //add all other chaperones to the newly computed total...
+    //     if (grand_total === true) {
+    //         for(var i = 0; i < state.chaperones.length; i++) {
+    //             if (i == state.index) {continue;}
+    //             total += state.chaperones[i].total;
+    //         }
+    //     }
+    //     // check if they are attending the chidon
+    //     // if ($(".full:checked").val() === "1") {
+    //     //     total += 100;
+    //     // } else 
+    //     if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
+    //         if ( $("#chap_modal input.chap_type:checked").val() == 2 ) total += 20;
+    //     }
+    //     return total; // return 0 by default....
+    // }
 });
