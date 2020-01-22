@@ -125,26 +125,26 @@
 						<form id="donationForm">
 							<div class="field">
 								<label>Full Name <span>(for receipt)</span>:</label>
-								<input type="text" id="name" placeholder="Full Name" required />
+								<input type="text" id="name" required />
 							</div>
 							<div class="field">
 								<label>Name to be displayed:</label>
-								<input type="text" id="display_name" placeholder="Name to be displayed" required />
+								<input type="text" id="display_name" required />
 							</div>
 							<div class="field">
 								<p><label class="checkbox"><input type="checkbox" id="anonymous" /><span></span></label><span style="color:#85ABDA">Donate anonymously</span></p>
 							</div>
 							<div class="field">
 								<label>Email <span>(for receipt)</span>:</label>
-								<input type="text" id="email" placeholder="Email" required />
+								<input type="text" id="email" required />
 							</div>
 							<div class="field">
-								<label>Phone:</label>
-								<input type="text" id="phone" placeholder="Phone (optional)" />
+								<label>Phone (optional):</label>
+								<input type="text" id="phone" />
 							</div>
 							<div class="field">
 								<label>Message or Dedication <span>(75 characters maximum)</span>:</label>
-								<input type="text" id="dedication" placeholder="Full Name" />
+								<input type="text" id="dedication" />
 							</div>
 							<h5>Pay with Paypal or Continue below</h5>
 							<br />
@@ -161,8 +161,7 @@
 								</div>
 								<div class="field">
 									<label>Exp. Year:</label>
-									<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
-										<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+									<select id="exp_yy"></select>
 								</div>
 								<div class="field">
 									<label>CVV:</label>
@@ -316,6 +315,13 @@
 		   //  		$(this).width(percent + '%');
 		   //  	});
 
+				// fill in exp dropdown
+				let html = "";
+				for ( let yy = 2020; yy <= 2030; yy++ ) {
+					html += "<option>" + yy + "</option>";
+				}
+				$("#exp_yy").html( html );
+
 				paypal.Buttons({
 					style: {
 						shape: 'rect',
@@ -447,7 +453,7 @@
 						let result = JSON.parse( info );
 						console.log( result );
 						if ( result.success ) {
-							let sponsorList = '<marquee behavior="scroll" direction="up" style="height:560px;">';;
+							let sponsorList = '<div class="marquee">';
 							for ( i in result.info.sponsors ) {
 								let sponsor = result.info.sponsors[i];
 								let dedication = sponsor.notes ? sponsor.notes : '';
@@ -465,7 +471,7 @@
 									</div>
 								`;
 							}
-							sponsorList += '</marquee>';
+							sponsorList += '</div>';
 							$(".sponsor-list").append( sponsorList );
 						} else {
 							alert( result.message );

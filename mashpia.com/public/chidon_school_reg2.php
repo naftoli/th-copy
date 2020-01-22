@@ -269,7 +269,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                     </div>
                     
                     <div class="create_chidon_info">
-                        <h3>Chidon Info</h3>
+                        <h3>Sweater</h3>
                         <div class="input_group input_full">
                             <i>Chaperones will be required to wear their Chidon sweaters throughout the Shabbaton.</i>
                         </div>

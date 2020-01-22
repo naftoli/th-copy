@@ -27,6 +27,9 @@ if ( $type == 'family' ) {
 $trans_id = $paypalInfo->id;
 $trans_info = 'Paypal transaction ID: ' . $trans_id . ' Payer ID: ' . $paypalInfo->payer->payer_id . ' Email Address: ' . $paypalInfo->payer->email_address . 
     ' Name: ' . $paypalInfo->payer->name->given_name . ' ' . $paypalInfo->payer->name->surname . ' More Info: ' . $paypalInfo->links[0]->href;
+    
+// send email
+include_once 'sendEmail.php'; 
 
 if ( $type == 'family' ) {
     // add to donations table 
