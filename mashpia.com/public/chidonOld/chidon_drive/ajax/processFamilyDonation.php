@@ -128,17 +128,14 @@ if ($response != null) {
           $trans_id = $tresponse->getTransId();
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
-          // send email confirmation
-          $subject = "Chidon Drive Donation";
-          $message = "Thank you for your donation of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your donation will go a long way in helping us give the children the chayos that will drive them to learn even more. Thank you.";
-          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          @mail( $email, $subject, $message, $headers );
+          // send email
+          include_once 'sendEmail.php';
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
-              $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-              $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+              // $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+              // $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+              $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
           }
       }
       // Or, print errors if the API request wasn't successful
@@ -147,11 +144,13 @@ if ($response != null) {
       $tresponse = $response->getTransactionResponse();
   
       if ($tresponse != null && $tresponse->getErrors() != null) {
-          $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-          $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+          // $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+          // $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+          $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
       } else {
-          $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
-          $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+          // $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+          // $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+          $error_msg .= $response->getMessages()->getMessage()[0]->getText() . "\n";
       }
   }
 } 

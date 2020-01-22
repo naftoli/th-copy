@@ -143,6 +143,15 @@
   });
 })();
 </script>
+<script>
+	$(function() {
+		let url = location.href;
+		let pos = url.indexOf('=');
+		let admin_id = 0;
+		if ( pos > 0 ) admin_id = url.substr( pos + 1 );
+		setTimeout(function(){ location.href="family-single.html?id=" + admin_id; }, 10000);
+	});
+</script>
 
 	</body>
 </html>

@@ -374,7 +374,7 @@
 					}
 
 					// get children info 
-					let url = window.location.href;
+					let url = location.href;
 					let pos = url.indexOf('=');
 					let admin_id = 0;
 					let children = []; // need to know user_id of children when creating the subsidies
@@ -430,12 +430,14 @@
 								return actions.order.capture().then(function(details) {
 									console.log( details );
 									$.post('../ajax/paypalPayment.php', { paypalInfo : JSON.stringify( details ), info : donation, type : 'family' }, function( result ) {
-										const res = JSON.parse( result );
+										console.log( result );
+										let res = JSON.parse( result );
 										if ( res.success ) {
-											alert('Transaction successfully completed!');
-											location.href = "thank-you.html";
+											alert("Your donation has been processed. A receipt will be sent to the email address provided. Thank you for your support!");
+											location.href = "thank-you.html?id=" + admin_id;
 										} else {
-											alert('Paypal Transaction successfully completed, however ' + res.error);
+											res.message += "Please check for errors or contact accounting@tzivoshashem.org for further support.";
+											alert( res.message );
 										}
 									});
 								});
@@ -647,7 +649,7 @@
 								});
 
 								// list of sponsors
-								let sponsorList = '<marquee behavior="scroll" direction="up" width="280px">';
+								let sponsorList = '<div class="marquee">';
 								console.log( info.data.sponsors );
 								console.log(info);
 								for ( i in info.data.sponsors ) {
@@ -667,7 +669,7 @@
 										</div>
 									`;
 								}
-								sponsorList += "</marquee>";
+								sponsorList += "</div>";
 								$(".sponsor-list").append( sponsorList );
 							} else {
 								alert( info.message );
@@ -720,10 +722,13 @@
 						$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function( result ) {
 							console.log( result );
 							let res = JSON.parse( result );
-							alert( res.message );
 							if ( res.success ) {
-								location.href = "thank-you.html";
-							} 
+								alert("Your donation has been processed. A receipt will be sent to the email address provided. Thank you for your support!");
+								location.href = "thank-you.html?id=" + admin_id;
+							} else {
+								res.message += "Please check for errors or contact accounting@tzivoshashem.org for further support.";
+								alert( res.message );
+							}
 						});
 					});
 		    });

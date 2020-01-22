@@ -162,7 +162,7 @@
 }
 .bar-bar__wrapper .bar-bar__marker {
 	position: absolute;
-  left: calc(100% - 2.5rem);
+  left: calc(100% - 1.7rem);
   top: -3rem;
 }
 .bar-bar__wrapper .bar-bar__marker p {    
@@ -604,4 +604,29 @@ input {
     .main-wrapper {
         width: 100%;
     }
+}
+
+.marquee {
+	padding-top: 100%;
+	-moz-animation: marquee 15s linear infinite;
+	-webkit-animation: marquee 15s linear infinite;
+	animation: marquee 15s linear infinite;
+}
+@-moz-keyframes marquee {
+	0%   { transform: translate(0, 0); }
+	100% { transform: translate(0, -100%); }
+}
+@-webkit-keyframes marquee {
+	0%   { transform: translate(0, 0); }
+	100% { transform: translate(0, -100%); }
+}
+@keyframes marquee {
+	0%   { 
+	-moz-transform: translate(0, 0);
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0); }
+	100% { 
+	-moz-transform: translate(0, -100%);
+	-webkit-transform: translate(0, -100%);
+	transform: translate(0, -100%); }
 }
