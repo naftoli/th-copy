@@ -159,14 +159,7 @@
 							<div class="field">
 								<label>Country:</label>
 								<select id="bill_country">
-									<option>United States</option>
-									<option>Canada</option>
-									<option>England</option>
-									<option>Australia</option>
-									<option>S Africa</option>
-									<option>France</option>
-									<option>Europe</option>
-									<option>S America</option>
+									
 								</select>
 							</div>						
 							<div class="field">
@@ -280,7 +273,51 @@
 
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
-		    });
+			});
+			
+			const countries = [
+				'United States',
+				'Argentina',
+				'Australia',
+				'Azerbaijan',
+				'Belarus',
+				'Belgium',
+				'Brazil',
+				'Canada',
+				'Chile',
+				'China',
+				'Colombia',
+				'Costa Rica',
+				'Czech Republic',
+				'Denmark',
+				'Finland',
+				'France',
+				'Germany',
+				'Hungary',
+				'India',
+				'Ireland',
+				'Israel',
+				'Italy',
+				'Lithuania',
+				'Mexico',
+				'Netherlands',
+				'South Korea', 
+				'Slovakia',
+				'South Africa',
+				'Spain',
+				'Sweden',
+				'Switzerland',
+				'Turkey',
+				'Ukraine',
+				'United Kingdom',
+				'Venezuela'
+			];
+			let html = '';
+			for (let c of countries) {
+				html += "<option>" + c + "</option>";
+			}
+			$("#bill_country").append( html );
+
 		    $(document).ready(function(e){
 					// // only show content if correct password is supplied
 					// let password = prompt("Please enter the correct password to access this page.");

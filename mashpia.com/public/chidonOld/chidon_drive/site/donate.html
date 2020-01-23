@@ -171,7 +171,9 @@
 							<h5>Billing Address</h5>						
 							<div class="field">
 								<label>Country:</label>
-								<select id="bill_country"><option>United States</option><option>Canada</option></select>
+								<select id="bill_country">
+
+								</select>
 							</div>						
 							<div class="field">
 								<label>Address:</label>
@@ -293,6 +295,49 @@
 		        }
 		    });
 		});
+
+			const countries = [
+				'United States',
+				'Argentina',
+				'Australia',
+				'Azerbaijan',
+				'Belarus',
+				'Belgium',
+				'Brazil',
+				'Canada',
+				'Chile',
+				'China',
+				'Colombia',
+				'Costa Rica',
+				'Czech Republic',
+				'Denmark',
+				'Finland',
+				'France',
+				'Germany',
+				'Hungary',
+				'India',
+				'Ireland',
+				'Israel',
+				'Italy',
+				'Lithuania',
+				'Mexico',
+				'Netherlands',
+				'South Korea', 
+				'Slovakia',
+				'South Africa',
+				'Spain',
+				'Sweden',
+				'Switzerland',
+				'Turkey',
+				'Ukraine',
+				'United Kingdom',
+				'Venezuela'
+			];
+			let html = '';
+			for (let c of countries) {
+				html += "<option>" + c + "</option>";
+			}
+			$("#bill_country").append( html );
 			
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
