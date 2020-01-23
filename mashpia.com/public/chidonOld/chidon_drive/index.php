@@ -9,7 +9,7 @@ if ( is_numeric( $url_end ) ) {
     exit;
 } else {
     switch ( $url ) {
-        case '/site/setup':
+        case '/setup':
             header("Location: https://" . $host . "/site/login.html");
             break;
         case '/site/intro.html':
