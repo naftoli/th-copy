@@ -135,14 +135,14 @@
 .bar-bar__wrapper .bar-bar__line.subsidy {
 	background: #e3b848;
 	position: absolute;
-	z-index: 2;
+	z-index: 1;
 	top: 0;
 	left: 0;
 }
 .bar-bar__wrapper .bar-bar__line.donation {
 	background: #4f78bb;
 	position: absolute;
-	z-index: 1;
+	z-index: 2;
 	top: 0;
 	left: 0;
 }
