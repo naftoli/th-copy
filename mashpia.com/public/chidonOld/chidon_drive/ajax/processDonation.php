@@ -1,4 +1,5 @@
 <?php
+// ini_set(display_errors,1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 
@@ -127,19 +128,13 @@ if ($response != null) {
 
           // send email
           include_once 'sendEmail.php';
-        } else {
-          $error_msg .= "Transaction Failed \n";
-          if ($tresponse->getErrors() != null) {
-              // $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-              // $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-              $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
-          }
-        } else {
-          $error_msg .= "Transaction Failed \n";
-          if ($tresponse->getErrors() != null) {
-              $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-              $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-          }
+      } else {
+        $error_msg .= "Transaction Failed \n";
+        if ($tresponse->getErrors() != null) {
+            // $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+            // $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+            $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
+        }
       }
       // Or, print errors if the API request wasn't successful
   } else {
