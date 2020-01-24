@@ -147,8 +147,7 @@
 								</div>
 								<div class="field">
 									<label>Exp. Year:</label>
-									<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
-										<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+									<select id="exp_yy"></select>
 								</div>
 								<div class="field">
 									<label>CVV:</label>
@@ -317,6 +316,13 @@
 				html += "<option>" + c + "</option>";
 			}
 			$("#bill_country").append( html );
+
+			// fill in exp dropdown
+			html = "";
+			for ( let yy = 2020; yy <= 2030; yy++ ) {
+				html += "<option>" + yy + "</option>";
+			}
+			$("#exp_yy").html( html );
 
 		    $(document).ready(function(e){
 					// // only show content if correct password is supplied
