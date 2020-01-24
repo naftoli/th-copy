@@ -365,6 +365,8 @@ input {
 	margin: auto;
   display: block;
   padding: .8rem;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 
