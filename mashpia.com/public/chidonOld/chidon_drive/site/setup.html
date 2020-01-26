@@ -39,51 +39,22 @@
                 <h2 class="title">Set Up Your Family Page</h2>					
 				<div class="form personal-information">
 					<form id="personalInfo">
-                        <h5 class="lower">Please note: Your ChidonDrive family page will only be activated once you set up your fundraising goals.</h5>
-<!-- 
-						<div class="bar">
-							<div class="bar-circle">
-								<p id="simple-arc">Shabbaton Cost</p>
-								<div class="bar-circle__inner">
-									<img src="img/donate/person.jpg" />
-									<span>$350</span>
-								</div>
-							</div>
-							<div class="bar-bar">
-								<div class="bar-bar__wrapper">
-									<div class="bar-bar__line registration" data-percent="50">
-										<div class="bar-bar__circle"></div>
-										<div class="bar-bar__marker">
-											<img src="img/marker-blue.png" />
-											<p>$175<br>Registration Fee</p>
-										</div>
-									</div>
-									<div class="bar-bar__line subsidy" data-percent="75">
-										<div class="bar-bar__circle"></div>
-										<div class="bar-bar__marker">
-											<img src="img/marker.png" />
-											<p>$100<br>Rohr Subsidy</p>
-										</div>
-									</div>
-									<div class="remaining">
-										<div class="bar-bar__marker">
-											<p>$100<br>Remaining</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
- --><!-- 
-                        <p>Want to be a Chidon ambassador?<br>Does your child have a large fan club?<br>Think you can raise the full $350 without the grant, or even more?</p> 
-                        <p>Up your child’s fundraising goal and contribute towards another child’s Shabbaton experience.</p>
- -->
+                        <h5 class="lower">Please note: Your ChidonDrive family page will only be activated once you set up your family page.</h5>
                         <br>
 
                         <p>Select which child(ren) you you will be raising money for and enter your fundraising goal for each child:</p>
-                        <div class="field" id="children"></div>
+						<div class="field" id="children"></div>
+						
+						<div class="progress-bar">
+                        	<h5>Track your progress here:</h5>
+							
+							<div class="setup-tickets">
+								
+							</div>
+                        </div>
 
 						<div class="group save-detail">
-							<input type="submit" name="submit" value="Save and continue to my page" class="button" />
+							<input type="submit" name="submit" value="Save and continue to my page" class="button" style="width: auto !important;" />
 						</div>
 						<p>Your custom page link:<br /><span class="custom-link"></span></p>
 					</form>
@@ -175,42 +146,42 @@
                         alert("Your goal cannot be less than " + cost);
                         $(this).val( cost );
                     }
-                });
+				});
 
 					// find out total amount
-					$.post('../ajax/getTotalDonation.php', function( result ) {
-						let res = JSON.parse( result );
-						if ( res.success ) {
-							let cost = 350;
-							let totalChildren = 3000;
-							let totalGoal = totalChildren * cost;
-							let totalAmount = Math.round(res.total);
-							let percent = Math.round((totalAmount / totalGoal) * 100);
-							let numChildrenSponsored = Math.round(totalAmount / cost);
-							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
-							// console.log( info );
-							$("#numChildren").html( numChildrenSponsored + " / " + totalChildren + "<br><span>children covered</span>" );
-							$("#circle-chart").data('percent', percent);
+					// $.post('../ajax/getTotalDonation.php', function( result ) {
+					// 	let res = JSON.parse( result );
+					// 	if ( res.success ) {
+					// 		let cost = 350;
+					// 		let totalChildren = 3428;
+					// 		let totalGoal = totalChildren * cost;
+					// 		let totalAmount = Math.round(res.total);
+					// 		let percent = Math.round((totalAmount / totalGoal) * 100);
+					// 		let numChildrenSponsored = Math.round(totalAmount / cost);
+					// 		// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
+					// 		// console.log( info );
+					// 		$("#numChildren").html( numChildrenSponsored + " / " + totalChildren + "<br><span>children covered</span>" );
+					// 		$("#circle-chart").data('percent', percent);
 
-							var circlePercent = $('#circle-chart').data('percent');
-							var myCircle = Circles.create({
-								id:                  'circle-chart',
-								radius:              90,
-								value:               circlePercent,
-								maxValue:            100,
-								width:               20,
-								text:                function(value){return '<p>'+value + '%</p><img src="img/percent-ppl.png">';},
-								colors:              ['#8fa3ad', '#4f78bb'],
-								duration:            400,
-								wrpClass:            'circles-wrp',
-								textClass:           'circles-text',
-								valueStrokeClass:    'circles-valueStroke',
-								maxValueStrokeClass: 'circles-maxValueStroke',
-								styleWrapper:        true,
-								styleText:           true
-							});
-						}
-					});
+					// 		var circlePercent = $('#circle-chart').data('percent');
+					// 		var myCircle = Circles.create({
+					// 			id:                  'circle-chart',
+					// 			radius:              90,
+					// 			value:               circlePercent,
+					// 			maxValue:            100,
+					// 			width:               20,
+					// 			text:                function(value){return '<p>'+value + '%</p><img src="img/percent-ppl.png">';},
+					// 			colors:              ['#8fa3ad', '#4f78bb'],
+					// 			duration:            400,
+					// 			wrpClass:            'circles-wrp',
+					// 			textClass:           'circles-text',
+					// 			valueStrokeClass:    'circles-valueStroke',
+					// 			maxValueStrokeClass: 'circles-maxValueStroke',
+					// 			styleWrapper:        true,
+					// 			styleText:           true
+					// 		});
+					// 	}
+					// });
 
                 $(".save-detail input").click( function( e ) {
                     e.preventDefault();
@@ -285,10 +256,107 @@
 							$(".save-detail input").val("Update my Settings");
 						}
 						$(".custom-link").text("https://chidondrive.com/" + res.info.children[0].last + "/" + admin_id);
+
+						// setup thermometers
+						html = '';
+						let tickets = '';
+						for ( child of res.info.children ) {
+							const cost = 350;
+							const raised = Math.round( child.raised );
+							const percent = Math.round((raised / cost) * 100);
+							const rohr = raised >= 275 ? 75 : 0;							
+							const rohrPercent = Math.round(((raised + rohr) / cost) * 100);
+							const remaining = cost - raised - rohr;
+
+							const halfRaised = parseFloat( raised / 2 ).toFixed(2);
+							const halfRohr = parseFloat( rohr / 2 ).toFixed(2);
+							const half = halfRaised + halfRohr;
+
+							html += `
+							<div class="bar setup-bar">
+								<div class="bar-circle">
+										<p id="simple-arc">Shabbaton Cost</p>
+										<div class="bar-circle__inner">
+											<img src="img/donate/person.jpg" />
+											<span>$350</span>
+										</div>
+									</div>
+									<div class="bar-bar">
+										<div class="bar-bar__wrapper">
+											<div class="bar-bar__line registration remaining" data-percent="${percent}">
+												<p class="amount">${halfRaised}</p>
+												<div class="bar-bar__circle"></div>
+												<p class="tag">$${raised} Raised</p>
+												<div class="bar-bar__marker">
+													<img src="img/marker-blue.png" />
+												</div>
+											</div>
+											<div class="bar-bar__line subsidy" data-percent="${rohrPercent}">
+												<p class="amount">${halfRohr}</p>
+												<div class="bar-bar__circle"></div>
+												<p class="tag">$${rohr}<br>Rohr Grant</p>
+												<div class="bar-bar__marker">
+													<img src="img/marker.png" />
+												</div>
+											</div>
+											<p class="description">$${cost / 2}<br>Registration</p>
+											<div class="remaining">
+												<div class="bar-bar__marker">
+													<p>$${remaining}<br>Remaining</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bar-bar">
+										<div class="bar-bar__wrapper">
+											<div class="bar-bar__line registration remaining" data-percent="${percent}">
+												<p class="amount">${halfRaised}</p>
+												<div class="bar-bar__circle"></div>
+											</div>
+											<div class="bar-bar__line subsidy" data-percent="${rohrPercent}">
+												<p class="amount">${halfRohr}</p>
+												<div class="bar-bar__circle"></div>
+											</div>
+											<p class="description">$${cost / 2}<br>Subsidy</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div>${child.first}</div>
+							`;
+							
+							const numTickets = parseInt( Math.round(raised) / 50 );
+							let grandTickets = 0;
+							if ( raised >= 275 ) grandTickets++;
+							if ( raised >= 500 ) grandTickets = 4;
+							
+							tickets += `
+								<div class="ticket-child">
+									<h5>${child.first}</h5>
+									<div class="ticket">
+										<div class="ticket-image">
+										</div>
+										<h6>${numTickets}</h6>
+									</div>
+									<div class="grand-prize">
+										<div class="ticket-image">
+										</div>
+										<h6>${grandTickets}</h6>
+									</div>
+								</div>
+							`;
+						}
+						$(".progress-bar > h5").append( html );
+						$(".setup-tickets").append( tickets );
+
+						// Round text
+						const circleType = new CircleType(document.getElementById('simple-arc'));
+						circleType.radius(59);
+
                     } else {
                         alert( res.error );
                     }
-                });
+				});
             });
 		</script>
 

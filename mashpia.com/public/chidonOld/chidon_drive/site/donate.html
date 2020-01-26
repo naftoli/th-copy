@@ -378,7 +378,7 @@
 					createOrder: function(data, actions) {
 						const amount = calcAmount();
 						if ( !amount ) {
-							alert("You have not entered any amount!");
+							confirm("You have not entered any amount!");
 							return false;
 						}
 
@@ -434,12 +434,6 @@
 						}
 						else $('.children-change').val('');
 				  });
-
-					$("#donation_amount").blur( function() {
-						if ( !isNaN( $(this).val() ) ) {
-							$(".donation_type").eq(1).trigger('click');
-						}
-					});
 
 					// find out total amount
 					$.post('../ajax/getTotalDonation.php', function( result ) {
@@ -537,8 +531,8 @@
 							value = value.replace(/\$/g, '');
 						}
 						if ( parseInt( value ) > 0 ) {
-							if ( !$(".donation_type").eq(1).is(":checked") ) {
-								$(".donation_type").eq(1).trigger('click');
+							if ( !$(".donation_type").eq(0).is(":checked") ) {
+								$(".donation_type").eq(0).trigger('click');
 							}
 						}
 					});

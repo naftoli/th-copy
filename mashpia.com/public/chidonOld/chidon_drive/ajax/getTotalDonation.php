@@ -15,24 +15,11 @@ $res = $stmt->execute([
   ':year' =>  $year
 ]);
 
-$stmt2 = $MASHPIA_DB->prepare("
-    SELECT 
-        SUM(paid) AS totalReg, SUM(rohr_subsidy) AS totalRohr
-    FROM
-        th_chidon
-    WHERE
-        year = :year
-");
-$res2 = $stmt2->execute([
-  ':year' =>  $year
-]);
-
-if ( $res && $res2 ) {
+if ( $res ) {
   $row = $stmt->fetch();
-  $row2 = $stmt2->fetch();
   echo json_encode([
     'success' =>  true, 
-    'total'   =>  $row['total'] + $row2['totalReg'] + ($row2['totalRohr'] * 100)
+    'total'   =>  $row['total']
   ]);
 } else {
   echo json_encode([
