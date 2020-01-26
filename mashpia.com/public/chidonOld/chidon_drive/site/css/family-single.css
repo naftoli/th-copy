@@ -167,7 +167,7 @@
 }
 .bar-bar__wrapper .bar-bar__marker p {    
 	position: absolute;
-  right: 2rem;
+  right: 0.3rem;
   top: 0rem;
   width: 100px;
   font-weight: 800;
@@ -543,7 +543,7 @@ input {
   margin-left: 48px;
 }
 .family-charts .bar-bar__wrapper .bar-bar__marker p {
-  right: 2.5rem;
+  right: 2rem;
   /* top: 1rem; */
   width: 3rem;
 }

@@ -72,6 +72,7 @@ $display_name = $donation['display_name'];
 $anonymous = $donation['anonymous'];
 $email = $donation['email'];
 $phone = $donation['phone'];
+$notes = $donation['dedication'];
 
 // prepare variables for donation table
 $amount = $donation['amount'];
@@ -170,7 +171,8 @@ if ( empty( $error_msg ) ) {
           transaction_id = :trans_id, 
           transaction_info = :trans_info, 
           email = :email, 
-          phone = :phone 
+          phone = :phone, 
+          notes = :notes
     ");
     $res = $stmt->execute([
       ':name'         =>  $name, 
@@ -182,7 +184,8 @@ if ( empty( $error_msg ) ) {
       ':trans_id'     =>  $trans_id, 
       ':trans_info'   =>  $trans_info, 
       ':email'        =>  $email,
-      ':phone'        =>  $phone
+      ':phone'        =>  $phone, 
+      ':notes'        =>  $notes
     ]);
     $donation_id = $MASHPIA_DB->lastInsertId();
 

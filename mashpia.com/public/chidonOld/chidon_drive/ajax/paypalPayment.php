@@ -14,6 +14,7 @@ $display_name = $info['display_name'];
 $anonymous = $info['anonymous'];
 $email = $info['email'];
 $phone = $info['phone'];
+$notes = $info['dedication'];
 
 // prepare variables for donation table
 $amount = $info['amount'];
@@ -45,7 +46,8 @@ if ( $type == 'family' ) {
             transaction_id = :trans_id, 
             transaction_info = :trans_info, 
             email = :email, 
-            phone = :phone 
+            phone = :phone, 
+            notes = :notes
     ");
     $res = $stmt->execute([
         ':name'         =>  $name, 
@@ -57,7 +59,8 @@ if ( $type == 'family' ) {
         ':trans_id'     =>  $trans_id, 
         ':trans_info'   =>  $trans_info, 
         ':email'        =>  $email,
-        ':phone'        =>  $phone
+        ':phone'        =>  $phone, 
+        ':notes'        =>  $notes
     ]);
     $donation_id = $MASHPIA_DB->lastInsertId();
 

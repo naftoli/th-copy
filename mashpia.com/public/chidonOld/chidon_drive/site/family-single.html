@@ -41,9 +41,9 @@
 				<div class="family-info">
 					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
 					<div class="bio-wrapper">
-						<p>Over the past few months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. Along with thousands of other children around the world, <span class="grammar"></span> chose to dedicate his spare time to this incredible goal.</p>
-						<p>To reward his great work, we hope to send <span class="grammar2"></span> to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
-						<p>Be a sponsor, and join us in showing <span class="grammar2"></span> just how much his accomplishment means.</p>
+						<p>Over the past six months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. As part of a beautiful movement of 5000 children around the world, <span class="grammar"></span> chose to dedicate <span class="grammar3"></span> spare time to this incredible goal.</p>
+						<p>To recognize <span class="grammar2"></span> for <span class="grammar3"></span> great work, and the tremendous knowledge they have gained, we are so proud to send <span class="grammar2"></span> to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
+						<p>Please be a sponsor, and help us reach our family goal to support this incredible cause. Together we will show them just how important <span class="grammar3"></span> accomplishment is.</p>
 					</div>
 					<a href="#" class="button edit-settings" style="display:none;">Manage Page</a>
 
@@ -522,14 +522,17 @@
 									if ( info.data.children.length > 1 ) {
 										$(".grammar").text('they');
 										$(".grammar2").text('them');
+										$(".grammar3").text('their');
 									} else {
 										if ( child.gender == 'M' ) {
 											$(".grammar").text('he');
 											$(".grammar2").text('him');
+											$(".grammar3").text('his');
 										}
 										else if ( child.gender == 'F' ) {
 											$(".grammer").text('she');
 											$(".grammar2").text('her');
+											$(".grammar3").text('her');
 										}
 									}
 									
@@ -537,23 +540,25 @@
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
 
 									// figure out amounts
-									let cost = child.goal;
+									let cost = parseFloat( child.goal );
 									// let regPaid = child.paid > 0 ? Math.round(child.paid) : 0;
 									// let regPercent = regPaid ? Math.round((regPaid / cost) * 100) : 0;
 									// if ( regPercent > 100 ) regPercent = 100;
 									// let subsidy = parseInt( child.rohr_subsidy ) ? 100 : 0;
 
-									let donation = child.total_donation;
+									let donation = parseFloat( child.total_donation );
 									let donationPercent = donation > 0 ? Math.round(( donation / cost ) * 100) : 0;
 									if ( donationPercent > 100 ) donationPercent = 100;
 
-									let subsidy = child.total_donation >= 275 ? 75 : 0;
+									let subsidy = donation >= 275 ? 75 : 0;
+									console.log('1:' + subsidy);
 									// make sure subsidy together with donation isn't more than goal
 									if ( donation + subsidy > cost ) {
 										subsidy = cost - donation;
 										if ( subsidy < 0 ) subsidy = 0;
 									}
-									let subsidyPercent = donation + subsidy > 0 ? Math.round(((donation + subsidy) / cost ) * 100) : 0;
+									console.log('2:' + subsidy);
+									let subsidyPercent = subsidy > 0 ? Math.round(((donation + subsidy) / cost ) * 100) : 0;
 
 									let percent = ((child.total_donation / cost) * 100).toFixed(2);
 									let balance = cost - donation - subsidy;
