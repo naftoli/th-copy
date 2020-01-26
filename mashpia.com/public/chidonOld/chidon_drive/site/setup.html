@@ -300,11 +300,15 @@
 												</div>
 											</div>
 											<p class="description">$${cost / 2}<br>Registration</p>
+											`;
+											if ( remaining ) html += `
 											<div class="remaining">
 												<div class="bar-bar__marker">
 													<p>$${remaining}<br>Remaining</p>
 												</div>
 											</div>
+											`;
+											html += `
 										</div>
 									</div>
 									<div class="bar-bar">
@@ -338,13 +342,15 @@
 										</div>
 										<h6>${numTickets}</h6>
 									</div>
+									`;
+									if ( grandTickets ) tickets += `
 									<div class="grand-prize">
 										<div class="ticket-image">
 										</div>
 										<h6>${grandTickets}</h6>
 									</div>
-								</div>
-							`;
+									`;
+							tickets += '</div>';
 						}
 						$(".progress-bar > h5").append( html );
 						$(".setup-tickets").append( tickets );
