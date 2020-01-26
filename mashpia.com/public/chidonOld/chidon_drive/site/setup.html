@@ -125,11 +125,6 @@
 		<script src="js/js.cookie.js"></script>
         <script type="text/javascript">
             $( function() {
-				// Animate bars
-		    	$('.bar-bar__line').each(function(index, i){
-		    		var percent = $(this).data('percent');
-		    		$(this).width(percent + '%');
-		    	});
 
                 if ( !Cookies.get('chidon_admin') ) {
                     location.href = "login.html";
@@ -275,7 +270,7 @@
 							html += `
 							<div class="bar setup-bar">
 								<div class="bar-circle">
-										<p id="simple-arc">Shabbaton Cost</p>
+										<p class="simple-arc">Shabbaton Cost</p>
 										<div class="bar-circle__inner">
 											<img src="img/donate/person.jpg" />
 											<span>$350</span>
@@ -354,15 +349,27 @@
 						}
 						$(".progress-bar > h5").append( html );
 						$(".setup-tickets").append( tickets );
-
-						// Round text
-						const circleType = new CircleType(document.getElementById('simple-arc'));
-						circleType.radius(59);
+						thermomter();
 
                     } else {
                         alert( res.error );
                     }
 				});
+
+
+				function thermomter() {
+					// Animate bars
+			    	$('.bar-bar__line').each(function(index, i){
+			    		var percent = $(this).data('percent');
+			    		$(this).width(percent + '%');
+			    	});
+
+					// Round text
+					$('.simple-arc').each(function(e){
+						const circleType = new CircleType($(this)[0]);
+						circleType.radius(63);	
+					})
+				}
             });
 		</script>
 
