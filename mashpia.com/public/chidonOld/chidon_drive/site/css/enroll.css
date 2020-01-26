@@ -349,6 +349,7 @@ div#children .field {
     font-weight: bold;
     font-size: 1.8rem;
     margin: auto;
+    color: #0a173a;
 }
 .bar-circle__inner img {
  	display: inline-block;
@@ -357,13 +358,13 @@ div#children .field {
   margin-top: .2rem;
   margin-bottom: -.3rem;
 }
-#simple-arc {
+.setup-bar .bar-circle .simple-arc {
  	color: #8fa3ad;
  	font-size: 1rem;
  	font-weight: bold;
  	position: absolute;
- 	top: -20px;
- 	left: 42px;
+ 	top: -30px;
+ 	left: 40px;
 }
 
 .bar-bar {
@@ -457,6 +458,7 @@ div#children .field {
 .setup-bar {
     padding: 2rem 5rem;
     padding-left: 0;
+   	margin-bottom: 2rem;
 }
 .setup-bar .bar-bar__wrapper {
     margin: 0;
