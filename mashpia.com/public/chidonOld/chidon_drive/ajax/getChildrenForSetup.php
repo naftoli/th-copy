@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 require __DIR__ . '/../encrypt.php';
@@ -14,33 +15,45 @@ if ( $admin_id ) {
         u.first,
         u.last,
         tc.fundraising_goal AS goal,
-        tc.show_pic AS pic,
-        IFNULL(SUM(cu.subsidy_amount), 0) AS raised
+        tc.show_pic AS pic
     FROM
         users u
             JOIN
         th_chidon tc USING (user_id)
-            LEFT JOIN
-        chidon_user_subsidies cu USING (user_id)
     WHERE
         tc.year = :year AND tc.parent_id = :admin
-            AND (cu.chidon_year IS NULL
-            OR cu.chidon_year = :year)
-    GROUP BY u.first
     ORDER BY u.first
   ");
   $res = $stmt->execute([
     ':year'   =>  $year, 
     ':admin'  =>  $admin_id
   ]);
+  
   //echo $stmt->debugDumpParams(); exit;
   if ( $res ) {
     $children = $stmt->fetchAll();
+    foreach ( $children as $idx => $child ) {
+      $stmt2 = $MASHPIA_DB->prepare("
+      SELECT 
+          IFNULL(SUM(subsidy_amount), 0) AS raised
+      FROM
+          chidon_user_subsidies
+      WHERE
+          user_id = :user AND chidon_year = :year
+      ");
+      $stmt2->execute([
+        ':user' => $child['user_id'], 
+        ':year' => $year
+      ]);
+      $row = $stmt2->fetch();
+      $children[$idx]['raised'] = $row['raised'];
+    }
+
     echo json_encode([
       'success'   =>  true,
       'info'      =>  [ 
-        'children' => $children, 
-        'admin'   => $admin_id
+        'children'=>  $children, 
+        'admin'   =>  $admin_id 
       ]
     ]);    
   } else {
