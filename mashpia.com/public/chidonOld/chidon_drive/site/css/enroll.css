@@ -403,13 +403,14 @@ div#children .field {
 	background: #c4922c;
 	position: absolute;
 	right: 0;
+	left: 10px;
 }
 .bar-bar__wrapper .bar-bar__line.registration .bar-bar__circle {
 	background: #3c65b0;
 }
 .bar-bar__wrapper .bar-bar__marker {
 	position: absolute;
-  left: calc(100% - 2.5rem);
+  left: calc(100% - 1.8rem);
   top: -3rem;
 }
 .bar-bar__wrapper .bar-bar__marker p {    
