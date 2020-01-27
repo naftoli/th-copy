@@ -226,9 +226,14 @@
 				let activate = true;
 				let admin_id = 0;
                 $.post("../ajax/getChildrenForSetup.php", { admin: Cookies.get('chidon_admin') }, function( result ) {
-                    const res = JSON.parse( result );
+					const res = JSON.parse( result );
+					console.log( res );
                     if ( res.success ) {
 						admin_id = res.info.admin;
+						if ( !res.info.children.length ) {
+							alert("You do not have any eligible children in the chidon.");
+							location.href = "intro.html";
+						}
                         const pic = parseInt( res.info.children[0].pic );
 
                         let html = '<table>';
