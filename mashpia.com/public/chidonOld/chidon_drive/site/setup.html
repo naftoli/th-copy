@@ -56,6 +56,7 @@
 						<div class="group save-detail">
 							<input type="submit" name="submit" value="Save and continue to my page" class="button" style="width: auto !important;" />
 						</div>
+						<br />
 						<p>Your custom page link:<br /><span class="custom-link"></span></p>
 					</form>
 				</div>
@@ -271,7 +272,7 @@
 
 						// setup thermometers
 						html = '';
-						let tickets = '';
+						let tickets = '<br /><h5>Tickets</h5>';
 						for ( child of res.info.children ) {
 							const cost = 350;
 							const raised = Math.round( child.raised );
@@ -302,7 +303,9 @@
 												<div class="bar-bar__circle"></div>
 												<p class="tag">$${raised} Raised</p>
 												<div class="bar-bar__marker">
-													<img src="img/marker-blue.png" />
+													`;
+													if ( percent >= 20 ) html += `<img src="img/marker-blue.png" />`;
+													html +=`
 												</div>
 											</div>
 											<div class="bar-bar__line subsidy" data-percent="${rohrPercent}">
@@ -313,8 +316,9 @@
 												`;
 												if ( rohr ) html += `<p class="tag">$${rohr}<br>Rohr Grant</p>`;
 												html += `
-												<div class="bar-bar__marker">
-													<img src="img/marker.png" />
+												<div class="bar-bar__marker">`;
+													if ( rohrPercent >= 20 ) html += `<img src="img/marker.png" />`;
+													html += `
 												</div>
 											</div>
 											<p class="description">$${cost / 2}<br>Registration</p>
@@ -372,7 +376,7 @@
 										<h6>${grandTickets}</h6>
 									</div>
 									`;
-							tickets += '</div>';
+							tickets += '</div><br />';
 						}
 						$(".progress-bar > h5").append( html );
 						$(".setup-tickets").append( tickets );
