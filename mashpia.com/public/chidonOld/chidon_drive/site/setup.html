@@ -194,7 +194,19 @@
                         child.pic = pic;
                         child.add = $(this).find('.id').is(":checked");
                         children.push( child );
-                    });
+					});
+					
+					// make sure at least one child is checked
+					let atLeastOne = false;
+					for (let child of children) {
+						if ( child.add ) {
+							atLeastOne = true;
+						}
+					}
+					if ( !atLeastOne ) {
+						alert("You must check off at least one child.");
+						return false;
+					}
 
                     if ( children.length > 0 ) {
                         $.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info : JSON.stringify( children ) }, function( res ) {
@@ -273,13 +285,15 @@
 										<p class="simple-arc">Shabbaton Cost</p>
 										<div class="bar-circle__inner">
 											<img src="img/donate/person.jpg" />
-											<span>$350</span>
+											<span>$${cost}</span>
 										</div>
 									</div>
 									<div class="bar-bar">
 										<div class="bar-bar__wrapper">
 											<div class="bar-bar__line registration remaining" data-percent="${percent}">
-												<p class="amount">${halfRaised}</p>
+												`;
+												if ( percent >= 25 ) html += `<p class="amount">${halfRaised}</p>`;
+											html += `
 												<div class="bar-bar__circle"></div>
 												<p class="tag">$${raised} Raised</p>
 												<div class="bar-bar__marker">
@@ -287,9 +301,13 @@
 												</div>
 											</div>
 											<div class="bar-bar__line subsidy" data-percent="${rohrPercent}">
-												<p class="amount">${halfRohr}</p>
+												`;
+												if ( halfRohr > 0 ) html += `<p class="amount">${halfRohr}</p>`;
+											html += `
 												<div class="bar-bar__circle"></div>
-												<p class="tag">$${rohr}<br>Rohr Grant</p>
+												`;
+												if ( rohr ) html += `<p class="tag">$${rohr}<br>Rohr Grant</p>`;
+												html += `
 												<div class="bar-bar__marker">
 													<img src="img/marker.png" />
 												</div>
@@ -309,11 +327,15 @@
 									<div class="bar-bar">
 										<div class="bar-bar__wrapper">
 											<div class="bar-bar__line registration remaining" data-percent="${percent}">
-												<p class="amount">${halfRaised}</p>
+												`;
+												if ( percent >= 25 ) html += `<p class="amount">${halfRaised}</p>`;
+											html += `
 												<div class="bar-bar__circle"></div>
 											</div>
 											<div class="bar-bar__line subsidy" data-percent="${rohrPercent}">
-												<p class="amount">${halfRohr}</p>
+												`;
+												if ( halfRohr > 0 ) html += `<p class="amount">${halfRohr}</p>`;
+												html += `
 												<div class="bar-bar__circle"></div>
 											</div>
 											<p class="description">$${cost / 2}<br>Subsidy</p>
