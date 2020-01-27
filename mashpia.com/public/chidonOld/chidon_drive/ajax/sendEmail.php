@@ -7,7 +7,7 @@ function sendEmail( $amount, $trans_id, $email ) {
     $headers[] = 'Reply-To: chidon@tzivoshashem.com';
 
     $subject = "Chidon Drive Donation";
-    $message = '<img src="email-header.jpg" style="max-width: 100%; height: auto;" />';
+    $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';
     $message .= "<p>Thank you for your generous donation of $" . number_format( $amount, 2 ) . ".</p>
                 <p>Your support enables us to show our children how meaningful their learning is, and to drive them to go mechayil el choyil.</p>";
     $message .= "<p>Your transaction id is: " . $trans_id . "</p>";
