@@ -99,6 +99,7 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/fullpage.js"></script>
+		<script src="js/js.cookie.js"></script>
 		<script type="text/javascript">
 		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
@@ -149,7 +150,7 @@
 		let pos = url.indexOf('=');
 		let admin_id = 0;
 		if ( pos > 0 ) admin_id = url.substr( pos + 1 );
-		setTimeout(function(){ location.href="family-single.html?id=" + admin_id; }, 10000);
+		if ( admin_id ) setTimeout(function(){ location.href="family-single.html?id=" + admin_id; }, 10000);
 	});
 </script>
 
