@@ -480,7 +480,7 @@ div#children .field {
 }
 .setup-bar .bar-bar__line p.tag {
     position: absolute;
-    top: -2rem;
+    top: -3rem;
     font-size: 1rem;
     font-weight: 400;
     margin: 0;
@@ -489,7 +489,7 @@ div#children .field {
     width: 100%;
 }
 .setup-bar .bar-bar__line.remaining p.tag {
-    padding-left: 6rem;
+    padding-left: 8rem;
 }
 .setup-bar .bar-bar__line.subsidy p.tag {
     color: #e3b848;
