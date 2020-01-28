@@ -179,51 +179,6 @@
 					// 	}
 					// });
 
-                $(".save-detail input").click( function( e ) {
-                    e.preventDefault();
-                    if ( !$("#agree:checked").length ) {
-                        alert("You must indicate your acceptance of having your page accessible to the public.");
-                        return false;
-                    }
-                    const pic = $("#pic").is(":checked");
-
-                    let children = [];
-                    $(".child").each( function() {
-                        let child = {};
-                        child.id = $(this).find('.id').attr('id');
-                        child.goal = parseInt( $(this).find('.goal').val() );
-                        child.pic = pic;
-                        child.add = $(this).find('.id').is(":checked");
-                        children.push( child );
-					});
-					
-					// make sure at least one child is checked
-					let atLeastOne = false;
-					for (let child of children) {
-						if ( child.add ) {
-							atLeastOne = true;
-						}
-					}
-					if ( !atLeastOne ) {
-						alert("You must check off at least one child.");
-						return false;
-					}
-
-                    if ( children.length > 0 ) {
-                        $.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info : JSON.stringify( children ) }, function( res ) {
-                            var result = JSON.parse( res );
-                            if ( result.success ) {
-                                alert("Your settings have been saved.\nYou will be routed to your Family Page.");
-                                location.href = "family-single.html?id=" + admin_id;
-                            } else {
-                                alert( result.error );
-                            }
-                        });
-                    } else {
-                        alert('You have not checked off any children.');
-                    }
-                });
-
 				let activate = true;
 				let admin_id = 0;
                 $.post("../ajax/getChildrenForSetup.php", { admin: Cookies.get('chidon_admin') }, function( result ) {
@@ -387,7 +342,6 @@
                     }
 				});
 
-
 				function thermomter() {
 					// Animate bars
 			    	$('.bar-bar__line').each(function(index, i){
@@ -401,6 +355,55 @@
 						circleType.radius(63);	
 					})
 				}
+
+				$(".save-detail input").click( function( e ) {
+                    e.preventDefault();
+                    if ( !$("#agree:checked").length ) {
+                        alert("You must indicate your acceptance of having your page accessible to the public.");
+                        return false;
+                    }
+                    const pic = $("#pic").is(":checked");
+
+                    let children = [];
+                    $(".child").each( function() {
+                        let child = {};
+                        child.id = $(this).find('.id').attr('id');
+                        child.goal = parseInt( $(this).find('.goal').val() );
+                        child.pic = pic;
+                        child.add = $(this).find('.id').is(":checked");
+                        children.push( child );
+					});
+					
+					// make sure at least one child is checked
+					let atLeastOne = false;
+					for (let child of children) {
+						if ( child.add ) {
+							atLeastOne = true;
+						}
+					}
+					if ( !atLeastOne ) {
+						alert("You must check off at least one child.");
+						return false;
+					}
+
+                    if ( children.length > 0 ) {
+                        $.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info : JSON.stringify( children ) }, function( res ) {
+                            var result = JSON.parse( res );
+                            if ( result.success ) {
+                                alert("Your settings have been saved.\nYou will be routed to your Family Page.");
+								const link = "family-single.html?id=" + admin_id;
+								if ( activate ) {
+									$.post('../email/intro.php', { link : link });
+								}
+								location.href = link;
+                            } else {
+                                alert( result.error );
+                            }
+                        });
+                    } else {
+                        alert('You have not checked off any children.');
+                    }
+                });
             });
 		</script>
 
