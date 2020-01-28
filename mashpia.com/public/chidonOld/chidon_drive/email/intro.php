@@ -22,7 +22,7 @@ foreach ( $names as $name ) {
 
     <h2>Congratulations!</h2>
 
-    <p>Your personalized webpage is now live at $name[link].</p>
+    <p>Your personalized webpage is now live at <a href='$name[link]'>$name[link]</a>.</p>
 
     <p>Now's the time to share it with family and friends so they can show their support!</p>
 
@@ -36,7 +36,7 @@ foreach ( $names as $name ) {
     <li>Click <a href='https://www.canva.com/design/DADyJNsRl-Q/qVs_0RFVNfNPR2fr00zHjg/view?utm_content=DADyJNsRl-Q&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton&mode=preview'>
         this link here for the boys version</a> or <a href='https://www.canva.com/design/DADyJFdodWY/RMRkrnoZaYm-DSx54H_Puw/view?utm_content=DADyJFdodWY&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton&mode=preview'>this one for the girls</a></li>
     <li>Select <strong>'Edit design'</strong></li>
-    <li><ul><li>You will need to log in or create a Canva account (free and simple).</li></ul></li>
+    <ul><li>You will need to log in or create a Canva account (free and simple).</li></ul>
     <li>Select <strong>'Use template'</strong></li>
     <li>Once the file opens you will see a bar on the left side of your screen. Select <strong>'Uploads'</strong> (the eighth option).</li>
     <li>Select <strong>'upload an image or video'</strong> and navigate to an image of your child that you’d like to use for this campaign.</li>
@@ -45,10 +45,10 @@ foreach ( $names as $name ) {
     <li>Right-click on your image and select <strong>SEND TO BACK</strong></li>
     <li>Your image is now complete! Click on the white <strong>download</strong> button to download it. Change the file type to <strong>JPG</strong> and select the <strong>page</strong> your photo is on. Hit download and you should be ready to go :)</li>
     </ul>
-    <br />
+    
     <p>Some ideas of messages you can use or adapt to accompany the image: </p>
 
-    <blockquote style='font-size: small'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
+    <blockquote style='font-size: 9px;'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
 
     We are so proud of everything our son/daughter!<br />
     They have learned over 100 mitzvos in detail this year in their spare time BY CHOICE, and we want them to know how valuable that is.<br />
@@ -67,6 +67,12 @@ foreach ( $names as $name ) {
     <p>Sincerely,</p>
 
     <p><strong>Tzivos Hashem Chidon Headquarters<strong></p>
+
+    <div align='center'>
+    &copy;2020<br />
+    790 Eastern Pkwy<br />
+    Brooklyn, NY 11213
+    <a href='/privacy.html'>Privacy Policy</a>
     ";
 
     if ( @mail( $email, $subject, $message, implode("\r\n", $headers) ) ) $sent++;
