@@ -49,7 +49,7 @@ foreach ( $names as $name ) {
     
     <p>Some ideas of messages you can use or adapt to accompany the image: </p>
 
-    <blockquote style='font-size: 10px;'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
+    <blockquote style='font-size: 12px;'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
 
     We are so proud of everything our son/daughter!<br />
     They have learned over 100 mitzvos in detail this year in their spare time BY CHOICE, and we want them to know how valuable that is.<br />
@@ -68,14 +68,15 @@ foreach ( $names as $name ) {
 
     <p>Sincerely,</p>
 
-    <p><strong>Tzivos Hashem Chidon Headquarters<strong></p>
+    <p><strong>Tzivos Hashem Chidon Headquarters</strong></p>
 
     <div align='center'>
     &copy;2020<br />
-    790 Eastern Pkwy<br />
+    792 Eastern Pkwy<br />
     Brooklyn, NY 11213
     <a href='privacy.html'>Privacy Policy</a><br />
-    click <a href='unsubscribe.html'>here</a> to unsubscribe
+    Click <a href='unsubscribe.html'>here</a> to unsubscribe
+    </div>
     ";
 
     if ( @mail( $email, $subject, $message, implode("\r\n", $headers) ) ) $sent++;
