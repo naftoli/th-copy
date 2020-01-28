@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors',1);
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once 'http://mashpia.com/api/header/db.php';
 
 $link = $_POST['link'];
 $pos = strpos($link, '?id=');
@@ -35,6 +34,8 @@ $message .= "
 
 <p>Keep in mind: The most effective method <strong>includes a personal message</strong>, image, or even a video to show the incredible impact that Chidon has had on your child.</p> 
 
+<p>To make it really simple for you, <a href='https://www.dropbox.com/sh/vofivk5fvkugx9j/AAD2COLAWDVuxNF5ZyS8v4QVa?dl=0'>here</a> <strong>are some prepared images</strong> that you can use to promote your campaign.</p>
+<!--
 <p>To make it really simple for you, <strong>we have created a few great filters</strong> that you can customize with your own image and share on social media. We’ve included step-by-step instructions below.<br /> 
 Or, if you prefer, <a href='https://www.dropbox.com/sh/vofivk5fvkugx9j/AAD2COLAWDVuxNF5ZyS8v4QVa?dl=0'>here</a> <strong>are some prepared images</strong> that don't need your own photo.</p>
 
@@ -52,6 +53,7 @@ Or, if you prefer, <a href='https://www.dropbox.com/sh/vofivk5fvkugx9j/AAD2COLAW
 <li>Right-click on your image and select <strong>SEND TO BACK</strong></li>
 <li>Your image is now complete! Click on the white <strong>download</strong> button to download it. Change the file type to <strong>JPG</strong> and select the <strong>page</strong> your photo is on. Hit download and you should be ready to go :)</li>
 </ul>
+-->
 
 <p>Some ideas of messages you can use or adapt to accompany the image: </p>
 
