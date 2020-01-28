@@ -9,6 +9,7 @@ $names = [
 $sent = 0;
 foreach ( $names as $name ) {
     $email = $name['email']; 
+    $link = $name['link'];
 
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
@@ -22,7 +23,7 @@ foreach ( $names as $name ) {
 
     <h2>Congratulations!</h2>
 
-    <p>Your personalized webpage is now live at <a href='$name[link]'>$name[link]</a>.</p>
+    <p>Your personalized webpage is now live at <a href='" . $link . "'>" . $link . "</a>.</p>
 
     <p>Now's the time to share it with family and friends so they can show their support!</p>
 
@@ -48,7 +49,7 @@ foreach ( $names as $name ) {
     
     <p>Some ideas of messages you can use or adapt to accompany the image: </p>
 
-    <blockquote style='font-size: 9px;'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
+    <blockquote style='font-size: 10px;'>Chidon Shabbaton is happening soon, and I have committed to raise $______ before I go! I have studied the mitzvos for months to get there. Please help me reach my goal!<br/ ><br />
 
     We are so proud of everything our son/daughter!<br />
     They have learned over 100 mitzvos in detail this year in their spare time BY CHOICE, and we want them to know how valuable that is.<br />
@@ -58,8 +59,9 @@ foreach ( $names as $name ) {
     It's incredible to see and it's all <strong>because of Chidon.</strong><br />
     Help us support this movement. Every dollar counts!<br/ ><br />
 
-    I'm looking forward to celebrating my achievements at the Chidon Shabbaton, a four-day incredible experience with trips and the most amazing game show and award ceremony. I’ll be joining thousands of kids from around the world who have each earned their place by studying hard for weeks and months. Please help me reach my goal!<br/ ><br />
+    I'm looking forward to celebrating my achievements at the Chidon Shabbaton, a four-day incredible experience with trips and the most amazing game show and award ceremony. I’ll be joining thousands of kids from around the world who have each earned their place by studying hard for weeks and months. Please help me reach my goal!
     </blockquote>
+    
     <p>Remember, every dollar raised not only shrinks your own fee, but goes a long way to ensuring that the Chidon Shabbaton stays alive and well for many years to come.</p>
 
     <p><strong>Thank you for partnering with us</strong> and investing in the future of our children.</p>
@@ -72,7 +74,8 @@ foreach ( $names as $name ) {
     &copy;2020<br />
     790 Eastern Pkwy<br />
     Brooklyn, NY 11213
-    <a href='/privacy.html'>Privacy Policy</a>
+    <a href='privacy.html'>Privacy Policy</a><br />
+    click <a href='unsubscribe.html'>here</a> to unsubscribe
     ";
 
     if ( @mail( $email, $subject, $message, implode("\r\n", $headers) ) ) $sent++;
