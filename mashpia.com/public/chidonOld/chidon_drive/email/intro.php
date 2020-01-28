@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require_once '../../../api/header/db.php';
 
 $link = $_POST['link'];
