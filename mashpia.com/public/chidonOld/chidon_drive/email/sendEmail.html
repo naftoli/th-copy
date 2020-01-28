@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script
+            src="https://code.jquery.com/jquery-1.12.4.js"
+            integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+            crossorigin="anonymous"></script>
+        <script>
+            const admins = [3,801,2580,2596,6390,6890,70972,119014,119114,150646,167903,172550,173212,183075,192850];
+            for ( let admin of admins ) {
+                $.post('intro.php', { admin : admin_id }, function( res ) {
+                    console.log( res );
+                });
+            }
+        </script>
+    </head>
+</html>
