@@ -9,6 +9,7 @@ $names = [
 $sent = 0;
 foreach ( $names as $name ) {
     $email = $name['email']; 
+    $link = $name['link'];
 
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
@@ -22,7 +23,7 @@ foreach ( $names as $name ) {
 
     <h2>Congratulations!</h2>
 
-    <p>Your personalized webpage is now live at <a href='$name[link]'>$name[link]</a>.</p>
+    <p>Your personalized webpage is now live at <a href='" . $link . "'>" . $link . "</a>.</p>
 
     <p>Now's the time to share it with family and friends so they can show their support!</p>
 
