@@ -8,7 +8,7 @@ if ($pos !== false) {
 } else {
     exit;
 }
-
+echo $admin_id;
 $stmt = $MASHPIA_DB->prepare("
     select admin_email from admins where admin_id = :id
 ");
@@ -84,4 +84,5 @@ Click <a href='unsubscribe.html'>here</a> to unsubscribe
 </div>
 ";
 
-@mail( $email, $subject, $message, implode("\r\n", $headers) );
+if (@mail( $email, $subject, $message, implode("\r\n", $headers) )) echo "sent";
+else echo "error";
