@@ -1,20 +1,15 @@
 <?php
-ini_set('display_errors',1);
-require_once 'http://mashpia.com/api/header/db.php';
+//ini_set('display_errors',1);
+require_once '../../../api/header/db.php';
 
-$link = $_POST['link'];
-$pos = strpos($link, '?id=');
-if ($pos !== false) {
-    $admin_id = substr($link, $pos + 4);
-} else {
-    exit;
-}
-
+$admin_id = $_POST['admin'];
 $stmt = $MASHPIA_DB->prepare("
-    select admin_email from admins where admin_id = :id
+    select last, admin_email from admins where admin_id = :id
 ");
 $stmt->execute([':id' => $admin_id]);
 $row = $stmt->fetch();
+$last = ucwords( $row['last'] );
+$link = "http://chidondrive.com/" . $last . "/" . $admin_id;
 $email = $row['admin_email']; 
 
 $headers[] = 'MIME-Version: 1.0';
@@ -80,7 +75,7 @@ I'm looking forward to celebrating my achievements at the Chidon Shabbaton, a fo
 <p><strong>Tzivos Hashem Chidon Headquarters</strong></p>
 
 <div align='center'>
-&copy;2020<br />
+&copy; Tzivos Hashem 2020<br />
 792 Eastern Pkwy<br />
 Brooklyn, NY 11213
 <a href='privacy.html'>Privacy Policy</a><br />

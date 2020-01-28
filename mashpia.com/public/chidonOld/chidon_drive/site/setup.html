@@ -393,13 +393,14 @@
                                 alert("Your settings have been saved.\nYou will be routed to your Family Page.");
 								const link = "family-single.html?id=" + admin_id;
 								if ( activate ) {
-									$.post('../email/intro.php', { link : link }, function( res ) {
+									$.post('../email/intro.php', { admin : admin_id }, function( res ) {
 										console.log( res );
-										location.href = link;
+										//location.href = link;
 									});
 								} else {
-									location.href = link;
+									//location.href = link;
 								}
+								location.href = link;
                             } else {
                                 alert( result.error );
                             }
