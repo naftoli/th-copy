@@ -15,7 +15,7 @@ foreach ( $names as $name ) {
     $headers[] = 'From: chidon@tzivoshashem.com';
     $headers[] = 'Reply-To: chidon@tzivoshashem.com';
 
-    $subject = "Your page is live! Here are some tools to get your campaign rolling...";
+    $subject = "Your ChidonDrive page is live!";
 
     $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';
     $message .= "
