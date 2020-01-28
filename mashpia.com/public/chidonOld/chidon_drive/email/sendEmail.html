@@ -8,7 +8,7 @@
         <script>
             const admins = [3,801,2580,2596,6390,6890,70972,119014,119114,150646,167903,172550,173212,183075,192850];
             for ( let admin of admins ) {
-                $.post('intro.php', { admin : admin_id }, function( res ) {
+                $.post('intro.php', { admin : admin }, function( res ) {
                     console.log( res );
                 });
             }
