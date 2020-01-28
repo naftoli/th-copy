@@ -8,7 +8,7 @@ if ($pos !== false) {
 } else {
     exit;
 }
-echo $admin_id;
+
 $stmt = $MASHPIA_DB->prepare("
     select admin_email from admins where admin_id = :id
 ");
