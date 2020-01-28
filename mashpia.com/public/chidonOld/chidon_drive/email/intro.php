@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors',1);
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once 'http://mashpia.com/api/header/db.php';
 
 $link = $_POST['link'];
 $pos = strpos($link, '?id=');
