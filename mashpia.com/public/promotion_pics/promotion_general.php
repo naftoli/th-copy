@@ -52,10 +52,27 @@ foreach ( $ranks as $rank => $other ) {
             echo "<div class='row inner'><div class='name'>" . $userInfo[$user] . "</div></div>";
             echo "</div>";
 
+            $i++;
             // start new row for every 6 kids
-            if ( ++$i == 6 ) {
-                echo "</div></div><div class='grid'><div class='row'>";
-                $i = 0;
+            if ( isset( $_POST['rows'] ) ) {
+                if ( $_POST['rows'] == '1' ) {
+                    if ( $i == 6 ) {
+                        echo "</div></div><div class='grid'><div class='row'>";
+                        $i = 0;
+                    }
+                } else if ( $_POST['rows'] == '2' ) {
+                    if ( $i == 6 ) {
+                        echo "</div><div class='row'>";
+                    } else if ( $i == 12 ) {
+                        echo "</div></div><div class='grid'><div class='row'>";
+                        $i = 0;
+                    }
+                }
+            } else {
+                if ( $i == 6 ) {
+                    echo "</div></div><div class='grid'><div class='row'>";
+                    $i = 0;
+                }
             }
         }
         echo "</div></div><div style='page-break-after: always'></div>";
