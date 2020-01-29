@@ -1,7 +1,8 @@
 <?php
+chdir('../../');
 $admin_auth = ['school'];
-require_once '../../header.php';
-require_once '../../class.rankReport.php';
+require_once 'header.php';
+require_once 'class.rankReport.php';
 $r = new RankReport;
 $r->setRanks('byGenerals');
 $ranks = $r->getRanks();
