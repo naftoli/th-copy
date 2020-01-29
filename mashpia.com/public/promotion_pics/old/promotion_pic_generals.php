@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 chdir('../../');
 $admin_auth = ['school'];
 require_once 'header.php';

@@ -8,10 +8,11 @@ if ( is_numeric( $url_end ) ) {
     header("Location: https://" . $host . "/site/family-single.html?id=" . $url_end);
     exit;
 } else {
+    if ( strpos($url, '/setup') !== false ) {
+        header("Location: https://" . $host . "/site/login.html");
+        exit;
+    }
     switch ( $url ) {
-        case '/setup':
-            header("Location: https://" . $host . "/site/login.html");
-            break;
         case '/site/intro.html':
         case '/site/setup.html':
             header("Location: https://" . $host . $url);
