@@ -1,4 +1,5 @@
 <?php
+chdir('../../');
 $admin_auth = ['school'];
 require_once '../../header.php';
 require_once '../../class.rankReport.php';
