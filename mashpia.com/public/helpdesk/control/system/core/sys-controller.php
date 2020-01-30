@@ -75,9 +75,7 @@ class mswLic {
       } else {
         $s = @mysqli_fetch_object($Q);
       }
-      var_dump(LIC_PATH);
       $licfile = @file_get_contents(LIC_PATH . 'licence.lic');
-      var_dump($licfile);
       $file    = explode('------ MSW LIC FILE DATA -------', $licfile);
       // Decode here..
       if (MSW_PHP == 'old') {
@@ -85,7 +83,6 @@ class mswLic {
       } else {
         $dec     = mswLic::mswDecoder((isset($file[2]) ? $file[2] : '#:#'));
       }
-      var_dump($dec); exit;
       preg_match("/<mswlic>(.+)<\/mswlic>/si", $dec, $match);
       // If the prodkey field is missing, show message..
       if (isset($fatalErr) || (!isset($fatalErr) && !isset($s->prodkey))) {
@@ -309,7 +306,9 @@ class mswLic {
         break;
       case 'new':
         $ciphers     = openssl_get_cipher_methods();
+        var_dump( $ciphers ); 
         $parts       = explode(':', $value);
+        var_dump( $parts ); exit;
         if (isset($parts[0], $parts[1]) && in_array('AES-256-CBC', $ciphers)) {
           return trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
         }
