@@ -308,9 +308,11 @@ class mswLic {
         $ciphers     = openssl_get_cipher_methods();
         var_dump( $ciphers ); 
         $parts       = explode(':', $value);
-        var_dump( $parts ); exit;
+        var_dump( $parts ); 
         if (isset($parts[0], $parts[1]) && in_array('AES-256-CBC', $ciphers)) {
-          return trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
+          $str = trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
+          echo openssl_error_string(); exit;
+          return $str;
         }
         return 'failed-cipher';
         break;
