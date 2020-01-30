@@ -114,7 +114,7 @@ if ($charged) {
     $mail_parms['to'] = "$email";   
     $mail_parms['subject'] = "Confirmation of Credit Card Transaction";
     $mail_parms['message'] = "Thank you for donating to Tzivos Hashem. Your credit card has been charged $" . number_format( $amount, 2 ) .". Your authorization ID is: " . $response_array[4];
-	$mail_parms['message'] .= " P.S. Please retain this as proof of receipt of your tax-deductible donation of $" . number_format( $amount, 2 ) . "USD. No goods or services were provided for this donation. Tzivos Hashem is a 501(c)3 nonprofit corporation.";
+	$mail_parms['message'] .= " P.S. Please retain this as proof of receipt of your tax-deductible donation of $" . number_format( $amount, 2 ) . "USD. No goods or services were provided for this donation. Tzivos Hashem is a 501(c)3 nonprofit corporation. Tax ID: 11-2872082";
 	$mail_parms['headers'] .= "From: cth@mashpia.com" . "\r\n" ;
     
     $send_mail = new MailClass();
