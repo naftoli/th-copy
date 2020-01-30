@@ -83,6 +83,7 @@ class mswLic {
       } else {
         $dec     = mswLic::mswDecoder((isset($file[2]) ? $file[2] : '#:#'));
       }
+      var_dump($dec); exit;
       preg_match("/<mswlic>(.+)<\/mswlic>/si", $dec, $match);
       // If the prodkey field is missing, show message..
       if (isset($fatalErr) || (!isset($fatalErr) && !isset($s->prodkey))) {
@@ -93,7 +94,6 @@ class mswLic {
         echo mswLic::mswRuntimeFatalError('cipher');
         exit;
       }
-      var_dump($match);
       if (isset($match[1]) && isset($s->prodkey)) {
         // Is this the free version?
         if (strtolower($match[1]) == 'free-' . LIC_SOFTWARE) {
