@@ -306,14 +306,10 @@ class mswLic {
         break;
       case 'new':
         $ciphers     = openssl_get_cipher_methods();
-        var_dump( $ciphers ); 
         $parts       = explode(':', $value);
-        var_dump( $parts ); 
-        if (isset($parts[0], $parts[1]) && in_array('AES-256-CBC', $ciphers)) {
-          $str = trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
-          echo $str . "<br />";
-          echo openssl_error_string(); exit;
-          return $str;
+        // fix issue where openssl as of version 1.1.1 returns lowercase instead of uppercase
+        if (isset($parts[0], $parts[1]) && (in_array('AES-256-CBC', $ciphers) || in_array('aes-256-cbc', $ciphers))) {
+          return trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
         }
         return 'failed-cipher';
         break;
