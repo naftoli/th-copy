@@ -93,6 +93,7 @@ class mswLic {
         echo mswLic::mswRuntimeFatalError('cipher');
         exit;
       }
+      var_dump($match);
       if (isset($match[1]) && isset($s->prodkey)) {
         // Is this the free version?
         if (strtolower($match[1]) == 'free-' . LIC_SOFTWARE) {
