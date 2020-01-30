@@ -129,7 +129,7 @@ if ($response != null) {
 
           // send email
           include_once 'sendEmail.php';
-          sendEmail( $amount, $trans_id, $email );
+          sendEmail( $amount, $trans_id, $email, $name );
       } else {
         $error_msg .= "Transaction Failed \n";
         if ($tresponse->getErrors() != null) {

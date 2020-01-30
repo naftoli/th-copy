@@ -31,7 +31,7 @@ $trans_info = 'Paypal transaction ID: ' . $trans_id . ' Payer ID: ' . $paypalInf
     
 // send email
 include_once 'sendEmail.php'; 
-sendEmail( $amount, $trans_id, $email );
+sendEmail( $amount, $trans_id, $email, $name );
 
 if ( $type == 'family' ) {
     // add to donations table 
