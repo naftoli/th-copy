@@ -6,9 +6,8 @@ $info = array();
 $sql = "select * from th_chidon tc 
 			join users u using (user_id)
 			join schools s on s.school_id = tc.school_id 
-			where tc.year = " . $year . "
-			and (tc.contestant = 1 or tc.school_rep = 1) 
-			and tc.date_paid > 0 
+			where tc.year = " . $year . " 
+			and tc.deleted = 0 
 			order by s.school_name, tc.size";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
