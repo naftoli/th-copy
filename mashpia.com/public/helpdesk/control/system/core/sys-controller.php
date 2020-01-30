@@ -311,6 +311,7 @@ class mswLic {
         var_dump( $parts ); 
         if (isset($parts[0], $parts[1]) && in_array('AES-256-CBC', $ciphers)) {
           $str = trim(openssl_decrypt($parts[0], 'AES-256-CBC', LIC_ENC_KEY, 0, mswLic::mswSafe64Decode($parts[1])));
+          echo $str . "<br />";
           echo openssl_error_string(); exit;
           return $str;
         }
