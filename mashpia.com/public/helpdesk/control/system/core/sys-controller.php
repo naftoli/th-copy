@@ -75,7 +75,9 @@ class mswLic {
       } else {
         $s = @mysqli_fetch_object($Q);
       }
+      var_dump(LIC_PATH);
       $licfile = @file_get_contents(LIC_PATH . 'licence.lic');
+      var_dump($licfile);
       $file    = explode('------ MSW LIC FILE DATA -------', $licfile);
       // Decode here..
       if (MSW_PHP == 'old') {
