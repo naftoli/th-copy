@@ -2,7 +2,7 @@
 //ini_set('zlib.output_compression', '1');
 ini_set('default_charset', 'UTF-8');
 mb_internal_encoding("UTF-8");
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 setlocale(LC_MONETARY, 'en_US');
 
 // this feature seems to have been removed in php 5.4, what are we running? -hornbacher (http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc)

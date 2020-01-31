@@ -1,6 +1,6 @@
 <?php
 // log errors to the page
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 ini_set("display_errors", 1);
 ini_set('max_execution_time', 600); // max runtime = 10 min
 

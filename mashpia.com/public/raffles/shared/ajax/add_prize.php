@@ -1,6 +1,6 @@
 <?php
 // debugging, show errors. Note, this breaks the JS as it expects valid JSON to be returned.
-error_reporting(E_ALL);
+//;
 ini_set("display_errors", 1);
 
 // import authentication

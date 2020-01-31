@@ -1,5 +1,4 @@
 <?
-
 header("Location: https://mashpia.com/yearly_prize/reports/eligible_students.php?type=summary"); // redirect to the new page
 die();
 
@@ -7,7 +6,7 @@ $admin_auth = array('school');
 require('header.php');
 // enable debuging
 if ($_GET['debug']) {
-    error_reporting(E_ALL);
+    //error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true;
 }

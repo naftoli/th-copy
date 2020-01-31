@@ -2,7 +2,7 @@
 	ini_set('zlib.output_compression', '1');
 	ini_set('default_charset', 'UTF-8');
 	mb_internal_encoding("UTF-8");
-	error_reporting(E_ALL);
+	//error_reporting(E_ALL);
 	setlocale(LC_MONETARY, 'en_US');
 		
 	if (in_array(strlen($_GET["card_id"]), array(20)))

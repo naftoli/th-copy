@@ -1,5 +1,5 @@
 <?
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 $request = substr($_SERVER['PATH_INFO'], 1);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', getlastmod()) . ' GMT');
 

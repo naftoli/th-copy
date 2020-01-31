@@ -2,7 +2,7 @@
 <?
 ini_set('default_charset', 'UTF-8');
 mb_internal_encoding("UTF-8");
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 if($argc != 3) exit("Enter school_id and school_type_id\n");
 $school_id = $argv[1];

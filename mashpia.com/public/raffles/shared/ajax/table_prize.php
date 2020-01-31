@@ -2,7 +2,7 @@
 /***************** DEBUGGING SETTINGS **********************/
 $debug = false;
 if (isset( $_GET['debug'] ) && $_GET['debug']) {
-    error_reporting(E_ALL);
+    //error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true;
 }

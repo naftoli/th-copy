@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require('header.php');
 
 if( isset($_GET['debug'])){
-	error_reporting(E_ALL);
+	//error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
 ?>

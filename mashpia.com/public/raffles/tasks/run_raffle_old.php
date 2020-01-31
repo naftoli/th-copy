@@ -1,6 +1,6 @@
 <?php
 // log errors to the page
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 if( empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0){

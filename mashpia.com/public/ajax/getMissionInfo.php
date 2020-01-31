@@ -5,7 +5,7 @@ $type = $_GET['type'];
 
 if($_GET['debug']){
 	// log errors to the page
-	error_reporting(E_ALL);
+	//error_reporting(E_ALL);
 	ini_set("display_errors", 1);
 	$debug = true;
 }

@@ -1,6 +1,6 @@
 <? // start the script after the catch all title
 if ($_GET['debug']) {
-    error_reporting(E_ALL);
+    //error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
 } else {
