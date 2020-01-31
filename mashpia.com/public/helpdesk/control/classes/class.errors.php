@@ -43,7 +43,7 @@ if (ERR_HANDLER_ENABLED) {
   // Switch off display errors..
   @ini_set('display_errors', 0);
   // Set error reporting level..
-  error_reporting(E_ALL);
+  //error_reporting(E_ALL);
 }
 
 function msFatalErr() {

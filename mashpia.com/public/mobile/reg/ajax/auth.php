@@ -1,9 +1,9 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-require_once (dirname(__FILE__) . '/../../../db.php' );
 // start the session for Helpdesk login
 session_start();
+// error_reporting(E_ALL);
+ini_set('display_errors',1);
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 $username = mysql_real_escape_string($_POST['username']);
 $password = mysql_real_escape_string($_POST['password']);
