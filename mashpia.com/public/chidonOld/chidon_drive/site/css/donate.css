@@ -585,6 +585,18 @@ input {
 }
 }
 
+@media(max-width: 600px) {
+    .thermometer-wrapper {
+        float: none;
+        width: auto;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .thermometer-wrapper .thermometer-image .bar .bar-line {
+        width: calc(100vw - 10rem);
+    }
+}
+
 .marquee {
 	padding-top: 200%;
 	-moz-animation: marquee 15s linear infinite;
