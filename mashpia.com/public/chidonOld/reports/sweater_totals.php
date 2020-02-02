@@ -11,7 +11,7 @@ $sql = "SELECT s.school_name, u.gender, tc.size, COUNT(*) AS total FROM th_chido
     ." JOIN users u USING (user_id) "
     ." JOIN schools s ON tc.school_id = s.school_id "
     ." WHERE tc.year = '$year' AND s.test_school='0' "
-	." AND tc.deleted = 0 ";
+	." AND tc.deleted = 0 and ((tc.test1a + test2a) / 2 >= 70.00) ";
 if ( isset( $gender ) ) $sql .= " AND u.gender = '" . $gender . "'";
 $sql .= " GROUP BY school_name, gender, size "
     ." ORDER BY school_name, gender, grade, last, first, size";

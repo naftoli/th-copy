@@ -8,6 +8,7 @@ $sql = "select * from th_chidon tc
 			join schools s on s.school_id = tc.school_id 
 			where tc.year = " . $year . " 
 			and tc.deleted = 0 
+			and ((tc.test1a + test2a) / 2 >= 70.00) 
 			order by s.school_name, tc.size";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -60,7 +61,8 @@ while ($row = mysql_fetch_assoc($result)) {
 				join schools s on s.school_id = u.school_id 
 				join classes c on c.class_id = u.class_id 
 				where tc.year = $year 
-				and (tc.contestant = 1 or tc.school_rep = 1) 
+				and tc.deleted = 0 
+				and ((tc.test1a + test2a) / 2 >= 70.00) 
 				order by school_name, class_grade, class_sub, size, last, first";
 		$result = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($result)) {

@@ -8,7 +8,7 @@ if ( $admin_user['auth'] != 'super' ) {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/PHPExcel/IOFactory.php';
 
 //load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load( "sweater_sizes.xlsx" );
+$objPHPExcel = PHPExcel_IOFactory::load( "Book1.xlsx" );
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
 $info = [];
@@ -27,12 +27,14 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
 
 $updated = 0;
 foreach ( $info as $id => $size ) {
-    $sql = "update th_chidon set size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
-    // echo $sql . "<br />";
-    if ( mysql_query( $sql ) ) {
-        $updated++;
-    } else {
-        echo mysql_error() . "<br />" . $sql . "<br />";
+    if ( $id && $size ) {
+        $sql = "update th_chidon set size = '" . strtolower( $size ) . "' where th_chidon_id = " . $id;
+        // echo $sql . "<br />";
+        if ( mysql_query( $sql ) ) {
+            $updated++;
+        } else {
+            echo mysql_error() . "<br />" . $sql . "<br />";
+        }
     }
 }
 echo "Done.";
