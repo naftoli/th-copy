@@ -77,7 +77,7 @@ foreach ($schools as $id => $school) {
         ."WHERE tc.year = " . $year . " "
         ."AND u.school_id = " . $id;
     if ($admin_user['auth'] != 'super') $sql .= " AND deleted = 0";
-    if ( isset( $_POST['grade'] ) ) $sql .= " AND c.class_id = " . $_POST['grade'];
+    if ( isset( $_POST['grade'] ) ) $sql .= " AND c.class_grade = '" . $_POST['grade'] . "'";
     if($debug) echo $sql;
     //if ($admin_user['auth'] != 'super' && $shutdown && !in_array($id, $exceptions)) $sql .= " and tc.shabbaton = 1";        
     $sql .= " ORDER BY class_grade, class_sub, u.last, u.first";
@@ -182,14 +182,7 @@ foreach ($schools as $id => $school) {
             <?php
             // show grade selection if school is big
             $school_id = array_keys($schools)[0];
-            if ( in_array( $school_id, [ 54, 61, 255 ] ) ) {
-                $grades = [];
-                $gradesSql = "select * from classes where class_era = 0 and school_id = " . $school_id;
-                $gradesRes = mysql_query( $gradesSql );
-                while ( $gradeRow = mysql_fetch_assoc( $gradesRes ) ) {
-                    $grades[] = $gradeRow;
-                }
-            }
+            $grades = [ 'pre1a', '1' ,'2', '3', '4', '5', '6', '7', '8' ];
             if ( in_array( $school_id, [ 54, 61, 255 ] ) && !isset( $_POST['grade'] ) ) {
                 ?>
                 Please choose a grade:
@@ -198,8 +191,7 @@ foreach ($schools as $id => $school) {
                     <select name="grade">
                         <?php 
                         foreach ( $grades as $grade ) {
-                            echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : ''))
-                            . "</option>";
+                            echo "<option>" . $grade . "</option>";
                         }
                         ?>
                     </select><br />
@@ -215,9 +207,9 @@ foreach ($schools as $id => $school) {
                 if ( in_array( $school_id, [ 54, 61, 255 ] ) && isset( $_POST['grade'] ) ) {
                     echo "<select name='grade'>";
                     foreach ( $grades as $grade ) {
-                        echo "<option value='" . $grade['class_id'] . "'";
-                        if ( $grade['class_id'] == $_POST['grade'] ) echo " selected ";
-                        echo ">" . ($grade['class_grade'] . ($grade['class_sub'] ? '-' . $grade['class_sub'] : '')) . "</option>";
+                        echo "<option";
+                        if ( $grade == $_POST['grade'] ) echo " selected ";
+                        echo ">" . $grade . "</option>";
                     }
                     echo "</select><br />";
                     if ($admin_user['auth'] == 'super') echo "<input type='hidden' name='school' value='" . $school_id . "' />";
