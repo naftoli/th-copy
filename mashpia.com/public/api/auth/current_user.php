@@ -1,7 +1,6 @@
 <?php
 define( 'MASHPIA_AUTH_REQUIRED', true );
 require_once( __DIR__ . '/../header/header.php' );
-
 require_once( __DIR__ . '/../../chabad_org/classes/ChabadShliach.php' );
 
 class ProfilesRouter {

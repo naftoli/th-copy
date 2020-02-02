@@ -35,7 +35,7 @@ $userSchool = $r->getUserSchool();
     </head>
     <body>
     <?php if ( !isset( $_POST['rows'] ) ) : ?>
-            <form action="promotion_pic_general.php" method="post">
+            <form action="promotion_pic_general3.php" method="post">
                 How many rows do you want to show in each screen?<br />
                 <select name="rows">
                     <option value='1'>One</option>
