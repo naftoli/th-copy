@@ -95,12 +95,13 @@ $year = GlobalSettings::getChidonYear();
             </ul>
             
             <form>
-              <h2>Bus Home</h2>
+              <h2>Bus Home From Event</h2>
               <div class="input_group input_full">
-                Please choose one of the following options:<br />
-                <input type="radio" name="bus" class="bus" value="1" /> My bus is leaving from the Chidon Event Venue to JFK/LGA/Newark Airport after the event.<br />
-                <input type="radio" name="bus" class="bus" value="2" /> My bus is leaving from the Chidon Event Venue to Crown Heights drop off location; President and Kingston after the event.<br />
-                <input type="radio" name="bus" class="bus" value="0" /> My bus is leaving from the Chidon Event Venue to our school and we dont need a bus from the Chidon Event.
+                Please confirm where your students will go on Sunday after the event in Newark:<br />
+                <input type="radio" name="bus" class="bus" value="1" /> On a Chidon Shabbaton bus direct to the airport. 
+                  <select name="airport" id="airport" style="width: 110px;"><option>Please Select</option><option>Newark</option><option>LGA</option><option>JFK</option></select><br />
+                <input type="radio" name="bus" class="bus" value="2" /> On a Chidon Shabbaton bus back to Crown Heights drop off location (President and Kingston).<br />
+                <input type="radio" name="bus" class="bus" value="0" /> My school will provide our own buses to drive them home (out of town).
               </div>
 
               <h2>Food Trip Home</h2>
@@ -132,7 +133,8 @@ $year = GlobalSettings::getChidonYear();
                   </label>
               </div>
               <h2>Terms</h2>
-              <input type="checkbox" name="agreement" id="agreement" /> I accept the above mentioned responsibilities as well as any fees that we may incur.
+              <input type="checkbox" name="agreement" id="agreement" /> I accept the above mentioned responsibilities as well as any fees that we may incur.<br />
+              <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process, including registering a chaperone.
             </form>
 
         </div>    
@@ -153,8 +155,8 @@ $year = GlobalSettings::getChidonYear();
         $("#next_page").click( function( evt ) {
           evt.preventDefault();
 
-          if ( !$("#agreement:checked").length ) {
-            alert("You have not indicated your agreement to the terms and fees.");
+          if ( !$("#agreement:checked").length || !$("#agreement2:checked").length ) {
+            alert("You have not agreed to terms!");
             return false;
           }
 
@@ -163,6 +165,16 @@ $year = GlobalSettings::getChidonYear();
             return false;
           } else {
             var bus = $(".bus:checked").val();
+            if ( parseInt( bus ) == 1 ) {
+              // check airport
+              var airport = $("#airport").val();
+              if ( airport == 'Please Select' ) {
+                alert("You must choose the airport.");
+                return false;
+              }
+            } else {
+              var airport = '';
+            }
           }
 
           let cc = {};
@@ -196,7 +208,7 @@ $year = GlobalSettings::getChidonYear();
           let school_id = $("#school_id").val();
           let food = $("#food").is(":checked");
           if ( school_id ) {
-            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, food: food, cc_info: cc }, function( error ) {
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, airport: airport, food: food, cc_info: cc }, function( error ) {
               if ( error ) alert( error );
               else {
                 alert("You have successfully enrolled your school to the Shabbaton.");
