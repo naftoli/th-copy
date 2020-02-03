@@ -84,12 +84,14 @@ $year = GlobalSettings::getChidonYear();
             In order to participate in Shabbaton, you will need to fulfill the following requirements:
             <ul>
               <li>Confirm the status of all Chidon participants in your school, and remove any students who will not be attending the Shabbaton from the system. 
-              You currently have <span id="numStudents">0</span> students enrolled. Please <a href="review_enrollment.php">review them here</a> to confirm that only students who qualify AND plan to attend Shabbaton are in the system.</li>
+              You currently have <span id="numStudents">0</span> students enrolled. Please <a href="review_enrollment.php" target="_blank">review them here</a> to confirm that only students who qualify AND plan to attend Shabbaton are in the system.</li>
               <li>Attend the Chidon Shabbaton Conference call on Monday, March 16 / 20 Adar (for girls), or Monday, March 23 / 27 Adar (for the boys).</li>
-              <li>Provide a chaperone who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit">here</a>.</li>
-              <li>Provide a walking counselor who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit">here</a>.</li>
-              <li>In the event that a chaperone is not at the program on time or does not complete their responsibilities, a $100 fee PER DAY PER CHAPERONE will be applied. 
-              The fee will be charged to the credit card on file, or the one provided in the form below.</li>
+              <li>Provide one chaperone for every 50 students who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit" target="_blank">here</a>.</li>
+              <ul>
+                <li>In the event that a chaperone will not be available to walk children home, you may instead provide a dedicated walking supervisor who will be able to fulfill those duties, as detailed in the document linked above.</li>
+                <li>In the event that a chaperone is not at the program on time or does not complete their responsibilities, a $200 penalty PER DAY PER CHAPERONE will be applied. 
+                The fee will be charged to the credit card on file, or the one provided in the form below.</li>
+              </ul>
             </ul>
             
             <form>
