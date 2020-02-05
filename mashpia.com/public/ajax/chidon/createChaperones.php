@@ -1,92 +1,70 @@
 <?php
 //ini_set('display_errors', 1);
-include($_SERVER['DOCUMENT_ROOT']."/reports/inc/header.php");
+require_once $_SERVER['DOCUMENT_ROOT'] . "/reports/inc/header.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+use classes\authorize\CustomerProfile;
 
-// require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
-// require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+// $chaperones = isset($_POST["chaperones"]) ? $_POST["chaperones"] : false;
+// $school_id  = clean_post_param("school_id"); // get the school id
 
-use classes\authorize\AuthorizeAPIRequest;
-// use classes\authorize\CustomerProfile;
-
-$chaperones = isset($_POST["chaperones"]) ? $_POST["chaperones"] : false;
-$school_id  = clean_post_param("school_id"); // get the school id
-
-if(!$chaperones || !$school_id || count($chaperones) == 0) {
-    render_json_error("Error CH-CHP-020: Invalid request");
-}
+// if(!$chaperones || !$school_id || count($chaperones) == 0) {
+//     render_json_error("Error CH-CHP-020: Invalid request");
+// }
 
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-//***************** CREATE CHAPERONES **********************/
-function createChpaerones($chaperones, $year) {
-    $chaperone_ids = [];
-    // go through each chaperone
-    foreach($chaperones as $chaperone) {
-        $full_program   = 1; // hardcoded as of 2019
-        $school_id      = mysql_real_escape_string($chaperone['school_id']);
-        $first_name     = mysql_real_escape_string($chaperone['first_name']);
-        $last_name      = mysql_real_escape_string($chaperone['last_name']);
-        $email          = mysql_real_escape_string($chaperone['email']);
-        $phone          = mysql_real_escape_string($chaperone['phone']);
-        $dob            = mysql_real_escape_string($chaperone['dob']);
-        $chidon_type    = mysql_real_escape_string($chaperone['chidon_type']);
-        $vehicle        = intval(mysql_real_escape_string($chaperone['vehicle']));
-        $sweater        = intval(mysql_real_escape_string($chaperone['sweater']));
-        //$full_program   = intval(mysql_real_escape_string($chaperone['full_program']));
-        // accomidation info...
-        $acc_name       = mysql_real_escape_string($chaperone['acc_name']);
-        $acc_address    = mysql_real_escape_string($chaperone['acc_address']);
-        $acc_phone      = mysql_real_escape_string($chaperone['acc_phone']);
-        $chap_type      = mysql_real_escape_string($chaperone['chap_type']);
-        
-        $chaperone_sql = "INSERT INTO th_chidon_chaps "
-                ." SET school_id = " . $school_id . ", "
-                ." first_name = '" . $first_name . "', "
-                ." last_name = '" . $last_name . "', "
-                ." year = '$year', "
-                ." dob = '" . $dob . "', "
-                ." acc_name = '" . $acc_name . "', "
-                ." acc_address = \"" . $acc_address . "\", "
-                ." acc_phone = '" . $acc_phone . "', "
-                ." vehicle = " . $vehicle . ", "
-                ." phone = '" . $phone . "', "
-                ." email = '" . $email . "', "
-                ." chap_type = " . $chap_type . ", "
-                ." chidon_type = '" . $chidon_type . "', "
-                ." full_program = " . $full_program;
-        // get the sweater size if needed...
-        if($sweater == 1){
-            $sweater_size = mysql_real_escape_string($chaperone['sweater_size']);
-            $chaperone_sql .= ", sweater = 1, sweater_size = '" . $sweater_size . "'";
-        }
-        
-        // if(($full_program || $sweater) && !isset($_POST['cc_info'])) { // if they are getting a sweater or are in the program and did not pay....
-        //     render_json_error("Error CH-CHP-021: Payment info required but not provided.");
-        // }
+include("createChap.php");
 
-        //echo $chaperone_sql; continue;
-        
-        if (mysql_query($chaperone_sql)) { // if we can create the chaperone...
-            $chaperone_ids[] = mysql_insert_id(); // insert the ID into the array...
-            // send email to chaperone
-            $to = $email;
-            $subject = "Chidon Shabbaton Chaperone";
-            $message = "Congratulations! You are now registered as a Chaperone for the Chidon Shabbaton " . $year . "! Please be in touch with your school's Chidon Coordinator for more information.";
-            $headers = 'From: chidon@tzivoshashem.org';
-            @mail($to, $subject, $message, $headers);
-
-            // create entry in school chap table if none exists
-            
-        }
+$success = true;
+if ( isset( $_POST['info']['supervisor'] ) ) {
+    // we need to make sure to insert both or nothing
+    mysql_query("set autocommit = 0");
+    mysql_query("begin");
+    $chap_id = createChap( $_POST['info'] );
+    $supervisor = createChap( $_POST['info']['supervisor'], $chap_id );
+    if ( $chap_id && $supervisor ) {
+        mysql_query("commit");
+        mysql_query("set autocommit = 1");
+    } else {
+        $success = false;
+        mysql_query("rollback");
+        mysql_query("set autocommit = 1");
     }
-    
-    return $chaperone_ids;
+} else {
+    $chap_id = createChap( $_POST['info'] );
+    if ( !$chap_id ) $success = false;
 }
 
-$chaps = createChpaerones($chaperones, $year);
-if ( $chaps ) {
+if ( $success ) {
+    // charge card if necessary 
+    if ( $_POST['info']['toCharge'] ) {
+        $amount = $_POST['info']['toCharge'];
+        // get school info 
+        $sql = "select school_name, authorize_customer_profile_id, authorize_payment_profile_id from schools where school_id = " . mysql_real_escape_string( $_POST['info']['school_id'] );
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $school = $row['school_name'];
+        $description = "$" . $amount . " charged to " . $school . " for creating a walking supervisor";
+        if ( $amount > 20 ) $description .= " and buying a sweater";
+        $description .= ".";
+        $cs = new CustomerProfile( $row['authorize_customer_profile_id'] );
+        $response = $cs->chargeCard( $amount, $row['authorize_payment_profile_id'], null, null, $description );
+
+        if ( !is_array( $response ) ) {
+            // there was an issue, notify HQ about it
+            $to = "chidon@tzivoshashem.org";
+            $subject = "Error charging " . $school . " for a walking supervisor";
+            $message = "This is the error we received from Authorize: " . $response;
+            $headers = [
+                'From'      => 'cth@tzivoshashem.org',
+                'Reply-To'  => 'cth@tzivoshashem.org'
+            ];
+            @mail( $to, $subject, $message, $headers );
+        }
+    }
+
     echo json_encode([
         "success" => true, 
         "message" => "Chaperone(s) successfully created."

@@ -46,7 +46,7 @@
 						<div class="field" id="children"></div>
 						
 						<div class="progress-bar">
-                        	<h5>Track your progress here:</h5>
+							<h5 style="font-weight: bold;">Track your progress here:</h5>
 							
 							<div class="setup-tickets">
 								
@@ -205,7 +205,7 @@
                         }
                         html += `
                             </table>
-                        <p>You child will be automatically given one entry into the grand ChidonDrive raffle for every $50 they raise! </p>
+                        <p>You child will be automatically given one entry into <a href="grand_raffle_info.php" target="_blank">the grand ChidonDrive raffle</a> for every $50 they raise! </p>
                             <div class="field">
                                 <p>
                                     <label class="checkbox"><input type="checkbox" id="agree" checked="checked" /><span></span></label>
@@ -227,6 +227,7 @@
 
 						// setup thermometers
 						html = '';
+						let totalRaised = 0;
 						let tickets = '<br /><h5>Tickets</h5>';
 						for ( child of res.info.children ) {
 							const cost = 350;
@@ -240,7 +241,10 @@
 							const halfRohr = parseFloat( rohr / 2 ).toFixed(2);
 							const half = halfRaised + halfRohr;
 
+							totalRaised += raised;
+
 							html += `
+							<h5 style="font-weight: bold;">TOTAL RAISED TOWARDS FAMILY GOAL: $<span id="totalRaised"></span></h5>
 							<div class="bar setup-bar">
 								<div class="bar-circle">
 										<p class="simple-arc">Shabbaton Cost</p>
@@ -335,6 +339,7 @@
 						}
 						$(".progress-bar > h5").append( html );
 						$(".setup-tickets").append( tickets );
+						$("#totalRaised").text( totalRaised );
 						thermomter();
 
                     } else {
