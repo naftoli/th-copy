@@ -10,10 +10,10 @@ $(document).ready(function(){
     $("#chap_modal .close").click(hideChapModal);
     $("a#create_chaperone").click(showChapModal);
     $("#chap_modal form").submit(submitChaperone);
-    $("#chap_modal #walk_add").click(addWalking);
-    $("#chap_modal #chap_add").click(addChaperone);
-    $("#chap_modal #chap_prev").click(prevChaperone);
-    $("#chap_modal #chap_next").click(nextChaperone);
+    // $("#chap_modal #walk_add").click(addWalking);
+    // $("#chap_modal #chap_add").click(addChaperone);
+    // $("#chap_modal #chap_prev").click(prevChaperone);
+    // $("#chap_modal #chap_next").click(nextChaperone);
 
     // **************** APPLICATION STATE ****************//    
     var state; // set in showChapModal.
@@ -58,15 +58,21 @@ $(document).ready(function(){
     }
     // set the chaperone in the modal...
     function setChaperone(chap) {
+        $("#chap_modal input#school_id_val").val(chap.school_id);
+        $("#chap_modal input#chap_type").val(chap.chap_type)
         $("#chap_modal input#first_name").val(chap.first_name);
         $("#chap_modal input#last_name").val(chap.last_name);
         $("#chap_modal input#number").val(chap.phone);
         $("#chap_modal input#email").val(chap.email);
         $("#chap_modal input#dob").val(chap.dob);
         $("#chap_modal select.s_size").val(chap.sweater_size ? chap.sweater_size : "");
-        // disable the sweater size if none was selected/paid for.
-        //$("#chap_modal select.s_size").attr("disabled", !chap.sweater_size);
-        $("#chap_modal select.chidon_type").val(chap.chidon_type);
+        // disable the sweater size if none was selected/paid for and this is a walking supervisor.
+        if ( parseInt( chap.chap_type ) == 2 ) {
+            $("#chap_modal select.s_size").attr("disabled", true);
+            $("#walking_super_text").hide();
+            $("span#heading").text("Edit Walking Supervisor");
+            $("#chidon_modal h3").eq(0).text("Walking Supervisor Info");
+        }
         // update the Accommodation info...
         $("#chap_modal input#accName").val(chap.acc_name);
         $("#chap_modal input#accAddress").val(chap.acc_address);
@@ -78,6 +84,8 @@ $(document).ready(function(){
         if (chap.chap_id) {
             $("#chap_modal input#chap_id").val(chap.chap_id);
         }
+
+        $("#chap_modal #walking_super_form").hide();
                 
         // show the modal...
         modal($("#chap_modal")).show(); // show the modal...
@@ -88,21 +96,21 @@ $(document).ready(function(){
     function submitChaperone(event){
         event.preventDefault();
         var action = $("input#action").val(); // load the action...
-        var data = readChaperoneForm( false ); // this also loads the CC info into the state.
+        var data = readChaperoneForm(); 
         // make sure the form is good.
         if (!data) { return false; }
         
         if (action == "create") {
-            state.chaperones[state.index] = data; // update the current chaperone...
-            state.school_id = $("select#school_id").val(); // add the school id to the post request...
+            // state.chaperones[state.index] = data; // update the current chaperone...
+            // state.school_id = $("select#school_id").val(); // add the school id to the post request...
             // post the response to the server.
-            $.post("/ajax/chidon/createChaperones.php", state, function(raw_response) {
+            $.post("/ajax/chidon/createChaperones.php", { info : data }, function(raw_response) {
                 response = JSON.parse(raw_response);
                 if (!response.success) {
-                    
                     alert(response.error);
                 } else {
-                    alert(response.message);
+                    // alert(response.message);
+                    alert("Thank you. Your chaperone information has been saved.");
                     getChapsTable();
                     hideChapModal();
                 }
@@ -112,6 +120,8 @@ $(document).ready(function(){
                 response = JSON.parse(raw_response);
                 if (!response.success) {
                     alert(response.error);
+                } else {
+                    alert("Thank you. Your chaperone information has been saved.");
                 }
                 getChapsTable();
                 hideChapModal();
@@ -119,17 +129,17 @@ $(document).ready(function(){
         }
     }
     // add another chaperone to this registration...
-    function saveChaperone() {
-        var current_chaperone = readChaperoneForm(true);
+    // function saveChaperone() {
+    //     var current_chaperone = readChaperoneForm(true);
         
-        if (!current_chaperone) {
-            alert("Please finish adding this chaperone before moving to another one."); return false;
-        }
+    //     if (!current_chaperone) {
+    //         alert("Please finish adding this chaperone before moving to another one."); return false;
+    //     }
         
-        state.chaperones[state.index] = current_chaperone;
+    //     state.chaperones[state.index] = current_chaperone;
               
-        return true;
-    }
+    //     return true;
+    // }
     // read the form in the modal....
     function readChaperoneForm(skip_validation) {
         var action = $("input#action").val();
@@ -138,65 +148,90 @@ $(document).ready(function(){
         //     return false;
         // }
         // setup the initial data block...
+        let school_id = $("#school_id_val").val() > 0 ? $("#school_id_val").val() : $("select#school_id").val();
         var data = {
-            school_id:      $("select#school_id").val(),
-            chap_type:      $("#chap_modal input.chap_type:checked").val(),
-            first_name:     $("input#first_name").val(),
-            last_name:      $("input#last_name").val(),
-            phone:          $("input#number").val(),
+            school_id:      school_id,
+            chap_type:      1,
+            first_name:     $("#chap_modal input#first_name").val(),
+            last_name:      $("#chap_modal input#last_name").val(),
+            phone:          $("#chap_modal input#number").val(),
             email:          $("#chap_modal input#email").val(),
             dob:            $("#chap_modal input#dob").val(),
             chidon_type:    $("select.chidon_type").val(),
             acc_name:       $("#chap_modal input#accName").val(),
             acc_address:    $("#chap_modal input#accAddress").val(),
-            //acc_cross_st:   $("#chap_modal select#accCrossSt").val(),
             acc_phone:      $("#chap_modal input#accPhone").val(),
-            vehicle:        $("#chap_modal input.vehicle:checked").val()
+            vehicle:        $("#chap_modal input.vehicle:checked").val(), 
+            sweater:        $("#chap_modal input.sweater").val(), 
+            s_size:         $("#chap_modal select.s_size").val()
         };
 
         // get the sweater size...
         if (action == "edit") {
-            data.sweater_size = $(".edit_chidon_info select.s_size").val();
             data.chap_id        = $("input#chap_id").val();
-            return data; // we have all the information needed at this point for editing.. so lets just return the data....
-        } else {
-            data.sweater_size = $(".create_chidon_info select.s_size").val();
-        }
-        
-        //data.full_program = parseInt($('#chap_modal .full:checked').val());
-        data.full_program = 1; // automatically part of full program as of 2019
-        
+            // return data; // we have all the information needed at this point for editing.. so lets just return the data....
+        } 
+
         // validate that all fields are filled out.
         for (var field in data) {
             if (data.hasOwnProperty(field) && data[field] === "") { // if it is a property of the chaperone and it is blank...
-                alert("You must enter data for all the fields."); return false;
+                alert("You must enter data for all the fields." + field); return false;
             }
         }
+        
+        data.full_program = 1; // automatically part of full program as of 2019
         
         // validate that the radio buttons are checked....
         if (data.vehicle === undefined) {
             alert('You must select if you have a vehicle or not for the record.'); return false;
         }
         
-        if (!skip_validation) { // if we are not skipping the validations...
-            if (!$('#chap_modal input#terms').attr("checked")) { // make sure that they aggree to the charge...
-                alert('You must indicate your acceptance of the terms' + (amount > 0 ? " and charges" : "") + "."); return false;
-            }
+        if ( !($("#terms").is(":checked") && $("#terms2").is(":checked")) ) {
+            alert("You must agree to terms!");
+            return false;
         }
-        
-        // state.cc_info = {};
-        // var amount = calcTotal(true);
-        // if ( amount ) {
-        //     state.cc_info.amount = amount;
-        // }
-        // if (amount > 0) {
-        //     state.cc_info.amount = amount;
-        //     state.cc_info.ccnum = $("#chap_modal input#cardnumber").val().replace(/\D+/g, ""); // remove all non digit characters (whitespace and letters)
-        //     state.cc_info.ccexp = $("#chap_modal input#exp").val();
-        //     state.cc_info.cczip = $("#chap_modal input#zip").val();
-        // } else {
-        //     state.cc_info = {};
-        // }
+
+        // get data for walking supervisor if it exists
+        if ( $("#chap_modal #walking_supervisor").is(":checked") ) {
+            let school_id = $("#school_id_val").val() > 0 ? $("#school_id_val").val() : $("select#school_id").val();
+            let supervisor = {
+                school_id:      school_id,
+                chap_type:      2,
+                first_name:     $("input#supervisor_first_name").val(),
+                last_name:      $("input#supervisor_last_name").val(),
+                phone:          $("input#supervisor_number").val(),
+                email:          $("input#supervisor_email").val(),
+                dob:            $("input#supervisor_dob").val(),
+                chidon_type:    $("select.supervisor_chidon_type").val(),
+                acc_name:       $("input#supervisor_accName").val(),
+                acc_address:    $("input#supervisor_accAddress").val(),
+                acc_phone:      $("input#supervisor_accPhone").val(),
+                vehicle:        $("input.supervisor_vehicle:checked").val()
+            };
+            // validate that all fields are filled out.
+            for (let field in supervisor) {
+                if (supervisor.hasOwnProperty(field) && (!supervisor[field] || supervisor[field] === undefined)) { // if it is a property of the chaperone and it is blank...
+                    alert("You must enter data for all the fields." + field); return false;
+                }
+            }
+            let size = $("select.supervisor_s_size").val();
+            if ( size ) {
+                supervisor.sweater = 1;
+                supervisor.s_size = size;
+            } else {
+                supervisor.sweater = 0;
+            }
+            data.supervisor = supervisor;
+        } 
+
+        // if (!skip_validation) { // if we are not skipping the validations...
+        //     if (!$('#chap_modal input#terms').attr("checked")) { // make sure that they aggree to the charge...
+        //         alert('You must indicate your acceptance of the terms' + (amount > 0 ? " and charges" : "") + "."); return false;
+        //     }
+        // } 
+        if ( $("#total_charge").val() ) {
+            data.toCharge = parseInt( $("#total_charge").val() );        
+        }
         
         return data;
     }
@@ -219,50 +254,54 @@ $(document).ready(function(){
     }
 
     /********************** ALLOW FOR MORE THEN ONE CHAPERONE ********************/
-    function addWalking() {
-        if (saveChaperone()){
-            state.chaperones.push({});
-            state.index = state.chaperones.length - 1;
-            clearChapModal();
-            $("#chap_modal input.chap_type").eq(1).trigger('click');
-            $("#chap_prev").show();
-            $("#chap_next").hide();
-        }
-    }
-    function addChaperone() {
-        if (saveChaperone()){
-            state.chaperones.push({});
-            state.index = state.chaperones.length - 1;
-            clearChapModal();
-            $("#chap_modal input.chap_type").eq(0).trigger('click');
-            $("#chap_prev").show();
-            $("#chap_next").hide();
-        }
-    }
+    // function addWalking() {
+    //     if (saveChaperone()){
+    //         state.chaperones.push({});
+    //         state.index = state.chaperones.length - 1;
+    //         clearChapModal();
+    //         $("#chap_modal input.chap_type").eq(1).attr('disabled', false);
+    //         $("#chap_modal input.chap_type").eq(0).attr('disabled', true);
+    //         $("#chap_modal input.chap_type").eq(1).trigger('click');
+    //         $("#chap_prev").show();
+    //         $("#chap_next").hide();
+    //     }
+    // }
+    // function addChaperone() {
+    //     if (saveChaperone()){
+    //         state.chaperones.push({});
+    //         state.index = state.chaperones.length - 1;
+    //         clearChapModal();
+    //         // $("#chap_modal input.chap_type").eq(0).attr('disabled', false);
+    //         // $("#chap_modal input.chap_type").eq(1).attr('disabled', true);
+    //         // $("#chap_modal input.chap_type").eq(0).trigger('click');
+    //         // $("#chap_prev").show();
+    //         // $("#chap_next").hide();
+    //     }
+    // }
     // navigate to the previous chaperone
-    function prevChaperone() {
-        if (saveChaperone() && state.index >= 0) {
-            state.index -= 1;
-            $("#chap_next").show();
-            setChaperone(state.chaperones[state.index]);
+    // function prevChaperone() {
+    //     if (saveChaperone() && state.index >= 0) {
+    //         state.index -= 1;
+    //         $("#chap_next").show();
+    //         setChaperone(state.chaperones[state.index]);
             
-            if (state.index === 0) {
-                $("#chap_prev").hide();
-            }
-        }
-    }
+    //         if (state.index === 0) {
+    //             $("#chap_prev").hide();
+    //         }
+    //     }
+    // }
     // navigate to the next chaperone...
-    function nextChaperone() {
-        if (saveChaperone() && state.index < state.chaperones.length) {
-            state.index += 1;
-            $("#chap_prev").show();
-            setChaperone(state.chaperones[state.index]);
+    // function nextChaperone() {
+    //     if (saveChaperone() && state.index < state.chaperones.length) {
+    //         state.index += 1;
+    //         $("#chap_prev").show();
+    //         setChaperone(state.chaperones[state.index]);
             
-            if (state.index === state.chaperones.length - 1) {
-                $("#chap_next").hide();
-            }
-        }
-    }
+    //         if (state.index === state.chaperones.length - 1) {
+    //             $("#chap_next").hide();
+    //         }
+    //     }
+    // }
     
     /********************** CONTROL THE MODAL ********************/
     // show the chaperone modal...
@@ -282,14 +321,16 @@ $(document).ready(function(){
         }; // the state of the mini application will be stored in this variable...
         
         if (parseInt(chap_id)) { // if the chap id is a number and not an event object...
-            $("span#heading").text("Edit");   $("input#action").val("edit");
-            $(".create_chidon_info").hide(); $("div.edit_chidon_info").show();
+            $("span#heading").text("Edit Chaperone");   $("input#action").val("edit");
+            $(".create_chidon_info").hide(); 
+            // $("div.edit_chidon_info").show();
             $("#chap_modal .submit").val("Update Chaperone");
             loadChaperone(chap_id);
         } else {
-            $("span#heading").text("Create");   $("input#action").val("create");
-            $(".create_chidon_info").show(); $("div.edit_chidon_info").hide();
-            $("#chap_modal .submit").val("Create Chaperone(s) and Open Enrollment");
+            $("span#heading").text("Create Chaperone");   $("input#action").val("create");
+            $(".create_chidon_info").show(); 
+            // $("div.edit_chidon_info").hide();
+            $("#chap_modal .submit").val("Create Chaperone");
             modal($("#chap_modal")).show(); // show the modal...
         }
     }
@@ -360,4 +401,32 @@ $(document).ready(function(){
     //     }
     //     return total; // return 0 by default....
     // }
+
+    // show / hide walking supervisor section
+    $("#walking_supervisor").click( function() {
+        if ( $(this).is(":checked") ) {
+            calcCharge();
+            $("#walking_super_form").show();
+        } else {
+            $("#total_charge").val( 0 );
+            $("#walking_super_form").hide();
+        }
+    });
+
+    $(".supervisor_s_size").change( function() {
+        calcCharge();
+    });
+
+    function calcCharge() {
+        let total = 0;
+        if ( $("#walking_supervisor").is(":checked") ) {
+            total = 20;
+        }
+        if ( $(".supervisor_s_size").val() ) {
+            total += 20;
+        }
+        $("#total_charge_span").text( total );
+        $("#total_charge").val( total );
+
+    }
 });

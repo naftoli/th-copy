@@ -8,7 +8,7 @@ if(!$th_chidon_chap_id){
 }
 
 $chap_query = mysql_query(
-     " SELECT th_chidon_chap_id AS chap_id, first_name, last_name, phone, email, dob, sweater_size, "
+     " SELECT th_chidon_chap_id AS chap_id, school_id, first_name, last_name, phone, email, dob, sweater_size, "
     ." acc_name, acc_address, acc_cross_st, acc_phone, vehicle "
     ." FROM th_chidon_chaps WHERE th_chidon_chap_id = '$th_chidon_chap_id';"
 );

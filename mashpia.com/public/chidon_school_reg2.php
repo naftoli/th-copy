@@ -147,26 +147,28 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         <div class="modal" id="chap_modal">
             <div class="modal-content">
                 <h1>
-                    <span id="heading">Create</span> Chaperone
+                    <span id="heading">Create Chaperone</span> 
                     <span class="close" id="update_cc_exit">×</span>
                 </h1>
                 <? if ($admin_user['auth'] == "super") { ?>
                     <p class="warning create_chidon_info">
-                        <i>Disclaimer: The chaperone will be assigned to the school currenty selected on the master dropdown. Not always the one who's list you are looking at. Please refresh the report to be 100% sure you are on the correct school.</i>
+                        <i>Disclaimer: The chaperone will be assigned to the school currently selected on the master dropdown. Not always the one who's list you are looking at. Please refresh the report to be 100% sure you are on the correct school.</i>
                     </p>
                 <? } ?>
                 <form>
-                    <h3>Chaperone Type</h3>
+                    <input type="hidden" id="action" value="create" />
+                    <input type="hidden" id="chap_id" value="" />
+                    <input type="hidden" id="school_id_val" value="0" />
+                    <input type="hidden" name="chap_type" id="chap_type" value="1" />
+                    <!-- <h3>Chaperone Type</h3>
                     <div class="input_group input_half">
                         <label>
-                            <input type="radio" class="chap_type chap_type_1" name="chap_type" value="1" checked /> Chaperone<br />
-                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" /> Walking Counsellor
+                            <input type="radio" class="chap_type chap_type_1" name="chap_type" value="1" checked="checked" /> Chaperone<br />
+                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" disabled /> Walking Counsellor
                         </label>
-                    </div>
+                    </div> -->
 
                     <h3>Chaperone Info</h3>
-                    <input type="hidden" id="action" value="create"/>
-                    <input type="hidden" id="chap_id" value=""/>
                     <div class="input_group input_half">
                         <label>
                             First Name<br/>
@@ -197,7 +199,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                             <input type="date" id="dob" name="dob" min="1950-01-01" max="2009-12-31" required />
                         </label>
                     </div>
-                    <div class="input_group input_half edit_chidon_info">
+                    <!-- <div class="input_group input_half edit_chidon_info">
                         <label>
                             Sweater Size<br/>
                             <select name="s_size" class="s_size">
@@ -209,7 +211,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                                 <option value="xxl">XXLarge</option>
                             </select>
                         </label>
-                    </div>
+                    </div> -->
                     
                     <div class="input_group input_half">
                         <label>
@@ -268,9 +270,9 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                         </label>
                     </div>
                     
-                    <div class="create_chidon_info">
+                    <!-- <div class="create_chidon_info"> -->
                         <h3>Sweater</h3>
-                        <div class="input_group input_full">
+                        <div class="input_group input_full" style="color: red;">
                             <i>Chaperones will be required to wear their Chidon sweaters throughout the Shabbaton.</i>
                         </div>
                         <div class="input_group input_full">
@@ -317,21 +319,142 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                                 </label>
                             </div>
                         </div> -->
-                    </div>
+                    <!-- </div> -->
                     
                     <div class="input_group input_full" style="line-height: 1.4">
                         <h3>Terms</h3>
                         <input type="checkbox" name="terms" id="terms" />
-                        I have read and provided my chaperone with this document and understand and accept the responsibilities of the chaperone. <br />
+                        I have read and provided my chaperone with <a href="https://www.google.com/url?q=https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit&sa=D&ust=1580840674748000&usg=AFQjCNGfCmwjnkSkvtwMf5wGy7qmE8RyBA">this document</a> and understand and accept the responsibilities of the chaperone. <br />
                         <input type="checkbox" name="terms" id="terms2" />
                         I understand that the chaperone will be responsible to take a group of chayolim home on Thursday night, Friday afternoon, and Motzei Shabbos after the program. 
-                        If the chaperone will be unable to do this, you will need to provide another dedicated walking counselor to do so instead. 
-                        <a class="button" id="walk_add">
-                            <i class="fa fa-plus" aria-hidden="true"></i> Add a Walking Counselor
-                        </a>
+                        If the chaperone will be unable to do this, you will need to provide another dedicated walking supervisor to do so instead. <br />
+                        <span id="walking_super_text">
+                            <input type="checkbox" name="walking_supervisor" id="walking_supervisor" /> 
+                            I will provide a dedicated walking supervisor at an additional fee of $20.
+                        </span>
                     </div>
+
+                    <div id="walking_super_form" style="display: none">
+                        <input type="hidden" name="supervisor_chap_type" id="supervisor_chap_type" value="2" />
+
+                        <h3>Walking Supervisor Info</h3>
+                        <div class="input_group input_half">
+                            <label>
+                                First Name<br/>
+                                <input type="text" id="supervisor_first_name" name="supervisor_first_name" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half">
+                            <label>
+                                Last Name<br/>
+                                <input type="text" id="supervisor_last_name" name="supervisor_last_name" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half">
+                            <label>
+                                Cell Number<br/>
+                                <input type="text" id="supervisor_number" name="supervisor_number" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half">
+                            <label>
+                                E-Mail<br/>
+                                <input type="text" id="supervisor_email" name="supervisor_email" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half ">
+                            <label>
+                                DOB<br/>
+                                <input type="date" id="supervisor_dob" name="supervisor_dob" min="1950-01-01" max="2009-12-31" />
+                            </label>
+                        </div>
+                        
+                        <div class="input_group input_half">
+                            <label>
+                                Chidon Type<br/>
+                                <select name="supervisor_chidon_type" class="supervisor_chidon_type">
+                                    <option value="boys">Boys</option>
+                                    <option value="girls">Girls</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <h3>Sweater</h3>
+                        <div class="input_group input_full" style="color: red;">
+                            <i>Walking supervisors can be provided with a Shabbaton sweatshirt for an additional fee of $20.</i>
+                        </div>
+                        <div class="input_group input_full">
+                            <label>
+                                <div class="s-size">
+                                    Sweater size:
+                                    <select name="supervisor_s_size" class="supervisor_s_size">
+                                        <option value="">Not Getting A Sweater</option>
+                                        <option value="s">Small</option>
+                                        <option value="m">Medium</option>
+                                        <option value="l">Large</option>
+                                        <option value="xl">XLarge</option>
+                                        <option value="xxl">XXLarge</option>
+                                        <option value="xxxl">XXXLarge</option>
+                                    </select>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <h3>Accommodation Info</h3>
+                        <div class="input_group input_half">
+                            <label>
+                                Name<br/>
+                                <input type="text" id="supervisor_accName" name="supervisor_accName" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half">
+                            <label>
+                                Address<br/>
+                                <input type="text" id="supervisor_accAddress" name="supervisor_accAddress" />
+                            </label>
+                        </div>
+                        <!-- <div class="input_group input_half">
+                            <label>
+                                Cross Streets<br/>
+                                <select name="accCrossSt" id="accCrossSt">
+                                <?php
+                                // array of cross streets
+                                $cross1 = ['Nostrand', 'New York', 'Brooklyn', 'Kingston', 'Albany', 'Troy', 'Schenectady', 'Utica'];
+                                $cross2 = ['S Johns Place', 'Lincoln place', 'Eastern Parkway', 'Union Street', 'President Street', 'Carrol Street', 'Crown Street', 
+                                    'Montgomery Street', 'Empire Blvd', 'Lefferts Avenue', 'East New York Avenue', 'Maple Street', 'Rutland'];
+                                for ( $i = 0; $i < count( $cross1 ); $i++ ) {
+                                    for ( $j = 0; $j < count( $cross2 ); $j++ ) {
+                                        $street = $cross1[$i] . ' & ' . $cross2[$j];
+                                        echo "<option value='" . $street . "'>" . $street . "</option>";
+                                    }
+                                }
+                                ?>
+                                </select>
+                                <!-- <input type="text" id="accCrossSt" name="accCrossSt" required /> -->
+                        <!--    </label>
+                        </div> -->
+                        <div class="input_group input_half">
+                            <label>
+                                Phone Number<br/>
+                                <input type="text" id="supervisor_accPhone" name="supervisor_accPhone" />
+                            </label>
+                        </div>
+                        <div class="input_group input_half">
+                            <label>
+                                Vehicle<br/>
+                                <input type="radio" name="supervisor_vehicle" class="supervisor_vehicle vehicle_0" value="0" /> NO
+                                <input type="radio" name="supervisor_vehicle" class="supervisor_vehicle vehicle_1" value="1" /> YES
+                            </label>
+                        </div>
+                        <h3></h3>
+                        <div class="input_group input_full">
+                            Your credit card on file will be charged: $<span id="total_charge_span">0</span>
+                        </div>
+                        <input type="hidden" name="total_charge" id="total_charge" value="0" />
+                    </div>
+
                     
-                    <div class="input_group input_full" style="text-align: center">
+                    <!-- <div class="input_group input_full" style="text-align: center">
                         <a class="button" id="chap_prev" style="float: left; display: none;">
                             <i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Chaperone
                         </a>
@@ -341,17 +464,17 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                         <a class="button" id="chap_next" style="float: right; display: none;">
                             Next Chaperone <i class="fa fa-arrow-right" aria-hidden="true"></i>
                         </a>
-                    </div>
+                    </div> -->
                     <div style="clear: both"></div>
                     <div class="input_group input_full" style="text-align: center">
-                        <a class="button"><input type="submit" name="submit" class="submit" value="Add Chaperone" /></a>
+                        <input type="submit" name="submit" class="submit" value="Add Chaperone" style="padding: 10px;" />
                     </div>
                 </form>
             </div>
         </div>
         
         <a class='button' id='prev_page' href='/chidon_school_reg.php'><i class='fa fa-arrow-left'></i> Enroll School to Shabbaton</a>
-        <a class='button' id="next_page" href='/enrollment.php'>Activate Enrollment <i class="fa fa-arrow-right"></i></a>
+        <a class='button' id="next_page" href='/enrollment.php'>Finalize School Registration <i class="fa fa-arrow-right"></i></a>
         <script src="/js/admin/components/modal.js"></script>
         <script src="/scripts/chidon/chidon_school_reg.php.js"></script>
     </body>
