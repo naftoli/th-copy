@@ -118,4 +118,24 @@ if ( $customer_id && $payment_id ) {
     }
     $res = mysql_query( $sql );
     if ( !$res ) echo "Error registering school for Chidon Shabbaton " . $year;
+    else {
+        // put $500 on hold
+        $cp = new CustomerProfile( $customer_id );
+        $response = $cp->chargeCard( 500, $payment_id, null, null, $desc, "authOnlyTransaction" );
+        if ( is_array( $response ) ) {
+            // all good, save to db
+            $id = $response['transactionResponse']['transId'];
+            $sql = "update schools set chidon_hold_id = " . $id . ", chidon_hold_date = now() where school_id = " . $school_id;
+            @mysql_query( $sql );
+        } else {
+            $to = "chidon@tzivoshashem.org; accounting@tzivoshashem.org";
+            $subject = "School Hold Error";
+            $message = "There was an error putting the $500 hold on school with ID: " . $school_id;
+            $headers = [
+                'From'      => 'cth@tzivoshashem.org',
+                'Reply-To'  => 'cth@tzivoshashem.org'
+            ];
+            @mail($to, $subject, $message, $headers);
+        }
+    }
 }
