@@ -234,7 +234,7 @@ class CustomerProfile {
      *
      */
     
-    public function chargeCard($amount, $paymentProfileId = null, $refId = null, $invoice_number = null, $description=null) {
+    public function chargeCard($amount, $paymentProfileId = null, $refId = null, $invoice_number = null, $description = null, $authType = "authCaptureTransaction") {
         // set default refID if not provided.
         if (!$refId){
             $date = new DateTime();
@@ -245,7 +245,7 @@ class CustomerProfile {
         $api_array = [
             "refId" => $refId,
             "transactionRequest" => [
-                "transactionType" => "authCaptureTransaction",
+                "transactionType" => $authType,
                 "amount" => $amount,
                 "profile" => [
                     "customerProfileId" => $this->customerProfileId
