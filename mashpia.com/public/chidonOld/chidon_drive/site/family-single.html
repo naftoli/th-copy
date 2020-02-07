@@ -546,7 +546,7 @@
 									// if ( regPercent > 100 ) regPercent = 100;
 									// let subsidy = parseInt( child.rohr_subsidy ) ? 100 : 0;
 
-									let donation = parseFloat( child.total_donation );
+									let donation = Math.round( parseFloat( child.total_donation ) );
 									let donationPercent = donation > 0 ? Math.round(( donation / cost ) * 100) : 0;
 									if ( donationPercent > 100 ) donationPercent = 100;
 
@@ -561,7 +561,7 @@
 									let subsidyPercent = subsidy > 0 ? Math.round(((donation + subsidy) / cost ) * 100) : 0;
 
 									let percent = ((child.total_donation / cost) * 100).toFixed(2);
-									let balance = cost - donation - subsidy;
+									let balance = Math.round( cost - donation - subsidy );
 									if ( balance < 0 ) balance = 0;
 
 									// add to family charts 
