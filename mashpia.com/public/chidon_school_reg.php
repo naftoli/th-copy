@@ -86,11 +86,12 @@ $year = GlobalSettings::getChidonYear();
               <li>Confirm the status of all Chidon participants in your school, and remove any students who will not be attending the Shabbaton from the system. 
               You currently have <span id="numStudents">0</span> students enrolled. Please <a href="review_enrollment.php" target="_blank">review them here</a> to confirm that only students who qualify AND plan to attend Shabbaton are in the system.</li>
               <li>Attend the Chidon Shabbaton Conference call on Monday, March 16 / 20 Adar (for girls), or Monday, March 23 / 27 Adar (for the boys).</li>
-              <li>Provide one chaperone for every 40 students who will be able to fulfill the chaperone duties as detailed <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit" target="_blank">here</a>.</li>
+              <li>Provide a chaperone who will be responsible for the general wellbeing and arrangements of your students. Please refer to 
+              <a href="https://docs.google.com/document/d/1MLoZrLdBqylp4wzgwzNvFRu1o0bQH_KWIYuHtt-729c/edit?usp=sharing" target="_blank">this document</a> for specific duties.</li>
+              <li>Provide a walking supervisor for every 40 students who will be available to walk children home on Thursday, Friday, and Motzei Shabbos of the Chidon. Your chaperone may be counted toward this number.</li>
               <ul>
-                <li>In the event that a chaperone will not be available to walk children home, you may instead provide a dedicated walking supervisor who will be able to fulfill those duties, as detailed in the document linked above.</li>
-                <li>In the event that a chaperone is not at the program on time or does not complete their responsibilities, a $200 penalty PER DAY PER CHAPERONE will be applied. 
-                The fee will be charged to the credit card on file, or the one provided in the form below.</li>
+                <li>In the event that a walking supervisor is not at the program on time or does not complete their responsibilities, a $200 penalty 
+                  PER DAY PER SUPERVISOR will be applied. The fee will be charged to the credit card on file or the one provided in the form below.</li>
               </ul>
             </ul>
             
@@ -135,6 +136,7 @@ $year = GlobalSettings::getChidonYear();
               <h2>Terms</h2>
               <input type="checkbox" name="agreement" id="agreement" /> I accept the above mentioned responsibilities as well as any fees that we may incur.<br />
               <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process, including registering a chaperone.
+              <input type="checkbox" name="agreement3" id="agreement3" /> I understand that Tzivos Hashem will put a $500 hold on the credit card provided, which will be canceled after Chidon in the event that no incidental charges are required.
             </form>
 
         </div>    
@@ -155,8 +157,8 @@ $year = GlobalSettings::getChidonYear();
         $("#next_page").click( function( evt ) {
           evt.preventDefault();
 
-          if ( !$("#agreement:checked").length || !$("#agreement2:checked").length ) {
-            alert("You have not agreed to terms!");
+          if ( !$("#agreement:checked").length || !$("#agreement2:checked").length || !$("#agreement3:checked").length ) {
+            alert("You have not agreed to ALL terms!");
             return false;
           }
 
