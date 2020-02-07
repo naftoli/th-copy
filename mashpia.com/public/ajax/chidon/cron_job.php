@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
 use classes\authorize\CustomerProfile;
