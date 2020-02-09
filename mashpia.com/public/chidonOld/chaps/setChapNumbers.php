@@ -58,10 +58,9 @@ $grades = [4, 5, 6, 7, 8];
                     echo "<h2>" . $school . "</h2>";
                     ?>
                     <p>School-wide Student Limit: <input type="text" class="schoolLimit" value="0" /></p>
-                    <p>School-wide Test Avg: <input type="text" class="schoolAvg" value=70 /></p>
+                    <p>School-wide Test Avg: <input type="text" class="schoolAvg" value="70" /></p>
                     <p>Number of Chaperones Needed: <span class="numChaps">1</span></p>
                     <p>Number of Walking Supervisors Needed: <span class="numSupers"></span></p>
-                    <!-- <p><button class="calc">Calculate</button></p> -->
                     <table>
                         <tr>
                             <th>Grade</th>
@@ -77,9 +76,6 @@ $grades = [4, 5, 6, 7, 8];
                                 <td class="numStudents"></td>
                             </tr>
                         <?php } ?>
-                        <!-- <tr>
-                            <td><button class="save">Save</button></td>
-                        </tr> -->
                     </table>
                     </div>
                 <?php 
@@ -117,7 +113,8 @@ $grades = [4, 5, 6, 7, 8];
                         } else {
                             $(schoolInfo).find(".numStudents").eq(i).text(0);
                         }
-                        totalStudents += numStudents;
+                        if ( limit ) totalStudents += limit;
+                        else totalStudents += numStudents;
                     }
                 }
                 if ( totalStudents ) {
@@ -171,11 +168,6 @@ $grades = [4, 5, 6, 7, 8];
                     });
                 }
             });
-
-            // $(".calc").click( function() {
-            //     const id = $(this).parent().parent().attr('id');
-            //     calculate( id );
-            // });
         });
     </script>
 </html>
