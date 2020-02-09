@@ -57,7 +57,7 @@ $grades = [4, 5, 6, 7, 8];
                     echo "<div id='" . $id . "'>";
                     echo "<h2>" . $school . "</h2>";
                     ?>
-                    <p>School-wide Student Limit: <input type="text" class="schoolLimit" value="0" /></p>
+                    <p>School-wide Student Limit: <input type="text" class="schoolLimit" value="" /></p>
                     <p>School-wide Test Avg: <input type="text" class="schoolAvg" value="70" /></p>
                     <p>Total Eligible Students in School: <span class="totalStudents"></span></p>
                     <p>Number of Chaperones Needed: <span class="numChaps">1</span></p>
@@ -73,7 +73,7 @@ $grades = [4, 5, 6, 7, 8];
                             <tr>
                                 <td><?= $grade ?></td>
                                 <td><input type="text" class="avg" value="70" /></td>
-                                <td><input type="text" class="limit" value="0" /></td>
+                                <td><input type="text" class="limit" value="" /></td>
                                 <td class="numStudents"></td>
                             </tr>
                         <?php } ?>
@@ -92,12 +92,12 @@ $grades = [4, 5, 6, 7, 8];
             const calculate = school_id => {
                 const ratio = parseInt( $("#ratio").val() );
                 const schoolInfo = $("#" + school_id);
-                const schoolLimit = parseInt( $(schoolInfo).find(".schoolLimit").val() );
+                const schoolLimit = $(schoolInfo).find(".schoolLimit").val().trim() === "" ? false : parseInt( $(schoolInfo).find(".schoolLimit").val() );
                 let totalStudents = 0;
                 // get avgs for all grades
                 for (let i = 0; i < 6; i++) {
                     let avg = parseFloat( $(schoolInfo).find(".avg").eq(i).val() );
-                    let limit = parseInt( $(schoolInfo).find(".limit").eq(i).val() );
+                    let limit = $(schoolInfo).find(".limit").eq(i).val() === "" ? false : parseInt( $(schoolInfo).find(".limit").eq(i).val() );
                     if ( avg ) {
                         let numStudents = 0;
                         let grade = i + 4;
@@ -110,11 +110,12 @@ $grades = [4, 5, 6, 7, 8];
                                     if ( (parseFloat(student["test1a"]) + parseFloat(student["test2a"])) / 2 >= avg ) numStudents++;
                                 }
                             }
-                            $(schoolInfo).find(".numStudents").eq(i).text( numStudents );
+                            if ( limit !== false && limit < numStudents ) $(schoolInfo).find(".numStudents").eq(i).text( limit );
+                            else $(schoolInfo).find(".numStudents").eq(i).text( numStudents );
                         } else {
                             $(schoolInfo).find(".numStudents").eq(i).text(0);
                         }
-                        if ( limit ) totalStudents += limit;
+                        if ( limit !== false ) totalStudents += limit;
                         else totalStudents += numStudents;
                         $(schoolInfo).find(".totalStudents").text( totalStudents );
                     }
@@ -122,9 +123,10 @@ $grades = [4, 5, 6, 7, 8];
                 if ( totalStudents ) {
                     // figure out number of walking supers
                     let total = 0;
-                    if ( schoolLimit ) total = schoolLimit;
+                    if ( schoolLimit !== false ) total = schoolLimit;
                     else total = totalStudents;
-                    const numSupers = parseInt(total / ratio) + 1;
+                    let numSupers = 0;
+                    if ( total ) numSupers = parseInt(total / ratio) + 1;
                     $(schoolInfo).find(".numSupers").text( numSupers );
                 }
             }
