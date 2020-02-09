@@ -59,6 +59,7 @@ $grades = [4, 5, 6, 7, 8];
                     ?>
                     <p>School-wide Student Limit: <input type="text" class="schoolLimit" value="0" /></p>
                     <p>School-wide Test Avg: <input type="text" class="schoolAvg" value="70" /></p>
+                    <p>Total Eligible Students in School: <span class="totalStudents"></span></p>
                     <p>Number of Chaperones Needed: <span class="numChaps">1</span></p>
                     <p>Number of Walking Supervisors Needed: <span class="numSupers"></span></p>
                     <table>
@@ -115,6 +116,7 @@ $grades = [4, 5, 6, 7, 8];
                         }
                         if ( limit ) totalStudents += limit;
                         else totalStudents += numStudents;
+                        $(schoolInfo).find(".totalStudents").text( totalStudents );
                     }
                 }
                 if ( totalStudents ) {
