@@ -112,7 +112,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         }
         ?>
         
-        <div class="warning" style="color: red !important; font-size: 14px !important; line-height: 1.4 !important;">
+        <div style="font-size: 14px !important; line-height: 1.4 !important;">
             <p><strong>Please register your school's Chidon staff.</strong></p>
             <p>Based on the amount of eligible students you have, and the avg mark needed, you will be required to provide 1 chaperone and 
                 <span id="numSupers"><?= isset( $numSupers ) ? $numSupers : ''; ?></span> 
@@ -126,7 +126,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
             </ul>
             <br />
             <p>You may also register additional Chidon staff members and order any of the above items for them for a small fee. This option will remain open until 1 Adar 5780 / February 26, 2020.</p>
-            <p><i>Please note: You must complete registration for your school's required staff before your students can enroll in Shabbaton.</i></p>
+            <p class="warning"><i>Please note: You must complete registration for your school's required staff before your students can enroll in Shabbaton.</i></p>
     </div>
         
         <? if(count($schools) == 1) { ?>
