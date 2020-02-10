@@ -43,11 +43,12 @@ foreach ($schools as $sid => $schoolName) {
             't2b' => $t2b,
             't3a' => $t3a,
             't3b' => $t3b,
-            'contestant'  => $row['contestant'],
-            'rep' => $row['school_rep'],
-            'enrolled' => $row['date_paid'],
-            'can_enroll' => $row['can_enroll'],
-            'edit'  => $row['allow_edit']
+            'contestant'    => $row['contestant'],
+            'trophy'        => $row['trophy_contestant'],
+            'rep'           => $row['school_rep'],
+            'enrolled'      => $row['date_paid'],
+            'can_enroll'    => $row['can_enroll'],
+            'edit'          => $row['allow_edit']
         );
     }
 }
@@ -108,8 +109,8 @@ foreach ($schools as $sid => $schoolName) {
                     <th>Contestant</th>
                     <th>Avg Part 2</th>
                     <th>Avg All</th>
+                    <th>Trophy Contestant</th>
                     <th>Representative</th>
-                    <th>Shabbaton Eligibility</th>
                     <th>Activate Enrollment</th>
                     <th>Enrolled</th>
                     <th>Allow Edits</th>
@@ -141,12 +142,12 @@ foreach ($schools as $sid => $schoolName) {
                             if ($tests['contestant']) echo "checked ";
                             echo " /></td><td>";
                             echo number_format($avg2, 2) . "</td><td>" . number_format($avg, 2) . "</td><td>";
+                            echo "<input type='checkbox' class='trophy' ";
+                            if ($tests['trophy']) echo "checked ";
+                            echo " /></td><td>";
                             echo "<input type='checkbox' class='rep' ";
                             if ($tests['rep']) echo "checked ";
                             echo " /></td><td>";
-                            if ($tests['rep']) echo "Representative";
-                            else if ($tests['contestant']) echo "Contestant";
-                            echo "</td><td>";
                             echo "<input type='checkbox' class='activate'";
                             if ($tests['can_enroll']) echo "checked ";
                             echo " /></td><td>";

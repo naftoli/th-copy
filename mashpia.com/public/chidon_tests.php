@@ -50,6 +50,11 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
+        if ( isset( $_POST['tie'] ) ) {
+            foreach ( $_POST['tie'] as $id => $on ) {
+                $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
+            }
+        }
     
         // echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         foreach ($qrys as $qry) {
@@ -100,10 +105,11 @@ foreach ($schools as $id => $school) {
             't2b' => $t2b,
             't3a' => $t3a,
             't3b' => $t3b,
-            'paid' => $row['paid'], 
-            'deleted' => $row['deleted'],
-            'rep' => $row['school_rep'], 
-            'contestant' => $row['contestant'] 
+            'tie'           => $row['tie_breaker'],
+            'paid'          => $row['paid'], 
+            'deleted'       => $row['deleted'],
+            'rep'           => $row['school_rep'], 
+            'contestant'    => $row['contestant'] 
         );
     }
 }
@@ -182,7 +188,7 @@ foreach ($schools as $id => $school) {
             <?php
             // show grade selection if school is big
             $school_id = array_keys($schools)[0];
-            $grades = [ 'pre1a', '1' ,'2', '3', '4', '5', '6', '7', '8' ];
+            $grades = [ '4', '5', '6', '7', '8' ];
             if ( in_array( $school_id, [ 54, 61, 255 ] ) && !isset( $_POST['grade'] ) ) {
                 ?>
                 Please choose a grade:
@@ -236,6 +242,7 @@ foreach ($schools as $id => $school) {
                             <th width="35px">Test 2 Part 2</th>
                             <th width="35px">Test 3 Part 1</th>
                             <th width="35px">Test 3 Part 2</th>
+                            <th width="35px">Tie Breaker Winner</th>
                             <th width="35px">Avg Part 1</th>
                             <th width="35px">Avg Part 2</th>
                             <th width="35px">Avg All</th>
@@ -309,6 +316,13 @@ foreach ($schools as $id => $school) {
                                         </td>
                                         <td>
                                             <input type='text' name='t3b[<?=$user_id?>]' value='<?=$t3b?>'
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type='checkbox' name='tie[<?=$user_id?>]' 
+                                                <? if ($tests['tie']) echo "checked='checked' "; ?>
                                                 <?//= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
                                                 <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
                                             />
