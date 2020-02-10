@@ -55,6 +55,17 @@ function createChap( $info ) {
     } else {
         $chaperone_sql .= ", sweater = 0, sweater_size = null";
     }
+    if ( isset( $info['purchases'] ) ) {
+        $fixString = false;
+        foreach ( $info['purchases'] as $field ) {
+            if ( $field == 'extra_sweater' ) continue;
+            else {
+                $fixString = true;
+                $chaperone_sql .= $field . " = 1,";
+            }
+        }
+        if ( $fixString ) $chaperone_sql = substr($chaperone_sql, 0, strlen($chaperone_sql - 1));
+    }
 
     if  (mysql_query($chaperone_sql) ) { // if we can create the chaperone...
         return mysql_insert_id();

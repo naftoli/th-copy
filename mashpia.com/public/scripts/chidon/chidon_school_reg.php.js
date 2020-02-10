@@ -195,9 +195,17 @@ $(document).ready(function(){
         if ( 
             parseInt( data.chap_type ) != 4 && data.s_size == '' || 
             parseInt( data.chap_type ) == 4 && data.purchases !== undefined && data.purchases.includes('extra_sweater') 
-            ) {
+        ) {
             alert("Please choose a sweater size.");
             return false;
+        }
+
+        // remove sweater size if type 4 but didn't check off extra sweater
+        if ( 
+            ( parseInt( data.chap_type ) == 4 && data.s_size != '' && data.purchases === undefined ) || 
+            ( data.purchases !== undefined && !data.purchases.includes('extra_sweater') )
+        ) {
+            data.s_size = '';
         }
         
         if (action == "edit") {
