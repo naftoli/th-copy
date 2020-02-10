@@ -31,10 +31,12 @@ function createChap( $info ) {
     $acc_name       = mysql_real_escape_string($info['acc_name']);
     $acc_address    = mysql_real_escape_string($info['acc_address']);
     $acc_phone      = mysql_real_escape_string($info['acc_phone']);
-    $chap_type      = mysql_real_escape_string($info['chap_type']);
+    $chap_type      = mysql_real_escape_string(intval($info['chap_type']));
+    $walking        = mysql_real_escape_string($info['walking']);
     
     $chaperone_sql = "INSERT INTO th_chidon_chaps "
             ." SET school_id = " . $school_id . ", "
+            ." chap_type = " . $chap_type . ", "
             ." first_name = '" . $first_name . "', "
             ." last_name = '" . $last_name . "', "
             ." year = '$year', "
@@ -47,6 +49,7 @@ function createChap( $info ) {
             ." email = '" . $email . "', "
             ." chap_type = " . $chap_type . ", "
             ." chidon_type = '" . $chidon_type . "', "
+            ." is_walking = " . $walking . ", "
             ." full_program = " . $full_program;
     // get the sweater size if needed...
     if( $info['s_size'] != '' ) {
@@ -55,6 +58,7 @@ function createChap( $info ) {
     } else {
         $chaperone_sql .= ", sweater = 0, sweater_size = null";
     }
+
     if ( isset( $info['purchases'] ) ) {
         $fixString = false;
         foreach ( $info['purchases'] as $field ) {
