@@ -56,6 +56,7 @@ foreach ($schools as $sid => $schoolName) {
             't2b'           => $row['test2b'],
             't3a'           => $row['test3a'],
             't3b'           => $row['test3b'],
+            'trophy'        => $row['trophy_contestant'],
             'contestant'    => $row['contestant'],
             'rep'           => $row['school_rep'],
             'enrolled'      => $row['date_paid'],
@@ -156,7 +157,14 @@ foreach ($schools as $sid => $schoolName) {
                                 <td><?=number_format($avg1, 2)?></td>
                                 <td><?=number_format($avg2, 2)?></td>
                                 <td><?=number_format($avg, 2)?></td>
-                                <td><?=($tests['rep'] ? "Representative" : $tests['contestant'] ? "Contestant" : '')?></td>
+                                <td>
+                                    <?php
+                                    if ( $tests['rep'] ) echo "Representative";
+                                    else if ( $tests['trophy'] ) echo "Trophy Contestant";
+                                    else if ( $tests['contestant'] ) echo "Contestant";
+                                    else echo '';
+                                    ?>
+                                </td>
                                 <td>
                                     <label class="fancy-check-container">
                                         <input type='checkbox' class='activate' <?=$tests['can_enroll'] ? "checked" : ""?>/>
