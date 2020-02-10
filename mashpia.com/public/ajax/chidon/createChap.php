@@ -1,6 +1,6 @@
 <?php
 //***************** CREATE CHAPERONES **********************/
-function createChap( $info, $chap_id = 0 ) {
+function createChap( $info ) {
     global $year;
     $full_program   = 1; // hardcoded as of 2019
     $school_id      = mysql_real_escape_string($info['school_id']);
@@ -11,7 +11,6 @@ function createChap( $info, $chap_id = 0 ) {
     $dob            = mysql_real_escape_string($info['dob']);
     $chidon_type    = mysql_real_escape_string($info['chidon_type']);
     $vehicle        = intval(mysql_real_escape_string($info['vehicle']));
-    $sweater        = intval(mysql_real_escape_string($info['sweater']));
     //$full_program   = intval(mysql_real_escape_string($chaperone['full_program']));
     // accomidation info...
     $acc_name       = mysql_real_escape_string($info['acc_name']);
@@ -35,17 +34,11 @@ function createChap( $info, $chap_id = 0 ) {
             ." chidon_type = '" . $chidon_type . "', "
             ." full_program = " . $full_program;
     // get the sweater size if needed...
-    if( $sweater == 1 ) {
+    if( $info['s_size'] != '' ) {
         $sweater_size = mysql_real_escape_string($info['s_size']);
         $chaperone_sql .= ", sweater = 1, sweater_size = '" . $sweater_size . "'";
     } else {
-        $sweater_size = mysql_real_escape_string($info['s_size']);
         $chaperone_sql .= ", sweater = 0, sweater_size = null";
-    }
-
-    // if it's a supervisor, connect it to chaperone
-    if ( $chap_id ) {
-        $chaperone_sql .= ", connected_to = " . $chap_id;
     }
 
     if  (mysql_query($chaperone_sql) ) { // if we can create the chaperone...

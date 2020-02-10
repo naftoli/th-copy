@@ -135,7 +135,7 @@ $year = GlobalSettings::getChidonYear();
               </div>
               <h2>Terms</h2>
               <input type="checkbox" name="agreement" id="agreement" /> I accept the above mentioned responsibilities as well as any fees that we may incur.<br />
-              <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process, including registering a chaperone.
+              <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process, including registering a chaperone.<br />
               <input type="checkbox" name="agreement3" id="agreement3" /> I understand that Tzivos Hashem will put a $500 hold on the credit card provided, which will be canceled after Chidon in the event that no incidental charges are required.
             </form>
 
