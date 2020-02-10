@@ -87,9 +87,7 @@ if ( $success ) {
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         $school = $row['school_name'];
-        $description = "$" . $amount . " charged to " . $school . " for chidon staff purchases";
-        if ( $amount > 20 ) $description .= " and buying a sweater";
-        $description .= ".";
+        $description = "$" . $amount . " charged to " . $school . " for chidon staff purchases.";
         $cs = new CustomerProfile( $row['authorize_customer_profile_id'] );
         $response = $cs->chargeCard( $amount, $row['authorize_payment_profile_id'], null, null, $description );
 
