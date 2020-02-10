@@ -180,6 +180,18 @@ $(document).ready(function(){
             s_size:         $("#chap_modal select.s_size").val().trim()
         };
 
+        data.walking = 0;
+        if ( parseInt( data.chap_type ) == 1 && action != 'edit' ) {
+            // check if chap will be walking children
+            if ( !$(".walking:checked").length ) {
+                alert("You must indicate if you are walking the children home.");
+                return false;
+            }
+            data.walking = $(".walking:checked").val();
+        } else if ( parseInt( data.chap_type ) == 2 ) {
+            data.walking = 1;
+        }
+
         // get purchases if types 3,4
         if ( parseInt( data.chap_type ) == 3 || parseInt( data.chap_type ) == 4 ) {
             let purchases = [];
