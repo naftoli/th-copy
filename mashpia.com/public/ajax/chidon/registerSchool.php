@@ -101,7 +101,7 @@ if ( $customer_id && $payment_id ) {
         ." SET school_id = " . $school_id . ", "
         ." year = " . $year . ", "
         ." bus = " . $bus . ", "
-        ." airport = " . $airport . ", "
+        ." airport = '" . $airport . "', "
         ." food = " . $food . ", "
         ." payment_profile_id = " . $payment_id . ", "
         ." registered = 1";
@@ -109,7 +109,7 @@ if ( $customer_id && $payment_id ) {
         $sql = 
         " UPDATE th_chidon_schools "
         ." SET bus = " . $bus . ", "
-        ." airport = " . $airport . ", "
+        ." airport = '" . $airport . "', "
         ." food = " . $food . ", "
         ." payment_profile_id = " . $payment_id . " "
         ." WHERE school_id = " . $school_id . " "
@@ -120,6 +120,7 @@ if ( $customer_id && $payment_id ) {
     if ( !$res ) echo "Error registering school for Chidon Shabbaton " . $year;
     else {
         // put $500 on hold
+        $desc = "$500 hold on School: " . $school_id . " for Chidon Registration.";
         $cp = new CustomerProfile( $customer_id );
         $response = $cp->chargeCard( 500, $payment_id, null, null, $desc, "authOnlyTransaction" );
         if ( is_array( $response ) ) {
