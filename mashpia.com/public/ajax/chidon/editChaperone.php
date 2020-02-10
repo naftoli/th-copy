@@ -21,52 +21,21 @@ foreach($fields as $key) {
     // if we are missing a paramater, return an error....
     if(!isset($_POST[$key]) && !in_array($key, ["s_size"])) { // if the key is blank and not excluded from the requirments...
         render_json_error("Error CH-CHP-010: Empty field. All fields are required.");
-    } elseif (isset($_POST[$key]) && $value != "") { // do not add feilds that can be blank to the sql data if they are...
-        $sql_data[] = "$key = '$value'";
     } elseif (isset($_POST[$key]) && in_array($key, ["s_size"]) && $value == "") { // if sweater is blank set sweater to null
-        $sql_data[] = "$key = null";
+        $sql_data[] = "sweater_size = null";
+        $sql_data[] = "sweater = 0";
+    } elseif (isset($_POST[$key]) && $value != "") { // do not add feilds that can be blank to the sql data if they are...
+        if ($key == 's_size') $key = "sweater_size";
+        $sql_data[] = "$key = '$value'";
+        if ($key == 's_size') $sql_data[] = "sweater = 1";
     }
 }
 
-$update_query = mysql_query(
-    "UPDATE th_chidon_chaps SET ".implode(", ", $sql_data)." WHERE th_chidon_chap_id='$th_chidon_chap_id'"
-);
+$update_sql = "UPDATE th_chidon_chaps SET ".implode(", ", $sql_data)." WHERE th_chidon_chap_id='$th_chidon_chap_id'";
+$update_query = mysql_query( $update_sql );
 
 if(!$update_query){
     render_json_error("Error CH-CHP-011: Could not update chaperone.");
-}
-
-if ( isset($_POST['supervisor']) ) {
-    include("createChap.php");
-    $chap_id = createChap($_POST['supervisor'], $th_chidon_chap_id);
-    if ( !$chap_id ) render_json_error("Error CH-CHP-011: Could not create walking supervisor.");
-}
-
-// charge card if necessary
-if ( $_POST['toCharge'] ) {
-    $amount = $_POST['toCharge'];
-    // get school info 
-    $sql = "select school_name, authorize_customer_profile_id, authorize_payment_profile_id from schools where school_id = " . mysql_real_escape_string( $_POST['school_id'] );
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $school = $row['school_name'];
-    $description = "$" . $amount . " charged to " . $school . " for creating a walking supervisor";
-    if ( $amount > 20 ) $description .= " and buying a sweater";
-    $description .= ".";
-    $cs = new CustomerProfile( $row['authorize_customer_profile_id'] );
-    $response = $cs->chargeCard( $amount, $row['authorize_payment_profile_id'], null, null, $description );
-
-    if ( !is_array( $response ) ) {
-        // there was an issue, notify HQ about it
-        $to = "chidon@tzivoshashem.org";
-        $subject = "Error charging " . $school . " for a walking supervisor";
-        $message = "This is the error we received from Authorize: " . $response;
-        $headers = [
-            'From'      => 'cth@tzivoshashem.org',
-            'Reply-To'  => 'cth@tzivoshashem.org'
-        ];
-        @mail( $to, $subject, $message, $headers );
-    }
 }
 
 // let the user know that editing is done...

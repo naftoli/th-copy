@@ -7,7 +7,8 @@ $year = $_POST['year'];
 $stmt = $MASHPIA_DB->prepare("
     SELECT count(*) as total FROM th_chidon 
     WHERE school_id = :school 
-    AND year = :year
+    AND year = :year 
+    AND deleted = 0
 ");
 
 $res = $stmt->execute([
