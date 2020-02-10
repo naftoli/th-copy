@@ -7,25 +7,24 @@ $chidon_id = mysql_real_escape_string($_POST['id']);
 $can_enroll = mysql_real_escape_string($_POST['can_enroll']);
 
 // make sure there is a chaperone in the school...
-$chap_school_id_query = mysql_query("SELECT school_id FROM th_chidon WHERE th_chidon_id = " . $chidon_id); // get the school id as it is not sent it
-$chap_school_id = mysql_fetch_assoc($chap_school_id_query)['school_id'];
+// $chap_school_id_query = mysql_query("SELECT school_id FROM th_chidon WHERE th_chidon_id = " . $chidon_id); // get the school id as it is not sent it
+// $chap_school_id = mysql_fetch_assoc($chap_school_id_query)['school_id'];
 
-$chap_check = mysql_query("SELECT * FROM th_chidon_chaps WHERE chap_type = 1 and year = " . $year . " AND school_id = " . $chap_school_id);
-if(mysql_num_rows($chap_check) == 0){
-    echo json_encode([
-        "success"   => false,
-        "chap"      => false,
-        "chap_school_id" => "SELECT school_id FROM th_chidon WHERE th_chidon_id = " . $chidon_id
-    ]);
-    die();
-}
+// $chap_check = mysql_query("SELECT * FROM th_chidon_chaps WHERE chap_type = 1 and year = " . $year . " AND school_id = " . $chap_school_id);
+// if(mysql_num_rows($chap_check) == 0){
+//     echo json_encode([
+//         "success"   => false,
+//         "chap"      => false,
+//         "chap_school_id" => "SELECT school_id FROM th_chidon WHERE th_chidon_id = " . $chidon_id
+//     ]);
+//     die();
+// }
 
 $sql = "UPDATE th_chidon SET can_enroll = '$can_enroll' WHERE th_chidon_id = " . $chidon_id;
 if (mysql_query($sql)) {
     
     echo json_encode([
-        "success"   => true,
-        "chap"      => true
+        "success"   => true
     ]);
     
     // send an email if can_enroll is set to 1
@@ -53,7 +52,6 @@ if (mysql_query($sql)) {
 } else {
     echo json_encode([
         "success"   => false,
-        "chap"      => true,
         "sql_error" => mysql_error(),
         "sql"       => $sql
     ]);
