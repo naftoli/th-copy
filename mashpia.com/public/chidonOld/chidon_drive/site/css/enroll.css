@@ -624,3 +624,13 @@ h2.login {
     width: auto;
     padding: 1rem 3rem;
 }
+
+@media(max-width: 480px) {
+	.setup-bar .bar-bar__line p.tag {
+		width: 152px;
+		top: -4rem;
+	}
+	.bar-bar__wrapper .remaining p br {
+		display: none;/
+	}
+}

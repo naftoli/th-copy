@@ -569,6 +569,11 @@ body #section0 .buttons-wrapper {
 	.form .group.two-btn-group input.continue {
 		margin-top: 15px;
 	}
+
+	.bar .bar-percent .bar-percent__number  {
+		font-size: 1.4rem;
+		padding-top: 1rem;
+	}
 }
 
 @media(max-width: 480px) {
