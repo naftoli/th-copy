@@ -96,7 +96,6 @@ foreach ($schools as $id => $school) {
 // sort by avg
 foreach ( $users as $school => $more ) {
     foreach ( $more as $gender => $other ) {
-        // ksort( $users[$school][$gender] );
         foreach ( $other as $grade => $avgs ) {
             krsort( $users[$school][$gender][$grade] );
         }
@@ -174,14 +173,14 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                         if ( $idx == 0 ) {
                                             $status = "Representative";
                                             $stat = 1;
-                                            if ( isset( $reps[$grade] ) ) $reps[$grade]++;
-                                            else $reps[$grade] = 1;
+                                            if ( isset( $reps[$gender][$grade] ) ) $reps[$gender][$grade]++;
+                                            else $reps[$gender][$grade] = 1;
                                         }
                                         else if ( $idx == 1 ) {
                                             $status = "Trophy Contestant";
                                             $stat = 2;
-                                            if ( isset( $trophy[$grade] ) ) $trophy[$grade]++;
-                                            else $trophy[$grade] = 1;
+                                            if ( isset( $trophy[$gender][$grade] ) ) $trophy[$gender][$grade]++;
+                                            else $trophy[$gender][$grade] = 1;
                                         }
                                     } else if ( $info['avg1'] >= $needed ) {
                                         $status = "Contestant";
@@ -209,12 +208,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <table>
                 <caption>Number of Reps per Grade</caption>
                 <tr>
+                    <th>Gender</th>
                     <th>Grade</th>
                     <th>Number of Reps</th>
                 </tr>
                 <?php
-                foreach ( $reps as $grade => $num ) {
-                    echo "<tr><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                foreach ( $reps as $gender => $more ) {
+                    if ( $gender == 'M' ) $type = 'boys';
+                    else if ( $gender == 'F' ) $type = 'girls';
+                    foreach ( $more as $grade => $num ) {
+                        echo "<tr><td>" . $type . "</td><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                    }
                 }
                 ?>
             </table>
@@ -222,12 +226,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <table>
                 <caption>Number of Trophy Contestants per Grade</caption>
                 <tr>
+                    <th>Gender</th>
                     <th>Grade</th>
                     <th>Number of Trophy Contestants</th>
                 </tr>
                 <?php
-                foreach ( $trophy as $grade => $num ) {
-                    echo "<tr><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                foreach ( $trophy as $gender => $more ) {
+                    if ( $gender == 'M' ) $type = 'boys';
+                    else if ( $gender == 'F' ) $type = 'girls';
+                    foreach ( $more as $grade => $num ) {
+                        echo "<tr><td>" . $type . "</td><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                    }
                 }
                 ?>
             </table>
