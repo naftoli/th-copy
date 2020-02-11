@@ -109,7 +109,8 @@ foreach ($schools as $id => $school) {
             'paid'          => $row['paid'], 
             'deleted'       => $row['deleted'],
             'rep'           => $row['school_rep'], 
-            'contestant'    => $row['contestant'] 
+            'contestant'    => $row['contestant'] , 
+            'trophy'        => $row['trophy_contestant']
         );
     }
 }
@@ -246,7 +247,7 @@ foreach ($schools as $id => $school) {
                             <th width="35px">Avg Part 1</th>
                             <th width="35px">Avg Part 2</th>
                             <th width="35px">Avg All</th>
-                            <th>Eligibility Status</th>
+                            <!-- <th>Eligibility Status</th> -->
                             <th></th>
                         </tr>
                         <?php
@@ -330,13 +331,14 @@ foreach ($schools as $id => $school) {
                                         <td><?=number_format($avg1, 2)?></td>
                                         <td><?=number_format($avg2, 2)?></td>
                                         <td><?=number_format($avg , 2)?></td>
-                                        <td>
+                                        <!-- <td>
                                         <?php
                                             if ($tests['rep']) echo "Representative";
+                                            else if ($tests['trophy']) echo "Trophy Contestant";
                                             else if ($tests['contestant']) echo "Contestant";
                                             else echo "Not Eligible";
                                         ?>
-                                        </td>
+                                        </td> -->
                                         <td>
                                         <?php
                                         if ($admin_user['auth'] == 'super') {
