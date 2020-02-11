@@ -83,7 +83,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <link href="admin_styles.css" rel="stylesheet" type="text/css">  
         <style>
             tr, th, td {
-                font-size: 14px;
+                font-size: 13px;
                 padding: 5px;
             }
         </style>
@@ -94,6 +94,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Review Eligibility</h1>
         <?php
+        $reps = [];
+        $trophy = [];
         foreach ( $users as $school_id => $more ) {
             echo "<h2>" . $schools[$school_id] . "</h2>";
             ?>
@@ -105,7 +107,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     <th>Avg Part 2</th>
                     <th>Total Avg</th>
                     <th>Avg Needed</th>
-                    <th>Status</th>
+                    <th>Eligibility Status</th>
                     <th>Class</th>
                 </tr>
                 <?php
@@ -116,8 +118,16 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                             $status = "n/a";
                             $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70;
                             if ( $info['avg'] >= $needed && in_array( $idx, [0, 1] ) ) {
-                                if ( $idx == 0 ) $status = "Representative";
-                                else if ( $idx == 1 ) $status = "Trophy Contestant";
+                                if ( $idx == 0 ) {
+                                    $status = "Representative";
+                                    if ( isset( $reps[$grade] ) ) $reps[$grade]++;
+                                    else $reps[$grade] = 1;
+                                }
+                                else if ( $idx == 1 ) {
+                                    $status = "Trophy Contestant";
+                                    if ( isset( $trophy[$grade] ) ) $trophy[$grade]++;
+                                    else $trophy[$grade] = 1;
+                                }
                             } else if ( $info['avg1'] >= $needed ) {
                                 $status = "Contestant";
                             }
@@ -131,6 +141,35 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             </table>
             <?php
         }
-        ?>
+        // echo "<pre>"; print_r( $reps ); print_r( $trophy ); echo "</pre>";
+        if ( $admin_user['auth'] == 'super' ) :
+            ?>
+            <br />
+            <table>
+                <caption>Number of Reps per Grade</caption>
+                <tr>
+                    <th>Grade</th>
+                    <th>Number of Reps</th>
+                </tr>
+                <?php
+                foreach ( $reps as $grade => $num ) {
+                    echo "<tr><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                }
+                ?>
+            </table>
+            <br />
+            <table>
+                <caption>Number of Trophy Contestants per Grade</caption>
+                <tr>
+                    <th>Grade</th>
+                    <th>Number of Trophy Contestants</th>
+                </tr>
+                <?php
+                foreach ( $trophy as $grade => $num ) {
+                    echo "<tr><td>" . $grade . "</td><td>" . $num . "</td></tr>";
+                }
+                ?>
+            </table>
+        <?php endif; ?>
     </body>
 </html>
