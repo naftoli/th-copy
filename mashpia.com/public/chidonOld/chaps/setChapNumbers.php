@@ -2,6 +2,10 @@
 ini_set('display_errors',1);
 $admin_auth = array('school'); 
 require('../../header.php');
+if ( $admin_user['auth'] != 'super' ) {
+    echo "You do not have sufficient priviliges to view this page.";
+    exit;
+}
 
 require_once '../../class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true );
@@ -71,7 +75,7 @@ $grades = [4, 5, 6, 7, 8];
                         </tr>
                         <?php foreach ( $grades as $grade ) { ?>
                             <tr>
-                                <td><?= $grade ?></td>
+                                <td><input type="hidden" class="grade" value="<?=$grade?>" /><?=$grade?></td>
                                 <td><input type="text" class="avg" value="70" /></td>
                                 <td><input type="text" class="limit" value="" /></td>
                                 <td class="numStudents"></td>
@@ -151,13 +155,31 @@ $grades = [4, 5, 6, 7, 8];
 
             $("#save").click( function() {
                 let info = [];
+                let avgs = [];
                 $("#chapForm div").each( function() {
                     const school_id = $(this).attr('id');
                     const schoolInfo = "#" + school_id;
                     const supersNeeded = parseInt( $(schoolInfo).find(".numSupers").text() );
-                    if ( supersNeeded ) info.push({ school_id: school_id, numSupers: supersNeeded });
+                    if ( supersNeeded ) {
+                        info.push({ school_id: school_id, numSupers: supersNeeded });
+                        const avgDetails = {
+                            school: school_id, 
+                            grades: []
+                        }
+                        const grades = $(schoolInfo).find(".grade");
+                        $(grades).each( function() {
+                            let grade = $(this).val();
+                            let avg = $(this).parent().parent().find(".avg").val();
+                            avgDetails.grades.push({ 
+                                grade: grade,
+                                avg: avg
+                            });
+                        });
+                        avgs.push( avgDetails );
+                    }
                 });
-                console.log( info );
+                // console.log( avgs );
+                // console.log( info );
                 if ( !info.length ) {
                     alert("You need to click on 'calculate' first!");
                     return false;
@@ -165,9 +187,17 @@ $grades = [4, 5, 6, 7, 8];
                     $.post('ajax/setSupers.php', { info: info }, function( success ) {
                         const res = JSON.parse( success );
                         if ( res.success ) {
-                            alert("Updated.");
+                            alert("Number of Supervisors Saved.");
                         } else {
-                            alert("Error updating.");
+                            alert("Error saving number of Supervisors.");
+                        }
+                    });
+                    $.post('ajax/setAvgs.php', { avgs: avgs }, function( success ) {
+                        const res = JSON.parse( success );
+                        if ( res.success ) {
+                            alert("Avgs Saved.");
+                        } else {
+                            alert("Error saving avgs.");
                         }
                     });
                 }
