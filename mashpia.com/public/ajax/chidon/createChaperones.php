@@ -36,10 +36,9 @@ function createChap( $info ) {
     
     $chaperone_sql = "INSERT INTO th_chidon_chaps "
             ." SET school_id = " . $school_id . ", "
-            ." chap_type = " . $chap_type . ", "
             ." first_name = '" . $first_name . "', "
             ." last_name = '" . $last_name . "', "
-            ." year = '$year', "
+            ." year = $year, "
             ." dob = '" . $dob . "', "
             ." acc_name = '" . $acc_name . "', "
             ." acc_address = \"" . $acc_address . "\", "
