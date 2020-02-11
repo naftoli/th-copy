@@ -50,11 +50,11 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-        if ( isset( $_POST['tie'] ) ) {
-            foreach ( $_POST['tie'] as $id => $on ) {
-                $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
-            }
-        }
+        // if ( isset( $_POST['tie'] ) ) {
+        //     foreach ( $_POST['tie'] as $id => $on ) {
+        //         $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
+        //     }
+        // }
     
         // echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         foreach ($qrys as $qry) {
@@ -105,12 +105,8 @@ foreach ($schools as $id => $school) {
             't2b' => $t2b,
             't3a' => $t3a,
             't3b' => $t3b,
-            'tie'           => $row['tie_breaker'],
             'paid'          => $row['paid'], 
-            'deleted'       => $row['deleted'],
-            'rep'           => $row['school_rep'], 
-            'contestant'    => $row['contestant'] , 
-            'trophy'        => $row['trophy_contestant']
+            'deleted'       => $row['deleted']
         );
     }
 }
@@ -243,7 +239,6 @@ foreach ($schools as $id => $school) {
                             <th width="35px">Test 2 Part 2</th>
                             <th width="35px">Test 3 Part 1</th>
                             <th width="35px">Test 3 Part 2</th>
-                            <th width="35px">Tie Breaker Winner</th>
                             <th width="35px">Avg Part 1</th>
                             <th width="35px">Avg Part 2</th>
                             <th width="35px">Avg All</th>
@@ -321,13 +316,13 @@ foreach ($schools as $id => $school) {
                                                 <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
                                             />
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <input type='checkbox' name='tie[<?=$user_id?>]' 
                                                 <? if ($tests['tie']) echo "checked='checked' "; ?>
                                                 <?//= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
                                                 <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
                                             />
-                                        </td>
+                                        </td> -->
                                         <td><?=number_format($avg1, 2)?></td>
                                         <td><?=number_format($avg2, 2)?></td>
                                         <td><?=number_format($avg , 2)?></td>
@@ -368,7 +363,7 @@ foreach ($schools as $id => $school) {
             </form>
 
             <a class='button' id="prev_page" href='/chidon_school_reg.php'><i class="fa fa-arrow-left"></i> Register Chaperones</a>
-            <a class='button' id="next_page" href='/enrollment.php'>Activate Enrollment <i class="fa fa-arrow-right"></i></a>
+            <a class='button' id="next_page" href='/review_eligibility.php'>Review Eligibility <i class="fa fa-arrow-right"></i></a>
             <?php } ?>
 
         <?php endif; ?>
