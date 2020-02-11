@@ -20,6 +20,38 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') {
     $schools[82] = "Avrohom Academy";
+
+    if ( isset( $_POST['submit'] ) ) {
+        // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
+        $qrys = [];
+
+        if ( $_POST['submit'] == 'Save Tie Breaker(s)' ) {
+            foreach ( $_POST['tie'] as $id => $on ) {
+                $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
+            }
+        } else if ( $_POST['submit'] == 'Save Eligibility' ) {
+            foreach ( $_POST['status'] as $id => $stat ) {
+                switch ( intval( $stat ) ) {
+                    case 1:
+                        $qrys[] = "UPDATE th_chidon SET representative = 1 WHERE th_chidon_id = " . $id;
+                        break;
+                    case 2:
+                        $qrys[] = "UPDATE th_chidon SET trophy_contestant = 1 WHERE th_chidon_id = " . $id;
+                        break;
+                    case 3:
+                        $qrys[] = "UPDATE th_chidon SET contestant = 1 WHERE th_chidon_id = " . $id;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // execute qrys
+        foreach ( $qrys as $qry ) {
+            mysql_query( $qry );
+        }
+    }
 }
 
 $users = array();
@@ -45,9 +77,9 @@ foreach ($schools as $id => $school) {
         $t2b = floatval( $row['test2b'] );
         $t3a = floatval( $row['test3a'] );
         $t3b = floatval( $row['test3b'] );
+        if ( $row['tie_breaker'] ) $t3b += 0.25;
         $avg1 = number_format((($t1a + $t2a + $t3a) / 3), 2);
         $avg2 = number_format((($t1b + $t2b + $t3b) / 3), 2);
-        if ( $row['tie_breaker'] ) $t3a += 1.0;
         $avg = number_format((($t1a + $t1b + $t2a + $t2b + $t3a + $t3b) / 6), 2);
         $users[$id][$grade][$avg][] = array(
             'grade_info'    => $grade_sub, 
@@ -93,54 +125,75 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <? include('admin_header.php'); ?>
         <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Review Eligibility</h1>
-        <?php
-        $reps = [];
-        $trophy = [];
-        foreach ( $users as $school_id => $more ) {
-            echo "<h2>" . $schools[$school_id] . "</h2>";
-            ?>
-            <table>
-                <tr>
-                    <th>Grade</th>
-                    <th>Name</th>
-                    <th>Avg Part 1</th>
-                    <th>Avg Part 2</th>
-                    <th>Total Avg</th>
-                    <th>Avg Needed</th>
-                    <th>Eligibility Status</th>
-                    <th>Class</th>
-                </tr>
-                <?php
-                foreach ( $more as $grade => $other ) {
-                    $idx = 0;
-                    foreach ( $other as $avg => $more ) {
-                        foreach ( $more as $info ) {
-                            $status = "n/a";
-                            $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70;
-                            if ( $info['avg'] >= $needed && in_array( $idx, [0, 1] ) ) {
-                                if ( $idx == 0 ) {
-                                    $status = "Representative";
-                                    if ( isset( $reps[$grade] ) ) $reps[$grade]++;
-                                    else $reps[$grade] = 1;
+
+        <form action="review_eligibility.php" method="post">
+            <div align="center">
+                <input type="submit" name="submit" value="Save Tie Breaker(s)" style="padding: 10px;" /><br /><br />
+                <input type="submit" name="submit" value="Save Eligibility" style="padding: 10px;" />
+            </div>
+            <?php
+            $reps = [];
+            $trophy = [];
+            foreach ( $users as $school_id => $more ) {
+                echo "<h2>" . $schools[$school_id] . "</h2>";
+                ?>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Grade</th>
+                        <th>Name</th>
+                        <th>Avg Part 1</th>
+                        <th>Avg Part 2</th>
+                        <th>Total Avg</th>
+                        <th>Set Tie Breaker</th>
+                        <th>Avg Needed</th>
+                        <th>Eligibility Status</th>
+                        <th>Class</th>
+                    </tr>
+                    <?php
+                    $prevGrade = 4;
+                    foreach ( $more as $grade => $other ) {
+                        $idx = 0;
+                        if ( intval( $grade ) != $prevGrade ) {
+                            echo "<tr><td colspan='10'><h2></h2></td></tr>";
+                            $prevGrade = $grade;
+                        }
+                        foreach ( $other as $avg => $more ) {
+                            foreach ( $more as $info ) {
+                                $status = "n/a";
+                                $stat = 0;
+                                $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70.00;
+                                if ( $info['avg'] >= $needed && in_array( $idx, [0, 1] ) ) {
+                                    if ( $idx == 0 ) {
+                                        $status = "Representative";
+                                        $stat = 1;
+                                        if ( isset( $reps[$grade] ) ) $reps[$grade]++;
+                                        else $reps[$grade] = 1;
+                                    }
+                                    else if ( $idx == 1 ) {
+                                        $status = "Trophy Contestant";
+                                        $stat = 2;
+                                        if ( isset( $trophy[$grade] ) ) $trophy[$grade]++;
+                                        else $trophy[$grade] = 1;
+                                    }
+                                } else if ( $info['avg1'] >= $needed ) {
+                                    $status = "Contestant";
+                                    $stat = 3;
                                 }
-                                else if ( $idx == 1 ) {
-                                    $status = "Trophy Contestant";
-                                    if ( isset( $trophy[$grade] ) ) $trophy[$grade]++;
-                                    else $trophy[$grade] = 1;
-                                }
-                            } else if ( $info['avg1'] >= $needed ) {
-                                $status = "Contestant";
+                                echo "<input type='hidden' name='status[" . $info['id'] . "]' value='" . $stat . "' />";
+                                echo "<tr><td>" . $info['id'] . "</td><td>" . $grade . "</td><td>" . $info['name'] . "</td><td>" . $info['avg1'] . "</td><td>" . 
+                                    $info['avg2'] . "</td><td>" . $info['avg'] . "</td><td><input type='checkbox' name='tie[" . $info['id'] . "]'";
+                                if ( $info['tie'] ) echo " checked='checked'";
+                                echo " /></td><td>" . $needed . "</td><td>" . $status . "</td><td>" . $info['grade_info'] . "</td><td>";
+                                $idx++;
                             }
-                            echo "<tr><td>" . $grade . "</td><td>" . $info['name'] . "</td><td>" . $info['avg1'] . "</td><td>" . $info['avg2'] . "</td><td>" . $info['avg'] . 
-                                "</td><td>" . $needed . "</td><td>" . $status . "</td><td>" . $info['grade_info'] . "</td><td>";
-                            $idx++;
                         }
                     }
-                }
-                ?>
-            </table>
-            <?php
-        }
+                    ?>
+                </table>
+                <?php
+            }
+        echo "</form>";
         // echo "<pre>"; print_r( $reps ); print_r( $trophy ); echo "</pre>";
         if ( $admin_user['auth'] == 'super' ) :
             ?>
