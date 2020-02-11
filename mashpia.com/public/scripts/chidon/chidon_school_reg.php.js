@@ -205,7 +205,7 @@ $(document).ready(function(){
 
         // make sure we have a sweater size 
         if ( 
-            parseInt( data.chap_type ) != 4 && data.s_size == '' || 
+            parseInt( data.chap_type ) != 4 && parseInt( data.chap_type ) != 3 && data.s_size == '' || 
             parseInt( data.chap_type ) == 4 && data.purchases !== undefined && data.purchases.includes('extra_sweater') 
         ) {
             alert("Please choose a sweater size.");

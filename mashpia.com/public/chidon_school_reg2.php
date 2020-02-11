@@ -114,7 +114,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         
         <div style="font-size: 14px !important; line-height: 1.4 !important;">
             <p><strong>Please register your school's Chidon staff.</strong></p>
-            <p>Based on the amount of eligible students you have, and the avg mark needed, you will be required to provide 1 chaperone and 
+            <p>Based on the number of eligible contestants enrolled from your school, you will be required to provide 1 chaperone and 
                 <span id="numSupers"><?= isset( $numSupers ) ? $numSupers : ''; ?></span> 
                 walking supervisors for your students.</p>
             <p>Your chaperone and walking supervisors will receive the following <strong>complimentary items:</strong> </p>
@@ -125,7 +125,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                 <li>A ticket to the Chidon game show</li>
             </ul>
             <br />
-            <p>You may also register additional Chidon staff members and order any of the above items for them for a small fee. This option will remain open until 1 Adar 5780 / February 26, 2020.</p>
+            <p>You may also register additional Chidon staff members and order any of the above items for them for a small fee. The option to add additional staff will remain open until 1 Adar 5780 / February 26, 2020.</p>
             <p class="warning"><i>Please note: You must complete registration for your school's required staff before your students can enroll in Shabbaton.</i></p>
     </div>
         
@@ -186,7 +186,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                     <div class="input_group input_half">
                         <label>
                             <input type="radio" class="chap_type chap_type_1" name="chap_type" value="1" /> Chaperone<br />
-                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" /> Walking Counsellor<br />
+                            <input type="radio" class="chap_type chap_type_2" name="chap_type" value="2" /> Walking Supervisor<br />
                             <input type="radio" class="chap_type chap_type_3" name="chap_type" value="3" /> School Principal<br />
                             <input type="radio" class="chap_type chap_type_4" name="chap_type" value="4" /> Other School Staff Member
                         </label>
