@@ -31,15 +31,6 @@ $year = GlobalSettings::getChidonYear();
             caption {border-bottom: dashed 1px black;}
             .options{text-align: center;}
             
-            div.fullProgram {
-                font-size: 14px;
-                line-height: 1.5;
-            }
-            div.fullProgram ul {
-                margin-left: 10px;
-                list-style-type: circle;
-                font-style: italic;
-            }
             a.button{display: inline-block;}
             a#next_page{float: right;margin-bottom: 20px;}
             a#prev_page{float: left;}
@@ -72,7 +63,6 @@ $year = GlobalSettings::getChidonYear();
 
     <body>
         <? include('admin_header.php'); ?>
-        <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); // require a password to use this page... ?>
         <h1>Chidon Staff</h1>
 
 <!--         
@@ -83,7 +73,7 @@ $year = GlobalSettings::getChidonYear();
                     <span class="close" id="update_cc_exit">×</span>
                 </h1> -->
 
-                <form>
+                <form action="createStaff.php" method="post">
                     <h3>Staff Info</h3>
                     <div class="input_group input_half">
                         <label>
@@ -100,7 +90,7 @@ $year = GlobalSettings::getChidonYear();
                     <div class="input_group input_half">
                         <label>
                             Cell Number<br/>
-                            <input type="text" id="number" name="number" required />
+                            <input type="text" id="cell" name="cell" required />
                         </label>
                     </div>
                     <div class="input_group input_half">
@@ -183,10 +173,10 @@ $year = GlobalSettings::getChidonYear();
                     
                     <div style="clear: both"></div>
                     <div class="input_group input_full" style="text-align: center">
-                        <input type="submit" name="submit" value="Create Staff Member" style="padding: 10px;" />
+                        <input type="submit" name="submit" id="submit" value="Create Staff Member" style="padding: 10px;" />
                     </div>
-                <!-- </form>
-            </div>
+                </form>
+            <!-- </div>
         </div> -->
     </body>
     <script>
@@ -198,25 +188,27 @@ $year = GlobalSettings::getChidonYear();
         }
         $("#position").append( html );
 
-        $("form").submit( e => {
+        $("#submit").click( function( e ) {
             e.preventDefault();
-            const fields = ['first_name', 'last_name', 'number', 'email', 'dob', 's_size', 'chidon_type', 'accName', 'accAddress', 'accPhone', 'position'];
-            let values = [];
+            e.stopPropagation();
+            
+            const fields = ['first_name', 'last_name', 'cell', 'email', 'dob', 's_size', 'chidon_type', 'accName', 'accAddress', 'accPhone', 'position'];
+            let info = {};
             for ( let f of fields ) {
-                values[f] = $("#" + f).val();                
+                info[f] = $("#" + f).val();                
             }
             if ( !$(".vehicle:checked").length ) {
                 alert("You must whether you have a vehicle or not.");
                 return false;
             } else {
-                values['vehicle'] = parseInt( $(".vehicle:checked").val() );
+                info['vehicle'] = parseInt( $(".vehicle:checked").val() );
             }
             if ( !$("#terms:checked").length ) {
                 alert("You must agree to terms.");
                 return false;
             }
-            console.log( values );
-            $.post("ajax/chidon/createStaff.php", values, success => {
+            console.log( info );
+            $.post("ajax/chidon/createStaff.php", info, function( success ) {
                 const res = JSON.parse( success );
                 if ( res.success ) {
                     alert("Saved.");
