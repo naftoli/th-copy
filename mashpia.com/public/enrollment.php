@@ -56,6 +56,7 @@ foreach ($schools as $sid => $schoolName) {
             't2b'           => $row['test2b'],
             't3a'           => $row['test3a'],
             't3b'           => $row['test3b'],
+            'khk'           => $row['khk'],
             'trophy'        => $row['trophy_contestant'],
             'contestant'    => $row['contestant'],
             'rep'           => $row['school_rep'],
@@ -159,17 +160,22 @@ foreach ($schools as $sid => $schoolName) {
                                 <td><?=number_format($avg, 2)?></td>
                                 <td>
                                     <?php
-                                    if ( $tests['rep'] ) echo "Representative";
+                                    if ( $tests['khk'] ) echo "Kol Hatorah Kulo";
+                                    else if ( $tests['rep'] ) echo "Representative";
                                     else if ( $tests['trophy'] ) echo "Trophy Contestant";
                                     else if ( $tests['contestant'] ) echo "Contestant";
                                     else echo '';
                                     ?>
                                 </td>
                                 <td>
-                                    <label class="fancy-check-container">
-                                        <input type='checkbox' class='activate' <?=$tests['can_enroll'] ? "checked" : ""?>/>
-                                        <span class="fancy-check"></span>
-                                    </label>
+                                    <?php
+                                    if ( intval($tests['khk']) || intval($tests['rep']) || intval($tests['trophy']) || intval($tests['contestant']) ) {
+                                        echo "<label class='fancy-check-container'><input type='checkbox' class='activate'";
+                                        if ($tests['can_enroll']) echo "checked ";
+                                        echo " />";
+                                        echo "<span class='fancy-check'></span></label>";
+                                    }
+                                    ?>
                                 </td>
                                 <td><?=$tests['enrolled'] ? $tests['enrolled'] : ""?></td>
                                 <td>

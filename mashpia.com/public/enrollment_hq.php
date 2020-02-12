@@ -56,7 +56,7 @@ foreach ($schools as $sid => $schoolName) {
             'rep'           => $row['school_rep'],
             'enrolled'      => $row['date_paid'],
             'can_enroll'    => $row['can_enroll'],
-            'edit'          => $row['allow_edit']
+            'edit'          => $row['allow_edit'], 
         ];
     }
 }
@@ -165,9 +165,13 @@ foreach ( $userInfo as $school => $more ) {
                                 echo "<input type='checkbox' class='trophy' ";
                                 if ($test['trophy']) echo "checked ";
                                 echo " /></td><td>";
-                                echo "<input type='checkbox' class='activate'";
-                                if ($test['can_enroll']) echo "checked ";
-                                echo " /></td><td>";
+                                if ( intval($test['khk']) || intval($test['rep']) || intval($test['trophy']) || intval($test['contestant']) ) {
+                                    echo "<input type='checkbox' class='activate'";
+                                    if ($test['can_enroll']) echo "checked ";
+                                    echo " /></td><td>";
+                                } else {
+                                    echo "</td><td>";
+                                }
                                 if ($test['enrolled']) echo $tests['enrolled'];
                                 echo "</td><td>";
                                 echo "<input type='checkbox' class='edit' ";
