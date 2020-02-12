@@ -137,6 +137,15 @@ $year = GlobalSettings::getChidonYear();
                             </select>
                         </label>
                     </div>
+
+                    <div class="input_group input_half">
+                        <label>
+                            Position<br/>
+                            <select name="position" id="position">
+                                
+                            </select>
+                        </label>
+                    </div>
                     
                     <h3>Accommodation Info</h3>
                     <div class="input_group input_half">
@@ -181,9 +190,17 @@ $year = GlobalSettings::getChidonYear();
         </div> -->
     </body>
     <script>
+        const types = ['walking supervisor', 'medical coordinator', 'safety coordinator', 'grade commander', 'head councillor', 'head councillor assistant', 'councillor', 'on site director', 'head runner', 'runner'];
+        types.sort();
+        let html = '';
+        for ( let type of types ) {
+            html += "<option>" + type + "</option>";
+        }
+        $("#position").append( html );
+
         $("form").submit( e => {
             e.preventDefault();
-            const fields = ['first_name', 'last_name', 'number', 'email', 'dob', 's_size', 'chidon_type', 'accName', 'accAddress', 'accPhone'];
+            const fields = ['first_name', 'last_name', 'number', 'email', 'dob', 's_size', 'chidon_type', 'accName', 'accAddress', 'accPhone', 'position'];
             let values = [];
             for ( let f of fields ) {
                 values[f] = $("#" + f).val();                
@@ -191,12 +208,22 @@ $year = GlobalSettings::getChidonYear();
             if ( !$(".vehicle:checked").length ) {
                 alert("You must whether you have a vehicle or not.");
                 return false;
+            } else {
+                values['vehicle'] = parseInt( $(".vehicle:checked").val() );
             }
             if ( !$("#terms:checked").length ) {
                 alert("You must agree to terms.");
                 return false;
             }
-            
+            console.log( values );
+            $.post("ajax/chidon/createStaff.php", values, success => {
+                const res = JSON.parse( success );
+                if ( res.success ) {
+                    alert("Saved.");
+                } else {
+                    alert( res.error );
+                }
+            });
         });
     </script>
 </html>
