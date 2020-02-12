@@ -127,8 +127,8 @@ foreach ( $userInfo as $school => $more ) {
                         <th>Contestant</th>
                         <th>Avg Part 2</th>
                         <th>Avg All</th>
-                        <th>Trophy Contestant</th>
                         <th>Representative</th>
+                        <th>Trophy Contestant</th>
                         <th>Activate Enrollment</th>
                         <th>Enrolled</th>
                         <th>Allow Edits</th>
@@ -151,11 +151,11 @@ foreach ( $userInfo as $school => $more ) {
                                 if ($test['contestant']) echo "checked ";
                                 echo " /></td><td>";
                                 echo $avg2 . "</td><td>" . $avg . "</td><td>";
-                                echo "<input type='checkbox' class='trophy' ";
-                                if ($test['trophy']) echo "checked ";
-                                echo " /></td><td>";
                                 echo "<input type='checkbox' class='rep' ";
                                 if ($test['rep']) echo "checked ";
+                                echo " /></td><td>";
+                                echo "<input type='checkbox' class='trophy' ";
+                                if ($test['trophy']) echo "checked ";
                                 echo " /></td><td>";
                                 echo "<input type='checkbox' class='activate'";
                                 if ($test['can_enroll']) echo "checked ";

@@ -163,7 +163,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                     $status = "n/a";
                                     $stat = 0;
                                     $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70.00;
-                                    if ( $info['avg'] >= $needed && in_array( $idx, [0, 1] ) ) {
+                                    if ( $info['avg1'] >= $needed && $info['avg2'] >= $needed && in_array( $idx, [0, 1] ) ) {
                                         if ( $idx == 0 ) {
                                             $status = "Representative";
                                             $stat = 1;
