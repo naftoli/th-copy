@@ -28,7 +28,7 @@ foreach ($schools as $sid => $schoolName) {
     echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
-        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        $gradeInfo = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $name = $row['first'] . ' ' . $row['last'];
 
         // calculate avgs
@@ -44,7 +44,8 @@ foreach ($schools as $sid => $schoolName) {
         $avg2 = number_format(($t1b + $t2b + $t3b) / 3, 2);
         $avg = number_format(($t1a + $t1b + $t2a + $t2b + $t3a + $t3b) / 6, 2);
 
-        $userInfo[$sid][$row['gender']][$grade][$avg][] = [
+        $userInfo[$sid][$row['gender']][$row['class_grade']][$avg][] = [
+            'gradeInfo' => $gradeInfo, 
             'name'  => $name, 
             'id'    => $row['th_chidon_id'],
             'avg1'  => $avg1, 
@@ -66,7 +67,7 @@ foreach ( $userInfo as $school => $more ) {
         }
     }
 }
-echo "<pre>"; print_r( $userInfo ); echo "</pre>";
+// echo "<pre>"; print_r( $userInfo ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <HTML>
@@ -123,6 +124,7 @@ echo "<pre>"; print_r( $userInfo ); echo "</pre>";
                     <caption><?=$schools[$sid] . " (" . $type . ")";?></caption>
                     <tr>
                         <th>Grade</th>
+                        <th>Class</th>
                         <th>Student</th>
                         <th>Avg Part 1</th>
                         <th>Contestant</th>
@@ -143,11 +145,11 @@ echo "<pre>"; print_r( $userInfo ); echo "</pre>";
                                 $avg2 = $test['avg2'];
                                 
                                 if ($curGrade != $grade) {
-                                    echo "<tr><td colspan='12'><h2></h2></td></tr>";
+                                    echo "<tr><td colspan='13'><h2></h2></td></tr>";
                                     $curGrade = $grade;
                                 }
                                 
-                                echo "<tr id=" . $test['id'] . " class='student'><td>" . $grade . "</td><td>" . $test['name'] . "</td><td>" . $avg1 . "</td><td>";
+                                echo "<tr id=" . $test['id'] . " class='student'><td>" . $grade . "</td><td>" . $test['gradeInfo'] . "</td><td>" . $test['name'] . "</td><td>" . $avg1 . "</td><td>";
                                 echo "<input type='checkbox' class='contestant' ";
                                 if ($test['contestant']) echo "checked ";
                                 echo " /></td><td>";
