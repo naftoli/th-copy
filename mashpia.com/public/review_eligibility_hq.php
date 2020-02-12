@@ -256,4 +256,21 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             </table>
         <?php endif; ?>
     </body>
+    <script>
+        // check if we have over 40 reps in a grade
+        const reps = <?=json_encode($reps)?>;
+        const genders = ['M', 'F'];
+        const grades = [4, 5, 6, 7, 8];
+        console.log(reps);
+        for (let gender of genders) {
+            for (let grade of grades) {
+                if (reps[gender][grade] > 40) {
+                    let g;
+                    if (gender == 'M') g = 'boys';
+                    else if (gender == 'F') g = "girls";
+                    alert("You have more than 40 representatives in grade " + grade + " (" + g + ")");
+                }
+            }
+        }
+    </script>
 </html>
