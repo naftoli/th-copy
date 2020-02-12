@@ -477,7 +477,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         </div>
         
         <a class='button' id='prev_page' href='/chidon_school_reg.php'><i class='fa fa-arrow-left'></i> Enroll School to Shabbaton</a>
-        <a class='button' id="next_page" href='/enrollment.php'>Finalize School Registration <i class="fa fa-arrow-right"></i></a>
+        <a class='button' id="next_page" href='/review_eligibility.php'>Finalize School Registration <i class="fa fa-arrow-right"></i></a>
         <script src="/js/admin/components/modal.js"></script>
         <script src="/scripts/chidon/chidon_school_reg.php.js"></script>
     </body>
