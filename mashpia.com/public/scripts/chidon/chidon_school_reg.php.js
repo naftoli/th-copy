@@ -66,16 +66,25 @@ $(document).ready(function(){
         $("#chap_modal input#dob").val(chap.dob);
         $("#chap_modal select.s_size").val(chap.sweater_size ? chap.sweater_size : "");
         if (parseInt(chap.chap_type) == 4 && !chap.sweater_size) $("#chap_modal select.s_size").attr('disabled', true); // can't change sweater size so that we don't have to worry about charging
+        if (parseInt(chap.chap_type) == 1) {
+            if (parseInt(chap.is_walking)) {
+                $(".walking").eq(0).attr('checked', true);
+            } else {
+                $(".walking").eq(1).attr('checked', true);
+            }
+        }
 
         // update chap type
         let chap_type = chap.chap_type;
         $("#chap_modal input.chap_type_" + chap_type).attr("checked", true);
         $("#chap_modal input.chap_type").attr("disabled", true);
         if ( parseInt(chap.chap_type) == 1 ) {
+            $(".chap_only").show();
             $(".super_terms").hide();
             $(".chap_terms").show();
             $(".terms").show();
         } else if ( parseInt(chap.chap_type) == 2 ) {
+            $(".chap_only").hide();
             $(".chap_terms").hide();
             $(".super_terms").show();
             $(".terms").show();
@@ -181,7 +190,7 @@ $(document).ready(function(){
         };
 
         data.walking = 0;
-        if ( parseInt( data.chap_type ) == 1 && action != 'edit' ) {
+        if ( parseInt( data.chap_type ) == 1 ) {
             // check if chap will be walking children
             if ( !$(".walking:checked").length ) {
                 alert("You must indicate if you are walking the children home.");

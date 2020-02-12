@@ -12,7 +12,7 @@ $school_id          = clean_post_param("school_id");
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-$fields = ['school_id', 'first_name', 'last_name', 'phone', 'email', 'dob', 'chidon_type', 'acc_name', 'acc_address', 'acc_phone', 'vehicle', 's_size', 'chap_type'];
+$fields = ['school_id', 'first_name', 'last_name', 'phone', 'email', 'dob', 'chidon_type', 'acc_name', 'acc_address', 'acc_phone', 'vehicle', 's_size', 'chap_type', 'walking'];
 
 $sql_data = [];
 // go through each feild and add it to the dataset...
@@ -21,11 +21,12 @@ foreach($fields as $key) {
     // if we are missing a paramater, return an error....
     if(!isset($_POST[$key]) && !in_array($key, ["s_size"])) { // if the key is blank and not excluded from the requirments...
         render_json_error("Error CH-CHP-010: Empty field. All fields are required.");
-    } elseif (isset($_POST[$key]) && in_array($key, ["s_size"]) && $value == "") { // if sweater is blank set sweater to null
+    } else if (isset($_POST[$key]) && in_array($key, ["s_size"]) && $value == "") { // if sweater is blank set sweater to null
         $sql_data[] = "sweater_size = null";
         $sql_data[] = "sweater = 0";
-    } elseif (isset($_POST[$key]) && $value != "") { // do not add feilds that can be blank to the sql data if they are...
+    } else if (isset($_POST[$key]) && $value != "") { // do not add feilds that can be blank to the sql data if they are...
         if ($key == 's_size') $key = "sweater_size";
+        else if ($key == 'walking') $key = "is_walking";
         $sql_data[] = "$key = '$value'";
         if ($key == 's_size') $sql_data[] = "sweater = 1";
     }
