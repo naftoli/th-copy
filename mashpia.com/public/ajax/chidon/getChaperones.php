@@ -55,7 +55,7 @@ if (count($chaps) > 0) { ?>
             <th>Chap Type</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Address</th>
+            <!-- <th>Address</th> -->
             <th>Email</th>
             <th>Phone</th>
             <!-- <th>Full Program</th> -->
@@ -74,13 +74,25 @@ if (count($chaps) > 0) { ?>
                 <td><?=$chap['chidon_type']?></td>
                 <td>
                     <?php
-                    if ( $chap['chap_type'] == 1 ) echo "Chaperone";
-                    else if ( $chap['chap_type'] == 2 ) echo "Walking Counselor";
+                    switch ( intval( $chap['chap_type'] ) ) {
+                        case 1:
+                            echo "Chaperone";
+                            break;
+                        case 2:
+                            echo "Walking Supervisor";
+                            break;
+                        case 3:
+                            echo "Principal";
+                            break;
+                        case 4:
+                            echo "Other";
+                            break;
+                    }
                     ?>
                 </td>
                 <td><?=$chap['first_name']?></td>
                 <td><?=$chap['last_name']?></td>
-                <td><?=$chap['acc_address']?></td>
+                <!-- <td><?=$chap['acc_address']?></td> -->
                 <td><?=$chap['email']?></td>
                 <td><?=$chap['phone']?></td>
                 <!-- <td><?=$chap['full_program'] ? 'yes' : 'no';?></td> -->
