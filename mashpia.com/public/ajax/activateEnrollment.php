@@ -46,7 +46,7 @@ if (mysql_query($sql)) {
                     'Enroll for Chidon Shabbaton' to get started. Enrollment closes on Monday, Daled Adar (Feb 19).";
         $headers = 'From: chidon@tzivoshashem.org' . "\r\n" .
                     'Reply-To: chidon@tzivoshashem.org' . "\r\n";    
-        @mail($to, $subject, $msg, $headers);
+        // @mail($to, $subject, $msg, $headers);
     }
     
 } else {
