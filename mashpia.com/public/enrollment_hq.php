@@ -146,7 +146,7 @@ foreach ( $userInfo as $school => $more ) {
                                     $curGrade = $grade;
                                 }
                                 
-                                echo "<tr id=" . $test['id'] . " class='student'><td>" . $grade . "</td><td>" . $name . "</td><td>" . $avg1 . "</td><td>";
+                                echo "<tr id=" . $test['id'] . " class='student'><td>" . $grade . "</td><td>" . $test['name'] . "</td><td>" . $avg1 . "</td><td>";
                                 echo "<input type='checkbox' class='contestant' ";
                                 if ($test['contestant']) echo "checked ";
                                 echo " /></td><td>";
