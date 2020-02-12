@@ -50,6 +50,7 @@ foreach ($schools as $sid => $schoolName) {
             'id'    => $row['th_chidon_id'],
             'avg1'  => $avg1, 
             'avg2'  => $avg2, 
+            'khk'   => $row['khk'],
             'contestant'    => $row['contestant'],
             'trophy'        => $row['trophy_contestant'],
             'rep'           => $row['school_rep'],
@@ -130,6 +131,7 @@ foreach ( $userInfo as $school => $more ) {
                         <th>Contestant</th>
                         <th>Avg Part 2</th>
                         <th>Avg All</th>
+                        <th>Kol Hatorah Kula</th>
                         <th>Representative</th>
                         <th>Trophy Contestant</th>
                         <th>Activate Enrollment</th>
@@ -154,6 +156,9 @@ foreach ( $userInfo as $school => $more ) {
                                 if ($test['contestant']) echo "checked ";
                                 echo " /></td><td>";
                                 echo $avg2 . "</td><td>" . $avg . "</td><td>";
+                                echo "<input type='checkbox' class='khk' ";
+                                if ($test['khk']) echo "checked ";
+                                echo " /></td><td>";
                                 echo "<input type='checkbox' class='rep' ";
                                 if ($test['rep']) echo "checked ";
                                 echo " /></td><td>";
