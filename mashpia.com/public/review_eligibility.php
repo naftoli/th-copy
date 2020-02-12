@@ -21,6 +21,7 @@ $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') {
     $schools[82] = "Avrohom Academy";
 }
+
 if ( isset( $_POST['submit'] ) ) {
     // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
     $qrys = [];
@@ -49,7 +50,6 @@ if ( isset( $_POST['submit'] ) ) {
 
     // execute qrys
     foreach ( $qrys as $qry ) {
-        // echo $qry . "<br />";
         mysql_query( $qry );
     }
 }
@@ -133,7 +133,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 <input type="submit" name="submit" value="Save Tie Breaker(s)" style="padding: 10px;" /><br /><br />
                 <input type="submit" name="submit" value="Save Eligibility" style="padding: 10px;" />
             </div>
-        </form>
             <?php
             $reps = [];
             $trophy = [];

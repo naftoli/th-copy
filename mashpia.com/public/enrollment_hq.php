@@ -66,6 +66,7 @@ foreach ( $userInfo as $school => $more ) {
         }
     }
 }
+echo "<pre>"; print_r( $userInfo ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <HTML>
