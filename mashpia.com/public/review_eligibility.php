@@ -20,37 +20,37 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') {
     $schools[82] = "Avrohom Academy";
+}
+if ( isset( $_POST['submit'] ) ) {
+    // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
+    $qrys = [];
 
-    if ( isset( $_POST['submit'] ) ) {
-        // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
-        $qrys = [];
-
-        if ( $_POST['submit'] == 'Save Tie Breaker(s)' ) {
-            foreach ( $_POST['tie'] as $id => $on ) {
-                $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
-            }
-        } else if ( $_POST['submit'] == 'Save Eligibility' ) {
-            foreach ( $_POST['status'] as $id => $stat ) {
-                switch ( intval( $stat ) ) {
-                    case 1:
-                        $qrys[] = "UPDATE th_chidon SET representative = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    case 2:
-                        $qrys[] = "UPDATE th_chidon SET trophy_contestant = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    case 3:
-                        $qrys[] = "UPDATE th_chidon SET contestant = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    default:
-                        break;
-                }
+    if ( $_POST['submit'] == 'Save Tie Breaker(s)' ) {
+        foreach ( $_POST['tie'] as $id => $on ) {
+            $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
+        }
+    } else if ( $_POST['submit'] == 'Save Eligibility' ) {
+        foreach ( $_POST['status'] as $id => $stat ) {
+            switch ( intval( $stat ) ) {
+                case 1:
+                    $qrys[] = "UPDATE th_chidon SET school_rep = 1 WHERE th_chidon_id = " . $id;
+                    break;
+                case 2:
+                    $qrys[] = "UPDATE th_chidon SET trophy_contestant = 1 WHERE th_chidon_id = " . $id;
+                    break;
+                case 3:
+                    $qrys[] = "UPDATE th_chidon SET contestant = 1 WHERE th_chidon_id = " . $id;
+                    break;
+                default:
+                    break;
             }
         }
+    }
 
-        // execute qrys
-        foreach ( $qrys as $qry ) {
-            mysql_query( $qry );
-        }
+    // execute qrys
+    foreach ( $qrys as $qry ) {
+        // echo $qry . "<br />";
+        mysql_query( $qry );
     }
 }
 
@@ -128,11 +128,12 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Review Eligibility</h1>
 
-        <form action="review_eligibility.php" method="post">
+        <form action="review_eligibility.php" method="POST">
             <div align="center">
                 <input type="submit" name="submit" value="Save Tie Breaker(s)" style="padding: 10px;" /><br /><br />
                 <input type="submit" name="submit" value="Save Eligibility" style="padding: 10px;" />
             </div>
+        </form>
             <?php
             $reps = [];
             $trophy = [];
