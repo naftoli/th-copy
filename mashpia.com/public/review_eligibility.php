@@ -89,7 +89,11 @@ foreach ($schools as $id => $school) {
             'avg2'  => $avg2, 
             'avg'   => $avg,
             'tie'   => $row['tie_breaker'],
-            'paid'  => $row['paid'] 
+            'paid'  => $row['paid'], 
+            'khk'   => $row['khk'],
+            'rep'   => $row['school_rep'], 
+            'trophy'=> $row['trophy_contestant'], 
+            'contestant' => $row['contestant'] 
         );
     }
 }
@@ -167,24 +171,32 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                             foreach ( $other as $avg => $more ) {
                                 foreach ( $more as $info ) {
                                     $status = "n/a";
-                                    $stat = 0;
-                                    $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70.00;
-                                    if ( $info['avg1'] >= $needed && $info['avg2'] >= $needed && in_array( $idx, [0, 1] ) ) {
-                                        if ( $idx == 0 ) {
-                                            $status = "Representative";
-                                            $stat = 1;
-                                            if ( isset( $reps[$gender][$grade] ) ) $reps[$gender][$grade]++;
-                                            else $reps[$gender][$grade] = 1;
+                                    // if status already set, put that
+                                    if ( $info['khk'] || $info['rep'] || $info['trophy'] || $info['contestant'] ) {
+                                        if ( $info['khk'] ) $status = "Kol Hatorah Kula";
+                                        else if ( $info['rep'] ) $status = "Representative";
+                                        else if ( $info ['trophy'] ) $status = "Trophy Contestant";
+                                        else if ( $info['contestant'] ) $status = "Contestant";
+                                    } else {
+                                        $stat = 0;
+                                        $needed = isset( $avgs[$school_id][$grade] ) ? $avgs[$school_id][$grade] : 70.00;
+                                        if ( $info['avg1'] >= $needed && $info['avg2'] >= $needed && in_array( $idx, [0, 1] ) ) {
+                                            if ( $idx == 0 ) {
+                                                $status = "Representative";
+                                                $stat = 1;
+                                                if ( isset( $reps[$gender][$grade] ) ) $reps[$gender][$grade]++;
+                                                else $reps[$gender][$grade] = 1;
+                                            }
+                                            else if ( $idx == 1 ) {
+                                                $status = "Trophy Contestant";
+                                                $stat = 2;
+                                                if ( isset( $trophy[$gender][$grade] ) ) $trophy[$gender][$grade]++;
+                                                else $trophy[$gender][$grade] = 1;
+                                            }
+                                        } else if ( $info['avg1'] >= $needed ) {
+                                            $status = "Contestant";
+                                            $stat = 3;
                                         }
-                                        else if ( $idx == 1 ) {
-                                            $status = "Trophy Contestant";
-                                            $stat = 2;
-                                            if ( isset( $trophy[$gender][$grade] ) ) $trophy[$gender][$grade]++;
-                                            else $trophy[$gender][$grade] = 1;
-                                        }
-                                    } else if ( $info['avg1'] >= $needed ) {
-                                        $status = "Contestant";
-                                        $stat = 3;
                                     }
                                     echo "<input type='hidden' name='status[" . $info['id'] . "]' value='" . $stat . "' />";
                                     echo "<tr><td>" . $info['id'] . "</td><td>" . $grade . "</td><td>" . $info['name'] . "</td><td>" . $info['avg1'] . "</td><td>" . 
