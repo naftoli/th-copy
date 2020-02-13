@@ -199,31 +199,45 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
 		$children[$row['user_id']]['shabbatonEdit'] = 0;
 		$children[$row['user_id']]['shabbatonConfirmed'] = 0;
-		$cSql = "SELECT * FROM th_chidon WHERE (contestant = 1 or school_rep = 1) and deleted = 0 and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
-		$cRes = mysql_query($cSql);
-		if (mysql_num_rows($cRes) > 0) {
-			$cRow = mysql_fetch_assoc($cRes);
-			$children[$row['user_id']]['chidonRegistered'] = 1;
-			$children[$row['user_id']]['allowRemove'] = 0;
-			$children[$row['user_id']]['enrollShabbaton'] = 1;
-			// make sure school indicated that child should enroll for shabbaton 
-			if ($cRow['can_enroll']) {
-				// make sure school is registered to chidon
-				// $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
-				// $chapRes = mysql_query( $chapSql );
-				// if (mysql_num_rows($chapRes) > 0) {
-				// 	$children[$row['user_id']]['enrollShabbaton'] = 1;
-				// }
-				$children[$row['user_id']]['enrollShabbaton'] = 1;
-			}
-			if ($cRow['allow_edit']) {
-				$children[$row['user_id']]['shabbatonEdit'] = 1;
-			}
-			if ($cRow['date_paid'] > 0) {
-				$children[$row['user_id']]['shabbatonRegistered'] = 1;
-			}
-			if ($cRow['confirmed']) {
-				$children[$row['user_id']]['shabbatonConfirmed'] = 1;
+		$d1 = time();
+		$d2 = strtotime("2020-02-14 00:00:00");
+		if ( $d1 > $d2 || $row['user_id'] == 13159 ) {
+			$cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and (contestant = 1 or school_rep = 1 or khk = 1 or trophy_contestant = 1) and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
+			$cRes = mysql_query($cSql);
+			if (mysql_num_rows($cRes) > 0) {
+				$cRow = mysql_fetch_assoc($cRes);
+				$children[$row['user_id']]['chidonRegistered'] = 1;
+				$children[$row['user_id']]['allowRemove'] = 0;
+
+				// make sure school is registered and has enough staff
+				$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $chidon_year . " AND registered = 1";
+				$chapRes = mysql_query( $chapSql );
+				if (mysql_num_rows($chapRes) > 0) {
+					// check chap
+					$sqlChaps = "select * from th_chidon_chaps where chap_type = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+					$resChaps = mysql_query( $sqlChaps );
+					if ( mysql_num_rows( $resChaps ) > 0 ) {
+						$sqlWalking = "select * from th_chidon_chaps_needed where school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+						$resWalking = mysql_query( $sqlWalking );
+						$rowWalking = mysql_fetch_assoc( $resWalking );
+						$needed = $rowWalking['needed'];
+						$sqlSupers = "select * from th_chidon_chaps where is_walking = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+						$resSupers = mysql_query( $sqlSupers );
+						if ( mysql_num_rows( $resSupers ) >= $needed ) {
+							$children[$row['user_id']]['enrollShabbaton'] = 1;
+
+							if ($cRow['allow_edit']) {
+								$children[$row['user_id']]['shabbatonEdit'] = 1;
+							}
+							if ($cRow['date_paid'] > 0) {
+								$children[$row['user_id']]['shabbatonRegistered'] = 1;
+							}
+							if ($cRow['confirmed']) {
+								$children[$row['user_id']]['shabbatonConfirmed'] = 1;
+							}
+						}
+					}
+				} 
 			}
 		}
 
