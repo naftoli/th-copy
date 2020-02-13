@@ -24,7 +24,8 @@ $sql = "UPDATE th_chidon SET can_enroll = '$can_enroll' WHERE th_chidon_id = " .
 if (mysql_query($sql)) {
     
     echo json_encode([
-        "success"   => true
+        "success"   => true, 
+        "chap"      => true
     ]);
     
     // send an email if can_enroll is set to 1

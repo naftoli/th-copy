@@ -8,6 +8,14 @@ $th_chidon_chap_id  = clean_post_param("chap_id");
 //$action             = clean_post_param("action");
 $school_id          = clean_post_param("school_id");
 
+if ( !(isset($th_chidon_chap_id) && $th_chidon_chap_id) ) {
+    echo json_encode([
+        'success' => false, 
+        'error'   => "Missing chidon ID."
+    ]);
+    exit;
+} 
+
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
