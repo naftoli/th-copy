@@ -24,7 +24,7 @@ foreach ($schools as $sid => $schoolName) {
             ." WHERE tc.year = " . $year . " "
             ." AND u.school_id = " . $sid . " "
             ." AND tc.deleted = 0 "; // only not deleted kids
-    $sql .= " ORDER BY u.gender, class_grade, class_sub, tc.school_rep desc, u.last, u.first";
+    $sql .= " ORDER BY u.gender, class_grade, class_sub";
     echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
@@ -153,21 +153,21 @@ foreach ( $userInfo as $school => $more ) {
                                 
                                 echo "<tr id=" . $test['id'] . " class='student'><td>" . $grade . "</td><td>" . $test['gradeInfo'] . "</td><td>" . $test['name'] . "</td><td>" . $avg1 . "</td><td>";
                                 echo "<input type='checkbox' class='contestant' ";
-                                if ($test['contestant']) echo "checked ";
+                                if ($test['contestant']) echo "checked='checked' ";
                                 echo " /></td><td>";
                                 echo $avg2 . "</td><td>" . $avg . "</td><td>";
                                 echo "<input type='checkbox' class='khk' ";
-                                if ($test['khk']) echo "checked ";
+                                if ($test['khk']) echo "checked='checked' ";
                                 echo " /></td><td>";
                                 echo "<input type='checkbox' class='rep' ";
-                                if ($test['rep']) echo "checked ";
+                                if ($test['rep']) echo "checked='checked' ";
                                 echo " /></td><td>";
                                 echo "<input type='checkbox' class='trophy' ";
-                                if ($test['trophy']) echo "checked ";
+                                if ($test['trophy']) echo "checked='checked' ";
                                 echo " /></td><td>";
                                 if ( intval($test['khk']) || intval($test['rep']) || intval($test['trophy']) || intval($test['contestant']) ) {
                                     echo "<input type='checkbox' class='activate'";
-                                    if ($test['can_enroll']) echo "checked ";
+                                    if ($test['can_enroll']) echo "checked='checked' ";
                                     echo " /></td><td>";
                                 } else {
                                     echo "</td><td>";
@@ -175,7 +175,7 @@ foreach ( $userInfo as $school => $more ) {
                                 if ($test['enrolled']) echo $tests['enrolled'];
                                 echo "</td><td>";
                                 echo "<input type='checkbox' class='edit' ";
-                                if ($test['edit']) echo "checked ";
+                                if ($test['edit']) echo "checked='checked' ";
                                 echo "/></td></tr>";
                             }
                         }
