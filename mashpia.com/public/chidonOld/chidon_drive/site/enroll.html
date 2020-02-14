@@ -102,7 +102,7 @@
 						<div class="group .shoesize">
 							<div class="field">
 								<label>Sweater Size:</label>
-								<select id="sweater" name="sweater" required>
+								<select id="sweater" name="sweater" required disabled>
 										<option value="0">Please Choose</option>
 										<option value="children s">Children S (6 - 8)</option>
 										<option value="children m">Children M (8 - 10)</option>
@@ -223,12 +223,12 @@
 							<label>Crown Heights Phone Number:</label>
 							<input type="text" id="acc_phone" name="acc_phone" required />
 						</div>
-						<div class="field">
+						<!-- <div class="field">
 							<p><label class="checkbox"><input type="checkbox" name="walking" id="walking" /><span></span></label>
 								I allow my child to walk home alone at any time of the day and night, from ALL chidon programs. 
 								PLEASE NOTE: only select this if you would not like your child to be included in walking groups from ANY programs.
 							</p>
-						</div>
+						</div> -->
 
 						<h5>Test Information</h5>
 						<div class="field">
@@ -266,6 +266,22 @@
 							<textarea id="chidonAnswer"></textarea>
 						</div>
 
+						<h5>Waivers</h5>
+						<div class="field">
+							<p>For your registration to be considered complete, you must fill out an online waiver for each child attending Chidon.</p>
+						</div>
+						<div class="field">
+							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers">Grade 4 online waiver</a> (Launch Trampoline Park)</p>
+							<p><a style="font-size: 16px;" href="https://launchlinden.pfestore.com/waiver/">Grade 5 online waiver</a> (Launch Trampoline Park)</p>
+							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers">Grade 6 online waiver</a> (Launch Trampoline Park)</p>
+							<p><a style="font-size: 16px;" href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42">Grade 7 online waiver</a> (Boundless Adventures)</p>
+							<p><a style="font-size: 16px;" href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42">Grade 8 online waiver</a> (Boundless Adventures)</p>
+						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" id="waiver" /><span></span></label>  I have filled out the waiver for <span class="first_name"></span></p>
+						</div>
+
+						<h5>Terms</h5>
 						<div class="field">
 							<p><label class="checkbox"><input type="checkbox" id="terms1" class="terms" /><span></span></label>	I understand that the way my child’s Hebrew name is written here is the way it will be printed on any plaque and certificate.</p>
 						</div>
@@ -285,11 +301,11 @@
 								Safety of all our chayolim is most important. It is essential that staff knows where every finalist is at all times. Any finalist who leaves any activity without the consent of their counselor and safety officer will automatically be dismissed from the Shabbaton.	
 							</p>
 						</div>
-						<div class="field" id="walkingException" style="display: none;">
+						<!-- <div class="field" id="walkingException" style="display: none;">
 							<p><label class="checkbox"><input type="checkbox" id="terms6" class="terms" /><span></span></label>	
 								I will arrange pickup and drop off for my child for all Chidon programs.
 							</p>
-						</div>
+						</div> -->
 
 						<div class="group save-detail">
 							
@@ -434,6 +450,7 @@
 					let child = children[id];
 					$("#user_id").val( child.user_id );
 					$("#first").val( child.first );
+					$(".first_name").text( child.first );
 					$("#last").val( child.last );
 					$("#heFirst").val( child.first_he );
 					$("#heLast").val( child.last_he );
@@ -475,7 +492,7 @@
 					$("#acc_cross2").val( child.between_streets2 );
 					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
-					if ( parseInt(child.walking) ) $("#walking").trigger('click');
+					// if ( parseInt(child.walking) ) $("#walking").trigger('click');
 					if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
 					
 					switch ( child.test_lang ) {
@@ -696,7 +713,7 @@
 						info.acc_cross2 = $("#acc_cross2").val();
 						info.walking_zone = $("#walking_zone").val();
 						info.acc_phone = $("#acc_phone").val();
-						info.walking = $("#walking").is(":checked") ? 1 : 0;
+						// info.walking = $("#walking").is(":checked") ? 1 : 0;
 						info.test_lang = $(".testLang:checked").val();
 						info.history = '';
 						$(".history").each( function() {
@@ -729,12 +746,15 @@
 						if ( info.allergy && !info.allergies ) {
 							errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
 						}
+						if (!$("#waiver:checked").length) {
+							errors += "You must fill out the waiver!\n";
+						}
 						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
 							errors += "You must indicate your agreement to all terms.\n";
 						}
-						if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
-							errors += "You must indicate your agreement to all terms.\n";
-						}
+						// if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
+						// 	errors += "You must indicate your agreement to all terms.\n";
+						// }
 						console.log( errors );
 						//}
 
