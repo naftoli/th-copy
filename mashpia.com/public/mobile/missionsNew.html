@@ -330,7 +330,7 @@
 							$( "#mainLink a" ).attr('href', 'reg/medals/?id=' + id);
 						}
 						// if the language is set to 2 (yiddish) in the html
-						if (lang == 2) {
+						if (lang && lang == 2) {
 							$(".container").eq(1).addClass('he'); // add a he class to the page
 							$(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
 							$(".personalImg").css({"right": "2%"}); // move the profile photo over a bit...

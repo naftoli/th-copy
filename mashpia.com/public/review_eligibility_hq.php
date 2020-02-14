@@ -20,38 +20,6 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') {
     $schools[82] = "Avrohom Academy";
-
-    if ( isset( $_POST['submit'] ) ) {
-        // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
-        $qrys = [];
-
-        if ( $_POST['submit'] == 'Save Tie Breaker(s)' ) {
-            foreach ( $_POST['tie'] as $id => $on ) {
-                $qrys[] = "UPDATE th_chidon SET tie_breaker = 1 WHERE th_chidon_id = " . $id;
-            }
-        } else if ( $_POST['submit'] == 'Save Eligibility' ) {
-            foreach ( $_POST['status'] as $id => $stat ) {
-                switch ( intval( $stat ) ) {
-                    case 1:
-                        $qrys[] = "UPDATE th_chidon SET representative = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    case 2:
-                        $qrys[] = "UPDATE th_chidon SET trophy_contestant = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    case 3:
-                        $qrys[] = "UPDATE th_chidon SET contestant = 1 WHERE th_chidon_id = " . $id;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        // execute qrys
-        foreach ( $qrys as $qry ) {
-            mysql_query( $qry );
-        }
-    }
 }
 
 $users = array();
@@ -89,7 +57,11 @@ foreach ($schools as $id => $school) {
             'avg2'  => $avg2, 
             'avg'   => $avg,
             'tie'   => $row['tie_breaker'],
-            'paid'  => $row['paid'] 
+            'paid'  => $row['paid'],
+            'khk'   => $row['khk'],
+            'rep'   => $row['school_rep'], 
+            'trophy'=> $row['trophy_contestant'], 
+            'contestant' => $row['contestant']  
         );
     }
 }
@@ -142,7 +114,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     <th>Avg Part 1</th>
                     <th>Avg Part 2</th>
                     <th>Total Avg</th>
-                    <th>Set Tie Breaker</th>
+                    <!-- <th>Set Tie Breaker</th> -->
                     <th>Avg Needed</th>
                     <!-- <th>Eligibility Status</th> -->
                     <th>Actual Status</th>
@@ -211,9 +183,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                     echo "<input type='hidden' name='status[" . $info['id'] . "]' value='" . $stat . "' />";
                                     echo "<tr><td>" . $info['id'] . "</td><td>" . $schools[$school_id] . " (" . $type . ")</td><td>" . $grade . "</td><td>" . $info['name'] . 
                                         "</td><td>" . $info['avg1'] . "</td><td>" . $info['avg2'] . "</td><td>" . $info['avg'] . 
-                                        "</td><td><input type='checkbox' name='tie[" . $info['id'] . "]'";
-                                    if ( $info['tie'] ) echo " checked='checked'";
-                                    echo " /></td><td>" . $needed . "</td><td>" . $status . "</td><td>" . $info['grade_info'] . "</td><td>";
+                                        "</td><td>" . $needed . "</td><td>" . $status . "</td><td>" . $info['grade_info'] . "</td><td>";
                                     $idx++;
                                 }
                             }
