@@ -86,7 +86,7 @@ if ( $admin_id ) {
         echo json_encode([
           'success'   =>  true,
           'children'  =>  $children, 
-          'error'     =>  "Not all of your child(ren)'s school(s) have their chaperones and walking supervisors setup yet. Therefore, not all eligible children will show up on enrollment form."
+          'error'     =>  "Not all of your children's schools have their chaperones and walking supervisors setup yet. Therefore, not all eligible children will show up on enrollment form."
         ]);
       } else {
         echo json_encode([

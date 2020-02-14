@@ -107,7 +107,7 @@ if ( $res ) {
     else {
         echo json_encode([
             'success' =>  false,
-            'message' =>  "Could not find any children that have enough staff setup. Please contact your school."
+            'message' =>  "Could not find any children that have a school with enough staff setup. Please contact your child(ren)'s school."
         ]);
         exit;
     }
