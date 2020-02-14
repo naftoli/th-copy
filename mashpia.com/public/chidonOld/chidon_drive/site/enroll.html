@@ -149,7 +149,7 @@
 								</select>
 							</div>
 
-							<div class="field" id="yarmulka_size" style="display: none;">
+							<!-- <div class="field" id="yarmulka_size" style="display: none;">
 								<input type="hidden" name="gender" id="gender" />
 								<label>Yarmulka Size:</label>
 								<select id="yarmulka" name="yarmulka" required>
@@ -159,7 +159,7 @@
 										<option value="6">6</option>
 										<option value="7">7</option>
 								</select>
-							</div>
+							</div> -->
 						</div>
 
 						<h5>Allergies</h5>
@@ -185,11 +185,11 @@
 						</div>
 						<div class="group">
 							<div class="field">
-								<label>Street Number ONLY:</label>
-								<input type="text" id="acc_street_num" name="acc_street_num" />
+								<label>House Number ONLY:</label>
+								<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
 							</div>
 							<div class="field">
-								<label>Street Number Suffix:</label>
+								<label>House Number Suffix:</label>
 								<select id="acc_street_num_suffix">
 									<option></option>
 									<option>A</option>
@@ -199,7 +199,7 @@
 							</div>
 							<div class="field">
 								<label>Apt/Suite #</label>
-								<input type="text" id="acc_street_apt" />
+								<input type="text" id="acc_street_apt" maxlength="5" />
 							</div>
 						</div>
 						<div class="group">
@@ -223,12 +223,12 @@
 							<label>Crown Heights Phone Number:</label>
 							<input type="text" id="acc_phone" name="acc_phone" required />
 						</div>
-						<!-- <div class="field">
+						<div class="field">
 							<p><label class="checkbox"><input type="checkbox" name="walking" id="walking" /><span></span></label>
 								I allow my child to walk home alone at any time of the day and night, from ALL chidon programs. 
 								PLEASE NOTE: only select this if you would not like your child to be included in walking groups from ANY programs.
 							</p>
-						</div> -->
+						</div>
 
 						<h5>Test Information</h5>
 						<div class="field">
@@ -471,10 +471,10 @@
 					$("#sandwich").niceSelect('update');
 
 					$("#gender").val( child.gender );
-					$("#yarmulka").val( child.yarmulka );
-					$("#yarmulka").niceSelect('update');
-					if ( child.gender == 'M' ) $("#yarmulka_size").show();
-					else $("#yarmulka_size").hide();
+					// $("#yarmulka").val( child.yarmulka );
+					// $("#yarmulka").niceSelect('update');
+					// if ( child.gender == 'M' ) $("#yarmulka_size").show();
+					// else $("#yarmulka_size").hide();
 					
 					if ( child.allergies ) {
 						$(".allergy").eq(1).trigger('click');
@@ -492,7 +492,7 @@
 					$("#acc_cross2").val( child.between_streets2 );
 					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
-					// if ( parseInt(child.walking) ) $("#walking").trigger('click');
+					if ( parseInt(child.walking) ) $("#walking").trigger('click');
 					if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
 					
 					switch ( child.test_lang ) {
@@ -700,7 +700,7 @@
 						info.sweater = $("#sweater").val();
 						info.shoe = $("#shoe").val();
 						info.sandwich = $("#sandwich").val();
-						info.yarmulka = $("#yarmulka").val();
+						// info.yarmulka = $("#yarmulka").val();
 						info.allergy = parseInt( $(".allergy:checked").val() );
 						info.allergies = '';
 						if ( info.allergy ) info.allergies = $("#allergies").val();
@@ -713,7 +713,7 @@
 						info.acc_cross2 = $("#acc_cross2").val();
 						info.walking_zone = $("#walking_zone").val();
 						info.acc_phone = $("#acc_phone").val();
-						// info.walking = $("#walking").is(":checked") ? 1 : 0;
+						info.walking = $("#walking").is(":checked") ? 1 : 0;
 						info.test_lang = $(".testLang:checked").val();
 						info.history = '';
 						$(".history").each( function() {
@@ -733,7 +733,7 @@
 						if ( !info.sweater || info.sweater == '0' ) errors += "You must choose a sweater size.\n";
 						if ( !info.shoe || info.shoe == '0' ) errors += "You must choose a shoe size.\n";
 						if ( !info.sandwich || info.sandwich == '0' ) errors += "You must choose a sandwich.\n";
-						if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
+						// if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
 						if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
 						if ( !info.acc_street || info.acc_street == 'Choose One' ) errors += "You must enter which street you are staying on.\n";
 						if ( info.acc_street != 'East Flatbush (out of the walking zone)' && (
