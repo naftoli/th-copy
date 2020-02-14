@@ -60,6 +60,10 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
+// if ( isset( $_GET ) ) {
+// 	print_r( $_GET );
+// 	exit;
+// }
 if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
