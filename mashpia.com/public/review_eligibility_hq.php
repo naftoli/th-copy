@@ -167,20 +167,26 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                         if ( $idx == 0 ) {
                                             $status = "Representative";
                                             $stat = 1;
-                                            if ( isset( $reps[$gender][$grade] ) ) $reps[$gender][$grade]++;
-                                            else $reps[$gender][$grade] = 1;
                                         }
                                         else if ( $idx == 1 ) {
                                             $status = "Trophy Contestant";
                                             $stat = 2;
-                                            if ( isset( $trophy[$gender][$grade] ) ) $trophy[$gender][$grade]++;
-                                            else $trophy[$gender][$grade] = 1;
                                         }
                                     } else if ( $info['avg1'] >= $needed ) {
                                         $status = "Contestant";
                                         $stat = 3;
                                         if ( isset( $contestants[$school_id][$gender][$grade] ) ) $contestants[$school_id][$gender][$grade]++;
                                         else $contestants[$school_id][$gender][$grade] = 1;
+                                    }
+                                    switch ($status) {
+                                        case 'Representative':
+                                            if ( isset( $reps[$gender][$grade] ) ) $reps[$gender][$grade]++;
+                                            else $reps[$gender][$grade] = 1;
+                                        break;
+                                        case 'Trophy Contestant':
+                                            if ( isset( $trophy[$gender][$grade] ) ) $trophy[$gender][$grade]++;
+                                            else $trophy[$gender][$grade] = 1;
+                                        break;
                                     }
                                     echo "<input type='hidden' name='status[" . $info['id'] . "]' value='" . $stat . "' />";
                                     echo "<tr><td>" . $info['id'] . "</td><td>" . $schools[$school_id] . " (" . $type . ")</td><td>" . $grade . "</td><td>" . $info['name'] . 
