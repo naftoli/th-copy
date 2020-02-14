@@ -240,6 +240,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     <th>Number of Contestants</th>
                 </tr>
                 <?php
+                // sort contestants by school / grade 
+                foreach ( $contestants as $school_id => $other ) {
+                    ksort( $contestants[$school_id] );
+                }
                 foreach ( $contestants as $school_id => $other ) {
                     foreach ( $other as $gender => $more ) {
                         if ( $gender == 'M' ) $type = 'boys';
