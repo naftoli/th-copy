@@ -34,8 +34,8 @@ $qry = "
       users u USING (user_id) 
   WHERE
       tc.parent_id = :admin AND tc.year = :year 
-          AND tc.fundraising_goal > 0 
-          AND tc.date_paid is null
+        AND tc.can_enroll = 1 
+        AND (tc.khk = 1 or tc.school_rep = 1 or tc.trophy_contestant = 1 or tc.contestant = 1)
     ORDER BY u.first
 ";
 
@@ -114,7 +114,7 @@ if ( $res ) {
   } else {
     echo json_encode([
       'success' =>  false,
-      'message' =>  "Could not find any children that have a fundraising goal setup."
+      'message' =>  "Could not find any children that are eligible."
     ]);
     exit;
   }
