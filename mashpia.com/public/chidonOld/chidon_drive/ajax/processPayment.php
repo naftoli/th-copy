@@ -98,6 +98,7 @@ $cc_info['country'] = $billing['country'];
 if ( $cc_info['skip'] ) {
   // don't process card at all
   $response = null;
+  $trans_info = "bypassing credit card processing";
 } else {
   if ( $amount > 0 ) {
     require 'authorize.php';
@@ -171,7 +172,7 @@ if ( !empty( $msg ) ) {
         paid = :amount,
         date_paid = NOW(),
         paid_by = :admin, 
-        approval = :approval, 
+        approval = :approval 
     WHERE
         user_id = :user AND year = :year
   ");
@@ -186,7 +187,7 @@ if ( !empty( $msg ) ) {
       ':approval' =>  $trans_info 
     ]);
     if ( !$res ) {
-      //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
+      // echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
       $success = false;
       break;
     }
