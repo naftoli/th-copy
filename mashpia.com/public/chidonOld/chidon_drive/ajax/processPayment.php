@@ -195,6 +195,11 @@ if ( !empty( $msg ) ) {
 
   if ( $success ) {
     $MASHPIA_DB->commit();
+
+    // send email to parents
+    require_once '../email/enrollmentEmail.php';
+    sendEnrollmentEmail( $email );
+
     $msg .= "Your child(ren) have been successfully registered for the Chidon Shabbaton " . $year;
     echo json_encode([
       'success'   =>  true,
