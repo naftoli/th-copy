@@ -8,7 +8,10 @@ function sendEnrollmentEmail( $email ) {
     $headers[] = 'From: chidon@tzivoshashem.com';
     $headers[] = 'Reply-To: chidon@tzivoshashem.com';
 
-    $message = '<img src="http://test.mashpia.com/chidonOld/chidon_drive/email/Chidon-5780-Header-web.png" style="max-width: 100%; height: auto;" />';
+    $server = $_SERVER['DOCUMENT_ROOT'];
+    if ( $server == 'chidondrive.com' ) $src = "http://chidondrive.com/email/Chidon-5780-Header-web.png";
+    else $src = "http://" . $server . "/chidonOld/chidon_drive/email/Chidon-5780-Header-web.png";
+    $message = '<img src="' . $src . '" style="max-width: 100%; height: auto;" />';
 $message .= '<p>Thank you for completing your Chidon Shabbaton enrollment form.</p>
 <p><strong>PLEASE NOTE: In order for your child to be officially registered for Shabbaton, your information must be properly reviewed, signed, and returned to your child\'s Chidon coordinator. </strong></p>
 <p>If any changes need to be made, please indicate it clearly on this page when submitting.</p>
