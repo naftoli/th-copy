@@ -9,6 +9,7 @@ function sendEnrollmentEmail( $email ) {
     $headers[] = 'Reply-To: chidon@tzivoshashem.com';
 
     $server = $_SERVER['DOCUMENT_ROOT'];
+    echo $server; exit;
     if ( $server == 'chidondrive.com' ) $src = "http://chidondrive.com/email/Chidon-5780-Header-web.png";
     else $src = "http://" . $server . "/chidonOld/chidon_drive/email/Chidon-5780-Header-web.png";
     $message = '<img src="' . $src . '" style="max-width: 100%; height: auto;" />';
