@@ -68,11 +68,11 @@
 							<input type="text" placeholder="Last Name" id="last" required name="last" />
 						</div>
 						<div class="field">
-							<label>Hebrew First Name:</label>
+							<label>Hebrew First Name (as you would like it on your certificate or plaque):</label>
 							<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
 						</div>
 						<div class="field">
-							<label>Hebrew Last Name:</label>
+							<label>Hebrew Last Name (as you would like it on your certificate or plaque):</label>
 							<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
 						</div>
 						<div class="group">
@@ -103,7 +103,7 @@
 							<div class="field">
 								<label>Sweater Size:</label>
 								<select id="sweater" name="sweater" required disabled>
-										<option value="0">Please Choose</option>
+										<option value="0">Please Select</option>
 										<option value="children s">Children S (6 - 8)</option>
 										<option value="children m">Children M (8 - 10)</option>
 										<option value="children l">Children L (10 - 12)</option>
@@ -117,7 +117,7 @@
 							<div class="field">
 								<label>Shoe Size:</label>
 								<select id="shoe" name="shoe" required>
-										<option value="0">Please Choose</option>
+										<option value="0">Please Select</option>
 										<option value='children 11'>Children 11</option>
 										<option value='children 12'>Children 12</option>
 										<option value='children 13'>Children 13</option>
@@ -140,7 +140,7 @@
 							<div class="field">
 								<label>Sandwich Preference:</label>
 								<select id="sandwich" name="sandwich" required>
-										<option value="0">Please Choose</option>
+										<option value="0">Please Select</option>
 										<option value="tuna">Tuna</option>
 										<option value="egg">Egg</option>
 										<option value="cc">Cream Cheese</option>
@@ -176,9 +176,25 @@
 
 						<h5>Accommodation Information</h5>
 						<p>
-								I understand that the Chidon staff will supervise a safe drop-off AT this location FROM all Chidon programs whether in Bais Rivkah, Oholei Torah, or the Jewish Children's Museum.<br/><br />
-							The address where my child will be staying in Crown Heights during the Shabbaton is:<br><span>(If you live in Crown Heights please provide your home address)</span></p><p class="smaller">Walking groups will be arranged within the Schenectady- Nostrand, Rutland- S Johns radius.</p><p class="tiny">*Please note there will be a $100 fee for changes of address after enrollment closes.</p>
-						<p>For a map of crown heights walking area click <a href="img/Map Updated.png" style="color: aqua;" onclick="window.open('img/Map Updated.png'); return false;">here</a></p>
+							Chidon staff will supervise a safe drop-off FROM all Chidon programs on Thursday night, Friday afternoon, and Motzei Shabbos if they are within our walking group zones. 
+							See <a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0" target="_blank">here</a> for a map.<br />
+							It will be your responsibility to get your child TO Chidon programs each morning. 
+						</p>
+						<h5>Where will your child be staying?</h5>
+						<p>
+							Please note: If you live in Crown Heights, please provide your home address. <br />
+							We will need an address on record even if it is outside of the walking zones.<br />
+						</p>
+						<div class="group">
+							<div class="field">
+								<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone" value="1" /><span></span></label>My child will be staying WITHIN the Crown Heights walking zone</p>
+								<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone" value="0" /><span></span></label>My child will be staying OUTSIDE of the walking zone. 
+									I understand I will need to make arrangements to get them home after Chidon programs. Click 
+									<a href="https://chat.whatsapp.com/ENXQ6jOOnxr0RSW8K9Hs4H" target="_blank">here to join a whatsapp group</a> 
+									with other parents from outside the walking zone to coordinate transportation arrangements.
+								</p>
+							</div>
+						</div>
 						<div class="field">
 							<label>Crown Heights Family Name:</label>
 							<input type="text" id="acc_family" name="acc_family" required />
@@ -202,26 +218,51 @@
 								<input type="text" id="acc_street_apt" maxlength="5" />
 							</div>
 						</div>
-						<div class="group">
-							<div class="field">
-								<label>Street Name:</label>
-								<select id="acc_street" name="acc_street" required></select>
+						<div class="inside_zone">
+							<div class="group">
+								<div class="field">
+									<label>Street Name:</label>
+									<select id="acc_street" name="acc_street"></select>
+								</div>
+							</div>
+							<div class="group">
+								<div class="field">
+									<label>Between:</label>
+									<input type="text" id="acc_cross1" name="acc_cross1" disabled />
+								</div>
+								<div class="field">
+									<label>And:</label>
+									<input type="text" id="acc_cross2" name="acc_cross2" disabled />
+								</div>
+							</div>
+						</div>
+						<div class="outside_zone" style="display: none;">
+							<div class="group">
+								<div class="field">
+									<label>Street Name:</label>
+									<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
+								</div>
+							</div>
+							<div class="group">
+								<div class="field">
+									<label>Between:</label>
+									<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
+								</div>
+								<div class="field">
+									<label>And:</label>
+									<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
+								</div>
 							</div>
 						</div>
 						<div class="group">
 							<div class="field">
-								<label>Between:</label>
-								<input type="text" id="acc_cross1" name="acc_cross1" disabled />
-							</div>
-							<div class="field">
-								<label>And:</label>
-								<input type="text" id="acc_cross2" name="acc_cross2" disabled />
+								<p><i style="font-size: 16px;">Address not showing up? Please email chidon@tzivoshashem.org with the exact address and cross streets to have it updated.</i></p>
 							</div>
 						</div>
 						<input type="hidden" name="walking_zone" id="walking_zone" />
 						<div class="field">
-							<label>Crown Heights Phone Number:</label>
-							<input type="text" id="acc_phone" name="acc_phone" required />
+							<label>Crown Heights Phone Number:<i>(Required format: xxx xxx xxxx)</i></label>
+							<input type="text" id="acc_phone" name="acc_phone" placeholder="888 888 8888" pattern="[0-9]{3} [0-9]{3} [0-9]{4}" required />
 						</div>
 						<div class="field">
 							<p>
@@ -233,20 +274,22 @@
 							</p>
 						</div>
 
-						<h5>Test Information</h5>
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="en" /><span></span></label>I would like to take the test in English.</p>
-						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="yi" /><span></span></label>I would like to take the test in Yiddish.</p>
+						<div id="testInfo">
+							<h5>Test Information</h5>
+							<div class="field">
+								<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="en" /><span></span></label>I would like to take the test in English.</p>
+							</div>
+							<div class="field">
+								<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="yi" /><span></span></label>I would like to take the test in Yiddish.</p>
+							</div>
+							<div class="field">
+								<p>Disclaimer: The Yiddish translation is a private project not under the direction of Chidon HQ. We do not take responsibility in case of any error on the translated tests.								</p>
+							</div>
 						</div>
 
 						<h5>Additional Information</h5>
 						<p>My child has attended Shabbaton in the year:</p>
 						<div class="group">
-							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" value="5775" class="history" /><span></span></label>5775</p>
-							</div>
 							<div class="field">
 								<p><label class="checkbox"><input type="checkbox" value="5776" class="history" /><span></span></label>5776</p>
 							</div>
@@ -260,7 +303,7 @@
 								<p><label class="checkbox"><input type="checkbox" value="5779" class="history" /><span></span></label>5779</p>
 							</div>
 						</div>
-						<p>Important Notes:</p>
+						<p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
 						<div class="field">
 							<textarea id="chidonNotes"></textarea>
 						</div>
@@ -273,7 +316,7 @@
 						<div class="field">
 							<p>For your registration to be considered complete, you must fill out an online waiver for each child attending Chidon.</p>
 						</div>
-						<div class="field">
+						<div class="field waivers">
 							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers" target="_blank">Grade 4 online waiver</a> (Launch Trampoline Park)</p>
 							<p><a style="font-size: 16px;" href="https://launchlinden.pfestore.com/waiver/" target="_blank">Grade 5 online waiver</a> (Launch Trampoline Park)</p>
 							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers" target="_blank">Grade 6 online waiver</a> (Launch Trampoline Park)</p>
@@ -286,22 +329,30 @@
 
 						<h5>Terms</h5>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms1" class="terms" /><span></span></label>	I understand that the way my child’s Hebrew name is written here is the way it will be printed on any plaque and certificate.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms2" class="terms" /><span></span></label>I authorize my child's chaperone to sign the trip waivers on my behalf if needed. I understand that Chidon will not be responsible for any injury that may occur.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms2" class="terms" /><span></span></label>I authorize my school chaperone to sign the trip waivers on my behalf. I understand that Chidon will not be responsible for any injury that may happen.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms3" class="terms" /><span></span></label>I am aware that by participating in the Chidon I consent to my child's name and picture being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms3" class="terms" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
-						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms4" class="terms" /><span></span></label>	
-								The Shabbaton will be full of fun, excitement, and inspiration. As chayolim, you need to remember you are representing the Rebbe the entire day. In the unfortunate circumstance that a chayol’s behavior does not live up to this expectation, they will need to remain at their host during the Shabbaton programs. The Shabbaton fee will not be refunded.
+							<p>
+								<label class="checkbox"><input type="checkbox" id="terms4" class="terms" /><span></span></label>	
+								Please read with your child and initial: I will abide by all rules established by Chidon headquarters. 
+								Any behavior deemed inappropriate by staff or a departure from an activity without the consent of your counselor and safety officer 
+								is terms for dismissal from the Shabbaton. The Shabbaton fee will not be refunded. <input type="text" id="initials" style="width: 40px;" />
 							</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms5" class="terms" /><span></span></label>	
-								Safety of all our chayolim is most important. It is essential that staff knows where every finalist is at all times. Any finalist who leaves any activity without the consent of their counselor and safety officer will automatically be dismissed from the Shabbaton.	
+							<p>
+								<label class="checkbox"><input type="checkbox" id="terms5" class="terms" /><span></span></label>	
+								The Chidon Shabbaton is a major undertaking, and requires extensive work and coordination to ensure everyone's safety at all times. 
+								For this reason, changes to information submitted after enrollment will require much additional work, and therefore we must apply an 
+								additional charge. I understand that any changes to this application after registration closes will incur additional charges:
+								<blockquote>
+									<p>After that point, changes can be made by emailing chidon@tzivoshashem.org, at an additional charge of $50.</p>
+									<p>On Wednesday the day before the shabbaton begins, changes can be made between 12:00 and 5:00pm in the lobby of the Jewish children's Museum at a cost of $100.</p>
+									<p>Any changes we are informed about during the actual Shabbaton will incur a $150 charge and must be submitted at the information desk.</p>
+								</blockquote>
 							</p>
 						</div>
 						<!-- <div class="field" id="walkingException" style="display: none;">
@@ -434,7 +485,7 @@
 												<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
 										</div>
 										<h6>${child.first} <br>${child.last}</h6>
-										<a href="#" class="button enroll" id="${child.user_id}">fill form</a>
+										<a href="#" class="button enroll" id="${child.user_id}">enroll now</a>
 									</div>
 								`;
 							}
@@ -458,8 +509,11 @@
 					$("#heFirst").val( child.first_he );
 					$("#heLast").val( child.last_he );
 
-					$("#grade").val( (parseInt( child.book ) + 3).toString() );
+					let grade = parseInt( child.book ) + 3;
+					$("#grade").val( grade.toString() );
 					$("#grade").niceSelect('update');
+					if ( grade == 8 ) $("#testInfo").hide();
+					$(".waivers p").not(":eq(" + (parseInt( child.book ) - 1) + ")").hide();
 
 					$("#book").val( child.book );
 					$("#book").niceSelect('update');
@@ -486,17 +540,28 @@
 						$(".allergy").eq(0).trigger('click');
 					}
 
+					let in_zone = child.in_zone;
+					if ( parseInt( in_zone ) == 1 ) {
+						$(".in_zone").eq(0).trigger('click');
+						$("#acc_street").val( child.host_street );
+						$("#acc_cross1").val( child.between_streets1 );
+						$("#acc_cross2").val( child.between_streets2 );
+					} else {
+						$(".in_zone").eq(1).trigger('click');
+						$(".inside_zone").hide();
+						$(".outside_zone").show();
+						$("#acc_street_outside_zone").val( child.host_street );
+						$("#acc_cross1_outside_zone").val( child.between_streets1 );
+						$("#acc_cross2_outside_zone").val( child.between_streets2 );
+					}
 					$("#acc_family").val( child.host );
 					$("#acc_street_num").val( child.host_street_num );
 					$("#acc_street_num_suffix").val( child.host_street_num_suffix );
 					$("#acc_street_apt").val( child.host_street_apt );
-					$("#acc_street").val( child.host_street );
-					$("#acc_cross1").val( child.between_streets1 );
-					$("#acc_cross2").val( child.between_streets2 );
 					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
 					if ( parseInt(child.walking) ) $("#walking").trigger('click');
-					if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
+					// if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
 					
 					switch ( child.test_lang ) {
 						case 'en':
@@ -526,7 +591,7 @@
 						if ( $(this).is(":checked") ) $(this).trigger('click');
 					}); 
 
-					let options = [ 5775, 5776, 5777, 5778, 5779 ];
+					let options = [ 5776, 5777, 5778, 5779 ];
 					for ( h in history ) {
 						if ( history[h] == options[h] ) $(".history").eq(h).trigger('click');
 						// switch ( history[h] ) {
@@ -590,7 +655,7 @@
 				}
 
 				function getCrossStreets( number, street ) {
-					if ( street && street != 'Choose One' && street != 'East Flatbush (out of the walking zone)' ) {
+					if ( street && street != 'Choose One' && parseInt($(".in_zone:checked").val()) == 1 ) {
 						if ( !number ) {
 							alert('You must enter a Street Number.');
 							return false;
@@ -599,25 +664,40 @@
 							return false;
 						} 
 
-						$("#walkingException").hide();
+						// $("#walkingException").hide();
 						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
 							let info = JSON.parse( result );
 							if ( info.success ) {
 								let cross = info.data;
 								$("#acc_cross1").val( cross.cross1 );
 								$("#acc_cross2").val( cross.cross2 );
-								$("#walking_zone").val( cross.zone );
+								$("#walking_zone").val( cross.zone_5780 );
 							} else {	
 								alert( info.error );
 								$("#walking_zone").val(0);
 							}
 						});
-					} else if ( street == 'East Flatbush (out of the walking zone)' ) {
-						$("#walkingException").show();
+					} else {
+						$("#walking_zone").val(0);
 					}
+					// } else if ( street == 'East Flatbush (out of the walking zone)' ) {
+					// 	$("#walkingException").show();
+					// }
 				}
 
 		    $(document).ready(function(e){
+				$(".in_zone").click( function() {
+					if ( $(this).is(":checked") ) {
+						let val = parseInt( $(this).val() );
+						if ( val ) {
+							$(".inside_zone").show();
+							$(".outside_zone").hide();
+						} else {
+							$(".inside_zone").hide();
+							$(".outside_zone").show();
+						}
+					}
+				});
 					// get streets for dropdown
 					$.post('../ajax/getStreets.php', function( result ) {
 						let data = JSON.parse( result );
@@ -625,15 +705,17 @@
 						for ( s in data.streets ) {
 							html += "<option>" + data.streets[s].street + "</option>";
 						}
-						html += "<option>East Flatbush (out of the walking zone)</option>";
+						// html += "<option>East Flatbush (out of the walking zone)</option>";
 						$("#acc_street").append( html );
 						$('select#acc_street').niceSelect('update');
 					});
 
 					$("#acc_street_num").blur( function() {
-						let number = $(this).val();
-						let street = $("#acc_street").val();
-						getCrossStreets( number, street );
+						if ( parseInt($(".in_zone:checked").val()) == 1 ) {
+							let number = $(this).val();
+							let street = $("#acc_street").val();
+							getCrossStreets( number, street );
+						}
 					});
 
 					$("#acc_street").change( function() {
@@ -707,15 +789,23 @@
 						info.allergy = parseInt( $(".allergy:checked").val() );
 						info.allergies = '';
 						if ( info.allergy ) info.allergies = $("#allergies").val();
+						let in_zone = parseInt( $(".in_zone:checked").val() );
+						info.in_zone = in_zone;
+						if ( in_zone == 1 ) {
+							info.acc_street = $("#acc_street").val();
+							info.acc_cross1 = $("#acc_cross1").val();
+							info.acc_cross2 = $("#acc_cross2").val();
+						} else {
+							info.acc_street = $("#acc_street_outside_zone").val();
+							info.acc_cross1 = $("#acc_street_outside_zone").val();
+							info.acc_cross2 = $("#acc_street_outside_zone").val();
+						}
 						info.acc_family = $("#acc_family").val();
-						info.acc_street = $("#acc_street").val();
 						info.acc_street_num = $("#acc_street_num").val();
 						info.acc_street_num_suffix = $("#acc_street_num_suffix").val();
 						info.acc_street_apt = $("#acc_street_apt").val();
-						info.acc_cross1 = $("#acc_cross1").val();
-						info.acc_cross2 = $("#acc_cross2").val();
-						info.walking_zone = $("#walking_zone").val();
 						info.acc_phone = $("#acc_phone").val();
+						info.walking_zone = $("#walking_zone").val();
 						info.walking = $("#walking").is(":checked") ? 1 : 0;
 						info.test_lang = $(".testLang:checked").val();
 						info.history = '';
@@ -739,11 +829,8 @@
 						// if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
 						if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
 						if ( !info.acc_street || info.acc_street == 'Choose One' ) errors += "You must enter which street you are staying on.\n";
-						if ( info.acc_street != 'East Flatbush (out of the walking zone)' && (
-									!info.acc_street_num || !info.acc_cross1 || !info.acc_cross2 || 
-									!info.walking_zone || info.walking_zone == '0' ) 
-								) 
-							 		errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
+						if ( !info.acc_street_num || !info.acc_cross1 || !info.acc_cross2 ) errors += "You have not entered all required address info.\n";
+						if ( info.in_zone && ( !info.walking_zone || info.walking_zone == '0' ) ) errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
 						if ( !info.acc_phone ) errors += "You have not entered a phone number to where you are staying.\n";
 						if ( !info.test_lang ) errors += "You have not indicated which language the test should be in.\n";
 						if ( info.allergy && !info.allergies ) {
@@ -752,7 +839,8 @@
 						if (!$("#waiver:checked").length) {
 							errors += "You must fill out the waiver!\n";
 						}
-						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
+						if ( $("#initials").val().trim() == '' ) errors += "You must enter your initials by the third item under terms.";
+						if (! ($("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
 							errors += "You must indicate your agreement to all terms.\n";
 						}
 						// if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
