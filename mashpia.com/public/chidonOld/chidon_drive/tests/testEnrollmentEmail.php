@@ -1,3 +1,4 @@
 <?php
 require_once '../email/enrollmentEmail.php';
-sendEnrollmentEmail( 'naftoli@tzivoshashem.org' );
+if ( sendEnrollmentEmail( 'naftoli@tzivoshashem.org' ) ) echo "sent";
+else echo "error";
