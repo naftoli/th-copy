@@ -740,8 +740,20 @@
 							if ( info.success ) {
 								Cookies.set('chidon_admin', info.admin);
 								Cookies.set('from_enrollment', 1);
-								location.href = "intro.html";
-								// getChildren( info.admin );
+								$.post('../ajax/checkForSetup.php', { admin : info.admin }, function( result ) {
+									const res = JSON.parse( result );
+									if ( res.success ) {
+										const admin_info = res.info;
+										// console.log( admin_info );
+										if ( parseInt( admin_info.setup ) > 0 ) {
+											getChildren( info.admin );
+										} else {
+											location.href = "intro.html";
+										}
+									} else {
+										location.href = "intro.html";
+									}
+								});
 							} else {
 								alert( info.error );
 							}
