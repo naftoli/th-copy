@@ -46,7 +46,11 @@ $stmt = $MASHPIA_DB->prepare("
       host_street_apt = :street_apt, 
       walking_zone = :zone,
       walking = :walking, 
-      in_zone = :in_zone
+      in_zone = :in_zone, 
+      transportation = :transportation, 
+      airport = :airport, 
+      flight = :flight, 
+      snack_way_back = :snack
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -73,7 +77,11 @@ $res = $stmt->execute([
   ':street_apt'   =>  $childInfo['acc_street_apt'], 
   ':zone'         =>  $childInfo['walking_zone'], 
   ':walking'      =>  $childInfo['walking'], 
-  ':in_zone'      =>  $childInfo['in_zone']
+  ':in_zone'      =>  $childInfo['in_zone'], 
+  ':transportation' => $chidonInfo['transportation'], 
+  ':airport'      =>  $childInfo['airport'], 
+  ':flight'       =>  $childInfo['flight'], 
+  ':snack'        =>  $childInfo['snack_way_back']
 ]);
 //echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
 if ( $res ) {

@@ -335,13 +335,14 @@
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="1"><span></span></label> 
 									My child will go on a Chidon Bus to the airport instead:<br />
 									Please choose which airport: 
-									<select name="airport" style="width: auto;">
-										<option>JFK</option>
-										<option>LGA</option>
-										<option>EWR</option>
+									<select name="airport" class="airport" style="width: 80px;">
+										<option value="0">Please Select</option>
+										<option value="JFK">JFK</option>
+										<option value="LGA">LGA</option>
+										<option value="EWR">EWR</option>
 									</select>
 									<br />
-									What time is your flight? <input type="text" name="flight_time" class="flight_time" style="width: 65px;" />
+									What time is your flight? <input type="text" name="flight" class="flight" style="width: 65px;" />
 								</p>
 								<p>
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="2"><span></span></label> 
@@ -354,12 +355,11 @@
 						<div class="group">
 							<div class="field">
 								<p>
-									<label class="checkbox"><input type="checkbox" name="sandwich" class="sandwich"><span></span></label> 
+									<label class="checkbox"><input type="checkbox" name="snack_way_back" class="snack_way_back"><span></span></label> 
 									Yes! I would like to receive a sandwich and snack for the trip back home from the event.
 								</p>
 							</div>
 						</div>
-
 
 						<h5>Waivers</h5>
 						<div class="field">
@@ -681,6 +681,22 @@
 							break;
 					}
 
+					// if they chose what transportation they want
+					switch (parseInt( child.transportation )) {
+						case 0:
+							$(".transportation").eq(0).trigger('click');
+							break;
+						case 1:
+							$(".transportation").eq(1).trigger('click');
+							$(".airport").val( child.airport );
+							$(".flight").val( child.flight );
+							break;
+						case 2:
+							$(".transportation").eq(2).trigger('click');
+							break;
+					}
+					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click');
+
 					$('select').niceSelect('update');
 					$("#first").focus();
 				}
@@ -888,6 +904,9 @@
 						});
 						info.notes = $("#chidonNotes").val();
 						info.answer = $("#chidonAnswer").val();
+						info.transportation = parseInt( $(".transportation:checked").val() );
+						info.airport = $(".airport").val();
+						info.flight = $(".flight").val().trim();
 
 						let errors = '';
 						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
@@ -909,6 +928,10 @@
 						if ( !info.test_lang ) errors += "You have not indicated which language the test should be in.\n";
 						if ( info.allergy && !info.allergies ) {
 							errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
+						}
+						if ( !$(".transportation:checked").length ) errors += "You must choose how your child will be coming back from the event.\n";
+						if ( info.transportation == 1 ) {
+							if ( !info.airport || info.airport == '0' || info.flight == '' ) errors += "You must choose an airport and time of flight.\n";
 						}
 						if (!$("#waiver:checked").length) {
 							errors += "You must fill out the waiver!\n";
