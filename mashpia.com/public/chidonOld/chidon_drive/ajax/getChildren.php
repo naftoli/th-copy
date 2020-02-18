@@ -10,11 +10,13 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 if ( $admin_id ) {
   $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        u.user_id, u.first, u.last, u.first_he, u.last_he, u.mobile_pic, u.user_photo_id, u.gender, tc.* 
+        u.user_id, u.first, u.last, u.first_he, u.last_he, u.mobile_pic, u.user_photo_id, u.gender, tc.*, tcs.bus as school_bus, tcs.airport as school_airport  
     FROM
         users u
             JOIN
         th_chidon tc USING (user_id) 
+            JOIN
+        th_chidon_schools tcs on (tcs.school_id = tc.school_id and tcs.year = tc.year) 
     WHERE
         tc.year = :year AND tc.parent_id = :admin
             AND tc.can_enroll = 1 
