@@ -15,9 +15,9 @@ function sendEnrollmentEmail( $email ) {
 $message .= '<p>Thank you for completing your Chidon Shabbaton enrollment form.</p>
 <p><strong>PLEASE NOTE: In order for your child to be officially registered for Shabbaton, your information must be properly reviewed, signed, and returned to your child\'s Chidon coordinator. </strong></p>
 <p>If any changes need to be made, please indicate it clearly on this page when submitting.</p>
-<p>IMPORTANT NOTE: The Chidon Shabbaton is a major undertaking, and requires extensive work and coordination to ensure everyone’s safety at all times. For this reason, changes to information submitted after enrollment will require much additional work, and therefore we must apply an additional charge. I understand that any changes to this application after registration closes: </p>
+<p>IMPORTANT NOTE: The Chidon Shabbaton is a major undertaking, and requires extensive coordination to ensure everyone\'s safety at all times. For this reason, changes to information submitted after enrollment will incur additional charges:</p>
 <blockquote>    
-    <p>After that point, changes can be made by emailing chidon@tzivoshashem.org, at an additional charge of $50.</p>
+    <p>From Feb 23, changes can be made through your account at an additional charge of $50.</p>
     <p>On Wednesday the day before the shabbaton begins, changes can be made between 12:00 and 5:00pm in the lobby of the Jewish children\'s Museum at a cost of $100.</p>
     <p>Any changes we are informed about during the actual Shabbaton will incur a $150 charge and must be submitted at the information desk.</p>
 </blockquote>
