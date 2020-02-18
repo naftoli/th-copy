@@ -345,6 +345,9 @@
 									</blockquote>
 								</p>
 							</div>
+						</div>
+
+						<div class="group">
 							<div class="field">
 								<p>
 									<label class="checkbox"><input type="checkbox" name="sandwich" class="sandwich"><span></span></label> 
@@ -664,13 +667,13 @@
 
 					switch (parseInt( child.school_bus) ) {
 						case 0:
-							$(".schoolBusOption").text("your home town");
+							$("#schoolBusOption").text("your home town");
 							break;
 						case 1:
-							$(".schoolBusOption").text(child.school_airport + " airport");
+							$("#schoolBusOption").text(child.school_airport + " airport");
 							break;
 						case 2:
-							$(".schoolBusOption").text("Crown Heights");
+							$("#schoolBusOption").text("Crown Heights");
 							break;
 					}
 
