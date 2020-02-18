@@ -238,20 +238,32 @@
 								html += "<option value='" + amount + "'>" + amount + "</option>";
 							}
 							// find out if child has raised enough to have even less registration charge
+							let raised = 0;
 							if ( parseInt( child.total_donation ) > 0 ) {
-								let raised = parseInt( child.total_donation );
+								raised = parseInt( child.total_donation );
 								if (( raised ) >= 275) raised += 75; // give rohr if they raised at least 275
 								let amount = (minAmount - raised / 2);
 								if ( !Number.isInteger( amount ) ) amount = amount.toFixed(2);
 								if ( amount <= 0 ) amount = 0;
 								html += "<option value='" + amount + "'>" + amount + "</option>";
 							}
+							raised = 5;
 							html += `
 											</select>
 										</div>
 									</div>
-								</div>
-							`;
+									`;
+									if ( raised ) {
+										html += `
+										<div class="group">
+											<div class="field">
+												<p style='color: #85abda; font-size: 14px;'>Congratulations! You have raised $${raised} on Chidon Drive, 
+													which makes you eligible to receive $${raised / 2} off your registration fee.</p>
+											</div>
+										</div>
+										`;
+									}
+							html += '</div>';
 						}
 						$(".select-amount").empty();
 						$(".select-amount").append( html );

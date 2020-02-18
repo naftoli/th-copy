@@ -122,6 +122,18 @@ foreach ($schools as $id => $school) {
                 echo "<br /><br />";
                 echo "Please verify above information and fix anything which is mistaken.<br /><br />";
                 echo "<input type='checkbox'> I verify that I have looked over the information above and fixed anything which is wrong.<br /><br />";
+                ?>
+                IMPORTANT NOTE: The Chidon Shabbaton is a major undertaking, and requires extensive work and coordination to ensure everyone's safety at all times. 
+                For this reason, changes to information submitted after enrollment will require much additional work, and therefore we must apply an additional charge. 
+                I understand that any changes to this application after registration closes will incur additional charges: <br />
+                <ul>
+                    <li> After that point, changes can be made by emailing chidon@tzivoshashem.org, at an additional charge of $50.</li>
+                    <li> On Wednesday the day before the Shabbaton begins, changes can be made between 12:00 and 5:00pm in the lobby of the Jewish children's Museum 
+                    at a cost of $100.</li>
+                    <li> Any changes we are informed about during the actual Shabbaton will incur a $150 charge and must be submitted at the information desk.</li>
+                </ul>
+                <?
+                echo "<br /><br />";
                 echo "Parent Signature: ______________________________________<br /><br />";
                 echo "Child Signature: _______________________________________";
                 echo "</div>";

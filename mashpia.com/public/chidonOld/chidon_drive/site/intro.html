@@ -79,6 +79,7 @@
 
 								<a href="#" class="button setup">Setup your Family Page</a><br /><br />
 								<a href="#" class="button family" style="display: none;">Continue to your Family Page</a>
+								<a href="#" class="button enrollment" style="display: none;">Pay for Shabbaton Enrollment</a>
 							</div>
 						</div>
 					</div>
@@ -207,6 +208,16 @@
 			} else {
 				location.href = "login.html";
 			}
+
+			let enrollment = Cookies.get('from_enrollment');
+			if ( enrollment ) {
+				$(".enrollment").show();
+			}
+
+			$(".enrollment").click( function( e ) {
+				e.preventDefault();
+				location.href = "enroll.html";
+			});
 		});
 	</script>
 	</body>
