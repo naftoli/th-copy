@@ -200,7 +200,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['shabbatonEdit'] = 0;
 		$children[$row['user_id']]['shabbatonConfirmed'] = 0;
 
-		if ( $row['school_id'] != 54 ) { // don't let beis rivka ch enroll
+		//if ( $row['school_id'] != 54 ) { // don't let beis rivka ch enroll
 			$cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and (contestant = 1 or school_rep = 1 or khk = 1 or trophy_contestant = 1) and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
 			$cRes = mysql_query($cSql);
 			if (mysql_num_rows($cRes) > 0) {
@@ -238,7 +238,7 @@ if ( !empty( $users ) ) {
 					}
 				} 
 			}
-		}
+		//}
 
 		// don't open up enrollment yet
 		// if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
