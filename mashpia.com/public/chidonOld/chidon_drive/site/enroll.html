@@ -905,8 +905,14 @@
 						info.notes = $("#chidonNotes").val();
 						info.answer = $("#chidonAnswer").val();
 						info.transportation = parseInt( $(".transportation:checked").val() );
-						info.airport = $(".airport").val();
-						info.flight = $(".flight").val().trim();
+						alert( info.transportation );
+						if ( parseInt( info.transportation ) == 1 ) {
+							info.airport = $(".airport").val();
+							info.flight = $(".flight").val().trim();
+						} else {
+							info.airport = '';
+							info.flight = '';
+						}
 
 						let errors = '';
 						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
