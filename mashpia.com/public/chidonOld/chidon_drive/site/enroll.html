@@ -160,7 +160,7 @@
 						<div class="group shoesize">
 							<div class="field">
 								<label>Sweater Size:</label>
-								<select id="sweater" name="sweater" disabled>
+								<select id="sweater" name="sweater">
 										<option value="0">Please Select</option>
 										<option value="children xs">Children XS (4 - 6)</option>
 										<option value="children s">Children S (6 - 8)</option>
@@ -999,7 +999,7 @@
 						// find out if we are going to next child or going to payment
 						let btn = $(this).find("input[type=submit]:focus").attr('class');
 						let next = false;
-						let pay = false;;
+						let pay = false;
 						if ( btn.indexOf('next') != -1 ) next = true;
 						else if ( btn.indexOf('pay') != -1 ) pay = true;			
 

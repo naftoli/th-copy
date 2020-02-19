@@ -224,11 +224,11 @@
 																			<div class="chidonRegInfo" style="color: #17771c">Chidon Shabbaton Enrolled</div>
 																		{{else}}
 																			<div class="chidonRegInfo">Chidon Shabbaton Pending Enrollment</div>
-																			<!-- {{#if this.shabbatonEdit}}
+																			{{#if this.shabbatonEdit}}
 																				<div style="margin: 10px 0px">
 																					<button class="btn btn-danger editEnrollment">Edit Enrollment</button>
 																				</div>
-																			{{/if}} -->
+																			{{/if}}
 																		{{/if}}
 																	{{else}}
 																		{{#if this.enrollShabbaton}}
@@ -512,10 +512,10 @@
                     location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
                 });
                 
-                $(document).on('click', '.editChidon', function() {
-                    var id = $(this).parent().parent().parent().parent().attr('id');
-                    location.href = "/mobile/chidon/edit.html?id=" + id;
-                });
+                // $(document).on('click', '.editChidon', function() {
+                //     var id = $(this).parent().parent().parent().parent().attr('id');
+                //     location.href = "/mobile/chidon/edit.html?id=" + id;
+                // });
 
                 $(document).on('click', '.chanuka', function() {
                 	location.href = "/mobile/mivtzoim/chanuka.html";
@@ -531,9 +531,7 @@
                 });
                 
                 $(document).on('click', '.editEnrollment', function() {
-                    // var id = $(this).parent().parent().parent().parent().attr('id');
-                    // location.href = "/mobile/chidon/edit.html?id=" + id;
-                    var url = "https://chidondrive.com/site/edit.html";
+                    let url = "https://chidondrive.com/site/edit.html?a=" + Cookies.get('admin');
                     location.href = url;
                 });
                 
