@@ -200,10 +200,11 @@ if ( !empty( $msg ) ) {
     require_once '../email/enrollmentEmail.php';
     sendEnrollmentEmail( $email );
 
-    $msg .= "Your child(ren) have been successfully registered for the Chidon Shabbaton " . $year;
+    $message = "Your child(ren) have been successfully registered for the Chidon Shabbaton " . $year;
+    $message .= $msg;
     echo json_encode([
       'success'   =>  true,
-      'message'   =>  $msg
+      'message'   =>  $message
     ]);
   } else {
     $MASHPIA_DB->rollBack();
