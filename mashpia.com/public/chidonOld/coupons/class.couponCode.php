@@ -28,7 +28,7 @@ class CouponCode
     }
 
     public function generateCode( $length ) {
-        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_-+={}[]<>?,.';
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $shuffled = str_shuffle( $permitted_chars );
         return substr( $shuffled, 0, $length );
     }
