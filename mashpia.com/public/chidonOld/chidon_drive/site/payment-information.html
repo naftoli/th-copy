@@ -208,12 +208,14 @@
 					let checked = 0; // make sure at least one child is checked if hiding payment info
 					$(".child").each( function() {
 						if ( $(this).is(":checked") ) {
-							checked++;
 							let num = $(this).parent().parent().parent().find('.current').text();
-							totalAmount += parseFloat( num );
+							if ( num !== 'Please Select' ) {
+								checked++;
+								totalAmount += parseFloat( num );
+							}
 						}
 					});
-					$(".children-change").val( totalAmount.toFixed(2) );
+					if ( checked ) $(".children-change").val( totalAmount.toFixed(2) );
 					if ( checked && totalAmount == 0 ) {
 						// no need for payment
 						$("#paymentInfo").hide();
@@ -236,6 +238,7 @@
 									<div class="group">
 										<div class="field">
 											<select class="amounts" onchange="calculateAmount()">
+												<option value="-1">Please Select</option>
 										`;
 
 							let maxAmount = 350;
@@ -309,7 +312,8 @@
 				});
 
 				$(document).on('change', '.amounts', function() {
-					$(this).parent().parent().parent().find('input.child').trigger('click');
+					const elem = $(this).parent().parent().parent().find('input.child');
+					if ( !$(elem).is(":checked") ) $(elem).trigger('click');
 				});
 
 		    $(document).ready(function(e){					
@@ -343,6 +347,10 @@
 							alert("You have not checked off any children to register.");
 							return false;
 						}
+						if ( totalAmount === 'NaN' ) {
+							alert("You do not have a valid amount to charge.");
+							return false;
+						}
 
 						// get all info together
 						let donation = {};
@@ -355,13 +363,19 @@
 							if ( $(this).is(":checked") ) {
 								let id = $(this).parent().parent().parent().attr('id');
 								let num = $(this).parent().parent().parent().find('.current').text();
-								regDetails.push({ 
-									'id': id, 
-									'amount': num
-								});
+								if ( num !== 'Please Select' ) {
+									regDetails.push({ 
+										'id': id, 
+										'amount': num
+									});
+								}
 							}
 						});
 						donation.regDetails = regDetails;
+						if ( !regDetails.length ) {
+							alert("You have not indicated how much you are paying!");
+							return false;
+						}
 
 						let cc = {}
 						cc.num = $("#cc_num").val();
