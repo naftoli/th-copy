@@ -46,6 +46,12 @@
 						<div class="select-amount">
 							
 						</div>
+						<div class="form">
+							<div class="field">
+								<label style="display: inline;">Coupon Code:</label> 
+								<input type="text" name="code" id="code" style="width: 100px;" />
+							</div>
+						</div>
 					</div>
 					<div class="anash_extra">
 						<div class="field textcenter">
@@ -203,6 +209,7 @@
 				}
 
 				var totalAmount;
+				var codeValue;
 				function calculateAmount() {
 					totalAmount = 0;
 					let checked = 0; // make sure at least one child is checked if hiding payment info
@@ -215,6 +222,7 @@
 							}
 						}
 					});
+					if ( codeValue ) totalAmount -= codeValue;
 					if ( checked ) $(".children-change").val( totalAmount.toFixed(2) );
 					if ( checked && totalAmount == 0 ) {
 						// no need for payment
@@ -286,6 +294,18 @@
 						$('select').niceSelect();
 				}
 
+				$("#code").blur( function() {
+					$.post("../ajax/checkCode.php", { code : $(this).val() }, function( result ) {
+						const res = JSON.parse( result );
+						if ( res.success ) {
+							codeValue = res.value;
+							calculateAmount();
+						} else {
+							alert( res.error );
+						}
+					});
+				});
+
 				$(document).on('click', '.enroll', function() {
 					// get list of id's to enroll
 					let toEnroll = [];
@@ -355,6 +375,7 @@
 						// get all info together
 						let donation = {};
 						donation.amount = totalAmount;
+						donation.code = $("#code").val();
 						donation.name = $("#name").val();
 						donation.email = $("#email").val();
 
