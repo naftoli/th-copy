@@ -53,9 +53,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="anash_extra">
+					<div class="anash_extra" style="display: none;">
 						<div class="field textcenter">
-							<p style="color: #85abda; margin-top: -20px; margin-bottom: 20px;"><i>Reminder: You are being charged an extra $25 per child that needs to be picked up in the morning which is reflected in the price above.</i></label></p>
+							<p style="color: #85abda; margin-top: -20px; margin-bottom: 20px;"><i>Reminder: Your price reflects an additional $25 Anash Kinder chaperone fee.</i></label></p>
+							<p class="walking_fee" style="display: none;">You are being charged an additional $25 for optional walking arrangements to Shabbaton programs based on your selection on the previous page.</p>
 						</div>
 					</div>
 					<div class="total-amount">
@@ -223,6 +224,7 @@
 						}
 					});
 					if ( codeValue ) totalAmount -= codeValue;
+					if ( totalAmount < 0 ) totalAmount = 0;
 					if ( checked ) $(".children-change").val( totalAmount.toFixed(2) );
 					if ( checked && totalAmount == 0 ) {
 						// no need for payment
@@ -237,61 +239,66 @@
 				var children; // global variable to hold children info
 				function updateDropDown() {
 					let html = '';
-						for ( c in children ) {
-							let child = children[c];
-							html += `
-								<div class="select-item" id="${child.user_id}">
-									<input type="hidden" class="morning_pickup" value="${child.morning_pickup}" />
-									<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
+					for ( c in children ) {
+						let child = children[c];
+						html += `
+							<div class="select-item" id="${child.user_id}">
+								<input type="hidden" class="morning_pickup" value="${child.morning_pickup}" />
+								<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
+								<div class="group">
+									<div class="field">
+										<select class="amounts" onchange="calculateAmount()">
+											<option value="-1">Please Select</option>
+									`;
+
+						let maxAmount = 350;
+						let minAmount = 175;
+						if ( parseInt( child.school_id ) == 269 ) {
+							minAmount = 200; // anash kinder need to pay another 25
+							if ( parseInt( child.morning_pickup ) == 1 ) {
+								// add another 25
+								minAmount = 225;
+							}
+						}
+						for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
+							html += "<option value='" + amount + "'>" + amount + "</option>";
+						}
+						// find out if child has raised enough to have even less registration charge
+						let raised = 0;
+						if ( parseInt( child.total_donation ) > 0 ) {
+							raised = parseInt( child.total_donation );
+							if (( raised ) >= 275) raised += 75; // give rohr if they raised at least 275
+							let amount = (minAmount - raised / 2);
+							if ( !Number.isInteger( amount ) ) amount = amount.toFixed(2);
+							if ( amount <= 0 ) amount = 0;
+							html += "<option value='" + amount + "'>" + amount + "</option>";
+						}
+						html += `
+										</select>
+									</div>
+								</div>
+								`;
+								if ( raised ) {
+									html += `
 									<div class="group">
 										<div class="field">
-											<select class="amounts" onchange="calculateAmount()">
-												<option value="-1">Please Select</option>
-										`;
-
-							let maxAmount = 350;
-							let minAmount = 175;
-							if ( parseInt( child.school_id ) == 269 ) {
-								minAmount = 200; // anash kinder need to pay another 25
-								if ( parseInt( child.morning_pickup ) == 1 ) {
-									// add another 25
-									minAmount = 225;
-								}
-							}
-							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
-								html += "<option value='" + amount + "'>" + amount + "</option>";
-							}
-							// find out if child has raised enough to have even less registration charge
-							let raised = 0;
-							if ( parseInt( child.total_donation ) > 0 ) {
-								raised = parseInt( child.total_donation );
-								if (( raised ) >= 275) raised += 75; // give rohr if they raised at least 275
-								let amount = (minAmount - raised / 2);
-								if ( !Number.isInteger( amount ) ) amount = amount.toFixed(2);
-								if ( amount <= 0 ) amount = 0;
-								html += "<option value='" + amount + "'>" + amount + "</option>";
-							}
-							html += `
-											</select>
+											<p style='color: #85abda; font-size: 14px;'>Congratulations! You have raised $${raised} on Chidon Drive, 
+												which makes you eligible to receive $${raised / 2} off your registration fee.</p>
 										</div>
 									</div>
 									`;
-									if ( raised ) {
-										html += `
-										<div class="group">
-											<div class="field">
-												<p style='color: #85abda; font-size: 14px;'>Congratulations! You have raised $${raised} on Chidon Drive, 
-													which makes you eligible to receive $${raised / 2} off your registration fee.</p>
-											</div>
-										</div>
-										`;
-									}
-							html += '</div>';
+								}
+						html += '</div>';
+						// show anash kinder text if needed
+						if ( parseInt( child.school_id ) == 269 ) {
+							$(".anash_extra").show();
+							if ( child.morning_pickup ) $(".walking_fee").show();
 						}
-						$(".select-amount").empty();
-						$(".select-amount").append( html );
-						// Select 
-						$('select').niceSelect();
+					}
+					$(".select-amount").empty();
+					$(".select-amount").append( html );
+					// Select 
+					$('select').niceSelect();
 				}
 
 				$("#code").blur( function() {
