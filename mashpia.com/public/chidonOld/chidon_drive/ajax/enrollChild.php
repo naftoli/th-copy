@@ -55,10 +55,10 @@ if ( intval( $childInfo['school_id'] ) == 269 ) {
         school_name = :school_name, 
         affiliation = :affiliation, 
         friend_name = :friend_name, 
-        anash_address = :anash_address, 
-        anash_city = :anash_city, 
-        anash_state = :anash_state, 
-        anash_zip = :anash_zip, 
+        home_address = :anash_address, 
+        home_city = :anash_city, 
+        home_state = :anash_state, 
+        home_zip = :anash_zip, 
         medications = :medications, 
         known_family = :known_family, 
         anash_airport = :anash_airport, 
@@ -171,7 +171,7 @@ if ( intval( $childInfo['school_id'] ) == 269 ) {
     ':snack'        =>  $childInfo['snack_way_back']
   ]);
 }
-//echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
+// echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
 if ( $res ) {
   echo json_encode([
     'success'   =>  true,

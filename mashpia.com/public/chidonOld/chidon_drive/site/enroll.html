@@ -69,11 +69,15 @@
 							<input type="text" placeholder="Last Name" id="last" required name="last" />
 						</div>
 						<div class="field">
-							<label>Hebrew First Name (as you would like it on your certificate or plaque):</label>
+							<label>Hebrew First Name (as you would like it on your certificate or plaque): 
+								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+							</label>
 							<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
 						</div>
 						<div class="field">
-							<label>Hebrew Last Name (as you would like it on your certificate or plaque):</label>
+							<label>Hebrew Last Name (as you would like it on your certificate or plaque):
+								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+							</label>
 							<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
 						</div>
 						<div class="group">
@@ -100,24 +104,14 @@
 						</div>
 
 						<div class="anash_kinder">
-							<div class="group">
-								<div class="field">
-									<label>School Name:</label>
-									<input type="text" placeholder="School Name" id="school_name" name="school_name" />
-								</div>
-								<div class="field">
-									<label>Affiliation:</label>
-									<select id="affiliation" name="affiliation">
-										<option>Please Select</option>
-										<option>Chabad</option>
-										<option>Chassidish</option>
-										<option>Livish</option>
-										<option>Yeshivish</option>
-										<option>Modern Orthodox</option>
-										<option>Other</option>
-									</select>
-								</div>
+							<div class="field">
+								<label>School Name:</label>
+								<input type="text" placeholder="School Name" id="school_name" name="school_name" />
 							</div>
+							<div class="field">
+								<label>Affiliation (Chabad, Chassidish, Litvish, Yeshivish, Modern Orthodox, Other)?</label>
+								<input type="text" name="affiliation" id="affiliation" />
+							</div>	
 							<div class="field">
 								<p>
 									Do You have a friend coming to the Shabbaton? If yes, please enter their name:<br />
@@ -397,10 +391,10 @@
 								<p><label class="checkbox"><input type="checkbox" value="5779" class="history" /><span></span></label>5779</p>
 							</div>
 						</div>
-						<p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
+						<!-- <p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
 						<div class="field">
 							<textarea id="chidonNotes"></textarea>
-						</div>
+						</div> -->
 						<p>What makes Chidon special to you? Please share.</p>
 						<div class="field">
 							<textarea id="chidonAnswer"></textarea>
@@ -412,21 +406,22 @@
 								<p>
 									The Chidon Shabbaton officially ends on Sunday afternoon after the event in Newark Symphony Hall in Newark, NJ. 
 									Dismissal will be from 4:30pm to 5:30pm. <br />
+									<span class="anash_hide">
 									Your child's school has indicated that it will be traveling after the event by Bus to <span id="schoolBusOption"></span>.<br />
-									Please indicate how you would like YOUR child to travel from the Event: 
+									Please indicate how you would like YOUR child to travel from the Event: </span>
 								</p>
 							</div>
 						</div>
 
 						<div class="group">
 							<div class="field">
-								<p>
+								<p class="anash_hide">
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="0"><span></span></label> 
 									My child will go with their School Bus.
 								</p>
 								<p>
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="1"><span></span></label> 
-									My child will go on a Chidon Bus to the airport instead:<br />
+									My child will go on a Chidon Bus to the airport <span class="anash_hide">instead</span>:<br />
 									Please choose which airport: 
 									<select name="airport" class="airport" style="width: 80px;">
 										<option value="0">Please Select</option>
@@ -439,7 +434,7 @@
 								</p>
 								<p>
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="2"><span></span></label> 
-									My child will go on a Chidon Bus to Crown Heights instead.
+									My child will go on a Chidon Bus to Crown Heights <span class="anash_hide">instead</span>.
 								</p>
 								<div class="anash_kinder">
 									<p>
@@ -657,14 +652,15 @@
 					$("#school_id").val( child.school_id );
 					if ( parseInt( child.school_id ) == 269 ) {
 						$(".anash_kinder").show();
+						$(".anash_hide").hide();
 						// add anash kinder field values
 						$("#school_name").val( child.school_name );
 						$("#affiliation").val( child.affiliation );
 						$("#friend_name").val( child.friend_name );
-						$("#anash_address").val( child.anash_address );
-						$("#anash_city").val( child.anash_city );
-						$("#anash_state").val( child.anash_state );
-						$("#anash_zip").val( child.anash_zip );
+						$("#anash_address").val( child.home_address );
+						$("#anash_city").val( child.home_city );
+						$("#anash_state").val( child.home_state );
+						$("#anash_zip").val( child.home_zip );
 						$("#meds").val( child.medications );
 						if ( parseInt( child.known_family ) == 1 ) $(".know_family").eq(0).trigger('click');
 						else $(".known_family").eq(1).trigger('click');
@@ -674,7 +670,8 @@
 						else $(".morning_pickup").eq(0).trigger('click');
 					}
 					else {
-						$("#anash_kinder").hide();
+						$(".anash_kinder").hide();
+						$(".anash_hide").show();
 						// make sure all values are set to nothing
 						$("#school_name").val('');
 						$("#affiliation").val('Please Select');
@@ -805,7 +802,7 @@
 						// }
 					}
 
-					$("#chidonNotes").val( child.notes );
+					// $("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
 
 					// reset terms checkboxes
@@ -1046,7 +1043,8 @@
 						$(".history").each( function() {
 							if ( $(this).is(":checked") ) info.history += $(this).val() + ',';
 						});
-						info.notes = $("#chidonNotes").val();
+						// info.notes = $("#chidonNotes").val();
+						info.notes = '';
 						info.answer = $("#chidonAnswer").val();
 						info.transportation = parseInt( $(".transportation:checked").val() );
 						if ( parseInt( info.transportation ) == 1 ) {
@@ -1104,7 +1102,6 @@
 							if ( !info.school_name ) errors += "You must enter your child's school name.\n";
 							if ( info.affiliation == 'Please Select' ) errors += "You must enter your affiliation.\n";
 							if ( !(info.anash_address && info.anash_city && info.anash_state && info.anash_zip) ) errors += "You must enter your home address info.\n";
-							if ( !(info.anash_airport && info.anash_arrival) ) errors += "You must enter the travel info.\n";
 							if ( !$(".known_family:checked").length ) errors += "You must indicate whether your child is staying at a family that you personally know or not.\n";
 							if ( !$(".morning_pickup:checked").length ) errors += "You must indicate whether you need to have your child picked up in the morning.\n";
 						}
