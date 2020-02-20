@@ -393,6 +393,7 @@ $(document).ready(function(){
             $(".create_chidon_info").show(); 
             // $("div.edit_chidon_info").hide();
             $("#chap_modal .submit").val("Register Staff Member");
+            $("#school_id_val").val( $("select#school_id").val() );
             modal($("#chap_modal")).show(); // show the modal...
         }
     }

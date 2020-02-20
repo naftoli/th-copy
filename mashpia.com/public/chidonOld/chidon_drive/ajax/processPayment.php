@@ -74,6 +74,7 @@ $field";
 
 // prepare variables for payment
 $amount = $donation['amount'];
+$code = trim( $donation['code'] );
 $name = $donation['name'];
 $email = $donation['email'];
 
@@ -93,6 +94,15 @@ $cc_info['city'] = $billing['city'];
 $cc_info['state'] = $billing['state'];
 $cc_info['zip'] = $billing['zip'];
 $cc_info['country'] = $billing['country'];
+
+// make sure amount is not NaN
+if ( $amount == 'NaN' ) {
+  echo json_encode([
+    'success' => false, 
+    'error'   => "You have not selected any amount."
+  ]);
+  exit;
+}
 
 // first process donation
 if ( $cc_info['skip'] ) {
@@ -190,6 +200,21 @@ if ( !empty( $msg ) ) {
       // echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
       $success = false;
       break;
+    }
+  }
+
+  // if a code was used, set code to used
+  if ( $code ) {
+    $stmt = $MASHPIA_DB->prepare("
+      UPDATE coupon_codes 
+      SET 
+        used = 1 
+      WHERE
+        code = :code
+    ");
+    $res = $stmt->execute([':code' => $code]);
+    if ( !$res ) {
+      $success = false;
     }
   }
 
