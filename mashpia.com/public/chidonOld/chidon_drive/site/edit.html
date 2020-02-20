@@ -69,11 +69,15 @@
 							<input type="text" placeholder="Last Name" id="last" required name="last" />
 						</div>
 						<div class="field">
-							<label>Hebrew First Name (as you would like it on your certificate or plaque):</label>
+							<label>Hebrew First Name (as you would like it on your certificate or plaque): 
+								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+							</label>
 							<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
 						</div>
 						<div class="field">
-							<label>Hebrew Last Name (as you would like it on your certificate or plaque):</label>
+							<label>Hebrew Last Name (as you would like it on your certificate or plaque):
+								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+							</label>
 							<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
 						</div>
 						<div class="group">
@@ -100,24 +104,14 @@
 						</div>
 
 						<div class="anash_kinder">
-							<div class="group">
-								<div class="field">
-									<label>School Name:</label>
-									<input type="text" placeholder="School Name" id="school_name" name="school_name" />
-								</div>
-								<div class="field">
-									<label>Affiliation:</label>
-									<select id="affiliation" name="affiliation">
-										<option>Please Select</option>
-										<option>Chabad</option>
-										<option>Chassidish</option>
-										<option>Livish</option>
-										<option>Yeshivish</option>
-										<option>Modern Orthodox</option>
-										<option>Other</option>
-									</select>
-								</div>
+							<div class="field">
+								<label>School Name:</label>
+								<input type="text" placeholder="School Name" id="school_name" name="school_name" />
 							</div>
+							<div class="field">
+								<label>Affiliation (Chabad, Chassidish, Litvish, Yeshivish, Modern Orthodox, Other)?</label>
+								<input type="text" name="affiliation" id="affiliation" />
+							</div>	
 							<div class="field">
 								<p>
 									Do You have a friend coming to the Shabbaton? If yes, please enter their name:<br />
@@ -412,21 +406,22 @@
 								<p>
 									The Chidon Shabbaton officially ends on Sunday afternoon after the event in Newark Symphony Hall in Newark, NJ. 
 									Dismissal will be from 4:30pm to 5:30pm. <br />
+									<span class="anash_hide">
 									Your child's school has indicated that it will be traveling after the event by Bus to <span id="schoolBusOption"></span>.<br />
-									Please indicate how you would like YOUR child to travel from the Event: 
+									Please indicate how you would like YOUR child to travel from the Event: </span>
 								</p>
 							</div>
 						</div>
 
 						<div class="group">
 							<div class="field">
-								<p>
+								<p class="anash_hide">
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="0"><span></span></label> 
 									My child will go with their School Bus.
 								</p>
 								<p>
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="1"><span></span></label> 
-									My child will go on a Chidon Bus to the airport instead:<br />
+									My child will go on a Chidon Bus to the airport <span class="anash_hide">instead</span>:<br />
 									Please choose which airport: 
 									<select name="airport" class="airport" style="width: 80px;">
 										<option value="0">Please Select</option>
@@ -439,7 +434,7 @@
 								</p>
 								<p>
 									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="2"><span></span></label> 
-									My child will go on a Chidon Bus to Crown Heights instead.
+									My child will go on a Chidon Bus to Crown Heights <span class="anash_hide">instead</span>.
 								</p>
 								<div class="anash_kinder">
 									<p>
@@ -780,6 +775,9 @@
 							break;
 						case 2:
 							$(".transportation").eq(2).trigger('click');
+							break;
+						case 3:
+							$(".transportation").eq(3).trigger('click');
 							break;
 					}
 					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click');
