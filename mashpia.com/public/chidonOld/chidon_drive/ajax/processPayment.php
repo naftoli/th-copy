@@ -208,7 +208,8 @@ if ( !empty( $msg ) ) {
     $stmt = $MASHPIA_DB->prepare("
       UPDATE coupon_codes 
       SET 
-        used = 1 
+        used = 1, 
+        date_redeemed = now()  
       WHERE
         code = :code
     ");
