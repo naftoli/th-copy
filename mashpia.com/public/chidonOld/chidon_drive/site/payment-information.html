@@ -47,6 +47,11 @@
 							
 						</div>
 					</div>
+					<div class="anash_extra">
+						<div class="field textcenter">
+							<p style="color: #85abda; margin-top: -20px; margin-bottom: 20px;"><i>Reminder: You are being charged an extra $25 per child that needs to be picked up in the morning which is reflected in the price above.</i></label></p>
+						</div>
+					</div>
 					<div class="total-amount">
 						<label>TOTAL $</label>
 						<input type="text" readonly class="children-change" />
@@ -226,6 +231,7 @@
 							let child = children[c];
 							html += `
 								<div class="select-item" id="${child.user_id}">
+									<input type="hidden" class="morning_pickup" value="${child.morning_pickup}" />
 									<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
 									<div class="group">
 										<div class="field">
@@ -234,6 +240,13 @@
 
 							let maxAmount = 350;
 							let minAmount = 175;
+							if ( parseInt( child.school_id ) == 269 ) {
+								minAmount = 200; // anash kinder need to pay another 25
+								if ( parseInt( child.morning_pickup ) == 1 ) {
+									// add another 25
+									minAmount = 225;
+								}
+							}
 							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
 								html += "<option value='" + amount + "'>" + amount + "</option>";
 							}

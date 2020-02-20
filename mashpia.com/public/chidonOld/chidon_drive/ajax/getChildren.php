@@ -105,7 +105,7 @@ if ( $admin_id ) {
       } else {
         echo json_encode([
           'success'   =>  false,
-          'error'     =>  "Your child(ren)'s school(s) need to activate enrollment before you can enroll."
+          'error'     =>  "You don't have any children that are elligible for Shabbaton Enrollment."
         ]);
       }
     }
