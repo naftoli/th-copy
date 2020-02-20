@@ -295,15 +295,18 @@
 				}
 
 				$("#code").blur( function() {
-					$.post("../ajax/checkCode.php", { code : $(this).val() }, function( result ) {
-						const res = JSON.parse( result );
-						if ( res.success ) {
-							codeValue = res.value;
-							calculateAmount();
-						} else {
-							alert( res.error );
-						}
-					});
+					const code = $(this).val();
+					if ( code ) {
+						$.post("../ajax/checkCode.php", { code : code }, function( result ) {
+							const res = JSON.parse( result );
+							if ( res.success ) {
+								codeValue = res.value;
+								calculateAmount();
+							} else {
+								alert( res.error );
+							}
+						});
+					}
 				});
 
 				$(document).on('click', '.enroll', function() {

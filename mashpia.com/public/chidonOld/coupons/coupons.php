@@ -21,13 +21,16 @@ if ( isset( $_POST['submit'] ) ) {
     if ( !($length && $value && $created_by && $reason) ) {
         $msg .= "You must fill out all the fields in order to generate a coupon code.";
     }
+    if ( !is_numeric( $value ) ) {
+
+    }
     
     if ( empty( $msg ) ) {
         $c = new CouponCode( $MASHPIA_DB, $year );
         $code = $c->getCouponCode( $length );
         if ( $code ) {
             if ( $c->saveCode( $value, $created_by, $reason ) ) {
-                $msg .= "The following code has been generated and saved: " . $code . "<br />It can now be given out and used.<br /><br />";
+                $msg .= "The following code has been generated and saved: " . $code . "<br />It can now be given out <strong>for one-time use.</strong><br /><br />";
             }
         }
     }
@@ -59,14 +62,14 @@ $codes = CouponCode::getlistOfCodes( $MASHPIA_DB, $year );
         </div>
 
         <form action="coupons.php" method="post">
-            <p>To generate a coupon code, we need to know how many characters it should have, how much it should be worth, who is creating it, and why it's being created:</p>
+            <p> Please fill in the following fields to generate a one-time-use coupon code:</p>
             <table>
                 <tr>
-                    <td>Number of characters:</td>
+                    <td>Code Length:</td>
                     <td><input type="text" name="characters" size="2" /></td>
                 </tr>
                 <tr>
-                    <td>Value:</td>
+                    <td>Dollar Value:</td>
                     <td><input type="text" name="value" size="6" /></td>
                 </tr>
                 <tr>
@@ -93,7 +96,7 @@ $codes = CouponCode::getlistOfCodes( $MASHPIA_DB, $year );
             <caption>Current Chidon Codes in System</caption>
             <tr>
                 <th>Code</th>
-                <th>Value</th>
+                <th>Dollar Value</th>
                 <th>Status</th>
                 <th>Created By</th>
                 <th>Reason</th>
