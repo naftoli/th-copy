@@ -17,12 +17,18 @@ if ( isset( $_POST['submit'] ) ) {
     $value = $_POST['value'];
     $created_by = $_POST['created_by'];
     $reason = $_POST['reason'];
+
+    if ( !($length && $value && $created_by && $reason) ) {
+        $msg .= "You must fill out all the fields in order to generate a coupon code.";
+    }
     
-    $c = new CouponCode( $MASHPIA_DB, $year );
-    $code = $c->getCouponCode( $length );
-    if ( $code ) {
-        if ( $c->saveCode( $value, $created_by, $reason ) ) {
-            $msg .= "The following code has been generated and saved: " . $code . "<br />It can now be given out and used.<br /><br />";
+    if ( empty( $msg ) ) {
+        $c = new CouponCode( $MASHPIA_DB, $year );
+        $code = $c->getCouponCode( $length );
+        if ( $code ) {
+            if ( $c->saveCode( $value, $created_by, $reason ) ) {
+                $msg .= "The following code has been generated and saved: " . $code . "<br />It can now be given out and used.<br /><br />";
+            }
         }
     }
 }
