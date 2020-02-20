@@ -106,7 +106,7 @@ $codes = CouponCode::getlistOfCodes( $MASHPIA_DB, $year );
             <?php
             foreach ( $codes as $code ) {
                 echo "<tr><td>" . $code['code'] . "</td><td>" . $code['value'] . "</td><td>";
-                if ( intval( $code['used'] ) ) echo "Used";
+                if ( intval( $code['used'] ) ) echo "Redeemed";
                 else echo "Not yet used";
                 echo "</td><td>" . $code['created_by'] . "</td><td>" . $code['reason'] . "</td><td>" . $code['date_created'] . "</td><td>" . 
                     $code['date_redeemed'] . "</td></tr>";
