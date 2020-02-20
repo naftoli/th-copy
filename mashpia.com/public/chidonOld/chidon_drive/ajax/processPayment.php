@@ -94,6 +94,15 @@ $cc_info['state'] = $billing['state'];
 $cc_info['zip'] = $billing['zip'];
 $cc_info['country'] = $billing['country'];
 
+// make sure amount is not NaN
+if ( $amount == 'NaN' ) {
+  echo json_encode([
+    'success' => false, 
+    'error'   => "You have not selected any amount."
+  ]);
+  exit;
+}
+
 // first process donation
 if ( $cc_info['skip'] ) {
   // don't process card at all
