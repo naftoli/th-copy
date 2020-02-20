@@ -397,10 +397,10 @@
 								<p><label class="checkbox"><input type="checkbox" value="5779" class="history" /><span></span></label>5779</p>
 							</div>
 						</div>
-						<p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
+						<!-- <p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
 						<div class="field">
 							<textarea id="chidonNotes"></textarea>
-						</div>
+						</div> -->
 						<p>What makes Chidon special to you? Please share.</p>
 						<div class="field">
 							<textarea id="chidonAnswer"></textarea>
@@ -753,7 +753,7 @@
 						// }
 					}
 
-					$("#chidonNotes").val( child.notes );
+					// $("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
 
 					switch (parseInt( child.school_bus) ) {
@@ -987,7 +987,8 @@
 						$(".history").each( function() {
 							if ( $(this).is(":checked") ) info.history += $(this).val() + ',';
 						});
-						info.notes = $("#chidonNotes").val();
+						// info.notes = $("#chidonNotes").val();
+						info.notes = '';
 						info.answer = $("#chidonAnswer").val();
 						info.transportation = parseInt( $(".transportation:checked").val() );
 						if ( parseInt( info.transportation ) == 1 ) {
