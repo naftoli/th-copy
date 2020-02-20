@@ -19,10 +19,10 @@ if ( isset( $_POST['submit'] ) ) {
     $reason = $_POST['reason'];
 
     if ( !($length && $value && $created_by && $reason) ) {
-        $msg .= "You must fill out all the fields in order to generate a coupon code.";
+        $msg .= "You must fill out all the fields in order to generate a coupon code.<br />";
     }
     if ( !is_numeric( $value ) ) {
-
+        $msg .= "You can only enter numbers or decimals for the dollar value.<br />";
     }
     
     if ( empty( $msg ) ) {
