@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '../../../api/header/db.php';
-require __DIR__ . '../../coupons/class.couponCode.php';
-require __DIR__ . '../../../class.globalSettings.php';
+ini_set('display_errors',1);
+require __DIR__ . '/../../../api/header/db.php';
+require __DIR__ . '/../../coupons/class.couponCode.php';
+require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $c = new CouponCode( $MASHPIA_DB, $year );
