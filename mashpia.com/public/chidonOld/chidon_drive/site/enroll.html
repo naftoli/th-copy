@@ -618,7 +618,7 @@
 							numChildren = info.children.length;
 							for ( c in info.children ) {
 								let child = info.children[c];
-								if ( child.date_paid > 0 ) continue;
+								if ( parseInt( child.date_paid ) > 0 ) continue;
 								children[child.user_id] = child;
 								children_ids.push( child.user_id );
 								let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
@@ -632,7 +632,7 @@
 									</div>
 								`;
 							}
-							if ( !children ) {
+							if ( !children.length ) {
 								alert("All children have been enrolled.");
 								return false;
 							}

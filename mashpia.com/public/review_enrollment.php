@@ -20,7 +20,7 @@ foreach ($schools as $sid => $schoolName) {
             join admin_auths aa on aa.id = u.user_id 
             join admins a using (admin_id) 
             where tc.year = " . $year . "
-            and (tc.contestant = 1 or tc.school_rep = 1) 
+            and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) 
             and tc.date_paid > 0 
             and aa.auth = 'user'
             and u.school_id = " . $sid;
@@ -99,7 +99,9 @@ foreach ($schools as $sid => $schoolName) {
                             }
                             
                             echo "<tr id=" . $chidon_id . "><td>" . $grade . "</td><td>" . $name . "</td><td>";
-                            if ($row['school_rep']) echo "Representative";
+                            if ($row['khk']) echo "Kol Hatorah Kulo";
+                            else if ($row['school_rep']) echo "Representative";
+                            else if ($row['trophy_contestant']) echo "Trophy Contestant";
                             else if ($row['contestant']) echo "Contestant";
                             echo "</td><td>";
                             echo $row['admin_email'] . "<br />" . $row['admin_phone_mobile'] . "<br />" . $row['admin_phone_mobile2'] . "<br />" . $row['admin_phone_home'];
