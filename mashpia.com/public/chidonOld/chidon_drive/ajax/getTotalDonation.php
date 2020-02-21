@@ -17,9 +17,23 @@ $res = $stmt->execute([
 
 if ( $res ) {
   $row = $stmt->fetch();
+  $totalDonation = $row['total'];
+
+  $stmt = $MASHPIA_DB->prepare("
+    SELECT 
+        SUM(paid) AS registration
+    FROM
+        th_chidon
+    WHERE
+        year = :year
+  ");
+  $stmt->execute([':year' => $year]);
+  $row = $stmt->fetch();
+  $totalReg = $row['registration'];
+
   echo json_encode([
     'success' =>  true, 
-    'total'   =>  $row['total']
+    'total'   =>  intval( $totalDonation ) + intval( $totalReg )
   ]);
 } else {
   echo json_encode([
