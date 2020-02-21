@@ -1,7 +1,7 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require __DIR__ . '../../../api/header/db.php';
+require __DIR__ . '../../coupons/class.couponCode.php';
+require __DIR__ . '../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $c = new CouponCode( $MASHPIA_DB, $year );
