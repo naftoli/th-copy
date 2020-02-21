@@ -22,7 +22,7 @@ foreach ($schools as $id => $school) {
         ."join admins a using (admin_id) "
         ."where tc.year = " . $year . " "
         ."and aa.auth = 'user' "
-        ."and (tc.contestant = 1 or tc.school_rep = 1) "
+        ."and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) "
         ."and tc.date_paid > 0 "
         ."and u.school_id = " . $id;
     if (isset($_GET['id'])) $sql .= " and tc.th_chidon_id = " . $_GET['id'];
