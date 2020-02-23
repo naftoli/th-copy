@@ -252,12 +252,12 @@
 									`;
 
 						let maxAmount = 350;
-						let minAmount = 175;
+						let minAmount = 250;
 						if ( parseInt( child.school_id ) == 269 ) {
-							minAmount = 200; // anash kinder need to pay another 25
+							minAmount += 25; // anash kinder need to pay another 25
 							if ( parseInt( child.morning_pickup ) == 1 ) {
 								// add another 25
-								minAmount = 225;
+								minAmount += 25;
 							}
 						}
 						for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
