@@ -10,8 +10,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
 $issues = [];
 foreach ( $info as $row ) {
-    $sql2 = "select first, last, class_grade from classes c 
+    $sql2 = "select first, last, school_name, class_grade from classes c 
             join users u using (class_id) 
+            join schools s on s.school_id = u.school_id
             where u.user_id = " . $row['user_id'];
     $result2 = mysql_query( $sql2 );
     $row2 = mysql_fetch_assoc( $result2 );
@@ -23,5 +24,5 @@ foreach ( $info as $row ) {
 }
 
 foreach ($issues as $issue) {
-    echo $issue['first'] . $issue['last'] . " is in grade " . $issue['class_grade'] . " but was set to book " . $issue['book'] . "<br />";
+    echo $issue['first'] . ' ' . $issue['last'] . " from " . $issue['school_name'] . " is in grade " . $issue['class_grade'] . " but was set to book " . $issue['book'] . "<br />";
 }
