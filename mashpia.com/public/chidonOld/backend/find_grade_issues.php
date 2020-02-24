@@ -10,7 +10,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
 $issues = [];
 foreach ( $info as $row ) {
-    $sql2 = "select first, last, school_name, class_grade from classes c 
+    $sql2 = "select user_id, first, last, school_name, class_grade from classes c 
             join users u using (class_id) 
             join schools s on s.school_id = u.school_id
             where u.user_id = " . $row['user_id'];
