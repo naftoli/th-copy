@@ -750,6 +750,7 @@
 					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
 					if ( parseInt(child.walking) ) $("#walking").trigger('click');
+					else if ($("#walking:checked").length) $("#walking").trigger('click');
 					// if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
 					
 					switch ( child.test_lang ) {
@@ -772,36 +773,14 @@
 							history = [ child.history ];
 						}
 					}
-
 					console.log( history );
 
 					// reset all to unchecked
 					$(".history").each( function() {
 						if ( $(this).is(":checked") ) $(this).trigger('click');
+						if ( history.includes($(this).val()) ) $(this).trigger('click');
 					}); 
-
-					let options = [ 5776, 5777, 5778, 5779 ];
-					for ( h in history ) {
-						if ( history[h] == options[h] ) $(".history").eq(h).trigger('click');
-						// switch ( history[h] ) {
-						// 	case options[h]:
-						// 		$(".history").eq(h).trigger('click');
-						// 		break;
-						// 	case '5776':
-						// 	$(".history").eq(1).trigger('click');
-						// 		break;
-						// 	case '5777':
-						// 	$(".history").eq(2).trigger('click');
-						// 		break;
-						// 	case '5778':
-						// 		$(".history").eq(3).trigger('click');
-						// 		break;
-						// 	case '5779':
-						// 		$(".history").eq(4).trigger('click');
-						// 		break;
-						// }
-					}
-
+					
 					// $("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
 
