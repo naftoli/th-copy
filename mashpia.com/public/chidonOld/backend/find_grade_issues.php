@@ -24,5 +24,5 @@ foreach ( $info as $row ) {
 }
 
 foreach ($issues as $issue) {
-    echo $issue['first'] . ' ' . $issue['last'] . " from " . $issue['school_name'] . " is in grade " . $issue['class_grade'] . " but was set to book " . $issue['book'] . "<br />";
+    echo "User ID: " . $issue['user_id'] . " Name: " . $issue['first'] . ' ' . $issue['last'] . " from " . $issue['school_name'] . " is in grade " . $issue['class_grade'] . " but was set to book " . $issue['book'] . "<br />";
 }
