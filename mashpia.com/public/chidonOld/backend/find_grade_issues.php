@@ -22,7 +22,33 @@ foreach ( $info as $row ) {
         $issues[] = $row2;
     }
 }
-
-foreach ($issues as $issue) {
-    echo "User ID: " . $issue['user_id'] . " Name: " . $issue['first'] . ' ' . $issue['last'] . " from " . $issue['school_name'] . " is in grade " . $issue['class_grade'] . " but was set to book " . $issue['book'] . "<br />";
-}
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <style>
+            tr, th, td {
+                font-size: 14px;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>School</th>
+                <th>Grade</th>
+                <th>Book</th>
+            </tr>
+            <?php
+            foreach ( $issues as $issue ) {
+                echo "<tr><td>" . $issue['user_id'] . "</td><td>" . $issue['first'] . ' ' . $issue['last'] . "</td><td>" . $issue['school_name'] . "</td><td>" . 
+                    $issue['class_grade'] . "</td><td>" . $issue['book'] . "</td></tr>";
+            }
+            ?>
+        </table>
+    </body>
+</html>
