@@ -20,19 +20,21 @@ $stmt->execute([':year' => $year]);
 $rows = $stmt->fetchAll();
 
 $qrys = [];
+$errors = [];
 foreach ( $rows as $row ) {
     if ( intval($row['in_zone']) ) {
         $w = new WalkingZones;
         $num = $row['host_street_num'];
         $street = $row['host_street'];
         $info = $w->getCrossStreets( $street, $num );
-        if ( $info['zone_5780'] != $row['walking_zone'] ) {
-            echo "<pre>"; print_r( $info ); echo "</pre>";
+        if ( is_array( $info ) && $info['zone_5780'] != $row['walking_zone'] ) {
             $qrys[$row['th_chidon_id']] = $info['zone_5780'];
+        } else {
+            $errors[] = $row;
         }
     }
 }
-echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
+echo "<pre>"; print_r( $qrys ); print_r( $errors ); echo "</pre>"; exit;
 
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon SET walking_zone = :zone WHERE th_chidon_id = :id
