@@ -10,15 +10,6 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $year = GlobalSettings::getChidonYear();
 $donation = $_POST['info'];
 
-//*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
-require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
-require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
-
-use classes\authorize\AuthorizeAPIRequest;
-use classes\authorize\CustomerProfile;
-use classes\authorize\PaymentProfile;
-
 function checkMandatory( $values ) {
   $missing = [];
 

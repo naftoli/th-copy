@@ -456,8 +456,22 @@
 						</div>
 						
 						<div class="payment-box" id="paymentInfo" style="display: none;">
+							<!-- <h5>Pay with Paypal or Continue below</h5>
+							<br />
+							<div id="paypal-button-container"></div>
+							<br /> -->
 							<h5>PAYMENT INFORMATION</h5>
-							<div class="form" style="margin-top: -10px;">
+							<div class="group">
+								<div class="field">
+									<label>Coupon Code:</label> 
+									<input type="text" name="code" id="code" style="width: 100px;" />
+								</div>
+								<div class="field">
+									<label>Total Charge for editing info: $<span id="totalChargeText"></span></label>
+									<input type="hidden" name="totalCharge" id="totalCharge" value="0" />
+								</div>
+							</div>
+							<div class="form" style="margin-top: -20px;">
 								<!-- <form id="paymentForm"> -->
 									<div class="field">
 										<label>Name on Credit Card:</label>
@@ -594,6 +608,7 @@
 			</div>
 		</footer>
 
+		<script src="https://www.paypal.com/sdk/js?client-id=Ac4Tmje6CzuArpBjRshXC5-gMgtxjch9I3ujZKRMxvu8VZg6oifXGw9UY9BBbZiSQvvFpJpFRsMl4Nza&currency=USD&disable-funding=card,credit" data-sdk-integration-source="button-factory"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/circletype.min.js"></script>
 		<script src="js/jquery.nice-select.min.js"></script>
@@ -641,28 +656,50 @@
 							numChildren = info.children.length;
 							for ( c in info.children ) {
 								let child = info.children[c];
-								children[child.user_id] = child;
-								children_ids.push( child.user_id );
-								let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
-								html += `
-									<div class="kid">
-										<div class="image-wrapper">
-												<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
+								// check if it's not too late to allow edits
+								let valid = checkDate( child );
+								if ( valid ) {
+									children[child.user_id] = child;
+									children_ids.push( child.user_id );
+									let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+									html += `
+										<div class="kid">
+											<div class="image-wrapper">
+													<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
+											</div>
+											<h6>${child.first} <br>${child.last}</h6>
+											<a href="#" class="button enroll" id="${child.user_id}">edit</a>
 										</div>
-										<h6>${child.first} <br>${child.last}</h6>
-										<a href="#" class="button enroll" id="${child.user_id}">edit</a>
-									</div>
-								`;
+									`;
+								} else {
+									alert("You cannot edit the info for " + child.first + " anymore. Please contact Chidon HQ @ 718-907-8884.");
+								}
+							}
+							if ( numChildren && !children.length ) {
+								alert("You do not have any children that you can edit. You will be routed to home page.");
+								location.href = "/";
 							}
 							$(".login").hide();
 							$("#logoffDiv").show();
 							$(".kids-wrapper").empty();
 							$(".kids-wrapper").append( html );
-							$(".kids-wrapper").show();							
+							$(".kids-wrapper").show();						
 						} else {
 							alert( info.error );
 						}
 					});
+				}
+
+				function checkDate( child ) {
+					let d1;
+					let d2 = new Date();
+					if ( child.gender == 'M' ) {
+						d1 = new Date(2020, 2, 25); // javascript uses 0 - 11 for months
+					} else if ( child.gender == 'F' ) {
+						d1 = new Date(2020, 2, 18);
+					}
+					if ( d2 < d1 ) return true;
+					return false;
 				}
 
 				function fillEnrollmentForm( id ) {
@@ -833,6 +870,8 @@
 					if ( $(".snack_way_back").is(":checked") ) $(".snack_way_back").trigger('click'); // first reset
 					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click'); // then set to checked if needed
 
+					calculateCharge( child.user_id );
+
 					$('select').niceSelect('update');
 					$("#first").focus();
 				}
@@ -897,7 +936,90 @@
 					// }
 				}
 
+				function calculateCharge( id ) {
+					// $.post('ajax/getEditingCharge.php', { user_id : id }, function( charge ) {
+					// 	$("#totalChargeText").text( charge );
+					// 	$("#totalCharge").val( charge );
+					// 	if ( charge ) $("#paymentInfo").show(); 
+					// 	else $("#paymentInfo").hide();
+					// });
+					let charge = 50;
+					// check coupon code
+					if ( codeValue ) charge -= codeValue;
+					if ( charge < 0 ) charge = 0;
+					$("#totalChargeText").text( charge );
+					$("#totalCharge").val( charge );
+					if ( charge ) $("#paymentInfo").show(); 
+					else $("#paymentInfo").hide();
+				}
+
+				var codeValue;
+				$("#code").blur( function() {
+					const code = $(this).val();
+					if ( code ) {
+						$.post("../ajax/checkCode.php", { code : code }, function( result ) {
+							const res = JSON.parse( result );
+							if ( res.success ) {
+								codeValue = res.value;
+								calculateCharge();
+							} else {
+								alert( res.error );
+							}
+						});
+					}
+				});
+
 		    $(document).ready(function(e){
+
+				// paypal.Buttons({
+				// 	style: {
+				// 		shape: 'rect',
+				// 		color: 'gold',
+				// 		layout: 'vertical',
+				// 		label: 'paypal',
+						
+				// 	},
+				// 	createOrder: function(data, actions) {
+				// 		const amount = calcAmount();
+				// 		if ( !amount ) {
+				// 			confirm("You have not entered any amount!");
+				// 			return false;
+				// 		}
+
+				// 		return actions.order.create({
+				// 			purchase_units: [{
+				// 				amount: {
+				// 					value: amount
+				// 				}
+				// 			}]
+				// 		});
+				// 	},
+				// 	onApprove: function(data, actions) {
+				// 		// get all info together
+				// 		let donation = {};
+				// 		donation.amount = calcAmount();
+				// 		donation.name = $("#name").val();
+				// 		donation.display_name = $("#display_name").val();
+				// 		donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
+				// 		donation.email = $("#email").val();
+				// 		donation.phone = $("#phone").val();
+				// 		donation.dedication = $("#dedication").val();
+
+				// 		return actions.order.capture().then(function(details) {
+				// 			console.log( details );
+				// 			$.post('../ajax/paypalPayment.php', { paypalInfo : JSON.stringify( details ), info : donation, type : 'donation' }, function( result ) {
+				// 				const res = JSON.parse( result );
+				// 				if ( res.success ) {
+				// 					alert('Transaction successfully completed!');
+				// 					location.href = "thank-you.html";
+				// 				} else {
+				// 					alert('Paypal Transaction successfully completed, however ' + res.error);
+				// 				}
+				// 			});
+				// 		});
+				// 	}
+				// }).render('#paypal-button-container');				
+
 				$(".in_zone").click( function() {
 					if ( $(this).is(":checked") ) {
 						let val = parseInt( $(this).val() );
@@ -1064,27 +1186,44 @@
 							info.anash_arrival = $("#anash_arrival").val( );
 							info.morning_pickup = $(".morning_pickup:checked").val();
 						}
+						info.code = $("#code").val();
 
-						// get all info together
-						let donation = {};
-						donation.name = $("#name").val();
-						donation.email = $("#email").val();
+						let charge = parseFloat( $("#totalCharge").val() );
+						if ( charge ) {
+							// get all info together
+							let donation = {};
+							donation.amount = charge;
+							donation.name = $("#name").val();
+							donation.email = $("#email").val();
+							if ( !(donation.name && donation.email) ) {
+								alert("You must enter your name and email under Payment Info.");
+								return false;
+							}
 
-						let cc = {}
-						cc.num = $("#cc_num").val();
-						cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
-						cc.cvv = $("#cc_cvv").val();
+							let cc = {}
+							cc.num = $("#cc_num").val();
+							cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+							cc.cvv = $("#cc_cvv").val();
+							if ( !(cc.num && cc.exp && cc.cvv) ) {
+								alert("You must enter your credit card number, expiry, and cvv.");
+								return false;
+							}
 
-						let billing = {}
-						billing.apt = $("#bill_apt").val();
-						billing.address = $("#bill_address").val();
-						billing.city = $("#bill_city").val();
-						billing.state = $("#bill_state").val();
-						billing.zip = $("#bill_zip").val();
-						billing.country = $("#bill_country").val();
-						cc.billing = billing;
-						donation.cc = cc;
-						info.payment = donation;
+							let billing = {}
+							billing.apt = $("#bill_apt").val();
+							billing.address = $("#bill_address").val();
+							billing.city = $("#bill_city").val();
+							billing.state = $("#bill_state").val();
+							billing.zip = $("#bill_zip").val();
+							billing.country = $("#bill_country").val();
+							if ( !(billing.address && billing.city && billing.state && billing.zip && billing.country) ) {
+								alert("You must enter your billing info.");
+								return false;
+							}
+							cc.billing = billing;
+							donation.cc = cc;
+							info.payment = donation;
+						}
 
 						let errors = '';
 						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
