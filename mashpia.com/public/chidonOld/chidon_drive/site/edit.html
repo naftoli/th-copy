@@ -943,9 +943,12 @@
 					// 	if ( charge ) $("#paymentInfo").show(); 
 					// 	else $("#paymentInfo").hide();
 					// });
-					let charge = 50;
+					let d1 = new Date();
+					let d2 = new Date(2020, 2, 26, 12, 5, 0, 0);
+					let charge = 0;
+					if (d1.getTime() >= d2.getTime()) charge = 50;
 					// check coupon code
-					if ( codeValue ) charge -= codeValue;
+					if ( charge && codeValue ) charge -= codeValue;
 					if ( charge < 0 ) charge = 0;
 					$("#totalChargeText").text( charge );
 					$("#totalCharge").val( charge );
