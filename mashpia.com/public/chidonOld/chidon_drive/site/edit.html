@@ -870,7 +870,7 @@
 					if ( $(".snack_way_back").is(":checked") ) $(".snack_way_back").trigger('click'); // first reset
 					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click'); // then set to checked if needed
 
-					calculateCharge( child.user_id );
+					calculateCharge();
 
 					$('select').niceSelect('update');
 					$("#first").focus();
@@ -936,7 +936,8 @@
 					// }
 				}
 
-				function calculateCharge( id ) {
+				var chargeForWalking = false;
+				function calculateCharge() {
 					// $.post('ajax/getEditingCharge.php', { user_id : id }, function( charge ) {
 					// 	$("#totalChargeText").text( charge );
 					// 	$("#totalCharge").val( charge );
@@ -947,6 +948,10 @@
 					let d2 = new Date(2020, 2, 26, 12, 5, 0, 0);
 					let charge = 0;
 					if (d1.getTime() >= d2.getTime()) charge = 50;
+
+					// check if anash kinder child and changed to walking
+					if ( parseInt( $("#school_id").val() ) == 269 && chargeForWalking ) charge += 25;
+
 					// check coupon code
 					if ( charge && codeValue ) charge -= codeValue;
 					if ( charge < 0 ) charge = 0;
@@ -973,6 +978,12 @@
 				});
 
 		    $(document).ready(function(e){
+
+				$(".morning_pickup").click( function() {
+					if ( parseInt($(this).val()) == 1 ) {
+						chargeForWalking = true;
+					}
+				});
 
 				// paypal.Buttons({
 				// 	style: {
