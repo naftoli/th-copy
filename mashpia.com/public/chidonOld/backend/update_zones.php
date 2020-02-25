@@ -21,12 +21,14 @@ $rows = $stmt->fetchAll();
 
 $qrys = [];
 foreach ( $rows as $row ) {
-    $w = new WalkingZones;
-    $num = $row['host_street_num'];
-    $street = $row['host_street'];
-    $info = $w->getCrossStreets( $street, $num );
-    if ( $info['zone_5780'] != $row['walking_zone'] ) {
-        $qrys[$row['th_chidon_id']] = $info['zone_5780'];
+    if ( intval($row['in_zone']) ) {
+        $w = new WalkingZones;
+        $num = $row['host_street_num'];
+        $street = $row['host_street'];
+        $info = $w->getCrossStreets( $street, $num );
+        if ( $info['zone_5780'] != $row['walking_zone'] ) {
+            $qrys[$row['th_chidon_id']] = $info['zone_5780'];
+        }
     }
 }
 echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
