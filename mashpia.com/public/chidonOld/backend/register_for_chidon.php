@@ -1,6 +1,10 @@
 <?php
-ini_set('display_errors',1);
-$admin_auth = array('school');
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permission.";
+    exit;
+}
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';

@@ -1,5 +1,10 @@
 <?php
-require '../../db.php';
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permission.";
+    exit;
+}
 
 $info = [];
 $sql = "select * from th_chidon";

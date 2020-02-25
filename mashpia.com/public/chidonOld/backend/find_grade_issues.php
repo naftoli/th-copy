@@ -1,5 +1,10 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permission.";
+    exit;
+}
 
 $info = [];
 $sql = "select * from th_chidon where year = 5780 and (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1)";
