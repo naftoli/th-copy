@@ -27,6 +27,7 @@ foreach ( $rows as $row ) {
         $street = $row['host_street'];
         $info = $w->getCrossStreets( $street, $num );
         if ( $info['zone_5780'] != $row['walking_zone'] ) {
+            echo "<pre>"; print_r( $info ); echo "</pre>";
             $qrys[$row['th_chidon_id']] = $info['zone_5780'];
         }
     }

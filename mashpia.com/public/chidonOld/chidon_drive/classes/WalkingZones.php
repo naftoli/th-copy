@@ -53,11 +53,11 @@ class WalkingZones {
       ':number' =>  $number
     ]);
     if ( $res ) {
-      $rows = $stmt->fetch();
-      if ( empty( $rows ) ) {
+      $row = $stmt->fetch();
+      if ( empty( $row ) ) {
         return "There's no such address in our system. Either the Street Number or Street Name are incorrect. You won't be able to submit the form until it's fixed.";
       } else {
-        return $rows;
+        return $row;
       }
     } else {
       return "Error retreiving cross streets.";
