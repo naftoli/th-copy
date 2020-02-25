@@ -868,7 +868,7 @@
 							break;
 					}
 					if ( $(".snack_way_back").is(":checked") ) $(".snack_way_back").trigger('click'); // first reset
-					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click'); // then set to checked if needed
+					if ( parseInt(child.snack_way_back) == 1 ) $(".snack_way_back").trigger('click'); // then set to checked if needed
 
 					calculateCharge();
 
@@ -949,8 +949,8 @@
 					let charge = 0;
 					if (d1.getTime() >= d2.getTime()) charge = 50;
 
-					// check if anash kinder child and changed to walking
-					if ( parseInt( $("#school_id").val() ) == 269 && chargeForWalking ) charge += 25;
+					// check if charging for walking
+					if ( chargeForWalking ) charge += 25;
 
 					// check coupon code
 					if ( charge && codeValue ) charge -= codeValue;
@@ -980,7 +980,7 @@
 		    $(document).ready(function(e){
 
 				$(".morning_pickup").click( function() {
-					if ( parseInt($(this).val()) == 1 ) {
+					if ( parseInt( $("#school_id").val() ) == 269 && parseInt($(this).val()) == 1 ) {
 						chargeForWalking = true;
 					}
 				});
@@ -1183,6 +1183,7 @@
 							info.airport = '';
 							info.flight = '';
 						}
+						info.snack_way_back = $(".snack_way_back").is(':checked') ? 1 : 0;
 
 						const school_id = $("#school_id").val();
 						info.school_id = school_id;

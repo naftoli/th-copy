@@ -132,7 +132,7 @@ class Reports
             ),
             'winner_type'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('contestant', 'school_rep')
+                'column'    =>  array('khk', 'trophy_contestant', 'contestant', 'school_rep')
             ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
@@ -570,7 +570,7 @@ class Reports
             if ($limit) {
                 switch ($limit) {
                     case "contestant":
-                        $sql .= " and (tc.contestant = 1 || tc.school_rep = 1)";
+                        $sql .= " and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1)";
                         break;
                     case "confirmed":
                         $sql .= " and tc.confirmed = 1";

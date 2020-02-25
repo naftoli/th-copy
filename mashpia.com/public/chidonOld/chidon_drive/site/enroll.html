@@ -819,7 +819,8 @@
 							$(".transportation").eq(3).trigger('click');
 							break;
 					}
-					if ( parseInt(child.snack_way_back) ) $(".snack_way_back").trigger('click');
+					if ( $(".snack_way_back").is(":checked") ) $(".snack_way_back").trigger('click'); // first reset
+					if ( parseInt(child.snack_way_back) == 1 ) $(".snack_way_back").trigger('click'); // then set to checked if needed
 
 					$('select').niceSelect('update');
 					$("#first").focus();
@@ -1037,6 +1038,7 @@
 							info.airport = '';
 							info.flight = '';
 						}
+						info.snack_way_back = $(".snack_way_back").is(':checked') ? 1 : 0;
 
 						const school_id = $("#school_id").val();
 						info.school_id = school_id;
