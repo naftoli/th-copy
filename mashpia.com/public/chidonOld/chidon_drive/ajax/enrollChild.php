@@ -5,6 +5,18 @@ require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 $childInfo = $_POST['child'];
 
+// if we need to charge card, charge using authorize
+if ( $childInfo['payment']['amount'] ) {
+  $info = chargeCard(); 
+  if ( $info['error'] ) {
+    echo json_encode([
+      'success' => false, 
+      'error'   => "We could not save your info as there were errors trying to charge your card.\n" . $info['error']
+    ]);
+    exit; 
+  }
+}
+
 $stmt = $MASHPIA_DB->prepare("
   UPDATE users 
   SET
@@ -173,6 +185,18 @@ if ( intval( $childInfo['school_id'] ) == 269 ) {
 }
 // echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
 if ( $res ) {
+   // if a code was used, set code to used
+   if ( $childInfo['code'] ) {
+    $stmt = $MASHPIA_DB->prepare("
+      UPDATE coupon_codes 
+      SET 
+        used = 1, 
+        date_redeemed = now()  
+      WHERE
+        code = :code
+    ");
+    $stmt->execute([':code' => $childInfo['code']]);
+  }
   echo json_encode([
     'success'   =>  true,
     'message'   =>  'Saved.'
@@ -182,4 +206,92 @@ if ( $res ) {
     'success'   =>  false,
     'error'     =>  'Error saving info.'
   ]);
+}
+
+function chargeCard() {
+  global $childInfo, $year; 
+
+  // prepare variables for payment
+  $donation = $childInfo['payment'];
+  $amount = $donation['amount'];
+  $code = $donation['code'];
+  $name = $donation['name'];
+  $email = $donation['email'];
+
+  $cc_info = [];
+  $cc_info['number'] = $donation['cc']['num'];
+  $cc_info['exp'] = $donation['cc']['exp'];
+  $cc_info['cvc'] = $donation['cc']['cvv'];
+  $cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
+  $cc_info['desc'] = "Editing Shabbaton Registration " . $year . " for " . $childInfo['first'] . ' ' . $childInfo['last'] . ' ID: ' . $childInfo['user_id'];
+  $cc_info['last'] = $name;
+  $cc_info['first'] = '';
+
+  // prepare billing address
+  $billing = $donation['cc']['billing'];
+  $cc_info['address'] = $billing['address'] . ' ' . $billing['apt'];
+  $cc_info['city'] = $billing['city'];
+  $cc_info['state'] = $billing['state'];
+  $cc_info['zip'] = $billing['zip'];
+  $cc_info['country'] = $billing['country'];
+
+  // first process donation
+  if ( $cc_info['skip'] ) {
+    // don't process card at all
+    $response = null;
+  } else {
+    require 'authorize.php';
+    $response = chargeCreditCard( $amount, $cc_info );
+  }
+
+  // check response
+  $msg = '';
+  $error_msg = '';
+  if ($response != null) {
+    // Check to see if the API request was successfully received and acted upon
+    if ($response->getMessages()->getResultCode() == "Ok") {
+        // Since the API request was successful, look for a transaction response
+        // and parse it to display the results of authorizing the card
+        $tresponse = $response->getTransactionResponse();
+    
+        if ($tresponse != null && $tresponse->getMessages() != null) {
+            $msg .= " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+            $msg .= " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+            $msg .= " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+            $msg .= " Auth Code: " . $tresponse->getAuthCode() . "\n";
+            $msg .= " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+
+            $trans_id = $tresponse->getTransId();
+
+            // send email confirmation
+            $subject = "Charge for Editing Shabbaton Enrollment " . $year;
+            $message = "You have been charged $" . $amount . " for editing your child's info. Your transaction id is: " . $trans_id;
+            $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+                      'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+            @mail( $email, $subject, $message, $headers );
+          } else {
+            $error_msg .= "Transaction Failed \n";
+            if ($tresponse->getErrors() != null) {
+                $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+            }
+        }
+        // Or, print errors if the API request wasn't successful
+    } else {
+        $error_msg .= "Transaction Failed \n";
+        $tresponse = $response->getTransactionResponse();
+    
+        if ($tresponse != null && $tresponse->getErrors() != null) {
+            $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+            $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+        } else {
+            $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+            $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+        }
+    }
+  }
+  return [
+    'msg'   => $msg, 
+    'error' => $error_msg
+  ];
 }
