@@ -52,14 +52,19 @@ foreach ( $qrys as $id => $zone ) {
             <tr>
                 <th>Admin ID</th>
                 <th>User ID</th>
+                <th>Eligibility</th>
                 <th>Host Street Number</th>
                 <th>Host Street</th>
                 <th>Walking Zone</th>
             </tr>
             <?php
             foreach ( $errors as $row ) {
-                echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['host_street_num'] . "</td><td>" . 
-                    $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td></tr>";
+                if ( intval($row['khk']) ) $eligibility = "khk";
+                else if ( intval($row['school_rep']) ) $eligibility = "school rep";
+                else if ( intval($row['trophy_contestant']) ) $eligibility = "trophy contestant";
+                else if ( intval($row['contestant']) ) $eligibility = "contestant";
+                echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . "</td><td>" . $row['host_street_num'] . 
+                    "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td></tr>";
             }
             ?>
         </table>
