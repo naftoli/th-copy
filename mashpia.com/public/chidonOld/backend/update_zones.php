@@ -29,7 +29,7 @@ foreach ( $rows as $row ) {
         $info = $w->getCrossStreets( $street, $num );
         if ( is_array( $info ) && $info['zone_5780'] != $row['walking_zone'] ) {
             $qrys[$row['th_chidon_id']] = $info['zone_5780'];
-        } else {
+        } else if ( !is_array( $info ) ) {
             $errors[] = $row;
         }
     }
