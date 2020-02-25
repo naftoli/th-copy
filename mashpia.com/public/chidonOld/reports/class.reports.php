@@ -316,6 +316,22 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'cert_number'
             ),
+            'transportation'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'transportation'
+            ),
+            'airport'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'airport'
+            ), 
+            'flight'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'flight'
+            ),
+            'snack_way_back'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'snack_way_back'
+            ),
             
             'date_paid'   =>  array(
                 'table'     =>  'th_chidon',
