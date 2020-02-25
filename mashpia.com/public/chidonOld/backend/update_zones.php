@@ -34,7 +34,6 @@ foreach ( $rows as $row ) {
         }
     }
 }
-echo "Num errors: " . count( $errors ); exit;
 
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon SET walking_zone = :zone WHERE th_chidon_id = :id
@@ -43,3 +42,5 @@ foreach ( $qrys as $id => $zone ) {
     $stmt->execute([':zone' => $zone]);
 }
 echo "done.";
+
+echo "<pre>"; print_r( $errors ); echo "</pre>";
