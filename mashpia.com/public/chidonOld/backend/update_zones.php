@@ -41,6 +41,27 @@ $stmt = $MASHPIA_DB->prepare("
 foreach ( $qrys as $id => $zone ) {
     $stmt->execute([':zone' => $zone]);
 }
-echo "done.";
-echo "<br />Num Errors: " . count( $errors );
-echo "<pre>"; print_r( $errors ); echo "</pre>";
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>Admin ID</th>
+                <th>User ID</th>
+                <th>Host Street Number</th>
+                <th>Host Street</th>
+                <th>Walking Zone</th>
+            </tr>
+            <?php
+            foreach ( $errors as $row ) {
+                echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['host_street_num'] . "</td><td>" . 
+                    $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td></tr>";
+            }
+            ?>
+        </table>
+    </body>
+</html>
