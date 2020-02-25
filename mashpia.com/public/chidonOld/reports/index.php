@@ -18,7 +18,7 @@ $info = array(
 		'gender'		=>	'Gender',
 		'dob'			=>	'Date of Birth',
 		'book'			=>	'Book',
-		'grade'			=>	'Grade',
+		// 'grade'			=>	'Grade',
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',
@@ -31,7 +31,7 @@ $info = array(
 		'sandwich'		=>	'Sandwich',
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
-		'winner_type'	=>	'Contestant / School Rep.',
+		'winner_type'	=>	'Eligibility Status',
 		'walking'			=>	'Walk Alone',
 		'walking_group'	=>	'Walking Group',
 		'bunk_number'	=>	'Bunk',
@@ -46,8 +46,8 @@ $info = array(
 		'test3a'		=>	'Test 3 Part 1',
 		'test3b'		=>	'Test 3 Part 2', 
 		'mm_test1'      =>  'Mitzva Maven Test 1', 
-    'mm_test2'      =>  'Mitzva Maven Test 2', 
-    'mm_test3'      =>  'Mitzva Maven Test 3', 
+		'mm_test2'      =>  'Mitzva Maven Test 2', 
+		'mm_test3'      =>  'Mitzva Maven Test 3', 
 		'avg1'			=>	'Average Part 1',
 		'avg2'			=>	'Average Part 2',
 		'history'		=>	'Number of years attended Chidon',
@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
 		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
 		'host_address'	=>	array('host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
-		'winner_type'	=>	array('contestant', 'school_rep'),
+		'winner_type'	=>	array('contestant', 'school_rep', 'khk', 'trophy_contestant'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
@@ -316,9 +316,13 @@ if (isset($_POST['submit'])) {
 									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
 								} else if ($column == 'winner_type') {
 									if (intval($row[$lookup[$column][1]])) {
-										$html .= 'school rep.';
+										$html .= 'school rep';
 									} else if (intval($row[$lookup[$column][0]])) {
 										$html .= 'contestant';
+									} else if (intval($row[$lookup[$column][2]])) {
+										$html .= 'khk';
+									} else if (intval($row[$lookup[$column][3]])) {
+										$html .= 'trophy contestant';
 									}
 								} else {
 									foreach ($lookup[$column] as $val) {
