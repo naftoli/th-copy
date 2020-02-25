@@ -42,5 +42,5 @@ foreach ( $qrys as $id => $zone ) {
     $stmt->execute([':zone' => $zone]);
 }
 echo "done.";
-
+echo "<br />Num Errors: " . count( $errors );
 echo "<pre>"; print_r( $errors ); echo "</pre>";
