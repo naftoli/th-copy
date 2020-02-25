@@ -18,7 +18,7 @@ $info = array(
 		'gender'		=>	'Gender',
 		'dob'			=>	'Date of Birth',
 		'book'			=>	'Book',
-		// 'grade'			=>	'Grade',
+		'grade'			=>	'Grade',
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',
@@ -66,7 +66,11 @@ $info = array(
 		//'seat_number'	=>	'Seat Number',
 		'date_paid'		=>	'Enrolled',
 		'paid'			=>	'Amount Paid',
-		'cert_number'	=>  'Certificate Code'
+		'cert_number'	=>  'Certificate Code', 
+		'transportation'=>	'Transportation after Event', 
+		'airport'		=>	'Airport after Event', 
+		'flight'		=>	'Time of flight',
+		'snack_way_back'=>	'Snack / Sandwich for after Event'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
@@ -289,6 +293,24 @@ if (isset($_POST['submit'])) {
 									else echo "<td>no</td>";
 								} else if (in_array($column, array('avgTests','avgLow','avgHigh'))) {
 									// don't output anything they are just avgs for sql qry
+								} else if ($column == 'transportation') {
+									switch ( intval($row[$column]) ) {
+										case 0:
+											echo "<td>School Bus</td>";
+											break;
+										case 1:
+											echo "<td>Chidon Bus to Airport</td>";
+											break;
+										case 2:
+											echo "<td>Chidon Bus to Crown Heights</td>";
+											break;
+										case 3:
+											echo "<td>Private Ride</td>";
+											break;
+									}
+								} else if ($column == 'snack_way_back') {
+									if ( intval($row[$column]) == 1 ) echo "<td>Yes</td>"; 
+									else echo "<td>No</td>";
 								} else {
 									echo "<td>" . $row[$column] . "</td>";
 								}
