@@ -14,7 +14,8 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT tc.*, a.admin_email FROM th_chidon tc 
+    SELECT tc.*, a.admin_email, a.first, a.last 
+    FROM th_chidon tc 
     JOIN admins a ON a.admin_id = tc.parent_id 
     WHERE year = :year 
     AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1)
@@ -68,6 +69,7 @@ foreach ( $qrys as $id => $zone ) {
                 <th>Host Street</th>
                 <th>Walking Zone</th>
                 <th>Date Paid</th>
+                <th>Parent Name</th>
                 <th>Parent Email</th>
             </tr>
             <?php
@@ -78,7 +80,7 @@ foreach ( $qrys as $id => $zone ) {
                 else if ( intval($row['contestant']) ) $eligibility = "contestant";
                 echo "<tr><td>" . $row['th_chidon_id'] . "</td><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . 
                     "</td><td>" . $row['host_street_num'] . "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . 
-                    "</td><td>" . $row['date_paid'] . "</td><td>" . $row['admin_email'] . "</td></tr>";
+                    "</td><td>" . $row['date_paid'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['admin_email'] . "</td></tr>";
             }
             ?>
         </table>
