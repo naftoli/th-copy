@@ -1,4 +1,9 @@
 <?php
+$admin_auth = ['school'];
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permissions.";
+    exit;
+}
 ini_set('display_errors',1);
 ini_set('max_execution_time', 300);
 require __DIR__ . "/../../db.php";
