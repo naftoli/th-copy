@@ -14,7 +14,10 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM th_chidon WHERE year = :year AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1)
+    SELECT tc.*, a.admin_email FROM th_chidon tc 
+    JOIN admins a ON a.admin_id = tc.parent_id 
+    WHERE year = :year 
+    AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1)
 ");
 $stmt->execute([':year' => $year]);
 $rows = $stmt->fetchAll();
@@ -30,7 +33,7 @@ foreach ( $rows as $row ) {
         if ( is_array( $info ) && $info['zone_5780'] != $row['walking_zone'] ) {
             $qrys[$row['th_chidon_id']] = $info['zone_5780'];
         } else if ( !is_array( $info ) ) {
-            $errors[] = $row;
+            if ( $row['date_paid'] > 0 ) $errors[] = $row;
         }
     }
 }
@@ -48,6 +51,7 @@ foreach ( $qrys as $id => $zone ) {
         <meta charset="utf8" />
         <style>
             tr, th, td {
+                font-family: Arial;
                 font-size: 14px;
                 padding: 5px;
             }
@@ -64,6 +68,7 @@ foreach ( $qrys as $id => $zone ) {
                 <th>Host Street</th>
                 <th>Walking Zone</th>
                 <th>Date Paid</th>
+                <th>Parent Email</th>
             </tr>
             <?php
             foreach ( $errors as $row ) {
@@ -73,7 +78,7 @@ foreach ( $qrys as $id => $zone ) {
                 else if ( intval($row['contestant']) ) $eligibility = "contestant";
                 echo "<tr><td>" . $row['th_chidon_id'] . "</td><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . 
                     "</td><td>" . $row['host_street_num'] . "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . 
-                    "</td><td>" . $row['date_paid'] . "</td></tr>";
+                    "</td><td>" . $row['date_paid'] . "</td><td>" . $row['admin_email'] . "</td></tr>";
             }
             ?>
         </table>
