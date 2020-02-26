@@ -1,4 +1,9 @@
 <?php
+$admin_auth = ['school'];
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permissions.";
+    exit;
+}
 //error_reporting(E_ALL);
 ini_set("display_errors", 1);
 

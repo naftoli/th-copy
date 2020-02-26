@@ -1,4 +1,9 @@
 <?php
+$admin_auth = ['school'];
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permissions.";
+    exit;
+}
 // AUTHENTICATION
 $admin_auth = array('school');
 require ( $_SERVER['DOCUMENT_ROOT'].'/header.php' );
