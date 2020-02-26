@@ -265,9 +265,10 @@ function chargeCard() {
 
             // send email confirmation
             $subject = "Charge for Editing Shabbaton Enrollment " . $year;
-            $message = "You have been charged $" . $amount . " for editing your child's info. Your transaction id is: " . $trans_id;
+            $message = "You have been charged $" . $amount . " for editing your child's info. (" . $childInfo['first'] . ' ' . $childInfo['last'] . ' ID: ' . $childInfo['user_id']. "). Your transaction id is: " . $trans_id;
             $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
                       'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+                      'Cc: chidonedits@gmail.com' . "\r\n";
             @mail( $email, $subject, $message, $headers );
           } else {
             $error_msg .= "Transaction Failed \n";
