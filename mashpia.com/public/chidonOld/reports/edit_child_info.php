@@ -17,7 +17,7 @@ foreach ( $stmt->fetchAll() as $row ) {
     if ( !in_array( $row['Field'], ['grade'] ) ) $fields[] = $row['Field'];
 }
 
-if ( isset( $_POST['submit'] ) ) {
+if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
     $qrys = [];
     $info = [];
     foreach ( $_POST as $k => $v ) {
@@ -43,21 +43,47 @@ if ( isset( $_POST['submit'] ) ) {
     // echo "<pre>"; print_r( $qrys ); echo "</pre>";
     // exit;
     foreach ( $qrys as $qry ) mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
+    $msg = "Saved.";
+} else if ( isset( $_POST['user'] ) && $_POST['user'] ) {
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT * FROM th_chidon WHERE year = :year AND user_id = :user
+    ");
+    $stmt->execute([
+        ':year' =>  $year, 
+        ':user' =>  $_POST['user']
+    ]);
+    // echo $stmt->debugDumpParams();
+    $user = $stmt->fetch();
 }
 
-$start = 0;
-$limit = 50;
-if ( isset( $_POST['start'] ) ) $start = $_POST['start'] + $limit;
+// $start = 0;
+// $limit = 50;
+// if ( isset( $_POST['start'] ) ) $start = $_POST['start'] + $limit;
+
+// $stmt = $MASHPIA_DB->prepare("
+//     SELECT * FROM th_chidon WHERE year = :year AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) LIMIT :start, :limit
+// ");
+// $stmt->bindValue(':year', $year, PDO::PARAM_INT);
+// $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+// $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+// $stmt->execute();
+// // echo $stmt->debugDumpParams();
+// $rows = $stmt->fetchAll();
 
 $stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM th_chidon WHERE year = :year AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) LIMIT :start, :limit
+    SELECT 
+        user_id, first, last 
+    FROM 
+        users u 
+    JOIN
+        th_chidon tc USING (user_id) 
+    WHERE
+        year = :year AND (tc.khk = 1 or tc.school_rep or tc.trophy_contestant = 1 or tc.contestant = 1)
+    ORDER BY 
+        last, first
 ");
-$stmt->bindValue(':year', $year, PDO::PARAM_INT);
-$stmt->bindValue(':start', $start, PDO::PARAM_INT);
-$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$stmt->execute();
-// echo $stmt->debugDumpParams();
-$rows = $stmt->fetchAll();
+$stmt->execute([':year' => $year]);
+$users = $stmt->fetchAll();
 ?>
 <DOCTYPE html>
 <html>
@@ -71,27 +97,32 @@ $rows = $stmt->fetchAll();
             }
         </style>
     </head>
-    <body>
+    <body>        
         <form action="edit_child_info.php" method="post">
-            <input type="hidden" name="start" value="<?= $start ?>" />
-            <button name='submit'>Save & Next 50 >></button><br /><br />
-            <table>
-                <tr>
-                    <?php foreach ( $fields as $field ) : ?>
-                        <th><?= $field ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                <?php
-                foreach ( $rows as $row ) {
-                    echo "<tr>";
-                    foreach ( $fields as $i => $field ) {
-                        if ( $i < 4 ) echo "<td>" . $row[$field] . "</td>";
-                        else echo "<td><input type='text' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td>";
-                    }
-                    echo "</tr>";
+            <?php if ( !isset( $_POST['user'] ) ) : ?>
+                <?php 
+                if ( isset( $msg ) ) {
+                    echo "<div style='color: red;'>" . $msg . "</div><br />";
                 }
                 ?>
-            </table>
+                <select name="user">
+                    <option value="0">Choose Student</option>
+                    <?php foreach ( $users as $row ) echo "<option value='" . $row['user_id'] . "'>" . $row['last'] . ', ' .  $row['first'] . "</option>"; ?>
+                </select><br /><br />
+                <input type="submit" name="submit" value="go" />
+            <?php else : ?>
+            <!-- <input type="hidden" name="start" value="<?= $start ?>" /> -->
+            <button name='submit'>Save</button><br /><br />
+                <table>
+                    <?php
+                    foreach ( $fields as $i => $field ) {
+                        echo "<tr><td>" . $field . "</td>";
+                        if ( $i < 4 ) echo "<td>" . $user[$field] . "</td>";
+                        else echo "<td><input type='text' name='" . $field . "[" . $user['user_id'] . "]' value='" . $user[$field] . "' /></td></tr>";
+                    }
+                    ?>
+                </table>
+            <?php endif; ?>
         </form>
     </body>
 </html>
