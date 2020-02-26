@@ -50,6 +50,7 @@ foreach ( $qrys as $id => $zone ) {
     <body>
         <table>
             <tr>
+                <th>Chidon ID</th>
                 <th>Admin ID</th>
                 <th>User ID</th>
                 <th>Eligibility</th>
@@ -64,8 +65,9 @@ foreach ( $qrys as $id => $zone ) {
                 else if ( intval($row['school_rep']) ) $eligibility = "school rep";
                 else if ( intval($row['trophy_contestant']) ) $eligibility = "trophy contestant";
                 else if ( intval($row['contestant']) ) $eligibility = "contestant";
-                echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . "</td><td>" . $row['host_street_num'] . 
-                    "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
+                echo "<tr><td>" . $row['th_chidon_id'] . "</td><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . 
+                    "</td><td>" . $row['host_street_num'] . "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . 
+                    "</td><td>" . $row['date_paid'] . "</td></tr>";
             }
             ?>
         </table>
