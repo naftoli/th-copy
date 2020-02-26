@@ -56,6 +56,7 @@ foreach ( $qrys as $id => $zone ) {
                 <th>Host Street Number</th>
                 <th>Host Street</th>
                 <th>Walking Zone</th>
+                <th>Date Paid</th>
             </tr>
             <?php
             foreach ( $errors as $row ) {
@@ -64,7 +65,7 @@ foreach ( $qrys as $id => $zone ) {
                 else if ( intval($row['trophy_contestant']) ) $eligibility = "trophy contestant";
                 else if ( intval($row['contestant']) ) $eligibility = "contestant";
                 echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $eligibility . "</td><td>" . $row['host_street_num'] . 
-                    "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td></tr>";
+                    "</td><td>" . $row['host_street'] . "</td><td>" . $row['walking_zone'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
             }
             ?>
         </table>
