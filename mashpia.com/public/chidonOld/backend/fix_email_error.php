@@ -1,5 +1,10 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+if ( $admin_user['auth'] != 'super' ) {
+    echo "No Permission.";
+    exit;
+}
 
 $info = [];
 $sql = 'select admin_email from admins where admin_id in (
