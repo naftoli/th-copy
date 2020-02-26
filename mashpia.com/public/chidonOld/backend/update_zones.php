@@ -46,6 +46,12 @@ foreach ( $qrys as $id => $zone ) {
 <html>
     <head>
         <meta charset="utf8" />
+        <style>
+            tr, th, td {
+                font-size: 14px;
+                padding: 5px;
+            }
+        </style>
     </head>
     <body>
         <table>
