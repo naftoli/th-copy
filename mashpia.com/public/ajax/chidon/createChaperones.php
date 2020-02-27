@@ -53,12 +53,13 @@ function createChap( $info ) {
     // get the sweater size if needed...
     if( $info['s_size'] != '' ) {
         $sweater_size = mysql_real_escape_string($info['s_size']);
-        $chaperone_sql .= ", sweater = 1, sweater_size = '" . $sweater_size . "'";
+        $chaperone_sql .= ", sweater = 1, sweater_size = '" . $sweater_size . "' ";
     } else {
-        $chaperone_sql .= ", sweater = 0, sweater_size = null";
+        $chaperone_sql .= ", sweater = 0, sweater_size = null ";
     }
 
     if ( isset( $info['purchases'] ) ) {
+        $chaperone_sql .= ", ";
         $fixString = false;
         foreach ( $info['purchases'] as $field ) {
             if ( $field == 'extra_sweater' ) continue;
@@ -67,13 +68,13 @@ function createChap( $info ) {
                 $chaperone_sql .= $field . " = 1,";
             }
         }
-        if ( $fixString ) $chaperone_sql = substr($chaperone_sql, 0, strlen($chaperone_sql - 1));
+        if ( $fixString ) $chaperone_sql = substr($chaperone_sql, 0, strlen($chaperone_sql) - 1);
     }
 
-    if  (mysql_query($chaperone_sql) ) { // if we can create the chaperone...
+    if (mysql_query($chaperone_sql) ) { // if we can create the chaperone...
         return mysql_insert_id();
     } 
-
+    echo mysql_error() . "<br />" . $chaperone_sql;
     return false;
 }
 
