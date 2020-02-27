@@ -59,22 +59,17 @@ function createChap( $info ) {
     }
 
     if ( isset( $info['purchases'] ) ) {
-        $chaperone_sql .= ", ";
-        $fixString = false;
+        $chaperone_sql .= ",";
         foreach ( $info['purchases'] as $field ) {
-            if ( $field == 'extra_sweater' ) continue;
-            else {
-                $fixString = true;
-                $chaperone_sql .= $field . " = 1,";
-            }
+            if ( $field != 'extra_sweater' ) $chaperone_sql .= $field . " = 1,";
         }
-        if ( $fixString ) $chaperone_sql = substr($chaperone_sql, 0, strlen($chaperone_sql) - 1);
+        $chaperone_sql = substr($chaperone_sql, 0, strlen($chaperone_sql) - 1);
     }
 
     if (mysql_query($chaperone_sql) ) { // if we can create the chaperone...
         return mysql_insert_id();
     } 
-    echo mysql_error() . "<br />" . $chaperone_sql;
+    // echo mysql_error() . "<br />" . $chaperone_sql;
     return false;
 }
 
