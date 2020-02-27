@@ -20,6 +20,7 @@ foreach ( $stmt->fetchAll() as $row ) {
 if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
     $qrys = [];
     $info = [];
+    // arrange info so that the first index is the user id and the next index is the field
     foreach ( $_POST as $k => $v ) {
         if ( is_array( $v ) ) {
             foreach ( $v as $user_id => $val ) {
