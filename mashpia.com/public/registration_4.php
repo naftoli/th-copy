@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
 		}
 
 		if ( !$message ) {
-			$school->reg_type = $_POST['reg_type'];
+			$school->reg_type = mysql_real_escape_string( $_POST['reg_type'] );
 			$school->store_reset = $reset_points;
 			if ( !$school->save() ) {
 				$message = "Error updating school.";
