@@ -186,7 +186,7 @@ $(document).ready(function(){
             acc_address:    $("#chap_modal input#accAddress").val(),
             acc_phone:      $("#chap_modal input#accPhone").val(),
             vehicle:        $("#chap_modal input.vehicle:checked").val(), 
-            s_size:         $("#chap_modal select.s_size").val().trim()
+            s_size:         $("#chap_modal select.s_size").val()
         };
 
         data.walking = 0;
