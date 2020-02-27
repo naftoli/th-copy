@@ -74,6 +74,7 @@ $needed = $MASHPIA_DB->prepare("
             </tr>
             <?php
             foreach ( $schools as $school ) {
+                if ( $school['school_id'] == 612 ) continue; // skip unassigned school
                 $chaps->execute([
                     ':year' => $year, 
                     ':id'   => $school['school_id']
