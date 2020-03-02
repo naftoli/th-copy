@@ -127,7 +127,6 @@ abstract class MissionDisplay {
 	}
 
 	public function createFooter() { 
-		return "<div></div>";
 	?>
 		<div class="footer">
 			<? if ($this->lang_id == 1) : ?>
