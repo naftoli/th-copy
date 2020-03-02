@@ -30,7 +30,8 @@ class StaffManager
     $this->types = [];
     $this->bunks = [];
     $this->walkingGroups = [];
-    $this->year = GlobalSettings::getChidonYear();
+    // $this->year = GlobalSettings::getChidonYear();
+    $this->year = 5779;
   }
 
   public function checkLogin( $username, $password ) {
