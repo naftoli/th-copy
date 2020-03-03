@@ -24,6 +24,7 @@ foreach ( $info as $row ) {
 
 $updated = 0;
 foreach ( $qrys as $qry ) {
+    echo $qry . "<br />";
     mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
     $updated++;
 }
