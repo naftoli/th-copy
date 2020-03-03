@@ -19,12 +19,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
 $qrys = [];
 foreach ( $info as $row ) {
-    if ( intval($row['book']) ) $qrys[] = "update th_chidon set grade = " . (intval( $row['book'] ) + 3) . " where th_chidon_id = " . $row['th_chidon_id'];
+    if ( intval($row['book']) ) $qrys[] = "update th_chidon set grade = '" . (intval( $row['book'] ) + 3) . "' where th_chidon_id = " . $row['th_chidon_id'];
 }
 
 $updated = 0;
 foreach ( $qrys as $qry ) {
-    echo $qry . "<br />";
     mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
     $updated++;
 }
