@@ -22,4 +22,9 @@ foreach ( $info as $row ) {
     if ( intval($row['book']) ) $qrys[] = "update th_chidon set grade = " . (intval( $row['book'] ) + 3) . " where th_chidon_id = " . $row['th_chidon_id'];
 }
 
-foreach ( $qrys as $qry ) mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
+$updated = 0;
+foreach ( $qrys as $qry ) {
+    mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
+    $updated++;
+}
+echo "Updated: " . $updated;
