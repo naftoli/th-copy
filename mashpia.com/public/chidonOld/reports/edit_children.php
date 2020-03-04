@@ -55,6 +55,18 @@ if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
     ]);
     // echo $stmt->debugDumpParams();
     $user = $stmt->fetch();
+} else if ( $_POST['chidon_ids'] != '' ) {
+    $ids = explode(";", $_POST['chidon_ids']);
+    $ids = implode(',', $ids);
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT * FROM th_chidon WHERE year = :year AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) AND th_chidon_id in ($ids)
+    ");
+    // $stmt->bindValue(':year', $year, PDO::PARAM_INT);
+    // $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+    // $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute([':year' => $year]);
+    // echo $stmt->debugDumpParams();
+    $rows = $stmt->fetchAll();
 }
 
 // $start = 0;
@@ -110,44 +122,40 @@ $users = $stmt->fetchAll();
                     <option value="0">Choose Student</option>
                     <?php foreach ( $users as $row ) echo "<option value='" . $row['user_id'] . "'>" . $row['last'] . ', ' .  $row['first'] . "</option>"; ?>
                 </select><br /><br />
+                Or enter chidon ID's separated by semicolon: <input type="text" name="chidon_ids" /><br /><br />
                 <input type="submit" name="submit" value="go" />
             <?php else : ?>
             <!-- <input type="hidden" name="start" value="<?= $start ?>" /> -->
-            <button name='submit' id='save'>Save</button><br /><br />
-                <table>
-                    <?php
-                    foreach ( $fields as $i => $field ) {
-                        echo "<tr><td>" . $field . "</td>";
-                        if ( $i < 4 ) echo "<td>" . $user[$field] . "</td>";
-                        else if ( $field == 'host_street_num' ) echo "<td><input type='text' id='" . $field . "' name='" . $field . "[" . $user['user_id'] . "]' value='" . $user[$field] . 
-                            "' /> <button id='calc'>Calculate Walking Zone</button></td></tr>"; 
-                        else echo "<td><input type='text' id='" . $field . "' name='" . $field . "[" . $user['user_id'] . "]' value='" . $user[$field] . "' /></td></tr>";
-                    }
-                    ?>
-                </table>
+                <button name='submit'>Save</button><br /><br />
+                <?php if ( isset( $user ) ) : ?>
+                    <table>
+                        <?php
+                        foreach ( $fields as $i => $field ) {
+                            echo "<tr><td>" . $field . "</td>";
+                            if ( $i < 4 ) echo "<td>" . $user[$field] . "</td>";
+                            else echo "<td><input type='text' name='" . $field . "[" . $user['user_id'] . "]' value='" . $user[$field] . "' /></td></tr>";
+                        }
+                        ?>
+                    </table>
+                <?php elseif ( isset( $rows ) ) : ?>
+                    <table>
+                        <?php
+                        foreach ( $rows as $row ) {
+                            echo "<tr>";
+                            foreach ( $fields as $i => $field ) {
+                                echo "<td>" . $field . "</td>";
+                            }
+                            echo "</tr><tr>";
+                            foreach ( $fields as $i => $field ) {
+                                if ( $i < 4 ) echo "<td>" . $row[$field] . "</td>";
+                                else echo "<td><input type='text' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td>";
+                            }
+                            echo "</tr>";
+                        }
+                        ?>
+                    </table>
+                <?php endif; ?>
             <?php endif; ?>
         </form>
     </body>
-    <script
-        src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-        crossorigin="anonymous"></script>
-    <script>
-        $(function() {
-            $("#calc").click( function( e ) {
-                e.preventDefault();
-                const number = $(this).parent().find('#host_street_num').val();
-                const street = $(this).parent().parent().parent().find('#host_street').val();
-                $.post("../chidon_drive/ajax/getCrossStreets.php", { street: street, num: number }, function( result ) {
-                    const res = JSON.parse( result );
-                    console.log( res );
-                    if ( res.error ) alert("There's no such address in our system. Either the Street Number or Street Name are incorrect.");
-                    else {
-                        $("#walking_zone").val( res.data.zone_5780 );
-                        alert("Updated walking zone on form. Don't forget to Save.");
-                    }
-                });
-            });            
-        });
-    </script>
 </html>
