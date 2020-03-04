@@ -144,6 +144,8 @@ $users = $stmt->fetchAll();
                     if ( res.error ) alert("There's no such address in our system. Either the Street Number or Street Name are incorrect.");
                     else {
                         $("#walking_zone").val( res.data.zone_5780 );
+                        $("#between_streets1").val( res.data.cross1 );
+                        $("#between_streets2").val( res.data.cross2 );
                         alert("Updated walking zone on form. Don't forget to Save.");
                     }
                 });
