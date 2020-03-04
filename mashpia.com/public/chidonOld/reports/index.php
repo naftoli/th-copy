@@ -25,6 +25,7 @@ $info = array(
 		'host_address_num'	=>	'Accomodation Address Number',
 		'host_address'	=>	'Accomodation Address',
 		'between_streets'	=>	'Cross Streets',
+		'walking_zone'	=>	'Walking Zone',
 		'admin_city'	=>	'City', 
 		'admin_state'	=>	'State', 
 		'allergies'		=>	'Allergies',

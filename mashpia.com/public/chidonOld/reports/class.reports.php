@@ -106,6 +106,10 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('between_streets1', 'between_streets2')
             ),
+            'walking_zone'  =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'walking_zone'
+            ),
             'allergies' =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'allergies'
