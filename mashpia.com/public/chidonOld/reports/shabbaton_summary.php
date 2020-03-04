@@ -24,6 +24,7 @@ if ( isset( $_POST['submit'] ) ) {
     $year = GlobalSettings::getChidonYear();
 
     $grades = "'" . implode("','", $_POST['grade']) . "'";
+    $genders = "'" . implode("','", $_POST['gender']) . "'";
     $stmt = $MASHPIA_DB->prepare("
         SELECT 
             u.gender, tc.*
@@ -34,7 +35,8 @@ if ( isset( $_POST['submit'] ) ) {
         WHERE
             grade IN ($grades) AND year = 5780 
                 AND deleted = 0
-                AND date_paid > 0
+                AND date_paid > 0 
+                AND u.gender IN ($genders)
         ORDER BY
             grade
     ");
@@ -46,8 +48,8 @@ if ( isset( $_POST['submit'] ) ) {
     foreach ( $rows as $row ) {
         foreach ( $_POST['cat'] as $cat ) {
             if ( intval($row[$cat]) == 1 ) {
-                if ( isset( $info[$row['gender']][$cat][$row['grade']] ) ) $info[$row['gender']][$cat][$row['grade']]++;
-                else $info[$row['gender']][$cat][$row['grade']] = 1;
+                if ( isset( $info[$row['gender']][$row['grade']][$cat] ) ) $info[$row['gender']][$row['grade']][$cat]++;
+                else $info[$row['gender']][$row['grade']][$cat] = 1;
                 break;
             }
         }
@@ -98,8 +100,8 @@ if ( isset( $_POST['submit'] ) ) {
                 </fieldset>
                 <fieldset>
                     <legend>Choose Gender</legend>
-                    <input type="checkbox" name="gender[]" value='m' /> Boys<br />
-                    <input type="checkbox" name="gender[]" value='f' /> Girls<br />
+                    <input type="checkbox" name="gender[]" value='M' /> Boys<br />
+                    <input type="checkbox" name="gender[]" value='F' /> Girls<br />
                 </fieldset>
                 <br />
                 <input type="submit" name="submit" value="submit" />
@@ -114,18 +116,18 @@ if ( isset( $_POST['submit'] ) ) {
                 </h1>
                 <table>
                     <tr>
-                        <th>Category</th>
                         <th>Grade</th>
+                        <th>Category</th>
                         <th>Total</th>
                     </tr>
                     <?php
                     $grandTotal = 0;
-                    foreach ( $more as $cat => $other ) {
+                    foreach ( $more as $grade => $other ) {
                         $gTotal = 0;
-                        foreach ( $other as $grade => $total ) {
+                        foreach ( $other as $cat => $total ) {
                             $gTotal += $total;
                             $grandTotal += $total;
-                            echo "<tr><td>" . $cat . "</td><td>" . $grade . "</td><td>" . $total . "</td></tr>";
+                            echo "<tr><td>" . $grade . "</td><td>" . $cat . "</td><td>" . $total . "</td></tr>";
                         }
                         echo "<tr><th colspan='2' style='text-align: right;'>Total:</th><th>" . $gTotal . "</th></tr>";
                     }
