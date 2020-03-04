@@ -11,9 +11,9 @@ require __DIR__ . "/../../class.globalSettings.php";
 $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
-if (($handle = fopen("book_updates.csv", "r")) !== FALSE) {
+if (($handle = fopen("book_grade_updates.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $qry = "update th_chidon set book = " . $data[1] . " where user_id = " . $data[0] . " and year = " . $year;
+        $qry = "update th_chidon set grade = " . $data[1] . ", book = " . $data[2] . " where user_id = " . $data[0] . " and year = " . $year;
         $qrys[] = $qry;
     }
     fclose($handle);
