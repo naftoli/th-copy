@@ -17,7 +17,7 @@ foreach ( $stmt->fetchAll() as $row ) {
     if ( !in_array( $row['Field'], ['grade'] ) ) $fields[] = $row['Field'];
 }
 
-if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
+if ( isset( $_POST['submit'] ) && !isset( $_POST['chidon_ids'] ) ) {
     $qrys = [];
     $info = [];
     // arrange info so that the first index is the user id and the next index is the field
@@ -45,19 +45,9 @@ if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
     // exit;
     foreach ( $qrys as $qry ) mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
     $msg = "Saved.";
-} else if ( isset( $_POST['user'] ) && $_POST['user'] ) {
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT * FROM th_chidon WHERE year = :year AND user_id = :user
-    ");
-    $stmt->execute([
-        ':year' =>  $year, 
-        ':user' =>  $_POST['user']
-    ]);
-    // echo $stmt->debugDumpParams();
-    $user = $stmt->fetch();
-} else if ( $_POST['chidon_ids'] != '' ) {
+} else if ( !empty( $_POST['chidon_ids'] ) ) {
     $ids = explode(";", $_POST['chidon_ids']);
-    $ids = implode(',', $ids);
+    $ids = implode(',', str_replace(' ', '', $ids));
     $stmt = $MASHPIA_DB->prepare("
         SELECT * FROM th_chidon WHERE year = :year AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) AND th_chidon_id in ($ids)
     ");
@@ -67,6 +57,9 @@ if ( isset( $_POST['submit'] ) && !isset( $_POST['user'] ) ) {
     $stmt->execute([':year' => $year]);
     // echo $stmt->debugDumpParams();
     $rows = $stmt->fetchAll();
+    if ( empty( $rows ) ) {
+        $msg = "No children found with those IDs.";
+    }
 }
 
 // $start = 0;
@@ -103,59 +96,71 @@ $users = $stmt->fetchAll();
     <head>
         <meta charset="utf8" />
         <style>
+            table {
+                float: left;
+            }
             tr, th, td {
                 font-family: Arial;
                 font-size: 14px;
                 padding: 5px;
             }
+            td {
+                height: 30px;
+            }
         </style>
     </head>
     <body>        
-        <form action="edit_child_info.php" method="post">
-            <?php if ( !isset( $_POST['user'] ) ) : ?>
+        <form action="edit_children.php" method="post">
+            <?php if ( !isset( $rows ) || empty( $rows ) ) : ?>
                 <?php 
                 if ( isset( $msg ) ) {
                     echo "<div style='color: red;'>" . $msg . "</div><br />";
                 }
                 ?>
-                <select name="user">
-                    <option value="0">Choose Student</option>
-                    <?php foreach ( $users as $row ) echo "<option value='" . $row['user_id'] . "'>" . $row['last'] . ', ' .  $row['first'] . "</option>"; ?>
-                </select><br /><br />
-                Or enter chidon ID's separated by semicolon: <input type="text" name="chidon_ids" /><br /><br />
+                Enter chidon ID's separated by semicolon: <input type="text" name="chidon_ids" /><br /><br />
                 <input type="submit" name="submit" value="go" />
             <?php else : ?>
             <!-- <input type="hidden" name="start" value="<?= $start ?>" /> -->
                 <button name='submit'>Save</button><br /><br />
-                <?php if ( isset( $user ) ) : ?>
-                    <table>
-                        <?php
-                        foreach ( $fields as $i => $field ) {
-                            echo "<tr><td>" . $field . "</td>";
-                            if ( $i < 4 ) echo "<td>" . $user[$field] . "</td>";
-                            else echo "<td><input type='text' name='" . $field . "[" . $user['user_id'] . "]' value='" . $user[$field] . "' /></td></tr>";
-                        }
-                        ?>
-                    </table>
-                <?php elseif ( isset( $rows ) ) : ?>
-                    <table>
-                        <?php
-                        foreach ( $rows as $row ) {
-                            echo "<tr>";
-                            foreach ( $fields as $i => $field ) {
-                                echo "<td>" . $field . "</td>";
-                            }
-                            echo "</tr><tr>";
-                            foreach ( $fields as $i => $field ) {
-                                if ( $i < 4 ) echo "<td>" . $row[$field] . "</td>";
-                                else echo "<td><input type='text' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td>";
-                            }
-                            echo "</tr>";
-                        }
-                        ?>
-                    </table>
-                <?php endif; ?>
+                <?php
+                echo "<table>";
+                foreach ( $fields as $i => $field ) {
+                    echo "<tr><td>" . $field . "</td></tr>";
+                }
+                echo "</table>";
+                foreach ( $rows as $row ) {
+                    echo "<table>";
+                    foreach ( $fields as $i => $field ) {
+                        if ( $i < 4 ) echo "<tr><td>" . $row[$field] . "</td></tr>";
+                        else echo "<tr><td><input type='text' class='" . $field . "' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td></tr>";
+                    }
+                    echo "</table>";
+                }
+                ?>
             <?php endif; ?>
         </form>
     </body>
+    <script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $(".host_street_num").blur( function() {
+                const number = $(this).val();
+                const street = $(this).parent().parent().prev().find('.host_street').val();
+                $.post("../chidon_drive/ajax/getCrossStreets.php", { street: street, num: number }, function( result ) {
+                    const res = JSON.parse( result );
+                    console.log( res );
+                    if ( res.error ) alert("There's no such address in our system. Either the Street Number or Street Name are incorrect.");
+                    else {
+                        $(this).parent().parent().prev().find(".walking_zone").val( res.data.zone_5780 );
+                        $(this).parent().parent().prev().find(".between_streets1").val( res.data.cross1 );
+                        $(this).parent().parent().prev().find(".between_streets2").val( res.data.cross2 );
+                        alert("Walking zone updated. Don't forget to Save.");
+                    }
+                });
+            }); 
+        });           
+    </script>
 </html>
