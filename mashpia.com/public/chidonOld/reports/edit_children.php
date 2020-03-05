@@ -96,10 +96,16 @@ $users = $stmt->fetchAll();
     <head>
         <meta charset="utf8" />
         <style>
+            table {
+                float: left;
+            }
             tr, th, td {
                 font-family: Arial;
                 font-size: 14px;
                 padding: 5px;
+            }
+            td {
+                height: 30px;
             }
         </style>
     </head>
@@ -116,23 +122,45 @@ $users = $stmt->fetchAll();
             <?php else : ?>
             <!-- <input type="hidden" name="start" value="<?= $start ?>" /> -->
                 <button name='submit'>Save</button><br /><br />
-                <table>
-                    <?php
-                    foreach ( $rows as $row ) {
-                        echo "<tr>";
-                        foreach ( $fields as $i => $field ) {
-                            echo "<td>" . $field . "</td>";
-                        }
-                        echo "</tr><tr>";
-                        foreach ( $fields as $i => $field ) {
-                            if ( $i < 4 ) echo "<td>" . $row[$field] . "</td>";
-                            else echo "<td><input type='text' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td>";
-                        }
-                        echo "</tr>";
+                <?php
+                echo "<table>";
+                foreach ( $fields as $i => $field ) {
+                    echo "<tr><td>" . $field . "</td></tr>";
+                }
+                echo "</table>";
+                foreach ( $rows as $row ) {
+                    echo "<table>";
+                    foreach ( $fields as $i => $field ) {
+                        if ( $i < 4 ) echo "<tr><td>" . $row[$field] . "</td></tr>";
+                        else echo "<tr><td><input type='text' class='" . $field . "' name='" . $field . "[" . $row['user_id'] . "]' value='" . $row[$field] . "' /></td></tr>";
                     }
-                    ?>
-                </table>
+                    echo "</table>";
+                }
+                ?>
             <?php endif; ?>
         </form>
     </body>
+    <script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $(".host_street_num").blur( function() {
+                const number = $(this).val();
+                const street = $(this).parent().parent().prev().find('.host_street').val();
+                $.post("../chidon_drive/ajax/getCrossStreets.php", { street: street, num: number }, function( result ) {
+                    const res = JSON.parse( result );
+                    console.log( res );
+                    if ( res.error ) alert("There's no such address in our system. Either the Street Number or Street Name are incorrect.");
+                    else {
+                        $(this).parent().parent().prev().find(".walking_zone").val( res.data.zone_5780 );
+                        $(this).parent().parent().prev().find(".between_streets1").val( res.data.cross1 );
+                        $(this).parent().parent().prev().find(".between_streets2").val( res.data.cross2 );
+                        alert("Walking zone updated. Don't forget to Save.");
+                    }
+                });
+            }); 
+        });           
+    </script>
 </html>
