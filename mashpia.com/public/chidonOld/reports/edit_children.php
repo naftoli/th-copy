@@ -18,6 +18,7 @@ foreach ( $stmt->fetchAll() as $row ) {
 }
 
 if ( isset( $_POST['submit'] ) && !isset( $_POST['chidon_ids'] ) ) {
+    // echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
     $qrys = [];
     $info = [];
     // arrange info so that the first index is the user id and the next index is the field

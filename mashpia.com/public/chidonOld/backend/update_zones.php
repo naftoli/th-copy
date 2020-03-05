@@ -18,7 +18,8 @@ $stmt = $MASHPIA_DB->prepare("
     FROM th_chidon tc 
     JOIN admins a ON a.admin_id = tc.parent_id 
     WHERE year = :year 
-    AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1)
+    AND (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
+    AND deleted = 0
 ");
 $stmt->execute([':year' => $year]);
 $rows = $stmt->fetchAll();
@@ -26,7 +27,7 @@ $rows = $stmt->fetchAll();
 $qrys = [];
 $errors = [];
 foreach ( $rows as $row ) {
-    if ( intval($row['in_zone']) ) {
+    // if ( intval($row['in_zone']) ) {
         $w = new WalkingZones;
         $num = $row['host_street_num'];
         $street = $row['host_street'];
@@ -36,15 +37,19 @@ foreach ( $rows as $row ) {
         } else if ( !is_array( $info ) ) {
             if ( $row['date_paid'] > 0 ) $errors[] = $row;
         }
-    }
+    // }
 }
 
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon SET walking_zone = :zone WHERE th_chidon_id = :id
 ");
+$updated = 0;
 foreach ( $qrys as $id => $zone ) {
-    $stmt->execute([':zone' => $zone]);
+    if ( $stmt->execute([':zone' => $zone, ':id' => $id]) ) $updated++;
 }
+echo "Updated: " . $updated;
+echo "<pre>"; print_r( $errors ); echo "</pre>";
+exit;
 ?>
 <!DOCTYPE html>
 <html>
