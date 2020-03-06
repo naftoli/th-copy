@@ -376,9 +376,9 @@ body {
 	clear: both;
 	width: 100%;
 	height: 1.1in;
-    padding-top: 0;
-    position: absolute;
-    bottom: -160px;
+    padding-top: 20px;
+    /* position: absolute;
+    bottom: -160px; */
 }
 
 .he .footer {
