@@ -10,9 +10,9 @@ $sql = "SELECT s.school_id, s.school_name, u.last, u.first, u.gender, tc.grade, 
     ." JOIN users u USING (user_id) "
     ." JOIN schools s ON tc.school_id = s.school_id "
     ." WHERE tc.year = '$year' AND s.test_school='0' "
-    ." AND u.gender = 'M' "
+    ." AND u.gender = 'F' "
     ." AND tc.deleted = 0 "
-    ." and ((tc.test1a + test2a) / 2 >= 70.00) "
+    ." and (tc.khk = 1 or tc.school_rep = 1 or tc.trophy_contestant = 1 or tc.contestant = 1) "
     ." ORDER BY school_name, gender, grade, last, first, size";
 
 $result = mysql_query($sql);
