@@ -71,7 +71,20 @@ $info = array(
 		'transportation'=>	'Transportation after Event', 
 		'airport'		=>	'Airport after Event', 
 		'flight'		=>	'Time of flight',
-		'snack_way_back'=>	'Snack / Sandwich for after Event'
+		'snack_way_back'=>	'Snack / Sandwich for after Event', 
+		'school_name'	=>	'Non TH School Name', 
+		'affiliation'	=>	'Affiliation',
+		'home_address'	=>	'Home Address (AK)', 
+		'home_city'		=>	'Home City (AK)', 
+		'home_state'	=>	'Home State (AK)', 
+		'home_zip'		=>	'Home Zip (AK)', 
+		'medications'	=>	'Medications', 
+		'friend_name'	=>	'Friend Name', 
+		'bunk_request'	=>	'Bunk Request', 
+		'anash_airport'	=>	'Airport (AK)', 
+		'anash_arrival'	=>	'Arrival (AK)',
+		'known_family'	=>	'Known Family', 
+		'morning_pickup'=>	'Morning Pickup'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
@@ -289,9 +302,9 @@ if (isset($_POST['submit'])) {
 								} else if ($column == 'chap_type') {
 									if ($row[$column] == 1) echo "<td>Chaperone</td>";
 									else echo "<td>Walking Counselor</td>";
-								} else if ( $column == 'walking' ) {
-									if ( intval( $row[$column] == 1 ) ) echo "<td>yes</td>"; 
-									else echo "<td>no</td>";
+								} else if ( in_array($column, ['walking','snack_way_back','known_family','morning_pickup']) ) {
+									if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>"; 
+									else echo "<td>No</td>";
 								} else if (in_array($column, array('avgTests','avgLow','avgHigh'))) {
 									// don't output anything they are just avgs for sql qry
 								} else if ($column == 'transportation') {
@@ -309,9 +322,6 @@ if (isset($_POST['submit'])) {
 											echo "<td>Private Ride</td>";
 											break;
 									}
-								} else if ($column == 'snack_way_back') {
-									if ( intval($row[$column]) == 1 ) echo "<td>Yes</td>"; 
-									else echo "<td>No</td>";
 								} else {
 									echo "<td>" . $row[$column] . "</td>";
 								}
