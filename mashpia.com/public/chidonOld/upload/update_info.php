@@ -29,13 +29,15 @@ if (($handle = fopen("chidon_updates.csv", "r")) !== FALSE) {
 // find out user ids update hebrew names
 $qrys = [];
 foreach ( $info as $data ) {
-    $sql = "select user_id from th_chidon where th_chidon_id = " . $data[0];
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    if ( $row['user_id'] ) {
-        $qrys[] = "update users set first_he = \"" . $data[1] . "\", last_he = \"" . $data[2] . "\" where user_id = " . $row['user_id'];
+    if ( intval($data[0]) ) {
+        $sql = "select user_id from th_chidon where th_chidon_id = " . intval($data[0]);
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        if ( $row['user_id'] ) {
+            $qrys[] = "update users set first_he = \"" . $data[1] . "\", last_he = \"" . $data[2] . "\" where user_id = " . intval($row['user_id']);
+        }
+        $qrys[] = "update th_chidon set host = \"" . $data[3] . "\", host_number = '" . $data[4] . "' where th_chidon_id = " . intval($data[0]);
     }
-    $qrys[] = "update th_chidon set host = \"" . $data[3] . "\", host_number = '" . $data[4] . "' where th_chidon_id = " . $data[0];
 }
 
 // echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
@@ -51,8 +53,13 @@ foreach ( $qrys as $qry ) {
     }
 }
 
-if ( $success ) mysql_query('commit');
-else mysql_query('rollback');
+if ( $success ) {
+    mysql_query('commit');
+    echo "done.";
+} else {
+    mysql_query('rollback');
+    echo "Errors.";
+}
 mysql_query('set autocommit=1');
-echo "done.";
+
 echo "</body></html>";

@@ -232,6 +232,58 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('plaque', 'plaque_number')
             ),
+            'school_name'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'school_name'
+            ), 
+            'affiliation'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'affiliation'
+            ), 
+            'friend_name'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'friend_name'
+            ), 
+            'home_address'  =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'home_address'
+            ), 
+            'home_city'     =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'home_city'
+            ), 
+            'home_state'    =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'home_state'
+            ), 
+            'home_zip'      =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'home_zip'
+            ), 
+            'medications'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'medications'
+            ), 
+            'bunk_request'  =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'bunk_request'
+            ), 
+            'anash_airport' =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'anash_airport'
+            ), 
+            'anash_arrival' =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'anash_arrival'
+            ), 
+            'known_family'  =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'known_family'
+            ), 
+            'morning_pickup'    =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'morning_pickup'
+            ),
             // 'bus'       =>  array(
             //     'table'     =>  'th_chidon',
             //     'column'    =>  'bus_number as bus'
