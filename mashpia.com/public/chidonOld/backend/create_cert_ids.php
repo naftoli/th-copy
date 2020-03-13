@@ -20,7 +20,7 @@ $sql = "select * from th_chidon tc
         order by tc.grade, tc.school_id, last, first";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    $cert_id = $row['grade'] . '-' . $row['school_id'] . '-' . $i++;
+    $cert_id = $row['grade'] . ':' . $row['school_id'] . ':' . $i++;
     $qrys[] = "update th_chidon set cert_number = '" . $cert_id . "' where th_chidon_id = " . $row['th_chidon_id'];
 }
 
