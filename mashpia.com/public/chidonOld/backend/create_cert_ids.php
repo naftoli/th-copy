@@ -17,7 +17,7 @@ $sql = "select * from th_chidon tc
         and deleted = 0 
         and (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
         and year = " . $year . " 
-        order by last, first";
+        order by grade, school_id, last, first";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $cert_id = $row['grade'] . '-' . $row['school_id'] . '-' . $i++;
