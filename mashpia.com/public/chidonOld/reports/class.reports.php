@@ -142,6 +142,10 @@ class Reports
                 'table'     =>  'th_chidon', 
                 'column'    =>  'year'
             ),
+            'poll'      =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'poll'
+            ),
 
             'class'     =>  array(
                 'table'     => 'classes', 

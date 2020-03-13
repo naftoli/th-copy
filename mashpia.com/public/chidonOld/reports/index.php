@@ -52,6 +52,7 @@ $info = array(
 		'avg1'			=>	'Average Part 1',
 		'avg2'			=>	'Average Part 2',
 		'history'		=>	'Number of years attended Chidon',
+		'poll'			=>	'Poll',
 		'team'			=>	'Team',
 		'test_table'	=>	'Test Table',
 		'test_lang'		=>	'Test Language',
