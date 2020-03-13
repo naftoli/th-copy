@@ -25,4 +25,5 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $qrys[] = "update th_chidon set cert_number = '" . $cert_id . "' where th_chidon_id = " . $row['th_chidon_id'];
 }
 
-echo "<pre>"; print_r( $qrys ); echo "</pre>";
+foreach ( $qrys as $qry ) mysql_query( $qry );
+echo "done.";
