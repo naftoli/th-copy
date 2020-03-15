@@ -13,8 +13,7 @@ $i = 1;
 $qrys = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
-        where deleted = 0 
-        and (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
+        where (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
         and year = " . $year . " 
         order by tc.grade, tc.school_id, last, first";
 $result = mysql_query( $sql );
