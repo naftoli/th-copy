@@ -18,9 +18,14 @@ $sql = "select * from th_chidon tc
         and year = " . $year . " 
         order by tc.grade, tc.school_id, last, first";
 $result = mysql_query( $sql );
+$prevGrade = 0;
 while ( $row = mysql_fetch_assoc( $result ) ) {
+    if ( $prevGrade != $row['grade'] ) {
+        $i = 1;
+        $prevGrade = $row['grade'];
+    }
     $identifier = '_';
-    $cert_id = $row['grade'] . $identifier . $row['school_id'] . $identifier . $i++;
+    $cert_id = $row['grade'] . $identifier . $row['school_id'] . $identifier . str_pad($i++, 2, '0', STR_PAD_LEFT);
     $qrys[] = "update th_chidon set cert_number = '" . $cert_id . "' where th_chidon_id = " . $row['th_chidon_id'];
 }
 
