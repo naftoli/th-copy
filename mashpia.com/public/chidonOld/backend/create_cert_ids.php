@@ -13,16 +13,17 @@ $i = 1;
 $qrys = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
-        where deleted = 0 
-        and (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
+        where (khk = 1 or school_rep = 1 or trophy_contestant = 1 or contestant = 1) 
         and year = " . $year . " 
         order by tc.grade, tc.school_id, last, first";
 $result = mysql_query( $sql );
 $prevGrade = 0;
+$prevSchool = 0;
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    if ( $prevGrade != $row['grade'] ) {
+    if ( $prevGrade != $row['grade'] || $prevSchool != $row['school_id'] ) {
         $i = 1;
-        $prevGrade = $row['grade'];
+        if ( $prevGrade != $row['grade'] ) $prevGrade = $row['grade'];
+        if ( $prevSchool != $row['school_id'] ) $prevSchool = $row['school_id'];
     }
     $identifier = '_';
     $cert_id = $row['grade'] . $identifier . $row['school_id'] . $identifier . str_pad($i++, 2, '0', STR_PAD_LEFT);

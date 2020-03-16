@@ -100,7 +100,7 @@ class UserRegistrationRouter {
         // * get each registration
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
-            $totals[$info['registration_type']] += $info['paid'];
+            $totals[$info['registration_type']] += intval($info['paid']);
         }
         
         // * get all the user models
