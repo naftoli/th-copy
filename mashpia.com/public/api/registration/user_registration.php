@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -193,9 +192,8 @@ class UserRegistrationRouter {
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
-                        $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount, $trans_id, $lite
+                            $current_user->admin_id, $year, $amount, $trans_id
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
