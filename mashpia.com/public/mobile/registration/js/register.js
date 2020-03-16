@@ -267,7 +267,7 @@ var registrationApp = function() {
         window.location.hash = 'step-4';
         showSection("step-4");
         
-        var total = state.cart.reduce( function( total, item ) { return total + item.price }, 0 );
+        var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
         if ( total === 0 ){
             return registerUsers( { payment: { total: 0 } } );
         }
@@ -755,7 +755,7 @@ var templates = function(){
             }
         },
         renderCheckout: function( cart ){
-            var total = cart.reduce( function( total, item ) { return total + item.price }, 0 );
+            var total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
             $("#charges").html('');
             // add each item
             cart.forEach( function( item ){
