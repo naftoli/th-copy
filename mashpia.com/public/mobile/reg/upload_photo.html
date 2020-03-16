@@ -303,10 +303,9 @@
 				if (photo == 'images/addphoto.png') {
 					photo = null;
 					alert('You need to upload a photo.');
-					return false;
+				} else {
+					update();
 				}
-				
-				update();
 				
 				function update() {
                     $.post('ajax/updateChidonPhoto.php', {
