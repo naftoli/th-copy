@@ -77,6 +77,7 @@
       
       { "label": "Review Enrollment", "legacy": true, "path": "/review_enrollment.php" },
       { "label": "Print Enrollment Info", "legacy": true, "path": "/chidon_review.php" },
+      { "label": "Review Chidon Pictures", "legacy": true, "path": "/chidonOld/reports/chidon_pics.php" },
 
       { "label": "Generate ID Cards", "legacy": true, "user_types": ["HQ"], "path": "/chidon/IDcards/" },
       { "label": "Upload Spreadsheets", "legacy": true, "user_types": ["HQ"], "path": "/chidon/upload/" },
