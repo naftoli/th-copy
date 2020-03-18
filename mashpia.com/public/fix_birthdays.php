@@ -10,7 +10,7 @@ require 'class.heDob.php';
 // while ($row = mysql_fetch_assoc( $result )) {
 //     $users[] = $row['user_id'];
 // }
-$users = [ 17264 ];
+$users = [ 62386 ];
 
 foreach ($users as $user_id) {
     $b = new Birthday( $user_id );
