@@ -71,7 +71,7 @@ $table_prefix  = 'wp_';
  */
 define('WP_DEBUG', true);
 
-// define('WP_ALLOW_MULTISITE', true);
+define('WP_ALLOW_MULTISITE', true);
 // define('MULTISITE', true);
 // define('SUBDOMAIN_INSTALL', false);
 // define('DOMAIN_CURRENT_SITE', 'mashpia.com');
