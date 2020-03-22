@@ -225,6 +225,7 @@ if ( !empty( $users ) ) {
 						$resSupers = mysql_query( $sqlSupers );
 						if ( mysql_num_rows( $resSupers ) >= $needed ) {
 							$children[$row['user_id']]['enrollShabbaton'] = 1;
+							$children[$row['user_id']]['showChidonPic'] = 1;
 
 							if ($cRow['allow_edit']) {
 								$children[$row['user_id']]['shabbatonEdit'] = 1;
