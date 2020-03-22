@@ -195,9 +195,9 @@ class NewAccount extends Component {
                 Create Account
               </SaveButton>
               
-              <Link className='btn btn-primary' to='/'>
+              {/* <Link className='btn btn-primary' to='/'>
                 Login <FontAwesome icon='sign-in-alt' />
-              </Link>
+              </Link> */}
             </Col>
           </Row>
         </form>
