@@ -125,7 +125,7 @@ export class Login extends Component {
 
             <div id='links' className='clearfix'>
               <Link to='/forgot'>Forgot Password?</Link>
-              <Link to='/signup'>New Account</Link>
+              {/* <Link to='/signup'>New Account</Link> */}
             </div>
 
             <footer>
