@@ -2,6 +2,15 @@
 chdir('../../../');
 require 'db.php';
 
-$sql = "UPDATE users SET chidon_pic = '" . mysql_real_escape_string($_POST['chidonPhoto']) . "' WHERE user_id = " . mysql_real_escape_string($_POST['user_id']);
+if ( isset( $_POST['serial'] ) ) {
+    $sql = "select user_id from users where user_serial = " . mysql_real_escape_string( $_POST['serial'] );
+    $result = mysql_query( $sql );
+    $row = mysql_fetch_assoc( $result );
+    $user_id = $row['user_id'];
+} else {
+    $user_id = mysql_real_escape_string($_POST['user_id']);
+}
+
+$sql = "UPDATE users SET chidon_pic = '" . mysql_real_escape_string($_POST['chidonPhoto']) . "' WHERE user_id = " . $user_id;
 $success = mysql_query( $sql );
 echo $success;
