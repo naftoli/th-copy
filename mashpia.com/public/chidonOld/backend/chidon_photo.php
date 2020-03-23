@@ -368,6 +368,10 @@
         }
     }
 
+    $("#imgchild").change( function() {
+        alert();
+    });
+
     function readURL(input) {
 	  setTimeout(
         function() {
@@ -378,8 +382,8 @@
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    // $('#avatar-loaded-img')
-                        // .attr('src', e.target.result);
+                    $('#avatar-loaded-img')
+                        .attr('src', e.target.result);
                     $('#avatar-loaded-img-2')
                         .attr('src', e.target.result);
                 };
