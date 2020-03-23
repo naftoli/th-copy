@@ -368,8 +368,10 @@
         }
     }
 
-    $("#imgchild").change( function() {
-        alert();
+    $(".avatar-save").click( function() {
+        setInterval(() => {
+            alert($("#imgchild").attr('src'));
+        }, 3000);
     });
 
     function readURL(input) {
