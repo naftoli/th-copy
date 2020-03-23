@@ -300,26 +300,37 @@
 						window.location = "parent_detail.html";
 					} else {
 						var info = $.parseJSON( success );
-						if (info.chidon_pic != null) $("#imgchild").attr('src', info.chidon_pic);							
+						if (info.chidon_pic != null) $("#imgchild").attr('src', '../../mobile/reg/' + info.chidon_pic);							
                     }
 				});
 			}			
 	    });
 		
 	    $('#regForm').submit( function(e) {
-	    	e.preventDefault();
-	    	
-				var photo = $("#imgchild").attr('src');
-				if (photo == 'images/addphoto.png') {
+            e.preventDefault();
+                const serial = $("#user").val();
+                if ( !serial ) {
+                    alert("You must enter a serial number.");
+                    return false;
+                }
+                let photo = $("#imgchild").attr('src');
+				if (photo == '/mobile/reg/images/addphoto.png') {
 					photo = null;
 					alert('You need to upload a photo.');
 				} else {
-					update();
+                    const pos = photo.indexOf('img/');
+                    if ( pos >= 0 ) {
+                        photo = photo.substring(pos);
+                        update();
+                    } else {
+                        alert("Error");
+                        return false;
+                    }
 				}
 				
 				function update() {
-                    $.post('ajax/updateChidonPhoto.php', {
-                        user_id : id,
+                    $.post('/mobile/reg/ajax/updateChidonPhoto.php', {
+                        serial : serial,
                         chidonPhoto : photo,  
                     }, function( success ) {
                         if ( !success ) {
@@ -367,6 +378,14 @@
             }
         }
     }
+
+    // show pic on page after uploading
+    $(".avatar-save").click( function() {
+        setTimeout(() => {
+            const src = $("#imgchild").attr('src');
+            $("#imgchild").attr('src', '/mobile/reg/' + src);
+        }, 3000);
+    });
 
     function readURL(input) {
 	  setTimeout(

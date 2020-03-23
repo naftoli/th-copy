@@ -3,10 +3,15 @@ chdir('../../../');
 require 'db.php';
 
 if ( isset( $_POST['serial'] ) ) {
-    $sql = "select user_id from users where user_serial = " . mysql_real_escape_string( $_POST['serial'] );
+    $sql = "select user_id from users where user_serial = " . mysql_real_escape_string(trim($_POST['serial']));
     $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $user_id = $row['user_id'];
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        $user_id = $row['user_id'];
+    } else {
+        echo false;
+        exit;
+    }
 } else {
     $user_id = mysql_real_escape_string($_POST['user_id']);
 }
