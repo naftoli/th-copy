@@ -313,7 +313,7 @@
 					photo = null;
 					alert('You need to upload a photo.');
 				} else {
-                    const pos = strpos(photo, 'img/')
+                    const pos = strpos(photo, 'img/');
                     photo = substr(photo, pos);
 					update();
 				}
