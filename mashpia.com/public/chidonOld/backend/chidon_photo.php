@@ -308,17 +308,18 @@
 		
 	    $('#regForm').submit( function(e) {
 	    	e.preventDefault();
-	    	
-				var photo = $("#imgchild").attr('src');
-				if (photo == 'images/addphoto.png') {
+                let photo = $("#imgchild").attr('src');
+				if (photo == '/mobile/reg/images/addphoto.png') {
 					photo = null;
 					alert('You need to upload a photo.');
 				} else {
+                    const pos = strpos(photo, 'img/')
+                    photo = substr(photo, pos);
 					update();
 				}
 				
 				function update() {
-                    $.post('ajax/updateChidonPhoto.php', {
+                    $.post('/mobile/reg/ajax/updateChidonPhoto.php', {
                         user_id : id,
                         chidonPhoto : photo,  
                     }, function( success ) {
