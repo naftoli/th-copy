@@ -368,9 +368,11 @@
         }
     }
 
+    // show pic on page after uploading
     $(".avatar-save").click( function() {
-        setInterval(() => {
-            alert($("#imgchild").attr('src'));
+        setTimeout(() => {
+            const src = $("#imgchild").attr('src');
+            $("#imgchild").attr('src', '/mobile/reg/' + src);
         }, 3000);
     });
 
