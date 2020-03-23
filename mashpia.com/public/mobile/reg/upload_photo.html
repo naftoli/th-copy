@@ -322,7 +322,7 @@
 						window.location = "parent_detail.html";
 					} else {
 						var info = $.parseJSON( success );
-						if (info.chidon_pic != null) $("#imgchild").attr('src', info.chidon_pic);							
+						if (info.chidon_pic != null) $("#imgchild").attr('src', '../../mobile/reg/' + info.chidon_pic);							
                     }
 				});
 			}			
