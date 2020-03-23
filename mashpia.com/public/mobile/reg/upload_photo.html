@@ -322,7 +322,7 @@
 						window.location = "parent_detail.html";
 					} else {
 						var info = $.parseJSON( success );
-						if (info.chidon_pic != null) $("#imgchild").attr('src', '../../mobile/reg/' + info.chidon_pic);							
+						if (info.chidon_pic != null) $("#imgchild").attr('src', info.chidon_pic);							
                     }
 				});
 			}			
@@ -332,8 +332,7 @@
 
 	    $('#regForm').submit( function(e) {
 	    	e.preventDefault();
-	    	
-				var photo = $("#imgchild").attr('src');
+				let photo = $("#imgchild").attr('src');
 				if (photo == 'images/addphoto.png') {
 					photo = null;
 					alert('You need to upload a photo.');
@@ -342,13 +341,8 @@
 				}
 				
 				function update() {
-					const serial = $("#user").val().trim();
-					if ( !serial ) {
-						alert("You must enter a serial number.");
-						return false;
-					}
                     $.post('ajax/updateChidonPhoto.php', {
-						serial: serial,
+						user_id: id,
                         chidonPhoto : photo,  
                     }, function( success ) {
                         if ( !success ) {
