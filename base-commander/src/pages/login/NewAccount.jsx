@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import Mosdos from './includes/Mosdos';
-import { Link } from 'react-router-dom';
-import { FontAwesome, Callout } from 'components/ui';
+// import { Link } from 'react-router-dom';
+// import { FontAwesome, Callout } from 'components/ui';
+import { Callout } from 'components/ui';
 import { AccountRow } from 'components/rows';
 import { Label, Password } from 'components/inputs';
 import { Row, Col, Collapse, UncontrolledAlert, Input } from 'reactstrap';
