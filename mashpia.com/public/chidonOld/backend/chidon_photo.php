@@ -313,9 +313,14 @@
 					photo = null;
 					alert('You need to upload a photo.');
 				} else {
-                    const pos = strpos(photo, 'img/');
-                    photo = substr(photo, pos);
-					update();
+                    const pos = photo.indexOf('img/');
+                    if ( pos >= 0 ) {
+                        photo = photo.substring(pos);
+                        update();
+                    } else {
+                        alert("Error");
+                        return false;
+                    }
 				}
 				
 				function update() {
