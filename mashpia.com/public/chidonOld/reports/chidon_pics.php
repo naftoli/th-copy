@@ -60,9 +60,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     $img = '';
                     if ( !empty($child['chidon_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['chidon_pic']) ) {
                         $img = '/mobile/reg/' . $child['chidon_pic'];
-                    } else if ( !empty($child['mobile_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['mobile_pic']) ) {
+                    } 
+                    if ( (empty($img) || $img == '/mobile/reg/img/addphoto.png') && !empty($child['mobile_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['mobile_pic']) ) {
                         $img = '/mobile/reg/' . $child['mobile_pic'];
-                    } else if ( !empty($child['thumb']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/thumbs/' . $child['thumb']) ) {
+                    } 
+                    if ( (empty($img) || $img == '/mobile/reg/img/addphoto.png') && !empty($child['thumb']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/thumbs/' . $child['thumb']) ) {
                         $img = '/mobile/reg/thumbs/' . $child['mobile_pic'];
                     }
                     echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
