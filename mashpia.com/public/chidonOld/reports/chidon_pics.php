@@ -11,7 +11,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = [];
-$sql = "select * from th_chidon tc join users u using (user_id) where date_paid > 0 and year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+$sql = "select * from th_chidon tc 
+        join users u using (user_id) 
+        left join thumbs t on u.user_photo_id = t.file_id 
+        where date_paid > 0 and year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;
@@ -54,11 +57,15 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 </tr>
                 <?php
                 foreach ( $children as $child ) {
-                    echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     if ( !empty($child['chidon_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['chidon_pic']) ) {
-                        echo "<img src='/mobile/reg/" . $child['chidon_pic'] . "' />";
-                    } 
-                    echo "</td></tr>";
+                        $img = '/mobile/reg/' . $child['chidon_pic'];
+                    } else if ( !empty($child['mobile_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['mobile_pic']) ) {
+                        $img = '/mobile/reg/' . $child['mobile_pic'];
+                    } else if ( !empty($child['thumb']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/thumbs/' . $child['mobile_pic']) ) {
+                        $img = '/mobile/reg/thumbs/' . $child['mobile_pic'];
+                    }
+                    echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
+                    echo "<img src='" . $img . "' /></td></tr>";
                 }
                 ?>
             </table>
