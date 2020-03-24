@@ -58,15 +58,18 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 <?php
                 foreach ( $children as $child ) {
                     $img = '';
-                    if ( !empty($child['chidon_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['chidon_pic']) ) {
-                        $img = '/mobile/reg/' . $child['chidon_pic'];
+                    if ( !empty($child['chidon_pic']) ) {
+                        $img = 'http://mashpia.com/mobile/reg/' . $child['chidon_pic'];
                     } 
-                    if ( (empty($img) || $img == '/mobile/reg/img/addphoto.png') && !empty($child['mobile_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['mobile_pic']) ) {
-                        $img = '/mobile/reg/' . $child['mobile_pic'];
+                    if ( (empty($img) || $img == 'http://mashpia.com/mobile/reg/img/addphoto.png') && !empty($child['mobile_pic']) ) {
+                        $img = 'http://mashpia.com/mobile/reg/' . $child['mobile_pic'];
                     } 
-                    if ( (empty($img) || $img == '/mobile/reg/img/addphoto.png') && !empty($child['thumb']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/thumbs/' . $child['thumb']) ) {
-                        $img = '/mobile/reg/thumbs/' . $child['mobile_pic'];
+                    if ( (empty($img) || $img == 'http://mashpia.com/mobile/reg/img/addphoto.png') && !empty($child['thumb']) ) {
+                        $img = 'http://mashpia.com/mobile/reg/thumbs/' . $child['mobile_pic'];
                     }
+                    if ( (empty($img) || $img == 'http://mashpia.com/mobile/reg/img/addphoto.png') && !empty($child['user_photo_id']) ) {
+                        $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
+                    } 
                     echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
                 }
