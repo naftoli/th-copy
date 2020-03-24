@@ -57,6 +57,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 </tr>
                 <?php
                 foreach ( $children as $child ) {
+                    $img = '';
                     if ( !empty($child['chidon_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['chidon_pic']) ) {
                         $img = '/mobile/reg/' . $child['chidon_pic'];
                     } else if ( !empty($child['mobile_pic']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/' . $child['mobile_pic']) ) {
