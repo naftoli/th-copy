@@ -83,7 +83,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     if (!is_dir($school)) {
                         mkdir($school);
                     }
-                    $new_img = imagecreatefromstring(file_get_contents(urlencode($img)));
+                    $new_img = imagecreatefromstring(file_get_contents($img));
                     $new_image = imagepng($new_img, $school . '/' . $child['th_chidon_id'] . '.png');
                 }
             }
