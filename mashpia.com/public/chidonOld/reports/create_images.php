@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors',1);
+ini_set('max_execution_time', 600);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -76,12 +77,15 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 } 
                 
                 // create images and download to correct folder
-                $school = $child['school_name'];
-                if (!is_dir($school)) {
-                    mkdir($school);
+                $new_file = $school . '/' . $child['th_chidon_id'] . '.png';
+                if (!file_exists($new_file)) {
+                    $school = $child['school_name'];
+                    if (!is_dir($school)) {
+                        mkdir($school);
+                    }
+                    $new_img = imagecreatefromstring(file_get_contents($img));
+                    $new_image = imagepng($new_img, $school . '/' . $child['th_chidon_id'] . '.png');
                 }
-                $new_img = imagecreatefromstring(file_get_contents($img));
-                $new_image = imagepng($new_img, $school . '/' . $child['th_chidon_id'] . '.png');
             }
         }
         chdir("../");
@@ -89,5 +93,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <p>
             <a href="images/">Images Directory</a>
         </p> 
+        <!-- <p>
+            <form action="download_images.php">
+                <button>Download zipped folder</button>
+            </form>
+        </p> -->
     </BODY>
 </HTML>
