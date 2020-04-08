@@ -207,7 +207,7 @@ if ( !empty( $users ) ) {
 			if (mysql_num_rows($cRes) > 0) {
 				$cRow = mysql_fetch_assoc($cRes);
 				$children[$row['user_id']]['chidonRegistered'] = 1;
-				$children[$row['user_id']]['allowRemove'] = 0;
+				// $children[$row['user_id']]['allowRemove'] = 0;
 
 				// make sure school is registered and has enough staff
 				$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $chidon_year . " AND registered = 1";
