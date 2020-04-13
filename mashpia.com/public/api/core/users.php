@@ -301,6 +301,18 @@ class UsersRouter {
             json_error("Error moving student.");
         }
     }
+
+    public function updateBirthdayMissions( $id ) {
+        global $current_user;
+
+        $user = \Soldier::find([ $_POST['user_id'] ]);
+        if ( !$user->validateAccess( $current_user->login ) )
+            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
+
+        $user->setupBirthdayMissions();
+        json_response("Updated.");
+    }
+
 }
 
 rest_router( new UsersRouter );
