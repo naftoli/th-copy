@@ -8,7 +8,8 @@ import { Callout } from 'components/ui';
 import { AccountRow } from 'components/rows';
 import { Label, Password } from 'components/inputs';
 import { Row, Col, Collapse, UncontrolledAlert, Input } from 'reactstrap';
-import { GoogleButton, ChabadOrgButton, SaveButton } from 'components/buttons';
+import { SaveButton } from 'components/buttons';
+// import { GoogleButton, ChabadOrgButton, SaveButton } from 'components/buttons';
 // styles and images
 import logo from 'img/logos/th.svg';
 // functions

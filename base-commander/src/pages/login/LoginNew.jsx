@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Link } from 'react-router-dom';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { GoogleButton, ChabadOrgButton } from 'components/buttons';
@@ -12,7 +11,6 @@ import { setErrors } from 'store/login/actions';
 // styles and images
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-import { LEGACY_URL } from 'components/constants';
 import { Row, Col } from 'reactstrap';
 
 const noop = () => {};
@@ -76,10 +74,6 @@ export class Login extends Component {
     errors = errors.map( (error, index) => 
       <UncontrolledAlert color='danger' key={index}>{ error }</UncontrolledAlert> 
     );
-
-    const linkProps = {
-      target: '_blank', rel: 'noopener noreferrer'
-    }
     
     return (
       <div id='Login'>
