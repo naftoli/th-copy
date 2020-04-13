@@ -18,7 +18,7 @@ import { removeAuth, createAuth } from 'store/base/staff/operations';
 import { showError } from 'functions/notifications';
 import { 
   getSoldier,     updateSoldier, 
-  deleteSoldier,  updateMissions 
+  deleteSoldier,  updateMissions, updateBirthday 
 } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
@@ -64,8 +64,18 @@ class SoldierPage extends Component {
     }) 
     .catch( error => {
       toast.error( error.message );
-    });
+  });
   
+  updateBirthday = user_id => 
+    this.props.updateBirthday( user_id )
+    .then( msg => {
+      toast.info( msg );
+      this.getSoldier()
+    }) 
+    .catch( error => {
+      toast.error( error.message );
+  });
+
   createAuth = auth =>
     this.props.createAuth( auth )
     .then( this.getSoldier );
@@ -227,6 +237,7 @@ class SoldierPage extends Component {
             createAuth={ this.createAuth }
             handleChange={ this.onUpdate }
             deleteSoldier={ this.deleteSoldier }
+            updateBirthday={ this.updateBirthday }
             onValidChange={ this.updateValid('settings') } />
           
           <RankTab 
@@ -260,7 +271,7 @@ const mapStateToProps = ( state ) => {
 
 const mapDispatchToProps = {
   removeAuth,   createAuth,     updateMissions,
-  getSoldier,   updateSoldier,  deleteSoldier
+  getSoldier,   updateSoldier,  deleteSoldier, updateBirthday
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( SoldierPage );

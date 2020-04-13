@@ -47,6 +47,12 @@ export default ( state = initialState, action ) => {
           soldier => soldier.user_id !== action.payload 
         )
       };
+    case types.UPDATE_BIRTHDAY:
+        return {
+          ...state, soldiers: state.soldiers.filter( 
+            soldier => soldier.user_id !== action.payload 
+          )
+        };
     // return the state for other actions
     default:
       return state; 

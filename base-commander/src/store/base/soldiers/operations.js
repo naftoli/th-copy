@@ -43,6 +43,14 @@ export const deleteSoldier = ( id ) => dispatch => {
     });
 }
 
+export const updateBirthday = ( id ) => dispatch => {
+  return API.post( '/core/users?action=updateBirthdayMissions', { user_id: id } )
+    .then( soldier => {
+      dispatch( actions.updateBirthday( id, soldier ) );  
+      return soldier;
+    });
+}
+
 /********************** NON STORE API OPERATIONS **********************/
 
 // load a single soldier - not added to state

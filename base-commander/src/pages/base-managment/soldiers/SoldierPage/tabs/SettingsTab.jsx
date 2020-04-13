@@ -34,6 +34,10 @@ class SettingsTab extends Component {
       this.props.deleteSoldier( this.props.soldier.user_id );
   }
 
+  updateBirthday = () => {
+    this.props.updateBirthday( this.props.soldier.user_id );
+  }
+
   // render the page
   render() {
     const { 
@@ -162,6 +166,7 @@ class SettingsTab extends Component {
             removeAuth={ this.props.removeAuth } /> 
             
           { isBC( login.code ) &&
+          <div>
             <Row>
               <Col xs='12'>
                 <p className='title'>Remove Soldier from School</p>
@@ -170,6 +175,16 @@ class SettingsTab extends Component {
                 </Button>
               </Col>
             </Row>
+
+            <Row>
+              <Col xs='12'>
+                <p className='title'>Update Soldier's Birthday Missions</p>
+                <Button color="info" onClick={ this.updateBirthday }>
+                  <FontAwesome icon='user-edit' /> Update Birthday Missions
+                </Button>
+              </Col>
+            </Row>
+          </div>
           }
         </Form>
         

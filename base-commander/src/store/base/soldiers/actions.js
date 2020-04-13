@@ -41,3 +41,10 @@ export const deleteSoldier = ( id ) => {
     payload: id
   }
 };
+
+export const updateBirthday = ( id ) => {
+  return {
+    type: types.UPDATE_BIRTHDAY,
+    payload: id
+  }
+};

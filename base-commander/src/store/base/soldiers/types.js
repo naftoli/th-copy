@@ -4,3 +4,4 @@ export const SET_SOLDIERS = `soldiers/set_soldiers`;
 export const UPDATE_SOLDIER = `soldiers/update_soldier`;
 export const DELETE_SOLDIER = `soldiers/delete_soldier`;
 export const SET_REGISTRATION_SOLDIERS = `soldiers/set_registration_soldiers`;
+export const UPDATE_BIRTHDAY = `soldiers/update_birthday`;
