@@ -26,7 +26,7 @@ export const AccountRow = ({ account, onChange, xl = false }) => {
           value={ account.first || '' } />
       </Col>
 
-      <Col xs={12}>
+      <Col xs={12} sm={6}>
         <Label>Last Name</Label>
 
         <Input
@@ -36,6 +36,20 @@ export const AccountRow = ({ account, onChange, xl = false }) => {
           placeholder='Last Name'
           value={ account.last || '' } />
       </Col>
+
+      <Col xs={12} sm={6}>
+        <Label>Home Phone</Label>
+
+        <PhoneNumber
+          required
+          onChange={ onChange }
+          name='admin_phone_home'
+          placeholder='Home Phone'
+          value={ account.admin_phone_home || '' } />
+
+        <div className='invalid-message'>Please enter a valid phone number</div>
+      </Col>
+
 
       <Col xs={12} sm={6}>
         <Label>Work Phone</Label>

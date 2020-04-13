@@ -117,7 +117,7 @@ class NewAccount extends Component {
           <div id='account-login'>
             <p className='title'>Account Login</p>
             <Row>
-              <Col xs={12} id='sign-in-with'>
+              {/* <Col xs={12} id='sign-in-with'>
 
                 <GoogleButton
                   disabled={ !!account.google_id }
@@ -127,10 +127,10 @@ class NewAccount extends Component {
                   onLogin={ this.onChabadOrgLogin }
                   disabled={ !!account.chabad_org_shliach_id } />
 
-              </Col>
+              </Col> */}
 
               <Col xs={12}>
-                <Label>Username / E-mail Address</Label>
+                <Label>E-mail Address (Username)</Label>
 
                 <Input
                   required

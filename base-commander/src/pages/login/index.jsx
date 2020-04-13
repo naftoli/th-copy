@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
-import Login from './Login';
+import Login from './LoginNew'; // changed to use loginNew component
 import Forgot from './Forgot';
 import NewAccount from './NewAccount';
 // import the style sheet
