@@ -80,11 +80,11 @@ export class Login extends Component {
         <div>
           <img src={logo} id='logo' alt='logo' />
 
-            Welcome to Tzivos Hashem<br />
+            <h1>Welcome to Tzivos Hashem</h1><br />
             An army of Jewish children united to bring Moshiach now!
             <br /><br /><br />
 
-            <h4>Parents</h4>
+            <h4>Family Accounts</h4>
             <hr />
             <Row>
               <Col xs="6">

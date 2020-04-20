@@ -93,7 +93,7 @@ class NewAccount extends Component {
     // make the request to create an account and wait for the response
     this.props.createAccount( account )
       .then( () => {
-        this.props.history.replace('/')
+        this.props.history.replace('/register')
       })
       .catch( e => {
         this.setState({ saving: false, errors: e.data || [ e.message ] });
@@ -107,16 +107,30 @@ class NewAccount extends Component {
       <UncontrolledAlert color='danger' key={ i }>{ e }</UncontrolledAlert>
     );
 
+    const divStyle = {
+      'max-width': '650px'
+    }
+
+    const imgStyle = {
+      'text-align': 'right',
+      'float': 'right',
+      'margin-left': 'auto'
+    }
+
     return (
       <div id='NewAccount'>
-        <img src={logo} id='logo' alt='logo' />
+        <div style={ divStyle }>
+        <img src={logo} id='logo' alt='logo' style={ imgStyle } />
+        </div>
 
-        <h3>New TH Account</h3>
+        <h1>Tzivos Hashem Accounts</h1>
+        
+        <h3>New Base Commander Account</h3>
 
         <form onSubmit={ this.onSubmit } id='create-form'>
 
           <div id='account-login'>
-            <p className='title'>Account Login</p>
+            <p className='title'>Create a Login</p>
             <Row>
               {/* <Col xs={12} id='sign-in-with'>
 
@@ -131,7 +145,7 @@ class NewAccount extends Component {
               </Col> */}
 
               <Col xs={12}>
-                <Label>E-mail Address (Username)</Label>
+                <Label>E-mail Address (this will be your username)</Label>
 
                 <Input
                   required
@@ -145,11 +159,11 @@ class NewAccount extends Component {
               </Col>
 
               <Col sm={6}>
-                <Label>Password</Label>
+                <Label>Create a Password</Label>
 
                 <Password required
                   name='password'
-                  placeholder='Password'
+                  placeholder='Create a Password'
                   onChange={ this.onChange }
                   autoComplete='new-password'
                   value= { account.password || '' } />
@@ -169,7 +183,7 @@ class NewAccount extends Component {
           </div>
 
           <div id='account-information'>
-            <p className='title'>Account Information</p>
+            <p className='title'>Personal Information</p>
 
             <AccountRow
               account={ account }
