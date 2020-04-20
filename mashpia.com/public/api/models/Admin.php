@@ -16,8 +16,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $has_many = [ [ 'admin_auths' ] ];
     // validations
     static $validates_uniqueness_of = [
-        [ 'username', 'message' => 'must be unique' ],
-        [ 'admin_email', 'message' => 'addresses must be unique' ],
+        [ 'username', 'message' => 'must be unique (this username is already being used, please choose a different username)' ],
+        [ 'admin_email', 'message' => 'addresses must be unique (this email address is already being used, please choose a different email address)' ],
         [ 'chabad_org_shliach_id', 'message' => 'connections must be unique' ],
         [ 'google_id', 'message' => 'connections must be unique' ],
     ];
