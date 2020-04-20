@@ -107,21 +107,9 @@ class NewAccount extends Component {
       <UncontrolledAlert color='danger' key={ i }>{ e }</UncontrolledAlert>
     );
 
-    const divStyle = {
-      'max-width': '650px'
-    }
-
-    const imgStyle = {
-      'text-align': 'right',
-      'float': 'right',
-      'margin-left': 'auto'
-    }
-
     return (
       <div id='NewAccount'>
-        <div style={ divStyle }>
-        <img src={logo} id='logo' alt='logo' style={ imgStyle } />
-        </div>
+        <img src={logo} id='logo' alt='logo' />
 
         <h1>Tzivos Hashem Accounts</h1>
         
