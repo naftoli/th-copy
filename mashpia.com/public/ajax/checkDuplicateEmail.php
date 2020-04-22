@@ -1,13 +1,9 @@
 <?php
+header('Access-Control-Allow-Origin: *'); // CORS
 require '../db.php';
-$email = mysql_real_escape_string( $_POST['email'] );
+$email = mysql_real_escape_string( $_REQUEST['email'] );
 
 $sql = "select * from admins where admin_email = '" . $email . "'";
 $result = mysql_query( $sql );
-$num = mysql_num_rows($result);
-if ( $num ) {
-    echo 1;
-} else {
-    echo 0;
-}
+echo mysql_num_rows( $result );
 ?>

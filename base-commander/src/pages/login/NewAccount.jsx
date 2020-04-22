@@ -100,7 +100,28 @@ class NewAccount extends Component {
       });
   }
 
-  render(){
+  // check if username is unique
+  checkUsername = e => {
+    if ( e.target.value.length ) {
+      const url = process.env.NODE_ENV === "production" ? "" : "//tzivos.local";
+      fetch(url + '/ajax/checkDuplicateEmail.php?email=' + e.target.value)
+      .then( result => {
+        return result.json()
+      })
+      .then( data => {
+        console.log( data )
+        if ( data === 1 ) {
+          alert("This email address is already being used. Please choose a different one.");
+          this.setState({ account: { ...this.state.account, admin_email: '' } })
+        }
+      })
+      .catch( error => {
+        console.log( error )
+      })
+    }
+  }
+
+  render() {
     let { account, errors, saving } = this.state;
 
     errors = errors.map( ( e, i ) =>
@@ -114,6 +135,7 @@ class NewAccount extends Component {
         <h1>Tzivos Hashem Accounts</h1>
         
         <h3>New Base Commander Account</h3>
+        <br />
 
         <form onSubmit={ this.onSubmit } id='create-form'>
 
@@ -142,7 +164,8 @@ class NewAccount extends Component {
                   name='admin_email'
                   placeholder='Username'
                   autoComplete='username'
-                  onChange={ this.onChange }
+                  onChange={ this.onChange } 
+                  onBlur={ this.checkUsername }
                   value= { account.admin_email || '' } />
               </Col>
 
