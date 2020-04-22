@@ -123,8 +123,12 @@
 							<label for='country'>Country</label>
 							<div class="form-group has-feedback" id="divcountry">
 							  <div class="input-group">
+								<!-- <span class="input-group-addon"><img src="/mobile/img_new/flag-color-gray-svg.svg"/></span>
+								<input id="country" name="country" type="text" class="form-control" placeholder="USA" required /> -->
 								<span class="input-group-addon"><img src="/mobile/img_new/flag-color-gray-svg.svg"/></span>
-								<input id="country" name="country" type="text" class="form-control" placeholder="USA" required />
+								<select class="form-control" id="country">
+
+								</select>
 							  </div>
 							</div>
 						  </div>
@@ -214,7 +218,48 @@
         	    //$('#phone').inputmask("(999) 999-9999");  //static mask
         	    //$('#zip').inputmask("99999");
         	   
-        	    $('#country').val('USA');
+        	    const countries = [
+				'United States',
+				'Canada',
+				'United Kingdom',
+				'South Africa',
+				'Australia',
+				'Argentina',
+				'Azerbaijan',
+				'Belarus',
+				'Belgium',
+				'Brazil',
+				'Chile',
+				'China',
+				'Colombia',
+				'Costa Rica',
+				'Czech Republic',
+				'Denmark',
+				'Finland',
+				'France',
+				'Germany',
+				'Hungary',
+				'India',
+				'Ireland',
+				'Israel',
+				'Italy',
+				'Lithuania',
+				'Mexico',
+				'Netherlands',
+				'South Korea', 
+				'Slovakia',
+				'Spain',
+				'Sweden',
+				'Switzerland',
+				'Turkey',
+				'Ukraine',
+				'Venezuela'
+			];
+			let html = '';
+			for (let c of countries) {
+				html += "<option>" + c + "</option>";
+			}
+			$("#country").append( html );
         		
 					$("#email").keyup( function(event) {
 						if (/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(event.keyCode)) || event.keyCode === 8) {
@@ -277,7 +322,8 @@
                 var state = $("#state").val();
                 var zip = $("#zip").val();
                 var country = $("#country").val();
-                var phone = $("#phone").val();
+				var phone = $("#phone").val();
+				var phone2 = $("#phone2").val();
                 var username = email;
                 var fatherPic = null;
                 var motherPic = null;
@@ -293,7 +339,7 @@
                 	|| country == '' || phone == '' || username == '' || pwd == '') {
             		alert('You must fill in all the fields.');
             		*/
-        				if (lastname == '' || email == '' || phone == '' || username == '' || pwd == '') {
+        				if (lastname == '' || email == '' || phone == '' || phone2 == '' || username == '' || pwd == '') {
         					alert('Not all mandatory fields have been filled out. Please fill out and try again.');
         					return false;
         				}
@@ -309,7 +355,12 @@
 								}
 								
 								if (phone.length < 9 || isAlphabetic(phone)) {
-									alert("Contact number must be at least 9 digits and cannot contain alphabetic characters.");
+									alert("Father's phone number must be at least 9 digits and cannot contain alphabetic characters.");
+									return false;
+								}
+
+								if (phone2.length < 9 || isAlphabetic(phone2)) {
+									alert("Mother's phone number must be at least 9 digits and cannot contain alphabetic characters.");
 									return false;
 								}
 								
@@ -336,7 +387,8 @@
                 	state : state, 
                 	zip : zip, 
                 	country : country, 
-                	phone : phone, 
+					phone : phone, 
+					phone2 : phone2,
                 	username : username, 
                 	pwd : pwd
                 }, function( success ) {
@@ -353,7 +405,8 @@
                 	}
                 });
             });
-        });
+		});
+	});
     </script>
 </body>
 </html>

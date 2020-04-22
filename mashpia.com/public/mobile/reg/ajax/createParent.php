@@ -7,6 +7,7 @@ $mother = mysql_real_escape_string( $_POST['mother'] );
 $lname = mysql_real_escape_string( $_POST['lastname'] );
 $email = mysql_real_escape_string( $_POST['email'] );
 $phone = mysql_real_escape_string( $_POST['phone'] );
+$phone2 = mysql_real_escape_string( $_POST['phone2'] );
 $address = mysql_real_escape_string( $_POST['address'] );
 $city = mysql_real_escape_string( $_POST['city'] );
 $state = mysql_real_escape_string( $_POST['state'] );
@@ -14,8 +15,8 @@ $zip = mysql_real_escape_string( $_POST['zip'] );
 $country = mysql_real_escape_string( $_POST['country'] );
 $username = mysql_real_escape_string( $_POST['username'] );
 $pwd = mysql_real_escape_string( $_POST['pwd'] );
-$fatherPic = mysql_real_escape_string( $_POST['fatherPic'] );
-$motherPic = mysql_real_escape_string( $_POST['motherPic'] );
+// $fatherPic = mysql_real_escape_string( $_POST['fatherPic'] );
+// $motherPic = mysql_real_escape_string( $_POST['motherPic'] );
 
 //check if username and email has been used
 $sql = "select * from admins where username = '" . $username . "' or admin_email = '" . $email . "'";
@@ -26,24 +27,24 @@ if (mysql_num_rows($result) > 0) {
 }
 
 //create thumbnails of image
-$pics = array( $fatherPic, $motherPic );
-foreach ($pics as $pic) {
-	if (!is_null($pic)) {
-		$target = "../" . $pic;
-		try {
-			//create thumb from image
-			$image = new Imagick( $target );
-			$width = $image->getImageWidth();
-			if ($width > 250) {	
-				$image->thumbnailImage( 250, 0 );
-				$image->writeImage( $target );
-			}
-			$image->destroy();
-		} catch (ImagickException $e) {
-			//echo $e->getMessage();
-		}
-	}
-}
+// $pics = array( $fatherPic, $motherPic );
+// foreach ($pics as $pic) {
+// 	if (!is_null($pic)) {
+// 		$target = "../" . $pic;
+// 		try {
+// 			//create thumb from image
+// 			$image = new Imagick( $target );
+// 			$width = $image->getImageWidth();
+// 			if ($width > 250) {	
+// 				$image->thumbnailImage( 250, 0 );
+// 				$image->writeImage( $target );
+// 			}
+// 			$image->destroy();
+// 		} catch (ImagickException $e) {
+// 			//echo $e->getMessage();
+// 		}
+// 	}
+// }
 
 chdir('newClasses');
 require 'newParent.php';
@@ -56,6 +57,7 @@ $info = array(
 	'admin_postal'		=>	$zip, 
 	'admin_country'		=>	$country, 
 	'admin_phone_mobile'=>	$phone, 
+	'admin_phone_mobile2' => $phone2,
 	'admin_email'		=>	$email, 
 	'username'			=>	$username, 
 	'password'			=>	$pwd, 
