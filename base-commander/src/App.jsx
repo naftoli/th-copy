@@ -79,6 +79,7 @@ export class App extends Component {
   
   // render the page
   render() {
+    console.log(this.props);
     const { message, isOpen, refreshing } = this.state;
     const { title, login, current_user, logged_in } = this.props;
 

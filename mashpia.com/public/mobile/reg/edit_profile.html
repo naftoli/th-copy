@@ -5,7 +5,7 @@
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <meta charset="UTF-8">
-    <title>Parents Account</title>
+    <title>Family Account</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <style type="text/css">video, img {max-width:100%;}</style>
     <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
@@ -41,7 +41,7 @@
     <form id="editForm" method="post" action="">
       <div class="container parent-page" id="crop-avatar">
         <div class="login-header">
-            <span class="span12">PARENT'S ACCOUNT</span>
+            <span class="span12">FAMILY ACCOUNT</span>
         </div>
         
         <div id="email_error" style="display: none;" class="alert alert-success">
@@ -72,27 +72,27 @@
               </div>
               <div class="row">
                 <div class="col-xs-6">
-                  <label for='father'>Father</label>
+                  <label for='father'>Father's Name</label>
                   <div class="form-group has-feedback" id="divfather">
                     <div class="input-group">
                       <span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg"/></span>
-                      <input id="father" name="father" type="text" class="form-control" placeholder="tatty" />
+                      <input id="father" name="father" type="text" class="form-control" placeholder="Father" required />
                     </div>
                   </div>
                 </div>
                 <div class="col-xs-6">
-                  <label for='mother'>Mother</label>
+                  <label for='mother'>Mother's Name</label>
                   <div class="form-group has-feedback" id="divmother">
                     <div class="input-group">
                       <span class="input-group-addon"><img src="/mobile/img_new/woman-color-gray-svg.svg"/></span>
-                      <input id="mother" name="mother" type="text" class="form-control" placeholder="mommy" />
+                      <input id="mother" name="mother" type="text" class="form-control" placeholder="Mother" required />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-12">
-                  <label for='lastname'>Family Name</label>
+                  <label for='lastname'>Lastname</label>
                   <div class="form-group has-feedback" id="divlastname">
                     <div class="input-group">
                       <span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg"/></span>
@@ -158,22 +158,22 @@
 
               <div class="row">
                 <div class="col-xs-12">
-                  <label for='phone'>Father Cell</label>
+                  <label for='phone'>Father's Cell</label>
                   <div class="form-group has-feedback" id="divphone">
                     <div class="input-group">
                       <span class="input-group-addon"><img src="/mobile/img_new/phone-color-gray-svg.svg" style="padding: 8%;"/></span>
-                      <input id="phone" name="phone" type="tel" class="form-control" placeholder="Father Cell" required />
+                      <input id="phone" name="phone" type="tel" class="form-control" placeholder="Father's Cell" required />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-12">
-                  <label for='phone2'>Mother Cell</label>
+                  <label for='phone2'>Mother's Cell</label>
                   <div class="form-group has-feedback" id="divphone2">
                     <div class="input-group">
                       <span class="input-group-addon"><img src="/mobile/img_new/phone-color-gray-svg.svg" style="padding: 8%;"/></span>
-                      <input id="phone2" name="phone2" type="tel" class="form-control" placeholder="Mother Cell" required />
+                      <input id="phone2" name="phone2" type="tel" class="form-control" placeholder="Mother's Cell" required />
                     </div>
                   </div>
                 </div>

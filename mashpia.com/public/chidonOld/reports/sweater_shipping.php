@@ -11,6 +11,7 @@ $sql = "SELECT s.school_id, s.school_name, u.last, u.first, u.gender, tc.grade, 
     ." JOIN schools s ON tc.school_id = s.school_id "
     ." WHERE tc.year = '$year' AND s.test_school='0' "
     ." AND tc.deleted = 0 "
+    ." AND tc.date_paid > 0 "
     ." and (tc.khk = 1 or tc.school_rep = 1 or tc.trophy_contestant = 1 or tc.contestant = 1) "
     ." ORDER BY school_name, gender, grade, last, first, size";
 
