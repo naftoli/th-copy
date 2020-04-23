@@ -2,6 +2,8 @@
 require 'db.php';
 $users = [];
 $marks = [];
+$start_date = 2458663;
+$end_date = 2458732;
 
 $sql = "
   SELECT 
@@ -32,8 +34,8 @@ $sql = "
           JOIN
       date_tasks_missions dtmm USING (date_tasks_mission_id)
   WHERE
-      dtmm.start_date >= 2458284
-          AND dtmm.end_date <= 2458358
+      dtmm.start_date >= $start_date
+          AND dtmm.end_date <= $end_date
   GROUP BY user_id 
   ORDER BY total DESC
 ";
