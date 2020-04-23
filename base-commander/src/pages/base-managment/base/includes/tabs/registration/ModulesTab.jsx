@@ -54,9 +54,9 @@ export class ModulesTab extends React.Component {
     return (
       <TabPane tabId={ tabId } id='ModulesTab'>
 
-        {/* <Callout color="warning">
+        <Callout color="warning">
           This base can be registered in one or more modules.
-        </Callout> */}
+        </Callout>
 
         <div className='modules'>
 
