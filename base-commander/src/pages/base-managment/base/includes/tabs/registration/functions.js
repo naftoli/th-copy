@@ -12,9 +12,9 @@ export const availableModules = ( registration, asObject = false ) => {
 
   // remove by naftoli 08/01/2019 b/c all chayolei schools are registering for all modules regardless of anything
   // if we do, then filter to what is not registered yet
-  // if ( registration && registration.modules ) {
-  //   modules = modules.filter( key => !registration.modules[ key ] );
-  // }
+  if ( registration && registration.modules ) {
+    modules = modules.filter( key => !registration.modules[ key ] );
+  }
   
   // convert to object with the keys as true
   if ( asObject ) {
@@ -86,6 +86,9 @@ export const moduleSelected = base => {
   let modules = availableModules( base.registration );
 
   // return true if one available module was checked
-  const found = modules.find( key => !!base[key] ) || false;
+  // const found = modules.find( key => !!base[key] ) || false;
+
+  // return true if chayolei was checked
+  const found = modules.find( key => key === 'chayolei' && !!base[key] ) || false;
   return found;
 }
