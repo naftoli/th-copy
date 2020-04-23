@@ -172,9 +172,9 @@ class RegistrationPage extends Component {
     const navProps = { activeTab, onClick: this.toggleTab };
     const tabs = [
       { tab: 1, ...navProps, icon: 'school',    title: 'Base Information', valid: valid.base },
-      { tab: 2, ...navProps, icon: 'truck',     title: 'Shipping',  disabled: false, valid: valid.shipping },
-      { tab: 3, ...navProps, icon: 'tasks',     title: 'Modules',   disabled: false, valid: valid.modules },
-      { tab: 4, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: false },
+      { tab: 2, ...navProps, icon: 'truck',     title: 'Shipping',  disabled: this.tabDisabled( 2 ), valid: valid.shipping },
+      { tab: 3, ...navProps, icon: 'tasks',     title: 'Modules',   disabled: this.tabDisabled( 3 ), valid: valid.modules },
+      { tab: 4, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 4 ) },
       { tab: 5, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 5 ) },
     ];
 
