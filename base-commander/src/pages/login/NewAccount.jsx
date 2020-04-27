@@ -132,7 +132,7 @@ class NewAccount extends Component {
       <div id='NewAccount'>
         <img src={logo} id='logo' alt='logo' />
 
-        <h1>Tzivos Hashem Accounts</h1>
+        <h1>Tzivos Hashem</h1>
         
         <h3>New Base Commander Account</h3>
         <br />

@@ -97,13 +97,13 @@ export class Login extends Component {
               <Col xs="6">
                 <a href="/mobile">
                   <Button size="lg" color='primary' id='parent_login'>
-                    Login to your account
+                    Log in to your account
                   </Button>
                 </a>
               </Col>
             </Row>
             <br />
-            <h4>Schools</h4>
+            <h4>School Accounts</h4>
             <hr />
             <Row>
               <Col xs="6">
@@ -115,7 +115,7 @@ export class Login extends Component {
               </Col>
               <Col xs="6">
                 <Button size="lg" color='primary' id='show_login' onClick={ this.showLogin }>
-                  Login to your account
+                  Log in to your account
                 </Button>
               </Col>
             </Row>

@@ -59,17 +59,18 @@ export class ShippingTab extends Component {
             shipping_last={ shipping_last }
             shipping_first={ shipping_first }
             shipping_method={ shipping_method } />
+          
+          <AddressRow
+            showPhone
+            showShipping={ this.state.showShipping }
+            { ...base }
+            title={ false }
+            prefix='shipping_'
+            required={ required }
+            onChange={ this.onChange } />
 
           { this.state.showShipping &&
           <Fragment>
-            <AddressRow
-              showPhone
-              { ...base }
-              title={ false }
-              prefix='shipping_'
-              required={ required }
-              onChange={ this.onChange } />
-
             <p className='title'>
               Special Shipping Requests
             </p>
