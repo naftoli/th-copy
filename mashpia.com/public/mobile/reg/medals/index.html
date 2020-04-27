@@ -282,7 +282,7 @@
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var carousel = "";
-            var loop = 0;
+			var loop = 0;
 
             $(window).load(function(){
                 $( ".sky-carousel" ).unbind();
@@ -445,7 +445,43 @@
     			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
     		});
             // get the medal info for the user
-            medal_board( "#medals", id );
+			medal_board( "#medals", id );
+			
+			const setupSpeechRecognition = (function() {
+				const analyze = text => {
+					if (text.includes('mark')) {
+						const conf = confirm("Are u sure you would like to mark missions?");
+						if ( conf ) {
+							location.href = "/mobile/missionsNew.html?id=" + id;
+						}
+					}
+				}
+
+				const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+				if (SpeechRecognition) {
+					// new speech recognition object
+					const talk = new SpeechRecognition();
+					talk.lang = 'en-US';
+
+					talk.onresult = function(event) {
+						console.log('Transcript: ' + event.results[0][0].transcript);
+						console.log('Confidence: ' + event.results[0][0].confidence);
+						analyze( event.results[0][0].transcript.toLowerCase() );
+					}
+
+					talk.onend = function() {
+						talk.start();
+					}
+
+					// start recognition
+					talk.start();
+
+				} else {
+					console.log("Speech recognition not supported.");
+					// code to handle error
+				}
+			})();
 		});
 		</script>
 		<script>
