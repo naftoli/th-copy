@@ -39,54 +39,57 @@
                     <div class="col-12">
                         <div class="alert alert-success" role="alert">
                             <p>
-                                IF you would like to add a child that is going to any school which already offers the Chayolei system (missions/tasks/etc), you need 
-                                to have the school add the child to the system first. Only then can u use this form to CONNECT the child to your account by 
-                                choosing the school, grade, lastname, and dob.
+                                Please note: Your child must be at least 5 years old to join this brigade. 
+                                Stay tuned for the launch of Junior Troops for younger children! 
                             </p>
                             <p>
-                                IF HOWEVER, you would like to add a child that is not in school currently offering Chayolei Tzivos Hashem, you can click on 
-                                "My child is not in a Base" button, and you will be able to create and add a new child.
+                                Begin by selecting your child’s school and grade to add them to your family account.
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12 centered">
                         <a class="navigation-button btn btn-primary" data-id="no-th-base" href="#">
                             My child is not in a Base
                         </a>
                     </div>
-                </div>
+                </div> -->
                 <form id="th-base-child" class="child-form">
                     <div class="row">
                         <div class="col-12 col-xl-6">
                             <label for="th-school_id">
-                                Base ( School )
+                                Tzivos Hashem Base (School Name)
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
                                 </span>
                                 <select class="form-control form-control-lg" id="th-school_id" name="school_id" required>
-                                    <option value="" selected disabled>Base (School)</option>
+                                    <option value="" selected disabled>TH Base (School Name)</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="col-12 centered">
+                            <a class="navigation-button btn btn-primary" data-id="no-th-base" href="#" style="font-size: 16px; margin-bottom: 10px;">
+                                My child's school is not listed
+                            </a>
+                        </div>
                         <div class="col-12 col-xl-6">
                             <label for="th-class_id">
-                                Platoon ( Class / Grade )
+                                Platoon (Grade and Class)
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" style="padding: 20%;" />  
                                 </span>
                                 <select class="form-control form-control-lg" id="th-class_id" name="class_id" required>
-                                    <option value="" selected disabled>Platoon ( Class / Grade )</option>
+                                    <option value="" selected disabled>Platoon (Grade and Class)</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="moreInfo">
                         <div class="col-12 col-xl-6">
                             <label for="last">
                                 Last Name
@@ -126,18 +129,18 @@
         
         <section id="no-th-base" class="animated fadeIn">
             <div class="container">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12 centered">
                         <a class="navigation-button btn btn-primary" data-id="th-base" href="#">
                             My child is already in a Base
                         </a>
                     </div>
-                </div>
+                </div> -->
                 <form id="no-th-base-child" class="child-form">
                     <div class="row">
                         <div class="col-12 col-xl-6">
                             <label for="no-th-school_id">
-                                Base ( School )
+                                Tzivos Hashem Base (School Name)
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
@@ -149,16 +152,21 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-12 centered">
+                            <a class="navigation-button btn btn-primary" data-id="th-base" href="#" style="font-size: 16px; margin-bottom: 10px;">
+                                My child is already in a Base
+                            </a>
+                        </div>
                         <div class="col-12 col-xl-6">
                             <label for="no-th-class_id">
-                                Platoon ( Class / Grade )
+                                Platoon (Grade and Class)
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" style="padding: 20%;" />  
                                 </span>
                                 <select class="form-control form-control-lg" id="no-th-class_id" name="class_id" required>
-                                    <option value="" selected disabled>Platoon ( Class / Grade )</option>
+                                    <option value="" selected disabled>Platoon (Grade and Class)</option>
                                 </select>
                             </div>
                         </div>
