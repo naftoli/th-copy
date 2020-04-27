@@ -13,7 +13,7 @@ import { NavigationRow } from '../rows/registration/NavigationRow';
 export class ShippingTab extends Component {
 
   state = {
-    removeShipping: true
+    removeShipping: false
   }
 
   onChange = onInputChange( this.props.onUpdate );
