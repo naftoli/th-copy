@@ -86,56 +86,56 @@ export class PaymentTab extends React.Component {
           </Checkbox>
         </Callout>
 
-        { total > 0 && 
-          <Row id='totals'>
-            <Col lg={4}>
-              <div className='totals'>
-                <p className='title'>
-                  Final Summary
-                </p>
+        
+        <Row id='totals'>
+          <Col lg={4}>
+            <div className='totals'>
+              <p className='title'>
+                Final Summary
+              </p>
 
-                <ul className='cart'>
-                  { cart.map( item =>
-                    <li key={ item.name }>
-                      { item.name }: <CurrencyDisplay value={ item.price } />
-                    </li>
-                  ) }
-
-                  { !!balance &&
-                    <li id='balance'>
-                      Outstanding Balance: <CurrencyDisplay value={ balance } />
-                    </li>
-                  }
-
-                  <li className='total'>
-                    Total: <CurrencyDisplay value={ total } />
+              <ul className='cart'>
+                { cart.map( item =>
+                  <li key={ item.name }>
+                    { item.name }: <CurrencyDisplay value={ item.price } />
                   </li>
-                </ul>
-              </div>
+                ) }
 
-              { !!balance &&
-                <UncontrolledTooltip target='#balance' autohide={ false }>
-                    If you have questions about this charge please contact{' '}
-                    <a href='mailto:accounting@tzivoshashem.org?subject=Registration%20Balance' target='_blank' rel="noopener noreferrer">
-                      accounting@tzivoshashem.org
-                    </a>.
-                </UncontrolledTooltip>
-              }
-            </Col>
+                { !!balance &&
+                  <li id='balance'>
+                    Outstanding Balance: <CurrencyDisplay value={ balance } />
+                  </li>
+                }
 
-            <Col lg={8}>
-              <PaymentForm
-                value={ cc }
-                onChange={ this.props.onStateUpdate( 'cc' ) }
-                payments={ customerProfile && customerProfile.paymentProfiles } />
-            </Col>
-          </Row>
-        }
+                <li className='total'>
+                  Total: <CurrencyDisplay value={ total } />
+                </li>
+              </ul>
+            </div>
+
+            { !!balance &&
+              <UncontrolledTooltip target='#balance' autohide={ false }>
+                  If you have questions about this charge please contact{' '}
+                  <a href='mailto:accounting@tzivoshashem.org?subject=Registration%20Balance' target='_blank' rel="noopener noreferrer">
+                    accounting@tzivoshashem.org
+                  </a>.
+              </UncontrolledTooltip>
+            }
+          </Col>
+          { total > 0 && 
+          <Col lg={8}>
+            <PaymentForm
+              value={ cc }
+              onChange={ this.props.onStateUpdate( 'cc' ) }
+              payments={ customerProfile && customerProfile.paymentProfiles } />
+          </Col>
+          }
+        </Row>
 
         <NavigationRow back={ back }>
           <Button color='primary'
               onClick={ this.props.register } disabled={ !this.props.terms }>
-            Pay and Register <FontAwesome icon='registered' regular />
+            { total > 0 ? 'Pay and' : '' } Register <FontAwesome icon='registered' regular />
           </Button>
         </NavigationRow>
       </TabPane>

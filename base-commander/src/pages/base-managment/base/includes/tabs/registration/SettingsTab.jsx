@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { TabPane } from 'reactstrap';
@@ -41,17 +41,21 @@ export class SettingsTab extends Component {
             base={ base }
             onUpdate={ onUpdate } />
 
-          <p className='title'>
-            Registration Settings
-          </p>
+          { base.inst_id !== 10 && 
+            <Fragment>
+              <p className='title'>
+                Registration Settings
+              </p>
 
-          <RegTypeRow
-            regType={ reg_type }
-            onUpdate={ onUpdate }
-            childFee={ child_fee }
-            earlyBird={ earlyBird }
-            prices={ base.currentRegPrices } />
-
+              <RegTypeRow
+                regType={ reg_type }
+                onUpdate={ onUpdate }
+                childFee={ child_fee }
+                earlyBird={ earlyBird }
+                prices={ base.currentRegPrices } />
+            </Fragment>
+          }
+          
           <NavigationRow back={ back } next />
         </Form>
       </TabPane>
