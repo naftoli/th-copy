@@ -13,17 +13,17 @@ import { NavigationRow } from '../rows/registration/NavigationRow';
 export class ShippingTab extends Component {
 
   state = {
-    showShipping: true
+    removeShipping: true
   }
 
   onChange = onInputChange( this.props.onUpdate );
   
   onBlur = e => {
-    console.log("onBlur called");
+    // console.log("onBlur called");
     if ( e.target.name === 'shipping_method' && e.target.value === 'pickup' ) {
-      this.setState({ showShipping: false });
-    } else if ( this.state.showShipping === false && e.target.name === 'shipping_method' && e.target.value === 'deliver' ) {
-      this.setState({ showShipping: true });
+      this.setState({ removeShipping: true });
+    } else if ( this.state.removeShipping === true && e.target.name === 'shipping_method' && e.target.value === 'deliver' ) {
+      this.setState({ removeShipping: false });
     }
   }
 
@@ -62,7 +62,7 @@ export class ShippingTab extends Component {
           
           <AddressRow
             showPhone
-            showShipping={ this.state.showShipping }
+            removeShipping={ this.state.removeShipping }
             { ...base }
             title={ false }
             prefix='shipping_'
