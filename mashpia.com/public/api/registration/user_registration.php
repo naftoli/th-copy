@@ -192,8 +192,9 @@ class UserRegistrationRouter {
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
+                        $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount, $trans_id
+                            $current_user->admin_id, $year, $amount, $trans_id, $lite
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;

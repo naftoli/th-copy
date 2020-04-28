@@ -241,7 +241,8 @@ var registrationApp = function() {
         // remove any shipping items from the cart
         state.shipping_type = 1;
         chayolei_user_ids = state.cart.map( function( item ){ 
-            return item.meta.registration_type !== 'chayolei' || item.meta.user_id
+            // skip for any non chayolei registration or chayolei lite registration
+            return item.meta.registration_type !== 'chayolei' || item.meta.lite_version != undefined || item.meta.user_id
         });
         getShipping(
             // limit to kids registering for Tzivos Hashem
@@ -317,10 +318,12 @@ var registrationApp = function() {
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
+            chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
             chidon: $('#chidon-registration input')[0].checked,
             yahadus: $('#yahadus-registration input')[0].checked
         }
         if ( selected_charges.chayolei === false 
+            && selected_charges.chayolei_lite === false 
             && selected_charges.chidon === false 
             //&& selected_charges.yahadus === false
         ){
@@ -377,6 +380,12 @@ var registrationApp = function() {
                 var non_th_school = $("#non_th_school").val().trim();
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
             }
+        } else if ( selected_charges.chayolei_lite === true ) {
+            // make sure non th school field is not empty
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                var non_th_school = $("#non_th_school").val().trim();
+                if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
+            }
         }
 
         // validate that they have accepted to be used in media campaigns
@@ -398,6 +407,20 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chayolei',
                     paid: selected_user.registrationRates.chayolei
+                }
+            });
+        } 
+        if ( selected_charges.chayolei_lite ) {
+            selected_user.registrationRates.chayolei = 0;
+            state.cart.push({
+                description: 'Tzivos Hashem Registration for ' + selected_user.first,
+                price: selected_user.registrationRates.chayolei,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'chayolei',
+                    paid: selected_user.registrationRates.chayolei,
+                    lite_version: 1
                 }
             });
         } 
@@ -644,7 +667,7 @@ var templates = function(){
                     '</div><div class="col-6">' +
                         '<p class="name">' + child.first + " " + child.last + '</p>' +
                         ( child.registrationStatus.chayolei === false ? 
-                            ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '</p>' ) : '' ) +
+                            ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '<br />($0 Free Lite Edition)</p>' ) : '' ) +
                         ( child.registrationStatus.chidon === false ? 
                             ( '<p class="reg_cost">Chidon: $' + child.registrationRates.chidon + '</p>' ) : '' ) +
                     '</div><div class="col-2">' +
@@ -697,6 +720,9 @@ var templates = function(){
             $("#step-2 form select#yahadus-poll option").prop('selected', false);
 
             $("#step-2 form .chidon-reg").hide();
+
+            // reset chayolei lite reg
+            $( '#step-2 form #chayolei-lite-registration input' )[0].checked = false;
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
