@@ -27,7 +27,7 @@ th, td {
         <th>Address</th>
         <th>Phone Number</th>
         <th>Email address</th>
-        <th>Total number of kids in Tzivos Hashem</th>
+        <th>Total number of kids registered in Tzivos Hashem</th>
     </tr>
 <?php        
 //get list of parents
