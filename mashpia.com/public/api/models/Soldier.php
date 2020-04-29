@@ -432,7 +432,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $amount
      * @return array
      */
-    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0 ){
+    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
         global $MASHPIA_DB;
         $errors = [];
         // Insert into user_registration
@@ -453,7 +453,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'paid' => isset($amount) ? $amount : null,
         ])) $errors[] = "Could not insert into user_registration.";
         // save the charge
-        if ( !$this->registrationCharge( 'chayolei', $amount, $trans_id ) )
+        $type = 'chayolei';
+        if ( $lite ) $type = 'chayolei-lite';
+        if ( $ckids ) $type = 'ckids';
+        if ( !$this->registrationCharge( $type, $amount, $trans_id ) )
             $errors[] = "Could not insert into registration_charges.";
         // update fields to mark registered
         if ( !$this->user_registered ) $this->user_registered = new \Datetime();

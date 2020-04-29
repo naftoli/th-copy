@@ -12,6 +12,9 @@ class CampaignEnrollment {
         ),
         'frum' => array(
             1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
+        ), 
+        'ckids' =>  array(
+            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
         )
     );
     
@@ -27,6 +30,8 @@ class CampaignEnrollment {
         }
         
         switch ($school_type_id) {
+            case 14: case 15: // ckids
+                return $this->campaigns['ckids'];
             case 12: case 13: // 12 and 13 are just frum
                 return $this->campaigns['frum'];
             case 2: case 3: default: // 2 and 3 and others are chabad
@@ -50,9 +55,9 @@ class CampaignEnrollment {
             case 12:    case 13:
                 $this->type = 'frum';
                 break;
-            // case 22:    case 23:
-            //     $this->type = 'ckids';
-            //     break;
+            case 14:    case 15:
+                $this->type = 'ckids';
+                break;
             default:
                 $this->type = 'chabad';
                 break;

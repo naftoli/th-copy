@@ -319,11 +319,13 @@ var registrationApp = function() {
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
             chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
+            ckids: $('#ckids-registration input')[0].checked, 
             chidon: $('#chidon-registration input')[0].checked,
             yahadus: $('#yahadus-registration input')[0].checked
         }
         if ( selected_charges.chayolei === false 
             && selected_charges.chayolei_lite === false 
+            && selected_charges.ckids === false 
             && selected_charges.chidon === false 
             //&& selected_charges.yahadus === false
         ){
@@ -374,19 +376,13 @@ var registrationApp = function() {
                     return showError("You must choose who recruited you.");
                 }
             }
-        } else if ( selected_charges.chayolei === true ) {
+        } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
             // make sure non th school field is not empty
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 var non_th_school = $("#non_th_school").val().trim();
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
             }
-        } else if ( selected_charges.chayolei_lite === true ) {
-            // make sure non th school field is not empty
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                var non_th_school = $("#non_th_school").val().trim();
-                if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
-            }
-        }
+        }  
 
         // validate that they have accepted to be used in media campaigns
         if ( $(event.target).find( "#media" )[0].checked ){
@@ -421,6 +417,20 @@ var registrationApp = function() {
                     registration_type: 'chayolei',
                     paid: selected_user.registrationRates.chayolei,
                     lite_version: 1
+                }
+            });
+        } 
+        if ( selected_charges.ckids ) {
+            selected_user.registrationRates.chayolei = 0;
+            state.cart.push({
+                description: 'CKids Registration for ' + selected_user.first,
+                price: selected_user.registrationRates.chayolei,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'chayolei',
+                    paid: selected_user.registrationRates.chayolei,
+                    ckids: 1
                 }
             });
         } 
@@ -667,6 +677,7 @@ var templates = function(){
                     '</div><div class="col-6">' +
                         '<p class="name">' + child.first + " " + child.last + '</p>' +
                         ( child.registrationStatus.chayolei === false ? 
+                            child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) : 
                             ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '<br />($0 Free Lite Edition)</p>' ) : '' ) +
                         ( child.registrationStatus.chidon === false ? 
                             ( '<p class="reg_cost">Chidon: $' + child.registrationRates.chidon + '</p>' ) : '' ) +
@@ -723,6 +734,21 @@ var templates = function(){
 
             // reset chayolei lite reg
             $( '#step-2 form #chayolei-lite-registration input' )[0].checked = false;
+
+            // reset ckids reg
+            $( '#step-2 form #ckids-registration input' )[0].checked = false;
+            // hide ckids unless its a ckids child
+            if (user.school_inst_id === 10) {
+                $('#step-2 form #chayolei-registration').hide();
+                $('#step-2 form #chayolei-lite-registration').hide();
+                $('#step-2 form #ckids-registration').show();
+                $("#step-2 form #broadcast").hide();
+            } else {
+                $('#step-2 form #chayolei-registration').show();
+                $('#step-2 form #chayolei-lite-registration').show();
+                $('#step-2 form #ckids-registration').hide();
+                $("#step-2 form #broadcast").show();
+            }
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
