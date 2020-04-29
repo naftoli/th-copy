@@ -83,6 +83,6 @@ ksort( $totals );
     }
     ?>
 </table>
-<h2>Total Families: <?= $totalparents ?></h2>
+<h2>Total Families: <?= $$totalParents; ?></h2>
 </body>
 </html>
