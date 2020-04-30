@@ -57,14 +57,6 @@
                 </div> -->
                 <form id="th-base-child" class="child-form">
                     <div class="row">
-                        <div class="col-12 centered">
-                            <label for="no-th-base">
-                                &nbsp;
-                            </label>
-                            <a class="navigation-button btn btn-primary" data-id="no-th-base" href="#" style="margin-bottom: 10px;">
-                                My child's school is not listed
-                            </a>
-                        </div>
                         <div class="col-12 col-xl-6">
                             <label for="th-school_id">
                                 Tzivos Hashem Base (School Name)
@@ -101,9 +93,10 @@
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/profile-1-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <select class="form-control form-control-lg" id="th-last" name="last" required>
+                                <!-- <select class="form-control form-control-lg" id="th-last" name="last" required>
                                     <option value="" selected disabled>Last Name</option>
-                                </select>
+                                </select> -->
+                                <input type="text" class="form-control" id="th-last" placeholder="Please type last name" required />
                             </div>
                         </div>
                         <div class="col-12 col-xl-6">
@@ -126,6 +119,16 @@
                             <a href="/mobile/reg/parent_detail.html" class="btn btn-primary">Cancel</a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <label for="no-th-base">
+                                &nbsp;
+                            </label>
+                            <a class="navigation-button btn btn-outline-primary" data-id="no-th-base" href="#" style="margin-top: -30px;">
+                                My child's school is not listed
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </section>
@@ -141,14 +144,6 @@
                 </div> -->
                 <form id="no-th-base-child" class="child-form">
                     <div class="row">
-                        <div class="col-12 centered">
-                            <label for="th-base">
-                                &nbsp;
-                            </label>
-                            <a class="navigation-button btn btn-primary" data-id="th-base" href="#" style="margin-bottom: 10px;">
-                                My child is already in a Base
-                            </a>
-                        </div>
                         <div class="col-12 col-xl-6">
                             <label for="no-th-school_id">
                                 Tzivos Hashem Base (School Name)
@@ -287,6 +282,17 @@
                             <a href="/mobile/" class="btn btn-primary">Cancel</a>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <label for="th-base">
+                                &nbsp;
+                            </label>
+                            <a class="navigation-button btn btn-outline-primary" data-id="th-base" href="#" style="margin-top: -30px;">
+                                My child is already in a Base
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </section>
@@ -408,6 +414,9 @@
     <script src="../lib/hebrew-keyboard/hebrew-keyboard.js"></script>
     <script src="js/image-upload.js"></script>
     <script src="js/child.js"></script>
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
     <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-71974937-1');</script>

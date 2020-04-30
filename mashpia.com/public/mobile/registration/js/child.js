@@ -73,10 +73,15 @@ var childApp = function(){
                     names.push( user.last );
                 }
             });
+
+            $("#th-last").autocomplete({
+                source: names, 
+                minLength: 3
+            });
             
-            renderDropdown( "last", names.map( function( name ) {
-                return { id: name, name: name }
-            }));
+            // renderDropdown( "last", names.map( function( name ) {
+            //     return { id: name, name: name }
+            // }));
         });
     }
 
