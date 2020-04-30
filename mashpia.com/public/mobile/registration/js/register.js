@@ -795,7 +795,9 @@ var templates = function(){
                         // just make dropdown show 0
                         htmlFee += "<option value='0'>0</option>";
                     } else {
-                        for ( var n of [ 100, 75, 60, 55, 50, 45, 40, 30, 20, 10 ]) {
+                        var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
+                        if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
+                        for ( var n of rates ) {
                             if ( n < user.registrationRates[ rateType ] ) break;
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
