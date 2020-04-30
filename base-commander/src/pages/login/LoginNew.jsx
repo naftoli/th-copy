@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
-import { GoogleButton, ChabadOrgButton } from 'components/buttons';
+// import { GoogleButton, ChabadOrgButton } from 'components/buttons';
 import { InputGroup, InputGroupAddon, Button, UncontrolledAlert } from 'reactstrap';
 // state
 import { login, getCurrentUser } from 'store/login/operations';
@@ -11,7 +11,6 @@ import { setErrors } from 'store/login/actions';
 // styles and images
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-import { Row, Col } from 'reactstrap';
 
 const noop = () => {};
 
@@ -22,7 +21,6 @@ export class Login extends Component {
     username: '',
     password: '',
     show_password: false, 
-    show_form: false
   }
   // default props
   static defaultProps = {
@@ -74,59 +72,25 @@ export class Login extends Component {
     errors = errors.map( (error, index) => 
       <UncontrolledAlert color='danger' key={index}>{ error }</UncontrolledAlert> 
     );
+
+    const imgStyle = { 'max-width':' 200px' };
+    const inputStyle = { 'margin': '12px 0' };
     
     return (
       <div id='Login'>
         <div>
-          <img src={logo} id='logo' alt='logo' />
+          <img src={logo} id='logo' alt='logo' style={ imgStyle } />
 
             <h1>Welcome to Tzivos Hashem</h1><br />
             An army of Jewish children united to bring Moshiach now!
-            <br /><br /><br />
-
-            <h4>Family Accounts</h4>
-            <hr />
-            <Row>
-              <Col xs="6">
-                <a href="/mobile/reg/parent_register.html">
-                  <Button size="lg" color='primary' id='parent_join'>
-                      Create an Account
-                  </Button>
-                </a>
-              </Col>
-              <Col xs="6">
-                <a href="/mobile">
-                  <Button size="lg" color='primary' id='parent_login'>
-                    Log in to your account
-                  </Button>
-                </a>
-              </Col>
-            </Row>
-            <br />
-            <h4>School Accounts</h4>
-            <hr />
-            <Row>
-              <Col xs="6">
-                <a href="/signup">
-                  <Button size="lg" color='primary' id='join'>
-                      Create an Account
-                  </Button>
-                </a>
-              </Col>
-              <Col xs="6">
-                <Button size="lg" color='primary' id='show_login' onClick={ this.showLogin }>
-                  Log in to your account
-                </Button>
-              </Col>
-            </Row>
+            
         </div>
-        <br />
 
         { loading && <Spinner size={ 8 } /> }
 
         { errors }
 
-        { !loading && this.state.show_form && 
+        { !loading && 
           <div className='form' id='login-form'>
             <form onSubmit={ this.handleLoginForm }>
               <InputGroup size="lg">
@@ -136,6 +100,7 @@ export class Login extends Component {
                 </InputGroupAddon>
 
                 <input
+                  style={ inputStyle }
                   name='username'
                   autoFocus required
                   placeholder='Username'
@@ -146,25 +111,26 @@ export class Login extends Component {
               </InputGroup>
 
               <Password
+                style={ inputStyle }
                 required
                 showIcon  size="lg"
                 value={ this.state.password } 
                 onChange={ this.handleChange } />
 
-              <Button size="lg" color='primary' id='login'>
+              <Button size="lg" color='primary' id='login' style={ inputStyle }>
                 Login <FontAwesome icon='sign-in-alt '/>
               </Button>
             </form>
 
-            <div id='sign-in-with'>
+            {/* <div id='sign-in-with'>
 
               <GoogleButton size="sm" shrink
                 tokenOnly onSuccess={ this.onGoogleLogin } />
 
               <ChabadOrgButton size="sm" shrink
-                onLogin={ this.onChabadOrgLogin }/>
+                onLogin={ this.onChabadOrgLogin } />
 
-            </div>
+            </div> */}
 
             {/* <div id='links' className='clearfix'>
               <Link to='/forgot'>Forgot Password?</Link>

@@ -95,6 +95,7 @@ export class App extends Component {
     if ( login.active ) {
       routes = [
           { path: `/`, exact: true, component:  HomePage },
+          { path: `/login`, component: HomePage },
           { path: `/rewards`, component:  Rewards },
           { path: `/bm`, component:  BaseManagment },
           { path: `/missions`, component:  Missions },
