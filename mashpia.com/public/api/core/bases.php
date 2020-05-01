@@ -15,7 +15,7 @@ class BaseRouter {
             ." FROM schools s LEFT JOIN ( "
                 ." SELECT COUNT(*) AS soldier_count, school_id FROM users GROUP BY school_id "
             ." ) soldiers USING (school_id) "
-            ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
+            ." WHERE $filters AND school_id != 612 GROUP BY school_id ORDER BY school_name;"
         );
         $query->execute();
         $bases = $query->fetchAll();

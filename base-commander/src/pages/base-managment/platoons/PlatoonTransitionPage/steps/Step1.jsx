@@ -14,7 +14,7 @@ class Step1 extends Component {
 
     let baseSelect;
     if ( isAdmin( login.code ) )
-      baseSelect = <BaseSelect value={ school_id } onChange={ selectChange( 'school_id' ) } fetchAll />;
+      baseSelect = <BaseSelect value={ school_id } onChange={ selectChange( 'school_id' ) } addUnassigned fetchAll />;
     else 
       baseSelect = <BaseSelect value={ school_id } onChange={ selectChange( 'school_id' ) } addUnassigned />;
 
