@@ -6,7 +6,7 @@ import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
 import { getBases } from 'store/base/bases/operations';
-import API from 'api/api';
+// import API from 'api/api';
 
 class PTBaseSelect extends Component {
 
