@@ -452,10 +452,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			echo "<pre>";
-			print_r($missions);
-			echo "</pre>";
-			exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
@@ -579,7 +579,7 @@ if (isset($_POST['submit'])) {
         
         <div id="task_form">
             <h2>Upload File</h2>
-            <form enctype="multipart/form-data" action="create_tasks.php" method="post">
+            <form enctype="multipart/form-data" action="create_tasks_ckids.php" method="post">
                 Choose language:<br />
                 <input type="radio" name="lang" value="1" checked /> English<br />
                 <!-- <input type="radio" name="lang" value="2" /> Yiddish -->
