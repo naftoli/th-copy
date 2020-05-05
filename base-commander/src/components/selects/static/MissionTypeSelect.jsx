@@ -35,7 +35,7 @@ export class MissionTypeSelect extends Component {
     return [
       { value:  0 + offset, label: 'Chabad' },
       { value: 10 + offset, label: 'Frum' },
-      { value: 20 + offset, label: 'C-Kids' },
+      { value: 2 + offset, label: 'C-Kids' },
       { value: 12 + offset, label: 'Friendship Circle' }
     ];
   }
