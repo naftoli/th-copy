@@ -1,7 +1,6 @@
 <?php
 ini_set('display_errors', 1);
-$admin_auth = ['school'];
-require_once('header.php');
+require_once('db.php');
 ?>
 <html>
 <head>
