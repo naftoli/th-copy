@@ -1,12 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 require_once('db.php');
-?>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-</head>
-<?php
+
 $ids = [];
 $sql = "select user_id from users where user_registered > 0";
 $result = mysql_query( $sql ); 
@@ -20,11 +15,11 @@ require_once('classes/rank_updater.php');
 $mupdater = new medal_updater();
 $rupdater = new rank_updater();
 
-echo "Started: " . time() . "<br />";
+echo "Running Medals / Ranks Updater....\n";
+echo "Started: " . time() . "\n";
 foreach ( $ids as $user ) {
     $mupdater->update_medal_two($user);
     $rupdater->update_rank_two($user);
 }
 echo "Ended: " . time();
 ?>
-</html>
