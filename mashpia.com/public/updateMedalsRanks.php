@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 ?>
 <html>
 <head>
@@ -20,10 +20,11 @@ require_once('classes/rank_updater.php');
 $mupdater = new medal_updater();
 $rupdater = new rank_updater();
 
+echo "Started: " . time() . "<br />";
 foreach ( $ids as $user ) {
     $mupdater->update_medal_two($user);
     $rupdater->update_rank_two($user);
 }
-echo "done.";
+echo "Ended: " . time();
 ?>
 </html>
