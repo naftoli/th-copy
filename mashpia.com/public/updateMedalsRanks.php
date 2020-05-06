@@ -9,7 +9,7 @@ require_once('header.php');
 </head>
 <?php
 $ids = [];
-$sql = "select user_id from users were user_registered > 0";
+$sql = "select user_id from users where user_registered > 0";
 $result = mysql_query( $sql ); 
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $ids[] = $row['user_id'];
