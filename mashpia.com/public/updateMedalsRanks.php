@@ -1,13 +1,13 @@
 <?php
 ini_set('display_errors', 1);
 $admin_auth = ['school'];
+require_once('header.php');
 ?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <?php
-require_once('header.php');
 $ids = [];
 $sql = "select user_id from users were user_registered > 0";
 $result = mysql_query( $sql ); 
