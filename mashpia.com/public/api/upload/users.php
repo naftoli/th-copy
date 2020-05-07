@@ -234,7 +234,6 @@ class UsersUploadRouter {
             $user->chayolei = $school->chayolei;
             $user->chidon   = $school->chidon;
             $user->yan      = $school->tanya;
-            $user->tehillim = $school->tehillim;
             
             $user->save();
         }
