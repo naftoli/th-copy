@@ -54,11 +54,18 @@ export class BulkUploadModal extends Component {
               <ol style={{ paddingLeft: '0px' }}>
                 <li>Download the <a href={ url } target='_href'>spreadsheet</a> (Excel/.xls)</li>
                 <li>Enter all information into spreadsheet.<br/>
-                  <strong>
-                    Please Note: You MUST have the First Name, Last Name, 
-                    First Name Hebrew, Last name Hebrew, English Date of Birth, Gender, 
-                    and Mission Type fields of each student filled out.
-                  </strong>
+                  { inst === 10 && 
+                    <strong>
+                      Please Note: You MUST have ALL FIELDS filled out.
+                    </strong>
+                  }
+                  { inst !== 10 && 
+                      <strong>
+                      Please Note: You MUST have the First Name, Last Name, 
+                      First Name Hebrew, Last name Hebrew, English Date of Birth, Gender, 
+                      and Mission Type fields of each student filled out.
+                    </strong>
+                  }
                 </li>
                 <li>Upload spreadsheet into system using the file input below.</li>
                 <li>
