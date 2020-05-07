@@ -75,7 +75,7 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
       updateNotifcation( toast_id, 'Spreadsheet Uploaded!', true );
       return response;
     }).catch( error => {
-      updateNotifcation( toast_id, '', error.message, false );
+      updateNotifcation( toast_id, '', error.message + '\n' + error.data, false );
       return Promise.reject( error );
     });
 }

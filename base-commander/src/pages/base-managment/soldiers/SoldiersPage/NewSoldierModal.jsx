@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { SaveButton } from 'components/buttons/index';
 import { MissionTypeSelect } from 'components/selects';
-import { Select } from 'components/inputs'
+import { Select } from 'components/inputs';
 import { 
   NameRow, DobCol, ProfileRow, BasePlatoonRow 
 } from '../components';
@@ -106,6 +106,7 @@ class NewSoldierModal extends Component {
               onGenderChange={ this.onInputChange } />
 
             <NameRow
+              inst={ login.inst_id }
               soldier={ soldier }
               onChange={ this.onInputChange } />
 

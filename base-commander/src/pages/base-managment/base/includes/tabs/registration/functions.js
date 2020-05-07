@@ -10,7 +10,6 @@ export const availableModules = ( registration, asObject = false ) => {
   // default modules
   let modules = [ 'chayolei', 'chidon', 'tanya', 'rewards' ];
 
-  // remove by naftoli 08/01/2019 b/c all chayolei schools are registering for all modules regardless of anything
   // if we do, then filter to what is not registered yet
   if ( registration && registration.modules ) {
     modules = modules.filter( key => !registration.modules[ key ] );
@@ -84,7 +83,6 @@ export const getCart = ( base ) => {
 export const moduleSelected = base => {
   // get the modules
   let modules = availableModules( base.registration );
-
   // return true if one available module was checked
   // const found = modules.find( key => !!base[key] ) || false;
 

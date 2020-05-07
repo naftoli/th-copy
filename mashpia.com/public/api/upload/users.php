@@ -15,20 +15,35 @@ class UsersUploadRouter {
 
         if ( !isset( $_FILES['users'] ) )
             json_error("No File Sent", 'UPLOAD-USERS-17');
-        // columns to create users
-        $columnNames = [
-            "*First Name",  "*Last Name", 
-            "*First Name Hebrew",  "*Last Name Hebrew",
-            "*Gender", "*English Date of Birth", 
-            "Address 1", "Address 2", "City", "State", "Zip", "Country", 
-            "Phone", "Parents Email", "*Mission Type"
-        ];
-        $dbColumnNames = [
-            'first', 'last', 'first_he', 'last_he',
-            'gender', 'dob', 'user_address1', 'user_address2',
-            'user_city', 'user_state', 'user_postal', 'user_country',
-            'user_phone', 'email', 'school_type_id'
-        ];
+        
+        $ckids = false;
+        if ( $current_user->login->inst_id == 10 ) {
+            // columns to create users
+            $columnNames = [
+                "First Name",  "Last Name", 
+                "DOB", "Gender", "Type of Tasks"
+            ];
+            $dbColumnNames = [
+                'first', 'last', 'dob', 'gender', 'school_type_id'
+            ];
+            $ckids = true;
+        } else {
+            // columns to create users
+            $columnNames = [
+                "*First Name",  "*Last Name", 
+                "*First Name Hebrew",  "*Last Name Hebrew",
+                "*Gender", "*English Date of Birth", 
+                "Address 1", "Address 2", "City", "State", "Zip", "Country", 
+                "Phone", "Parents Email", "*Mission Type"
+            ];
+            $dbColumnNames = [
+                'first', 'last', 'first_he', 'last_he',
+                'gender', 'dob', 'user_address1', 'user_address2',
+                'user_city', 'user_state', 'user_postal', 'user_country',
+                'user_phone', 'email', 'school_type_id'
+            ];
+        }
+        
         // load up the excel reader
         require_once( __DIR__ . '/../../PHPExcel/IOFactory.php' );
         $objPHPExcel = PHPExcel_IOFactory::load($_FILES['users']['tmp_name']);
@@ -65,23 +80,31 @@ class UsersUploadRouter {
                     $value = trim($cell->getValue());
                     $errorString = "Error on line $errorLine:  ";
                     // validate required rows
-                    if ((
-                        $headers[$cellIndex] == "*First Name"              || 
-                        $headers[$cellIndex] == "*Last Name"               ||
-                        $headers[$cellIndex] == "*First Name Hebrew"       || 
-                        $headers[$cellIndex] == "*Last Name Hebrew"        ||
-                        $headers[$cellIndex] == "*Gender"                  || 
-                        $headers[$cellIndex] == "*English Date of Birth"   || 
-                        $headers[$cellIndex] == "*Mission Type"
-                    ) && $value == "" ) {
-                        $errors[] = "$errorString You must supply a "
-                            . substr($headers[$cellIndex], 1) . " for every student.";
+                    if( $ckids ) {
+                        if ( $value == '' ) {
+                            $errors[] = $errorString . " All fields are mandatory.";
+                        }
+                    } else {
+                        if ((
+                            $headers[$cellIndex] == "*First Name"              || 
+                            $headers[$cellIndex] == "*Last Name"               ||
+                            $headers[$cellIndex] == "*First Name Hebrew"       || 
+                            $headers[$cellIndex] == "*Last Name Hebrew"        ||
+                            $headers[$cellIndex] == "*Gender"                  || 
+                            $headers[$cellIndex] == "*English Date of Birth"   || 
+                            $headers[$cellIndex] == "*Mission Type"
+                        ) && $value == "" ) {
+                            $errors[] = "$errorString You must supply a "
+                                . substr($headers[$cellIndex], 1) . " for every student.";
+                        }
                     }
 
                     // check name length
                     if ((
                         $headers[$cellIndex] == "*First Name"        ||
+                        $headers[$cellIndex] == "First Name"         ||
                         $headers[$cellIndex] == "*Last Name"         ||
+                        $headers[$cellIndex] == "Last Name"          ||
                         $headers[$cellIndex] == "*First Name Hebrew" ||
                         $headers[$cellIndex] == "*Last Name Hebrew"
                     ) && strlen( $value ) < 3 ) {
@@ -98,13 +121,13 @@ class UsersUploadRouter {
                     }
                     
                     // cast gender to upper case
-                    if ( $headers[$cellIndex] == "*Gender" ) {
+                    if ( $headers[$cellIndex] == "*Gender" || $headers[$cellIndex] == "Gender" ) {
                         $value = strtoupper( $value );
                     }
 
                     // check gender type
                     if (
-                        $headers[$cellIndex] == "*Gender" && 
+                        ($headers[$cellIndex] == "*Gender" || $headers[$cellIndex] == "Gender") && 
                         !in_array( $value, [ 'M', 'F' ] )
                     ) {
                         $errors[] = "$errorString Gender must be 'M' or 'F'.";
@@ -112,7 +135,7 @@ class UsersUploadRouter {
 
                     // validate dob
                     if (
-                        $headers[$cellIndex] == "*English Date of Birth"
+                        $headers[$cellIndex] == "*English Date of Birth" || $headers[$cellIndex] == "DOB"
                     ) {
                         // parse the date
                         if ( is_numeric( $value ) ) {
@@ -139,15 +162,21 @@ class UsersUploadRouter {
                     }
 
                     // cast mission type to lower case
-                    if ( $headers[$cellIndex] == "*Mission Type" ) {
+                    if ( $headers[$cellIndex] == "*Mission Type"  || $headers[$cellIndex] == "Type of Tasks") {
                         $value = strtolower( $value );
                     }
                     // validate mission type
                     if ( $headers[$cellIndex] == "*Mission Type" && 
-                        !in_array( $value, [ 'chabad', 'frum', 'c-kids' ] )
+                        !in_array( $value, [ 'chabad', 'frum' ] )
                     ) {
-                        $errors[] = "$errorString Mission type must be 'chabad', 'frum' or 'c-kids'.";
+                        $errors[] = "$errorString Mission type must be 'chabad' or 'frum'.";
                     }
+                    if ( $headers[$cellIndex] == "Type of Tasks" && 
+                        !in_array( $value, [ 'day school', 'hebrew school', 'no school' ] )
+                    ) {
+                        $errors[] = "$errorString Mission type must be day school', 'hebrew school' or 'no school'.";
+                    }
+
                     
                     $user[ $dbColumnNames[ $cellIndex ] ] = $value;
                     $cellIndex += 1;
@@ -165,7 +194,7 @@ class UsersUploadRouter {
         // return the list of errors
         if ( count( $errors ) >= 1 ){
             return json_error( 
-                count( $errors )." errors where found in your spreadsheet. "
+                count( $errors )." error(s) was / were found in your spreadsheet. "
                 ."Please correct your file before uploading again.",
                 $errors
             );
@@ -179,21 +208,33 @@ class UsersUploadRouter {
         }
 
         // create all the users...
-        foreach( $users as $index => $user ){
-            if ( $user['school_type_id'] == 'chabad' ) {
-                $user['school_type_id'] = $user['gender'] == 'M' ? 2 : 3; 
-            } else if ( $user['school_type_id'] == 'frum' ) {
-                $user['school_type_id'] = $user['gender'] == 'M' ? 12 : 13;
-            } else {
-                $user['school_type_id'] = $user['gender'] == 'M' ? 22 : 23; 
+        foreach( $users as $user ){
+            switch ( $user['school_type_id'] ) {
+                case 'chabad':
+                    $type = $user['gender'] == 'M' ? 2 : 3; 
+                    break;
+                case 'frum':
+                    $type = $user['gender'] == 'M' ? 12 : 13;
+                    break;
+                case 'day school':
+                    $type = $user['gender'] == 'M' ? 4 : 5;
+                    break;
+                case 'hebrew school':
+                    $type = $user['gender'] == 'M' ? 6 : 7;
+                    break;
+                case 'no school':
+                    $type = $user['gender'] == 'M' ? 8 : 9;
+                    break;
             }
+            $user['school_type_id'] = $type;
 
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
             $user->school_id = $school->school_id;
             $user->chayolei = $school->chayolei;
             $user->chidon   = $school->chidon;
-            $user->yan    = $school->tanya;
+            $user->yan      = $school->tanya;
+            $user->tehillim = $school->tehillim;
             
             $user->save();
         }

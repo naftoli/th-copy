@@ -36,8 +36,9 @@ export class BulkUploadModal extends Component {
   }
 
   render() {
-    const { isOpen, centered, toggle } = this.props;
+    const { inst, isOpen, centered, toggle } = this.props;
     const { loading, errors } = this.state;
+    const url = inst === 10 ? '//mashpia.com/ckids.xls' : '//mashpia.com/students.xls';
 
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='bulk-upload-modal'>
@@ -51,7 +52,7 @@ export class BulkUploadModal extends Component {
                 Leaving them in your spreadsheet will reset them back to a private.
               </p>
               <ol style={{ paddingLeft: '0px' }}>
-                <li>Download the <a href='//mashpia.com/students.xls' target='_href'>spreadsheet</a> (Excel/.xls)</li>
+                <li>Download the <a href={ url } target='_href'>spreadsheet</a> (Excel/.xls)</li>
                 <li>Enter all information into spreadsheet.<br/>
                   <strong>
                     Please Note: You MUST have the First Name, Last Name, 

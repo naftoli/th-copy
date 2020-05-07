@@ -73,7 +73,7 @@ export class Login extends Component {
       <UncontrolledAlert color='danger' key={index}>{ error }</UncontrolledAlert> 
     );
 
-    const imgStyle = { 'max-width':' 200px' };
+    const imgStyle = { 'maxWidth':' 200px' };
     const inputStyle = { 'margin': '12px 0' };
     
     return (

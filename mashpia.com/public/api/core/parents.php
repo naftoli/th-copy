@@ -81,8 +81,8 @@ class ParentsRouter {
             'mother' => $_POST['mother'],
             'last' => $_POST['last'],
             'admin_email'=> $_POST['email'],
-            'admin_phone_home'  => $_POST['home'],
-            'admin_phone_mobile'=> $_POST['cell'],
+            'admin_phone_mobile'  => $_POST['father_cell'],
+            'admin_phone_mobile2' => $_POST['mother_cell'],
             'is_parent' => '1',
             'created_by' => $current_user->admin_id,
         ]);

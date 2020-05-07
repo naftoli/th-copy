@@ -178,6 +178,7 @@ export class SoldiersPage extends Component {
         {/* Only show the uploader for base commanders */ 
           login.code === 'BC' &&
           <BulkUploadModal
+            inst={ this.props.login.inst_id }
             isOpen={ upload.show }
             upload={ this.uploadSpreadsheet }
             toggle={ this.toggleModal('upload') } />
