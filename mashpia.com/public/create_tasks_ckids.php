@@ -129,7 +129,7 @@ if (isset($_POST['submit'])) {
     //echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
     
     $langSheet = $_POST['lang'];
-    $file = "SystemTasks/ckids/" . $subjects[$subject_id] . $missionYear . ".xlsx";
+    $file = "SystemTasks/ckids/" . $missionYear . ".xlsx";
     
     $arrMandatory = array();
     $arrFocus = array();
@@ -349,13 +349,13 @@ if (isset($_POST['submit'])) {
                 // }
                 
                 // if no dates were entered create array based on default start and end dates
+                // each day is another mission
                 if (empty($arrStart)) {
                     $startTemp = $startDate;
                     $endTemp = $endDate;
                     while ($startTemp < $endTemp) {
                         $arrStart[] = $startTemp;
-                        $arrEnd[] = $startTemp + 6;
-                        $startTemp += 7;
+                        $arrEnd[] = $startTemp++;
                     }
                 }
                 //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
@@ -368,7 +368,7 @@ if (isset($_POST['submit'])) {
                     $start = $startDate;
                     $end = $endDate;
 					//echo $start . '-' . $end . "<br /><br />"; continue;
-                    if ($start < unixtojd()) continue;
+                    // if ($start < unixtojd()) continue;
                     
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
@@ -452,10 +452,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			// echo "<pre>";
-			// print_r($missions);
-			// echo "</pre>";
-			// exit; 
+			echo "<pre>";
+			print_r($missions);
+			echo "</pre>";
+			exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
