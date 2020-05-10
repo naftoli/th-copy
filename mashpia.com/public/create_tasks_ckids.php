@@ -409,7 +409,7 @@ if (isset($_POST['submit'])) {
                             $pic = '';
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {
 	                        	//echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
-                                $missions[$action][$subject_id][$type][$level][$cat][$missionValue][$start][$end][$lang][] = array(
+                                $missions[$action][$type][$subject_id][$level][$cat][$missionValue][$start][$end][$lang][] = array(
                                     'task'          =>  $task, 
                                     'catOrd'        =>	$catOrd, 
                                     'cat'           =>  $cat, 
@@ -458,10 +458,10 @@ if (isset($_POST['submit'])) {
                 // if (++$l == 10000) break;
             }
 			//exit;
-			// echo "<pre>";
-			// print_r($missions);
-			// echo "</pre>";
-			// exit; 
+			echo "<pre>";
+			print_r($missions);
+			echo "</pre>";
+			exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
@@ -489,8 +489,8 @@ if (isset($_POST['submit'])) {
                                                         end_date = " . mysql_real_escape_string($end) . ", 
                                                         lang_id = " . mysql_real_escape_string($lang) . ",
                                                         default_on = 1";
-                                                //echo $sql . "<br />";
-                                                //continue;
+                                                // echo $sql . "<br />";
+                                                // continue;
                                                 if ( mysql_query( $sql ) ) {
                                                     $missionsCreated++; 
                                                     $id = mysql_insert_id();
