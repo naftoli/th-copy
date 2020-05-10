@@ -132,9 +132,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             if ( $child_fee > 0 ) return $child_fee;
         }
         
+        // pass in whether its a ckids school or not; added by Naftoli 5/8/2020
         $fee = GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
-            $to_soldier,    $early_bird,    $no_discount
+            $to_soldier,    $early_bird,    $no_discount, 
+            $this->inst_id === 10
         );
 
         if ( intval( $this->school_id ) == 61 ) {

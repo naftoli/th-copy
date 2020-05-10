@@ -50,11 +50,13 @@ export class RegistrationPage extends Component {
   closeModal = () => this.setState({ showModal: false });
   // open the modal or just register the soldiers
   payAndRegister = () => {
-    if ( this.state.total > 0 ) {
-      return this.setState({ showModal: true });
-    } else {
-      return this.registerSoldiers();
-    }
+    // if ( this.state.total > 0 ) {
+    //   return this.setState({ showModal: true });
+    // } else {
+    //   return this.registerSoldiers();
+    // }
+    // aways show modal to make sure the school enters a cc to be on file; modified by Naftoli 5/8/2020 
+    return this.setState({ showModal: true });
   }
   // get the id
   getId = row => row.user_id;
@@ -96,6 +98,9 @@ export class RegistrationPage extends Component {
     const { total, selection, showModal } = this.state;
     const { login, loading, soldiers, payments } = this.props;
 
+    // if we don't have a payment profile on file alert
+
+    // console.log( soldiers );
     console.log( payments );
 
     // define table columns

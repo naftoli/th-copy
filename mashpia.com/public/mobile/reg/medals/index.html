@@ -217,11 +217,11 @@
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
 				</div>
 				
-				<div id="speech">
+				<!-- <div id="speech">
 					<a href="">
 						<i class="fas fa-microphone fa-2x"></i>
 					</a>
-				</div>
+				</div> -->
 				
 				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
@@ -472,33 +472,33 @@
 				}
 			}
 
-			$("#speech").click( function(e) {
-				e.preventDefault();
-				// start recognition
-				if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+			// $("#speech").click( function(e) {
+			// 	e.preventDefault();
+			// 	// start recognition
+			// 	if (window.SpeechRecognition || window.webkitSpeechRecognition) {
 					
-					const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+			// 		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 			
-					// new speech recognition object
-					const talk = new SpeechRecognition();
-					talk.lang = 'en-US';
+			// 		// new speech recognition object
+			// 		const talk = new SpeechRecognition();
+			// 		talk.lang = 'en-US';
 
-					talk.onresult = function(event) {
-						console.log('Transcript: ' + event.results[0][0].transcript);
-						console.log('Confidence: ' + event.results[0][0].confidence);
-						analyze( event.results[0][0].transcript.toLowerCase() );
-					}
+			// 		talk.onresult = function(event) {
+			// 			console.log('Transcript: ' + event.results[0][0].transcript);
+			// 			console.log('Confidence: ' + event.results[0][0].confidence);
+			// 			analyze( event.results[0][0].transcript.toLowerCase() );
+			// 		}
 
-					talk.onspeechend = function(event) {
-						talk.stop();
-					}
+			// 		talk.onspeechend = function(event) {
+			// 			talk.stop();
+			// 		}
 
-					// start speech recognition
-					talk.start();
-				} else {
-					alert("Your browser does not support this action.");
-				}
-			});
+			// 		// start speech recognition
+			// 		talk.start();
+			// 	} else {
+			// 		alert("Your browser does not support this action.");
+			// 	}
+			// });
 		});
 		</script>
 		<script>
