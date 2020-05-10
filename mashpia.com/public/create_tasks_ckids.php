@@ -458,10 +458,10 @@ if (isset($_POST['submit'])) {
                 // if (++$l == 10000) break;
             }
 			//exit;
-			echo "<pre>";
-			print_r($missions);
-			echo "</pre>";
-			exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
