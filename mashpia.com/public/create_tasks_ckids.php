@@ -354,7 +354,7 @@ if (isset($_POST['submit'])) {
                     $startTemp = $startDate;
                     $endTemp = $endDate;
                     while ($startTemp < $endTemp) {
-                        if (in_array($labelID, [80,81])) {
+                        if ($labelID == 72) {
                             $arrStart[] = $startTemp;
                             $arrEnd[] = $startTemp + 6;
                             $startTemp += 7;
