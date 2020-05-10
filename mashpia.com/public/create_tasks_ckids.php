@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
     require_once 'PHPExcel/IOFactory.php';
 
     // there is null data in the database under mission_number
-    $sql = "select mission_number from date_tasks_missions where subject_id = $subject_id order by mission_number desc limit 1";
+    $sql = "select mission_number from date_tasks_missions order by mission_number desc limit 1";
     //echo $sql;
     $result = mysql_query($sql);
     if (mysql_num_rows($result) > 0) {
@@ -175,7 +175,7 @@ if (isset($_POST['submit'])) {
                 'task',
                 'cat',
                 'labelID', 
-                'campaign'
+                'subject_id'
             );
             
             foreach ( $objWorksheet->getRowIterator() as $row ) {
@@ -378,7 +378,7 @@ if (isset($_POST['submit'])) {
                     
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
-	                    	$mission = $cat;
+	                    	// $mission = $missionName;
                             // if (empty($mission)) {
 							// 	//echo $start . "<br />";
 							// 	//echo $end . "<br />";
@@ -408,7 +408,7 @@ if (isset($_POST['submit'])) {
                             $pic = '';
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {
 	                        	//echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
-                                $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
+                                $missions[$action][$type][$level][$cat][$missionValue][$start][$end][$lang][] = array(
                                     'task'          =>  $task, 
                                     'catOrd'        =>	$catOrd, 
                                     'cat'           =>  $cat, 
@@ -456,10 +456,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			echo "<pre>";
-			print_r($missions);
-			echo "</pre>";
-			exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
