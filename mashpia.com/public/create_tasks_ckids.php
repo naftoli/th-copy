@@ -378,12 +378,12 @@ if (isset($_POST['submit'])) {
                     
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
-	                    	$mission = $missionName;
-                            if (empty($mission)) {
-								//echo $start . "<br />";
-								//echo $end . "<br />";
-                                $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
-                            } 
+	                    	$mission = $cat;
+                            // if (empty($mission)) {
+							// 	//echo $start . "<br />";
+							// 	//echo $end . "<br />";
+                            //     $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
+                            // } 
                             //check if there's an array of dates for mandatory or focus
                             // if (!empty($arrMandatory)) {
                             //     $mandatory = 0;
