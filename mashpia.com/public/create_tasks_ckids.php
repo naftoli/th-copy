@@ -20,35 +20,35 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-function getStartEnd($arr) {
-    $temp = array();
-    for ($i = 0; $i < count($arr); $i++) {
-        if ($i % 2 == 0) {
-            $temp['start'][] = $arr[$i];
-        } else {
-            $temp['end'][] = $arr[$i];
-        }
-    }
-    return $temp;
-}
+// function getStartEnd($arr) {
+//     $temp = array();
+//     for ($i = 0; $i < count($arr); $i++) {
+//         if ($i % 2 == 0) {
+//             $temp['start'][] = $arr[$i];
+//         } else {
+//             $temp['end'][] = $arr[$i];
+//         }
+//     }
+//     return $temp;
+// }
 
-function createStartArray( $val, $subject_id ) {
-    // these tasks are a colon separated list of dates that are both the start date and end date of that task
-    global $missionYear, $arrStart, $arrEnd;
-    $arrValues = explode(':', $val);
-    foreach ($arrValues as $value) {
-        $arrTemp = explode(',', $value);
-        $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
-        //$year = $missionYear;
-        $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
-        $arrStart[] = $jd;
-        if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
-            $arrEnd[] = $jd + 6;
-        } else { // end date is same as start date
-            $arrEnd[] = $jd;
-        }
-    }
-}
+// function createStartArray( $val, $subject_id ) {
+//     // these tasks are a colon separated list of dates that are both the start date and end date of that task
+//     global $missionYear, $arrStart, $arrEnd;
+//     $arrValues = explode(':', $val);
+//     foreach ($arrValues as $value) {
+//         $arrTemp = explode(',', $value);
+//         $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
+//         //$year = $missionYear;
+//         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
+//         $arrStart[] = $jd;
+//         if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
+//             $arrEnd[] = $jd + 6;
+//         } else { // end date is same as start date
+//             $arrEnd[] = $jd;
+//         }
+//     }
+// }
 ?>
 <html>
     <head>
@@ -373,35 +373,33 @@ if (isset($_POST['submit'])) {
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
 	                    	$mission = $missionName;
-                            if (empty($mission)) {
-								//echo $start . "<br />";
-								//echo $end . "<br />";
-                                $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
-                            } 
+                            // if (empty($mission)) {
+							// 	//echo $start . "<br />";
+							// 	//echo $end . "<br />";
+                            //     $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
+                            // } 
                             //check if there's an array of dates for mandatory or focus
-                            if (!empty($arrMandatory)) {
-                                $mandatory = 0;
-                                $mand = getStartEnd($arrMandatory);
-                                for ($c = 0; $c < count($mand['start']); $c++) {
-                                    if ($start >= $mand['start'][$c] && $end <= $mand['end'][$c]) {
-                                        $mandatory = 1;
-                                    }
-                                }
-                            }
-                            if (!empty($arrFocus)) {
-                                $focus = 0;
-                                $f = getStartEnd($arrFocus);
-                                for ($c = 0; $c < count($f['start']); $c++) {
-                                    if ($start >= $f['start'][$c] && $end <= $f['end'][$c]) {
-                                        $focus = 1;
-                                    }
-                                }
-                            }
-                            if (in_array($type, array(2,12,14))) {
-                                $pic = $pic_boys;
-                            } else if (in_array($type, array(3,13,15))) {
-                                $pic = $pic_girls;
-                            }
+                            // if (!empty($arrMandatory)) {
+                            //     $mandatory = 0;
+                            //     $mand = getStartEnd($arrMandatory);
+                            //     for ($c = 0; $c < count($mand['start']); $c++) {
+                            //         if ($start >= $mand['start'][$c] && $end <= $mand['end'][$c]) {
+                            //             $mandatory = 1;
+                            //         }
+                            //     }
+                            // }
+                            // if (!empty($arrFocus)) {
+                            //     $focus = 0;
+                            //     $f = getStartEnd($arrFocus);
+                            //     for ($c = 0; $c < count($f['start']); $c++) {
+                            //         if ($start >= $f['start'][$c] && $end <= $f['end'][$c]) {
+                            //             $focus = 1;
+                            //         }
+                            //     }
+                            // }
+                            $mandatory = 1;
+                            $focus = 0;
+                            $pic = '';
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {
 	                        	//echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
                                 $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
