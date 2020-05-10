@@ -408,7 +408,7 @@ if (isset($_POST['submit'])) {
                             $pic = '';
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {
 	                        	//echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
-                                $missions[$action][$type][$level][$cat][$missionValue][$start][$end][$lang][] = array(
+                                $missions[$action][$subject_id][$type][$level][$cat][$missionValue][$start][$end][$lang][] = array(
                                     'task'          =>  $task, 
                                     'catOrd'        =>	$catOrd, 
                                     'cat'           =>  $cat, 
@@ -468,89 +468,91 @@ if (isset($_POST['submit'])) {
                 $missionsCreated = 0;
                 $tasksCreated = 0;
                 foreach( $missions['add'] as $type => $info ) {
-                    foreach( $info as $level => $otherInfo ) { 
-                        foreach( $otherInfo as $mName => $arr ) {
-                            foreach( $arr as $mVal => $info ) {
-                                foreach( $info as $start => $arr ) {
-                                    foreach( $arr as $end => $info ) {
-                                        foreach ($info as $lang => $other) { 
-                                            $sql = "insert into date_tasks_missions 
-                                                    set school_type_id = " . mysql_real_escape_string($type) . ", 
-                                                    subject_id = " . mysql_real_escape_string($subject_id) . ", 
-                                                    level = " . mysql_real_escape_string($level) . ", 
-                                                    track_id = " . mysql_real_escape_string($track) . ", 
-                                                    mission_name = \"" . mysql_real_escape_string( $mName ) . "\",  
-                                                    mission_value = " . mysql_real_escape_string($mVal) . ", 
-                                                    mission_number = " . $missionNumber++ . ", 
-                                                    start_date = " . mysql_real_escape_string($start) . ", 
-                                                    end_date = " . mysql_real_escape_string($end) . ", 
-                                                    lang_id = " . mysql_real_escape_string($lang) . ",
-                                                    default_on = 1";
-                                            //echo $sql . "<br />";
-                                            //continue;
-                                            if ( mysql_query( $sql ) ) {
-                                                $missionsCreated++; 
-                                                $id = mysql_insert_id();
-                                                //$id = 1111;
-                                                foreach ( $other as $task ) {
-                                                    $sql = "insert into date_tasks 
-                                                            set date_tasks_mission_id = $id, 
-                                                            name = \"" . mysql_real_escape_string( $task['task'] ) . "\", 
-                                                            cat_ord_new = " . mysql_real_escape_string( $task['catOrd'] ) . ", 
-                                                            cat = \"" . mysql_real_escape_string( $task['cat'] ) . "\", 
-                                                            points = " . $task['points'] . ", 
-                                                            short_name = \"" . mysql_real_escape_string($task['short_name']) . "\",
-                                                            grid_marking = " . mysql_real_escape_string($task['grid_marking']) . ",
-                                                            mission_marking = " . mysql_real_escape_string($task['mission_marking']) . ",
-                                                            daily_task = " . mysql_real_escape_string($task['daily']) . ",
-                                                            label_id = " . mysql_real_escape_string($task['label']) . ",
-                                                            grid_id = " . mysql_real_escape_string($task['grid_id']); 
-                                                    if ( $task['mand'] ) { 
-                                                        $sql .= ", mandatory_qty = 1, optional_qty = 0";
-                                                    } else {
-                                                        $sql .= ", mandatory_qty = 0, optional_qty = 1";
+                    foreach( $info as $subject_id => $more ) {
+                        foreach( $more as $level => $otherInfo ) { 
+                            foreach( $otherInfo as $mName => $arr ) {
+                                foreach( $arr as $mVal => $info ) {
+                                    foreach( $info as $start => $arr ) {
+                                        foreach( $arr as $end => $info ) {
+                                            foreach ($info as $lang => $other) { 
+                                                $sql = "insert into date_tasks_missions 
+                                                        set school_type_id = " . mysql_real_escape_string($type) . ", 
+                                                        subject_id = " . mysql_real_escape_string($subject_id) . ", 
+                                                        level = " . mysql_real_escape_string($level) . ", 
+                                                        track_id = " . mysql_real_escape_string($track) . ", 
+                                                        mission_name = \"" . mysql_real_escape_string( $mName ) . "\",  
+                                                        mission_value = " . mysql_real_escape_string($mVal) . ", 
+                                                        mission_number = " . $missionNumber++ . ", 
+                                                        start_date = " . mysql_real_escape_string($start) . ", 
+                                                        end_date = " . mysql_real_escape_string($end) . ", 
+                                                        lang_id = " . mysql_real_escape_string($lang) . ",
+                                                        default_on = 1";
+                                                //echo $sql . "<br />";
+                                                //continue;
+                                                if ( mysql_query( $sql ) ) {
+                                                    $missionsCreated++; 
+                                                    $id = mysql_insert_id();
+                                                    //$id = 1111;
+                                                    foreach ( $other as $task ) {
+                                                        $sql = "insert into date_tasks 
+                                                                set date_tasks_mission_id = $id, 
+                                                                name = \"" . mysql_real_escape_string( $task['task'] ) . "\", 
+                                                                cat_ord_new = " . mysql_real_escape_string( $task['catOrd'] ) . ", 
+                                                                cat = \"" . mysql_real_escape_string( $task['cat'] ) . "\", 
+                                                                points = " . $task['points'] . ", 
+                                                                short_name = \"" . mysql_real_escape_string($task['short_name']) . "\",
+                                                                grid_marking = " . mysql_real_escape_string($task['grid_marking']) . ",
+                                                                mission_marking = " . mysql_real_escape_string($task['mission_marking']) . ",
+                                                                daily_task = " . mysql_real_escape_string($task['daily']) . ",
+                                                                label_id = " . mysql_real_escape_string($task['label']) . ",
+                                                                grid_id = " . mysql_real_escape_string($task['grid_id']); 
+                                                        if ( $task['mand'] ) { 
+                                                            $sql .= ", mandatory_qty = 1, optional_qty = 0";
+                                                        } else {
+                                                            $sql .= ", mandatory_qty = 0, optional_qty = 1";
+                                                        }
+                                                        if ( $task['labelOrd'] ) {
+                                                            $sql .= ", label_ord = " . mysql_real_escape_string($task['labelOrd']);
+                                                        }
+                                                        if ( $task['qty'] ) {
+                                                            $sql .= ", quantity = " . mysql_real_escape_string($task['qty']);
+                                                        }
+                                                        if ( $task['needed'] ) {
+                                                            $sql .= ", needed = " . mysql_real_escape_string($task['needed']);
+                                                        }
+                                                        if ( $task['focus'] ) {
+                                                            $sql .= ", focus_task = " . mysql_real_escape_string($task['focus']);
+                                                        }
+                                                        if ( !$task['def'] ) {
+                                                            $sql .= ", default_on = 0";
+                                                        }
+                                                        if ( $task['pic'] ) {
+                                                            $sql .= ", medium_pic = \"" . mysql_real_escape_string($task['pic']) . "\"";
+                                                        }
+                                                        //echo $sql . "<br />";
+                                                        //$tasksCreated++;
+                                                        
+                                                        if ( mysql_query( $sql ) ) {
+                                                            $tasksCreated++; 
+                                                        } else {
+                                                            echo $sql . "<br />" . mysql_error() . "<br />"; 
+                                                            mysql_query("ROLLBACK");
+                                                            mysql_query("SET AUTOCOMMIT=1");
+                                                            exit;
+                                                        }
+                                                        
                                                     }
-                                                    if ( $task['labelOrd'] ) {
-                                                        $sql .= ", label_ord = " . mysql_real_escape_string($task['labelOrd']);
-                                                    }
-                                                    if ( $task['qty'] ) {
-                                                        $sql .= ", quantity = " . mysql_real_escape_string($task['qty']);
-                                                    }
-                                                    if ( $task['needed'] ) {
-                                                        $sql .= ", needed = " . mysql_real_escape_string($task['needed']);
-                                                    }
-                                                    if ( $task['focus'] ) {
-                                                        $sql .= ", focus_task = " . mysql_real_escape_string($task['focus']);
-                                                    }
-                                                    if ( !$task['def'] ) {
-                                                        $sql .= ", default_on = 0";
-                                                    }
-                                                    if ( $task['pic'] ) {
-                                                        $sql .= ", medium_pic = \"" . mysql_real_escape_string($task['pic']) . "\"";
-                                                    }
-                                                    //echo $sql . "<br />";
-                                                    //$tasksCreated++;
-                                                    
-                                                    if ( mysql_query( $sql ) ) {
-                                                        $tasksCreated++; 
-                                                    } else {
-                                                        echo $sql . "<br />" . mysql_error() . "<br />"; 
-                                                        mysql_query("ROLLBACK");
-                                                        mysql_query("SET AUTOCOMMIT=1");
-                                                        exit;
-                                                    }
-                                                    
+                                                    //echo "<br />";
+                                                
+                                                } else {
+                                                    echo $sql . "<br />" . mysql_error() . "<br />";
+                                                    mysql_query("ROLLBACK");
+                                                    mysql_query("SET AUTOCOMMIT=1");
+                                                    exit;
                                                 }
+                                                
                                                 //echo "<br />";
-                                               
-                                            } else {
-                                                echo $sql . "<br />" . mysql_error() . "<br />";
-                                                mysql_query("ROLLBACK");
-                                                mysql_query("SET AUTOCOMMIT=1");
-                                                exit;
                                             }
-                                            
-                                            //echo "<br />";
                                         }
                                     }
                                 }
