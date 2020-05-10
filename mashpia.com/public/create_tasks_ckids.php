@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
     // $defaultEnd = 2459103;
 
     $defaultStart = 2458971; // May 1, 2020
-    $defaultEnd = 2459103; // Sept 10, 2020
+    $defaultEnd = 2459033; // July 2, 2020
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -178,6 +178,7 @@ if (isset($_POST['submit'])) {
                 'subject_id'
             );
             
+            // $l = 0;
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
@@ -454,12 +455,13 @@ if (isset($_POST['submit'])) {
 				$arrStart = array();
                 $arrEnd = array();
                 $missionName = "";
+                // if (++$l == 10000) break;
             }
 			//exit;
-			echo "<pre>";
-			print_r($missions);
-			echo "</pre>";
-			exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
