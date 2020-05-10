@@ -50,11 +50,11 @@ export class RegistrationPage extends Component {
   closeModal = () => this.setState({ showModal: false });
   // open the modal or just register the soldiers
   payAndRegister = () => {
-    // if ( this.state.total > 0 ) {
-    //   return this.setState({ showModal: true });
-    // } else {
-    //   return this.registerSoldiers();
-    // }
+    if ( this.state.total > 0 ) {
+      return this.setState({ showModal: true });
+    } else {
+      return this.registerSoldiers();
+    }
     // aways show modal to make sure the school enters a cc to be on file; modified by Naftoli 5/8/2020 
     return this.setState({ showModal: true });
   }

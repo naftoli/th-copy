@@ -14,7 +14,7 @@ class CampaignEnrollment {
             1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
         ), 
         'ckids' =>  array(
-            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
+            110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120
         )
     );
     
@@ -30,7 +30,13 @@ class CampaignEnrollment {
         }
         
         switch ($school_type_id) {
-            case 14: case 15: // ckids
+            // ckids
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
                 return $this->campaigns['ckids'];
             case 12: case 13: // 12 and 13 are just frum
                 return $this->campaigns['frum'];
@@ -55,7 +61,7 @@ class CampaignEnrollment {
             case 12:    case 13:
                 $this->type = 'frum';
                 break;
-            case 14:    case 15:
+            case 4: case 5: case 6: case 7: case 8: case 9:
                 $this->type = 'ckids';
                 break;
             default:
@@ -104,14 +110,15 @@ class CampaignEnrollment {
     }
     
     private function resetTracks() {
-        switch ($this->type) {
-            case 'chabad':
-                $sql = "DELETE FROM user_tracks WHERE subject_id in (92,93,94) AND user_id = " . $this->user_id;
-                break;
-            case 'frum':
-                $sql = "DELETE FROM user_tracks WHERE subject_id in (12,13,40) AND user_id = " . $this->user_id;
-                break;
-        }
+        // switch ($this->type) {
+        //     case 'chabad':
+        //         $sql = "DELETE FROM user_tracks WHERE subject_id in (92,93,94) AND user_id = " . $this->user_id;
+        //         break;
+        //     case 'frum':
+        //         $sql = "DELETE FROM user_tracks WHERE subject_id in (12,13,40) AND user_id = " . $this->user_id;
+        //         break;
+        // }
+        $sql = "DELETE FROM user_tracks WHERE user_id = " . $this->user_id;
         //echo $sql . "<br />"; die();
         return mysql_query($sql);
     }
