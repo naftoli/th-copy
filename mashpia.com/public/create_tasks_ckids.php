@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
     // $defaultEnd = 2459103;
 
     $defaultStart = 2458971; // May 1, 2020
-    $defaultEnd = 2459005; // June 4, 2020
+    $defaultEnd = 2459096; // Sept 3, 2020
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -355,14 +355,9 @@ if (isset($_POST['submit'])) {
                     $startTemp = $startDate;
                     $endTemp = $endDate;
                     while ($startTemp < $endTemp) {
-                        if ($labelID == 72) {
-                            $arrStart[] = $startTemp;
-                            $arrEnd[] = $startTemp + 6;
-                            $startTemp += 7;
-                        } else {
-                            $arrStart[] = $startTemp;
-                            $arrEnd[] = $startTemp++;
-                        }
+                        $arrStart[] = $startTemp;
+                        $arrEnd[] = $startTemp + 6;
+                        $startTemp += 7;
                     }
                 }
                 //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
