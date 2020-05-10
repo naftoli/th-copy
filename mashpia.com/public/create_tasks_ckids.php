@@ -354,8 +354,14 @@ if (isset($_POST['submit'])) {
                     $startTemp = $startDate;
                     $endTemp = $endDate;
                     while ($startTemp < $endTemp) {
-                        $arrStart[] = $startTemp;
-                        $arrEnd[] = $startTemp++;
+                        if (in_array($labelID, [80,81])) {
+                            $arrStart[] = $startTemp;
+                            $arrEnd[] = $startTemp + 6;
+                            $startTemp += 7;
+                        } else {
+                            $arrStart[] = $startTemp;
+                            $arrEnd[] = $startTemp++;
+                        }
                     }
                 }
                 //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
@@ -373,11 +379,11 @@ if (isset($_POST['submit'])) {
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
 	                    	$mission = $missionName;
-                            // if (empty($mission)) {
-							// 	//echo $start . "<br />";
-							// 	//echo $end . "<br />";
-                            //     $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
-                            // } 
+                            if (empty($mission)) {
+								//echo $start . "<br />";
+								//echo $end . "<br />";
+                                $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
+                            } 
                             //check if there's an array of dates for mandatory or focus
                             // if (!empty($arrMandatory)) {
                             //     $mandatory = 0;
