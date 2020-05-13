@@ -6,6 +6,7 @@ require '../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = [];
+$totals = [];
 $sql = "
     SELECT 
         tc.award_type,
@@ -33,10 +34,23 @@ $sql = "
 			JOIN
 		classes c ON c.class_id = u.class_id 
     WHERE 
-        tc.award_type != '' AND tc.year = " . $year;
+        tc.award_type != '' AND tc.year = " . $year . " 
+            AND
+        u.school_id NOT IN (61, 269) 
+    ORDER BY 
+        s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query( $sql );
-while ( $row = mysql_query( $sql ) ) {
+while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[] = $row;
+    $school = $row['school_name'];
+    $grade = $row['class_grade'] . (empty($row['class_grade']) ? '' : '-' . $row['class_sub']);
+    if (strtolower($row['award_type']) != 'certificate') {
+        if (isset($totals[$school][$grade])) {
+            $totals[$school][$grade]++;
+        } else {
+            $totals[$school][$grade] = 1;
+        }
+    }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
@@ -68,9 +82,7 @@ while ( $row = mysql_query( $sql ) ) {
                 page-break-after: always;
             }
             .medal {
-                width: 1in;
-                float: left;
-                font-size: 9px;
+                font-size: 11px;
             }
             .name {
                 width: 2.15in;
@@ -136,7 +148,7 @@ while ( $row = mysql_query( $sql ) ) {
 
             foreach ( $info as $r ) {
                 $school = $r['school_name'];
-                $grade = $r['school_grade'] . '-' . $r['school_sub'];
+                $grade = $r['class_grade'] . (empty($r['class_grade']) ? '' : '-' . $r['class_sub']);
                 $teacher = $r['class_teacher'];
 
                 $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
@@ -157,38 +169,28 @@ while ( $row = mysql_query( $sql ) ) {
                 } 
                  
                 if ( $schoolChanged || $gradeChanged ) {
-                    if ( $schoolChanged ) {
-                        //echo "</div>";
-                        //checkForBreak();
-                        //echo "<div class='page-break'></div><div class='topSpace'></div><div class='label'>";
+                    if ($schoolChanged) {
                         if (!$firstTime) {
                             echo "<div class='page-break'></div><div class='topSpace'></div>";
                             $i = 1;
                         } else $firstTime = false;
-                        echo "<div class='label'>";
-                        echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
-                        $schoolChanged = false;
-                    } else if ( $gradeChanged ) {
-                        echo "<div class='label'>";
-                        echo "<span class='name'><b>" . $school . "</b><br />" . $teacher . "<br />" . $grade . "</span>"; 
-                        $gradeChanged = false;
+                    }
+                    echo "<div class='label'>";
+                    echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
+                    if ( $gradeChanged ) {
+                        echo "<br /><span class='medal'>Total number of plaques: " . $totals[$school][$grade] . "</span>";
                     }
                     //put current user info on new label so that we don't lose this user
                     echo "</div>";
                     checkForBreak();
-                    echo "<div class='label'>";
-                    echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
-                    echo "</div>";
-                    echo "<div class='label'>";
-                    echo "<span class='medal'>Award: " . $r['award_type'] . "</span>";
-                    echo "</div>";
+                    createLabel( $school, $grade, $r );
                 } else {
-                    echo "<div class='label'>";
-                    echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
-                    echo "</div>";
-                    echo "<div class='label'>";
-                    echo "<span class='medal'>Award: " . $r['award_type'] . "</span>";
-                    echo "</div>";
+                    createLabel( $school, $grade, $r );
+                }
+                if (strtolower($r['award_type']) == 'medal') {
+                    checkForBreak();
+                    $r['award_type'] = 'Plaque';
+                    createLabel( $school, $grade, $r );
                 }
                 // echo "</div>"; 
                 checkForBreak();
@@ -207,6 +209,13 @@ while ( $row = mysql_query( $sql ) ) {
                     }
                 }
                 $i++;
+            }
+
+            function createLabel( $school, $grade, $r ) {
+                echo "<div class='label'>";
+                echo "<span class='name'>" . $school . "<br />" . $r['first'] . ' ' . $r['last'] . " (Grade: " . $grade . ")</span><br /><br />";
+                echo "<b>Award:</b> " . $r['award_type'];
+                echo "</div>";
             }
             ?>
             
