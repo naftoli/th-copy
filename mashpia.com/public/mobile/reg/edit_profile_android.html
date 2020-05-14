@@ -404,7 +404,17 @@
 				})
 				// permission granted:
 				.then(function(stream) {
-					// video.src = window.URL.createObjectURL(stream);
+                    // video.src = window.URL.createObjectURL(stream);
+                    // Older browsers may not have srcObject
+					if ("srcObject" in video) {
+						video.srcObject = stream;
+					} else {
+						// Avoid using this in new browsers, as it is going away.
+						video.src = window.URL.createObjectURL(stream);
+					}
+					video.onloadedmetadata = function(e) {
+						video.play();
+					};
 					window.mediaStream = stream.getTracks()[0]; // create the stream tracker
 					//video.addEventListener('click', takeSnapshot);
 				})
