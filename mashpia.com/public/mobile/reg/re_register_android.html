@@ -384,6 +384,7 @@
 				// permission granted:
 				.then(function(stream) {
 					// video.src = window.URL.createObjectURL(stream);
+					video.srcObject = stream;
 					window.mediaStream = stream.getTracks()[0]; // create the stream tracker
 					//video.addEventListener('click', takeSnapshot);
 				})
