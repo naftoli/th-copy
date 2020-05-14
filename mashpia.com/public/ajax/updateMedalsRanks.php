@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors',1);
 require '../db.php';
 require '../classes/medal_updater.php';
 require '../classes/rank_updater.php';

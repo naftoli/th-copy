@@ -62,7 +62,8 @@ class rank_updater {
 
 	function updateWP( $rank, $user ) {
 		$info = $this->getInfo( $rank, $user );
-		require_once(__DIR__."../blog/wp-load.php");
+		if (defined('STDIN')) require_once '../blog/wp-load.php'; // if running cron job
+		else require_once $_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php";
 		$this->import_promotion($info);
 	}
 	
