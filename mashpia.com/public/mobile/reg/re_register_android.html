@@ -382,14 +382,14 @@
 		// use MediaDevices API
 		// docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 		if (navigator.mediaDevices) {
-			var constraints;
-			if (rearCamera)
-				constraints = {
-					advanced: [{
-						facingMode: "environment"
-					}]
-				};
-			else constraints = true;
+			// var constraints;
+			// if (rearCamera)
+			// 	constraints = {
+			// 		advanced: [{
+			// 			facingMode: "environment"
+			// 		}]
+			// 	};
+			// else constraints = true;
 
 			// stop current streaming
 			if (window.mediaStream)
@@ -397,12 +397,12 @@
 
 			// access the web cam
 			navigator.mediaDevices.getUserMedia({
-					// video: constraints
-					video: true
+					audio: false,
+					video: { facingMode: "user" }
 				})
 				// permission granted:
 				.then(function(stream) {
-					video.src = window.URL.createObjectURL(stream);
+					// video.src = window.URL.createObjectURL(stream);
 					window.mediaStream = stream.getTracks()[0]; // create the stream tracker
 					//video.addEventListener('click', takeSnapshot);
 				})
