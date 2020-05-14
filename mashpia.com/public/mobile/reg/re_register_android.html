@@ -389,6 +389,7 @@
 				})
 				// permission denied:
 				.catch(function(error) {
+					console.log(error);
 					document.body.textContent = 'Could not access the camera. Error: ' + error.name;
 				});
 		}
@@ -553,9 +554,9 @@
 						if (info.mobile_pic != null) {
 							$("#imgchild").attr('src', info.mobile_pic);
 						} else if (info.thumb !== null) {
-							$("#imgchild").attr('src', 'http://mashpia.com/thumbs/' + info.thumb);
+							$("#imgchild").attr('src', 'https://mashpia.com/thumbs/' + info.thumb);
 						} else {
-							$("#imgchild").attr('src', 'http://mashpia.com/file_view.php?id=' + info.user_photo_id);
+							$("#imgchild").attr('src', 'https://mashpia.com/file_view.php?id=' + info.user_photo_id);
 						}
 							
 						$(".gender").each( function() {

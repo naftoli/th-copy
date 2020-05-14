@@ -404,12 +404,13 @@
 				})
 				// permission granted:
 				.then(function(stream) {
-					video.src = window.URL.createObjectURL(stream);
+					// video.src = window.URL.createObjectURL(stream);
 					window.mediaStream = stream.getTracks()[0]; // create the stream tracker
 					//video.addEventListener('click', takeSnapshot);
 				})
 				// permission denied:
 				.catch(function(error) {
+                    console.log(error);
 					document.body.textContent = 'Could not access the camera. Error: ' + error.name;
 				});
 		}
