@@ -397,8 +397,8 @@
 
 			// access the web cam
 			navigator.mediaDevices.getUserMedia({
-					audio: false,
-					video: constraints
+					// video: constraints
+					video: true
 				})
 				// permission granted:
 				.then(function(stream) {
@@ -409,7 +409,7 @@
 				// permission denied:
 				.catch(function(error) {
 					console.log(error)
-					document.body.textContent = 'Could not access the camera. Error: ' + error.name + '\n' + JSON.stringify(navigator.mediaDevices);
+					document.body.textContent = 'Could not access the camera. Error: ' + error.name;
 				});
 		}
 	};
