@@ -382,14 +382,14 @@
 		// use MediaDevices API
 		// docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 		if (navigator.mediaDevices) {
-			// var constraints;
-			// if (rearCamera)
-			// 	constraints = {
-			// 		advanced: [{
-			// 			facingMode: "environment"
-			// 		}]
-			// 	};
-			// else constraints = true;
+			var constraints;
+			if (rearCamera)
+				constraints = {
+					advanced: [{
+						facingMode: "environment"
+					}]
+				};
+			else constraints = true;
 
 			// stop current streaming
 			if (window.mediaStream)
@@ -397,7 +397,7 @@
 
 			// access the web cam
 			navigator.mediaDevices.getUserMedia({
-					video: { facingMode: "user" }
+					video: constraints
 				})
 				// permission granted:
 				.then(function(stream) {
@@ -572,9 +572,9 @@
 						if (info.mobile_pic != null) {
 							$("#imgchild").attr('src', info.mobile_pic);
 						} else if (info.thumb !== null) {
-							$("#imgchild").attr('src', 'http://mashpia.com/thumbs/' + info.thumb);
+							$("#imgchild").attr('src', 'https://mashpia.com/thumbs/' + info.thumb);
 						} else {
-							$("#imgchild").attr('src', 'http://mashpia.com/file_view.php?id=' + info.user_photo_id);
+							$("#imgchild").attr('src', 'https://mashpia.com/file_view.php?id=' + info.user_photo_id);
 						}
 							
 						$(".gender").each( function() {
