@@ -407,8 +407,13 @@
 				})
 				// permission denied:
 				.catch(function(error) {
+<<<<<<< HEAD
 					console.log(error);
 					document.body.textContent = 'Could not access the camera. Error: ' + error.name;
+=======
+					console.log(error)
+					document.body.textContent = 'Could not access the camera. Error: ' + JSON.stringify(error);
+>>>>>>> 10019b1e6... debug  android camera
 				});
 		}
 	};
