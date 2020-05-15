@@ -14,10 +14,7 @@ export class PlatoonRow extends Component {
       soldiers, miles_per_soldier, miles_balance,
     } = this.props.platoon;
 
-    let grades = [
-      'Pre-school 1', 'Pre-school 2', 'Pre-school 3', 'Pre1a', '1', 
-      '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
-    ];
+    let grades = [ 'Pre1a/Kindergarten', '1', '2', '3', '4', '5', '6', '7', '8' ];
     grades = grades.map( grade => ({ label: grade, value: grade }) );
     const selectedGrade = findOption( grades, class_grade );
 
@@ -33,7 +30,7 @@ export class PlatoonRow extends Component {
         </Col>
 
         <Col sm={6}>
-          <label>Sub (optional details, e.g. 'Boys' or 'א‬'.)</label>
+          <label>Class (e.g. 'Boys' or 'א‬'.)</label>
           <Input name='class_sub' value={ class_sub || '' } { ...inputProps } required={ false }/>
         </Col>
 
@@ -46,10 +43,10 @@ export class PlatoonRow extends Component {
           <label>Teacher Phone</label>
 
           <Input required name='cell' type='tel' value={ cell || '' }
-            { ...inputProps } title='1 or more valid phone numbers (, or ; seperated)' // one or more valid phone numbers
+            { ...inputProps } title='separate multiple email addresses with a comma' // one or more valid phone numbers
             //pattern='^(((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) |-)?[0-9]{3}(?: |-)?[0-9]{4}))[,;])*((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) |-)?[0-9]{3}(?: |-)?[0-9]{4}))$'
             />
-          <div className='invalid-message'>1 or more valid phone numbers (, or ; seperated)</div>
+          <div className='invalid-message'>separate multiple email addresses with a comma</div>
         </Col>
 
         <Col sm={6}>
