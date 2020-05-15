@@ -46,7 +46,7 @@ export class PlatoonsPage extends Component {
     let columns = [
       { Header: 'Grade', accessor: 'class_grade',
         Cell: props => <Link to={`${match.path}/${props.original.class_id}`}>{props.value}</Link> },
-      { Header: 'Sub', accessor: 'class_sub',
+      { Header: 'Class', accessor: 'class_sub',
         Cell: props => <Link to={`${match.path}/${props.original.class_id}`}>{props.value}</Link> },
       { Header: 'Teacher', accessor: 'teacher', 
         Cell: props => <Link to={`${match.path}/${props.original.class_id}`}>{props.value}</Link> },

@@ -54,8 +54,8 @@ export class ModulesTab extends React.Component {
     return (
       <TabPane tabId={ tabId } id='ModulesTab'>
 
-        <Callout color="warning">
-          This base can be registered in one or more modules.
+        <Callout>
+          Please choose which modules you would like to enroll your base in.
         </Callout>
 
         <div className='modules'>
@@ -71,8 +71,8 @@ export class ModulesTab extends React.Component {
                 onChange={ onChange }
                 checked={ true }
                 disabled={ true }>
-              Chayolei Tzivos Hashem (CTH)
-            </Checkbox> */}
+              Basic Tzivos Hashem Programming
+            </Checkbox>
 
             <div className='details'>
               <p>
