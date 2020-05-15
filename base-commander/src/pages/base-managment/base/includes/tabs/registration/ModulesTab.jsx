@@ -72,7 +72,7 @@ export class ModulesTab extends React.Component {
                 checked={ true }
                 disabled={ true }>
               Basic Tzivos Hashem Programming
-            </Checkbox>
+            </Checkbox>*/}
 
             <div className='details'>
               <p>
