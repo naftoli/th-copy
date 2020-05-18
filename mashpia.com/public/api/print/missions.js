@@ -2,13 +2,12 @@
 $(".userMission").each( function() {			
     var user = $(this).attr('id');	
     var user_id = user.substring(user.indexOf('-') + 1);
-    var image = 'All';
     var elem = this;
 
     $.ajax({
         url: '/ajax/getMissionInfo.php', 
         async: false, 
-        data: {user_id : user_id, type : image}, 
+        data: { user_id : user_id }, 
         success: function( data ) {
             if ( typeof data == 'string' )
                 data = $.parseJSON(data);
