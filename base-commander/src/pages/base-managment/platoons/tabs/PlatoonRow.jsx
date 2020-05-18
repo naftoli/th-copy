@@ -70,7 +70,7 @@ export class PlatoonRow extends Component {
 
         <Col xs={12}>
           <p className='title'>
-            Achivement Card Settings
+            Achievement Card Settings
           </p>
         </Col>
 

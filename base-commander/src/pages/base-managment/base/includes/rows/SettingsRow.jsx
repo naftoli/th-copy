@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 // components
 import { Row, Col } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
@@ -37,10 +37,10 @@ export class SettingsRow extends Component {
     const { base } = this.props;
     let { 
       pic_mission_type,   store_reset,  school_gender,
-      print_parent_tasks, allow_parent_tasks,
+      print_parent_tasks, allow_parent_tasks, rewards 
     } = base;
 
-    const store_reset_jd = store_reset;
+    const store_reset_jd = parseInt(store_reset);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     //console.log( store_reset );
     //console.log( store_reset_jd );
@@ -95,26 +95,29 @@ export class SettingsRow extends Component {
             Allow
           </Checkbox>
           <Checkbox checked={!!print_parent_tasks} name='print_parent_tasks' { ...checkboxProps} >
-            Print on Mission Sheets
+            Include on printable mission sheets
           </Checkbox>
         </Col>
 
+      { rewards > 0 &&
+      <Fragment>
         <Col sm={12} className='special-options'>
           <p className='title'>Store Miles Settings</p>
-          <Label>Store Miles Start From:</Label>
+          <Label>Allow students to spend miles earned from:</Label>
 
-          <Radio value='2458663' 
+          <Radio value='2459029' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === '2458663' }>
-            Friday, 25 Sivan (June 28) (Chayolim can use the points they earned from summer missions and on)
+            checked={ store_reset_jd === 2459029 }>
+            The beginning of the summer (Friday, 25 Sivan / June 28)
           </Radio>
+          <br />
 
-          <Radio value='2458733' 
+          <Radio value='2459099' 
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === '2458733' }>
-            Friday, 6 Elul (Sep 6) (Chayolim will not be able to use the points they earned from the majority of summer missions)
+            checked={ store_reset_jd === 2459099 }>
+            The beginning of the school year (Friday, 6 Elul / Sep 6)
           </Radio>
 
           <br />
@@ -122,7 +125,7 @@ export class SettingsRow extends Component {
             { ...storeResetProps }
             onChange={ this.disableSchoolReset } 
             checked={ store_reset_jd === 0 }>
-            Never (This includes all miles from previous years) 
+            Always (This includes all miles from previous years) 
           </Radio>
           <br />
 
@@ -154,6 +157,8 @@ export class SettingsRow extends Component {
             This includes all miles from previous years
           </UncontrolledTooltip> */}
         </Col>
+      </Fragment>
+      }
       </Row>
     );
   }

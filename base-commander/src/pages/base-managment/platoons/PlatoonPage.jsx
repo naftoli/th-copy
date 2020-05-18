@@ -122,7 +122,7 @@ export class PlatoonPage extends Component {
 }
 
 const mapStateToProps = ({ login }) => ({
-  login: login.current_login
+  login: login.current_login, 
 })
 
 const mapDispatchToProps = { 

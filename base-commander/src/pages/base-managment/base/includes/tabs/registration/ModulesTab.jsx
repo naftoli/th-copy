@@ -65,7 +65,7 @@ export class ModulesTab extends React.Component {
                 onChange={ onChange }
                 checked={ !!chayolei }
                 disabled={ !modules.chayolei }>
-              Chayolei Tzivos Hashem (CTH)
+              Basic Tzivos Hashem Programming
             </Checkbox>
             {/* <Checkbox name='chayolei'
                 onChange={ onChange }
