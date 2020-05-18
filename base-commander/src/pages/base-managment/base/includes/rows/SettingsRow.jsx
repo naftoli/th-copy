@@ -40,7 +40,7 @@ export class SettingsRow extends Component {
       print_parent_tasks, allow_parent_tasks, rewards 
     } = base;
 
-    const store_reset_jd = parseInt(store_reset);
+    const store_reset_jd = parseInt(store_reset, 10);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     //console.log( store_reset );
     //console.log( store_reset_jd );
