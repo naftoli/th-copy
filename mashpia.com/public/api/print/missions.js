@@ -36,7 +36,9 @@ $(".userMission").each( function() {
                 $.each(val, function(indx, value) {
                     //build footer info
                     if (j++ == 0) { //first get sticker info
-                        str += "<img src='/mission_report/stickerOutlines/" + s[i] + "' /><br /><b>" + indx + "</b><br />";
+                        // make sure subject has a sticker image
+                        if (i in s) str += "<img src='/mission_report/stickerOutlines/" + s[i] + "' /><br /><b>" + indx + "</b><br />";
+                        else str += "<img src='' /><br /><b>" + indx + "</b><br />";
                     } else { //then get medal info
                         str += "<i>" + value + " to " + indx + "</i>";
                     }
