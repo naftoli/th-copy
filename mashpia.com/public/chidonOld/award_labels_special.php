@@ -86,7 +86,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             }
             @media screen { 
                 #report_div {
-                    /* display: none; */
+                    display: none;
                 }
                 .no-print {
                     display: block;
