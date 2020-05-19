@@ -79,7 +79,7 @@ class ParentPage extends Component {
     // get the info from the parent
     const { 
       father_pic, mother_pic, father, mother, last,
-      username, cell, email, children, ...address
+      username, cell, mother_cell, email, children, ...address
     } = parent;
 
     const options = getChildOptions( this.props.availableChildren );
@@ -105,19 +105,23 @@ class ParentPage extends Component {
             <label>Username</label>
             <Input value={ username } disabled />
           </Col>
-          <Col xs={{size: 12, order: 12}} sm={{size: 6, order: 2}}>
-            <Button color='primary' id='login' onClick={ this.loginToParent }>
-              <FontAwesome icon='sign-in-alt' /> Login to parent account.
-            </Button>
-          </Col>
-          <Col sm={{size: 6, order: 3}}>
-            <label>Cell Phone</label>
-            <PhoneNumber value={ cell } disabled />
-          </Col>
-          <Col sm={{size: 6, order: 4}}>
+          <Col sm={{size: 6, order: 2}}>
             <label>E-Mail Address</label>
             <Input value={ email } disabled />
           </Col>
+          <Col sm={{size: 6, order: 3}}>
+            <label>Father's Cell Phone</label>
+            <PhoneNumber value={ cell } disabled />
+          </Col>
+          <Col sm={{size: 6, order: 4}}>
+            <label>Mother's Cell Phone</label>
+            <PhoneNumber value={ mother_cell } disabled />
+          </Col>
+          <Col sm={{size: 12, order: 5}}>
+            <Button color='primary' id='login' onClick={ this.loginToParent }>
+              <FontAwesome icon='sign-in-alt' /> Login to parent account.
+            </Button>
+          </Col>          
         </Row>
 
         <AddressRow disabled { ...address } prefix='admin_' title='Address' />
