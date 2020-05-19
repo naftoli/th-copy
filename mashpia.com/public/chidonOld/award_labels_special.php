@@ -12,7 +12,8 @@ $sql = "
         tc.award_type,
         tc.trophy,
         u.first,
-        u.last, 
+        u.last,
+        a.admin_id,  
         a.first as parent_first, 
         a.last as parent_last, 
         a.admin_address1, 
@@ -85,7 +86,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             }
             @media screen { 
                 #report_div {
-                    display: none;
+                    /* display: none; */
                 }
                 .no-print {
                     display: block;
@@ -128,46 +129,57 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <div id="report_div" name="report_div">
             <div class='topSpace'></div>
             <?php 
-            $i = 1; //counter for columns
+            $cols = 1; //counter for columns
             $rows = 1; //counter for rows 
 
+            $admin_id = 0;
+            $showAddress = false;
             foreach ( $info as $r ) {  
-                createLabel( $r );
+                if ($admin_id != $r['admin_id']) {
+                    $showAddress = true;
+                    $admin_id = $r['admin_id'];
+                } else {
+                    $showAddress = false;
+                }
+                createLabel( $r, $showAddress );
                 if (strtolower($r['award_type']) == 'medal') {
-                    checkForBreak();
                     $r['award_type'] = 'Plaque';
                     createLabel( $r );
                 }
+            }
+
+            function createLabel( $r, $showAddress = false ) {
+                $shippingName = $r['parent_first'] . ' ' . $r['parent_last'];
+                $shipping = empty($r['admin_address2']) ? '' : $r['admin_address2'] . "<br />";
+                $shippingAddress = $r['admin_address1'] . "<br />" . $shipping . $r['admin_city'] . 
+                        ", " . $r['admin_state'] . " " . $r['admin_postal'] . "<br />" . $r['admin_country'];
+                
+                if ( $showAddress ) {
+                    echo "<div class='label'>";
+                    echo "<span class='name'>" . $shippingName . "<br />" . $shippingAddress . "</span>";
+                    echo "</div>";
+                    checkForBreak();
+                }
+                echo "<div class='label'>";
+                echo "<span class='name'>" . $r['first'] . ' ' . $r['last'] . "</span><br /><br />";
+                echo "<b>Award:</b> " . $r['award_type'];
+                echo "</div>";
                 checkForBreak();
             }
 
             function checkForBreak() {
-                global $i, $rows;
-                if (($i % 3) != 0) {
+                global $cols, $rows;
+                if (($cols % 3) != 0) {
                     echo "<div class='space'></div>";
                 } else {
-                    $i = 0; //reset i so that it will show new row
+                    $cols = 0; //reset i so that it will show new row
                     $rows++; //add row
                     if ( ($rows % 11) == 0 ) {
                         $rows = 1; //reset rows counter and add space to top of new page
                         echo "<div class='page-break'></div><div class='topSpace'></div>"; 
                     }
                 }
-                $i++;
-            }
-
-            function createLabel( $r ) {
-                $shippingName = $r['parent_first'] . ' ' . $r['parent_last'];
-                $shipping = empty($r['admin_address2']) ? '' : $r['admin_address2'] . "<br />";
-                $shippingAddress = $r['admin_address1'] . "<br />" . $shipping . $r['admin_city'] . 
-                        ", " . $r['admin_state'] . " " . $r['admin_postal'] . "<br />" . $r['admin_country'];
-                echo "<div class='label'>";
-                echo "<span class='name'>" . $shippingName . "<br />" . $shippingAddress . "</span>";
-                echo "</div>";
-                echo "<div class='label'>";
-                echo "<span class='name'>" . $r['first'] . ' ' . $r['last'] . "</span><br /><br />";
-                echo "<b>Award:</b> " . $r['award_type'];
-                echo "</div>";
+                $cols++;
             }
             ?>
             
