@@ -3,7 +3,7 @@ ini_set('display_errors',1);
 $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../class.rankReport.php';
-$r = new RankReport;
+$r = new RankReport(true); // true param gets previous report
 $r->setRanks('byGenerals', 9);
 $ranks = $r->getRanks();
 $logos = $r->getSchoolLogos();
