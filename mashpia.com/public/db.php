@@ -803,7 +803,7 @@ function header_points($arrParams) {
 		print "Sorry, there was an error: H-HIP101-SA87DS";
 		exit;
 	}
-	$strUrl = 'http://'.$_SERVER['SERVER_NAME'].'/v2/legacy/userpoints';
+	$strUrl = 'http://mashpia.com/v2/legacy/userpoints';
 	if (isset($arrParams["no_negs"])) {
 		$strUrl .= "/no_negs/" . $arrParams["no_negs"];
 	}
@@ -825,6 +825,10 @@ function header_points($arrParams) {
 	curl_setopt($objCurl, CURLOPT_POSTFIELDS, $arrPost);
 	curl_setopt($objCurl, CURLOPT_RETURNTRANSFER, 1);
 	$strResult = curl_exec($objCurl);
+	if ($strResult == false) {
+		$error = curl_error($objCurl);
+		$info = curl_getinfo($objCurl);
+	}
 	//echo $strResult; exit;
 
 	if (0&&preg_match("/Sorry, there was an error/", $strResult))
