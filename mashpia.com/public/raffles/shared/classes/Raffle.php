@@ -273,6 +273,7 @@ class Raffle {
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
             echo "User ID: " . $user_id . "<br />";
+            echo "School ID: " . $row['school_id'] . "<br />";
             // select the total number of days that the user was marked between the start date and end date for daily tasks with the following querry (transalated to SQL)
             // get the total number of rows that are returned from the following query as `total`
             // get the mark date from date_tasks_marks where the user_track and the mark have the users user id, the task is a daily task, and the mark date is within the raffles boundries
