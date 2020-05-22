@@ -272,6 +272,7 @@ class Raffle {
         while ($row = mysql_fetch_assoc($query)){
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
+            echo "User ID: " . $user_id . "<br />";
             // select the total number of days that the user was marked between the start date and end date for daily tasks with the following querry (transalated to SQL)
             // get the total number of rows that are returned from the following query as `total`
             // get the mark date from date_tasks_marks where the user_track and the mark have the users user id, the task is a daily task, and the mark date is within the raffles boundries
@@ -314,6 +315,7 @@ class Raffle {
                 
             } else if ($this->type == 'monthly'){ // if it is monthly, do the monthly checks.
                 if($total >= Constants::get_monthly_task_requirment()){ // we need 60 days
+                    echo "Total: " . $total . "<br /><br />";
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                     //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
                 } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
@@ -338,6 +340,7 @@ class Raffle {
                             $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false); 
                         }
                     }
+                    echo "Total: " . $total . "<br /><br />";
                 }
                 
                 //if($log && $total < 20) echo "uneligible\n";
