@@ -272,6 +272,7 @@ class Raffle {
         while ($row = mysql_fetch_assoc($query)){
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
+            echo "<br />";
             echo "User ID: " . $user_id . "<br />";
             echo "School ID: " . $row['school_id'] . "<br />";
             // select the total number of days that the user was marked between the start date and end date for daily tasks with the following querry (transalated to SQL)
@@ -290,6 +291,7 @@ class Raffle {
             $total = $daily_row['total']; // get the value in the defined total field
             // log the user id and the total
             //if($log) echo "user_id: $user_id\t total daily marks: $total\t";
+            echo "Total before daily: " . $total . "<br />";
             
             if($this->type == 'weekly'){ // if this is a weekly raffle: do the weekly checks
                 // give the user a chance
@@ -340,8 +342,8 @@ class Raffle {
                             // if it reaches 60, add it to the user_id
                             $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false); 
                         }
+                        echo "Total: " . $total . "<br /><br />";
                     }
-                    echo "Total: " . $total . "<br /><br />";
                 }
                 
                 //if($log && $total < 20) echo "uneligible\n";
