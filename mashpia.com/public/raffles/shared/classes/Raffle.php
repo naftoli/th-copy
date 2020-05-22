@@ -220,7 +220,7 @@ class Raffle {
      *
      * TODO: check even if the user is not in the table based off of doc
      */
-    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false, $school_id = 0){
+    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false, $school_id = 0, $debug = false){
         $year = $this->year;
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
@@ -236,6 +236,7 @@ class Raffle {
         // add the sorting by the user_id
         if($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
+        if ($debug) echo $sql . "<br />";
         // print out some logs
         if($log) echo "Getting users manually marked as eligible\n";
         // run the query
@@ -261,6 +262,7 @@ class Raffle {
         if( $user_id ) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
         $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
+        if ($debug) echo $sql . "<br />";
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
         if($log) echo "Checking ".mysql_num_rows($query)." remaining users";
