@@ -318,7 +318,7 @@ class Raffle {
                 
             } else if ($this->type == 'monthly'){ // if it is monthly, do the monthly checks.
                 if($total >= Constants::get_monthly_task_requirment()){ // we need 60 days
-                    echo "Total: " . $total . "<br /><br />";
+                    echo "Total: " . $total . "<br />";
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                     //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
                 } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
@@ -342,10 +342,10 @@ class Raffle {
                             // if it reaches 60, add it to the user_id
                             $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false); 
                         }
-                        echo "Total: " . $total . "<br /><br />";
                     }
+                    echo "Total: " . $total . "<br />";
                 }
-                
+                echo "<br />";
                 //if($log && $total < 20) echo "uneligible\n";
                 //if($log && $total >= 20) echo "eligible\n";
             }
