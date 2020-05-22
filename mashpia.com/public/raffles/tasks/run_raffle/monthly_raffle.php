@@ -34,7 +34,7 @@ function monthly_raffle($raffle){
 
     echo "<pre>";
     print_r(array_keys($schools));
-    // print_r($prizes);
+    print_r($prizes);
     echo "</pre>";
     
     /************************** RUN RAFFLE **************************/
