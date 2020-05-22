@@ -6,7 +6,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
 $raffle = Raffle::load($_GET['raffle_id']);
-$schools = $raffle->get_eligable_user_ids(false, true, true, false, 0, true);
+$schools = $raffle->get_eligable_user_ids(false, true, true);
 echo "<pre>";
 print_r(array_keys($schools)); 
 echo "</pre>";
