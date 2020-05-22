@@ -253,7 +253,7 @@ class Raffle {
         if($log) echo "Loading remaining users...\n";
         // get all users not marked in raffle_eligibility and who are registerd
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
-            " LEFT JOIN admins a USING ( admin_id ) ".
+            // " LEFT JOIN admins a USING ( admin_id ) ".
             " WHERE u.user_registered IS NOT NULL AND u.school_id " . ($school_id ? "= " . $school_id : " IS NOT NULL ");
         // on reports we need to hide the soldiers who already won
         if ( !$report )
@@ -261,7 +261,7 @@ class Raffle {
         // if a user is passed in, then limit it to this user
         if( $user_id ) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
-        $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
+        $sql .= " GROUP BY u.user_id ORDER BY u.school_id, u.user_id;"; // LIMIT 250 only for testing
         if ($debug) echo $sql . "<br />";
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
@@ -270,6 +270,8 @@ class Raffle {
         
         // for each of the users not marked in the table
         while ($row = mysql_fetch_assoc($query)){
+            echo "<br />School: " . $row['school_id'] . "<br />";
+            echo "User: " . $row['user_id'] . "<br />";
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
             if ( $this->type == 'monthly' ) {
@@ -291,6 +293,7 @@ class Raffle {
                     }
                 }
             }
+            echo "Total: " . $total . "<br /><br />";
             if ( $total >= $needed ) {
                 $this->append_to_user_ids($user_id, [
                     "user_id" => $user_id, 
