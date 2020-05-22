@@ -31,6 +31,11 @@ function monthly_raffle($raffle){
     $prize_sql = "SELECT * FROM raffles_monthly WHERE raffle_id=".$raffle->raffle_id.";";
     $prize_query = mysql_query($prize_sql); $prizes = [];
     while($prize = mysql_fetch_assoc($prize_query)) $prizes[] = $prize;
+
+    echo "<pre>";
+    print_r($schools);
+    print_r($prizes);
+    echo "</pre>";
     
     /************************** RUN RAFFLE **************************/
     echo "Beginning Raffle...\n";
