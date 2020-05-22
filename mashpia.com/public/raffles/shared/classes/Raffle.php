@@ -574,15 +574,22 @@ class Raffle {
     }
 
     private function checkDaily( $user_id ) {
-        $daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
-                    ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
-                    ' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
-                    ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
-                    ' and dtmarks.mark_date >= '. $this->start_date .' and dtmarks.mark_date <= ' . $this->end_date .
-                    ' group by dtmarks.mark_date';
-        //echo $daily_sql."\n"; // if you want to debug...
-        $daily_query = mysql_query($daily_sql); // run the query
-        $total = mysql_num_rows( $daily_query ); // get the number of marks
+        $start = $this->start_date;
+        $end = $start + 6;
+        $total = 0;
+        while ( $end <= $this->end_date ) {
+            $daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
+                        ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
+                        ' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
+                        ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
+                        ' and dtmarks.mark_date >= '. $start .' and dtmarks.mark_date <= ' . $end .
+                        ' group by dtmarks.mark_date';
+            //echo $daily_sql."\n"; // if you want to debug...
+            $daily_query = mysql_query($daily_sql); // run the query
+            if ( mysql_num_rows( $daily_query ) > 0 ) $total++; // get the number of marks
+            $start = $end + 1;
+            $end = $start + 6;
+        }
         return $total;
     }
 }
