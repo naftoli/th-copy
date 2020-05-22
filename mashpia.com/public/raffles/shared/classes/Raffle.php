@@ -293,8 +293,8 @@ class Raffle {
                     }
                 }
             }
-            echo "Total: " . $total . "<br /><br />";
             if ( $total >= $needed ) {
+                echo "Total: " . $total . "<br /><br />";
                 $this->append_to_user_ids($user_id, [
                     "user_id" => $user_id, 
                     "school_id" => $row['school_id'], 
