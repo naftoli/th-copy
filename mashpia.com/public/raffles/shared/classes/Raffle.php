@@ -270,8 +270,8 @@ class Raffle {
         
         // for each of the users not marked in the table
         while ($row = mysql_fetch_assoc($query)){
-            echo "<br />School: " . $row['school_id'] . "<br />";
-            echo "User: " . $row['user_id'] . "<br />";
+            // echo "<br />School: " . $row['school_id'] . "<br />";
+            // echo "User: " . $row['user_id'] . "<br />";
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
             if ( $this->type == 'monthly' ) {
@@ -294,7 +294,7 @@ class Raffle {
                 }
             }
             if ( $total >= $needed ) {
-                echo "Total: " . $total . "<br /><br />";
+                // echo "Total: " . $total . "<br /><br />";
                 $this->append_to_user_ids($user_id, [
                     "user_id" => $user_id, 
                     "school_id" => $row['school_id'], 
