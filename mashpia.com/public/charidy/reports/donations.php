@@ -48,7 +48,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <td></td>
       </tr>
       <?php
-      $years = [5776,5777,5778];
+      $years = [5776,5777,5778,5779];
 
       foreach ( $years as $year ) {
         $totals[$year] = 0;
