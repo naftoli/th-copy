@@ -44,6 +44,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <th>5776 Donation</th>
         <th>5777 Donation</th>
         <th>5778 Donation</th>
+        <th>5779 Donation</th>
         <td></td>
       </tr>
       <?php
