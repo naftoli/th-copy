@@ -72,7 +72,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         }
         echo "</td></tr>";
       }
-      echo "<tr><td colspan='6'></td>";
+      echo "<tr><td colspan='11'></td>";
       foreach ( $totals as $year => $amount ) {
         echo "<th>$" . number_format( $amount ) . "</th>";
       }
