@@ -220,7 +220,7 @@ class Raffle {
      *
      * TODO: check even if the user is not in the table based off of doc
      */
-    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false, $school_id = 0, $debug = false){
+    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false, $school_id = 0){
         $year = $this->year;
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
@@ -236,7 +236,6 @@ class Raffle {
         // add the sorting by the user_id
         if($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
-        if ($debug) echo $sql . "<br />";
         // print out some logs
         if($log) echo "Getting users manually marked as eligible\n";
         // run the query
@@ -253,7 +252,7 @@ class Raffle {
         if($log) echo "Loading remaining users...\n";
         // get all users not marked in raffle_eligibility and who are registerd
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
-            // " LEFT JOIN admins a USING ( admin_id ) ".
+            " LEFT JOIN admins a USING ( admin_id ) ".
             " WHERE u.user_registered IS NOT NULL AND u.school_id " . ($school_id ? "= " . $school_id : " IS NOT NULL ");
         // on reports we need to hide the soldiers who already won
         if ( !$report )
@@ -262,7 +261,7 @@ class Raffle {
         // if a user is passed in, then limit it to this user
         if( $user_id ) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
-        $sql .= " GROUP BY u.user_id ORDER BY u.school_id, u.user_id;"; // LIMIT 250 only for testing
+        $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
         if($log) echo "Checking ".mysql_num_rows($query)." remaining users";
@@ -270,17 +269,28 @@ class Raffle {
         
         // for each of the users not marked in the table
         while ($row = mysql_fetch_assoc($query)){
-            // echo "<br />School: " . $row['school_id'] . "<br />";
-            // echo "User: " . $row['user_id'] . "<br />";
             if($log && ++$log_count == 50){echo "."; $log_count = 0;} // log a . for every 50 users checked
             $user_id = $row['user_id']; // get the user id
-            if ( $this->type == 'monthly' ) {
-                $total = $this->checkMonthly( $user_id );
-                $needed = Constants::get_monthly_task_requirment();
-            } else {
-                $total = $this->checkDaily( $user_id );
-                $needed = Constants::get_weekly_task_requirment();
-                if ($total == ($needed - 1)){ // if it is only (4) we can check for some marks that are not tied to any specific dates
+            // select the total number of days that the user was marked between the start date and end date for daily tasks with the following querry (transalated to SQL)
+            // get the total number of rows that are returned from the following query as `total`
+            // get the mark date from date_tasks_marks where the user_track and the mark have the users user id, the task is a daily task, and the mark date is within the raffles boundries
+            //      join all the dates together to avoid duplicates (the group by at the end)
+            $daily_sql = 'select count(*) as total from (select dtmarks.mark_date from user_tracks ut'.
+                        ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
+                        ' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
+                        ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
+                        ' and dtmarks.mark_date >= '. $this->start_date .' and dtmarks.mark_date <= ' . $this->end_date .
+                        ' group by dtmarks.mark_date) AS SQ';
+            //if($log) echo $daily_sql."\n"; // if you want to debug...
+            $daily_query = mysql_query($daily_sql); // run the query
+            $daily_row = mysql_fetch_assoc($daily_query); // get the row
+            $total = $daily_row['total']; // get the value in the defined total field
+            // log the user id and the total
+            //if($log) echo "user_id: $user_id\t total daily marks: $total\t";
+            
+            if($this->type == 'weekly'){ // if this is a weekly raffle: do the weekly checks
+                // give the user a chance
+                if($total == Constants::get_weekly_task_requirment() - 1){ // if it is only (4) we can check for some marks that are not tied to any specific dates
                     // get a total count of all the non daily missions marked between the start and end dates of this raffle
                     $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
                             " AND dtmarks.mark_date >= ". $this->start_date ." AND dtmarks.mark_date <= ". $this->end_date .
@@ -289,96 +299,49 @@ class Raffle {
                     $update_total_row = mysql_fetch_assoc($update_total_query);
                     // if the user did at least one task then add him to the list (as it brings his total from 4 to 5)
                     if($update_total_row['total'] > 0) {
-                        $total++; // set the total to 5
+                        $total = 5; // set the total to 5
                     }
                 }
-            }
-            if ( $total >= $needed ) {
-                // echo "Total: " . $total . "<br /><br />";
-                $this->append_to_user_ids($user_id, [
-                    "user_id" => $user_id, 
-                    "school_id" => $row['school_id'], 
-                    "admin_id" => $row['admin_id']
-                ], $group_by_school ? $row['school_id'] : false);
-            }
-            // echo "<br />";
-            // echo "User ID: " . $user_id . "<br />";
-            // echo "School ID: " . $row['school_id'] . "<br />";
-            // select the total number of days that the user was marked between the start date and end date for daily tasks with the following querry (transalated to SQL)
-            // get the total number of rows that are returned from the following query as `total`
-            // get the mark date from date_tasks_marks where the user_track and the mark have the users user id, the task is a daily task, and the mark date is within the raffles boundries
-            //      join all the dates together to avoid duplicates (the group by at the end)
-            // $daily_sql = 'select count(*) as total from (select dtmarks.mark_date from user_tracks ut'.
-            //             ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
-            //             ' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
-            //             ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
-            //             ' and dtmarks.mark_date >= '. $this->start_date .' and dtmarks.mark_date <= ' . $this->end_date .
-            //             ' group by dtmarks.mark_date) AS SQ';
-            //if($log) echo $daily_sql."\n"; // if you want to debug...
-            // $daily_query = mysql_query($daily_sql); // run the query
-            // $daily_row = mysql_fetch_assoc($daily_query); // get the row
-            // $total = $daily_row['total']; // get the value in the defined total field
-            // log the user id and the total
-            //if($log) echo "user_id: $user_id\t total daily marks: $total\t";
-            // echo "Total before daily: " . $total . "<br />";
-            
-            // if($this->type == 'weekly'){ // if this is a weekly raffle: do the weekly checks
-            //     // give the user a chance
-            //     if($total == Constants::get_weekly_task_requirment() - 1){ // if it is only (4) we can check for some marks that are not tied to any specific dates
-            //         // get a total count of all the non daily missions marked between the start and end dates of this raffle
-            //         $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
-            //                 " AND dtmarks.mark_date >= ". $this->start_date ." AND dtmarks.mark_date <= ". $this->end_date .
-            //                 " AND daily_task = 0 AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-            //         $update_total_query = mysql_query($update_total_sql);
-            //         $update_total_row = mysql_fetch_assoc($update_total_query);
-            //         // if the user did at least one task then add him to the list (as it brings his total from 4 to 5)
-            //         if($update_total_row['total'] > 0) {
-            //             $total = 5; // set the total to 5
-            //         }
-            //     }
-            //     // check if they are eligible
-            //     if($total >= Constants::get_weekly_task_requirment())
-            //         $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
+                // check if they are eligible
+                if($total >= Constants::get_weekly_task_requirment())
+                    $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                     //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
 
                 // log uneligible if it is less then 5
                 //if($log && $total >= 5) echo "eligible\n";
                 //if($log && $total < 5) echo "uneligible\n";
                 
-            // } else if ($this->type == 'monthly'){ // if it is monthly, do the monthly checks.
-            //     if($total >= Constants::get_monthly_task_requirment()){ // we need 60 days
-                    // echo "Total: " . $total . "<br />";
-            //         $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
+            } else if ($this->type == 'monthly'){ // if it is monthly, do the monthly checks.
+                if($total >= Constants::get_monthly_task_requirment()){ // we need 60 days
+                    $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                     //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
-            //     } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
-                    // $start_date = $this->start_date; // default to this start date
-                    // $end_date = $this->start_date + 6; // get the end date for the first week
-                    // // TODO, iterate and check for additional marks...
-                    // $i = 0; // set $i to 0
-                    // while($total < 60 && $i < 12){ // while we are still below 20 and have not checked all 4 weeks yet.
-                    //     $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
-                    //         AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
-                    //         AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-                    //     $update_total_query = mysql_query($update_total_sql);
-                    //     $update_total_row = mysql_fetch_assoc($update_total_query);
-                    //     // cleanup
-                    //     $i++; // increment $i
-                    //     $start_date = $end_date + 1; // go to the next day for the next start date
-                    //     $end_date = $start_date + 6; // get the end date for the first week
+                } else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
+                    $start_date = $this->start_date; // default to this start date
+                    $end_date = $this->start_date + 6; // get the end date for the first week
+                    // TODO, iterate and check for additional marks...
+                    $i = 0; // set $i to 0
+                    while($total < 60 && $i < 12){ // while we are still below 20 and have not checked all 4 weeks yet.
+                        $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
+                            AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
+                            AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+                        $update_total_query = mysql_query($update_total_sql);
+                        $update_total_row = mysql_fetch_assoc($update_total_query);
+                        // cleanup
+                        $i++; // increment $i
+                        $start_date = $end_date + 1; // go to the next day for the next start date
+                        $end_date = $start_date + 6; // get the end date for the first week
                         
-                    //     if($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
-                    //     if($total == Constants::get_monthly_task_requirment()) {
-                    //         // if it reaches 60, add it to the user_id
-                    //         $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false); 
-                    //     }
-
-            //         }
-                    // echo "Total: " . $total . "<br />";
-            //     }
-                // echo "<br />";
+                        if($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
+                        if($total == Constants::get_monthly_task_requirment()) {
+                            // if it reaches 60, add it to the user_id
+                            $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false); 
+                        }
+                    }
+                }
+                
                 //if($log && $total < 20) echo "uneligible\n";
                 //if($log && $total >= 20) echo "eligible\n";
-            // }
+            }
         }
         if($log) echo "\n";
         
