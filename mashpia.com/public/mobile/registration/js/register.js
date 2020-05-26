@@ -318,13 +318,13 @@ var registrationApp = function() {
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
-            chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
+            // chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
             ckids: $('#ckids-registration input')[0].checked, 
             chidon: $('#chidon-registration input')[0].checked,
             yahadus: $('#yahadus-registration input')[0].checked
         }
         if ( selected_charges.chayolei === false 
-            && selected_charges.chayolei_lite === false 
+            // && selected_charges.chayolei_lite === false 
             && selected_charges.ckids === false 
             && selected_charges.chidon === false 
             //&& selected_charges.yahadus === false
@@ -678,7 +678,8 @@ var templates = function(){
                         '<p class="name">' + child.first + " " + child.last + '</p>' +
                         ( child.registrationStatus.chayolei === false ? 
                             child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) : 
-                            ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '<br />($0 Free Lite Edition)</p>' ) : '' ) +
+                            ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei ) : '' ) +
+                            // ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '<br />($0 Free Lite Edition)</p>' ) : '' ) +
                         ( child.registrationStatus.chidon === false ? 
                             ( '<p class="reg_cost">Chidon: $' + child.registrationRates.chidon + '</p>' ) : '' ) +
                     '</div><div class="col-2">' +
@@ -733,19 +734,19 @@ var templates = function(){
             $("#step-2 form .chidon-reg").hide();
 
             // reset chayolei lite reg
-            $( '#step-2 form #chayolei-lite-registration input' )[0].checked = false;
+            // $( '#step-2 form #chayolei-lite-registration input' )[0].checked = false;
 
             // reset ckids reg
             $( '#step-2 form #ckids-registration input' )[0].checked = false;
             // hide ckids unless its a ckids child
             if (user.school_inst_id === 10) {
                 $('#step-2 form #chayolei-registration').hide();
-                $('#step-2 form #chayolei-lite-registration').hide();
+                // $('#step-2 form #chayolei-lite-registration').hide();
                 $('#step-2 form #ckids-registration').show();
                 $("#step-2 form #broadcast").hide();
             } else {
                 $('#step-2 form #chayolei-registration').show();
-                $('#step-2 form #chayolei-lite-registration').show();
+                // $('#step-2 form #chayolei-lite-registration').show();
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
             }
