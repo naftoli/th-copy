@@ -11,6 +11,7 @@ $sql = "
     SELECT 
         tc.award_type,
         tc.trophy,
+        tc.cert_number,
         u.first,
         u.last,
         a.admin_id,  
@@ -162,6 +163,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 }
                 echo "<div class='label'>";
                 echo "<span class='name'>" . $r['first'] . ' ' . $r['last'] . "</span><br /><br />";
+                echo "<b>Cert #:</b> " . $r['cert_number']
                 echo "<b>Award:</b> " . $r['award_type'];
                 echo "</div>";
                 checkForBreak();
