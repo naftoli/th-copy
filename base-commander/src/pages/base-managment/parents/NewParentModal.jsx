@@ -16,7 +16,7 @@ import { isHQ } from 'functions/login';
 
 const initialState = {
   father: '', mother: '', last: '',   email: '',
-  cell: '',   home: '',   children: [],
+  father_cell: '',   mother_cell: '',   children: [],
   error: false, saving: false
 }
 
@@ -60,7 +60,7 @@ class NewParentModal extends Component {
   render(){
     const { isOpen, toggle, login } = this.props;
     const {
-      mother, cell, error, home,
+      mother, father_cell, error, mother_cell,
       father, last, email, saving, children
     } = this.state;
     // props for all inputs
@@ -116,18 +116,18 @@ class NewParentModal extends Component {
               </Col>
 
               <Col xs={6}>
-                <Label>Cell Phone</Label>
+                <Label>Father Cell Phone</Label>
                 <PhoneNumber required name='home'
-                  value={ home } {...inputProps} />
+                  value={ father_cell } {...inputProps} />
                 <div className='invalid-message'>
                   Please enter a valid phone number
                 </div>
               </Col>
 
               <Col xs={6}>
-                <Label>Home Phone</Label>
+                <Label>Mother Cell Phone</Label>
                 <PhoneNumber required name='cell'
-                  value={ cell } {...inputProps} />
+                  value={ mother_cell } {...inputProps} />
                 <div className='invalid-message'>
                   Please enter a valid phone number
                 </div>

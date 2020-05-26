@@ -16,7 +16,7 @@ const Step3 = ({
       <Row>
         <Col sm={6} xl={4}>
           <label>To Base</label>
-          <PTBaseSelect value={ school_id } fetchAll 
+          <PTBaseSelect value={ school_id } addUnassigned fetchAll 
             onChange={ selectChange('school_id') } />
         </Col>
         <Col sm={6} xl={4}>

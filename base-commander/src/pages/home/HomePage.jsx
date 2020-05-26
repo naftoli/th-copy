@@ -36,7 +36,7 @@ class HomePage extends Component {
     const { name, img, code, active } = this.props.login;
     const { login, home, getRegistration } = this.props;
 
-    if ( isBlank( code ) ) {
+    if ( active && isBlank( code ) ) {
       return (
         <div id='HomePage' className='select-account-type'>
           <h1>Select Account Type</h1>
@@ -65,8 +65,10 @@ class HomePage extends Component {
           </div>
         </div>
       );
+    }
+    
     // show the registration page to accounts that are currently disabled.
-    } else if ( !active ) {
+    else if ( !active ) {
       return <RegistrationPage />;
     }
     

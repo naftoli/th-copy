@@ -199,7 +199,25 @@
 		                  </div>
 		              </div>
 		          </div>
-		      </div>
+			  </div>
+			  
+			  <div class="row">
+				<div class="col-xs-12">
+					<div class="form-group has-feedback" id="divclass">
+						<div class="input-group" id="type_select">
+							<span class="input-group-addon"><img src="/mobile/img_new/arrow-2-color-gray-svg.svg"/></span>
+							<select id="type" name="type" class="selectpicker show-tick form-control" data-style="btn-default" required>
+							  <option value="2">Chabad</option>
+							  <option value="12">Frum</option>
+							  <option value="4">CKids Day School</option>
+							  <option value="6">CKids Hebrew School</option>
+							  <option value="8">CKids No School</option>
+							  <option value="14">Friendship Circle</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
 					
 					<div class="row reg">
 							<div class="col-xs-12">
@@ -384,7 +402,6 @@
 				// permission granted:
 				.then(function(stream) {
 					// video.src = window.URL.createObjectURL(stream);
-					// video.srcObject = stream;
 					// Older browsers may not have srcObject
 					if ("srcObject" in video) {
 						video.srcObject = stream;
@@ -592,6 +609,43 @@
 						$("#zip").val( info.user_postal );
 						var lang = parseInt( info.lang_id );
 						$("#lang option[value='" + lang + "']").attr('selected', true);
+						// unselect all the lang options....
+						$("#lang_select li").removeClass("selected");
+						$("#lang_select li[data-original-index='" + (lang - 1) + "']").addClass("selected"); // select the correct one based on it's index.
+						$("#lang_select button span.filter-option").text( // update the text for the dropdown...
+							$("#lang_select li[data-original-index='" + (lang - 1) + "']").text() // set it to the value of the selected item...
+						);
+
+						// set mission type
+						var school_type_id = info.school_type_id;
+						var i;
+						switch (school_type_id) {
+							case 12:
+							case 13:
+								i = 1;
+								break;
+							case 4:
+							case 5:
+								i = 2;
+								break;
+							case 6:
+							case 7:
+								i = 3;
+								break;
+							case 8:
+							case 9:
+								i = 4;
+								break;
+							case 14:
+							case 15:
+								i = 5;
+								break;
+							default:
+								i = 0;
+								break;
+						}
+						$("#type option").eq(i).attr('selected', true);
+						$("#type").selectpicker('refresh');
 						
 						$.post('ajax/getSchools.php', function( success ) {
 							var schools = $.parseJSON( success );
@@ -731,6 +785,7 @@
 					//return false;
 				}
 				var lang = $("#lang").val();
+				var type = $("#type").val();
 				/*
 				var ch = p.indexOf('=');
 				if (ch != -1) {
@@ -822,7 +877,8 @@
 			        	dob : dob, 
 			        	gender : gender, 
 			        	photo : photo, 
-			        	lang : lang 
+						lang : lang,
+						type : type 
 			        }, function( success ) {
 			        	var userID = parseInt(success);
 			        	if ( userID ) {
@@ -845,7 +901,8 @@
 			        	dob : dob, 
 			        	gender : gender, 
 			        	photo : photo, 
-			        	lang : lang 
+						lang : lang, 
+						type : type 
 			        }, function( success ) {
 			        	var result = parseInt(success);
 			        	if ( !result ) {

@@ -16,6 +16,9 @@ var childApp = function(){
         preface: "th-"
     };
 
+    // hide lastname and dob
+    $("#moreInfo").hide();
+
     /************************ EVENTS ************************/
     $( ".navigation-button" ).click( function( event ) {
         showPage( event.target.dataset.id );
@@ -31,6 +34,11 @@ var childApp = function(){
 
     $( "#th-base-child" ).submit( registerChild );
     $( "#no-th-base-child" ).submit( createChild );
+
+    $("#th-class_id").change( function() {
+        if ( $(this).val() > 0 ) $("#moreInfo").show();
+        else $("#moreInfo").hide();
+    });
 
     /************************ PAGES ************************/
     // change the page (section)
@@ -65,10 +73,15 @@ var childApp = function(){
                     names.push( user.last );
                 }
             });
+
+            $("#th-last").autocomplete({
+                source: names, 
+                minLength: 3
+            });
             
-            renderDropdown( "last", names.map( function( name ) {
-                return { id: name, name: name }
-            }));
+            // renderDropdown( "last", names.map( function( name ) {
+            //     return { id: name, name: name }
+            // }));
         });
     }
 

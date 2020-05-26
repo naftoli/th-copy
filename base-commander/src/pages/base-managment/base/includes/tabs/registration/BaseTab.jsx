@@ -39,7 +39,7 @@ export class BaseTab extends React.Component {
           <AccountingRow
             required
             { ...base } 
-            title='Accounting Info'
+            title='Accounting Dept Info'
             prefix='accounting_'
             onChange={ onChange } />
 

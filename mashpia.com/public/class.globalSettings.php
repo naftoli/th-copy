@@ -102,8 +102,12 @@ class GlobalSettings {
      */
     public static function calculateChildFee(
         $type,  $fee = null,    $is_soldier = false, 
-        $early_bird = false,    $no_discount = false
+        $early_bird = false,    $no_discount = false, 
+        $ckids = false
     ) {
+        // ckids has no fee
+        if ( $ckids ) return 0;
+
         // type 1 soldiers pay nothing
         if ( $type == 1 && $is_soldier ) {
             $fee = 0;

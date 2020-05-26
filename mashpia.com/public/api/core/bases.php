@@ -1,4 +1,5 @@
 <?php
+if ($_SERVER['HTTP_HOST'] == 'localhost') header('Access-Control-Allow-Origin: *'); // CORS
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -10,12 +11,12 @@ class BaseRouter {
         if ( !$filters ) return json_error('Access Deinied');
         $query = $MASHPIA_DB->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
-            ." s.chayolei, s.chidon, s.tanya, s.tehillim, "
+            ." s.chayolei, s.chidon, s.tanya, s.tehillim, s.inst_id, "
             ." IFNULL( soldier_count, 0 ) as soldier_count "
             ." FROM schools s LEFT JOIN ( "
                 ." SELECT COUNT(*) AS soldier_count, school_id FROM users GROUP BY school_id "
             ." ) soldiers USING (school_id) "
-            ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
+            ." WHERE $filters AND school_id != 612 GROUP BY school_id ORDER BY school_name;"
         );
         $query->execute();
         $bases = $query->fetchAll();
@@ -57,6 +58,8 @@ class BaseRouter {
 
     public function register() {
         global $current_user;
+
+        if ( $_POST['base']['tanya'] == 1 ) $_POST['base']['tehillim'] = 1; // make sure to turn on tehillim if tanya is checked
 
         $cc = isset( $_POST['cc'] ) ? $_POST['cc'] : false;
         $cart = isset( $_POST['cart'] ) ? $_POST['cart'] : false;

@@ -79,6 +79,7 @@ export class App extends Component {
   
   // render the page
   render() {
+    console.log(this.props);
     const { message, isOpen, refreshing } = this.state;
     const { title, login, current_user, logged_in } = this.props;
 
@@ -94,6 +95,7 @@ export class App extends Component {
     if ( login.active ) {
       routes = [
           { path: `/`, exact: true, component:  HomePage },
+          { path: `/login`, component: HomePage },
           { path: `/rewards`, component:  Rewards },
           { path: `/bm`, component:  BaseManagment },
           { path: `/missions`, component:  Missions },

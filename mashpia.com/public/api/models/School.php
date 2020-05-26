@@ -16,6 +16,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     static $belongs_to = [ 'institution' ];
     // callbacks
     static $before_create = [ 'generateSchoolNumber', 'generateInitials' ];
+    static $after_create = [ 'enrollIntoCampaigns' ];
     static $before_update = [ 'updateSoldiers' ];
     // valdiations and aliases
     public static $alias_attribute = [
@@ -132,9 +133,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             if ( $child_fee > 0 ) return $child_fee;
         }
         
+        // pass in whether its a ckids school or not; added by Naftoli 5/8/2020
         $fee = GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
-            $to_soldier,    $early_bird,    $no_discount
+            $to_soldier,    $early_bird,    $no_discount, 
+            $this->inst_id === 10
         );
 
         if ( intval( $this->school_id ) == 61 ) {
@@ -426,5 +429,35 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $this->to_array([
             'only' => [ 'school_id', 'school_name', 'hachayol_name' ]
         ]);
+    }
+
+    /**
+     * assign school to appropriate campaigns
+     */
+    public function enrollIntoCampaigns() {
+        global $MASHPIA_DB;
+
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO school_subjects VALUES( :school, :subject )
+        ");
+
+        if ($this->inst_id === 10) {
+            // ckids
+            $subjects = [];
+            $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10");
+            $rows = $stmtSubjects->fetchAll();
+            foreach ( $rows as $row ) {
+                $subjects[] = $row['subject_id'];
+            }
+        } else {
+            // chayolei
+            $subjects = [1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 92, 93, 94, 100];
+        }
+        foreach ( $subjects as $subject ) {
+            $stmt->execute([
+                ':school'   =>  $this->school_id, 
+                ':subject'  =>  $subject
+            ]);
+        }
     }
 }

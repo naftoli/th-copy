@@ -1,7 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
-import Login from './Login';
+import Login from './LoginNew'; // changed to use loginNew component
+import LoginDashboard from './LoginDashboard';
 import Forgot from './Forgot';
 import NewAccount from './NewAccount';
 // import the style sheet
@@ -12,7 +13,8 @@ const LoginIndexPage = () => {
     <Switch>
       <Route path={`/forgot`} exact component={ Forgot }/>
       <Route path={`/signup`} exact component={ NewAccount }/>
-      <Route component={ Login } />
+      <Route path={`/login`} exact component={ Login }/>
+      <Route component={ LoginDashboard } />
     </Switch>
   );
 }

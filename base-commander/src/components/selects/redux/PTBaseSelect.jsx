@@ -6,14 +6,14 @@ import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
 import { getBases } from 'store/base/bases/operations';
-import API from 'api/api';
+// import API from 'api/api';
 
 class PTBaseSelect extends Component {
 
-  state = {
-    baseAdded: false,
-    bases: []
-  }
+  // state = {
+  //   baseAdded: false,
+  //   bases: []
+  // }
 
   static propTypes = {
     showAllOption: PropTypes.bool,
@@ -33,14 +33,14 @@ class PTBaseSelect extends Component {
 
   componentDidUpdate() {
     // add unassigned school only for this component once the bases from redux are available
-    if ( !this.state.baseAdded && this.props.bases.length ) {
-      const baseList = this.props.bases.filter( base => base.school_id !== 612 );
-      API.get( `/core/bases?id=612` )
-      .then( base => {
-        const bases = baseList.concat( base );
-        this.setState({ bases: bases, baseAdded: true });
-      });
-    }
+    // if ( !this.state.baseAdded && this.props.bases.length ) {
+    //   const baseList = this.props.bases.filter( base => base.school_id !== 612 );
+    //   API.get( `/core/bases?id=612` )
+    //   .then( base => {
+    //     const bases = baseList.concat( base );
+    //     this.setState({ bases: bases, baseAdded: true });
+    //   });
+    // }
 
     const { onChange, value, isClearable } = this.props;
     // actually select the first option if is not clearable
@@ -54,11 +54,15 @@ class PTBaseSelect extends Component {
 
   getOptions = () => {
     const { showAllOption } = this.props;
-    const bases = this.state.bases;
+    const bases = this.props.bases;
     const options = bases.map( 
       ({ school_name, school_id }) => ({ value: school_id.toString(), label: school_name })
     );
     if ( showAllOption ) options.unshift({ value: false, label: 'All Bases' });
+    // for platoon transition, add the unassigned school
+    if ( this.props.addUnassigned && this.props.bases.length ) {
+      options.push( { value: "612", label: "Unassigned Students" } );
+    }
     return options;
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 // components
 import { TabPane } from 'reactstrap';
 import { Callout } from 'components/ui';
@@ -37,14 +37,14 @@ export class ModulesTab extends React.Component {
   render(){
     let { tabId, base, back, onChange } = this.props;
 
-    // let {
-    //   chayolei, chayolei_fee, tanya,  tanya_fee,
-    //   rewards,  rewards_fee,  chidon, chidon_fee,
-    // } = base;
     let {
-      chayolei_fee, tanya_fee,
-      rewards_fee,  chidon_fee,
+      chayolei, chayolei_fee, tanya,  tanya_fee,
+      rewards,  rewards_fee,  chidon, chidon_fee,
     } = base;
+    // let {
+    //   chayolei_fee, tanya_fee,
+    //   rewards_fee,  chidon_fee,
+    // } = base;
     // check if we have one item checked
     const total = getTotal( base );
     const valid = this.isValid( base );
@@ -61,18 +61,18 @@ export class ModulesTab extends React.Component {
         <div className='modules'>
 
           <div className={`module ${ !modules.chayolei ? 'paid' : '' }`}>
-            {/* <Checkbox name='chayolei'
+            <Checkbox name='chayolei'
                 onChange={ onChange }
                 checked={ !!chayolei }
                 disabled={ !modules.chayolei }>
-              Chayolei Tzivos Hashem (CTH)
-            </Checkbox> */}
-            <Checkbox name='chayolei'
+              Basic Tzivos Hashem Programming
+            </Checkbox>
+            {/* <Checkbox name='chayolei'
                 onChange={ onChange }
                 checked={ true }
                 disabled={ true }>
               Basic Tzivos Hashem Programming
-            </Checkbox>
+            </Checkbox>*/}
 
             <div className='details'>
               <p>
@@ -98,88 +98,92 @@ export class ModulesTab extends React.Component {
             </div>
           </div>
 
-          <div className={`module ${ !modules.chidon ? 'paid' : '' }`}>
-            {/* <Checkbox name='chidon'
-                onChange={ onChange }
-                checked={ !!chidon }
-                disabled={ !modules.chidon}>
-              Chidon
-            </Checkbox> */}
-            <Checkbox name='chidon'
-                onChange={ onChange }
-                checked={ true }
-                disabled={ true }>
-              Chidon
-            </Checkbox>
+          { this.props.base.inst_id !== 10 && 
+          <Fragment>
+            <div className={`module ${ !modules.chidon ? 'paid' : '' }`}>
+              <Checkbox name='chidon'
+                  onChange={ onChange }
+                  checked={ !!chidon }
+                  disabled={ !modules.chidon}>
+                Chidon
+              </Checkbox>
+              {/* <Checkbox name='chidon'
+                  onChange={ onChange }
+                  checked={ true }
+                  disabled={ true }>
+                Chidon
+              </Checkbox> */}
 
-            <div className='details'>
-              <p>
-                Join us in teaching Safer Hamitzvos to every Jewish boy and girl.
-              </p>
-              <ul className='checkboxes'>
-                <li>Discount on Yahadus Books when ordering during soldier registration.</li>
-                <li>Promotional Materials and Test Resources.</li>
-                <li>Invitations to join the world famous final test in NYC.</li>
-              </ul>
+              <div className='details'>
+                <p>
+                  Join us in teaching Safer Hamitzvos to every Jewish boy and girl.
+                </p>
+                <ul className='checkboxes'>
+                  <li>Discount on Yahadus Books when ordering during soldier registration.</li>
+                  <li>Promotional Materials and Test Resources.</li>
+                  <li>Invitations to join the world famous final test in NYC.</li>
+                </ul>
+              </div>
+
+              <div className='price'>
+                <span>
+                  Total Value: <CurrencyDisplay value={ 600 } />
+                </span>
+                <span>
+                  Your Price: <CurrencyDisplay value={ chidon_fee } />
+                </span>
+              </div>
             </div>
 
-            <div className='price'>
-              <span>
-                Total Value: <CurrencyDisplay value={ 600 } />
-              </span>
-              <span>
-                Your Price: <CurrencyDisplay value={ chidon_fee } />
-              </span>
-            </div>
-          </div>
+            <div className={`module ${ !modules.tanya ? 'paid' : '' }`}>
+              <Checkbox name='tanya'
+                  onChange={ onChange }
+                  checked={ !!tanya }
+                  disabled={ !modules.tanya}>
+                Tanya Program
+              </Checkbox>
+              {/* <Checkbox name='tanya'
+                  onChange={ onChange }
+                  checked={ true }
+                  disabled={ true }>
+                Tanya Program
+              </Checkbox> */}
 
-          <div className={`module ${ !modules.tanya ? 'paid' : '' }`}>
-            {/* <Checkbox name='tanya'
-                onChange={ onChange }
-                checked={ !!tanya }
-                disabled={ !modules.tanya}>
-              Tanya Program
-            </Checkbox> */}
-            <Checkbox name='tanya'
-                onChange={ onChange }
-                checked={ true }
-                disabled={ true }>
-              Tanya Program
-            </Checkbox>
+              <div className='details'>
+                <p>
+                  Put your base on the world stage learning Tanya for the Rebbe's birthday.
+                </p>
+                <ul className='checkboxes'>
+                  <li>Your School featured on OurBirthdayGift.com</li>
+                  <li>Compete with other schools all over the world for the top spot on the public leaderboard</li>
+                </ul>
+              </div>
 
-            <div className='details'>
-              <p>
-                Put your base on the world stage learning Tanya for the Rebbe's birthday.
-              </p>
-              <ul className='checkboxes'>
-                <li>Your School featured on OurBirthdayGift.com</li>
-                <li>Compete with other schools all over the world for the top spot on the public leaderboard</li>
-              </ul>
+              <div className='price'>
+                <span>
+                  Total Value: <CurrencyDisplay value={ 150 } />
+                </span>
+                <span>
+                  Your Price: <CurrencyDisplay value={ tanya_fee } />
+                </span>
+              </div>
             </div>
-
-            <div className='price'>
-              <span>
-                Total Value: <CurrencyDisplay value={ 150 } />
-              </span>
-              <span>
-                Your Price: <CurrencyDisplay value={ tanya_fee } />
-              </span>
-            </div>
-          </div>
+          </Fragment>
+          }
 
           <div className={`module ${ !modules.rewards ? 'paid' : '' }`}>
-            {/* <Checkbox name='rewards'
+            <Checkbox name='rewards'
                 onChange={ onChange }
                 checked={ !!rewards }
                 disabled={ !modules.rewards}>
               Rewards Program
-            </Checkbox> */}
-            <Checkbox name='rewards'
+            </Checkbox>
+            {/* <Checkbox name='rewards'
                 onChange={ onChange }
                 checked={ true }
                 disabled={ true }>
               Rewards Program
-            </Checkbox>
+            </Checkbox> */}
 
             <div className='details'>
               <p>

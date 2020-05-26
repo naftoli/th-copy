@@ -9,7 +9,8 @@
         <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
         <script src="../js/all.js" defer></script>
         <link rel="stylesheet" href="/mobile/reg/css/medal-board/medals.css"/>
-        <link rel="stylesheet" href="/mobile/css/lib/animate.css"/>
+		<link rel="stylesheet" href="/mobile/css/lib/animate.css"/>
+		<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     	<style>
             .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); background-size: cover; }
             .header-edit span, .header-setting span { color: #fff; }
@@ -100,7 +101,15 @@
             }
             @media (max-width:  420px){
 				.hide-small { display: none; }
-            }
+			}
+			#speech {
+				float: left; 
+				position: -webkit-sticky;
+				position: sticky;
+				top: 95%;
+				left: 2%;
+				z-index: 999999;
+			}
 		</style>
 	</head>
 	<body>
@@ -161,7 +170,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+			</div>
+
             <div class="span12 body" style="margin-bottom: 120px;">
                 <div class="span12" style="margin-top:10px;">
                     <div class="caption">
@@ -205,7 +215,13 @@
 					<img id="item11" src="/mobile/img_new/circle-color-green-svg.svg">
 					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
-                </div>
+				</div>
+				
+				<!-- <div id="speech">
+					<a href="">
+						<i class="fas fa-microphone fa-2x"></i>
+					</a>
+				</div> -->
 				
 				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
@@ -218,9 +234,9 @@
                     <div class="medal-label">
                         <span>MEDALS</span>
                     </div>
-                </div>
-                <div id="medals" class="clearfix"></div>
+				</div>
 				
+				<div id="medals" class="clearfix"></div>
 			</div>
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
@@ -282,7 +298,7 @@
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var carousel = "";
-            var loop = 0;
+			var loop = 0;
 
             $(window).load(function(){
                 $( ".sky-carousel" ).unbind();
@@ -445,7 +461,44 @@
     			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
     		});
             // get the medal info for the user
-            medal_board( "#medals", id );
+			medal_board( "#medals", id );
+			
+			const analyze = text => {
+				if (text.includes('mark')) {
+					const conf = confirm("Are u sure you would like to mark missions?");
+					if ( conf ) {
+						location.href = "/mobile/missionsNew.html?id=" + id;
+					}
+				}
+			}
+
+			// $("#speech").click( function(e) {
+			// 	e.preventDefault();
+			// 	// start recognition
+			// 	if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+					
+			// 		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+			
+			// 		// new speech recognition object
+			// 		const talk = new SpeechRecognition();
+			// 		talk.lang = 'en-US';
+
+			// 		talk.onresult = function(event) {
+			// 			console.log('Transcript: ' + event.results[0][0].transcript);
+			// 			console.log('Confidence: ' + event.results[0][0].confidence);
+			// 			analyze( event.results[0][0].transcript.toLowerCase() );
+			// 		}
+
+			// 		talk.onspeechend = function(event) {
+			// 			talk.stop();
+			// 		}
+
+			// 		// start speech recognition
+			// 		talk.start();
+			// 	} else {
+			// 		alert("Your browser does not support this action.");
+			// 	}
+			// });
 		});
 		</script>
 		<script>

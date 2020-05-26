@@ -128,6 +128,7 @@ class user_track
 			. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
 		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
+		// echo $sql . "<br />";
 		//echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
 		//if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
 		//if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";

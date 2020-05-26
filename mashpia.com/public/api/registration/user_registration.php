@@ -192,8 +192,10 @@ class UserRegistrationRouter {
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
+                        $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
+                        $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount, $trans_id
+                            $current_user->admin_id, $year, $amount, $trans_id, $lite, $ckids 
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
@@ -317,7 +319,7 @@ class UserRegistrationRouter {
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount' ],
                 'include' => [ 
-                    'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method' ] ],
+                    'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]
             ]);

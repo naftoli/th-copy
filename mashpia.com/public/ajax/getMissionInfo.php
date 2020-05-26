@@ -1,7 +1,21 @@
 <?
 require '../db.php';
 $user = $_GET['user_id'];
-$type = $_GET['type'];
+// $type = $_GET['type'];
+
+$subjects = [ 1, 4, 12, 13, 16, 21, 27, 40, 41, 42, 45, 90, 100 ];
+// find out user type
+$sql = "select school_type_id from users where user_id = " . $user;
+$result = mysql_query( $sql );
+$row = mysql_fetch_assoc( $result );
+switch ( $row['school_type_id'] ) {
+    case 12: case 13:
+        $subjects = [ 1, 4, 21, 27, 41, 42, 45, 90, 92, 93, 94, 100 ];
+        break;
+    case 4: case 5: case 6: case 7: case 8: case 9: 
+        $subjects = [ 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120 ];
+        break;
+}
 
 if($_GET['debug']){
 	// log errors to the page
@@ -9,21 +23,15 @@ if($_GET['debug']){
 	ini_set("display_errors", 1);
 	$debug = true;
 }
-
-//set up array depending on whether it's a regular school or a yeshiva school
-if ( $type == 'All' ) {
-    $subjects = array( 1,4,12,13,16,21,27,40,41,42,45,90,100 );
-} else {
-    $subjects = array( 1,4,93,92,21,27,94,41,42,45,90,100 );
-}
-
-$missions = array();
+ 
+$missions = [];
 $sql = "SELECT subject_id, mark_date, SUM( mission_count ) AS total 
 		FROM user_tracks ut
 		LEFT JOIN date_tasks_mission_marks dtmm
 		USING ( user_id, subject_id ) 
 		WHERE ut.user_id = $user 
-		AND ut.enrolled = 1
+		AND ut.enrolled = 1 
+        AND subject_id in (" . implode(',', $subjects) . ") 
 		GROUP BY subject_id";
 if($debug) echo $sql."\n";
 $result = mysql_query( $sql );
@@ -67,7 +75,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 $medal_subjects = array();
 $sql = "SELECT subject_id, missions_required
         FROM medals_subjects
-        WHERE medal_ord =1
+        WHERE medal_ord = 1 
+        AND subject_id in (" . implode(',', $subjects) . ") 
         ORDER BY subject_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -75,9 +84,8 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 //array to hold stickers info
-$stickers = array();
-$str = implode( ',', $subjects );
-$sql = "select subject_id, subject_name, subject_image_id from subjects where subject_id in ($str)";
+$stickers = [];
+$sql = "select subject_id, subject_name, subject_image_id from subjects where subject_id in (" . implode(',', $subjects) . ")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
 	if ($row['subject_id'] == 1) 
@@ -85,7 +93,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $stickers[$row['subject_id']][$row['subject_name']] = $row['subject_image_id'];
 }
 
-$info = array();
+$info = [];
 foreach ( $subjects as $subject ) {
     $key = array_keys( $stickers[$subject] ); 
     $info[$subject][$key[0]] = $stickers[$subject][$key[0]]; 

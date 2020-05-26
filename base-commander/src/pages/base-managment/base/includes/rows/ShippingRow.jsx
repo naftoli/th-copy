@@ -7,10 +7,11 @@ export class ShippingRow extends Component {
   render(){
     const {
       required,   shipping_first,
-      onChange,   shipping_method,  shipping_last
+      onChange,   shipping_method,  shipping_last, 
+      onBlur
     } = this.props;
 
-    const inputProps = { required, onChange };
+    const inputProps = { required, onChange, onBlur };
 
     return (
       <Row>

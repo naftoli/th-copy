@@ -32,16 +32,26 @@
             #remember input[type=checkbox]:checked + #remember-check {background: url("/mobile/img_new/square-check-color-blue-svg.svg"); background-size:cover; }
 			#remember input[type=checkbox]:hover + #remember-check {background: url("/mobile/img_new/square-check-color-blue-svg.svg"); background-size:cover; transform: scale(1.1);cursor: pointer;}
 			.logo img.img-responsive.center-block {padding: 2%;}
+			@media screen and (max-width: 639px) {
+				h2 {
+					font-size: 24px;
+				}
+			}
 		</style>
 	</head>
 	<body>
         <div class="container login-page">
             <div class="login-header">
-                <span class="span12">PARENT'S LOGIN</span>
+                <span class="span12">TZIVOS HASHEM</span>
             </div>
             <div class="span12 body">
+				<div style="text-align: center;">
+					<h2>
+						Family Account Login
+					</h2>
+				</div>
                 <div class="logo">
-                	<img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="" class="img-responsive center-block">
+                	<img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="" class="img-responsive center-block" style="max-width: 250px !important;">
                 </div>
                 <div class="login-box">
                     <div class="login-box-body">
@@ -83,7 +93,7 @@
 	                        </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button type="submit" class="btn btn-primary btn-block H8"><b>LOGIN</b></button>
+                                    <button type="submit" class="btn btn-primary btn-block H8"><b>LOG IN</b></button>
                                 </div><!-- /.col -->
                             </div>
                         </form>
@@ -179,10 +189,10 @@
                     });  
                 });
 
-				$("#createAccount").click( function(e) {
-					var confirm = window.confirm("Warning! Do not create a new account if you might have an existing one. Your school could have already created a parent account for you. You can find out if they have an account by clicking “forgot user/password” and you will be prompted to enter your email address in which you will be sent your password.\nAre you sure you want to continue creating a new account?");
-					return confirm;
-				});
+				// $("#createAccount").click( function(e) {
+				// 	var confirm = window.confirm("Warning! Do not create a new account if you might have an existing one. Your school could have already created a parent account for you. You can find out if they have an account by clicking “forgot user/password” and you will be prompted to enter your email address in which you will be sent your password.\nAre you sure you want to continue creating a new account?");
+				// 	return confirm;
+				// });
             });
         </script>
         <script>

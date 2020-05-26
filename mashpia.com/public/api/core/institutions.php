@@ -6,7 +6,24 @@ class InstRouter {
 
     public function index(){
         $institutions = \Institution::all();
-        json_response( $institutions, true, true );
+        $schools = [];
+        foreach ( $institutions as $institution ) {
+            switch ($institution->inst_id) {
+                case 2:
+                    $institution->inst_name = 'Chabad School (Chayolei Tzivos Hashem)';
+                    $schools[] = $institution;
+                    break;
+                case 10:
+                    $institution->inst_name = 'Chabad Hebrew School (CKids)';
+                    $schools[] = $institution;
+                    break;
+                case 8:
+                    $schools[] = $institution;
+                    break;
+                default: break;
+            }
+        }
+        json_response( $schools, true, true );
     }
 }
 

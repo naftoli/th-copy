@@ -8,7 +8,8 @@ import { Callout } from 'components/ui';
 import { AccountRow } from 'components/rows';
 import { Label, Password } from 'components/inputs';
 import { Row, Col, Collapse, UncontrolledAlert, Input } from 'reactstrap';
-import { GoogleButton, ChabadOrgButton, SaveButton } from 'components/buttons';
+import { SaveButton } from 'components/buttons';
+// import { GoogleButton, ChabadOrgButton, SaveButton } from 'components/buttons';
 // styles and images
 import logo from 'img/logos/th.svg';
 // functions
@@ -92,14 +93,35 @@ class NewAccount extends Component {
     // make the request to create an account and wait for the response
     this.props.createAccount( account )
       .then( () => {
-        this.props.history.replace('/')
+        this.props.history.replace('/register')
       })
       .catch( e => {
         this.setState({ saving: false, errors: e.data || [ e.message ] });
       });
   }
 
-  render(){
+  // check if username is unique
+  checkUsername = e => {
+    if ( e.target.value.length ) {
+      const url = process.env.NODE_ENV === "production" ? "" : "//tzivos.local";
+      fetch(url + '/ajax/checkDuplicateEmail.php?email=' + e.target.value)
+      .then( result => {
+        return result.json()
+      })
+      .then( data => {
+        console.log( data )
+        if ( data === 1 ) {
+          alert("This email address is already being used. Please choose a different one.");
+          this.setState({ account: { ...this.state.account, admin_email: '' } })
+        }
+      })
+      .catch( error => {
+        console.log( error )
+      })
+    }
+  }
+
+  render() {
     let { account, errors, saving } = this.state;
 
     errors = errors.map( ( e, i ) =>
@@ -110,14 +132,17 @@ class NewAccount extends Component {
       <div id='NewAccount'>
         <img src={logo} id='logo' alt='logo' />
 
-        <h3>New TH Account</h3>
+        <h1>Tzivos Hashem</h1>
+        
+        <h3>New Base Commander Account</h3>
+        <br />
 
         <form onSubmit={ this.onSubmit } id='create-form'>
 
           <div id='account-login'>
-            <p className='title'>Account Login</p>
+            <p className='title'>Create a Login</p>
             <Row>
-              <Col xs={12} id='sign-in-with'>
+              {/* <Col xs={12} id='sign-in-with'>
 
                 <GoogleButton
                   disabled={ !!account.google_id }
@@ -127,10 +152,10 @@ class NewAccount extends Component {
                   onLogin={ this.onChabadOrgLogin }
                   disabled={ !!account.chabad_org_shliach_id } />
 
-              </Col>
+              </Col> */}
 
               <Col xs={12}>
-                <Label>Username / E-mail Address</Label>
+                <Label>E-mail Address (this will be your username)</Label>
 
                 <Input
                   required
@@ -139,16 +164,17 @@ class NewAccount extends Component {
                   name='admin_email'
                   placeholder='Username'
                   autoComplete='username'
-                  onChange={ this.onChange }
+                  onChange={ this.onChange } 
+                  onBlur={ this.checkUsername }
                   value= { account.admin_email || '' } />
               </Col>
 
               <Col sm={6}>
-                <Label>Password</Label>
+                <Label>Create a Password</Label>
 
                 <Password required
                   name='password'
-                  placeholder='Password'
+                  placeholder='Create a Password'
                   onChange={ this.onChange }
                   autoComplete='new-password'
                   value= { account.password || '' } />
@@ -168,7 +194,7 @@ class NewAccount extends Component {
           </div>
 
           <div id='account-information'>
-            <p className='title'>Account Information</p>
+            <p className='title'>Personal Information</p>
 
             <AccountRow
               account={ account }

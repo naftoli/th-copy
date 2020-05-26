@@ -432,7 +432,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $amount
      * @return array
      */
-    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0 ){
+    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
         global $MASHPIA_DB;
         $errors = [];
         // Insert into user_registration
@@ -441,11 +441,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
             ."ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
         );
-        $x = [ 
-            'year' => $year,                'admin_id' => $admin_id, 
-            'user_id' => $this->user_id,    'school_id' => $this->school_id,
-            'paid' => isset($amount) ? $amount : null,
-        ];
+        // $x = [ 
+        //     'year' => $year,                'admin_id' => $admin_id, 
+        //     'user_id' => $this->user_id,    'school_id' => $this->school_id,
+        //     'paid' => isset($amount) ? $amount : null,
+        // ];
         // register the soldier
         if( !$reg_query->execute([ 
             'year' => $year,                'admin_id' => $admin_id, 
@@ -453,11 +453,16 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'paid' => isset($amount) ? $amount : null,
         ])) $errors[] = "Could not insert into user_registration.";
         // save the charge
-        if ( !$this->registrationCharge( 'chayolei', $amount, $trans_id ) )
+        $type = 'chayolei';
+        if ( $lite ) $type = 'chayolei-lite';
+        if ( $ckids ) $type = 'ckids';
+        if ( !$this->registrationCharge( $type, $amount, $trans_id ) )
             $errors[] = "Could not insert into registration_charges.";
         // update fields to mark registered
         if ( !$this->user_registered ) $this->user_registered = new \Datetime();
         if ( !$this->user_start_date ) $this->user_start_date = unixtojd();
+        // update field for chayolei lite registration 
+        if ( $lite ) $this->lite_edition = 1;
         $this->generateRank();
         $this->save();
         // create campaigns and birthday missions

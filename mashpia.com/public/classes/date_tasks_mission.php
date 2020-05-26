@@ -71,6 +71,7 @@ class date_tasks_mission {
 		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
 		//echo "<input type='hidden' name='SQL TWO' value='" . $sql . "'>\n";
 		//if ($subject_id == 100 && $user_id == 55248) echo $sql . "<br />";
+		// echo $sql . "<br />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);
@@ -88,20 +89,19 @@ class date_tasks_mission {
 			} else {
 				if ( $row['default_on'] == 0 ) continue;
 			}
-			
-            if ( $row['name'] == 'I said קריאת שמע before the זמן.' ) continue;
+            // if ( $row['name'] == 'I said קריאת שמע before the זמן.' ) continue;
             
 			if ( !empty($this->tasks )) {
 				if (!in_array($row['name'], $this->tasks)) continue;
 			}
-			
+
 			$daily_task = new daily_task($row, $subject_id, $row['name']);
 			$daily_task->set_subject_image_id($subject_image_id);
 			$daily_task->set_dates($start_date, $end_date);
 			$daily_task->set_date_tasks_marks($user_id, $start_date, $end_date);
 			array_push($daily_tasks, $daily_task);
 		}
-        //echo "<pre>" . print_r($daily_tasks) . "</pre>";
+		// echo "<pre>" . print_r($daily_tasks) . "</pre>";
 		return $daily_tasks;
 	}
 	

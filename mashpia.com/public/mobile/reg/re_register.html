@@ -28,6 +28,11 @@
 	@media (min-width: 479px) and (max-width: 638px){
 		.bootstrap-select.form-control:not([class*=col-]) {width: 224px;}
 	}
+	@media screen and (max-width: 479px) {
+		.register-box .form-control, .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+			font-size: 18px;
+		}
+	}
 /*	.register-box .has-feedback .form-control{width: 97%;}*/
 </style>
 <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
@@ -80,7 +85,7 @@
 <body class="skin-blue sidebar-mini">
 <div class="container register-page parent-page" id="crop-avatar">
   <div class="login-header">
-      <span class="span12 titler">REGISTRATION 5778</span>
+      <span class="span12 titler">REGISTRATION 5780</span>
   </div>
 	<form id="regForm" action="" method="post">
 		<div class="register-box">
@@ -238,8 +243,12 @@
 		                  <div class="input-group" id="type_select">
 		                      <span class="input-group-addon"><img src="/mobile/img_new/arrow-2-color-gray-svg.svg"/></span>
 		                      <select id="type" name="type" class="selectpicker show-tick form-control" data-style="btn-default" required>
-		                      	<option value="2">Chabad Missions</option>
-		                      	<option value="12">Frum Missions</option>
+								<option value="2">Chabad</option>
+								<option value="12">Frum</option>
+								<option value="4">CKids Day School</option>
+								<option value="6">CKids Hebrew School</option>
+								<option value="8">CKids No School</option>
+								<option value="14">Friendship Circle</option>
 		                      </select>
 		                  </div>
 		              </div>
@@ -541,11 +550,33 @@
 
 						// set mission type
 						var school_type_id = info.school_type_id;
-						if ( school_type_id == 2 || school_type_id == 3 ) {
-							$("#type option").eq(0).attr('selected', true);
-						} else if ( school_type_id == 12 || school_type_id == 13 ) {
-							$("#type option").eq(1).attr('selected', true);
+						var i;
+						switch (school_type_id) {
+							case 12:
+							case 13:
+								i = 1;
+								break;
+							case 4:
+							case 5:
+								i = 2;
+								break;
+							case 6:
+							case 7:
+								i = 3;
+								break;
+							case 8:
+							case 9:
+								i = 4;
+								break;
+							case 14:
+							case 15:
+								i = 5;
+								break;
+							default:
+								i = 0;
+								break;
 						}
+						$("#type option").eq(i).attr('selected', true);
 						$("#type").selectpicker('refresh');
 						
 						$.post('ajax/getSchools.php', function( success ) {
@@ -779,7 +810,8 @@
 								dob : dob, 
 								gender : gender, 
 								photo : photo, 
-								lang : lang 
+								lang : lang, 
+								type: type 
 							}, function( success ) {
 								var userID = parseInt(success);
 								if ( userID ) {
