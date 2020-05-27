@@ -1152,10 +1152,12 @@ class TasksCustomizationNew {
 
         //to find exceptions we need to check all task ids for each mission within each category  
         //and see if all of them are in exceptions table
-        foreach( $missions as $mission => $enrolled ) {
-            $ids = $this->getTaskIDs($cat, array($mission), $subject_id);
-            if ($this->isException($ids)) {
-                $missions[$mission]['enrolled'] = 0;
+        foreach( $missions as $idx => $info ) {
+            foreach ( $info as $mission => $enrolled ) {
+                $ids = $this->getTaskIDs($cat, array($mission), $subject_id);
+                if ($this->isException($ids)) {
+                    $missions[$idx][$mission]['enrolled'] = 0;
+                }
             }
         }
         return $missions;

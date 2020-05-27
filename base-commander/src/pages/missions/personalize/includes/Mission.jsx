@@ -16,12 +16,14 @@ class Mission extends Component {
   render() {
     const {
       name,   enrolled,   disabled, end,
-      start,  start_date, end_date
+      start,  start_date, end_date, mandatory
     } = this.props;
 
     const classNames = classnames({
       'Mission': true,
     });
+
+    const mandStyle = { color: 'red' }
 
     return (
       <div className={ classNames }>
@@ -29,7 +31,10 @@ class Mission extends Component {
             disabled={ disabled }
             onChange={ this.personalize }
             checked={ disabled ? false : enrolled }>
-          { name }
+          { name } 
+          { mandatory &&
+            <span style={ mandStyle }>*</span> 
+          }
           <small>{ start } - { end }</small>
           <small><DateDisplay value={ start_date }/> - <DateDisplay value={ end_date }/></small>
         </Checkbox>
