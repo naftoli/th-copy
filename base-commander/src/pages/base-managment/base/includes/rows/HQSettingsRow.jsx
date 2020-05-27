@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
@@ -25,6 +25,7 @@ export class HQSettingsRow extends Component {
     const regTypeProps = { onChange: this.onChange, name: 'reg_type' }
     
     return (
+      <Fragment>
       <Row id='HQSettingsRow'>
         <Col xl={6}>
           <Label><strong>Currently</strong> enrolled in:</Label>
@@ -118,6 +119,10 @@ export class HQSettingsRow extends Component {
             onChange={ this.onNumberChange } placeholder='Default' />
         </Col>
       </Row>
+      <p className='title'>Notes</p>
+        <Input type="textarea" name='hq_notes' rows='6'
+          value={ base.hq_notes || '' } onChange={ this.onChange } />
+      </Fragment>
     );
   }
 }
