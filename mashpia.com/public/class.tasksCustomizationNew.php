@@ -1129,22 +1129,25 @@ class TasksCustomizationNew {
 				and (dtm.created_by_school is null or dtm.created_by_school = $this->school_id)";
 		if ($this->type != 'user') {
 			$sql .= " and dtm.personal = 0";
-		}
-        $sql .= " group by dtm.mission_name order by dtm.start_date";
+        }
+        // $sql .= " group by dtm.mission_name order by dtm.start_date";
+        $sql .= " group by dtm.start_date order by dtm.start_date";
 
         $result = mysql_query($sql);
-		//echo mysql_num_rows($result);
+        //echo mysql_num_rows($result);
+        $i = 0; // some missions have same name for entire yr so we need to add an extra index to make sure not to overwrite (Naftoli - 05/27/20)
         while ($row = mysql_fetch_assoc($result)) {
             $mission = $row['mission_name'];
-            $missions[$mission]['enrolled'] = 1;
-            $missions[$mission]['mandatory'] = $row['mandatory_qty'];
+            $missions[$i][$mission]['enrolled'] = 1;
+            $missions[$i][$mission]['mandatory'] = $row['mandatory_qty'];
             $heStart = cal_from_jd($row['start_date'], CAL_JEWISH);
             $heEnd = cal_from_jd($row['end_date'], CAL_JEWISH);
-            $missions[$mission]['start'] = $heStart['day'] . ' ' . $heStart['monthname'];
-            $missions[$mission]['end'] = $heEnd['day'] . ' ' . $heEnd['monthname'];
+            $missions[$i][$mission]['start'] = $heStart['day'] . ' ' . $heStart['monthname'];
+            $missions[$i][$mission]['end'] = $heEnd['day'] . ' ' . $heEnd['monthname'];
 
-            $missions[$mission]['start_date']   = $row['start_date'];
-            $missions[$mission]['end_date']     = $row['end_date'];
+            $missions[$i][$mission]['start_date']   = $row['start_date'];
+            $missions[$i][$mission]['end_date']     = $row['end_date'];
+            $i++;
         }
 
         //to find exceptions we need to check all task ids for each mission within each category  

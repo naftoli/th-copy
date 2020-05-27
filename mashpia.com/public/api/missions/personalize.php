@@ -112,13 +112,15 @@ class PersonalizeRouter {
         // * Format the response to something sane and consistent
         $response = [];
         // go through each cat
-        foreach( $missions as $name => $mission ) {
-            $mission['enrolled'] = !!$mission['enrolled'];
-            $mission['start_date']  = date( SQL_DATE_FORMAT, jdtounix( $mission['start_date'] ) );
-            $mission['end_date']    = date( SQL_DATE_FORMAT, jdtounix( $mission['end_date'] ) );
-            $response[] = array_merge(
-                [ 'name' => $name ], $mission
-            );
+        foreach( $missions as $idx => $info ) {
+            foreach ( $info as $name => $mission ) {
+                $mission['enrolled'] = !!$mission['enrolled'];
+                $mission['start_date']  = date( SQL_DATE_FORMAT, jdtounix( $mission['start_date'] ) );
+                $mission['end_date']    = date( SQL_DATE_FORMAT, jdtounix( $mission['end_date'] ) );
+                $response[] = array_merge(
+                    [ 'name' => $name ], $mission
+                );
+            }
         } // and finish task-label level
 
         json_response( $response, true, true );
