@@ -41,14 +41,14 @@ export default class LoginDashboard extends Component {
             <hr />
             <Row>
               <Col xs="6">
-                <a href="/signup">
+                <a href="/new/signup">
                   <Button size="lg" color='primary' id='join'>
                       Create an Account
                   </Button>
                 </a>
               </Col>
               <Col xs="6">
-                <a href="/login">
+                <a href="/new/login">
                     <Button size="lg" color='primary' id='show_login'>
                     Log in to your account
                     </Button>
