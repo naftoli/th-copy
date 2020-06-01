@@ -42,10 +42,16 @@ export class ProfilePicture extends Component {
     const imageClassNames = classnames( className, 'profile-img' );
     // update props
     tabIndex = tabIndex || ( onClick ? 0 : -1 );
-    src = src ? `${LEGACY_URL}${src}` : ''
+    src = src ? `${LEGACY_URL}${src}` : '';
+
+    const logoStyle = { display: 'inline-block' }
 
     return (
-      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames }>
+      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames } 
+      { this.props.inlineStyle && 
+        style={ logoStyle }
+      }
+      >
 
         <img { ...props } 
           onClick={ onClick }

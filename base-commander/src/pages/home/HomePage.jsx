@@ -71,15 +71,13 @@ class HomePage extends Component {
     else if ( !active ) {
       return <RegistrationPage />;
     }
-
-    const logoStyle = { display: 'inline-block' }
     
     // return the proper homepage
     return (
       <div id='HomePage'>
         <div id='logo'>
           <img src={ man } alt='man' className='general' />
-          <BaseLogo src={ img } style={ logoStyle } />
+          <BaseLogo src={ img } inlineStyle />
           <img src={ woman } alt='woman' className='general' />
         </div>
 
