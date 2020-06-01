@@ -129,7 +129,8 @@
       { "label": "Tanya", "module": "tanya",
         "items": [
           { "label": "Individual Marking", "legacy": true, "path": "/editSoldierLines2.php" },
-          { "label": "Yud Aleph Nissan Reports", "legacy": true, "path": "/yud_alef_nissan_choose.php" }
+          { "label": "Yud Aleph Nissan Reports", "legacy": true, "path": "/yud_alef_nissan_choose.php" },
+          { "label": "Last Yr Report", "legacy": true, "path": "/yan_last_yr_all.php" }
         ]
       },
       { "label": "Tehillim", "module": "tehillim",
