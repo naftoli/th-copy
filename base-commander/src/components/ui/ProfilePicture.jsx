@@ -47,11 +47,7 @@ export class ProfilePicture extends Component {
     const logoStyle = { display: 'inline-block' }
 
     return (
-      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames } 
-      { this.props.inlineStyle && 
-        style={ logoStyle }
-      }
-      >
+      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames } style={ logoStyle } >
 
         <img { ...props } 
           onClick={ onClick }
