@@ -37,6 +37,7 @@ while ($row = mysql_fetch_assoc( $result )) {
                     join classes c using (class_id) 
                     where u.school_id = $id 
                     and u.user_registered > 0 
+                    and c.class_era = 0 
                     order by class_grade, class_sub, last, first";
             $result = mysql_query( $sql );
             if (mysql_num_rows( $result ) > 0) {
