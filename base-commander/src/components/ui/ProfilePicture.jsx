@@ -44,8 +44,10 @@ export class ProfilePicture extends Component {
     tabIndex = tabIndex || ( onClick ? 0 : -1 );
     src = src ? `${LEGACY_URL}${src}` : ''
 
+    const logoStyle = { display: 'inline-block' }
+
     return (
-      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames }>
+      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames } style={ logoStyle } >
 
         <img { ...props } 
           onClick={ onClick }
