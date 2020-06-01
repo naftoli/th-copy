@@ -1,0 +1,84 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('max_execution_time', 600);
+$admin_auth = array('school'); 
+require('header.php');
+
+require_once 'class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
+$sql = "select * from line_campaigns where year = " . --$year;
+$result = mysql_query( $sql );
+while ($row = mysql_fetch_assoc( $result )) {
+	$campaigns[$row['id']] = strtolower( $row['type'] );
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+
+    <HEAD>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Last Year's birthday present to the Rebbe</title>
+        <link href="admin_styles.css" rel="stylesheet" type="text/css">
+    </head>
+    
+    <body>
+    	<? include('admin_header.php'); ?>
+        <h1 class="no-print">Last Year's birthday present to the Rebbe</h1>
+
+        <?php
+        require_once 'class.adminSchools.php';
+        $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+        $schools = $as->getSchools();
+
+        $users = [];
+        foreach ($schools as $id => $school) {
+            $sql = "select * from users u 
+                    join classes c using (class_id) 
+                    where u.school_id = $id 
+                    and u.user_registered > 0 
+                    order by class_grade, class_sub, last, first";
+            $result = mysql_query( $sql );
+            if (mysql_num_rows( $result ) > 0) {
+                while ($row = mysql_fetch_assoc( $result )) {
+                    $users[$row['user_id']] = $row;
+                }
+            }
+        }
+
+        $results = [];
+        require_once 'class.bpSummary.php';
+        foreach ($campaigns as $id => $campaign) {
+            $bps = new BpSummary( $id, 'user' );
+            foreach ($users as $user_id => $info) {
+                $learned = $bps->getSummary( $user_id );
+                if ($learned == '') $learned = 0;
+                $results[$info['school_id']][$user_id][$campaign] = $learned;
+            }
+        }
+
+        foreach ($results as $school => $more) {
+            echo "<h2>" . $schools[$school] . "</h2>";
+            ?>                    
+            <table width="75%">
+                <tr>
+                    <th>Grade</th>
+                    <th>Chayol</th>
+                    <th>תניא בעל פה <br />Lines Learned</th>
+                    <th>משניות בעל פה <br />Lines Learned</th>
+                </tr>
+                <?php
+                foreach ($more as $user_id => $info) { 
+                    $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
+                    $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
+                    echo "<tr><td>" . $grade . "</td><td>" . $name . '</td><td>' . $info['tanya'] . "</td><td>" .
+                    $info['mishna'] . "</td></tr>";
+                }
+                ?>
+            </table>
+            <div class="page-break"></div>
+            <?php
+        } 
+        ?>
+    </body>
+</html>
