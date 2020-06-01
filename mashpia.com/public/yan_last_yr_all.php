@@ -64,6 +64,7 @@ while ($row = mysql_fetch_assoc( $result )) {
             }
         }
 
+        $totals = [];
         foreach ($results as $school => $more) {
             echo "<h2>" . $schools[$school] . "</h2>";
             ?>                    
@@ -80,7 +81,12 @@ while ($row = mysql_fetch_assoc( $result )) {
                     $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
                     echo "<tr><td>" . $grade . "</td><td>" . $name . '</td><td>' . $info['tanya'] . "</td><td>" .
                     $info['mishna'] . "</td></tr>";
+                    if (isset($totals[$school]['tanya'])) $totals[$school]['tanya'] += $info['tanya'];
+                    else $totals[$school]['tanya'] = $info['tanya'];
+                    if (isset($totals[$school]['mishna'])) $totals[$school]['mishna'] += $info['mishna'];
+                    else $totals[$school]['mishna'] = $info['mishna'];
                 }
+                echo "<tr><th colspan='2'>Total:</th><th>" . $totals[$school]['tanya'] . "</th><th>" . $totals[$school]['mishna'] . "</th></tr>";
                 ?>
             </table>
             <div class="page-break"></div>
