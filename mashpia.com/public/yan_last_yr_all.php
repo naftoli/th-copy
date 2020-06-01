@@ -20,6 +20,12 @@ while ($row = mysql_fetch_assoc( $result )) {
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Last Year's birthday present to the Rebbe</title>
         <link href="admin_styles.css" rel="stylesheet" type="text/css">
+        <style>
+            tr, th, td {
+                font-size: 14px;
+                padding: 5px;
+            }
+        </style>
     </head>
     
     <body>
