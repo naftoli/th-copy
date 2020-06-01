@@ -77,7 +77,7 @@ class HomePage extends Component {
       <div id='HomePage'>
         <div id='logo'>
           <img src={ man } alt='man' className='general' />
-          <BaseLogo src={ img } inlineStyle />
+          <BaseLogo src={ img } />
           <img src={ woman } alt='woman' className='general' />
         </div>
 
