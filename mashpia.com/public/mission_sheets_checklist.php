@@ -134,10 +134,12 @@ while ($row = mysql_fetch_assoc($result)) {
             <input type='button' name='print' value='Print' onclick='window.print()' />
         </div>
 
-        <div class="infobox">
+        <br />
+        <div class="infobox" style="font-size: 16px;">
             It will show a check next to a chayol even if he/she only completed 1 task the entire week.<br /> 
             (To see which chayolim checked off tasks for at least 5/7 days per week, go to Mission Marathon>Weekly Raffle>Eligible Students)
         </div>
+        <br />
         
         <p>
         	Click <a href="modify_checklist.php">here</a> to modify report.
@@ -229,7 +231,8 @@ while ($row = mysql_fetch_assoc($result)) {
                     if ($date['end'] >= $today) {
                         // we found current week
                         $to = $date['end'];
-                        $from = $dates[$idx-4]; // go back 4 weeks
+                        $from = $dates[$idx-3]['start']; // go back 3 weeks
+                        break;
                     }
                 }
             }
@@ -254,7 +257,7 @@ while ($row = mysql_fetch_assoc($result)) {
             foreach ( $dates as $date ) {
                 if ( $date['start'] >= $from && $date['end'] <= $to ) $reports[] = $date;
             }
-            //echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
+            // echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
 
             //create list
             $commanders = array();
