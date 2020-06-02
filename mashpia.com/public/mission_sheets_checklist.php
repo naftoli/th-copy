@@ -106,24 +106,24 @@ while ($row = mysql_fetch_assoc($result)) {
                 });
             }
             
-            function checkDates() { 
-                if ( $(".radio:checked").val() ) {
-                    return true;
-                } else {
-                    var start = $("#from").val();
-                    var end = $("#to").val();
-                    var dif = end - start;
-                    if ( dif > 69 ) {
-                        alert("You cannot choose more than a 10 week period.");
-                        return false;
-                    } else if ( dif < 6 ) {
-                        alert("End week must be after start week!");
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-            }
+            // function checkDates() { 
+            //     if ( $(".radio:checked").val() ) {
+            //         return true;
+            //     } else {
+            //         var start = $("#from").val();
+            //         var end = $("#to").val();
+            //         var dif = end - start;
+            //         if ( dif > 69 ) {
+            //             alert("You cannot choose more than a 10 week period.");
+            //             return false;
+            //         } else if ( dif < 6 ) {
+            //             alert("End week must be after start week!");
+            //             return false;
+            //         } else {
+            //             return true;
+            //         }
+            //     }
+            // }
         </script>
     </HEAD>
 
@@ -132,6 +132,11 @@ while ($row = mysql_fetch_assoc($result)) {
         <h1 class="no-print">Teacher's Mission Checklist</h1>
         <div class='no-print' align='center'>
             <input type='button' name='print' value='Print' onclick='window.print()' />
+        </div>
+
+        <div class="infobox">
+            It will show a check next to a chayol even if he/she only completed 1 task the entire week.<br /> 
+            (To see which chayolim checked off tasks for at least 5/7 days per week, go to Mission Marathon>Weekly Raffle>Eligible Students)
         </div>
         
         <p>
@@ -166,53 +171,68 @@ while ($row = mysql_fetch_assoc($result)) {
             require_once 'class.missionSheet.php';
             $m = new MissionSheet;
 			
-			if ( isset( $_POST['weeks'] ) || !isset( $_POST['from'] ) ) {
+			// if ( isset( $_POST['weeks'] ) || !isset( $_POST['from'] ) ) {
 				
-				if ( !isset($_POST['weeks'] ) ) {                
-					//find out which period to show
-					$weeks = array(2458362, 2458439, 2458516, 2458593, 2458670);
-					//get todays date
-					$jd = unixtojd();
-					for ( $i = 0; $i < 6; $i++ ) {
-						if ( $jd < $weeks[$i] ) {
-							$_POST['weeks'] = 'set' . $i;
-							break;
-						}
-					}
-				}
+			// 	if ( !isset($_POST['weeks'] ) ) {                
+			// 		//find out which period to show
+			// 		$weeks = array(2458362, 2458439, 2458516, 2458593, 2458670);
+			// 		//get todays date
+			// 		$jd = unixtojd();
+			// 		for ( $i = 0; $i < 6; $i++ ) {
+			// 			if ( $jd < $weeks[$i] ) {
+			// 				$_POST['weeks'] = 'set' . $i;
+			// 				break;
+			// 			}
+			// 		}
+			// 	}
 				
-				switch ( $_POST['weeks'] ) {
-	                case 'set1': 
-	                    $from = 2458362;
-	                    $to = 2458438;
-	                    break;
-	                case 'set2': 
-	                    $from = 2458439;
-	                    $to = 2458515;
-	                    break;
-	                case 'set3':
-	                    $from = 2458516;
-	                    $to = 2458592;
-	                    break;
-	                case 'set4':
-	                    $from = 2458593;
-	                    $to = 2458669;
-	                    break;
-	                case 'set5':
-	                    $from = 2458670;
-	                    $to = 2458753;
-	                    break;
-                    // case 'set6':
-	                //     $from = 2457921;
-	                //     $to = 2458004;
-	                //     break;
-	                default:
-	                    break;
-	            }
-	        } else {
-				$from = $_POST['from'];
+			// 	switch ( $_POST['weeks'] ) {
+	        //         case 'set1': 
+	        //             $from = 2458362;
+	        //             $to = 2458438;
+	        //             break;
+	        //         case 'set2': 
+	        //             $from = 2458439;
+	        //             $to = 2458515;
+	        //             break;
+	        //         case 'set3':
+	        //             $from = 2458516;
+	        //             $to = 2458592;
+	        //             break;
+	        //         case 'set4':
+	        //             $from = 2458593;
+	        //             $to = 2458669;
+	        //             break;
+	        //         case 'set5':
+	        //             $from = 2458670;
+	        //             $to = 2458753;
+	        //             break;
+            //         // case 'set6':
+	        //         //     $from = 2457921;
+	        //         //     $to = 2458004;
+	        //         //     break;
+	        //         default:
+	        //             break;
+	        //     }
+	        // } else {
+			// 	$from = $_POST['from'];
+			// 	$to = $_POST['to'];
+            // }
+            
+            if ( isset($_POST['from']) && isset($_POST['to']) ) {
+                $from = $_POST['from'];
 				$to = $_POST['to'];
-	        }
+            } else {
+                // default to last 4 weeks
+                $today = unixtojd();
+                foreach ($dates as $idx => $date) {
+                    if ($date['end'] >= $today) {
+                        // we found current week
+                        $to = $date['end'];
+                        $from = $dates[$idx-4]; // go back 4 weeks
+                    }
+                }
+            }
             
             //get image info
             $sql = "select school_logo_id from schools where school_id = " . $id;
