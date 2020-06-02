@@ -33,7 +33,7 @@ export const updateSoldier = ( id, data ) => dispatch => {
     });
 }
 
-// we don't actually delete, rather move the child to the Unassigned School
+// if soldier has points, we don't actually delete, rather move the child to the Unassigned School 
 export const deleteSoldier = ( id ) => dispatch => {
   // return API.delete( `/core/users?id=${id}`);
   return API.post( '/core/users?action=removeFromSchool', { user_id: id } )
