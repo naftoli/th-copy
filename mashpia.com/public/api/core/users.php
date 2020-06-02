@@ -237,6 +237,14 @@ class UsersRouter {
         global $MASHPIA_DB;
 
         $soldier = \Soldier::find([ $_POST['user_id'] ]);
+        // delete soldier if has no points
+        if ( $soldier->canDestroy() ) {
+            $soldier->delete();
+            // remove from parent account
+            $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id='.$user->user_id.' AND auth = "user"');
+            return json_response( 'Soldier has been deleted.' );
+        }
+
         // make sure we have a class connected to student
         if ( !$soldier->class_id ) {
             json_error("Student needs to be assigned to a grade before he/she can be removed.");
