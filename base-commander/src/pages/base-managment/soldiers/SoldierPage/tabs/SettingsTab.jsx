@@ -30,7 +30,7 @@ class SettingsTab extends Component {
   onSelectChange = onSelectChange( this.props.handleChange )
   // delete a soldier
   delete = () => {
-    if ( window.confirm( 'Are you sure you want to remove this soldier?') )
+    if ( window.confirm( 'Are you sure you want to remove / delete this soldier?') )
       this.props.deleteSoldier( this.props.soldier.user_id );
   }
 
@@ -169,7 +169,7 @@ class SettingsTab extends Component {
           <div>
             <Row>
               <Col xs='12'>
-                <p className='title'>Remove Soldier from School</p>
+                <p className='title'>Remove Soldier from School (Deletes from system if soldier has not points)</p>
                 <Button color="danger" onClick={ this.delete }>
                   <FontAwesome icon='trash' /> Remove Soldier
                 </Button>
