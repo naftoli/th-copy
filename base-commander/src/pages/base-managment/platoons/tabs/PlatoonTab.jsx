@@ -34,6 +34,9 @@ export class PlatoonTab extends Component {
           <p>
             Please note that editing settings will edit the same settings on all soldiers if available.
           </p>
+          <p>
+            <strong>If you want to include 2 teachers for 1 class, you can write them both just divided by a ";"</strong>
+          </p>
         </Callout>
 
         <form onSubmit={ onSubmit }>
