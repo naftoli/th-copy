@@ -32,9 +32,9 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <p style="text-align: center">
             Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual
         </p>
-        
-        <h2>Weekly Raffles</h2>
-        <div id="action-links">
+
+        <h2>All Raffles</h2>
+        <div id="action_links">
             <a href="eligible_form.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
@@ -47,6 +47,22 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Winners</span>
                 </div>
             </a>
+        </div>
+        
+        <h2>Weekly Raffles</h2>
+        <div id="action-links">
+            <!-- <a href="eligible_form.php">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <span class="link-text">Eligible Students</span>
+                </div>
+            </a>
+            <a href="winners_form.php">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
+                    <span class="link-text">Winners</span>
+                </div>
+            </a> -->
             <a href="/raffles/posters/weekly.php">
                 <div class="button">
                     <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
@@ -54,7 +70,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <h2>Grand Raffles</h2>
+        <!-- <h2>Grand Raffles</h2>
         <div id="action-links">
             <a href="eligible_form.php">
                 <div class="button">
@@ -78,6 +94,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                         <span class="link-text">Eligible Students</span>
                     </div>
                 </a> -->
+                <!--
             <?// } else { ?>
                 <a href="eligible_form.php">
                 <div class="button">
@@ -92,7 +109,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Winners</span>
                 </div>
             </a>
-        </div>
+        </div> -->
 
             <!-- <a href="../../yearly/printout/">
                 <div class="button">
