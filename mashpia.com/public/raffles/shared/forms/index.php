@@ -34,7 +34,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </p>
 
         <h2>All Raffles</h2>
-        <div id="action_links">
+        <div id="action-links">
             <a href="eligible_form.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
