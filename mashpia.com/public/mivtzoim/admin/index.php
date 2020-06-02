@@ -73,6 +73,7 @@ function inputDate( $julian ) {
         <h1>Setup Mivtzoim</h1>
 
         <p>
+            Click <a href="../lulav_settings_report.php">here</a> for Lulav Settings Report<br />
             Click <a href="/mivtzoim/fixes/fixSyncing.php">here</a> to fix syncing issues (deletes duplicates).
         </p>
 
