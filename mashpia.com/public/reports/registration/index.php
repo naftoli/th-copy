@@ -67,7 +67,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/admin_yearly.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">School Types</span>
+                    <span class="link-text">Unregister Schools and Students</span>
                 </div>
             </a>
         </div>
