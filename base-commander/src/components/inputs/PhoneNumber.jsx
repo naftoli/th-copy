@@ -8,6 +8,8 @@ export const PhoneNumber = ( props ) =>
     type='tel'
     { ...props }
     className='form-control'
-    options={{ phone: true, phoneRegionCode: 'US' }}
+    // options={{ phone: true, phoneRegionCode: 'US' }}
+    options={{ phone: true }}
     title='Please enter a valid 9+ digit Phone Number'
-    pattern='^(\+[0-9]{1,3}[0-9 ]{9,})|((?:1 )?[0-9]{3}(?: )?[0-9]{3}(?: )?[0-9]{4})$' />
+    // pattern='^(\+[0-9]{1,3}[0-9 ]{9,})|((?:1 )?[0-9]{3}(?: )?[0-9]{3}(?: )?[0-9]{4})$' 
+    />
