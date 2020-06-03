@@ -97,16 +97,10 @@ class CampaignEnrollment {
             $row = mysql_fetch_assoc( $result );
             $grade = $row['class_grade'];
         } else {
-            $grade = 'pre1a'; // put in lowest grade
+            $grade = 'Pre1a';
         }
-        switch ( $grade ) {
-            case 'pre1a':
-                $this->year = 6;
-                break;
-            default:
-                $this->year = intval( $grade ) + 6;
-                break;
-        }
+        if ( is_numeric( $grade ) ) $this->year = intval( $grade ) + 6;
+        else $this->year = 6;
     }
     
     private function resetTracks() {

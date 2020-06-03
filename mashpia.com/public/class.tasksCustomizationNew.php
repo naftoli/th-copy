@@ -1216,11 +1216,59 @@ class TasksCustomizationNew {
             //mysql_query( $sql );
         }
     }
+
+    private function getLevel( $user_id ) {
+        $sql = "select class_grade from users u join classes c on u.class_id = c.class_id where u.user_id = " . $user_id;
+        $result = mysql_query( $sql );
+        if ( mysql_num_rows( $result ) > 0 ) {
+            $row = mysql_fetch_assoc( $result );
+            $grade = $row['class_grade'];
+        } else {
+            $grade = 'Pre1a'; // put in lowest grade
+        }
+        if ( is_numeric( $grade ) ) return intval( $grade ) + 6;
+        else return 6;
+    }
 	
     public function enroll( $user_ids, $campaigns ) {
         foreach( $user_ids as $user_id ) { 
+            $type = 0;
+            $level = 0;
             foreach( $campaigns as $campaign ) {
-                $sql = "update user_tracks set enrolled = 1 where user_id = $user_id and subject_id = $campaign";
+                // find out if row exists
+                $sql = "select * from user_tracks where user_id = $user_id and subject_id = $campaign";
+                $result = mysql_query( $sql );
+                if ( mysql_num_rows( $result ) > 0 )
+                    $sql = "update user_tracks set enrolled = 1 where user_id = $user_id and subject_id = $campaign";
+                else {
+                    if ( $level == 0 ) {
+                        // find out correct level
+                        $level = $this->getLevel( $user_id );
+                    }
+                    if ( $type == 0 ) {
+                        // find out school type
+                        $sql = "select school_type_id from users where user_id = " . mysql_real_escape_string($user);
+                        $result = mysql_query($sql);
+                        $row = mysql_fetch_assoc($result);
+                        $type = intval($row['school_type_id']);
+                    }
+                    if ( $campaign == 1 ) {
+                        switch ( $type ) {
+                            case 2: case 3:
+                                $track = 5;
+                                break;
+                            case 12: case 13:
+                                $track = 3;
+                                break;
+                            default:
+                                $track = 5;
+                                break;
+                        }
+                    } else {
+                        $track = 1;
+                    }    
+                    $sql = "insert into user_tracks set enrolled = 1, user_id = " . $user_id . ", subject_id = " . $campaign . ", level = " . $level . ", track_id = " . $track;
+                }
                 mysql_query( $sql );
 				//if enrolling into yoma depagra we need to create birthday mission
 				/*
