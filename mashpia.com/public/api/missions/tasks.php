@@ -135,7 +135,7 @@ class PersonalizeRouter {
     private function getColumns() { 
         return ' dt.grid_id, dtm.lang_id, s.subject_name, dt.short_name, '
             .'dt.name, dt.points, dt.cat, dt.mission_marking, dt.grid_marking, '
-            .'l.label_name, dt.label_id, dtm.created_by_school, b.school_name ';
+            .'l.label_name, dt.label_id, dtm.created_by_school, b.school_name, min(dtm.level) as min_level, max(dtm.level) as max_level ';
     }
 
     private function getJoins() { 

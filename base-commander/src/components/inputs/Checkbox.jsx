@@ -23,9 +23,13 @@ export const Checkbox = ( props ) => {
     'disabled': inputProps.disabled
   });
 
+  let labelStyle = inputProps.fixstyle ? { width: 'auto' } : {}
+
   return (
     <label id={ id } className={ classNames } 
-        tabIndex={ inputProps.disabled ? -1 : 0 } onKeyPress={onKeyPress}>
+        tabIndex={ inputProps.disabled ? -1 : 0 } onKeyPress={onKeyPress}
+        style={ labelStyle }
+        >
 
       <input { ...inputProps } type='checkbox'
           className='form-check-input' ref={ ref => {setupRef( ref )}} />
