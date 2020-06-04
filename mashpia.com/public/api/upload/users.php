@@ -120,18 +120,13 @@ class UsersUploadRouter {
                         $errors[] = "$errorString Hebrew name must be in hebrew characters.";
                     }
                     
-                    // cast gender to upper case
+                    // cast gender to upper case and check 
                     if ( $headers[$cellIndex] == "*Gender" || $headers[$cellIndex] == "Gender" ) {
                         $value = strtoupper( $value );
+                        if ( !in_array( $value, [ 'M', 'F' ] ) ) {
+                            $errors[] = "$errorString Gender must be one of the following: 'M'/'F'/'m'/'f'.";
+                        } 
                     }
-
-                    // check gender type
-                    if (
-                        ($headers[$cellIndex] == "*Gender" || $headers[$cellIndex] == "Gender") && 
-                        !in_array( $value, [ 'M', 'F' ] )
-                    ) {
-                        $errors[] = "$errorString Gender must be 'M' or 'F'.";
-                    } 
 
                     // validate dob
                     if (
@@ -166,15 +161,14 @@ class UsersUploadRouter {
                         $value = strtolower( $value );
                     }
                     // validate mission type
-                    if ( $headers[$cellIndex] == "*Mission Type" && 
-                        !in_array( $value, [ 'chabad', 'frum' ] )
+                    if ( $headers[$cellIndex] == "*Mission Type" && !in_array( $value, [ 'chabad', 'frum' ] )
                     ) {
                         $errors[] = "$errorString Mission type must be 'chabad' or 'frum'.";
                     }
                     if ( $headers[$cellIndex] == "Type of Tasks" && 
                         !in_array( $value, [ 'day school', 'hebrew school', 'no school' ] )
                     ) {
-                        $errors[] = "$errorString Mission type must be day school', 'hebrew school' or 'no school'.";
+                        $errors[] = "$errorString Mission type must be 'day school', 'hebrew school' or 'no school'.";
                     }
 
                     
