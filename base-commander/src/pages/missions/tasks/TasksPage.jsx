@@ -76,6 +76,7 @@ class TasksPage extends Component {
   render() {
     const { loading, tasks, login } = this.props;
     const { createModal, editModal, editTask } = this.state;
+    console.log( tasks )
 
     const columns = getColumns( login, this.edit );
 

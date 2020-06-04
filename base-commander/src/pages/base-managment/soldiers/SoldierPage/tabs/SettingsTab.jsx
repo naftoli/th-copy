@@ -84,8 +84,8 @@ class SettingsTab extends Component {
 
           <Row className='enrollment'>
             <Col xs='12' sm='6' xl={4}>
-              <label id='enrolled'>Enrolled in:</label>
-              <UncontrolledTooltip placement="top" target="enrolled" autohide={ false }>
+              <label id='enrolled'>Enrolled in: <i class="fas fa-info-circle" id="enrollment_comment"></i></label>
+              <UncontrolledTooltip placement="top" target="enrollment_comment" autohide={ false }>
                 Control what this soldier is enrolled in.
                 <strong>Warning: This overrides any registration</strong>
               </UncontrolledTooltip>
@@ -114,8 +114,8 @@ class SettingsTab extends Component {
             </Col>
 
             <Col xs='12' sm='6' xl={4}>
-              <label id='customize'>Custom Parent Tasks</label>
-              <UncontrolledTooltip placement="top" target="customize" autohide={ false }>
+              <label id='customize'>Custom Parent Tasks <i class="fas fa-info-circle" id="parent_comment"></i></label>
+              <UncontrolledTooltip placement="top" target="parent_comment" autohide={ false }>
                 Allow parents to create completely custom tasks for this soldier.
                 Custom tasks are worth 0.5 miles per day/week
               </UncontrolledTooltip>
@@ -136,7 +136,10 @@ class SettingsTab extends Component {
             </Col>
 
             <Col xs={12} sm={6} xl={4}>
-              <Label>Mission Sheet Type</Label>
+              <Label>Mission Sheet Type <i class="fas fa-info-circle" id="mission_comment"></i></Label>
+              <UncontrolledTooltip placement="top" target="mission_comment" autohide={ false }>
+                Determines whether to show pictures on the mission sheets or not
+              </UncontrolledTooltip>
               <Radio value='1'
                   name='pic_mission_type'
                   onChange={ this.onInputChange }

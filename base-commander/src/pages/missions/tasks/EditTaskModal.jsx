@@ -14,6 +14,8 @@ const initialState = {
   short_name: '',
   grid_marking: false,
   mission_marking: false,
+  min_level: 0, 
+  max_level: 0
 }
 
 class EditTaskModal extends Component {
@@ -25,6 +27,7 @@ class EditTaskModal extends Component {
   componentDidUpdate( { isOpen } ) {
     if ( !isOpen && this.props.isOpen )
       this.setState({ ...this.props.task });
+      console.log(this.state)
   }
 
   // * Event handlers
