@@ -11,9 +11,10 @@ class Sidebar extends Component {
     )
 
     const active = this.props.active ? "active" : "";
+    const sidebarStyle = { scrollbarWidth: 'none' }
 
     return (
-      <div id="sidebar" className={`${active}`} >
+      <div id="sidebar" className={`${active}`} style={ sidebarStyle } >
         <ul className="list-unstyled components">
           { menu }
         </ul>
