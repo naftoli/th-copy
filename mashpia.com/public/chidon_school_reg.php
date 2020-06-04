@@ -77,7 +77,7 @@ $year = GlobalSettings::getChidonYear();
                     </select>
                 </div>
             </div>
-        <?}?>
+        <? } ?>
 
         <div id="school_shabbaton">
             <h2>School Responsibilities</h2>
@@ -100,7 +100,12 @@ $year = GlobalSettings::getChidonYear();
               <div class="input_group input_full">
                 Please confirm where your students will go on Sunday after the event in Newark:<br />
                 <input type="radio" name="bus" class="bus" value="1" /> On a Chidon Shabbaton bus direct to the airport. 
-                  <select name="airport" id="airport" style="width: 110px;"><option>Please Select</option><option>Newark</option><option>LGA</option><option>JFK</option></select><br />
+                  <select name="airport" id="airport" style="width: 110px;">
+                    <option>Please Select</option>
+                    <option>Newark</option>
+                    <option>LGA</option>
+                    <option>JFK</option>
+                  </select><br />
                 <input type="radio" name="bus" class="bus" value="2" /> On a Chidon Shabbaton bus back to Crown Heights drop off location (President and Kingston).<br />
                 <input type="radio" name="bus" class="bus" value="0" /> My school will provide our own buses to drive them home (out of town).
               </div>
@@ -225,6 +230,7 @@ $year = GlobalSettings::getChidonYear();
           if ( school_id ) {
             $.post('ajax/chidon/getSchoolInfo.php', { school : school_id }, function( school_info ) {
               let school = JSON.parse( school_info );
+              setDefaults( school.info );
               if ( !(school.authorize_customer_profile_id && school.authorize_payment_profile_id) ) {
                 alert("As you don't have any credit card on file, you will need to provide us with a credit card.");
                 $("#ccOnFile").hide();
@@ -233,6 +239,7 @@ $year = GlobalSettings::getChidonYear();
                 $(".cc_info").eq(0).attr('checked', true);
                 $("#ccOnFile").show();
               }
+              // set 
             });
           } else {
             $("#ccOnFile").hide();
@@ -255,6 +262,19 @@ $year = GlobalSettings::getChidonYear();
           } else {
             $("#numStudents").text( '0' );
           }
+        }
+
+        function setDefaults( info ) {
+          const bus = parseInt(info.bus)
+          const airport = info.airport
+          const food = parseInt(info.food)
+          $(".bus").each( function() {
+            if ($(this).val() == bus) $(this).attr('checked', true);
+          });
+          $("#airport option").each( function() {
+            if ($(this).val() == airport) $(this).attr('selected', true);
+          });
+          $("#food").attr('checked', food)
         }
       });
     </script>
