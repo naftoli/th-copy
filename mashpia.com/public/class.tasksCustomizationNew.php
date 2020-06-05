@@ -575,10 +575,16 @@ class TasksCustomizationNew {
         $types = array(
             '2'	=> 'Chabad Boys', 
             '3'	=> 'Chabad Girls', 
+            '4' => 'Ckids Day School Boys', 
+            '5' => 'Ckids Day School Girls', 
+            '6' => 'Ckids Hebrew School Boys',
+            '7' => 'Ckids Hebrew School Girls', 
+            '8' => 'Ckids Unaffiliated Boys',  
+            '9' => 'Ckids Unaffiliated Girls', 
             '12'=> 'Frum Boys', 
-            '13'=> 'Frum Girls',
-            '22'=> 'C-Kids Boys', 
-            '23'=> 'C-Kids Girls'
+            '13'=> 'Frum Girls', 
+            '14'=> 'Friendship Circle Boys', 
+            '15'=> 'Friendship Circle Girls'
         );
         
         $friendly = array();
