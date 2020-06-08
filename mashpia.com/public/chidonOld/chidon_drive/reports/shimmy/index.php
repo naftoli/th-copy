@@ -16,7 +16,7 @@ $stmt = $MASHPIA_DB->prepare("
     SELECT u.first, u.last, tc.paid, IFNULL( SUM(subsidy_amount), 0 ) as total_raised 
     FROM users u 
     JOIN th_chidon tc USING (user_id) 
-    JOIN chidon_user_subsidies cs ON (cs.user_id = tc.user_id and tc.year = cs.chidon_year)
+    LEFT JOIN chidon_user_subsidies cs ON (tc.user_id = cs.user_id and tc.year = cs.chidon_year)
     WHERE tc.year = :year 
     GROUP BY tc.user_id 
     ORDER BY u.last, u.first
@@ -46,19 +46,27 @@ if ( $stmt->execute([':year' => $year]) ) $info = $stmt->fetchAll();
                 <th>Rohr</th>
             </tr>
             <?php
+            $totals['raised'] = 0;
+            $totals['paid'] = 0;
+            $totals['rohr'] = 0;
             foreach ($info as $row) {
                 $first = $row['first'];
                 $last = $row['last'];
                 $raised = floatval($row['total_raised']);
                 $paid = floatval($row['paid']);
                 $rohr = 0;
-                if (($raised + $paid) >= 225) {
+                if (($raised + $paid) >= 275) {
                     $rohr = 350 - ($raised + $paid);
                     if ($rohr < 0) $rohr = 0;
                 }
+                $totals['raised'] += $raised;
+                $totals['paid'] += $paid;
+                $totals['rohr'] += $rohr;
                 echo "<tr><td>" . $first . "</td><td>" . $last . "</td><td>" . $raised . "</td><td>" . $paid . "</td><td>" . ($raised + $paid) . 
                     "</td><td>" . $rohr . "</td></tr>";
             }
+            echo "<tr><th colspan='2'>Totals:</th><th>" . number_format($totals['raised']) . "</th><th>" . number_format($totals['paid']) . 
+                "</th><th>" . number_format($totals['raised'] + $totals['paid']) . "</th><th>" . number_format($totals['rohr']) . "</th></tr>";
             ?>
         </table>
     </body>
