@@ -111,11 +111,21 @@ class ParentPage extends Component {
           </Col>
           <Col sm={{size: 6, order: 3}}>
             <label>Father's Cell Phone</label>
+            { cell && 
             <PhoneNumber value={ cell } disabled />
+            }
+            { !cell && 
+            <PhoneNumber disabled />
+            }
           </Col>
           <Col sm={{size: 6, order: 4}}>
             <label>Mother's Cell Phone</label>
+            { mother_cell && 
             <PhoneNumber value={ mother_cell } disabled />
+            }
+            { !mother_cell &&
+            <PhoneNumber disabled />
+            }
           </Col>
           <Col sm={{size: 12, order: 5}}>
             <Button color='primary' id='login' onClick={ this.loginToParent }>
