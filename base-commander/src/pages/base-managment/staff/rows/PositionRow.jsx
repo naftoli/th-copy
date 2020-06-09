@@ -7,6 +7,7 @@ import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { updateAuth, removeAuth } from 'store/base/staff/operations';
+import { changeLogin } from 'store/login/actions';
 
 class PositionRow extends Component {
 
@@ -34,6 +35,12 @@ class PositionRow extends Component {
     const { admin_id, auth, id } = this.props;
     this.props.removeAuth({ admin_id, auth, id });
   }
+
+  // onLoginChange = () => {
+  //   const { type, id } = this.props.login;
+  //   console.log( type, id )
+  //   changeLogin( type, id );
+  // }
 
   render() {
     let { role, base, platoon, auth, id } = this.props;
@@ -70,6 +77,9 @@ class PositionRow extends Component {
               <Button color='danger' onClick={this.remove}>
                 <FontAwesome icon='trash'/> Remove
               </Button>
+              {/* <Button color='primary' id='login' onClick={ this.onLoginChange }>
+                <FontAwesome icon='sign-in-alt' /> Login to staff member
+              </Button> */}
             </ButtonBar>
           </Col>
         </Row>
@@ -78,4 +88,4 @@ class PositionRow extends Component {
   }
 }
 
-export default connect( null, { removeAuth })( PositionRow );
+export default connect( null, { removeAuth, changeLogin })( PositionRow );
