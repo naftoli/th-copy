@@ -98,7 +98,7 @@ class StaffDetailPage extends Component {
           />
 
         { staff.positions.map( 
-          ( position, index ) => <PositionRow key={ index } { ...position } />) 
+          ( position, index ) => <PositionRow key={ index } { ...position } login={ login } />) 
         }
       </div>
     );

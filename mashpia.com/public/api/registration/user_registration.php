@@ -199,6 +199,17 @@ class UserRegistrationRouter {
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
+
+                        if ($user->school_id == '269') {
+                            // send email to anash kinder about registration
+                            $headers[] = 'MIME-Version: 1.0';
+                            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                            $headers[] = 'From: HQ Office <admin@tzivoshashem.org>';
+                            $subject = "New Chayolei Registration";
+                            $to = 'anash@tzivoshashem.org';
+                            $msg = $user->first . ' ' . $user->last . '(User ID: ' . $user->user_id . ') just registered for chayolei tzivos hashem for the year of ' . $year;
+                            @mail($to, $subject, $msg, implode("\r\n", $headers));
+                        }
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
                         $year = GlobalSettings::getChidonYear();
@@ -219,6 +230,7 @@ class UserRegistrationRouter {
                             $headers[] = 'MIME-Version: 1.0';
                             $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                             $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+                            if ($user->school_id == '269') $headers[] = 'CC: chidonanash@gmail.com';
 
                             $subject = "Chidon Registration Confirmation";
                             $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
