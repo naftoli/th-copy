@@ -112,8 +112,15 @@ class PersonalizeRouter {
         // * Format the response to something sane and consistent
         $response = [];
         // go through each cat
-        foreach( $missions as $idx => $info ) {
+        $prevName = '';
+        $i = 2;
+        foreach( $missions as $info ) {
             foreach ( $info as $name => $mission ) {
+                if ( $prevName != $name ) {
+                    $prevName = $name;
+                } else {
+                    $name .= ('_' . $i++);
+                }
                 $mission['enrolled'] = !!$mission['enrolled'];
                 $mission['start_date']  = date( SQL_DATE_FORMAT, jdtounix( $mission['start_date'] ) );
                 $mission['end_date']    = date( SQL_DATE_FORMAT, jdtounix( $mission['end_date'] ) );
