@@ -52,7 +52,7 @@ export class BaseTab extends Component {
 
           <AddressRow { ...base } showPhone prefix='school_' onChange={ this.onChange } />
 
-          <p className='title'>Notes</p>
+          <p className='title'>Accounting Notes</p>
           <Input type="textarea" name='notes' rows='6'
             value={ base.notes || '' } onChange={ this.onChange } />
 
