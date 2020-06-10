@@ -367,7 +367,7 @@ class Raffle {
         if($separate_genders) $this->winner_info = ["boys" => [], "girls" => []]; // create the boys/girls structure
         
         /***************** GENERATE THE SQL *****************/
-        if ($this->type == "monthly" && $this->raffle_id != 10) { // make sure it is a monthly raffle and is not the Tishrei Exception then pull it from the prizes_auciton_table
+        if ($this->type == 'yearly' || ($this->type == "monthly" && $this->raffle_id != 10)) { // make sure it is a monthly raffle and is not the Tishrei Exception then pull it from the prizes_auciton_table
             $sql = "SELECT prize_name as 'name', prize_image_id, prize_id,  ";
         } else { // pull it from the prizes table
             $sql = "SELECT prizes.prize_id, prizes.name, prizes.picture, prizes.thumbnail, ";
@@ -376,7 +376,7 @@ class Raffle {
         $sql .= "users.user_id, users.first, users.last, users.gender, schools.school_id, schools.school_name, schools.hachayol_name, classes.class_sub, classes.class_grade, "
             ."admins.admin_address1, admin_city, admin_state, admin_postal, admin_country FROM raffle_winners ";
         // specific joins
-        if ($this->type == "monthly" && $this->raffle_id != 10) {
+        if ($this->type == 'yearly' || ($this->type == "monthly" && $this->raffle_id != 10)) {
             $sql .= "JOIN prizes_auction USING (prize_id) ";
         } else {
             $sql .= "JOIN prizes USING (prize_id) ";
@@ -393,7 +393,7 @@ class Raffle {
         if($sorting =="school") $sql .= "ORDER BY schools.school_name, classes.class_grade, users.last, users.first";
         if($sorting =="name") $sql .= "ORDER BY users.last, users.first"; // just sort by name
         if($sorting == "prize_id") $sql .= "ORDER BY prize_id, users.last, users.first"; // added by Naftoli 1/3/18
-        
+        // echo $sql;
         $query = mysql_query($sql);
         
         // for every winner
