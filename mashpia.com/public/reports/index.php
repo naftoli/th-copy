@@ -105,19 +105,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Mivtzoim</span>
                 </div>
             </a>
-            <br />
-            <a href="/mivtzoim/lulav_settings.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Lulov Settings</span>
-                </div>
-            </a>
-            <a href="/mivtzoim_purchases/chanuka_settings.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Chanukah Settings</span>
-                </div>
-            </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Managment Links</h2>

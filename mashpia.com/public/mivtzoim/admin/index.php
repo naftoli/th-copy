@@ -73,7 +73,20 @@ function inputDate( $julian ) {
         <h1>Setup Mivtzoim</h1>
 
         <p>
-            Click <a href="../lulav_settings_report.php">here</a> for Lulav Settings Report<br />
+            <a href="/mivtzoim/lulav_settings.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <span class="link-text">Mivtza Lulov Settings</span>
+                </div>
+            </a>
+            <br />
+            <a href="/mivtzoim_purchases/chanuka_settings.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <span class="link-text">Mivtza Chanukah Settings</span>
+                </div>
+            </a>
+        </p>
+
+        <p>
             Click <a href="/mivtzoim/fixes/fixSyncing.php">here</a> to fix syncing issues (deletes duplicates).
         </p>
 
