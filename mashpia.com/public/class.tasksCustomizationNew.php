@@ -1150,7 +1150,6 @@ class TasksCustomizationNew {
             $heEnd = cal_from_jd($row['end_date'], CAL_JEWISH);
             $missions[$i][$mission]['start'] = $heStart['day'] . ' ' . $heStart['monthname'];
             $missions[$i][$mission]['end'] = $heEnd['day'] . ' ' . $heEnd['monthname'];
-
             $missions[$i][$mission]['start_date']   = $row['start_date'];
             $missions[$i][$mission]['end_date']     = $row['end_date'];
             $i++;
