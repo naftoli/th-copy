@@ -18,11 +18,13 @@ $stmt = $MASHPIA_DB->prepare("
     SELECT * FROM date_tasks_marks dtm 
     LEFT JOIN date_tasks dt using (date_task_id) 
     WHERE mark_date >= :start
-    AND mark_date <= :end
+    AND mark_date <= :end 
+    AND user_id = :user
 ");
 $stmt->execute([
     ':start'=>  $start, 
-    ':end'  =>  $end
+    ':end'  =>  $end, 
+    ':user' =>  $user_id
 ]);
 $tasks = $stmt->fetchAll();
 
