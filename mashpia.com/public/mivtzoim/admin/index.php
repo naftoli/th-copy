@@ -73,7 +73,7 @@ function inputDate( $julian ) {
         <h1>Setup Mivtzoim</h1>
 
         <p>
-            <a href="/mivtzoim/lulav_settings.php<?=$debug ? "?debug=true": "";?>">
+            <!-- <a href="/mivtzoim/lulav_settings.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <span class="link-text">Mivtza Lulov Settings</span>
                 </div>
@@ -82,6 +82,17 @@ function inputDate( $julian ) {
             <a href="/mivtzoim_purchases/chanuka_settings.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <span class="link-text">Mivtza Chanukah Settings</span>
+                </div>
+            </a> -->
+            <a href="/mivtzoim_purchases/settings_report.php">
+                <div class="button">
+                    <span class="link-text">Mivtza Chanukah Settings Report</span>
+                </div>
+            </a>
+            <br />
+            <a href="/mivtzoim/lulav_settings_report.php">
+                <div class="button">
+                    <span class="link-text">Mivtza Lulav Settings Report</span>
                 </div>
             </a>
         </p>
