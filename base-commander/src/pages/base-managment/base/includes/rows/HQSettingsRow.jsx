@@ -119,7 +119,7 @@ export class HQSettingsRow extends Component {
             onChange={ this.onNumberChange } placeholder='Default' />
         </Col>
       </Row>
-      <p className='title'>Notes</p>
+      <p className='title'>Accounting Notes</p>
         <Input type="textarea" name='hq_notes' rows='6'
           value={ base.hq_notes || '' } onChange={ this.onChange } />
       </Fragment>
