@@ -136,7 +136,7 @@ if ( $dates == 'english' ) $dates_id = 2;
     <script src="missions.js"></script>
     <script>
         document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
-        window.print();
+        // window.print();
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
