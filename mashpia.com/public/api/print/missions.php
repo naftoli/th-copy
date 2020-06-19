@@ -148,7 +148,7 @@ if ( $dates == 'english' ) $dates_id = 2;
                 // document.body.innerHtml = '<html><head><title></title></head><body><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />' + print_div + "</body></html>";
                 // window.print();
                 // document.body.innerHTML = original;
-                const print_area = window.open();
+                const print_area = window.open('', '', 'width=900,height=650');
                 print_area.document.write('<link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />');
                 print_area.document.write(print_div);
                 print_area.document.close();
