@@ -172,7 +172,7 @@ class SettingsTab extends Component {
           <div>
             <Row>
               <Col xs='12'>
-                <p className='title'>Remove Soldier from School (Deletes from system if soldier has not points)</p>
+                <p className='title'>Remove Soldier from School (Deletes from system if soldier has no points)</p>
                 <Button color="danger" onClick={ this.delete }>
                   <FontAwesome icon='trash' /> Remove Soldier
                 </Button>
