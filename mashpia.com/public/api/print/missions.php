@@ -138,6 +138,26 @@ if ( $dates == 'english' ) $dates_id = 2;
         document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
         window.print();
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // your code here
+            // const original = document.body.innerHTML;
+            $(".userMission").each( function() {
+                const id = $(this).attr('id');
+                const print_div = document.getElementById(id).innerHTML;
+                // document.body.innerHtml = '<html><head><title></title></head><body><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />' + print_div + "</body></html>";
+                // window.print();
+                // document.body.innerHTML = original;
+                const print_area = window.open();
+                print_area.document.write('<link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />');
+                print_area.document.write(print_div);
+                print_area.document.close();
+                print_area.focus();
+                print_area.print();
+                print_area.close();
+            });
+        }, false);
+    </script>
     <?php // ! *************************** Debug *************************** ?>
     <!-- <details id='debug'>
         <summary>Debug</summary>
