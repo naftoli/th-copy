@@ -156,7 +156,7 @@ if ( $dates == 'english' ) $dates_id = 2;
                 setTimeout(() => {
                     print_area.print();
                     print_area.close();
-                }, 50);
+                }, 100);
                 // print_area.print();
                 // print_area.close();
             });
