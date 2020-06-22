@@ -66,6 +66,37 @@ class AdminAuthRouter {
        return json_error('You cannot delete login if it does not exist');
     }
 
+    /**
+     * delete admin auth connections and then add new one
+     */
+    public function removeTeacher() {
+        global $MASHPIA_DB;
+
+        // delete old position
+        try {
+            $auth = AdminAuth::findAuth( $_POST['admin_id'], $_POST['auth'], $_POST['id'] );
+            $auth->delete();
+        } catch ( Exception $e ) {
+            return json_error('Cannot delete invalid login. Please try again.');
+        } 
+
+        // get school id
+        $stmt = $MASHPIA_DB->prepare("SELECT school_id FROM classes WHERE class_id = :id");
+        $stmt->execute([':id' => $_POST['id']]);
+        $school_id = $stmt->fetch()['school_id'];
+
+        // create new position
+        $new_auth = AdminAuth::create([
+            'admin_id'  =>  $_POST['admin_id'], 
+            'id'    =>  $school_id, 
+            'auth'  =>  'staff', 
+            'role_id'   =>  40,
+            'position'  =>  ''
+        ]);
+        if (!$new_auth) return json_error('Error creating new position.');
+        return json_response( $new_auth );
+    }
+
     public function index() {
         $auth = AdminAuth::findAuth( 2, 'school', 58 );
         json_response( $auth );
