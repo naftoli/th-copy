@@ -142,7 +142,6 @@ if ( $dates == 'english' ) $dates_id = 2;
         document.addEventListener('DOMContentLoaded', function() {
             // your code here
             // const original = document.body.innerHTML;
-            let elems = [];
             $(".userMission").each( function() {
                 const id = $(this).attr('id');
                 const print_div = document.getElementById(id).innerHTML;
@@ -153,16 +152,14 @@ if ( $dates == 'english' ) $dates_id = 2;
                 print_area.document.write('<html><head><meta charset="utf8" /><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" /></head><body>');
                 print_area.document.write(print_div + "</body></html>");
                 print_area.document.close();
-                elems.push(print_area);
-                // print_area.focus();
+                print_area.focus();
+                setTimeout(() => {
+                    print_area.print();
+                    print_area.close();
+                }, 50);
                 // print_area.print();
                 // print_area.close();
             });
-            $(elems).each( function() {
-                $(this).focus();
-                $(this).print();
-                $(this).close();
-            })
         }, false);
     </script>
     <?php // ! *************************** Debug *************************** ?>
