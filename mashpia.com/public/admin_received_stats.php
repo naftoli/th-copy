@@ -32,11 +32,14 @@ $go = '0';
 $subject_id = 0;
 $class_id = 0;
 $user_id = 0;
+
+require_once 'class.globalSettings.php';
+$defaults = GlobalSettings::getCurYearDates();
 	
-$from_awarded = 2456305;
+$from_awarded = $defaults['start'];
 $to_awarded = unixtojd();
 
-$from_promoted = 2456305;
+$from_promoted = $defaults['start'];
 $to_promoted = unixtojd();
 	
 if (isset($_POST['go']) && $_POST['go'] == '1' && isset($_POST['from_awarded'])) {
