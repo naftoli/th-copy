@@ -35,8 +35,8 @@
       { "label": "Mark", "path": "/missions/mark" },
       { "label": "Personalize", "path": "/missions/personalize" },
       { "label": "Tasks", "path": "/missions/tasks", "user_types": [ "HQ", "INST", "BC" ] },
-      { "label": "Mission Checklist (old)", "legacy": true, "path": "/mission_sheets_checklist.php" },
-      { "label": "Mission Report (old)", "legacy": true, "path": "/missions_report.php" }
+      { "label": "Mission Checklist (old)", "legacy": true, "path": "/mission_sheets_checklist.php", "user_types": [ "HQ", "BC" ] },
+      { "label": "Mission Report (old)", "legacy": true, "path": "/missions_report.php", "user_types": [ "HQ", "BC" ] }
     ]
   },
   {
