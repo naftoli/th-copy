@@ -208,8 +208,8 @@
             
             $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
-                var html = "Total Miles Earned: " + info.tpoints;
-                html += "<br />Total Miles Earned this Year: " + info.earned;
+                var html = "Total Miles Earned: " + info.tpoints.toLocaleString( navigator.language );
+                html += "<br />Total Miles Earned this Year: " + info.earned.toLocaleString( navigator.language );
                 html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
                 $(".balance").html(html);
                 originalBal = info.available;
