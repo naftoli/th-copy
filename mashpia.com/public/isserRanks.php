@@ -143,7 +143,8 @@ function getRank($user) {
 											echo "<tr><td><input type='checkbox'></td><td>" . $row['user_serial'] . "</td><td>";
 											if (!empty($heNames[$student]))
 												echo $heNames[$student] . ' - ';
-											echo $userInfo[$student];
+                                            echo $userInfo[$student];
+                                            echo " (" . $grade . ")";
 											echo "</td></tr>";
                                         	//echo "<div class='students'>" . $student . " " . $row['user_serial'] . " <input type='checkbox' /></div>";
 										}
