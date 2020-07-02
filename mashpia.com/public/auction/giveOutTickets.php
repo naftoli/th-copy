@@ -1,10 +1,16 @@
 <?php
-ini_set('display_errors',1);
-// give out 1 ticket for 5 prizes to all children who do not have any tickets in the auction but have points
-require '../db.php';
-//require '../class.points.php';
+// ini_set('display_errors',1);
+// // give out 1 ticket for 5 prizes to all children who do not have any tickets in the auction but have points
+// require '../db.php';
+// //require '../class.points.php';
 
-$auction_id = 79;
+// $auction_id = 79;
+
+// find out auction start date
+$sql = "select auction_points_start_date from auctions where auction_id = " . $auction_id;
+$result = mysql_query( $sql );
+$row = mysql_fetch_assoc( $result );
+$auction_start = $row['auction_points_start_date'];
 
 function getChildren() {
     $users = array();
@@ -22,9 +28,10 @@ function getChildren() {
     while ($row = mysql_fetch_assoc( $result )) {
         $user_id = $row['user_id'];
         // find out how many auction points are available
-        //$p = new Points( $user_id );
-        //$points = $p->getAuctionPoints( 2458007 );
-        $sqlPoints = "select SUM(mark_points) points FROM date_tasks_marks WHERE user_id = $user_id and mark_date >= 2458007";
+        // don't use point class b/c it hangs due to checking achievement cards
+        // $p = new Points( $user_id );
+        // $points = floor( $p->getAuctionPoints( 2458670 ) );
+        $sqlPoints = "select SUM(mark_points) points FROM date_tasks_marks WHERE user_id = $user_id and mark_date >= " . $auction_start;
         $resultPoints = mysql_query( $sqlPoints );
         if (mysql_num_rows( $resultPoints ) > 0) {
             $rowPoints = mysql_fetch_assoc( $resultPoints );
