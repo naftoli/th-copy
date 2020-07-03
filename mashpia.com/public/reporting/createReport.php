@@ -100,7 +100,8 @@ $fields = [
 	
 	<body>
         <h1>Personalized Report</h1>
-        <table id="table" class="table table-striped table-condensed">
+        <button id="download" style="padding: 5px;">Download Table (CSV/Excel)</button>
+        <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
             <thead>
                 <tr>
                     <?php
@@ -132,6 +133,48 @@ $fields = [
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script>
-		$('#table').DataTable();
+		$('#table').DataTable({
+            paging: false
+        });
+    </script>
+    <script>
+        function dataToCSV( headers, rows, filename ) {
+            const universalBOM = "\uFEFF";
+            let csvContent = `${ headers.join(',') }\n`;
+            // Add each row to the CSV content and encode it for unicode in excel
+            rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
+            csvContent = encodeURIComponent( universalBOM + csvContent );
+            // create and click the download link
+            let link = document.createElement('a');
+            link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+            // link.target = '_blank';
+            link.download = `${filename}.csv`;
+            link.click();
+        }
+
+        $("#download").click( function() {
+            const fields = <?= json_encode($fields) ?>;
+            const info = <?= json_encode($result) ?>;
+            // console.log(fields)
+            // console.log(info)
+            // get the headers
+            const headers = Object.keys(info[0])
+            // console.log(headers)
+            let columns = []
+            for (h of headers) {
+                columns.push(fields[h])
+            }
+            // get the data
+            let rows = []
+            for (i of info) {
+                let row = []
+                for (h of headers) {
+                    row.push(i[h])
+                }
+                rows.push(row)
+            }
+            console.log(rows)
+            dataToCSV( columns, rows, "CustomReport" );
+        });
     </script>
 </html>
