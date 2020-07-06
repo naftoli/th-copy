@@ -61,7 +61,7 @@ function buildSelect( $info ) {
         <style>
             body {
                 font-family: sans-serif;
-                font-size: 12px;
+                font-size: 14px;
                 padding-left: 3%;
                 padding-right: 3%;
             }
