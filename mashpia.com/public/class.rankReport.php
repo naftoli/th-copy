@@ -14,6 +14,7 @@ class RankReport extends Report {
     protected $schoolExceptions;
     protected $schoolLogos;
     protected $userSchool;
+    protected $userPic;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -24,6 +25,7 @@ class RankReport extends Report {
         $this->schoolExceptions = [180,588,612];
         $this->schoolLogos = [];
         $this->userSchool = [];
+        $this->userPic = [];
     }
     
     public function setRanks($orderType = 'byGrade', $rankOrd = 0) {
@@ -102,6 +104,15 @@ class RankReport extends Report {
                 'logo_girls'    =>  $row['logo_girls'],
                 'logo_id'       =>  $row['school_logo_id']
             ];
+
+            // set user pic
+            $pic = '/mobile/reg/images/profile-photo-default.jpg';
+            if ( $row['mobile_pic'] ) {
+                $pic = '/mobile/reg/' . $row['mobile_pic'];
+            } else if ( $row['user_photo_id'] ) {
+                $pic = '/file_view.php?id=' . $row['user_photo_id'];
+            }
+            $this->userPic[$user_id] = $pic;
         }
     }
     
@@ -147,6 +158,10 @@ class RankReport extends Report {
 
     public function getUserSchool() {
         return $this->userSchool;
+    }
+
+    public function getUserPic() {
+        return $this->userPic;
     }
 }
 ?>
