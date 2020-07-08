@@ -16,9 +16,8 @@ function createFile($info, $name) {
     fclose($fp);
 }
 
-function createZip($files, $images) {
+function createZip($files, $images, $filename) {
     $zip = new ZipArchive();
-    $filename = "./tsv.zip";
     if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
         exit("cannot open <$filename>\n");
     }
@@ -76,18 +75,19 @@ foreach ($schools as $id => $school) {
         break;
     }
 } 
-
-createZip($files, $images);
+$filename = "tsv.zip";
+createZip($files, $images, $filename);
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename="'.basename("tsv.zip").'"');
+header('Content-Disposition: attachment; filename="'.basename($filename).'"');
 header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
-header('Content-Length: ' . filesize("tsv.zip"));
+header('Content-Length: ' . filesize($filename));
 flush(); // Flush system output buffer
-readfile("tsv.zip");
+readfile($filename);
+unlink($filename);
 exit;
 ?>
 <!DOCTYPE html>
