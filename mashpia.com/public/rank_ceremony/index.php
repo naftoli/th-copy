@@ -78,6 +78,16 @@ foreach ($schools as $id => $school) {
 } 
 
 createZip($files, $images);
+
+header('Content-Description: File Transfer');
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename="'.basename("tsv.zip").'"');
+header('Expires: 0');
+header('Cache-Control: must-revalidate');
+header('Pragma: public');
+header('Content-Length: ' . filesize("tsv.zip"));
+flush(); // Flush system output buffer
+readfile("tsv.zip");
 exit;
 ?>
 <!DOCTYPE html>
