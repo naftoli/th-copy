@@ -28,7 +28,7 @@ class RankReport extends Report {
         $this->userPic = [];
     }
     
-    public function setRanks($orderType = 'byGrade', $rankOrd = 0) {
+    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ') {
 		$this->ranks = array();
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end']; 
@@ -72,7 +72,7 @@ class RankReport extends Report {
             $school = $row['school_name'];
             $teacher = $row['class_teacher'];
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-            $user = $row['first'] . " " . $row['last'];
+            $user = $row['first'] . $nameBreak . $row['last'];
             $rank = $row['rank_name'];
             if ( $orderType == 'byGrade' )
                 $this->ranks[$school][$teacher][$grade][][$user_id] = $rank;
