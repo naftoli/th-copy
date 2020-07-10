@@ -17,17 +17,18 @@ function createFile($info, $name) {
 }
 
 function createZip($files, $images, $filename) {
-    $zip = new ZipArchive();
-    if ($zip->open($filename, ZipArchive::CREATE) !== true) {
+    $zip = new ZipArchive;
+    $success = $zip->open($filename, ZipArchive::CREATE);
+    if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
-        $zip->addFile($file);
+        $zip->addFromString($file, $file);
         unlink($file);
     }
     foreach ($images as $img) {
-        $zip->addFile($img);
-        // unlink($img);
+        $zip->addFromString($img, $img);
+        unlink($img);
     }
     $zip->close();
 }
@@ -36,7 +37,8 @@ $files = [];
 $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
-    $r->setSchoolId($id);
+    // $r->setSchoolId($id);
+    $r->setSchoolId(2);
     $r->setRanks('byRank');
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
@@ -52,14 +54,16 @@ foreach ($schools as $id => $school) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id) {
                         // create pic of child to add to zipArchive
-                        $new_img = imagecreatefromstring(file_get_contents('http://mashpia.com' . $pics[$user_id]));
-                        $new_image = imagepng($new_img, $user_id . '.png');
-                        if ($new_image) $images[] = $user_id . '.png';
+                        $url = 'http://mashpia.com' . $pics[$user_id];
+                        $img_url = $user_id . '.png';
+                        $new_img = imagecreatefromstring(file_get_contents($url));
+                        $new_image = imagepng($new_img, $img_url);
+                        if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
 
                         $info[$i]['comp'] = $rank;
                         $info[$i]['comp_name'] = $rank . '_' . $j++; 
                         $info[$i]['chayol_name'] = $users[$user_id];
-                        $info[$i]['chayol_picture'] = $new_image ? $user_id . '.png' : '';
+                        $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
                         $info[$i]['school_name'] = $school;
                         $info[$i]['school_logo'] = $logos[$school]['logo_id'];
                         $i++;
