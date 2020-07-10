@@ -18,7 +18,7 @@ function createFile($info, $name) {
 
 function createZip($files, $images, $filename) {
     $zip = new ZipArchive();
-    if (!$zip->open($filename, ZipArchive::CREATE)) {
+    if ($zip->open($filename, ZipArchive::CREATE) !== true) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
