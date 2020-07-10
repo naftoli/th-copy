@@ -23,7 +23,7 @@ function createZip($files, $images, $filename) {
     }
     foreach($files as $file) {
         $zip->addFile($file);
-        unlink($file);
+        // unlink($file);
     }
     foreach ($images as $img) {
         $zip->addFile($img);
