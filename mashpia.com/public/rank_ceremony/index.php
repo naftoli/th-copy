@@ -37,8 +37,7 @@ $files = [];
 $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
-    // $r->setSchoolId($id);
-    $r->setSchoolId(2);
+    $r->setSchoolId($id);
     $r->setRanks('byRank');
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
