@@ -23,11 +23,11 @@ function createZip($files, $images, $filename) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
-        $zip->addFile($file);
+        $zip->addFromString($file, file_get_contents($file));
         unlink($file);
     }
     foreach ($images as $img) {
-        $zip->addFile($img);
+        $zip->addFromString($img, file_get_contents($img));
         unlink($img);
     }
     $zip->close();
@@ -37,7 +37,8 @@ $files = [];
 $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
-    $r->setSchoolId($id);
+    $r->setSchoolId(2);
+    // $r->setSchoolId($id);
     $r->setRanks('byRank', 0, "<br />"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
