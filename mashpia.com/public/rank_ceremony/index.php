@@ -90,7 +90,6 @@ foreach ($schools as $id => $school) {
             }
         }
     }
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     $info[$i] = ['outro','outro']; // outro
     if (count($ranks)) {
         $file_name = "TSV_Report_" . $id . ".csv";
