@@ -9,6 +9,10 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 function createFile($info, $name) {
+    // remove quotes from fields
+    for ($i = 0; $i < count($fields); $i++) {
+        $info[$i] = str_replace("\"", '', $info[$i]);
+    }
     $fp = fopen($name, "w");
     foreach ($info as $fields) {
         fputcsv($fp, $fields, "\t");
@@ -55,7 +59,7 @@ $r = new RankReport();
 foreach ($schools as $id => $school) {
     $r->setSchoolId(2);
     // $r->setSchoolId($id);
-    $r->setRanks('byRank', 0, "<br/>"); // make sure to add break in name between first name and last name
+    $r->setRanks('byRank', 0, "<br>"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -67,7 +71,7 @@ foreach ($schools as $id => $school) {
     foreach ($ranks as $school => $other) {
         foreach ($other as $rank => $more) {
             $j = 1;
-            $info[$i++] = [($rankNames[$rank] . '_intro')]; // rank intro
+            $info[$i++] = [($rankNames[$rank] . '_intro'), ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)))]; // rank intro
             foreach ($more as $teacher => $other) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id) {
