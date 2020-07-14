@@ -67,7 +67,7 @@ foreach ($schools as $id => $school) {
     foreach ($ranks as $school => $other) {
         foreach ($other as $rank => $more) {
             $j = 1;
-            $info[$i++] = [$rankNames[$rank] . '_intro']; // rank intro
+            $info[$i++] = [($rankNames[$rank] . '_intro'),'','','','']; // rank intro
             foreach ($more as $teacher => $other) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id) {
@@ -79,7 +79,7 @@ foreach ($schools as $id => $school) {
                         if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
 
                         $info[$i]['comp'] = $rankNames[$rank];
-                        $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', $rankNames[$rank] . '_' . $j++)); 
+                        $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))); 
                         $info[$i]['chayol_name'] = $users[$user_id];
                         $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
                         $info[$i]['school_name'] = $school;
