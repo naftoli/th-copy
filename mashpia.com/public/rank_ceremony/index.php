@@ -10,8 +10,9 @@ $schools = $as->getSchools();
 
 function createFile($info, $name) {
     // remove quotes from fields
-    for ($i = 0; $i < count($fields); $i++) {
-        $info[$i] = str_replace("\"", '', $info[$i]);
+    for ($i = 0; $i < count($info); $i++) {
+        if (isset($info[$i]['comp_name'])) $info[$i]['comp_name'] = str_replace("\"", '', $info[$i]['comp_name']);
+        if (isset($info[$i]['school_name'])) $info[$i]['school_name'] = str_replace("\"", '', $info[$i]['school_name']);
     }
     $fp = fopen($name, "w");
     foreach ($info as $fields) {
