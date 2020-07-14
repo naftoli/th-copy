@@ -33,13 +33,29 @@ function createZip($files, $images, $filename) {
     $zip->close();
 }
 
+$ranksNames = [
+    'Sergeant'          =>  'sergeant',
+    'Sergeant Major'    =>  'sergeant_major',
+    'Second Lieutenant' =>  'second_lieutenant',
+    'First Lieutenant'  =>  'first_lieutenant',
+    'Captain'           =>  'captain',
+    'Major'             =>  'major',
+    'Colonel'           =>  'colonel',
+    'General'           =>  'general',
+    '1* General'        =>  'one_star_general',
+    '2* General'        =>  'two_star_general',
+    '3* General'        =>  'three_star_general',
+    '4* General'        =>  'four_star_general',
+    '5* General'        =>  'five_star_general'
+];
+
 $files = [];
 $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
     $r->setSchoolId(2);
     // $r->setSchoolId($id);
-    $r->setRanks('byRank', 0, "<br />"); // make sure to add break in name between first name and last name
+    $r->setRanks('byRank', 0, "<br/>"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -47,9 +63,11 @@ foreach ($schools as $id => $school) {
     
     $i = 0;
     $info[$i++] = ['comp','comp_name','chayol_name','school_name','school_logo'];
+    $info[$i++] = ['promotions_intro','promotions_intro','','',$school,$logos[$school]['logo_id']]; // intro
     foreach ($ranks as $school => $other) {
         foreach ($other as $rank => $more) {
             $j = 1;
+            $info[$i++] = [$rankNames[$rank] . '_intro']; // rank intro
             foreach ($more as $teacher => $other) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id) {
@@ -60,7 +78,7 @@ foreach ($schools as $id => $school) {
                         $new_image = imagepng($new_img, $img_url);
                         if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
 
-                        $info[$i]['comp'] = $rank;
+                        $info[$i]['comp'] = $rankNames[$rank];
                         $info[$i]['comp_name'] = $rank . '_' . $j++; 
                         $info[$i]['chayol_name'] = $users[$user_id];
                         $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
@@ -72,6 +90,7 @@ foreach ($schools as $id => $school) {
             }
         }
     }
+    $info[$i] = ['outro','outro','','','','']; // outro
     if (count($ranks)) {
         $file_name = "TSV_Report_" . $id . ".csv";
         createFile($info, $file_name);
