@@ -79,7 +79,7 @@ foreach ($schools as $id => $school) {
                         if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
 
                         $info[$i]['comp'] = $rankNames[$rank];
-                        $info[$i]['comp_name'] = $rank . '_' . $j++; 
+                        $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', $rankNames[$rank] . '_' . $j++)); 
                         $info[$i]['chayol_name'] = $users[$user_id];
                         $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
                         $info[$i]['school_name'] = $school;
