@@ -53,6 +53,7 @@ $files = [];
 $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
+    if ($id == 612) continue;
     $r->setSchoolId(2);
     // $r->setSchoolId($id);
     $r->setRanks('byRank', 0, "<br>"); // make sure to add break in name between first name and last name
