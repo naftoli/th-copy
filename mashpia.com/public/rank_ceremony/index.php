@@ -11,7 +11,7 @@ $schools = $as->getSchools();
 function createFile($info, $name) {
     $fp = fopen($name, "w");
     foreach ($info as $fields) {
-        fputcsv($fp, $fields, "\t", '');
+        fputcsv($fp, $fields, "\t", ' ');
     }
     fclose($fp);
 }
