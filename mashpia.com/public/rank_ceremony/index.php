@@ -63,8 +63,8 @@ foreach ($schools as $id => $school) {
     $logos = $r->getSchoolLogos();
     
     $i = 0;
-    $info[$i++] = ['comp','comp_name','chayol_name','school_name','school_logo'];
-    $info[$i++] = ['promotions_intro','promotions_intro','','',$school,$logos[$school]['logo_id']]; // intro
+    $info[$i++] = ['comp','comp_name','chayol_name','chayol_picture','school_name','school_logo'];
+    $info[$i++] = ['promotions_intro','promotions_intro','','','',$school,$logos[$school]['logo_id']]; // intro
     foreach ($ranks as $school => $other) {
         foreach ($other as $rank => $more) {
             $j = 1;
