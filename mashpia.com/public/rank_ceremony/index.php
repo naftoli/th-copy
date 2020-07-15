@@ -9,14 +9,9 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 function createFile($info, $name) {
-    // remove quotes from fields
-    // for ($i = 0; $i < count($info); $i++) {
-    //     if (isset($info[$i]['comp_name'])) $info[$i]['comp_name'] = str_replace("\"", '', $info[$i]['comp_name']);
-    //     if (isset($info[$i]['school_name'])) $info[$i]['school_name'] = str_replace("\"", '', $info[$i]['school_name']);
-    // }
     $fp = fopen($name, "w");
     foreach ($info as $fields) {
-        fputcsv($fp, $fields, "\t");
+        fputcsv($fp, $fields);
     }
     fclose($fp);
 }
