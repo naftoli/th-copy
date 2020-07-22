@@ -335,7 +335,7 @@
 										</picture>
 			                        </div>
 			                        <div class="span12">
-			                            <span data-i18n="news">News</span>
+			                            <span>News</span>
 			                        </div>
 			                    </div>
 			                </a>
@@ -353,22 +353,14 @@
             referencelng="en" 
             fallbacklng="en" 
             src="https://unpkg.com/locizify@^4.0.7"
-            allowedAddOrUpdateHost=['tzivos.local','test.mashpia.com']
+            allowedAddOrUpdateHost="tzivos.local"
             debug="true">
         </script>
-        <script>
-            // using Promises
-            locizify.i18next
-                .changeLanguage('he')
-                .then((t) => {
-                    t('news'); // -> same as i18next.t
-                })
-
-            locizify.i18next.on('loaded', function() {
-                alert()
-            })
-        </script>
 		<script>
+            locizify.i18next.on('loaded', function() {
+                console.log(locizify.i18next.languages)
+                locizify.i18next.changeLanguage('en')
+            })
             document.addEventListener("DOMContentLoaded", function() {
 				// allow parents to swipe to open a child's account.
                 function setSwiper() {
