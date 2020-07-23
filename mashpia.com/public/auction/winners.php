@@ -3,7 +3,8 @@
 		<meta charset='UTF-8' />
 		<style>
 			table {
-				font-size: 12px;
+				font-size: 14px;
+				font-family: Arial, Helvetica, sans-serif;
 			}
 			th, td {
 				border: 1px solid black;
