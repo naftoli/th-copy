@@ -23,7 +23,7 @@ $sql = "SELECT
             JOIN
         classes c ON c.class_id = u.class_id
         WHERE
-        aup.auction_id = 80
+        aup.auction_id = 81
         GROUP BY prize_id , user_id
         ORDER BY prize_id , school_name , class_grade , class_sub , last , first";
 $result = mysql_query( $sql );
