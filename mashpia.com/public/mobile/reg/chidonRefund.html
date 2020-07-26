@@ -106,6 +106,7 @@
     
     <script src="js/all.js" defer></script>
     <script>
+        var totalPaid = 0 // keep track of total paid for updateTotal function
         document.addEventListener("DOMContentLoaded", function(event) {
             // make sure we have a cookie
             var admin = Cookies.get('admin');
@@ -129,6 +130,7 @@
                         else {
                             // set refund default amount
                             const paid = parseFloat(children[c].shabbatonPaid)
+                            totalPaid += paid
                             let refund = paid - 50.00
                             if (refund < 0) refund = 0.00
                             children[c].refund = refund
@@ -165,6 +167,11 @@
             $('.refund').each(function() {
                 const amount = parseFloat($(this).val())
                 total += amount
+                if (total > totalPaid) {
+                    alert("You cannot get a refund greater than what you paid!")
+                    $(this).val(0)
+                    total -= amount
+                }
             })
             $("#amount").text(total)
         }
