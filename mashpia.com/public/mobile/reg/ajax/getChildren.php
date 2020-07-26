@@ -232,6 +232,7 @@ if ( !empty( $users ) ) {
 							}
 							if ($cRow['date_paid'] > 0) {
 								$children[$row['user_id']]['shabbatonRegistered'] = 1;
+								$children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];								
 							}
 							if ($cRow['confirmed']) {
 								$children[$row['user_id']]['shabbatonConfirmed'] = 1;
