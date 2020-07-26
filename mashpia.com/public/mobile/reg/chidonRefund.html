@@ -98,7 +98,11 @@
                     <div class="row">
                         <h2>Total Refund Requested: $<span id="amount">0</span></h2>
                         <input type="hidden" id="total" />
-                    </div>           
+                    </div>   
+                    
+                    <div class="row">
+                        <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Save</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -160,6 +164,25 @@
             });
 
             $(document).on('keyup', '.refund', updateTotal);
+
+            $("#save").click( function(e) {
+                e.preventDefault()
+                let refunds = []
+                $(".refund").each( function() {
+                    const amount = parseFloat($(this).val())
+                    const id = $(this).attr('id')
+                    refunds.push({ id: id, amount: amount })
+                })
+                $.post('ajax/saveRefunds.php', { data: refunds }, function(result) {
+                    const res = JSON.parse(result)
+                    if (res.success) {
+                        alert('Your refund request has been received!')
+                    } else {
+                        alert(res.error)
+                        console.log(res.info)
+                    }
+                })
+            })
         });
 
         function updateTotal() {
