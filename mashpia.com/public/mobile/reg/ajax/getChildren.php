@@ -22,7 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSe
 $info = array();
 
 $parent = array();
-$sql = "SELECT father, mother, father_pic, mother_pic FROM admins WHERE admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -31,6 +31,7 @@ $parent['fatherPic'] = $row['father_pic'];
 $parent['motherPic'] = $row['mother_pic'];
 $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
+$parent['showRefund'] = intval($row['show_chidon_refund']);
 
 $info['parent'] = $parent;
 
@@ -232,7 +233,13 @@ if ( !empty( $users ) ) {
 							}
 							if ($cRow['date_paid'] > 0) {
 								$children[$row['user_id']]['shabbatonRegistered'] = 1;
-								$children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];								
+								if ($parent['showRefund']) {
+									$children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
+									$children[$row['user_id']]['refundRequested'] = $cRow['shabbaton_refund'];
+								} else {
+									$children[$row['user_id']]['shabbatonPaid'] = 0;
+									$children[$row['user_id']]['refundRequested'] = 0;
+								}					
 							}
 							if ($cRow['confirmed']) {
 								$children[$row['user_id']]['shabbatonConfirmed'] = 1;

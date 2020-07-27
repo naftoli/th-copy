@@ -127,8 +127,9 @@
                 if ( success == -1 ) {
                     window.location = "index.html";
                 } else {
-                    var data = $.parseJSON( success );
-                    var children = data.children;
+                    const data = $.parseJSON( success );
+                    const children = data.children;
+                    console.log(children)
                     for (c in children) {
                         if (!children[c].shabbatonRegistered) delete children[c];
                         else {
@@ -137,6 +138,7 @@
                             totalPaid += paid
                             let refund = paid - 50.00
                             if (refund < 0) refund = 0.00
+                            if (parseFloat(children[c].refundRequested)) refund = parseFloat(children[c].refundRequested)
                             children[c].refund = refund
                         }
                     }
