@@ -234,9 +234,11 @@ if ( !empty( $users ) ) {
 							if ($cRow['date_paid'] > 0) {
 								$children[$row['user_id']]['shabbatonRegistered'] = 1;
 								if ($parent['showRefund']) {
+									$children[$row['user_id']]['showRefund'] = 1;
 									$children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
 									$children[$row['user_id']]['refundRequested'] = $cRow['shabbaton_refund'];
 								} else {
+									$children[$row['user_id']]['showRefund'] = 0;
 									$children[$row['user_id']]['shabbatonPaid'] = 0;
 									$children[$row['user_id']]['refundRequested'] = 0;
 								}					

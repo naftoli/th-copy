@@ -227,6 +227,13 @@
 																	{{#if this.shabbatonRegistered}}
 																		{{#if this.shabbatonConfirmed}}
                                                                             <div class="chidonRegInfo" style="color: #17771c">Chidon Shabbaton Enrolled - Chidon ID: {{this.th_chidon_id}}</div>
+                                                                            {{#if this.showRefund}}
+                                                                                <div style="margin: 10px 0px">
+                                                                                    <a href="chidonRefund.html">
+                                                                                        <button class="btn btn-danger refund">Request Refund</button>
+                                                                                    </a>
+                                                                                </div>
+                                                                            {{/if}}
 																		{{else}}
 																			<div class="chidonRegInfo">Chidon Shabbaton Pending Enrollment</div>
 																			{{#if this.shabbatonEdit}}
