@@ -105,30 +105,31 @@ $ids = $as->getSchools();
 
 $info = [];
 foreach ( $ids as $id => $name ) {
-	if (count($ids) > 1) {
-		echo "<h2>" . $name . "</h2>";
-		echo "<div class='page-break'></div>";
-    }
+	// if (count($ids) > 1) {
+	// 	echo "<h2>" . $name . "</h2>";
+	// 	echo "<div class='page-break'></div>";
+    // }
     foreach ([2459049,2459077] as $date) {
         $sm->setReportDates($date);
         $sm->setSchool($id);
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
         $done = $sm->getStudentDoneResults();
-        foreach ($quotas as $date => $other) {
-            foreach ($other as $grade => $more) {
-                foreach ($more as $user_id => $values) {
-                    foreach ($values as $task => $quota) {
-                        if ($done[$date][$grade][$user_id][$task] >= $quota) {
-                            $info[$id][$user_id][$date][$task] = [
-                                'quota' =>  $quota, 
-                                'done'  =>  $done[$date][$grade][$user_id][$task]
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+        echo "<pre>"; print_r($quotas); print_r($done); echo "</pre>";
+        // foreach ($quotas as $date => $other) {
+        //     foreach ($other as $grade => $more) {
+        //         foreach ($more as $user_id => $values) {
+        //             foreach ($values as $task => $quota) {
+        //                 if ($done[$date][$grade][$user_id][$task] >= $quota) {
+        //                     $info[$id][$user_id][$date][$task] = [
+        //                         'quota' =>  $quota, 
+        //                         'done'  =>  $done[$date][$grade][$user_id][$task]
+        //                     ];
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 } 
 echo "<pre>"; 
