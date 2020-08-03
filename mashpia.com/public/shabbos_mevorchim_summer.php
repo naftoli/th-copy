@@ -124,7 +124,7 @@ foreach ( $ids as $id => $name ) {
                         if ($result && $result >= intval($quota)) {
                             $info[$id][$user_id][$date] = [
                                 'quota' =>  $quota, 
-                                'done'  =>  $done[$date][$grade][$user_id][$task]
+                                'done'  =>  $result
                             ];
                         }
                     }
