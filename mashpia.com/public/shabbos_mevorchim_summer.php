@@ -123,7 +123,7 @@ foreach ( $ids as $id => $name ) {
                             $info[$id][$user_id][$date][$task] = [
                                 'quota' =>  $quota, 
                                 'done'  =>  $done[$date][$grade][$user_id][$task]
-                            ]
+                            ];
                         }
                     }
                 }
