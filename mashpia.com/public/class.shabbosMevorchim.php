@@ -1105,9 +1105,9 @@ class ShabbosMevorchim {
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
                             $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
-                            if ($sid == 176 && $user['user_id'] == 17267) {
-                                //echo "<pre>"; print_r($stmt2); echo "</pre>";
-                            }
+                            // if ($sid == 176 && $user['user_id'] == 17267) {
+                            //     echo "<pre>"; print_r($stmt2); echo "</pre>";
+                            // }
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
