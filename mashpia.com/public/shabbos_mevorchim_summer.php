@@ -115,22 +115,22 @@ foreach ( $ids as $id => $name ) {
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
         $done = $sm->getStudentDoneResults();
-        echo "<pre>"; print_r($done); echo "</pre>";
-        foreach ($quotas as $date => $other) {
-            foreach ($other as $grade => $more) {
-                foreach ($more as $user_id => $values) {
-                    foreach ($values as $task => $quota) {
-                        $result = intval($done[$date][$grade][$user_id][$task]);
-                        if ($result && $result >= intval($quota)) {
-                            $info[$id][$user_id][$date] = [
-                                'quota' =>  $quota, 
-                                'done'  =>  $result
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+        echo "<pre>"; print_r($quotas); print_r($done); echo "</pre>";
+        // foreach ($quotas as $date => $other) {
+        //     foreach ($other as $grade => $more) {
+        //         foreach ($more as $user_id => $values) {
+        //             foreach ($values as $task => $quota) {
+        //                 $result = intval($done[$date][$grade][$user_id][$task]);
+        //                 if ($result && $result >= intval($quota)) {
+        //                     $info[$id][$user_id][$date] = [
+        //                         'quota' =>  $quota, 
+        //                         'done'  =>  $result
+        //                     ];
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 } 
 echo "<pre>"; 
