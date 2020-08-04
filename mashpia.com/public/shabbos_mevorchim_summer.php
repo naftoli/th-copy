@@ -110,13 +110,13 @@ foreach ( $ids as $id => $name ) {
 	// 	echo "<h2>" . $name . "</h2>";
 	// 	echo "<div class='page-break'></div>";
     // }
-    foreach ([2459049,2459077] as $date) {
+    foreach ([2459021,2459049] as $date) {
         $sm->setReportDates($date);
         $sm->setSchool($id);
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
         $done = $sm->getStudentDoneResults();
-        echo "<pre>"; print_r($done); echo "</pre>";
+        // echo "<pre>"; print_r($done); echo "</pre>";
         foreach ($quotas as $date => $other) {
             foreach ($other as $grade => $more) {
                 foreach ($more as $user_id => $values) {
