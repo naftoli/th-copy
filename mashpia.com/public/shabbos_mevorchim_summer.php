@@ -105,6 +105,7 @@ tr, th, td {
 
     $info = [];
     foreach ( $ids as $id => $name ) {
+        if ($id == 612) continue;
         // if (count($ids) > 1) {
         // 	echo "<h2>" . $name . "</h2>";
         // 	echo "<div class='page-break'></div>";
