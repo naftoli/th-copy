@@ -104,7 +104,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $ids = $as->getSchools();
 
 $info = [];
-$ids = [255];
+$ids = [255 => 'ot'];
 foreach ( $ids as $id => $name ) {
 	// if (count($ids) > 1) {
 	// 	echo "<h2>" . $name . "</h2>";
