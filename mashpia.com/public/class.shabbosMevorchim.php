@@ -881,7 +881,7 @@ class ShabbosMevorchim {
                 AND ut.enrolled =1";                   
         $stmt1 = $this->db->prepare( $sql1 );
  
-		$sql2 = "select dtm.done_qty as total 
+		$sql2 = "select MAX(dtm.done_qty) as total 
 				from date_tasks_marks dtm
 				join date_tasks dt using (date_task_id)
 				join date_tasks_missions dtmm using (date_tasks_mission_id) 
@@ -1112,7 +1112,6 @@ class ShabbosMevorchim {
                             $total = $row2['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
                             if ($row2['total'] > 0) echo $user['user_id'] . '-' . $row2['total'] . "<br />";
-                            else $stmt2->debugDumpParams();
                         }
 						
 						if ($sid) {
