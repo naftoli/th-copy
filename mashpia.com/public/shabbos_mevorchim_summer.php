@@ -104,6 +104,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $ids = $as->getSchools();
 
 $info = [];
+$ids = [255];
 foreach ( $ids as $id => $name ) {
 	// if (count($ids) > 1) {
 	// 	echo "<h2>" . $name . "</h2>";
@@ -115,22 +116,21 @@ foreach ( $ids as $id => $name ) {
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
         $done = $sm->getStudentDoneResults();
-        echo "<pre>"; print_r($done); echo "</pre>";
-        // foreach ($quotas as $date => $other) {
-        //     foreach ($other as $grade => $more) {
-        //         foreach ($more as $user_id => $values) {
-        //             foreach ($values as $task => $quota) {
-        //                 $result = intval($done[$date][$grade][$user_id][$task]);
-        //                 if ($result && $result >= intval($quota)) {
-        //                     $info[$id][$user_id][$date] = [
-        //                         'quota' =>  $quota, 
-        //                         'done'  =>  $result
-        //                     ];
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        foreach ($quotas as $date => $other) {
+            foreach ($other as $grade => $more) {
+                foreach ($more as $user_id => $values) {
+                    foreach ($values as $task => $quota) {
+                        $result = intval($done[$date][$grade][$user_id][$task]);
+                        if ($result && $result >= intval($quota)) {
+                            $info[$id][$user_id][$date] = [
+                                'quota' =>  $quota, 
+                                'done'  =>  $result
+                            ];
+                        }
+                    }
+                }
+            }
+        }
     }
 } 
 echo "<pre>"; 
