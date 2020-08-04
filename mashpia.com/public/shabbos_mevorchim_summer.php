@@ -85,58 +85,78 @@ tr, th, td {
 </head>
 
 <body>
-<? 
-require_once 'admin_header.php';
-require_once 'class.shabbosMevorchim.php';
-$sm = new ShabbosMevorchim();
-?>
-<div class='no-print'>
-    <h1>Shabbos Mevorchim Tehillim Report</h1>
-    
-    <div align='center'>
-        <input type='button' value='Print' onclick='window.print()'>
+    <?php
+    require_once 'admin_header.php';
+    require_once 'class.shabbosMevorchim.php';
+    $sm = new ShabbosMevorchim();
+    ?>
+    <div class='no-print'>
+        <h1>Shabbos Mevorchim Tehillim Report</h1>
+        
+        <div align='center'>
+            <input type='button' value='Print' onclick='window.print()'>
+        </div>
     </div>
-</div>
-<br />
-<? 
-require_once 'class.adminSchools.php';      
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$ids = $as->getSchools();
+    <br />
+    <?php
+    require_once 'class.adminSchools.php';      
+    $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+    $ids = $as->getSchools();
 
-$info = [];
-$ids = [255 => 'ot'];
-foreach ( $ids as $id => $name ) {
-	// if (count($ids) > 1) {
-	// 	echo "<h2>" . $name . "</h2>";
-	// 	echo "<div class='page-break'></div>";
-    // }
-    foreach ([2459021,2459049] as $date) {
-        $sm->setReportDates($date);
-        $sm->setSchool($id);
-        $sm->setStudentResults();
-        $quotas = $sm->getStudentResults();
-        $done = $sm->getStudentDoneResults();
-        // echo "<pre>"; print_r($done); echo "</pre>";
-        foreach ($quotas as $date => $other) {
-            foreach ($other as $grade => $more) {
-                foreach ($more as $user_id => $values) {
-                    foreach ($values as $task => $quota) {
-                        $result = intval($done[$date][$grade][$user_id][$task]);
-                        if ($result && $result >= intval($quota)) {
-                            $info[$id][$user_id][$date] = [
-                                'quota' =>  $quota, 
-                                'done'  =>  $result
-                            ];
+    $info = [];
+    $ids = [255 => 'ot'];
+    foreach ( $ids as $id => $name ) {
+        // if (count($ids) > 1) {
+        // 	echo "<h2>" . $name . "</h2>";
+        // 	echo "<div class='page-break'></div>";
+        // }
+        $userInfo = [];
+        foreach ([2459021,2459049] as $date) {
+            $sm->setReportDates($date);
+            $sm->setSchool($id);
+            $sm->setStudentResults();
+            $quotas = $sm->getStudentResults();
+            $done = $sm->getStudentDoneResults();
+            // echo "<pre>"; print_r($done); echo "</pre>";
+            foreach ($quotas as $date => $other) {
+                foreach ($other as $grade => $more) {
+                    foreach ($more as $user_id => $values) {
+                        $sql = "select first, last, class_grade, class_sub from users u join classes c using (class_id) where user_id = " . $user_id;
+                        $result = mysql_query($sql);
+                        $userInfo[$user_id] = mysql_fetch_assoc($result);
+                        foreach ($values as $task => $quota) {
+                            $result = intval($done[$date][$grade][$user_id][$task]);
+                            if ($result && $result >= intval($quota)) {
+                                $info[$id][$user_id][$date] = [
+                                    'quota' =>  $quota, 
+                                    'done'  =>  $result
+                                ];
+                            }
                         }
                     }
                 }
             }
         }
-    }
-} 
-echo "<pre>"; 
-print_r( $info );
-echo "</pre>";
-?>
+    } 
+    ?>
+    <table>
+        <tr>
+            <th>School</th>
+            <th>Grade</th>
+            <th>Student</th>
+        </tr>
+        <?php
+        foreach ($info as $school_id => $more) {
+            foreach ($more as $user_id => $dates) {
+                if (count($dates) > 1) {
+                    $user = $userInfo[$user_id];
+                    $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
+                    $name = $user['first'] . ' ' . $user['last'];
+                    echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
+                }
+            }
+        }
+        ?>
+    </table>
 </body>
 </html>
