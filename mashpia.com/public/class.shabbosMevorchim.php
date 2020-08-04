@@ -941,8 +941,6 @@ class ShabbosMevorchim {
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
-                            if ($row2['total'] > 0) echo $user['user_id'] . '-' . $row2['total'] . "<br />";
-                            else $stmt2->debugDumpParams();
                         }
 						
 						if ($total > 0) {
@@ -1113,6 +1111,8 @@ class ShabbosMevorchim {
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                            if ($row2['total'] > 0) echo $user['user_id'] . '-' . $row2['total'] . "<br />";
+                            else $stmt2->debugDumpParams();
                         }
 						
 						if ($sid) {
