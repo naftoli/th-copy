@@ -1006,7 +1006,7 @@ class ShabbosMevorchim {
                     
         $stmt1 = $this->db->prepare( $sql1 );
 
-		$sql2 = "SELECT dtm.done_qty AS total 
+		$sql2 = "SELECT MAX(dtm.done_qty) AS total 
 				FROM date_tasks_marks dtm
 				JOIN date_tasks dt USING (date_task_id)
 				JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
