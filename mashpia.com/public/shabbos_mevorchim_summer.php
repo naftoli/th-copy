@@ -104,7 +104,6 @@ tr, th, td {
     $ids = $as->getSchools();
 
     $info = [];
-    $ids = [255 => 'ot'];
     foreach ( $ids as $id => $name ) {
         // if (count($ids) > 1) {
         // 	echo "<h2>" . $name . "</h2>";
@@ -140,6 +139,7 @@ tr, th, td {
     } 
     ?>
     <table>
+        <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Menachem Av</caption>
         <tr>
             <th>School</th>
             <th>Grade</th>
