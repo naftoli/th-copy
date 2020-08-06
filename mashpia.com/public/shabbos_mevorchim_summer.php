@@ -88,7 +88,6 @@ tr, th, td {
     <?php
     require_once 'admin_header.php';
     require_once 'class.shabbosMevorchim.php';
-    $sm = new ShabbosMevorchim();
     ?>
     <div class='no-print'>
         <h1>Shabbos Mevorchim Tehillim Report</h1>
@@ -111,9 +110,10 @@ tr, th, td {
         // 	echo "<h2>" . $name . "</h2>";
         // 	echo "<div class='page-break'></div>";
         // }
+        $sm = new ShabbosMevorchim();
+        $sm->setSchool($id);
         foreach ([2459021,2459049] as $date) {
             $sm->setReportDates($date);
-            $sm->setSchool($id);
             $sm->setStudentResults();
             $quotas = $sm->getStudentResults();
             $done = $sm->getStudentDoneResults();
@@ -138,7 +138,6 @@ tr, th, td {
             }
         }
     } 
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     ?>
     <table>
         <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Menachem Av</caption>
