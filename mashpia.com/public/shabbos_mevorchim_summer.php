@@ -138,6 +138,7 @@ tr, th, td {
             }
         }
     } 
+    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     ?>
     <table>
         <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Menachem Av</caption>
