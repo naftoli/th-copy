@@ -104,13 +104,13 @@ tr, th, td {
     $ids = $as->getSchools();
 
     $info = [];
+    $userInfo = [];
     foreach ( $ids as $id => $name ) {
         if ($id == 612) continue;
         // if (count($ids) > 1) {
         // 	echo "<h2>" . $name . "</h2>";
         // 	echo "<div class='page-break'></div>";
         // }
-        $userInfo = [];
         foreach ([2459021,2459049] as $date) {
             $sm->setReportDates($date);
             $sm->setSchool($id);
