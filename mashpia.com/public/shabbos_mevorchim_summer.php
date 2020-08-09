@@ -127,6 +127,10 @@ tr, th, td {
                         $userInfo[$user_id] = mysql_fetch_assoc($result);
                         foreach ($values as $task => $quota) {
                             $result = intval($done[$date][$grade][$user_id][$task]);
+                            if ($user_id == 22949) {
+                                echo "Quota: " . $quota . "<br />"; 
+                                echo "Done: " . $result . "<br />";
+                            }
                             if ($result && $result >= intval($quota)) {
                                 $info[$id][$user_id][$date] = [
                                     'quota' =>  $quota, 
