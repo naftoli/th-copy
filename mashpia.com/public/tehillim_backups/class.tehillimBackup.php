@@ -36,7 +36,7 @@ class TehillimBackup {
         // if (in_array( $today, $this->dates )) {
             // find out last shabbos mevorchim date
             // $this->getLastSM();
-            $this->date = 2459021;
+            $this->date = 2459049;
             
             // make sure there's no duplicates
             $this->fixDuplicates();
