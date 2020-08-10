@@ -33,10 +33,9 @@ class TehillimBackup {
     
     public function runBackup() {
         $today = unixtojd();
-        // if (in_array( $today, $this->dates )) {
+        if (in_array( $today, $this->dates )) {
             // find out last shabbos mevorchim date
-            // $this->getLastSM();
-            $this->date = 2459049;
+            $this->getLastSM();
             
             // make sure there's no duplicates
             $this->fixDuplicates();
@@ -46,9 +45,9 @@ class TehillimBackup {
             
             // update db
             $this->backup();
-        // } else {
-        //     $this->errors[] = "No backup to do today.";
-        // }
+        } else {
+            $this->errors[] = "No backup to do today.";
+        }
     }
     
     private function getLastSM() {
