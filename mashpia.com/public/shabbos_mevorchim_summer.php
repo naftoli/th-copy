@@ -102,7 +102,7 @@ tr, th, td {
     require_once 'class.adminSchools.php';      
     $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
     $ids = $as->getSchools();
-    $ids = [54 => 'Beis Rivka'];
+    // $ids = [54 => 'Beis Rivka'];
 
     $info = [];
     $userInfo = [];
@@ -119,7 +119,7 @@ tr, th, td {
             $sm->setStudentResults();
             $quotas = $sm->getStudentResults();
             $done = $sm->getStudentDoneResults();
-            echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
+            // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
             foreach ($quotas as $date => $other) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id => $values) {
