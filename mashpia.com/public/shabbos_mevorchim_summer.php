@@ -119,7 +119,7 @@ tr, th, td {
             $sm->setStudentResults();
             $quotas = $sm->getStudentResults();
             $done = $sm->getStudentDoneResults();
-            echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
+            // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
             foreach ($quotas as $date => $other) {
                 foreach ($other as $grade => $more) {
                     foreach ($more as $user_id => $values) {
