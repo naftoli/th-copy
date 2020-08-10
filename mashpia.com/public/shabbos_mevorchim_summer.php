@@ -116,7 +116,7 @@ tr, th, td {
         $sm->setSchool($id);
         foreach ([2459021,2459049] as $date) {
             $sm->setReportDates($date);
-            $sm->setStudentResults(22949);
+            $sm->setStudentResults();
             $quotas = $sm->getStudentResults();
             $done = $sm->getStudentDoneResults();
             // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
@@ -128,10 +128,10 @@ tr, th, td {
                         $userInfo[$user_id] = mysql_fetch_assoc($result);
                         foreach ($values as $task => $quota) {
                             $result = intval($done[$date][$grade][$user_id][$task]);
-                            // echo "User: " . $user_id . "<br />";
-                            // echo "Date: " . $date . "<br />";
-                            // echo "Quota: " . $quota . "<br />"; 
-                            // echo "Done: " . $result . "<br /><br />";
+                            echo "User: " . $user_id . "<br />";
+                            echo "Date: " . $date . "<br />";
+                            echo "Quota: " . $quota . "<br />"; 
+                            echo "Done: " . $result . "<br /><br />";
                             if ($result && $result >= intval($quota)) {
                                 $info[$id][$user_id][$date] = [
                                     'quota' =>  $quota, 
