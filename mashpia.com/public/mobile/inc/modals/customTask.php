@@ -38,7 +38,7 @@ while ($parsha = mysql_fetch_assoc($parsha_query)) {
     ];
 }
 // get the labels that the parents can use
-$labels_query = mysql_query("select label_id, label_name from labels where label_id >= 30 order by label_name");
+$labels_query = mysql_query("select label_id, label_name from labels where label_id >= 30 and label_id < 70 order by label_name");
 $labels = [];
 while ($label = mysql_fetch_assoc($labels_query)) {
     $labels[$label['label_id']] = $label['label_name'];
