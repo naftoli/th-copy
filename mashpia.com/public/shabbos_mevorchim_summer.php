@@ -116,7 +116,7 @@ tr, th, td {
         $sm->setSchool($id);
         foreach ([2459021,2459049] as $date) {
             $sm->setReportDates($date);
-            $sm->setStudentResults(2162256);
+            $sm->setStudentResults(22949);
             $quotas = $sm->getStudentResults();
             $done = $sm->getStudentDoneResults();
             // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
