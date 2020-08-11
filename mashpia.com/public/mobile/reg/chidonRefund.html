@@ -85,12 +85,17 @@
                                             <span>
                                                 <b>{{rank}}</b> {{first}} {{last}} <br />
                                                 Paid: ${{shabbatonPaid}} <br />
-                                                Please refund: $<input type="text" id="{{@key}}" class="refund" value="{{refund}}" size="6" />
+                                                <i>We are asking all parents to please donate at least $50 per child for the chidon expenses</i><br />
+                                                <input type='text' class='refund' size='6' />I would like to give a $50 donation for the chidon expenses<br />
+                                                <!-- Please refund: $<input type="text" id="{{@key}}" class="refund" value="{{refund}}" size="6" /> -->
                                             </span>
                                         </div>
                                     </div>
                                     {{/each}}
                                 </script>
+                            </div>
+                            <div>
+                                I would like to give an additional donation of $<input type='text' id='additional' size="6" /><br />
                             </div>
                         </div>
                     </div>
