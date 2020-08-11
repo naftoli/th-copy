@@ -76,6 +76,8 @@
                 <div style="width: 250px; margin: auto; display: none;" id="purchases">
                     <div class="row">
                         <h2>Refund For:</h2>
+                        <div><i>We would like to ask you to consider giving at least $50 from your refund to pay our direct expenses for your child.
+                            For those who are able to give more this would be very greatly appreciated.</i><br /></div>
                         <div class="col-12">
                             <div class="chilrens" id="children">
                                 <script id="childrenTpl" type="text/x-handlebars-template">
@@ -85,8 +87,6 @@
                                             <span>
                                                 <b>{{rank}}</b> {{first}} {{last}} <br />
                                                 Paid: ${{shabbatonPaid}} <br />
-                                                <i>We would like to ask you to consider giving at least $50 from your refund to pay our direct expenses for your child.
-                                                     For those who are able to give more this would be very greatly appreciated.</i><br />
                                                 <input type='checkbox' class='refund50' /> I would like to give a $50 donation for the chidon expenses<br />
                                                 I would like to give: $<input type='text' class='refund' size='6' /> for the chidon expenses.
                                                 <!-- Please refund: $<input type="text" id="{{@key}}" class="refund" value="{{refund}}" size="6" /> -->
@@ -96,9 +96,9 @@
                                     {{/each}}
                                 </script>
                             </div>
-                            <div>
-                                I would like to give an additional donation of $<input type='text' id='additional' size="6" /><br />
-                            </div>
+                        </div>
+                        <div class="col-12">
+                            I would like to give an additional donation of $<input type='text' id='additional' size="6" /><br />
                         </div>
                     </div>
 
