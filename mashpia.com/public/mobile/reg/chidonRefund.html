@@ -56,7 +56,7 @@
             <div class="container page5">   
                 <div class="row" id="purchase_info">
                     <div class="col-12" style="font-size: 16px;">                   
-                        Please use the following form to let us know how much you would like to be refunded from the money that you paid for the Chidon Shabbaton Registration 5780.
+                        Please use the following form to let us know how much you would like to be refunded from the money that you paid for the Chidon.
                     </div>
                     <hr />
                 </div>  
@@ -66,18 +66,22 @@
                         <div class="col-12">
                             <div>
                                 <h3>
-                                    It seems that you don't have any children that have been registered for the Chidon Shabbaton 5780.
+                                    It seems that you don't have any children that have been registered for the Chidon.
                                 </h3>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-12" style="font-size: 14px;">
+                        <i>We would like to ask you to consider giving at least $50 from your refund to pay our direct expenses for your child.
+                        For those who are able to give more this would be very greatly appreciated.</i>
+                    </div>
+                </div>
                 
                 <div style="width: 250px; margin: auto; display: none;" id="purchases">
                     <div class="row">
-                        <h2>Refund For:</h2>
-                        <div><i>We would like to ask you to consider giving at least $50 from your refund to pay our direct expenses for your child.
-                            For those who are able to give more this would be very greatly appreciated.</i><br /></div>
                         <div class="col-12">
                             <div class="chilrens" id="children">
                                 <script id="childrenTpl" type="text/x-handlebars-template">
@@ -87,7 +91,7 @@
                                             <span>
                                                 <b>{{rank}}</b> {{first}} {{last}} <br />
                                                 Paid: ${{shabbatonPaid}} <br />
-                                                <input type='checkbox' class='refund50' /> I would like to give a $50 towards the direct expenses of my child.<br />
+                                                <input type='checkbox' class='refund50' /> I would like to give $50 towards the direct expenses of my child.<br />
                                                 <!-- Please refund: $<input type="text" id="{{@key}}" class="refund" value="{{refund}}" size="6" /> -->
                                             </span>
                                         </div>
@@ -99,15 +103,16 @@
                     </div>
 
                     <div class="row">
+                        <h2>Total Refund Requested: $<span id="amount">0</span></h2>
+                    </div> 
+
+                    <div class="row">
                         <div class="col-12">
                             I would like to give an additional donation of $<input type='text' id='additional' size="6" /><br />
                         </div>
                     </div>
 
-                    <div class="row">
-                        <h2>Total Refund Requested: $<span id="amount">0</span></h2>
-                        <input type="hidden" id="total" />
-                    </div>   
+                    <input type="hidden" id="total" />
                     
                     <div class="row">
                         <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Save</button>
