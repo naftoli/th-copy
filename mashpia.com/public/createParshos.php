@@ -33,13 +33,13 @@ if ($admin_user['auth'] != 'super') {
                     $val = mysql_real_escape_string(trim($cell->getValue()));
 					//echo $val . "<br />";
 					switch ($column) {
-						case 0:
+						case 2:
 							$name = $val;
 							break;
-						case 1:
+						case 0:
 							$start = $val;
 							break;
-						case 2:
+						case 1:
 							$end = $val;
 							break;
 						case 3:
