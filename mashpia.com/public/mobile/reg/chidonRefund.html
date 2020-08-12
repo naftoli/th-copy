@@ -99,6 +99,7 @@
                     </div>
                 </div>
 
+                <hr />
                 <div class="row">
                     <h4>Refund: $<span id="refund"></span></h4>
                 </div> 
@@ -116,7 +117,7 @@
                 <input type="hidden" class="total" />
                 
                 <div class="row">
-                    <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Request Refund</button>
+                    <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;" disabled>Request Refund</button>
                 </div>
             </div>
         </section>
@@ -139,9 +140,19 @@
             // load children
             $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
                 if ( success == -1 ) {
-                    window.location = "index.html";
+                    location.href = "index.html";
                 } else {
                     const data = $.parseJSON( success );
+                    const parent = data.parent
+                    if (!parent.showRefund) {
+                        alert('You need to request access to this page from HQ.\nPlease call 718-907-8884.')
+                        return
+                    } else if (parent.alreadyRefunded) {
+                        alert('You have already been refunded.')
+                        location.href = "index.html"
+                    } else {
+                        $("#save").attr('disabled', false)
+                    }
                     const children = data.children;
                     console.log(children)
                     for (c in children) {

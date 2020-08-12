@@ -22,7 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSe
 $info = array();
 
 $parent = array();
-$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund FROM admins WHERE admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -32,6 +32,7 @@ $parent['motherPic'] = $row['mother_pic'];
 $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
 $parent['showRefund'] = intval($row['show_chidon_refund']);
+$parent['alreadyRefunded'] = intval($row['already_refunded']);
 
 $info['parent'] = $parent;
 
@@ -233,7 +234,7 @@ if ( !empty( $users ) ) {
 							}
 							if ($cRow['date_paid'] > 0) {
 								$children[$row['user_id']]['shabbatonRegistered'] = 1;
-								if ($parent['showRefund']) {
+								if ($parent['showRefund'] && !$parent['alreadyRefunded']) {
 									$children[$row['user_id']]['showRefund'] = 1;
 									$children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
 								} else {
