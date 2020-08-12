@@ -100,7 +100,7 @@
                 </div>
 
                 <div class="row">
-                    <h4>Refund: $<span id="amount">0</span></h4>
+                    <h4>Refund: $<span id="amount">{{totalPaid}}</span></h4>
                 </div> 
 
                 <div class="row">
@@ -110,13 +110,13 @@
                 </div>
 
                 <div class="row">
-                    <h3>Total Refund: $<span id="total">0</span></h3>
+                    <h3>Total Refund: $<span id="total"></span></h3>
                 </div>
 
-                <input type="hidden" id="total" />
+                <input type="hidden" id="totalRefund" />
                 
                 <div class="row">
-                    <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Save</button>
+                    <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Request Refund</button>
                 </div>
             </div>
         </section>
@@ -150,12 +150,9 @@
                             // set refund default amount
                             const paid = parseFloat(children[c].shabbatonPaid)
                             totalPaid += paid
-                            let refund = paid - 50.00
-                            if (refund < 0) refund = 0.00
-                            if (parseFloat(children[c].refundRequested)) refund = parseFloat(children[c].refundRequested)
-                            children[c].refund = refund
                         }
                     }
+                    children.totalPaid = totalPaid
                                         
                     // Grab the template script
                     var tplScript = $("#childrenTpl").html();
