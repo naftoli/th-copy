@@ -100,7 +100,7 @@
                 </div>
 
                 <div class="row">
-                    <h4>Refund: $<span id="amount">{{totalPaid}}</span></h4>
+                    <h4>Refund: $<span id="refund"></span></h4>
                 </div> 
 
                 <div class="row">
@@ -110,10 +110,10 @@
                 </div>
 
                 <div class="row">
-                    <h3>Total Refund: $<span id="total"></span></h3>
+                    <h3>Total Refund: $<span id="totalRefund"></span></h3>
                 </div>
 
-                <input type="hidden" id="totalRefund" />
+                <input type="hidden" class="total" />
                 
                 <div class="row">
                     <button id="save" style="padding: 5px; margin-top: 10px; margin-left: 30%;">Request Refund</button>
@@ -152,8 +152,7 @@
                             totalPaid += paid
                         }
                     }
-                    children.totalPaid = totalPaid
-                                        
+                                         
                     // Grab the template script
                     var tplScript = $("#childrenTpl").html();
                 
@@ -165,51 +164,59 @@
                     
                     $("#purchase_info").show();
                     if ( $.trim( html ) === '' ) { 
-                        $("#no-children").show(); 
+                        $("#no-children").show();
                     } else {
                         // Add the compiled html to the page
-                        $(".chilrens").append( html );
-                        $(".year").text(year);
-                        $("#purchases").show();
-                        updateTotal()
+                        $(".chilrens").append( html )
+                        $(".year").text(year)
+                        $("#purchases").show()
+                        $("#refund").text(totalPaid)
+                        $("#totalRefund").text(totalPaid)
                     } 
                 }
             });
 
-            $(document).on('keyup', '.refund', updateTotal);
+            $(document).on('click', '.refund50', updateRefund)
+            $(document).on('keyup', '#additional', updateTotal)
 
             $("#save").click( function(e) {
                 e.preventDefault()
-                let refunds = []
-                $(".refund").each( function() {
-                    const amount = parseFloat($(this).val())
-                    const id = $(this).attr('id')
-                    refunds.push({ id: id, amount: amount })
-                })
-                $.post('ajax/saveRefunds.php', { data: refunds }, function(result) {
-                    const res = JSON.parse(result)
-                    if (res.success) {
-                        alert('Your refund request has been received!')
-                    } else {
-                        alert(res.error)
-                        console.log(res.info)
+                const total = parseFloat($("#totalRefund").text())
+                if (total) {
+                    const conf = confirm('Are u sure that you want to be refunded $' + total + ' ?')
+                    if (conf) {
+                        $("#save").attr("disabled", true); // make sure they can't click again
+                        $.post('ajax/saveRefunds.php', { total: total }, function (result) {
+                            const res = JSON.parse(result)
+                            if (res.success) {
+                                alert('Your refund has been processed. You will receive an email with the details shortly.')
+                            } else {
+                                alert(res.error)
+                                console.log(res.info)
+                                $("#save").attr("disabled", false);
+                            }
+                        })
                     }
-                })
+                }
             })
         });
 
-        function updateTotal() {
-            let total = 0;
-            $('.refund').each(function() {
-                const amount = parseFloat($(this).val())
-                total += amount
-                if (total > totalPaid) {
-                    alert("You cannot get a refund greater than what you paid!")
-                    $(this).val(0)
-                    total -= amount
-                }
+        function updateRefund() {
+            let refund = totalPaid;
+            $('.refund50').each(function() {
+                if ($(this).is(":checked")) refund -= 50
             })
-            $("#amount").text(total)
+            if (refund < 0) refund = 0
+            $("#refund").text(refund)
+            updateTotal()
+        }
+
+        function updateTotal() {
+            let total = parseFloat($("#refund").text())
+            const additional = parseFloat($("#additional").val())
+            if (additional) total -= additional
+            if (total < 0) total = 0
+            $("#totalRefund").text(total)
         }
     </script>
 </html>
