@@ -355,7 +355,7 @@
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
                 if ( response ) {
                     $("#raffleInfoBanner").show();
-                    $("#raffleInfo").append( response );
+                    $("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
                 }
 			});
             
