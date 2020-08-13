@@ -128,21 +128,21 @@
         var totalPaid = 0 // keep track of total paid for updateTotal function
         document.addEventListener("DOMContentLoaded", function(event) {
             // make sure we have a cookie
-            var admin = Cookies.get('admin');
-            if (!admin) { window.close(); }
+            var admin = Cookies.get('admin')
+            if (!admin) window.close()
             
             // get the current year
-            var year;
+            var year
             $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
-                success: function( info ) { year = info; }
-            });
+                success: function( info ) { year = info }
+            })
             
             // load children
             $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
                 if ( success == -1 ) {
-                    location.href = "index.html";
+                    location.href = "index.html"
                 } else {
-                    const data = $.parseJSON( success );
+                    const data = $.parseJSON( success )
                     const parent = data.parent
                     if (!parent.showRefund) {
                         alert('You need to request access to this page from HQ.\nPlease call 718-907-8884.')
@@ -165,17 +165,17 @@
                     }
                                          
                     // Grab the template script
-                    var tplScript = $("#childrenTpl").html();
+                    var tplScript = $("#childrenTpl").html()
                 
                     // Compile the template 
-                    var tpl = Handlebars.compile( tplScript );
+                    var tpl = Handlebars.compile( tplScript )
 
                     // Pass our data to the template
-                    var html = tpl( { children } );
+                    var html = tpl( { children } )
                     
-                    $("#purchase_info").show();
+                    $("#purchase_info").show()
                     if ( $.trim( html ) === '' ) { 
-                        $("#no-children").show();
+                        $("#no-children").show()
                     } else {
                         // Add the compiled html to the page
                         $(".chilrens").append( html )
@@ -194,7 +194,13 @@
                 e.preventDefault()
                 const total = parseFloat($("#totalRefund").text())
                 if (total) {
-                    const conf = confirm('Are u sure that you want to be refunded $' + total + ' ?')
+                    const refund = parseFloat($("#refund").text())
+                    const additional = parseFloat($("#additional").val())
+                    let text = "Please confirm:\nYou paid a total of $" + totalPaid + ".\n"
+                    if (refund) text += "You are giving $" + (totalPaid - refund) + " towards direct expenses for your child(ren).\n"
+                    if (additional) text += "You are giving an additional donation of $" + additional + ".\n"
+                    text += "You are requesting a refund of $" + total + "."
+                    const conf = confirm(text)
                     if (conf) {
                         $("#save").attr("disabled", true); // make sure they can't click again
                         $.post('ajax/saveRefunds.php', { total: total }, function (result) {
@@ -204,7 +210,7 @@
                             } else {
                                 alert(res.error)
                                 console.log(res.info)
-                                $("#save").attr("disabled", false);
+                                $("#save").attr("disabled", false)
                             }
                         })
                     }
@@ -213,9 +219,12 @@
         });
 
         function updateRefund() {
-            let refund = totalPaid;
+            let num = 0
+            let refund = totalPaid
             $('.refund50').each(function() {
-                if ($(this).is(":checked")) refund -= 50
+                if ($(this).is(":checked")) {
+                    refund -= 50
+                }
             })
             if (refund < 0) refund = 0
             $("#refund").text(refund)
