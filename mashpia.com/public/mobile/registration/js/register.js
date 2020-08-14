@@ -315,6 +315,11 @@ var registrationApp = function() {
             });
         }
 
+        // check if pic is generic or new pic needs to be uploaded
+        if ( parseInt($("#needs_new_pic").val()) === 1 ) {
+            return showError('You must upload a new photo.');
+        }
+
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
@@ -658,6 +663,7 @@ var registrationApp = function() {
         
         $("input#mobile_pic").val( data.filename );
         $("img#user-img, #child-" + user_id + " img").attr( "src", data.location );
+        $("#needs_new_pic").val(0);
         
         $.post("/api/core/users?id=" + user_id, { mobile_pic: data.filename }, function( response ){
             if ( !response.success ){
@@ -692,6 +698,7 @@ var templates = function(){
         showUser: function( user, index ){
             if( index > 0 ) window.location.hash = 'step-2-' + index;
             $( '#step-2 form #user_id' ).val( user.user_id );
+            $( '#step-2 form #needs_new_pic' ).val( user.newPic );
             $( '#step-2 form #mobile_pic' ).val( user.mobile_pic );
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form .gender[value=\'' + user.gender + '\']')[0].checked = true;

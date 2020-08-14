@@ -329,7 +329,7 @@ class UserRegistrationRouter {
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic' ],
                 'include' => [ 
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]

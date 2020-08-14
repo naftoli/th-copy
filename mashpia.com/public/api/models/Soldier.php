@@ -32,6 +32,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     private $rank; // the users current rank
     private $missions = [];
     public $parent; // needed for chidon registration
+    public $needs_new_pic = 1; // needs new Picture entered from mobile site
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -53,11 +54,16 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // * returns profile picture path from (mashpia.com)/
     public function profilePicture() {
         if ( $this->mobile_pic ) {
+            $this->needs_new_pic = 0;
             return '/mobile/reg/' . $this->mobile_pic;
         } else if ( $this->user_photo_id ) {
             return '/file_view.php?id=' . $this->user_photo_id;
         }
         return '/mobile/reg/images/profile-photo-default.jpg';
+    }
+    // * returns whether we need a new pic
+    public function newPic() {
+        return $this->needs_new_pic;
     }
     // *returns name based on language?
     public function name() {
@@ -702,7 +708,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'methods' => [ 
                 'profilePicture', 'barcode', 'miles', 'rank',
                 'rankBoard', 'medalBoard', 
-                'parentAccount', 'registrationCharges'
+                'parentAccount', 'registrationCharges',
             ],
             'include' => [ 
                 'school' => [ 
