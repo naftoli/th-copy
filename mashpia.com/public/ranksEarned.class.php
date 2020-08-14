@@ -60,6 +60,7 @@ class RanksEarned
 			5777	=>	2457636, // Sep 4, 2016
 			5778	=>	2457885, // May 11, 2017 - was changed to 2457993 at some point but put back to original
 			5779	=>	2458236, // April 27, 2018
+			5780	=>	2458628, // May 24, 2019
 		);
 	}
 	
