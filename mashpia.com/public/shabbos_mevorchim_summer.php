@@ -1,5 +1,6 @@
 <?php
-ini_set('max_execution_time', 600);
+ini_set('display_errors', 1);
+ini_set('max_execution_time', 300);
 $admin_auth = array('school','user'); 
 require('header.php');
 
