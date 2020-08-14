@@ -27,95 +27,163 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
         <h1>Manuals</h1>
-        
-        <h2>Links to Manuals</h2>
+
+        <div class="infobox">
+            Tip: To easily search a specific topic WITHIN a manual, click “Control-F” on your keyboard and search the keywords you’re looking for.
+        </div>
+
+        <h2>Mivtzoim Manuals</h2>
+        <div id="action-links">
+            <a href="https://docs.google.com/document/d/1Y2yIQHo89t3THTZTa3yHUu5yK53pR2oIe3wGCY4PAp4/edit">
+                <div class="button">
+                    <img src="/images/th.png" height="32"/>
+                    <span class="link-text">Mivtzoim</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1Y2yIQHo89t3THTZTa3yHUu5yK53pR2oIe3wGCY4PAp4/edit">
+                <div class="button">
+                    <img src="/images/th.png" height="32"/>
+                    <span class="link-text">Mivtza Yom Huledes</span>
+                </div>
+            </a>
+            <a href="https://drive.google.com/open?id=1kZW-sKyTr_W0_6BG38zIK9bbM6FALVec333-enBkH4o">
+                <div class="button">
+                    <img src="/images/th.png" height="32"/>
+                    <span class="link-text">Mivtza Bayis Molei Seforim</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1GnZSTqQdiYPCuih-2fh1A37EKTplI_E5Z78w_jaxxl4/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32"/>
+                    <span class="link-text">Mivtza Os B’Sefer Torah</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/138BVOQ6GeyOxPx18gjkBFasbUuKiz8BW2qjMCaVjlkQ/edit">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtza Neshek</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1QCvr2cAdxFFVNhGphnT4DnF9WkSF5RFr8XpXVXyf3Yc/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtza Matzah</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1Swrhh85DEqtrnCrs6VwQpioL_Jq41j3rhCFbQOairtQ/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtza Cheder Tzivos Hashem</span>
+                </div>
+            </a>
+        </div>
+
+        <h2>Campaigns</h2>
+        <div id="action-links">
+            <a href="https://docs.google.com/document/d/1u8wDZ3Gi7E-sJiyqj8HGO_jyDc7GjRkp1gsx9fBpMbY/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Tanya & Mishnayos Baal Peh</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1qJxAdDrhJ3QIrBixycAPmkwLuskcSRCMRvLpCvAF9vs/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Connection Point</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1FkSQkRwnBtKXQ_Bbv54MprK9e8fSBRABM6houTMGwKg/edit#heading=h.67mwmp63ouiy">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Viholachta Bidrachov</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1fGI4Dmd3hoD03dJhrSXOoThzEcb_IjIi22c-vLQorWg/edit#heading=h.1n4ea5c9m44g">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Shabbos Mevarchim Tehillim</span>
+                </div>
+            </a>
+        </div>
+
+        <h2>Motivation</h2>
         <div id="action-links">
             <a href="https://docs.google.com/document/d/1GIFYrddcmW81NUDuSj5S3eWMQyMl2f2Rm3Ja5mvtwv0/edit?usp=sharing">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
                     <span class="link-text">Promotions Pictures & Ceremonies</span>
                 </div>
             </a>
             <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
                     <span class="link-text">Mission Rewards & Store</span>
                 </div>
             </a>
-            <a href="https://docs.google.com/document/d/1u8wDZ3Gi7E-sJiyqj8HGO_jyDc7GjRkp1gsx9fBpMbY/edit?usp=sharing">
+            <a href="https://docs.google.com/document/d/1LzeGpKicYJ0kWpLXmL-EZJSczlOWf1vEbyzBPrpZy0g/edit?usp=sharing">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Tanya & Mishnayos Baal Peh</span>
-                </div>
-            </a>
-</div>
-<div id="action-links">
-            <a href="https://docs.google.com/document/d/1qJxAdDrhJ3QIrBixycAPmkwLuskcSRCMRvLpCvAF9vs/edit?usp=sharing">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Connection Point</span>
-                </div>
-            </a>
-            <a href="https://docs.google.com/document/d/138BVOQ6GeyOxPx18gjkBFasbUuKiz8BW2qjMCaVjlkQ/edit">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Neshek</span>
-                </div>
-            </a>
-            <a href="https://docs.google.com/document/d/1FkSQkRwnBtKXQ_Bbv54MprK9e8fSBRABM6houTMGwKg/edit#heading=h.67mwmp63ouiy">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Viholachta Bidrachov</span>
-                </div>
-            </a>
-</div>
-<div id="action-links">
-            <a href="https://docs.google.com/document/d/1fGI4Dmd3hoD03dJhrSXOoThzEcb_IjIi22c-vLQorWg/edit#heading=h.1n4ea5c9m44g">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Shabbos Mevarchim Tehillim</span>
-                </div>
-            </a>
-            <a href="https://docs.google.com/document/d/1h8VTGK-Tj9hC1Wb_jkE4TDmQD3fodXoa0u4X2o8WxAk/edit#heading=h.s7tewwcu2zgr">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">CTH Registration</span>
-                </div>
-            </a>
-            <a href="https://docs.google.com/document/d/1jGVsCyc8F9VY2pXIACFuFcf4xjz4BpSaf8ijRLtYATo/edit#heading=h.otv8xuv33x70">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Chidon</span>
-                </div>
-            </a>
-</div>
-<div id="action-links">
-            <a href="https://docs.google.com/document/d/1K-h4PaWRFb3y4cCNDpoRBaUngJbTpHR_ucAveA6a-GM/edit#heading=h.3i38t9cowumh">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Rallies</span>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Medals & Ranks</span>
                 </div>
             </a>
             <a href="https://docs.google.com/document/d/1cQWsy5xbKEVXmGZBDovjTx0esRxX8bcFkp4J4VLgx3A/edit">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
                     <span class="link-text">Contests</span>
                 </div>
             </a>
-</div>
-<div id="action-links">
-            <a href="https://docs.google.com/document/d/1Swrhh85DEqtrnCrs6VwQpioL_Jq41j3rhCFbQOairtQ/edit?usp=sharing">
+            <a href="https://docs.google.com/document/d/1K-h4PaWRFb3y4cCNDpoRBaUngJbTpHR_ucAveA6a-GM/edit#heading=h.3i38t9cowumh">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Cheder Tzivos Hashem</span>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Rallies</span>
                 </div>
             </a>
-            <a href="https://docs.google.com/document/d/1QCvr2cAdxFFVNhGphnT4DnF9WkSF5RFr8XpXVXyf3Yc/edit?usp=sharing">
+        </div>
+
+        <h2>Miscellaneous</h2>
+        <div id="action-links">
+            <a href="https://docs.google.com/document/d/1h8VTGK-Tj9hC1Wb_jkE4TDmQD3fodXoa0u4X2o8WxAk/edit#heading=h.s7tewwcu2zgr">
                 <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Matzah</span>
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">CTH Registration</span>
                 </div>
             </a>
-        </div>        
+            <a href="https://docs.google.com/document/d/1NzxJ0qVTv4-JFDgNhoa8ctObGxlwxKJ0Irmy40kl3jU/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">BC Job Description</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1jGVsCyc8F9VY2pXIACFuFcf4xjz4BpSaf8ijRLtYATo/edit#heading=h.otv8xuv33x70">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Chidon</span>
+                </div>
+            </a>
+            <a href="https://drive.google.com/open?id=1CbhdltK3-5nSxNHDmdaMnkERfIzwLdIb1fZLcZ3LOdk">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Website Tutorial</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1Vws11xg8DlTISJ-po_1EJ8eQGdGmibBE07QO8mtSLVE/edit#">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mobile Site</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/12whtW4jf_qOjzrnUtzUTsZLcO95D50yqjrYHOt9Uwzo/edit">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Missions</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1QT2p7dvLLI-rmai9in6hNoglvoqx6dlucKvYVCQ5Zok/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Sources from the Rebbe Why TH</span>
+                </div>
+            </a>
+        </div>
     </body>
 </html>
