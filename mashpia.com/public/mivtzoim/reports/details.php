@@ -63,7 +63,7 @@ $r = new MivtzoimReport( $m );
                             .reduce(function (a, b) {
                                 return parseInt(a) + parseInt(b)
                             }, 0)
-                        $( api.column( i ).footer() ).html( total )
+                        $( api.column( i ).footer() qq).html( total )
                     }
                 }
             });
