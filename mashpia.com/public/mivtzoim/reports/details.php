@@ -35,6 +35,7 @@ $r = new MivtzoimReport( $m );
         <?php 
         $r->createIndividualBoard( $_REQUEST['school'] );
         $num_users = $r->getNumUsers();
+        $num_names = count( $r->getShortNames() );
         ?>
     </body>
 
@@ -50,7 +51,21 @@ $r = new MivtzoimReport( $m );
         $(document).ready(function () {
             var num_users = <?= $num_users ?>;
             $('#leaderboard').DataTable({
-                'pageLength': num_users
+                'pageLength': num_users,
+                "footerCallback": function () {
+                    const api = this.api()
+                    let num = <?= $num_names ?>;
+                    num += 3 // add three b/c first three columns are not to be summarized
+                    for ( let i = 3; i < num; i++ ) {
+                        total = api
+                            .column( i )
+                            .data()
+                            .reduce(function (a, b) {
+                                return parseInt(a) + parseInt(b)
+                            }, 0)
+                        $( api.column( i ).footer() ).html( total )
+                    }
+                }
             });
         });
     </script>
