@@ -1,12 +1,8 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('max_execution_time', 300);
-$admin_auth = array('school','user'); 
+$admin_auth = ['school'];
 require('header.php');
-
-require_once 'class.adminSchools.php';      
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$schools = $as->getSchools(); 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -87,10 +83,7 @@ tr, th, td {
 </head>
 
 <body>
-    <?php
-    require_once 'admin_header.php';
-    require_once 'class.shabbosMevorchim.php';
-    ?>
+    <?php require_once 'admin_header.php'; ?>
     <div class='no-print'>
         <h1>Shabbos Mevorchim Tehillim Report</h1>
         
@@ -105,6 +98,7 @@ tr, th, td {
     $ids = $as->getSchools();
     // $ids = [54 => 'Beis Rivka'];
 
+    require_once 'class.shabbosMevorchim.php';
     $info = [];
     $userInfo = [];
     foreach ( $ids as $id => $name ) {
@@ -145,7 +139,6 @@ tr, th, td {
             }
         }
     } 
-    echo "<pre>"; print_r($info); echo "</pre>";
     ?>
     <table>
         <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Menachem Av</caption>
