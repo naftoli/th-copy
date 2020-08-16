@@ -488,6 +488,10 @@ class MivtzoimReport {
         $this->numUsers = 0;
     }
 
+    public function getShortNames() {
+        return $this->m->getShortNames();
+    }
+
     public function setSchools( array $schools ) {
         $this->schools = $schools;
     }
@@ -724,7 +728,7 @@ class MivtzoimReport {
             }
             echo "</tr>";
         } 
-        echo "</tbody></table>";        
+        echo "</tbody></table>";
     }
 
     public function createIndividualBoard( $school ) {
@@ -772,7 +776,9 @@ class MivtzoimReport {
                     }            
                 }
             } 
-            echo "</tbody></table>";     
+            echo "</tbody><tfoot><tr><th colspan='3' style='text-align: right'>Totals:</th>";
+            foreach ( $names as $name ) echo "<th></th>";
+            echo "</tr></tfoot></table>";
         //}
     }
 }
