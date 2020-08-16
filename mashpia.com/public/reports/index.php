@@ -107,7 +107,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
-        <h2>Managment Links</h2>
+        <h2>Management Links</h2>
         <div id="action-links">
             <a href="/blog/wp-admin">
                 <div class="button">
