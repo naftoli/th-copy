@@ -119,7 +119,8 @@ class TasksCustomizationNew {
 		if(!$not_enrolled){ // if not enrolled is not set to true, limit the results to the enrolled campaigns
 			$sql .= "and ut.enrolled = 1 ";
 		}
-		$sql .= "and subject_id not in (15,42) "
+		// skip hakhel campaign
+		$sql .= "and subject_id not in (15) "
 				."group by s.subject_id "
 				."order by s.subject_name";
         $result = mysql_query( $sql );
