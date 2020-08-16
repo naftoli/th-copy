@@ -154,7 +154,7 @@ tr, th, td {
                     $user = $userInfo[$user_id];
                     $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
                     $name = $user['first'] . ' ' . $user['last'];
-                    echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
+                    echo "<tr><td>" . $ids[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
                 }
             }
         }
