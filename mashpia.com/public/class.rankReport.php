@@ -15,6 +15,7 @@ class RankReport extends Report {
     protected $schoolLogos;
     protected $userSchool;
     protected $userPic;
+    protected $grades;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -26,6 +27,7 @@ class RankReport extends Report {
         $this->schoolLogos = [];
         $this->userSchool = [];
         $this->userPic = [];
+        $this->grades = [];
     }
     
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ') {
@@ -113,6 +115,7 @@ class RankReport extends Report {
                 $pic = '/file_view.php?id=' . $row['user_photo_id'];
             }
             $this->userPic[$user_id] = $pic;
+            $this->grades[] = $grade;
         }
     }
     
@@ -162,6 +165,10 @@ class RankReport extends Report {
 
     public function getUserPic() {
         return $this->userPic;
+    }
+
+    public function getGrades() {
+        return $this->grades;
     }
 }
 ?>
