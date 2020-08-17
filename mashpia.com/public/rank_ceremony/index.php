@@ -54,7 +54,7 @@ $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
     if ($id == 612) continue;
-    $r->setSchoolId(2);
+    $r->setSchoolId($id);
     // $r->setSchoolId($id);
     $r->setRanks('byRank', 0, "<br>"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
@@ -64,7 +64,7 @@ foreach ($schools as $id => $school) {
     
     $i = 0;
     $info[$i++] = ['comp','comp_name','chayol_name','chayol_picture','school_name','school_logo'];
-    $info[$i++] = ['promotions_intro','promotions_intro','','','',$school,$logos[$school]['logo_id']]; // intro
+    $info[$i++] = ['promotions_intro','promotions_intro','','',$school,$logos[$school]['logo_id']]; // intro
     foreach ($ranks as $school => $other) {
         foreach ($other as $rank => $more) {
             $j = 1;
