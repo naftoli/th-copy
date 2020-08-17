@@ -55,7 +55,7 @@ $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
     if ($id == 612) continue;
-    $r->setSchoolId($id);
+    $r->setSchoolId(2);
     // $r->setSchoolId($id);
     $r->setRanks('byRank', 0, "<br>"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
@@ -97,6 +97,7 @@ foreach ($schools as $id => $school) {
         $file_name = str_replace(' ', '_', $school) . ".csv";
         createFile($info, $file_name);
         $files[] = $file_name;
+        break;
     }
 } 
 $filename = "tsv.zip";
