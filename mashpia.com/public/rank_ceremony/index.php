@@ -99,6 +99,7 @@ foreach ($schools as $id => $school) {
             createFile($info, $file_name);
             $files[] = $file_name;
             //        break;
+            sleep(5);
         }
     }
 } 
