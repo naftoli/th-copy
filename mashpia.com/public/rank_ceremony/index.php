@@ -78,7 +78,8 @@ foreach ($schools as $id => $school) {
                             // create pic of child to add to zipArchive
                             $url = 'http://mashpia.com' . $pics[$user_id];
                             $img_url = $user_id . '.png';
-                            if ($contents = file_get_contents(($url) !== false)) {
+                            echo $url . "<br />";
+                            if (($contents = file_get_contents($url)) !== false) {
                                 $new_img = imagecreatefromstring($contents);
                                 $new_image = imagepng($new_img, $img_url);
                                 if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
