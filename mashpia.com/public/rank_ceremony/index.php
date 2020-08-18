@@ -102,7 +102,8 @@ foreach ($schools as $id => $school) {
             sleep(5);
         }
     }
-} 
+}
+exit;
 $filename = "tsv.zip";
 createZip($files, $images, $filename);
 
