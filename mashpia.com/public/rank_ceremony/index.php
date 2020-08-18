@@ -79,8 +79,8 @@ foreach ($schools as $id => $school) {
                             $url = 'http://mashpia.com' . $pics[$user_id];
                             $img_url = $user_id . '.png';
                             echo $url . "<br />";
-                            if (($contents = file_get_contents($url)) !== false) {
-                                $new_img = imagecreatefromstring($contents);
+                            if ($stream = fopen($url, "r")) {
+                                $new_img = imagecreatefromstring(stream_get_contents($stream));
                                 $new_image = imagepng($new_img, $img_url);
                                 if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                             }
