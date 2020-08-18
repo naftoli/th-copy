@@ -11,12 +11,14 @@ $schools = $as->getSchools();
 // key corresponds to db table and field name and value corresponds to output text on form
 // when we are not pulling from a specific table I use the word 'calc' instead
 $userInfo = [
-    'users|first'           => 'First Name', 
+    'users|first'           => 'First Name',
     'users|last'            => 'Last Name', 
     'users|first_he'        => 'Hebrew First', 
     'users|last_he'         => 'Hebrew Last', 
     'users|dob'             => 'English DOB', 
-    'users|dob_he'          => 'Hebrew DOB', 
+    'users|dob_he'          => 'Hebrew DOB',
+    'users|user_serial'     => 'Serial Number',
+    'users|user_code'       => 'Barcode',
     'users|user_registered' => 'Registered Date', 
     'classes|class_grade'   => 'Class Grade', 
     'classes|class_sub'     => 'Class Sub',

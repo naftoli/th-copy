@@ -69,7 +69,9 @@ $fields = [
     'store_points'      => 'Store Miles',
     'total_points'      => 'Total Miles Earned', 
     'total_this_yr'     => 'Total Miles Earned this Year', 
-    'user_id'           => 'Student ID'
+    'user_id'         => 'User ID',
+    'u_user_code'       => 'Barcode',
+    'u_user_serial'     => 'Serial Number'
 ];
 ?>
 <!DOCTYPE html>
