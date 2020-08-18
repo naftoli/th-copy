@@ -94,16 +94,15 @@ foreach ($schools as $id => $school) {
             }
         }
         $info[$i] = ['outro', 'outro']; // outro
-        if (count($ranks)) {
-            $file_name = str_replace(' ', '_', $school) . ".csv";
-            createFile($info, $file_name);
-            $files[] = $file_name;
-            //        break;
-            sleep(5);
-        }
+//        if (count($ranks)) {
+//            $file_name = str_replace(' ', '_', $school) . ".csv";
+//            createFile($info, $file_name);
+//            $files[] = $file_name;
+//            break;
+//        }
     }
 }
-exit;
+echo "done"; exit;
 $filename = "tsv.zip";
 createZip($files, $images, $filename);
 
