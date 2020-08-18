@@ -17,6 +17,7 @@ $parsha_ids = $_POST['parsha_ids'] ? explode( ',', $_POST['parsha_ids'] ) : fals
 
 $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
+$batchedPrinting = isset($_POST['batches']) ? 1 : 0;
 
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
@@ -136,30 +137,26 @@ if ( $dates == 'english' ) $dates_id = 2;
     <script src="missions.js"></script>
     <script>
         document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
-        // window.print();
-    </script>
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // your code here
-            // const original = document.body.innerHTML;
-            $(".userMission").each( function() {
-                const id = $(this).attr('id');
-                const print_div = document.getElementById(id).innerHTML;
-                // document.body.innerHtml = '<html><head><meta charset="utf8" /><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" /></head><body>' + print_div + "</body></html>";
-                // window.print();
-                // document.body.innerHTML = original;
-                const print_area = window.open('', '', 'width=900,height=650');
-                print_area.document.write('<html><head><meta charset="utf8" /><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" /></head><body>');
-                print_area.document.write(print_div + "</body></html>");
-                print_area.document.close();
-                print_area.focus();
-                setTimeout(() => {
-                    print_area.print();
-                    print_area.close();
-                }, 500);
-                // print_area.print();
-                // print_area.close();
-            });
+            const batch = <?= $batchedPrinting ?>;
+            if (batch) {
+                $(".userMission").each(function () {
+                    const id = $(this).attr('id');
+                    const print_div = document.getElementById(id).innerHTML;
+                    const print_area = window.open('', '', 'width=900,height=650');
+                    print_area.document.write('<html><head><meta charset="utf8" /><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" /></head><body>');
+                    print_area.document.write(print_div + "</body></html>");
+                    print_area.document.close();
+                    print_area.focus();
+                    setTimeout(() => {
+                        print_area.print();
+                        print_area.close();
+                    }, 500);
+                });
+            } else {
+                window.print();
+            }
         }, false);
     </script>
     <?php // ! *************************** Debug *************************** ?>

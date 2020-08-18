@@ -5,7 +5,7 @@ import { Callout, FontAwesome } from 'components/ui';
 import { Row, Col, Button, Input, UncontrolledTooltip } from 'reactstrap';
 import { 
   PlatoonSelect, SoldierSelect,
-  Radio, ParshaSelect, BaseSelect
+  Radio, ParshaSelect, BaseSelect, Checkbox
 } from 'components/inputs';
 // functions
 import julian from 'julian';
@@ -163,6 +163,12 @@ class PrintPage extends Component {
             </Col>
           </Row>
 
+          <Row>
+            <Col sm={ 12 }>
+              <label>Print Jobs</label><br />
+              <Checkbox name='batches'>Print in separate print jobs</Checkbox>
+            </Col>
+          </Row>
 
           <Row className='buttons'>
             <Col sm={6}>
