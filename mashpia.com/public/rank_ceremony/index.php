@@ -82,15 +82,15 @@ foreach ($schools as $id => $school) {
                                 $new_img = imagecreatefromstring($contents);
                                 $new_image = imagepng($new_img, $img_url);
                                 if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
-
-                                $info[$i]['comp'] = $rankNames[$rank];
-                                $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)));
-                                $info[$i]['chayol_name'] = $users[$user_id];
-                                $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
-                                $info[$i]['school_name'] = $school;
-                                $info[$i]['school_logo'] = $logos[$school]['logo_id'];
-                                $i++;
                             }
+
+                            $info[$i]['comp'] = $rankNames[$rank];
+                            $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)));
+                            $info[$i]['chayol_name'] = $users[$user_id];
+                            $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
+                            $info[$i]['school_name'] = $school;
+                            $info[$i]['school_logo'] = $logos[$school]['logo_id'];
+                            $i++;
                         }
                     }
                 }
@@ -105,7 +105,6 @@ foreach ($schools as $id => $school) {
 //        }
     }
 }
-echo "done"; exit;
 $filename = "tsv.zip";
 createZip($files, $images, $filename);
 
