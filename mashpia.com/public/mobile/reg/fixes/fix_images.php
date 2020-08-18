@@ -14,7 +14,7 @@ $images = [];
 if ($handle = opendir('../img')) {
     while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != "..") {
-            echo "$entry\n";
+            echo $entry . "<br />";
         }
     }
     closedir($handle);
