@@ -11,7 +11,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $stmt = "update users set mobile_pic = :new where mobile_pic = :old";
 
 $images = [];
-if ($handle = opendir('/mobile/reg/img')) {
+if ($handle = opendir('../img')) {
     while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != "..") {
             echo "$entry\n";
