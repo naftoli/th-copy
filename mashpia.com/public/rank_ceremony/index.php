@@ -8,6 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';  
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
+//echo "<pre>"; print_r($schools); echo "</pre>"; exit;
 
 function createFile($info, $name) {
     $fp = fopen($name, "w");
@@ -55,8 +56,8 @@ $images = [];
 $r = new RankReport();
 foreach ($schools as $id => $school) {
     if ($id == 612) continue;
-//    $r->setSchoolId(2);
-    $r->setSchoolId($id);
+    $r->setSchoolId(106);
+//    $r->setSchoolId($id);
     $r->setRanks('byRank', 0, "<br>"); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
