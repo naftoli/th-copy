@@ -49,6 +49,8 @@ $fields = [
     'u_last_he'         => 'Hebrew Last Name', 
     'u_dob'             => 'DOB',
     'u_dob_he'          => 'Hebrew DOB',
+    'u_user_code'       => 'Barcode',
+    'u_user_serial'     => 'Serial Number',
     'u_user_registered' => 'Registration Date', 
     'c_class_grade'     => 'Class Grade', 
     'c_class_sub'       => 'Class Sub',
@@ -69,9 +71,7 @@ $fields = [
     'store_points'      => 'Store Miles',
     'total_points'      => 'Total Miles Earned', 
     'total_this_yr'     => 'Total Miles Earned this Year', 
-    'user_id'         => 'User ID',
-    'u_user_code'       => 'Barcode',
-    'u_user_serial'     => 'Serial Number'
+    'user_id'           => 'User ID'
 ];
 ?>
 <!DOCTYPE html>
