@@ -76,19 +76,21 @@ foreach ($schools as $id => $school) {
                     foreach ($other as $grade => $more) {
                         foreach ($more as $user_id) {
                             // create pic of child to add to zipArchive
-                            $url = urlencode('http://mashpia.com' . $pics[$user_id]);
+                            $url = 'http://mashpia.com' . $pics[$user_id];
                             $img_url = $user_id . '.png';
-                            $new_img = imagecreatefromstring(file_get_contents($url));
-                            $new_image = imagepng($new_img, $img_url);
-                            if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
+                            if ($contents = file_get_contents(($url) !== false)) {
+                                $new_img = imagecreatefromstring($contents);
+                                $new_image = imagepng($new_img, $img_url);
+                                if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
 
-                            $info[$i]['comp'] = $rankNames[$rank];
-                            $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)));
-                            $info[$i]['chayol_name'] = $users[$user_id];
-                            $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
-                            $info[$i]['school_name'] = $school;
-                            $info[$i]['school_logo'] = $logos[$school]['logo_id'];
-                            $i++;
+                                $info[$i]['comp'] = $rankNames[$rank];
+                                $info[$i]['comp_name'] = ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)));
+                                $info[$i]['chayol_name'] = $users[$user_id];
+                                $info[$i]['chayol_picture'] = $new_image ? $img_url : '';
+                                $info[$i]['school_name'] = $school;
+                                $info[$i]['school_logo'] = $logos[$school]['logo_id'];
+                                $i++;
+                            }
                         }
                     }
                 }
