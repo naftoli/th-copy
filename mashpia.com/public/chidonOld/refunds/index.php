@@ -147,7 +147,7 @@ foreach ($admins as $id => $info) {
                     const that = this
                     $.post('createVoucher.php', { admin: admin, amount: amount }, success(res) {
                         if (res.success) {
-                            alert('Voucher created.');
+                            alert('Voucher created.')
                             $(that).after(res.info)
                         } else {
                             alert(res.error)
