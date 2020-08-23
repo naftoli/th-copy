@@ -24,11 +24,27 @@ $stmt = $MASHPIA_DB->prepare("
     ORDER BY a.last
 ");
 $res = $stmt->execute([':year' => $year]);
-    if ($res) {
-        foreach ($stmt->fetchAll() as $row) {
-            $admins[$row['admin_id']] = $row;
-        }
+if ($res) {
+    foreach ($stmt->fetchAll() as $row) {
+        $admins[$row['admin_id']] = $row;
     }
+}
+
+$raised = [];
+$stmt = $MASHPIA_DB->prepare("
+    SELECT SUM(donation_amount) as total FROM chidon_donations WHERE for_family_id = :admin AND chidon_year = :year
+");
+foreach ($admins as $id => $info) {
+    $res = $stmt->execute([
+        ':year' => $year,
+        ':for_family_id' => $id
+    ]);
+    if ($res) {
+        $row = $stmt->fetch();
+        $total = floatval($row['total']);
+        if ($total) $raised[$id] = $total;
+    }
+}
 
 $users = [];
 $stmt = $MASHPIA_DB->prepare("
@@ -75,6 +91,7 @@ foreach ($admins as $id => $info) {
                 <th>Email</th>
                 <th>Address</th>
                 <th>Children Info</th>
+                <th>Total Raised</th>
                 <th>Activate refund page</th>
             </tr>
             <?php
@@ -95,6 +112,9 @@ foreach ($admins as $id => $info) {
                         echo "<br /><hr width='50%' />";
                     }
                 }
+                // total raised
+                echo "</td><td>";
+                if (isset($raised[$admin_id])) echo "$" . number_format($raised[$admin_id], 2);
                 // activate refund checkbox
                 echo "</td><td><input type='checkbox' class='refund' id='" . $admin_id . "' ";
                 if (intval($row['show_chidon_refund'])) echo "checked ";
