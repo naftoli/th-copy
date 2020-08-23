@@ -19,7 +19,7 @@ $res = $stmt->execute([
     ':admin'    =>  $admin_id
 ]);
 
-if ($res) {
+if ($res && $checked) {
     // get email address
     $stmt = $MASHPIA_DB->prepare("
         SELECT first, last, admin_email FROM admins WHERE admin_id = :admin
