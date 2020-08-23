@@ -36,8 +36,8 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 foreach ($admins as $id => $info) {
     $res = $stmt->execute([
-        ':year' => $year,
-        ':for_family_id' => $id
+        ':year'     => $year,
+        ':admin'    => $id
     ]);
     if ($res) {
         $row = $stmt->fetch();
