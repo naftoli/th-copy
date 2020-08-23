@@ -1,26 +1,24 @@
 <html>
 <head>
+    <script src="js/jquery-1.8.1.min.js"></script>
+    <script>
+        $(".create_voucher").click( function() {
+            const admin = $(this).parent().parent().find('.refund').attr('id')
+            const amount = parseFloat($(this).parent().find('.voucher').val())
+            if (amount) {
+                const that = this;
+                $.post('createVoucher.php', { admin: admin, amount: amount }, function(res) {
+                    if (res.success) {
+                        alert('Voucher created.')
+                        $(that).after(res.info)
+                    } else {
+                        alert(res.error)
+                    }
+                });
+            }
+        })
+    </script>
 </head>
 <body>
-<?
-if (isset($_POST['submit'])) {
-	$barcode = $_POST['barcode'];
-	$num = $_POST['num'];
-	$value = $barcode;
-	$barcode--;
-	while ($barcode > 0) {
-		$value *= $barcode;
-		$barcode--;
-	}
-	$value /= $num;
-	echo "Number of cards per child: " . number_format($value);
-	exit;
-}
-?>
-<form method="post" action="test.php">
-Max number of children: <input name="num"><br />
-Number of digits in barcode: <input name="barcode"><br />
-<input type="submit" name="submit" value="submit">
-</form>
 </body>
 </html>

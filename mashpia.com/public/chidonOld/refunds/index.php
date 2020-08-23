@@ -144,8 +144,8 @@ foreach ($admins as $id => $info) {
                 const admin = $(this).parent().parent().find('.refund').attr('id')
                 const amount = parseFloat($(this).parent().find('.voucher').val())
                 if (amount) {
-                    const that = this
-                    $.post('createVoucher.php', { admin: admin, amount: amount }, success(res) {
+                    const that = this;
+                    $.post('createVoucher.php', { admin: admin, amount: amount }, function(res) {
                         if (res.success) {
                             alert('Voucher created.')
                             $(that).after(res.info)
