@@ -58,6 +58,11 @@
             }
 
             #no-children { display: none; text-align: center; }
+
+			.refund {
+				font-size: 16px;
+				padding: 5px;
+			}
         </style>
 	</head>
 	<body>
@@ -111,11 +116,14 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-xs-6" id="chidonDriveButton">
-                        <div class="button-spacing childrens-content" style="float:right;">
+                    <div class="col-xs-6">
+                        <div class="button-spacing refundDiv" style="float:right; display: none;">
                             <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
                             <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
                             <!-- <button class="btn btn-info chidondrive">ChidonDrive</button> -->
+							<a href="chidonRefund.html">
+								<button class="btn btn-danger refund">Request Chidon Refund</button>
+							</a>
                         </div>
                     </div>
 				</div>
@@ -407,6 +415,8 @@
                         if (motherPic != '' && motherPic != null) {
                             $("#mother").attr('src', motherPic);
                         }
+
+                        if (parseInt(parent.showRefund) && !parseInt(parent.alreadyRefunded)) $(".refundDiv").show();
                         //$("#mother").width( newW );
                         //$("#mother").height( newW );
                         
