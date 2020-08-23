@@ -93,6 +93,7 @@ foreach ($admins as $id => $info) {
                 <th>Children Info</th>
                 <th>Total Raised</th>
                 <th>Activate refund page</th>
+                <th>Create Voucher</th>
             </tr>
             <?php
             foreach ($admins as $admin_id => $row) {
@@ -118,7 +119,10 @@ foreach ($admins as $id => $info) {
                 // activate refund checkbox
                 echo "</td><td><input type='checkbox' class='refund' id='" . $admin_id . "' ";
                 if (intval($row['show_chidon_refund'])) echo "checked ";
-                echo "/></td></tr>";
+                echo "/></td><td>";
+                // vouchers
+                echo "$<input type='text' class='voucher' placeholder='0.00' size='4' /><button class='create_voucher'>create voucher</button>";
+                echo "</td></tr>";
             }
             ?>
         </table>
@@ -134,6 +138,22 @@ foreach ($admins as $id => $info) {
                     if (result.success) alert('Updated.')
                     else alert('Error updating.')
                 })
+            })
+            // vouchers
+            $(".create_voucher").click( function() {
+                const admin = $(this).parent().parent().find('.refund').attr('id')
+                const amount = parseFloat($(this).parent().find('.voucher').val())
+                if (amount) {
+                    const that = this
+                    $.post('createVoucher.php', { admin: admin, amount: amount }, success(res) {
+                        if (res.success) {
+                            alert('Voucher created.');
+                            $(that).after(res.info)
+                        } else {
+                            alert(res.error)
+                        }
+                    })
+                }
             })
         })
     </script>
