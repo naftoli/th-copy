@@ -62,7 +62,7 @@ MSG;
             // send mail to myself
             $subject = "Error sending chidon refund email";
             $to = 'naftoli@tzivoshashem.org';
-            @mail($to, $subject, $msg, implode("\r\n", $headers);
+            @mail($to, $subject, $msg, implode("\r\n", $headers));
         }
     }
 }
