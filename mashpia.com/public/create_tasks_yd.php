@@ -266,9 +266,9 @@ if (isset($_POST['submit'])) {
                 
                 // set the start date from the array if it is full and $startDate is empty
                 if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
-                    $year = in_array($arrStart[0], array(12,13)) && $mission_number < 50 ? $missionYear - 1 : $missionYear;
+                    $year = in_array($arrStart[0], array(12,13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
-                    $year = in_array($arrEnd[0], array(12,13)) && $mission_number < 50 ? $missionYear - 1 : $missionYear;
+                    $year = in_array($arrEnd[0], array(12,13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 
