@@ -44,6 +44,7 @@ if ($res) {
         <style>
             body, table, tr, th, td {
                 font-size: 14px;
+                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             }
             tr, th, td {
                 padding: 5px;
