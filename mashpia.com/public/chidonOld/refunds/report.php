@@ -116,6 +116,7 @@ if ($res) {
                 <th>Donation given</th>
                 <th>Number of Kids in Shabbaton</th>
                 <th>Number of Kids giving $50</th>
+                <th>Total given from $50 / child</th>
                 <th>Submitted</th>
             </tr>
             <?php
@@ -123,7 +124,7 @@ if ($res) {
                 echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $shabbatonPaid[$row['admin_id']] . "</td><td>" .
                     $chidonDrive[$row['admin_id']] . "</td><td>" . $row['refund'] . "</td><td>" . $row['donation'] .
                     "</td><td>" . $row['num_children'] . "</td><td>" . $row['num_donation_50'] . "</td><td>" .
-                    $row['created'] . "</td></tr>";
+                    ($row['num_donation_50'] * 50) . "</td><td>" . $row['created'] . "</td></tr>";
             }
             ?>
         </table>
