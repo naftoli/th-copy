@@ -123,6 +123,7 @@ if ($res) {
             $totals['shabbaton_paid'] = 0;
             $totals['chidon_drive'] = 0;
             $totals['refunds'] = 0;
+            $totals['donations'] = 0;
             $totals['num_children'] = 0;
             $totals['num_donation_50'] = 0;
             $totals['donation_50'] = 0;
@@ -134,13 +135,14 @@ if ($res) {
                 $totals['shabbaton_paid'] += $shabbatonPaid[$row['admin_id']];
                 $totals['chidon_drive'] += $chidonDrive[$row['admin_id']];
                 $totals['refunds'] += $row['refund'];
+                $totals['donations'] += $row['donation'];
                 $totals['num_children'] += $row['num_children'];
                 $totals['num_donation_50'] += $row['num_donation_50'];
                 $totals['donation_50'] += $row['num_donation_50'] * 50;
             }
             echo "<tr><th></th><th>" . $totals['shabbaton_paid'] . "</th><th>" . $totals['chidon_drive'] . "</th><th>" .
-                $totals['refunds'] . "</th><th>" . $totals['num_children'] . "</th><th>" . $totals['num_donation_50'] .
-                "</th><th>" . $totals['donation_50'] . "</th><th></th></tr>";
+                $totals['refunds'] . "</th><th>" . $totals['donations'] . "</th><th>" . $totals['num_children'] .
+                "</th><th>" . $totals['num_donation_50'] . "</th><th>" . $totals['donation_50'] . "</th><th></th></tr>";
             ?>
         </table>
         <?php } ?>
