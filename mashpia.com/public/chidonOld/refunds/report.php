@@ -140,9 +140,11 @@ if ($res) {
                 $totals['num_donation_50'] += $row['num_donation_50'];
                 $totals['donation_50'] += $row['num_donation_50'] * 50;
             }
-            echo "<tr><th></th><th>" . $totals['shabbaton_paid'] . "</th><th>" . $totals['chidon_drive'] . "</th><th>" .
-                $totals['refunds'] . "</th><th>" . $totals['donations'] . "</th><th>" . $totals['num_children'] .
-                "</th><th>" . $totals['num_donation_50'] . "</th><th>" . $totals['donation_50'] . "</th><th></th></tr>";
+            echo "<tr><th></th><th>" . number_format($totals['shabbaton_paid'], 2) . "</th><th>" .
+                number_format($totals['chidon_drive'], 2) . "</th><th>" .
+                number_format($totals['refunds'], 2) . "</th><th>" . number_format($totals['donations'], 2) .
+                "</th><th>" . $totals['num_children'] . "</th><th>" . $totals['num_donation_50'] . "</th><th>" .
+                number_format($totals['donation_50'], 2) . "</th><th></th></tr>";
             ?>
         </table>
         <?php } ?>
