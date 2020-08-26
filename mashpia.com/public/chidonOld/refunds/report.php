@@ -120,12 +120,27 @@ if ($res) {
                 <th>Submitted</th>
             </tr>
             <?php
+            $totals['shabbaton_paid'] = 0;
+            $totals['chidon_drive'] = 0;
+            $totals['refunds'] = 0;
+            $totals['num_children'] = 0;
+            $totals['num_donation_50'] = 0;
+            $totals['donation_50'] = 0;
             foreach ($rows as $row) {
                 echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $shabbatonPaid[$row['admin_id']] . "</td><td>" .
                     $chidonDrive[$row['admin_id']] . "</td><td>" . $row['refund'] . "</td><td>" . $row['donation'] .
                     "</td><td>" . $row['num_children'] . "</td><td>" . $row['num_donation_50'] . "</td><td>" .
                     ($row['num_donation_50'] * 50) . "</td><td>" . $row['created'] . "</td></tr>";
+                $totals['shabbaton_paid'] += $shabbatonPaid[$row['admin_id']];
+                $totals['chidon_drive'] += $chidonDrive[$row['admin_id']];
+                $totals['refunds'] += $row['refund'];
+                $totals['num_children'] += $row['num_children'];
+                $totals['num_donation_50'] += $row['num_donation_50'];
+                $totals['donation_50'] += $row['num_donation_50'] * 50;
             }
+            echo "<tr><th></th><th>" . $totals['shabbaton_paid'] . "</th><th>" . $totals['chidon_drive'] . "</th><th>" .
+                $totals['refunds'] . "</th><th>" . $totals['num_children'] . "</th><th>" . $totals['num_donation_50'] .
+                "</th><th>" . $totals['donation_50'] . "</th><th></th></tr>";
             ?>
         </table>
         <?php } ?>
