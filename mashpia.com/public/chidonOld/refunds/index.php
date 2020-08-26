@@ -121,7 +121,8 @@ foreach ($admins as $id => $info) {
                 if (intval($row['show_chidon_refund'])) echo "checked ";
                 echo "/></td><td>";
                 // vouchers
-                echo "$<input type='text' class='voucher' placeholder='0.00' size='4' /><button class='create_voucher'>create voucher</button>";
+                if ($raised[$admin_id] > 0) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
+                            <button class='create_voucher'>create voucher</button>";
                 echo "</td></tr>";
             }
             ?>
@@ -143,6 +144,12 @@ foreach ($admins as $id => $info) {
             $(".create_voucher").click( function() {
                 const admin = $(this).parent().parent().find('.refund').attr('id')
                 const amount = parseFloat($(this).parent().find('.voucher').val())
+                const max = $(this).parent().find('.voucher').data('max')
+                console.log(max)
+                if (max < amount) {
+                    alert('Voucher amount cannot be more than the amount raised.')
+                    return false
+                }
                 if (amount) {
                     const that = this;
                     $.post('createVoucher.php', { admin: admin, amount: amount }, function(result) {
