@@ -145,9 +145,9 @@ foreach ($admins as $id => $info) {
                 const admin = $(this).parent().parent().find('.refund').attr('id')
                 const amount = parseFloat($(this).parent().find('.voucher').val())
                 const max = $(this).parent().find('.voucher').data('max')
-                console.log(max)
                 if (max < amount) {
                     alert('Voucher amount cannot be more than the amount raised.')
+                    $(this).parent().find('.voucher').val().focus()
                     return false
                 }
                 if (amount) {
