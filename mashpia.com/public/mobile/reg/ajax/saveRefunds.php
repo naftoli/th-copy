@@ -8,6 +8,17 @@ $donation50 = implode(',', $_POST['donation50']);
 $num_donation_50 = $_POST['num_donation_50'];
 $num_children = $_POST['num_children'];
 $admin = encrypt_decrypt('decrypt', $_COOKIE['admin']);
+$year = 5780;
+
+// first delete any existing refund requests
+$stmtDelete = $MASHPIA_DB->prepare("
+    DELETE FROM chidon_refunds 
+    WHERE year = :year AND admin_id = :admin
+");
+$resDelete = $stmtDelete->execute([
+    ':year' => $year,
+    ':admin'=> $admin
+]);
 
 $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_refunds 
@@ -21,7 +32,7 @@ $stmt = $MASHPIA_DB->prepare("
         num_children = :num_children
 ");
 $res = $stmt->execute([
-    ':year'     => 5780,
+    ':year'     => $year,
     ':admin'    => $admin,
     ':donation' => $donation,
     ':total'    => $total,

@@ -11,11 +11,16 @@ $admin_id = $_POST['admin_id'];
 $checked = intval($_POST['checked']);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-$stmt = $MASHPIA_DB->prepare("
-    UPDATE admins SET show_chidon_refund = :checked WHERE admin_id = :admin
-");
+if ($checked) {
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE admins SET show_chidon_refund = 1 WHERE admin_id = :admin
+    ");
+} else {
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE admins SET show_chidon_refund = 0, already_refunded = 0 WHERE admin_id = :admin
+    ");
+}
 $res = $stmt->execute([
-    ':checked'  =>  $checked,
     ':admin'    =>  $admin_id
 ]);
 

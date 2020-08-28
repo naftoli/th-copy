@@ -116,12 +116,16 @@ foreach ($admins as $id => $info) {
                 // total raised
                 echo "</td><td>";
                 if (isset($raised[$admin_id])) echo "$" . number_format($raised[$admin_id], 2);
-                // activate refund checkbox
-                echo "</td><td><input type='checkbox' class='refund' id='" . $admin_id . "' ";
-                if (intval($row['show_chidon_refund'])) echo "checked ";
-                echo "/></td><td>";
+                echo "</td><td>";
+                if (floatval($paid) > 0) {
+                    // activate refund checkbox
+                    echo "<input type='checkbox' class='refund' id='" . $admin_id . "' ";
+                    if (intval($row['show_chidon_refund'])) echo "checked ";
+                    echo "/>";
+                }
+                echo "</td><td>";
                 // vouchers
-                if ($raised[$admin_id] > 0) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
+                if (floatval($paid) > 0 && floatval($raised[$admin_id] > 0)) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
                             <button class='create_voucher'>create voucher</button>";
                 echo "</td></tr>";
             }

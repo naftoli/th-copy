@@ -417,6 +417,9 @@
                         }
 
                         if (parseInt(parent.showRefund) && !parseInt(parent.alreadyRefunded)) $(".refundDiv").show();
+                        else if (parseInt(parent.alreadyRefunded)) {
+							$(".refundDiv").empty().append("Your Refund has been Requested")
+						}
                         //$("#mother").width( newW );
                         //$("#mother").height( newW );
                         
