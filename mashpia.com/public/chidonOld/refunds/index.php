@@ -125,7 +125,7 @@ foreach ($admins as $id => $info) {
                 }
                 echo "</td><td>";
                 // vouchers
-                if (floatval($paid) > 0 && floatval($raised[$admin_id] > 0)) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
+                if (floatval($raised[$admin_id] > 0)) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
                             <button class='create_voucher'>create voucher</button>";
                 echo "</td></tr>";
             }
