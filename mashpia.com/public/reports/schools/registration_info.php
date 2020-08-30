@@ -91,12 +91,12 @@ $schools = \School::find_all_by_chayolei_and_test_school(
 
         <strong>Status:</strong> The current status of the base
         <ol>
-            <li><strong>Deactivate (button):</strong> Revoke base commanders access to their base untill they pay for registration.</li>
-            <li><strong>Inactive:</strong> Base commanders are locked out of this base untill registration is paid.</li>
+            <li><strong>Deactivate (button):</strong> Revoke base commanders access to their base until they pay for registration.</li>
+            <li><strong>Inactive:</strong> Base commanders are locked out of this base until registration is paid.</li>
             <li><strong>Paid:</strong> the base has gone through registration and paid.</li>
         </ol>
     </div>
-    <div id="report">
+    <div id="report" style="display: none;">
         <table>
             <thead>
                 <th>Year</th>

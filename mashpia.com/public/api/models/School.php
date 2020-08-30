@@ -140,11 +140,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             $this->inst_id === 10
         );
 
-        if ( intval( $this->school_id ) == 61 ) {
-            if ( new DateTime() < new DateTime( '2019-09-12 00:00:00' ) ) {
-                $fee -= 5;
-            }
-        }
+//        if ( intval( $this->school_id ) == 61 ) {
+//            if ( new DateTime() < new DateTime( '2020-09-25 00:00:00' ) ) {
+//                $fee -= 5;
+//            }
+//        }
 
         return $fee;
     }
@@ -260,7 +260,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     public function earlyBird() {
         if ( $this->early_bird )
             return $this->early_bird;
-        return new DateTime( '2019-09-26 11:59:00' );
+        return new DateTime( '2020-09-24 11:59:59' );
     }
 
     // get the current registration prices, subject to change at any time

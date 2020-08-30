@@ -105,19 +105,19 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Allow students to spend miles earned from:</Label>
 
-          <Radio value='2459029' 
+          <Radio value='2459027'
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === 2459029 }>
-            The beginning of the summer (Friday, 25 Sivan / June 28)
+            checked={ store_reset_jd === 2459027 }>
+            The beginning of the summer (Friday, 4 Tammuz / June 26)
           </Radio>
           <br />
 
-          <Radio value='2459099' 
+          <Radio value='2459097'
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === 2459099 }>
-            The beginning of the school year (Friday, 6 Elul / Sep 6)
+            checked={ store_reset_jd === 2459097 }>
+            The beginning of the school year (Friday,15 Elul / Sep 4)
           </Radio>
 
           <br />
