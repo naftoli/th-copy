@@ -317,7 +317,7 @@ var registrationApp = function() {
 
         // check if pic is generic or new pic needs to be uploaded
         if ( parseInt($("#needs_new_pic").val()) === 1 ) {
-            return showError('You must upload a new photo.');
+            return showError('You must upload a (new) photo.');
         }
 
         // Detect and validate the charges accepted.
