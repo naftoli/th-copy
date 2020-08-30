@@ -173,6 +173,14 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['chayoleiRegistered'] = true;
         }
 
+        // add remove reg button for children that are tuition school and parents registered but school didn't register
+        $children[$row['user_id']]['removeRegButton'] = 0;
+        $sqlRemove = "select * from reg_confirmations where user_id = " . $row['user_id'] . " and year = " . $reg_year;
+        $resRemove = mysql_query($sqlRemove);
+        if (mysql_num_rows($resRemove)) {
+            $children[$row['user_id']]['removeRegButton'] = 1;
+        }
+
         // for testing
         // if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {
         // 	$children[$row['user_id']]['needsReg'] = 1;

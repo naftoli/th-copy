@@ -89,7 +89,7 @@ class UsersRouter {
             }
             
             // * setup the queries
-            $description = "Soldier Registration ( Base ) for $year: " . count( $users ) . " Soldiers. ";
+            $description = "Soldier Registration ( Base ID: " . $school->school_id . " ) for $year: " . count( $users ) . " Soldiers. ";
 
             // create Transaction
             $create_transaction_query = $MASHPIA_DB->prepare(

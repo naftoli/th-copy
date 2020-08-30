@@ -114,7 +114,7 @@ class UserRegistrationRouter {
         }
         $totals_string = trim( $totals_string );
         // get the description four our database
-        $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
+        $user_serials = array_map( function( $user ){ return $user->user_serial . ':' . $user->school_id; }, $users);
         $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
         $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
         

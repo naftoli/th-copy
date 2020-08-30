@@ -442,39 +442,59 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
         $errors = [];
         // Insert into user_registration
-        $reg_query = $MASHPIA_DB->prepare(
-            "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
-            ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
-            ."ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
-        );
-        // $x = [ 
-        //     'year' => $year,                'admin_id' => $admin_id, 
-        //     'user_id' => $this->user_id,    'school_id' => $this->school_id,
-        //     'paid' => isset($amount) ? $amount : null,
-        // ];
-        // register the soldier
-        if( !$reg_query->execute([ 
-            'year' => $year,                'admin_id' => $admin_id, 
-            'user_id' => $this->user_id,    'school_id' => $this->school_id,
-            'paid' => isset($amount) ? $amount : null,
-        ])) $errors[] = "Could not insert into user_registration.";
-        // save the charge
-        $type = 'chayolei';
-        if ( $lite ) $type = 'chayolei-lite';
-        if ( $ckids ) $type = 'ckids';
-        if ( !$this->registrationCharge( $type, $amount, $trans_id ) )
-            $errors[] = "Could not insert into registration_charges.";
-        // update fields to mark registered
-        if ( !$this->user_registered ) $this->user_registered = new \Datetime();
-        if ( !$this->user_start_date ) $this->user_start_date = unixtojd();
-        // update field for chayolei lite registration 
-        if ( $lite ) $this->lite_edition = 1;
-        $this->generateRank();
-        $this->save();
-        // create campaigns and birthday missions
-        $this->enrollInCampaigns();
-        $this->setupBirthdayMissions();
-
+        // make sure to only register child if there's an amount, otherwise it's only a parent confirming information for a tuition school
+        if (floatval($amount) > 0) {
+            $reg_query = $MASHPIA_DB->prepare(
+                "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
+                . "VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
+                . "ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
+            );
+            // $x = [
+            //     'year' => $year,                'admin_id' => $admin_id,
+            //     'user_id' => $this->user_id,    'school_id' => $this->school_id,
+            //     'paid' => isset($amount) ? $amount : null,
+            // ];
+            // register the soldier
+            if (!$reg_query->execute([
+                'year' => $year, 'admin_id' => $admin_id,
+                'user_id' => $this->user_id, 'school_id' => $this->school_id,
+                'paid' => isset($amount) ? $amount : null,
+            ])) {
+                $errors[] = "Could not insert into user_registration. (Not Registered).";
+                return $errors;
+            }
+            // save the charge
+            $type = 'chayolei';
+            if ($lite) $type = 'chayolei-lite';
+            if ($ckids) $type = 'ckids';
+            if (!$this->registrationCharge($type, $amount, $trans_id))
+                $errors[] = "Could not insert into registration_charges.";
+            // update fields to mark registered
+            if (!$this->user_registered) $this->user_registered = new \Datetime();
+            if (!$this->user_start_date) $this->user_start_date = unixtojd();
+            // update field for chayolei lite registration
+            if ($lite) $this->lite_edition = 1;
+            $this->generateRank();
+            $this->save();
+            // create campaigns and birthday missions
+            $this->enrollInCampaigns();
+            $this->setupBirthdayMissions();
+        } else {
+            $stmt = $MASHPIA_DB->prepare("
+                INSERT INTO reg_confirmations 
+                SET 
+                    year = :year, 
+                    admin_id = :admin, 
+                    user_id = :user
+            ");
+            if (!$stmt->execute([
+                ':year'     => $year,
+                ':admin'    => $admin_id,
+                ':user'     => $this->user_id
+            ])) {
+                $errors[] = "Could not register child.";
+            }
+        }
         return $errors;
     }
     /**

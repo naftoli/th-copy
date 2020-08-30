@@ -206,8 +206,11 @@
 																	{{#if this.schoolRegistered}}
 																		{{#if this.schoolTypeRegistered}}
                                                                             {{#if this.reg_types.chayolei }}
-                                                                                <button class="btn btn-primary re_register">Register Chayolei {{ this.chayolei_year }}                                            Tzivos Hashem {{ this.reg_year }}
-                                                                                {{#if this.reg_types.chidon }}
+																				{{#if this.removeRegButton }}
+																				{{else}}
+                                                                                	<button class="btn btn-primary re_register">Register Chayolei {{ this.chayolei_year }}                                            Tzivos Hashem {{ this.reg_year }}
+																				{{/if}}
+																				{{#if this.reg_types.chidon }}
                                                                                     / Chidon {{ this.chidon_year }}
                                                                                 {{/if}}
                                                                                 </button>
