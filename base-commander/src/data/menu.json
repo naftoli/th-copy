@@ -183,10 +183,6 @@
     "icon": "/images/icon_wizard.png"
   },
   {
-    "label": "Setup Guide",  "legacy": true, "path": "/admin_setup_guide.php", "module": "chayolei",
-    "icon": "/images/icon_wizard.png"
-  },
-  {
     "label": "Support",  "legacy": true, "path": "/helpdesk/?p=open",
     "icon": "/images/parentIcons/support icon.gif"
   },
