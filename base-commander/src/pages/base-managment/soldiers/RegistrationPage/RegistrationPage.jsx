@@ -65,7 +65,7 @@ export class RegistrationPage extends Component {
     if ( this.state.selection.length > selection.length )
       fee = -Math.abs(fee); // update the fee to a negative number if we reduced the length of items
     // update the state
-    const total = parseInt(this.state.total) + fee;
+    const total = parseInt(this.state.total, 10) + fee;
     this.setState({ selection, total });
   };
   // toggle all the rows in the table
