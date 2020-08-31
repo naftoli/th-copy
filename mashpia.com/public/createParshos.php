@@ -1,4 +1,4 @@
-<?
+<?php
 $admin_auth = array('school');
 require_once 'header.php';
 
@@ -34,13 +34,13 @@ if ($admin_user['auth'] != 'super') {
 					//echo $val . "<br />";
 					switch ($column) {
 						case 0:
-							$name = $val;
-							break;
-						case 1:
 							$start = $val;
 							break;
-						case 2:
+						case 1:
 							$end = $val;
+							break;
+						case 2:
+							$name = $val;
 							break;
 						case 3:
 							$year = $val;
