@@ -70,6 +70,7 @@ if (!isset($menu_type))
             <li><a href="hachayol_report_details.php">Hachayol Report Details</a></li>
             <li><a href="myShliachHachayolReport.php">MyShliach Hachayol Report</a></li>       
             <li><a href="myShliachHachayolLabels.php">MyShliach Hachayol Labels</a></li>
+            <li><a href="anashHachayolLabels.php">Anash Kinder Hachayol Labels</a></li>
 			<li><a href="/raffles/shared/forms/winners_hachayol_form.php">Hachayol Raffle Winners</a></li> 
             <li></li><br />      
             <li><a href="admin_received_stats_all.php"><?=T_("Medal/Rank Report All Schools")?></a></li>
