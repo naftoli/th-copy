@@ -69,13 +69,11 @@ Dear $name,
 <br /><br />
 Thank you for requesting a refund for your child(ren).
 <br /><br />
-We will be submitting all refunds requests on Wednesday the 19th of Elul September 10th.
-<br /><br />
-Please allow 7 days after that for your card to be refunded.
+We will be submitting all refunds requests on Monday the 25th of Elul, September 14. Please allow 7 days after that for your card to be refunded.
 <br /><br />
 We wish you much continued Nachas from your child(ren).
 <br /><br />
-We look forward to the ultimate chidon with Moshiach Now.
+We look forward to the ultimate Chidon with Moshiach Now.
 <br /><br />
 Kesiva Vachasima Tova <br />
 Shimmy Weinbaum <br />

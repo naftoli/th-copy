@@ -49,6 +49,13 @@ Thank you for requesting a refund for your child(ren).
 <br /><br />
 Please log into your Tzivos Hashem parents account. 
 <br /><br />
+Go to http://TzivosHashem.com/mobile
+<br /><br />
+Enter your username and password.
+<br /><br />
+If you don't know your username and password click on forgot password and enter the email address associated 
+with your parent account: ($to)
+<br /><br />
 In the top right corner you will see a button that says "request refund". 
 <br /><br />
 Click on that button and fill out the form.

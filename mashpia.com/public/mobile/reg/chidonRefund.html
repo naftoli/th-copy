@@ -104,7 +104,7 @@
                     <h4>Refund: $<span id="refund"></span></h4>
                 </div> 
 
-                <div class="row">
+                <div class="row" id="additional_div">
                     <div class="col-12" style="font-size: 16px;">
                         I would like to give an additional donation of $<input type='text' id='additional' size="6" /><br />
                     </div>
@@ -241,6 +241,8 @@
                 }
             })
             if (refund < 0) refund = 0
+            if (refund == 0) $("#additional_div").hide()
+            else $("#additional_div").show()
             $("#refund").text(refund)
             updateTotal()
         }
