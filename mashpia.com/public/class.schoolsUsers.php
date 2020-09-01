@@ -1,5 +1,5 @@
 <?
-class SchoolsUsers {
+class choolsUsers {
     private $school;
     private $users;
     private $usersByClass;

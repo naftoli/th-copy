@@ -47,11 +47,10 @@ if( isset($_GET['debug'])){
             $users = [];
             $sql = "select u.*, c.* from users u 
                     join classes c on u.class_id = c.class_id  
-                    join registration_charges rc using (user_id) 
-                    where rc.type = 'chayolei' 
-                    and u.user_registered > 0 
+                    join user_registration ur using (user_id) 
+                    where u.user_registered > 0 
                     and u.school_id = " . $id . " 
-                    and rc.year = " . $year . " 
+                    and ur.year = " . $year . " 
                     group by u.user_id 
                     order by class_grade, class_sub, last, first";
             $result = mysql_query( $sql );

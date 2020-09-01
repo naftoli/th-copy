@@ -467,8 +467,16 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $type = 'chayolei';
             if ($lite) $type = 'chayolei-lite';
             if ($ckids) $type = 'ckids';
-            if (!$this->registrationCharge($type, $amount, $trans_id))
-                $errors[] = "Could not insert into registration_charges.";
+            if (!$this->registrationCharge($type, $amount, $trans_id)) {
+                $errors[] = "Could not insert into registration_charges. (Not Registered)";
+                // remove from user_registration
+                $unreg_qry = $MASHPIA_DB->prepare("DELETE FROM user_registration WHERE user_id = :user, AND year = :year");
+                $unreg_qry->execute([
+                    ':user' => $this->user_id,
+                    ':year' => $year
+                ]);
+                return $errors;
+            }
             // update fields to mark registered
             if (!$this->user_registered) $this->user_registered = new \Datetime();
             if (!$this->user_start_date) $this->user_start_date = unixtojd();
