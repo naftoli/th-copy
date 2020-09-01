@@ -72,6 +72,8 @@ $schools = \School::find_all_by_chayolei_and_test_school(
         </ol>
         <br/>
 
+        <p><strong>School Charge Date:</strong> This is for Tuition / Guaranteed schools. It's the date that HQ should charge them for any unregistered children.</p>
+
         <p><strong>Chayolei Fee:</strong> The fee the base will pay to register.</p>
 
         <p><strong>Balance:</strong> The balance the base owes to Tzivos Hashem.</p>
@@ -102,6 +104,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                 <th>Year</th>
                 <th colspan='2'>Base</th>
                 <th>Registration Type</th>
+                <th>School Charge Date</th>
                 <th>Chayolei Fee</th>
                 <th>Chidon Fee</th>
                 <th>Balance</th>
@@ -124,6 +127,14 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                             <option value="2" <?= $base->reg_type == '2' ? 'selected' : ''; ?>>Guaranteed</option>
                             <option value="3" <?= $base->reg_type == '3' ? 'selected' : ''; ?>>By Parent</option>
                         </select>
+                    </td>
+                    <td>
+                        <?php
+                        if (!$base->school_charge_date) echo "n/a";
+                        else { ?>
+                        <input type="date" name="school_charge_date"
+                               value="<?= date('Y-m-d', strtotime($base->school_charge_date)) ?>" />
+                        <?php } ?>
                     </td>
                     <td>
                         <input type='number' name='chayolei_fee'
