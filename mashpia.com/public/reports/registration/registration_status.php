@@ -13,7 +13,7 @@ $main_query = "SELECT s.school_id, s.school_number, s.school_name, sr.date_paid,
     .") u USING (school_id) LEFT JOIN ( "
         ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
-        ."SELECT school_id, COUNT(*) AS total_registered FROM users WHERE user_registered > 0 GROUP BY school_id"
+        ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
     .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND test_school=0 GROUP BY school_id ORDER BY school_name";
 $main_query = mysql_query( $main_query );
 $data = [];

@@ -50,7 +50,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <h2>MyShliach</h2>
+        <h2>MyShliach / Anash Kinder</h2>
         <div id="action-links">
             <a href="/myShliachHachayolReport.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
@@ -62,6 +62,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <div class="button">
                     <img src="/images/myshliach.png" height="32" alt="tickets"/>
                     <span class="link-text">MyShliach Label Report</span>
+                </div>
+            </a>
+            <a href="/anashHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/myshliach.png" height="32" alt="tickets"/>
+                    <span class="link-text">Anash Kinder Label Report</span>
                 </div>
             </a>
         </div>
