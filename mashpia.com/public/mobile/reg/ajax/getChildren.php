@@ -220,6 +220,18 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['chidonRegistered'] = 1;
             // $children[$row['user_id']]['allowRemove'] = 0;
 
+            // figure out which kids can be refunded
+            if ($cRow['date_paid'] > 0) {
+                $children[$row['user_id']]['shabbatonRegistered'] = 1;
+                if ($parent['showRefund'] && !$parent['alreadyRefunded']) {
+                    $children[$row['user_id']]['showRefund'] = 1;
+                    $children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
+                } else {
+                    $children[$row['user_id']]['showRefund'] = 0;
+                    $children[$row['user_id']]['shabbatonPaid'] = 0;
+                }
+            }
+
             // make sure school is registered and has enough staff
             $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $chidon_year . " AND registered = 1";
             $chapRes = mysql_query( $chapSql );
@@ -240,16 +252,6 @@ if ( !empty( $users ) ) {
 
                         if ($cRow['allow_edit']) {
                             $children[$row['user_id']]['shabbatonEdit'] = 1;
-                        }
-                        if ($cRow['date_paid'] > 0) {
-                            $children[$row['user_id']]['shabbatonRegistered'] = 1;
-                            if ($parent['showRefund'] && !$parent['alreadyRefunded']) {
-                                $children[$row['user_id']]['showRefund'] = 1;
-                                $children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
-                            } else {
-                                $children[$row['user_id']]['showRefund'] = 0;
-                                $children[$row['user_id']]['shabbatonPaid'] = 0;
-                            }
                         }
                         if ($cRow['confirmed']) {
                             $children[$row['user_id']]['shabbatonConfirmed'] = 1;
