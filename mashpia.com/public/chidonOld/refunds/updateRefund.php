@@ -35,7 +35,7 @@ if ($res && $checked) {
     $name = $row['first'] . ' ' . $row['last'];
     if (filter_var($to, FILTER_VALIDATE_EMAIL)) {
         // send email to parent
-        $from = "accounting@tzivoshashem.org";
+        $from = "chidonrefunds@tzivoshashem.org";
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: ' . $from;
