@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tzivos Hashem | Raffle 5 Page</title>
+    <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <link href="../fonts/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin/loader.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+        rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js'></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="raffle5.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
+        integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
+        crossorigin="anonymous"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+        }
+
+        p,
+        h2 {
+            color: #232c7b;
+        }
+
+        .container {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .item {
+            position: relative;
+            /* float: left; */
+        }
+
+        .item .raffleFlagContainer,
+        .smallRaffleFlagContainer {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .item .raffleFlagContainer img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .smallRaffleFlagContainer img {
+            height: 35px;
+            width: 35px;
+        }
+
+        .item .raffleFlagContainer h2 {
+            font-size: 25px;
+            position: absolute;
+            top: 0;
+            left: 15px;
+            margin: 15px 0;
+        }
+
+        svg {
+            transform: rotate(-90deg) scale(1, -1);
+        }
+
+        .circle_animation {
+            stroke-dasharray: 687.5;
+            stroke-dashoffset: 687.5;
+        }
+
+        .circle_animation_background {
+            stroke-dasharray: 0;
+            stroke-dashoffset: 0;
+        }
+
+        .background_circle {
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .raffleID .circle_animation {
+            -webkit-animation: raffleID 1s ease-out forwards;
+            animation: raffleID 1s ease-out forwards;
+        }
+
+        .css .circle_animation {
+            -webkit-animation: css 1s ease-out forwards;
+            animation: css 1s ease-out forwards;
+        }
+
+        @-webkit-keyframes raffleID {
+            to {
+                stroke-dashoffset: 80;
+            }
+        }
+
+        @keyframes raffleID {
+            to {
+                stroke-dashoffset: 80;
+            }
+        }
+
+        /* @-webkit-keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			}
+
+			@keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			} */
+
+        .headerRaffleInfo,
+        .raffleDetails {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* TODO: remove this for large screens. add transform: scale(1.2); to svg */
+            align-items: center;
+        }
+
+        .raffleDetails p {
+            margin: 0 auto;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .daysLeft {
+            font-weight: 600;
+            color: #ed224b;
+            text-transform: uppercase;
+        }
+
+        .details {
+            font-size: 14px !important;
+        }
+
+        .detailsBold {
+            color: #ffd624;
+        }
+
+        .winnerCount {
+            font-size: 17px;
+            text-transform: uppercase;
+        }
+
+        .prizeDetails {
+            position: absolute;
+            width: 100%;
+            align-items: center;
+            top: 0;
+            left: 10px;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .prizeDetails p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .prizeDetails img {
+            height: 120px;
+            margin-top: 10px;
+        }
+
+        #seeWhoWon {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            border-radius: 4px;
+            padding: 4px;
+            text-transform: uppercase;
+            color: white;
+            background: #ed224b;
+            border: 1px solid #c01f40;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        #trackRecordContainer h2:first-child {
+            color: #232c7b;
+            font-weight: 900;
+            text-align: center;
+            margin: 0;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+
+        #trackRecordContainer div {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .raffleInfo {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: auto;
+            position: relative;
+        }
+
+        .smallRaffleFlagContainer {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            top: 0;
+            left: 0;
+            height: 95%;
+            justify-content: center !important;
+            z-index: 1;
+        }
+
+        .smallRaffleFlagContainer h2 {
+            font-size: 20px;
+            position: absolute;
+            left: 50px;
+            margin: 0;
+            margin-top: 18px;
+            font-family: Baloo;
+        }
+
+        .parsha {
+            font-weight: 600;
+            color: #232c7b;
+            text-transform: uppercase;
+        }
+
+        .whoWonNav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .whoWonNav h2 {
+            flex: 2;
+            text-transform: uppercase;
+            text-align: center;
+            margin: 15px auto;
+        }
+
+        .whoWonNav p {
+            font-size: 12px;
+            min-width: 40px;
+            color: #585858;
+            margin: 0;
+        }
+
+        .whoWonNav div:first-child {
+            min-width: 40px;
+        }
+
+        #trackRecordContainer {
+            margin-top: 30px;
+        }
+
+        #parsha-header {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            border-radius: 4px;
+            padding: 4px;
+            text-transform: uppercase;
+            color: white;
+            background: #ed224b;
+            border: 1px solid #c01f40;
+            text-decoration: none;
+            margin-top: 0;
+            font-weight: bold;
+            margin-left: -16px;
+            margin-right: -16px;
+            font-size: 16px;
+        }
+
+        #parshaPrizeContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #parshaPrizeContainer p {
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        #parshaPrizeContainer img {
+            height: 40px;
+            width: 40px;
+        }
+
+        #parshaFlagContainer {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        #parshaFlagContainer img {
+            height: 30px;
+            width: 30px;
+        }
+
+        #parshaFlagContainer h2 {
+            position: absolute;
+            color: black;
+            font-size: 20px;
+            margin-left: 5px;
+        }
+
+        #parshaContainer {
+            border: 1px solid #b3b3b0;
+            border-top: none;
+            border-radius: 5px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        #namesContainer {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        #namesContainer>.column>div>p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        #namesContainer>.column>div>p:first-child {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #namesContainer>.column>div {
+            margin: 8px 0;
+        }
+
+        #namesContainer h2 {
+            font-size: 20px;
+            margin: 0
+        }
+
+        #circleText {
+            width: 100px;
+            height: 100px;
+            z-index: 1;
+            position: absolute;
+            fill: transparent;
+            transform: rotate(180deg);
+        }
+
+        #circleText textPath {
+            color: black;
+            fill: black;
+            font-size: 7px;
+        }
+
+        div#boys {
+            margin-right: 10px;
+        }
+
+        .loader {
+            border-top: 1.1em solid #ed224b;
+            /* border-right: 1.1em solid #ed224b;
+            border-bottom: 1.1em solid #ed224b; */
+            /* border-left: 1.1em solid #ed224b; */
+        }
+    </style>
+</head>
+
+<body onload="init()">
+    <div class="container">
+        <div class="headerRaffleInfo">
+            <div id="raffleID" class="item raffleID"></div>
+            <div class="raffleDetails">
+                <p class="detailsBold"><i>Did you know?</i></p>
+                <p>There are <span class="winnerCount">150 winners</span> of the 5 Flag raffle every week!</p>
+                <p class="detailsBold">That's 3,000 winners each year!</p>
+                <p class="details">Fill out missions 5 or more times a week to qualify.</p>
+            </div>
+        </div>
+        <a href="#whoWonContainer" id="seeWhoWon">See who won!</a>
+
+        <div id="trackRecordContainer">
+            <h2>How is your 5-Flag track record?</h2>
+        </div>
+
+        <div id="whoWonContainer">
+            <div class="whoWonNav">
+                <p id="previousWinnerParsha"></p>
+                <h2>Past Winners</h2>
+                <p id="nextWinnerParsha"></p>
+            </div>
+            <div id="parshaContainer">
+                <p id="parsha-header">פרשת </p>
+                <div class="whoWonNav">
+                    <div></div>
+                    <div id="parshaPrizeContainer"></div>
+                    <div id="parshaFlagContainer"></div>
+                </div>
+                <div id="namesContainer">
+                    <div class="column" id="boys">
+                        <h2>Boys</h2>
+                    </div>
+                    <div class="column" id="girls">
+                        <h2>Girls</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- TODO: Add animations -->
+            <!-- TODO: Updatee for full screens -->
+            <!-- <div style="min-height: 400px;" id="raffles">
+                <div class="loader"></div>
+            </div> -->
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
