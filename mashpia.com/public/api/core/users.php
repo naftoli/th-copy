@@ -236,25 +236,14 @@ class UsersRouter {
     public function removeFromSchool() {
         global $MASHPIA_DB;
 
-        $soldier = \Soldier::find([ $_POST['user_id'] ]);
-        // delete soldier if has no points
-        if ( $soldier->canDestroy() ) {
-            $soldier->delete();
-            // remove from parent account
-            $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id='.$user->user_id.' AND auth = "user"');
-            return json_response( 'Soldier has been deleted.' );
-        }
-
-        // make sure we have a class connected to student
-        if ( !$soldier->class_id ) {
-            json_error("Student needs to be assigned to a grade before he/she can be removed.");
-            return;
+        if (is_array($_POST['user_id'])) {
+            $users = $_POST['user_id'];
+        } else {
+            $users = [$_POST['user_id']];
         }
 
         $school_id = 612;
 
-        // find current class grade
-        $success = false;
         $stmt = $MASHPIA_DB->prepare("
             SELECT 
                 class_grade
@@ -263,50 +252,77 @@ class UsersRouter {
             WHERE
                 class_id = :id
         ");
-        $res = $stmt->execute([
-            ':id'   =>  $soldier->class_id
-        ]);
-        if ( $res ) {
-            $row = $stmt->fetch();
-            $class_grade = $row['class_grade'];
 
-            // get class id to switch to
-            $stmt2 = $MASHPIA_DB->prepare("
-                SELECT 
-                    class_id
-                FROM
-                    classes
-                WHERE
-                    school_id = :school AND class_grade = :grade
-            ");
-            $res2 = $stmt2->execute([
-                ':school'   =>  $school_id, 
-                ':grade'    =>  $class_grade
+        $stmt2 = $MASHPIA_DB->prepare("
+            SELECT 
+                class_id
+            FROM
+                classes
+            WHERE
+                school_id = :school AND class_grade = :grade
+        ");
+
+        $moveStmt = $MASHPIA_DB->prepare("
+            UPDATE users 
+            SET school_id = :school, class_id = :grade 
+            WHERE user_id = :user
+        ");
+
+        $errors = [];
+        foreach ($users as $user) {
+            $soldier = \Soldier::find($user);
+            // delete soldier if has no points
+            if ($soldier->canDestroy()) {
+                $soldier->delete();
+                // remove from parent account
+                $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $user->user_id . ' AND auth = "user"');
+//                return json_response('Soldier has been deleted.');
+            }
+
+            // make sure we have a class connected to student
+            if (!$soldier->class_id) {
+//                json_error("Student needs to be assigned to a grade before he/she can be removed.");
+//                return;
+                $errors[] = $user . " is not assigned to a grade and therefore can not be removed.";
+                continue;
+            }
+
+            // find current class grade
+            $res = $stmt->execute([
+                ':id' => $soldier->class_id
             ]);
+            if ($res) {
+                $row = $stmt->fetch();
+                $class_grade = $row['class_grade'];
 
-            
-            if ( $res2 ) {
-                $row2 = $stmt2->fetch();
-                if ( $row2 ) {
-                    $class_id = $row2['class_id'];
-                    $moveStmt = $MASHPIA_DB->prepare("
-                        UPDATE users 
-                        SET school_id = :school, class_id = :grade 
-                        WHERE user_id = :user
-                    ");
-                    $moveStmt->execute([
-                        ':school'   =>  $school_id, 
-                        ':grade'    =>  $class_id, 
-                        ':user'     =>  $soldier->user_id
-                    ]);
-                    $success = true;
+                // get class id to switch to
+
+                $res2 = $stmt2->execute([
+                    ':school' => $school_id,
+                    ':grade' => $class_grade
+                ]);
+
+                if ($res2) {
+                    $row2 = $stmt2->fetch();
+                    if ($row2) {
+                        $class_id = $row2['class_id'];
+
+                        $moveStmt->execute([
+                            ':school' => $school_id,
+                            ':grade' => $class_id,
+                            ':user' => $soldier->user_id
+                        ]);
+                    }
                 }
             }
+            if (!( $res && $res2 )) {
+                $errors[] = "There was an error moving " . $user;
+            }
         }
-        if ( $success ) {
+        if ( empty($errors) ) {
             json_response("Updated.");
         } else {
-            json_error("Error moving student.");
+            json_error(implode('\n', $errors));
         }
     }
 
