@@ -196,7 +196,8 @@ if (isset($_POST['submit'])) {
                             ${$fieldNames[$i]} = 'add';
                             break;
                         case 1:
-                            if ( empty( $val ) ) continue; // empty row
+                            if ( empty( $val ) ) continue 2; // empty row
+                            break;
                         // Start Date
                         case 3:
                             if ( strpos($val, ',') === false ) {
