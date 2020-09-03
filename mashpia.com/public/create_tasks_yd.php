@@ -199,6 +199,7 @@ if (isset($_POST['submit'])) {
                             if (empty($val)) {
                                 continue 2;
                             }
+                            ${$fieldNames[$i]} = $val;
                             break;
                         // Start Date
                         case 3:
@@ -319,10 +320,10 @@ if (isset($_POST['submit'])) {
             }
             //exit;
 			
-			// echo "<pre>";
-			// print_r($missions);
-			// echo "</pre>";
-			// exit; 
+//			 echo "<pre>";
+//			 print_r($missions);
+//			 echo "</pre>";
+//			 exit;
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
