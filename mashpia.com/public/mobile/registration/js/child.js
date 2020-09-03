@@ -113,7 +113,6 @@ var childApp = function(){
             return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
         }
 
-
         $.post( "api/tasks/addChild.php", postData, function( response ){
             // show any API errors...
             if( !response.success )
