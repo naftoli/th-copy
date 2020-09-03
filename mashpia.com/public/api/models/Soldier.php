@@ -488,19 +488,27 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $this->enrollInCampaigns();
             $this->setupBirthdayMissions();
         } else {
+            // make sure admin is parent
             $stmt = $MASHPIA_DB->prepare("
-                INSERT INTO reg_confirmations 
-                SET 
-                    year = :year, 
-                    admin_id = :admin, 
-                    user_id = :user
+                SELECT * FROM admin_auths WHERE admin_id = :admin AND auth = 'user'
             ");
-            if (!$stmt->execute([
-                ':year'     => $year,
-                ':admin'    => $admin_id,
-                ':user'     => $this->user_id
-            ])) {
-                $errors[] = "Could not register child.";
+            $res = $stmt->execute([':admin' => $admin_id]);
+            $rows = $stmt->fetch();
+            if ($res && !empty($rows)) {
+                $stmt = $MASHPIA_DB->prepare("
+                    INSERT INTO reg_confirmations 
+                    SET 
+                        year = :year, 
+                        admin_id = :admin, 
+                        user_id = :user
+                ");
+                if (!$stmt->execute([
+                    ':year' => $year,
+                    ':admin' => $admin_id,
+                    ':user' => $this->user_id
+                ])) {
+                    $errors[] = "Could not register child.";
+                }
             }
         }
         return $errors;
