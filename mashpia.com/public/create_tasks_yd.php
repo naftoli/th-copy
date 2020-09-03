@@ -195,9 +195,6 @@ if (isset($_POST['submit'])) {
                             // set the action to add no matter what
                             ${$fieldNames[$i]} = 'add';
                             break;
-                        case 1:
-                            if ( empty( $val ) ) continue 2; // empty row
-                            break;
                         // Start Date
                         case 3:
                             if ( strpos($val, ',') === false ) {
@@ -258,6 +255,8 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 }
+                // if row is empty skip it
+                if (empty($mission_number)) continue;
                 $r++;
                 
                 // make sure we don't have incorrect yiddish label for english task or vice versa
@@ -294,15 +293,15 @@ if (isset($_POST['submit'])) {
                             'mand'          =>  $mandatory, 
                             'focus'         =>  $focus, 
                             'label'         =>  $labelID, 
-                            'labelOrd'	    => $labelOrd, 
+                            'labelOrd'	    =>  $labelOrd,
                             'daily'         =>  $daily, 
                             'needed'        =>  $needed, 
                             'def'           =>  $default, 
-                            'short_name'    => $shortName, 
-                            'pic'		    => $pic,
-                            'grid_id'       => $catOrd,
+                            'short_name'    =>  $shortName,
+                            'pic'		    =>  $pic,
+                            'grid_id'       =>  $catOrd,
                             'mission_marking' => $mission_marking,
-                            'grid_marking'  => $grid_marking
+                            'grid_marking'  =>  $grid_marking
                         );
                         /*
                         echo "Mission - " . $missionName . "<br />";
