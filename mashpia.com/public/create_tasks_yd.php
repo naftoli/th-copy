@@ -319,12 +319,7 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             //exit;
-			
-//			 echo "<pre>";
-//			 print_r($missions);
-//			 echo "</pre>";
-//			 exit;
-            
+
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
 			$line = 1;

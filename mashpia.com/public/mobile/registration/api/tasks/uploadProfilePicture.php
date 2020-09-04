@@ -78,9 +78,9 @@ function shrink_image( $target_file, $size = 500 ) {
 				$orientation = $exif['Orientation']; // get the orientation
 				if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
 					switch($orientation) {  
-						case 3: $image->rotateimage("#FFF", 180); $thumb->rotateimage("#FFF", 180); break; // upside down
-						case 6: $image->rotateimage("#FFF", 90); $thumb->rotateimage("#FFF", 90); break; // rotate 90 degrees CW
-						case 8: $image->rotateimage("#FFF", -90); $thumb->rotateimage("#FFF", -90);break; // rotate 90 degrees CCW
+						case 3: $image->rotateimage("#FFF", 180); $image->rotateimage("#FFF", 180); break; // upside down
+						case 6: $image->rotateimage("#FFF", 90); $image->rotateimage("#FFF", 90); break; // rotate 90 degrees CW
+						case 8: $image->rotateimage("#FFF", -90); $image->rotateimage("#FFF", -90);break; // rotate 90 degrees CCW
 					}
 				}
 			}
