@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 include_once( dirname(__FILE__) . "/../header.php" );
 // include_once( dirname(__FILE__) . "/../classes/ProfilePicture.php" );
 
