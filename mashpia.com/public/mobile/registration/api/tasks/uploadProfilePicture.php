@@ -39,7 +39,7 @@ $result = move_uploaded_file($file['tmp_name'], $target_file);
 if ( !$result )
     render_json_error( "Failed to save file. Please check for file corruption." );
 // limit to 500x500px
-shrink_image( $target_file );
+//shrink_image( $target_file );
 // show the response
 return json_response([
     "location" => "/mobile/reg/$file_name",
