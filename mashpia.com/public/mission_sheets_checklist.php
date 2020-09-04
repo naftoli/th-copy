@@ -176,7 +176,7 @@ while ($row = mysql_fetch_assoc($result)) {
             foreach ( $dates as $date ) {
                 if ( $date['start'] >= $from && $date['end'] <= $to ) $reports[] = $date;
             }
-            // echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
+            echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
 
             //create list
             $commanders = array();
