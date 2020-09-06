@@ -72,7 +72,7 @@ export class RegistrationPage extends Component {
   toggleAll = ( selection, currentRecords ) => {
     let total = 0;
     if ( currentRecords.length > 0 )
-      currentRecords.forEach(item => { total += item._original.fee; } ); // calculate the fee
+      currentRecords.forEach(item => { total += parseInt(item._original.fee, 10); } ); // calculate the fee
       
     this.setState({ selection, total });
   };
