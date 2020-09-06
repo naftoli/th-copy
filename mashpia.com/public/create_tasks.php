@@ -392,7 +392,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
-                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
