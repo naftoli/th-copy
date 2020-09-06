@@ -227,7 +227,7 @@ if (isset($_POST['submit'])) {
                 
                 foreach( $cellIterator as $cell ) { 
                     $val = trim($cell->getValue());
-					//echo $val . "<br />"; continue;
+					echo $val . "<br />"; continue;
                     switch ($i) { //$i represents the column in the row
                         case 0:
                             // set the action to add no matter what
@@ -486,10 +486,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			 echo "<pre>";
-			 print_r($missions);
-			 echo "</pre>";
-			 exit;
+            echo "<pre>";
+			print_r($missions);
+			echo "</pre>";
+			exit;
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
