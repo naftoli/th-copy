@@ -367,9 +367,9 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 */
-                echo $startDate . "<br />";
-                echo $endDate . "<br />";
-				continue;
+//                echo $startDate . "<br />";
+//                echo $endDate . "<br />";
+//				continue;
                 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
@@ -392,7 +392,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
-                //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
