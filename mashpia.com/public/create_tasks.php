@@ -227,7 +227,7 @@ if (isset($_POST['submit'])) {
                 
                 foreach( $cellIterator as $cell ) { 
                     $val = trim($cell->getValue());
-					echo $val . "<br />"; continue;
+					//echo $val . "<br />"; continue;
                     switch ($i) { //$i represents the column in the row
                         case 0:
                             // set the action to add no matter what
@@ -367,9 +367,9 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 */
-                //echo $startDate . "<br />";
-                //echo $endDate . "<br />";
-				//continue;
+                echo $startDate . "<br />";
+                echo $endDate . "<br />";
+				continue;
                 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
