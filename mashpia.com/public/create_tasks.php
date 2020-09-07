@@ -233,6 +233,13 @@ if (isset($_POST['submit'])) {
                             // set the action to add no matter what
                             ${$fieldNames[$i]} = 'add';
                             break;
+                        case 1:
+                            // skip row if it's empty
+                            if (empty($val)) {
+                                continue 2;
+                            }
+                            ${$fieldNames[$i]} = $val;
+                            break;
                         // Start Date
                         case 2:
 							if (strpos($val, ':') !== false) {

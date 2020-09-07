@@ -196,6 +196,7 @@ if (isset($_POST['submit'])) {
                             ${$fieldNames[$i]} = 'add';
                             break;
                         case 1:
+                            // skip row if it's empty
                             if (empty($val)) {
                                 continue 2;
                             }
