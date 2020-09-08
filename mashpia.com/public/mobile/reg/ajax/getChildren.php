@@ -200,7 +200,7 @@ if ( !empty( $users ) ) {
         // 	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
         // }
         // turn off chidon
-        $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
+//        $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
 //        if ($row['user_id'] == 13159) $children[$row['user_id']]['reg_types']['chidon'] = true;
 
         // if school hasn't registered, turn off chayolei, chidon registration
