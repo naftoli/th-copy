@@ -117,13 +117,15 @@
                         </a>
                     </div>
                     <div class="col-xs-6">
-                        <div class="button-spacing refundDiv" style="float:right; display: none;">
-                            <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
-                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
+                        <div class="button-spacing" style="float:right;">
+                            <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
+                            <!-- <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
                             <!-- <button class="btn btn-info chidondrive">ChidonDrive</button> -->
-							<a href="chidonRefund.html">
-								<button class="btn btn-danger refund">Request Chidon Refund</button>
-							</a>
+							<div class="refundDiv" style="display:none;">
+								<a href="chidonRefund.html">
+									<button class="btn btn-danger refund">Request Chidon Refund</button>
+								</a>
+							</div>
                         </div>
                     </div>
 				</div>
@@ -421,7 +423,7 @@
 
                         if (parseInt(parent.showRefund) && !parseInt(parent.alreadyRefunded)) $(".refundDiv").show();
                         else if (parseInt(parent.alreadyRefunded)) {
-							$(".refundDiv").empty().append("Your Refund has been Requested")
+							$(".refundDiv").empty().append("Your Chidon Refund has been Requested").show()
 						}
                         //$("#mother").width( newW );
                         //$("#mother").height( newW );
@@ -639,10 +641,10 @@
                     alert("Sorry, this soldier's base has not yet been setup for advance registration.");
                 });
 
-                // $(document).on('click', '.lulav', function() {
-                //     //alert("Sorry, we are SOLD OUT!");
-                //     window.open("/mobile/reg/lulavSet.html");
-                // });
+                $(document).on('click', '.lulav', function() {
+                    //alert("Sorry, we are SOLD OUT!");
+                    window.open("/mobile/reg/lulavSet.html");
+                });
             });
 		</script>
 		<script>
