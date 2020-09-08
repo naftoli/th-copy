@@ -189,15 +189,9 @@
                             <div class="col-10 col-md-11">
                                 <!-- <strong>Chayolei Tzivos Hashem (Full Edition)</strong> ($<span id="chayolei-cost"></span> minimum fee) -->
                                 <strong>Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span> minimum fee)
-                                <span id="anash_kinder_text" style="display: none"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-8">
                                 Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:
-                            </div>
-                            <div class="col-4" style="min-width: fit-content;">
-                                <select class="form-control" id="chayolei-fee"></select>
+                                <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
+                                <span id="anash_kinder_text" style="display: none"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
                             </div>
                         </div>
                     </label>
@@ -236,14 +230,13 @@
                                 </label>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>Be ready for the first day of school!</strong><br />
+                                <strong>Be ready for the first day of the learning program!</strong><br />
                                 Registration Fee: <b>$<span id="chidon-cost"></span></b><br />
                                 <span id="study-guides" style="display: none">
-                                    Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)<br />
+                                    Registering by Wednesday, 20 Elul (Sep 9) will ensure that you get your study guide and Yehadus Book by Thursday, 4 Tishrei (September 22).<br />
                                 </span>
-                                The cost for the Shabbaton if your child qualifies is <span class="shabbaton-cost"><b>$175</b></span>. Shabbaton enrollment opens Wednesday, 17 Shvat (February 12).
-                                <br /><br />
-                                <label for="chidon-book">Choose the BOOK # your child will need to study for Chidon 5780:</label>
+                                <br />
+                                <label for="chidon-book">Choose the BOOK # your child will need to study for Chidon 5781:</label>
                                 <select class="form-control" id="chidon-book">
                                     <option value="0">Choose Book Number</option>
                                     <option value="1">4th Grade: Book 1</option>
@@ -253,8 +246,10 @@
                                     <option value="5">8th Grade: Book 5</option>
                                 </select>
                                 <br />
-                                <label for="chidon-sweater-size">Chidon Sweater Size:</label>
+                                <label for="chidon-sweater-size"><strong>Chidon Sweater Size</strong> - PLEASE NOTE: THERE WILL
+                                    <strong>NO OTHER OPPORTUNITY</strong> TO UPDATE YOUR SWEATER SIZE. Please be sure to enter the correct size.</label>
                                 <select class="form-control" id="chidon-sweater-size">
+                                    <option value="">Choose sweater size</option>
                                     <option value="children xs">Children XS</option>
                                     <option value="children s">Children S</option>
                                     <option value="children m">Children M</option>
@@ -276,7 +271,7 @@
 
                                 <div id="book-purchase" style="display:none">
                                     Where did you buy your chidon book?<br />        
-                                    <input type="radio" name="book-purchase" class="book-purchase" value="event" /> By the Chidon 5779 Event<br />
+<!--                                    <input type="radio" name="book-purchase" class="book-purchase" value="event" /> By the Chidon 5779 Event<br />-->
                                     <input type="radio" name="book-purchase" class="book-purchase" value="store" /> In a store<br />
                                     <div id="book-purchase-details" style="display:none; margin-left: 30px;">
                                         <table>
@@ -290,7 +285,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" /> Through my parent account<br />
+<!--                                    <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" /> Through my parent account<br />-->
                                     <input type="radio" name="book-purchase" class="book-purchase" value="school" /> Through my school<br />
                                 </div>
                             </div>
@@ -309,10 +304,9 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                <b>Yes! I would like to purchase a book on sale now.</b><br />
-                                Book price is normally $55, but for Chidon Members it is <b>ON SALE for $40</b> (limited time only!).<br />
-                                <span id="yahadus-shipping">If you need it shipped to your school, there is an extra shipping charge of <b>$5</b>.</span><br />
-                                <i>Purchase the book by Tuesday, 17 Elul (Sep 17) and you will receive it by Yom Kippur. (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</i><br />
+                                Yes, I would like to purchase a Yahadus Book
+                                <div id="book-info"></div>
+                                <!--                                <span id="yahadus-shipping">If you need it shipped to your school, there is an extra shipping charge of <b>$5</b>.</span><br />-->
                             </div>
                         </div>
                         <br />
@@ -326,7 +320,6 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 No thanks, I already have a book to use.
-                                <br />
                             </div>
                         </div>
                     </label>
@@ -357,8 +350,8 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                I am aware that If my child qualifies, the cost for the Shabbaton is <span class="shabbaton-cost"><b>$175</b></span>. This fee can be subsidized through the Chidon drive. 
-                                Shabbaton enrollment opens Wednesday, 17 Shvat (February 12). 
+                                I am aware that If my child qualifies, the cost for the Shabbaton is <strong><span id="shabbaton-cost"></span></strong>.
+                                This fee can be subsidized through the Chidon Drive. Shabbaton Enrollment opens Wednesday, 17 Shvat (February 12).
                             </div>                            
                         </div>
                         <br />
@@ -370,7 +363,7 @@
                                 
                             </div>
                             <div class="col-10 col-md-11">
-                                Was there anyone that recruited you to join Chidon 5780?<br />
+                                Was there anyone that recruited you to join Chidon 5781?<br />
                                 <input type="radio" name="recruit" class="recruit" value="1" /> Yes<br />
                                 <input type="radio" name="recruit" class="recruit" value="0" /> No<br />
                                 <br />
@@ -470,7 +463,7 @@
                             <span id="shipping-type-1" class="shipping_cost">$40</span>
                         </div>
                         <div class="col-9 col-lg-10 col-xl-11">
-                            <p>Prepaid shipping fee for <strong>Hachayol magazines, medals and rank books.</strong></p>
+                            <p>Prepaid shipping fee for <strong>Hachayol magazines, medals and rank books and the gift from Rabbi Moshe and Rutti Weiss.</strong></p>
                         </div>
                     </div>
                     <!-- <div class="row">

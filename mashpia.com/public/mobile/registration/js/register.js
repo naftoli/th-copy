@@ -11,6 +11,25 @@ var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
+// fees and shipping
+const fees = {
+    'regular': {
+        'shabbaton': 185,
+        'book': 40,
+        'shipping': {
+            'USA': 5,
+            'Canada': 10,
+        }
+    },
+    'special': {
+        'book': 40,
+        'shipping': 15
+    },
+    'anash': {
+        'shabbaton': 250
+    }
+}
+
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
     var state = {
@@ -105,7 +124,6 @@ var registrationApp = function() {
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
             $("#anash_kinder_text").show();
-            $(".shabbaton-cost").html("<b>$250</b>");
         }
 
         // yahadus registration
@@ -337,13 +355,19 @@ var registrationApp = function() {
             return showError(
                 'You must select at least one type of registration.'
             );
-        } 
+        }
 
         if ( selected_charges.chidon === true ) {
             // check that book was selected
             if ( $("select#chidon-book").val() == 0 ) {
                 return showError("You must choose which book is being studied.");
             }
+
+            // make sure sweater size is chosen
+            if ( $("select#chidon-sweater-size").val() == '' ) {
+                return showError("You must choose a sweater size.");
+            }
+
             if ( !$(".book-bought").is(":checked") ) {
                 return showError("You must indicate if you have already purchased a book or not.");
             }
@@ -386,6 +410,10 @@ var registrationApp = function() {
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 var non_th_school = $("#non_th_school").val().trim();
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
+            }
+            // make sure they chose an amount to pay
+            if (!parseInt( $("select#chayolei-fee").val() )) {
+                return showError("You must choose an amount to pay for chayolei tzivos hashem.");
             }
         }  
 
@@ -466,11 +494,15 @@ var registrationApp = function() {
         }
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
-            var shipping_charge = 5;
+            let d1 = new Date()
+            let d2 = new Date(2020, 08, 10)
+            if ( d1 < d2 && selected_user.parentAccount.admin_country.toUpperCase() === 'USA' ) shipping_included = false; // for usa shipping is free if before sept 10, 2020
+            let shipping_charge = fees.regular.shipping.USA;
+            if ( selected_user.parentAccount.admin_country.toUpperCase() !== 'USA' ) shipping_charge = fees.regular.shipping.Canada
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
-                if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
-                else shipping_charge = 30;
+                // if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = fees.special.shipping;
+                shipping_charge = fees.special.shipping;
             }
             // // don't add to cart if anash kinder / myshliach and not in USA
             // if ( 
@@ -731,10 +763,10 @@ var templates = function(){
             // setup the payment options - chayolei
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
-            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
-                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
-            }
+            // if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+            //     if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+            //     else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
+            // }
 
             $("#step-2 form select#yahadus-poll option").prop('selected', false);
 
@@ -789,6 +821,34 @@ var templates = function(){
             //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
             //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             // }
+            // reset sweater
+            $("#chidon-sweater-size").val('')
+            // reset shipping
+            $("#book-info").empty()
+            // build html for book fees and shipping fees
+            let html
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                $("#non-th-school").show()
+                if ( user.school.school_id == 269 ) $("#shabbaton-cost").text( '$' + fees.anash.shabbaton )
+                else $("#shabbaton-cost").text( '$' + fees.regular.shabbaton )
+                html = `
+                    Book Sale: Book price is normally $55, but for Chidon Members it is <b>ON SALE for $${fees.special.book}</b> (limited time only!).<br />
+                    Shipping:<br />
+                    <blockquote>USA: $${fees.special.shipping}.</blockquote>
+                `
+            } else {
+                $("#non-th-school").hide()
+                $("#shabbaton-cost").text( '$' + fees.regular.shabbaton )
+                html = `
+                    Book Sale: Book price is normally $55, but for Chidon Members it is <b>ON SALE for $${fees.regular.book}</b> (limited time only!).<br />
+                    Shipping:<br />
+                    <blockquote>
+                        USA: Free shipping to your school till Chof Elul (September 9). After that there is a $${fees.regular.shipping.USA} charge.<br />
+                        Canada: $${fees.regular.shipping.Canada} flat fee charge.
+                    </blockquote>
+                `
+            }
+            $("#book-info").append( html )
             console.log( user );
         },
         toggleRates: function( user, rateType ){
@@ -803,6 +863,7 @@ var templates = function(){
                         // just make dropdown show 0
                         htmlFee += "<option value='0'>0</option>";
                     } else {
+                        htmlFee += "<option value=''>Please Choose</option>";
                         var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
                         if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
                         for ( var n of rates ) {

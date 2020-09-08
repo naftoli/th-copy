@@ -142,9 +142,9 @@ class GlobalSettings {
         // Anash kinder and MyShliach has $12 fee
         if ( in_array( $school_id, [ 61, 269 ] ) ) {
             if ( $school_id == 269 ) return 45;
-            else return 12;
+            else return 14;
         }
-        return 8;
+        return 10;
     }
 
     /**
