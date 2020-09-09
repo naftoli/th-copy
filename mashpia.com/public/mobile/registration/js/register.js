@@ -12,7 +12,7 @@ var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
 // fees and shipping
-const fees = {
+var fees = {
     'regular': {
         'shabbaton': 185,
         'book': 40,
@@ -763,9 +763,6 @@ var templates = function(){
             $( '#step-2 form #first' ).val( user.first );       $( '#step-2 form #last' ).val( user.last );
             $( '#step-2 form #first_he' ).val( user.first_he ); $( '#step-2 form #last_he' ).val( user.last_he );
             $( '#step-2 form #lang_id' ).val( user.lang_id );   $( '#step-2 form #dob' ).val( user.dob );
-            // setup the payment options - chayolei
-            templates.toggleRates( user, 'chayolei' );
-            templates.toggleRates( user, 'chidon' );
             // if ( [ 269, 61 ].includes( user.school.school_id ) ) {
             //     if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
             //     else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
@@ -792,6 +789,10 @@ var templates = function(){
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
             }
+
+            // setup the payment options - chayolei
+            templates.toggleRates( user, 'chayolei' );
+            templates.toggleRates( user, 'chidon' );
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
@@ -878,7 +879,8 @@ var templates = function(){
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
             } else {
-                $( '#step-2 form #' + rateType + '-registration').hide();
+                console.log( $('#step-2 form #' + rateType + '-registration') )
+                $('#step-2 form #' + rateType + '-registration').hide();
             }
         },
         renderCheckout: function( cart ){
