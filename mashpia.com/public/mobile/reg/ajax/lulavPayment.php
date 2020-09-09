@@ -34,7 +34,7 @@ if ( $amount > 0 ) {
             "INSERT into lulav_purchases  
             SET 
                 admin_id = :admin, 
-                amount_paid = :amount, 
+                paid = :amount, 
                 authorization = :auth, 
                 users = :users, 
                 year = :year"
@@ -46,7 +46,7 @@ if ( $amount > 0 ) {
             ':users'    => implode(',', $info['users']), 
             ':year'     => $year
         ]);
-        
+
         $qry = $MASHPIA_DB->prepare(
             "INSERT INTO transactions 
             SET trans_date = now(),
