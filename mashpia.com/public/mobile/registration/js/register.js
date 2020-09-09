@@ -428,6 +428,9 @@ var registrationApp = function() {
         // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             selected_user.registrationRates.chayolei = parseInt( $("select#chayolei-fee").val() );
+            if (isNaN(selected_user.registrationRates.chayolei)) {
+                return showError('You have not chosen how much you will be paying for Chayolei Tzivos Hashem Registration');
+            }
             state.cart.push({
                 description: 'Tzivos Hashem Registration for ' + selected_user.first,
                 price: selected_user.registrationRates.chayolei,
@@ -871,6 +874,7 @@ var templates = function(){
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
                     }
+                    $( '#step-2 form #chayolei-fee' ).empty();
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
             } else {
