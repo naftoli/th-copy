@@ -498,7 +498,7 @@ var registrationApp = function() {
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
             let d1 = new Date()
-            let d2 = new Date(2020, 08, 10)
+            let d2 = new Date(2020, 08, 12)
             if ( d1 < d2 && selected_user.parentAccount.admin_country.toUpperCase() === 'USA' ) shipping_included = false; // for usa shipping is free if before sept 10, 2020
             let shipping_charge = fees.regular.shipping.USA;
             if ( selected_user.parentAccount.admin_country.toUpperCase() !== 'USA' ) shipping_charge = fees.regular.shipping.Canada
