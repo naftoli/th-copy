@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = ['school']; 	
 require_once ( __DIR__ . '/../../header.php' ); 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
@@ -9,7 +10,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 $children = [];
-$query = mysql_query("SELECT users FROM mivtzoim_purchases.lulav_purchases WHERE year = $year");
+$query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
 while ( $row = mysql_fetch_assoc( $query ) ) {
     if ( strpos($row['users'], ',') !== false ) {
         $users = explode(',', $row['users']);
@@ -21,7 +22,6 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
     }
 }
 $total = count( $children );
-//echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 
 $info = [];
 $sql = "SELECT u.first, u.last, c.class_grade, c.class_sub, s.school_name 
