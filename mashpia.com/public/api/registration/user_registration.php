@@ -100,6 +100,10 @@ class UserRegistrationRouter {
         // * get each registration
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
+            if (!is_numeric($info['paid'])) {
+                // we have an error and need to stop registration
+                json_error("There is an error in the amount being paid. please try again.");
+            }
             $totals[$info['registration_type']] += intval($info['paid']);
         }
         
