@@ -233,7 +233,7 @@ class UserRegistrationRouter {
                             if ($user->school_id == '269') $headers[] = 'CC: chidonanash@gmail.com';
 
                             $subject = "Chidon Registration Confirmation";
-                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
+                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
                                         <br /><br/>
                                         We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                         <br /><br />
@@ -245,7 +245,7 @@ class UserRegistrationRouter {
                                         To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thchidon.com</a>.";
                             if ( $user->school_id == 61 ) {
                                 $message = "
-                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for 5780.
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for $year.
                                 <br /><br />
                                 We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                 <br /><br />
