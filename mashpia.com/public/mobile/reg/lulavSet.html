@@ -312,14 +312,16 @@
                     });
                     
                     var num_sets = info.users.length;
+                    $("#purchase").attr('disabled', true);
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
                             alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
-                            // location.reload();
+                            location.reload();
                         } else {
                             alert( result.error );
                         }
+                        $("#purchase").attr('disabled', false);
                     });
 
                 } else {
