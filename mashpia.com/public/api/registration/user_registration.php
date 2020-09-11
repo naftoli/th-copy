@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -137,7 +138,7 @@ class UserRegistrationRouter {
                     json_error( $payment_profile );
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
-            
+
             // Let the user know if the transaction fails
             $payment_response = $customer_profile->chargeCard(
                 $total, $payment_profile_id, null, null, $description
@@ -148,7 +149,7 @@ class UserRegistrationRouter {
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             $transaction_query->execute([
-                $current_user->admin_id, $description, $payment_info['total'], 
+                $current_user->admin_id, $description, $payment_info['total'],
                 ( $total - $shipping_charges ), $shipping_charges,
                 $current_user->admin_postal, implode( ', ', $user_ids ),
                 json_encode( $payment_response )
@@ -176,6 +177,7 @@ class UserRegistrationRouter {
                 ]);
             }
             // for each user
+            $admin_id = $current_user->admin_id;
             foreach ( $users as $user ) {
                 $user_errors = [];
                 foreach( $registrations as $registration ){
@@ -198,9 +200,10 @@ class UserRegistrationRouter {
                     if ( $registration['registration_type'] == 'chayolei' ) {
                         $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
-                        array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount, $trans_id, $lite, $ckids 
-                        ) );
+                        $chayolei_errors = $user->registerChayolei(
+                            $admin_id, $year, $amount, $trans_id, $lite, $ckids
+                        );
+                        if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
 
@@ -219,9 +222,8 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
-
                         else {
                             // add book purchased info to db
                             if ( intval( $registration['purchased'] ) == 1 ) {
@@ -319,8 +321,11 @@ class UserRegistrationRouter {
         //     }
         // }
 
-        if ( count( $errors ) > 0 )
-            @mail( "support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+        if ( count( $errors ) > 0 ) {
+            echo "<pre>"; print_r( $errors ); echo "</pre>";
+            @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
+            json_error( 'There were errors.', $errors );
+        }
         
         json_response( "Successfully Registered." );
     }
