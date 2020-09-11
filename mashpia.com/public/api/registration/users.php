@@ -57,6 +57,7 @@ class UsersRouter {
 
     public function create() {
         global $current_user; global $MASHPIA_DB;
+        $admin_id = $current_user->admin_id;
 
         if ( !$current_user->login->code === 'BC' )
             json_error( 'Only Base Commanders can authorize registration.');
@@ -118,7 +119,7 @@ class UsersRouter {
         $fee = $school->soldierFee();
 
         foreach( $users as $user ) {
-            $user_errors = $user->registerChayolei( $current_user->admin_id, $year, $fee );
+            $user_errors = $user->registerChayolei( $admin_id, $year, $fee );
             if ( count( $user_errors ) > 0 )
                 $errors[ $user->user_id ] = $user_errors;
         }
