@@ -59,6 +59,7 @@ foreach ( $rows as $row ) {
                 $admin_id = $user['admin_id'];
                 $registered = $user['user_registered'];
 
+                echo "checking info for user: " . $user_id . "<br />";
                 if ( is_null($registered) || empty($registered) ) updateReg( $user_id, $row['trans_date'] );
                 checkUserReg( $admin_id, $school_id, $user_id, $row['trans_date'], $paid );
                 checkRegCharges( $row['trans_id'], $user_id, $school_id, $paid, $row['trans_date'] );
