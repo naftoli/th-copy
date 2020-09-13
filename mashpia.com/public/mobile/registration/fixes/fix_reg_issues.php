@@ -34,18 +34,19 @@ $info = [];
 foreach ( $rows as $row ) {
     $description = $row['description'];
     // check if description has word chayolei
-    if ( $posChayolei = strpos($description, 'chayolei') !== false ) {
+    if ( strpos($description, 'chayolei') !== false ) {
+        $posChayolei = strpos($description, 'chayolei');
         // only check the chayolei reg NOT the chayolei + chidon reg
         if ( strpos($description, 'chidon') === false ) {
             // find out how much was paid in total
             $posPaid = strpos($description, ')');
-            $total_paid = substr($description, ($posChayolei + 10), ($posPaid - ($posChayolei + 10)));
+            $total_paid = floatval(substr($description, ($posChayolei + 10), ($posPaid - ($posChayolei + 10))));
             // get user serials
             $pos = strpos($description, '5781:');
             $serials = substr($description, ($pos + 6));
             $arrSerials = explode(',', $serials);
             $paid = $total_paid / count($arrSerials);
-            echo $description . "<br />" . "Paid: " . $paid . "<br />";
+//            echo $description . "<br />" . "Paid: " . $paid . "<br />";
             // check each child to make sure he / she was registered properly
             foreach ( $arrSerials as $serial ) {
                 // get user id using serial and separate serial and school id
@@ -65,6 +66,7 @@ foreach ( $rows as $row ) {
                 checkRegCharges( $row['trans_id'], $user_id, $school_id, $paid, $row['trans_date'] );
                 echo "<br />";
             }
+            echo "done.";
         } else {
             echo $description . "<br />" . $serials . "<br /><br />";
         }
@@ -77,10 +79,10 @@ function updateReg( $user_id, $date ) {
         UPDATE users SET user_registered = :date WHERE user_id = :id
     ");
     echo "updating user...<br />";
-//    $stmt->execute([
-//        ':date' => $date,
-//        ':id'   => $user_id
-//    ]);
+    $stmt->execute([
+        ':date' => $date,
+        ':id'   => $user_id
+    ]);
 }
 
 function checkUserReg( $admin_id, $school_id, $user_id, $date, $paid ) {
@@ -99,14 +101,14 @@ function checkUserReg( $admin_id, $school_id, $user_id, $date, $paid ) {
             school_id = :school
     ");
     echo "checking user_registration...<br />";
-//    $stmt->execute([
-//        ':admin'    => $admin_id,
-//        ':school'   => $school_id,
-//        ':user'     => $user_id,
-//        ':date'     => $date,
-//        ':paid'     => $paid,
-//        ':year'     => $year
-//    ]);
+    $stmt->execute([
+        ':admin'    => $admin_id,
+        ':school'   => $school_id,
+        ':user'     => $user_id,
+        ':date'     => $date,
+        ':paid'     => $paid,
+        ':year'     => $year
+    ]);
 }
 
 function checkRegCharges( $id, $user_id, $school_id, $paid, $date ) {
@@ -126,12 +128,12 @@ function checkRegCharges( $id, $user_id, $school_id, $paid, $date ) {
               type = 'chayolei'
     ");
     echo "checking user_registration...<br />";
-//    $stmt->execute([
-//        ':user'     => $user_id,
-//        ':school'   => $school_id,
-//        ':paid'     => $paid,
-//        ':year'     => $year
-//    ]);
+    $stmt->execute([
+        ':user'     => $user_id,
+        ':school'   => $school_id,
+        ':paid'     => $paid,
+        ':year'     => $year
+    ]);
     $rows = $stmt->fetchAll();
     if ( empty( $rows ) ) {
         $stmt = $MASHPIA_DB->prepare("
@@ -144,13 +146,13 @@ function checkRegCharges( $id, $user_id, $school_id, $paid, $date ) {
                 year = :year,
                 date = :date 
         ");
-//        $stmt->execute([
-//            ':id'       => $id,
-//            ':user'     => $user_id,
-//            ':school'   => $school_id,
-//            ':paid'     => $paid,
-//            ':year'     => $year,
-//            ':date'     => $date
-//        ]);
+        $stmt->execute([
+            ':id'       => $id,
+            ':user'     => $user_id,
+            ':school'   => $school_id,
+            ':paid'     => $paid,
+            ':year'     => $year,
+            ':date'     => $date
+        ]);
     }
 }
