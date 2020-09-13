@@ -23,6 +23,13 @@ $stmt = $MASHPIA_DB->prepare("
     GROUP BY a.admin_id 
     ORDER BY a.last
 ");
+$children = $MASHPIA_DB->prepare("
+    SELECT first, paid FROM users u 
+    JOIN th_chidon tc using (user_id) 
+    JOIN admin_auths aa ON aa.id = u.user_id
+    WHERE aa.admin_id = :admin 
+    AND tc.year = :year 
+");
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,6 +40,7 @@ $stmt = $MASHPIA_DB->prepare("
             tr, th, td {
                 padding: 5px;
                 font-size: 14px;
+                border: 1px grey solid;
             }
         </style>
     </head>
@@ -57,12 +65,25 @@ $stmt = $MASHPIA_DB->prepare("
                         <th>Address</th>
                         <th>Phone Numbers</th>
                         <th>Email Address</th>
+                        <th>Children</th>
                     </tr>
                     <?php
                     foreach ($rows as $row) {
+                        // get children info 
+                        $res = $children->execute([
+                            ':admin' => $row['admin_id'],
+                            ':year'  => $year
+                        ]);
+                        if ($res) {
+                            $details = $children->fetchAll();
+                        }
                         echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . 
-                            $row['admin_address'] . "<br />" . $row['admin_city'] . ', ' . $row['admin_state'] . ' ' . $row['admin_postal'] . "</td><td>" . 
-                            $row['admin_phone_mobile'] . "<br />" . $row['admin_phone_mobile2'] . "</td><td>" . $row['admin_email'] . "</td></tr>";
+                            $row['admin_address1'] . "<br />" . $row['admin_city'] . ', ' . $row['admin_state'] . ' ' . $row['admin_postal'] . "</td><td>" . 
+                            $row['admin_phone_mobile'] . "<br />" . $row['admin_phone_mobile2'] . "</td><td>" . $row['admin_email'] . "</td><td>";
+                        foreach ($details as $detail) {
+                            echo $detail['first'] . ' - Paid: ' . ($detail['paid'] ? $detail['paid'] : 0) . '<br />';
+                        }
+                        echo "</td></tr>";
                     }
                     ?>
                 </table>
