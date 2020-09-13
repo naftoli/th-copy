@@ -30,48 +30,54 @@ $stmt = $MASHPIA_DB->query("
 $rows = $stmt->fetchAll();
 
 // parse rows
+$num = 0;
 $info = [];
 foreach ( $rows as $row ) {
     $description = $row['description'];
     // check if description has word chayolei
     if ( strpos($description, 'chayolei') !== false ) {
         $posChayolei = strpos($description, 'chayolei');
-        // only check the chayolei reg NOT the chayolei + chidon reg
-        if ( strpos($description, 'chidon') === false ) {
-            // find out how much was paid in total
-            $posPaid = strpos($description, ')');
-            $total_paid = floatval(substr($description, ($posChayolei + 10), ($posPaid - ($posChayolei + 10))));
-            // get user serials
-            $pos = strpos($description, '5781:');
-            $serials = substr($description, ($pos + 6));
-            $arrSerials = explode(',', $serials);
-            $paid = $total_paid / count($arrSerials);
-//            echo $description . "<br />" . "Paid: " . $paid . "<br />";
-            // check each child to make sure he / she was registered properly
-            foreach ( $arrSerials as $serial ) {
-                // get user id using serial and separate serial and school id
-                $arrInfo = explode(':', $serial);
-                $serial_num = $arrInfo[0];
-                $school_id = $arrInfo[1];
+        $posChidon = strpos($description, 'chidon');
+        if ( $posChidon === false ) continue; // we already took care of them
+        // find out how much was paid in total
+//        $posPaid = strpos($description, ')');
+        $total_paid = floatval(substr($description, ($posChayolei + 10), ($posChidon - ($posChayolei + 10))));
+        // get user serials
+        $pos = strpos($description, '5781:');
+        $serials = substr($description, ($pos + 6));
+        $arrSerials = explode(',', $serials);
+        // see if makes sense to assume all serials are for chayolei
+        $num_chayolei_reg = floor($total_paid / 50);
+        if ( $num_chayolei_reg < count($arrSerials) ) {
+            echo $description . "<br />";
+            $num++;
+        }
+        continue;
+        // figure out paid for kids
+        $paid = $total_paid / count($arrSerials);
+//        echo $description . "<br />" . "Paid: " . $paid . "<br />"; exit;
+        // check each child to make sure he / she was registered properly
+        foreach ( $arrSerials as $serial ) {
+            // get user id using serial and separate serial and school id
+            $arrInfo = explode(':', $serial);
+            $serial_num = $arrInfo[0];
+            $school_id = $arrInfo[1];
 
-                $stmtUser->execute([':serial' => $serial_num]);
-                $user = $stmtUser->fetch();
-                $user_id = $user['user_id'];
-                $admin_id = $user['admin_id'];
-                $registered = $user['user_registered'];
+            $stmtUser->execute([':serial' => $serial_num]);
+            $user = $stmtUser->fetch();
+            $user_id = $user['user_id'];
+            $admin_id = $user['admin_id'];
+            $registered = $user['user_registered'];
 
-                echo "checking info for user: " . $user_id . "<br />";
-                if ( is_null($registered) || empty($registered) ) updateReg( $user_id, $row['trans_date'] );
-                checkUserReg( $admin_id, $school_id, $user_id, $row['trans_date'], $paid );
-                checkRegCharges( $row['trans_id'], $user_id, $school_id, $paid, $row['trans_date'] );
-                echo "<br />";
-            }
-            echo "done.";
-        } else {
-            echo $description . "<br />" . $serials . "<br /><br />";
+            echo "checking info for user: " . $user_id . "<br />";
+            if ( is_null($registered) || empty($registered) ) updateReg( $user_id, $row['trans_date'] );
+            checkUserReg( $admin_id, $school_id, $user_id, $row['trans_date'], $paid );
+            checkRegCharges( $row['trans_id'], $user_id, $school_id, $paid, $row['trans_date'] );
+            echo "<br />";
         }
     }
 }
+echo "Num needed: " . $num;
 
 function updateReg( $user_id, $date ) {
     global $MASHPIA_DB;
@@ -144,7 +150,8 @@ function checkRegCharges( $id, $user_id, $school_id, $paid, $date ) {
                 school_id = :school, 
                 amount = :paid, 
                 year = :year,
-                date = :date 
+                date = :date, 
+                type = 'chayolei'
         ");
         $stmt->execute([
             ':id'       => $id,
