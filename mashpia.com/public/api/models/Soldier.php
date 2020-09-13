@@ -442,6 +442,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
         global $MASHPIA_DB;
         $errors = [];
+        if ( !$admin_id ) {
+            $errors[] = "Missing Admin ID." . "<br />" . "Admin ID: " . $admin_id;
+            return $errors;
+        }
         // Insert into user_registration
         // make sure to only register child if there's an amount, otherwise it's only a parent confirming information for a tuition school
         if (floatval($amount) > 0) {

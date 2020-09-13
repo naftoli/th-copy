@@ -57,10 +57,11 @@ class UsersRouter {
 
     public function create() {
         global $current_user; global $MASHPIA_DB;
+        $admin = $current_user; // $current_user global gets overwritten by wp
 
-        if ( !$current_user->login->code === 'BC' )
+        if ( !$admin->login->code === 'BC' )
             json_error( 'Only Base Commanders can authorize registration.');
-        $school = $current_user->login->model;
+        $school = $admin->login->model;
         // get all the users we are registering
         if ( !isset($_POST['user_ids']) || count($_POST['user_ids']) < 1 ) 
             json_error('Please select some soldiers to register.');
@@ -107,7 +108,7 @@ class UsersRouter {
             // * save the transaction to our dbs
             $create_transaction_query->execute([
                 $school->school_id,             $description,   $total,
-                $current_user->admin_id,        $school->shipping_postal,
+                $admin->admin_id,        $school->shipping_postal,
                 json_encode($payment_response), implode( ', ', $_POST['user_ids'] )
             ]);
 
@@ -118,7 +119,7 @@ class UsersRouter {
         $fee = $school->soldierFee();
 
         foreach( $users as $user ) {
-            $user_errors = $user->registerChayolei( $current_user->admin_id, $year, $fee );
+            $user_errors = $user->registerChayolei( $admin_id, $year, $fee );
             if ( count( $user_errors ) > 0 )
                 $errors[ $user->user_id ] = $user_errors;
         }
