@@ -44,7 +44,7 @@ foreach ( $rows as $row ) {
             $pos = strpos($description, '5781:');
             $serials = substr($description, ($pos + 6));
             $arrSerials = explode(',', $serials);
-            $paid = count($arrSerials / $total_paid);
+            $paid = $total_paid / count($arrSerials);
             // check each child to make sure he / she was registered properly
             foreach ( $arrSerials as $serial ) {
                 // get user id using serial and separate serial and school id
