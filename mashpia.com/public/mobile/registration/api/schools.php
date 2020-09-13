@@ -5,7 +5,7 @@ include_once( dirname(__FILE__) . "/header.php" );
 if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
     $schools_query = mysql_query(
         " SELECT school_id as id, school_name as name FROM schools "
-       ." WHERE test_school = 0 AND chidon = 1 " // make sure we only get chidon schools
+       ." WHERE test_school = 0 AND chayolei = 1 " // make sure we get all chayolei schools
        ." AND school_era IS NULL " // who are registered for this year
        ." AND school_id != 612 " // remove 'unassigned school'
        ." ORDER BY school_name;" // alphabetically
