@@ -156,6 +156,11 @@
         "items": [
           { "label": "Letter To Parents", "legacy": true, "path": "/charidy/pr/letter_to_parents.php" }
         ]
+      },
+      { "label": "Mishna", "module": "chayolei",
+        "items": [
+          { "label": "Chevras Mishnayos", "legacy": true, "path": "/mishna/join.php" }
+        ]
       }
     ]
   },
