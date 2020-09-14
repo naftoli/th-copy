@@ -1,13 +1,14 @@
 <?php
 ini_set('display_errors', 1);
 $admin_auth = ['school'];
+
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/PHPExcel/IOFactory.php';
 
 $admin_id = $admin_user['admin_id'];
 $auth = $admin_auth[0];
 
-require 'class.adminSchools.php';
+require  $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $a = new AdminSchools( $admin_id, $auth );
 $schools = $a->getSchools();
 
@@ -33,6 +34,8 @@ foreach ( $schools as $id => $school ) {
     }
 }
 
+$inputFile = 'mishna.xlsx';
+
 $school_id = null;
 foreach ( $schools as $id => $school ) {
     $school_id = $id;
@@ -40,32 +43,26 @@ foreach ( $schools as $id => $school ) {
 }
 $file = "chevras_mishnayos_{$school_id}.xls";
 
-//delete hebrew_names_school_id.xls if exists
+//delete file if exists
 if ( file_exists( $file ) ) {
     //chmod( $file, 0777 );
     unlink( $file );
 }
 
 // Read the file
-$objPHPExcel = PHPExcel_IOFactory::load( $file );
-$fields = ['User ID', 'Serial Number', 'Mishna Size', 'First Name', 'Last Name', 'First Name Hebrew', 'Last Name Hebrew',
-            'DOB', 'Gender', 'Platoon', 'Base'];
-$row = 1;
-$column = 'A';
-foreach( $fields as $field ) {
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $field );
-    $column++;
-}
-$row++;
-$column = 'A';
+$objPHPExcel = PHPExcel_IOFactory::load( $inputFile );
 
-/ Change the file
+// Change the file
+$row = 2;
+$column = 'A';
 foreach( $students as $id => $student ) {
     $dob = $student['dob'];
+    $newDob = '';
     if ( trim( $dob ) != "" ) {
         $dob = explode( '-', $student['dob'] );
+        $newDob = $dob[1] . '/' . $dob[2] . '/' . $dob[0];
     }
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", "$id" );
+    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $id );
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['user_serial'] );
     $column++;
@@ -79,7 +76,7 @@ foreach( $students as $id => $student ) {
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['last_he'] );
     $column++;
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $dob );
+    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $newDob );
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['gender'] );
     $column++;
@@ -94,7 +91,11 @@ foreach( $students as $id => $student ) {
 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
 
 // Write the file
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
-$objWriter->save( $file );
+try {
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
+    $objWriter->save($file);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 echo "<a href='<?=$file?>'download file</a>";
