@@ -119,7 +119,7 @@ class UsersRouter {
         $fee = $school->soldierFee();
 
         foreach( $users as $user ) {
-            $user_errors = $user->registerChayolei( $admin_id, $year, $fee );
+            $user_errors = $user->registerChayolei( $admin->admin_id, $year, $fee );
             if ( count( $user_errors ) > 0 )
                 $errors[ $user->user_id ] = $user_errors;
         }
