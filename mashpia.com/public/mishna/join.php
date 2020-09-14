@@ -66,7 +66,9 @@ foreach( $students as $id => $student ) {
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['user_serial'] );
     $column++;
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", '' );
+    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $schools[$school_id] );
+    $column++;
+    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['grade'] );
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['first'] );
     $column++;
@@ -80,15 +82,13 @@ foreach( $students as $id => $student ) {
     $column++;
     $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['gender'] );
     $column++;
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $student['grade'] );
-    $column++;
-    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", $schools[$school_id] );
+    $objPHPExcel->getActiveSheet()->setCellValue( "$column$row", '' );
     $column = 'A';
     $row++;
 }
 
 //update protection
-$objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
+//$objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
 
 // Write the file
 try {
@@ -98,4 +98,17 @@ try {
     echo $e->getMessage();
 }
 
-echo "<a href='<?=$file?>'download file</a>";
+include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
+?>
+<html>
+    <head>
+        <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        <h1>Chevras Mishnayos</h1>
+        <div>
+            <a href="<?=$file?>">download file</a>
+        </div>
+    </body>
+</html>
