@@ -16,7 +16,7 @@ $amount = floatval($_POST['amount']);
 
 $c = new CouponCode($MASHPIA_DB, $year);
 $coupon = $c->getCouponCode(6); // six digit coupon code
-$saved = $c->saveCode($amount, 'HQ', "credit for chidon 5781");
+$saved = $c->saveCode($amount, 'HQ', "credit for chidon 5781 - " . $admin);
 if ($saved) {
     echo json_encode([
         'success'   => true,
