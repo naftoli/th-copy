@@ -210,22 +210,31 @@
                                                                             {{#if this.reg_types.chayolei }}
 																				{{#if this.removeRegButton }}
 																				{{else}}
-                                                                                	<button class="btn btn-primary re_register">Register Chayolei {{ this.chayolei_year }}                                            Tzivos Hashem {{ this.reg_year }}
+																					<button class="btn btn-primary re_register">Register Chayolei {{ this.chayolei_year }} </button>                                          Tzivos Hashem {{ this.reg_year }}
 																				{{/if}}
-																				{{#if this.reg_types.chidon }}
-                                                                                    / Chidon {{ this.chidon_year }}
-                                                                                {{/if}}
-                                                                                </button>
-                                                                            {{else}}
-                                                                                {{#if this.reg_types.chidon }}
-                                                                                    <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
-                                                                                {{/if}}
-                                                                            {{/if}}
-                                                                        {{else}}
-                                                                            {{#if this.reg_types.chidon }}
-                                                                                <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
-                                                                            {{/if}}
-                                                                        {{/if}}
+<!--																				{{#if this.reg_types.chidon }}-->
+<!--																					{{#if this.chayoleiRegistered}}-->
+<!--																					{{else}}-->
+<!--                                                                                    	/ Chidon {{ this.chidon_year }}-->
+<!--																					{{/if}}-->
+<!--                                                                                {{/if}}-->
+<!--                                                                                </button>-->
+<!--                                                                            {{else}}-->
+<!--                                                                                {{#if this.reg_types.chidon }}-->
+<!--                                                                                    <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>-->
+<!--                                                                                {{/if}}-->
+<!--                                                                            {{/if}}-->
+<!--                                                                        {{else}}-->
+<!--                                                                            {{#if this.reg_types.chidon }}-->
+<!--                                                                                <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>-->
+<!--                                                                            {{/if}}-->
+<!--                                                                        {{/if}}-->
+																	{{/if}}
+																	{{#if this.reg_types.chidon }}
+																		{{#if this.chidonRegistered}}
+																		{{else}}
+																			<button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
+																		{{/if}}
 																	{{/if}}
 																</div>
                                                             {{/if}}
