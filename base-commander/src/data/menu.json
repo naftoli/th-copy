@@ -149,7 +149,7 @@
           { "label": "Leaderboard", "legacy": true, "path": "/mivtzoim/reports" }, 
           { "label": "Mivtza Lulav Settings", "legacy": true, "path": "/mivtzoim/lulav_settings.php" },
           { "label": "Mivtza Chanuka Settings", "legacy": true, "path": "/mivtzoim_purchases/chanuka_settings.php" }, 
-          { "label": "Mivtzoim Orders", "legacy": true, "path": "/mivtzoim_purchases/reports/" }
+          { "label": "Mivtzoim Orders", "legacy": true, "path": "/reports/mivtza_lulav/" }
         ]
       }, 
       { "label": "TH Drive", "module": "chayolei", 
