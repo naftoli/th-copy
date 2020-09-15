@@ -24,7 +24,6 @@ if ( isset( $_FILES['file'] ) ) {
         $values = [];
         foreach ( $cellIterator as $cell ) {
             $values[] = trim( $cell->getValue() );
-            
         }
         $info[] = $values;
     }
