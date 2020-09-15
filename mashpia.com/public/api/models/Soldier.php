@@ -400,7 +400,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
         // only add th_chidon_id if the user is in grade 4+ 
-        $exceptions = [483,482,544,583,588];
+        $exceptions = [482,544,583,588];
         if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 

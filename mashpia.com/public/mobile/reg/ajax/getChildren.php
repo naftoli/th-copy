@@ -192,7 +192,7 @@ if ( !empty( $users ) ) {
         // }
 
         // chidon registration
-         $exceptions = [483,482,544,583,588];
+         $exceptions = [482,544,583,588];
          if ( !$row['reg_chidon'] // if not in chidon
          	&& intval( $row['class_grade'] ) > 3 // and in grade 4+
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8
