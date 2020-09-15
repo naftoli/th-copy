@@ -412,7 +412,7 @@ var registrationApp = function() {
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
             }
             // make sure they chose an amount to pay
-            if (!parseInt( $("select#chayolei-fee").val() )) {
+            if ( parseInt($("select#chayolei-fee").val()) < 0 ) {
                 return showError("You must choose an amount to pay for chayolei tzivos hashem.");
             }
         }  
@@ -867,7 +867,7 @@ var templates = function(){
                         // just make dropdown show 0
                         htmlFee += "<option value='0'>0</option>";
                     } else {
-                        htmlFee += "<option value=''>Please Choose</option>";
+                        htmlFee += "<option value='-1'>Please Choose</option>";
                         var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
                         if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
                         for ( var n of rates ) {
