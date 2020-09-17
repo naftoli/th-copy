@@ -193,6 +193,8 @@
                     soldOut = true;
                     alreadySold = startWith;
                     leftToSell = 0;
+                    $(".sold").text( alreadySold );
+                    $("#leftToSell").text( leftToSell );
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
