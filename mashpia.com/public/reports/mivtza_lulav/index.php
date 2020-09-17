@@ -61,7 +61,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <p class="no-print">Grand Total: <?= $total ?></p>
     <?php endif; ?>
     <?php foreach ( $info as $school => $users ) : ?>
-        <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <?php
+        $num_users = count($users);
+        if ( array_search($school, $schools) == 4 ) $num_users++; // add michel rapoport order to yehuda munitz order
+        ?>
+        <h2><?= $school . ' (' . $num_users . ')' ?></h2>
         <table>
             <thead>
                 <th>Grade</th>
