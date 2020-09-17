@@ -73,6 +73,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                         <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
                         <td><?= $user['first'] . " " . $user['last'] ?></td>
                     </tr>
+                    <?php
+                    // for yehuda munitz he should show up 2 times (also for michel rapoport)
+                    if ( $user['user_id'] == 15418 ) {
+                        ?>
+                        <tr>
+                            <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
+                            <td><?= $user['first'] . " " . $user['last'] ?></td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 <?php endforeach; ?>
             </tbody>
         </table>
