@@ -181,8 +181,16 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['removeRegButton'] = 0;
         $sqlRemove = "select * from reg_confirmations where user_id = " . $row['user_id'] . " and year = " . $reg_year;
         $resRemove = mysql_query($sqlRemove);
-        if (mysql_num_rows($resRemove)) {
+        $confirmed = mysql_num_rows($resRemove);
+        if ( $confirmed ) {
             $children[$row['user_id']]['removeRegButton'] = 1;
+        }
+
+        // if school is tuition type, and school has registered child, we still need parent to confirm info if coming from parent acct
+        if ( intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !$confirmed ) {
+            $children[$row['user_id']]['chayoleiRegistered'] = false;
+            $children[$row['user_id']]['reg_types']['chayolei'] = true;
+            $children[$row['user_id']]['needsReg'] = 1;
         }
 
         // for testing
@@ -203,6 +211,7 @@ if ( !empty( $users ) ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
          }
+
         // turn off chidon
 //        $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
 //        if ($row['user_id'] == 13159) $children[$row['user_id']]['reg_types']['chidon'] = true;

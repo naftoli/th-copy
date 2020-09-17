@@ -375,20 +375,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
-        global $current_user;
-        
+
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, ur.paid, chayolei, th_chidon_id, chidon FROM users u "
+            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
+            ."JOIN schools s ON u.school_id = s.school_id "
             ."WHERE u.user_id = :user_id;"
         );
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
-        
+
         $result = [];
 
         if ( $row['chayolei'] && !$isBC ) {
@@ -396,6 +396,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
+
         // turn off chayolei reg 
         //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
@@ -423,6 +424,22 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
+
+        // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
+        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 ) {
+            $confStmt = $MASHPIA_DB->prepare("
+                SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
+            ");
+            $confStmt->execute([
+                ':user' => $this->user_id,
+                ':year' => $year
+            ]);
+            $rows = $confStmt->fetchAll();
+            if ( empty( $rows ) ) {
+                $result['chayolei'] = false;
+            }
+        }
+
         // turn off chidon reg
 //        $result['chidon'] = true;
 //        if (in_array($this->user_id, [13159,62881])) $result['chidon'] = false;
