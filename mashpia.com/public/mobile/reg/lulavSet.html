@@ -70,6 +70,7 @@
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
                         Wow! <span class="sold"></span> Chayolim bought their own lulov and esrog. <br />
+                        <strong>We are SOLD OUT!!!</strong><br />
                         Let's see who will do mivtzoim for the most amount of time!<br />
                         Let's see who will get the most shakes!<br />
                     </div>
@@ -190,6 +191,8 @@
                 $("#leftToSell").text( leftToSell );
                 if ( soldOut || leftToSell < 1 ) {
                     soldOut = true;
+                    alreadySold = startWith;
+                    leftToSell = 0;
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
