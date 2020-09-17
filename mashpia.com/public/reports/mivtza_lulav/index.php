@@ -24,7 +24,7 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
 $total = count( $children );
 
 $info = [];
-$sql = "SELECT u.first, u.last, c.class_grade, c.class_sub, s.school_name 
+$sql = "SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
         FROM users u 
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id 
