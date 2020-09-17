@@ -177,9 +177,9 @@
             var soldOut = false;
             var now = Math.floor( new Date().getTime() / 1000 );
             console.log( now );
-            if ( now > 1600401600 ) {
+            //if ( now > 1600401600 ) {
                 soldOut = true;
-            }
+            //}
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2000;
