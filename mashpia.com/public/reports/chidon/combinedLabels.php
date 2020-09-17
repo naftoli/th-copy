@@ -4,22 +4,20 @@ set_time_limit( 300 );
 ini_set('display_errors',1);
 $admin_auth = ['school']; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php'; 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php'; 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 
 if ( isset( $_POST['date'] ) && $_POST['date'] ) {
     if ( $_POST['date'] == 1 ) {
-        $from = '2019-06-01';
-        $to = '2019-08-12';
+        $from = '2020-06-01';
+        $to = '2020-09-16';
     } else if ( $_POST['date'] == 2 ) {
-        $from = '2019-08-13';
-        $to = '2019-09-17';
+        $from = '2020-09-16';
+        $to = '2020-09-21';
     } else if ( $_POST['date'] == 3 ) {
-        $from = '2019-09-18';
-        $to = '2019-09-25';
-    } else if ( $_POST['date'] == 4 ) {
-        $from = '2019-09-26';
-        $to = '2019-10-25';
-    } 
+        $from = '2020-09-21';
+        $to = '2020-10-15';
+    }
 
     $info = [];
     $sql = "
@@ -45,8 +43,8 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
             type IN ('yahadus' , 'chidon')
                 AND rc.year = 5780
                 AND rc.school_id in (61, 269) 
-                AND rc.date >= '" . $from . " 00:00:00' 
-                AND rc.date <= '" . $to . " 23:59:59'
+                AND rc.date >= '" . $from . " 14:00:00' 
+                AND rc.date <= '" . $to . " 13:59:59'
         GROUP BY rc.user_id
         ORDER BY first , last , date
     ";
@@ -149,18 +147,18 @@ function checkForBreak() {
         <form action="combinedLabels.php" method="post">
             <select name="date">
                 <option value="0">Choose Batch Number</option>
-                <option value="1" 
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                >1st Batch (until August 12)</option>
+                <option value="1"
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                >1st Batch (until Sept 16)</option>
                 <option value="2"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                >2nd Batch (from August 13 until Sept 17)</option>
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                >2nd Batch (from Sep 16 until Sep 21)</option>
                 <option value="3"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sept 18 to Sept 25)</option>
-                <option value="4"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                >4th Batch (from Sept 26 to Oct 25)</option>
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                >3rd Batch (from Sep 21 to Oct 15)</option>
+                <!--                <option value="4"-->
+                <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
             </select><br /><br />
             <input type="submit" name="submit" value="submit" />
         </form>
