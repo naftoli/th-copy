@@ -41,14 +41,14 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
             admins a ON a.admin_id = aa.admin_id
         WHERE
             type IN ('yahadus' , 'chidon')
-                AND rc.year = 5780
+                AND rc.year = $year
                 AND rc.school_id in (61, 269) 
                 AND rc.date >= '" . $from . " 14:00:00' 
                 AND rc.date <= '" . $to . " 13:59:59'
         GROUP BY rc.user_id
         ORDER BY first , last , date
     ";
-    //echo $sql; exit;
+//    echo $sql; exit;
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $info[] = $row;
