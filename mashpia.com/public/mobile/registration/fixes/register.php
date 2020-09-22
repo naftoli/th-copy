@@ -188,12 +188,14 @@ function checkChidonReg( $admin_id, $school_id, $user_id, $paid ) {
                 year = :year, 
                 sweater_size = :size, 
                 school_id = :school, 
+                parent_id = :admin,
                 reg_date = now()
         ");
         $stmt->execute([
             ':user'     => $user_id,
             ':year'     => $year,
-            ':school'   => $school_id
+            ':school'   => $school_id,
+            ':admin'    => $admin_id
         ]);
     }
 }
