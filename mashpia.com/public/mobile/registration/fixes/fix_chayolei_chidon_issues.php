@@ -115,7 +115,7 @@ $children = [];
 foreach ($info as $desc) {
 //    echo $desc . "<br />";
     $pos = strpos($desc, '5781:');
-    if ($pos === false) $pos = strpos($desc, '5780:');;
+    if ($pos === false) $pos = strpos($desc, '5780:');
     $serials = substr($desc, ($pos + 6));
     $arrSerials = explode(',', $serials);
     foreach ($arrSerials as $serial) {
@@ -126,7 +126,7 @@ foreach ($info as $desc) {
         $row = $stmt->fetch();
         if ( !isset( $admins[$row['admin_id']] ) ) {
             $admins[$row['admin_id']] = [
-                'name' => $row['first'] . ' ' . $row['last'],
+                'name'  => $row['first'] . ' ' . $row['last'],
                 'email' => $row['admin_email'],
                 'phone' => $row['admin_phone_mobile'],
                 'phone2' => $row['admin_phone_mobile2']
