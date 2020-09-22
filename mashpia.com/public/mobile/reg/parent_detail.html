@@ -210,7 +210,11 @@
                                                                             {{#if this.reg_types.chayolei }}
 																				{{#if this.removeRegButton }}
 																				{{else}}
-																					<button class="btn btn-primary re_register">Register Chayolei Tzivos Hashem {{ this.reg_year }}</button>
+																					{{#if this.confirmationOnly}}
+																						<button class="btn btn-primary re_register">Confirm Chayolei Registration {{ this.reg_year }}</button>
+																					{{else}}
+																						<button class="btn btn-primary re_register">Register Chayolei Tzivos Hashem {{ this.reg_year }}</button>
+																					{{/if}}
 																				{{/if}}
 <!--																				{{#if this.reg_types.chidon }}-->
 <!--																					{{#if this.chayoleiRegistered}}-->

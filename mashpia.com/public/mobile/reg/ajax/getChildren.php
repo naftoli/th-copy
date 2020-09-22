@@ -187,10 +187,12 @@ if ( !empty( $users ) ) {
         }
 
         // if school is tuition type, and school has registered child, we still need parent to confirm info if coming from parent acct
+        $children[$row['user_id']]['confirmationOnly'] = 0;
         if ( intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !$confirmed ) {
             $children[$row['user_id']]['chayoleiRegistered'] = false;
             $children[$row['user_id']]['reg_types']['chayolei'] = true;
             $children[$row['user_id']]['needsReg'] = 1;
+            $children[$row['user_id']]['confirmationOnly'] = 1;
         }
 
         // for testing
