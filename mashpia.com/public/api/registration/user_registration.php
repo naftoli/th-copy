@@ -248,7 +248,7 @@ class UserRegistrationRouter {
                                         <br /><br />
                                         Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
                                         <br /><br />
-                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thchidon.com</a>.";
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.";
                             if ( $user->school_id == 61 ) {
                                 $message = "
                                 Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for $year.
@@ -257,7 +257,7 @@ class UserRegistrationRouter {
                                 <br /><br />
                                 This is also an opportunity to have a Bubby or Zaidy learn with your child weekly. 
                                 <br /><br />
-                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='merkos302.formstack.com/forms/chidon_online_classes'>Here</a> to sign up for the classes.
+                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://www.thechidon.com/resources/online-classes/'>Here</a> to sign up for the classes.
                                 In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids. 
                                 <br /><br />
                                 Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.thchidon.com'>www.thchidon.com</a>.
