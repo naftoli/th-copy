@@ -1,5 +1,5 @@
 <?php
-//ini_set('display_errors',1);
+ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -25,7 +25,8 @@ class UserRegistrationRouter {
 
         $available_users = [];
         foreach( $users as $user ){
-            if ( !$user->school_id ) continue;
+//            echo $user->user_id . ' = ' . $user->school_id . "<br />";
+            if ( !$user->school_id || $user->school_id == 431 ) continue;
             //$reg_info = $user->school->registration();
             // make sure they paid for this year
             //if ( $reg_info && $reg_info->date_paid ) {
@@ -339,7 +340,7 @@ class UserRegistrationRouter {
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic' ],
-                'include' => [ 
+                'include' => [
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]
