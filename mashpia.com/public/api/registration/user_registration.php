@@ -26,7 +26,7 @@ class UserRegistrationRouter {
         $available_users = [];
         foreach( $users as $user ){
 //            echo $user->user_id . ' = ' . $user->school_id . "<br />";
-            if ( !$user->school_id || $user->school_id == 431 ) continue;
+            if ( !$user->school_id ) continue;
             //$reg_info = $user->school->registration();
             // make sure they paid for this year
             //if ( $reg_info && $reg_info->date_paid ) {
