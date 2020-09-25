@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('max_execution_time', 300);
+
 require 'db.php';
 require 'class.birthday.php';
 require 'class.birthdayYi.php';
