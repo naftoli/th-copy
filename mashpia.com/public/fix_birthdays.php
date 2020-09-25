@@ -7,12 +7,15 @@ require 'class.birthday.php';
 require 'class.birthdayYi.php';
 require 'class.heDob.php';
 
- $users = [];
- $sql = "select user_id from users where user_registered > 0";
- $result = mysql_query( $sql );
- while ($row = mysql_fetch_assoc( $result )) {
-     $users[] = $row['user_id'];
- }
+$start = 0;
+if (isset($_GET['start'])) $start = $_GET['start'];
+
+$users = [];
+$sql = "select user_id from users where user_registered > 0 limit $start, 1000";
+$result = mysql_query( $sql );
+while ($row = mysql_fetch_assoc( $result )) {
+ $users[] = $row['user_id'];
+}
 //$users = [ 62386 ];
 
 foreach ($users as $user_id) {
