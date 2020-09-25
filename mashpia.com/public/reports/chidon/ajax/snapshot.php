@@ -116,7 +116,7 @@ foreach ( $users as $grade => $other ) {
     }
 }
 $users = $temp;
-//print_r( $users );
+//echo "<pre>"; print_r( $users ); echo "</pre>";
 
 // find out what the fields returned are
 $columns = array_keys( $users[0] );
@@ -145,8 +145,23 @@ if (count($users) > 0) {
                                 <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                             <? endif; ?>
                             <?php foreach ( $columns as $column ) {
-                                if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<th>" . $niceFields[$column] . "</th>"; 
-                            } 
+                                if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
+                                    if (isset($niceFields[$column])) echo "<th>" . $niceFields[$column] . "</th>";
+                                    else {
+                                        if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                            // deal with parent info
+                                            if ($column == 'first') {
+                                                // show parent first and last name
+                                                echo "<th>Parent Name</th>";
+                                            } else if ($column == 'admin_phone_mobile') {
+                                                echo "<th>Parent Cell Number(s)</th>";
+                                            } else if ($column == 'admin_email') {
+                                                echo "<th>Parent Email</th>";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             ?>
                         </tr>
                     </thead>
@@ -162,7 +177,21 @@ if (count($users) > 0) {
                             <?php endif; ?>
                             <?php 
                                 foreach ( $columns as $column ) {
-                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
+                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
+                                        if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                            // deal with parent info
+                                            if ($column == 'first') {
+                                                // show parent first and last name
+                                                echo "<td>" . $user['first'] . ' ' . $user['last'] . "</td>";
+                                            } else if ($column == 'admin_phone_mobile') {
+                                                echo "<td>" . $user[$column] . "<br />" . $user['admin_phone_mobile2'] . "</td>";
+                                            } else if ($column == 'admin_email') {
+                                                echo "<td>" . $user[$column] . "</td>";
+                                            }
+                                        } else {
+                                            if (isset($user[$column])) echo "<td>" . $user[$column] . "</td>";
+                                        }
+                                    }
                                 }
                             ?>
                         </tr>
@@ -195,7 +224,22 @@ if (count($users) > 0) {
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<th>" . $niceFields[$column] . "</th>"; 
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
+                            if (isset($niceFields[$column])) echo "<th>" . $niceFields[$column] . "</th>";
+                            else {
+                                if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                    // deal with parent info
+                                    if ($column == 'first') {
+                                        // show parent first and last name
+                                        echo "<th>Parent Name</th>";
+                                    } else if ($column == 'admin_phone_mobile') {
+                                        echo "<th>Parent Cell Number(s)</th>";
+                                    } else if ($column == 'admin_email') {
+                                        echo "<th>Parent Email</th>";
+                                    }
+                                }
+                            }
+                        }
                     }    
                     ?>
                 </tr>
@@ -207,10 +251,24 @@ if (count($users) > 0) {
                         <td><?php if ($options[0] == 'true' || $options[1] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
                         <td><?php if ($options[1] == 'true') echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
                     <?php endif; ?>
-                    <?php 
-                        foreach ( $columns as $column ) {
-                            if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
+                    <?php
+                    foreach ( $columns as $column ) {
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
+                            if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                // deal with parent info
+                                if ($column == 'first') {
+                                    // show parent first and last name
+                                    echo "<td>" . $user['first'] . ' ' . $user['last'] . "</td>";
+                                } else if ($column == 'admin_phone_mobile') {
+                                    echo "<td>" . $user[$column] . "<br />" . $user['admin_phone_mobile2'] . "</td>";
+                                } else if ($column == 'admin_email') {
+                                    echo "<td>" . $user[$column] . "</td>";
+                                }
+                            } else {
+                                if (isset($user[$column])) echo "<td>" . $user[$column] . "</td>";
+                            }
                         }
+                    }
                     ?>
                 </tr>
                 <?}?>
