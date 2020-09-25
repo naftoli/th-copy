@@ -18,14 +18,33 @@ $stmtUser = $MASHPIA_DB->prepare("
     WHERE user_serial = :serial
 ");
 
-$users = [
+$chayolei = [
+    [
+        'serial'    => 7760592,
+        'paid'      => 50
+    ],
+    [
+        'serial'    => 7747414,
+        'paid'      => 50
+    ],
+];
+
+$chidon = [
     [
         'serial'    => 7751428,
         'paid'      => 10
     ],
+    [
+        'serial'    => 7760592,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7747414,
+        'paid'      => 10
+    ],
 ];
 
-foreach ($users as $user) {
+foreach ($chayolei as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
     $stmtUser->execute([':serial' => $user['serial']]);
@@ -37,8 +56,22 @@ foreach ($users as $user) {
 
     echo "checking info for user: " . $user_id . "<br />";
     if ( is_null($registered) || empty($registered) ) updateReg( $user_id );
-//    checkUserReg( $admin_id, $school_id, $user_id, $paid );
-//    checkRegCharges( $user_id, $school_id, $paid );
+    checkUserReg( $admin_id, $school_id, $user_id, $paid );
+    checkRegCharges( $user_id, $school_id, $paid );
+    echo "<br />";
+}
+
+foreach ($chidon as $user) {
+    $serial = $user['serial'];
+    $paid = $user['paid'];
+    $stmtUser->execute([':serial' => $user['serial']]);
+    $user = $stmtUser->fetch();
+    $user_id = $user['user_id'];
+    $admin_id = $user['admin_id'];
+    $registered = $user['user_registered'];
+    $school_id = $user['school_id'];
+
+    echo "checking info for user: " . $user_id . "<br />";
     checkChidonReg( $admin_id, $school_id, $user_id, $paid );
     echo "<br />";
 }
