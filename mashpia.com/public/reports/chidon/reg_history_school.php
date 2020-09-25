@@ -11,7 +11,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 // get school id and make sure admin has permission to view
-$school_id = $_GET['id'];
+$school_id = isset($_GET['id']) ? $_GET['id'] : $admin_user['auths']['school'][0] ;
 $ids = array_keys($schools);
 if (!in_array($school_id, $ids)) {
     echo "No Permission.";
