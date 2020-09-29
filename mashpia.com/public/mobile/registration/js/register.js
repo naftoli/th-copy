@@ -408,7 +408,7 @@ var registrationApp = function() {
         } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
             // make sure non th school field is not empty
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                var non_th_school = $("#non_th_school").val().trim();
+                var non_th_school = $("#non_th_school input").val().trim();
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
             }
             // make sure they chose an amount to pay
