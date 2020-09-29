@@ -224,9 +224,11 @@ if (count($users) > 0) {
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_sub', 'class_teacher'] )) {
                             if (isset($niceFields[$column])) echo "<th>" . $niceFields[$column] . "</th>";
-                            else {
+                            else if ($column == 'class_grade') {
+                                echo "<th>Grade</th>";
+                            } else {
                                 if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
                                     // deal with parent info
                                     if ($column == 'first') {
@@ -253,10 +255,13 @@ if (count($users) > 0) {
                     <?php endif; ?>
                     <?php
                     foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
-                            if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_sub', 'class_teacher'] )) {
+                            if (in_array($column, ['class_grade','first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                if ($column == 'class_grade') {
+                                    echo "<td>" . $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) . "</td>";
+                                }
                                 // deal with parent info
-                                if ($column == 'first') {
+                                else if ($column == 'first') {
                                     // show parent first and last name
                                     echo "<td>" . $user['first'] . ' ' . $user['last'] . "</td>";
                                 } else if ($column == 'admin_phone_mobile') {

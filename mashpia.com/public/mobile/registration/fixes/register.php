@@ -20,28 +20,24 @@ $stmtUser = $MASHPIA_DB->prepare("
 
 $chayolei = [
     [
-        'serial'    => 7760592,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7747414,
-        'paid'      => 50
-    ],
+        'serial'    => 7775634,
+        'paid'      => 55
+    ]
 ];
 
 $chidon = [
-    [
-        'serial'    => 7751428,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7760592,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7747414,
-        'paid'      => 10
-    ],
+//    [
+//        'serial'    => 7751428,
+//        'paid'      => 10
+//    ],
+//    [
+//        'serial'    => 7760592,
+//        'paid'      => 10
+//    ],
+//    [
+//        'serial'    => 7747414,
+//        'paid'      => 10
+//    ],
 ];
 
 foreach ($chayolei as $user) {
