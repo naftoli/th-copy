@@ -142,6 +142,35 @@ echo "<pre>";
 //print_r( $admins );
 //print_r( $children );
 echo "</pre>";
+
+$subject = "Chayolei / Chidon Registration Mistake";
+$headers[] = 'From: cth@tzivoshashem.org';
+$headers[] = 'Reply-to: cth@tzivoshashem.org';
+
+foreach ( $admins as $admin_id => $admin ) {
+    $name = $admin['name'];
+    $to = $admin['email'];
+    $childrenNames = [];
+    foreach ( $children[$admin_id] as $child ) $childrenNames[] = $child['name'];
+    $list_of_children = implode(', ', $childrenNames);
+    $msg = <<<MSG
+Dear <strong>$name</strong>, 
+<br /><br />
+Thank you for signing up your children.
+<br /><br />
+We apologize, but it seems like there was a glitch in our system. Even though you paid for your children, not all of your children were actually registered. 
+<br /><br />
+We know that you registered the following children - <strong>$list_of_children</strong> - but we don't know which child(ren) was registered for chayolei and which child(ren) was registered for chidon. 
+<br /><br />
+Please can you let us know who was registered for what, by replying to this email, so that we can rectify this ASAP? (For any child(ren) that were suppose to be registered for chidon, please 
+inform us of what the sweater size should be).
+<br /><br />
+Wishing you a freilechen Succos,
+<br /><br />
+mashpia.com technical team
+MSG;
+    mail($to, $subject, $msg, implode($headers, "\r\n"));
+}
 ?>
 <!DOCTYPE html>
 <html>
