@@ -47,7 +47,7 @@ if ( !empty( $users ) ) {
     $children = [];
     //need to have multiple result rows to get highest rank
     $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
-        ." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, "
+        ." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
@@ -216,7 +216,8 @@ if ( !empty( $users ) ) {
          }
 
         // turn off chidon
-        if (time() > 1601611200) $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
+        $keepOn = [7772460, 7763324, 7774904];
+        if (time() > 1601611200 && !in_array($row['user_serial'], $keepOn)) $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
 //        if ($row['user_id'] == 13159) $children[$row['user_id']]['reg_types']['chidon'] = true;
 
         // if school hasn't registered, turn off chayolei, chidon registration
