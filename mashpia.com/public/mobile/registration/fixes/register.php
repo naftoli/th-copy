@@ -19,36 +19,54 @@ $stmtUser = $MASHPIA_DB->prepare("
 ");
 
 $chayolei = [
-    [
-        'serial'    => 7775634,
-        'paid'      => 55
-    ]
+//    [
+//            'serial'    => 7775634,
+//        'paid'      => 55
+//    ]
 ];
 
 $chidon = [
-//    [
-//        'serial'    => 7751428,
-//        'paid'      => 10
-//    ],
-//    [
-//        'serial'    => 7760592,
-//        'paid'      => 10
-//    ],
-//    [
-//        'serial'    => 7747414,
-//        'paid'      => 10
-//    ],
+    [
+        'serial'    => 7748543,
+        'size'      => 'children xl',
+        'book'      => 4,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7754202,
+        'size'      => 'children l',
+        'book'      => 2,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7751428,
+        'size'      => 'adult s',
+        'book'      => 3,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7760592,
+        'size'      => 'children m',
+        'book'      => 1,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7747414,
+        'size'      => 'children xl',
+        'book'      => 3,
+        'paid'      => 10
+    ]
 ];
 
 foreach ($chayolei as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
     $stmtUser->execute([':serial' => $user['serial']]);
-    $user = $stmtUser->fetch();
-    $user_id = $user['user_id'];
-    $admin_id = $user['admin_id'];
-    $registered = $user['user_registered'];
-    $school_id = $user['school_id'];
+    $user_info = $stmtUser->fetch();
+    $user_id = $user_info['user_id'];
+    $admin_id = $user_info['admin_id'];
+    $registered = $user_info['user_registered'];
+    $school_id = $user_info['school_id'];
 
     echo "checking info for user: " . $user_id . "<br />";
     if ( is_null($registered) || empty($registered) ) updateReg( $user_id );
@@ -60,15 +78,17 @@ foreach ($chayolei as $user) {
 foreach ($chidon as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
+    $size = $user['size'];
+    $book = $user['book'];
     $stmtUser->execute([':serial' => $user['serial']]);
-    $user = $stmtUser->fetch();
-    $user_id = $user['user_id'];
-    $admin_id = $user['admin_id'];
-    $registered = $user['user_registered'];
-    $school_id = $user['school_id'];
+    $user_info = $stmtUser->fetch();
+    $user_id = $user_info['user_id'];
+    $admin_id = $user_info['admin_id'];
+    $registered = $user_info['user_registered'];
+    $school_id = $user_info['school_id'];
 
     echo "checking info for user: " . $user_id . "<br />";
-    checkChidonReg( $admin_id, $school_id, $user_id, $paid );
+    checkChidonReg( $admin_id, $school_id, $user_id, $paid, $size, $book );
     echo "<br />";
 }
 
@@ -153,7 +173,7 @@ function checkRegCharges( $user_id, $school_id, $paid ) {
     }
 }
 
-function checkChidonReg( $admin_id, $school_id, $user_id, $paid ) {
+function checkChidonReg( $admin_id, $school_id, $user_id, $paid, $size, $book ) {
     global $MASHPIA_DB, $year;
     // check if exist
     $stmt = $MASHPIA_DB->prepare("
@@ -215,7 +235,8 @@ function checkChidonReg( $admin_id, $school_id, $user_id, $paid ) {
             SET
                 user_id = :user, 
                 year = :year, 
-                sweater_size = :size, 
+                size = :size, 
+                book = :book,
                 school_id = :school, 
                 parent_id = :admin,
                 reg_date = now()
@@ -224,7 +245,28 @@ function checkChidonReg( $admin_id, $school_id, $user_id, $paid ) {
             ':user'     => $user_id,
             ':year'     => $year,
             ':school'   => $school_id,
-            ':admin'    => $admin_id
+            ':admin'    => $admin_id,
+            ':size'     => $size,
+            ':book'     => $book
+        ]);
+    } else {
+        $stmt = $MASHPIA_DB->prepare("
+            UPDATE th_chidon 
+            SET
+                size = :size, 
+                book = :book, 
+                school_id = :school, 
+                parent_id = :admin
+            WHERE
+                 user_id = :user AND year = :year
+        ");
+        $stmt->execute([
+            ':user'     => $user_id,
+            ':year'     => $year,
+            ':school'   => $school_id,
+            ':admin'    => $admin_id,
+            ':size'     => $size,
+            ':book'     => $book
         ]);
     }
 }
