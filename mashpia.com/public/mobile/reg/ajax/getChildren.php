@@ -219,8 +219,6 @@ if ( !empty( $users ) ) {
         $keepOn = [7772460, 7763324, 7774904];
         if (!in_array($row['user_serial'], $keepOn)) {
             $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
-        } else {
-            echo "Chidon Status: " . $children[ $row['user_id'] ]['reg_types']['chidon'];
         }
 //        if ($row['user_id'] == 13159) $children[$row['user_id']]['reg_types']['chidon'] = true;
 
