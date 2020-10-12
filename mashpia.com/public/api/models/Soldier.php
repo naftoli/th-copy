@@ -442,7 +442,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // find user id's of kids with exception
-        $serialNum = [7772460, 7763324, 7774904];
+        $serialNum = [7772460, 7763324, 7774904, 7760669, 7761155, 7775736, 7763077, 7754283, 7763409, 7746832, 7759804, 7747520, 7769363,
+            7769272, 7769275, 7750115, 7748057, 7759972];
         $serialStr = implode(',', $serialNum);
         $keepOn = [];
         $stmt = $MASHPIA_DB->query("
