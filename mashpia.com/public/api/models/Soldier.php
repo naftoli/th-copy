@@ -441,8 +441,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
+        // find user id's of kids with exception
+        $serialNum = [7772460, 7763324, 7774904];
+        $serialStr = implode(',', $serialNum);
+        $keepOn = [];
+        $stmt = $MASHPIA_DB->query("
+            SELECT user_id FROM users WHERE user_serial in ($serialStr)
+        ");
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) $keepOn[] = $row['user_id'];
+
         // turn off chidon reg
-        $keepOn = [7772460, 7763324, 7774904];
         if (!in_array($this->user_id, $keepOn)) $result['chidon'] = true;
 
         return $result;
