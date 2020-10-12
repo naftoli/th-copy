@@ -443,8 +443,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // turn off chidon reg
         $keepOn = [7772460, 7763324, 7774904];
-        if (!in_array($this->user_id, $keepOn)) $result['chidon'] = false;
-//        if (in_array($this->user_id, [13159,62881])) $result['chidon'] = false;
+        if (!in_array($this->user_id, $keepOn)) $result['chidon'] = true;
 
         return $result;
     }
