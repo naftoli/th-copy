@@ -16,19 +16,13 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        school_id,
-        school_name,
-        school_city,
-        school_state,
-        chidon_name,
-        chidon_number,
-        chidon_email,
+        s.*,
         COUNT(*) AS finalists, 
         SUM(trophy_5779) AS trophies 
     FROM
         schools s
             JOIN
-        th_chidon tc USING (school_id , year)
+        th_chidon tc USING (school_id)
     WHERE
         tcs.year = :year AND tc.date_paid > 0
     GROUP BY school_id
