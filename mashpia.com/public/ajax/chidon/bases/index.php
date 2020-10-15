@@ -24,7 +24,7 @@ $stmt = $MASHPIA_DB->prepare("
             JOIN
         th_chidon tc USING (school_id)
     WHERE
-        tcs.year = :year AND tc.date_paid > 0
+        tc.year = :year AND tc.date_paid > 0
     GROUP BY school_id
     ");
 $res = $stmt->execute([':year' => ($year - 1)]);
