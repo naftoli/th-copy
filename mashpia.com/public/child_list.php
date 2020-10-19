@@ -11,8 +11,8 @@ require('header.php');
 	<style>
 		table {width: 100%; font-size: 12px;}
 		tr {height: 22px;}
-		th, td {vertical-align: text-top;padding: 0 5px;border: 1px solid black;}
-		input {margin-top: -5px;margin-bottom: 3px;}
+		th, td {vertical-align: text-top;padding: 5px;border: 1px solid black;}
+		/*input {margin-top: -5px;margin-bottom: 3px;}*/
 		.newAdmin {border-top: 1px dashed black;padding-top: 10px;}
 	
 		/* The Modal (background) */
