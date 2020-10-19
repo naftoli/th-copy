@@ -8,10 +8,12 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.points.php';
 
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        u.first, u.last, u.user_serial, u.user_id, u.dob, a.*, a.first as parent_first, a.last as parent_last, s.school_name, c.class_grade, c.class_sub
+        u.first, u.last, u.user_serial, u.user_id, u.dob, u.school_id, a.*, a.first as parent_first, a.last as parent_last, 
+           s.school_name, c.class_grade, c.class_sub
     FROM
         users u
             LEFT JOIN
@@ -27,6 +29,28 @@ $stmt = $MASHPIA_DB->query("
     ORDER BY u.last , u.first
 ");
 $users = $stmt->fetchAll();
+
+$stmtMissions = $MASHPIA_DB->prepare("
+    select count(*) as total from date_tasks_mission_marks where user_id = :user
+");
+$stmtMedals = $MASHPIA_DB->prepare("
+    select count(*) as total from medal_marks where user_id = :user
+");
+$stmtRank = $MASHPIA_DB->prepare("
+    select rank_name from ranks 
+    where rank_ord = (
+        select max(rank_ord) from rank_marks 
+        where user_id = :user
+    )
+");
+
+$stmtCTH = $MASHPIA_DB->prepare("
+    select year from registration_charges where type = 'chayolei' and user_id = :user
+");
+$stmtChidon = $MASHPIA_DB->prepare("
+    select year from registration_charges where type = 'chidon' and user_id = :user
+");
+
 $fields = [
     'Base',
     'Parent ID',
@@ -46,12 +70,8 @@ $fields = [
     'Missions',
     'Medals',
     'Rank',
-    'CTH Registered 5779',
-    'CTH Registered 5780',
-    'CTH Registered 5781',
-    'Chidon Registered 5779',
-    'Chidon Registered 5780',
-    'Chidon Registered 5781',
+    'CTH Years Registered',
+    'Chidon Years Registered',
     'Delete Account'
 ];
 ?>
@@ -67,7 +87,7 @@ $fields = [
             }
             tr, th, td {
                 padding: 5px;
-                border: 1px solid black;
+                border: 1px solid #848383;
             }
         </style>
     </head>
@@ -78,6 +98,37 @@ $fields = [
             </tr>
             <?php
             foreach ($users as $user) {
+                $user_id = $user['user_id'];
+
+                // get miles
+                $p = new Points($user_id);
+                $miles = $p->getTotalPoints();
+                // get missions
+                $stmtMissions->execute([':user' => $user_id]);
+                $missions = $stmtMissions->fetch()['total'];
+                // get medals
+                $stmtMedals->execute([':user' => $user_id]);
+                $medals = $stmtMedals->fetch()['total'];
+                // get rank
+                $stmtRank->execute([':user' => $user_id]);
+                $rank = $stmtRank->fetch()['rank_name'];
+
+                // cth reg years
+                $cthYears = [];
+                $stmtCTH->execute([':user' => $user_id]);
+                $rows = $stmtCTH->fetchAll();
+                foreach ($rows as $row) {
+                    $cthYears[] = $row['year'];
+                }
+
+                // chidon reg years
+                $chidonYears = [];
+                $stmtChidon->execute([':user' => $user_id]);
+                $rows = $stmtChidon->fetchAll();
+                foreach ($rows as $row) {
+                    $chidonYears[] = $row['year'];
+                }
+
                 if ($user['school_id'] == 61) $base = "MyShliach";
                 else if ($user['school_id'] == 269) $base = "Anash Kinder";
                 $grade = $user['class_grade'] ? $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '') : '';
@@ -87,7 +138,9 @@ $fields = [
                     $grade . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" . $user['dob'] . "</td><td>" .
                     $user['parent_first'] . ' ' . $user['parent_last'] . "</td><td>" . $address . "</td><td>" .
                     $user['father'] . "</td><td>" . $user['mother'] . "</td><td>" . $user['admin_phone_mobile'] . "</td><td>" .
-                    $user['admin_phone_mobile2'] . "</td><td>" . $user['admin_email'] . "</td><td colspan='11'></td></tr>";
+                    $user['admin_phone_mobile2'] . "</td><td>" . $user['admin_email'] . "</td><td>" . $miles . "</td><td>" .
+                    $missions . "</td><td>" . $medals . "</td><td>" . $rank . "</td><td>" . implode(',', $cthYears) . "</td><td>" .
+                    implode(',', $chidonYears) . "</td><td></td></tr>";
             }
             ?>
         </table>
