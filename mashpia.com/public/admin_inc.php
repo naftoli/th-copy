@@ -191,7 +191,8 @@ if (!isset($menu_type))
 			<LI><A HREF="edit_school_type.php"><?=T_("Edit School Types")?></A>
 			<LI><A HREF="school_list.php"><?=T_("School List")?></A>
             <LI><A HREF="parent_list.php"><?=T_("Parent List")?></A>
-            <LI><A HREF="soldiers.php"><?=T_("Student List")?></A>			    
+            <LI><A HREF="soldiers.php"><?=T_("Student List")?></A>
+            <li><a href="child_list.php"><?=T_("Student/Parent Connections")?></a></li>
 			<LI><A HREF="school_possible_medals.php"><?=T_("School Possible Medals")?></A>
 			<LI><A HREF="school_possible_boards.php"><?=T_("School Possible Boards")?></A>
 			
