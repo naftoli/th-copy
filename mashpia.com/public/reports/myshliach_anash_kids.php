@@ -60,7 +60,7 @@ $fields = [
     'First Name',
     'Last Name',
     'DOB',
-    'Admin Name',
+    'Parent Name',
     'Address',
     'Father\'s Name',
     'Mother\'s Name',
