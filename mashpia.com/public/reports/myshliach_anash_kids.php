@@ -13,7 +13,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.points.php';
 
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        u.first, u.last, u.user_serial, u.user_id, u.dob, u.school_id, a.*, a.first as parent_first, a.last as parent_last, 
+        a.*, a.first as parent_first, a.last as parent_last, u.first, u.last, u.user_serial, u.user_id, u.dob, u.school_id,  
            s.school_name, c.class_grade, c.class_sub
     FROM
         users u
