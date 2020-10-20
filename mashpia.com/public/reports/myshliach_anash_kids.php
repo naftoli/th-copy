@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.points.php';
 
-$stmt = $MASHPIA_DB->query("
+$qry = "
     SELECT 
         a.*, a.first as parent_first, a.last as parent_last, u.first, u.last, u.user_serial, u.user_id, u.dob, u.school_id,  
            s.school_name, c.class_grade, c.class_sub
@@ -28,7 +28,26 @@ $stmt = $MASHPIA_DB->query("
     WHERE
         u.school_id IN (61 , 269)
     ORDER BY u.last , u.first
-");
+";
+if (isset($_GET['all'])) {
+    $qry = "
+        SELECT 
+            a.*, a.first as parent_first, a.last as parent_last, u.first, u.last, u.user_serial, u.user_id, u.dob, u.school_id,  
+               s.school_name, c.class_grade, c.class_sub
+        FROM
+            users u
+                LEFT JOIN
+            schools s USING (school_id)
+                LEFT JOIN
+            classes c USING (class_id)
+                LEFT JOIN
+            admin_auths aa ON aa.id = u.user_id
+                LEFT JOIN
+            admins a USING (admin_id)
+        ORDER BY u.last , u.first
+    ";
+}
+$stmt = $MASHPIA_DB->query($qry);
 $users = $stmt->fetchAll();
 
 $stmtMissions = $MASHPIA_DB->prepare("
