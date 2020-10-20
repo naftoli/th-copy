@@ -449,7 +449,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             7748551, 7773102, 7752969, 7748998, 7752490, 7753000, 7748547, 7775781, 7761287, 7747339, 7763109, 7753599, 7760704, 7758564,
             7775717, 7773901, 7748504, 7748503, 7755811, 7750671, 7753600, 7772141, 7775916, 7775924, 7775925, 7775931, 7775932, 7764763,
             7751454, 7748673, 7747302, 7756085, 7759885, 7748725, 7753953, 7759944, 7752990, 7748247, 7748267, 7750109, 7750056, 7775943,
-            7758214, 7775704];
+            7758214, 7775704, 7747594, 7775949, 7775950];
         $serialStr = implode(',', $serialNum);
         $keepOn = [];
         $stmt = $MASHPIA_DB->query("
@@ -687,6 +687,27 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $check_duplicate->execute([ $this->user_code ]);
                 $valid_code = $check_duplicate->fetch()['total'] == 0;
             }
+        }
+    }
+
+    public function reGenerateBarcode(){
+        global $MASHPIA_DB;
+        // prepare the sql queries
+        $check_duplicate = $MASHPIA_DB->prepare( "SELECT COUNT(*) as total FROM users WHERE user_code = ?;" );
+        $generate_barcode = $MASHPIA_DB->prepare( "SELECT FLOOR(RAND() * 9223372036854775807) as user_code" );
+        // counters
+        $count = 0; $valid_code = false;
+        // while we do not have a valid code, generate a new one and validate it.
+        while( !$valid_code ) {
+            // at 1,000 iterations ( and 2,000 queries ) just abort saving the model.
+            if ( $count++ > 1000 )
+                return false;
+            // generate the barcode
+            $generate_barcode->execute();
+            $this->user_code = $generate_barcode->fetch()['user_code'];
+            // make sure it is unique
+            $check_duplicate->execute([ $this->user_code ]);
+            $valid_code = $check_duplicate->fetch()['total'] == 0;
         }
     }
 
