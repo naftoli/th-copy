@@ -220,6 +220,7 @@ workflows:
             branches:
               only:
                 - staging
+                - testing
 
       - deploy-production:
           requires:
