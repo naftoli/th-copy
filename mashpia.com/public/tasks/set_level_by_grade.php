@@ -14,8 +14,8 @@ $updated = 0;
 foreach ( $users as $row ) {
     $level = 6;
     $grade = $row['class_grade'];
-    if ( is_numeric( $grade ) ) $level += $grade;
-    $sql = "update user_tracks set level = " . $level . " where user_id = " . $row['user_id'] . " and subject_id = 1";
+    if ( is_numeric( $grade ) ) $level += intval( $grade );
+    $sql = "update user_tracks set level = " . $level . " where user_id = " . $row['user_id'];
     if ( mysql_query( $sql ) ) $updated++;
 }
 echo "Updated: " . $updated;
