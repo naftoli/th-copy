@@ -1,0 +1,17 @@
+﻿{
+  "Title": "מכירה פומבית",
+  "parentsLogin": "כניסה להורים",
+  "Oops": "אופס!",
+  "forgotMyUsername":"שכחתי שם משתמש / סיסמא ?",
+  "PleaseSendMePassword":"שלחו לי בבקשה את הקישור לאיפוס הסיסמא",
+  "PleaseSendMePassword2":"(שימו לב אנחנו נשלח לכם סיסמא רק אם יש לנו את כתובת הדואר האלקטרוני שלכם במערכת)",
+  "YourEmail":"המייל שלך",
+  "SEND":"שלח",
+  "Oops2":"אופס!",
+  "PleaseReEnter":"נא להכניס שוב את כתובת",
+  "PleaseReEnterEnter":"הדואר האלקטרוני.",
+  "SorryWeCouldntFind":"לא מצאנו את המידע הזה - סליחה",
+  "PleaseContact":"צרו קשר עם",
+  "ch_email":"cth@tzivoshashem.org",
+  "CANCEL":"ביטול"
+}

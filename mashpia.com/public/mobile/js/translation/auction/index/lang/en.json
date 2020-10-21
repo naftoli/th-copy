@@ -1,0 +1,19 @@
+﻿{
+  "title": "Mobile Auction",
+  "pageTitle": "AUCTION",
+  "Store": "Store",
+  "Scanner": "Scanner",
+  "Auction": "Auction",
+  "PrizeAuctionCart": "After adding a prize in your Auction cart, be sure to click \"SAVE\" at the very bottom of your cart (in the cart page).",
+  "AuctionEnded": "The Auction for this year has ended.",
+  "Accounts": "Accounts",
+  "Missions": "Missions",
+  "Achievements": "Achievements",
+  "Rewards": "Rewards",
+  "TotalMilesEarned: ": "Total Miles Earned: ",
+  "TotalMilesYear": "Total Miles Earned this Year:",
+  "AvailableAuctionMiles": "Available Auction Miles:",
+  "UpdateBrowser1": "You need to update your browser to the latest version in order for this site to work properly.",
+  "NotEnoughMiles": "You do not have enough miles to add this prize.",
+  "UpdateBrowser": "You need to update your browser to the latest version in order for this feature to work."
+}

@@ -1,0 +1,19 @@
+﻿{
+    "Title": "TZIVOS HASHEM",
+    "heading": "Family Account Login",
+    "username": "username",
+    "password": "password",
+    "remember": "Remember me",
+    "error": "oops!",
+    "error2": "The",
+    "error3": "username",
+    "error4": "or",
+    "error5": "password",
+    "error6": "you entered is",
+    "error7": "incorrect.",
+    "error8": " Please try again.",
+    "login": "LOGIN",
+    "forgot": "Forgot user\/password?",
+    "create": "Create account",
+    "news": "News"
+}

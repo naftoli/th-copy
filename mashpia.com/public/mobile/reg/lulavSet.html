@@ -37,10 +37,6 @@
             }
 
             .form-control { border: 1px solid lightgrey !important; }
-
-            #top {
-                min-height: auto;
-            }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -59,18 +55,15 @@
             <div class="container page5">   
                 <div class="row" id="purchase_info" style="display: none;">
                     <div class="col-12" style="font-size: 16px;">                   
-                        Lulav Sets cost ONLY $10. We will only ship the sets to your child's school.
-                        Shipping charges vary by School depending on how many sets are being purchasing.
-                        Last day to order is on Thursday, 28 Elul (Sept 17) 11:59 pm EST.
+                        Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
                         <hr />
-                        <h2>Number of sets: 2000</h2>
+                        <h2>Number of sets: 2600</h2>
                         <h2>Already Sold: <span class="sold"></span></h2>
                         <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
                         Wow! <span class="sold"></span> Chayolim bought their own lulov and esrog. <br />
-                        <strong>We are SOLD OUT!!!</strong><br />
                         Let's see who will do mivtzoim for the most amount of time!<br />
                         Let's see who will get the most shakes!<br />
                     </div>
@@ -105,7 +98,6 @@
                                                 {{/if}}
                                                 <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
-                                            <div>Lulav Set: <strong>$10</strong></div>
                                             <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
                                             {{#if lulavPurchased}}
                                                 <div style='color:red'><strong><i>Child has already purchased a lulav set.</i></strong></div>
@@ -176,25 +168,21 @@
             
             // find out how many sets have been sold
             var soldOut = false;
-            var now = Math.floor( new Date().getTime() / 1000 );
+            var now = Math.floor( new Date().getTime() / 1000);
             console.log( now );
-            //if ( now > 1600401600 ) {
+            if ( now >= 1569556800 ) {
                 soldOut = true;
-            //}
+            }
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
-                var startWith = 2000;
-                var alreadySold = 600;
+                var startWith = 2600;
+                var alreadySold = 1000;
                 alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
                 if ( soldOut || leftToSell < 1 ) {
                     soldOut = true;
-                    alreadySold = startWith;
-                    leftToSell = 0;
-                    $(".sold").text( alreadySold );
-                    $("#leftToSell").text( leftToSell );
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
@@ -243,12 +231,9 @@
                         // Add the compiled html to the page
                         $(".chilrens").append( html );
                         $(".year").text(year);
-                        if ( soldOut ) {
-                            $("#sold-out").show();
-                        } else {
-                            $("#purchases").show();
-                        }
-                    }
+                        if ( soldOut ) $("#sold-out").show();
+                        else $("#purchases").show();
+                    } 
                 }
             });
             
@@ -317,7 +302,6 @@
                     });
                     
                     var num_sets = info.users.length;
-                    $("#purchase").attr('disabled', true);
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
@@ -326,7 +310,6 @@
                         } else {
                             alert( result.error );
                         }
-                        $("#purchase").attr('disabled', false);
                     });
 
                 } else {

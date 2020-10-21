@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Tzivos Hashem Registration</title>
+    <title data-key="Title" class="i18n">Tzivos Hashem Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
@@ -21,36 +21,41 @@
     <link rel="stylesheet" type="text/css" href="css/image-upload.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/registration/index/index.js"></script>    
 </head>
 <body>
     <header>
         <a href="/mobile/reg/parent_detail.html" class="logout" id="logOff">
-            logout&nbsp;<img src="/mobile/img_new/lock-color-white-svg.svg" height="18" alt="lock" />
+            <span class="i18n" data-key="logout">logout</span> &nbsp;
+            <img src="/mobile/img_new/lock-color-white-svg.svg" height="18" alt="lock" />
         </a>
-        <span id="title">Registration</span>
+        <span id="title" class="i18n" data-key="Registration">Registration</span>
         <a href="/mobile/reg/parent_detail.html" class="home">
-            <img src="/mobile/img_new/house-color-white-svg.svg" height="18" alt="home" />&nbsp;home
+            <img src="/mobile/img_new/house-color-white-svg.svg" height="18" alt="home" />&nbsp;
+            <span class="i18n" data-key="home">home</span>
         </a>
     </header>
     <div id="pages">
         <section id="no-children" class="animated fadeIn">
             <div class="container">
-                <h2>No Children To Register</h2>
-                <p>It seems that all your children who are eligible have been registered.</p>
-                <p>Press the 'Home' button in the upper right corner to go back to your homepage.</p>
+                <h2 class="i18n" data-key="NoChildrenRegister">No Children To Register</h2>
+                <p class="i18n" data-key="EligibledChildren">It seems that all your children who are eligible have been registered.</p>
+                <p class="i18n" data-key="HomePage">Press the 'Home' button in the upper right corner to go back to your homepage.</p>
             </div>
         </section>
 
         <section id="welcome-message">
             <div class="container">
-                <h2>Welcome to the Registration Process!</h2>
-                <p>There are 3 steps to the registration proccess.</p>
-                <p><strong>1. </strong>Select the children you wish to register. Please note that this step may be skipped if you only have one child</p>
-                <p><strong>2. </strong>Update and confirm the information for each child.</p>
-                <p><strong>3. </strong>Select an existing payment method or add a new one.</p>
+                <h2 class="i18n" data-key="WelRegistrationProcess">Welcome to the Registration Process!</h2>
+                <p class="i18n" data-key="3StepsRegistration">There are 3 steps to the registration proccess.</p>
+                <p><strong>1. </strong> <span class="i18n" data-key="SelectTheChildren"> Select the children you wish to register. Please note that this step may be skipped if you only have one child  </span> </p>
+                <p><strong>2. </strong> <span class="i18n" data-key="InformationForEach"> Update and confirm the information for each child. </span></p>
+                <p><strong>3. </strong> <span class="i18n" data-key="SelectPaymentType"> Select an existing payment method or add a new one. </span> </p>
                 <div class="row spaced navigation">
                     <div class="col-12">
-                        <button class="btn btn-primary start-step-1">Begin Registration</button>
+                        <button class="btn btn-primary start-step-1 i18n" data-key="BeginRegistration">Begin Registration</button>
                     </div>
                 </div>
             </div>
@@ -64,14 +69,15 @@
 
             <div class="content animated fadeIn">
                 <div class="container">
-                    <h2>Select Children</h2>
+                    <h2 class="i18n" data-key="SelectChildren">Select Children</h2>
                     <div class="row">
                         <div id="children"></div>
                     </div>
                     <div class="row spaced navigation">
                         <div class="col-12 right">
                             <button class="btn btn-primary start-step-2">
-                                Confirm Information &nbsp;<i class="fas fa-arrow-right"></i>
+                                <span class="i18n" data-key="ConfirmInformation">Confirm Information</span>
+                                 &nbsp;<i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
@@ -81,14 +87,13 @@
 
         <section id="step-2" class="animated fadeIn">
             <div class="container">
-                <h2>Soldier Information</h2>
+                <h2 class="i18n" data-key="SoldierInformation">Soldier Information</h2>
                 <hr>
                 <form id="update-user">
                     <input type="hidden" id="user_id" name="user_id" />
                     <input type="hidden" id="current_index" />
                     <div class="row">
                         <div class="col-12 centered">
-                            <input type="hidden" id="needs_new_pic" />
                             <input type="hidden" id="mobile_pic" name="mobile_pic" required/>
                             <img src="//mashpia.com/mobile/reg/images/addphoto.png" alt="profile" id="user-img" data-toggle="modal" data-target="#cropperModal"/>
                         </div>
@@ -99,19 +104,19 @@
                                 <input type="radio" class="gender" name="gender" value="M"/>
                                 <span class="radio"></span>
                             </label>
-                            <span>Boy</span>
+                            <span class="i18n" data-key="Boys">Boy</span>
                         </div>
                         <div class="col-4 col-md-3 col-xl-2">
                             <label class="radio-label">
                                 <input type="radio" class="gender" name="gender" value="F"/>
                                 <span class="radio"></span>
                             </label>
-                            <span>Girl</span>
+                            <span class="i18n" data-key="Girls">Girl</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="first">Name</label>
+                            <label for="first"  class="i18n" data-key="Girls">Name</label>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required>
@@ -122,7 +127,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="first_he">Hebrew Name</label>
+                            <label for="first_he" class="i18n" data-key="HebrewName">Hebrew Name</label>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required/>
@@ -133,17 +138,17 @@
                     </div>
                     <div class="row">
                         <div class="col-12 col-xl-6">
-                            <label for="school_name">School</label>
+                            <label for="school_name" class="i18n" data-key="School">School</label>
                             <input type="text" disabled class="form-control" placeholder="N / A" id="school_name">
                         </div>
                         <div class="col-12 col-xl-6" id="class_name">
-                            <label for="class_name">Class / Grade</label>
+                            <label for="class_name" class="i18n" data-key="ClassGrade">Class / Grade</label>
                             <select class="form-control" name="class_id"></select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-xl-6">
-                            <label for="no-th-dob">
+                            <label for="no-th-dob"  class="i18n" data-key="EnglishDateBirth">
                                 English Date of Birth
                             </label>
                             <div class="input-group">
@@ -154,7 +159,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <label for="lang_id">
+                            <label for="lang_id"  class="i18n" data-key="MissionLanguage">
                                 Mission Language
                             </label>
                             <div class="input-group">
@@ -162,24 +167,24 @@
                                     <img src="/mobile/img_new/arrow-2-color-gray-svg.svg" width="75" style="padding: 15%;" />  
                                 </span>
                                 <select class="form-control form-control-lg" id="lang_id" name="lang_id" required>
-                                    <option value="1">English</option>
-                                    <option value="2">Yiddish</option>
+                                    <option value="1" class="i18n" data-key="English">English</option>
+                                    <option value="2" class="i18n" data-key="Yiddish">Yiddish</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="non_th_school">
+                    <div class="row">
                         <div class="col-12">
-                            <label for="non_th_school">
+                            <label for="non_th_school"  class="i18n" data-key="NameSchoolAttending">
                                 Name of School Attending During Year
                             </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="non_th_school">
+                                <input type="text" class="form-control" id="non_th_school" name="non_th_school">
                             </div>
                         </div>
                     </div>
                     <label id="chayolei-registration">
-                        <h2>Chayolei Registration</h2>
+                        <h2  class="i18n" data-key="ChayoleiRegistration">Chayolei Registration</h2>
                         <hr>
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -188,10 +193,16 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 <!-- <strong>Chayolei Tzivos Hashem (Full Edition)</strong> ($<span id="chayolei-cost"></span> minimum fee) -->
-                                <strong>Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span> minimum fee)
+                                <strong class="i18n" data-key="ChayoleiTzivosHashem">Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span> <span class="18in" data-key="MinFee">minimum fee </span>)
+                                <span id="anash_kinder_text" style="display: none" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8 i18n" data-key="Charidydonors">
                                 Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:
-                                <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
-                                <span id="anash_kinder_text" style="display: none"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
+                            </div>
+                            <div class="col-4" style="min-width: fit-content;">
+                                <select class="form-control" id="chayolei-fee"></select>
                             </div>
                         </div>
                     </label>
@@ -207,7 +218,7 @@
                         </div>
                     </label> -->
                     <label id="ckids-registration">
-                        <h2>CKids Registration</h2>
+                        <h2 class="i18n" data-key="CKidsRegistration">CKids Registration</h2>
                         <hr>
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -215,12 +226,12 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>CKids Tzivos Hashem</strong> - FREE - (Includes Missions / Tasks / Virtual Medals and Ranks / Prizes)
+                                <strong class="i18n" data-key="CKidsTzivosHashem">CKids Tzivos Hashem</strong> <span class="i18n" data-key="CKidsTzivosHashemdes"> - FREE - (Includes Missions / Tasks / Virtual Medals and Ranks / Prizes)</span>
                             </div>
                         </div>
                     </label>
                     <label id="chidon-registration">
-                        <h2>Chidon Registration</h2>
+                        <h2 class="i18n" data-key="ChidonRegistration">Chidon Registration</h2>
                         <hr />
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -230,67 +241,67 @@
                                 </label>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>Be ready for the first day of the learning program!</strong><br />
-                                Registration Fee: <b>$<span id="chidon-cost"></span></b><br />
+                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />
+                                <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />
                                 <span id="study-guides" style="display: none">
-                                    Registering by Wednesday, 20 Elul (Sep 9) will ensure that you get your study guide and Yehadus Book by Thursday, 4 Tishrei (September 22).<br />
+                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />
                                 </span>
-                                <span id="late-reg" style="display: none">
-                                    There is no longer an option to order a book while registered.
-                                    Please purchase the correct book at thechidon.com/textbooks. The study guide can be downloaded at thechidon.com/study-guides.<br />
-                                </span>
-                                <br />
-                                <label for="chidon-book">Choose the BOOK # your child will need to study for Chidon 5781:</label>
+                                <span class="i18n" data-key="CostTheShabbaton">The cost for the Shabbaton if your child qualifies is</span> <span class="shabbaton-cost"><b>$175</b></span>. <span class="i18n" data-key="CostTheShabbatondes">Shabbaton enrollment opens Wednesday, 17 Shvat (February 12)</span>.
+                                <br /><br />
+                                <label for="chidon-book" class="i18n" data-key="ChooseBOOK">Choose the BOOK # your child will need to study for Chidon 5780:</label>
                                 <select class="form-control" id="chidon-book">
-                                    <option value="0">Choose Book Number</option>
-                                    <option value="1">4th Grade: Book 1</option>
-                                    <option value="2">5th Grade: Book 2</option>
-                                    <option value="3">6th Grade: Book 3</option>
-                                    <option value="4">7th Grade: Book 4</option>
-                                    <option value="5">8th Grade: Book 5</option>
+                                    <option value="0" class="i18n" data-key="ChooseBookNumber">Choose Book Number</option>
+                                    <option value="1" class="i18n" data-key="GradeBook1">4th Grade: Book 1</option>
+                                    <option value="2" class="i18n" data-key="GradeBook2">5th Grade: Book 2</option>
+                                    <option value="3" class="i18n" data-key="GradeBook3">6th Grade: Book 3</option>
+                                    <option value="4" class="i18n" data-key="GradeBook4">7th Grade: Book 4</option>
+                                    <option value="5" class="i18n" data-key="GradeBook5">8th Grade: Book 5</option>
                                 </select>
                                 <br />
-                                <label for="chidon-sweater-size"><strong>Chidon Sweater Size</strong> - PLEASE NOTE: THERE WILL
-                                    <strong>NO OTHER OPPORTUNITY</strong> TO UPDATE YOUR SWEATER SIZE. Please be sure to enter the correct size.</label>
+                                <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:</label>
                                 <select class="form-control" id="chidon-sweater-size">
-                                    <option value="">Choose sweater size</option>
-                                    <option value="children xs">Children XS</option>
-                                    <option value="children s">Children S</option>
-                                    <option value="children m">Children M</option>
-                                    <option value="children l">Children L</option>
-                                    <option value="children xl">Children XL</option>
-                                    <option value="adult s">Adult S</option>
-                                    <option value="adult m">Adult M</option>
-                                    <option value="adult l">Adult L</option>
-                                    <option value="adult xl">Adult XL</option>
+                                    <option value="children xs" class="i18n" data-key="ChildrenXS">Children XS</option>
+                                    <option value="children s" class="i18n" data-key="ChildrenS">Children S</option>
+                                    <option value="children m" class="i18n" data-key="ChildrenM">Children M</option>
+                                    <option value="children l" class="i18n" data-key="ChildrenL">Children L</option>
+                                    <option value="children xl" class="i18n" data-key="ChildrenXL">Children XL</option>
+                                    <option value="adult s" class="i18n" data-key="AdultS">Adult S</option>
+                                    <option value="adult m" class="i18n" data-key="AdultM">Adult M</option>
+                                    <option value="adult l" class="i18n" data-key="AdultL">Adult L</option>
+                                    <option value="adult xl" class="i18n" data-key="AdultXL">Adult XL</option>
                                 </select>
                                 <br />
 
                                 <div>
-                                    Have you already bought your chidon book for this year's chidon?<br />
-                                    <input type="radio" name="book-bought" class="book-bought" value="1" /> Yes<br />
-                                    <input type="radio" name="book-bought" class="book-bought" value="0" /> No<br />
+                                    <span class="i18n" data-key="AlreadyBoughtBooks">Have you already bought your chidon book for this year's chidon? </span><br />
+                                    <input type="radio" name="book-bought" class="book-bought i18n" data-key="Yes" value="1" /> Yes<br />
+                                    <input type="radio" name="book-bought" class="book-bought i18n" data-key="No" value="0" /> No<br />
                                 </div>
                                 <br />
 
                                 <div id="book-purchase" style="display:none">
-                                    Where did you buy your chidon book?<br />        
-<!--                                    <input type="radio" name="book-purchase" class="book-purchase" value="event" /> By the Chidon 5779 Event<br />-->
-                                    <input type="radio" name="book-purchase" class="book-purchase" value="store" /> In a store<br />
+                                    <span class="i18n" data-key="Wherebuybook">Where did you buy your chidon book?</span>
+                                    <br />        
+                                    <input type="radio" name="book-purchase" class="book-purchase i18n" value="event" data-key="ChidonEvent" /> By the Chidon 5779 Event<br />
+                                    <input type="radio" name="book-purchase" class="book-purchase i18n" value="store" data-key="InStore" /> In a store<br />
                                     <div id="book-purchase-details" style="display:none; margin-left: 30px;">
                                         <table>
                                             <tr>
-                                                <td>Store Name:</td>
+                                                <td class="i18n" data-key="StoreName">Store Name:</td>
                                                 <td><input type="text" name="store-name" id="store-name" /></td>
                                             </tr>
                                             <tr>
-                                                <td>City:</td>
+                                                <td class="i18n" data-key="City">City:</td>
                                                 <td><input type="text" name="store-city" id="store-city" /></td>
                                             </tr>
                                         </table>
                                     </div>
-<!--                                    <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" /> Through my parent account<br />-->
-                                    <input type="radio" name="book-purchase" class="book-purchase" value="school" /> Through my school<br />
+                                    <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" /> 
+                                    <span class="i18n" data-key="ThroughParent">Through my parent account </span>
+                                    <br />
+                                    <input type="radio" name="book-purchase" class="book-purchase" value="school" /> 
+                                    <span class="i18n" data-key="ThroughSchool">Through my school</span>
+                                    <br />
                                 </div>
                             </div>
                         </div>
@@ -308,9 +319,19 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                Yes, I would like to purchase a Yahadus Book
-                                <div id="book-info"></div>
-                                <!--                                <span id="yahadus-shipping">If you need it shipped to your school, there is an extra shipping charge of <b>$5</b>.</span><br />-->
+                                <b class="i18n" data-key="IWouldLike0">Yes! I would like to purchase a book on sale now.</b>
+                                <br />
+                                <span class="i18n" data-key="IWouldLike1">Book price is normally $55, but for Chidon Members it is </span>
+                                <b class="i18n" data-key="IWouldLike2">ON SALE for $40</b> 
+                                <span class="i18n" data-key="IWouldLike3"> (limited time only!).</span>
+                                <br/>
+                                <span id="yahadus-shipping">
+                                    <span class="i18n" data-key="IWouldLike4">If you need it shipped to your school, there is an extra shipping charge of </span>
+                                    <b>$5</b>.
+                                </span>
+                                <br />
+                                <i class="i18n" data-key="IWouldLike5">Purchase the book by Tuesday, 17 Elul (Sep 17) and you will receive it by Yom Kippur. (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</i>
+                                <br />
                             </div>
                         </div>
                         <br />
@@ -323,7 +344,8 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                No thanks, I already have a book to use.
+                               <span class="i18n" data-key="AlreadyHaveBook"> No thanks, I already have a book to use.</span>
+                                <br />
                             </div>
                         </div>
                     </label>
@@ -334,13 +356,14 @@
                                 
                             </div>
                             <div class="col-10 col-md-11">
-                                I will be Learning for Chidon:<br />
+                                <span class="i18n" data-key="LearningChidon">I will be Learning for Chidon:</span>
+                                <br />
                                 <select id="yahadus-poll" multiple>
-                                    <option>On my own</option>
-                                    <option>With a chavrusa</option>
-                                    <option>With a Parent</option>
-                                    <option>With a Bubby or Zaidy</option>
-                                    <option>On the online class</option>
+                                    <option class="i18n" data-key="OnMyOwn">On my own</option>
+                                    <option class="i18n" data-key="WithChavrusa">With a chavrusa</option>
+                                    <option class="i18n" data-key="WithParent">With a Parent</option>
+                                    <option class="i18n" data-key="WithBubbyZaidy">With a Bubby or Zaidy</option>
+                                    <option class="i18n" data-key="OnOnlineClass">On the online class</option>
                                 </select>
                             </div>
                         </div>
@@ -354,8 +377,9 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                I am aware that If my child qualifies, the cost for the Shabbaton is <strong><span id="shabbaton-cost"></span></strong>.
-                                This fee can be subsidized through the Chidon Drive. Shabbaton Enrollment opens Wednesday, 17 Shvat (February 12).
+                                <span class="i18n" data-key="IAmAware">I am aware that If my child qualifies, the cost for the Shabbaton is </span>
+                                <span class="shabbaton-cost"><b>$175</b></span>. 
+                                <span class="i18n" data-key="IAmAwaredes">This fee can be subsidized through the Chidon drive.Shabbaton enrollment opens Wednesday, 17 Shvat (February 12).</span>
                             </div>                            
                         </div>
                         <br />
@@ -367,21 +391,22 @@
                                 
                             </div>
                             <div class="col-10 col-md-11">
-                                Was there anyone that recruited you to join Chidon 5781?<br />
-                                <input type="radio" name="recruit" class="recruit" value="1" /> Yes<br />
-                                <input type="radio" name="recruit" class="recruit" value="0" /> No<br />
+                                <span class="i18n" data-key="JoinChidon5780">Was there anyone that recruited you to join Chidon 5780?</span>
+                                <br />
+                                <input type="radio" name="recruit" class="recruit i18n" data-key="Yes" value="1" /> Yes<br />
+                                <input type="radio" name="recruit" class="recruit i18n" data-key="No" value="0" /> No<br />
                                 <br />
                                 <div id="recruited-by" style="display: none;">
                                     <select class="form-control" id="school">
-                                        <option value="0">Select School</option>
+                                        <option value="0" class="i18n" data-key="SelectSchool">Select School</option>
                                     </select>
                                     <br />
                                     <select class="form-control" id="grade">
-                                        <option value="0">Select Grade</option>
+                                        <option value="0" class="i18n" data-key="SelectGrade">Select Grade</option>
                                     </select>
                                     <br />
                                     <select class="form-control" id="user">
-                                        <option value="0">Select Student</option>
+                                        <option value="0" class="i18n" data-key="SelectStudent">Select Student</option>
                                     </select>
                                 </div>
                             </div>                            
@@ -391,7 +416,7 @@
                     
                     <hr />
                     <div class="row" id="broadcast">
-                        <div class="col-sm-12" style="padding-left: 2%; padding-right: 4%; text-align: center;">
+                        <div class="col-sm-12 i18n" data-key="WantToReceive" style="padding-left: 2%; padding-right: 4%; text-align: center;">
                             Want to receive Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853 to join the broadcast for Tzivos Hashem updates.
                         </div>
                         <hr />
@@ -402,7 +427,7 @@
                                 <input type="checkbox" id="media" />
                                 <span class="checkbox"></span>
                             </div>
-                            <div class="col-10 col-md-11">
+                            <div class="col-10 col-md-11 i18n" data-key="ParticipatingChayolei">
                                 I am aware that by participating in Chayolei Tzivos Hashem and its programs
                                 I consent to having my child's names and pictures being used in any media produced by Tzivos Hashem,
                                 for publicity purposes or otherwise.
@@ -411,7 +436,7 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <strong>By pressing the button below I affirm that I have reviewed the above information and found it to be correct.</strong>
+                            <strong class="i18n" data-key="ByPressing">By pressing the button below I affirm that I have reviewed the above information and found it to be correct.</strong>
                         </div>
                     </div>
                     <div class="row">
@@ -423,7 +448,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 left">
                         <button class="btn btn-primary start-step-1">
-                            <i class="fas fa-arrow-left"></i> &nbsp;Select Children
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="SelectChildren">Select Children</span>
                         </button>
                     </div>
                 </div>
@@ -438,22 +463,22 @@
             <div class="container content">
                 <div class="row">
                     <div class="col-12">
-                        <h2>Shipping Rates</h2>
+                        <h2 class="i18n" data-key="ShippingRates">Shipping Rates</h2>
                         <p>
-                            All children not enrolled in an active Tzivos Hashem Base will need to have their physical items (such as Hachayols, Rank Books and Medals) shipped directly. 
-                            Sadly, as much as we would love to do this for free we simply cannot do so and must charge for shipping.<br/><br/>
+                            <span class="i18n" data-key="ShippingFee">All children not enrolled in an active Tzivos Hashem Base will need to have their physical items (such as Hachayols, Rank Books and Medals) shipped directly.Sadly, as much as we would love to do this for free we simply cannot do so and must charge for shipping. </span>
+                            <br/><br/>
                             
                             <!-- Please note that this charge is <strong>only for children who are <em>not</em> enrolled in an active Tzivos Hashem Base.</strong>
                             Children who <strong>are enrolled will have their items delivered to them by their Base Commanders.</strong><br/><br/> -->
 
-                            The shipping fee covers a minimum 14 shipments per year, which includes approximately:
+                            <span class="i18n" data-key="ShippingFeedes"> The shipping fee covers a minimum 14 shipments per year, which includes approximately:</span>
                             <ul>
-                                <li>11 Hachayol shipments containing 7 issues each, one subscription per family</li>
-                                <li>3 shipments of medals, rank books and rank cards</li>
-                                <li>Raffle prize shipments (if your child wins)</li>
+                                <li class="i18n" data-key="ShipmentsIssues">11 Hachayol shipments containing 7 issues each, one subscription per family</li>
+                                <li class="i18n" data-key="ShipmentsMedals">3 shipments of medals, rank books and rank cards</li>
+                                <li class="i18n" data-key="RafflePrize">Raffle prize shipments (if your child wins)</li>
                             </ul>
 
-                            <small>Shipping rates may vary by location.</small>
+                            <small class="i18n" data-key="ShippingRatesVary">Shipping rates may vary by location.</small>
                         </p>
                     </div>
                 </div>
@@ -467,7 +492,7 @@
                             <span id="shipping-type-1" class="shipping_cost">$40</span>
                         </div>
                         <div class="col-9 col-lg-10 col-xl-11">
-                            <p>Prepaid shipping fee for <strong>Hachayol magazines, medals and rank books and the gift from Rabbi Moshe and Rutti Weiss.</strong></p>
+                            <p> <span class="i18n" data-key="PrepaidShippingFor">Prepaid shipping fee for <span> <strong class="i18n" data-key="PrepaidShippingFordes">Hachayol magazines, medals and rank books.</strong></p>
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -491,7 +516,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 left">
                         <button class="btn btn-primary start-step-2">
-                            <i class="fas fa-arrow-left"></i> &nbsp;Confirm Children
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="ConfirmChildren">Confirm Children</span>
                         </button>
                     </div>
                 </div>
@@ -500,13 +525,13 @@
 
         <section id="step-4" class="animated fadeIn">
             <div class="container">
-                <h2>Checkout</h2>
+                <h2 class="i18n" data-key="Checkout">Checkout</h2>
                 <div class="row">
                     <div id="charges" class="col-12 col-lg-6"></div>
                     <div class="col-12 col-md-10 col-lg-6 mx-auto">
                         <div class="card" id="cc-card">
                             <div class="card-body">
-                                <h5 class="card-title">Payment Method</h5><hr>
+                                <h5 class="card-title i18n" data-key="PaymentMethod">Payment Method</h5><hr>
                                 <form id="payment">
                                     <input type="hidden" id="total" name="total" />
                                     <input type="hidden" id="selected-shipping-type" name="shipping-type" />
@@ -526,23 +551,23 @@
                                         <div id="card-on-file"></div>
                                         <div id="new-card">
                                             <div class="form-group">
-                                                <label for="cc-number" class="control-label mb-1">Card number</label>
+                                                <label for="cc-number" class="control-label mb-1 i18n" data-key="CardNumber">Card number</label>
                                                 <input id="cc-number" name="cc-number" type="tel" class="form-control cc-number identified" required="" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
-                                                <span class="invalid-feedback">Enter a valid credit card number</span>
+                                                <span class="invalid-feedback i18n" data-key="EnterValidCard">Enter a valid credit card number</span>
                                             </div>
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="cc-exp" class="control-label mb-1">Expiration</label>
+                                                        <label for="cc-exp" class="control-label mb-1 i18n" data-key="Expiration">Expiration</label>
                                                         <input id="cc-exp" name="cc-exp" type="tel" class="form-control cc-exp" required placeholder="MM / YY" autocomplete="cc-exp" pattern="[0-9]{2}[\/ ]{0,3}[0-9]{2}" maxlength="7">
-                                                        <span class="invalid-feedback">Enter the expiration date</span>
+                                                        <span class="invalid-feedback i18n" data-key="ExpirationDate">Enter the expiration date</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <label for="x_card_code" class="control-label mb-1">Security code</label>
+                                                    <label for="x_card_code" class="control-label mb-1 i18n" data-key="SecurityCode">Security code</label>
                                                     <div class="input-group">
                                                         <input id="x_card_code" name="x_card_code" type="tel" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
-                                                        <span class="invalid-feedback order-last">Enter the 3-digit code on back</span>
+                                                        <span class="invalid-feedback order-last i18n" data-key="3DigitCode">Enter the 3-digit code on back</span>
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">
                                                             <span class="fa fa-question-circle fa-lg" data-toggle="popover" data-container="body" data-html="true" data-title="Security Code" 
@@ -554,15 +579,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                                <label for="zip" class="control-label mb-1 i18n" data-key="ZipPostalCode">Zip / Postal Code</label>
                                                 <input id="zip" name="zip" type="tel" class="form-control" required="" placeholder="XXXXX" maxlength="12">
-                                                <span class="invalid-feedback">Enter a valid zip / postal code</span>
+                                                <span class="invalid-feedback i18n" data-key="ValidZipPostalCode">Enter a valid zip / postal code</span>
                                             </div>
                                         </div>
 
                                         <div class="row spaced">
                                             <div class="col-12">
-                                                <button id="payment-button" class="btn btn-primary">
+                                                <button id="payment-button" class="btn btn-primary i18n" data-key="PayAndRegister">
                                                     Pay And Register
                                                 </button>
                                             </div>
@@ -577,7 +602,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 right">
                         <button class="btn btn-primary start-step-2">
-                            <i class="fas fa-arrow-left"></i> &nbsp;Confirm Soldiers
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="ConfirmSoldiers">Confirm Soldiers</span>
                         </button>
                     </div>
                 </div>
@@ -589,7 +614,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5>
+                    <h5 class="i18n" data-key="UploadProfilePicture">
                         Upload Profile Picture
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -601,7 +626,8 @@
                         <input type="file" name="profile" id="profile" accept=".png,.jpg,.jpeg"/>
                         <label for="profile">
                             <i class="fas fa-camera"></i>
-                            Choose a picture
+                           <span class="i18n" data-key="ChoosePicture"> Choose a picture</span>
+
                         </label>
                     </div>
                     <div id="cropper-image-container">
@@ -635,8 +661,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="submit-image">Upload</button>
+                    <button type="button" class="btn btn-danger i18n" data-key="Cancel"  data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary i18n" data-key="Upload" id="submit-image">Upload</button>
                 </div>
             </div>
         </div>
@@ -646,14 +672,14 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5>Error</h5>
+                    <h5 class="i18n" data-key="Error">Error</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
                     </button>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="Close">Close</button>
                 </div>
             </div>
         </div>
@@ -669,11 +695,11 @@
                             <polyline class="path check" fill="none" stroke="#2c539e" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                         </svg>
                     </div>
-                    <p id="success" class="primary">Your child(ren) has(have) been registered!</p>
+                    <p id="success" class="primary i18n" data-key="YourchildRegistered">Your child(ren) has(have) been registered!</p>
                     <div class="alert alert-danger" id="error-message"></div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" href="/mobile/reg/parent_detail.html">Close</a>
+                    <a class="btn btn-primary i18n" href="/mobile/reg/parent_detail.html"  data-key="Close">Close</a>
                 </div>
             </div>
         </div>
@@ -683,14 +709,14 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Please confirm your shipping address!</h4>
+                    <h4 class="i18n" data-key="ConfirmShippingAddress">Please confirm your shipping address!</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
                     </button>
                 </div>
                 <div class="modal-body">
                     <p>
-                        The shipping address we have on file is:<br />
+                        <span class="i18n" data-key="ShippingAddressFileClickConfirm">The shipping address we have on file is: </span><br />
                         <div id="shipping-address" class="container">
                             <div class="row" style="margin-bottom: 10px;">
                                 <input type="text" id="ship-address1" class="form-control col-md-6 col-sm-12" placeholder="address line 1" />
@@ -706,24 +732,23 @@
                             </div>
                         </div>
                     </p>
-                    <p>
+                    <p class="i18n" data-key="ClickConfirm">
                         To change it, just update the fields and click "Update", otherwise click on "Confirm".
                     </p>
                     <p>
-                        <b>Please Note: If your are changing to a US address, you MUST enter USA in the country field.</b>
+                        <b class="i18n" data-key="PleaseNoteAddressChange">Please Note: If your are changing to a US address, you MUST enter USA in the country field.</b>
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="update-shipping" style="background-color: #2c539e; border-color:#2c419e;">Update</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #2c539e; border-color:#2c419e;">Confirm</button>
+                    <button type="button" class="btn btn-danger i18n" id="update-shipping" style="background-color: #2c539e; border-color:#2c419e;" data-key="Update">Update</button>
+                    <button type="button" class="btn btn-danger i18n" data-dismiss="modal" style="background-color: #2c539e; border-color:#2c419e;" data-key="Confirm">Confirm</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="scripts">
-        <!-- Jquery, Popper.js and Bootstrap -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Jquery, Popper.js and Bootstrap --> 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <!-- Cropper.js -->

@@ -31,13 +31,13 @@ if ( $amount > 0 ) {
                         $response_array[9];	
 
         $qry = $MASHPIA_DB->prepare(
-            "INSERT into lulav_purchases  
-            SET 
-                admin_id = :admin, 
-                paid = :amount, 
-                authorization = :auth, 
-                users = :users, 
-                year = :year"
+            "INSERT into mivtzoim_purchases.purchases 
+            SET admin_id = :admin, 
+            amount_paid = :amount, 
+            authorization = :auth, 
+            users = :users, 
+            year = :year, 
+            item_id = 1"
         );
         $qry->execute([
             ':admin'    => $admin_id, 
@@ -46,7 +46,7 @@ if ( $amount > 0 ) {
             ':users'    => implode(',', $info['users']), 
             ':year'     => $year
         ]);
-
+        
         $qry = $MASHPIA_DB->prepare(
             "INSERT INTO transactions 
             SET trans_date = now(),

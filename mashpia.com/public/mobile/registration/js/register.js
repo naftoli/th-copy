@@ -11,29 +11,6 @@ var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
-var lateReg = false; // global var to determine if it's a late registration
-var lateDate = new Date(2020, 09, 21);
-if (new Date().getTime() >= lateDate.getTime()) lateReg = true;
-
-// fees and shipping
-var fees = {
-    'regular': {
-        'shabbaton': 185,
-        'book': 40,
-        'shipping': {
-            'USA': 5,
-            'Canada': 10,
-        }
-    },
-    'special': {
-        'book': 40,
-        'shipping': 15
-    },
-    'anash': {
-        'shabbaton': 250
-    }
-}
-
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
     var state = {
@@ -123,19 +100,16 @@ var registrationApp = function() {
         var australian = [ 55, 66, 110, 112, 180, 256 ]; 
 
         // show study guides info for all non Australian schools
-        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) {
-            if (lateReg) $("#late-reg").show();
-            else $("#study-guides").show();
-        }
+        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
 
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
             $("#anash_kinder_text").show();
+            $(".shabbaton-cost").html("<b>$250</b>");
         }
 
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
-            if (lateReg) return;
             $("#step-2 form .chidon-reg").show();
             if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
             if ( $(this).val() == 0 ) {
@@ -341,11 +315,6 @@ var registrationApp = function() {
             });
         }
 
-        // check if pic is generic or new pic needs to be uploaded
-        if ( parseInt($("#needs_new_pic").val()) === 1 ) {
-            return showError('You must upload a (new) photo.');
-        }
-
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
@@ -363,67 +332,55 @@ var registrationApp = function() {
             return showError(
                 'You must select at least one type of registration.'
             );
-        }
+        } 
 
         if ( selected_charges.chidon === true ) {
             // check that book was selected
             if ( $("select#chidon-book").val() == 0 ) {
                 return showError("You must choose which book is being studied.");
             }
-
-            // make sure sweater size is chosen
-            if ( $("select#chidon-sweater-size").val() == '' ) {
-                return showError("You must choose a sweater size.");
+            if ( !$(".book-bought").is(":checked") ) {
+                return showError("You must indicate if you have already purchased a book or not.");
+            }
+            
+            if ( $(".book-bought:checked").val() == '1' ) {
+                // make sure something is checked
+                if ( !$(".book-purchase").is(":checked") ) {
+                    return showError("You have not selected where you bought the book.");
+                }
+                // make sure that if they bought a book from a store, that the store info is filled out
+                console.log( $(".book-purchase:checked").val() );
+                if ( $(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '' ) ) {
+                    return showError("You must enter the store information for your book purchase.");
+                }
+            } else {
+                // make sure they checked either that they want to purchase a book or that they already have a book
+                if ( !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
+                    return showError("You must indicate whether you would like to purchase a book or not.");
+                }
             }
 
-            if (!lateReg) {
-                if (!$(".book-bought").is(":checked")) {
-                    return showError("You must indicate if you have already purchased a book or not.");
-                }
+            var poll = $("#yahadus-poll").val();
+            if ( !poll.length ) {
+                return showError("You must indicate how you will be learning for chidon.");
+            }
 
-                if ($(".book-bought:checked").val() == '1') {
-                    // make sure something is checked
-                    if (!$(".book-purchase").is(":checked")) {
-                        return showError("You have not selected where you bought the book.");
-                    }
-                    // make sure that if they bought a book from a store, that the store info is filled out
-                    console.log($(".book-purchase:checked").val());
-                    if ($(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '')) {
-                        return showError("You must enter the store information for your book purchase.");
-                    }
-                } else {
-                    // make sure they checked either that they want to purchase a book or that they already have a book
-                    if (!$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked")) {
-                        return showError("You must indicate whether you would like to purchase a book or not.");
-                    }
-                }
+            // make sure shabbaton button was checked as well
+            if ( !$("#shabbaton").is(":checked") ) {
+                return showError("You must indicate your acknowledgment of the Shabbaton fee.");
+            }
 
-                var poll = $("#yahadus-poll").val();
-                if (!poll.length) {
-                    return showError("You must indicate how you will be learning for chidon.");
-                }
-
-                // make sure shabbaton button was checked as well
-                if (!$("#shabbaton").is(":checked")) {
-                    return showError("You must indicate your acknowledgment of the Shabbaton fee.");
-                }
-
-                // make sure we have student id if recruited by is checked off
-                if ($(".recruit").eq(0).is(":checked")) {
-                    if (parseInt($("#user").val()) == 0) {
-                        return showError("You must choose who recruited you.");
-                    }
+            // make sure we have student id if recruited by is checked off
+            if ( $(".recruit").eq(0).is(":checked") ) {
+                if ( parseInt( $("#user").val() ) == 0 ) {
+                    return showError("You must choose who recruited you.");
                 }
             }
         } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
             // make sure non th school field is not empty
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                var non_th_school = $("#non_th_school input").val().trim();
+                var non_th_school = $("#non_th_school").val().trim();
                 if ( non_th_school.length < 3 ) return showError("You must enter the name of the school that you are attending.");
-            }
-            // make sure they chose an amount to pay
-            if ( parseInt($("select#chayolei-fee").val()) < 0 ) {
-                return showError("You must choose an amount to pay for chayolei tzivos hashem.");
             }
         }  
 
@@ -438,9 +395,6 @@ var registrationApp = function() {
         // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             selected_user.registrationRates.chayolei = parseInt( $("select#chayolei-fee").val() );
-            if (isNaN(selected_user.registrationRates.chayolei)) {
-                return showError('You have not chosen how much you will be paying for Chayolei Tzivos Hashem Registration');
-            }
             state.cart.push({
                 description: 'Tzivos Hashem Registration for ' + selected_user.first,
                 price: selected_user.registrationRates.chayolei,
@@ -507,15 +461,11 @@ var registrationApp = function() {
         }
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
-            let d1 = new Date()
-            let d2 = new Date(2020, 08, 16) // wed, sept 16. 2020
-            if ( d1 < d2 && selected_user.parentAccount.admin_country.toUpperCase() === 'USA' ) shipping_included = false; // for usa shipping is free if before sept 10, 2020
-            let shipping_charge = fees.regular.shipping.USA;
-            if ( selected_user.parentAccount.admin_country.toUpperCase() !== 'USA' ) shipping_charge = fees.regular.shipping.Canada
+            var shipping_charge = 5;
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
-                // if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = fees.special.shipping;
-                shipping_charge = fees.special.shipping;
+                if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
+                else shipping_charge = 30;
             }
             // // don't add to cart if anash kinder / myshliach and not in USA
             // if ( 
@@ -708,7 +658,6 @@ var registrationApp = function() {
         
         $("input#mobile_pic").val( data.filename );
         $("img#user-img, #child-" + user_id + " img").attr( "src", data.location );
-        $("#needs_new_pic").val(0);
         
         $.post("/api/core/users?id=" + user_id, { mobile_pic: data.filename }, function( response ){
             if ( !response.success ){
@@ -743,7 +692,6 @@ var templates = function(){
         showUser: function( user, index ){
             if( index > 0 ) window.location.hash = 'step-2-' + index;
             $( '#step-2 form #user_id' ).val( user.user_id );
-            $( '#step-2 form #needs_new_pic' ).val( user.newPic );
             $( '#step-2 form #mobile_pic' ).val( user.mobile_pic );
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form .gender[value=\'' + user.gender + '\']')[0].checked = true;
@@ -773,10 +721,13 @@ var templates = function(){
             $( '#step-2 form #first' ).val( user.first );       $( '#step-2 form #last' ).val( user.last );
             $( '#step-2 form #first_he' ).val( user.first_he ); $( '#step-2 form #last_he' ).val( user.last_he );
             $( '#step-2 form #lang_id' ).val( user.lang_id );   $( '#step-2 form #dob' ).val( user.dob );
-            // if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-            //     if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
-            //     else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
-            // }
+            // setup the payment options - chayolei
+            templates.toggleRates( user, 'chayolei' );
+            templates.toggleRates( user, 'chidon' );
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                if ( user.parentAccount.admin_country.toUpperCase() == 'USA' ) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+                else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
+            }
 
             $("#step-2 form select#yahadus-poll option").prop('selected', false);
 
@@ -799,10 +750,6 @@ var templates = function(){
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
             }
-
-            // setup the payment options - chayolei
-            templates.toggleRates( user, 'chayolei' );
-            templates.toggleRates( user, 'chidon' );
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
@@ -835,34 +782,6 @@ var templates = function(){
             //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
             //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             // }
-            // reset sweater
-            $("#chidon-sweater-size").val('')
-            // reset shipping
-            $("#book-info").empty()
-            // build html for book fees and shipping fees
-            let html
-            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
-                $("#non-th-school").show()
-                if ( user.school.school_id == 269 ) $("#shabbaton-cost").text( '$' + fees.anash.shabbaton )
-                else $("#shabbaton-cost").text( '$' + fees.regular.shabbaton )
-                html = `
-                    Book Sale: Book price is normally $55, but for Chidon Members it is <b>ON SALE for $${fees.special.book}</b> (limited time only!).<br />
-                    Shipping:<br />
-                    <blockquote>USA: $${fees.special.shipping}.</blockquote>
-                `
-            } else {
-                $("#non-th-school").hide()
-                $("#shabbaton-cost").text( '$' + fees.regular.shabbaton )
-                html = `
-                    Book Sale: Book price is normally $55, but for Chidon Members it is <b>ON SALE for $${fees.regular.book}</b> (limited time only!).<br />
-                    Shipping:<br />
-                    <blockquote>
-                        USA: Free shipping to your school till Chof Elul (September 9). After that there is a $${fees.regular.shipping.USA} charge.<br />
-                        Canada: $${fees.regular.shipping.Canada} flat fee charge.
-                    </blockquote>
-                `
-            }
-            $("#book-info").append( html )
             console.log( user );
         },
         toggleRates: function( user, rateType ){
@@ -877,7 +796,6 @@ var templates = function(){
                         // just make dropdown show 0
                         htmlFee += "<option value='0'>0</option>";
                     } else {
-                        htmlFee += "<option value='-1'>Please Choose</option>";
                         var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
                         if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
                         for ( var n of rates ) {
@@ -885,12 +803,10 @@ var templates = function(){
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
                     }
-                    $( '#step-2 form #chayolei-fee' ).empty();
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
             } else {
-                console.log( $('#step-2 form #' + rateType + '-registration') )
-                $('#step-2 form #' + rateType + '-registration').hide();
+                $( '#step-2 form #' + rateType + '-registration').hide();
             }
         },
         renderCheckout: function( cart ){
