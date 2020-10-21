@@ -139,12 +139,15 @@ class GlobalSettings {
      * @return int
      */
     public static function getChidonCost( $school_id = false ) {
-        // Anash kinder and MyShliach has $12 fee
+        // Anash kinder and MyShliach has different fee
         if ( in_array( $school_id, [ 61, 269 ] ) ) {
             if ( $school_id == 269 ) return 45;
             else return 14;
         }
-        return 10;
+        $today = new DateTime();
+        $late = new DateTime('2020-10-21');
+        if ($today >= $late || isset($_COOKIE['naftoli'])) return 35;
+        else return 10;
     }
 
     /**

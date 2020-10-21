@@ -11,6 +11,10 @@ var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
 
+var lateReg = false; // global var to determine if it's a late registration
+var lateDate = new Date(2020, 09, 21);
+if (new Date().getTime() >= lateDate.getTime() || Cookies.get('naftoli')) lateReg = true;
+
 // fees and shipping
 var fees = {
     'regular': {
@@ -119,7 +123,10 @@ var registrationApp = function() {
         var australian = [ 55, 66, 110, 112, 180, 256 ]; 
 
         // show study guides info for all non Australian schools
-        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
+        if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) {
+            if (lateReg) $("#late-reg").show();
+            else $("#study-guides").show();
+        }
 
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
@@ -128,6 +135,7 @@ var registrationApp = function() {
 
         // yahadus registration
         $('#step-2 form .book-bought').click( function() {
+            if (lateReg) return;
             $("#step-2 form .chidon-reg").show();
             if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
             if ( $(this).val() == 0 ) {
@@ -368,41 +376,43 @@ var registrationApp = function() {
                 return showError("You must choose a sweater size.");
             }
 
-            if ( !$(".book-bought").is(":checked") ) {
-                return showError("You must indicate if you have already purchased a book or not.");
-            }
-            
-            if ( $(".book-bought:checked").val() == '1' ) {
-                // make sure something is checked
-                if ( !$(".book-purchase").is(":checked") ) {
-                    return showError("You have not selected where you bought the book.");
+            if (!lateReg) {
+                if (!$(".book-bought").is(":checked")) {
+                    return showError("You must indicate if you have already purchased a book or not.");
                 }
-                // make sure that if they bought a book from a store, that the store info is filled out
-                console.log( $(".book-purchase:checked").val() );
-                if ( $(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '' ) ) {
-                    return showError("You must enter the store information for your book purchase.");
+
+                if ($(".book-bought:checked").val() == '1') {
+                    // make sure something is checked
+                    if (!$(".book-purchase").is(":checked")) {
+                        return showError("You have not selected where you bought the book.");
+                    }
+                    // make sure that if they bought a book from a store, that the store info is filled out
+                    console.log($(".book-purchase:checked").val());
+                    if ($(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '')) {
+                        return showError("You must enter the store information for your book purchase.");
+                    }
+                } else {
+                    // make sure they checked either that they want to purchase a book or that they already have a book
+                    if (!$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked")) {
+                        return showError("You must indicate whether you would like to purchase a book or not.");
+                    }
                 }
-            } else {
-                // make sure they checked either that they want to purchase a book or that they already have a book
-                if ( !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
-                    return showError("You must indicate whether you would like to purchase a book or not.");
+
+                var poll = $("#yahadus-poll").val();
+                if (!poll.length) {
+                    return showError("You must indicate how you will be learning for chidon.");
                 }
-            }
 
-            var poll = $("#yahadus-poll").val();
-            if ( !poll.length ) {
-                return showError("You must indicate how you will be learning for chidon.");
-            }
+                // make sure shabbaton button was checked as well
+                if (!$("#shabbaton").is(":checked")) {
+                    return showError("You must indicate your acknowledgment of the Shabbaton fee.");
+                }
 
-            // make sure shabbaton button was checked as well
-            if ( !$("#shabbaton").is(":checked") ) {
-                return showError("You must indicate your acknowledgment of the Shabbaton fee.");
-            }
-
-            // make sure we have student id if recruited by is checked off
-            if ( $(".recruit").eq(0).is(":checked") ) {
-                if ( parseInt( $("#user").val() ) == 0 ) {
-                    return showError("You must choose who recruited you.");
+                // make sure we have student id if recruited by is checked off
+                if ($(".recruit").eq(0).is(":checked")) {
+                    if (parseInt($("#user").val()) == 0) {
+                        return showError("You must choose who recruited you.");
+                    }
                 }
             }
         } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
