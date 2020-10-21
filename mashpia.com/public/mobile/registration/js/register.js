@@ -13,7 +13,7 @@ var showClasses = 0; // global var to determine if we need to show link to myshl
 
 var lateReg = false; // global var to determine if it's a late registration
 var lateDate = new Date(2020, 09, 21);
-if (new Date().getTime() >= lateDate.getTime() || Cookies.get('naftoli')) lateReg = true;
+if (new Date().getTime() >= lateDate.getTime()) lateReg = true;
 
 // fees and shipping
 var fees = {
