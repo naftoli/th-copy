@@ -4,7 +4,7 @@ require_once '../db.php';
 $users = [];
 $sql = "select * from users u 
         join classes c on c.class_id = u.class_id 
-        where user_registered > 0";
+        where user_registered > 0 and user_start_date > 2459000"; // June 1, 2020
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[] = $row;
