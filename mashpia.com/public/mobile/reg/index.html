@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -203,14 +203,14 @@
 									placeholder="password" required>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-xs-12">
+						<div id="remembermediv" class="row">
+							<div  class="col-xs-12">
 								<div class="form-group no-border remember">
 									<label id="remember">
 										<input type="checkbox">
 										<span id="remember-check" />
 									</label>
-									<span class="i18n" data-key="remember">&nbsp; Remember me </span>
+									<span id="rememberme" class="i18n" data-key="remember">&nbsp; Remember me </span>
 								</div>
 							</div><!-- /.col -->
 						</div>
@@ -235,10 +235,10 @@
 					</form>
 					<br>
 					<div class="row">
-						<div class="col-xs-7 forgot">
-							<div class="error-change"><a href="forgot.html" class="i18n" data-key="forgot">Forgot user/password?</a></div>
+						<div class="col-xs-7 forgot" id="forgotdiv">
+							<div class="error-change"><a href="forgot.html" class="i18n" data-key="forgot">Forgot user/password</a><span>?</span></div>
 						</div>
-						<div class="col-xs-5 text-right create-account">
+						<div class="col-xs-5 text-right create-account" id="creatediv" >
 							<a href="parent_register.html" id="createAccount"><b class="i18n" data-key="create">Create account</b></a>
 						</div>
 					</div>
