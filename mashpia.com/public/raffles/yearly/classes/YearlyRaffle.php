@@ -15,9 +15,8 @@ class YearlyRaffle {
     private $DAY_COUNT = 180;
     private $db_conn;
     private $year;
-    // ends on lag baomer
-    private $deadline = 2458984; // May 14, 2020
-    private $start = 2458733; // Sept 6, 2019
+    private $deadline;
+    private $start;
     
     public $eligibility;
 
@@ -32,6 +31,11 @@ class YearlyRaffle {
         // create a new DB adapter if one is not provided
         $db_conn ? $this->db_conn = $db_conn : $this->db_conn = new DBAdapter();
         $this->year  = GlobalSettings::getCurrentYear();
+        // find raffle 180
+        $result = $this->db_conn->query("select * from raffles where type = 'yearly' order by year desc limit 1");
+        $row = $result->fetch_assoc();
+        $this->deadline = $row['end_date'];
+        $this->start = $row['start_date'];
     }
 // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
