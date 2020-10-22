@@ -207,7 +207,7 @@ module.exports = {
                     },
                     {
                       loader: require.resolve('sass-loader'),
-                      options: { includePaths: ['src'] }
+                      options: { includePaths: ['src'], implementation: require('sass'), }
                     },
                   ],
                 },
