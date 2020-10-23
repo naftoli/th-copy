@@ -20,6 +20,8 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         $from = '2020-09-22';
         $to = '2020-10-15';
     }
+    $from .= " 14:00:00";
+    $to .= " 21:59:59";
 //    } else if ( $_POST['date'] == 4 ) {
 //        $from = '2019-09-26';
 //        $to = '2019-10-25';
@@ -40,7 +42,7 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
 }
 if ( isset( $from ) && isset( $to ) ) {
-    $qry .= "AND rc.date >= '" . $from . " 14:00:00' AND rc.date <= '" . $to . " 21:59:59' ";
+    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
 }
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";

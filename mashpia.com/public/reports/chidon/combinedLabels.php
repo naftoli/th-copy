@@ -18,42 +18,56 @@ if ( isset( $_POST['date'] ) && $_POST['date'] ) {
         $from = '2020-09-21';
         $to = '2020-10-15';
     }
-
-    $info = [];
-    $sql = "
-        SELECT 
-            u.first,
-            u.last,
-            a.admin_address1,
-            a.admin_address2,
-            a.admin_city,
-            a.admin_state,
-            a.admin_postal,
-            a.admin_country,
-            a.admin_email
-        FROM
-            registration_charges rc
-                JOIN
-            users u USING (user_id)
-                JOIN
-            admin_auths aa ON aa.id = u.user_id
-                JOIN
-            admins a ON a.admin_id = aa.admin_id
-        WHERE
-            type IN ('yahadus' , 'chidon')
-                AND rc.year = $year
-                AND rc.school_id in (61, 269) 
-                AND rc.date >= '" . $from . " 14:00:00' 
-                AND rc.date <= '" . $to . " 13:59:59'
-        GROUP BY rc.user_id
-        ORDER BY first , last , date
-    ";
-//    echo $sql; exit;
-    $result = mysql_query( $sql );
-    while ( $row = mysql_fetch_assoc( $result ) ) {
-        $info[] = $row;
-    }
+    $from .= " 14:00:00";
+    $to .= " 13:59:59";
 }
+
+if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
+    $from = mysql_real_escape_string( $_POST['fromDate'] );
+    $to = mysql_real_escape_string( $_POST['toDate'] );
+}
+
+$info = [];
+$sql = "
+    SELECT 
+        u.first,
+        u.last,
+        a.admin_address1,
+        a.admin_address2,
+        a.admin_city,
+        a.admin_state,
+        a.admin_postal,
+        a.admin_country,
+        a.admin_email
+    FROM
+        registration_charges rc
+            JOIN
+        users u USING (user_id)
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
+            JOIN
+        admins a ON a.admin_id = aa.admin_id
+    WHERE
+        type IN ('yahadus' , 'chidon')
+            AND rc.year = $year
+            AND rc.school_id in (61, 269) 
+";
+if ( isset( $from ) && isset( $to ) ) {
+    $sql .= "
+        AND rc.date >= '" . $from . "'
+        AND rc.date <= '" . $to . "'
+    ";
+}
+$sql .= "
+    GROUP BY rc.user_id
+    ORDER BY first , last , date
+";
+//echo $sql; exit;
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info[] = $row;
+}
+
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 $cols = 1; //counter for columns
 $rows = 1; //counter for rows
@@ -145,21 +159,28 @@ function checkForBreak() {
         <h1>Hachayol Report</h1>    
         <?php if ( !isset( $_POST['date'] ) ) : ?>
         <form action="combinedLabels.php" method="post">
-            <select name="date">
-                <option value="0">Choose Batch Number</option>
-                <option value="1"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                >1st Batch (until Sept 16)</option>
-                <option value="2"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                >2nd Batch (from Sep 16 until Sep 21)</option>
-                <option value="3"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sep 21 to Oct 15)</option>
-                <!--                <option value="4"-->
-                <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
-            </select><br /><br />
+            <p>
+                <select name="date">
+                    <option value="0">Choose Batch Number</option>
+                    <option value="1"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                    >1st Batch (until Sept 16)</option>
+                    <option value="2"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                    >2nd Batch (from Sep 16 until Sep 21)</option>
+                    <option value="3"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                    >3rd Batch (from Sep 21 to Oct 15)</option>
+                    <!--                <option value="4"-->
+                    <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                    <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
+                </select>
+            </p>
+            <p>
+                OR
+                From Date: <input type="date" name="fromDate" />
+                To Date: <input type="date" name="toDate" />
+            </p>
             <input type="submit" name="submit" value="submit" />
         </form>
         <?php else : ?>
