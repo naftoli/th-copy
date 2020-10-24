@@ -12324,7 +12324,8 @@ input.form-control:not(:focus) {
 
 .page5 .lb-add-child {
     color: #35559f;
-    font-size: 30px
+    font-size: 30px;
+    margin-left:5px;
 }
 
 .page5 .lb-new-registration {
@@ -15505,5 +15506,5 @@ body {
 
 
 .hebrew {
-    font-family:Arial;
+    font-family: Arial !important;
 }

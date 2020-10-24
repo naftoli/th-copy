@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -110,6 +110,11 @@
 				left: 2%;
 				z-index: 999999;
 			}
+
+            .hebrew {
+                font-family: Arial !important;
+            }
+
 		</style>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -141,7 +146,7 @@
                 </div>				
                 <div class="span12 mt1">
                     <div class="span4">
-                        <div class="top-left-space">
+                        <div id="topleftspace" class="top-left-space">
                             <div class="span12">
                                 <img id="item0" src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="">
                             </div>
@@ -149,9 +154,9 @@
                                 <span class="title" id="rank"></span>
                             </div>
                             <div class="span12">
-                                <span class="descr" id="name"></span>
+                                <span class="descr i18n" id="name"></span>
                             </div>
-							<div class="span12">
+							<div class="span12" id="serialdiv">
 								<span class="title i18n" data-key="Serial">Serial:</span>
                                 <span class="descr" id="serial"></span>
                             </div>
@@ -162,16 +167,16 @@
                     		<img id="userImg" src="">
                     	</div>
                     </div>
-                    <div class="span4" style="text-align: right;">
-                        <div class="top-right-space">
+                    <div  class="span4" style="text-align: right;">
+                        <div id="toprightspace" class="top-right-space">
                             <div class="span12">
                                 <img id="logo" src="">
                             </div>
-                            <div class="span12" style="margin-top: 10px;">
+                            <div id="commanderdiv" class="span12" style="margin-top: 10px;">
                                 <span class="title i18n" data-key="Commander">Commander:<br></span>
                                 <span class="descr" id="teacher"></span>
                             </div>
-							<div class="span12">
+							<div id="platoondiv" class="span12">
                                 <span class="title i18n" data-key="Platoon">Platoon:</span>
                                 <span class="descr" id="grade"></span>
                             </div>

@@ -96,9 +96,11 @@
      })
 
      if (sessionStorage.getItem("locallang") == "he") {
-         //alert();
-         $("body").addClass("hebrew");
+       
 
+         $(".i18n").addClass("hebrew");
+
+          
          $("#remembermediv").css("float", "right");
      
 
@@ -110,7 +112,9 @@
 
          $("#forgotdiv").css("direction", "rtl");
 
-       //   
+         $("#error-block").css("direction", "rtl");
+
+       
 
 
      }

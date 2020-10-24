@@ -93,7 +93,24 @@ var jsonen = (function(){
             const key = $(this).data('key')
 
             $(this).text(i18next.t(key))
-            
+
+            if (sessionStorage.getItem("locallang") == "he") {
+                //alert();
+              
+
+                $(".i18n").addClass("hebrew");
+
+
+                
+
+                $("#forgot").css("direction", "rtl");
+                
+                $("#forgot").addClass("hebrew");
+
+                //   
+
+
+            }
 
         })
 

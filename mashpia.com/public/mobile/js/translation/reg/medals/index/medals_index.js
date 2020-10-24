@@ -76,15 +76,7 @@ var en = jsonen;
 
     
 
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
+       
     })
 
 
@@ -100,4 +92,48 @@ var en = jsonen;
 
         })
 
-    } 
+        if (sessionStorage.getItem("locallang") == "he") {
+            //alert();
+
+
+            $(".i18n").addClass("hebrew");
+
+
+           // 
+
+           //commanderdiv
+            $("#serialdiv .title").remove().insertAfter($("#serialdiv .descr"));
+            $("#commanderdiv .title").remove().insertAfter($("#commanderdiv .descr"));
+            $("#platoondiv .title").remove().insertAfter($("#platoondiv .descr"));
+
+            $(".descr").css("margin-right", "5px");
+
+          
+           // var topleftspace
+            swapElement($("#topleftspace"), $("#toprightspace"));
+
+            $("#topleftspace").removeClass("top-left-space");
+            $("#topleftspace").addClass("top-right-space");
+
+            $("#toprightspace").removeClass("top-right-space");
+            $("#toprightspace").addClass("top-left-space");
+
+
+           
+          //  $("#topleftspace").css("background-color", "yellow");
+            //$("#topleftspace").css("float", "left");
+
+          //  $("#toprightspace").css("background-color", "yellow");
+
+        }
+
+} 
+
+function swapElement(a, b) {
+    // create a temporary marker div
+    var aNext = $('<div>').insertAfter(a);
+    a.insertAfter(b);
+    b.insertBefore(aNext);
+    // remove marker div
+    aNext.remove();
+}
