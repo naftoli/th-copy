@@ -390,7 +390,10 @@ if (isset($_POST['submit'])) {
                 // }
                 // only create tasks for future
                 $today = unixtojd();
-                if ($startDate < $today) continue;
+                if ($startDate < $today) {
+                    echo $startDate . "<br />";
+                    continue;
+                }
                 
                 // if no dates were entered create array based on default start and end dates
                 if (empty($arrStart)) {
