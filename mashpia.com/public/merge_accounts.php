@@ -64,19 +64,19 @@ if ( isset( $_POST['submit'] ) ) {
       }
       mysql_query('set autocommit=1');
 
-			if ( $updated ) {
-				//require_once('classes/mission_marks_updater.php');
-				require_once('classes/medal_updater.php');
-				require_once('classes/rank_updater.php');
-				
-				//$mmupdater = new mission_marks_updater();
-				$mupdater = new medal_updater();
-				$rupdater = new rank_updater();
-				
-				$user = $to;
-				//$mmupdater->mission_marks_update( $user );
-				$mupdater->update_medal_two( $user );
-        $rupdater->update_rank_two( $user );
+      if ( $updated ) {
+        //require_once('classes/mission_marks_updater.php');
+        require_once('classes/medal_updater.php');
+        require_once('classes/rank_updater.php');
+
+        //$mmupdater = new mission_marks_updater();
+        $mupdater = new medal_updater();
+        $rupdater = new rank_updater();
+
+        //$mmupdater->mission_marks_update( $to );
+        $mupdater->update_medal_two( $to );
+        $rupdater->updateWordPress = false;
+        $rupdater->update_rank_two( $to );
         
         // update any medals / ranks earned and received info from old to new
         foreach ( $medals as $medal ) {
@@ -85,7 +85,7 @@ if ( isset( $_POST['submit'] ) ) {
           $sql = "select * from medal_marks where subject_id = " . $subject . " and medal_ord = " . $medal_ord . " and user_id = " . $to;
           $result = mysql_query( $sql );
           if ( mysql_num_rows( $result ) > 0 ) {
-            // if medal was awared now by updater, update to have info from old account
+            // if medal was awarded now by updater, update to have info from old account
             $row = mysql_fetch_assoc( $result );
             if ( $row['date_awarded'] == unixtojd() ) {
               $sql = "update medal_marks 
@@ -105,7 +105,7 @@ if ( isset( $_POST['submit'] ) ) {
           $sql = "select * from rank_marks where rank_ord = " . $rank['rank_ord'] . " and user_id = " . $to;
           $result = mysql_query( $sql );
           if ( mysql_num_rows( $result ) > 0 ) {
-            // if rank was awared now by updater, update to have info from old account
+            // if rank was awarded now by updater, update to have info from old account
             $row = mysql_fetch_assoc( $result );
             if ( $row['date_promoted'] == unixtojd() ) {
               $sql = "update rank_marks 
@@ -127,11 +127,11 @@ if ( isset( $_POST['submit'] ) ) {
         mysql_query( $sql );
         mysql_query( $sql2 );
 				
-				$msg .= "The two accounts have been merged<br />";
-			} else {
-				$msg .= "Error trying to merge the two accounts.<br />" . $sql . "<br />" . mysql_error() . "<br />";
-			}
-		}
+            $msg .= "The two accounts have been merged<br />";
+        } else {
+            $msg .= "Error trying to merge the two accounts.<br />" . $sql . "<br />" . mysql_error() . "<br />";
+        }
+      }
 	} else {
 		$msg .= "You have not entered a correct value for the old and / or new account.<br />Please try again!<br />";
 	}
