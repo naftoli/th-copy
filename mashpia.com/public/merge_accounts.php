@@ -96,9 +96,18 @@ if ( isset( $_POST['submit'] ) ) {
                       where medal_ord = " . $medal_ord . ", 
                       and subject_id = " . $subject . ", 
                       and user_id = " . $to;
-              mysql_query( $sql );
             }
+          } else {
+              // insert medal if updater didn't put it in b/c missions may have been deleted in past
+              $sql = "insert into medal_marks 
+                    set subject_id = " . $subject . " , 
+                    medal_ord = " . $medal_ord . ", 
+                    user_id = " . $to . ", 
+                    date_awarded = " . $medal['date_awarded'];
+              if ( $medal['date_shipped'] ) $sql .= ", date_shipped = '" . $medal['date_shipped'] . "'";
+              if ( $medal['date_received'] ) $sql .= ", date_received = '" . $medal['date_received'] . "'";
           }
+          mysql_query( $sql );
         }
 
         foreach ( $ranks as $rank ) {
@@ -109,16 +118,27 @@ if ( isset( $_POST['submit'] ) ) {
             $row = mysql_fetch_assoc( $result );
             if ( $row['date_promoted'] == unixtojd() ) {
               $sql = "update rank_marks 
-                      set data_promoted = " . $rank['data_promoted'];
+                      set date_promoted = " . $rank['date_promoted'];
               if ( $rank['date_printed'] ) $sql .= ", date_printed = '" . $rank['date_printed'] . "'";
               if ( $rank['date_book_shipped'] ) $sql .= ", date_book_shipped = '" . $rank['date_book_shipped'] . "'";
               if ( $rank['date_book_received'] ) $sql .= ", date_book_received = '" . $rank['date_book_received'] . "'";
               if ( $rank['date_card_shipped'] ) $sql .= ", date_card_shipped = '" . $rank['date_card_shipped'] . "'";
               if ( $rank['date_card_received'] ) $sql .= ", date_card_received = '" . $rank['date_card_received'] . "'";
               $sql .= " where user_id = " . $to;
-              mysql_query( $sql );
             }
+          } else {
+              // insert rank if for some reason rank updater didn't update it
+              $sql = "insert into rank_marks set 
+                    rank_ord = " . $rank['rank_ord'] . ", 
+                    user_id = " . $to . ", 
+                    date_promoted = " . $rank['date_promoted'];
+              if ( $rank['date_printed'] ) $sql .= ", date_printed = '" . $rank['date_printed'] . "'";
+              if ( $rank['date_book_shipped'] ) $sql .= ", date_book_shipped = '" . $rank['date_book_shipped'] . "'";
+              if ( $rank['date_book_received'] ) $sql .= ", date_book_received = '" . $rank['date_book_received'] . "'";
+              if ( $rank['date_card_shipped'] ) $sql .= ", date_card_shipped = '" . $rank['date_card_shipped'] . "'";
+              if ( $rank['date_card_received'] ) $sql .= ", date_card_received = '" . $rank['date_card_received'] . "'";
           }
+          mysql_query( $sql );
         }
 
         // delete old medals / ranks
