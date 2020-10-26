@@ -56,7 +56,7 @@ if (count($users) > 0) {
             <?php if ($superAdmin) : ?>
                 <th>Non TH School</th>
             <?php endif; ?>
-            <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Serial Number</th><th>Email</th><th>Father Cell</th><th>Mother Cell</th>
+            <th>Grade</th><th>Registered</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Serial Number</th><th>Email</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
             <?php 
