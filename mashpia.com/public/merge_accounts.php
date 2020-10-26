@@ -141,10 +141,14 @@ if ( isset( $_POST['submit'] ) ) {
           mysql_query( $sql );
         }
 
-        // delete old medals / ranks
-        $sql = "delete from medal_marks where user_id = " . $from;
-        $sql2 = "delete from rank_marks where rank_ord != 1 and user_id = " . $from;
+        // update any achievement cards
+        $sql = "update pointsDB.user_points set user_id = " . $to . " where user_id = " . $from;
         mysql_query( $sql );
+
+        // delete old medals / ranks
+        $sql1 = "delete from medal_marks where user_id = " . $from;
+        $sql2 = "delete from rank_marks where rank_ord != 1 and user_id = " . $from;
+        mysql_query( $sql1 );
         mysql_query( $sql2 );
 				
             $msg .= "The two accounts have been merged<br />";
