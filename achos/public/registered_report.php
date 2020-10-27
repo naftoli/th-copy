@@ -54,7 +54,7 @@ require('header.php');
             foreach ( $users as $user ) {
                 $grade = $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] );
                 echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] . 
-                    "</td><td>" $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
+                    "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
                     "</td><td>" . $user['user_registered'] . "</td></tr>"; 
                 if ( isset( $totals[$schools[$school]][$grade] ) ) 
                     $totals[$schools[$school]][$grade]++;

@@ -82,7 +82,7 @@ function add_camp_prize($params) {
                     " , prize_image_id=" . ms($global_prize_image_id) .
                     " , prize_current=" . ms($global_prize_current); 
                     
-            if (!mysql_query($sql)) 
+            if (!mysql_query($sql)) {
 		      
 		      $global_prize_id = 0;
               $error_code = 1; 
