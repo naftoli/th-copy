@@ -14,8 +14,11 @@ export class PlatoonRow extends Component {
       soldiers, miles_per_soldier, miles_balance,
     } = this.props.platoon;
 
-    let grades = [ 'Pre1a/Kindergarten', '1', '2', '3', '4', '5', '6', '7', '8' ];
-    grades = grades.map( grade => ({ label: grade, value: grade }) );
+    let grades = [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ];
+    grades = grades.map( grade => {
+        if (grade == 'Pre1a') return {label: 'Pre1a / Kindergarten', value: grade};
+        return {label: grade, value: grade};
+    } );
     const selectedGrade = findOption( grades, class_grade );
 
     return (
