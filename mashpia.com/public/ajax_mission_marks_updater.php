@@ -12,7 +12,7 @@ $mission_marks_updater->mission_marks_update($user_id);
 $medal_updater = new medal_updater();
 $medal_updater->update_medal($user_id);
 
-$rank_updater new rank_updater();
+$rank_updater = new rank_updater();
 $rank_updater->update_rank($user_id);
 
 echo "1";
