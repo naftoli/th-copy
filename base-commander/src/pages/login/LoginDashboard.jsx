@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // components
 import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
 // styles and images
 import logo from 'img/logos/th.svg';
 import { Row, Col } from 'reactstrap';
@@ -41,18 +42,18 @@ export default class LoginDashboard extends Component {
             <hr />
             <Row>
               <Col xs="6">
-                <a href="/new/signup">
+                <Link to={'/signup'}>
                   <Button size="lg" color='primary' id='join'>
-                      Create an Account
+                    Create an Account
                   </Button>
-                </a>
+                </Link>
               </Col>
               <Col xs="6">
-                <a href="/new/login">
-                    <Button size="lg" color='primary' id='show_login'>
+                <Link to={'/login'}>
+                  <Button size="lg" color='primary' id='show_login'>
                     Log in to your account
-                    </Button>
-                </a>
+                  </Button>
+                </Link>
               </Col>
             </Row>
         </div>
