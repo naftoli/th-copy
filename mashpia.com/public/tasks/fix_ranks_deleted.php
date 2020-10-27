@@ -1,0 +1,30 @@
+<?php
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo "No Permission.";
+    exit;
+}
+
+$qrys = [];
+$sql = "select * from mashpia_backup.rank_marks where rank_ord = 1 and date_printed is null";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    if ($row['user_id']) {
+        $sql = "insert ignore into rank_marks 
+                set rank_ord = " . $row['rank_ord'] . ", 
+                user_id = " . $row['user_id'] . ", 
+                date_promoted = " . $row['date_promoted'];
+        if ($row['date_printed']) $sql .= ", date_printed = " . $row['date_printed'];
+        if ($row['date_book_shipped']) $sql .= ", date_book_shipped = " . $row['date_book_shipped'];
+        if ($row['date_book_received']) $sql .= ", date_book_received = " . $row['date_book_received'];
+        if ($row['date_card_shipped']) $sql .= ", date_card_shipped = " . $row['date_card_shipped'];
+        if ($row['date_card_received']) $sql .= ", date_card_received = " . $row['date_card_received'];
+        if ($row['ranks_updated']) $sql .= ", ranks_updated = " . $row['ranks_updated'];
+        $qrys[] = $sql;
+    }
+}
+
+foreach ($qrys as $qry) mysql_query($qry);
+echo "done";
