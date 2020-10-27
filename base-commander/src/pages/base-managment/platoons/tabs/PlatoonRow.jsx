@@ -16,7 +16,7 @@ export class PlatoonRow extends Component {
 
     let grades = [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ];
     grades = grades.map( grade => {
-        if (grade == 'Pre1a') return {label: 'Pre1a / Kindergarten', value: grade};
+        if (grade === 'Pre1a') return {label: 'Pre1a / Kindergarten', value: grade};
         return {label: grade, value: grade};
     } );
     const selectedGrade = findOption( grades, class_grade );
