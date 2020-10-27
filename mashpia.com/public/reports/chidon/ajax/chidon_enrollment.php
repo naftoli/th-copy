@@ -34,7 +34,7 @@ $qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id,
         ." WHERE deleted = 0 AND th.year = " . $year;
 if ( $school_id > 0 ) $qry .= " AND th.school_id = $school_id ";
 //$qry .= " ORDER BY s.school_name, c.class_grade, c.class_sub, u.last ";
-$qry .= " ORDER BY s.school_name, u.user_registered, u.last ";
+$qry .= " ORDER BY s.school_name, u.user_registered desc, u.last ";
 $users_query = mysql_query( $qry );
 
 $users = [];
