@@ -545,8 +545,8 @@ class Raffle {
     public function checkMonthly( $user_id ) {
         $total = $this->checkDaily( $user_id );
         $required = Constants::get_monthly_task_requirment();
-        
-        if ($total < $required) { 
+
+        if ($total < $required && $total >= ($required - 12)) { // only check if less than 60 but at least 48
             $start_date = $this->start_date; // default to this start date
             $end_date = $start_date + 6; // get the end date for the first week
             // TODO, iterate and check for additional marks...

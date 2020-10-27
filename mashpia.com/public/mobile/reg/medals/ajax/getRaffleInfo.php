@@ -50,25 +50,22 @@ function checkMonthly( $user_id ) {
 
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_monthly_task_requirment();
-	
-	if ($total >= $required - 12) { // if it is between 60 and 48 we can check each week to see if we get 60.
-		$start_date = $dates['start_date']; // default to this start date
-		$end_date = $dates['start_date'] + 6; // get the end date for the first week
-		// TODO, iterate and check for additional marks...
-		$i = 0; // set $i to 0
-		while ($total < $required && $i < 12) { // while we are still below 60 and have not checked all 12 weeks yet.
-			$update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
-				AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
-				AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-			$update_total_query = mysql_query($update_total_sql);
-			$update_total_row = mysql_fetch_assoc($update_total_query);
-			if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
-			
-			// cleanup
-			$i++; // increment $i
-			$start_date = $end_date + 1; // go to the next day for the next start date
-			$end_date = $start_date + 6; // get the end date for the first week			
-		}
+
+    if ($total < $required && $total >= ($required - 12)) { // only check if less than 60 but at least 48
+        $start_date = $dates['start_date']; // default to this start date
+        $end_date = $dates['start_date'] + 6; // get the end date for the first week
+        // TODO, iterate and check for additional marks...
+        for ($i = 0; $i < 12; $i++) { // loop over the 12 weeks.
+            $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
+                    AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
+                    AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+            $update_total_query = mysql_query($update_total_sql);
+            $update_total_row = mysql_fetch_assoc($update_total_query);
+            if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
+
+            $start_date = $end_date + 1; // go to the next day for the next start date
+            $end_date = $start_date + 6; // get the end date for the first week
+        }
     }
     
     return formatRaffleInfo( $total, $required, $dates['name'], 'monthly' );
