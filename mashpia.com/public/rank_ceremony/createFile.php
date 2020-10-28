@@ -64,9 +64,9 @@ function generateFile( $gender = '' ) {
     $logos = $r->getSchoolLogos();
 
     if (!empty($ranks)) {
-        if ($gender == 'M') $logoContent = file_get_contents("http://mashpia.com/file_view.php?id=" . $logos[$schools[$school]]['logo_boys']);
-        else if ($gender == 'F') $logoContent = file_get_contents("http://mashpia.com/file_view.php?id=" . $logos[$schools[$school]]['logo_girls']);
-        else $logoContent = file_get_contents("http://mashpia.com/file_view.php?id=" . $logos[$schools[$school]]['logo']);
+        if ($gender == 'M') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_boys']);
+        else if ($gender == 'F') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_girls']);
+        else $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo']);
         $logo_img = imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
         $logo_image = imagepng($logo_img, $logo_url);
