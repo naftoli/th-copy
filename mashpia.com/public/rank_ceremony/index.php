@@ -47,7 +47,7 @@ $schools = $as->getSchools();
         Promise.all([...p])
             .then(values => {
                 console.log(values)
-                location.href = 'createZip.php'
+                // location.href = 'createZip.php'
             })
             .catch(error => {
                 console.log(error)

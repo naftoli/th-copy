@@ -515,8 +515,6 @@ for ($cntr = 0; $cntr < count($subjects); $cntr++) {
 				
 			</div> <!-- main -->
 			
-			<? } ?>
-			
 			<div id="footer">
 				<?php include("includes/bottombar.php"); ?>
 			</div> <!-- footer -->

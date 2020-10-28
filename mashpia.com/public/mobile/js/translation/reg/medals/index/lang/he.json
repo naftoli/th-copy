@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿{
   "Title" : "צבאות השם - דף הבית",
   "logout" : "יציאה",
@@ -12,4 +13,20 @@
   "Achievements" : "הישגים",
   "Rewards" : "פרסים",
   "SureMarkMissions" : "האם אתה בטוח שברצונך לסמן משימות?"
+=======
+﻿{
+  "Title" : "צבאות השם - דף הבית",
+  "logout" : "יציאה",
+  "edit" : "עריכה",
+  "Serial" : "מספר סידורי",
+  "Commander" : "מפקד",
+  "Platoon" : "מחלקה",
+  "RAFFLEINFO" : "מידע לגבי הגרלות ",
+  "MEDALS" : "מדליות",
+  "Accounts" : "חשבונות",
+  "Missions" : "משימות",
+  "Achievements" : "הישגים",
+  "Rewards" : "פרסים",
+  "SureMarkMissions" : "האם אתה בטוח שברצונך לסמן משימות?"
+>>>>>>> 82efab0cde801144375ca8e70b489a5cff043f74
 }

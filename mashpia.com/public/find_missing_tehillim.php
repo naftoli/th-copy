@@ -69,23 +69,23 @@ require_once 'header.php';
 				7 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -93,23 +93,23 @@ require_once 'header.php';
 				8 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -117,23 +117,23 @@ require_once 'header.php';
 				9 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -141,23 +141,23 @@ require_once 'header.php';
 				10 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -165,23 +165,23 @@ require_once 'header.php';
 				11 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -189,23 +189,23 @@ require_once 'header.php';
 				12 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -213,23 +213,23 @@ require_once 'header.php';
 				13 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
@@ -237,23 +237,23 @@ require_once 'header.php';
 				14 => array(
 					array(
 						3 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						4 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						5 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						6 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						), 
 						7 => array(
-							'minutes' => , 
+							// 'minutes' => , 
 							'kapitelach' => '' 
 						)
 					)
