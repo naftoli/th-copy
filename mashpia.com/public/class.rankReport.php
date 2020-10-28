@@ -29,7 +29,7 @@ class RankReport extends Report {
         $this->userPic = [];
     }
 
-    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ') {
+    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $reverseHe = false) {
         $this->ranks = array();
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
@@ -56,6 +56,10 @@ class RankReport extends Report {
         if ( $rankOrd ) {
             $sql .= "AND rm.rank_ord = " . $rankOrd . " ";
         }
+        if ( !empty( $specificGender ) ) {
+            $sql .= "AND gender = '" . $specificGender . "' ";
+        }
+
         if ($orderType == 'byGrade') {
             $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first, r.rank_ord";
         } else if ( $orderType == 'byRankFirst' || $orderType == 'byRankFirstMixedGender' ) {
@@ -73,7 +77,14 @@ class RankReport extends Report {
             $school = $row['school_name'];
             $teacher = $row['class_teacher'];
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-            $user = $row['first'] . $nameBreak . $row['last'];
+
+            $first = $row['first'];
+            $last = $row['last'];
+            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
+            else $user = $first . $nameBreak . $last;
+            $this->userInfo[$user_id] = $user;
+            $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
+
             $rank = $row['rank_name'];
             if ( $orderType == 'byGrade' )
                 $this->ranks[$school][$teacher][$grade][][$user_id] = $rank;
@@ -88,6 +99,8 @@ class RankReport extends Report {
             else if ( $orderType == 'byGenerals' ) {
                 if ( $row['rank_ord'] < 9 ) continue;
                 $this->ranks[$rank][$row['gender']][] = $user_id;
+            } else if ( $orderType == 'byGender') {
+                $this->ranks[$row['gender']][$school][$rank][$teacher][$grade][] = $user_id;
             }
 
             $this->rankInfo[$user_id]['card_printed'] = $row['date_printed'];
@@ -95,9 +108,6 @@ class RankReport extends Report {
             $this->rankInfo[$user_id]['card_received'] = $row['date_card_received'];
             $this->rankInfo[$user_id]['book_shipped'] = $row['date_book_shipped'];
             $this->rankInfo[$user_id]['book_received'] = $row['date_book_received'];
-
-            $this->userInfo[$user_id] = $user;
-            $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
             $this->userSchool[$user_id] = $school;
             $this->schoolLogos[$school] = [
@@ -173,6 +183,13 @@ class RankReport extends Report {
 
     public function getPicOnly() {
         return $this->picOnly;
+    }
+
+    private function checkHe($first, $last, $separator) {
+        if (ord($first[0]) > 122) {
+            // its hebrew
+            return strrev($last) . $separator . strrev($first);
+        }
     }
 }
 ?>
