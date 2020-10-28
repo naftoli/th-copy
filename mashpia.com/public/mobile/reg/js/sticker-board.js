@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The following code is line for line from leaderboard/main.js - 6/13/2018
  */
 // make sure that we do not get a no-refrance error.
@@ -84,18 +84,31 @@ var sticker_board = function() {
         setupSlider( selected_subject );
     }
     // template for top slider
-    function renderMedalSliderItem( campaign ){
+    function renderMedalSliderItem(campaign) {
+        var MissionsText = "Missions";
+        var CampaignCompleateText = "Campaign Compleate!";
+        var progressbarFloat = "";
+        if (sessionStorage.getItem("locallang") == "he") {
+            MissionsText = "משימות";
+            CampaignCompleateText = "הקמפיין הושלם!";
+            progressbarFloat = "display: block; float: right;";
+        }
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
-        var progress_text = campaign.total + ' / ' + campaign.subject_total + ' Missions</span>';
-        if ( percent_compleate >= 100 ) progress_text = 'Campaign Compleate!'
-        return  '<div class="medal-slider-item">' +
+        var progress_text = campaign.total + ' / ' + campaign.subject_total + ' ' + MissionsText+'</span>';
+        if (percent_compleate >= 100) progress_text = CampaignCompleateText;
+
+        var result =  '<div class="medal-slider-item">' +
                     '<img src="' + campaign.photo + '">' + 
                     '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
                     '<div class="medal-status progress">' + 
-                        '<div class="progress-bar ' + ( percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;"></div>' +
+            '<div class="progress-bar ' + (percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="float:right;width: ' + percent_compleate + '%;"></div>' +
                         '<span>' + progress_text + '</span>' +
                     '</div>' +
-                '</div>';
+            '</div>';
+
+       // alert(result);
+
+        return result;
     }
 
     function renderStickerRows( index, campaign, cache ){

@@ -16,11 +16,21 @@ var leaderboardApp = function(){
         $( '#filtersModalContainer' ).on( 'hidden.bs.modal',  onModalClose );
         $( '#filtersModalContainer' ).on( 'show.bs.modal',    onModalOpen  );
         // setup event listeners for when an option is changed
-        $("#update-leaderboard").click( function() {
+
+        $("#update-leaderboard").click(function () {
             state.updateClicked = true; // do not update the UI
             getLeaderBoard( 0 ); // get a new leaderboard
             $('#filtersModalContainer').modal('hide');
         });
+
+
+        $("#update-leaderboard-he").click(function () {
+            state.updateClicked = true; // do not update the UI
+            getLeaderBoard(0); // get a new leaderboard
+            $('#filtersModalContainerHE').modal('hide');
+        });
+
+
     }); // end on page load anynomus function
     /**
      * onModalOpen

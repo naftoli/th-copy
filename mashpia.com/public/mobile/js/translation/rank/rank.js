@@ -70,14 +70,7 @@
          translate();
      })
 
-     // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-     // $.post("js/translation/forgot/en.json", function (res) {
-
-     //     // todo : add all translations to page dynamicaly !!
-     //     console.log(res,'sss')
-
-     // })
+    
  })
 
  function trasPlaceholder(){
@@ -100,6 +93,21 @@
 
          $(this).text(i18next.t(key))
 
+         if (sessionStorage.getItem("locallang") == "he") {
+             //alert();
+
+
+             $(".i18n").addClass("hebrew");
+
+
+           
+
+             $("#ManyStars").css("direction", "rtl");
+
+
+            
+
+         }
      })
 
  }

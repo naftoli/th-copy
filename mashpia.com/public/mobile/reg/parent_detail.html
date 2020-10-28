@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
@@ -158,15 +158,19 @@
                     <div class="col-xs-6">
                         <a href="#" id="logOff">
                             <div><img src="/mobile/img_new/lock-color-white-svg.svg" /></div>
-                            <div style="margin-left:10px"><span data-key="LogOut" class="i18n"
-                                    class="lb-ico">logout</span></div>
+                            <div style="margin-left:10px">
+                                <span data-key="LogOut"
+                                      class="lb-ico i18n">logout</span>
+                            </div>
                         </a>
                     </div>
                     <div class="col-xs-6" align="right" id="settings">
                         <a href="edit_profile.html">
                             <div><img src="/mobile/img_new/settings-color-white-svg.svg" /></div>
-                            <div style="margin-right:10px;"><span data-key="edit" class="i18n"
-                                    class="lb-ico">edit</span></div>
+                            <div style="margin-right:10px;">
+                                <span data-key="edit"
+                                      class="lb-ico i18n">edit</span>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -189,213 +193,242 @@
                     </div>
                 </div>
             </div>
-            <div style="float: right;">
-                <button id="en" class="translate">English</button>
-                <button id="he" class="translate">עִברִית</button>
-            </div>
-            <div class="row add_child">
-                <div class="col-xs-6">
+
+            <div  class="row add_child">
+                <div id="addchilddiv" class="col-xs-6 float_element">
                     <a href="/mobile/registration/child.html" id="addChild">
-                        <div style="float:left">
+                        <div class="float_element" style="float:left">
                             <div class="ico-wrapper">
                                 <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
                             </div>
                         </div>
-                        <div style="float:left">
-                            <span class="lb-add-child i18n" data-key="addChild">&nbsp;add child</span>
+                        <div class="float_element" style="float:left">
+                            <span class="lb-add-child i18n" data-key="addChild">add child</span>
                         </div>
                     </a>
                 </div>
                 <div class="col-xs-6" id="chidonDriveButton">
                     <div class="button-spacing childrens-content" style="float:right;">
                         <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
-                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
+                <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
                         <!-- <button class="btn btn-info chidondrive">ChidonDrive</button> -->
                     </div>
                 </div>
             </div>
+
+            <!-- temp
+                <div id="addchilddiv2" >
+                    <div class="col-xs-6" style="float:right;">
+                        <a href="/mobile/registration/child.html" id="addChild">
+                            <div style="float:right">
+                                <div class="ico-wrapper">
+                                    <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
+                                </div>
+                            </div>
+                            <div style="float:right">
+                                <span class="lb-add-child i18n" data-key="addChild">הספפ </span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6" id="chidonDriveButton">
+                        <div class="button-spacing childrens-content" style="float:right;">
+
+                        </div>
+                    </div>
+                </div>
+
+    -->
+
+
+
+
 
             <div class="row">
                 <div class="col-xs-12">
                     <div class="chilrens" id="children">
                         <script id="childrenTpl" type="text/x-handlebars-template">
                             {{#each children}}
-									<div class="row" id="r{{@key}}">
-										<div class="col-xs-12">
-											<table width="100%" style="margin-left:-10px">
-												<tr>
-													<td width="33.3%" valign="top">
-														<div class="avatar-container img-people" align="center" style="position:relative">
-															<!--<a href="medals/index.html?id={{@key}}">-->
-															{{#if this.needsReg}}
-																{{#if this.allowRemove}}
-																{{else}}
-																	<a href="medals/?id={{@key}}">
-																{{/if}}
-															{{else}}
-																{{#if this.chayolei}}
-																	<a href="medals/?id={{@key}}">
-																{{/if}}
-															{{/if}}
-															{{#if this.mobile_pic}}
-																<img src="{{mobile_pic}}" class="children-avatar">
-															{{else}}
-																{{#if this.photo}}
-																	{{#if this.thumb}} 
-																	<img src="/thumbs/{{thumb}}" class="children-avatar">
-																	{{else}}
-																	<img src="../../git cdh{{photo}}" class="children-avatar">
-																	{{/if}}
-																{{else}}
-																<img src="images/profile-photo-default.jpg" class="children-avatar">
-																{{/if}}
-															{{/if}}
-															<img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
-															<!--</a>-->
-															{{#if this.needsReg}}
-																{{#if this.allowRemove}}
-																{{else}}
-																	</a>
-																{{/if}}
-															{{else}}
-																{{#if this.chayolei}}
-																	</a>
-																{{/if}}
-															{{/if}}
-														</div>
-													</td>
-													<td style="padding-left:10px" id="{{@key}}">
-														<div class="childrens-content">
-															{{#if this.needsReg}}
-																{{#if this.allowRemove}}
-																{{else}}
-																	<a href="medals/?id={{@key}}">
-																{{/if}}
-															{{else}}
-																{{#if this.chayolei}}
-																	<a href="medals/?id={{@key}}">
-																{{/if}}
-															{{/if}}
-																<div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
-																<div class="childrens-content-h2">{{school}} - {{city}}</div>
-															{{#if this.needsReg}}
-																{{#if this.allowRemove}}
-																{{else}}
-																	</a>
-																{{/if}}
-															{{else}}
-																{{#if this.chayolei}}
-																	</a>
-																{{/if}}
-															{{/if}}
-															{{#if this.needsReg}}
-																<div class="button-spacing">
-																	{{#if this.schoolRegistered}}
-																		{{#if this.schoolTypeRegistered}}
-                                                                            {{#if this.reg_types.chayolei }}
-                                                                                <button class="btn btn-primary re_register"> <span data-key="RegisterChayolei" class="i18n"> Register Chayolei </span> {{ this.chayolei_year }} <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}
-                                                                                {{#if this.reg_types.chidon }}
-                                                                                    / Chidon {{ this.chidon_year }}
-                                                                                {{/if}}
-                                                                                </button>
-                                                                            {{else}}
-                                                                                {{#if this.reg_types.chidon }}
-                                                                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
-                                                                                {{/if}}
-                                                                            {{/if}}
-                                                                        {{else}}
-                                                                            {{#if this.reg_types.chidon }}
-                                                                                <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
-                                                                            {{/if}}
-                                                                        {{/if}}
-																	{{/if}}
-																</div>
+                            <div class="row" id="r{{@key}}">
+                                <div class="col-xs-12">
+                                    <table width="100%" style="margin-left:-10px">
+                                        <tr>
+                                            <td width="33.3%" valign="top">
+                                                <div class="avatar-container img-people" align="center" style="position:relative">
+                                                    <!--<a href="medals/index.html?id={{@key}}">-->
+                                                    {{#if this.needsReg}}
+                                                    {{#if this.allowRemove}}
+                                                    {{else}}
+                                                    <a href="medals/?id={{@key}}">
+                                                        {{/if}}
+                                                        {{else}}
+                                                        {{#if this.chayolei}}
+                                                        <a href="medals/?id={{@key}}">
                                                             {{/if}}
-															
-															{{#if this.chidonRegistered}}
-																<div class="button-spacing">
-                                                                    {{#if this.showChidonPic}}
-                                                                    <!-- <div style="margin: 10px 0px">
-                                                                        <button class="btn btn-info chidonPhoto">Upload Chidon Photo</button>
-                                                                    </div> -->
-                                                                    {{/if}}
-																	{{#if this.shabbatonRegistered}}
-																		{{#if this.shabbatonConfirmed}}
-                                                                            <div class="chidonRegInfo" style="color: #17771c"><span data-key="EnrolledChidon_msg1" class="i18n"> Chidon Shabbaton Enrolled - Chidon ID: </span>{{this.th_chidon_id}}</div>
-																		{{else}}
-																			<div class="chidonRegInfo" data-key="EnrolledChidon_msg2" class="i18n">Chidon Shabbaton Pending Enrollment</div>
-																			{{#if this.shabbatonEdit}}
-																				<div style="margin: 10px 0px">
-																					<button class="btn btn-danger editEnrollment" data-key="EditEnrollment" class="i18n">Edit Enrollment</button>
-																				</div>
-																			{{/if}}
-																		{{/if}}
-																	{{else}}
-																		<!-- {{#if this.enrollShabbaton}}
-																			<div class="button-spacing">
-																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
-																			</div>
-                                                                        {{/if}} -->
-                                                                        <!-- <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div> -->
-																	{{/if}}
-																	<!-- <div style="margin:10px 0px">
-																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
-																	</div> -->
-																</div>
                                                             {{/if}}
-                                                            {{#if this.chayoleiRegistered}}
-                                                                <div class="button-spacing">
-                                                                    <div class="chidonRegInfo" style="color: #17771c" ><span data-key="RegisteredCH" class="i18n"> Registered for Chayolei TH </span> {{ this.reg_year }}</div>
-                                                                </div>
+                                                            {{#if this.mobile_pic}}
+                                                            <img src="{{mobile_pic}}" class="children-avatar">
+                                                            {{else}}
+                                                            {{#if this.photo}}
+                                                            {{#if this.thumb}}
+                                                            <img src="/thumbs/{{thumb}}" class="children-avatar">
+                                                            {{else}}
+                                                            <img src="../../git cdh{{photo}}" class="children-avatar">
                                                             {{/if}}
-															<!--
-															{{#if this.chidon}}
-																{{#if this.chidonRegistered}}
-																{{else}}
-																	<div class="button-spacing">
-																		<button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
-																	</div>
-																{{/if}}
-															{{/if}}
-															
-															{{#if this.auctionInfo}}
-																<div class="chidonRegInfo">
-																	{{this.auctionInfo}}
-																</div>
-															{{/if}}
-															-->
-															{{#if this.allowRemove}}
-															<a href="#" class="del">
-																<div class="button-spacing">
-																	<span class="glyphicon glyphicon-trash"></span>
-																	<span class="ln-delete"><b data-key="REMOVE" class="i18n">REMOVE FROM ACCOUNT</b></span>
-																</div>
-															</a>
+                                                            {{else}}
+                                                            <img src="images/profile-photo-default.jpg" class="children-avatar">
                                                             {{/if}}
-															
-															{{#if this.showStory}}
-																<div style="margin:10px 0px">
-																	<a href="https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit" data-key="RebbeStoryContest_1" class="i18n">Rebbe Story Contest</a>
-																</div>
-																<div style="margin:10px 0px">
-																	<button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
-																</div>
-															{{/if}}
-														</div>
-													</td>
-												</tr>
-											</table>
-										</div>
-									</div>
-								{{/each}}
-							</script>
+                                                            {{/if}}
+                                                            <img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
+                                                            <!--</a>-->
+                                                            {{#if this.needsReg}}
+                                                            {{#if this.allowRemove}}
+                                                            {{else}}
+                                                        </a>
+                                                        {{/if}}
+                                                        {{else}}
+                                                        {{#if this.chayolei}}
+                                                    </a>
+                                                    {{/if}}
+                                                    {{/if}}
+                                                </div>
+                                            </td>
+                                            <td style="padding-left:10px" id="{{@key}}">
+                                                <div class="childrens-content">
+                                                    {{#if this.needsReg}}
+                                                    {{#if this.allowRemove}}
+                                                    {{else}}
+                                                    <a href="medals/?id={{@key}}">
+                                                        {{/if}}
+                                                        {{else}}
+                                                        {{#if this.chayolei}}
+                                                        <a href="medals/?id={{@key}}">
+                                                            {{/if}}
+                                                            {{/if}}
+                                                            <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
+                                                            <div class="childrens-content-h2">{{school}} - {{city}}</div>
+                                                            {{#if this.needsReg}}
+                                                            {{#if this.allowRemove}}
+                                                            {{else}}
+                                                        </a>
+                                                        {{/if}}
+                                                        {{else}}
+                                                        {{#if this.chayolei}}
+                                                    </a>
+                                                    {{/if}}
+                                                    {{/if}}
+                                                    {{#if this.needsReg}}
+                                                    <div class="button-spacing">
+                                                        {{#if this.schoolRegistered}}
+                                                        {{#if this.schoolTypeRegistered}}
+                                                        {{#if this.reg_types.chayolei }}
+                                                        <button class="btn btn-primary re_register">
+                                                            <span data-key="RegisterChayolei" class="i18n"> Register Chayolei </span> {{ this.chayolei_year }} <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}
+                                                            {{#if this.reg_types.chidon }}
+                                                            / Chidon {{ this.chidon_year }}
+                                                            {{/if}}
+                                                        </button>
+                                                        {{else}}
+                                                        {{#if this.reg_types.chidon }}
+                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
+                                                        {{/if}}
+                                                        {{/if}}
+                                                        {{else}}
+                                                        {{#if this.reg_types.chidon }}
+                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
+                                                        {{/if}}
+                                                        {{/if}}
+                                                        {{/if}}
+                                                    </div>
+                                                    {{/if}}
+
+                                                    {{#if this.chidonRegistered}}
+                                                    <div class="button-spacing">
+                                                        {{#if this.showChidonPic}}
+                                                        <!-- <div style="margin: 10px 0px">
+                                                    <button class="btn btn-info chidonPhoto">Upload Chidon Photo</button>
+                                                </div> -->
+                                                        {{/if}}
+                                                        {{#if this.shabbatonRegistered}}
+                                                        {{#if this.shabbatonConfirmed}}
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="EnrolledChidon_msg1" class="i18n"> Chidon Shabbaton Enrolled - Chidon ID: </span>{{this.th_chidon_id}}</div>
+                                                        {{else}}
+                                                        <div class="chidonRegInfo" data-key="EnrolledChidon_msg2" class="i18n">Chidon Shabbaton Pending Enrollment</div>
+                                                        {{#if this.shabbatonEdit}}
+                                                        <div style="margin: 10px 0px">
+                                                            <button class="btn btn-danger editEnrollment" data-key="EditEnrollment" class="i18n">Edit Enrollment</button>
+                                                        </div>
+                                                        {{/if}}
+                                                        {{/if}}
+                                                        {{else}}
+                                                        <!-- {{#if this.enrollShabbaton}}
+                                                    <div class="button-spacing">
+                                                        <button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
+                                                    </div>
+                                                {{/if}} -->
+                                                        <!-- <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div> -->
+                                                        {{/if}}
+                                                        <!-- <div style="margin:10px 0px">
+                                                    <button class="btn btn-primary editChidon">Edit Sweater Size</button>
+                                                </div> -->
+                                                    </div>
+                                                    {{/if}}
+                                                    {{#if this.chayoleiRegistered}}
+                                                    <div class="button-spacing">
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH" class="i18n"> Registered for Chayolei TH </span> {{ this.reg_year }}</div>
+                                                    </div>
+                                                    {{/if}}
+                                                    <!--
+                                            {{#if this.chidon}}
+                                                {{#if this.chidonRegistered}}
+                                                {{else}}
+                                                    <div class="button-spacing">
+                                                        <button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
+                                                    </div>
+                                                {{/if}}
+                                            {{/if}}
+
+                                            {{#if this.auctionInfo}}
+                                                <div class="chidonRegInfo">
+                                                    {{this.auctionInfo}}
+                                                </div>
+                                            {{/if}}
+                                            -->
+                                                    {{#if this.allowRemove}}
+                                                    <a href="#" class="del">
+                                                        <div class="button-spacing">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                            <span class="ln-delete"><b data-key="REMOVE" class="i18n">REMOVE FROM ACCOUNT</b></span>
+                                                        </div>
+                                                    </a>
+                                                    {{/if}}
+
+                                                    {{#if this.showStory}}
+                                                    <div style="margin:10px 0px">
+                                                        <a href="https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit" data-key="RebbeStoryContest_1" class="i18n">Rebbe Story Contest</a>
+                                                    </div>
+                                                    <div style="margin:10px 0px">
+                                                        <button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
+                                                    </div>
+                                                    {{/if}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </script>
                     </div>
                     <div id='no-children'>
                         <h3>
-                            <span data-key="WelcomeMsg1" class="i18n">Welcome to your Tzivos Hashem Family Account. Get
-                                started by </span>
-                            <a href="/mobile/registration/child.html" data-key="WelcomeMsg2Add" class="i18n">adding a
-                                child</a>.
+                            <span data-key="WelcomeMsg1" class="i18n">
+                                Welcome to your Tzivos Hashem Family Account. Get
+                                started by
+                            </span>
+                            <a href="/mobile/registration/child.html" data-key="WelcomeMsg2Add" class="i18n">
+                                adding a
+                                child
+                            </a>.
                         </h3>
                     </div>
                 </div>
@@ -403,25 +436,25 @@
 
             <div class="bottomSpace"></div>
             <!--
-				<div id="popModal" class="modal fade" role="dialog">
-				  <div class="modal-dialog modal-sm">
-				
-				    <div class="modal-content">
-				    	<form action="addchild.php" method="post" id="popup">
-				      		<div class="modal-body">
-				      			Has the child that you are adding ever been in Tzivos Hashem?<br />
-				      			<input type="radio" class="thAdded" name="childAdded" value="1" /> Yes<br />
-				      			<input type="radio" class="thAdded" name="childAdded" value="0" /> No
-				      		</div>
-				      		<div class="modal-footer">
-						        <button class="btn btn-default" name="submit">Continue</button>
-				      		</div>
-				      	</form>		
-				  	</div>
-				  	
-				  </div>
-				</div>
-				-->
+    <div id="popModal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <form action="addchild.php" method="post" id="popup">
+                <div class="modal-body">
+                    Has the child that you are adding ever been in Tzivos Hashem?<br />
+                    <input type="radio" class="thAdded" name="childAdded" value="1" /> Yes<br />
+                    <input type="radio" class="thAdded" name="childAdded" value="0" /> No
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" name="submit">Continue</button>
+                </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+    -->
             <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;max-width: 1024px;">
                 <div class="span12 footer">
                     <div class="span3" style="width: 100%">

@@ -69,15 +69,6 @@ var jsonen = (function(){
         })
 
   
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
     })
 
 
@@ -101,7 +92,43 @@ var jsonen = (function(){
 
             $(this).text(i18next.t(key))
             
+            if (sessionStorage.getItem("locallang") == "he") {
+               
 
+
+                $(".i18n").addClass("hebrew");
+
+               
+                var url_string = window.location.href;
+                var url = new URL(url_string);
+                var idParam = url.searchParams.get("id");
+                var path = window.location.pathname;
+                var pageName = path.split("/").pop();
+                console.log(pageName);
+
+                if (pageName != "indexHE.html")
+                    window.location = "/mobile/leaderboard/indexHE.html?id=" + idParam;
+
+               
+
+
+             
+            }
+            
+            
+            //swapElement($("#LocationHeader"), $("#LocationOptions"));
+            
         })
 
-    } 
+} 
+
+
+
+function swapElement(a, b) {
+    // create a temporary marker div
+    var aNext = $('<div>').insertAfter(a);
+    a.insertAfter(b);
+    b.insertBefore(aNext);
+    // remove marker div
+    aNext.remove();
+}
