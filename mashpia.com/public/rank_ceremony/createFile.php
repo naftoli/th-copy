@@ -70,8 +70,8 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $logos = $r->getSchoolLogos();
 
     if (!empty($ranks)) {
-        if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_boys']);
-        else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_girls']);
+        if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
+        else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
         $logo_img = imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
         $logo_image = imagepng($logo_img, $logo_url);
@@ -115,7 +115,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             }
         }
         $info[$i] = ['outro', 'outro']; // outro
-        echo "<pre>"; print_r($info); echo "</pre>"; return;
         if (count($ranks)) {
             if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
             else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
