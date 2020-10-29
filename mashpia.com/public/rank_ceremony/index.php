@@ -42,12 +42,13 @@ $schools = $as->getSchools();
         let p = [];
         const schools = <?= json_encode($schools) ?>;
         for (let school in schools) {
-            p[i++] = createFile(school)
+            if (school == 61 || school == 269)
+                p[i++] = createFile(school)
         }
         Promise.all([...p])
             .then(values => {
                 console.log(values)
-                location.href = 'createZip.php'
+                // location.href = 'createZip.php'
             })
             .catch(error => {
                 console.log(error)
