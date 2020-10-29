@@ -31,22 +31,6 @@ if (in_array($school, [61,269])) {
     else exit;
 }
 
-$rankNames = [
-    'Sergeant' => 'sergeant',
-    'Sergeant Major' => 'sergeant_major',
-    'Second Lieutenant' => 'second_lieutenant',
-    'First Lieutenant' => 'first_lieutenant',
-    'Captain' => 'captain',
-    'Major' => 'major',
-    'Colonel' => 'colonel',
-    'General' => 'general',
-    '1* General' => 'one_star_general',
-    '2* General' => 'two_star_general',
-    '3* General' => 'three_star_general',
-    '4* General' => 'four_star_general',
-    '5* General' => 'five_star_general'
-];
-
 function createFile($info, $name)
 {
     $fp = fopen($name, "w");
@@ -57,8 +41,24 @@ function createFile($info, $name)
 }
 
 function generateFile( $logoType = '', $limitTo = '' ) {
-    global $school, $schools, $rankNames;
-//    $images = [];
+    global $school, $schools;
+
+    $rankNames = [
+        'Sergeant' => 'sergeant',
+        'Sergeant Major' => 'sergeant_major',
+        'Second Lieutenant' => 'second_lieutenant',
+        'First Lieutenant' => 'first_lieutenant',
+        'Captain' => 'captain',
+        'Major' => 'major',
+        'Colonel' => 'colonel',
+        'General' => 'general',
+        '1* General' => 'one_star_general',
+        '2* General' => 'two_star_general',
+        '3* General' => 'three_star_general',
+        '4* General' => 'four_star_general',
+        '5* General' => 'five_star_general'
+    ];
+
     $r = new RankReport();
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
@@ -74,8 +74,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
         $logo_img = imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
-        $logo_image = imagepng($logo_img, $logo_url);
-//        $images[] = $logo_image;
+        imagepng($logo_img, $logo_url);
         $i = 0;
         $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
         $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url]; // intro
@@ -97,7 +96,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                     $new_img = imagecreatefromstring($contents);
                                     $img_url = 'images/' . $user_id . '.png';
                                     $new_image = imagepng($new_img, $img_url);
-//                                    if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                                 }
 
                                 $info[$i++] = [
