@@ -58,7 +58,7 @@ function createFile($info, $name)
 
 function generateFile( $logoType = '', $limitTo = '' ) {
     global $school, $schools, $rankNames;
-    $images = [];
+//    $images = [];
     $r = new RankReport();
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
@@ -75,7 +75,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         $logo_img = imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
         $logo_image = imagepng($logo_img, $logo_url);
-        $images[] = $logo_image;
+//        $images[] = $logo_image;
         $i = 0;
         $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
         $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url]; // intro
@@ -97,7 +97,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                     $new_img = imagecreatefromstring($contents);
                                     $img_url = 'images/' . $user_id . '.png';
                                     $new_image = imagepng($new_img, $img_url);
-                                    if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
+//                                    if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                                 }
 
                                 $info[$i++] = [
