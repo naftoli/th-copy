@@ -80,8 +80,9 @@ class RankReport extends Report {
 
             $first = $row['first'];
             $last = $row['last'];
-            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
-            else $user = $first . $nameBreak . $last;
+//            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
+//            else $user = $first . $nameBreak . $last;
+            $user = $first . $nameBreak . $last;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
@@ -186,10 +187,18 @@ class RankReport extends Report {
     }
 
     private function checkHe($first, $last, $separator) {
+        // check for hebrew
+        $he = false;
         if (ord($first[0]) > 122) {
-            // its hebrew
-            return $this->mb_strrev($last) . $separator . $this->mb_strrev($first, 'WINDOWS-1255');
+            $he = true;
+            $first = $this->mb_strrev($first);
         }
+        if (ord($last[0]) > 122) {
+            $he = true;
+            $last = $this->mb_strrev($last);
+        }
+        if ($he) return $last . $separator . $first;
+        else return $first . $separator . $last;
     }
 
     /**
@@ -202,7 +211,9 @@ class RankReport extends Report {
      */
     private function mb_strrev(string $string, string $encoding = null): string
     {
-        $string = iconv('WINDOWS-1255', 'UTF-8', $string);
+        echo $string;
+        $str = @iconv("WINDOWS-1255", "UTF-8", $string);
+        if ($str) $string = $str;
         $chars = mb_str_split($string, 1, 'UTF-8');
         return implode('', array_reverse($chars));
     }

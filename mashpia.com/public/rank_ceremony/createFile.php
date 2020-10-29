@@ -100,6 +100,9 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                     if ($new_img) @imagepng($new_img, $img_url);
                                     else $img_url = '';
                                 }
+                                if ($school == 61) {
+                                    echo $users[$user_id] . '\n'; continue;
+                                }
 
                                 $info[$i++] = [
                                     $rankNames[$rank],
