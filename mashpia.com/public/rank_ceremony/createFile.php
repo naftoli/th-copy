@@ -68,13 +68,15 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $pics = $r->getUserPic();
     $picOnly = $r->getPicOnly();
     $logos = $r->getSchoolLogos();
+//    echo "<pre>"; print_r($users); echo "</pre>"; return;
 
     if (!empty($ranks)) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
         else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
-        $logo_img = imagecreatefromstring($logoContent);
+        $logo_img = @imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
-        imagepng($logo_img, $logo_url);
+        if ($logo_img) @imagepng($logo_img, $logo_url);
+        else $logo_url = '';
         $i = 0;
         $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
         $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url]; // intro
@@ -93,16 +95,17 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                 else $url = "http://mashpia.com" . $pics[$user_id];
                                 $contents = file_get_contents($url);
                                 if ($contents) {
-                                    $new_img = imagecreatefromstring($contents);
+                                    $new_img = @imagecreatefromstring($contents);
                                     $img_url = 'images/' . $user_id . '.png';
-                                    $new_image = imagepng($new_img, $img_url);
+                                    if ($new_img) @imagepng($new_img, $img_url);
+                                    else $img_url = '';
                                 }
 
                                 $info[$i++] = [
                                     $rankNames[$rank],
                                     ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))),
                                     $users[$user_id],
-                                    $new_image ? $img_url : '',
+                                    $img_url,
                                     $school_name,
                                     $logo_url
                                 ];
@@ -113,6 +116,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             }
         }
         $info[$i] = ['outro', 'outro']; // outro
+//        echo "<pre>"; print_r($info); echo "</pre>"; return;
         if (count($ranks)) {
             if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
             else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
