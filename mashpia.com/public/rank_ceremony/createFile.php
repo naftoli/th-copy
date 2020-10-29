@@ -17,12 +17,18 @@ if (!$school) exit;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
+$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
+    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58];
+$girlsSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
+
 // separate myshliach / anashKinder into separate boys/girls files
 if (in_array($school, [61,269])) {
-    generateFile( 'M' );
-    generateFile( 'F' );
+    generateFile( 'boys', 'M' );
+    generateFile( 'girls', 'F' );
 } else {
-    generateFile();
+    if (array_search($school, $boySchools) !== false) generateFile('boys');
+    else if (array_search($school, $girlsSchools) !== false) generateFile('girls');
+    else exit;
 }
 
 $rankNames = [
@@ -50,13 +56,13 @@ function createFile($info, $name)
     fclose($fp);
 }
 
-function generateFile( $gender = '' ) {
+function generateFile( $logoType = '', $limitTo = '' ) {
     global $school, $schools, $rankNames;
     $images = [];
     $r = new RankReport();
     $r->setSchoolId($school);
-    if (empty($gender)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
-    else $r->setRanks('byGender', 0, "<br>", $gender, true); // limit to gender for myshliach / anashKinder
+    if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
+    else $r->setRanks('byGender', 0, "<br>", '', $limitTo, true); // limit to gender for myshliach / anashKinder
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -64,9 +70,8 @@ function generateFile( $gender = '' ) {
     $logos = $r->getSchoolLogos();
 
     if (!empty($ranks)) {
-        if ($gender == 'M') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_boys']);
-        else if ($gender == 'F') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_girls']);
-        else $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo']);
+        if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_boys']);
+        else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . $logos[$schools[$school]]['logo_girls']);
         $logo_img = imagecreatefromstring($logoContent);
         $logo_url = 'images/' . $school . '.png';
         $logo_image = imagepng($logo_img, $logo_url);
@@ -111,8 +116,8 @@ function generateFile( $gender = '' ) {
         }
         $info[$i] = ['outro', 'outro']; // outro
         if (count($ranks)) {
-            if ($gender == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
-            else if ($gender == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
+            if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
+            else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
             else $file_name = str_replace(' ', '_', $schools[$school]) . ".csv";
             createFile($info, $file_name);
         }
