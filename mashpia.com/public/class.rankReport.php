@@ -188,7 +188,7 @@ class RankReport extends Report {
     private function checkHe($first, $last, $separator) {
         if (ord($first[0]) > 122) {
             // its hebrew
-            return $this->mb_strrev($last, 'WINDOWS-1255') . $separator . $this->mb_strrev($first, 'WINDOWS-1255');
+            return $this->mb_strrev($last) . $separator . $this->mb_strrev($first, 'WINDOWS-1255');
         }
     }
 
@@ -202,6 +202,7 @@ class RankReport extends Report {
      */
     private function mb_strrev(string $string, string $encoding = null): string
     {
+        $string = iconv('WINDOWS-1255', 'UTF-8', $string);
         $chars = mb_str_split($string, 1, $encoding ?: mb_internal_encoding());
         return implode('', array_reverse($chars));
     }
