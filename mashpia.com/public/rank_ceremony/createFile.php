@@ -55,8 +55,8 @@ function generateFile( $gender = '' ) {
     $images = [];
     $r = new RankReport();
     $r->setSchoolId($school);
-    if (empty($gender)) $r->setRanks('byGender', 0, "<br>"); // make sure to add break in name between first name and last name
-    else $r->setRanks('byGender', 0, "<br>", $gender); // limit to gender for myshliach / anashKinder
+    if (empty($gender)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
+    else $r->setRanks('byGender', 0, "<br>", $gender, true); // limit to gender for myshliach / anashKinder
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
