@@ -42,8 +42,7 @@ $schools = $as->getSchools();
         let p = [];
         const schools = <?= json_encode($schools) ?>;
         for (let school in schools) {
-            if (school == 61 || school == 269)
-                p[i++] = createFile(school)
+            p[i++] = createFile(school)
         }
         Promise.all([...p])
             .then(values => {

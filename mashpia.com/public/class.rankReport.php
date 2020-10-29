@@ -80,9 +80,8 @@ class RankReport extends Report {
 
             $first = $row['first'];
             $last = $row['last'];
-//            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
-//            else $user = $first . $nameBreak . $last;
-            $user = $first . $nameBreak . $last;
+            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
+            else $user = $first . $nameBreak . $last;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 

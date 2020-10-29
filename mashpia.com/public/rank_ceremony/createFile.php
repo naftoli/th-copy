@@ -34,6 +34,7 @@ if (in_array($school, [61,269])) {
 function createFile($info, $name)
 {
     $fp = fopen($name, "w");
+    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
     foreach ($info as $fields) {
         fputcsv($fp, $fields, "\t", ' ');
     }
@@ -68,12 +69,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $pics = $r->getUserPic();
     $picOnly = $r->getPicOnly();
     $logos = $r->getSchoolLogos();
-    if (in_array($school, [61,269])) {
-        echo "<pre>";
-        print_r($users);
-        echo "</pre>";
-        return;
-    }
 
     if (!empty($ranks)) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
