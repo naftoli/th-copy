@@ -80,9 +80,9 @@ class RankReport extends Report {
 
             $first = $row['first'];
             $last = $row['last'];
-//            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
-//            else $user = $first . $nameBreak . $last;
-            $user = $first . $nameBreak . $last;
+            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
+            else $user = $first . $nameBreak . $last;
+//            $user = $first . $nameBreak . $last;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
@@ -187,35 +187,49 @@ class RankReport extends Report {
     }
 
     private function checkHe($first, $last, $separator) {
-        // check for hebrew
-        $he = false;
-        if (ord($first[0]) > 122) {
-            $he = true;
-            $first = $this->mb_strrev($first);
+        // check for hebrew using ascii character numbers
+        // any letter that is greater than 122 in ascii is not english
+        $firstRev = [];
+        $lastRev = [];
+        $firstHe = false;
+        $lastHe = false;
+        $firstLen = mb_strlen($first);
+        $lastLen = mb_strlen($last);
+        for ($i = 0; $i < $firstLen; $i++) {
+            if (ord($first[$i]) > 122) {
+                $firstHe = true;
+                break;
+            }
         }
-        if (ord($last[0]) > 122) {
-            $he = true;
-            $last = $this->mb_strrev($last);
+        for ($i = 0; $i < $lastLen; $i++) {
+            if (ord($last[$i]) > 122) {
+                $lastHe = true;
+                break;
+            }
         }
-        if ($he) return $last . $separator . $first;
-        else return $first . $separator . $last;
-    }
-
-    /**
-     * Reverse a miltibyte string.
-     *
-     * @param string $string The string to be reversed.
-     * @param string|null $encoding The character encoding. If it is omitted, the internal character encoding value
-     *     will be used.
-     * @return string The reversed string
-     */
-    private function mb_strrev(string $string, string $encoding = null): string
-    {
-        echo $string;
-        $str = @iconv("WINDOWS-1255", "UTF-8", $string);
-        if ($str) $string = $str;
-        $chars = mb_str_split($string, 1, 'UTF-8');
-        return implode('', array_reverse($chars));
+        if ($firstHe) {
+            $end = $firstLen - 1;
+            for ($i = 0; $i < $firstLen; $i++) {
+                $firstRev[$end--] = $first[$i];
+            }
+        }
+        if ($lastHe) {
+            $end = $lastLen - 1;
+            for ($i = 0; $i < $lastLen; $i++) {
+                $lastRev[$end--] = $last[$i];
+            }
+        }
+        if ($firstRev) {
+            print_r($firstRev);
+            $first = implode('', $firstRev);
+        }
+        if ($lastRev) {
+            print_r($lastRev);
+            $last = implode('', $lastRev);
+        }
+//        if ($firstRev || $lastRev) return $last . $separator . $first;
+//        else return $first . $separator . $last;
+        return $first . $separator . $last;
     }
 }
 ?>

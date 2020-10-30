@@ -24,7 +24,7 @@ class MivtzoimSetting {
             SELECT 
                 *
             FROM
-                mivtzoim_purchases.school_settings
+                mashpia_purchases.school_settings
             WHERE
                 school_id = :school AND year = :year
                     AND item_id = :item
@@ -48,7 +48,7 @@ class MivtzoimSetting {
         if ( !empty( $row ) && (floatval( $row['shipping_charge'] ) != floatval( $shipping_fee ) || $row['allow_purchases'] == 0) ) {
             // update
             $stmt = $this->pdo->prepare("
-                UPDATE mivtzoim_purchases.school_settings 
+                UPDATE mashpia_purchases.school_settings 
                 SET 
                     allow_purchases = 1,
                     shipping_charge = :fee
@@ -59,7 +59,7 @@ class MivtzoimSetting {
         } else if ( empty( $row ) ) {
             // add row to db
             $stmt = $this->pdo->prepare("
-                INSERT INTO mivtzoim_purchases.school_settings 
+                INSERT INTO mashpia_purchases.school_settings 
                 SET 
                     allow_purchases = 1, 
                     shipping_charge = :fee, 
@@ -92,7 +92,7 @@ class MivtzoimSetting {
         if ( !empty( $row ) && intval( $row['allow_purchases'] ) != 0 ) {
             // update
             $stmt = $this->pdo->prepare("
-                UPDATE mivtzoim_purchases.school_settings 
+                UPDATE mashpia_purchases.school_settings 
                 SET 
                     allow_purchases = 0,
                     shipping_charge = 0
@@ -103,7 +103,7 @@ class MivtzoimSetting {
         } else if ( empty( $row ) ) {
             // add row to db
             $stmt = $this->pdo->prepare("
-                INSERT INTO mivtzoim_purchases.school_settings 
+                INSERT INTO mashpia_purchases.school_settings 
                 SET 
                     allow_purchases = 0, 
                     shipping_charge = 0, 
@@ -132,7 +132,7 @@ class MivtzoimSetting {
         global $MASHPIA_DB;
         $items = implode(',', $items);
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * FROM mivtzoim_purchases.school_settings 
+            SELECT * FROM mashpia_purchases.school_settings 
             WHERE allow_purchases = 1 
                 AND year = :year AND item_id in ($items) 
         ");
@@ -146,7 +146,7 @@ class MivtzoimSetting {
         global $MASHPIA_DB;
         $items = implode(',', $items);
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * FROM mivtzoim_purchases.school_settings 
+            SELECT * FROM mashpiaa_purchases.school_settings 
             WHERE year = :year AND item_id in ($items) 
         ");
         $stmt->execute([
