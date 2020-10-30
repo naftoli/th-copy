@@ -16,9 +16,9 @@ $schools = $as->getSchools();
 $fee_info = [
     'Menorah'  =>  [
         'id'    =>  2,
-        'fee'   =>  0.5,
+        'fee'   =>  1.70,
         'shipping'  => [
-            50  =>  0.44
+            50  =>  0.50
         ]
     ],
     'Brochure' =>  [
@@ -86,14 +86,14 @@ if ( isset( $_POST['submit'] ) ) {
 <br /><br /> 
 Based on your selection will depend on how much your children will pay for their Chanukah Mivtzoim Ammunition.
 <br /><br />
-Each Menorah box costs $0.50
+Each Menorah box costs $1.70
 <br /><br />
 Each Brochure costs $0.20 
 <br /><br />
 If you chose PICK UP, your children will pay this price and will not be charged anything extra for shipping.
 <br /><br />
 <strong>Shipping charges for Menorah Boxes.</strong><br /><br />
-Each Menorah Box costs  $0.44 to ship. (Total $2.14).
+Each Menorah Box costs $0.50 to ship. (Total $2.20).
 <br /><br />
 <strong>Shipping charges for Chanukah brochures.</strong><br /><br />
 The price of shipping for  brochures depends on how many you guarentee will be ordered by the  chayolim in your base 
