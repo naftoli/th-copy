@@ -16,7 +16,7 @@ $schools = $as->getSchools();
 $fee_info = [
     'Menorah'  =>  [
         'id'    =>  2,
-        'fee'   =>  1.7, 
+        'fee'   =>  0.5,
         'shipping'  => [
             50  =>  0.44
         ]
@@ -86,7 +86,7 @@ if ( isset( $_POST['submit'] ) ) {
 <br /><br /> 
 Based on your selection will depend on how much your children will pay for their Chanukah Mivtzoim Ammunition.
 <br /><br />
-Each Menorah box costs $1.70 
+Each Menorah box costs $0.50
 <br /><br />
 Each Brochure costs $0.20 
 <br /><br />
@@ -132,6 +132,7 @@ There is a minimum order of 50 brochures and or menorahs that a shipping schools
                 }
                 ?>
                 <input type="radio" name="shipping-fee" class='shipping-fee' value="-1" /> We would like our base to  be removed from the list of schools offering Menorah Boxes and brochures on the parents accounts.<br />
+                <br />
                 <input type="radio" name="shipping-fee" class='shipping-fee' value="0" /> We will pick up our Chanukah Mivtzoim Ammunition.<br /><br />
                 <?php
                 foreach ( $fee_info as $item => $info ) {
