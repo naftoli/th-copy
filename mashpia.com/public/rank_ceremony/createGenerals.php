@@ -31,15 +31,19 @@ $rankNames = [
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 $files = [];
-$images = [];
+//$images = [];
 $r = new RankReport();
 
 $i = 0;
 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
 
+$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
+    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58];
+$girlsSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
+
 $ords = [9,10,11,12,13,14];
 foreach ($ords as $ord) {
-    $r->setRanks('byRankFirst', $ord, "<br>"); // make sure to add break in name between first name and last name
+    $r->setRanks('byRankFirst', $ord, "<br>", '', true); // make sure to add break in name between first name and last name and reverse he names
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -54,14 +58,30 @@ foreach ($ords as $ord) {
                 $j = 1;
                 $info[$i++] = [($rankNames[$rank] . '_intro'), ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++)))]; // rank intro
 
+                // flag for myshliach / anash kinder
+                $first_time = true;
+
                 foreach ($details as $school_name => $more) {
                     // logo image
                     $school_id = array_search($school_name, $schools);
-                    $logoContent = file_get_contents("http://mashpia.com/file_view.php?id=" . $logos[$school_id]['logo_boys']);
+                    // myshliach / anash kinder will be split into two schools for boys / girls
+                    if (in_array($school_id, [61, 269])) {
+                        if ($first_time) {
+                            $first_time = false;
+                            $school_name = $school_name . "_Boys";
+                            $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_boys']));
+                        } else {
+                            $school_name = $school_name . "_Girls";
+                            $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_girls']));
+                        }
+                    } else {
+                        if (in_array($school_id, $boySchools)) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_boys']));
+                        else if (in_array($school_id, $girlsSchools)) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_girls']));
+                    }
                     $logo_img = @imagecreatefromstring($logoContent);
                     $logo_url = 'images/' . $school_id . '.png';
                     $logo_image = @imagepng($logo_img, $logo_url);
-                    $images[] = $logo_image;
+//                    $images[] = $logo_image;
 
                     foreach ($more as $user_id) {
                         // create pic of child to add to zipArchive
@@ -73,7 +93,7 @@ foreach ($ords as $ord) {
                             $new_img = @imagecreatefromstring($contents);
                             $img_url = 'images/' . $user_id . '.png';
                             $new_image = @imagepng($new_img, $img_url);
-                            if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
+//                            if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                         }
 
                         $info[$i++] = [
