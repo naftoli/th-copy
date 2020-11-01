@@ -58,9 +58,9 @@ foreach ($ords as $ord) {
                     // logo image
                     $school_id = array_search($school_name, $schools);
                     $logoContent = file_get_contents("http://mashpia.com/file_view.php?id=" . $logos[$school_id]['logo_boys']);
-                    $logo_img = imagecreatefromstring($logoContent);
+                    $logo_img = @imagecreatefromstring($logoContent);
                     $logo_url = 'images/' . $school_id . '.png';
-                    $logo_image = imagepng($logo_img, $logo_url);
+                    $logo_image = @imagepng($logo_img, $logo_url);
                     $images[] = $logo_image;
 
                     foreach ($more as $user_id) {
@@ -70,9 +70,9 @@ foreach ($ords as $ord) {
                         else $url = "http://mashpia.com" . $pics[$user_id];
                         $contents = file_get_contents($url);
                         if ($contents) {
-                            $new_img = imagecreatefromstring($contents);
+                            $new_img = @imagecreatefromstring($contents);
                             $img_url = 'images/' . $user_id . '.png';
-                            $new_image = imagepng($new_img, $img_url);
+                            $new_image = @imagepng($new_img, $img_url);
                             if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                         }
 
@@ -84,14 +84,6 @@ foreach ($ords as $ord) {
                             $school_name,
                             $logo_url
                         ];
-
-                        //                        $info[$i]['comp'] = ;
-                        //                        $info[$i]['comp_name'] = ;
-                        //                        $info[$i]['chayol_name'] = ;
-                        //                        $info[$i]['chayol_picture'] = ;
-                        //                        $info[$i]['school_name'] = ;
-                        //                        $info[$i]['school_logo'] = ;
-                        //                        $i++;
                     }
                 }
             }
