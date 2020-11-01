@@ -80,9 +80,16 @@ class RankReport extends Report {
 
             $first = $row['first'];
             $last = $row['last'];
-            if ($reverseHe) $user = $this->checkHe($first, $last, $nameBreak);
-            else $user = $first . $nameBreak . $last;
-//            $user = $first . $nameBreak . $last;
+            $user = $this->reverseHebrew($first . ' ' . $last);
+            // add break before last name
+            $userDetails = explode(' ', $user);
+            $last = count($userDetails) - 1;
+            $lastName = $userDetails[$last];
+            $firstName = '';
+            for ($i = 0; $i < $last; $i++) {
+                $firstName .= $userDetails[$i] . ' ';
+            }
+            $user = $firstName . $nameBreak . $lastName;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
@@ -186,50 +193,40 @@ class RankReport extends Report {
         return $this->picOnly;
     }
 
-    private function checkHe($first, $last, $separator) {
-        // check for hebrew using ascii character numbers
-        // any letter that is greater than 122 in ascii is not english
-        $firstRev = [];
-        $lastRev = [];
-        $firstHe = false;
-        $lastHe = false;
-        $firstLen = mb_strlen($first);
-        $lastLen = mb_strlen($last);
-        for ($i = 0; $i < $firstLen; $i++) {
-            if (ord($first[$i]) > 122) {
-                $firstHe = true;
-                break;
+    private function reverseHebrew($text)
+    {
+        $words = array_reverse(explode(' ', $text));
+        foreach ($words as $index => $word) {
+            if ($this->isHebrew($word)) {
+                $words[$index] = $this->mbStrRev($word);
             }
         }
-        for ($i = 0; $i < $lastLen; $i++) {
-            if (ord($last[$i]) > 122) {
-                $lastHe = true;
-                break;
+        return join(' ', $words);
+    }
+
+    private function isHebrew($text)
+    {
+        for ($i = 0, $cnt = strlen($text); $i < $cnt; ++$i) {
+            if (ord($text[$i]) > 127) {
+                return true;
             }
         }
-        if ($firstHe) {
-            $end = $firstLen - 1;
-            for ($i = 0; $i < $firstLen; $i++) {
-                $firstRev[$end--] = $first[$i];
-            }
+        return false;
+    }
+
+    private function mbStrRev($string, $encoding = null)
+    {
+        if ($encoding === null) {
+            $encoding = mb_detect_encoding($string);
         }
-        if ($lastHe) {
-            $end = $lastLen - 1;
-            for ($i = 0; $i < $lastLen; $i++) {
-                $lastRev[$end--] = $last[$i];
-            }
+
+        $length   = mb_strlen($string, $encoding);
+        $reversed = '';
+        while ($length-- > 0) {
+            $reversed .= mb_substr($string, $length, 1, $encoding);
         }
-        if ($firstRev) {
-            print_r($firstRev);
-            $first = implode('', $firstRev);
-        }
-        if ($lastRev) {
-            print_r($lastRev);
-            $last = implode('', $lastRev);
-        }
-//        if ($firstRev || $lastRev) return $last . $separator . $first;
-//        else return $first . $separator . $last;
-        return $first . $separator . $last;
+
+        return $reversed;
     }
 }
 ?>
