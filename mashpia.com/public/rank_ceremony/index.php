@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -42,13 +43,12 @@ $schools = $as->getSchools();
         let p = [];
         const schools = <?= json_encode($schools) ?>;
         for (let school in schools) {
-            if (school == 61)
             p[i++] = createFile(school)
         }
         Promise.all([...p])
             .then(values => {
                 console.log(values)
-                // location.href = 'createZip.php'
+                location.href = 'createZip.php'
             })
             .catch(error => {
                 console.log(error)

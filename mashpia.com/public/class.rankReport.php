@@ -80,16 +80,13 @@ class RankReport extends Report {
 
             $first = $row['first'];
             $last = $row['last'];
-            $user = $this->reverseHebrew($first . ' ' . $last);
-            // add break before last name
-            $userDetails = explode(' ', $user);
-            $last = count($userDetails) - 1;
-            $lastName = $userDetails[$last];
-            $firstName = '';
-            for ($i = 0; $i < $last; $i++) {
-                $firstName .= $userDetails[$i] . ' ';
+            if ($this->isHebrew($first) || $this->isHebrew($last)) {
+                $first = $this->reverseHebrew($first);
+                $last = $this->reverseHebrew($last);
+                $user = $last . $nameBreak . $first;
+            } else {
+                $user = $first . $nameBreak . $last;
             }
-            $user = $firstName . $nameBreak . $lastName;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
