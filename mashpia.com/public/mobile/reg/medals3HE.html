@@ -30,251 +30,138 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
     <script src="../js/translation/medals3/medals3.js"></script>
-    <style type="text/css">
-        html {
-            font-family: sans-serif
-        }
 
+    <style>
         body {
-            margin: 0
+            margin-bottom: 100px;
         }
 
-        a {
-            background-color: transparent
+        @media(max-width:650px) {
+            body {
+                margin-bottom: 55px;
+            }
         }
 
-        img {
-            border: 0
+        #gold {
+            padding-top: 4%;
         }
 
-        table {
-            border-spacing: 0;
-            border-collapse: collapse
+            #gold img {
+                width: 26%;
+                height: 26%;
+                margin-left: 10%;
+                margin-right: 10%;
+            }
+
+        #backs img {
+            opacity: 0.3;
         }
 
-        td {
-            padding: 0
-        }
-
-        * {
-            box-sizing: border-box
-        }
-
-        ::after, ::before {
-            box-sizing: border-box
-        }
-
-        html {
-            font-size: 10px
-        }
-
-        body {
-            font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #333;
-            background-color: #fff
-        }
-
-        a {
-            color: #337ab7;
-            text-decoration: none
-        }
-
-        img {
-            vertical-align: middle
-        }
-
-        .container {
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto
-        }
-
-        table {
-            background-color: transparent
-        }
-
-        .container::after, .container::before {
-            display: table;
-            content: ' '
-        }
-
-        .container::after {
-            clear: both
-        }
-
-        a {
-            color: #3c8dbc
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-size: 12px
-        }
-
-        .container {
+        #userImg {
+            border-radius: 50%;
             width: 100%;
-            margin: 0 auto;
-            display: table;
-            padding: 0
+            height: 100%;
+            border: 2px solid #31559f;
         }
 
-        .span12 {
-            width: 100%;
-            float: left
+        .personalImg {
+            width: 50px;
+            height: 50px;
+            left: 1%;
+            top: 1%;
+            border-radius: 50%;
+            position: absolute;
         }
 
-        .span3 {
-            width: 25%;
-            float: left
+        .panel-heading {
+            background-color: #f68829 !important;
+            border: none;
+            font-size: 20px;
         }
 
-        .footer {
+        .panel a {
+            color: white;
+        }
+
+            .panel a:hover, a:active, a:visited, a:link {
+                text-decoration: none;
+            }
+
+        .medalInfo {
+            float: right;
+            width: 70%;
+            padding-top: 1%;
+        }
+
+        .progress {
+            margin-bottom: 5px !important;
+        }
+
+        .progressText {
+            position: absolute;
+            display: block;
+            width: 95%;
+            color: black;
             text-align: center;
-            border-top-width: 2px;
-            border-top-style: solid;
-            border-top-color: #9f9f9f;
-            display: table;
-            width: 100%
+            font-family: 'digi';
+            font-size: 14px;
         }
 
-            .footer .span3 {
-                background-color: #e6e6e6
-            }
+        .progress .text {
+            font-family: 'digi';
+            color: #fff;
+            font-weight: normal;
+        }
 
-                .footer .span3 span {
-                    padding: 5px;
-                    color: grey;
-                    font-size: 20px;
-                    font-family: font1
-                }
+        .progressMedalText {
+            position: absolute;
+            width: 60%;
+            color: black;
+            text-align: center;
+            font-family: 'digi';
+            font-size: 14px;
+            font-weight: normal;
+        }
 
-            .footer .menu-item {
-                width: 130px;
-                height: 100px;
-                margin: 0 auto
-            }
+        i.glyphicon {
+            transition: transform .3s ease-in-out;
+            transition: -moz-transform .3s ease-in-out;
+            transition: -webkit-transform .3s ease-in-out;
+        }
 
-            .footer .span3 img {
-                width: 80px
-            }
+        hr {
+            margin: 10px 0 !important;
+        }
 
-            .footer .span3.active {
-                background-image: -webkit-linear-gradient(top,#e9e9e9,#b7b8b9);
-                background-position: initial initial;
-                background-repeat: initial initial
-            }
+        .levelText {
+            font-weight: bold !important;
+            margin: 0 auto;
+            line-height: 1.1;
+            font-size: 24px !important;
+            width: 95%;
+        }
+
+        .header-yellow #page-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            width: auto;
+            display: block;
+            padding: 5px 0px;
+            transition: .25s;
+        }
 
         .header-yellow {
-            width: 100%;
-            background-color: #f68829
+            min-height: 48px;
         }
 
-            .header-yellow table {
-                font-size: 80px;
-                font-family: font3;
-                color: #fff
-            }
-
-        @media screen and (max-width:1024px) {
-            .container {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                border: 0 solid #9f9f9f;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                border-bottom-left-radius: 0
-            }
-
-            .footer {
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                border-bottom-left-radius: 0
+        @media (min-width: 525px) {
+            .header-yellow #page-title {
+                font-size: 40px;
+                padding: 10px 0px;
             }
         }
-
-        @media screen and (max-width:900px) {
-            .footer .menu-item {
-                width: 120px;
-                height: 100px
-            }
-
-            .footer .span3 img {
-                width: 80px
-            }
-
-            .header-yellow table {
-                font-size: 60px
-            }
-        }
-
-        @media screen and (max-width:767px) {
-            .footer .menu-item {
-                width: 120px;
-                height: 80px
-            }
-
-            .footer .span3 img {
-                width: 60px
-            }
-
-            .footer .span3 span {
-                font-size: 14px
-            }
-
-            .header-yellow table {
-                font-size: 40px
-            }
-        }
-
-        @media screen and (max-width:639px) {
-            .footer .menu-item {
-                width: 100px;
-                height: 60px
-            }
-
-            .footer .span3 img {
-                width: 50px
-            }
-
-            .footer .span3 span {
-                font-size: 12px
-            }
-
-            .header-yellow table {
-                font-size: 40px
-            }
-        }
-
-        @media screen and (max-width:479px) {
-            .footer .menu-item {
-                width: 60px;
-                height: 40px
-            }
-
-            .footer .span3 img {
-                width: 30px
-            }
-
-            .footer .span3 span {
-                font-size: 8px
-            }
-
-            .header-yellow table {
-                font-size: 30px
-            }
-        }
-
-        body {
-            background-color: #fcfcfc
-        }
-        /*@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}*/
     </style>
 </head>
 
@@ -298,38 +185,38 @@
         <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
             <div class="span12 body">
                 <div class="span12 footer media-group subMenu" style="width: 100%;">
-                    <a href="" id="leaderMenu">
+                    <a href="leaderboard.html" id="leaderBoardLink">
                         <div class="span3" style="width: 33%;">
                             <div class="menu-item">
                                 <div class="span12">
                                     <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
                                 </div>
                                 <div class="span12">
-                                    <span>Leaderboard</span>
+                                    <span class="i18n" data-key="Leaderboard">Leaderboard</span>
                                 </div>
                             </div>
                         </div>
                     </a>
-                    <a href="" id="rankMenu">
+                    <a href="rank.html" id="rankBoardLink">
                         <div class="span3" style="width:34%">
                             <div class="menu-item">
                                 <div class="span12">
                                     <img src="/mobile/img_new/trophy-color-orange-svg.svg">
                                 </div>
                                 <div class="span12">
-                                    <span>Rank Board</span>
+                                    <span class="i18n" data-key="RankBoard" >Rank Board</span>
                                 </div>
                             </div>
                         </div>
                     </a>
-                    <a href="" id="medalMenu">
+                    <a href="medals.html" id="medalBoardLink">
                         <div class="span3 active" style="width:33%">
                             <div class="menu-item">
                                 <div class="span12">
                                     <img src="/mobile/img_new/medals-color-orange-svg.svg">
                                 </div>
                                 <div class="span12">
-                                    <span>Medal Board</span>
+                                    <span class="i18n" data-key="MedalBoard">Medal Board</span>
                                 </div>
                             </div>
                         </div>
@@ -355,43 +242,43 @@
                                 <img src="/mobile/img_new/boy-color-green-svg.svg">
                             </div>
                             <div class="span12">
-                                <span>Accounts</span>
+                                <span class="i18n" data-key="Accounts" >Accounts</span>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="span3">
-                    <a href="#" id="missionsLink">
+                    <a href="/mobile/missionsNew.html?id=8273" id="missionsLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/square-check-color-purple-svg.svg">
                             </div>
                             <div class="span12">
-                                <span>Missions</span>
+                                <span class="i18n" data-key="Missions">Missions</span>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="span3 active">
-                    <a href="#" id="rankLink">
+                    <a href="/mobile/reg/rank.html?id=8273" id="rankLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/achievements-color-orange-svg.svg">
                             </div>
                             <div class="span12">
-                                <span>Achievements</span>
+                                <span class="i18n" data-key="Achievements">Achievements</span>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="span3">
-                    <a href="#" id="storeLink">
+                    <a href="/mobile/store/index.html?id=8273" id="storeLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/cart-color-red-svg.svg">
                             </div>
                             <div class="span12">
-                                <span>Rewards</span>
+                                <span class="i18n" data-key="Rewards">Rewards</span>
                             </div>
                         </div>
                     </a>

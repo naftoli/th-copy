@@ -9,7 +9,12 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <!-- Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">-->
+
+    <link rel="stylesheet"
+          href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If"
+          crossorigin="anonymous">
     <!-- Cropper -->
     <link href="../lib/cropper/cropper.min.css" rel="stylesheet">
     <!-- datepicker -->
@@ -19,13 +24,13 @@
     <!-- our CSS styles -->
     <link rel="stylesheet" type="text/css" href="css/spinner.css" />
     <link rel="stylesheet" type="text/css" href="css/image-upload.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/mainHE.css" />
     <link rel="stylesheet" type="text/css" href="css/child.css" />
 
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
     <script src="../js/translation/registration/add-child/add-child.js"></script>
- 
+
     <style>
         .hebrew {
             font-family: Arial !important;
@@ -48,7 +53,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success" role="alert" style="text-align:right;">
                             <p data-key="PleaseNote" class="i18n">
                                 Please note: Your child must be at least 5 years old to join this brigade. 
                                 Stay tuned for the launch of Junior Troops for younger children! 
@@ -66,7 +71,7 @@
                         </a>
                     </div>
                 </div> -->
-                <form id="th-base-child" class="child-form">
+                <form id="th-base-child" class="child-form" style="direction:rtl;text-align:right;">
                     <div class="row">
                         <div class="col-12 col-xl-6">
                             <label for="th-school_id" data-key="Base" class="i18n">
@@ -76,8 +81,8 @@
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <select class="form-control form-control-lg i18n" id="th-school_id" name="school_id" required data-key="BaseOption">
-                                    <option value="" selected disabled>TH Base (School Name)</option>
+                                <select class="form-control form-control-lg"  id="th-school_id" name="school_id" required >
+                                    <option class="i18n" data-key="BaseOption" value="" selected disabled>TH Base (School Name)</option>
                                 </select>
                             </div>
                         </div>
@@ -153,7 +158,7 @@
                         </a>
                     </div>
                 </div> -->
-                <form id="no-th-base-child" class="child-form">
+                <form id="no-th-base-child" class="child-form" style="direction:rtl;text-align:right;">
                     <div class="row">
                         <div class="col-12 col-xl-6">
                             <label for="no-th-school_id" data-key="Base" class="i18n">
@@ -291,7 +296,7 @@
                     
                     <div class="row">
                         <div class="col-12 col-xl-6 order-xl-12">
-                            <input type="submit" class="btn btn-primary i18n" data-key="Add"  value="Add Child" />
+                            <button type="submit" class="btn btn-primary i18n" data-key="Add">Add Child</button>
                         </div>
                         <div class="col-12 col-xl-6">
                             <a href="/mobile/" class="btn btn-primary i18n" data-key="Cancel">Cancel</a>
@@ -328,7 +333,7 @@
                             <input type="file" name="profile" id="profile" accept=".png,.jpg,.jpeg"/>
                             <label for="profile" >
                                 <i class="fas fa-camera"></i>
-                                <span data-key="ChoosePicture" class="i18n"> Choose a picture</span>
+                                <span data-key="ChoosePicture" class="i18n"> Choose a picture</span>  
                             </label>
                         </div>
                         <div id="cropper-image-container">
@@ -395,7 +400,7 @@
                             <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                         </svg>
                         <p id="success" data-key="ChildAddedMessage" class="i18n">Your child has been added to your account!</p>
-                        <div class="alert alert-success" id="fee-paid" role="alert">
+                        <div class="alert alert-success i18n" id="fee-paid" role="alert" data-key="title">
                             <span class="i18n" data-key="ChildAddedMessage2">The registration fee has already been paid for through your child’s school, so no additional payment is needed.</span>  <br /><br />
                             <span class="i18n" data-key="ChildAddedMessage3"> Wishing you lots of Nachas as you watch your child grow as a Chayol in Tzivos Hashem.</span>
                         </div>

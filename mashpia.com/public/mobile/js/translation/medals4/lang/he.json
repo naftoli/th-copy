@@ -1,12 +1,10 @@
 ﻿{
   "Title": "לוח המדליות - צבאות השם",
   "MyMedalBoard": "לוח המדליות שלי ",
-  "Leaderboard": "לוח התוצאות",
   "MissionBoard": "לוח המשימות ",
-
-
-  "RankBoard": "דרגות ",
-  "MedalBoard": "מדליות",
+  "Leaderboard": "לוח התוצאות",
+  "RankBoard": "לוח הדרגות",
+  "MedalBoard": " לוח המדליות",
   "Accounts": "חשבונות",
   "Missions": "משימות",
   "Achievements": "הישגים",

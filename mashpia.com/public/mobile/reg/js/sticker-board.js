@@ -88,10 +88,12 @@ var sticker_board = function() {
         var MissionsText = "Missions";
         var CampaignCompleateText = "Campaign Compleate!";
         var progressbarFloat = "";
+        var progressTextAlignment = "";
         if (sessionStorage.getItem("locallang") == "he") {
             MissionsText = "משימות";
             CampaignCompleateText = "הקמפיין הושלם!";
-            progressbarFloat = "display: block; float: right;";
+            progressbarFloat = "float: right;";
+            progressTextAlignment = ' style="direction:rtl;" ';
         }
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
         var progress_text = campaign.total + ' / ' + campaign.subject_total + ' ' + MissionsText+'</span>';
@@ -101,8 +103,8 @@ var sticker_board = function() {
                     '<img src="' + campaign.photo + '">' + 
                     '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
                     '<div class="medal-status progress">' + 
-            '<div class="progress-bar ' + (percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="float:right;width: ' + percent_compleate + '%;"></div>' +
-                        '<span>' + progress_text + '</span>' +
+            '<div class="progress-bar ' + (percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;' + progressbarFloat +'"></div>' +
+            '<span' + progressTextAlignment +'>' + progress_text + '</span>' +
                     '</div>' +
             '</div>';
 
@@ -111,7 +113,18 @@ var sticker_board = function() {
         return result;
     }
 
-    function renderStickerRows( index, campaign, cache ){
+    function renderStickerRows(index, campaign, cache) {
+        var ToText = " To ";
+        var CampaignCompleateText = "Campaign Compleate!";
+        var progressbarFloat = "";
+        var progressTextAlignment = "";
+        if (sessionStorage.getItem("locallang") == "he") {
+            ToText = " עד ";
+            CampaignCompleateText = "הקמפיין הושלם!";
+            progressbarFloat = "float: right;";
+            progressTextAlignment = ' style="direction:rtl;" ';
+        }
+
         var total = parseInt( campaign.total );
         var html = renderCampaignInfo( campaign ); // variable to store sticker rows, will be added to cache.
         // render the row on the sticker board for each of the medals in the campaign
@@ -128,7 +141,7 @@ var sticker_board = function() {
             // current
             } else if ( total >= last_total && medal_info.running_total > total ) {
                 compleation_status = ( ( total - last_total ) / ( medal_info.running_total - last_total ) ) * 100;
-                status_text = ( medal_info.missions_required - ( total - last_total ) ) + ' to ' + medal_info.medal_name;
+                status_text = (medal_info.missions_required - (total - last_total)) + ToText + medal_info.medal_name;
             // future
             } else {
                 compleation_status = 0; status_text = '';
@@ -154,8 +167,8 @@ var sticker_board = function() {
                     '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
             if ( status_text !== '' ) {
             html += '<div class="medal-status progress">' + 
-                        '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
-                        '<span>' + status_text + '</span>' +
+                '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;' + progressbarFloat +'"></div>' + 
+                '<span ' + progressTextAlignment +'>' + status_text + '</span>' +
                     '</div>';
             }
             html += '</div></div>';
@@ -165,7 +178,20 @@ var sticker_board = function() {
         return '<div class="sticker-board" id="sticker-board-' + index + '"></div>';
     }
 
-    function renderCampaignInfo( campaign ) {
+    function renderCampaignInfo(campaign) {
+       
+        if (sessionStorage.getItem("locallang") == "he") {
+            
+            return '<div class="campaign-info">' +
+               
+                '<p>' +
+                '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
+                campaign.subject_details +
+                '</p>' +
+                '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+                '</div>';
+            
+        }
         return '<div class="campaign-info">' +
             '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
             '<p>' +

@@ -88,11 +88,11 @@
  function translate() {
 
      $(".i18n").each(function () {
-
+       
          const key = $(this).data('key')
 
          $(this).text(i18next.t(key))
-
+         
      })
 
      if (sessionStorage.getItem("locallang") == "he") {

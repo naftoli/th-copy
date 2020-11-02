@@ -31,9 +31,7 @@ var jsonen = (function(){
  
 
  
-    $(function () {
-
-        /// example number 1 - static translation 
+    $(document).ready(function () {
         i18next.init({
 
             lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
@@ -58,7 +56,7 @@ var jsonen = (function(){
         }).then(function (t) { 
             // initialized and ready to go!
 
-            translate()
+            translate();
 
         });
         
@@ -86,9 +84,9 @@ var jsonen = (function(){
 
             $(this).text(i18next.t(key))
             
-
+            
         })
-
+      //  alert($("table").html());
 
         if (sessionStorage.getItem("locallang") == "he") {
             //alert();
@@ -99,8 +97,9 @@ var jsonen = (function(){
 
             $(".float_element").css("float", "right");
 
-            //$("#forgot").css("direction", "rtl");
-
+            
+             $("table").css("direction", "rtl");
+            
             //$("#forgot").addClass("hebrew");
 
             //   
@@ -110,3 +109,8 @@ var jsonen = (function(){
 
 
 } //
+
+
+function test() {
+    alert();
+}

@@ -9,9 +9,15 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
     <!-- Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">-->
+
+    <link rel="stylesheet"
+          href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If"
+          crossorigin="anonymous">
+
     <!-- Cropper -->
-    <link  href="../lib/cropper/cropper.min.css" rel="stylesheet">
+    <link href="../lib/cropper/cropper.min.css" rel="stylesheet">
     <!-- datepicker -->
     <link href="lib/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
     <!-- animate.css -->
@@ -19,11 +25,11 @@
     <!-- our CSS styles -->
     <link rel="stylesheet" type="text/css" href="css/spinner.css" />
     <link rel="stylesheet" type="text/css" href="css/image-upload.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/mainHE.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-	<script src="../js/translation/registration/index/index.js"></script>    
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+    <script src="../js/translation/registration/index/index.js"></script>
 </head>
 <body>
     <header>
@@ -76,8 +82,9 @@
                     <div class="row spaced navigation">
                         <div class="col-12 right">
                             <button class="btn btn-primary start-step-2">
+                                <i class="fas fa-arrow-left"></i>  &nbsp;
                                 <span class="i18n" data-key="ConfirmInformation">Confirm Information</span>
-                                 &nbsp;<i class="fas fa-arrow-right"></i>
+
                             </button>
                         </div>
                     </div>
@@ -89,7 +96,7 @@
             <div class="container">
                 <h2 class="i18n" data-key="SoldierInformation">Soldier Information</h2>
                 <hr>
-                <form id="update-user">
+                <form id="update-user" style="direction:rtl;text-align:right;">
                     <input type="hidden" id="user_id" name="user_id" />
                     <input type="hidden" id="current_index" />
                     <div class="row">
@@ -193,16 +200,17 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 <!-- <strong>Chayolei Tzivos Hashem (Full Edition)</strong> ($<span id="chayolei-cost"></span> minimum fee) -->
-                                <strong class="i18n" data-key="ChayoleiTzivosHashem">Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span>
-                                <span class="18in" data-key="MinFee">minimum fee</span> )
-                                <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
+                                <strong class="i18n" data-key="ChayoleiTzivosHashem">Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span> 
+                                <span class="i18n" data-key="MinFee">minimum fee</span> )
+                                  <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>      
                                 <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
                                 <span id="anash_kinder_text" style="display: none" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
 
 
-
+                                
                             </div>
                         </div>
+                       
                     </label>
                     <!-- <label id="chayolei-lite-registration">
                         <div class="row">
@@ -443,8 +451,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            
-                            <button type="submit" class="btn btn-primary i18n" data-key="Confirm">Confirm</button>
+                            <button type="submit" class="btn btn-primary i18n"  data-key="Confirm" >Confirm</button>
                         </div>
                     </div>
                 </form>
@@ -485,7 +492,7 @@
                         </p>
                     </div>
                 </div>
-                <form id="shipping-form">
+                <form id="shipping-form" style="direction:rtl;text-align:right;">
                     <div class="row">
                         <div class="col-3 col-lg-2 col-xl-1">
                             <label class="radio-label" style="display: none">
@@ -535,7 +542,7 @@
                         <div class="card" id="cc-card">
                             <div class="card-body">
                                 <h5 class="card-title i18n" data-key="PaymentMethod">Payment Method</h5><hr>
-                                <form id="payment">
+                                <form id="payment" >
                                     <input type="hidden" id="total" name="total" />
                                     <input type="hidden" id="selected-shipping-type" name="shipping-type" />
                                     <div class="form-group text-center">

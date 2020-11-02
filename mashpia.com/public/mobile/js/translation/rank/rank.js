@@ -86,7 +86,7 @@
 }
 
  function translate() {
-
+    
      $(".i18n").each(function () {
 
          const key = $(this).data('key')

@@ -75,15 +75,7 @@ var en = jsonen;
 
          
 
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
+      
     })
 
 
@@ -96,7 +88,28 @@ var en = jsonen;
 
             $(this).text(i18next.t(key))
             
+            if (sessionStorage.getItem("locallang") == "he") {
 
+                $(".i18n").addClass("hebrew");
+
+
+                var url_string = window.location.href;
+                var url = new URL(url_string);
+                var idParam = url.searchParams.get("id");
+                var subjectParam = url.searchParams.get("subject");
+
+                var path = window.location.pathname;
+                var pageName = path.split("/").pop();
+                console.log(pageName);
+
+                if (pageName != "medals3HE.html")
+                    window.location = "/mobile/reg/medals3HE.html?id=" + idParam + "&subject=" + subjectParam;
+
+
+
+
+
+            }
         })
 
     } 

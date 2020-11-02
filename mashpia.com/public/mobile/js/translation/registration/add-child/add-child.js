@@ -4,7 +4,7 @@ var jsonhe = (function(){
   $.ajax({
     'async':false,
     'global':false,
-    'url':'../js/translation/auction/index/lang/he.json',
+      'url':'../js/translation/registration/add-child/lang/he.json',
     'dataType':"json",
     'success':function(data){
         json=data;
@@ -19,7 +19,7 @@ var jsonen = (function(){
   $.ajax({
     'async':false,
     'global':false,
-    'url':'../js/translation/auction/index/lang/en.json',
+      'url':'../js/translation/registration/add-child/lang/en.json',
     'dataType':"json",
     'success':function(data){
         json=data;
@@ -29,12 +29,13 @@ var jsonen = (function(){
   return json; 
 })(); 
  
-    $(function () {
 
-        /// example number 1 - static translation 
+ 
+    $(document).ready(function () {
         i18next.init({
 
             lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+
 
             debug: true,
 
@@ -42,7 +43,7 @@ var jsonen = (function(){
 
                 en: {
 
-                    translation: jsonen
+                    translation: jsonen,
                 },
 
                 he: {
@@ -54,37 +55,40 @@ var jsonen = (function(){
 
         }).then(function (t) { 
             // initialized and ready to go!
-            
-            trasPlaceholder();
-            translate()
 
-        }); 
+            translate();
+            trasPlaceholder();
+
+        });
+        
+         
 
         $('.translate').click(function() {
-            
             var lang = $(this).attr('id');
             sessionStorage.setItem("locallang", lang);
-            i18next.changeLanguage(lang); 
+            
+            i18next.changeLanguage(lang);
+
             trasPlaceholder();
             translate();      
         })
 
-  
-        
+ 
+
     })
 
 
-    function trasPlaceholder(){
+function trasPlaceholder() {
 
-        $("input.form-control").each(function() {
+    $("input.form-control").each(function () {
 
-            const key = $(this).attr('data-key')
-            
-            $(this).attr('placeholder',i18next.t(key)) 
-
-        });           
+        const key = $(this).attr('data-key')
         
-    }
+        $(this).attr('placeholder', i18next.t(key))
+
+    });
+
+}
 
     function translate() {
 
@@ -94,28 +98,32 @@ var jsonen = (function(){
 
             $(this).text(i18next.t(key))
             
+           
 
         })
+     
 
         if (sessionStorage.getItem("locallang") == "he") {
+
             $(".i18n").addClass("hebrew");
+
 
             var url_string = window.location.href;
             var url = new URL(url_string);
             var idParam = url.searchParams.get("id");
-            //   var subjectParam = url.searchParams.get("subject");
-
             var path = window.location.pathname;
             var pageName = path.split("/").pop();
-            // console.log(pageName);
+            console.log(pageName);
 
-            //if (pageName != "indexHE.html")
-            //    window.location = "/mobile/reg/medals/indexHE.html?id=" + idParam;
-            $(".alert").attr("dir", "rtl");
+            if (pageName != "childHE.html")
+                window.location = "/mobile/registration/childHE.html";
 
-            $("#AuctionEnded").css("direction", "rtl");
-            $("#AuctionEnded").css("float", "right");
+
+
+
 
         }
 
-    } 
+
+} //
+

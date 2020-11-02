@@ -41,13 +41,9 @@ header, .btn-primary{
     background-color: #ff1a1a; color: #fff; border-color: #ff1a1a;
 }
 /* Input styles */
-.input-group-btn img {
-    padding: 20%; height: 100%; max-height: calc( 2px + 4rem );
-    border: 1px solid #ccc; border-right: 0px; 
-    border-top-left-radius: 0.3rem; border-bottom-left-radius: 0.3rem;
-}
+
 /* hebrew*/
-.input-group-btn-he img {
+.input-group-btn img {
     padding: 20%;
     height: 100%;
     max-height: calc( 2px + 4rem );
@@ -57,12 +53,9 @@ header, .btn-primary{
     border-bottom-right-radius: 0.3rem;
 }
 .input-group select:not(:first-child), .input-group input:not(:first-child) {
-    border-left: 0px;
-}
-
-.input-group-he select:not(:first-child), .input-group input:not(:first-child) {
     border-right: 0px;
 }
+
 
 
 form {
@@ -187,4 +180,9 @@ p#success {
 @keyframes dash-check {
     0% { stroke-dashoffset: -100; }
     100% { stroke-dashoffset: 900; }
+}
+
+
+.hebrew {
+    font-family: Arial !important;
 }

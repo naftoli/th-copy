@@ -93,37 +93,28 @@ var en = jsonen;
         })
 
         if (sessionStorage.getItem("locallang") == "he") {
-            //alert();
-
-
             $(".i18n").addClass("hebrew");
 
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var idParam = url.searchParams.get("id");
+            //   var subjectParam = url.searchParams.get("subject");
 
-           // 
+            var path = window.location.pathname;
+            var pageName = path.split("/").pop();
+            // console.log(pageName);
 
-           //commanderdiv
-            $("#serialdiv .title").remove().insertAfter($("#serialdiv .descr"));
-            $("#commanderdiv .title").remove().insertAfter($("#commanderdiv .descr"));
-            $("#platoondiv .title").remove().insertAfter($("#platoondiv .descr"));
+            if (pageName != "indexHE.html")
+                    window.location = "/mobile/reg/medals/indexHE.html?id=" + idParam;
 
-            $(".descr").css("margin-right", "5px");
 
-          
-           // var topleftspace
-            swapElement($("#topleftspace"), $("#toprightspace"));
 
-            $("#topleftspace").removeClass("top-left-space");
-            $("#topleftspace").addClass("top-right-space");
 
-            $("#toprightspace").removeClass("top-right-space");
-            $("#toprightspace").addClass("top-left-space");
 
+            
 
            
-          //  $("#topleftspace").css("background-color", "yellow");
-            //$("#topleftspace").css("float", "left");
-
-          //  $("#toprightspace").css("background-color", "yellow");
+         
 
         }
 

@@ -70,14 +70,7 @@
          translate();
      })
 
-     // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-     // $.post("js/translation/forgot/en.json", function (res) {
-
-     //     // todo : add all translations to page dynamicaly !!
-     //     console.log(res,'sss')
-
-     // })
+    
  })
 
  function trasPlaceholder(){
@@ -101,5 +94,31 @@
          $(this).text(i18next.t(key))
 
      })
+
+     if (sessionStorage.getItem("locallang") == "he") {
+
+         $(".i18n").addClass("hebrew");
+
+
+
+         var url_string = window.location.href;
+         var url = new URL(url_string);
+         var idParam = url.searchParams.get("id");
+         var path = window.location.pathname;
+         var pageName = path.split("/").pop();
+
+         if (pageName != "indexHE.html") {
+            
+            // console.log(pageName);
+             window.location = "/mobile/registration/indexHE.html";
+         }
+             
+             
+
+
+
+
+
+     }
 
  }
