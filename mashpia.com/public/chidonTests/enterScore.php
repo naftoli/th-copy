@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $ct->insertMarks($_POST['marks']);
 }
 
-$info = [];
+$info = []
 $marks = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
@@ -29,7 +29,7 @@ foreach ($schools as $id => $school) {
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Enter Test Marks</title>
+        <title>Enter Test Score</title>
         <link href="../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
             tr, th, td {
@@ -43,7 +43,7 @@ foreach ($schools as $id => $school) {
     </head>
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
-        <h1>Enter Test Marks</h1>
+        <h1>Enter Test Score</h1>
         <h2>Test #<?= $testNumber ?></h2>
         <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
@@ -63,9 +63,12 @@ foreach ($schools as $id => $school) {
                     $name = $child['first'] . ' ' . $child['last'];
                     $id = $child['th_chidon_id'];
                     echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                    if (empty($child['test_type'])) $default = true;
+                    else $default = false;
                     foreach ($types as $type) {
                         echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";
                         if ($child['test_type'] == $type) echo " checked";
+                        if ($type == 'expert' && $default) echo " checked";
                         echo " disabled />" . ucwords($type) . "<br />";
                     }
                     foreach ($types as $type) {
@@ -90,7 +93,7 @@ foreach ($schools as $id => $school) {
             const max = 10;
             let val = $(this).val();
             if (parseInt(val) > max) {
-                alert('You cannot enter a mark higher than 10');
+                alert('Please be sure that you are entering the number of questions scored correctly, and NOT the test mark. It should not be higher than ' + max);
                 $(this).val(0);
                 $(this).focus();
             }
@@ -99,7 +102,7 @@ foreach ($schools as $id => $school) {
             const max = 15;
             let val = $(this).val();
             if (parseInt(val) > max) {
-                alert('You cannot enter a mark higher than 10');
+                alert('Please be sure that you are entering the number of questions scored correctly, and NOT the test mark. It should not be higher than ' + max);
                 $(this).val(0);
                 $(this).focus();
             }

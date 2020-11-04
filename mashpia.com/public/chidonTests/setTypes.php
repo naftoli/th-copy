@@ -12,6 +12,8 @@ $ct = new ChidonTests();
 
 if (isset($_POST['submit'])) {
     $ct->setTestTypes($_POST['type']);
+    header("Location: enterScore.php");
+    exit;
 }
 
 $info = [];
@@ -40,9 +42,13 @@ foreach ($schools as $id => $school) {
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Chidon Test Types</h1>
         <?php
-        $types = ['maven', 'pro', 'expert'];
+        $types = [
+            'maven' => 'Maven',
+            'pro'   => 'Maven / Pro',
+            'expert'=> 'Pro / Expert'
+        ];
         echo "<form action='' method='post'>";
-        echo "<input type='submit' name='submit' value='Save' />";
+        echo "<input type='submit' name='submit' value='Save & Go To Test Scoring' />";
         foreach ($info as $school => $children) {
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th></tr>";
@@ -51,16 +57,16 @@ foreach ($schools as $id => $school) {
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
                 echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
-                foreach ($types as $type) {
+                foreach ($types as $type => $value) {
                     echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";
                     if ($child['test_type'] == $type) echo " checked";
-                    echo " />" . ucwords($type) . "<br />";
+                    echo " />" . ucwords($value) . ' ';
                 }
                 echo "</td></tr>";
             }
             echo "</table>";
         }
-        echo "<input type='submit' name='submit' value='Save' />";
+        echo "<input type='submit' name='submit' value='Save & Go To Test Scoring' />";
         echo "</form>";
         ?>
     </body>
