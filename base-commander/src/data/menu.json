@@ -60,14 +60,14 @@
 
       { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
+
+      { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
+      { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidonTests/enterMarks.php" },
       
       { "label": "Study Guides / Yahadus", "legacy": true, "path": "/reports/chidon/combined.php" },
 
       { "label": "Shabbaton Enrolled Report", "legacy": true, "path": "/reports/chidon/shabbaton_enrollment.php" },
       { "label": "Shabbaton Walking Report", "legacy": true, "path": "/reports/chidon/walking_groups.php" },
-
-      { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidon_tests.php" },
-      { "label": "Enter Mitzvah Maven Marks", "legacy": true, "path": "/chidon_mm_tests.php" },
 
       { "label": "School Shabbaton Enrollment", "legacy": true, "path": "/chidon_school_reg.php" },
       { "label": "Review / Create Chaperones", "legacy": true, "path": "/chidon_school_reg2.php" },
