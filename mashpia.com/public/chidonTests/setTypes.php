@@ -53,9 +53,11 @@ foreach ($schools as $id => $school) {
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
                 echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                $default = 'expert';
                 foreach ($types as $type => $value) {
                     echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";
                     if ($child['test_type'] == $type) echo " checked";
+                    if ($type == $default && empty($child['test_type'])) echo " checked";
                     echo " />" . ucwords($value) . ' ';
                 }
                 echo "</td></tr>";
