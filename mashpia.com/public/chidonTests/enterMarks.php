@@ -51,33 +51,35 @@ foreach ($schools as $id => $school) {
         echo "<form action='' method='post'>";
         echo "<input type='submit' name='submit' value='Save' />";
         foreach ($info as $school => $children) {
-            echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
-            foreach ($types as $type) {
-                echo "<th>" . ucwords($type) . " Mark</th>";
-            }
-            echo "<th>Trophy Mark</th></th></tr>";
-            foreach ($children as $child) {
-                $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
-                $name = $child['first'] . ' ' . $child['last'];
-                $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+            if (!empty($children)) {
+                echo "<h2>" . $schools[$school] . "</h2>";
+                echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
                 foreach ($types as $type) {
-                    echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";
-                    if ($child['test_type'] == $type) echo " checked";
-                    echo " disabled />" . ucwords($type) . "<br />";
+                    echo "<th>" . ucwords($type) . " Mark</th>";
                 }
-                foreach ($types as $type) {
-                    $class = 'mark';
-                    if ($type == 'expert') $class = 'expert';
-                    $mark = isset($marks[$school][$id][$testNumber][$type]) ? $marks[$school][$id][$testNumber][$type] : 0;
-                    echo "<td><input type='text' name='marks[$id][$testNumber][$type]' value='" . $mark . "' size='4' class='$class' /></td>";
+                echo "<th>Trophy Mark</th></th></tr>";
+                foreach ($children as $child) {
+                    $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+                    $name = $child['first'] . ' ' . $child['last'];
+                    $id = $child['th_chidon_id'];
+                    echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                    foreach ($types as $type) {
+                        echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";
+                        if ($child['test_type'] == $type) echo " checked";
+                        echo " disabled />" . ucwords($type) . "<br />";
+                    }
+                    foreach ($types as $type) {
+                        $class = 'mark';
+                        if ($type == 'expert') $class = 'expert';
+                        $mark = isset($marks[$school][$id][$testNumber][$type]) ? $marks[$school][$id][$testNumber][$type] : 0;
+                        echo "<td><input type='text' name='marks[$id][$testNumber][$type]' value='" . $mark . "' size='4' class='$class' /></td>";
+                    }
+                    $trophy_mark = isset($marks[$school][$id][$testNumber]['trophy']) ? $marks[$school][$id][$testNumber]['trophy'] : 0;
+                    echo "<td><input type='text' name='marks[$id][$testNumber][trophy]' value='" . $trophy_mark . "' size='4' /></td>";
+                    echo "</td></tr>";
                 }
-                $trophy_mark = isset($marks[$school][$id][$testNumber]['trophy']) ? $marks[$school][$id][$testNumber]['trophy'] : 0;
-                echo "<td><input type='text' name='marks[$id][$testNumber][trophy]' value='" . $trophy_mark . "' size='4' /></td>";
-                echo "</td></tr>";
+                echo "</table>";
             }
-            echo "</table>";
         }
         echo "<input type='submit' name='submit' value='Save' />";
         echo "</form>";
