@@ -44,6 +44,8 @@ foreach ($schools as $id => $school) {
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Enter Test Marks</h1>
+        <h2>Test #<?= $testNumber ?></h2>
+        <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
         $types = ['maven', 'pro', 'expert'];
         echo "<form action='' method='post'>";
