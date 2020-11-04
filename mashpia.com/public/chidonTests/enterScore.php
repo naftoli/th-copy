@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $ct->insertMarks($_POST['marks']);
 }
 
-$info = []
+$info = [];
 $marks = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
