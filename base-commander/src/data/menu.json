@@ -62,7 +62,7 @@
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
 
       { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
-      { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidonTests/enterMarks.php" },
+      { "label": "Enter Chidon Test Score", "legacy": true, "path": "/chidonTests/enterScore.php" },
       
       { "label": "Study Guides / Yahadus", "legacy": true, "path": "/reports/chidon/combined.php" },
 
