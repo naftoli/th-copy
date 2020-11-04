@@ -50,6 +50,7 @@ foreach ($schools as $id => $school) {
         $types = $ct->getTypes();
         echo "<form action='' method='post'>";
         echo "<input type='submit' name='submit' value='Save' />";
+        echo "<div style='float: right'><a href='setTypes.php'><input type='button' value='Go Back to Set Types' /></a></div>";
         foreach ($info as $school => $children) {
             if (!empty($children)) {
                 echo "<h2>" . $schools[$school] . "</h2>";
