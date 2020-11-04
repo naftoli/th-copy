@@ -12,6 +12,7 @@ class ChidonTests
     private $db;
     private $children;
     private $marks;
+    private $types;
     private $testQuestions;
 
     public function __construct() {
@@ -20,6 +21,11 @@ class ChidonTests
         $this->year = GlobalSettings::getChidonYear();
         $this->children = [];
         $this->marks = [];
+        $this->types = [
+            'maven' => 'Maven',
+            'pro'   => 'Maven / Pro',
+            'expert'=> 'Pro / Expert'
+        ];
         // hardcode number of questions per test type
         $this->testQuestions = [
             'maven' => 10,
@@ -119,6 +125,10 @@ class ChidonTests
                 }
             }
         }
+    }
+
+    public function getTypes() {
+        return $this->types;
     }
 
     public function setTestTypes($types) {

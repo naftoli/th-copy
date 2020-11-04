@@ -42,11 +42,7 @@ foreach ($schools as $id => $school) {
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Chidon Test Types</h1>
         <?php
-        $types = [
-            'maven' => 'Maven',
-            'pro'   => 'Maven / Pro',
-            'expert'=> 'Pro / Expert'
-        ];
+        $types = $ct->getTypes();
         echo "<form action='' method='post'>";
         echo "<input type='submit' name='submit' value='Save & Go To Test Scoring' />";
         foreach ($info as $school => $children) {
