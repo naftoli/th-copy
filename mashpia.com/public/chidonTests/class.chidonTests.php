@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 /**
@@ -11,15 +11,17 @@ class ChidonTests
     private $year;
     private $db;
     private $children;
-    private $marks;
+    private $scores;
     private $types;
     private $testQuestions;
+    private $marks;
 
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
         $this->year = GlobalSettings::getChidonYear();
         $this->children = [];
+        $this->scores = [];
         $this->marks = [];
         $this->types = [
             'maven' => 'Maven',
@@ -73,7 +75,7 @@ class ChidonTests
         return $this->children;
     }
 
-    public function setMarks() {
+    public function setScores() {
         $stmt = $this->db->prepare("
             SELECT 
                 *
@@ -88,17 +90,17 @@ class ChidonTests
             if ($res) {
                 $rows = $stmt->fetchAll();
                 foreach ($rows as $row) {
-                    $this->marks[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
+                    $this->scores[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
                 }
             }
         }
     }
 
-    public function getMarks() {
-        return $this->marks;
+    public function getScores() {
+        return $this->scores;
     }
 
-    public function insertMarks($info) {
+    public function insertScores($info) {
         $stmt = $this->db->prepare("
             INSERT IGNORE INTO th_chidon_marks 
             SET 
@@ -145,5 +147,31 @@ class ChidonTests
                 ':type' => $type
             ]);
         }
+    }
+
+    public function calculateMarks() {
+        foreach ($this->scores as $id => $more) {
+            foreach ($more as $testNum => $details) {
+                foreach ($this->testQuestions as $type => $questions) {
+                    switch ($type) {
+                        case 'maven':
+                        case 'trophy':
+                            $mark = floatval($details[$type] / $questions);
+                            break;
+                        case 'pro':
+                            $mark = floatval(($details['maven'] + $details[$type]) / ($this->testQuestions['maven'] + $questions));
+                            break;
+                        case 'expert':
+                            $mark = floatval(($details['pro'] + $details[$type]) / ($this->testQuestions['pro'] + $questions));
+                            break;
+                    }
+                    $this->marks[$id][$testNum][$type] = $mark * 100;
+                }
+            }
+        }
+    }
+
+    public function getMarks() {
+        return $this->marks;
     }
 }

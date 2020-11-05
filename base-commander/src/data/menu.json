@@ -55,14 +55,19 @@
     "label": "Chidon", "legacy": true, "module": "chidon",
     "icon": "/images/chidon.png",
     "items": [
+      { "label": "Tests",
+        "items" : [
+          { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
+          { "label": "Enter Chidon Test Scores", "legacy": true, "path": "/chidonTests/enterScores.php" },
+          { "label": "Review Marks", "legacy": true, "path": "/chidonTests/marks.php" }
+        ]
+      },
+
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       { "label": "Chidon Drive Letter", "legacy": true, "path": "/chidonOld/shabbaton_letter.php" },
 
       { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
-
-      { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
-      { "label": "Enter Chidon Test Score", "legacy": true, "path": "/chidonTests/enterScore.php" },
       
       { "label": "Study Guides / Yahadus", "legacy": true, "path": "/reports/chidon/combined.php" },
 

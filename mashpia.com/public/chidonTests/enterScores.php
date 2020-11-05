@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -13,16 +13,16 @@ $ct = new ChidonTests();
 $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 
 if (isset($_POST['submit'])) {
-    $ct->insertMarks($_POST['marks']);
+    $ct->insertScores($_POST['scores']);
 }
 
 $info = [];
-$marks = [];
+$scores = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
-    $ct->setMarks();
-    $marks[$id] = $ct->getMarks();
+    $ct->setScores();
+    $scores[$id] = $ct->getScores();
 }
 ?>
 <!DOCTYPE html>
@@ -70,13 +70,13 @@ foreach ($schools as $id => $school) {
                     if ($child['test_type'] == $type) echo ucwords($value);
                 }
                 foreach ($types as $type => $value) {
-                    $class = 'mark';
+                    $class = 'score';
                     if ($type == 'expert') $class = 'expert';
-                    $mark = isset($marks[$school][$id][$testNumber][$type]) ? $marks[$school][$id][$testNumber][$type] : 0;
-                    echo "</td><td><input type='text' name='marks[$id][$testNumber][$type]' value='" . $mark . "' size='4' class='$class' /></td>";
+                    $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
+                    echo "</td><td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' /></td>";
                 }
-                $trophy_mark = isset($marks[$school][$id][$testNumber]['trophy']) ? $marks[$school][$id][$testNumber]['trophy'] : 0;
-                echo "<td><input type='text' name='marks[$id][$testNumber][trophy]' value='" . $trophy_mark . "' size='4' class='mark' /></td>";
+                $trophy_score = isset($scores[$school][$id][$testNumber]['trophy']) ? $scores[$school][$id][$testNumber]['trophy'] : 0;
+                echo "<td><input type='text' name='scores[$id][$testNumber][trophy]' value='" . $trophy_score . "' size='4' class='score' /></td>";
                 echo "</td></tr>";
             }
             echo "</table>";
@@ -89,7 +89,7 @@ foreach ($schools as $id => $school) {
         $(function() {
             alert('Please make sure to SAVE after entering scores.');
         })
-        $(".mark").keyup( function() {
+        $(".score").keyup( function() {
             const max = 10;
             let val = $(this).val();
             if (parseInt(val) > max) {

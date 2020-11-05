@@ -12,7 +12,7 @@ $ct = new ChidonTests();
 
 if (isset($_POST['submit'])) {
     $ct->setTestTypes($_POST['type']);
-    header("Location: enterScore.php");
+    header("Location: enterScores.php");
     exit;
 }
 
