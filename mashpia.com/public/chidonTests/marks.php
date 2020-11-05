@@ -49,6 +49,7 @@ foreach ($schools as $id => $school) {
         <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
         $types = $ct->getTypes();
+        $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
         echo "<a href='setTypes.php'><input type='button' value='Edit Level' style='padding: 12px; font-size: large' /></a>";
         echo "<div style='float: right'><a href='enterScores.php'><input type='button' value='Edit Test 1 Scores' style='padding: 12px; font-size: large' /></a></div>";
@@ -64,9 +65,9 @@ foreach ($schools as $id => $school) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>";
+                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 foreach ($types as $type => $value) {
-                    if ($child['test_type'] == $type) echo ucwords($value);
+                    if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
                 }
                 foreach ($types as $type => $value) {
                     $mark = isset($marks[$id][$testNumber][$type]) ? $marks[$id][$testNumber][$type] : 0;
@@ -75,16 +76,9 @@ foreach ($schools as $id => $school) {
                         $color = 'black';
                         if ($mark < 70) $color = 'red';
                     }
-                    echo "</td><td style='color: $color;'>" . $mark . "%</td>";
+                    echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
-                $trophy_mark = isset($marks[$id][$testNumber]['trophy']) ? $marks[$id][$testNumber]['trophy'] : 0;
-                $color = 'grey';
-                if ($child['test_type'] == 'trophy') {
-                    $color = 'black';
-                    if ($mark < 70) $color = 'red';
-                }
-                echo "<td style='color: $color;'>" . $trophy_mark . "%</td>";
-                echo "</td></tr>";
+                echo "</tr>";
             }
             echo "</table>";
         }

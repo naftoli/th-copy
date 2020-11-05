@@ -48,6 +48,7 @@ foreach ($schools as $id => $school) {
         <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
         $types = $ct->getTypes();
+        $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
         echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
         echo "<a href='setTypes.php'><input type='button' value='Go back to change test level' style='padding: 12px; font-size: large' /></a>";
@@ -63,21 +64,19 @@ foreach ($schools as $id => $school) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 if (empty($child['test_type'])) $default = true;
                 else $default = false;
                 foreach ($types as $type => $value) {
-                    if ($child['test_type'] == $type) echo ucwords($value);
+                    if ($child['test_type'] == $type) echo "<td class='type'>" . ucwords($value) . "</td>";
                 }
                 foreach ($types as $type => $value) {
                     $class = 'score';
                     if ($type == 'expert') $class = 'expert';
                     $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                    echo "</td><td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' /></td>";
+                    echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' /></td>";
                 }
-                $trophy_score = isset($scores[$school][$id][$testNumber]['trophy']) ? $scores[$school][$id][$testNumber]['trophy'] : 0;
-                echo "<td><input type='text' name='scores[$id][$testNumber][trophy]' value='" . $trophy_score . "' size='4' class='score' /></td>";
-                echo "</td></tr>";
+                echo "</tr>";
             }
             echo "</table>";
         }
