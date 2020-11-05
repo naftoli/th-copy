@@ -1,11 +1,11 @@
-﻿{
-  "Title" : "לוח המשימות - צבאות השם",
-  "MissionBoard" : "לוח המשימות ",
-  "Leaderboard" : "לוח התוצאות",
-  "RankBoard" : "לוח הדרגות",
-  "MedalBoard" : " לוח המדליות",
-  "Accounts" : "חשבונות",
-  "Missions" : "משימות",
-  "Achievements" : "הישגים",
-  "Rewards" : "תגמולים"
+{
+  "Accounts": "חשבונות",
+  "Achievements": "הישגים",
+  "Leaderboard": "לוח התוצאות",
+  "MedalBoard": " לוח המדליות",
+  "MissionBoard": "לוח המשימות ",
+  "Missions": "משימות",
+  "RankBoard": "לוח הדרגות",
+  "Rewards": "תגמולים",
+  "Title": "לוח המשימות - צבאות השם"
 }

@@ -1,3 +1,4 @@
+﻿
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -506,16 +507,40 @@
             margin-top: 10px;
         }
 
+        .rank-logo-he {
+            width: 18%;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            margin-top: 10px;
+            float:right;
+        }
+
         .rank-medals {
             width: 82%;
             display: inline-block;
         }
+
+        .rank-medals-he {
+            width: 82%;
+            display: inline-block;
+            direction:rtl;
+        }
+
 
         .rank-medal {
             display: inline-block;
             text-align: center;
             width: 13.5%;
             margin-bottom: 2%;
+        }
+
+        .rank-medal-he {
+            display: inline-block;
+            text-align: center;
+            width: 13.5%;
+            margin-bottom: 2%;
+            float: right;
         }
 
         hr {
@@ -669,7 +694,7 @@
             </div>
             <div style="clear: both; margin-bottom: 10px;"></div>
             
-            <div class="well well-sm" style="margin: 0 auto; width: 75%">
+            <div id="ManyStars" class="well well-sm i18n" data-key="ManyStars" style="margin: 0 auto; width: 75%">
                     Start as a private and after earning 3 medals of any color or campaign you will be promoted to a Sergeant. 
                     Keep earning medals and rising in rank. Can <b>YOU</b> become a <b>GENERAL WITH MANY STARS?</b>
             </div>
@@ -849,24 +874,52 @@
                 14 : '5* General'
             }
 
+            if (localStorage.getItem("locallang") == "he") {//window.localStorage
+
+                ranks = {
+                    1: 'טוראי',
+                    2: 'סמל',
+                    3: 'רב סמל',
+                    4: 'סגן-משנה',
+                    5: 'סגן',
+                    6: 'סרן',
+                    7: 'רב סרן',
+                    8: 'אלוף משנה',
+                    9: 'גנרל',
+                    10: '1* גנרל',
+                    11: '2* גנרל',
+                    12: '3* גנרל',
+                    13: '4* גנרל',
+                    14: '5* גנרל'
+                }
+            }
+          
             var html = "";
             var start = 0;
+            var rankLogo = "rank-logo";
+            var rankMedals = "rank-medals";
+            var rankMedal = "rank-medal";
+            if (localStorage.getItem("locallang") == "he") {
+                rankLogo = "rank-logo-he";
+                rankMedals = "rank-medals-he";
+                rankMedal = "rank-medal-he";
+            }
             var showRankAfterSlideShow = true;
             for (var j = 1; j < 15; j++) {
                 var end = parseInt( medalsInfo[j+1] );
                 if (j == 14) end = 133; // 5 star general ending
                 
                 html += '<div id="' + j + '">';
-                html +=     '<div class="rank-logo">';
+                html += '<div class="' + rankLogo+'">';
                 html +=         '<div class="rankName">' + ranks[j] + '</div>';
                 html +=         '<img class="medal real rankLogo ' + (
                     showRankAfterSlideShow ? "rankLogoEarned" : ""
                 ) + '" src="/mobile/img_new/ranks/' + j + '.svg" />';
                 html +=     '</div>';
-                html +=     '<div class="rank-medals">';
+                html += '<div class="' + rankMedals+'">';
                 // for each medal show a icon
                 for (var i = start; i < end; i++) {
-                    html += '<div class="rank-medal">';
+                    html += '<div class="' + rankMedal+'">';
                     html += ( i + 1 ) + '<br />'; // print the medal number
                     if ( i < num ) {
                         if ( medals[i].subject == 106 ) {
@@ -960,6 +1013,8 @@
                 }); // end jquery wraped function
             }, 1000); // end settimeout
         });
+
+       
     });
 </script>
 <script>
@@ -971,4 +1026,6 @@
   ga('send', 'pageview');
 </script>
 </body>
+
+
 </html>

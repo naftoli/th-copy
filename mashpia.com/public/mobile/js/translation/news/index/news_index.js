@@ -36,7 +36,7 @@ var jsonhe = (function(){
           /// example number 1 - static translation 
           i18next.init({
   
-            lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+            lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
 
   
               debug: true,
@@ -67,7 +67,7 @@ var jsonhe = (function(){
           $('.translate').click(function() {
               var lang = $(this).attr('id');
               
-              sessionStorage.setItem("locallang", lang);
+              localStorage.setItem("locallang", lang);
               
               i18next.changeLanguage(lang);
               translate();      

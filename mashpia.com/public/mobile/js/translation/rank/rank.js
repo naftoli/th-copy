@@ -34,7 +34,7 @@
 
      i18next.init({
 
-        lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+        lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
 
 
          debug: true,
@@ -63,7 +63,7 @@
      $('.translate').click(function () {
          var lang = $(this).attr('id');
 
-         sessionStorage.setItem("locallang", lang);
+         localStorage.setItem("locallang", lang);
 
          i18next.changeLanguage(lang);
          trasPlaceholder();
@@ -93,7 +93,7 @@
 
          $(this).text(i18next.t(key))
 
-         if (sessionStorage.getItem("locallang") == "he") {
+         if (localStorage.getItem("locallang") == "he") {
              //alert();
 
 
@@ -103,6 +103,10 @@
            
 
              $("#ManyStars").css("direction", "rtl");
+
+             $(".rank-logo").css("float", "right");
+
+             $(".rank-medals").css("float", "right");
 
 
             

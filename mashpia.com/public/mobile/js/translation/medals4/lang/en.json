@@ -1,11 +1,11 @@
-﻿{
-    "Title": "Mission Board | Tzivos Hashem",
-    "MissionBoard": "Mission Board",
-    "Leaderboard": "Leaderboard",
-    "RankBoard": "Rank Board",
-    "MedalBoard": "Medal Board",
-    "Accounts": "Accounts",
-    "Missions": "Missions",
-    "Achievements": "Achievements",
-    "Rewards": "Rewards"
+{
+  "Accounts": "Accounts",
+  "Achievements": "Achievements",
+  "Leaderboard": "Leaderboard",
+  "MedalBoard": "Medal Board",
+  "MissionBoard": "Mission Board",
+  "Missions": "Missions",
+  "RankBoard": "Rank Board",
+  "Rewards": "Rewards",
+  "Title": "Mission Board | Tzivos Hashem"
 }

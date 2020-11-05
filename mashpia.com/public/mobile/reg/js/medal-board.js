@@ -1,3 +1,4 @@
+
 ﻿/**
  * medal-board.js
  * 
@@ -70,7 +71,7 @@ function Medal( config ) {
         "Blue", "Purple", "Brown", "Gray", "Black", "Bronze"
     ]
 
-    if (sessionStorage.getItem("locallang") == "he") {
+    if (localStorage.getItem("locallang") == "he") {
         
         this.colors = [
             "לבן", "אדום", "כתום", "צהוב", "ירוק",
@@ -82,7 +83,7 @@ function Medal( config ) {
 
 Medal.prototype.getColor = function( current ) {
     var CompleationText = "Compleation";
-    if (sessionStorage.getItem("locallang") == "he") {
+    if (localStorage.getItem("locallang") == "he") {
         CompleationText = "הסתיים";
     }
 
@@ -111,7 +112,7 @@ Medal.prototype.render = function() {
     var progressbarFloat = "";
     var progressTextAlignment = "";
 
-    if (sessionStorage.getItem("locallang") == "he") {
+    if (localStorage.getItem("locallang") == "he") {
 
         ToText = " עד ";
         CampaignCompleateText = "הקמפיין הושלם!";
@@ -148,4 +149,6 @@ Medal.prototype.render = function() {
     html    += "</div>";
     
     return html;
+
+
 }

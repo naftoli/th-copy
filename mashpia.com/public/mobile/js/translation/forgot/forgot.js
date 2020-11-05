@@ -34,7 +34,7 @@ var jsonen = (function(){
         /// example number 1 - static translation 
         i18next.init({
 
-            lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+            lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
 
             debug: true,
 
@@ -61,7 +61,7 @@ var jsonen = (function(){
 
         $('.translate').click(function() {
             var lang = $(this).attr('id');
-            sessionStorage.setItem("locallang", lang);
+            localStorage.setItem("locallang", lang);
 
             i18next.changeLanguage(lang);
             trasPlaceholder();
@@ -94,7 +94,7 @@ var jsonen = (function(){
 
             $(this).text(i18next.t(key))
 
-            if (sessionStorage.getItem("locallang") == "he") {
+            if (localStorage.getItem("locallang") == "he") {
                 //alert();
               
 

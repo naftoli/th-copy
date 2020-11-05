@@ -34,7 +34,7 @@ var jsonen = (function(){
     $(document).ready(function () {
         i18next.init({
 
-            lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+            lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
 
 
             debug: true,
@@ -62,13 +62,7 @@ var jsonen = (function(){
         
          
 
-        $('.translate').click(function() {
-            var lang = $(this).attr('id');
-            sessionStorage.setItem("locallang", lang);
-            
-            i18next.changeLanguage(lang);
-            translate();      
-        })
+        
 
  
 
@@ -76,19 +70,10 @@ var jsonen = (function(){
 
 
 
-    function translate() {
+    
+ 
 
-        $(".i18n").each(function () {
-
-            const key = $(this).data('key')
-
-            $(this).text(i18next.t(key))
-            
-            
-        })
-      //  alert($("table").html());
-
-        if (sessionStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") == "he") {
             //alert();
 
 

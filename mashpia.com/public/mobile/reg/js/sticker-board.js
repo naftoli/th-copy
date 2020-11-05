@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The following code is line for line from leaderboard/main.js - 6/13/2018
  */
 // make sure that we do not get a no-refrance error.
@@ -89,7 +89,7 @@ var sticker_board = function() {
         var CampaignCompleateText = "Campaign Compleate!";
         var progressbarFloat = "";
         var progressTextAlignment = "";
-        if (sessionStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") == "he") {
             MissionsText = "משימות";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
@@ -118,7 +118,7 @@ var sticker_board = function() {
         var CampaignCompleateText = "Campaign Compleate!";
         var progressbarFloat = "";
         var progressTextAlignment = "";
-        if (sessionStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") == "he") {
             ToText = " עד ";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
@@ -180,7 +180,7 @@ var sticker_board = function() {
 
     function renderCampaignInfo(campaign) {
        
-        if (sessionStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") == "he") {
             
             return '<div class="campaign-info">' +
                
@@ -247,5 +247,8 @@ var sticker_board = function() {
 
     return { loadPage: loadPage }
 }();
+
+
+
 
 sticker_board.loadPage();

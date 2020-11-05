@@ -34,7 +34,7 @@ var jsonen = (function(){
         /// example number 1 - static translation 
         i18next.init({
 
-            lng: (sessionStorage.getItem("locallang"))?sessionStorage.getItem("locallang"):'en',
+            lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
 
             debug: true,
 
@@ -55,13 +55,13 @@ var jsonen = (function(){
         }).then(function (t) { 
             // initialized and ready to go!
             trasPlaceholder();
-            translate()
+            translate();
 
         }); 
 
         $('.translate').click(function() {
             var lang = $(this).attr('id');
-            sessionStorage.setItem("locallang", lang);
+            localStorage.setItem("locallang", lang);
 
             i18next.changeLanguage(lang);
             trasPlaceholder();
@@ -91,34 +91,32 @@ var jsonen = (function(){
             const key = $(this).data('key')
 
             $(this).text(i18next.t(key))
-            
-            if (sessionStorage.getItem("locallang") == "he") {
-               
-
-
-                $(".i18n").addClass("hebrew");
-
-               
-                var url_string = window.location.href;
-                var url = new URL(url_string);
-                var idParam = url.searchParams.get("id");
-                var path = window.location.pathname;
-                var pageName = path.split("/").pop();
-                console.log(pageName);
-
-                if (pageName != "indexHE.html")
-                    window.location = "/mobile/leaderboard/indexHE.html?id=" + idParam;
-
-               
-
-
-             
-            }
-            
-            
-            //swapElement($("#LocationHeader"), $("#LocationOptions"));
+          
             
         })
+
+        if (localStorage.getItem("locallang") == "he") {
+
+
+
+            $(".i18n").addClass("hebrew");
+
+
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var idParam = url.searchParams.get("id");
+            var path = window.location.pathname;
+            var pageName = path.split("/").pop();
+            console.log(pageName);
+            // alert(pageName);
+            if (pageName != "indexHE.html")
+                window.location = "/mobile/leaderboard/indexHE.html?id=" + idParam;
+
+
+
+
+
+        }
 
 } 
 
