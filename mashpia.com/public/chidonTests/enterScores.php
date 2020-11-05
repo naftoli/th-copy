@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -13,16 +13,16 @@ $ct = new ChidonTests();
 $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 
 if (isset($_POST['submit'])) {
-    $ct->insertMarks($_POST['marks']);
+    $ct->insertScores($_POST['scores']);
 }
 
 $info = [];
-$marks = [];
+$scores = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
-    $ct->setMarks();
-    $marks[$id] = $ct->getMarks();
+    $ct->setScores();
+    $scores[$id] = $ct->getScores();
 }
 ?>
 <!DOCTYPE html>
@@ -49,45 +49,47 @@ foreach ($schools as $id => $school) {
         <?php
         $types = $ct->getTypes();
         echo "<form action='' method='post'>";
-        echo "<input type='submit' name='submit' value='Save' />";
-        echo "<div style='float: right'><a href='setTypes.php'><input type='button' value='Go Back to Set Types' /></a></div>";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
+        echo "<a href='setTypes.php'><input type='button' value='Go back to change test level' style='padding: 12px; font-size: large' /></a>";
         foreach ($info as $school => $children) {
-            if (!empty($children)) {
-                echo "<h2>" . $schools[$school] . "</h2>";
-                echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
-                foreach ($types as $type => $value) {
-                    echo "<th>" . ucwords($value) . " Score</th>";
-                }
-                echo "<th>Trophy Score</th></th></tr>";
-                foreach ($children as $child) {
-                    $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
-                    $name = $child['first'] . ' ' . $child['last'];
-                    $id = $child['th_chidon_id'];
-                    echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
-                    if (empty($child['test_type'])) $default = true;
-                    else $default = false;
-                    foreach ($types as $type => $value) {
-                        if ($child['test_type'] == $type) echo ucwords($value);
-                    }
-                    foreach ($types as $type => $value) {
-                        $class = 'mark';
-                        if ($type == 'expert') $class = 'expert';
-                        $mark = isset($marks[$school][$id][$testNumber][$type]) ? $marks[$school][$id][$testNumber][$type] : 0;
-                        echo "</td><td><input type='text' name='marks[$id][$testNumber][$type]' value='" . $mark . "' size='4' class='$class' /></td>";
-                    }
-                    $trophy_mark = isset($marks[$school][$id][$testNumber]['trophy']) ? $marks[$school][$id][$testNumber]['trophy'] : 0;
-                    echo "<td><input type='text' name='marks[$id][$testNumber][trophy]' value='" . $trophy_mark . "' size='4' /></td>";
-                    echo "</td></tr>";
-                }
-                echo "</table>";
+            if (empty($children)) continue;
+            echo "<h2>" . $schools[$school] . "</h2>";
+            echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
+            foreach ($types as $type => $value) {
+                echo "<th>" . ucwords($value) . " Score</th>";
             }
+            echo "<th>Trophy Score</th></th></tr>";
+            foreach ($children as $child) {
+                $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+                $name = $child['first'] . ' ' . $child['last'];
+                $id = $child['th_chidon_id'];
+                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                if (empty($child['test_type'])) $default = true;
+                else $default = false;
+                foreach ($types as $type => $value) {
+                    if ($child['test_type'] == $type) echo ucwords($value);
+                }
+                foreach ($types as $type => $value) {
+                    $class = 'score';
+                    if ($type == 'expert') $class = 'expert';
+                    $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
+                    echo "</td><td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' /></td>";
+                }
+                $trophy_score = isset($scores[$school][$id][$testNumber]['trophy']) ? $scores[$school][$id][$testNumber]['trophy'] : 0;
+                echo "<td><input type='text' name='scores[$id][$testNumber][trophy]' value='" . $trophy_score . "' size='4' class='score' /></td>";
+                echo "</td></tr>";
+            }
+            echo "</table>";
         }
-        echo "<input type='submit' name='submit' value='Save' />";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
         echo "</form>";
         ?>
     </body>
     <script>
-        $(".mark").keyup( function() {
+        $(function() {
+            alert('Please make sure to SAVE after entering scores.');
+        })
+        $(".score").keyup( function() {
             const max = 10;
             let val = $(this).val();
             if (parseInt(val) > max) {
