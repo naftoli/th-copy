@@ -44,8 +44,10 @@ foreach ($schools as $id => $school) {
         <?php
         $types = $ct->getTypes();
         echo "<form action='' method='post'>";
-        echo "<input type='submit' name='submit' value='Save & Go To Test Scoring' />";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
+        echo "<div style='clear: both'></div>";
         foreach ($info as $school => $children) {
+            if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th></tr>";
             foreach ($children as $child) {
@@ -64,8 +66,13 @@ foreach ($schools as $id => $school) {
             }
             echo "</table>";
         }
-        echo "<input type='submit' name='submit' value='Save & Go To Test Scoring' />";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
         echo "</form>";
         ?>
     </body>
+    <script>
+        $(function() {
+            alert('Please make sure to SAVE after entering scores.');
+        })
+    </script>
 </html>
