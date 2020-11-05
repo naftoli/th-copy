@@ -19,7 +19,6 @@ if (isset($_POST['submit'])) {
 $info = [];
 $marks = [];
 foreach ($schools as $id => $school) {
-    if ($id != 3) continue;
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
     $ct->setScores();
