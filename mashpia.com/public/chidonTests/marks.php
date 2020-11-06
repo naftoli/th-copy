@@ -30,7 +30,7 @@ foreach ($schools as $id => $school) {
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Enter Test Score</title>
+        <title>Review Marks</title>
         <link href="../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
             tr, th, td {
@@ -44,14 +44,14 @@ foreach ($schools as $id => $school) {
     </head>
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
-        <h1>Enter Test Score</h1>
+        <h1>Review Marks</h1>
         <h2>Test #<?= $testNumber ?></h2>
         <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
-        echo "<a href='setTypes.php'><input type='button' value='Edit Level' style='padding: 12px; font-size: large' /></a>";
+        echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
         echo "<div style='float: right'><a href='enterScores.php'><input type='button' value='Edit Test 1 Scores' style='padding: 12px; font-size: large' /></a></div>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
@@ -60,7 +60,7 @@ foreach ($schools as $id => $school) {
             foreach ($types as $type => $value) {
                 echo "<th>" . ucwords($value) . " Mark</th>";
             }
-            echo "<th>Trophy Mark</th></th></tr>";
+            echo "</tr>";
             foreach ($children as $child) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
