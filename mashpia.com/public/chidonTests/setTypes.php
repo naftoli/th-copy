@@ -72,7 +72,7 @@ foreach ($schools as $id => $school) {
     </body>
     <script>
         $(function() {
-            alert('Please make sure to SAVE after entering scores.');
+            alert('Please make sure to SAVE after making changes.');
         })
     </script>
 </html>
