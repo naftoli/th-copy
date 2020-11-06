@@ -14,6 +14,8 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 
 if (isset($_POST['submit'])) {
     $ct->insertScores($_POST['scores']);
+    header("Location: marks.php");
+    exit;
 }
 
 $info = [];
@@ -50,8 +52,8 @@ foreach ($schools as $id => $school) {
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
-        echo "<div style='float: right'><a href='marks.php'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></a></div>";
-        echo "<a href='setTypes.php'><input type='button' value='Go back to change test level' style='padding: 12px; font-size: large' /></a>";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
+        echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
@@ -80,7 +82,7 @@ foreach ($schools as $id => $school) {
             }
             echo "</table>";
         }
-        echo "<div style='float: right'><a href='marks.php'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></a></div>";
+        echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
         echo "</form>";
         ?>
     </body>
