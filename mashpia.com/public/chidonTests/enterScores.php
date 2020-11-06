@@ -80,7 +80,7 @@ foreach ($schools as $id => $school) {
             }
             echo "</table>";
         }
-        echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
+        echo "<div style='float: right'><a href='marks.php'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></a></div>";
         echo "</form>";
         ?>
     </body>
