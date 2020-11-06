@@ -50,14 +50,14 @@ foreach ($schools as $id => $school) {
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
-        echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
+        echo "<div style='float: right'><a href='marks.php'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></a></div>";
         echo "<a href='setTypes.php'><input type='button' value='Go back to change test level' style='padding: 12px; font-size: large' /></a>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
             foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($value) . " Score</th>";
+                echo "<th>" . ucwords($type) . " Score</th>";
             }
             echo "<th>Trophy Score</th></th></tr>";
             foreach ($children as $child) {
