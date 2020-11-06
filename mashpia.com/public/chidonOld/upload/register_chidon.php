@@ -1,11 +1,11 @@
 <?php
 $admin_auth = ['school'];
+require __DIR__ . "/../../header.php";
 if ( $admin_user['auth'] != 'super' ) {
     echo "No Permissions.";
     exit;
 }
 ini_set('display_errors',1);
-require __DIR__ . "/../../db.php";
 $year = 5781;
 $qrys = [];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
