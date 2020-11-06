@@ -6,24 +6,32 @@ if ( $admin_user['auth'] != 'super' ) {
 }
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
+$year = 5781;
 $qrys = [];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $serial_num = $data[0];
+        $chidon_id = $data[0];
         $sweater = $data[1];
         $book = $data[2];
-        $qry = "INSERT INTO th_chidon 
-                SET
-                    user_id = (select user_id from users where user_serial = $serial_num),
-                    year = 5781,
-                    size = '$sweater', 
-                    book = $book,
-                    school_id = (select school_id from users where user_serial = $serial_num), 
-                    parent_id = (select admin_id from admin_auths where id = (
-                        select user_id from users where user_serial = $serial_num
-                    )),
-                    reg_date = now()";
-        $qrys[] = $qry;
+        // get info using chidon_id
+        $sql = "select user_id from th_chidon where th_chidon_id = " . $chidon_id;
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $user_id = $row['user_id'];
+            $qry = "INSERT INTO th_chidon 
+                    SET
+                        user_id = $user_id,
+                        year = $year,
+                        size = '$sweater', 
+                        book = $book,
+                        school_id = (select school_id from users where user_id = $user_id), 
+                        parent_id = (select admin_id from admin_auths where id = $user_id),
+                        reg_date = now()";
+            $qrys[] = $qry;
+        } else {
+            echo "couldn't find chidon id";
+            exit;
+        }
     }
     fclose($handle);
 }
