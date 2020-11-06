@@ -11,7 +11,7 @@ $qrys = [];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $chidon_id = $data[0];
-        $sweater = $data[1];
+        $sweater = strtolower($data[1]);
         $book = $data[2];
         // get info using chidon_id
         $sql = "select user_id from th_chidon where th_chidon_id = " . $chidon_id;
