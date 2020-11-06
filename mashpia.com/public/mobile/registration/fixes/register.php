@@ -111,7 +111,7 @@ foreach ($chidon as $user) {
     checkChidonReg( $admin_id, $school_id, $user_id, $paid, $size, $book );
     echo "<br />";
 }
-*/
+
 function updateReg( $user_id ) {
     global $MASHPIA_DB;
     $stmt = $MASHPIA_DB->prepare("
