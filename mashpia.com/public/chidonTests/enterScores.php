@@ -59,7 +59,7 @@ foreach ($schools as $id => $school) {
             foreach ($types as $type => $value) {
                 echo "<th>" . ucwords($type) . " Score</th>";
             }
-            echo "<th>Trophy Score</th></th></tr>";
+            echo "</tr>";
             foreach ($children as $child) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
