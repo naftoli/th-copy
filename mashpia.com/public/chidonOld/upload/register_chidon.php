@@ -13,16 +13,25 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
         $user_id = $data[0];
         $sweater = strtolower($data[1]);
         $book = $data[2];
-        $qry = "INSERT INTO th_chidon 
-                SET
-                    user_id = $user_id,
-                    year = $year,
-                    size = '$sweater', 
-                    book = $book,
-                    school_id = (select school_id from users where user_id = $user_id), 
-                    parent_id = (select admin_id from admin_auths where id = $user_id),
-                    reg_date = now()";
-        $qrys[] = $qry;
+        // get some details
+        $sql = "select school_id, admin_id from users u 
+                join admin_auths aa on aa.id = u.user_id 
+                where u.user_id = " . $user_id;
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $school_id = $row['school_id'];
+            $admin_id = $row['admin_id'];
+            $qry = "INSERT INTO th_chidon 
+                    SET
+                        user_id = $user_id,
+                        year = $year,
+                        size = '$sweater', 
+                        book = $book,
+                        school_id = $school_id, 
+                        parent_id = $admin_id,
+                        reg_date = now()";
+            $qrys[] = $qry;
+        }
     }
     fclose($handle);
 }
