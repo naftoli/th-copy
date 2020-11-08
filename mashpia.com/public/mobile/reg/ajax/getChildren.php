@@ -46,7 +46,7 @@ if ( !empty( $users ) ) {
 	//need to have multiple result rows to get highest rank
 	$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
 		." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, "
-		." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
+		." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, u.user_serial "
 		." FROM users u "
 		." JOIN schools s USING (school_id) "
 		." LEFT JOIN classes c ON c.class_id = u.class_id "

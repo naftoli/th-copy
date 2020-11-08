@@ -71,31 +71,23 @@ var jsonen = (function(){
 
 
     
- 
+function translate() {
+
+    $(".i18n").each(function () {
+
+        const key = $(this).data('key')
+
+        $(this).text(i18next.t(key))
 
         if (localStorage.getItem("locallang") == "he") {
-            //alert();
 
-
-           $(".i18n").addClass("hebrew");
-
-
+            $(".i18n").addClass("hebrew");
             $(".float_element").css("float", "right");
-
-            
-             $("table").css("direction", "rtl");
-            
-            //$("#forgot").addClass("hebrew");
-
-            //   
-
+            $("table").css("direction", "rtl");
 
         }
+    })
 
+} 
 
-} //
-
-
-function test() {
-    alert();
-}
+        

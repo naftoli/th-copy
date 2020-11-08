@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "Accounts": "חשבונות",
   "Achievements": "הישגים",
@@ -9,3 +10,16 @@
   "Rewards": "תגמולים",
   "Title": "לוח המשימות - צבאות השם"
 }
+=======
+{
+  "Accounts": "חשבונות",
+  "Achievements": "הישגים",
+  "Leaderboard": "לוח התוצאות",
+  "MedalBoard": " לוח המדליות",
+  "MissionBoard": "לוח המשימות ",
+  "Missions": "משימות",
+  "RankBoard": "לוח הדרגות",
+  "Rewards": "תגמולים",
+  "Title": "לוח המשימות - צבאות השם"
+}
+>>>>>>> ecb704a766a3b593088dd697d366ef9c3104d405

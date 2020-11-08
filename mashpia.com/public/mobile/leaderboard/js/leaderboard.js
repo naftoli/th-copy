@@ -1,4 +1,4 @@
-
+﻿
 var findGetParameter; // requires findGetParameter to be loaded first...
 
 var leaderboardApp = function(){
@@ -115,20 +115,35 @@ var leaderboardApp = function(){
                 );
             });
         }
+
+        var direction = " ";
+        var loadMoreText = "Load More";
+       
+        if (localStorage.getItem("locallang") == "he") {
+            direction = " style='direction:rtl;' ";
+            loadMoreText = "טען עוד ";
+           
+        }
+
+        html = "<div " + direction+ ">" + html + "</div>";
+
+     
+        $("#leaderboard").append(html);
+      
         
-        $("#leaderboard").append( html );
-    
         if ( 
             offset < 75 && 
             offset + data.leaderboard.length < data.total
         ) {
             $("#leaderboard").append(
-                '<div id="load-more-box"><button class="btn btn-branding" id="load-more">Load More</button></div>'
+                '<div id="load-more-box"><button class="btn btn-branding" id="load-more">' + loadMoreText+'</button></div>'
             );
             $("#load-more").click( function() {
                 getLeaderBoard( $(".user").length ); // load the next 25 users
             });
         }
+
+        console.log($("#leaderboard").html());
     }
     
     function renderUser ( user, start, position, current_user_position ) {
@@ -136,15 +151,22 @@ var leaderboardApp = function(){
         if ( current_user_position == position) {
             user_style = "background: #f9f9f9; color: #f7872a;";
         }
-    
-        var html = '<div class="user animated fadeIn" style="animation-delay: ' + 
+
+        var medalsText = " Medals";
+        var missionsText = " Missions";
+        if (localStorage.getItem("locallang") == "he") {
+            user_style = user_style + " direction:rtl; ";
+            medalsText = " מדליות";
+            missionsText = " משימות";
+        }
+        var html = '<div class="user animated fadeIn" style="animation-delay:' + 
                         ( (position - start) / 10) + 's; ' + user_style + '">';
         html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
         html +=     '<div class="user_info">';
         html +=         '<h1 class="position">#' + position + '</h1>';
         html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
-        html +=         '<div class="medal_count">' + user.medal_count + ' Medals</div>'
-        html +=         '<div class="mission_count">' + formatNumber(user.mission_count) + ' Missions</div>'
+        html += '<div class="medal_count">' + user.medal_count + medalsText + ' </div>'
+        html += '<div class="mission_count">' + formatNumber(user.mission_count) + missionsText +' </div>'
         html +=     '</div>';
         html +=    '</div>';
         return html;

@@ -1,0 +1,13 @@
+﻿{
+  "title": "Mobile Auction",
+  "pageTitle": "Auction Cart",
+  "message1": "After ADDING a prize in your Auction cart, be sure to click \"SAVE\" at the very bottom of your cart.",
+  "message2": "After UPDATING the quantities, be sure to click \"UPDATE\" & then \"SAVE\".",
+  "points": "points",
+  "Qty": "Qty",
+  "Update": "Update",
+  "REMOVE": "REMOVE",
+  "BACK": "BACK",
+  "SAVE": "SAVE"
+
+}

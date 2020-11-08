@@ -80,15 +80,6 @@ var en = jsonen;
         
          
 
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
     })
 
 
@@ -115,5 +106,14 @@ var en = jsonen;
             
 
         })
+
+           if (localStorage.getItem("locallang") == "he") {
+            $(".i18n").addClass("hebrew");
+           // $(".media-body").css("float", "right");
+               $(".innerImg p").css("direction", "rtl");
+               $("#scanner").css("direction", "rtl");
+
+               
+        }
 
     } 

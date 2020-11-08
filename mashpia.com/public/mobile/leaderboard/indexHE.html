@@ -23,6 +23,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
     <script src="../js/translation/leaderboard/leaderboard_index.js"></script>    
+
 </head>
 <body>
 
@@ -129,9 +130,7 @@
 
                                 <i class="fas fa-users"></i> <span class="i18n" data-key="Gender">Gender</span>
 
-                                <i class="fas fa-users"></i> <span class="i18n" data-key="Gender">Gender</span>
-
-                                <i class="fas fa-users"></i> <span class="i18n" data-key="Gender">Gender</span>:
+                                
 
                             </span>
                         </div>
@@ -181,100 +180,6 @@
 
 
 
-    <section id="filtersHE">
-      
-        <h2 id="user_position"></h2>
-        <div class="modal fade" id="filtersModalContainerHE" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title i18n" data-key="FilterLeaderboard" id="exampleModalLongTitle">Filter Leaderboard</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <img src="/mobile/img_new/x-color-white-svg.svg" height="16" width="16" />
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="filter">
-
-                            <div id="LocationOptions" class="filter-options" >
-                                <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="army" checked />
-                                    <span class="i18n" data-key="Army">Army</span>
-                                </label>
-                                <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="base" />
-                                    <span class="i18n" data-key="Base">Base</span>
-                                </label>
-                                <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="platoon" />
-                                    <span class="i18n" data-key="Platoon">Platoon</span>
-                                </label>
-                            </div>
-
-                            <span id="LocationHeader" class="filter-title">
-                                <i class="fas fa-globe"></i> <span class="i18n" data-key="Location">Location:</span>
-                            </span>
-                        </div>
-                        <div class="filter">
-
-                            <div id="GenderOptions" class="filter-options">
-                                <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="" checked />
-                                    <span class="i18n" data-key="All">All</span>
-                                </label>
-                                <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="M" />
-                                    <span class="i18n" data-key="Boys">Boys</span>
-                                </label>
-                                <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="F" />
-                                    <span class="i18n" data-key="Girls">Girls</span>
-                                </label>
-                            </div>
-
-                            <span id="GenderHeader" class="filter-title">
-                                <i class="fas fa-users"></i> <span class="i18n" data-key="Gender">Gender</span>:
-                            </span>
-                        </div>
-                        <div class="filter">
-
-                            <div id="RankOtions" class="filter-options">
-                                <select class="form-control" id="rank">
-                                    <option value="" class="i18n" data-key="AllRanks">All Ranks</option>
-                                    <option value="1" class="i18n" data-key="Private">Private</option>
-                                    <option value="2" class="i18n" data-key="Sergeant">Sergeant</option>
-                                    <option value="3" class="i18n" data-key="SergeantMajor">Sergeant Major</option>
-                                    <option value="4" class="i18n" data-key="SecondLieutenant">Second Lieutenant</option>
-                                    <option value="5" class="i18n" data-key="FirstLieutenant">First Lieutenant</option>
-                                    <option value="6" class="i18n" data-key="Captain">Captain</option>
-                                    <option value="7" class="i18n" data-key="Major">Major</option>
-                                    <option value="8" class="i18n" data-key="Colonel">Colonel</option>
-                                    <option value="9" class="i18n" data-key="General">General</option>
-                                    <option value="10" class="i18n" data-key="1General">1* General</option>
-                                    <option value="11" class="i18n" data-key="2General">2* General</option>
-                                    <option value="12" class="i18n" data-key="3General">3* General</option>
-                                    <option value="13" class="i18n" data-key="4General">4* General</option>
-                                    <option value="14" class="i18n" data-key="5General">5* General</option>
-                                </select>
-                            </div>
-
-                            <span id="RankHeader" class="filter-title">
-                                <i class="fas fa-trophy"></i> Rank:
-                            </span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-branding i18n" data-key="Close" data-dismiss="modal">Close</button>
-                        <button class="btn btn-branding i18n" data-key="UpdateLeaderboard" id="update-leaderboard-he">Update Leaderboard</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-    </section>
 
     <section id="leaderboard">
     </section>

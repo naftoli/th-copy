@@ -736,7 +736,7 @@
 				// need to update browser so that sessionStorage will work
 				alert(i18next.ht('UpdateBrowser1'));
 			} else {
-				if (sessionStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
+				if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
 					cart = JSON.parse(localStorage.getItem('auctionCart' + user));
 					for (var c in cart) {
 						var item = cart[c];
@@ -773,7 +773,7 @@
 						}
 						//alert(cartQty);
 						localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
-						sessionStorage.setItem('cartLoaded', 1);
+						localStorage.setItem('cartLoaded', 1);
 						$("#cartQty").text(cartQty);
 						calcBalance();
 					});

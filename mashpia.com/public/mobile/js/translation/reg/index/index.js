@@ -68,6 +68,8 @@
          i18next.changeLanguage(lang);
          trasPlaceholder();
          translate();
+         
+         //createAccount
      })
 
     
@@ -113,6 +115,8 @@
          $("#forgotdiv").css("direction", "rtl");
 
          $("#error-block").css("direction", "rtl");
+
+         $("#createAccount").css("float", "left");
 
        
 
