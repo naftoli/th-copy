@@ -83,10 +83,8 @@ class RankReport extends Report {
             if ($this->isHebrew($first) || $this->isHebrew($last)) {
                 $first = $this->reverseHebrew($first);
                 $last = $this->reverseHebrew($last);
-                $user = $last . $nameBreak . $first;
-            } else {
-                $user = $first . $nameBreak . $last;
             }
+            $user = $first . $nameBreak . $last;
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
