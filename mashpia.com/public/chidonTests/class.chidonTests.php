@@ -115,7 +115,7 @@ class ChidonTests
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    if ($details[$type] > 0) {
+//                    if ($details[$type] > 0) {
                         $stmt->execute([
                             ':id' => $id,
                             ':type' => $type,
@@ -123,7 +123,7 @@ class ChidonTests
                             ':questions' => $questions,
                             ':answered' => $details[$type]
                         ]);
-                    }
+//                    }
                 }
             }
         }
