@@ -105,7 +105,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                     if ($new_img) @imagepng($new_img, $img_url);
                                     else $img_url = '';
                                 }
-//                                if ($school == 61) continue;
 
                                 $info[$i++] = [
                                     $rankNames[$rank],
@@ -122,7 +121,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             }
         }
         $info[$i] = ['outro', 'outro']; // outro
-//        echo "<pre>"; print_r($info); echo "</pre>"; return;
         if (count($ranks)) {
             if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
             else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
@@ -193,7 +191,6 @@ function generateFileByGrade() {
                                 if ($new_img) @imagepng($new_img, $img_url);
                                 else $img_url = '';
                             }
-//                                if ($school == 61) continue;
 
                             $info[$i++] = [
                                 $rankNames[$rank],
@@ -206,7 +203,6 @@ function generateFileByGrade() {
                         }
 
                         $info[$i] = ['outro', 'outro']; // outro
-//                      echo "<pre>"; print_r($info); echo "</pre>"; return;
                         if (count($ranks)) {
                             $file_name = str_replace(' ', '_', $schools[$school]) . "_" . $grade . ".csv";
                             createFile($info, $file_name);
