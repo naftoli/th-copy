@@ -97,7 +97,7 @@ var en = jsonen;
         if (localStorage.getItem("locallang") == "he") {
             $(".i18n").addClass("hebrew");
            // $(".media-body").css("float", "right");
-            $("media-body").css("direction", "rtl");
+            $(".media-body").css("direction", "rtl");
         }
 
     } 

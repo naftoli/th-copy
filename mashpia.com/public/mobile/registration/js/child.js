@@ -1,3 +1,6 @@
+﻿const ErrorTextDOB = "Please enter a valid Date of Birth (YYYY-MM-DD)";
+const ErrorTextDOB_he = " (YYYY-MM-DD) נא להכניס תאריך לידה בפורמט תקין  ";
+
 // wrap all our logic inside childApp
 if ( !checkDateInput() ) {
     $('#th-dob, #no-th-dob').datepicker({ format: "yyyy-mm-dd" });
@@ -107,10 +110,14 @@ var childApp = function(){
     function registerChild( event ) {
         event.preventDefault();
 
-        var postData = formToJSON( event.target );
+        var postData = formToJSON(event.target);
+        
+
         // validate the DOB is valid input
-        if ( !postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/) ){
-            return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
+        if (!postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/)) {
+            if (localStorage.getItem("locallang") == "he") 
+                return showError(ErrorTextDOB_he);      
+             return showError(ErrorTextDOB );
         }
 
 
@@ -137,25 +144,37 @@ var childApp = function(){
         var postData = formToJSON( event.target );
         
         if ( !postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/) ){
-            return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
+            if (localStorage.getItem("locallang") == "he")
+                return showError(ErrorTextDOB_he);
+            return showError(ErrorTextDOB);
         }
 
-        if ( !postData.gender ){
-            return showError( "Please select your child's Gender." );
+        const childGenderText = "Please select your child's Gender.";
+        const childGenderText_he = "נא לבחור את המגדר של ילדך.";
+        if (!postData.gender) {
+            if (localStorage.getItem("locallang") == "he")
+                return showError(childGenderText_he);
+            return showError(childGenderText);
         }
 
         // if ( !postData.mobile_pic ) {
         //     return showError( "Please upload a profile picture for your child." );
         // }
+        const responseMsgText = "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
+        const responseMsgText_he = " נא לדבר עם מטה צבאות השם בטלפון (718-907-8884) או לשלוח מייל בכתובת 'cth@tzivosHashem.org'  "
 
-        $.post("/api/core/users.php", postData, function( response ){
+        $.post("/api/core/users.php", postData, function (response) {
             console.log( response );
             if( response.success ){ 
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
             } else {
-                response.message += "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
+                if (localStorage.getItem("locallang") == "he")
+                    response.message += responseMsgText_he;
+                else
+                    response.message += responseMsgText;
+
                 showError( response.message || response );
             }
         });

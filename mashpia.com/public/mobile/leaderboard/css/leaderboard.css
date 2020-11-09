@@ -102,7 +102,7 @@ section#leaderboard {
 .user div.user_info {
     width: 78%;
     padding: 0% 2%;
-    float:right;
+
 }
 .medal_count, .mission_count {
     width: 50%;

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JS file for /mobile/registration/
  */
 // page setup
@@ -60,6 +60,9 @@ var registrationApp = function() {
         });
     }
 
+    const pleaseSelectErr = "Please select at least one child";
+    const pleaseSelectErr_he = "נא לבחור לפחות ילד אחד";
+
     // show selected users
     function step2() {
         window.location.hash = 'step-2';
@@ -69,8 +72,10 @@ var registrationApp = function() {
             state.selected_users.push( Object.assign(
                 { confirmed: false }, state.users[0]
             ));
-        } else if ( state.users.length === 0 || $('#step-1 #children input:checked').length === 0 ) {
-            return showError( 'Please select at least one child' );
+        } else if (state.users.length === 0 || $('#step-1 #children input:checked').length === 0) {
+            if (localStorage.getItem("locallang") == "he")
+                return showError(pleaseSelectErr_he);
+             return showError(pleaseSelectErr );
         }
         // determine if the navigation should show
         if ( state.users.length == 1 ) {
