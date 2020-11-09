@@ -88,18 +88,18 @@ class MishnaInfo {
 		return $mesechtos;
 	}
 	
-	public static function getAssignedAll( $school_id, $class_id, $user = 0, $withNames = false ) {
+	public static function getAssignedAll( $school_id, $class_id, $user_id = 0, $withNames = false ) {
 		//if there is a user id then get assigned both for class and user
 		$mesechtos = array();
 		$sedorim = array(1,2,3,4,5,6);
 		
 		foreach ($sedorim as $seder) {
-			if ($user) {
+			if ($user_id) {
 				//need to check both for individual and class
 				$sql = "select * from mishna_assigned 
 						where school_id = $school_id 
 						and class_id = $class_id 
-						and user_id = $user   
+						and user_id = $user_id   
 						and seder_id = $seder";
 				$result = mysql_query( $sql );
 				while ($row = mysql_fetch_assoc($result)) {
