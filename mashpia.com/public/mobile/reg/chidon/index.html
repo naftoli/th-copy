@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile Web Site</title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/responsive.css" type="text/css" rel="stylesheet" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<link href="/mobile/reg/plugins/iCheck/all.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="css/keyboard.css">
+		<link rel="stylesheet" href="cropper/dist/cropper.css">	
+    	<link rel="stylesheet" href="cropper/avatar/css/main.css">
+		<style>
+			.btn-primary {
+				background-color: #2b529e;
+    			border-color: #2b529e;
+			}
+			.control-label {
+				padding-top: 3%;
+			}
+			label {
+				vertical-align: middle;
+			}
+			.xtra {
+				font-size: 14px;
+				padding: 6px;
+			}
+			.form-control {
+				border-radius: 5px !important;
+				border: 1px solid #b1b1b1 !important;
+				margin: 3px;
+			}
+			hr {
+				margin-bottom: 0;
+			}
+			.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+				background-color: #2b529e !important;
+			}
+			.check-accept span {
+				font-size: 14px;
+				font-family: font3;
+				line-height: 1.2;
+			}
+		</style>
+	</head>
+	<body>
+        <div class="container login-page" id="crop-avatar">
+            <div class="login-header">
+                <span class="span12">Chidon Registration</span>
+            </div>
+            <div class="span12 body">
+				<!--
+                <div class="logo">
+                    <img src="chidon.jpg" style="max-width: 250px" class="img-responsive center-block" />
+                </div>
+				-->
+                <div class="login-box">
+                    <div class="login-box-body">
+                        <form id="loginForm">
+                        	<!--
+                            <div class="form-group">
+                            	<select class="form-control" name="school" id="school">
+                            		
+                            	</select>
+                            </div>
+                           
+                            <div class="form-group" id="childSelect">
+                                <select class="form-control" name="children" id="children">
+                            		
+                            	</select>
+                            </div>
+                            -->
+                            <div id="regInfo">
+								<!--
+                            	<br />
+						        <div class="col-xs-12">
+					              	<div class="image-upload" id="crop-avatar-child">
+										<div class="avatar-view" title="Add Photo">
+											<img src="/mobile/reg/images/addphoto.png" class="img-people" id="imgchild" />
+										</div>
+			                        </div>
+					            </div>
+								-->
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px; margin-top: 0;">Personal Info</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="fname">First Name:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="fname" placeholder="First name" required />
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="lname">Last Name:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="lname"  placeholder="Last name" required />
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="hfname">Hebrew First Name:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control keyboardInput" id="hfname" placeholder="Hebrew first name" required />
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="hlname">Hebrew Last Name:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control keyboardInput" id="hlname" placeholder="Hebrew last name" required />
+								    </div>
+								</div>
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="city">City:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="city" placeholder="City" required />
+								    </div>
+								</div>
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="state">State:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="state" placeholder="State" required />
+								    </div>
+								</div>
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="country">Country:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="country" placeholder="Country" required />
+								    </div>
+								</div>
+								<!--
+								<div class="row">
+									<label class="control-label col-sm-2" for="grade">Grade:</label>
+								    <div class="col-sm-3">
+								      <select class="form-control" name="grade" id="grade" required>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+								      </select>
+								    </div>
+								</div>
+								
+								<div class="row">
+									<label class="control-label col-sm-2" for="book">Yahadus Book Number:</label>
+								    <div class="col-sm-3">
+								      <select class="form-control" name="book" id="book" required>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+								      </select>
+								    </div>
+								</div>
+								-->
+								<!--
+								<div class="row">
+								    <label class="control-label col-sm-2" for="pname">Parent Name:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="pname" placeholder="Parent name" required>
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="pemail">Parent Email:</label>
+								    <div class="col-sm-10">
+								      <input type="email" class="form-control" id="pemail" placeholder="Parent email" required>
+								    </div>
+								</div>
+								-->
+								<div class="row">
+								    <label class="control-label col-sm-2" for="email">Father / Mother Email:</label>
+								    <div class="col-sm-10">
+								      <input type="email" class="form-control" id="email" placeholder="Email" required />
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="fcell">Father Cell:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="fcell" placeholder="Father's cell" required />
+								    </div>
+								</div>
+								<div class="row">
+								    <label class="control-label col-sm-2" for="mcell">Mother Cell:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="mcell" placeholder="Mother's cell" required />
+								    </div>
+								</div>
+								
+								<div class="row">
+									<label class="control-label col-sm-2" for="phone">Home Phone:</label>
+									<div class="col-sm-10">
+									  <input type="text" class="form-control" id="phone" placeholder="Home phone" required />
+									</div>
+								</div>
+								
+								<!--
+								<div class="row xtra">
+									<div class="col-sm-12">
+										I attended Chidon:
+										<div style="padding-right: 10px;" id="history">
+											<input type="checkbox" class="flat-red" name="history[]" value="5776" /> 5776<br />
+											<input type="checkbox" class="flat-red" name="history[]" value="5775" /> 5775<br />
+											<input type="checkbox" class="flat-red" name="history[]" value="5774" /> 5774<br />
+										</div>
+								    </div>
+								</div>								
+								-->
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px;">Trip Info</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="size">Sweater Size:</label>
+								    <div class="col-sm-10">
+								      <select class="form-control" name="size" id="size" required>
+										<option value="0">Please Choose</option>
+										<option value="children s">Children S (6 - 8)</option>
+										<option value="children m">Children M (8 - 10)</option>
+										<option value="children l">Children L (10 - 12)</option>
+										<option value="children xl">Children XL (12 - 14)</option>
+										<option value="adult s">Adult S</option>
+										<option value="adult m">Adult M</option>
+										<option value="adult l">Adult L</option>
+										<option value="adult xl">Adult XL</option>
+								      </select>
+								    </div>
+								</div>
+								<br />
+								
+								<div class="row">
+									<div class="col-xs-12">
+										<label class="check-accept">
+											<input type="checkbox" name="participate" id="participate" class="minimal-red"> 
+											<span>Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your
+											children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</span>
+										</label>
+									</div>
+								</div>
+								<!--
+								<div class="row">
+								    <label class="control-label col-sm-2" for="shoe">Shoe Size:</label>
+								    <div class="col-sm-10">
+								      <select class="form-control" name="shoe" id="shoe" required>
+										<option value="0">Please Choose</option>
+										<option value="children 1">Children 1</option>
+										<option value="children 2">Children 2</option>
+										<option value="children 3">Children 3</option>
+										<option value="children 4">Children 4</option>
+										<option value="children 5">Children 5</option>
+										<option value="children 6">Children 6</option>
+										<option value="adult 6">Adult 6</option>
+										<option value="adult 7">Adult 7</option>
+										<option value="adult 8">Adult 8</option>
+										<option value="adult 9">Adult 9</option>
+										<option value="adult 10">Adult 10</option>
+								      </select>
+								    </div>
+								</div>
+								
+								<div class="row">
+								    <label class="control-label col-sm-2" for="sandwich">Sandwich Preference:</label>
+								    <div class="col-sm-10">
+								      <select class="form-control" name="sandwich" id="sandwich" required>
+										<option value="0">Please Choose</option>
+										<option value="tuna">Tuna</option>
+										<option value="egg">Egg</option>
+										<option value="cc">Cream Cheese</option>
+										<option value="plain">Plain</option>
+										<option value="cheese">Hard Cheese</option>
+								      </select>
+								    </div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px;">Allergies</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h5>Does your child have any allergies?</h5>
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="allergies" class="minimal-red allerg" value="0" />
+										</div>
+										My child has NO KNOWN Allergies.
+									</div>
+								</div>
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="allergies" class="minimal-red allerg" value="1" />
+										</div>
+										My child DOES HAVE Allergies.
+									</div>
+								</div>
+								
+								<div class="row allergies">
+								    <label class="control-label col-sm-2" for="allergy">List Allergies:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" id="allergy" placeholder="List of allergies">
+								    </div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px;">Walking Home</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h5>Do you allow your child to walk home without an adult?</h5>
+									</div>
+								</div>
+
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="permission" class="minimal-red perm" value="3" />
+										</div>
+										YES <!--I allow my child to walk home alone EVEN during NIGHT time hours.-->
+										<!--
+									</div>
+								</div>
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="permission" class="minimal-red perm" value="1" />
+										</div>
+										NO <!--I DON'T allow my child to walk home EVEN during DAY time hours.-->
+										<!--
+									</div>
+								</div>
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="permission" class="minimal-red perm" value="2" />
+										</div>
+										ONLY DURING DAY TIME HOURS.
+										<!--YES I allow my child to walk home alone ONLY during DAY time hours.-->
+										<!--
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px;">Chidon What’s App Broadcast</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h5 style="line-height: 1.3"><i>Want to be kept in the loop throughout chidon shabbaton with pictures and updates?
+										Save this number +1 718-907-8853 to your phone as a contact and send a What’s App Message
+										to this number with the word "Boys/Girls/Both" to sign up and receive the updates.</i></h5>
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="whatsapp" class="minimal-red whatsapp" value="1" />
+										</div>
+										Yes, I want to be kept in the loop and completed the above instructions.
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="whatsapp" class="minimal-red whatsapp" value="0" />
+										</div>
+										No, i do not want to receive updates.
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="margin-bottom: -10px;">Accomodation Info</h3>
+									</div>
+								</div>
+								<hr />
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="accInfo" class="minimal-red accInfo" value="1" />
+										</div>
+										The address where my child will be staying in Crown Heights during the Shabbaton is:
+										<br />(If you live in Crown Heights please provide your home address)
+									</div>
+								</div>
+								<div id="accomodations" style="display:none">
+									<div class="row">
+									    <label class="control-label col-sm-2" for="chfamily">Crown Heights Family Name:</label>
+									    <div class="col-sm-10">
+									      <input type="text" class="form-control" id="chfamily" placeholder="Crown Heights family name">
+									    </div>
+									</div>
+									<div class="row">
+									    <label class="control-label col-sm-2" for="addr1">Crown Heights Address:</label>
+										<div class="col-sm-3">
+											<input type="text" class="form-control" id="addr1" placeholder="#" />
+										</div>
+									    <div class="col-sm-7">
+									      <input type="text" class="form-control" id="addr2" placeholder="Street Name">
+									    </div>
+									</div>
+									<div class="row">
+									    <label class="control-label col-sm-2" for="addr3">Cross Streets:</label>
+									    <div class="col-sm-10">
+									      <input type="text" class="form-control" id="addr3" placeholder="Cross Streets">
+									    </div>
+									</div>
+									<div class="row">
+									    <label class="control-label col-sm-2" for="chphone">Crown Heights Phone Number:</label>
+									    <div class="col-sm-10">
+									      <input type="text" class="form-control" id="chphone" placeholder="Crown Heights phone number">
+									    </div>
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="accInfo" class="minimal-red accInfo" value="0" />
+										</div>
+										I do not yet know where my child will be staying in Crown Heights.
+									</div>
+								</div>
+
+								<!--
+								<div class="row">
+								    <label class="control-label col-sm-2" for="help">Shoe Size:</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" name="shoeSize" id="shoeSize" placeholder="Enter shoe size" />
+								    </div>
+								</div>
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="permission" id="permy" class="minimal-red" />
+										</div>
+										Yes I allow my child to walk home alone during day time hours only.
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="radio" name="permission" id="permn" class="minimal-red" />
+										</div>
+										No I don't allow my child to walk home even during day time hours only.
+									</div>
+								</div>
+								<div class="row xtra">
+									<div class="col-sm-12">
+										If yes, please enter between which streets your child can walk alone.<br />
+										<input type="text" class="form-control" id="streets" name="between_streets" placeholder="enter cross streets"/>
+									</div>
+								</div>
+								
+								<div class="row xtra">
+									<div class="col-sm-12">
+										<div style="padding-right: 10px; float: left">
+											<input type="checkbox" id="agreement" class="minimal-red" />
+										</div>
+										I allow my child's marks to be sent to Tzivos Hashem.
+									</div>
+								</div>
+								-->
+								
+								<input type="hidden" id="school" />
+								<input type="hidden" id="edit" value="0" />
+								<input type="hidden" id="chidon_reg_id" value="0" />
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<br />
+										<button id="pay" type="submit" class="btn btn-primary btn-block H8">Register</button>
+										<!--<button id="pay" type="submit" class="btn btn-primary btn-block H8">Continue to Payment</button>-->
+									</div>
+								</div>
+                            </div>                            
+                        </form>   
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="js/keyboard.js" charset="UTF-8"></script>
+		<script src="js/js.cookie.js" type="text/javascript"></script>
+        <script>
+            $(function() {            	
+            	$('input').iCheck({
+		            checkboxClass: 'icheckbox_square-blue',
+		            radioClass: 'iradio_square-blue',
+		            increaseArea: '20%' // optional
+		        });
+		        
+            	//$("#childSelect").hide();
+            	//$("#regInfo").hide();
+				
+				var url = location.toString();
+				var pos = url.indexOf('='); 
+				var id = url.substring( pos+1 );
+				
+				var edit = false;
+				var pos2 = id.indexOf('&');
+				if (pos2 !== -1) {
+					id = id.substr(0, pos2);
+					edit = true;
+				}
+				
+				var admin_id = Cookies.get('admin');
+				if (!admin_id) {
+					location.href = "/mobile";
+				}
+				
+				$.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
+					if (success == 0) {
+						location.href = "/mobile";
+					}
+				});
+				
+				var year;
+				$.ajax({
+					type : "POST",
+					url : "ajax/getYear.php",
+					async : false, 
+					success : function( info ) {
+						year = info;
+					}
+				});
+				
+				$.post('ajax/getChidonUser.php', { user : id, year : year }, function( success ) {
+					if (success != 0) {
+						var info = $.parseJSON(success);
+						var admin = info.admin;
+						var user = info.user;
+						var chidon = info.chidon;
+						
+						if (chidon.th_chidon_id) $("#chidon_reg_id").val(chidon.th_chidon_id);
+						
+						$("#school").val(user.school_id);
+						/*
+						if (chidon.grade) $("#grade").val(chidon.grade);
+						else $("#grade").val(user.class_grade);
+						
+						if (chidon.book) $("#book").val(chidon.book);
+						else {
+							var book;
+							switch (parseInt(user.class_grade)) {
+								case 4:
+								case 8:
+									book = 1;
+									break;
+								case 5:
+									book = 2;
+									break;
+								case 6:
+									book = 3;
+									break;
+								case 7:
+									book = 4;
+									break;
+							}
+							$("#book").val(book);
+						}
+						*/						
+						//$("#pname").val(admin.first + ' ' + admin.last);
+						//$("#pemail").val(admin.admin_email);
+						$("#fcell").val(admin.admin_phone_mobile);
+						$("#mcell").val(admin.admin_phone_mobile2);
+						$("#phone").val(admin.admin_phone_home);
+						$("#email").val(admin.admin_email);
+						$("#fname").val(user.first);
+						$("#lname").val(user.last);
+						$("#hfname").val(user.first_he);
+						$("#hlname").val(user.last_he);
+						
+						$("#city").val(admin.admin_city);
+						$("#state").val(admin.admin_state);
+						$("#country").val(admin.admin_country);
+						/*
+						if (user.mobile_pic != null) {
+							$("#imgchild").attr('src', 'http://mashpia.com/mobile/reg/' + user.mobile_pic);
+						} else if (user.thumb !== null) {
+							$("#imgchild").attr('src', 'http://mashpia.com/thumbs/' + user.thumb);
+						} else {
+							$("#imgchild").attr('src', 'http://mashpia.com/file_view.php?id=' + user.user_photo_id);
+						}
+						
+						if (parseInt(admin.chidon_whatsapp)) {
+							$(".whatsapp").eq(0).iCheck('check');
+						} else if (parseInt(admin.chidon_whatsapp) == 0) {
+							$(".whatsapp").eq(1).iCheck('check');
+						}
+						
+						// find out if we are editing existing chidon registration
+						if (chidon.user_id) {
+							//$("#agreement").iCheck('check');
+							$("#edit").val('1');
+							/*
+							if (chidon.history) {
+								var history = chidon.history.split(',');
+								for (var h in history) {
+									switch (history[h]) {
+										case '5776':
+											$("#history input").eq(0).iCheck('check');
+											break;
+										case '5775':
+											$("#history input").eq(1).iCheck('check');
+											break;
+										case '5774':
+											$("#history input").eq(2).iCheck('check');
+											break;
+									}
+								}
+							}
+						}
+						*/
+						if (chidon.size) {
+							var size = chidon.size;
+							$("#size").val(size);
+						}
+						/*
+						if (chidon.host) {
+							$("#chfamily").val(chidon.host);
+							$(".accInfo").eq(0).iCheck('check');
+						}
+						if (chidon.host_address1) $("#addr1").val(chidon.host_address1);
+						if (chidon.host_address2) $("#addr2").val(chidon.host_address2);
+						if (chidon.between_streets) $("#addr3").val(chidon.between_streets);
+						if (chidon.host_number) $("#chphone").val(chidon.host_number);
+						
+						if (chidon.allergies != '') {
+							$(".allerg").eq(1).iCheck('check');
+							$("#allergy").val(chidon.allergies);
+						}
+						
+						if (chidon.sandwich) $("#sandwich").val(chidon.sandwich);
+						if (chidon.shoe_size) $("#shoe").val(chidon.shoe_size);
+						
+						if (parseInt(chidon.walk_night)) $(".perm").eq(0).iCheck('check');
+						else if (parseInt(chidon.walk_day)) $(".perm").eq(2).iCheck('check');
+						else if (parseInt(chidon.walk_night) == 0 && parseInt(chidon.walk_day) == 0) $(".perm").eq(1).iCheck('check');
+						*/
+					}
+				});
+            	
+				/*
+            	$.post('ajax/getSchools.php', function( result ) {
+            		var schools = $.parseJSON(result);
+            		var html = "<option value='0'>Select School</option>";
+            		for (var school in schools) {
+            			html += "<option value='" + schools[school].chidon_schools_id + "'>" + schools[school].school_name + "</option>";
+            		}
+            		$("#school").append(html);
+            	});
+            	
+            	$("#school").change( function() {
+            		var id = $(this).val();
+            		$.post('ajax/getReg.php', { school : id }, function( result ) {
+            			$("#children").empty();
+            			var children = $.parseJSON( result );
+            			var html = "<option value='0'>Select Child</option>";
+	            		for (var i in children) {
+	            			var child = children[i];
+	            			html += "<option value='" + child.chidon_reg_id + "'>" + child.name + ' ' + child.last_name + "</option>";
+	            			setInfo( child );
+	            		}
+	            		$("#children").append(html);
+	            		$("#childSelect").show();
+            		});
+            	});
+            	
+            	$("#children").change( function() {
+            		var id = $(this).val();
+            		var child = childInfo[id];
+            		
+            		var paid = parseInt(child.paid);
+            		if (paid) {
+            			//alert(child.name + ' ' + child.last_name + ' has already been paid for.');
+            			//return;
+            			$("#pay").text('Update');
+            		}
+            		
+            		$("#grade").val(child.grade);
+            		$("#size").val(child.size.toLowerCase());
+            		$("#fname").val(child.name);
+            		$("#lname").val(child.last_name);
+            		$("#hfname").val(child.hfname);
+            		$("#hlname").val(child.hlname);
+            		$("#pname").val(child.parent_name);
+            		$("#pemail").val(child.parent_email);
+            		$("#fcell").val(child.parent_cell);
+            		$("#mcell").val(child.parent_cell2);
+            		if (child.help == 0) {
+	            		$("#chfamily").val(child.family);
+	            		$("#chaddress").val(child.address);
+	            		$("#chphone").val(child.phone);
+	            	}
+            		
+            		if (child.file) {
+            			var src = '../../chidon/img/' . child.file;
+            			/*
+            			if (src.indexOf('img/') == -1) {
+            				if (src.indexOf('/chidon') == -1) {
+            					src = '/chidon/photos/' + src;
+            				}
+            			} else {
+            				var img = new Image();
+            				img.src = '/chidon/' + child.file;
+            				if (img.height) {
+            					src = '/chidon/' + child.file;
+            				}
+            			}
+            			*/
+						/*
+            			$("#imgchild").attr('src', src);
+            		}
+            		
+            		if (child.shoe_size) {
+            			$("#shoeSize").val(child.shoe_size);
+            		}
+            		
+            		if (child.between_streets) {
+            			$("#streets").val(child.between_streets);
+            		}
+            		
+            		var walk = parseInt(child.walk_alone);
+            		if (walk) {
+            			$("#permy").attr('checked', true);
+            			$("#permy").parent().addClass('checked');
+            		} else {
+            			$("#permn").attr('checked', true);
+            			$("#permn").parent().addClass('checked');
+            		}
+            		
+            		if (parseInt(child.whatsapp)) {
+            			$("#whatsapp").parent().addClass('checked');
+            		}
+            		
+            		$("#regInfo").show();
+            	});
+            	
+            	$("#help").change( function() {
+            		var val = parseInt($(this).val());
+            		if (val == 0) {
+            			$("#accomodations").show();
+            		} else if (val == 1) {
+            			$("#accomodations").hide();
+            		}
+            	});
+            	
+				$(".allerg").on('ifChecked', function() {
+					var val = parseInt($(this).val());
+					if (val) {
+						$(".allergies").show();
+						$("#allergy").attr('required', true);
+						$("#allergy").focus();
+					} else {
+						$(".allergies").hide();
+						$("#allergy").attr('required', false);
+					}
+				});
+						
+				$(".accInfo").on('ifChecked', function() {
+					var val = parseInt($(this).val());
+					if (val) {
+						$("#accomodations").show();
+					} else {
+						$("#accomodations").hide();
+					}
+				});
+				*/
+            	$("#loginForm").submit( function(e) {
+					e.preventDefault();
+					
+					if (!$("#participate").is(":checked")) {
+						alert('You must indicate your acceptance of participation in Tzivos Hashem Media.');
+						return false;
+					}
+		
+					var fname = $("#fname").val().trim();
+					var lname = $("#lname").val().trim();
+					var hfname = $("#hfname").val().trim();
+					var hlname = $("#hlname").val().trim();
+					var fcell =	$("#fcell").val().trim();
+					var mcell =	$("#mcell").val().trim();
+					var phone =	$("#phone").val().trim();
+					var email = $("#email").val().trim();
+					var city = $("#city").val();
+					var state = $("#state").val();
+					var country = $("#country").val();
+					var school = parseInt($("#school").val());
+					var size = $("#size").val();
+					//var grade = $("#grade").val();
+					//var book = $("#book").val();
+					//var sandwich = $("#sandwich").val();
+					//var shoe = $("#shoe").val();
+					
+					var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+					if (!emailPattern.test(email)) {
+						alert("Invalid Email.");
+						$("#email").focus();
+						return false;
+					}
+					
+					if (size == '0') {
+						alert('You must choose a sweater size.');
+						$("#size").focus();
+						return false;
+					}
+					/*
+					var whatsapp;
+					if (!$(".whatsapp:checked").length) {
+						alert('You must indicate whether you want to be part of the whatsapp group.');
+						return false;
+					} else {
+						whatsapp = parseInt($(".whatsapp:checked").val()); 
+					}
+					
+					if (sandwich == '0') {
+						alert('You must choose a sandwich.');
+						$("#sandwich").focus();
+						return false;
+					}
+					
+					if (shoe == '0') {
+						alert('You must choose a shoe size.');
+						$("#shoe").focus();
+						return false;
+					}
+					
+					var allergies = '';
+					if (!$(".allerg:checked").length) {
+						alert('You must indicate whether your child has any allergies.');
+						return false;
+					} else {
+						if (parseInt($(".allerg:checked").val())) {
+							allergies = $("#allergy").val().trim();
+							if (allergies == '') {
+								alert('You have indicated that your child has allergies, but you have not entered what they are!');
+								return false;
+							}
+						}
+					}
+					
+					var permission = 0;
+					if (!$(".perm:checked").length) {
+						alert('You must indicate what type of permissions your child has regarding walking alone.');
+						return false;
+					} else {
+						permission = parseInt($(".perm:checked").val());
+					}
+					
+					var host = $("#chfamily").val().trim();
+					var hostAddr1 = $("#addr1").val().trim();
+					var hostAddr2 = $("#addr2").val().trim();
+					var betStreets = $("#addr3").val().trim();
+					var hostPhone = $("#chphone").val().trim();
+					
+					var accInfo;
+					if (!$(".accInfo:checked").length) {
+						alert('You have not indicated where your child is staying.');
+						return false;
+					} else {
+						accInfo = parseInt($(".accInfo:checked").val());
+						if (accInfo) {
+							if (host == '' || hostAddr1 == '' || hostAddr2 == '' || betStreets == '' || hostPhone == '') {
+								$("#chfamily").focus();
+								alert('All Accomodation info is mandatory.');
+								return false;
+							}
+						}
+					}
+					*/
+					if (fname == '' || lname == '' || hfname == '' || hlname == '' || fcell == '' || mcell == '' || phone == '' || email == '') {
+						alert('All personal and contact info is mandatory.');
+						$("#fname").focus();
+						return false;
+					}
+					
+					/*
+					if (!$("#agreement").is(":checked")) {
+						alert('You must agree to having the marks sent to Tzivos Hashem.');
+						return false;
+					}
+					*/
+					
+					$.post('ajax/updateAdmin.php', {
+						admin : admin_id,
+						fcell : fcell,
+						mcell : mcell,
+						phone : phone,
+						email : email,
+						city : city,
+						state : state,
+						country : country
+					});
+					
+					$.post('ajax/updateChild.php', {
+						user : id,
+						fname : fname,
+						lname : lname ,
+						hfname : hfname,
+						hlname : hlname
+					});
+					
+					$.post('ajax/regChidon.php', {
+						admin : admin_id, 
+						year : year, 
+						user : id,
+						school : school, 
+						size : size
+					}, function( error ) {
+						if (error == 0) {
+							alert($("#fname").val() + ' ' + $("#lname").val() + ' has now been registered for Chidon ' + year + '.');
+							location.href = "/mobile/reg/parent_detail.html";
+						} else {
+							console.log( error );
+						}
+					});
+					/*
+					var history = [];
+					$("#history input").each( function() {
+						if ($(this).is(":checked")) {
+							history.push($(this).val());
+						}
+					});
+					
+					var edit = parseInt($("#edit").val());
+					$.post('ajax/updateChidon.php', {
+						year : year, 
+						user : id,
+						school : school,
+						grade : grade,
+						book : book, 
+						size : size, 
+						toEdit : edit,
+						sandwich : sandwich,
+						allergies : allergies,
+						permission : permission,
+						accomodations : accInfo,
+						host : host,
+						hostAddr1 : hostAddr1,
+						hostAddr2 : hostAddr2,
+						betStreets : betStreets, 
+						hostPhone : hostPhone,
+						shoe : shoe
+					}, function() {
+						//location.href = encodeURI("https://mashpia.com/mobile/chidon/pay.html?id=" + $("#chidon_reg_id").val() + "&name=" + fname + ' ' + lname);
+						if (edit) alert("The information for " + $("#fname").val() + ' ' + $("#lname").val() + ' has been edited.');
+						else alert($("#fname").val() + ' ' + $("#lname").val() + ' has now been registered for Chidon ' + year + '.');
+						location.href = "/mobile/reg/parent_detail.html";
+					});
+					
+					//if (edit) alert("The information for " + $("#fname").val() + ' ' + $("#lname").val() + ' has been edited.');
+					//else alert($("#fname").val() + ' ' + $("#lname").val() + ' has now been registered for Chidon 5777.');
+					//location.href = "/mobile/reg/parent_detail.html";
+					/*
+            		// save to db           		
+            		var grade = $("#grade").val();
+            		var size = $("#size").val();
+            		var fname = $("#fname").val();
+            		var lname = $("#lname").val();
+            		var hname = $("#hfname").val() + ' ' + $("#hlname").val();
+            		var pname = $("#pname").val();
+            		var pemail = $("#pemail").val();
+            		var fcell = $("#fcell").val();
+            		var mcell = $("#mcell").val();
+            		var whatsapp = $("#whatsapp").is(":checked") ? 1 : 0;
+            		var help = parseInt($("#help").val());
+            		var chfamily = $("#chfamily").val();
+        			var chaddress = $("#chaddress").val();
+        			var chphone = $("#chphone").val();
+        			var permy = $("#permy").is(":checked");
+        			var permn = $("#permn").is(":checked");
+        			var walkAlone = permy ? 1 : 0;
+        			var allergy = $("#allergy").val();
+        			var shoeSize = $("#shoeSize").val();
+        			var streets = $("#streets").val();
+            		
+            		var errors = [];
+            		var pic = $("#imgchild").attr('src');
+            		if (pic == '/mobile/reg/images/addphoto.png') {
+            			pic = '';
+            			errors.push('You must upload a photo.');
+            		}
+            		if (!help || help == 0) {
+            			if (chfamily == '' || chaddress == '' || chphone == '') {
+            				errors.push('You must enter all accomodation info.');
+            			}
+            		}
+            		if (!permy && !permn) {
+            			errors.push('You must indicate whether you allow your child to walk alone during the day.');
+            		} 
+            		
+            		if (errors.length) {
+            			alert(errors);
+            			return false;
+            		}           		
+            		
+            		var id = $("#children").val();
+            		$.post('ajax/updateReg.php', {
+            			id : id, 
+            			grade : grade, 
+            			size : size, 
+            			fname : fname, 
+            			lname : lname, 
+            			hname : hname, 
+            			pname : pname, 
+            			pemail : pemail, 
+            			fcell : fcell, 
+            			mcell : mcell, 
+            			pic : pic, 
+            			whatsapp : whatsapp, 
+            			help : help, 
+            			chfamily : chfamily, 
+            			chaddress : chaddress, 
+            			chphone : chphone, 
+            			walkAlone : walkAlone, 
+            			allergy : allergy, 
+            			shoeSize : shoeSize, 
+            			streets : streets 
+            		}, function( success ) {
+            			if (success == 0) {
+            				alert('Error updating info.');
+            			} else {
+            				var child = childInfo[id];
+            				if (parseInt(child.paid)) {
+            					alert('Updated.');
+            					return false;
+            				}
+		            		var str = "http://mashpia.com/mobile/chidon/pay.html?id=" + id;
+		            		str += "&name=" + child.name + ' ' + child.last_name;
+		            		//window.location = encodeURI(str);
+            			}
+            		});
+            		*/
+            		return false;
+            	});
+            });
+            
+			/*
+            var childInfo = [];
+            function setInfo( info ) {
+            	var id = info.chidon_reg_id;
+            	childInfo[id] = info;
+            }
+            */
+        </script>
+        <script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-71974937-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
+	</body>
+</html>

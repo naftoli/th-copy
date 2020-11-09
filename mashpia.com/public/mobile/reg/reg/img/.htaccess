@@ -1,0 +1,7 @@
+Header always set Access-Control-Allow-Origin "*"
+# If we are not on mashpia.com and we do not have the image, 
+# rewrite the request to redirect.php which will do a CORS compliant redirect ( Location header )
+RewriteEngine On
+RewriteCond "%{HTTP_HOST}"   "!^mashpia.com" [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ redirect.php?img=$1 [QSA,L]

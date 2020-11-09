@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Site</title>
+<style type="text/css">
+    html{font-family:sans-serif}body{margin:0}a{background-color:transparent}img{border:0}button,select,textarea{margin:0;font-family:inherit;font-size:inherit;font-style:inherit;font-variant:inherit;font-weight:inherit;line-height:inherit;color:inherit}button{overflow:visible}button,select{text-transform:none}button{-webkit-appearance:button}textarea{overflow:auto}table{border-spacing:0;border-collapse:collapse}td{padding:0}*{box-sizing:border-box}::after,::before{box-sizing:border-box}html{font-size:10px}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}button,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}h2{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h2{margin-top:20px;margin-bottom:10px}h2{font-size:30px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}label{display:inline-block;max-width:100%;margin-bottom:5px;font-weight:700}.form-control{display:block;width:100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(0,0,0,.0745098) 0 1px 1px inset;box-shadow:rgba(0,0,0,.0745098) 0 1px 1px inset}.form-control::-webkit-input-placeholder{color:#999}textarea.form-control{height:auto}.form-group{margin-bottom:5px}.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;background-image:none;border:1px solid transparent;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px}.btn-default{color:#333;background-color:#fff;border-color:#ccc}.container::after,.container::before{display:table;content:' '}.container::after{clear:both}h2{font-family:'Source Sans Pro',sans-serif}a{color:#3c8dbc}.form-control{box-shadow:none;border-color:#d2d6de;border-top-left-radius:0!important;border-top-right-radius:0!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important}.form-control::-webkit-input-placeholder{color:#bbb}.form-control:not(select){-webkit-appearance:none}.btn{border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px;-webkit-box-shadow:none;box-shadow:none;border:1px solid transparent}.btn-default{background-color:#f4f4f4;color:#444;border-color:#ddd}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{text-align:center;border-top-width:2px;border-top-style:solid;border-top-color:#9f9f9f;display:table;max-width:1020px;width:100%}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:20px;font-family:font1}.footer .menu-item{width:130px;height:100px;margin:0 auto}.footer .span3 img{width:80px}.btn-default{background-color:#fff;border-color:transparent}.header-yellow{width:100%;background-color:#f68829}.header-yellow table{font-size:80px;font-family:font3;color:#fff}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.footer{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:100px}.footer .span3 img{width:80px}.header-yellow table{font-size:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:14px}.header-yellow table{font-size:40px}}@media screen and (max-width:639px){.footer .menu-item{width:100px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:12px}.header-yellow table{font-size:40px}}@media screen and (max-width:479px){.footer .menu-item{width:60px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}.header-yellow table{font-size:30px}}body{background-color:#fcfcfc}@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}
+</style>
+<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+<script src="js/all.js" defer></script>
+<style>
+	@font-face {
+		font-family: 'digi';
+		src: url('font/DS-DIGIB.TTF');
+	}
+	
+    body {
+    	margin-bottom: 100px;
+    }
+	
+	label {
+		font-size: 16px;
+	}
+	
+    .form-group {
+        padding-top: 10px;
+    }
+</style>
+</head>
+<body class="rank-page">
+<div class="header-yellow" style="position: relative">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <table style="width: 100%;">
+            <tr>
+            	<td>&nbsp;</td>
+            	<td>&nbsp;</td>
+                <!--<td><div class="yellow-star-l"><img src="images/yellow-star.png"></div></td>-->
+                <td style="text-align: center;"><span>Story Contest</span></td>
+                <!--<td><div class="yellow-star-r"><img src="images/yellow-star.png"></div></td>-->
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="container">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
+        
+        <div class="span12" style="padding: 15px; padding-top: 0;">
+            <h2>My Special Moment With the Rebbe</h2>
+            <form role="form">
+                <div class="form-group">
+                    <label for="chayol">From: (Chayol's Name)</label>
+                    <select class="form-control" id="chayol">
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="story">My Story:</label>
+                  <textarea class="form-control" rows="5" id="story"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="lesson">...and it's Lesson to me:</label>
+                  <textarea class="form-control" rows="5" id="lesson"></textarea>
+                </div>
+				<div class="form-group" align="center">
+					<button type="submit" class="btn btn-default" id="submit">Submit</button>
+				</div>
+            </form>
+        </div>
+        
+        <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;">
+            <div class="span12 footer">
+                <div class="span3" style="width: 50%">
+                    <a href="/mobile/news">
+                        <div class="menu-item">
+                            <div class="span12">
+                                  <picture>
+                                        <source srcset="img/webp/top-menu1.webp" type="image/webp">
+                                        <img src="img/top-menu1.png" alt="">
+                                  </picture>
+                            </div>
+                            <div class="span12">
+                                <span>News</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3" style="width: 50%; border-left: 1px solid #9f9f9f;">
+                	<a href="/mobile/reg/">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                  <picture>
+                                        <source srcset="img/webp/menu1.webp" type="image/webp">
+                                        <img src="img/menu1.png" alt="">
+                                  </picture>
+	                        </div>
+	                        <div class="span12">
+	                            <span>Accounts</span>
+	                        </div>
+	                    </div>
+	                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        $( function() {
+            var admin = Cookies.get('admin');
+            if (!admin) {
+                window.location = "index.html";
+            }
+            $.post('ajax/getChildrenNames.php', { admin : admin }, function( success ) {
+                var children = $.parseJSON( success );
+                var html = "<option value='0'>Please choose</option>";
+                for (var c in children) {
+                    var child = children[c];
+                    html += "<option value='" + c + "'>" + child + "</option>";
+                }
+                $("#chayol").empty();
+                $("#chayol").append(html);
+            });
+        });
+        
+        $("#submit").click(function( e ) {
+            e.preventDefault();
+    		
+    		var user = parseInt($("#chayol").val());
+    		var story = $("#story").val();
+            var lesson = $("#lesson").val();
+    		var year = 5777;
+    		
+            if (user === 0) {
+                alert('You must choose a child.');
+                return false;
+            }
+            
+            if (story.length < 250) {
+                alert('Your story must have at least 250 characters.');
+                return false;
+            }
+    		
+    		if (lesson.length < 100) {
+                alert('Your lesson must have at least 100 characters.');
+                return false;
+            }
+            
+            $.post('ajax/submitStory.php', {
+    			user : user,
+    			story : story,
+    			lesson : lesson,
+    			year : year
+    		}, function( success ) {
+                if (parseInt(success) === 0) {
+                    alert('Your story has been submitted. Thank you.');
+                } else {
+                    alert('There was an error submitting your story.');
+                }
+            });
+        });
+    });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

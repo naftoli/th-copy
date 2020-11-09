@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Jetpack - Mobile Template</title>
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Icons -->
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" media="all" rel="stylesheet" type="text/css">
+
+    <!-- Styles -->
+    <link href="css/keyframes.css" rel="stylesheet" type="text/css">
+    <link href="css/materialize.min.css" rel="stylesheet" type="text/css">
+    <link href="css/swiper.css" rel="stylesheet" type="text/css">
+    <link href="css/swipebox.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+		<style>
+			@font-face {
+				font-family: 'font3';
+				src: url('/mobile/font/SourceSansPro-Semibold.otf');
+				src: url('/mobile/font/SourceSansPro-Semibold.otf') format('opentype');
+				font-weight: normal;
+				font-style: normal;
+			}
+			.del {
+				font-size: 10px;
+				color: red;
+				cursor: pointer;
+			}
+		</style>
+</head>
+
+  <body>
+    <div id="main"> <!-- Main Container -->
+		
+			<div id="spinner"></div>
+			        
+      <!-- Sidebar -->
+      <ul id="slide-out" class="side-nav primary-color collapsible menu">
+        
+      </ul>
+      <!-- End of Sidebars -->
+
+      <!-- Toolbar -->
+      <div id="toolbar" class="primary-color">
+        <div class="title"></div>
+        <div class="open-right" id="open-right" data-activates="slide-out">
+          <i class="ion-android-menu"></i>
+        </div>
+      </div>
+      <!-- End of Toolbar -->
+      
+      <!-- Page Contents -->
+      <div class="page animated fadeinright">
+      	
+      	<div class="notification notification-warning" style="text-align: center">
+      	  <a class="close-notification no-smoothState"><i class="ion-android-close"></i></a>
+          <p><span id="points">0</span> points original</p>
+					<p><span class="totalPoints">0</span> points in cart</p>
+          <p><span id="pointsLeft">0</span> points left</p>
+        </div>
+        
+        <!-- Order Recap -->
+        <ul class="collapsible checkout-header animated fadeindown delay-2" data-collapsible="accordion" style="margin-right: 17px; margin-left: 17px;">
+          <li>
+            <div class="collapsible-header">
+              Show order summary
+              <i class="ion-android-arrow-dropdown"></i>
+              <span class="checkout-price right totalPoints"></span>
+            </div>
+            <div class="collapsible-body z-depth-1">
+              
+              <div id="details">
+              	
+              </div>
+              
+              <!-- Total -->
+              <div class="total">
+                <h4>Total <span class="right totalPoints"></span></h4>
+              </div>
+
+            </div>
+          </li>
+        </ul>
+
+        <!-- Form Inputs -->
+        <div class="form-inputs p-20">
+          <a class="waves-effect waves-light btn-large primary-color block" onclick="purchase()">Save</a>
+        </div>
+
+      </div> 
+      <!-- End of Page Contents -->
+
+    </div><!-- End of Main Container -->
+    
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/jquery.swipebox.min.js"></script>   
+    <script src="js/materialize.min.js"></script> 
+    <script src="js/swiper.min.js"></script>  
+    <script src="js/jquery.mixitup.min.js"></script>
+    <script src="js/masonry.min.js"></script>
+    <script src="js/chart.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="/mobile/reg/js/js.cookie.js"></script>
+    
+    <script>
+    	var admin = Cookies.get('admin');
+    	if (!admin) {
+    		window.location = "/mobile";
+    	}
+    	
+    	var url = location.toString();
+			var pos = url.indexOf('='); 
+			var id = url.substring( pos+1 );
+			
+			$(".menu").append(
+				'<li><a href="category2.html?id=' + id + '" class="no-child"><i class="ion-ios-home-outline"></i> Back</a></li>' 
+			);
+			
+			//get user info
+			$.post('ajax/getUserInfo.php', { user : id }, function( success ) {
+					var user = $.parseJSON( success );
+					$(".title").html(user.rank + ' ' + user.name);
+			});
+			
+			var initPoints;
+			var auction = parseInt(Cookies.get('auction'));
+    	var cart = []
+			initCart();
+			
+			function initCart() {
+				$.post('ajax/getTickets.php', { auction : auction, id : id }, function( success ) {
+					var tickets = $.parseJSON( success );
+					if (tickets.length) {
+						for (var t in tickets) {
+							var ticket = tickets[t];
+							cart.push({
+								'id' : parseInt(ticket.prize_id),
+								'name' : ticket.prize_name,
+								'qty' : parseInt(ticket.quantity),
+								'price' : parseInt(ticket.prize_points),
+								'pic' : ticket.prize_image_id
+							});
+						}
+						//Cookies.set('cart' + id, cart);
+						calcPoints();
+						
+						var html = '';
+						var total = 0;
+						var num = 0;
+						for (var i in cart) {
+							total += (cart[i].qty * cart[i].price);
+							html += '<div class="checkout-details">\
+											<img class="checkout-image" src="http://mashpia.com/file_view.php?id=' + cart[i].pic + '" alt="">\
+											<div class="checkout-product-title">\
+												<h6>' + cart[i].name + ' <span class="right">' + (cart[i].price * cart[i].qty) + ' points</span></h6>\
+												<span>Qty: ' + cart[i].qty + '</span><br /><span><a class="del" id="' + (num++) + '">remove</a></span>\
+											</div>\
+										</div>';
+						}
+						$("#details").append(html);
+						
+						$(".del").click( function() {
+							var item = $(this).attr('id');
+							$(this).parent().parent().parent().remove();
+							cart.splice(item, 1);
+							calcPoints();
+							//Cookies.set('cart' + id, cart);
+						});
+					}
+				});
+			}
+			//Cookies.getJSON('cart' + id);
+    	console.log(cart);
+			
+			$.post('ajax/getUserPoints.php', { user : id, auction : auction }, function( success ) {
+					var points = $.parseJSON( success );
+					initPoints = Math.floor(points.cur);
+					calcPoints();
+			});
+    	
+    	function purchase() {
+				var left = parseInt($("#pointsLeft").text());
+				if (left < 0) {
+					alert("You don't have enough points for this transaction.");
+					return false;
+				}
+				
+				$.post('ajax/purchaseTickets.php', { 
+					auction : auction, 
+					user : id, 
+					info : cart 
+				}, function( success ) {
+					if (success == 0) {
+						//Cookies.remove('cart');
+						alert('Saved.');
+						location.href = "/mobile/auction/category2.html?id=" + id;
+					} else {
+						alert('There was an error saving.');
+					}
+				});
+    	}
+			
+    	function calcPoints() {
+					var total = 0;
+					for (var i in cart) {
+							total += (cart[i].qty * cart[i].price);
+					}
+					$("#points").text(initPoints);
+					$("#pointsLeft").text(initPoints - total);
+					$(".totalPoints").text(-total + ' points');
+			}
+    	
+    	$(".close-notification").click( function() {
+    	   $(this).parent().hide(); 
+    	});
+    </script>
+  </body>
+</html>

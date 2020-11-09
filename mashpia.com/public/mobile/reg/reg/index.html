@@ -1,0 +1,357 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title data-key="Title" class="i18n">Mobile Web Site</title>
+	<link href="/mobile/reg/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="preload" href="/mobile/reg/css/all.css" as="style" onload="this.rel='stylesheet'">
+	<noscript>
+		<link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+	</noscript>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
+		as="style" onload="this.rel='stylesheet'">
+	<noscript>
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+			rel="stylesheet">
+	</noscript>
+	<script>
+		! function (e) {
+			"use strict";
+			var t = function (t, n, r) {
+				function o(e) {
+					if (i.body) return e();
+					setTimeout(function () {
+						o(e)
+					})
+				}
+
+				function a() {
+					d.addEventListener && d.removeEventListener("load", a), d.media = r || "all"
+				}
+				var l, i = e.document,
+					d = i.createElement("link");
+				if (n) l = n;
+				else {
+					var s = (i.body || i.getElementsByTagName("head")[0]).childNodes;
+					l = s[s.length - 1]
+				}
+				var u = i.styleSheets;
+				d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () {
+					l.parentNode.insertBefore(d, n ? l : l.nextSibling)
+				});
+				var f = function (e) {
+					for (var t = d.href, n = u.length; n--;)
+						if (u[n].href === t) return e();
+					setTimeout(function () {
+						f(e)
+					})
+				};
+				return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d
+			};
+			"undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
+		}("undefined" != typeof global ? global : this),
+		function (e) {
+			if (e.loadCSS) {
+				var t = loadCSS.relpreload = {};
+				if (t.support = function () {
+						try {
+							return e.document.createElement("link").relList.supports("preload")
+						} catch (e) {
+							return !1
+						}
+					}, t.poly = function () {
+						for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) {
+							var r = t[n];
+							"preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute(
+								"media")), r.rel = null)
+						}
+					}, !t.support()) {
+					t.poly();
+					var n = e.setInterval(t.poly, 300);
+					e.addEventListener && e.addEventListener("load", function () {
+						t.poly(), e.clearInterval(n)
+					}), e.attachEvent && e.attachEvent("onload", function () {
+						e.clearInterval(n)
+					})
+				}
+			}
+		}(this);
+	</script>
+	<!--<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script><script src="js/ajaxupload.js" type="text/javascript"></script>-->
+	<script src="js/all.js" defer></script>
+	<style type="text/css">
+		/*			Shamai asked for this in APP-176*/
+		body {
+			background-color: #fff
+		}
+
+		.input-group .input-group-addon,
+		.form-control {
+			border-radius: 5px;
+		}
+
+		.input-group .form-control {
+			width: 99%;
+		}
+
+		/* border radius not working. so just keep it 1% from the edge....*/
+		/*New styles with image*/
+		.login-box-body .form-group,
+		.body .logo img,
+		.login-box-body .btn-primary,
+		#divlogin img,
+		#divpwd img {
+			transition: .25s
+		}
+
+		#divlogin img,
+		#divpwd img {
+			max-height: 40px;
+		}
+
+		@media (max-width: 640px) {
+
+			#divlogin img,
+			#divpwd img {
+				max-height: 25px;
+			}
+		}
+
+		span {
+			vertical-align: middle;
+		}
+
+		#remember input[type=checkbox] {
+			display: none
+		}
+
+		#remember-check {
+			background: url("/mobile/img_new/square-color-blue-svg.svg");
+			background-size: cover;
+			height: 25px;
+			width: 25px;
+			display: inline-block;
+			transition: transform .1s;
+		}
+
+		#remember input[type=checkbox]:checked+#remember-check {
+			background: url("/mobile/img_new/square-check-color-blue-svg.svg");
+			background-size: cover;
+		}
+
+		#remember input[type=checkbox]:hover+#remember-check {
+			background: url("/mobile/img_new/square-check-color-blue-svg.svg");
+			background-size: cover;
+			transform: scale(1.1);
+			cursor: pointer;
+		}
+
+		.logo img.img-responsive.center-block {
+			padding: 2%;
+		}
+
+		@media screen and (max-width: 639px) {
+			h2 {
+				font-size: 24px;
+			}
+		}
+	</style>
+	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/reg/index/index.js"></script>
+
+</head>
+
+<body>
+	<div class="container login-page">
+		<div class="login-header">
+			<span class="span12 i18n" data-key="Title">TZIVOS HASHEM</span>
+
+			<div style="float: right;">
+				<button id="en" class="translate">English</button>
+				<button id="he" class="translate">עִברִית</button>
+			</div>
+		</div>
+		<div class="span12 body">
+			<div style="text-align: center;">
+				<h2 class="i18n" data-key="heading">
+					Family Account Login
+				</h2>
+			</div>
+			<div class="logo">
+				<img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="" class="img-responsive center-block"
+					style="max-width: 250px !important;">
+			</div>
+			<div class="login-box">
+				<div class="login-box-body">
+					<form id="loginForm">
+						<div class="form-group has-feedback" id="divlogin">
+							<div class="input-group">
+								<span class="input-group-addon"><img
+										src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
+								<input id="login" name="login" type="text" class="form-control" data-key="username"
+									placeholder="username" required autofocus>
+							</div>
+						</div>
+						<div class="form-group has-feedback" id="divpwd">
+							<div class="input-group">
+								<span class="input-group-addon"><img
+										src="/mobile/img_new/lock-color-gray-svg.svg" /></span>
+								<input id="pwd" name="pwd" type="password" class="form-control" data-key="password"
+									placeholder="password" required>
+							</div>
+						</div>
+						<div id="remembermediv" class="row">
+							<div  class="col-xs-12">
+								<div class="form-group no-border remember">
+									<label id="remember">
+										<input type="checkbox">
+										<span id="remember-check" />
+									</label>
+									<span id="rememberme" class="i18n" data-key="remember">&nbsp; Remember me </span>
+								</div>
+							</div><!-- /.col -->
+						</div>
+						<div class="row" id="error-block">
+							<div class="col-sm-12 error-box" style="display: none;">
+								<div class="error-box" style="display: none;"><img src="img/error.png" width="10%">
+									<span class="color-red i18n" data-key="error"><b>oops!</b></span></div>
+								<span class="color-grey i18n" data-key="error2">The</span>
+								<span class="color-red i18n" data-key="error3">username</span>
+								<span class="color-grey i18n" data-key="error4">or</span>
+								<span class="color-red i18n" data-key="error5">password</span>
+								<span class="color-grey i18n" data-key="error6">you entered is</span>
+								<span class="color-red i18n" data-key="error7">incorrect.</span>
+								<span class="color-grey i18n" data-key="error8"> Please try again.</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<button type="submit" class="btn btn-primary btn-block H8 i18n" data-key="login"><b>LOG IN</b></button>
+							</div><!-- /.col -->
+						</div>
+					</form>
+					<br>
+					<div class="row">
+						<div class="col-xs-7 forgot" id="forgotdiv">
+							<div class="error-change"><a href="forgot.html" class="i18n" data-key="forgot">Forgot user/password</a></div>
+						</div>
+						<div class="col-xs-5 text-right create-account" id="creatediv" >
+							<a href="parent_register.html" id="createAccount"><b class="i18n" data-key="create">Create account</b></a>
+						</div>
+					</div>
+					<!--
+                        <div class="row" align="center" id="desktop">
+                        	<div class="col-xs-12 forgot">
+                        		<a href="/admin.php?fromMobile">
+                        			<span style="color: red">Desktop Site</span>
+                        		</a>
+                        	</div>
+                        </div>
+						-->
+				</div>
+
+			</div>
+
+			<div class="span12" style="bottom: 0px;z-index: 9999;">
+				<div class="span12 footer">
+					<div class="span3" style="width: 100%">
+						<a href="/mobile/news/?v=3">
+							<div class="menu-item">
+								<div class="span12">
+									<img src="/mobile/img_new/news-color-green-svg.svg" alt="news" />
+								</div>
+								<div class="span12">
+									<span class="i18n" data-key="news">News</span>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script src="../js/js.cookie.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function (event) {
+			//$(function () {
+			//    $('input').iCheck({
+			//        checkboxClass: 'icheckbox_square-aero',
+			//        radioClass: 'iradio_square-aero',
+			//        increaseArea: '20%' // optional
+			//    });
+			//});
+			if (Cookies.get('isconnected')) {
+				var cookies = Cookies.get();
+				for (var c in cookies) {
+					Cookies.remove(c);
+				}
+			}
+
+			//check cookie
+			if (Cookies.get('admin')) {
+				window.location = "parent_detail.html";
+			}
+
+			$("#loginForm").submit(function (event) {
+				// Stop form from submitting normally
+				event.preventDefault();
+
+				// Get some values from elements on the page:
+				var $form = $(this),
+					login = $form.find("input[name='login']").val(),
+					pwd = $form.find("input[name='pwd']").val();
+
+				$.post('ajax/auth.php', {
+					username: login,
+					password: pwd
+				}, function (success) {
+					if (success !== '0') {
+						//check for 'remember me'
+						if ($(".remember input").is(":checked")) {
+							Cookies.set('admin', success, {
+								path: '/',
+								expires: 365
+							});
+						} else {
+							Cookies.set('admin', success, {
+								path: '/',
+								expires: 1
+							});
+						}
+						//Cookies.set('admin', success, { path: '/', expires: 1 });
+						window.location = "parent_detail.html";
+					} else {
+						$("#desktop").hide();
+						$(".error-box").show();
+					}
+				});
+			});
+
+			// $("#createAccount").click( function(e) {
+			// 	var confirm = window.confirm("Warning! Do not create a new account if you might have an existing one. Your school could have already created a parent account for you. You can find out if they have an account by clicking “forgot user/password” and you will be prompted to enter your email address in which you will be sent your password.\nAre you sure you want to continue creating a new account?");
+			// 	return confirm;
+			// });
+		});
+	</script>
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-71974937-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</body>
+
+</html>

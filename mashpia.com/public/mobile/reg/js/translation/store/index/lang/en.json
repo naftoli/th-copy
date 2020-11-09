@@ -1,0 +1,18 @@
+﻿{
+    "Title": "Mobile Store", 
+    "MyStore": "My Store",
+    "Store": "Store",
+    "Scanner": "Scanner",
+    "Auction": "Auction",
+    "NotPrizesSetup": "It appears that your base does not have any prizes setup yet, or all it's prizes are out of stock.",
+    "ContactBaseCommander": "Please contact your Base Commander for more information.",
+    "Accounts": "Accounts",
+    "Missions": "Missions",
+    "Achievements": "Achievements",
+    "Rewards": "Rewards",
+    "Updatebrowser": "You need to update your browser to the latest version in order for this site to work properly.",
+    "NotEnoughPoints": "You do not have enough points to add this prize.",
+    "PurchaseOne": "You can only purchase one of this prize.",
+    "NoStock": "Sorry there are no more left in stock.",
+    "Updatebrowser2": "You need to update your browser to the latest version in order for this feature to work."
+}

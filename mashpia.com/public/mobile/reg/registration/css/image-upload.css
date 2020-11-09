@@ -1,0 +1,42 @@
+/* CropperModal */
+/* Limit image width to avoid overflow the container */
+#cropperModal img {
+    max-width: 100%; /* This rule is very important, please do not ignore this! */
+}
+/* hide the input */
+#cropperModal input[type="file"] {
+	width: 0.1px; height: 0.1px;
+	opacity: 0; overflow: hidden;
+	position: absolute; z-index: -1;
+}
+/* show the label */
+#cropperModal input[type="file"] + label {
+    font-size: 1.5em; text-align: center; padding: 5px;
+    display: block; margin: 0 auto; max-width: 250px;
+    background: #2c539e; color: #fff; transition: .25s;
+}
+#cropperModal input[type="file"]:focus + label,
+#cropperModal input[type="file"] + label:hover {
+    background-color: #223f75;
+    transform: scale(.9);
+    cursor: pointer;
+}
+/* hide the image by default */
+#cropper-image-container, #cropper-image-loader{
+    display: none;
+}
+#cropper-image-container{ 
+    max-width: 80%; margin: 0 auto;
+}
+/* bring the border around the container */
+.cropper-container { 
+    border: 1px solid #223f75; width: 100% !important;
+    border-bottom: none;
+    border-top-left-radius: 5px; border-top-right-radius: 5px;
+}
+/* show the buttons in one full width row */
+.control-buttons { display: flex }
+.control-buttons .btn { 
+    flex-grow: 1; 
+    border-top-left-radius: 0px; border-top-right-radius: 0px;
+}
