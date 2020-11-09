@@ -567,6 +567,24 @@ class Raffle {
         return $total;
     }
 
+    public function checkWeekly( $user_id ) {
+        $total = $this->checkDaily( $user_id );
+        $required = Constants::get_weekly_task_requirment();
+        if ($total == $required - 1) { // if it is only (4) we can check for some marks that are not tied to any specific dates
+            // get a total count of all the non daily missions marked between the start and end dates of this raffle
+            $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
+                " AND dtmarks.mark_date >= ". $this->start_date ." AND dtmarks.mark_date <= ". $this->end_date .
+                " AND daily_task = 0 AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+            $update_total_query = mysql_query($update_total_sql);
+            $update_total_row = mysql_fetch_assoc($update_total_query);
+            // if the user did at least one task then add him to the list (as it brings his total from 4 to 5)
+            if($update_total_row['total'] > 0) {
+                $total = 5; // set the total to 5
+            }
+        }
+        return $total;
+    }
+
     private function checkDaily( $user_id ) {
         $daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
                     ' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
