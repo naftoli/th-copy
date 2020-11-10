@@ -681,14 +681,14 @@
 				var girls = posts.girls;
 				var html = '';
 
+				html += '<div class="span12 wrap1">';
+				html += '<div class="heDate">' + posts.date + '<br />' + new Date().toDateString() +
+					'</div><div class="date"></div>';
 				if (boys.length || girls.length) {
-					html += '<div class="span12 wrap1">';
-					html += '<div class="heDate">' + posts.date + '<br />' + new Date().toDateString() +
-						'</div><div class="date"></div>';
 					html += '<div class="mazalTov">!מזל טוב! שנת הצלחה</div>';
 					html += '<div style="width : 90%; margin : 2% 5%;">';
 					html += '<div style="float: left; width: 48%;">';
-					html += '<div class="b-t-title"><span>""'+ i18next.t('Boys') +'</span></div>';
+					html += '<div class="b-t-title"><span>'+ i18next.t('Boys') +'</span></div>';
 
 					if (boys.length) {
 						for (var p in boys) {
@@ -701,11 +701,13 @@
 								'age'
 							] + '</div></div><br />';
 						}
+					} else {
+						html += '<div style="margin: 3px 0">No birthdays today</div>'
 					}
 					html += '</div>';
 
 					html += '<div style="float: right; width: 48%;">';
-					html += '<div class="b-t-title"><span>'+i18next.t('Boys') +'</span></div>';
+					html += '<div class="b-t-title"><span>'+i18next.t('Girls') +'</span></div>';
 					if (girls.length) {
 						for (var p in girls) {
 							html += '<div class="user"><div class="b-t-description">';
@@ -718,8 +720,13 @@
 								'age'
 							] + '</div></div><br />';
 						}
+					} else {
+						html += '<div style="margin: 3px 0">No birthdays today</div>'
 					}
 					html += '</div></div></div><div style="clear: both"></div>';
+				} else {
+					html += '<div style="text-align: center; margin: 10px auto">No birthdays today</div>'
+					html += '</div>';
 				}
 
 				$("#wpContent").append(html);

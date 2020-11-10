@@ -1,4 +1,34 @@
-<!DOCTYPE html>
+{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}
+		</style>
+		<link rel="stylesheet" href="/mobile/css/lib/animate.css">
+		<link rel="preload" href="css/all.css?v=1.6" as="style" onload="this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="css/all.css?v=1.3" as="style" onload="this.rel='stylesheet'"></noscript>
+		<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css"></noscript>
+		<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+		<script src="js/all.js" defer></script>
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+		<link rel="stylesheet" href="css/bug_report.css"/>
+        <style>
+			.list-unstyled{padding-right: 0px;}
+            /* Text inputs*/
+        	.textInput { border: 1px solid #5e1c77;border-radius: 5px;position: absolute;right: 15px;font-size: 12px;max-width: 36px;color: #000;font-weight: bold;padding: 5px;}
+            /* Mandatory star marks*/
+			.mandStar {color: red;right: auto !important;padding-right: 5px;float: left !important;position: relative !important;}
+			.he .mandStar {color: red; padding-left: 5px;float: right !important; right: 0px !important;}
+            /* Panel headings*/
+			.panel-heading {cursor: pointer;}
+            /* Back and forward buttons*/
+			button.slick-prev, button.slick-next {background: none;border: none;color: #fff;font-size: 1em;}
+			/* For Firefox */
+			input[type='number'] {-moz-appearance:textfield;}
+			/* Webkit browsers like Safari and Chrome */
+			input[type=number]::-webkit-inner-spin-button,
+			input[type=number]::-webkit-outer-spin-button {
+				-webkit-appearance: none;margin: 0;
+=======
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
@@ -132,6 +162,7 @@
 						e.clearInterval(n)
 					})
 				}
+>>>>>>> bfdf4fcdbf70163b5fca7a5130d0861b68e0373b
 			}
             /* Top navigation/action buttons */
 			div#navigation-buttons{max-width: 500px; margin: 0 auto;}
@@ -337,6 +368,135 @@
 				if (d > 0) {
 					id = id.substring( 0, d );
 				}
+<<<<<<< HEAD
+				// make sure that the user is logged in
+				authenticate( id );
+				// update the missions for the user_id...
+				$.post('reg/ajax/updateMissions.php', { user_id : id });
+
+				// show popup for yearly raffle winners
+				// var winners = [14545,15495,15517,16090,17069,17556,20570,22151,22394,22549,24212,24495,50435,51768,51830,52938,54041,55990,56113,56953];
+				// if ( winners.includes( parseInt( id ) ) ) {
+				// 	alert("We want to feature you! Take a pic with your prize you won in the yearly raffle and send to Hachayol@tzivoshahem.org.");
+				// }
+
+				// var d1 = new Date();
+				// var d2 = new Date('April 12, 2019 23:59:59');
+				// if ( d2 > d1 ) {
+				// 	$.post('ajax/checkPoll.php', { user: id }, function( result ) {
+				// 		if ( result == 'true' ) {
+				// 			$("#pollModal").modal('show');
+				// 		} else {
+				// 			continueLoading();
+				// 		}
+				// 	});
+				// } else {
+				// 	continueLoading();
+				// }
+
+				// $("#pollModal .submit").click( function() {
+				// 	var poll = $("#pollModal .rally:checked").val();
+				// 	if ( poll === undefined ) {
+				// 		alert('You must choose one of the options.');
+				// 		return;
+				// 	}
+				// 	$.post('ajax/poll.php', { user: id, poll_number: poll }, function( result ) {
+				// 		if ( result == 'true' ) {
+				// 			alert('Thank you.');
+				// 			continueLoading();
+				// 		} else {
+				// 			alert('There was an error submiting your answer.');
+				// 			continueLoading();
+				// 		}
+				// 	});
+				// });
+
+				//function continueLoading() {
+				//$("#pollModal").remove();
+					// options for the loading spinner....
+					var opts = {
+						lines: 8, 		// The number of lines to draw
+						length: 26, 	// The length of each line
+						width: 12, 		// The line thickness
+						radius: 26, 	// The radius of the inner circle
+						scale: 0.75, 	// Scales overall size of the spinner
+						corners: 1, 	// Corner roundness (0..1)
+						color: '#888', 	// #rgb or #rrggbb or array of colors
+						opacity: 0.25, 	// Opacity of the lines
+						rotate: 0, 		// The rotation offset
+						direction: 1, 	// 1: clockwise-1: counterclockwise
+						speed: 1.1, 	// Rounds per second
+						trail: 60, 		// Afterglow percentage
+						fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
+						zIndex: 2e9, 	// The z-index (defaults to 2000000000)
+						className: 'spinner', // The CSS class to assign to the spinner
+						top: '50%', 	// Top position relative to parent
+						left: '50%', 	// Left position relative to parent
+						shadow: false, 	// Whether to render a shadow
+						hwaccel: true, 	// Whether to use hardware acceleration
+						position: 'absolute' // Element positioning
+					};
+					var target = document.getElementById('spinner');
+					new Spinner(opts).spin(target);
+					
+					// use regex to determine desktop or mobile
+					var desktop = $(window).width() > 767; // all devices this small are mobile. As well as the folowing regex
+					if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){ // look for common mobile names in userAgent
+						desktop = false;
+					}
+					console.log({"desktop": desktop});
+					// should we render the daily page?
+					var daily = (!desktop && Cookies.get('marking') != "weekly") || Cookies.get('marking') == "daily";
+					// load up the mission page...
+					$.get('getMissionPage.php?id=' + str + "&daily=" + daily + "&desktop=" + desktop, function( html ) {
+						$("#spinner").empty(); // clear the spinner...
+						$("#main").append( html ); // load up the html into the page...
+						$("#main").addClass("animated fadeIn");
+						// hide the personalize button for kids
+						if( localStorage.getItem( "login" ) == "user" ){
+							$( "#buttons > #leftButtons" ).hide();
+							$( "#buttons > button").css( "float", lang == 1 ? "left" : "right" ); // move the help button to where the personalize button was
+							$( "#mainLink a" ).attr('href', 'reg/medals/?id=' + id);
+						}
+						// if the language is set to 2 (yiddish) in the html
+						if (lang && lang == 2) {
+							$(".container").eq(1).addClass('he'); // add a he class to the page
+							$(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
+							$(".personalImg").css({"right": "2%"}); // move the profile photo over a bit...
+						} else {
+							$(".personalImg").css({"left": "2%"}); // move the profile image a but from the edge...
+						}
+						// setup the links on the bottom of the page
+						$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
+						$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
+						$("#rankLink").attr('href', 'reg/rank.html?id=' + id);
+						$("#storeLink").attr('href', 'store/index.html?id=' + id);
+						// load up the users profile photo...
+						$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
+							var info = $.parseJSON( success ); // get the info from the response...
+							var html = '<a href="reg/medals/index.html?id=' + id +'">'; // setup the a tag...
+							// add the image based on the way the user's image is stored...
+							if (info.mobile_pic) html += '<img id="userImg" src="/mobile/reg/' + info.mobile_pic + '">';
+							else if (info.thumb) html += '<img id="userImg" src="/thumbs/' + info.thumb + '">';
+							else if (info.photo) html += '<img id="userImg" src="/file_view.php?id=' + info.photo + '">';
+							// close the a tag
+							html += '</a>';
+							$(".personalImg").append( html );
+						}); // end the user image
+					}); // end the AJAX loading of the Missions Page
+				//}
+			}); // end anynomus function
+		}); // end on page loaded listener
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+=======
 				// setup the links on the bottom of the page
 				$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
 				$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
@@ -382,4 +542,5 @@
 	ga('send', 'pageview');
 </script>
 
+>>>>>>> bfdf4fcdbf70163b5fca7a5130d0861b68e0373b
 </html>

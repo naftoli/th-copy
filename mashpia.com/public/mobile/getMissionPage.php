@@ -68,21 +68,9 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if t
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
-	switch ($today) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			$diff = $today + 2; // add two days to the current date if before thursday
-			break;
-		case 5: // thursday is the end date so no diff
-			$diff = 0;
-			break;
-		case 6: // friday is the first day so the difference is one
-			$diff = 1;
-			break;
-	}
+	// add two days to the current date,
+	// wrapping around to the beginning of the week if it reaches seven.
+	$diff = ($today + 2) % 7;
 	$start = $jd - $diff; // the start is the current date minus the difference
 	$end = $start + 6; // the ending is the start date plus 6
 	// check if we need to change start / end
@@ -160,21 +148,9 @@ $parshos = array();
 if (isset($_GET['d'])) {
 	$jdTemp = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jdTemp))); //sunday starts 0
-	switch ($today) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			$diff = $today + 2;
-			break;
-		case 5:
-			$diff = 0;
-			break;
-		case 6:
-			$diff = 1;
-			break;
-	}
+	// add two days to the current date,
+	// wrapping around to the beginning of the week if it reaches seven.
+	$diff = ($today + 2) % 7;
 	$curParsha['start'] = $jdTemp - $diff;
 	$curParsha['end'] = $curParsha['start'] + 6;
 	
@@ -203,12 +179,7 @@ $detect = new Mobile_Detect;
 
 /********************** LOAD UP THE MISHNA INFO **********************/
 require '../class.mishnaInfo.php';
-$sql = "select school_id, class_id from users where user_id = " . $user_id; // get the school and class id from the users table for the given user
-$result = mysql_query($sql);
-$row = mysql_fetch_assoc($result);
-$school = $row['school_id'];
-$grade = $row['class_id'];
-$assigned = MishnaInfo::getAssignedAll( $school, $grade, $user_id, true );
+$assigned = MishnaInfo::getAssignedAll( $user->$school_id, $user->$class_id, $user_id, true );
 $he_chars = array(
 	1	=>	'א',	2	=>	'ב',	3	=>	'ג',		4	=>	'ד',		5	=>	'ה',
 	6	=>	'ו',		7	=>	'ז',		8	=>	'ח',	9	=>	'ט',	10	=>	'י',

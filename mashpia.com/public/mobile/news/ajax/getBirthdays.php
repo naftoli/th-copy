@@ -106,7 +106,7 @@ if (!empty($girls)) {
 */
 
 $titles = []; // make sure duplicates don't show up
-$info = array();
+$info = ["boys" => [], "girls" => []]; // make sure gendered arrays exist, even if empty 
 $sql = "select * from wp.wp_posts where post_type = 'birthday' and post_date = '" . $today . "'";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
