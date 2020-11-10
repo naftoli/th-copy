@@ -102,8 +102,8 @@ var en = jsonen;
                 var pageName = path.split("/").pop();
                 console.log(pageName);
 
-                //if (pageName != "medals3HE.html")
-                //    window.location = "/mobile/reg/medals3HE.html?id=" + idParam + "&subject=" + subjectParam;
+                if (pageName != "medals3HE.html")
+                    window.location = "/mobile/reg/medals3HE.html?id=" + idParam + "&subject=" + subjectParam;
 
 
 
