@@ -24,7 +24,7 @@ class Raffle {
     public $date_created; // the date it was created
     public $date_ran; // the date it actually ran
     public $show_on_mobile; // if it should be shown on the mobile website
-    public $year; // if it should be shown on the mobile website
+    public $year; // raffle year
     
     // not in DBS
     public $prizes = []; // by default the prizes is an empty array
