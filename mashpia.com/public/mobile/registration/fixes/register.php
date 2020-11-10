@@ -35,44 +35,14 @@ $chayolei = [
 
 $chidon = [
     [
-        'serial'    => 7776056,
-        'size'      => 'children l',
-        'book'      => 1,
+        'serial'    => 7751336,
+        'size'      => 'Adult XS',
+        'book'      => 3,
         'paid'      => 10
     ],
     [
-        'serial'    => 7776057,
-        'size'      => 'children l',
-        'book'      => 1,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7776058,
-        'size'      => 'children l',
-        'book'      => 2,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7776059,
-        'size'      => 'children l',
-        'book'      => 2,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7776060,
-        'size'      => 'children l',
-        'book'      => 2,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7776061,
-        'size'      => 'children l',
-        'book'      => 2,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7772679,
-        'size'      => 'children l',
+        'serial'    => 7753919,
+        'size'      => 'Childrens S',
         'book'      => 1,
         'paid'      => 10
     ]
