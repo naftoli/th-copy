@@ -202,7 +202,7 @@ function generateFileByGrade() {
                             ];
                         }
 
-                        $info[$i] = ['outro', 'outro']; // outro
+                        $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
                         if (count($ranks)) {
                             $file_name = str_replace(' ', '_', $schools[$school]) . "_" . $grade . ".csv";
                             createFile($info, $file_name);
