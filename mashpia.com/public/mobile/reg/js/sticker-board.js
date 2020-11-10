@@ -6,7 +6,8 @@ var authenticate;
 // get the ID from get GET params
 var id = findGetParameter("id");
 // make sure we can authenticate the user
-if ( !authenticate ) {
+if (!authenticate) {
+   
     window.location = "/mobile";
 } else {
     authenticate( id ); // get the users ID and authenticate them
@@ -89,11 +90,14 @@ var sticker_board = function() {
         var CampaignCompleateText = "Campaign Compleate!";
         var progressbarFloat = "";
         var progressTextAlignment = "";
+       
         if (localStorage.getItem("locallang") == "he") {
             MissionsText = "משימות";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
-            progressTextAlignment = ' style="direction:rtl;" ';
+            progressTextAlignment = ' style="direction:rtl !important;" ';
+            
+            
         }
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
         var progress_text = campaign.total + ' / ' + campaign.subject_total + ' ' + MissionsText+'</span>';
@@ -118,11 +122,16 @@ var sticker_board = function() {
         var CampaignCompleateText = "Campaign Compleate!";
         var progressbarFloat = "";
         var progressTextAlignment = "";
+        var levelText = "Level ";
+        var styleFloat = "";
+
         if (localStorage.getItem("locallang") == "he") {
             ToText = " עד ";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
-            progressTextAlignment = ' style="direction:rtl;" ';
+            progressTextAlignment = ' style="direction:rtl !important;" ';
+            levelText = "שלב ";
+            styleFloat = ' style="float: right;" ';
         }
 
         var total = parseInt( campaign.total );
@@ -148,13 +157,13 @@ var sticker_board = function() {
             }
             
             html += '<hr><div class="row">';
-            html += '<div class="col-8 col-sm-9 order-12 medal-level-stickers">';
+            html += '<div class="col-8 col-sm-9 order-12 medal-level-stickers"' + progressTextAlignment +'>';
             // render all the stickers
             for( var i = 1; i <= medal_info.missions_required; i++ ) {
                 var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
                 var earned = slot_number <= total;
                 var slot_sticker = campaign.sticker_name + ( earned ? '' : '_bw' )
-                html += '<div class="sticker ' + ( earned ? 'earned' : '') + '">' +
+                html += '<div class="sticker ' + (earned ? 'earned' : '') + '" ' + styleFloat +'>' +
                     ( slot_number ) + 
                     '<img src="//mashpia.com/mobile/img_new/stickers/' + slot_sticker + '.gif">'
                 +'</div>';
@@ -163,7 +172,7 @@ var sticker_board = function() {
             html += '</div>';
             // render the medal icon
             html += '<div class="col-4 col-sm-3 medal-level">' +
-                    '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
+                '<span class="levelText">'+ levelText + medal_info.medal_ord + '</span>' + 
                     '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
             if ( status_text !== '' ) {
             html += '<div class="medal-status progress">' + 

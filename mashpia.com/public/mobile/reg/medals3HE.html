@@ -1,191 +1,52 @@
 ﻿<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title data-key="Title" class="i18n">Mission Board | Tzivos Hashem</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
-            integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous">
-    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title class="i18n" data-key="TitleMissions">Mission Board | Tzivos Hashem</title>
 
+    <link href="css/Medals3HE.css" rel="stylesheet" />
     <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+    <script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
 
-    <!-- Bootstrap -->
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">-->
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css" integrity="sha512-3Lr2MkT5iW+jVhwKFUBa+zQk8Uklef98/3mebU6wNxTzj65enYrFXaeuqPAYWxcQd1GAt9aUBvYHOIcl2SUsKA==" crossorigin="anonymous" />-->
+    
 
+    <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+    <!--    Bug Report code -->
     <link rel="stylesheet" href="/mobile/css/bug_report.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+    <script src="../js/translation/medals4/medals4.js"></script>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css" integrity="sha512-3Lr2MkT5iW+jVhwKFUBa+zQk8Uklef98/3mebU6wNxTzj65enYrFXaeuqPAYWxcQd1GAt9aUBvYHOIcl2SUsKA==" crossorigin="anonymous" />-->
     <!-- Animation Libraries -->
     <link rel="stylesheet" type="text/css" href="/mobile/css/lib/animate.css" />
+
     <!-- Slider  -->
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <!-- Sticker board page -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/medal-board/stickers.css" />
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-    <script src="../js/translation/medals3/medals3.js"></script>
-
-    <style>
-        body {
-            margin-bottom: 100px;
-        }
-
-        @media(max-width:650px) {
-            body {
-                margin-bottom: 55px;
-            }
-        }
-
-        #gold {
-            padding-top: 4%;
-        }
-
-            #gold img {
-                width: 26%;
-                height: 26%;
-                margin-left: 10%;
-                margin-right: 10%;
-            }
-
-        #backs img {
-            opacity: 0.3;
-        }
-
-        #userImg {
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            border: 2px solid #31559f;
-        }
-
-        .personalImg {
-            width: 50px;
-            height: 50px;
-            left: 1%;
-            top: 1%;
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        .panel-heading {
-            background-color: #f68829 !important;
-            border: none;
-            font-size: 20px;
-        }
-
-        .panel a {
-            color: white;
-        }
-
-            .panel a:hover, a:active, a:visited, a:link {
-                text-decoration: none;
-            }
-
-        .medalInfo {
-            float: right;
-            width: 70%;
-            padding-top: 1%;
-        }
-
-        .progress {
-            margin-bottom: 5px !important;
-        }
-
-        .progressText {
-            position: absolute;
-            display: block;
-            width: 95%;
-            color: black;
-            text-align: center;
-            font-family: 'digi';
-            font-size: 14px;
-        }
-
-        .progress .text {
-            font-family: 'digi';
-            color: #fff;
-            font-weight: normal;
-        }
-
-        .progressMedalText {
-            position: absolute;
-            width: 60%;
-            color: black;
-            text-align: center;
-            font-family: 'digi';
-            font-size: 14px;
-            font-weight: normal;
-        }
-
-        i.glyphicon {
-            transition: transform .3s ease-in-out;
-            transition: -moz-transform .3s ease-in-out;
-            transition: -webkit-transform .3s ease-in-out;
-        }
-
-        hr {
-            margin: 10px 0 !important;
-        }
-
-        .levelText {
-            font-weight: bold !important;
-            margin: 0 auto;
-            line-height: 1.1;
-            font-size: 24px !important;
-            width: 95%;
-        }
-
-        .header-yellow #page-title {
-            font-size: 25px;
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            width: auto;
-            display: block;
-            padding: 5px 0px;
-            transition: .25s;
-        }
-
-        .header-yellow {
-            min-height: 48px;
-        }
-
-        @media (min-width: 525px) {
-            .header-yellow #page-title {
-                font-size: 40px;
-                padding: 10px 0px;
-            }
-        }
-    </style>
 </head>
 
 <body class="rank-page">
-   
-   
     <div class="header-yellow" style="position: relative">
         <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
             <span id="page-title" class="i18n" data-key="MissionBoard"> Mission Board</span>
         </div>
     </div>
 
-
     <div class="personalImg"></div>
     <div class="bug-report">
-        <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report">
+        <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report" />
     </div>
-   
-    
+
     <div class="container">
         <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
             <div class="span12 body">
                 <div class="span12 footer media-group subMenu" style="width: 100%;">
-                    <a href="leaderboard.html" id="leaderBoardLink">
+                    <a href="" id="leaderMenu">
                         <div class="span3" style="width: 33%;">
                             <div class="menu-item">
                                 <div class="span12">
@@ -197,19 +58,19 @@
                             </div>
                         </div>
                     </a>
-                    <a href="rank.html" id="rankBoardLink">
+                    <a href="" id="rankMenu">
                         <div class="span3" style="width:34%">
                             <div class="menu-item">
                                 <div class="span12">
                                     <img src="/mobile/img_new/trophy-color-orange-svg.svg">
                                 </div>
                                 <div class="span12">
-                                    <span class="i18n" data-key="RankBoard" >Rank Board</span>
+                                    <span class="i18n" data-key="RankBoard">Rank Board</span>
                                 </div>
                             </div>
                         </div>
                     </a>
-                    <a href="medals.html" id="medalBoardLink">
+                    <a href="" id="medalMenu">
                         <div class="span3 active" style="width:33%">
                             <div class="menu-item">
                                 <div class="span12">
@@ -233,7 +94,7 @@
                 </section>
             </div>
         </div>
-        <!--<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
             <div class="span12 footer">
                 <div class="span3">
                     <a href="/mobile/reg/parent_detail.html" id="mainLink">
@@ -242,13 +103,13 @@
                                 <img src="/mobile/img_new/boy-color-green-svg.svg">
                             </div>
                             <div class="span12">
-                                <span class="i18n" data-key="Accounts" >Accounts</span>
+                                <span class="i18n" data-key="Accounts">Accounts</span>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="span3">
-                    <a href="/mobile/missionsNew.html?id=8273" id="missionsLink">
+                    <a href="#" id="missionsLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/square-check-color-purple-svg.svg">
@@ -260,7 +121,7 @@
                     </a>
                 </div>
                 <div class="span3 active">
-                    <a href="/mobile/reg/rank.html?id=8273" id="rankLink">
+                    <a href="#" id="rankLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/achievements-color-orange-svg.svg">
@@ -272,54 +133,46 @@
                     </a>
                 </div>
                 <div class="span3">
-                    <a href="/mobile/store/index.html?id=8273" id="storeLink">
+                    <a href="#" id="storeLink">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/cart-color-red-svg.svg">
                             </div>
                             <div class="span12">
+                                
                                 <span class="i18n" data-key="Rewards">Rewards</span>
                             </div>
                         </div>
                     </a>
                 </div>
             </div>
-        </div>-->
+        </div>
     </div>
 
-    
+    <!-- Jquery, Popper.js and Bootstrap -->
 
-   
-
-    <div id="scripts">
-        <!-- Jquery, Popper.js and Bootstrap -->
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-                integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-                integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-        </script>
-        <!-- Authentication -->
-        <script src="/mobile/js/js.cookie.js"></script>
-        <script src="/mobile/js/authenticate.js"></script>
-        <!-- Slider -->
-        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-        <!-- Sticker board js -->
-        <script src="js/sticker-board.js"></script>
-        <!-- Google Anylitcs -->
-        <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'UA-71974937-1');
-        </script>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+            integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+            integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
+    </script>
+    <!-- Authentication -->
+    <script src="/mobile/js/js.cookie.js"></script>
+    <script src="/mobile/js/authenticate.js"></script>
+    <!-- Slider -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <!-- Sticker board js -->
+    <script src="js/sticker-board.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-71974937-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
-
 </html>
