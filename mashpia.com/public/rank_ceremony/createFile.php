@@ -120,7 +120,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                 }
             }
         }
-        $info[$i] = ['outro', 'outro']; // outro
+        $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
         if (count($ranks)) {
             if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . "_Boys.csv";
             else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . "_Girls.csv";
