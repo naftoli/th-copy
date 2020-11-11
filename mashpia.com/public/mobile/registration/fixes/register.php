@@ -20,34 +20,20 @@ $stmtUser = $MASHPIA_DB->prepare("
 
 $chayolei = [
     [
-        'serial'    => 7746921,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7748556,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7756837,
+        'serial'    => 7745260,
         'paid'      => 50
     ]
 ];
 
 $chidon = [
     [
-        'serial'    => 7751336,
-        'size'      => 'Adult XS',
+        'serial'    => 7745260,
+        'size'      => 'Adult S',
         'book'      => 3,
-        'paid'      => 10
-    ],
-    [
-        'serial'    => 7753919,
-        'size'      => 'Childrens S',
-        'book'      => 1,
         'paid'      => 10
     ]
 ];
-/*
+
 foreach ($chayolei as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
@@ -64,7 +50,7 @@ foreach ($chayolei as $user) {
     checkRegCharges( $user_id, $school_id, $paid );
     echo "<br />";
 }
-*/
+
 foreach ($chidon as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
