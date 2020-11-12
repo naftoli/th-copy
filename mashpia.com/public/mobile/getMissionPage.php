@@ -68,9 +68,21 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if t
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
-	// add two days to the current date,
-	// wrapping around to the beginning of the week if it reaches seven.
-	$diff = ($today + 2) % 7;
+	switch ($today) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			$diff = $today + 2; // add two days to the current date if before thursday
+			break;
+		case 5: // thursday is the end date so no diff
+			$diff = 0;
+			break;
+		case 6: // friday is the first day so the difference is one
+			$diff = 1;
+			break;
+	}
 	$start = $jd - $diff; // the start is the current date minus the difference
 	$end = $start + 6; // the ending is the start date plus 6
 	// check if we need to change start / end
@@ -148,9 +160,21 @@ $parshos = array();
 if (isset($_GET['d'])) {
 	$jdTemp = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jdTemp))); //sunday starts 0
-	// add two days to the current date,
-	// wrapping around to the beginning of the week if it reaches seven.
-	$diff = ($today + 2) % 7;
+	switch ($today) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			$diff = $today + 2;
+			break;
+		case 5:
+			$diff = 0;
+			break;
+		case 6:
+			$diff = 1;
+			break;
+	}
 	$curParsha['start'] = $jdTemp - $diff;
 	$curParsha['end'] = $curParsha['start'] + 6;
 	
@@ -179,7 +203,12 @@ $detect = new Mobile_Detect;
 
 /********************** LOAD UP THE MISHNA INFO **********************/
 require '../class.mishnaInfo.php';
-$assigned = MishnaInfo::getAssignedAll( $user->$school_id, $user->$class_id, $user_id, true );
+$sql = "select school_id, class_id from users where user_id = " . $user_id; // get the school and class id from the users table for the given user
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$school = $row['school_id'];
+$grade = $row['class_id'];
+$assigned = MishnaInfo::getAssignedAll( $school, $grade, $user_id, true );
 $he_chars = array(
 	1	=>	'א',	2	=>	'ב',	3	=>	'ג',		4	=>	'ד',		5	=>	'ה',
 	6	=>	'ו',		7	=>	'ז',		8	=>	'ח',	9	=>	'ט',	10	=>	'י',
@@ -297,17 +326,32 @@ $he_chars = array(
                 <div id="buttons" style="text-align: center;">
                     <div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
                         <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
-                        <input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
-                        <a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
-                            <input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
-                        </a>
+                      
+						
+						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
+                       
+						
+						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
+                            <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
+                       
+							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
+								Print Missions
+							</button>
+							
+							</a>
                     </div>
                     <div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
                         <a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
-                            <input type="button" class="btn btn-danger btn-sm" value="Personalize" />
+                            <!-- <input type="button" class="btn btn-danger btn-sm i18n" data-key="Personalize" value="Personalize" /> -->
+
+							<button type="button" data-key="Personalize" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
+								Personalize
+							</button>
+
+
                         </a>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
+                    <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
                         Help
                     </button>
                 </div>
@@ -339,8 +383,10 @@ $he_chars = array(
                             <div class="collapse in" id="#panel_<?=$index?>">
                                 <div class="panel-body dailyPanel">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/>
-                                </div>
+                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/> 
+								  
+									
+									</div>
                                 <br />
                                 <?//if ($lang == 2) echo '<br />'; // extra space for hebrew ?>
                                 <ul class="list-unstyled">
@@ -803,7 +849,7 @@ $he_chars = array(
                         <img src="img_new/boy-color-green-svg.svg">
                     </div>
                     <div class="span12">
-                        <span>Accounts</span>
+                       <span class="i18n" data-key="Accounts">Accounts</span>
                     </div>
                 </div>
 			</a>
@@ -815,7 +861,7 @@ $he_chars = array(
 					<img src="img_new/square-check-color-purple-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Missions</span>
+					<span class="i18n" data-key="Missions">Missions</span>
 				</div>
 			</div>
 			</a>
@@ -827,7 +873,7 @@ $he_chars = array(
 					<img src="img_new/achievements-color-orange-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Achievements</span>
+					<span class="i18n" data-key="Achievements">Achievements</span>
 				</div>
 			</div>
 			</a>
@@ -839,7 +885,7 @@ $he_chars = array(
 					<img src="img_new/cart-color-red-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Rewards</span>
+					  <span class="i18n" data-key="Rewards">Rewards</span>
 				</div>
 			</div>
 			</a>
@@ -951,9 +997,19 @@ $he_chars = array(
 		});
 		/******************* CHECK ALL EVENT LISTENER *******************/
 		$(".checkAll").click( function() {
+
+		var CheckALLText = "Check All";
+		var unCheckALLText = "Uncheck All";
+		 if (localStorage.getItem("locallang") == "he") {
+			  CheckALLText = "סמן הכל";
+			 unCheckALLText = "הסר סימון";
+		 //
+		 }
+		// alert($(this).val() );
+		// alert(CheckALLText);
 			$(this).width(65);
-			if ($(this).val() == 'Check All') {
-				$(this).val('Uncheck All');
+			if ($(this).val() == CheckALLText ) {
+				$(this).val(unCheckALLText);
 				var inputs = $(this).parent().parent().find('.box-check');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -962,8 +1018,8 @@ $he_chars = array(
 						$(input).trigger('click');
 					}
 				}
-			} else if ($(this).val() == 'Uncheck All') {
-				$(this).val('Check All');
+			} else if ($(this).val() == unCheckALLText) {
+				$(this).val(CheckALLText);
 				var inputs = $(this).parent().parent().find('.box-check');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -976,9 +1032,16 @@ $he_chars = array(
 		});
 		
 		$(".checkAllDaily").click( function() {
+		var CheckALLText = "Check All";
+		var unCheckALLText = "Uncheck All";
+		 if (localStorage.getItem("locallang") == "he") {
+			  CheckALLText = "סמן הכל";
+			 unCheckALLText = "הסר סימון";
+		 //
+		 }
 			$(this).width(65);
-			if ($(this).val() == 'Check All') {
-				$(this).val('Uncheck All');
+			if ($(this).val() == CheckALLText) {
+				$(this).val(unCheckALLText);
 				var inputs = $(this).parent().parent().find('.dMark');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -989,8 +1052,8 @@ $he_chars = array(
 						$(input).trigger('click');
 					}
 				}
-			} else if ($(this).val() == 'Uncheck All') {
-				$(this).val('Check All');
+			} else if ($(this).val() == unCheckALLText) {
+				$(this).val(CheckALLText);
 				var inputs = $(this).parent().parent().find('.dMark');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {

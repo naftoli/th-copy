@@ -19,7 +19,7 @@
                         <img src="/mobile/img_new/boy-color-green-svg.svg">
                     </div>
                     <div class="span12">
-                        <span>Accounts</span>
+                        <span data-key="Accounts" class="i18n">Accounts</span>
                     </div>
                 </div>
 			</a>
@@ -31,7 +31,7 @@
 					<img src="/mobile/img_new/square-check-color-purple-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Missions</span>
+					<span data-key="Missions" class="i18n">Missions</span>
 				</div>
 			</div>
 			</a>
@@ -43,7 +43,7 @@
 					<img src="/mobile/img_new/achievements-color-orange-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Achievements</span>
+					<span data-key="Achievements" class="i18n">Achievements</span>
 				</div>
 			</div>
 			</a>
@@ -55,7 +55,7 @@
 					<img src="/mobile/img_new/cart-color-red-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Rewards</span>
+					<span data-key="Rewards" class="i18n">Rewards</span>
 				</div>
 			</div>
 			</a>

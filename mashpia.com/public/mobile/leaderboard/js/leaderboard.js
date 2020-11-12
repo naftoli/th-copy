@@ -143,7 +143,7 @@ var leaderboardApp = function(){
             });
         }
 
-        console.log($("#leaderboard").html());
+        //console.log($("#leaderboard").html());
     }
     
     function renderUser ( user, start, position, current_user_position ) {

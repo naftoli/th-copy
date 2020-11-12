@@ -722,9 +722,9 @@
 
 			if (localStorage.getItem("locallang") == "he") {
 				float_element = 'style="float:right;direction:rtl; margin-right:6px;"';
-				availibleStoreHTML = "מיילים שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
-                totalmilesText = "סך המיילים שנצברו  : ";
-                var totalmilesYearText = "סך המיילים שנצברו השנה: ";
+				availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
+                totalmilesText = "סך הנקודות שנצברו  : ";
+                var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
 			}
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);

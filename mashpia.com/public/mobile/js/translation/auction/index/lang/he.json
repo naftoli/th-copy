@@ -9,11 +9,11 @@
   "Accounts" : "חשבונות",
   "Missions" : "משימות",
   "Achievements" : "הישגים",
-  "Rewards" : "תגמולים",
-  "TotalMilesEarned: " : "סהכ מיילים שנצברו:",
-  "TotalMilesYear" : "סך המיילים שנצברו השנה:",
+  "Rewards" : "פרסים",
+  "TotalMilesEarned: " : "סהכ נקודות שנצברו:",
+  "TotalMilesYear" : "סך הנקודות שנצברו השנה:",
   "AvailableAuctionMiles" : "מייל מכירה פומבית זמינה:",
   "UpdateBrowser1" : "עליך לעדכן את הדפדפן שלך לגירסה האחרונה בכדי שהאתר הזה יפעל כראוי.",
-  "NotEnoughMiles" : "אין לך מספיק מיילים כדי להוסיף את הפרס הזה.",
+  "NotEnoughMiles" : "אין לך מספיק נקודות כדי להוסיף את הפרס הזה.",
   "UpdateBrowser" : "עליך לעדכן את הדפדפן שלך לגרסה האחרונה כדי שתכונה זו תעבוד."
 }

@@ -136,7 +136,7 @@
 
             var totalMilesEraned = "Total Miles Earned: "
             if (localStorage.getItem("locallang") == "he") {
-                totalMilesEraned = " סך המיילים שנצברו:";
+                totalMilesEraned = " סך הנקודות שנצברו:";
 
             }
 
@@ -144,8 +144,8 @@
                 var info = $.parseJSON(success);
                 if (localStorage.getItem("locallang") == "he") {
                     html = "<span style='direction:rtl;' > ";
-                    html += "סך המיילים שנצברו: " + info.earned;//
-                    html += "<br />מיילים פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
+                    html += "סך הנקודות שנצברו: " + info.earned;//
+                    html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
                     html += "</span > ";
                     //
                 }

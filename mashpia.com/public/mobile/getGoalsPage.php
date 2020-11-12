@@ -92,7 +92,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 <header class="navbar" id="top" role="banner">
     <div class="container">
         <div class="navbar-header">
-        	<h1>MY GOALS</h1>
+        	<h1 class="i18n" data-key="myGoals">MY GOALS</h1>
         </div>
     </div>
 </header>
@@ -107,21 +107,23 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 		<div class="link-container">
 			<a id="back-link" href="missionsNew.html?id=<?=$user_id?>">
 				<img src="img_new/arrow-1-color-white-svg.svg" style="<?if ($lang == 1) {?>transform: rotateY(180deg);<?}?>"/>
-				Mark Missions
+				<span class="i18n" data-key="markMissions">Mark Missions </span>
             </a>
             <? if ($has_campaigns) { ?>
 				<a id="campaign-link" data-toggle="modal" data-target="#enrollCampaignModal" href="#" style="text-decoration: none">
-					Enroll in Campaign
+					
+					<span class="i18n" data-key="EnrollCampaign">Enroll in Campaign </span>
 				</a>
 			<? } ?>
 			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
-				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none">
+				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none" class="i18n" data-key="AddCustomTask">
 					Add Custom Task
 				</a>
 			<? } ?>
 		</div>
 
-    	<div class="info" dir="ltr">Personalize the tasks that you would like to see for <?=$first?>'s missions.</div>
+    	<div class="info" dir="ltr" >
+	<span class="i18n" data-key="Personalize2">Personalize the tasks that you would like to see for  </span>	<?=$first?><span class="i18n" data-key="Personalize3">'s missions.</span></div>
     	<!--
     	<div class="text-left" style="margin-bottom: 20px;">
 			<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #5e1c77;border-color:#834999;" />
@@ -481,3 +483,4 @@ include 'inc/modals/enrollChild.php';
 	//});
 </script>
 <script src="js/bug_report.js"></script>
+

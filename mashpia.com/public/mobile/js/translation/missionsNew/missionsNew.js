@@ -1,10 +1,10 @@
-
+﻿
 var jsonhe = (function () {
     var json = null;
     $.ajax({
         'async': false,
         'global': false,
-        'url': '../js/translation/leaderboard/lang/he.json',
+        'url': 'https://test.mashpia.com/mobile/js/translation/missionsNew/lang/he.json',
         'dataType': "json",
         'success': function (data) {
             json = data;
@@ -19,7 +19,7 @@ var jsonen = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': '../js/translation/leaderboard/lang/en.json',
+        'url': 'https://test.mashpia.com/mobile/js/translation/missionsNew/lang/en.json',
         'dataType': "json",
         'success': function (data) {
             json = data;
@@ -37,7 +37,9 @@ $(function () {
         lng: (localStorage.getItem("locallang")) ? localStorage.getItem("locallang") : 'en',
 
         debug: true,
-
+        interpolation: {
+            escapeValue: false,
+        },
         resources: {
 
             en: {
@@ -85,11 +87,11 @@ function trasPlaceholder() {
 }
 
 function translate() {
-
+    //alert();
     $(".i18n").each(function () {
 
         const key = $(this).data('key')
-
+       
         $(this).text(i18next.t(key))
 
 
@@ -100,17 +102,16 @@ function translate() {
 
 
         $(".i18n").addClass("hebrew");
+        
+        $("#myModal").css("direction", "rtl");
 
+        $("#checkAll").val("סמן הכל");
 
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        var idParam = url.searchParams.get("id");
-        var path = window.location.pathname;
-        var pageName = path.split("/").pop();
-        console.log(pageName);
-        // alert(pageName);
-        //if (pageName != "indexHE.html")
-        //    window.location = "/mobile/leaderboard/indexHE.html?id=" + idParam;
+        $("#tSymbol").css("margin-right", "-20px");
+        $("#Missionislater").css("margin-right", "30px");
+        
+       // tSymbol
+
 
 
 

@@ -1,10 +1,10 @@
- 
+﻿ 
 var jsonhe = (function(){
   var json = null;
   $.ajax({
     'async':false,
     'global':false,
-    'url':'../js/translation/goalsNew/lang/he.json',
+    'url':'/mobile/js/translation/goalsNew/lang/he.json',
     'dataType':"json",
     'success':function(data){
         json=data;
@@ -19,7 +19,7 @@ var jsonen = (function(){
   $.ajax({
     'async':false,
     'global':false,
-    'url':'../js/translation/goalsNew/lang/en.json',
+      'url':'/mobile/js/translation/goalsNew/lang/en.json',
     'dataType':"json",
     'success':function(data){
         json=data;
@@ -32,38 +32,41 @@ var jsonen = (function(){
 var he = jsonhe;
 var en = jsonen;    
 
- 
-    $(function () {
 
-        /// example number 1 - static translation 
-        i18next.init({
+function initTranslation() {
+   
+    i18next.init({
 
-            lng: (localStorage.getItem("locallang"))?localStorage.getItem("locallang"):'en',
+        lng: (localStorage.getItem("locallang")) ? localStorage.getItem("locallang") : 'en',
 
-            debug: true,
+        debug: true,
 
-            resources: {
+        resources: {
 
-                en: {
+            en: {
 
-                    translation: en,
-                },
+                translation: en,
+            },
 
-                he: {
+            he: {
 
-                    translation: he
-                }
-
+                translation: he
             }
 
-        }).then(function (t) { 
-            // initialized and ready to go!
+        }
 
-            translate()
+    }).then(function (t) {
+        // initialized and ready to go!
 
-        });
+        translate();
+        trasPlaceholder();
+    });
+}
+ 
+    $(function () {
+       
         
-         
+        initTranslation();
 
         $('.translate').click(function() {
             var lang = $(this).attr('id');
@@ -78,28 +81,54 @@ var en = jsonen;
             alert(i18next.t('message'));
         })
 
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
+      
     })
 
 
+function trasPlaceholder() {
+
+    $("input.form-control").each(function () {
+
+        const key = $(this).attr('data-key')
+
+        $(this).attr('placeholder', i18next.t(key))
+
+    });
+
+}
 
     function translate() {
-
+       
         $(".i18n").each(function () {
 
             const key = $(this).data('key')
 
             $(this).text(i18next.t(key))
             
-
+            
         })
+        //
+        if (localStorage.getItem("locallang") == "he") {
+
+
+            $(".i18n").addClass("hebrew");
+
+            $(".info").css("direction", "rtl");
+         
+
+
+            $(".info").attr('dir', "rtl");
+            
+            $("#back-link").css('float', "right");// Mark Missions
+            $("#create-link").css('float', "left"); // add custom
+            $("#customTaskModal").css("direction", "rtl");
+            $("#ModalTitle").css("margin-right", "6px;");
+            $("#Parshos").css("direction", "ltr");
+            $("#toggleParshos").val("סימון הכל");
+            
+
+            //
+        }
+        
 
     } 

@@ -1,3 +1,31 @@
 ﻿{
-    "Title": "Tzivos Hashem | Personalize Missions"
+  "Title": "Tzivos Hashem | Personalize Missions",
+  "myGoals": "My Goals",
+  "EnrollCampaign": "Enroll in Campaign",
+  "AddCustomTask": "Add Custom Task",
+  "Personalize2": "Personalize the tasks that you would like to see for",
+  "Personalize3": "'s missions.",
+  "markMissions": "Mark Missions",
+  "ModalTitle": "Create Custom Task For ",
+  "Please": "Please note that all fields are required.",
+  "Language": "Task Language:",
+  "English": "English",
+  "Yiddish": "Yiddish",
+  "Campaign": "Task Campaign:",
+  "Choose": "Choose Campaign",
+  "TaskTitle": "Task Title: (Example: 'Modeh Ani'):",
+  "ModehAni": "Modeh Ani",
+  "TaskDetails": "Task Details: (Example: 'I did my quota of volunteer hours').",
+  "volunteerHours": "I did my quota of volunteer hours",
+  "Category": "Task Category:",
+  "ChooseLabel": "Choose Label",
+  "Parshos": "Parshos (Fri before to Thurs after)",
+  "Create": "Create",
+  "Cancel": "Cancel",
+  "Accounts": "Accounts",
+  "Missions": "Missions",
+  "Achievements": "Achievements",
+  "Rewards": "Rewards"
+
+
 }
