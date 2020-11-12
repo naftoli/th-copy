@@ -22,6 +22,7 @@ switch ($action) {
         ]);
         break;
     case 'track-records':
+        echo getRaffleHistory('weekly', $user_id);
         break;
     case 'completed':
         $raffle = Raffle::load($weekly['raffle_id']);
