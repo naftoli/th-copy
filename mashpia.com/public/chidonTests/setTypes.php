@@ -72,6 +72,18 @@ foreach ($schools as $id => $school) {
     </body>
     <script>
         $(function() {
+            // BCM IA wants to have the page only show when entering a password. not secure but makes her beleive it's secure.
+            const school_id = <?=$admin_user['auths']['school'][0]?>;
+            if (school_id == 176) {
+                // password protect
+                const password = 'laky';
+                $('body').hide();
+                let pass = '';
+                while (pass != password) {
+                    pass = prompt('Please enter password.');
+                }
+                $('body').show();
+            }
             alert('Please make sure to SAVE after making changes.');
         })
     </script>
