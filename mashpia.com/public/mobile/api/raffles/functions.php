@@ -132,3 +132,76 @@ function getDailyTaskInfo( $user_id, $type ) {
     ]);
     return $result;
 }
+
+function getWinnersInfo( $type, $year ) {
+    $result = [];
+    // keep array of rank names
+    $ranks = [];
+    $sql = "SELECT * FROM ranks";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $ranks[$row['rank_ord']] = $row['rank_name'];
+    }
+    // find the raffles we need to show
+    $raffles = [];
+    $sql = "SELECT * FROM raffles WHERE type = '" . $type . "' AND year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $raffles = $row['raffle_id'];
+        if (empty($row['date_ran'])) break;
+    }
+
+    foreach ($raffles as $raffle_id) {
+        $prize = getPrizeInfo($raffle_id);
+        $raffleInfo = [];
+        $sql = "
+            SELECT 
+                u.first,
+                u.last,
+                u.gender,
+                s.school_name,
+                MAX(rank_ord) AS rank,
+                c.class_grade,
+                c.class_sub
+            FROM
+                raffle_winners rw
+                    JOIN
+                users u USING (user_id)
+                    JOIN
+                schools s USING (school_id)
+                    JOIN
+                classes c ON c.class_id = u.class_id
+                    JOIN
+                rank_marks USING (user_id)
+            WHERE
+                raffle_id = " . $raffle_id;
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $gender = '';
+            if ($row['gender'] == 'M') {
+                $gender = 'boys';
+            } else if ($row['gender'] == 'F') {
+                $gender = 'girls';
+            }
+            $raffleInfo[$raffle_id] = [
+                $gender => [
+                    'name' => $row['first'] . ' ' . $row['last'],
+                    'grade' => $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']),
+                    'rank' => $ranks[$row['rank_ord']],
+                    'school' => $row['school_name']
+                ]
+            ];
+        }
+
+        $result[$raffle_id] = [
+            'prize' => [
+                'name' => $prize['name'],
+                'img' => $prize['pic'],
+                'thumb' => $prize['thumb']
+            ],
+            'year' => $year,
+            'raffles' => $raffleInfo
+        ];
+    }
+    return $result;
+}
