@@ -14,9 +14,7 @@ switch ($action) {
         break;
     case 'winner-data':
         $raffle = getRaffleInfo('monthly');
-        $raffle_id = $raffle['raffle_id'];
-        $year = $raffle['year'];
-        $winners = getWinnersInfo('monthly', $year);
+        $winners = getWinnersInfo('monthly', $raffle['year']);
         break;
 }
 echo $result;
