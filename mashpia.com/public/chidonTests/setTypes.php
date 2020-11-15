@@ -37,7 +37,7 @@ foreach ($schools as $id => $school) {
                 vertical-align: top;
             }
             body {
-                visibility: hidden;
+                display: none;
             }
         </style>
     </head>
