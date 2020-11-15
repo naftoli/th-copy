@@ -137,24 +137,24 @@ function getWinnersInfo( $type, $year ) {
     $result = [];
     // keep array of rank names
     $ranks = [];
-    $sql = "SELECT * FROM ranks";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
+    $sql_ranks = "SELECT * FROM ranks";
+    $result_ranks = mysql_query($sql_ranks);
+    while ($row = mysql_fetch_assoc($result_ranks)) {
         $ranks[$row['rank_ord']] = $row['rank_name'];
     }
     // find the raffles we need to show
     $raffles = [];
-    $sql = "SELECT * FROM raffles WHERE type = '" . $type . "' AND year = " . $year;
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $raffles = $row['raffle_id'];
+    $sql_raffles = "SELECT * FROM raffles WHERE type = '" . $type . "' AND year = " . $year;
+    $result_raffles = mysql_query($sql_raffles);
+    while ($row = mysql_fetch_assoc($result_raffles)) {
+        $raffles[] = $row['raffle_id'];
         if (empty($row['date_ran'])) break;
     }
 
     foreach ($raffles as $raffle_id) {
         $prize = getPrizeInfo($raffle_id);
         $raffleInfo = [];
-        $sql = "
+        $sql_raffles = "
             SELECT 
                 u.first,
                 u.last,
@@ -175,8 +175,8 @@ function getWinnersInfo( $type, $year ) {
                 rank_marks USING (user_id)
             WHERE
                 raffle_id = " . $raffle_id;
-        $result = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
+        $result_raffles = mysql_query($sql_raffles);
+        while ($row = mysql_fetch_assoc($result_raffles)) {
             $gender = '';
             if ($row['gender'] == 'M') {
                 $gender = 'boys';
