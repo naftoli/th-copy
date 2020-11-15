@@ -67,18 +67,6 @@ $schools = $as->getSchools();
     <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
     <h1>Yearly Raffle: Eligible Students</h1>
 
-    <div style="font-weight: bold">
-        This gift is only possible due to the generosity of Rabbi Moshe & Ruti Weiss.
-        <br /><br />
-        To show your appreciation:
-        <br />
-        <br />
-        <ul>
-            <li>Please have your children write Thank You cards and send them back to HQ.</li>
-            <li>Please take pictures as you give out the books and send to HQ.</li>
-        </ul>
-    </div>
-
     <div class="dropdowns">
         <? if(count($schools) == 1) {?>
             <select id="school_id" name="school_id" class="hidden"  disabled>

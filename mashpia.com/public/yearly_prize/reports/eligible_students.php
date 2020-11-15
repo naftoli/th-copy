@@ -68,6 +68,17 @@ if($debug) echo "</pre>";
             <a target="_blank" href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit">here</a>
             for the complete rewards manual
         </p>
+        <div style="font-weight: bold">
+            This gift is only possible due to the generosity of Rabbi Moshe & Ruti Weiss.
+            <br /><br />
+            To show your appreciation:
+            <br />
+            <br />
+            <ul>
+                <li>Please have your children write Thank You cards and send them back to HQ.</li>
+                <li>Please take pictures as you give out the books and send to HQ.</li>
+            </ul>
+        </div>
         <div id="dropdowns">
             <? if(count($schools) == 1) {?>
                 <select id="school_id" name="school_id" class="hidden"  disabled>
