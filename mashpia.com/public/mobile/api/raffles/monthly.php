@@ -14,7 +14,9 @@ switch ($action) {
         break;
     case 'winner-data':
         $raffle = getRaffleInfo('monthly');
-        $winners = getWinnersInfo('monthly', $raffle['year']);
+        $result = json_encode([
+            getWinnersInfo('monthly', $raffle['year'])
+        ]);
         break;
 }
 echo $result;
