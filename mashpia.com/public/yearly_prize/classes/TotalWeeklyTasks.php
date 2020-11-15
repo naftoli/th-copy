@@ -26,10 +26,7 @@ class TotalWeeklyTasks {
     public function __construct($user_id, $end_date) {
         // store this to get the user info later
         $this->user_id = $user_id;
-        
-        //$this->start_date = 2458047; // October 20, 2017
-        $this->start_date = 2458012; // September 15 2017
-        
+        $this->start_date = 2459027; // July 2020
         $this->end_date = $end_date;
     }
     
