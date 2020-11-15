@@ -97,7 +97,7 @@ class YearlyRaffle {
         // load all the eligible users
         while ( $row = $eligibility_query->fetch_assoc() ) {
             // find out how many tasks were done after cutoff by looking at new task
-            $row['days'] += $this->checkDays($row['user_id']);
+            $row['days'] += $this->checkDays($user_id);
             $this->eligibility[ $user_id ] = $row['days'];
             // cache the user if they are eligible
 //            if ( intval($row['days']) > $this->DAY_COUNT )
@@ -168,6 +168,7 @@ class YearlyRaffle {
                 and dt.grid_id = " . $this->grid_id . " 
                 and dtm.mark_date > " . $this->cutoff . " 
                 and dtm.mark_date <= " . $this->deadline;
+//        echo $sql; exit;
         $result = $this->db_conn->query($sql);
         return intval($result->fetch_assoc()['total']);
     }
