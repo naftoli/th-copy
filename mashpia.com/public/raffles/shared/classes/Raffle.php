@@ -612,7 +612,7 @@ class Raffle {
             $result = mysql_query($sql);
             $total = mysql_fetch_assoc($result)['total'];
         }
-        echo "User ID: " . $user_id . " Total: " . $total . "\n";
+//        echo "User ID: " . $user_id . " Total: " . $total . "\n";
         return $total;
     }
 
