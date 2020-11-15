@@ -11,6 +11,10 @@ function getRaffleInfo( $type ) {
         $info['raffle_id'] = $row['raffle_id'];
         $info['daysLeft'] = $row['end_date'] - $today;
         $info['name'] = $row['name'];
+        $info['year'] = $row['year'];
+        $info['start'] = $row['start_date'];
+        $info['end'] = $row['end_date'];
+        $info['run_date'] = $row['run_date'];
     }
     return $info;
 }
@@ -86,4 +90,45 @@ function checkTasks( $user_id, $start, $end ) {
             and dtm.mark_date <= " . $end;
     $result = mysql_query($sql);
     return mysql_fetch_assoc($result)['total'];
+}
+
+function getDailyTaskInfo( $user_id, $type ) {
+    $raffle = getRaffleInfo($type);
+
+    $start = $raffle['start'];
+    $end = $raffle['end'];
+    $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר ב','ניסן','אייר','סיון','תמוז','אב','אלול'];
+    $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
+
+    $startHe = explode('/', jdtojewish($start));
+    $endHe = explode('/', jdtojewish($end));
+    $run_date = $raffle['run_date'];
+
+    $origin = new DateTime();
+    $target = new DateTime($run_date);
+    $interval = $origin->diff($target);
+    $diff = $interval->format('a');
+
+    $total = checkTasks($user_id, $raffle['start'], $raffle['end']);
+
+    $info = [];
+    while ($start++ <= $end) {
+        $past = $start < unixtojd() ? true : false;
+        $heDate = explode('/', jdtojewish($start));
+        $heMonth = $months[$heDate[0]];
+        $info[$heMonth][] = [
+            'completed' => checkTasks($user_id, $start, $start),
+            'past'      => $past
+        ];
+    }
+    $result = json_encode([
+        'raffleNumber'  => $raffle['raffle_id'],
+        'startMonth'    => $heMonths[$startHe[0]],
+        'endMonth'      => $heMonths[$endHe[0]],
+        'year'          => $raffle['year'],
+        'daysTillDrawing'   => $diff,
+        'daysCompleted' => $total,
+        'months'        => $info
+    ]);
+    return $result;
 }
