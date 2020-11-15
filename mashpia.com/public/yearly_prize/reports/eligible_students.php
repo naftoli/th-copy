@@ -45,7 +45,7 @@ if($debug) echo $get_type."\n";
 // end debugging
 if($debug) echo "</pre>";
 ?>
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +79,7 @@ if($debug) echo "</pre>";
                 <li>Please take pictures as you give out the books and send to HQ.</li>
             </ul>
         </div>
+        <br /><br />
         <div id="dropdowns">
             <? if(count($schools) == 1) {?>
                 <select id="school_id" name="school_id" class="hidden"  disabled>
