@@ -41,6 +41,9 @@ foreach ($schools as $id => $school) {
             td:not(.type) {
                 vertical-align: top;
             }
+            body {
+                visibility: hidden;
+            }
         </style>
     </head>
     <body>
@@ -93,13 +96,12 @@ foreach ($schools as $id => $school) {
             if (school_id == 176) {
                 // password protect
                 const password = 'laky';
-                $('body').hide();
                 let pass = '';
                 while (pass != password) {
                     pass = prompt('Please enter password.');
                 }
-                $('body').show();
             }
+            $('body').show();
             alert('Please make sure to SAVE after entering scores.');
         })
         $(".score").keyup( function() {
