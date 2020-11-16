@@ -186,7 +186,7 @@
     "icon": "/images/icon_auction.png"
   },
   {
-    "label": "Yearly Gift",  "legacy": true, "path": "/raffles/yearly/eligibile_students.php", "module": "chayolei",
+    "label": "Yearly Gift",  "legacy": true, "path": "/yearly_prize/reports/eligibile_students.php", "module": "chayolei",
     "icon": "/images/icon_auction.png"
   },
   {
