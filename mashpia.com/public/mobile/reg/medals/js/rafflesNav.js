@@ -26,6 +26,8 @@ const createElementWithClass = (elm, className) => {
 
 
 const loadRaffleContainer = (flag, data) => {
+    const id = new URLSearchParams(window.location.search).get('id');
+
     let flagSrc, stroke;
 
     if (flag === 5) {
@@ -42,7 +44,7 @@ const loadRaffleContainer = (flag, data) => {
     }
 
     let container = createElementWithClass('div', 'raffleInfo');
-    container.onclick = function () { window.location.href = `/mobile/reg/raffle${flag}.html` };
+    container.onclick = function () { window.location.href = `/mobile/reg/raffle${flag}.html?id=${id}` };
 
     let raffleId = createElementWithClass('div', 'raffleID');
     raffleId.classList.add('item');
@@ -92,6 +94,7 @@ const loadRaffleContainer = (flag, data) => {
 
     let raffleDetails = createElementWithClass('div', 'raffleDetails');
     let daysLeft = createElementWithClass('p', 'daysLeft');
+    daysLeft.style.color = stroke;
     daysLeft.innerText = data.daysLeft === 0 ? 'MAZAL TOV!' : `${data.daysLeft} MORE DAYS`;
     let daysLeft2 = document.createElement('p');
     daysLeft2.innerText = data.daysLeft === 0 ? `you have been entered into ${data.raffleName}` : `of missions to enter ${data.raffleName}`;
@@ -111,6 +114,7 @@ const loadRaffleContainer = (flag, data) => {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
+
     const raffleInfoContainer = document.getElementById('raffleInfoContainer');
 
     let raffle5 = loadRaffleContainer(5, raffleNavData.raffle5);
@@ -120,77 +124,4 @@ document.addEventListener("DOMContentLoaded", function (event) {
     raffleInfoContainer.appendChild(raffle5);
     raffleInfoContainer.appendChild(raffle60);
     raffleInfoContainer.appendChild(raffle180);
-
-    // raffleInfoContainer.innerHTML += `<div class="raffleInfo" onclick="window.location.href = '/mobile/reg/raffle5.html'">
-    // <div class="item raffleID">
-    //     <div class="raffleFlagContainer">
-    //         <img src="/mobile/reg/images/red-flag.png" alt="flag" />
-    //         <h2>5</h2>
-    //     </div>
-    //     <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    //             <circle id="circle" class="circle_animation" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#00bcd4" fill="none"/>
-    //     </svg>
-    //     <svg class="background_circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-
-    //             <circle id="circle" class="circle_animation_background" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#607D8B" fill="none"/>
-    //     </svg>
-    // </div>
-    // <div class="raffleDetails">
-    //     <p class="daysLeft">1 more days</p>
-    //     <p>of missions to enter the 5 flag raffle</p>
-    //     <p class="details">details >></p>
-    // </div>
-    // </div>
-
-    // <div class="raffleInfo" onclick="window.location.href = '/mobile/reg/raffle60.html'">
-    // <div class="item raffleID">
-    //     <div class="raffleFlagContainer">
-    //         <img src="/mobile/reg/images/red-flag.png" alt="flag" />
-    //         <h2>60</h2>
-    //     </div>
-    //     <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    //         <g>
-    //             <title>Layer 1</title>
-    //             <circle id="circle" class="circle_animation" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#00bcd4" fill="none"/>
-    //         </g>
-    //     </svg>
-    //     <svg class="background_circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    //         <g>
-    //             <title>Background</title>
-    //             <circle id="circle" class="circle_animation_background" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#607D8B" fill="none"/>
-    //         </g>
-    //     </svg>
-    // </div>
-    // <div class="raffleDetails">
-    //     <p class="daysLeft">1 more days</p>
-    //     <p>of missions to enter the 60 flag raffle</p>
-    //     <p class="details">details >></p>
-    // </div>
-    // </div>
-
-    // <div class="raffleInfo" onclick="window.location.href = '/mobile/reg/raffle180.html'">
-    // <div class="item raffleID">
-    //     <div class="raffleFlagContainer">
-    //         <img src="/mobile/reg/images/red-flag.png" alt="flag" />
-    //         <h2>180</h2>
-    //     </div>
-    //     <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    //         <g>
-    //             <title>Layer 1</title>
-    //             <circle id="circle" class="circle_animation" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#00bcd4" fill="none"/>
-    //         </g>
-    //     </svg>
-    //     <svg class="background_circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    //         <g>
-    //             <title>Background</title>
-    //             <circle id="circle" class="circle_animation_background" r="43" cy="50.625" cx="50.625" stroke-width="10" stroke="#607D8B" fill="none"/>
-    //         </g>
-    //     </svg>
-    // </div>
-    // <div class="raffleDetails">
-    //     <p class="daysLeft">1 more days</p>
-    //     <p>of missions to enter the 180 flag raffle</p>
-    //     <p class="details">details >></p>
-    // </div>
-    // </div>`
 })

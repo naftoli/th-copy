@@ -4,17 +4,14 @@ const darkBlue = '#232c7b';
 const grey = '#b3b3b0';
 const xmlns = "http://www.w3.org/2000/svg";
 
-const sixtyFlagRaffleData = [
-    //sorted from newest to oldest
+const raffleData = [
     {
-        raffleNumber: 4,
-        startMonth: 'כסלו',
-        endMonth: 'שבט',
         year: 'תשפ״א',
         raffleDate: 'י״ט אייר',
         daysTillDrawing: 16,
         daysCompleted: 67,
         months: {
+            //sorted from newest to oldest
             'Iyar': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: true, past: false }, { completed: true, past: false }],
             'Nissan': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }],
             'Adar': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
@@ -76,8 +73,8 @@ const createBigDonutChart = () => {
 
 const load60FlagDonutCharts = () => {
     const raffle60Container = document.getElementById('raffle60Container');
-    sixtyFlagRaffleData.forEach(raffle => {
-        const { year, endMonth, startMonth, daysTillDrawing, raffleDate, months, daysCompleted } = raffle;
+    raffleData.forEach(raffle => {
+        const { year, daysTillDrawing, raffleDate, months, daysCompleted } = raffle;
         const raffleHeader = createElementWithClass('div', 'raffleHeader');
         const div = document.createElement('div');
         const parshaContainer = createElementWithClass('div', 'parshaContainer');
@@ -256,6 +253,35 @@ const createLargeDivider = (svg, perimeter, percentFill, totalAmountOfDays, tota
 
 
 const init = () => {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (localStorage.getItem("login")) {
+        document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
+        document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
+        document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
+        document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
+        document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
+        document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
+    }
+
+    $.post('../reg/ajax/getPhoto.php', { user_id: id }, function (success) {
+        var info = $.parseJSON(success);
+        var html = '<a href="/mobile/reg/medals/index.html?id=' + id + '">';
+        if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+        else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+        else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+        html += '</a>';
+        $(".personalImg").append(html);
+    });
+
+    //TODO
+    // if (lang == 2) {
+    //     $(".container").eq(1).addClass('he'); // add a he class to the page
+    //     $(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
+    //     $(".personalImg").css({ "right": "2%" }); // move the profile photo over a bit...
+    // } else {
+    //     $(".personalImg").css({ "left": "2%" }); // move the profile image a but from the edge...
+    // }
+
     createBigDonutChart();
     load60FlagDonutCharts();
 };

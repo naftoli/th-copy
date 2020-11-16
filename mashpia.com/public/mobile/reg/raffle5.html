@@ -328,7 +328,7 @@
             border-top: none;
             border-radius: 5px;
             padding: 0 15px;
-            margin-bottom: 20px;
+            margin-bottom: 60px;
         }
 
         #namesContainer {
@@ -381,55 +381,168 @@
             border-bottom: 1.1em solid #ed224b; */
             /* border-left: 1.1em solid #ed224b; */
         }
+
+        .missionMarathonHeader {
+            background: #ed224b;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            align-items: center;
+        }
+
+        #page-title {
+            color: white;
+            font-size: 18px;
+        }
+
+        #userImg {
+            border-radius: 100%;
+            border: 2px solid white;
+            height: 50px;
+            width: 50px;
+        }
+
+        #bugReport {
+            height: 35px;
+            width: 35px;
+        }
+
+        .navRaffleFlagContainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+            background: #e5e5e5;
+        }
+
+        .flagImg {
+            height: 50px;
+        }
     </style>
 </head>
 
 <body onload="init()">
-    <div class="container">
-        <div class="headerRaffleInfo">
-            <div id="raffleID" class="item raffleID"></div>
-            <div class="raffleDetails">
-                <p class="detailsBold"><i>Did you know?</i></p>
-                <p>There are <span class="winnerCount">150 winners</span> of the 5 Flag raffle every week!</p>
-                <p class="detailsBold">That's 3,000 winners each year!</p>
-                <p class="details">Fill out missions 5 or more times a week to qualify.</p>
-            </div>
-        </div>
-        <a href="#whoWonContainer" id="seeWhoWon">See who won!</a>
 
-        <div id="trackRecordContainer">
-            <h2>How is your 5-Flag track record?</h2>
+    <div>
+        <div class="missionMarathonHeader">
+            <div class="personalImg"></div>
+            <div>
+                <span id="page-title">MISSION MARATHON</span>
+            </div>
+            <a href="/helpdesk/?p=open">
+                <img id="bugReport" src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board"
+                    alt="bug-report">
+            </a>
+        </div>
+        <div class="navRaffleFlagContainer">
+            <a href="#" id="flagLink5">
+                <img class="flagImg" src="/mobile/reg/images/5-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
+            <a href="#" id="flagLink60">
+                <img class="flagImg" src="/mobile/reg/images/60-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
+            <a href="#" id="flagLink180">
+                <img class="flagImg" src="/mobile/reg/images/180-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
         </div>
 
-        <div id="whoWonContainer">
-            <div class="whoWonNav">
-                <p id="previousWinnerParsha"></p>
-                <h2>Past Winners</h2>
-                <p id="nextWinnerParsha"></p>
+        <div class="container">
+            <div class="headerRaffleInfo">
+                <div id="raffleID" class="item raffleID"></div>
+                <div class="raffleDetails">
+                    <p class="detailsBold"><i>Did you know?</i></p>
+                    <p>There are <span class="winnerCount">150 winners</span> of the 5 Flag raffle every week!</p>
+                    <p class="detailsBold">That's 3,000 winners each year!</p>
+                    <p class="details">Fill out missions 5 or more times a week to qualify.</p>
+                </div>
             </div>
-            <div id="parshaContainer">
-                <p id="parsha-header">פרשת </p>
+            <a href="#whoWonContainer" id="seeWhoWon">See who won!</a>
+
+            <div id="trackRecordContainer">
+                <h2>How is your 5-Flag track record?</h2>
+            </div>
+
+            <div id="whoWonContainer">
                 <div class="whoWonNav">
-                    <div></div>
-                    <div id="parshaPrizeContainer"></div>
-                    <div id="parshaFlagContainer"></div>
+                    <p id="previousWinnerParsha"></p>
+                    <h2>Past Winners</h2>
+                    <p id="nextWinnerParsha"></p>
                 </div>
-                <div id="namesContainer">
-                    <div class="column" id="boys">
-                        <h2>Boys</h2>
+                <div id="parshaContainer">
+                    <p id="parsha-header">פרשת </p>
+                    <div class="whoWonNav">
+                        <div></div>
+                        <div id="parshaPrizeContainer"></div>
+                        <div id="parshaFlagContainer"></div>
                     </div>
-                    <div class="column" id="girls">
-                        <h2>Girls</h2>
+                    <div id="namesContainer">
+                        <div class="column" id="boys">
+                            <h2>Boys</h2>
+                        </div>
+                        <div class="column" id="girls">
+                            <h2>Girls</h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- TODO: Add animations -->
-            <!-- TODO: Updatee for full screens -->
-            <!-- <div style="min-height: 400px;" id="raffles">
+                <!-- TODO: Add animations -->
+                <!-- TODO: Updatee for full screens -->
+                <!-- <div style="min-height: 400px;" id="raffles">
                 <div class="loader"></div>
             </div> -->
+            </div>
         </div>
-    </div>
+        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+            <div class="span12 footer">
+                <div class="span3">
+                    <a href="/mobile/reg/parent_detail.html" id="mainLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/boy-color-green-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span id="main-title">Accounts</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="missionsLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Missions</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="rankLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Achievements</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="storeLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/cart-color-red-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Rewards</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

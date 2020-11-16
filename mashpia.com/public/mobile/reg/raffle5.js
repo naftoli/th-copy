@@ -320,7 +320,7 @@ const fetchPastWinners = async (id) => {
     clearPastWinners();
     pastWinnersDataLoading = true;
     try {
-        let data = await axios.get(`/mobile/news/api/raffle.php?raffle_id=${id}`);
+        let data = await axios.get(`/mobile/api/raffles/weekly.php?action=completed&user_id=${id}`);
         if (data.data && data.data.success) {
             pastWinnersData = data.data.data;
             pastWinnersData.raffle.days_completed = 7; //TODO: get from backend
@@ -338,7 +338,36 @@ const fetchPastWinners = async (id) => {
 };
 
 const init = () => {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (localStorage.getItem("login")) {
+        document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
+        document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
+        document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
+        document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
+        document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
+        document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
+    }
+
+    $.post('../reg/ajax/getPhoto.php', { user_id: id }, function (success) {
+        var info = $.parseJSON(success);
+        var html = '<a href="/mobile/reg/medals/index.html?id=' + id + '">';
+        if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+        else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+        else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+        html += '</a>';
+        $(".personalImg").append(html);
+    });
+
+    //TODO
+    // if (lang == 2) {
+    //     $(".container").eq(1).addClass('he'); // add a he class to the page
+    //     $(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
+    //     $(".personalImg").css({ "right": "2%" }); // move the profile photo over a bit...
+    // } else {
+    //     $(".personalImg").css({ "left": "2%" }); // move the profile image a but from the edge...
+    // }
+
     createBigDonutChart();
     loadDonutCharts();
-    fetchPastWinners(0);
+    fetchPastWinners(id);
 }
