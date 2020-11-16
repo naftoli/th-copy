@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 if ( $admin_user['auth'] != 'super' ) {
     echo "No permission to access this page.";
@@ -13,14 +14,18 @@ if ( $admin_user['auth'] != 'super' ) {
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+$year = GlobalSettings::getRegistrationYear();
+
 $schoolList = implode(',', array_keys( $schools ));
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        school_id, school_name, allow_lulav, lulav_shipping
+        s.school_name, ls.*
     FROM
-        schools
+        lulav_settings ls 
+    JOIN
+        schools s using (school_id) 
     WHERE
-        school_id IN ($schoolList)
+        year = $year
 ");
 $info = $stmt->fetchAll();
 ?>

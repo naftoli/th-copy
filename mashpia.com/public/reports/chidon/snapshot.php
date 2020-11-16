@@ -15,6 +15,7 @@ $info = [
     'last_name'		=>	'Last Name',
     'he_first_name'	=>	'Hebrew First Name',
     'he_last_name'	=>	'Hebrew Last Name',
+    'user_serial'   =>  'Serial Number',
     'gender'		=>	'Gender',
     'dob'			=>	'Date of Birth',
     'class'			=>	'Class/Grade',
@@ -32,6 +33,12 @@ $info = [
     // 'date_paid'		=>	'Enrolled To Shabbaton',
     // 'paid'			=>	'Amount Paid',
     // 'cert_number'	=>  'Certificate Code'
+];
+
+$info2 = [
+    'parent_name'           => 'Parent Name',
+    'parent_number'         => 'Parent Cell Number(s)',
+    'parent_email'          => 'Parent Email Address'
 ];
 
 // required fields for qry to work
@@ -93,9 +100,13 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 </div>
             <?}?>
             <br/>
+
+            <p>
+                Which fields you would like to see on your report?
+            </p>
                                 
             <fieldset>
-                <legend>Which fields you would like to see on your report?</legend>
+                <legend>Student Info</legend>
                 <?php foreach ( $info as $key => $value ) : ?>
                     <input type="checkbox" id="<?=$key?>"
                     <?php if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
@@ -113,6 +124,15 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 // }
                 ?>
             </fieldset> -->
+
+            <fieldset>
+                <legend>Parent Info</legend>
+                <?php foreach ( $info2 as $key => $value ) : ?>
+                    <input type="checkbox" id="<?=$key?>"
+                        <?php if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
+                    /> <?=$value?><br />
+                <?php endforeach; ?>
+            </fieldset>
 
             <fieldset>
                 <legend>Options</legend>
@@ -178,6 +198,13 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                                 data.push( val );
                             }
                         }
+                        var info2 = <?=json_encode( $info2 )?>;
+                        for (var val in info2) {
+                            var id = "#" + val;
+                            if ($(id).is(":checked")) {
+                                data.push( val );
+                            }
+                        }
                     }
                     data.push('teacher'); // show teacher name
 
@@ -186,7 +213,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     
                     //$("#qryBuilder").hide();
                     $("#report").html("<div class='loader'></div>");
-                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: info };
+                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: <?= json_encode($info + $info2) ?> };
                     $.post("ajax/snapshot.php", ajaxData, function( data ) {
                         $("#report").html(data);
                         //$("#generate_report").hide();

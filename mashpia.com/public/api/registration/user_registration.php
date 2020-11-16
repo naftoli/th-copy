@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -24,6 +25,7 @@ class UserRegistrationRouter {
 
         $available_users = [];
         foreach( $users as $user ){
+//            echo $user->user_id . ' = ' . $user->school_id . "<br />";
             if ( !$user->school_id ) continue;
             //$reg_info = $user->school->registration();
             // make sure they paid for this year
@@ -84,6 +86,7 @@ class UserRegistrationRouter {
     // charge the card and register the users
     public function registerUsers(){
         global $current_user; global $MASHPIA_DB;
+        $admin = $current_user; // $current_user global gets overwritten by wp
 
         /******************************** SETUP ********************************/
         // * get the post data
@@ -100,6 +103,10 @@ class UserRegistrationRouter {
         // * get each registration
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
+            if (!is_numeric($info['paid'])) {
+                // we have an error and need to stop registration
+                json_error("There is an error in the amount being paid. please try again.");
+            }
             $totals[$info['registration_type']] += intval($info['paid']);
         }
         
@@ -114,7 +121,7 @@ class UserRegistrationRouter {
         }
         $totals_string = trim( $totals_string );
         // get the description four our database
-        $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
+        $user_serials = array_map( function( $user ){ return $user->user_serial . ':' . $user->school_id; }, $users);
         $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
         $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
         
@@ -122,18 +129,18 @@ class UserRegistrationRouter {
         if ( $total != 0 ) {
             // if we have a payment profile provided
             if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] ) {
-                $customer_profile = $current_user->customerProfile();
+                $customer_profile = $admin->customerProfile();
                 $payment_profile_id = $payment_info['payment_profile'];
             // we need to create the payment profile
             } else {
-                $payment_profile  = $current_user->createPaymentProfile( $payment_info );
-                $customer_profile = $current_user->customerProfile();
+                $payment_profile  = $admin->createPaymentProfile( $payment_info );
+                $customer_profile = $admin->customerProfile();
 
                 if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
                     json_error( $payment_profile );
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
-            
+
             // Let the user know if the transaction fails
             $payment_response = $customer_profile->chargeCard(
                 $total, $payment_profile_id, null, null, $description
@@ -144,9 +151,9 @@ class UserRegistrationRouter {
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             $transaction_query->execute([
-                $current_user->admin_id, $description, $payment_info['total'], 
+                $admin->admin_id, $description, $payment_info['total'],
                 ( $total - $shipping_charges ), $shipping_charges,
-                $current_user->admin_postal, implode( ', ', $user_ids ),
+                $admin->admin_postal, implode( ', ', $user_ids ),
                 json_encode( $payment_response )
             ]);
             $trans_id = $MASHPIA_DB->lastInsertId();
@@ -194,9 +201,10 @@ class UserRegistrationRouter {
                     if ( $registration['registration_type'] == 'chayolei' ) {
                         $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
-                        array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $amount, $trans_id, $lite, $ckids 
-                        ) );
+                        $chayolei_errors = $user->registerChayolei(
+                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids
+                        );
+                        if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
 
@@ -215,9 +223,8 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $current_user->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
-
                         else {
                             // add book purchased info to db
                             if ( intval( $registration['purchased'] ) == 1 ) {
@@ -233,7 +240,7 @@ class UserRegistrationRouter {
                             if ($user->school_id == '269') $headers[] = 'CC: chidonanash@gmail.com';
 
                             $subject = "Chidon Registration Confirmation";
-                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for 5780.
+                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
                                         <br /><br/>
                                         We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                         <br /><br />
@@ -242,19 +249,19 @@ class UserRegistrationRouter {
                                         <br /><br />
                                         Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
                                         <br /><br />
-                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thchidon.com</a>.";
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.";
                             if ( $user->school_id == 61 ) {
                                 $message = "
-                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for 5780.
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for $year.
                                 <br /><br />
                                 We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                 <br /><br />
                                 This is also an opportunity to have a Bubby or Zaidy learn with your child weekly. 
                                 <br /><br />
-                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>Here</a> to sign up for the classes.
+                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://www.thechidon.com/resources/online-classes/'>Here</a> to sign up for the classes.
                                 In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids. 
                                 <br /><br />
-                                Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.thchidon.com'>www.thchidon.com</a>.
+                                Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.thechidon.com'>www.thechidon.com</a>.
                                 <br /><br /><br />
                                 Wishing you Much Hatzlocho!
                                 <br /><br />
@@ -262,12 +269,12 @@ class UserRegistrationRouter {
                                 $headers[] = "Cc: chidon@myshliach.com";
                             }
 
-                            $to = $current_user->admin_email;
+                            $to = $admin->admin_email;
                             if ( $to ) {
                                 if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
                                     $to = "naftoli@tzivoshashem.org";
                                     $subject = "Error in chidon email";
-                                    $message .= "<br /><b>Sent to " . $current_user->admin_email . "</b>";
+                                    $message .= "<br /><b>Sent to " . $admin->admin_email . "</b>";
                                     @mail( $to, $subject, $message, implode("\r\n", $headers) );
                                 }
                             }
@@ -315,8 +322,11 @@ class UserRegistrationRouter {
         //     }
         // }
 
-        if ( count( $errors ) > 0 )
-            @mail( "support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
+        if ( count( $errors ) > 0 ) {
+//            echo "<pre>"; print_r( $errors ); echo "</pre>";
+            @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
+            json_error( 'There were errors.', $errors );
+        }
         
         json_response( "Successfully Registered." );
     }
@@ -330,7 +340,7 @@ class UserRegistrationRouter {
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic' ],
-                'include' => [ 
+                'include' => [
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]

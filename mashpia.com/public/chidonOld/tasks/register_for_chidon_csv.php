@@ -1,6 +1,7 @@
 <?php
-require_once '../../db.php';
-$year = 5780;
+require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 
 if ( isset( $_FILES['chidon'] ) ) {
     $name = $_FILES['chidon']['tmp_name'];
@@ -45,7 +46,7 @@ if ( isset( $_FILES['chidon'] ) ) {
                         set user_id = " . $user_id . ", 
                         school_id = " . $school_id . ", 
                         type = 'chidon', 
-                        amount = 0.00, 
+                        amount = 10.00, 
                         date = now(), 
                         year = " . $year;
                 //echo $sql . "<br />";

@@ -5,15 +5,14 @@ require_once('file_save.php');
 
 // get current working year
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
 $startEnd = GlobalSettings::getCurYearDates();
 
 //get default dates
+// get from parshas devorim
 $dates = array();
 $sql = "SELECT * FROM parshos 
         WHERE start >= " . $startEnd['start'] . " 
         and end <= " . $startEnd['end'];        
-//year = " . $year;      
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;
@@ -105,25 +104,6 @@ while ($row = mysql_fetch_assoc($result)) {
                     $("#image").html( data );
                 });
             }
-            
-            // function checkDates() { 
-            //     if ( $(".radio:checked").val() ) {
-            //         return true;
-            //     } else {
-            //         var start = $("#from").val();
-            //         var end = $("#to").val();
-            //         var dif = end - start;
-            //         if ( dif > 69 ) {
-            //             alert("You cannot choose more than a 10 week period.");
-            //             return false;
-            //         } else if ( dif < 6 ) {
-            //             alert("End week must be after start week!");
-            //             return false;
-            //         } else {
-            //             return true;
-            //         }
-            //     }
-            // }
         </script>
     </HEAD>
 
@@ -172,55 +152,6 @@ while ($row = mysql_fetch_assoc($result)) {
             
             require_once 'class.missionSheet.php';
             $m = new MissionSheet;
-			
-			// if ( isset( $_POST['weeks'] ) || !isset( $_POST['from'] ) ) {
-				
-			// 	if ( !isset($_POST['weeks'] ) ) {                
-			// 		//find out which period to show
-			// 		$weeks = array(2458362, 2458439, 2458516, 2458593, 2458670);
-			// 		//get todays date
-			// 		$jd = unixtojd();
-			// 		for ( $i = 0; $i < 6; $i++ ) {
-			// 			if ( $jd < $weeks[$i] ) {
-			// 				$_POST['weeks'] = 'set' . $i;
-			// 				break;
-			// 			}
-			// 		}
-			// 	}
-				
-			// 	switch ( $_POST['weeks'] ) {
-	        //         case 'set1': 
-	        //             $from = 2458362;
-	        //             $to = 2458438;
-	        //             break;
-	        //         case 'set2': 
-	        //             $from = 2458439;
-	        //             $to = 2458515;
-	        //             break;
-	        //         case 'set3':
-	        //             $from = 2458516;
-	        //             $to = 2458592;
-	        //             break;
-	        //         case 'set4':
-	        //             $from = 2458593;
-	        //             $to = 2458669;
-	        //             break;
-	        //         case 'set5':
-	        //             $from = 2458670;
-	        //             $to = 2458753;
-	        //             break;
-            //         // case 'set6':
-	        //         //     $from = 2457921;
-	        //         //     $to = 2458004;
-	        //         //     break;
-	        //         default:
-	        //             break;
-	        //     }
-	        // } else {
-			// 	$from = $_POST['from'];
-			// 	$to = $_POST['to'];
-            // }
-            
             if ( isset($_POST['from']) && isset($_POST['to']) ) {
                 $from = $_POST['from'];
 				$to = $_POST['to'];
@@ -241,23 +172,12 @@ while ($row = mysql_fetch_assoc($result)) {
             $sql = "select school_logo_id from schools where school_id = " . $id;
             $res = mysql_query( $sql );
             $r = mysql_fetch_assoc( $res );
-            
-            // $reports = array();
-            // $sql = "select report_id, report_name from reports 
-            //         where start_date >= $from 
-            //         and end_date <= $to 
-            //         and visibility = 'all' 
-            //         order by start_date";
-            // //echo $sql;
-            // $result = mysql_query( $sql );
-            // while ( $row = mysql_fetch_assoc( $result ) ) {
-            //     $reports[$row['report_id']] = $row['report_name'];
-            // }
+
             $reports = [];
             foreach ( $dates as $date ) {
                 if ( $date['start'] >= $from && $date['end'] <= $to ) $reports[] = $date;
             }
-            // echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
+//            echo "<pre>"; print_r( $reports ); echo "</pre>"; exit;
 
             //create list
             $commanders = array();

@@ -7,8 +7,8 @@ class Report extends ReportBasic {
 	    
     public function __construct($previousStart = false) {
         parent::__construct();
-        // $this->dates = array(2458570,2458619,2458787,2458822,2458864,2458892,2458921,2458976); // each year take last 2 dates from previous yr and add current dates
-        $this->dates = array(2458570,2458619,2458787,2458822,2458864,2458976); // each year take last 2 dates from previous yr and add current dates
+//        $this->dates = array(2458570,2458619,2458787,2458822,2458864,2458976); // each year take last 2 dates from previous yr and add current dates
+        $this->dates = array(2458864,2458976,2459145,2459250,2459327);
 		$this->setReportDates($previousStart);
     }
 

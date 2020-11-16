@@ -302,7 +302,7 @@ function delFiles($file_id) {
 
 function linkImgFile($id, $width=NULL, $height=NULL, $extra = '') 
 {
-	$result = mysql_unbuffered_query("SELECT file_name FROM files WHERE file_id = $id");
+	$result = mysql_query("SELECT file_name FROM files WHERE file_id = $id"); // removed mysql_unbuffered_query
     if( !isset($result) || !$result ) {
         $row = array();
         $row['file_name'] = "";

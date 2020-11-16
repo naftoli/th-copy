@@ -11,15 +11,18 @@ class TehillimBackup {
         require_once(dirname(__FILE__).'/../class.globalSettings.php');
         $this->year = GlobalSettings::getCurrentYear();
         $this->dates = array(
-            2458765, 
-            2458788,
-            2458816,
-            2458849,
-            2458879, 
-            2458907, 
-            2458941, 
-            2458964, 
-            2458998
+            2459113,
+            2459116,
+            2459144,
+            2459172,
+            2459200,
+            2459228,
+            2459256,
+            2459291,
+            2459319,
+            2459347,
+            2459431,
+            2459432
         );
         $this->errors = array();
     }
@@ -33,7 +36,7 @@ class TehillimBackup {
     
     public function runBackup() {
         $today = unixtojd();
-        if (in_array( $today, $this->dates )) {
+        if (in_array($today, $this->dates)) {
             // find out last shabbos mevorchim date
             $this->getLastSM();
             

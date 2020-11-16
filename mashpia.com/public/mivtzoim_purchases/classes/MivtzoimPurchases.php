@@ -9,7 +9,7 @@ class MivtzoimPurchases {
         global $MASHPIA_DB;
         $this->pdo = $MASHPIA_DB;
         // $this->items = [];
-        // $stmt = $MASHPIA_DB->query("SELECT * FROM mivtzoim_purchases.mivtzoim_items");
+        // $stmt = $MASHPIA_DB->query("SELECT * FROM mashpia_purchases.mivtzoim_items");
         // $rows = $stmt->fetchAll();
         // foreach ( $rows as $row ) {
         //     $this->items[$row['mivtzoim_item_id']] = $row['item'];
@@ -26,9 +26,9 @@ class MivtzoimPurchases {
                 SELECT 
                     *
                 FROM
-                    mivtzoim_purchases.purchases
+                    mashpia_purchases.purchases
                         JOIN
-                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                    mashpia_purchases.purchase_details USING (purchase_id)
                 WHERE
                     admin_id = :admin AND year = :year
                         AND item_id = :item
@@ -45,9 +45,9 @@ class MivtzoimPurchases {
                 SELECT 
                     *
                 FROM
-                    mivtzoim_purchases.purchases
+                    mashpia_purchases.purchases
                         JOIN
-                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                    mashpia_purchases.purchase_details USING (purchase_id)
                 WHERE
                     year = :year AND item_id = :item
             ");
@@ -72,9 +72,9 @@ class MivtzoimPurchases {
                 SELECT 
                     IFNULL(SUM(qty), 0) AS total
                 FROM
-                    mivtzoim_purchases.purchases
+                    mashpia_purchases.purchases
                         JOIN
-                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                    mashpia_purchases.purchase_details USING (purchase_id)
                 WHERE
                     admin_id = :admin AND year = :year
                         AND item_id = :item
@@ -91,9 +91,9 @@ class MivtzoimPurchases {
                 SELECT 
                     IFNULL(SUM(qty), 0) AS total
                 FROM
-                    mivtzoim_purchases.purchases
+                    mashpia_purchases.purchases
                         JOIN
-                    mivtzoim_purchases.purchase_details USING (purchase_id)
+                    mashpia_purchases.purchase_details USING (purchase_id)
                 WHERE
                     year = :year AND item_id = :item
             ");
@@ -119,9 +119,9 @@ class MivtzoimPurchases {
             SELECT 
                 *
             FROM
-                mivtzoim_purchases.purchases
+                mashpia_purchases.purchases
                     JOIN
-                mivtzoim_purchases.purchase_details USING (purchase_id)
+                mashpia_purchases.purchase_details USING (purchase_id)
             WHERE
                 year = :year AND item_id = :item
                     AND admin_id IN (SELECT 
@@ -156,7 +156,7 @@ class MivtzoimPurchases {
         $authorization = $info['auth'];
 
         $stmt = $this->pdo->prepare("
-            INSERT INTO mivtzoim_purchases.purchases 
+            INSERT INTO mashpia_purchases.purchases 
             SET 
                 year = :year, 
                 admin_id = :admin, 
@@ -165,7 +165,7 @@ class MivtzoimPurchases {
         ");
 
         $stmt2 = $this->pdo->prepare("
-            INSERT INTO mivtzoim_purchases.purchase_details 
+            INSERT INTO mashpia_purchases.purchase_details 
             SET 
                 purchase_id = :id, 
                 user_id = :user, 

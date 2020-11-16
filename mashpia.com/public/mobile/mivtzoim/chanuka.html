@@ -46,6 +46,10 @@
                 margin-top: 10px;
                 font-size: 24px;
             }
+
+            .navbar {
+                min-height: 80px;
+            }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -202,26 +206,25 @@
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
             
-            // find out how many sets have been sold
-            // var soldOut = false;
-            // var now = Math.floor( new Date().getTime() / 1000);
-            // console.log( now );
-            // if ( now >= 1569556800 ) {
-            //     soldOut = true;
-            // }
-            
             var menorahSoldOut = false;
             var brochureSoldOut = false;
             var soldOut = false;
 
-            soldOut = true;
-            $("#sold-out").show();
-            $("#purchases").hide();
+            // find out how many sets have been sold
+            var soldOut = false;
+            var now = Math.floor( new Date().getTime() / 1000);
+            console.log( now );
+            if ( now >= 1606435200 ) {
+                soldOut = true;
+            }
+
+            // soldOut = true;
+            // $("#sold-out").show();
+            // $("#purchases").hide();
 
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 5000;
-                var menorahSold = 5000;
-                // menorahSold += parseInt( sold );
+                var menorahSold = parseInt( sold );
                 var menorahLeft = menorahStart - menorahSold;
                 $(".menorahSold").text( menorahSold );
                 $(".menorahLeft").text( menorahLeft );
@@ -237,8 +240,7 @@
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
                 var brochureStart = 5000;
-                var brochureSold = 5000;
-                // brochureSold += parseInt( sold );
+                var brochureSold = parseInt( sold );
                 var brochureLeft = brochureStart - brochureSold;
                 $(".brochureSold").text( brochureSold );
                 $(".brochureLeft").text( brochureLeft );

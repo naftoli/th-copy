@@ -26,6 +26,10 @@ if ($today < $date3a || $today > $date3b) {
     $shutdown3 = true;
 }
 
+$shutdown1 = false;
+$shutdown2 = false;
+$shutdown3 = false;
+
 // close other marking until further notice
 // $shutdown2 = true;
 // $shutdown3 = true;

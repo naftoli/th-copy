@@ -77,7 +77,7 @@ class OrdersPage extends Component {
       'Miles', 'Qty', 'Total', 'Platoon'
     ];
     const rows = this.props.orders.map( order => [
-      order.modified, order.first, order.last, order.user_serial,
+      order.created, order.first, order.last, order.user_serial,
       order.prize_name, order.points, order.quantity, order.total * -1,
       order.platoon
     ]);
@@ -92,6 +92,7 @@ class OrdersPage extends Component {
 
     const { modal, selection, redeemed } = this.state;
     const { orders, loading, login } = this.props;
+    console.log(orders)
 
     let columns = getColumns( isBC( login.code, true ) );
 

@@ -375,20 +375,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
-        global $current_user;
-        
+
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, ur.paid, chayolei, th_chidon_id, chidon FROM users u "
+            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
+            ."JOIN schools s ON u.school_id = s.school_id "
             ."WHERE u.user_id = :user_id;"
         );
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
-        
+
         $result = [];
 
         if ( $row['chayolei'] && !$isBC ) {
@@ -396,11 +396,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
+
         // turn off chayolei reg 
         //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
         // only add th_chidon_id if the user is in grade 4+ 
-        $exceptions = [483,482,544,583,588];
+        $exceptions = [482,544,583];
         if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
@@ -423,8 +424,49 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
+
+        // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
+        // only if not australian schools
+        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
+            $confStmt = $MASHPIA_DB->prepare("
+                SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
+            ");
+            $confStmt->execute([
+                ':user' => $this->user_id,
+                ':year' => $year
+            ]);
+            $rows = $confStmt->fetchAll();
+            if ( empty( $rows ) ) {
+                $result['chayolei'] = false;
+            }
+        }
+
+        // find user id's of kids with exception
+        $serialNum = [
+            7746463, 7750077, 7750039, 7748535, 7762129, 7754560, 7769383, 7762129, 7759215, 7756202, 7760527, 7751368, 7747980, 7747390,
+            7748551, 7773102, 7752969, 7748998, 7752490, 7753000, 7748547, 7775781, 7761287, 7747339, 7763109, 7753599, 7760704, 7758564,
+            7751454, 7748673, 7747302, 7756085, 7759885, 7748725, 7753953, 7759944, 7752990, 7748247, 7748267, 7750109, 7750056, 7775943,
+            7753984, 7760408, 7772386, 7775680, 7761845, 7758518, 7754957, 7756463, 7756464, 7771828, 7750056, 7752979, 7770141, 7770138,
+            7758062, 7754553, 7763326, 7775941, 7760921, 7750103, 7773911, 7747801, 7753589, 7753585, 7759811, 7759332, 7749051, 7773272,
+            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7759826, 7775977,
+            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7775955, 7775735,
+            7764289, 7759999, 7760667, 7764902, 7764894, 7757205, 7751184, 7755566, 7775958, 7749753, 7763309, 7759584, 7753664, 7770142,
+            7759807, 7749753, 7759305, 7769272, 7769275, 7750115, 7748057, 7759972, 7751067, 7759461, 7769372, 7775788, 7772311, 7760230,
+            7756480, 7748529, 7775776, 7772514, 7761216, 7756223, 7769465, 7769465, 7761227, 7759542, 7772492, 7775717, 7773901, 7748504,
+            7748503, 7755811, 7750671, 7753600, 7772141, 7775916, 7775924, 7775925, 7775931, 7775932, 7764763, 7760724, 7763324, 7774904,
+            7760669, 7761155, 7775736, 7763077, 7754283, 7763409, 7746832, 7759804, 7747520, 7769363, 7772932, 7752995, 7753919, 7759608,
+            7753003, 7754075, 7773381, 7754400, 7750093, 7748053, 7770705, 7753540, 7754181, 7758576
+        ];
+        $serialStr = implode(',', $serialNum);
+        $keepOn = [];
+        $stmt = $MASHPIA_DB->query("
+            SELECT user_id FROM users WHERE user_serial in ($serialStr)
+        ");
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) $keepOn[] = $row['user_id'];
+
         // turn off chidon reg
-        $result['chidon'] = true;
+        if (!in_array($this->user_id, $keepOn)) $result['chidon'] = true;
 
         return $result;
     }
@@ -441,40 +483,80 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
         global $MASHPIA_DB;
         $errors = [];
+        if ( !$admin_id ) {
+            $errors[] = "Missing Admin ID." . "<br />" . "Admin ID: " . $admin_id;
+            return $errors;
+        }
         // Insert into user_registration
-        $reg_query = $MASHPIA_DB->prepare(
-            "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
-            ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
-            ."ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
-        );
-        // $x = [ 
-        //     'year' => $year,                'admin_id' => $admin_id, 
-        //     'user_id' => $this->user_id,    'school_id' => $this->school_id,
-        //     'paid' => isset($amount) ? $amount : null,
-        // ];
-        // register the soldier
-        if( !$reg_query->execute([ 
-            'year' => $year,                'admin_id' => $admin_id, 
-            'user_id' => $this->user_id,    'school_id' => $this->school_id,
-            'paid' => isset($amount) ? $amount : null,
-        ])) $errors[] = "Could not insert into user_registration.";
-        // save the charge
-        $type = 'chayolei';
-        if ( $lite ) $type = 'chayolei-lite';
-        if ( $ckids ) $type = 'ckids';
-        if ( !$this->registrationCharge( $type, $amount, $trans_id ) )
-            $errors[] = "Could not insert into registration_charges.";
-        // update fields to mark registered
-        if ( !$this->user_registered ) $this->user_registered = new \Datetime();
-        if ( !$this->user_start_date ) $this->user_start_date = unixtojd();
-        // update field for chayolei lite registration 
-        if ( $lite ) $this->lite_edition = 1;
-        $this->generateRank();
-        $this->save();
-        // create campaigns and birthday missions
-        $this->enrollInCampaigns();
-        $this->setupBirthdayMissions();
-
+        // make sure to only register child if there's an amount, otherwise it's only a parent confirming information for a tuition school
+        if (floatval($amount) > 0) {
+            $reg_query = $MASHPIA_DB->prepare(
+                "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
+                . "VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
+                . "ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
+            );
+            // $x = [
+            //     'year' => $year,                'admin_id' => $admin_id,
+            //     'user_id' => $this->user_id,    'school_id' => $this->school_id,
+            //     'paid' => isset($amount) ? $amount : null,
+            // ];
+            // register the soldier
+            if (!$reg_query->execute([
+                'year' => $year, 'admin_id' => $admin_id,
+                'user_id' => $this->user_id, 'school_id' => $this->school_id,
+                'paid' => isset($amount) ? $amount : null,
+            ])) {
+                $errors[] = "Could not insert into user_registration. (Not Registered).";
+                return $errors;
+            }
+            // save the charge
+            $type = 'chayolei';
+            if ($lite) $type = 'chayolei-lite';
+            if ($ckids) $type = 'ckids';
+            if (!$this->registrationCharge($type, $amount, $trans_id)) {
+                $errors[] = "Could not insert into registration_charges. (Not Registered)";
+                // remove from user_registration
+                $unreg_qry = $MASHPIA_DB->prepare("DELETE FROM user_registration WHERE user_id = :user, AND year = :year");
+                $unreg_qry->execute([
+                    ':user' => $this->user_id,
+                    ':year' => $year
+                ]);
+                return $errors;
+            }
+            // update fields to mark registered
+            if (!$this->user_registered) $this->user_registered = new \Datetime();
+            if (!$this->user_start_date) $this->user_start_date = unixtojd();
+            // update field for chayolei lite registration
+            if ($lite) $this->lite_edition = 1;
+            $this->generateRank();
+            $this->save();
+            // create campaigns and birthday missions
+            $this->enrollInCampaigns();
+            $this->setupBirthdayMissions();
+        } else {
+            // make sure admin is parent
+            $stmt = $MASHPIA_DB->prepare("
+                SELECT * FROM admin_auths WHERE admin_id = :admin AND auth = 'user'
+            ");
+            $res = $stmt->execute([':admin' => $admin_id]);
+            $rows = $stmt->fetch();
+            if ($res && !empty($rows)) {
+                $stmt = $MASHPIA_DB->prepare("
+                    INSERT INTO reg_confirmations 
+                    SET 
+                        year = :year, 
+                        admin_id = :admin, 
+                        user_id = :user
+                ");
+                if (!$stmt->execute([
+                    ':year' => $year,
+                    ':admin' => $admin_id,
+                    ':user' => $this->user_id
+                ])) {
+                    $errors[] = "Could not register child.";
+                }
+            }
+        }
         return $errors;
     }
     /**
@@ -612,6 +694,27 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $check_duplicate->execute([ $this->user_code ]);
                 $valid_code = $check_duplicate->fetch()['total'] == 0;
             }
+        }
+    }
+
+    public function reGenerateBarcode(){
+        global $MASHPIA_DB;
+        // prepare the sql queries
+        $check_duplicate = $MASHPIA_DB->prepare( "SELECT COUNT(*) as total FROM users WHERE user_code = ?;" );
+        $generate_barcode = $MASHPIA_DB->prepare( "SELECT FLOOR(RAND() * 9223372036854775807) as user_code" );
+        // counters
+        $count = 0; $valid_code = false;
+        // while we do not have a valid code, generate a new one and validate it.
+        while( !$valid_code ) {
+            // at 1,000 iterations ( and 2,000 queries ) just abort saving the model.
+            if ( $count++ > 1000 )
+                return false;
+            // generate the barcode
+            $generate_barcode->execute();
+            $this->user_code = $generate_barcode->fetch()['user_code'];
+            // make sure it is unique
+            $check_duplicate->execute([ $this->user_code ]);
+            $valid_code = $check_duplicate->fetch()['total'] == 0;
         }
     }
 

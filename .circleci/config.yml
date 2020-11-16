@@ -212,6 +212,7 @@ workflows:
               only:
                 - master
                 - staging
+                - testing
 
       - deploy-staging:
           requires:
@@ -220,6 +221,7 @@ workflows:
             branches:
               only:
                 - staging
+                - testing
 
       - deploy-production:
           requires:

@@ -66,12 +66,12 @@ $posters = array(
     $totals['deliver'] = 0;
 
     // hard coded totals
-    $exceptions = array(
+//    $exceptions = array(
         //54	=> 580, // update requested via E-mail on 1/3/2018
-        176	=> 84, 
-        9   => 400, 
-        265 => 70
-    );
+//        176	=> 84,
+//        9   => 400,
+//        265 => 70
+//    );
 
 ?>
     <div align='center' class='hide'>
@@ -105,7 +105,7 @@ $posters = array(
                     $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                     $total = $school['teachers'] + $school['total'] + $extra; 
                     // find out if total should be overrided
-                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
+//                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id];
                 }
 
                 if ( $extra !== 0 ) { ?>
@@ -152,7 +152,7 @@ $posters = array(
                     $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                     $total = $school['teachers'] + $school['total'] + $extra; 
                     // find out if total should be overrided
-                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
+//                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id];
                 } else {
                     $extra = get_extra_hachayols($id, $school['total']);
                     $total = $school['total'] + $extra;

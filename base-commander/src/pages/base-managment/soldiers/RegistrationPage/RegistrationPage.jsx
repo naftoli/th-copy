@@ -65,14 +65,14 @@ export class RegistrationPage extends Component {
     if ( this.state.selection.length > selection.length )
       fee = -Math.abs(fee); // update the fee to a negative number if we reduced the length of items
     // update the state
-    const total = this.state.total + fee;
+    const total = parseInt(this.state.total, 10) + parseInt(fee, 10);
     this.setState({ selection, total });
   };
   // toggle all the rows in the table
   toggleAll = ( selection, currentRecords ) => {
     let total = 0;
     if ( currentRecords.length > 0 )
-      currentRecords.forEach(item => { total += item._original.fee; } ); // calculate the fee
+      currentRecords.forEach(item => { total += parseInt(item._original.fee, 10); } ); // calculate the fee
       
     this.setState({ selection, total });
   };

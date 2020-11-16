@@ -1,5 +1,11 @@
 // hide everything from the global DOM
 var registration_info = function() {
+    let pass = '';
+    while (pass !== 'zelda@5780') {
+        pass = prompt("Please enter the password.", pass);
+    }
+    $("#report").show();
+
     // setup event listeners
     $('.base input, .base select').change( onChange );
     $('.base button.deactivate').click( deactivate );

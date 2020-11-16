@@ -1,6 +1,5 @@
-<?
+<?php
 class ShabbosMevorchim {
-    
     private $dates;
     private $rDates;
     private $showDone;
@@ -116,15 +115,23 @@ class ShabbosMevorchim {
     }
 
     public function getBackupRan( $date ){
-        $backupDateIndex = array_search( $date, array_values( $this->dates ) );
-
+//        $backupDateIndex = array_search( $date, array_values( $this->dates ) );
         // if there is an index, check if it is set. Otherwise just return false
-        if ( $backupDateIndex === false ) return false;
+//        if ( $backupDateIndex === false ) return false;
         // if we have a date at this index, make sure it is before today
-        if ( isset( $this->backup->dates[$backupDateIndex] ) )
-            return $this->backup->dates[$backupDateIndex] <= unixtojd();
+//        if ( isset( $this->backup->dates[$backupDateIndex] ) )
+//            return $this->backup->dates[$backupDateIndex] <= unixtojd();
+        // check if backup actually ran
+        $stmt = $this->db->prepare("
+            SELECT * FROM tehillim_backups WHERE sm_date = :date
+        ");
+        $stmt->execute([
+           ':date'  => $date
+        ]);
+        $rows = $stmt->fetch();
+        return !empty($rows);
         // by default we did not run the backup
-        return false;
+//        return false;
     }
 
 	public function setAccomplishedOnly() {
@@ -349,7 +356,6 @@ class ShabbosMevorchim {
     }
     
     public function setSchoolResults( $id, $minutes = false ) {
-        
         $sql1 = "SELECT sum( dt.quantity ) AS total
                 FROM date_tasks dt
                 JOIN date_tasks_missions dtm

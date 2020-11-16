@@ -3,13 +3,17 @@ setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
 // detect the info on the scanner input
 $("#manual-scanner #scanner").keyup( function( event ) {
-    if ( event.target.value.match(/^3{1}\d{19}$/) ) {
+    alert();
+    if ( event.target.value.length > 18 ) {
         checkNumber( event.target.value );
-    } else if ( event.target.value.length === 20 ) {
-        showError( "Please enter a valid barcode" );
-    } else if ( event.target.value.length > 20) {
-        event.target.value = event.target.value.slice(0, 20);
     }
+    // if ( event.target.value.match(/^3{1}\d{19}$/) ) {
+    //     checkNumber( event.target.value );
+    // } else if ( event.target.value.length === 20 ) {
+    //     showError( "Please enter a valid barcode" );
+    // } else if ( event.target.value.length > 20) {
+    //     event.target.value = event.target.value.slice(0, 20);
+    // }
 });
 
 $("#cardForm").submit( function( event ){
@@ -30,11 +34,12 @@ Quagga.onProcessed( showScanningBox );
 
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
-    if ( cardNumber.match(/^3{1}\d{19}$/) ) {
-        $.post( 'api/checkID.php', { card : cardNumber }, login );
-    } else {
-        console.error( "Invalid. Detected: ", cardNumber );
-    }
+    $.post( 'api/checkID.php', { card : cardNumber }, login );
+    // if ( cardNumber.match(/^3{1}\d{19}$/) ) {
+    //     $.post( 'api/checkID.php', { card : cardNumber }, login );
+    // } else {
+    //     console.error( "Invalid. Detected: ", cardNumber );
+    // }
 }
 
 // login the user based on the response

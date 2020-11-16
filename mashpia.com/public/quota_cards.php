@@ -1,8 +1,9 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = array('school');
-require_once 'header.php';
-require_once 'class.adminSchools.php';
-require_once 'class.schoolsUsers.php';         
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
@@ -14,8 +15,8 @@ foreach ( $schools as $id => $school ) {
 }
 //echo "<pre>"; print_r( $schoolsUsers ); echo "</pre>"; exit;
 // get current shabbos mevorchim
-require 'class.globalSettings.php';
-require_once 'class.shabbosMevorchim.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php';
 
 $year = GlobalSettings::getCurrentYear();
 $sm = new ShabbosMevorchim( $year );

@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' ); 
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getRegistrationYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
@@ -11,18 +11,21 @@ $schools = $as->getSchools();
 
 if ( isset( $_POST['date'] ) && $_POST['date'] ) {
     if ( $_POST['date'] == 1 ) {
-        $from = '2019-06-01';
-        $to = '2019-08-12';
+        $from = '2020-06-01';
+        $to = '2020-09-16';
     } else if ( $_POST['date'] == 2 ) {
-        $from = '2019-08-13';
-        $to = '2019-09-17';
+        $from = '2020-09-16';
+        $to = '2020-09-22';
     } else if ( $_POST['date'] == 3 ) {
-        $from = '2019-09-18';
-        $to = '2019-09-25';
-    } else if ( $_POST['date'] == 4 ) {
-        $from = '2019-09-26';
-        $to = '2019-10-25';
-    } 
+        $from = '2020-09-22';
+        $to = '2020-10-15';
+    }
+    $from .= " 14:00:00";
+    $to .= " 21:59:59";
+//    } else if ( $_POST['date'] == 4 ) {
+//        $from = '2019-09-26';
+//        $to = '2019-10-25';
+//    }
 }
 
 $combined_users = [];
@@ -39,10 +42,10 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
 }
 if ( isset( $from ) && isset( $to ) ) {
-    $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
+    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
 }
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
-$qry .= "GROUP BY rc.user_id ORDER BY school_name, first, last, date";
+$qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
@@ -88,18 +91,18 @@ $booklet_grand_totals = [
         <p>
             <select name="date">
                 <option value="0">Choose Batch Number</option>
-                <option value="1" 
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                >1st Batch (until August 12)</option>
+                <option value="1"
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                >1st Batch (until Sept 16)</option>
                 <option value="2"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                >2nd Batch (from August 13 until Sept 17)</option>
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                >2nd Batch (from Sep 16 until Sep 22)</option>
                 <option value="3"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sept 18 to Sept 25)</option>
-                <option value="4"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                >4th Batch (from Sept 26 to Oct 25)</option>
+                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                >3rd Batch (from Sep 22 to Oct 15)</option>
+                <!--                <option value="4"-->
+                <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
             </select>
         </p>
         <p>  

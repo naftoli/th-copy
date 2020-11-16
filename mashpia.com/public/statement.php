@@ -45,8 +45,8 @@ $user_id = $user['user_id'];
 $school_id = $user['school_id'];
 
 $camp_season = 0;
-$camp_id = $user_row['camp_id'];
-$camp_registered = $user_row['camp_registered'];
+//$camp_id = $user_row['camp_id'];
+//$camp_registered = $user_row['camp_registered'];
 
 //$australian = array(55,66,112,180);
 
@@ -151,9 +151,9 @@ $qryTimes[$qryCounter++]['end'] = time();
 
 //echo totalMarks("WHERE user_id = {$user['user_id']} AND mark_date >= " . dateThisYear(13, 18));
 
-if ($camp_season)
-	include('camp_code_processor.php');
-else
+//if ($camp_season)
+//	include('camp_code_processor.php');
+//else
 	include('code_processor.php');
 
 // ********** USER MILES ********** //
@@ -370,9 +370,9 @@ require 'mobile/reg/ajax/encrypt.php';
 
 	<body class="green" onload="check_browser();hideURLbar();">
 
-		<input type="hidden" name="camp_id" value="<?=$camp_id;?>">
-		<input type="hidden" name="camp_registered" value="<?=$camp_registered;?>">
-		<input type="hidden" name="camp_season" value="<?=$camp_season;?>">
+<!--		<input type="hidden" name="camp_id" value="--><?//=$camp_id;?><!--">-->
+<!--		<input type="hidden" name="camp_registered" value="--><?//=$camp_registered;?><!--">-->
+<!--		<input type="hidden" name="camp_season" value="--><?//=$camp_season;?><!--">-->
 
 		<div id="wrapper">
 
@@ -564,7 +564,7 @@ require 'mobile/reg/ajax/encrypt.php';
 			
 	     <? if($user['registered'] && (!$camp_season) ): ?>
             <div class="one_column">
-				<? $inbox = mysql_fetch_assoc(mq("SELECT COUNT(*) num FROM user_codes WHERE user_id = {$user_row['user_id']}")); ?>
+				<? //$inbox = mysql_fetch_assoc(mq("SELECT COUNT(*) num FROM user_codes WHERE user_id = $user_id")); ?>
 				<ul class="buttons button_icons">
 					<?//if($user_row['kiosk_edit'] != 'off'):?>
 				<!--<li><a href="../missions.php" class="icon_missions">Mission Reporting</a></li><?//endif;?>-->

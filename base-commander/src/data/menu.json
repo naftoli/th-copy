@@ -55,6 +55,14 @@
     "label": "Chidon", "legacy": true, "module": "chidon",
     "icon": "/images/chidon.png",
     "items": [
+      { "label": "Tests",
+        "items" : [
+          { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
+          { "label": "Enter Chidon Test Scores", "legacy": true, "path": "/chidonTests/enterScores.php" },
+          { "label": "Review Marks", "legacy": true, "path": "/chidonTests/marks.php" }
+        ]
+      },
+
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       { "label": "Chidon Drive Letter", "legacy": true, "path": "/chidonOld/shabbaton_letter.php" },
 
@@ -66,9 +74,6 @@
       { "label": "Shabbaton Enrolled Report", "legacy": true, "path": "/reports/chidon/shabbaton_enrollment.php" },
       { "label": "Shabbaton Walking Report", "legacy": true, "path": "/reports/chidon/walking_groups.php" },
 
-      { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidon_tests.php" },
-      { "label": "Enter Mitzvah Maven Marks", "legacy": true, "path": "/chidon_mm_tests.php" },
-
       { "label": "School Shabbaton Enrollment", "legacy": true, "path": "/chidon_school_reg.php" },
       { "label": "Review / Create Chaperones", "legacy": true, "path": "/chidon_school_reg2.php" },
       
@@ -78,6 +83,7 @@
       { "label": "Review Enrollment", "legacy": true, "path": "/review_enrollment.php" },
       { "label": "Print Enrollment Info", "legacy": true, "path": "/chidon_review.php" },
       { "label": "Review Chidon Pictures", "legacy": true, "path": "/chidonOld/reports/chidon_pics.php" },
+      { "label": "Chidon History Report", "legacy": true, "path": "/reports/chidon/reg_history_school.php" },
 
       { "label": "Generate ID Cards", "legacy": true, "user_types": ["HQ"], "path": "/chidonOld/IDcards/" },
       { "label": "Upload Spreadsheets", "legacy": true, "user_types": ["HQ"], "path": "/chidonOld/upload/" },
@@ -156,6 +162,11 @@
         "items": [
           { "label": "Letter To Parents", "legacy": true, "path": "/charidy/pr/letter_to_parents.php" }
         ]
+      },
+      { "label": "Mishna", "module": "chayolei",
+        "items": [
+          { "label": "Chevras Mishnayos", "legacy": true, "path": "/mishna/join.php" }
+        ]
       }
     ]
   },
@@ -180,10 +191,6 @@
   },
   {
     "label": "Manuals",  "legacy": true, "path": "/manuals", "module": "chayolei",
-    "icon": "/images/icon_wizard.png"
-  },
-  {
-    "label": "Setup Guide",  "legacy": true, "path": "/admin_setup_guide.php", "module": "chayolei",
     "icon": "/images/icon_wizard.png"
   },
   {

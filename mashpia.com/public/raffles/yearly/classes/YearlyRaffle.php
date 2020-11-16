@@ -15,9 +15,11 @@ class YearlyRaffle {
     private $DAY_COUNT = 180;
     private $db_conn;
     private $year;
-    // ends on lag baomer
-    private $deadline = 2458984; // May 14, 2020
-    private $start = 2458733; // Sept 6, 2019
+    private $deadline;
+    private $start;
+    private $grid_id;
+    private $cutoff;
+    private $num_before_cutoff;
     
     public $eligibility;
 
@@ -32,22 +34,32 @@ class YearlyRaffle {
         // create a new DB adapter if one is not provided
         $db_conn ? $this->db_conn = $db_conn : $this->db_conn = new DBAdapter();
         $this->year  = GlobalSettings::getCurrentYear();
+        // find raffle 180
+        $result = $this->db_conn->query("select * from raffles where type = 'yearly' order by year desc limit 1");
+        $row = $result->fetch_assoc();
+        $this->deadline = $row['end_date'];
+        $this->start = $row['start_date'];
+        $this->grid_id = 13012;
+        $this->cutoff = 2459166;
+        $this->numDays = 49;
     }
 // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
         $eligibility_query = $this->db_conn->query(
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date > " . $this->start . " "
-            ." AND mark_date < " . $this->deadline . " "
+            ." WHERE mark_date >= " . $this->start . " "
+            ." AND mark_date <= " . $this->cutoff . " "
             ." AND school_id = '$school_id' "
             ." GROUP BY user_id;"
         );
         // load all the eligible users
         $this->eligibility = [];
         while ( $row = $eligibility_query->fetch_assoc() ) {
+            // find out how many tasks were done after cutoff by looking at new task
+            $row['days'] += $this->checkDays($row['user_id']);
             $this->eligibility[$row['user_id']] = $row['days'];
-            if ( intval($row['days']) > $this->DAY_COUNT )
+//            if ( intval($row['days']) > $this->DAY_COUNT )
                 $this->cacheUser( $row['user_id'], $row['days'] );
         }
         return $this->eligibility;
@@ -77,16 +89,18 @@ class YearlyRaffle {
         $eligibility_query = $this->db_conn->query(
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date > " . $this->start . " "
-            ." AND mark_date < " . $this->deadline . " "
+            ." WHERE mark_date >= " . $this->start . " "
+            ." AND mark_date <= " . $this->cutoff . " "
             ." AND user_id = '$user_id' "
         );
 
         // load all the eligible users
         while ( $row = $eligibility_query->fetch_assoc() ) {
+            // find out how many tasks were done after cutoff by looking at new task
+            $row['days'] += $this->checkDays($row['user_id']);
             $this->eligibility[ $user_id ] = $row['days'];
             // cache the user if they are eligible
-            if ( intval($row['days']) > $this->DAY_COUNT )
+//            if ( intval($row['days']) > $this->DAY_COUNT )
                 $this->cacheUser( $user_id, $row['days'] );
         }
         
@@ -104,15 +118,16 @@ class YearlyRaffle {
      */
     public function get_eligible_users( $realtime = false, $school_id = false ) {
         // generate the SQL to run
+        // fist find out how many tasks were done before cutoff
         if ( $realtime )
             $users_sql = "SELECT user_id, user_serial, school_name, first, last, COUNT(DISTINCT (mark_date)) AS days, class_grade, class_sub "
                 ." FROM date_tasks_marks JOIN users USING (user_id) "
                 ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-                ." WHERE mark_date > " . $this->start . " "
-                ." AND mark_date < " . $this->deadline . " "
+                ." WHERE mark_date >= " . $this->start . " "
+                ." AND mark_date <= " . $this->cutoff . " "
                 .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
                 ." GROUP BY user_id "
-                ." HAVING days >= " . $this->DAY_COUNT . " "
+                ." HAVING days >= " . $this->numDays . " "
                 ." ORDER BY school_name, class_grade, class_sub, last, first ";
         else
             $users_sql = "SELECT user_id, user_serial, school_name, first, last, days, class_grade, class_sub"
@@ -128,10 +143,33 @@ class YearlyRaffle {
         $eligible_users = [];
         while( $row = $users_query->fetch_assoc() ) {
             $eligible_users[] = $row;
-            if( $realtime )
-                $this->cacheUser( $row['user_id'], $row['days'] );
+            if ( $realtime ) {
+                // find out how many tasks were done after cutoff by looking at new task
+                $row['days'] += $this->checkDays($row['user_id']);
+                $this->cacheUser($row['user_id'], $row['days']);
+            }
         }
+
         return $eligible_users;
+    }
+
+    /**
+     * checkDays
+     *
+     * finds out how many days of tasks were marked on same day as task (new task created at end of cheshvon)
+     *
+     * @param string $user_id
+     * @return int
+     */
+    private function checkDays($user_id) {
+        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
+                join date_tasks dt using (date_task_id) 
+                where dtm.user_id = " . $user_id . " 
+                and dt.grid_id = " . $this->grid_id . " 
+                and dtm.mark_date > " . $this->cutoff . " 
+                and dtm.mark_date <= " . $this->deadline;
+        $result = $this->db_conn->query($sql);
+        return intval($result->fetch_assoc()['total']);
     }
 
     /**

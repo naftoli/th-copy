@@ -1,11 +1,21 @@
 <?php
-$admin_auth = array(); 	
-require_once ( __DIR__ . '/../../header.php' ); 
+$admin_auth = ['school'];
+require_once ( __DIR__ . '/../../header.php' );
+if ($admin_user['auth'] != 'super') {
+    echo "No permission.";
+    exit;
+}
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
 
-$main_query = "SELECT s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
+$types = [
+    1 => 'Tuition',
+    2 => 'Guaranteed',
+    3 => 'Regular'
+];
+
+$main_query = "SELECT s.reg_type, s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
     ."total_registered, not_chayolei "
     ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
     ."LEFT JOIN ( "
@@ -13,11 +23,16 @@ $main_query = "SELECT s.school_id, s.school_number, s.school_name, sr.date_paid,
     .") u USING (school_id) LEFT JOIN ( "
         ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
-        ."SELECT school_id, COUNT(*) AS total_registered FROM users WHERE user_registered > 0 GROUP BY school_id"
-    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND test_school=0 GROUP BY school_id ORDER BY school_name";
+        ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
+    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND s.test_school=0 AND s.chayolei = 1 GROUP BY s.school_id ORDER BY s.school_name";
 $main_query = mysql_query( $main_query );
 $data = [];
-while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
+while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['reg_type']][$row['school_name']] = $row;
+ksort($data);
+// sort by name
+foreach ($data as $type => $schools) {
+    ksort($data[$type]);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,35 +50,37 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Base Registration Status</h1>
-    <h2>Details</h2>
-    <table>
-        <thead>
+    <?php
+    foreach ($data as $type => $schools) {
+        echo "<h2>" . $types[$type] . " Schools</h2>";
+        ?>
+        <table>
+            <thead>
             <th colspan='2'>Base</th>
             <th>Registered</th>
             <th>Amount Paid</th>
             <th>Soldiers Registered</th>
             <th>Chidon Only Soldiers</th>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <?php
-                foreach( $data as $base ) { 
-                    if ( !$base['total_registered'] ) $base['total_registered'] = 0; 
-                    if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
-                    <tr>
-                        <td><?= $base['school_number'] ?></td>
-                        <td><?= $base['school_name'] ?></td>
-                        <td><?= $base[ 'date_paid' ] ? 
-                            ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) : 
-                            'Not Registered'; 
+            foreach( $schools as $base ) {
+                if ( !$base['total_registered'] ) $base['total_registered'] = 0;
+                if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
+                <tr>
+                    <td><?= $base['school_number'] ?></td>
+                    <td><?= $base['school_name'] ?></td>
+                    <td><?= $base[ 'date_paid' ] ?
+                            ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) :
+                            'Not Registered';
                         ?></td>
-                        <td>$<?= number_format($base['amount_paid'], 0) ?></td>
-                        <td><?= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?></td>
-                        <td><?= $base['not_chayolei'] ?></td>
-                    </tr>
-                <?php 
-                } 
-            ?>
-        </tbody>
-    </table>
+                    <td>$<?= number_format($base['amount_paid'], 0) ?></td>
+                    <td><?= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?></td>
+                    <td><?= $base['not_chayolei'] ?></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+    <?php } ?>
 </body>
 </html>
