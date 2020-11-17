@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 600);
 require_once( dirname(__FILE__) . "/../../db.php" );
 require_once( dirname(__FILE__) . "/../classes/TotalWeeklyTasks.php" );
 
