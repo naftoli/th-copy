@@ -66,7 +66,7 @@ function getRaffleHistory( $type, $user_id ) {
         $end = $start + 6;
         for ( $i = $start; $i <= $end; $i++ ) {
             $days[] = [
-                'completed' => checkTasks( $user_id, $i, $i ),
+                'completed' => checkTasks( $user_id, $i, $i ) > 0 ? true: false,
                 'past'      => $past
             ];
         }
@@ -117,7 +117,7 @@ function getDailyTaskInfo( $user_id, $type ) {
         $heDate = explode('/', jdtojewish($start));
         $heMonth = $months[$heDate[0]];
         $info[$heMonth][] = [
-            'completed' => checkTasks($user_id, $start, $start),
+            'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
             'past'      => $past
         ];
     }
