@@ -560,6 +560,7 @@ class Raffle {
                         AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
                         AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
                     //                if ($user_id == 63609) echo $update_total_sql . "<br />";
+//                    echo $update_total_sql;
                     $update_total_query = mysql_query($update_total_sql);
                     $update_total_row = mysql_fetch_assoc($update_total_query);
                     if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
@@ -577,6 +578,7 @@ class Raffle {
                     and dt.grid_id = " . $grid_id . " 
                     and dtm.mark_date >= " . $this->start_date . " 
                     and dtm.mark_date <= " . $this->end_date;
+//            echo $sql;
             $result = mysql_query($sql);
             $total = mysql_fetch_assoc($result)['total'];
         }
@@ -609,10 +611,11 @@ class Raffle {
                     and dt.grid_id = " . $grid_id . " 
                     and dtm.mark_date >= " . $this->start_date . " 
                     and dtm.mark_date <= " . $this->end_date;
+            echo $sql;
             $result = mysql_query($sql);
             $total = mysql_fetch_assoc($result)['total'];
         }
-        echo "User ID: " . $user_id . " Total: " . $total . "\n";
+//        echo "User ID: " . $user_id . " Total: " . $total . "\n";
         return $total;
     }
 
@@ -623,6 +626,7 @@ class Raffle {
                     ' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
                     ' and dtmarks.mark_date >= '. $this->start_date .' and dtmarks.mark_date <= ' . $this->end_date .
                     ' group by dtmarks.mark_date';
+//        echo $daily_sql;
         //echo $daily_sql."\n"; // if you want to debug...
         $daily_query = mysql_query($daily_sql); // run the query
         $total = mysql_num_rows( $daily_query ); // get the number of marks
