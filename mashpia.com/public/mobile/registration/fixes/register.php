@@ -27,13 +27,31 @@ $chayolei = [
 
 $chidon = [
     [
-        'serial'    => 7745260,
-        'size'      => 'Adult S',
+        'serial'    => 7770921,
+        'size'      => 'Children M',
         'book'      => 3,
+        'paid'      => 14
+    ],
+    [
+        'serial'    => 7765978,
+        'size'      => 'Children L',
+        'book'      => 1,
+        'paid'      => 14
+    ],
+    [
+        'serial'    => 7756048,
+        'size'      => 'Children M',
+        'book'      => 2,
+        'paid'      => 10
+    ],
+    [
+        'serial'    => 7756047,
+        'size'      => 'Children L',
+        'book'      => 2,
         'paid'      => 10
     ]
 ];
-
+/*
 foreach ($chayolei as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
@@ -50,11 +68,11 @@ foreach ($chayolei as $user) {
     checkRegCharges( $user_id, $school_id, $paid );
     echo "<br />";
 }
-
+*/
 foreach ($chidon as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
-    $size = $user['size'];
+    $size = strtolower($user['size']);
     $book = $user['book'];
     $stmtUser->execute([':serial' => $user['serial']]);
     $user_info = $stmtUser->fetch();

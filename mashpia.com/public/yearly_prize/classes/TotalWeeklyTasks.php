@@ -48,7 +48,7 @@ class TotalWeeklyTasks {
             $date += 1; // move up one for the next start date (since the start date is included in the equation)
         }
     }
-    // count all the weeks with a task since September 15 2017 (default start date)
+    // count all the weeks with a task since default start date
     public function total_weeks_with_task( $realtime = false ){
         $total_weeks = 0; // start with no weeks with tasks
         // realtime or cached....
@@ -92,7 +92,6 @@ class TotalWeeklyTasks {
             ."where dtmarks.user_id = ".$this->user_id." and ut.user_id = ".$this->user_id." "
             ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
             ."group by dtmarks.date_task_id";
-            
         //if($this->user_id == 50628) echo $sql."<br/><br/>";
 
         $query = mysql_query($sql);
