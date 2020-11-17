@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 require_once( __DIR__ . '/db.php' );
 require_once( __DIR__ . '/api/header/db.php' );
-require_once( __DIR__ . '/yearly_prize/classes/TotalWeeklyTasks.php' );
+//require_once( __DIR__ . '/yearly_prize/classes/TotalWeeklyTasks.php' );
 
 //var_dump($_GET);
 $function_name = $_GET['function_name'];
@@ -236,7 +236,7 @@ function add_task_mark($parameters, $update = true) {
         }
 
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+//        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
 
 		return json_encode(true);
 	}
@@ -503,7 +503,7 @@ function add_daily_task_mark2($parameters, $update = true)
         echo 0;
         
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+//        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
 	}
 	else
 	{

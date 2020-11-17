@@ -1,6 +1,6 @@
 <?php
 include ( dirname(__FILE__) . "/db.php" );
-require_once( dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php' );
+//require_once( dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php' );
 
 $function_name = $_GET['function_name'];
 $parameters = $_GET['parameters'];
@@ -95,7 +95,7 @@ function delete_task_mark($parameters) {
 			*/
         }
         // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+//        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
 
 		return 1;
 	}
@@ -158,7 +158,7 @@ function delete_daily_task_mark2($parameters) {
 	
 	if ($query) {
         // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+//        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
         echo 0;
     } else {
         echo 1;
