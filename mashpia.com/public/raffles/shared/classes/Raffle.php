@@ -569,8 +569,8 @@ class Raffle
     public function checkMonthly($user_id)
     {
         $required = Constants::get_monthly_task_requirment();
-
-        if (unixtojd() < 2459171) {
+        $rollover = 2459171;
+        if ($this->start_date < $rollover) {
             $total = $this->checkDaily($user_id);
             //        if ($user_id == 63609) echo "Total: " . $total . " Required: " . $required;
             if ($total < $required && $total >= ($required - 12)) { // only check if less than 60 but at least 48
@@ -611,7 +611,8 @@ class Raffle
     public function checkWeekly($user_id)
     {
         $required = Constants::get_weekly_task_requirment();
-        if (unixtojd() < 2459167) {
+        $rollover = 2459167;
+        if ($this->start_date < $rollover) {
             $total = $this->checkDaily($user_id);
             if ($total == $required - 1) { // if it is only (4) we can check for some marks that are not tied to any specific dates
                 // get a total count of all the non daily missions marked between the start and end dates of this raffle
