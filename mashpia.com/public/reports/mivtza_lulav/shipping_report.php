@@ -12,7 +12,7 @@ $schools = $as->getSchools();
 $combined_users = [];
 
 $users = [];
-$users_sql = "SELECT users FROM mivtzoim_purchases.lulav_purchases WHERE year = " . $year;
+$users_sql = "SELECT users FROM lulav_purchases WHERE year = " . $year;
 $user_query = mysql_query( $users_sql );
 while ( $row = mysql_fetch_assoc( $user_query ) ) {
     if ( strpos($row['users'], ',') ) {

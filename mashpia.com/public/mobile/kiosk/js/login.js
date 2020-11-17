@@ -4,7 +4,7 @@ $(document).ready( function() {
     
     // check for valid card numbers
     function checkNumber( card ) {
-        if (card.length == 20) {
+        if (card.length == 19 || card.length == 20) {
             $.post('api/checkID.php', { card : card }, function( res ) {
                 var response = $.parseJSON( res );
                 if (response.success) {
@@ -19,7 +19,7 @@ $(document).ready( function() {
                 }
             });
         } else {
-            alert('Card must be 20 digits.');
+            alert('Card must be 19 or 20 digits.');
         }
     }
     // submit the card number manually

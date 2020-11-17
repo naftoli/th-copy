@@ -70,6 +70,7 @@ if (!isset($menu_type))
             <li><a href="hachayol_report_details.php">Hachayol Report Details</a></li>
             <li><a href="myShliachHachayolReport.php">MyShliach Hachayol Report</a></li>       
             <li><a href="myShliachHachayolLabels.php">MyShliach Hachayol Labels</a></li>
+            <li><a href="anashHachayolLabels.php">Anash Kinder Hachayol Labels</a></li>
 			<li><a href="/raffles/shared/forms/winners_hachayol_form.php">Hachayol Raffle Winners</a></li> 
             <li></li><br />      
             <li><a href="admin_received_stats_all.php"><?=T_("Medal/Rank Report All Schools")?></a></li>
@@ -190,7 +191,8 @@ if (!isset($menu_type))
 			<LI><A HREF="edit_school_type.php"><?=T_("Edit School Types")?></A>
 			<LI><A HREF="school_list.php"><?=T_("School List")?></A>
             <LI><A HREF="parent_list.php"><?=T_("Parent List")?></A>
-            <LI><A HREF="soldiers.php"><?=T_("Student List")?></A>			    
+            <LI><A HREF="soldiers.php"><?=T_("Student List")?></A>
+            <li><a href="child_list.php"><?=T_("Student/Parent Connections")?></a></li>
 			<LI><A HREF="school_possible_medals.php"><?=T_("School Possible Medals")?></A>
 			<LI><A HREF="school_possible_boards.php"><?=T_("School Possible Boards")?></A>
 			

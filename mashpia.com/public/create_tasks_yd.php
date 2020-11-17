@@ -195,6 +195,13 @@ if (isset($_POST['submit'])) {
                             // set the action to add no matter what
                             ${$fieldNames[$i]} = 'add';
                             break;
+                        case 1:
+                            // skip row if it's empty
+                            if (empty($val)) {
+                                continue 2;
+                            }
+                            ${$fieldNames[$i]} = $val;
+                            break;
                         // Start Date
                         case 3:
                             if ( strpos($val, ',') === false ) {
@@ -266,9 +273,9 @@ if (isset($_POST['submit'])) {
                 
                 // set the start date from the array if it is full and $startDate is empty
                 if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
-                    $year = in_array($arrStart[0], array(12,13)) && $mission_number < 50 ? $missionYear - 1 : $missionYear;
+                    $year = in_array($arrStart[0], array(12,13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
-                    $year = in_array($arrEnd[0], array(12,13)) && $mission_number < 50 ? $missionYear - 1 : $missionYear;
+                    $year = in_array($arrEnd[0], array(12,13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 
@@ -291,15 +298,15 @@ if (isset($_POST['submit'])) {
                             'mand'          =>  $mandatory, 
                             'focus'         =>  $focus, 
                             'label'         =>  $labelID, 
-                            'labelOrd'	    => $labelOrd, 
+                            'labelOrd'	    =>  $labelOrd,
                             'daily'         =>  $daily, 
                             'needed'        =>  $needed, 
                             'def'           =>  $default, 
-                            'short_name'    => $shortName, 
-                            'pic'		    => $pic,
-                            'grid_id'       => $catOrd,
+                            'short_name'    =>  $shortName,
+                            'pic'		    =>  $pic,
+                            'grid_id'       =>  $catOrd,
                             'mission_marking' => $mission_marking,
-                            'grid_marking'  => $grid_marking
+                            'grid_marking'  =>  $grid_marking
                         );
                         /*
                         echo "Mission - " . $missionName . "<br />";
@@ -313,12 +320,7 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             //exit;
-			
-			// echo "<pre>";
-			// print_r($missions);
-			// echo "</pre>";
-			// exit; 
-            
+
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
 			$line = 1;

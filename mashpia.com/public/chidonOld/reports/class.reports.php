@@ -62,6 +62,10 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'last_he as he_last_name',
             ),
+            'user_serial'   =>  array(
+                'table'     => 'users',
+                'column'    => 'user_serial'
+            ),
             'gender'    =>  array(
                 'table'     =>  'users',
                 'column'    =>  'gender',
@@ -418,7 +422,6 @@ class Reports
                 'column'    =>  'team'
             ),
             
-            
             'bunk_name'      =>  array(
                 'table'     =>  'th_chidon_bunks',
                 'column'    =>  'bunk_name'
@@ -678,8 +681,7 @@ class Reports
                     $sql .= " group by tc.user_id";
                 }
             }
-            //echo $sql; exit;
-
+//            echo $sql; exit;
             return $sql;
         } else {
             return false;

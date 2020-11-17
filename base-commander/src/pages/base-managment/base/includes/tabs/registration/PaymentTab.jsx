@@ -14,7 +14,7 @@ export class PaymentTab extends React.Component {
   //* initial state
   state = {
     terms: {
-      meet: 0, tools: 0, data: 0, reg: 0, bc: 0,
+      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, data: 0, reg: 0, bc: 0,
     }
   }
 
@@ -22,7 +22,7 @@ export class PaymentTab extends React.Component {
     if ( this.props.terms ) {
       this.setState({
         terms: {
-          meet: 1, tools: 1, data: 1, reg: 1, bc: 1,
+          meet: 1, tools: 1, wwtc: 1, yan: 1, mivtzoim: 1, data: 1, reg: 1, bc: 1,
         }
       })
     }
@@ -54,6 +54,8 @@ export class PaymentTab extends React.Component {
 
     const checkboxProps = { onChange: this.onTermsChange }
 
+    console.log(terms)
+
     return (
       <TabPane tabId={ tabId } id='PaymentTab'>
 
@@ -67,6 +69,21 @@ export class PaymentTab extends React.Component {
           <Checkbox required checked={ terms.meet } name='meet' { ...checkboxProps }>
             I am fully committed to the ongoing growth of Tzivos Hashem on our base (school)
             and will attend the monthly base commanders meetings.
+          </Checkbox>
+
+          <Checkbox required checked={ terms.wwtc } name='wwtc' { ...checkboxProps }>
+            I am fully committed to try my best to reach my school’s monthly
+            Shabbos Mevorchim Tehillim quota goal, and I understand that the entire army
+            relies on my base to do their part for the Army-Wide Goal to be reached.
+          </Checkbox>
+
+          <Checkbox required checked={ terms.yan } name='yan' { ...checkboxProps }>
+            I am fully committed to try my best to reach my school’s Tanya Baal Peh goal for Yud Alef Nissan,
+            and I understand that the entire army relies on my base to do their part for the Army-Wide Goal to be reached.
+          </Checkbox>
+
+          <Checkbox required checked={ terms.mivtzoim } name='mivtzoim' { ...checkboxProps }>
+            I am fully committed to try my best to reach my school’s Mivtzoim quotas
           </Checkbox>
 
           <Checkbox required checked={ terms.tools } name='tools' { ...checkboxProps }>

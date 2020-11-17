@@ -50,24 +50,26 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Registration Settings</span>
                 </div>
             </a>
+            <a href="/admin_yearly.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Unregister Schools and Students</span>
+                </div>
+            </a>
+            <!--
             <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Registration Report</span>
                 </div>
             </a>
+            -->
         </div>
         <div id="action-links">
             <a href="/types_of_schools.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">School Types</span>
-                </div>
-            </a>
-            <a href="/admin_yearly.php">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Unregister Schools and Students</span>
                 </div>
             </a>
         </div>

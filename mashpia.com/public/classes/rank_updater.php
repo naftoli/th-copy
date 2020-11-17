@@ -1,5 +1,7 @@
 <?
 class rank_updater {
+
+    public $updateWordPress = true;
 	
 	function update_rank_two($user_id, $debug = false) {
 		$response = false;
@@ -43,7 +45,7 @@ class rank_updater {
 						$insert_sql = $insert_sql . "ranks_updated=1";
 						$insert_query = mysql_query($insert_sql);
 						
-						$this->updateWP($rank_ord, $user_id);
+						if ( $this->updateWordPress ) $this->updateWP($rank_ord, $user_id);
 						
 						$response = ['rank_ord' => $rank_ord ];
 					}

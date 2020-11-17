@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = ['school']; 	
 require_once ( __DIR__ . '/../../header.php' ); 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
@@ -9,7 +10,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 $children = [];
-$query = mysql_query("SELECT users FROM mivtzoim_purchases.lulav_purchases WHERE year = $year");
+$query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
 while ( $row = mysql_fetch_assoc( $query ) ) {
     if ( strpos($row['users'], ',') !== false ) {
         $users = explode(',', $row['users']);
@@ -21,10 +22,9 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
     }
 }
 $total = count( $children );
-//echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 
 $info = [];
-$sql = "SELECT u.first, u.last, c.class_grade, c.class_sub, s.school_name 
+$sql = "SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
         FROM users u 
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id 
@@ -61,7 +61,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <p class="no-print">Grand Total: <?= $total ?></p>
     <?php endif; ?>
     <?php foreach ( $info as $school => $users ) : ?>
-        <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <?php
+        $num_users = count($users);
+        if ( array_search($school, $schools) == 4 ) $num_users++; // add michel rapoport order to yehuda munitz order
+        ?>
+        <h2><?= $school . ' (' . $num_users . ')' ?></h2>
         <table>
             <thead>
                 <th>Grade</th>
@@ -73,6 +77,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                         <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
                         <td><?= $user['first'] . " " . $user['last'] ?></td>
                     </tr>
+                    <?php
+                    // for yehuda munitz he should show up 2 times (also for michel rapoport)
+                    if ( $user['user_id'] == 15418 ) {
+                        ?>
+                        <tr>
+                            <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
+                            <td><?= $user['first'] . " " . $user['last'] ?></td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 <?php endforeach; ?>
             </tbody>
         </table>

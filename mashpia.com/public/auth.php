@@ -48,14 +48,16 @@ function check_login() {
       if(preg_match('/[^0-9]/', $user_code)) {
         $login_message = sprintf(T_('Code %s failed, must contain only numbers.'), $user_code);
         return false;
-      } elseif(strlen($user_code) != 20) {
-        $login_message = sprintf(T_('Code %s failed, was not 20 digits in length.'), $user_code);
+      } elseif(strlen($user_code) < 18 || strlen($user_code) > 20) {
+        echo 'here'; exit;
+        $login_message = sprintf(T_('Code %s failed, was not 18, 19 or 20 digits in length.'), $user_code);
         return false;
       } elseif($user_code[0] != 3) {
         $login_message = sprintf(T_('Code %s failed, does not appear to be a login card. Perhaps it\'s a point card.'), $user_code);
         return false;
       }
-      $result = mysql_query('SELECT user_id, user_code, username, password FROM users WHERE user_code = ' . substr($user_code, 1)) or die('Query failed 4');
+      $qry = 'SELECT user_id, user_code, username, password FROM users WHERE user_code = ' . substr($user_code, 1);
+      $result = mysql_query($qry) or die('Query failed 4');
     } else {
       $username = $_POST['login_username'];
       $password = $_POST['login_password'];

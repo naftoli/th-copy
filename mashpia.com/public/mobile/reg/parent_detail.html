@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -58,6 +58,11 @@
             }
 
             #no-children { display: none; text-align: center; }
+
+			.refund {
+				font-size: 16px;
+				padding: 5px;
+			}
         </style>
 	</head>
 	<body>
@@ -111,11 +116,16 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-xs-6" id="chidonDriveButton">
-                        <div class="button-spacing childrens-content" style="float:right;">
-                            <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
-                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button> -->
+                    <div class="col-xs-6">
+                        <div class="button-spacing" style="float:right;">
+<!--                            <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
+                             <button class="btn btn-lg btn-info chanuka">Chanuka Purchase(s)</button>
                             <!-- <button class="btn btn-info chidondrive">ChidonDrive</button> -->
+<!--							<div class="refundDiv" style="display:none;">-->
+<!--								<a href="chidonRefund.html">-->
+<!--									<button class="btn btn-danger refund">Request Chidon Refund</button>-->
+<!--								</a>-->
+<!--							</div>-->
                         </div>
                     </div>
 				</div>
@@ -199,21 +209,37 @@
 																	{{#if this.schoolRegistered}}
 																		{{#if this.schoolTypeRegistered}}
                                                                             {{#if this.reg_types.chayolei }}
-                                                                                <button class="btn btn-primary re_register">Register Chayolei {{ this.chayolei_year }}                                            Tzivos Hashem {{ this.reg_year }}
-                                                                                {{#if this.reg_types.chidon }}
-                                                                                    / Chidon {{ this.chidon_year }}
-                                                                                {{/if}}
-                                                                                </button>
+																				{{#if this.removeRegButton }}
+																				{{else}}
+																					{{#if this.confirmationOnly}}
+																						<button class="btn btn-primary re_register">Confirm Chayolei Registration {{ this.reg_year }}</button>
+																					{{else}}
+																						<button class="btn btn-primary re_register">Register Chayolei Tzivos Hashem {{ this.reg_year }}</button>
+																					{{/if}}
+																				{{/if}}
+<!--																				{{#if this.reg_types.chidon }}-->
+<!--																					{{#if this.chayoleiRegistered}}-->
+<!--																					{{else}}-->
+<!--                                                                                    	/ Chidon {{ this.chidon_year }}-->
+<!--																					{{/if}}-->
+<!--                                                                                {{/if}}-->
+<!--                                                                                </button>-->
                                                                             {{else}}
-                                                                                {{#if this.reg_types.chidon }}
-                                                                                    <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
-                                                                                {{/if}}
+<!--                                                                                {{#if this.reg_types.chidon }}-->
+<!--                                                                                    <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>-->
+<!--                                                                                {{/if}}-->
                                                                             {{/if}}
                                                                         {{else}}
-                                                                            {{#if this.reg_types.chidon }}
-                                                                                <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
-                                                                            {{/if}}
+<!--                                                                            {{#if this.reg_types.chidon }}-->
+<!--                                                                                <button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>-->
+<!--                                                                            {{/if}}-->
                                                                         {{/if}}
+																	{{/if}}
+																	{{#if this.reg_types.chidon }}
+																		{{#if this.chidonRegistered}}
+																		{{else}}
+																			<button class="btn btn-primary re_register">Register Chidon {{ this.chidon_year }}</button>
+																		{{/if}}
 																	{{/if}}
 																</div>
                                                             {{/if}}
@@ -249,7 +275,7 @@
 																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
 																			</div>
                                                                         {{/if}} -->
-                                                                        <!-- <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div> -->
+                                                                         <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div>
 																	{{/if}}
 																	<!-- <div style="margin:10px 0px">
 																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
@@ -415,6 +441,11 @@
                         if (motherPic != '' && motherPic != null) {
                             $("#mother").attr('src', motherPic);
                         }
+
+                        // if (parseInt(parent.showRefund) && !parseInt(parent.alreadyRefunded)) $(".refundDiv").show();
+                        // else if (parseInt(parent.alreadyRefunded)) {
+						// 	$(".refundDiv").empty().append("Your Chidon Refund has been Requested").show()
+						// }
                         //$("#mother").width( newW );
                         //$("#mother").height( newW );
                         
@@ -631,10 +662,10 @@
                     alert("Sorry, this soldier's base has not yet been setup for advance registration.");
                 });
 
-                // $(document).on('click', '.lulav', function() {
-                //     //alert("Sorry, we are SOLD OUT!");
-                //     window.open("/mobile/reg/lulavSet.html");
-                // });
+                $(document).on('click', '.lulav', function() {
+                    //alert("Sorry, we are SOLD OUT!");
+                    window.open("/mobile/reg/lulavSet.html");
+                });
             });
 		</script>
 		<script>

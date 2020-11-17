@@ -16,9 +16,9 @@ $schools = $as->getSchools();
 $fee_info = [
     'Menorah'  =>  [
         'id'    =>  2,
-        'fee'   =>  1.7, 
+        'fee'   =>  1.70,
         'shipping'  => [
-            50  =>  0.44
+            50  =>  0.50
         ]
     ],
     'Brochure' =>  [
@@ -86,14 +86,14 @@ if ( isset( $_POST['submit'] ) ) {
 <br /><br /> 
 Based on your selection will depend on how much your children will pay for their Chanukah Mivtzoim Ammunition.
 <br /><br />
-Each Menorah box costs $1.70 
+Each Menorah box costs $1.70
 <br /><br />
 Each Brochure costs $0.20 
 <br /><br />
 If you chose PICK UP, your children will pay this price and will not be charged anything extra for shipping.
 <br /><br />
 <strong>Shipping charges for Menorah Boxes.</strong><br /><br />
-Each Menorah Box costs  $0.44 to ship. (Total $2.14).
+Each Menorah Box costs $0.50 to ship. (Total $2.20).
 <br /><br />
 <strong>Shipping charges for Chanukah brochures.</strong><br /><br />
 The price of shipping for  brochures depends on how many you guarentee will be ordered by the  chayolim in your base 
@@ -132,6 +132,7 @@ There is a minimum order of 50 brochures and or menorahs that a shipping schools
                 }
                 ?>
                 <input type="radio" name="shipping-fee" class='shipping-fee' value="-1" /> We would like our base to  be removed from the list of schools offering Menorah Boxes and brochures on the parents accounts.<br />
+                <br />
                 <input type="radio" name="shipping-fee" class='shipping-fee' value="0" /> We will pick up our Chanukah Mivtzoim Ammunition.<br /><br />
                 <?php
                 foreach ( $fee_info as $item => $info ) {

@@ -7,13 +7,12 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = 5780;
 
 $admins = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        a.admin_id, a.first, a.last, a.admin_email, a.show_chidon_refund
+        a.*
     FROM
         admins a
             JOIN
@@ -26,12 +25,43 @@ $stmt = $MASHPIA_DB->prepare("
 $res = $stmt->execute([':year' => $year]);
 if ($res) {
     foreach ($stmt->fetchAll() as $row) {
-        $admins[$row['admin_id']] = [
-            'refund'    =>  intval($row['show_chidon_refund']), 
-            'first'     =>  $row['first'], 
-            'last'      =>  $row['last'], 
-            'email'     =>  $row['admin_email']
-        ];
+        $admins[$row['admin_id']] = $row;
+    }
+}
+
+$raised = [];
+$stmt = $MASHPIA_DB->prepare("
+    SELECT SUM(donation_amount) as total FROM chidon_donations WHERE for_family_id = :admin AND chidon_year = :year
+");
+foreach ($admins as $id => $info) {
+    $res = $stmt->execute([
+        ':year'     => $year,
+        ':admin'    => $id
+    ]);
+    if ($res) {
+        $row = $stmt->fetch();
+        $total = floatval($row['total']);
+        if ($total) $raised[$id] = $total;
+    }
+}
+
+$users = [];
+$stmt = $MASHPIA_DB->prepare("
+    SELECT * FROM th_chidon tc 
+    JOIN users u USING (user_id) 
+    WHERE tc.parent_id = :parent 
+    AND tc.year = :year
+    AND tc.date_paid is not null
+");
+foreach ($admins as $id => $info) {
+    $res = $stmt->execute([
+        ':parent'   => $id,
+        ':year'     => $year
+    ]);
+    if ($res) {
+        foreach ($stmt->fetchAll() as $row) {
+            $users[$id][] = $row;
+        }
     }
 }
 ?>
@@ -40,9 +70,13 @@ if ($res) {
     <head>
         <meta charset="utf8" />
         <style>
-            body {
+            body, tr, th, td {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 14px;
+            }
+            tr, th, td {
+                border: 1px black solid;
+                padding: 5px;
             }
         </style>
     </head>
@@ -50,18 +84,49 @@ if ($res) {
         <h1>Chidon Refunds 5780</h1>
         <table>
             <tr>
-                <th>Admin ID</th>
+                <th>Customer ID</th>
                 <th>First</th>
                 <th>Last</th>
                 <th>Email</th>
-                <th>Show refund page</th>
+                <th>Address</th>
+                <th>Children Info</th>
+                <th>Total Raised</th>
+                <th>Activate refund page</th>
+                <th>Create Voucher</th>
             </tr>
             <?php
-            foreach ($admins as $admin_id => $more) {
-                echo "<tr><td>" . $admin_id . "</td><td>" . $more['first'] . "</td><td>" . $more['last'] . "</td><td>" . $more['email'] . 
-                    "</td><td><input type='checkbox' class='refund' id='" . $admin_id . "' ";
-                    if ($more['refund']) echo "checked ";
-                    echo "/></td></tr>";
+            foreach ($admins as $admin_id => $row) {
+                $address = $row['admin_address1'];
+                if (!empty($row['admin_address2'])) $address .= " " . $row['admin_address2'];
+                $address .= "<br />" . $row['admin_city'] . ', ' . $row['admin_state'] . ' ' . $row['admin_postal'] . "<br />" . $row['admin_country'];
+                echo "<tr><td>" . $admin_id . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['admin_email'] .
+                    "</td><td>" . $address . "</td><td>";
+                // children info
+                $num_children = count($users[$admin_id]);
+                foreach ($users[$admin_id] as $idx => $child) {
+                    $name = $child['first'];
+                    $paid = $child['paid'];
+                    $date_paid = $child['date_paid'];
+                    echo $name . "<br />Paid: " . $paid . "<br />Date Paid: " . $date_paid;
+                    if ($num_children > ($idx + 1)) {
+                        echo "<br /><hr width='50%' />";
+                    }
+                }
+                // total raised
+                echo "</td><td>";
+                if (isset($raised[$admin_id])) echo "$" . number_format($raised[$admin_id], 2);
+                echo "</td><td>";
+                if (floatval($paid) > 0) {
+                    // activate refund checkbox
+                    echo "<input type='checkbox' class='refund' id='" . $admin_id . "' ";
+                    if (intval($row['show_chidon_refund'])) echo "checked ";
+                    echo "/>";
+                }
+                echo "</td><td>";
+                // vouchers
+                if (floatval($raised[$admin_id] > 0)) echo "$<input type='text' class='voucher' placeholder='0.00' size='4' data-max='" . $raised[$admin_id] . "' />
+                            <button class='create_voucher'>create voucher</button>";
+                echo "</td></tr>";
             }
             ?>
         </table>
@@ -77,6 +142,29 @@ if ($res) {
                     if (result.success) alert('Updated.')
                     else alert('Error updating.')
                 })
+            })
+            // vouchers
+            $(".create_voucher").click( function() {
+                const admin = $(this).parent().parent().find('.refund').attr('id')
+                const amount = parseFloat($(this).parent().find('.voucher').val())
+                const max = $(this).parent().find('.voucher').data('max')
+                if (max < amount) {
+                    alert('Voucher amount cannot be more than the amount raised.')
+                    $(this).parent().find('.voucher').val().focus()
+                    return false
+                }
+                if (amount) {
+                    const that = this;
+                    $.post('createVoucher.php', { admin: admin, amount: amount }, function(result) {
+                        const res = JSON.parse(result)
+                        if (res.success) {
+                            alert('Voucher created.')
+                            $(that).after(res.info)
+                        } else {
+                            alert(res.error)
+                        }
+                    })
+                }
             })
         })
     </script>

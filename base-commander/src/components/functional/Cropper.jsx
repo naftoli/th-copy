@@ -39,8 +39,11 @@ export class Cropper extends Component {
     else if ( this.cropperRef.current ){
       this.cropper = new CropperJS( this.cropperRef.current, {
           aspectRatio: 1 / 1, // force the square shape we want
-          dragMode: 'move', viewMode: this.props.viewMode, // do not allow the user to add alpha to the image.
-          cropBoxMovable: false, cropBoxResizable: false,
+          dragMode: 'move',
+          viewMode: this.props.viewMode, // do not allow the user to add alpha to the image.
+          cropBoxMovable: false,
+          cropBoxResizable: false,
+          checkOrientation: false,
           // autoCropArea: 1,
           ready: () => { this.cropper.zoom( -0.25 ); }
       });

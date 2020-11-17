@@ -64,19 +64,19 @@ if ( isset( $_POST['submit'] ) ) {
       }
       mysql_query('set autocommit=1');
 
-			if ( $updated ) {
-				//require_once('classes/mission_marks_updater.php');
-				require_once('classes/medal_updater.php');
-				require_once('classes/rank_updater.php');
-				
-				//$mmupdater = new mission_marks_updater();
-				$mupdater = new medal_updater();
-				$rupdater = new rank_updater();
-				
-				$user = $to;
-				//$mmupdater->mission_marks_update( $user );
-				$mupdater->update_medal_two( $user );
-        $rupdater->update_rank_two( $user );
+      if ( $updated ) {
+        //require_once('classes/mission_marks_updater.php');
+        require_once('classes/medal_updater.php');
+        require_once('classes/rank_updater.php');
+
+        //$mmupdater = new mission_marks_updater();
+        $mupdater = new medal_updater();
+        $rupdater = new rank_updater();
+
+        //$mmupdater->mission_marks_update( $to );
+        $mupdater->update_medal_two( $to );
+        $rupdater->updateWordPress = false;
+        $rupdater->update_rank_two( $to );
         
         // update any medals / ranks earned and received info from old to new
         foreach ( $medals as $medal ) {
@@ -85,7 +85,7 @@ if ( isset( $_POST['submit'] ) ) {
           $sql = "select * from medal_marks where subject_id = " . $subject . " and medal_ord = " . $medal_ord . " and user_id = " . $to;
           $result = mysql_query( $sql );
           if ( mysql_num_rows( $result ) > 0 ) {
-            // if medal was awared now by updater, update to have info from old account
+            // if medal was awarded now by updater, update to have info from old account
             $row = mysql_fetch_assoc( $result );
             if ( $row['date_awarded'] == unixtojd() ) {
               $sql = "update medal_marks 
@@ -96,42 +96,66 @@ if ( isset( $_POST['submit'] ) ) {
                       where medal_ord = " . $medal_ord . ", 
                       and subject_id = " . $subject . ", 
                       and user_id = " . $to;
-              mysql_query( $sql );
             }
+          } else {
+              // insert medal if updater didn't put it in b/c missions may have been deleted in past
+              $sql = "insert into medal_marks 
+                    set subject_id = " . $subject . " , 
+                    medal_ord = " . $medal_ord . ", 
+                    user_id = " . $to . ", 
+                    date_awarded = " . $medal['date_awarded'];
+              if ( $medal['date_shipped'] ) $sql .= ", date_shipped = '" . $medal['date_shipped'] . "'";
+              if ( $medal['date_received'] ) $sql .= ", date_received = '" . $medal['date_received'] . "'";
           }
+          mysql_query( $sql );
         }
 
         foreach ( $ranks as $rank ) {
           $sql = "select * from rank_marks where rank_ord = " . $rank['rank_ord'] . " and user_id = " . $to;
           $result = mysql_query( $sql );
           if ( mysql_num_rows( $result ) > 0 ) {
-            // if rank was awared now by updater, update to have info from old account
+            // if rank was awarded now by updater, update to have info from old account
             $row = mysql_fetch_assoc( $result );
             if ( $row['date_promoted'] == unixtojd() ) {
               $sql = "update rank_marks 
-                      set data_promoted = " . $rank['data_promoted'];
+                      set date_promoted = " . $rank['date_promoted'];
               if ( $rank['date_printed'] ) $sql .= ", date_printed = '" . $rank['date_printed'] . "'";
               if ( $rank['date_book_shipped'] ) $sql .= ", date_book_shipped = '" . $rank['date_book_shipped'] . "'";
               if ( $rank['date_book_received'] ) $sql .= ", date_book_received = '" . $rank['date_book_received'] . "'";
               if ( $rank['date_card_shipped'] ) $sql .= ", date_card_shipped = '" . $rank['date_card_shipped'] . "'";
               if ( $rank['date_card_received'] ) $sql .= ", date_card_received = '" . $rank['date_card_received'] . "'";
               $sql .= " where user_id = " . $to;
-              mysql_query( $sql );
             }
+          } else {
+              // insert rank if for some reason rank updater didn't update it
+              $sql = "insert into rank_marks set 
+                    rank_ord = " . $rank['rank_ord'] . ", 
+                    user_id = " . $to . ", 
+                    date_promoted = " . $rank['date_promoted'];
+              if ( $rank['date_printed'] ) $sql .= ", date_printed = '" . $rank['date_printed'] . "'";
+              if ( $rank['date_book_shipped'] ) $sql .= ", date_book_shipped = '" . $rank['date_book_shipped'] . "'";
+              if ( $rank['date_book_received'] ) $sql .= ", date_book_received = '" . $rank['date_book_received'] . "'";
+              if ( $rank['date_card_shipped'] ) $sql .= ", date_card_shipped = '" . $rank['date_card_shipped'] . "'";
+              if ( $rank['date_card_received'] ) $sql .= ", date_card_received = '" . $rank['date_card_received'] . "'";
           }
+          mysql_query( $sql );
         }
 
-        // delete old medals / ranks
-        $sql = "delete from medal_marks where user_id = " . $from;
-        $sql2 = "delete from rank_marks where rank_ord != 1 and user_id = " . $from;
+        // update any achievement cards
+        $sql = "update pointsDB.user_points set user_id = " . $to . " where user_id = " . $from;
         mysql_query( $sql );
+
+        // delete old medals / ranks
+        $sql1 = "delete from medal_marks where user_id = " . $from;
+        $sql2 = "delete from rank_marks where rank_ord != 1 and user_id = " . $from;
+        mysql_query( $sql1 );
         mysql_query( $sql2 );
 				
-				$msg .= "The two accounts have been merged<br />";
-			} else {
-				$msg .= "Error trying to merge the two accounts.<br />" . $sql . "<br />" . mysql_error() . "<br />";
-			}
-		}
+            $msg .= "The two accounts have been merged<br />";
+        } else {
+            $msg .= "Error trying to merge the two accounts.<br />" . $sql . "<br />" . mysql_error() . "<br />";
+        }
+      }
 	} else {
 		$msg .= "You have not entered a correct value for the old and / or new account.<br />Please try again!<br />";
 	}

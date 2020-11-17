@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -17,9 +18,9 @@ if ( isset( $_POST['submit'] ) ) {
         SELECT 
             *
         FROM
-            mivtzoim_purchases.purchase_details
+            mashpia_purchases.purchase_details
                 JOIN
-            mivtzoim_purchases.purchases USING (purchase_id)
+            mashpia_purchases.purchases USING (purchase_id)
         WHERE
             year = :year AND item_id IN ($items)
     ");
@@ -29,32 +30,34 @@ if ( isset( $_POST['submit'] ) ) {
     $rows = $stmt->fetchAll();
 
     $total = 0;
-    foreach ( $rows as $row ) {
-        $purchases[$row['user_id']][$row['item_id']] = $row['qty'];
-        $user_ids[] = $row['user_id'];
-        $total += $row['qty'];
-    }
+    if (!empty($rows)) {
+        foreach ($rows as $row) {
+            $purchases[$row['user_id']][$row['item_id']] = $row['qty'];
+            $user_ids[] = $row['user_id'];
+            $total += $row['qty'];
+        }
 
-    $info = [];
-    $children = implode(',', $user_ids);
-    $school_ids = implode(',', array_keys( $schools ));
-    $stmt = $MASHPIA_DB->query("
-        SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
-        FROM users u 
-        JOIN classes c ON c.class_id = u.class_id 
-        JOIN schools s ON s.school_id = u.school_id 
-        WHERE u.user_id in ($children) 
-        AND u.school_id in ($school_ids) 
-        ORDER BY school_name, class_grade, class_sub, last, first
-    ");
-    $rows = $stmt->fetchAll();
-    foreach ( $rows as $row ) {
-        $info[$row['school_name']][] = $row;
+        $info = [];
+        $children = implode(',', $user_ids);
+        $school_ids = implode(',', array_keys($schools));
+        $stmt = $MASHPIA_DB->query("
+            SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
+            FROM users u 
+            JOIN classes c ON c.class_id = u.class_id 
+            JOIN schools s ON s.school_id = u.school_id 
+            WHERE u.user_id in ($children) 
+            AND u.school_id in ($school_ids) 
+            ORDER BY school_name, class_grade, class_sub, last, first
+        ");
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['school_name']][] = $row;
+        }
     }
-} 
+}
 $types = [];
 $stmt = $MASHPIA_DB->query("
-    SELECT * FROM mivtzoim_purchases.mivtzoim_items 
+    SELECT * FROM mashpia_purchases.mivtzoim_items 
 ");
 $rows = $stmt->fetchAll();
 foreach ( $rows as $row ) {
@@ -110,44 +113,49 @@ foreach ( $rows as $row ) {
         <p class="no-print">Grand Total: <?= $total ?> purchases</p>
         <?php endif; ?>
 
-        <?php foreach ( $info as $school => $users ) : ?>
-            <h2><?= $school . ' (' . count( $users ) . ' chayolim)' ?></h2>
-            <table>
-                <thead>
-                    <th>Grade</th>
-                    <th>Student</th>
-                    <?php
-                    foreach ( $types as $type => $details ) {
-                        foreach ( $details as $item => $item_id ) {
-                            $chosen_items = explode(',', $items);
-                            if ( in_array( $item_id, $chosen_items ) ) echo "<th>" . $item . "</th>";
+        <?php if (empty($info)) : ?>
+        <h>No purchases were found</h>
+        <?php else : ?>
+
+            <?php foreach ( $info as $school => $users ) : ?>
+                <h2><?= $school . ' (' . count( $users ) . ' chayolim)' ?></h2>
+                <table>
+                    <thead>
+                        <th>Grade</th>
+                        <th>Student</th>
+                        <?php
+                        foreach ( $types as $type => $details ) {
+                            foreach ( $details as $item => $item_id ) {
+                                $chosen_items = explode(',', $items);
+                                if ( in_array( $item_id, $chosen_items ) ) echo "<th>" . $item . "</th>";
+                            }
                         }
-                    }
-                    ?>
-                </thead>
-                <tbody>
-                    <?php foreach ( $users as $user ) : ?>
-                        <tr>
-                            <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
-                            <td><?= $user['first'] . " " . $user['last'] ?></td>
-                            <?php
-                            $purchase = $purchases[$user['user_id']];
-                            foreach ( $types as $type => $details ) {
-                                foreach ( $details as $item => $item_id ) {
-                                    $chosen_items = explode(',', $items);
-                                    if ( in_array( $item_id, $chosen_items ) ) {
-                                        if ( isset( $purchase[$item_id]) ) echo "<td>" . $purchase[$item_id] . "</td>";
-                                        else echo "<td></td>";
+                        ?>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $users as $user ) : ?>
+                            <tr>
+                                <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
+                                <td><?= $user['first'] . " " . $user['last'] ?></td>
+                                <?php
+                                $purchase = $purchases[$user['user_id']];
+                                foreach ( $types as $type => $details ) {
+                                    foreach ( $details as $item => $item_id ) {
+                                        $chosen_items = explode(',', $items);
+                                        if ( in_array( $item_id, $chosen_items ) ) {
+                                            if ( isset( $purchase[$item_id]) ) echo "<td>" . $purchase[$item_id] . "</td>";
+                                            else echo "<td></td>";
+                                        }
                                     }
                                 }
-                            }
-                            ?>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <div style="page-break-after: always"></div>
-        <?php endforeach; ?>
+                                ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div style="page-break-after: always"></div>
+            <?php endforeach; ?>
+        <?php endif; ?>
 
     <?php endif; ?>
 </body>

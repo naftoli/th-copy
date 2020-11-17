@@ -108,11 +108,11 @@ class PrizesPage extends Component {
 
   toCSV = () => {
     const headers = [
-      'Prize Name', 'Miles', 'In Stock', 'Active',
+      'Prize ID', 'Prize Name', 'Miles', 'In Stock', 'Active',
       'One Per Soldier', 'Last Updated', 'Base Number', 'Base'
     ];
     const rows = this.props.prizes.map( prize => [
-      prize.prize_name, prize.points, prize.prize_count, 
+      prize.prize_id, prize.prize_name, prize.points, prize.prize_count,
       prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
       prize.modified, prize.school.school_number, prize.school.school_name
     ]);

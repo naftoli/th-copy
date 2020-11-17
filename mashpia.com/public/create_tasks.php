@@ -151,8 +151,8 @@ if (isset($_POST['submit'])) {
     // $defaultStart = 2458754; 
     // $defaultEnd = 2459103;
 
-    $defaultStart = 2458740; 
-    $defaultEnd = 2459103;
+    $defaultStart = 2459104;
+    $defaultEnd = 2459467;
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -232,6 +232,13 @@ if (isset($_POST['submit'])) {
                         case 0:
                             // set the action to add no matter what
                             ${$fieldNames[$i]} = 'add';
+                            break;
+                        case 1:
+                            // skip row if it's empty
+                            if (empty($val)) {
+                                continue 2;
+                            }
+                            ${$fieldNames[$i]} = $val;
                             break;
                         // Start Date
                         case 2:
@@ -367,9 +374,9 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 */
-                //echo $startDate . "<br />";
-                //echo $endDate . "<br />";
-				//continue;
+//                echo $startDate . "<br />";
+//                echo $endDate . "<br />";
+//				continue;
                 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
@@ -392,7 +399,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
-                //echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
@@ -401,7 +408,8 @@ if (isset($_POST['submit'])) {
 					$endDate = $arrEnd[$k];
                     $start = $startDate;
                     $end = $endDate;
-					//echo $start . '-' . $end . "<br /><br />"; continue;
+//					echo $start . '-' . $end . "<br /><br />"; continue;
+//                    echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
                     if ($start < unixtojd()) continue;
                     
 	                //while ($start <= $end) {
@@ -422,20 +430,22 @@ if (isset($_POST['submit'])) {
                                     }
                                 }
                             }
-                            if (!empty($arrFocus)) {
-                                $focus = 0;
-                                $f = getStartEnd($arrFocus);
-                                for ($c = 0; $c < count($f['start']); $c++) {
-                                    if ($start >= $f['start'][$c] && $end <= $f['end'][$c]) {
-                                        $focus = 1;
-                                    }
-                                }
-                            }
+//                            if (!empty($arrFocus)) {
+//                                $focus = 0;
+//                                $f = getStartEnd($arrFocus);
+//                                for ($c = 0; $c < count($f['start']); $c++) {
+//                                    if ($start >= $f['start'][$c] && $end <= $f['end'][$c]) {
+//                                        $focus = 1;
+//                                    }
+//                                }
+//                            }
+                            $focus = 0;
                             if (in_array($type, array(2,12,14))) {
                                 $pic = $pic_boys;
                             } else if (in_array($type, array(3,13,15))) {
                                 $pic = $pic_girls;
                             }
+
 	                        for ($level = $firstLevel; $level <= $lastLevel; $level++) {
 	                        	//echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
                                 $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
@@ -457,13 +467,13 @@ if (isset($_POST['submit'])) {
                                     'mission_marking' => $mission_marking,
                                     'grid_marking'  => $grid_marking
                                 );
-	                            /*
+                                /*
 	                            echo "Mission - " . $mission . "<br />";
 	                            echo "Start - " . $start . "<br />";
 	                            echo "End - " . $end . "<br />";
 	                            echo "Type - " . $type . "<br />";
 	                            echo "Level - " . $level . "<br /><br />";
-	                            */
+                                */
 	                        }
 	                    }
 						/*
@@ -486,10 +496,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			// echo "<pre>";
-			// print_r($missions);
-			// echo "</pre>";
-			// exit; 
+//            echo "<pre>";
+//			print_r($missions);
+//			echo "</pre>";
+//			exit;
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
