@@ -77,6 +77,7 @@ function checkMonthly( $user_id ) {
                     and dt.grid_id = " . $grid_id . " 
                     and dtm.mark_date >= " . $dates['start'] . " 
                     and dtm.mark_date <= " . $dates['end'];
+//        echo $sql; exit;
         $result = mysql_query($sql);
         $total = mysql_fetch_assoc($result)['total'];
     }
