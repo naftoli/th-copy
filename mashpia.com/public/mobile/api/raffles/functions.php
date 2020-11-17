@@ -193,7 +193,7 @@ function getWinnersInfo( $type, $year ) {
             ];
         }
 
-        $result[$raffle_id] = [
+        $result[$id] = [
             'prize' => [
                 'name' => $prize['name'],
                 'img' => $prize['pic'],
