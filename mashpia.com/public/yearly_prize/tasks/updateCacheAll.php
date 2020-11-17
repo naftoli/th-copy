@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 ini_set('max_execution_time', 600);
 require_once( dirname(__FILE__) . "/../../db.php" );
 require_once( dirname(__FILE__) . "/../classes/TotalWeeklyTasks.php" );
@@ -10,8 +11,9 @@ $totalWeeklyTasks->start_date = 2459099;
 // generate the week_dates
 $totalWeeklyTasks->get_week_dates();
 
+$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
 $users_query = mysql_query(
-    "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first"
+    "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first limit $limit, 1000"
 );
 
 $user_count = mysql_num_rows( $users_query );
