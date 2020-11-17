@@ -20,13 +20,13 @@ class TotalWeeklyTasks {
      *  - $user_id: the user id of the user we are getting the tasks for
      *  - $end_date: The end date for the report
      *
-     * sets $this->start date to September 15 2017 on the julian calander
+     * sets $this->start date to default date on the julian calander
      *
      */
     public function __construct($user_id, $end_date) {
         // store this to get the user info later
         $this->user_id = $user_id;
-        $this->start_date = 2459027; // July 2020
+        $this->start_date = 2459099; // September 7, 2020
         $this->end_date = $end_date;
     }
     
