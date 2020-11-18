@@ -1,5 +1,5 @@
 <?php
-//require 'auth.php';
+require 'auth.php';
 require 'functions.php';
 
 $action = mysql_real_escape_string($_GET['action']);
