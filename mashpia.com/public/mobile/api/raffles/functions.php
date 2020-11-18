@@ -15,6 +15,7 @@ function getRaffleInfo( $type ) {
         $info['start'] = $row['start_date'];
         $info['end'] = $row['end_date'];
         $info['run_date'] = $row['run_date'];
+        $info['name'] = $row['name'];
     }
     return $info;
 }
@@ -93,43 +94,58 @@ function checkTasks( $user_id, $start, $end ) {
 }
 
 function getDailyTaskInfo( $user_id, $type ) {
+    $raffles = [];
     $raffle = getRaffleInfo($type);
-
-    $start = $raffle['start'];
-    $end = $raffle['end'];
     $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר ב','ניסן','אייר','סיון','תמוז','אב','אלול'];
     $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
 
-    $startHe = explode('/', jdtojewish($start));
-    $endHe = explode('/', jdtojewish($end));
-    $run_date = $raffle['run_date'];
+    // if raffle type is monthly, get all raffles for year
+    if ($type == 'monthly') {
+        $sql = "select * from raffles where type = '" . $type . "' and year = " . $raffle['year'];
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $raffles[] = $row;
+        }
+    } else {
+        $raffles[] = $raffle;
+    }
 
-    $origin = new DateTime();
-    $target = new DateTime($run_date);
-    $interval = $origin->diff($target);
-    $diff = $interval->format('a');
+    foreach ($raffles as $idx => $raffle) {
+        $start = $raffle['start'];
+        $end = $raffle['end'];
 
-    $total = checkTasks($user_id, $raffle['start'], $raffle['end']);
+        $startHe = explode('/', jdtojewish($start));
+        $endHe = explode('/', jdtojewish($end));
+        $run_date = $raffle['run_date'];
 
-    $info = [];
-    while ($start++ <= $end) {
-        $past = $start < unixtojd() ? true : false;
-        $heDate = explode('/', jdtojewish($start));
-        $heMonth = $months[$heDate[0]];
-        $info[$heMonth][] = [
-            'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
-            'past'      => $past
+        $origin = new DateTime();
+        $target = new DateTime($run_date);
+        $interval = $origin->diff($target);
+        $diff = $interval->format('a');
+
+        $total = checkTasks($user_id, $raffle['start'], $raffle['end']);
+
+        $info = [];
+        while ($start++ <= $end) {
+            $past = $start < unixtojd() ? true : false;
+            $heDate = explode('/', jdtojewish($start));
+            $heMonth = $months[$heDate[0]];
+            $info[$heMonth][] = [
+                'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
+                'past' => $past
+            ];
+        }
+        $result[] = [
+            'raffleNumber' => $idx + 1,
+            'startMonth' => $heMonths[$startHe[0]],
+            'endMonth' => $heMonths[$endHe[0]],
+            'year' => $raffle['year'],
+            'daysTillDrawing' => $diff,
+            'daysCompleted' => $total,
+            'months' => $info,
+            'raffleDate' => $run_date
         ];
     }
-    $result = [
-        'raffleNumber'  => $raffle['raffle_id'],
-        'startMonth'    => $heMonths[$startHe[0]],
-        'endMonth'      => $heMonths[$endHe[0]],
-        'year'          => $raffle['year'],
-        'daysTillDrawing'   => $diff,
-        'daysCompleted' => $total,
-        'months'        => $info
-    ];
     return $result;
 }
 
