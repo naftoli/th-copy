@@ -64,10 +64,11 @@ function getRaffleHistory( $type, $user_id ) {
         // find out which days were marked
         $days = [];
         $start = intval($row['start_date']);
-        $end = $start + 6;
-        for ( $i = $start; $i <= $end; $i++ ) {
-            $days[] = [
-                'completed' => checkTasks( $user_id, $i, $i ) > 0 ? true: false,
+        $end = intval($row['end_date']);
+        $diff = $end - $start;
+        while ($end-- <= $start) {
+            $days[$diff--] = [
+                'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true: false,
                 'past'      => $past
             ];
         }
@@ -94,56 +95,64 @@ function checkTasks( $user_id, $start, $end ) {
 }
 
 function getDailyTaskInfo( $user_id, $type ) {
-    $raffles = [];
-    $raffle = getRaffleInfo($type);
+    $result = [];
     $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר ב','ניסן','אייר','סיון','תמוז','אב','אלול'];
     $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
 
-    // if raffle type is monthly, get all raffles for year
+    // get raffles
+    $raffles = [];
     if ($type == 'monthly') {
-        $sql = "select * from raffles where type = '" . $type . "' and year = " . $raffle['year'];
-        $result = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $raffles[] = $row;
-        }
+        $todayHe = explode('/', jdtojewish( unixtojd() ));
+        $sql_raffles = "select * from raffles 
+                        where type = '" . $type . "' 
+                        and year = " . $todayHe[2] . "  
+                        order by run_date desc";
     } else {
-        $raffles[] = $raffle;
+        $today = unixtojd();
+        $sql_raffles = "SELECT * FROM raffles
+			WHERE type = '" . $type . "'
+			AND start_date <= " . $today . "
+            AND end_date >= " . $today;
+    }
+    $result_raffles = mysql_query($sql_raffles);
+    while ($row = mysql_fetch_assoc($result_raffles)) {
+        $raffles[] = $row;
     }
 
     foreach ($raffles as $idx => $raffle) {
-        $start = $raffle['start'];
-        $end = $raffle['end'];
+        $start = $raffle['start_date'];
+        $end = $raffle['end_date'];
+        $year = $raffle['year'];
+        $run_date = $raffle['run_date'];
 
         $startHe = explode('/', jdtojewish($start));
         $endHe = explode('/', jdtojewish($end));
-        $run_date = $raffle['run_date'];
 
         $origin = new DateTime();
         $target = new DateTime($run_date);
         $interval = $origin->diff($target);
-        $diff = $interval->format('a');
-
-        $total = checkTasks($user_id, $raffle['start'], $raffle['end']);
+        $days = $interval->days;
+        $total = checkTasks($user_id, $start, $end);
 
         $info = [];
-        while ($start++ <= $end) {
-            $past = $start < unixtojd() ? true : false;
-            $heDate = explode('/', jdtojewish($start));
+        while ($end-- >= $start) {
+            $past = $end < unixtojd() ? true : false;
+            $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
             $info[$heMonth][] = [
-                'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
+                'completed' => checkTasks($user_id, $end, $end) > 0 ? true : false,
                 'past' => $past
             ];
         }
         $result[] = [
-            'raffleNumber' => $idx + 1,
-            'startMonth' => $heMonths[$startHe[0]],
-            'endMonth' => $heMonths[$endHe[0]],
-            'year' => $raffle['year'],
-            'daysTillDrawing' => $diff,
+            'raffleNumber'  => $idx + 1,
+            'startMonth'    => $heMonths[$startHe[0]],
+            'endMonth'      => $heMonths[$endHe[0]],
+            'year'          => $year,
+            'daysTillDrawing' => $days,
             'daysCompleted' => $total,
-            'months' => $info,
-            'raffleDate' => $run_date
+            'months'        => $info,
+            'raffleDate'    => $run_date
         ];
     }
     return $result;
