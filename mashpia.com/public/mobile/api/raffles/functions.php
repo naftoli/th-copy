@@ -74,11 +74,10 @@ function getRaffleHistory( $type, $user_id ) {
         if ( mysql_num_rows($winnerRes) ) $won = true;
         // find out which days were marked
         $days = [];
-        $i = 6;
         $start = $row['start_date'];
         $end = $row['end_date'];
         while ( $end-- >= $start ) { // check all days in week
-            $days[$i--] = [
+            $days[] = [
                 'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true : false,
                 'past'      => $row['date_ran'] > 0 ? true : false
             ];
@@ -134,7 +133,7 @@ function getDailyTaskInfo( $user_id, $type ) {
         $total = checkTasks($user_id, $start, $end);
 
         $info = [];
-        while ($end-- >= $start) {
+        while ($end-- > $start) {
             $past = $end < unixtojd() ? true : false;
             $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
