@@ -64,10 +64,11 @@ function getRaffleHistory( $type, $user_id ) {
         // find out which days were marked
         $days = [];
         $start = intval($row['start_date']);
-        $end = $start + 6;
-        for ( $i = $start; $i <= $end; $i++ ) {
-            $days[] = [
-                'completed' => checkTasks( $user_id, $i, $i ) > 0 ? true: false,
+        $end = intval($row['end_date']);
+        $diff = $end - $start;
+        while ($end-- <= $start) {
+            $days[$diff--] = [
+                'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true: false,
                 'past'      => $past
             ];
         }
@@ -101,7 +102,7 @@ function getDailyTaskInfo( $user_id, $type ) {
 
     // if raffle type is monthly, get all raffles for year
     if ($type == 'monthly') {
-        $sql = "select * from raffles where type = '" . $type . "' and year = " . $raffle['year'];
+        $sql = "select * from raffles where type = '" . $type . "' and year = " . $raffle['year'] . " order by run_date desc";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $raffles[] = $row;
@@ -111,8 +112,8 @@ function getDailyTaskInfo( $user_id, $type ) {
     }
 
     foreach ($raffles as $idx => $raffle) {
-        $start = $raffle['start'];
-        $end = $raffle['end'];
+        $start = $raffle['start_date'];
+        $end = $raffle['end_date'];
 
         $startHe = explode('/', jdtojewish($start));
         $endHe = explode('/', jdtojewish($end));
@@ -126,12 +127,12 @@ function getDailyTaskInfo( $user_id, $type ) {
         $total = checkTasks($user_id, $raffle['start'], $raffle['end']);
 
         $info = [];
-        while ($start++ <= $end) {
-            $past = $start < unixtojd() ? true : false;
-            $heDate = explode('/', jdtojewish($start));
+        while ($end-- >= $start) {
+            $past = $end < unixtojd() ? true : false;
+            $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
             $info[$heMonth][] = [
-                'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
+                'completed' => checkTasks($user_id, $end, $end) > 0 ? true : false,
                 'past' => $past
             ];
         }
