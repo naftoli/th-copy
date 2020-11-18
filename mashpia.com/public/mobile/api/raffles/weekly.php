@@ -4,7 +4,7 @@ require 'functions.php';
 
 $action = mysql_real_escape_string($_GET['action']);
 $user_id = mysql_real_escape_string($_GET['user_id']);
-$raffle_id = mysql_real_escape_string($_GET['raffle_id']);
+$raffle_id = isset($_GET['raffle_id']) ? mysql_real_escape_string($_GET['raffle_id']) : 0;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
 use \raffles\weekly\Raffle as Raffle;
