@@ -8,7 +8,6 @@ $raffle_id = isset($_GET['raffle_id']) ? mysql_real_escape_string($_GET['raffle_
 
 require $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
 use \raffles\weekly\Raffle as Raffle;
-//$weekly = getRaffleInfo('weekly');
 
 $result = [];
 switch ($action) {
@@ -24,6 +23,10 @@ switch ($action) {
         $result = getRaffleHistory('weekly', $user_id);
         break;
     case 'completed':
+        if (!$raffle_id) {
+            $weekly = getRaffleInfo('weekly');
+            $raffle_id = $weekly['raffle_id'];
+        }
         $raffle = Raffle::load($raffle_id);
         $completed = $raffle->checkWeekly($user_id);
         $result = json_encode([
