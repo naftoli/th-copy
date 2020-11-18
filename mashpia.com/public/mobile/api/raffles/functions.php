@@ -35,8 +35,19 @@ function getPrizeInfo( $raffleID ) {
     return $info;
 }
 
+function checkTasks( $user_id, $start, $end ) {
+    $grid_id = 13012;
+    $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
+            join date_tasks dt using (date_task_id) 
+            where dtm.user_id = " . $user_id . " 
+            and dt.grid_id = " . $grid_id . " 
+            and dtm.mark_date >= " . $start . " 
+            and dtm.mark_date <= " . $end;
+    $result = mysql_query($sql);
+    return mysql_fetch_assoc($result)['total'];
+}
+
 function getRaffleHistory( $type, $user_id ) {
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
     $todayHe = explode('/', jdtojewish( unixtojd() ));
     $year = $todayHe[2];
 
@@ -53,24 +64,23 @@ function getRaffleHistory( $type, $user_id ) {
             WHERE
                 type = '$type' AND year = $year
                     AND end_date <= $end
-            ORDER BY end_date";
+            ORDER BY end_date desc";
     $result = mysql_query($sql);
     while ( $row = mysql_fetch_assoc($result) ) {
         // check if user won
         $won = false;
-        $past = $row['date_ran'] > 0 ? true : false;
         $winnerSql = "SELECT * FROM raffle_winners WHERE raffle_id = " . $row['raffle_id'] . " AND user_id = " . $user_id;
         $winnerRes = mysql_query($winnerSql);
         if ( mysql_num_rows($winnerRes) ) $won = true;
         // find out which days were marked
         $days = [];
-        $start = intval($row['start_date']);
-        $end = intval($row['end_date']);
-        $diff = $end - $start;
-        while ($end-- <= $start) {
-            $days[$diff--] = [
-                'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true: false,
-                'past'      => $past
+        $i = 6;
+        $start = $row['start_date'];
+        $end = $row['end_date'];
+        while ( $end-- >= $start ) { // check all days in week
+            $days[$i--] = [
+                'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true : false,
+                'past'      => $row['date_ran'] > 0 ? true : false
             ];
         }
         $history[] = [
@@ -81,18 +91,6 @@ function getRaffleHistory( $type, $user_id ) {
         ];
     }
     return json_encode($history);
-}
-
-function checkTasks( $user_id, $start, $end ) {
-    $grid_id = 13012;
-    $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
-            join date_tasks dt using (date_task_id) 
-            where dtm.user_id = " . $user_id . " 
-            and dt.grid_id = " . $grid_id . " 
-            and dtm.mark_date >= " . $start . " 
-            and dtm.mark_date <= " . $end;
-    $result = mysql_query($sql);
-    return mysql_fetch_assoc($result)['total'];
 }
 
 function getDailyTaskInfo( $user_id, $type ) {
