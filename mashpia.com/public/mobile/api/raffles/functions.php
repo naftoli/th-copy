@@ -37,7 +37,8 @@ function getPrizeInfo( $raffleID ) {
 
 function getRaffleHistory( $type, $user_id ) {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-    $year = GlobalSettings::getCurrentYear();
+    $todayHe = explode('/', jdtojewish( unixtojd() ));
+    $year = $todayHe[2];
 
     $history = [];
     $end = unixtojd() + 6;
