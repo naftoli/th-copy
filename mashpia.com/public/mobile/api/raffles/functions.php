@@ -66,7 +66,7 @@ function getRaffleHistory( $type, $user_id ) {
         $end = $start + 6;
         for ( $i = $start; $i <= $end; $i++ ) {
             $days[] = [
-                'completed' => checkTasks( $user_id, $i, $i ),
+                'completed' => checkTasks( $user_id, $i, $i ) > 0 ? true: false,
                 'past'      => $past
             ];
         }
@@ -117,11 +117,11 @@ function getDailyTaskInfo( $user_id, $type ) {
         $heDate = explode('/', jdtojewish($start));
         $heMonth = $months[$heDate[0]];
         $info[$heMonth][] = [
-            'completed' => checkTasks($user_id, $start, $start),
+            'completed' => checkTasks($user_id, $start, $start) > 0 ? true : false,
             'past'      => $past
         ];
     }
-    $result = json_encode([
+    $result = [
         'raffleNumber'  => $raffle['raffle_id'],
         'startMonth'    => $heMonths[$startHe[0]],
         'endMonth'      => $heMonths[$endHe[0]],
@@ -129,7 +129,7 @@ function getDailyTaskInfo( $user_id, $type ) {
         'daysTillDrawing'   => $diff,
         'daysCompleted' => $total,
         'months'        => $info
-    ]);
+    ];
     return $result;
 }
 
@@ -146,12 +146,12 @@ function getWinnersInfo( $type, $year ) {
     $raffles = [];
     $sql_raffles = "SELECT * FROM raffles WHERE type = '" . $type . "' AND year = " . $year;
     $result_raffles = mysql_query($sql_raffles);
+    $i = 1;
     while ($row = mysql_fetch_assoc($result_raffles)) {
-        $raffles[] = $row['raffle_id'];
-        if (empty($row['date_ran'])) break;
+        $raffles[$i++] = $row['raffle_id'];
     }
 
-    foreach ($raffles as $raffle_id) {
+    foreach ($raffles as $id => $raffle_id) {
         $prize = getPrizeInfo($raffle_id);
         $raffleInfo = [];
         $sql_raffles = "
@@ -183,7 +183,7 @@ function getWinnersInfo( $type, $year ) {
             } else if ($row['gender'] == 'F') {
                 $gender = 'girls';
             }
-            $raffleInfo[$raffle_id] = [
+            $raffleInfo[$id] = [
                 $gender => [
                     'name' => $row['first'] . ' ' . $row['last'],
                     'grade' => $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']),
@@ -193,7 +193,7 @@ function getWinnersInfo( $type, $year ) {
             ];
         }
 
-        $result[$raffle_id] = [
+        $result[$id] = [
             'prize' => [
                 'name' => $prize['name'],
                 'img' => $prize['pic'],
