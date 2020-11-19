@@ -3,21 +3,6 @@ const yellow = '#ffd624';
 const darkBlue = '#232c7b';
 const grey = '#b3b3b0';
 
-const raffleNavData = {
-    raffle5: {
-        daysLeft: 1,
-        raffleName: "this weeek's 5 Flag Raffle"
-    },
-    raffle60: {
-        daysLeft: 0,
-        raffleName: 'the 60 Flag Raffle #2'
-    },
-    raffle180: {
-        daysLeft: 50,
-        raffleName: 'the 180 Flag Raffle'
-    }
-};
-
 const createElementWithClass = (elm, className) => {
     let element = document.createElement(elm)
     element.classList.add(className);
@@ -111,17 +96,47 @@ const loadRaffleContainer = (flag, data) => {
     container.appendChild(raffleDetails);
 
     return container;
-}
+};
+
+let raffleNavData = {
+    raffle5: {
+        daysLeft: 1,
+        raffleName: "this weeek's 5 Flag Raffle"
+    },
+    raffle60: {
+        daysLeft: 0,
+        raffleName: 'the 60 Flag Raffle #2'
+    },
+    raffle180: {
+        daysLeft: 50,
+        raffleName: 'the 180 Flag Raffle'
+    }
+};
+
+const fetchRaffleData = async (user_id) => {
+    try {
+        let response = await axios.get(`/mobile/api/raffles/dashboard.php`);
+        if (response.data) {
+            raffleNavData = response.data;
+
+            const raffleInfoContainer = document.getElementById('raffleInfoContainer');
+
+            let raffle5 = loadRaffleContainer(5, raffleNavData.raffle5);
+            let raffle60 = loadRaffleContainer(60, raffleNavData.raffle60);
+            let raffle180 = loadRaffleContainer(180, raffleNavData.raffle180);
+
+            raffleInfoContainer.appendChild(raffle5);
+            raffleInfoContainer.appendChild(raffle60);
+            raffleInfoContainer.appendChild(raffle180);
+        }
+    } catch (err) {
+        console.log(err)
+    }
+};
+
 
 document.addEventListener("DOMContentLoaded", function (event) {
+    const id = new URLSearchParams(window.location.search).get('id');
 
-    const raffleInfoContainer = document.getElementById('raffleInfoContainer');
-
-    let raffle5 = loadRaffleContainer(5, raffleNavData.raffle5);
-    let raffle60 = loadRaffleContainer(60, raffleNavData.raffle60);
-    let raffle180 = loadRaffleContainer(180, raffleNavData.raffle180);
-
-    raffleInfoContainer.appendChild(raffle5);
-    raffleInfoContainer.appendChild(raffle60);
-    raffleInfoContainer.appendChild(raffle180);
-})
+    fetchRaffleData(id);
+});

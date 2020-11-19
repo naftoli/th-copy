@@ -4,27 +4,6 @@ const darkBlue = '#232c7b';
 const grey = '#b3b3b0';
 const xmlns = "http://www.w3.org/2000/svg";
 
-const raffleData = [
-    {
-        year: 'תשפ״א',
-        raffleDate: 'י״ט אייר',
-        daysTillDrawing: 16,
-        daysCompleted: 67,
-        months: {
-            //sorted from newest to oldest
-            'Iyar': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: true, past: false }, { completed: true, past: false }],
-            'Nissan': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }],
-            'Adar': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Shvat': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Teves': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Kislev': [{ completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Cheshvon': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Tishrei': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
-            'Elul': [{ completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }],
-        }
-    }
-];
-
 const createElementWithClass = (elm, className) => {
     let element = document.createElement(elm)
     element.classList.add(className);
@@ -71,15 +50,15 @@ const createBigDonutChart = () => {
     raffleId.appendChild(svg);
 };
 
-const load60FlagDonutCharts = () => {
-    const raffle60Container = document.getElementById('raffle60Container');
+const load180FlagDonutCharts = () => {
+    const raffle180Container = document.getElementById('raffle180Container');
     raffleData.forEach(raffle => {
         const { year, daysTillDrawing, raffleDate, months, daysCompleted } = raffle;
         const raffleHeader = createElementWithClass('div', 'raffleHeader');
         const div = document.createElement('div');
         const parshaContainer = createElementWithClass('div', 'parshaContainer');
         const parsha = createElementWithClass('p', 'parsha');
-        parsha.innerText = `${raffleDate} ${year}`;
+        parsha.innerText = `${new Date(raffleDate).toDateString()}`;
         parshaContainer.appendChild(parsha);
 
         if (daysTillDrawing > 0) {
@@ -106,11 +85,11 @@ const load60FlagDonutCharts = () => {
         const innerPerimeter = 2 * 3.14 * 110; //r
         let percentFill = 100;
         let innerPercentFill = 100;
-        let rotation = 82;
+        let rotation = 86;
 
         let svgContainer = createElementWithClass('div', 'svgContainer');
 
-        Object.keys(months).forEach(month => {
+        Object.keys(months).forEach((month, index) => {
             let monthPercentOfDonut = months[month].length / totalAmountOfDays * 100;
             let monthStroke = `${darkBlue}1a`;
             let monthAmount = innerPercentFill;
@@ -130,7 +109,7 @@ const load60FlagDonutCharts = () => {
             svg.appendChild(innerCircle);
 
             let textSVG = document.createElementNS(xmlns, 'svg');
-            textSVG.setAttribute('viewBox', '0 0 340 340');
+            textSVG.setAttribute('viewBox', '10 0 340 340');
             textSVG.setAttribute('width', '110');
             textSVG.setAttribute('height', '110');
             textSVG.setAttribute('class', 'textSVG');
@@ -148,7 +127,16 @@ const load60FlagDonutCharts = () => {
             svgContainer.appendChild(textSVG);
 
             innerPercentFill -= monthPercentOfDonut;
-            rotation -= (360) / Object.keys(months).length;
+            if (index === 0) {
+                rotation -= ((360) / Object.keys(months).length) / 1.2;
+            } else if (index === Math.floor(Object.keys(months).length / 2) - 1) {
+                rotation -= ((360) / Object.keys(months).length) * 1.35;
+            } else if (index === Math.floor(Object.keys(months).length / 4) - 1) {
+                rotation -= ((360) / Object.keys(months).length) * 1.15;
+            } else {
+                rotation -= (360) / Object.keys(months).length;
+            }
+
 
             let totalMonths = Object.keys(months).length;
 
@@ -194,8 +182,8 @@ const load60FlagDonutCharts = () => {
         svgContainer.appendChild(flagContainer);
 
 
-        raffle60Container.appendChild(raffleHeader);
-        raffle60Container.appendChild(svgContainer);
+        raffle180Container.appendChild(raffleHeader);
+        raffle180Container.appendChild(svgContainer);
     });
 };
 
@@ -251,13 +239,54 @@ const createLargeDivider = (svg, perimeter, percentFill, totalAmountOfDays, tota
     return percentFill;
 }
 
+const loadImage = (elm, img, thumb, name) => {
+    let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let pic_src = ((w > 850) || !thumb) ? img : thumb;
+    elm.setAttribute('src', `//mashpia.com/${encodeURI(pic_src)}`);
+    elm.setAttribute('alt', name);
+}
+
+let raffleData = [
+    {
+        year: 'תשפ״א',
+        raffleDate: 'י״ט אייר',
+        daysTillDrawing: 16,
+        daysCompleted: 67,
+        months: {
+            //sorted from newest to oldest
+            'Iyar': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: true, past: false }, { completed: true, past: false }],
+            'Nissan': [{ completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }],
+            'Adar': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Shvat': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Teves': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Kislev': [{ completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Cheshvon': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Tishrei': [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }],
+            'Elul': [{ completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: true }],
+        }
+    }
+];
+
+const fetchRaffleData = async (id) => {
+    try {
+        let response = await axios.get('/mobile/api/raffles/yearly.php?action=raffle-data&user_id=' + id);
+        if (response.data) {
+            raffleData = response.data[0];
+            load180FlagDonutCharts();
+        }
+    } catch (err) {
+        pastWinnersDataLoading = false;
+        console.log(err)
+    }
+};
+
 
 const init = () => {
     const id = new URLSearchParams(window.location.search).get('id');
     if (localStorage.getItem("login")) {
-        document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
-        document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
-        document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
+        // document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
+        // document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
+        // document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
         document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
         document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
         document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
@@ -283,5 +312,5 @@ const init = () => {
     // }
 
     createBigDonutChart();
-    load60FlagDonutCharts();
+    fetchRaffleData(id)
 };

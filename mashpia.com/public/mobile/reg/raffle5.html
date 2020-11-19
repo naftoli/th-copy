@@ -24,12 +24,16 @@
             display: flex;
         }
 
+        body>div {
+            width: 100%;
+        }
+
         p,
         h2 {
             color: #232c7b;
         }
 
-        .container {
+        .rafflesContainer {
             flex: 1;
             padding: 30px;
         }
@@ -258,6 +262,7 @@
             min-width: 40px;
             color: #585858;
             margin: 0;
+            max-width: 30%;
         }
 
         .whoWonNav div:first-child {
@@ -328,7 +333,7 @@
             border-top: none;
             border-radius: 5px;
             padding: 0 15px;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
         }
 
         #namesContainer {
@@ -446,7 +451,7 @@
             </a>
         </div>
 
-        <div class="container">
+        <div class="rafflesContainer">
             <div class="headerRaffleInfo">
                 <div id="raffleID" class="item raffleID"></div>
                 <div class="raffleDetails">
@@ -491,7 +496,7 @@
             </div> -->
             </div>
         </div>
-        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+        <!-- <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
             <div class="span12 footer">
                 <div class="span3">
                     <a href="/mobile/reg/parent_detail.html" id="mainLink">
@@ -542,7 +547,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </body>
 

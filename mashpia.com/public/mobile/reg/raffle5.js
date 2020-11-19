@@ -4,50 +4,46 @@ const darkBlue = '#232c7b';
 const grey = '#b3b3b0';
 const xmlns = "http://www.w3.org/2000/svg";
 
-const trackRecordData = [
-    //needs to be sorted from newest to oldest
-    {
-        parsha: 'ויצא',
-        won: false,
-        prize: 'Cap',
-        days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }]
-    }, {
-        parsha: 'תולדות',
-        won: false,
-        prize: 'T Shirt',
-        days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }, {
-        parsha: 'חיי שרה',
-        won: false,
-        prize: 'Sweatshirt',
-        days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }, {
-        parsha: 'וירא',
-        won: false,
-        prize: 'Mug',
-        days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }, {
-        parsha: 'לך לך',
-        won: true,
-        prize: 'Fidget Spinner',
-        days: [{ completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }, {
-        parsha: 'נח',
-        won: false,
-        prize: 'Mug',
-        days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }, {
-        parsha: 'בראשית',
-        won: false,
-        prize: 'Sweatshirt',
-        days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-    }
-];
 
-const currentWeekData = {
-    img: '/mobile/reg/images/tzivos_hashem_mug.png',
-    name: 'Tzivos Hashem Mug'
-}
+// const trackRecordData = [
+//     //needs to be sorted from newest to oldest
+//     {
+//         parsha: 'ויצא',
+//         won: false,
+//         prize: 'Cap',
+//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }]
+//     }, {
+//         parsha: 'תולדות',
+//         won: false,
+//         prize: 'T Shirt',
+//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }, {
+//         parsha: 'חיי שרה',
+//         won: false,
+//         prize: 'Sweatshirt',
+//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }, {
+//         parsha: 'וירא',
+//         won: false,
+//         prize: 'Mug',
+//         days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }, {
+//         parsha: 'לך לך',
+//         won: true,
+//         prize: 'Fidget Spinner',
+//         days: [{ completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }, {
+//         parsha: 'נח',
+//         won: false,
+//         prize: 'Mug',
+//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }, {
+//         parsha: 'בראשית',
+//         won: false,
+//         prize: 'Sweatshirt',
+//         days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
+//     }
+// ];
 
 const createElementWithClass = (elm, className) => {
     let element = document.createElement(elm)
@@ -74,8 +70,7 @@ const createBigDonutChart = () => {
     b.innerText = currentWeekData.name;
     prizeTitle.appendChild(b);
     let prizeImg = document.createElement('img');
-    prizeImg.setAttribute('src', currentWeekData.img);
-    prizeImg.setAttribute('alt', currentWeekData.name);
+    loadImage(prizeImg, currentWeekData.img, currentWeekData.thumb, currentWeekData.name)
 
     prizeDetails.appendChild(raffleFlagContainer);
     prizeDetails.appendChild(p);
@@ -243,15 +238,16 @@ const clearPastWinners = () => {
 }
 
 const loadPastWinners = () => {
+    const id = new URLSearchParams(window.location.search).get('id');
     document.getElementById('loader').remove();
     if (pastWinnersData.previous) {
         let previousWinnerParsha = document.getElementById('previousWinnerParsha');
-        previousWinnerParsha.onclick = () => fetchPastWinners(pastWinnersData.previous.id);
+        previousWinnerParsha.onclick = () => fetchPastWinners(pastWinnersData.previous.id, id);
         previousWinnerParsha.innerText = `<< ${pastWinnersData.previous.name}`
     }
     if (pastWinnersData.next) {
         let nextWinnerParsha = document.getElementById('nextWinnerParsha');
-        nextWinnerParsha.onclick = () => fetchPastWinners(pastWinnersData.next.id);
+        nextWinnerParsha.onclick = () => fetchPastWinners(pastWinnersData.next.id, id);
         nextWinnerParsha.innerText = `${pastWinnersData.next.name} >>`
     }
 
@@ -260,10 +256,7 @@ const loadPastWinners = () => {
     let parshaPrizeContainer = document.getElementById('parshaPrizeContainer');
     let img = document.createElement('img');
     let prize = pastWinnersData.raffle.winner_info.boys[0] ? pastWinnersData.raffle.winner_info.boys[0] : pastWinnersData.raffle.winner_info.girls[0];
-    let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    let pic_src = w > 850 ? prize.prize_picture.full : prize.prize_picture.thumb;
-    img.setAttribute('src', `//mashpia.com/${encodeURI(pic_src)}`);
-    img.setAttribute('alt', prize.prize_name);
+    loadImage(img, prize.prize_picture.full, prize.prize_picture.thumb, prize.prize_name)
     let prizeName = document.createElement('p');
     prizeName.innerText = prize.prize_name;
     parshaPrizeContainer.appendChild(img);
@@ -292,6 +285,15 @@ const loadPastWinners = () => {
 
 };
 
+const loadImage = (elm, img, thumb, name) => {
+    let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let pic_src = ((w > 850) || !thumb) ? img : thumb;
+    if (pic_src) {
+        elm.setAttribute('src', `//mashpia.com/${encodeURI(pic_src)}`);
+        elm.setAttribute('alt', name);
+    }
+}
+
 const loadColumn = (arr, elm) => {
     arr.forEach(item => {
         let container = document.createElement('div');
@@ -308,6 +310,38 @@ const loadColumn = (arr, elm) => {
     })
 }
 
+let trackRecordData = [];
+
+const fetchTrackRecordData = async (user_id) => {
+    try {
+        let response = await axios.get(`/mobile/api/raffles/weekly.php?action=track-records&user_id=${user_id}`);
+        if (response.data) {
+            trackRecordData = response.data;
+            loadDonutCharts();
+        }
+    } catch (err) {
+        console.log(err)
+    }
+};
+
+let currentWeekData = {
+    img: '',
+    name: '',
+    thumb: ''
+}
+
+const fetchCurrentWeekData = async (raffle_id, user_id) => {
+    try {
+        let response = await axios.get(`/mobile/api/raffles/weekly.php?action=prize-info&user_id=${user_id}`);
+        if (response.data) {
+            currentWeekData = response.data;
+            createBigDonutChart();
+        }
+    } catch (err) {
+        console.log(err)
+    }
+};
+
 let pastWinnersData = {
     next: {},
     previous: {},
@@ -315,19 +349,18 @@ let pastWinnersData = {
 }
 
 let pastWinnersDataLoading = true;
+let raffle_id;
 
-const fetchPastWinners = async (id) => {
+const fetchPastWinners = async (raffle_id, user_id) => {
     clearPastWinners();
     pastWinnersDataLoading = true;
     try {
-        let data = await axios.get(`/mobile/api/raffles/weekly.php?action=completed&user_id=${id}`);
-        if (data.data && data.data.success) {
-            pastWinnersData = data.data.data;
-            pastWinnersData.raffle.days_completed = 7; //TODO: get from backend
-            pastWinnersData.raffle.prize = {
-                img: '/mobile/reg/images/tzivos_hashem_mug.png',
-                name: 'Tzivos Hashem Mug'
-            }
+        let response = await axios.get('/mobile/news/api/raffle.php?raffle_id=' + raffle_id);
+        if (response.data && response.data.success) {
+            raffle_id = response.data.data.raffle.raffle_id;
+            let response2 = await axios.get(`/mobile/api/raffles/weekly.php?action=completed&user_id=${user_id}&raffle_id=${raffle_id}`);
+            pastWinnersData = response.data.data;
+            pastWinnersData.raffle.days_completed = response2.data.days_completed; //TODO: get from backend
             pastWinnersDataLoading = false;
             loadPastWinners();
         }
@@ -340,9 +373,9 @@ const fetchPastWinners = async (id) => {
 const init = () => {
     const id = new URLSearchParams(window.location.search).get('id');
     if (localStorage.getItem("login")) {
-        document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
-        document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
-        document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
+        // document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
+        // document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
+        // document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
         document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
         document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
         document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
@@ -367,7 +400,7 @@ const init = () => {
     //     $(".personalImg").css({ "left": "2%" }); // move the profile image a but from the edge...
     // }
 
-    createBigDonutChart();
-    loadDonutCharts();
-    fetchPastWinners(id);
+    fetchTrackRecordData(id);
+    fetchCurrentWeekData(0, id);
+    fetchPastWinners(0, id);
 }
