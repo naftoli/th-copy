@@ -76,7 +76,6 @@ class RankReport extends Report {
             $school = $row['school_name'];
             $teacher = $row['class_teacher'];
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-
             $first = $row['first'];
             $last = $row['last'];
             if ($this->isHebrew($first) || $this->isHebrew($last)) {
