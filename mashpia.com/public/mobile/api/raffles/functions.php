@@ -176,55 +176,63 @@ function getWinnersInfo( $type, $year ) {
 
     foreach ($raffles as $id => $raffle_id) {
         $prize = getPrizeInfo($raffle_id);
-        $raffleInfo = [];
-        $sql_raffles = "
-            SELECT 
-                u.first,
-                u.last,
-                u.gender,
-                s.school_name,
-                MAX(rank_ord) AS rank,
-                c.class_grade,
-                c.class_sub
-            FROM
-                raffle_winners rw
-                    JOIN
-                users u USING (user_id)
-                    JOIN
-                schools s USING (school_id)
-                    JOIN
-                classes c ON c.class_id = u.class_id
-                    JOIN
-                rank_marks USING (user_id)
-            WHERE
-                raffle_id = " . $raffle_id;
-        $result_raffles = mysql_query($sql_raffles);
-        while ($row = mysql_fetch_assoc($result_raffles)) {
-            $gender = '';
-            if ($row['gender'] == 'M') {
-                $gender = 'boys';
-            } else if ($row['gender'] == 'F') {
-                $gender = 'girls';
+        if (!empty($prize)) {
+            $raffleInfo = [];
+            $sql_raffles = "
+                SELECT 
+                    u.first,
+                    u.last,
+                    u.gender,
+                    s.school_name,
+                    MAX(rank_ord) AS rank,
+                    c.class_grade,
+                    c.class_sub
+                FROM
+                    raffle_winners rw
+                        JOIN
+                    users u USING (user_id)
+                        JOIN
+                    schools s USING (school_id)
+                        JOIN
+                    classes c ON c.class_id = u.class_id
+                        JOIN
+                    rank_marks USING (user_id)
+                WHERE
+                    raffle_id = " . $raffle_id;
+            $result_raffles = mysql_query($sql_raffles);
+            if (mysql_num_rows($result_raffles) > 0) {
+                while ($row = mysql_fetch_assoc($result_raffles)) {
+                    $gender = '';
+                    if ($row['gender'] == 'M') {
+                        $gender = 'boys';
+                    } else if ($row['gender'] == 'F') {
+                        $gender = 'girls';
+                    }
+                    $raffleInfo[$id] = [
+                        $gender => [
+                            'name' => $row['first'] . ' ' . $row['last'],
+                            'grade' => $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']),
+                            'rank' => $ranks[$row['rank']],
+                            'school' => $row['school_name']
+                        ]
+                    ];
+                }
+            } else {
+                $raffleInfo[$id] = [];
             }
-            $raffleInfo[$id] = [
-                $gender => [
-                    'name' => $row['first'] . ' ' . $row['last'],
-                    'grade' => $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']),
-                    'rank' => $ranks[$row['rank_ord']],
-                    'school' => $row['school_name']
-                ]
-            ];
-        }
 
-        $result[$id] = [
-            'prize' => [
-                'name' => $prize['name'],
-                'img' => $prize['pic'],
-                'thumb' => $prize['thumb']
-            ],
-            'year' => $year,
-            'raffles' => $raffleInfo
-        ];
+            $result[$id] = [
+                'prize' => [
+                    'name' => $prize['name'],
+                    'img' => $prize['pic'],
+                    'thumb' => $prize['thumb']
+                ],
+                'year' => $year,
+                'raffles' => $raffleInfo
+            ];
+        } else {
+            $result[$id] = [];
+        }
     }
     return $result;
 }
