@@ -77,83 +77,61 @@ const createBigDonutChart = () => {
     prizeDetails.appendChild(prizeTitle);
     prizeDetails.appendChild(prizeImg);
 
-    const svg = document.createElementNS(xmlns, 'svg');
-    svg.setAttribute('height', 340);
-    svg.setAttribute('width', 340);
-    const circle = document.createElementNS(xmlns, 'circle');
-    circle.setAttribute('r', 146.2);
-    circle.setAttribute('cy', 172.125);
-    circle.setAttribute('cx', 172.125);
-    circle.setAttribute('fill', 'transparent');
-    circle.setAttribute('stroke-width', 18);
-    circle.setAttribute('stroke', red);
-    circle.setAttribute('class', 'circle-animation');
-    circle.setAttribute('ic', 'circle');
-    svg.appendChild(circle);
+    new Chart('raffle5Doughnut', {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            datasets: [{
+                data: [100],
+                backgroundColor: [red],
+                borderWidth: 0,
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            cutoutPercentage: 90,
+            aspectRatio: 1,
+            responsive: true,
+            elements: {
+                arc: {
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 0,
+                }
+            },
+            legend: {
+                labels: {
+                    fontColor: 'black',
+                    boxWidth: 0
+                },
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            }
+        }
+    });
 
     raffleId.appendChild(prizeDetails);
-    raffleId.appendChild(svg);
 }
 
 
-const createSmallDonutChart = (donutData) => {
-    const div = document.createElement('div');
-    let amountCompleted = donutData.days.filter(d => d.completed).length;
-    div.classList.add('raffleInfo');
-    const svg = document.createElementNS(xmlns, 'svg');
-    svg.setAttribute('height', 100);
-    svg.setAttribute('width', 100);
-    let startingVal = 100;
-    let perimeter = 2 * 3.14 * 43; //r
+const createSmallDonutChart = (donutData, index) => {
+    let trackDataDiv = document.getElementById('trackRecord' + index).getContext('2d');
+    let container = document.getElementById('trackRecord' + index).parentElement;
+    container.classList.add('raffleInfo');
 
-
-    if (!donutData.won) {
-        donutData.days.forEach(day => {
-            let stroke = day.completed ? '#ed224b' : day.past ? grey : '#ed224b1a';
-            let amount = startingVal;
-            let fillAmount = perimeter - perimeter * amount / 100;
-            let circle = document.createElementNS(xmlns, 'circle');
-            circle.setAttribute('r', 43);
-            circle.setAttribute('cy', 50.625);
-            circle.setAttribute('cx', 50.625);
-            circle.setAttribute('fill', 'transparent');
-            circle.setAttribute('stroke-width', 10);
-            circle.setAttribute('stroke', stroke);
-            circle.setAttribute('data-fill', startingVal);
-            circle.setAttribute('stroke-dasharray', perimeter);
-            circle.setAttribute('stroke-dashoffset', fillAmount);
-            svg.appendChild(circle);
-
-            startingVal -= (100 / 7);
-            if (amountCompleted < 7) {
-                fillAmount = perimeter - perimeter * (startingVal + 1) / 100;
-                let circle = document.createElementNS(xmlns, 'circle');
-                circle.setAttribute('r', 43);
-                circle.setAttribute('cy', 50.625);
-                circle.setAttribute('cx', 50.625);
-                circle.setAttribute('fill', 'transparent');
-                circle.setAttribute('stroke-width', 10);
-                circle.setAttribute('stroke', '#fff');
-                circle.setAttribute('data-fill', startingVal);
-                circle.setAttribute('stroke-dasharray', perimeter - 1);
-                circle.setAttribute('stroke-dashoffset', fillAmount);
-                svg.appendChild(circle);
-            }
-        });
-    }
-
-
-    let raffleDetails = document.createElement('div');
-    raffleDetails.classList.add('raffleDetails');
+    //Load Parsha
     let parsha = document.createElement('p');
     parsha.classList.add('parsha');
     parsha.innerText = donutData.parsha;
-    raffleDetails.appendChild(parsha);
+    container.prepend(parsha);
 
-    div.appendChild(raffleDetails);
-
-    let raffleID = document.createElement('div');
-    raffleID.classList.add('item', 'raffleID');
+    //Load small flag container
+    let amountCompleted = donutData.days.filter(d => d.completed).length;
     let smallRaffleFlagContainer = document.createElement('div');
     smallRaffleFlagContainer.classList.add('smallRaffleFlagContainer');
     let img = document.createElement('img');
@@ -161,11 +139,58 @@ const createSmallDonutChart = (donutData) => {
     img.alt = 'flag';
     let h2 = document.createElement('h2');
     h2.innerText = amountCompleted;
-
-    smallRaffleFlagContainer.appendChild(img);
     smallRaffleFlagContainer.appendChild(h2);
+    smallRaffleFlagContainer.appendChild(img);
+    container.appendChild(smallRaffleFlagContainer);
+
+    //Load Doughnut chart
+    const data = donutData.days.map(() => 100 / donutData.days.length);
+    new Chart(trackDataDiv, {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            datasets: [{
+                data: donutData.won ? [100] : data,
+                backgroundColor: donutData.won ? [red] : donutData.days.map(day => day.completed ? red : day.past ? grey : '#ed224b1a'),
+                borderWidth: donutData.won ? 0 : 2,
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            cutoutPercentage: 75,
+            aspectRatio: 1,
+            responsive: true,
+            elements: {
+                arc: {
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 0,
+                }
+            },
+            legend: {
+                labels: {
+                    fontColor: 'black',
+                    boxWidth: 0
+                },
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            }
+        }
+    });
 
     if (donutData.won) {
+        //Yellow background
+        let winningCircle = document.createElement('div');
+        winningCircle.classList.add('winningCircle');
+
+        container.appendChild(winningCircle);
+
+        //Congrats text. TODO: responsive size based on size of doughnut
         let textSVG = document.createElementNS(xmlns, 'svg');
         textSVG.setAttribute('viewBox', '0 0 101 101');
         textSVG.setAttribute('id', 'circleText')
@@ -180,46 +205,23 @@ const createSmallDonutChart = (donutData) => {
         text.innerHTML = `<textPath xlink:href="#curve">${'Congratulations! You won the ' + donutData.prize + '!'}</textPath>`
         textSVG.appendChild(path);
         textSVG.appendChild(text);
-        raffleID.appendChild(textSVG);
 
-        let innerCircle = document.createElementNS(xmlns, 'circle');
-        innerCircle.setAttribute('r', 43);
-        innerCircle.setAttribute('cy', 50.625);
-        innerCircle.setAttribute('cx', 50.625);
-        innerCircle.setAttribute('fill', '#ffd624');
-        svg.appendChild(innerCircle);
-
-        let fillAmount = perimeter - perimeter * startingVal / 100;
-        let circle = document.createElementNS(xmlns, 'circle');
-        circle.setAttribute('r', 43);
-        circle.setAttribute('cy', 50.625);
-        circle.setAttribute('cx', 50.625);
-        circle.setAttribute('fill', 'transparent');
-        circle.setAttribute('stroke-width', 10);
-        circle.setAttribute('stroke', '#ed224b');
-        circle.setAttribute('data-fill', startingVal);
-        circle.setAttribute('stroke-dasharray', perimeter);
-        circle.setAttribute('stroke-dashoffset', fillAmount);
-        svg.appendChild(circle);
+        container.appendChild(textSVG);
     }
 
-    raffleID.appendChild(smallRaffleFlagContainer);
-    raffleID.appendChild(svg);
-
-    div.appendChild(raffleID);
-    return div;
+    return container;
 };
 
 const loadDonutCharts = () => {
     const trackRecordContainer = document.getElementById("trackRecordContainer");
     let index = 0;
     let div;
-    trackRecordData.forEach(trackRecord => {
+    trackRecordData.forEach((trackRecord, index) => {
         if (index % 3 === 0) {
             if (div) trackRecordContainer.appendChild(div);
             div = document.createElement('div');
         }
-        let smallDonutChart = createSmallDonutChart(trackRecord);
+        let smallDonutChart = createSmallDonutChart(trackRecord, index);
         div.appendChild(smallDonutChart);
         index += 1
     });
