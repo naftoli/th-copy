@@ -12,6 +12,8 @@
         rel="stylesheet">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js'></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" type="text/javascript"></script>
+    </script>
     <script src="raffle5.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
         integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
@@ -161,11 +163,11 @@
             width: 100%;
             align-items: center;
             top: 0;
-            left: 10px;
-            height: 95%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            z-index: -1;
         }
 
         .prizeDetails p {
@@ -197,7 +199,6 @@
             font-weight: 900;
             text-align: center;
             margin: 0;
-            margin-bottom: 5px;
             font-size: 20px;
         }
 
@@ -221,11 +222,13 @@
             width: 100%;
             display: flex;
             align-items: center;
-            top: 0;
+            top: 60%;
             left: 0;
-            height: 95%;
+            height: 10%;
+            margin-bottom: 0;
             justify-content: center !important;
             z-index: 1;
+            align-items: flex-end;
         }
 
         .smallRaffleFlagContainer h2 {
@@ -241,6 +244,9 @@
             font-weight: 600;
             color: #232c7b;
             text-transform: uppercase;
+            margin-bottom: 0;
+            text-align: center;
+            font-size: 16px;
         }
 
         .whoWonNav {
@@ -368,6 +374,7 @@
             position: absolute;
             fill: transparent;
             transform: rotate(180deg);
+            bottom: 0;
         }
 
         #circleText textPath {
@@ -423,6 +430,40 @@
         .flagImg {
             height: 50px;
         }
+
+        .trackRecordCanvas {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            z-index: 1;
+            min-width: 100px;
+        }
+
+        .trackRecordContainer {
+            display: flex;
+        }
+
+        .trackRecord {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            box-sizing: border-box;
+        }
+
+        .winningCircle {
+            background: #ffd624;
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            position: absolute;
+            z-index: 0;
+            bottom: 0;
+        }
+
+        #raffle5Doughnut {
+            z-index: 1;
+        }
     </style>
 </head>
 
@@ -453,7 +494,9 @@
 
         <div class="rafflesContainer">
             <div class="headerRaffleInfo">
-                <div id="raffleID" class="item raffleID"></div>
+                <div id="raffleID" class="item raffleID">
+                    <canvas id="raffle5Doughnut"></canvas>
+                </div>
                 <div class="raffleDetails">
                     <p class="detailsBold"><i>Did you know?</i></p>
                     <p>There are <span class="winnerCount">150 winners</span> of the 5 Flag raffle every week!</p>
@@ -465,6 +508,36 @@
 
             <div id="trackRecordContainer">
                 <h2>How is your 5-Flag track record?</h2>
+                <div class="trackRecordContainer">
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord0"></canvas>
+                    </div>
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord1"></canvas>
+                    </div>
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord2"></canvas>
+                    </div>
+                </div>
+                <div class="trackRecordContainer">
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord3"></canvas>
+                    </div>
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord4"></canvas>
+                    </div>
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord5"></canvas>
+                    </div>
+                </div>
+                <div class="trackRecordContainer">
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord6"></canvas>
+                    </div>
+                    <div class="trackRecord">
+                        <canvas class="trackRecordCanvas" id="trackRecord7"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div id="whoWonContainer">
@@ -496,58 +569,6 @@
             </div> -->
             </div>
         </div>
-        <!-- <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
-            <div class="span12 footer">
-                <div class="span3">
-                    <a href="/mobile/reg/parent_detail.html" id="mainLink">
-                        <div class="menu-item">
-                            <div class="span12">
-                                <img src="/mobile/img_new/boy-color-green-svg.svg">
-                            </div>
-                            <div class="span12">
-                                <span id="main-title">Accounts</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="span3">
-                    <a href="#" id="missionsLink">
-                        <div class="menu-item">
-                            <div class="span12">
-                                <img src="/mobile/img_new/square-check-color-purple-svg.svg">
-                            </div>
-                            <div class="span12">
-                                <span>Missions</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="span3">
-                    <a href="#" id="rankLink">
-                        <div class="menu-item">
-                            <div class="span12">
-                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
-                            </div>
-                            <div class="span12">
-                                <span>Achievements</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="span3">
-                    <a href="#" id="storeLink">
-                        <div class="menu-item">
-                            <div class="span12">
-                                <img src="/mobile/img_new/cart-color-red-svg.svg">
-                            </div>
-                            <div class="span12">
-                                <span>Rewards</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div> -->
     </div>
 </body>
 

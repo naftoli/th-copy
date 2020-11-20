@@ -28,8 +28,50 @@ const loadRaffleContainer = (flag, data) => {
         stroke = darkBlue;
     }
 
-    let container = createElementWithClass('div', 'raffleInfo');
+    let trackDataDiv = document.getElementById('trackRecord' + flag).getContext('2d');
+    let container = document.getElementById('trackRecord' + flag).parentElement;
+    container.classList.add('raffleInfo');
     container.onclick = function () { window.location.href = `/mobile/reg/raffle${flag}.html?id=${id}` };
+
+    //Load Doughnut chart
+    new Chart(trackDataDiv, {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            datasets: [{
+                data: [(flag - data.daysLeft) / flag * 100, 100 - ((flag - data.daysLeft) / flag * 100)],
+                backgroundColor: [stroke, grey],
+                borderWidth: 0,
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            cutoutPercentage: 80,
+            aspectRatio: 1,
+            responsive: true,
+            elements: {
+                arc: {
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 0,
+                }
+            },
+            legend: {
+                labels: {
+                    fontColor: 'black',
+                    boxWidth: 0
+                },
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            }
+        }
+    });
+
 
     let raffleId = createElementWithClass('div', 'raffleID');
     raffleId.classList.add('item');
@@ -39,43 +81,6 @@ const loadRaffleContainer = (flag, data) => {
     img.setAttribute('src', flagSrc);
     img.setAttribute('alt', 'flag');
     raffleFlagContainer.appendChild(img);
-
-
-    const xmlns = "http://www.w3.org/2000/svg";
-    let perimeter = 2 * 3.14 * 43; //r
-    let percent = (flag - data.daysLeft) / flag * 100;
-    let fillAmount = perimeter - perimeter * percent / 100;
-    const progress = document.createElementNS(xmlns, 'svg');
-    progress.setAttribute('height', 100);
-    progress.setAttribute('width', 100);
-    const circle = document.createElementNS(xmlns, 'circle');
-    circle.setAttribute('r', 43);
-    circle.setAttribute('cy', 50.625);
-    circle.setAttribute('cx', 50.625);
-    circle.setAttribute('fill', 'transparent');
-    circle.setAttribute('stroke-width', 10);
-    circle.setAttribute('stroke', stroke);
-    circle.setAttribute('data-fill', percent);
-    circle.setAttribute('stroke-dasharray', perimeter);
-    circle.setAttribute('stroke-dashoffset', fillAmount);
-    circle.setAttribute('class', 'circle-animation');
-    circle.setAttribute('ic', 'circle');
-    progress.appendChild(circle);
-
-    const backgroundCircle = document.createElementNS(xmlns, 'svg');
-    backgroundCircle.setAttribute('height', 100);
-    backgroundCircle.setAttribute('width', 100);
-    backgroundCircle.setAttribute('class', 'background_circle');
-    const circle2 = document.createElementNS(xmlns, 'circle');
-    circle2.setAttribute('r', 43);
-    circle2.setAttribute('cy', 50.625);
-    circle2.setAttribute('cx', 50.625);
-    circle2.setAttribute('fill', 'transparent');
-    circle2.setAttribute('stroke-width', 10);
-    circle2.setAttribute('stroke', grey);
-    circle2.setAttribute('class', 'circle-animation');
-    circle2.setAttribute('ic', 'circle');
-    backgroundCircle.appendChild(circle2);
 
     let raffleDetails = createElementWithClass('div', 'raffleDetails');
     let daysLeft = createElementWithClass('p', 'daysLeft');
@@ -90,8 +95,6 @@ const loadRaffleContainer = (flag, data) => {
     raffleDetails.appendChild(details);
 
     raffleId.appendChild(raffleFlagContainer);
-    raffleId.appendChild(progress);
-    raffleId.appendChild(backgroundCircle);
     container.appendChild(raffleId);
     container.appendChild(raffleDetails);
 

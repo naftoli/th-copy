@@ -92,29 +92,52 @@ const createBigDonutChart = () => {
     prizeDetails.appendChild(p);
     prizeDetails.appendChild(prizeImg);
 
-    const svg = document.createElementNS(xmlns, 'svg');
-    svg.setAttribute('height', 340);
-    svg.setAttribute('width', 340);
-    const circle = document.createElementNS(xmlns, 'circle');
-    circle.setAttribute('r', 146.2);
-    circle.setAttribute('cy', 172.125);
-    circle.setAttribute('cx', 172.125);
-    circle.setAttribute('fill', 'transparent');
-    circle.setAttribute('stroke-width', 18);
-    circle.setAttribute('stroke', yellow);
-    circle.setAttribute('class', 'circle-animation');
-    circle.setAttribute('ic', 'circle');
-    svg.appendChild(circle);
+    new Chart('raffle60Doughnut', {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            datasets: [{
+                data: [100],
+                backgroundColor: [yellow],
+                borderWidth: 0,
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            cutoutPercentage: 90,
+            aspectRatio: 1,
+            responsive: true,
+            elements: {
+                arc: {
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 0,
+                }
+            },
+            legend: {
+                labels: {
+                    fontColor: 'black',
+                    boxWidth: 0
+                },
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            }
+        }
+    });
 
     raffleId.appendChild(prizeDetails);
-    raffleId.appendChild(svg);
 };
 
 const load60FlagDonutCharts = () => {
     const raffle60Container = document.getElementById('raffle60Container');
-    sixtyFlagRaffleData.forEach(raffle => {
+    sixtyFlagRaffleData.forEach((raffle, index) => {
         const { year, endMonth, startMonth, daysTillDrawing, raffleNumber, months, daysCompleted } = raffle;
-        const raffleHeader = createElementWithClass('div', 'raffleHeader');
+        const raffleHeader = document.getElementById('raffleHeader' + index);
         const div = document.createElement('div');
         const parshaContainer = createElementWithClass('div', 'parshaContainer');
         const parsha = createElementWithClass('p', 'parsha');
@@ -134,38 +157,70 @@ const load60FlagDonutCharts = () => {
         raffleHeader.appendChild(parshaContainer);
         raffleHeader.appendChild(calendar);
 
-        const svg = document.createElementNS(xmlns, 'svg');
-        svg.setAttribute('height', 340);
-        svg.setAttribute('width', 340);
-
-        const totalAmountOfDays = months[Object.keys(months)[0]].length + months[Object.keys(months)[1]].length + months[Object.keys(months)[2]].length;
-        const perimeter = 2 * 3.14 * 146.2; //r
-        const innerPerimeter = 2 * 3.14 * 110; //r
-        let percentFill = 100;
-        let innerPercentFill = 100;
         let rotation = 160;
 
-        let svgContainer = createElementWithClass('div', 'svgContainer');
+        let doughnutContainer = document.getElementById('doughnutContainer' + index);
+
+        let data = [];
+        let backgroundColors = [];
+        let totalAmountOfDaysInRaffle = 0;
+
+        Object.keys(months).forEach(month => {
+            months[month].forEach(day => {
+                totalAmountOfDaysInRaffle += 1;
+                backgroundColors.push(day.completed ? yellow : day.past ? grey : `#fff9e7`)
+            })
+        })
+
+        data = [...backgroundColors].map(() => 100 / totalAmountOfDaysInRaffle);
+
+
+        new Chart('doughnutChart' + index, {
+            // The type of chart we want to create
+            type: 'doughnut',
+
+            // The data for our dataset
+            data: {
+                datasets: [{
+                    data,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 1,
+                }, {
+                    data: [100],
+                    backgroundColor: [`#fff9e7`],
+                    borderWidth: 0,
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                cutoutPercentage: 55,
+                aspectRatio: 1,
+                responsive: true,
+                elements: {
+                    arc: {
+                        backgroundColor: 'white',
+                        borderColor: 'white',
+                        borderWidth: 0,
+                    }
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'black',
+                        boxWidth: 0
+                    },
+                    display: false
+                },
+                tooltips: {
+                    enabled: false
+                }
+            }
+        });
 
         Object.keys(months).forEach((month, monthIndex) => {
-            let monthPercentOfDonut = months[month].length / totalAmountOfDays * 100;
-            let monthStroke = `#fff9e7`;
-            let monthAmount = innerPercentFill;
-            let fill = innerPerimeter - innerPerimeter * monthAmount / 100;
             let id = 'curve' + month;
 
-            let circle = document.createElementNS(xmlns, 'circle');
-            circle.setAttribute('r', 110);
-            circle.setAttribute('cy', 170);
-            circle.setAttribute('cx', 170);
-            circle.setAttribute('fill', 'transparent');
-            circle.setAttribute('stroke-width', 35);
-            circle.setAttribute('stroke', monthStroke);
-            circle.setAttribute('data-fill', innerPercentFill);
-            circle.setAttribute('stroke-dasharray', innerPerimeter);
-            circle.setAttribute('stroke-dashoffset', fill);
-            svg.appendChild(circle);
-
+            // TODO: responsive width based on width of canvas
             let textSVG = document.createElementNS(xmlns, 'svg');
             textSVG.setAttribute('viewBox', '10 0 340 340');
             textSVG.setAttribute('width', '110');
@@ -182,74 +237,9 @@ const load60FlagDonutCharts = () => {
             textSVG.appendChild(text);
             textSVG.setAttribute('style', `transform: rotate(${rotation}deg)`)
 
-            svgContainer.appendChild(textSVG);
+            doughnutContainer.appendChild(textSVG);
 
-            innerPercentFill -= monthPercentOfDonut;
             rotation += (360 / Object.keys(months).length);
-
-            fill = innerPerimeter - innerPerimeter * (innerPercentFill + 1) / 100;
-            // let circle2 = document.createElementNS(xmlns, 'circle');
-            // circle2.setAttribute('r', 110);
-            // circle2.setAttribute('cy', 170);
-            // circle2.setAttribute('cx', 170);
-            // circle2.setAttribute('fill', 'transparent');
-            // circle2.setAttribute('stroke-width', 35);
-            // circle2.setAttribute('stroke', '#fff');
-            // circle2.setAttribute('data-fill', innerPercentFill);
-            // circle2.setAttribute('stroke-dasharray', innerPerimeter - 1);
-            // circle2.setAttribute('stroke-dashoffset', fill);
-            // svg.appendChild(circle2);
-
-            months[month].forEach((day, dayIndex) => {
-                let stroke = day.completed ? yellow : day.past ? grey : `#fff9e7`;
-                let amount = percentFill;
-                let fillAmount = perimeter - perimeter * amount / 100;
-                let circle = document.createElementNS(xmlns, 'circle');
-                circle.setAttribute('r', 146.2);
-                circle.setAttribute('cy', 170);
-                circle.setAttribute('cx', 170);
-                circle.setAttribute('fill', 'transparent');
-                circle.setAttribute('stroke-width', 35);
-                circle.setAttribute('stroke', stroke);
-                circle.setAttribute('data-fill', percentFill);
-                circle.setAttribute('stroke-dasharray', perimeter);
-                circle.setAttribute('stroke-dashoffset', fillAmount);
-                svg.appendChild(circle);
-
-                percentFill -= (100 / (totalAmountOfDays + 1));
-
-                // let lastMonth = Object.keys(months)[Object.keys(months).length - 1]
-                // if (month === lastMonth && index === months[lastMonth].length - 1) {
-                //     fillAmount = perimeter - perimeter * (percentFill + 1) / 100;
-                //     let circle2 = document.createElementNS(xmlns, 'circle');
-                //     circle2.setAttribute('r', 146.2);
-                //     circle2.setAttribute('cy', 170);
-                //     circle2.setAttribute('cx', 170);
-                //     circle2.setAttribute('fill', 'transparent');
-                //     circle2.setAttribute('stroke-width', 35);
-                //     circle2.setAttribute('stroke', '#fff');
-                //     circle2.setAttribute('data-fill', percentFill);
-                //     circle2.setAttribute('stroke-dasharray', perimeter - 1); //916
-                //     circle2.setAttribute('stroke-dashoffset', fillAmount + 8); //917
-                //     svg.appendChild(circle2);
-                //     return
-                // };
-                if ((monthIndex === Object.keys(months).length - 1) && dayIndex === months[month].length - 1) return;
-                fillAmount = perimeter - perimeter * (percentFill + 1) / 100;
-                let circle2 = document.createElementNS(xmlns, 'circle');
-                circle2.setAttribute('r', 146.2);
-                circle2.setAttribute('cy', 170);
-                circle2.setAttribute('cx', 170);
-                circle2.setAttribute('fill', 'transparent');
-                circle2.setAttribute('stroke-width', 35);
-                circle2.setAttribute('stroke', '#fff');
-                circle2.setAttribute('data-fill', percentFill);
-                circle2.setAttribute('stroke-dasharray', perimeter - 8);
-                circle2.setAttribute('stroke-dashoffset', fillAmount);
-                svg.appendChild(circle2);
-
-
-            });
 
         });
 
@@ -262,12 +252,11 @@ const load60FlagDonutCharts = () => {
         flagContainer.appendChild(numberOfDays);
 
 
-        svgContainer.appendChild(svg);
-        svgContainer.appendChild(flagContainer);
+        doughnutContainer.appendChild(flagContainer);
 
 
         raffle60Container.appendChild(raffleHeader);
-        raffle60Container.appendChild(svgContainer);
+        raffle60Container.appendChild(doughnutContainer);
     });
 };
 
@@ -581,7 +570,6 @@ const fetchPastWinners = async (id) => {
     pastWinnersDataLoading = true;
     try {
         let response = await axios.get('/mobile/api/raffles/monthly.php?action=winner-data&user_id=' + id);
-        // let data2 = await axios.get(`/mobile/api/raffles/weekly.php?action=completed&user_id=${user_id}`);
         if (response.data) {
             sixtyFlagWinnerData = response.data[0];
             // pastWinnersData.raffle.days_completed = data2.data.days_completed; //TODO: get from backend
@@ -597,9 +585,6 @@ const fetchPastWinners = async (id) => {
 const init = () => {
     const id = new URLSearchParams(window.location.search).get('id');
     if (localStorage.getItem("login")) {
-        // document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
-        // document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
-        // document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
         document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
         document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
         document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
