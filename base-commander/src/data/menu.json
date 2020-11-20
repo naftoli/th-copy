@@ -59,7 +59,8 @@
         "items" : [
           { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
           { "label": "Enter Chidon Test Scores", "legacy": true, "path": "/chidonTests/enterScores.php" },
-          { "label": "Review Marks", "legacy": true, "path": "/chidonTests/marks.php" }
+          { "label": "Review Marks", "legacy": true, "path": "/chidonTests/marks.php" },
+          { "label": "KHK Marks", "legacy": true, "path": "/chidonTests/khk_tests.php" }
         ]
       },
 

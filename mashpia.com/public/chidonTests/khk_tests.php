@@ -1,19 +1,20 @@
 <?php
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 if (isset($_POST['submit'])) {
-    echo "<pre>"; print_r($_POST); echo "</pre>";
     $qrys = [];
     foreach ($_POST['marks'] as $id => $marks) {
         foreach ($marks as $num => $mark) {
-            $qrys[] = "insert into th_chidon set khk_test_$num = $mark where th_chidon_id = " . $id;
+            if (is_numeric($mark))
+                $qrys[] = "update th_chidon set khk_test_$num = $mark where th_chidon_id = " . $id;
         }
     }
-    echo "<pre>"; print_r($qrys); echo "</pre>";
+    foreach ($qrys as $qry) mysql_query($qry);
+    echo "Marks Updated.";
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
@@ -33,6 +34,7 @@ foreach ($schools as $school_id => $school) {
         $info[$school_id][] = $row;
     }
 }
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,17 +50,14 @@ foreach ($schools as $school_id => $school) {
         td:not(.type) {
             vertical-align: top;
         }
-        body {
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
+    <?php include('../admin_header.php'); ?>
     <h1>Enter KHK Marks</h1>
     <?php
     echo "<form action='' method='post'>";
-    echo "<div style='float: right'><input type='submit' name='submit' value='Save Marks' style='padding: 12px; font-size: large' /></div>";
+    echo "<div style='float: right'><input type='submit' name='submit' value='Save Marks' style='padding: 12px; font-size: large' /></div><div style='clear: both;'></div>";
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
         echo "<h2>" . $schools[$school] . "</h2>";
@@ -69,8 +68,7 @@ foreach ($schools as $school_id => $school) {
             $id = $child['th_chidon_id'];
             echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             for ($i = 1; $i <= 4; $i++) {
-                $mark = 0;
-                if ($child["khk_test_$i"] > 0) $mark = $child["khk_test_$i"];
+                $mark = $child["khk_test_$i"];
                 echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' /></td>";
             }
             echo "</tr>";
@@ -82,4 +80,3 @@ foreach ($schools as $school_id => $school) {
     ?>
     </body>
 </html>
-
