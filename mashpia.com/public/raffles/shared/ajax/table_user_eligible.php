@@ -61,11 +61,15 @@ foreach ( $schoolsUsers as $school => $users ) {
             echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
             echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th></tr>";
-            foreach ( $users as $user ) {
-                if ( isset($user_ids[$user['user_id']]) ) {
-                    echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
-                    "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td><img class='flag' src='../images/5 flag.png' /></td></tr>";
-                } 
+            if (!empty($user_ids)) {
+                foreach ($users as $user) {
+                    if (isset($user_ids[$user['user_id']])) {
+                        echo "<tr><td>" . $user['class_grade'] . (empty($user['class_sub']) ? '' : "-" . $user['class_sub']) .
+                            "</td><td>" . $user['first'] . " " . $user['last'] . "</td><td><img class='flag' src='../images/5 flag.png' /></td></tr>";
+                    }
+                }
+            } else {
+                echo "<tr><td colspan='2'>No Eligible students found.</td><td></td></tr>";
             }
             echo "</table></div><div style='page-break-after: always'></div>";
         } else if ( $raffle->type == 'monthly' ) {

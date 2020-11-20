@@ -20,30 +20,34 @@ $stmtUser = $MASHPIA_DB->prepare("
 
 $chayolei = [
     [
-        'serial'    => 7746921,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7748556,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7756837,
+        'serial'    => 7745260,
         'paid'      => 50
     ]
 ];
 
 $chidon = [
     [
-        'serial'    => 7751336,
-        'size'      => 'Adult XS',
+        'serial'    => 7770921,
+        'size'      => 'Children M',
         'book'      => 3,
+        'paid'      => 14
+    ],
+    [
+        'serial'    => 7765978,
+        'size'      => 'Children L',
+        'book'      => 1,
+        'paid'      => 14
+    ],
+    [
+        'serial'    => 7756048,
+        'size'      => 'Children M',
+        'book'      => 2,
         'paid'      => 10
     ],
     [
-        'serial'    => 7753919,
-        'size'      => 'Childrens S',
-        'book'      => 1,
+        'serial'    => 7756047,
+        'size'      => 'Children L',
+        'book'      => 2,
         'paid'      => 10
     ]
 ];
@@ -68,7 +72,7 @@ foreach ($chayolei as $user) {
 foreach ($chidon as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
-    $size = $user['size'];
+    $size = strtolower($user['size']);
     $book = $user['book'];
     $stmtUser->execute([':serial' => $user['serial']]);
     $user_info = $stmtUser->fetch();

@@ -49,7 +49,8 @@ function checkMonthly( $user_id ) {
     if ( $dates === false ) return false;
 
 	$required = Constants::get_monthly_task_requirment();
-    if (unixtojd() < 2459171) {
+    $rollover = 2459171;
+    if ($dates['start'] < $rollover) {
         $total = checkDaily( $user_id, $dates );
 //        echo "Total: " . $total . " Required: " . $required;
         if ($total < $required && $total >= ($required - 12)) { // only check if less than 60 but at least 48
@@ -77,6 +78,7 @@ function checkMonthly( $user_id ) {
                     and dt.grid_id = " . $grid_id . " 
                     and dtm.mark_date >= " . $dates['start'] . " 
                     and dtm.mark_date <= " . $dates['end'];
+//        echo $sql; exit;
         $result = mysql_query($sql);
         $total = mysql_fetch_assoc($result)['total'];
     }
@@ -90,7 +92,8 @@ function checkWeekly( $user_id ) {
     if ( $dates === false ) return false;
 
 	$required = Constants::get_weekly_task_requirment();
-    if (unixtojd() < 2459167) {
+    $rollover = 2459167;
+    if ($dates['start'] < $rollover) {
         $total = checkDaily( $user_id, $dates );
         if ($total == $required - 1) { // if it is only (4) we can check for some marks that are not tied to any specific dates
             // get a total count of all the non daily missions marked between the start and end dates of this raffle

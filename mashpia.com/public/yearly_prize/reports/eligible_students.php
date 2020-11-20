@@ -45,7 +45,7 @@ if($debug) echo $get_type."\n";
 // end debugging
 if($debug) echo "</pre>";
 ?>
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -68,6 +68,18 @@ if($debug) echo "</pre>";
             <a target="_blank" href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit">here</a>
             for the complete rewards manual
         </p>
+        <div style="font-weight: bold">
+            This gift is only possible due to the generosity of Rabbi Moshe & Ruti Weiss.
+            <br /><br />
+            To show your appreciation:
+            <br />
+            <br />
+            <ul>
+                <li>Please have your children write Thank You cards and send them back to HQ.</li>
+                <li>Please take pictures as you give out the books and send to HQ.</li>
+            </ul>
+        </div>
+        <br /><br />
         <div id="dropdowns">
             <? if(count($schools) == 1) {?>
                 <select id="school_id" name="school_id" class="hidden"  disabled>
@@ -107,9 +119,9 @@ if($debug) echo "</pre>";
         <div id="action-links">
             <i class="fa fa-bar-chart" aria-hidden="true"></i> Report: 
             <select id="type">
-                <option value="combined">Combined Report</option>
+<!--                <option value="combined">Combined Report</option>-->
                 <option value="summary" <?= $get_type == "summary" ? "selected": "";?>>Summary Report</option>
-                <option value="form" <?= $get_type == "form" ? "selected": "";?>>Detailed Report</option>
+<!--                <option value="form" --><?//= $get_type == "form" ? "selected": "";?><!-->Detailed Report</option>-->
             </select>
             <a class="button" id="refresh">
                 <i class="fa fa-spinner" aria-hidden="true"></i> Load

@@ -34,21 +34,20 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </p>
         <h2>Reports</h2>
 
-        <strong>Coming Soon!!!</strong>
-        <!-- <div id="action-links">
+        <div id="action-links">
             <a href="eligible_students.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text"># of weeks with at least 1 mission (Yearly gift)</span>
                 </div>
             </a>
-            <a href="/raffles/yearly/eligibility_report_hq.php">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Over 160 Days of missions (Yearly Raffle)</span>
-                </div>
-            </a>
-        </div> -->
+<!--            <a href="/raffles/yearly/eligibility_report_hq.php">-->
+<!--                <div class="button">-->
+<!--                    <img src="/images/icon_report.png" height="32" alt="tickets"/>-->
+<!--                    <span class="link-text">Over 160 Days of missions (Yearly Raffle)</span>-->
+<!--                </div>-->
+<!--            </a>-->
+        </div>
         
     </body>
 </html>
