@@ -79,7 +79,7 @@ Medal.prototype.getColor = function( current ) {
     if ( index < this.colors.length ) {
         return this.colors[index];
     } else {
-        return "Compleation";
+        return "Completion";
     }
 }
 

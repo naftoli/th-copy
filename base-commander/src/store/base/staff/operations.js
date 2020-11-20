@@ -26,6 +26,11 @@ export const removeAuth = ( auth ) => dispatch =>  {
   .then( auth => dispatch( actions.removeAuth( auth ) ) );
 }
 
+export const removeTeacher = ( auth ) => dispatch =>  {
+  return API.post( `/core/admin_auths?action=removeTeacher`, auth )
+  .then( auth => dispatch( actions.removeAuth( auth ) ) );
+}
+
 export const createAuth = ( auth ) => dispatch =>  {
   return API.post( `/core/admin_auths`, auth )
   .then( response => dispatch( actions.createAuth( response ) ) );

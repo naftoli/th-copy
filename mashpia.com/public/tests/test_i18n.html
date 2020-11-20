@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div class="i18n" data-key="hi">hi</div>
+            <div id="more"></div>
+        </div>
+    </body>
+    <script>
+        $(function() {
+            i18next.init({
+                lng: 'en',
+                debug: true,
+                resources: {
+                    en: {
+                        translation: {
+                            "hi": "hello",
+                            "msg": "where were you?"
+                        }
+                    }
+                }
+            }).then(function(t) {
+                // initialized and ready to go!
+                translate()
+            });
+
+            // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
+            $.post("getInfo.php", function(res) {
+                const info = '<div class="i18n" data-key="msg">' + res + '</div>';
+                $("#more").append(info)
+                $("#more").on('click', translate)
+                $("#more").trigger('click')
+            })
+        })
+
+        function translate() {
+            $(".i18n").each( function() {
+                const key = $(this).data('key')
+                $(this).text(i18next.t(key))
+            })
+        }
+    </script>
+</html>

@@ -14,7 +14,7 @@ $auction_start = $row['auction_points_start_date'];
 
 function getChildren() {
     $users = array();
-    global $auction_id;
+    global $auction_id, $auction_start;
     $sql = "select user_id from users 
             where user_registered > 0 
             and school_id > 0 

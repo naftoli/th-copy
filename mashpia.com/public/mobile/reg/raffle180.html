@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tzivos Hashem | Raffle 180 Page</title>
+    <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <link href="../fonts/stylesheet.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+        rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js'></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="raffle180.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
+        integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
+        crossorigin="anonymous"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        body>div {
+            width: 100%;
+        }
+
+        p,
+        h2 {
+            color: #232c7b;
+        }
+
+        .rafflesContainer {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .item {
+            position: relative;
+            /* float: left; */
+        }
+
+        .item .raffleFlagContainer,
+        .smallRaffleFlagContainer {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .item .raffleFlagContainer img,
+        .smallRaffleFlagContainer img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .item .raffleFlagContainer h2 {
+            font-size: 25px;
+            position: absolute;
+            top: 0;
+            left: 15px;
+            margin: 15px 0;
+        }
+
+        svg {
+            transform: rotate(-90deg);
+        }
+
+        .circle_animation {
+            stroke-dasharray: 687.5;
+            stroke-dashoffset: 687.5;
+        }
+
+        .circle_animation_background {
+            stroke-dasharray: 0;
+            stroke-dashoffset: 0;
+        }
+
+        .background_circle {
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .raffleID .circle_animation {
+            -webkit-animation: raffleID 1s ease-out forwards;
+            animation: raffleID 1s ease-out forwards;
+        }
+
+        .css .circle_animation {
+            -webkit-animation: css 1s ease-out forwards;
+            animation: css 1s ease-out forwards;
+        }
+
+        @-webkit-keyframes raffleID {
+            to {
+                stroke-dashoffset: 80;
+            }
+        }
+
+        @keyframes raffleID {
+            to {
+                stroke-dashoffset: 80;
+            }
+        }
+
+        /* @-webkit-keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			}
+
+			@keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			} */
+
+        .headerRaffleInfo,
+        .raffleDetails {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* TODO: remove this for large screens. add transform: scale(1.2); to svg */
+            align-items: center;
+        }
+
+        .raffleDetails p {
+            margin: 0 auto;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .daysLeft {
+            font-weight: 600;
+            color: #ed224b;
+            text-transform: uppercase;
+        }
+
+        .details {
+            font-size: 13px !important;
+        }
+
+        .detailsBold {
+            color: #ffd624;
+        }
+
+        .winnerCount {
+            font-size: 17px;
+            text-transform: uppercase;
+        }
+
+        .prizeDetails {
+            position: absolute;
+            width: 100%;
+            align-items: center;
+            top: 0;
+            left: 3px;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .prizeDetails p {
+            max-width: 180px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .prizeDetails img {
+            height: 130px;
+        }
+
+        #seeWhoWon {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            border-radius: 4px;
+            padding: 4px;
+            text-transform: uppercase;
+            color: white;
+            background: #232c7b;
+            border: 1px solid #232c7b;
+            text-decoration: none;
+        }
+
+        #trackRecordContainer h2:first-child {
+            color: #232c7b;
+            font-weight: 900;
+            text-align: center;
+            margin: 0;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+
+        #trackRecordContainer div {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .raffleInfo {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: auto;
+            position: relative;
+        }
+
+        .smallRaffleFlagContainer {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            top: 0;
+            left: 0;
+            height: 95%;
+            justify-content: center !important;
+            z-index: 1;
+        }
+
+        .smallRaffleFlagContainer h2 {
+            font-size: 20px;
+            position: absolute;
+            left: 50px;
+            margin: 0;
+            margin-top: 18px;
+        }
+
+        .parsha {
+            font-weight: 600;
+            color: #232c7b;
+            text-transform: uppercase;
+        }
+
+        .whoWonNav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .whoWonNav h2 {
+            flex: 2;
+            text-transform: uppercase;
+            text-align: center;
+            margin: 15px auto;
+        }
+
+        .whoWonNav p {
+            font-size: 12px;
+            min-width: 40px;
+            color: #585858;
+            margin: 0;
+        }
+
+        .whoWonNav div:first-child {
+            min-width: 40px;
+        }
+
+        #trackRecordContainer {
+            margin-top: 30px;
+        }
+
+        #parsha-header {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            border-radius: 4px;
+            padding: 4px;
+            text-transform: uppercase;
+            color: white;
+            background: #ed224b;
+            border: 1px solid #c01f40;
+            text-decoration: none;
+            margin-top: 0;
+            font-weight: bold;
+            margin-left: -16px;
+            margin-right: -16px;
+            font-size: 16px;
+        }
+
+        #parshaPrizeContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #parshaPrizeContainer p {
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        #parshaPrizeContainer img {
+            height: 40px;
+            width: 40px;
+        }
+
+        #parshaFlagContainer {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        #parshaFlagContainer img {
+            height: 30px;
+            width: 30px;
+        }
+
+        #parshaFlagContainer h2 {
+            position: absolute;
+            color: black;
+            font-size: 20px;
+            margin-left: 5px;
+        }
+
+        #parshaContainer {
+            border: 1px solid #b3b3b0;
+            border-top: none;
+            border-radius: 5px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        #namesContainer {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        #namesContainer>.column>div>p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        #namesContainer>.column>div>p:first-child {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #namesContainer>.column>div {
+            margin: 8px 0;
+        }
+
+        #namesContainer h2 {
+            font-size: 20px;
+            margin: 0
+        }
+
+        #circleText {
+            z-index: 1;
+            position: absolute;
+            fill: transparent;
+            transform: rotate(180deg);
+        }
+
+        #circleText textPath {
+            color: black;
+            fill: black;
+            font-size: 7px;
+        }
+
+        .raffleHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .raffleHeader div:first-child {
+            height: 50px;
+            width: 50px;
+        }
+
+        .raffleHeader img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .raffleHeader p {
+            text-align: center;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .drawing {
+            font-style: italic;
+            color: #ffd624;
+            text-transform: uppercase;
+            font-size: 14px !important;
+        }
+
+        .svgContainer {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flagContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img.flag {
+            height: 100px;
+        }
+
+        p.numberOfDays {
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: 140px;
+            left: 162px;
+        }
+
+        .textSVG {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+        }
+
+        svg:not(:root) {
+            overflow: inherit !important;
+        }
+
+        .textSVG text {
+            font-size: 10px;
+            fill: #232c7b;
+            text-transform: uppercase;
+        }
+
+        #whoWonContainer {
+            background: #232c7b;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        #innerWhoWon {
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #innerWhoWon>img:first-child {
+            height: 60px;
+            width: 60px;
+        }
+
+        #innerWhoWon>img {
+            width: 180px;
+            margin-top: 15px;
+        }
+
+        #innerWhoWon>p {
+            font-size: 18px;
+            padding: 0 15px;
+            text-align: center;
+        }
+
+        .prizeImage {
+            font-weight: bold;
+        }
+
+        .missionMarathonHeader {
+            background: #232c7b;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            align-items: center;
+        }
+
+        #page-title {
+            color: white;
+            font-size: 18px;
+        }
+
+        #userImg {
+            border-radius: 100%;
+            border: 2px solid white;
+            height: 50px;
+            width: 50px;
+        }
+
+        #bugReport {
+            height: 35px;
+            width: 35px;
+        }
+
+        .navRaffleFlagContainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+            background: #e5e5e5;
+        }
+
+        .flagImg {
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+    <div>
+        <div class="missionMarathonHeader">
+            <div class="personalImg"></div>
+            <div>
+                <span id="page-title">MISSION MARATHON</span>
+            </div>
+            <a href="/helpdesk/?p=open">
+                <img id="bugReport" src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board"
+                    alt="bug-report">
+            </a>
+        </div>
+        <div class="navRaffleFlagContainer">
+            <a href="#" id="flagLink5">
+                <img class="flagImg" src="/mobile/reg/images/5-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
+            <a href="#" id="flagLink60">
+                <img class="flagImg" src="/mobile/reg/images/60-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
+            <a href="#" id="flagLink180">
+                <img class="flagImg" src="/mobile/reg/images/180-flag.png" data-category="Medal Board" alt="bug-report">
+            </a>
+        </div>
+        <div class="rafflesContainer">
+            <div class="headerRaffleInfo">
+                <div id="raffleID" class="item raffleID"></div>
+                <div class="raffleDetails">
+                    <p class="detailsBold"><i>Did you know?</i></p>
+                    <p>There will be <span class="winnerCount">1 SPECIAL WINNER</span> of the 180 Flag raffle at the end
+                        of
+                        the school year!</p>
+                    <p class="details">To qualify do your missions on at least 180 days throughout the school year.</p>
+                </div>
+            </div>
+            <a href="#whoWonContainer" id="seeWhoWon">See the most amazing grand raffle prizes!</a>
+
+            <div id="raffle180Container"></div>
+
+            <div id="whoWonContainer">
+                <div id="innerWhoWon">
+                    <img src="/mobile/reg/images/180-flag.png" alt="180 Flag" />
+                    <p>Winner can choose from 3 amazing prizes:</p>
+
+                    <img src="/mobile/reg/images/180-prize-1.png" alt="Trip to the Rebbe" />
+                    <p class="prizeImage">Trip to the Rebbe!</p>
+                    <p>Win up to $1000 in airfare so that you (and someone else) can visit 770 & the ohel!</p>
+
+                    <img src="/mobile/reg/images/180-prize-2.png" alt="Set of Toras Menachem" />
+                    <p class="prizeImage">A full set of Toras Menachem, both parts!</p>
+                    <p>Your learning will be stronger than ever.</p>
+
+                    <img src="/mobile/reg/images/180-prize-3.png" alt="Shopping Spree" />
+                    <p class="prizeImage">A $1000 Kingston shopping spree!</p>
+                    <p>Check out what Crown Heights' main avenue has to offer!</p>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+            <div class="span12 footer">
+                <div class="span3">
+                    <a href="/mobile/reg/parent_detail.html" id="mainLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/boy-color-green-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span id="main-title">Accounts</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="missionsLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Missions</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="rankLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Achievements</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="storeLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/cart-color-red-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Rewards</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+
+        });
+    </script>
+</body>
+
+</html>

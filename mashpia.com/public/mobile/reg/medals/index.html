@@ -10,6 +10,9 @@
         <script src="../js/all.js" defer></script>
         <link rel="stylesheet" href="/mobile/reg/css/medal-board/medals.css"/>
 		<link rel="stylesheet" href="/mobile/css/lib/animate.css"/>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js'></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="./js/rafflesNav.js"></script>
 		<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     	<style>
             .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); background-size: cover; }
@@ -31,8 +34,10 @@
                 background-size: 100% 100%;
             }
             .body .medal-label span {
-                display: inline-block;
-                color: #004E22;
+				display: inline-block;
+				color: #004E22;
+				text-transform: uppercase;
+				font-size: 14px;
             }
             .body .caption span {color: #004E22;}
             .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
@@ -59,6 +64,11 @@
             #raffleInfo .compleate .progress-bar { background-color: #004E22; }
             #raffleInfo .compleate span { color: #fff; }
             #raffleInfo .missed-deadline .progress-bar { background-color: #ef5350; }
+			#raffleInfoContainer {
+				display: flex;
+				justify-content: space-around;
+				margin-top: 15px;
+			}
 			
             /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
@@ -110,6 +120,115 @@
 				left: 2%;
 				z-index: 999999;
 			}
+
+			#raffleInfoContainer .item {
+				position: relative;
+				/* float: left; */
+			}
+
+			#raffleInfoContainer .item .raffleFlagContainer {
+				position: absolute;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				top: 0;
+				left: 2px;
+				height: 95%;
+				justify-content: center;
+			}
+
+			#raffleInfoContainer .item .raffleFlagContainer img {
+				height: 35px;
+				width: 35px;
+			}
+
+			#raffleInfoContainer .item .raffleFlagContainer h2 {
+				font-size: 20px;
+				position: absolute;
+				left: 45px;
+			}
+
+			#raffleInfoContainer svg {
+				transform: rotate(-90deg);
+			}
+
+			#raffleInfoContainer .circle_animation {
+				stroke-dasharray: 275;
+				stroke-dashoffset: 275;
+			}
+
+			#raffleInfoContainer .circle_animation_background {
+				stroke-dasharray: 0;
+				stroke-dashoffset: 0;
+			}
+			
+			#raffleInfoContainer .background_circle {
+				z-index: -1;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+
+			#raffleInfoContainer .raffleID .circle_animation {
+				-webkit-animation: raffleID 1s ease-out forwards;
+				animation: raffleID 1s ease-out forwards;
+			}
+
+			#raffleInfoContainer .css .circle_animation {
+				-webkit-animation: css 1s ease-out forwards;
+				animation: css 1s ease-out forwards;
+			}
+
+			@-webkit-keyframes raffleID {
+				to {
+					stroke-dashoffset: 80;
+				}
+			}
+
+			@keyframes raffleID {
+				to {
+					stroke-dashoffset: 80;
+				}
+			}
+
+			/* @-webkit-keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			}
+
+			@keyframes css {
+			to {
+				stroke-dashoffset: 160;
+			}
+			} */
+
+			.raffleInfo, .raffleDetails {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				width: 100px; /* TODO: remove this for large screens. add transform: scale(1.2); to svg */
+				align-items: center;
+			}
+
+			.raffleDetails p {
+				margin: 0 auto;
+				text-align: center;
+				line-height: 15px;
+				font-size: 12px;
+			}
+
+			.daysLeft {
+				font-weight: 600;
+				color: #00bcd4;
+				text-transform: uppercase;
+			}
+
+			.details {
+				font-style: italic;
+				color: #ef5350;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -225,10 +344,13 @@
 				
 				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
-                        <span>RAFFLE INFO</span>
+                        <span>MISSION MARATHON</span>
                     </div>
                 </div>
-				<div id="raffleInfo" class="clearfix"></div>
+				<div class="clearfix"></div>
+
+				<div id="raffleInfoContainer">
+				</div>
 				
                 <div class="span12" style="margin-top:15px;">
                     <div class="medal-label">
@@ -295,6 +417,7 @@
         <!-- misc javascript functions that are not in all.js -->
         <script src="/mobile/js/authenticate.js" defer></script>
         <script src="/mobile/reg/js/medal-board.js" defer></script>
+		<!-- <script src="/mobile/reg/js/index.js"></script> -->
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var carousel = "";
@@ -355,7 +478,7 @@
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
                 if ( response ) {
                     $("#raffleInfoBanner").show();
-                    $("#raffleInfo").append( response );
+                    $("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
                 }
 			});
             

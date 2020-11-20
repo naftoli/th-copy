@@ -98,6 +98,7 @@
                                 
                         $.post('/api/auth/forgot', { email: email }, function( data ) {
                             if ( data.success ) {
+                                // data.data should be 'Account Reset Email Sent' - need to figure out how to localize #LOCALIZE
                                 alert( data.data );
                                 $('.check_mark').show();
                                 $("#send").html("SENT");

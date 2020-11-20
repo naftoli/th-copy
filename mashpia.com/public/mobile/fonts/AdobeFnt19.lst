@@ -1,0 +1,299 @@
+%!Adobe-FontList 1.19
+%Locale:0x40d
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:Adobe Hebrew
+StyleNameNative:Regular
+FullNameNative:Adobe Hebrew Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:73492
+FileModTime:1329328336
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Baloo
+FamilyName:Baloo
+StyleName:Regular
+FullName:Baloo
+MenuName:Baloo
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Baloo-Regular.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:680508
+FileModTime:1598323827
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Baloo
+NameArray:0,Win,1,Baloo
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Bould-Bold
+FamilyName:Bould
+StyleName:Bold
+FullName:Bould Bold
+MenuName:Bould
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Bould-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:39160
+FileModTime:1557185246
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Bould Bold
+NameArray:0,Win,1,Bould
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Bould-Medium
+FamilyName:Bould
+StyleName:Medium
+FullName:Bould Medium
+MenuName:Bould Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Bould-Medium.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:39288
+FileModTime:1557185246
+WeightClass:500
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Bould Medium
+NameArray:0,Win,1,Bould Medium
+NameArray:0,Win,16,Bould
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Bould-Regular
+FamilyName:Bould
+StyleName:Regular
+FullName:Bould Regular
+MenuName:Bould
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Bould-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:38028
+FileModTime:1557185242
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Bould Regular
+NameArray:0,Win,1,Bould
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Exo-Bold
+FamilyName:Exo
+StyleName:Bold
+FullName:Exo Bold
+MenuName:Exo
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Exo-Bold.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:58072
+FileModTime:1328680800
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Exo
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Exo-Italic
+FamilyName:Exo
+StyleName:Italic
+FullName:Exo Italic
+MenuName:Exo
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Exo-Italic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:60884
+FileModTime:1328680800
+WeightClass:400
+WidthClass:5
+AngleClass:1
+NameArray:0,Win,1,Exo
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Exo-MediumItalic
+FamilyName:Exo Medium
+StyleName:Italic
+FullName:Exo Medium Italic
+MenuName:Exo Medium
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Exo-MediumItalic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:60732
+FileModTime:1328680800
+WeightClass:500
+WidthClass:5
+AngleClass:1
+NameArray:0,Win,1,Exo Medium
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Exo2-Bold
+FamilyName:Exo 2
+StyleName:Bold
+FullName:Exo 2 Bold
+MenuName:Exo 2
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Exo2-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:125452
+FileModTime:1518119379
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Exo 2 Bold
+NameArray:0,Win,1,Exo 2
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Exo2-Regular
+FamilyName:Exo 2
+StyleName:Regular
+FullName:Exo 2 Regular
+MenuName:Exo 2
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\Exo2-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:117296
+FileModTime:1518119379
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Exo 2 Regular
+NameArray:0,Win,1,Exo 2
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbTkuma-Bold
+FamilyName:Fb Tkuma
+StyleName:Bold
+FullName:FbTkuma Bold
+MenuName:Fb Tkuma
+StyleBits:2
+FamilyNameNative:Fb Tkuma
+StyleNameNative:Bold
+FullNameNative:Fb Tkuma Bold
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\FbTkuma-Bold.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:69924
+FileModTime:1434467028
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbTkuma Bold
+NameArray:0,Win,1,Fb Tkuma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbTkuma-Regular
+FamilyName:Fb Tkuma
+StyleName:Regular
+FullName:Fb Tkuma
+MenuName:Fb Tkuma
+StyleBits:0
+FamilyNameNative:Fb Tkuma
+StyleNameNative:Regular
+FullNameNative:Fb Tkuma Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Mobile Site\Mission marathon mockup2 Folder\Document fonts\FbTkuma-Regular.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:70464
+FileModTime:1434467028
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Fb Tkuma
+NameArray:0,Win,1,Fb Tkuma
+%EndFont
+

@@ -70,14 +70,12 @@ class RankReport extends Report {
             $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
         }
         // echo "<input type='hidden' name='SQL' value='" . $sql . "' />";
-
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $user_id = $row['user_id'];
             $school = $row['school_name'];
             $teacher = $row['class_teacher'];
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-
             $first = $row['first'];
             $last = $row['last'];
             if ($this->isHebrew($first) || $this->isHebrew($last)) {
