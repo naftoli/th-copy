@@ -22,9 +22,13 @@ $schools = $as->getSchools();
         crossorigin="anonymous"></script>
     <script>
         function createFile(school) {
+            let date = '';
+            while (date != 'current' && date != 'previous')
+                date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
+            const prev = date === 'previous' ? 1 : 0
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: "createFile.php",
+                    url: "createFile.php?prev=" + prev,
                     type: 'POST',
                     data: {
                         school: school,

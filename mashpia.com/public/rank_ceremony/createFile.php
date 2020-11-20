@@ -1,4 +1,4 @@
-<?php
+cla<?php
 ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -62,7 +62,8 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         '5* General' => 'five_star_general'
     ];
 
-    $r = new RankReport();
+    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+    else $r = new RankReport();
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", '', $limitTo, true); // limit to gender for myshliach / anashKinder
