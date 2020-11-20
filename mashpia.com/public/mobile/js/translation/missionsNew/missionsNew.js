@@ -84,6 +84,8 @@ function trasPlaceholder() {
 
     });
 
+   
+
 }
 
 function translate() {
@@ -97,6 +99,15 @@ function translate() {
 
     })
 
+    
+    $(".checkAll, .checkAllDaily").each(function () {
+
+        const key = $(this).data('key');
+       // alert(key);
+        $(this).val(i18next.t(key));
+       
+    });
+
     if (localStorage.getItem("locallang") == "he") {
 
 
@@ -109,6 +120,8 @@ function translate() {
 
         $("#tSymbol").css("margin-right", "-20px");
         $("#Missionislater").css("margin-right", "30px");
+
+        $(".btn").css("font-size", "14px");
         
        // tSymbol
 

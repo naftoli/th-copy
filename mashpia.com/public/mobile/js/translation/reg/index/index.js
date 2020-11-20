@@ -118,6 +118,11 @@
 
          $("#createAccount").css("float", "left");
 
+         $("#divlogin").css("direction", "rtl");
+
+         $("#divpwd").css("direction", "rtl");
+         
+
        
 
 

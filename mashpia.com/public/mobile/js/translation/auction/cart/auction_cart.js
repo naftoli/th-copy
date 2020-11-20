@@ -99,7 +99,10 @@ var jsonen = (function(){
 
         if (localStorage.getItem("locallang") == "he") {
             $(".i18n").addClass("hebrew");
+            $(".alert").attr("dir", "rtl");
 
+            $("#AuctionEnded").css("direction", "rtl");
+            $("#AuctionEnded").css("float", "right");
             var url_string = window.location.href;
             var url = new URL(url_string);
             var idParam = url.searchParams.get("id");
@@ -107,14 +110,11 @@ var jsonen = (function(){
 
             var path = window.location.pathname;
             var pageName = path.split("/").pop();
-            // console.log(pageName);
+             console.log(pageName);
 
-            //if (pageName != "indexHE.html")
-            //    window.location = "/mobile/reg/medals/indexHE.html?id=" + idParam;
-            $(".alert").attr("dir", "rtl");
-
-            $("#AuctionEnded").css("direction", "rtl");
-            $("#AuctionEnded").css("float", "right");
+            if (pageName != "cartHE.html")
+                window.location = "/mobile/auction/cartHE.html?id=" + idParam;
+           
 
         }
 

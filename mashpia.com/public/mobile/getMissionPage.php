@@ -65,8 +65,8 @@ $curParsha = array();
 // 	exit;
 // }
 if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
-	// get todays date (ignoring the time, or it'll break on friday afternoon)
-	$jd = floor(unixtojd((new DateTime('today'))->getTimestamp()));
+	//get todays day
+	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
 	switch ($today) {
 		case 0:
@@ -142,7 +142,6 @@ $user = new user($row); // create a new user
 $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
-// comment next line for quicker navigation debugging
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
 //echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
@@ -384,7 +383,7 @@ $he_chars = array(
                             <div class="collapse in" id="#panel_<?=$index?>">
                                 <div class="panel-body dailyPanel">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/> 
+                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs i18n" data-key="CheckAll" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/> 
 								  
 									
 									</div>
@@ -527,7 +526,7 @@ $he_chars = array(
                         <div class="collapse">
                             <div class="panel-body">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">
@@ -624,7 +623,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
                                 </div>
                                 <br />
                                 <? endif; ?>
@@ -726,7 +725,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">

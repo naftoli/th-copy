@@ -468,9 +468,9 @@
 			}
 		}
 	</style>
-	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!--<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-	<script src="../js/translation/auction/index/auction_cart.js"></script>
+	<script src="../js/translation/auction/index/auction_index.js"></script>
 
 </head>
 
@@ -478,7 +478,7 @@
 	<header class="navbar" id="top" role="banner">
 		<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
 			<span id="page-title" class="i18n" data-key="pageTitle">AUCTION</span>
-			
+
 		</div>
 	</header>
 
@@ -532,8 +532,10 @@
 				</div> -->
 
 			<div class="alert alert-warning" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
-				<b class="i18n" data-key="PrizeAuctionCart">After adding a prize in your Auction cart, be sure to click
-					"SAVE" at the very bottom of your cart (in the cart page).</b>
+				<b class="i18n" data-key="PrizeAuctionCart">
+					After adding a prize in your Auction cart, be sure to click
+					"SAVE" at the very bottom of your cart (in the cart page).
+				</b>
 			</div>
 
 			<div class="alert alert-warning" role="alert" dir="ltr">
@@ -548,8 +550,10 @@
 			</div>
 
 			<div id="main">
-				<div id="AuctionEnded"  style="text-align: center; font-size: 20px;" class="i18n" data-key="AuctionEnded">The Auction for
-					this year has ended.</div>
+				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n" data-key="AuctionEnded">
+					The Auction for
+					this year has ended.
+				</div>
 			</div>
 
 		</div>
@@ -609,245 +613,264 @@
 			</div>
 		</div>
 	</div>
-</body>
-<script src="/mobile/js/authenticate.js" defer></script>
-<script>
-	document.addEventListener("DOMContentLoaded", function (event) {
-		var url = location.href.toString();
-		var pos = url.indexOf('=');
-		var user = url.substring(pos + 1);
 
-		if (user.indexOf('#') != -1) {
-			var p = user.indexOf('#');
-			user = user.substring(0, p);
-		}
+	<script src="/mobile/js/authenticate.js" defer></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function (event) {
+			var url = location.href.toString();
+			var pos = url.indexOf('=');
+			var user = url.substring(pos + 1);
 
-		authenticate(user);
-		if (localStorage.getItem("login") == "user") {
-			$("#mainLink").attr('href', '/mobile/reg/medals/?id=' + user);
-		}
-
-		$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
-		$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);
-		$("#rankLink").attr('href', '../reg/rank.html?id=' + user);
-		$("#storeMenu").attr('href', '../store/index.html?id=' + user);
-		$("#scanMenu").attr('href', '../store/scan.html?id=' + user);
-
-		$.post('../reg/ajax/getPhoto.php', {
-			user_id: user
-		}, function (success) {
-			var info = $.parseJSON(success);
-			var html = '<a href="../reg/medals/index.html?id=' + user + '">';
-			if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info
-				.mobile_pic + '">';
-			else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info
-				.thumb + '">';
-			else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' +
-				info.photo + '">';
-			html += '</a>';
-			$(".personalImg").append(html);
-		});
-
-		var bal = 0;
-		var cart = [];
-		var cartQty = 0;
-		var totalPrice = 0;
-		var originalBal = 0;
-		var auction_id = 81;
-		var separator = '|';
-
-		$.post('ajax/getBalance.php', {
-			admin: Cookies.get('admin'),
-			user: user,
-			auction: auction_id
-		}, function (success) {
-			var info = $.parseJSON(success);
-			var html = i18next.h('TotalMilesEarned') + info.tpoints;
-			html += "<br/>" + i18next.h('TotalMilesYear') + info.earned;
-			html += "<br />" + i18next.h('AvailableAuctionMiles') + "<span id='balance'>" + info
-				.available + "</span>";
-			$(".balance").html(html);
-			originalBal = info.available;
-			initCart();
-		});
-
-		// $.post('ajax/getPrizes.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
-		//     var prizes = $.parseJSON(success);
-
-		//     var html = '';
-		// 	var itr = 0;
-		//     for (var amount in prizes) {
-		//         html += '<div class="panel panel-default">\
-		//                     <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Point Prizes</div>' +                        
-		//                     '<div class="collapse"><div class="panel-body"><div class="row">';
-		//         for (var p in prizes[amount]) {
-		// 			var prize = prizes[amount][p];
-		//             html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
-		//                     '<figure class="figure-hover-overlay">' +                                                                      
-		//                         '<a href="#" class="figure-href"></a>\
-		//                         <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
-		//                     </figure>\
-		//                     <div class="product-caption">\
-		//                         <div class="block-name">\
-		//                             <a href="#" class="product-name">' + prize.prize_name + '</a>\
-		//                             <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
-		// 							<p class="onePerUser">' + prize.available + ' available.</p>\
-		//                         </div>\
-		//                         <div class="product-cart" id="' +
-		// 							prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
-		//                             <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
-		// 							<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
-		// 						</div>\
-		// 					</div></article></div>';
-		//         }
-		//         html += '</div></div></div></div>';
-		//     }
-
-		//     $("#main").append(html);
-
-		//     $(".product-cart a").hover(
-		//         function() {
-		//             $(this).css('background-color', '#eb2c33');
-		//             $(this).find('.fa').css('color', '#fff');
-		//         },
-		//         function() {
-		//             $(this).css('background-color', '#fff');
-		//             $(this).find('.fa').css('color', '#eb2c33');
-		//         }
-		//     );
-		// });
-
-		$(document).on('click', ".panel-heading", function () {
-			//$(this).parent().find(".collapse").collapse('toggle');
-			var c = $(this).parent().attr('class');
-			if (c.indexOf('open') > 0) {
-				$(this).parent().removeClass('open');
-				$(this).parent().find('.collapse').removeClass('in');
-			} else {
-				$(this).parent().addClass('open');
-				$(this).parent().find('.collapse').addClass('in');
-				$(this).parent().siblings().removeClass('open');
-				$(this).parent().siblings().find('.collapse').removeClass('in');
+			if (user.indexOf('#') != -1) {
+				var p = user.indexOf('#');
+				user = user.substring(0, p);
 			}
-		});
 
-		function initCart() {
-			if (!window.localStorage) {
-				// need to update browser so that sessionStorage will work
-				alert(i18next.ht('UpdateBrowser1'));
-			} else {
-				if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
-					cart = JSON.parse(localStorage.getItem('auctionCart' + user));
-					for (var c in cart) {
-						var item = cart[c];
-						cartQty += item.qty;
-						totalPrice += item.qty * item.price;
-						$("#" + item.prize).find('.cartNum').text(item.qty);
-					}
-					$("#cartQty").text(cartQty);
-					calcBalance();
+			authenticate(user);
+			if (localStorage.getItem("login") == "user") {
+				$("#mainLink").attr('href', '/mobile/reg/medals/?id=' + user);
+			}
+
+			$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
+			$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);
+			$("#rankLink").attr('href', '../reg/rank.html?id=' + user);
+			$("#storeMenu").attr('href', '../store/index.html?id=' + user);
+			$("#scanMenu").attr('href', '../store/scan.html?id=' + user);
+
+			$.post('../reg/ajax/getPhoto.php', {
+				user_id: user
+			}, function (success) {
+				var info = $.parseJSON(success);
+				var html = '<a href="../reg/medals/index.html?id=' + user + '">';
+				if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info
+					.mobile_pic + '">';
+				else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info
+					.thumb + '">';
+				else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' +
+					info.photo + '">';
+				html += '</a>';
+				$(".personalImg").append(html);
+			});
+
+			var bal = 0;
+			var cart = [];
+			var cartQty = 0;
+			var totalPrice = 0;
+			var originalBal = 0;
+			var auction_id = 81;
+			var separator = '|';
+
+			$.post('ajax/getBalance.php', {
+				admin: Cookies.get('admin'),
+				user: user,
+				auction: auction_id
+			}, function (success) {
+
+                    var TotalMilesEarned ="Total Miles Earned:";
+                    var TotalMilesYear = "Total Miles Earned this Year:";
+                    var AvailableAuctionMiles ="Available Auction Miles: ";
+
+                  
+				var info = $.parseJSON(success);
+                    
+
+					if (localStorage.getItem("locallang") == "he") {
+                        html = "<span style='direction:rtl;' > ";
+                        html += "סך הנקודות שנצברו: " + info.earned;//
+                        html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
+                        html += "</span > ";
+                        //
+                    }
+                    else {
+                        var html = TotalMilesEarned + info.tpoints;
+                        html += "<br/>" + TotalMilesYear + info.earned;
+                        html += "<br />" + AvailableAuctionMiles + "<span id='balance'>" + info
+                            .available + "</span>";
+                    }
+
+
+					$(".balance").html(html);
+				originalBal = info.available;
+				initCart();
+			});
+
+			// $.post('ajax/getPrizes.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
+			//     var prizes = $.parseJSON(success);
+
+			//     var html = '';
+			// 	var itr = 0;
+			//     for (var amount in prizes) {
+			//         html += '<div class="panel panel-default">\
+			//                     <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Point Prizes</div>' +
+			//                     '<div class="collapse"><div class="panel-body"><div class="row">';
+			//         for (var p in prizes[amount]) {
+			// 			var prize = prizes[amount][p];
+			//             html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
+			//                     '<figure class="figure-hover-overlay">' +
+			//                         '<a href="#" class="figure-href"></a>\
+			//                         <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
+			//                     </figure>\
+			//                     <div class="product-caption">\
+			//                         <div class="block-name">\
+			//                             <a href="#" class="product-name">' + prize.prize_name + '</a>\
+			//                             <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
+			// 							<p class="onePerUser">' + prize.available + ' available.</p>\
+			//                         </div>\
+			//                         <div class="product-cart" id="' +
+			// 							prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
+			//                             <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
+			// 							<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
+			// 						</div>\
+			// 					</div></article></div>';
+			//         }
+			//         html += '</div></div></div></div>';
+			//     }
+
+			//     $("#main").append(html);
+
+			//     $(".product-cart a").hover(
+			//         function() {
+			//             $(this).css('background-color', '#eb2c33');
+			//             $(this).find('.fa').css('color', '#fff');
+			//         },
+			//         function() {
+			//             $(this).css('background-color', '#fff');
+			//             $(this).find('.fa').css('color', '#eb2c33');
+			//         }
+			//     );
+			// });
+
+			$(document).on('click', ".panel-heading", function () {
+				//$(this).parent().find(".collapse").collapse('toggle');
+				var c = $(this).parent().attr('class');
+				if (c.indexOf('open') > 0) {
+					$(this).parent().removeClass('open');
+					$(this).parent().find('.collapse').removeClass('in');
 				} else {
-					$.post('ajax/getTickets.php', {
-						user: user,
-						auction: auction_id
-					}, function (data) {
-						var info = $.parseJSON(data);
-						for (var i in info) {
-							var item = info[i];
-							var id = parseInt(item.prize_id);
-							var name = item.prize_name;
-							var price = parseInt(item.prize_points);
-							var qty = parseInt(item.quantity);
-							var img = item.prize_image_id;
-							cart.push({
-								prize: id,
-								name: name,
-								price: price,
-								image: img,
-								qty: qty
-							});
-							//alert(qty);
-							cartQty += qty;
-							totalPrice += qty * price;
-							$("#" + id).find('.cartNum').text(qty);
+					$(this).parent().addClass('open');
+					$(this).parent().find('.collapse').addClass('in');
+					$(this).parent().siblings().removeClass('open');
+					$(this).parent().siblings().find('.collapse').removeClass('in');
+				}
+			});
+
+			function initCart() {
+				if (!window.localStorage) {
+					// need to update browser so that sessionStorage will work
+					alert(i18next.ht('UpdateBrowser1'));
+				} else {
+					if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
+						cart = JSON.parse(localStorage.getItem('auctionCart' + user));
+						for (var c in cart) {
+							var item = cart[c];
+							cartQty += item.qty;
+							totalPrice += item.qty * item.price;
+							$("#" + item.prize).find('.cartNum').text(item.qty);
 						}
-						//alert(cartQty);
-						localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
-						localStorage.setItem('cartLoaded', 1);
 						$("#cartQty").text(cartQty);
 						calcBalance();
+					} else {
+						$.post('ajax/getTickets.php', {
+							user: user,
+							auction: auction_id
+						}, function (data) {
+							var info = $.parseJSON(data);
+							for (var i in info) {
+								var item = info[i];
+								var id = parseInt(item.prize_id);
+								var name = item.prize_name;
+								var price = parseInt(item.prize_points);
+								var qty = parseInt(item.quantity);
+								var img = item.prize_image_id;
+								cart.push({
+									prize: id,
+									name: name,
+									price: price,
+									image: img,
+									qty: qty
+								});
+								//alert(qty);
+								cartQty += qty;
+								totalPrice += qty * price;
+								$("#" + id).find('.cartNum').text(qty);
+							}
+							//alert(cartQty);
+							localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
+							localStorage.setItem('cartLoaded', 1);
+							$("#cartQty").text(cartQty);
+							calcBalance();
+						});
+					}
+				}
+			}
+
+			function calcBalance() {
+				bal = originalBal - totalPrice;
+				$("#balance").text(bal);
+			}
+
+			$(document).on('click', '.product-cart', function () {
+				// after deadline alert and return
+				//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				//return false;
+
+				// get prize id and add to cart
+				var prizeInfo = $(this).attr('id');
+				var info = prizeInfo.split(separator);
+				var id = parseInt(info[0]);
+				var price = parseInt(info[1]);
+				var image = info[2];
+				var prizeName = info[3];
+				var found = false;
+
+				// see if user has enough points for this
+				var curBal = parseInt($("#balance").text());
+				if (curBal - price < 0) {
+					alert(i18next.t('NotEnoughMiles'));
+					return false;
+				}
+
+				for (var c in cart) {
+					var item = cart[c];
+					// see if item exists
+					if (item.prize == id) {
+						found = true;
+						item.qty++;
+						totalPrice += item.price;
+						$("#" + id).find('.cartNum').text(item.qty);
+						break;
+					}
+				}
+
+				if (!found) {
+					cart.push({
+						prize: id,
+						name: prizeName,
+						price: price,
+						image: image,
+						qty: 1
 					});
+					totalPrice += price;
+					$("#" + id).find('.cartNum').text('1');
 				}
-			}
-		}
 
-		function calcBalance() {
-			bal = originalBal - totalPrice;
-			$("#balance").text(bal);
-		}
-
-		$(document).on('click', '.product-cart', function () {
-			// after deadline alert and return
-			//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
-			//return false;
-
-			// get prize id and add to cart
-			var prizeInfo = $(this).attr('id');
-			var info = prizeInfo.split(separator);
-			var id = parseInt(info[0]);
-			var price = parseInt(info[1]);
-			var image = info[2];
-			var prizeName = info[3];
-			var found = false;
-
-			// see if user has enough points for this
-			var curBal = parseInt($("#balance").text());
-			if (curBal - price < 0) {
-				alert(i18next.t('NotEnoughMiles'));
-				return false;
-			}
-
-			for (var c in cart) {
-				var item = cart[c];
-				// see if item exists
-				if (item.prize == id) {
-					found = true;
-					item.qty++;
-					totalPrice += item.price;
-					$("#" + id).find('.cartNum').text(item.qty);
-					break;
+				cartQty++;
+				if (!window.localStorage) {
+					// need to update browser so that sessionStorage will work
+					alert(i18next.t('UpdateBrowser'));
+				} else {
+					localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
 				}
-			}
+				$("#cartQty").text(cartQty);
 
-			if (!found) {
-				cart.push({
-					prize: id,
-					name: prizeName,
-					price: price,
-					image: image,
-					qty: 1
-				});
-				totalPrice += price;
-				$("#" + id).find('.cartNum').text('1');
-			}
+				calcBalance();
+			});
 
-			cartQty++;
-			if (!window.localStorage) {
-				// need to update browser so that sessionStorage will work
-				alert(i18next.t('UpdateBrowser'));
-			} else {
-				localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
-			}
-			$("#cartQty").text(cartQty);
+			$(".fa-shopping-cart").click(function () {
+				location.href = "cart.html?id=" + user;
+			});
 
-			calcBalance();
 		});
-
-		$(".fa-shopping-cart").click(function () {
-			location.href = "cart.html?id=" + user;
-		});
-
-	});
-</script>
-
+	</script>
+</body>
 </html>
