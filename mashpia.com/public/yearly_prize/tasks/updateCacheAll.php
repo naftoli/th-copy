@@ -11,7 +11,7 @@ $totalWeeklyTasks->get_week_dates();
 
 $limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
 $users_query = mysql_query(
-    "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first limit $limit, 1000"
+    "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first limit $limit, 500"
 );
 
 $user_count = mysql_num_rows( $users_query );
