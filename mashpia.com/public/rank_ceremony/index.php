@@ -21,11 +21,12 @@ $schools = $as->getSchools();
         integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
     <script>
-        function createFile(school) {
-            let date = '';
-            while (date != 'current' && date != 'previous')
-                date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
-            const prev = date === 'previous' ? 1 : 0
+        let date = '';
+        while (date != 'current' && date != 'previous')
+            date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
+        const prev = date === 'previous' ? 1 : 0
+
+        function createFile(school, prev) {
             return new Promise((resolve, reject) => {
                 $.ajax({
                     url: "createFile.php?prev=" + prev,
@@ -47,7 +48,7 @@ $schools = $as->getSchools();
         let p = [];
         const schools = <?= json_encode($schools) ?>;
         for (let school in schools) {
-            p[i++] = createFile(school)
+            p[i++] = createFile(school, prev)
         }
         Promise.all([...p])
             .then(values => {
