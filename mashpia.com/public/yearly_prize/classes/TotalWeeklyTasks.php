@@ -39,7 +39,7 @@ class TotalWeeklyTasks {
     public function get_week_dates() {
         // $date will refer to the date that is moving from the start date till the end date
         $date = $this->start_date;
-        while($date <= $this->end_date) {
+        while ($date <= $this->end_date) {
             $week_start = $date;
             $date += 6; // move to the end of the week
             
@@ -53,8 +53,8 @@ class TotalWeeklyTasks {
         $total_weeks = 0; // start with no weeks with tasks
         // realtime or cached....
         if ( $realtime ){
-            foreach($this->week_dates as $week_dates){
-                if( $this->week_has_task( $week_dates["start"], $week_dates["end"], true ) ){ // get the parts of the week by their start and end keys
+            foreach ($this->week_dates as $week_dates) {
+                if ( $this->week_has_task( $week_dates["start"], $week_dates["end"], true ) ) { // get the parts of the week by their start and end keys
                     $total_weeks += 1; // another week has tasks marked for it
                 }
             };
@@ -86,11 +86,15 @@ class TotalWeeklyTasks {
         }
         
         // check if there is any marks during the week period
-        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
-            ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
+//        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
+//            ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
+//            ."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
+//            ."where dtmarks.user_id = ".$this->user_id." and ut.user_id = ".$this->user_id." "
+//            ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
+//            ."group by dtmarks.date_task_id";
+        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from date_tasks_missions dtm "
             ."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
-            ."where dtmarks.user_id = ".$this->user_id." and ut.user_id = ".$this->user_id." "
-            ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
+            ."where dtmarks.user_id = ".$this->user_id." and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
             ."group by dtmarks.date_task_id";
         //if($this->user_id == 50628) echo $sql."<br/><br/>";
 
