@@ -10,7 +10,7 @@ if (isset($_POST['submit'])) {
     foreach ($_POST['marks'] as $id => $marks) {
         foreach ($marks as $num => $mark) {
             if (is_numeric($mark))
-                $qrys[] = "update th_chidon set khk_test_$num = $mark where th_chidon_id = " . $id;
+                $qrys[] = "update th_chidon set khk_test_$num = " . floatval($mark) . " where th_chidon_id = " . $id;
         }
     }
     foreach ($qrys as $qry) mysql_query($qry);
@@ -50,6 +50,9 @@ foreach ($schools as $school_id => $school) {
         td:not(.type) {
             vertical-align: top;
         }
+        .red {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -61,17 +64,22 @@ foreach ($schools as $school_id => $school) {
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
         echo "<h2>" . $schools[$school] . "</h2>";
-        echo "<table><tr><th>Chidon KHK ID</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th></tr>";
+        echo "<table><tr><th>Chidon KHK ID</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
             $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
+            $avg = 0;
             echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             for ($i = 1; $i <= 4; $i++) {
                 $mark = $child["khk_test_$i"];
+                $avg += floatval($mark);
                 echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' /></td>";
             }
-            echo "</tr>";
+            $avg = round($avg / 4, 2);
+            $class = '';
+            if ($avg >= 80) $class="red";
+            echo "<td class=''" . $class . "'>" . $avg . "</td></tr>";
         }
         echo "</table>";
     }
