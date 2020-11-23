@@ -592,7 +592,7 @@
                 
                 <div class="alert alert-warning" role="alert" dir="ltr" style="min-height: 92px;">
                     <div class="media">
-                        <div class="pull-right">
+                        <div class="pull-right" id="img-cart">
                             (<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-brown-svg.svg"/>
                         </div>
                         <div class="media-body">
@@ -726,16 +726,18 @@
             var totalmilesYearText = "Total Miles Earned this Year: ";
 
 			if (localStorage.getItem("locallang") == "he") {
-				float_element = 'style="float:right;direction:rtl; margin-right:6px;"';
+				$("#img-cart").removeClass('pull-right').addClass('pull-left');
+				float_element = 'style="float:right;direction:rtl; margin-right:8px;"';
 				availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
                 totalmilesText = "סך הנקודות שנצברו  : ";
                 var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
+                var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
 			}
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
                 var html = '<div id="balance-box" ' + float_element+'>';
 				html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
-                html += '</div><div id="data-box" ' + float_element +'>'
+                html += '</div><div id="data-box" ' + data_box_css +'>'
                 html += totalmilesText + info.tpoints.toLocaleString( navigator.language ) + "<br />";
                 html += totalmilesYearText + info.earned.toLocaleString( navigator.language ) + "<br />";
 				html += '</div>'
