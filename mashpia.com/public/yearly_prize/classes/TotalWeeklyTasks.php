@@ -26,7 +26,7 @@ class TotalWeeklyTasks {
     public function __construct($user_id, $end_date) {
         // store this to get the user info later
         $this->user_id = $user_id;
-        $this->start_date = 2459097; // September 4, 2020
+        $this->start_date = a; // September 4, 2020
         $this->end_date = $end_date;
     }
     
@@ -54,7 +54,7 @@ class TotalWeeklyTasks {
         // realtime or cached....
         if ( $realtime ){
             foreach ($this->week_dates as $week_dates) {
-                if ( $this->week_has_task( $week_dates["start"], $week_dates["end"], true ) ) { // get the parts of the week by their start and end keys
+                if ( $this->week_has_task( $week_dates["start"], $week_dates["end"], true, true ) ) { // get the parts of the week by their start and end keys
                     $total_weeks += 1; // another week has tasks marked for it
                 }
             };

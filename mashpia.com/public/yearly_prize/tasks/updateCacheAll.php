@@ -17,6 +17,7 @@ $users_query = mysql_query(
 $user_count = mysql_num_rows( $users_query );
 while ( $user = mysql_fetch_assoc( $users_query ) ) {
     $totalWeeklyTasks->user_id = $user['user_id'];
+    $totalWeeklyTasks->get_week_dates();
     $total = $totalWeeklyTasks->total_weeks_with_task( true );
     echo $user['last'] . ", " . $user['first'] . " - " . $total . "\n";
 }
