@@ -65,13 +65,14 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
 
     foreach( $subjects as $subject_id ){
         if ( !isset( $user_missions[$subject_id] ) ) {
-            $subject_name_query = mysql_query("SELECT subject_name, subject_details FROM subjects WHERE subject_id = '$subject_id';");
+            $subject_name_query = mysql_query("SELECT subject_name, subject_details, subject_details_he FROM subjects WHERE subject_id = '$subject_id';");
             $missing_subject_info = mysql_fetch_assoc( $subject_name_query );
             $user_missions[$subject_id] = [
                 'sticker_name' => getStickerName( $subject_id ),
                 'campaign_logo' => getSubjectImage( $subject_id ),
                 'subject_name' => getSubjectName( $subject_id, $missing_subject_info['subject_name'] ),
                 'subject_details' => $missing_subject_info['subject_details'],
+                'subject_details_he' => $missing_subject_info['subject_details_he'],
                 'subject_id' => $subject_id,
                 'total' => 0
             ];
