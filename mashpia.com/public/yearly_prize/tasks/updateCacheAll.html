@@ -7,8 +7,10 @@
     <script>
         let limit = 0
         for (let i = 0; i < 20; i++) {
-            $.get('updateCacheAll.php', { limit: limit })
-            limit += 500
+            setInterval(function() {
+                $.get('updateCacheAll.php', { limit: limit })
+                limit += 500
+            }, 500)
         }
     </script>
 </head>
