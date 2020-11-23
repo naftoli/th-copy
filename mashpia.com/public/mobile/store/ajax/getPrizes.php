@@ -11,8 +11,13 @@ $school_name = $row['school_name'] ? $row['school_name'] : 'Your Base';
 
 $prizes = [];
 $message = false;
-if ( !$row['school_store'] )
-    $message = "$school_name has closed it's prize store.";
+if ( !$row['school_store'] ) {
+    if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+        $message = "בית הספר " . $school_name . " סגר את חנות הפרסים שלו.";
+    } else {
+        $message = "$school_name has closed it's prize store.";
+    }
+}
 else {
     mysql_select_db('pointsDB');
     $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, prizes.created, points, image_id, one_per_user, prize_count, class_id 
@@ -37,8 +42,13 @@ else {
         // if not, add the prize to the results
         $prizes[$row['points']][] = $row;
     }
-    if ( count( $prizes ) == 0 )
-        $message = "It appears that $school_name has no prizes available.";
+    if ( count( $prizes ) == 0 ) {
+        if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+            $message = "נראה שבבית הספר / תלמוד תורה " . $school_name . " אין פרסים זמינים";
+        } else {
+            $message = "It appears that $school_name has no prizes available.";
+        }
+    }
 }
 
 header("Content-Type: application/json; charset=utf-8;");
