@@ -7,13 +7,12 @@
     <script>
         let limit = 0
         let counter = 0
-        setInterval(function() {
+        const id = setInterval(function() {
             $.get('updateCacheAll.php', { limit: limit })
             limit += 500
             counter++
-            if (counter > 19) {
-                clearInterval()
-                break
+            if (counter > 18) {
+                clearInterval(id)
             }
         }, 500)
     </script>
