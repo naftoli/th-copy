@@ -302,8 +302,18 @@ $he_chars = array(
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
-            It appears that <?=$user->first?> is currently unenrolled from Chayolei Tzivos Hashem (CTH).<br/><br/>
-            Please contact your base commander regarding enrolling <?=$user->gender == 'M' ? 'him' : 'her'?> in Chayolei Tzivos Hashem.
+            <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                ?>
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות השם<br /><br />
+                נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
+                <?php
+            } else {
+                ?>
+                It appears that <?=$user->first?> is currently unenrolled from Chayolei Tzivos Hashem (CTH).<br/><br/>
+                Please contact your base commander regarding enrolling <?=$user->gender == 'M' ? 'him' : 'her'?> in Chayolei Tzivos Hashem.
+                <?php
+            }
+            ?>
         </h1>
     </div>
 </div>
@@ -311,8 +321,18 @@ $he_chars = array(
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
-            It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
-            Please Register <?=$user->gender == 'M' ? 'him' : 'her'?> before marking missions.
+            <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                ?>
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות השם<br /><br />
+                נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
+                <?php
+            } else {
+                ?>
+                It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
+                Please Register  before marking missions.
+                <?php
+            }
+            ?>
         </h1>
     </div>
 </div>
