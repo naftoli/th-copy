@@ -455,7 +455,7 @@
               </div>
             </div>
             -->
-            <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;max-width: 1024px;">
+            <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;max-width: 1024px;" id="news-link">
                 <div class="span12 footer">
                     <div class="span3" style="width: 100%">
                         <a href="/mobile/news?v=3">
@@ -480,6 +480,8 @@
     <script src="../js/translation/parent-detail/parent_detail.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
+            if (localStorage.getItem("locallang") == 'he') $("#news-link").hide();
            
             // allow parents to swipe to open a child's account.
             function setSwiper() {
