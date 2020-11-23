@@ -5,8 +5,10 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script>
-        for (let i = 0; i < 20; i += 500) {
-            $.get('updateCacheAll.php', { limit: i });
+        let limit = 0
+        for (let i = 0; i < 20; i++) {
+            $.get('updateCacheAll.php', { limit: limit })
+            limit += 500
         }
     </script>
 </head>
