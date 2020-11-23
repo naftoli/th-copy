@@ -84,7 +84,7 @@ foreach ($schools as $school_id => $school) {
                 }
                 echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' /></td>";
             }
-            $avg = round($avg / $divideBy, 2);
+            if ($divideBy) $avg = round($avg / $divideBy, 2);
             $class = '';
             if ($avg >= 80) $class="red";
             echo "<td class=''" . $class . "'>" . $avg . "</td></tr>";
