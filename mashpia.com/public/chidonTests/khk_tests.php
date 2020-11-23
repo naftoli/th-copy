@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
         }
     }
     foreach ($qrys as $qry) mysql_query($qry);
-    $msg = "Marks Updated.";
+    $msg = "Marks Saved.";
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
