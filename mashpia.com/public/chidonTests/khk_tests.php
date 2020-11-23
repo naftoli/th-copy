@@ -5,6 +5,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+$msg = '';
 if (isset($_POST['submit'])) {
     $qrys = [];
     foreach ($_POST['marks'] as $id => $marks) {
@@ -14,7 +15,7 @@ if (isset($_POST['submit'])) {
         }
     }
     foreach ($qrys as $qry) mysql_query($qry);
-    echo "Marks Updated.";
+    $msg = "Marks Updated.";
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
@@ -59,24 +60,31 @@ foreach ($schools as $school_id => $school) {
     <?php include('../admin_header.php'); ?>
     <h1>Enter KHK Marks</h1>
     <?php
+    if (!empty($msg)) {
+        echo "<div style='color: red'>" . $msg . "</div>";
+    }
     echo "<form action='' method='post'>";
     echo "<div style='float: right'><input type='submit' name='submit' value='Save Marks' style='padding: 12px; font-size: large' /></div><div style='clear: both;'></div>";
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
         echo "<h2>" . $schools[$school] . "</h2>";
-        echo "<table><tr><th>Chidon KHK ID</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
+        echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
             $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
             $avg = 0;
             echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+            $divideBy = 0;
             for ($i = 1; $i <= 4; $i++) {
                 $mark = $child["khk_test_$i"];
-                $avg += floatval($mark);
+                if ($mark > 0) {
+                    $avg += floatval($mark);
+                    $divideBy++;
+                }
                 echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' /></td>";
             }
-            $avg = round($avg / 4, 2);
+            $avg = round($avg / $divideBy, 2);
             $class = '';
             if ($avg >= 80) $class="red";
             echo "<td class=''" . $class . "'>" . $avg . "</td></tr>";
