@@ -308,9 +308,17 @@ if ( !empty( $users ) ) {
 			$numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
 			// send them a message with how many days left/done
 			if ($numTasks >= 160) {
-				$children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+			    if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                    $children[$row['user_id']]['auctionInfo'] = 'הסתיימו 160 ימים של משימות. יש לך זכאות להשתתף בהגרלה השנתית';
+                } else {
+                    $children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+                }
 			} else {
-				$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+                if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                    $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . 'ימים של משימות כדי להכנס להגרלה השנתית';
+                } else {
+                    $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+                }
 			}
 		}
 		
