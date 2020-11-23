@@ -184,6 +184,10 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - add_ssh_keys:
+          fingerprints:
+            - "75:d5:c7:bb:6a:35:35:6b:24:69:1e:f8:9e:56:79:ad"
+
       - run:
           name: Add Test3.Mashpia.com to known_hosts
           command: |
@@ -256,7 +260,7 @@ workflows:
             branches:
               only:
                 - master
-                - testing
+#                - testing
                 - raffles
 
       - deploy-testing:
