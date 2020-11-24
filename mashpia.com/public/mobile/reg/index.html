@@ -170,8 +170,8 @@
 			<span class="span12 i18n" data-key="Title">TZIVOS HASHEM</span>
 
 			<div style="float: right;">
-				<button id="en" class="translate">English</button>
-				<button id="he" class="translate">עִברִית</button>
+				<button id="en" class="translate btn btn-flat">English</button>
+				<button id="he" class="translate btn btn-flat">עִברִית</button>
 			</div>
 		</div>
 		<div class="span12 body">
@@ -296,6 +296,10 @@
 				window.location = "parent_detail.html";
 			}
 
+			// check lang
+			const lang = localStorage.getItem('locallang') || Cookies.get('lang')
+			$("#" + lang).addClass('btn-primary')
+
 			$("#loginForm").submit(function (event) {
 				// Stop form from submitting normally
 				event.preventDefault();
@@ -330,6 +334,20 @@
 					}
 				});
 			});
+
+			$(".translate").click( function() {
+				const change = !$(this).hasClass('btn-primary')
+				if (change) {
+					const lang = $(this).attr('id')
+					if (lang == 'he') {
+						$("#he").addClass('btn-primary')
+						$("#en").removeClass('btn-primary')
+					} else if (lang == 'en') {
+						$("#en").addClass('btn-primary')
+						$("#he").removeClass('btn-primary')
+					}
+				}
+			})
 
 			// $("#createAccount").click( function(e) {
 			// 	var confirm = window.confirm("Warning! Do not create a new account if you might have an existing one. Your school could have already created a parent account for you. You can find out if they have an account by clicking “forgot user/password” and you will be prompted to enter your email address in which you will be sent your password.\nAre you sure you want to continue creating a new account?");

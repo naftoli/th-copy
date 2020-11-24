@@ -57,14 +57,14 @@
 
         trasPlaceholder();
 
-        translate()
+        translate();
      });
 
      $('.translate').click(function () {
          var lang = $(this).attr('id');
 
          localStorage.setItem("locallang", lang);
-         if (Cookies.get('lang')) Cookies.remove('lang')
+         if (Cookies.get('lang')) Cookies.remove('lang');
          Cookies.set('lang', lang);
 
          i18next.changeLanguage(lang);
