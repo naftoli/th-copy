@@ -77,14 +77,15 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['chayoleiRegistered'] = false;
 
 		// find out highest rank achieved
-		$sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
+		$sqlRank = "select r.rank_ord, r.rank_name, r.rank_name_he, r.rank_image_id 
 					from ranks r 
 					join rank_marks rm using (rank_ord) 
 					where rm.user_id = " . $row['user_id'] . " 
 					order by rank_ord desc limit 1";
         $resRank = mysql_query( $sqlRank );
         $rowRank = mysql_fetch_assoc( $resRank );
-        $children[$row['user_id']]['rank'] 		= $rowRank['rank_name'] ? $rowRank['rank_name'] : '';
+        $children[$row['user_id']]['rank'] 		= $rowRank['rank_name'] ?
+            (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $rowRank['rank_name_he'] : $rowRank['rank_name']) : '';
         $children[$row['user_id']]['rankOrd']	= $rowRank['rank_ord'] ? $rowRank['rank_ord'] : 0;
         $children[$row['user_id']]['rankImg'] 	= $rowRank['rank_image_id'] ? $rowRank['rank_image_id'] : '';
 

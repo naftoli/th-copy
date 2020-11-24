@@ -481,7 +481,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
-            if (localStorage.getItem("locallang") == 'he') $("#news-link").hide();
+            if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
            
             // allow parents to swipe to open a child's account.
             function setSwiper() {
