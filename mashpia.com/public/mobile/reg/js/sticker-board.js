@@ -91,21 +91,20 @@ var sticker_board = function() {
         var progressbarFloat = "";
         var progressTextAlignment = "";
        
-        if (localStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") === 'he' || Cookies.getItem('lang') === 'he') {
             MissionsText = "משימות";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
             progressTextAlignment = ' style="direction:rtl !important;" ';
-            
-            
         }
+
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
         var progress_text = campaign.total + ' / ' + campaign.subject_total + ' ' + MissionsText+'</span>';
         if (percent_compleate >= 100) progress_text = CampaignCompleateText;
 
         var result =  '<div class="medal-slider-item">' +
                     '<img src="' + campaign.photo + '">' + 
-                    '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
+                    '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' +
                     '<div class="medal-status progress">' + 
             '<div class="progress-bar ' + (percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;' + progressbarFloat +'"></div>' +
             '<span' + progressTextAlignment +'>' + progress_text + '</span>' +
@@ -125,7 +124,7 @@ var sticker_board = function() {
         var levelText = "Level ";
         var styleFloat = "";
 
-        if (localStorage.getItem("locallang") == "he") {
+        if (localStorage.getItem("locallang") === "he") {
             ToText = " עד ";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
@@ -195,7 +194,7 @@ var sticker_board = function() {
                
                 '<p>' +
                 '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
-                campaign.subject_details +
+                campaign.subject_details_he +
                 '</p>' +
                 '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
                 '</div>';
