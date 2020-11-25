@@ -185,12 +185,13 @@ $institution_result = mq('SELECT inst_id, inst_name FROM institutions ORDER BY i
         <OPTION VALUE="<?=$row['inst_id']?>" <?=$row['inst_id'] == $edit_row['inst_id'] ? 'SELECTED' : '' ?>><?=es($row['inst_name'])?></OPTION>
       <? endwhile; ?>
 </SELECT></LABEL><BR>
+    <input type="hidden" name="subject_type" value="" />
 <LABEL><?=T_('Order')?><BR><INPUT type="text" name="subject_ord" maxlength=3 value="<?=es($edit_row['subject_ord'])?>"></LABEL> (0-255). <?=T_('Subjects with the same number will sort alphabetically by name.')?><BR>
-<LABEL><?=T_('Type')?><BR><SELECT name="subject_type">
-      <? foreach(mysql_enum_values('subjects','subject_type') as $type): ?>
-        <OPTION VALUE="<?=$type?>" <?=$edit_row['subject_type'] == $type ? 'SELECTED' : '' ?>><?=$type == 'goal_hist' ? T_('Show goals and history') : $type ?></OPTION>
-      <? endforeach; ?>
-</SELECT></LABEL><BR>
+<!--<LABEL>--><?//=T_('Type')?><!--<BR><SELECT name="subject_type">-->
+<!--      --><?// foreach(mysql_enum_values('subjects','subject_type') as $type): ?>
+<!--        <OPTION VALUE="--><?//=$type?><!--" --><?//=$edit_row['subject_type'] == $type ? 'SELECTED' : '' ?><!--<?//=$type == 'goal_hist' ? T_('Show goals and history') : $type ?><!--</OPTION>-->
+<!--      --><?// endforeach; ?>
+<!--</SELECT></LABEL><BR>-->
 <LABEL><?=T_('Tzivos Hashem Types')?><BR><SELECT name="school_type_ids[]" multiple size="10">
       <? while($row = mysql_fetch_assoc($school_type_result)): ?>
         <OPTION VALUE="<?=$row['school_type_id']?>" <?=in_array($row['school_type_id'], $school_type_ids) ? 'SELECTED' : '' ?>><?=es($row['school_type_name'])?></OPTION>
