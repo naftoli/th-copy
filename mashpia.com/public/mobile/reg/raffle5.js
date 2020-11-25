@@ -4,47 +4,6 @@ const darkBlue = '#232c7b';
 const grey = '#b3b3b0';
 const xmlns = "http://www.w3.org/2000/svg";
 
-
-// const trackRecordData = [
-//     //needs to be sorted from newest to oldest
-//     {
-//         parsha: 'ויצא',
-//         won: false,
-//         prize: 'Cap',
-//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: false, past: false }, { completed: false, past: false }, { completed: false, past: false }]
-//     }, {
-//         parsha: 'תולדות',
-//         won: false,
-//         prize: 'T Shirt',
-//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }, {
-//         parsha: 'חיי שרה',
-//         won: false,
-//         prize: 'Sweatshirt',
-//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }, {
-//         parsha: 'וירא',
-//         won: false,
-//         prize: 'Mug',
-//         days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }, {
-//         parsha: 'לך לך',
-//         won: true,
-//         prize: 'Fidget Spinner',
-//         days: [{ completed: false, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }, {
-//         parsha: 'נח',
-//         won: false,
-//         prize: 'Mug',
-//         days: [{ completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }, {
-//         parsha: 'בראשית',
-//         won: false,
-//         prize: 'Sweatshirt',
-//         days: [{ completed: true, past: true }, { completed: false, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }, { completed: true, past: true }]
-//     }
-// ];
-
 const createElementWithClass = (elm, className) => {
     let element = document.createElement(elm)
     element.classList.add(className);
@@ -139,8 +98,8 @@ const createSmallDonutChart = (donutData, index) => {
     img.alt = 'flag';
     let h2 = document.createElement('h2');
     h2.innerText = amountCompleted;
-    smallRaffleFlagContainer.appendChild(h2);
     smallRaffleFlagContainer.appendChild(img);
+    smallRaffleFlagContainer.appendChild(h2);
     container.appendChild(smallRaffleFlagContainer);
 
     //Load Doughnut chart
@@ -220,12 +179,22 @@ const loadDonutCharts = () => {
         if (index % 3 === 0) {
             if (div) trackRecordContainer.appendChild(div);
             div = document.createElement('div');
+            div.classList.add('trackRecordContainer')
         }
-        let smallDonutChart = createSmallDonutChart(trackRecord, index);
-        div.appendChild(smallDonutChart);
+        let trackRecordDiv = document.createElement('div');
+        trackRecordDiv.classList.add('trackRecord');
+        let canvas = document.createElement('canvas');
+        canvas.classList.add('trackRecordCanvas');
+        canvas.id = 'trackRecord' + index;
+        trackRecordDiv.appendChild(canvas);
+        div.appendChild(trackRecordDiv);
         index += 1
     });
     trackRecordContainer.appendChild(div);
+
+    trackRecordData.forEach((trackRecord, index) => {
+        createSmallDonutChart(trackRecord, index);
+    });
 };
 
 const clearPastWinners = () => {
@@ -375,12 +344,11 @@ const fetchPastWinners = async (raffle_id, user_id) => {
 const init = () => {
     const id = new URLSearchParams(window.location.search).get('id');
     if (localStorage.getItem("login")) {
-        // document.getElementById("mainLink").setAttribute('href', '/mobile/reg/medals/?id=' + id);
-        // document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
-        // document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
         document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
         document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
         document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
+        let raffleNumber = window.location.pathname.split('.html')[0].split('raffle').pop();
+        document.getElementById("flagLink" + raffleNumber).classList.add('activeFlagLink');
     }
 
     $.post('../reg/ajax/getPhoto.php', { user_id: id }, function (success) {

@@ -135,13 +135,29 @@
 				width: 100%;
 				display: flex;
 				align-items: center;
-				top: 21%;
+				top: 0;
 				justify-content: center;
+				height: 78%;
+			}
+			@media (max-width:  450px){
+				#raffleInfoContainer .item .raffleFlagContainer {
+					height: 55%;
+				}
+			}
+
+			.body .medal-label span {
+				font-size: 12px;
+			}
+			
+			@media (min-width: 815px) {
+				.body .medal-label span {
+					font-size: 26px;
+				}
 			}
 
 			#raffleInfoContainer .item .raffleFlagContainer img {
-				height: 35px;
-				width: 35px;
+				/* height: 35px; */
+				width: 25%;
 			}
 
 			#raffleInfoContainer .item .raffleFlagContainer h2 {
@@ -246,6 +262,7 @@
 				flex-direction: column;
 				margin: 10px;
 				box-sizing: border-box;
+				cursor: pointer;
 			}
 
 		</style>

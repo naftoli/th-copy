@@ -37,6 +37,8 @@
         .rafflesContainer {
             flex: 1;
             padding: 30px;
+            max-width: 700px;
+            margin: auto;
         }
 
         .item {
@@ -408,6 +410,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            max-width: 400px;
+            margin: auto;
         }
 
         .textSVG {
@@ -447,7 +451,7 @@
             font-size: 40px;
             font-weight: bold;
             position: absolute;
-            top: 35%;
+            top: 36.3%;
             margin-left: -10px;
             font-family: Baloo;
             height: 10%;
@@ -538,6 +542,11 @@
             justify-content: space-between;
             padding: 10px;
             align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 2;
+            height: 70px;
+            box-sizing: border-box;
         }
 
         #page-title {
@@ -561,15 +570,24 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 10px;
             background: #e5e5e5;
+            margin-top: 70px;
+        }
+
+        .navRaffleFlagContainer>* {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
         }
 
         .flagImg {
             height: 50px;
         }
 
-        /* TODO: clean up styles */
+        .activeFlagLink {
+            background-image: linear-gradient(#e5e5e5, #bebebe);
+        }
     </style>
 </head>
 
