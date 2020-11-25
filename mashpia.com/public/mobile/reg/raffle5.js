@@ -121,7 +121,8 @@ const createSmallDonutChart = (donutData, index) => {
         options: {
             cutoutPercentage: 75,
             aspectRatio: 1,
-            responsive: true,
+            maintainAspectRatio: true,
+            responsive: false,
             elements: {
                 arc: {
                     backgroundColor: 'white',
