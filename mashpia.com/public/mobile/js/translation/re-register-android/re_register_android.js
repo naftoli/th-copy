@@ -78,15 +78,7 @@ var en = jsonen;
 
          
 
-        // get info from api to illustrate that we can make it work also with elements created and inserted dynamically
-
-        // $.post("js/translation/forgot/en.json", function (res) {
-
-        //     // todo : add all translations to page dynamicaly !!
-        //     console.log(res,'sss')
-
-        // })
-
+     
     })
 
     function trasPlaceholder(){
@@ -108,9 +100,16 @@ var en = jsonen;
 
             const key = $(this).data('key')
 
-            $(this).text(i18next.t(key))
-            
+            $(this).text(i18next.t(key))           
 
         })
+
+        if (localStorage.getItem("locallang") == "he") {
+            $(".i18n").addClass("hebrew");
+
+            $("BODY").css("direction", "rtl");
+            $("input").addClass("hebrew");
+
+        }
 
     } 
