@@ -37,6 +37,8 @@ cgi-bin
 /youtrack/
 /v2/stats
 /chidon/attendance/db-seeder/vendor
+/laravel/
+/symfony/
 
 # ignore image cache
 /camps/includes/imagecache/
