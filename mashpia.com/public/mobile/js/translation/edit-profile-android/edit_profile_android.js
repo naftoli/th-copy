@@ -1,4 +1,4 @@
- 
+﻿ 
 var jsonhe = (function(){
   var json = null;
   $.ajax({
@@ -112,8 +112,16 @@ var en = jsonen;
             const key = $(this).data('key')
 
             $(this).text(i18next.t(key))
-            
-
         })
+
+        if (localStorage.getItem("locallang") == "he") {
+            $(".i18n").addClass("hebrew");
+            $("input").addClass("hebrew");
+
+            $("BODY").css("direction", "rtl");
+            $(".fa-long-arrow-right").removeClass("fa-long-arrow-right").addClass("fa-long-arrow-left");
+
+
+        }
 
     } 
