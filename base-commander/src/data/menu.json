@@ -58,7 +58,14 @@
       { "label": "Tests",
         "items" : [
           { "label": "Set Chidon Test Types", "legacy": true, "path": "/chidonTests/setTypes.php" },
-          { "label": "Enter Chidon Test Scores", "legacy": true, "path": "/chidonTests/enterScores.php" },
+          { "label": "Enter Chidon Test Scores",
+            "items" : [
+              { "label": "Test #1", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=1" },
+              { "label": "Test #2", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=2" },
+              { "label": "Test #3", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=3" },
+              { "label": "Test #4", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=4" }
+            ]
+          },
           { "label": "Review Marks", "legacy": true, "path": "/chidonTests/marks.php" },
           { "label": "KHK Tests", "legacy": true, "path": "/chidonTests/khk_tests.php" }
         ]
