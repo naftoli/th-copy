@@ -35,16 +35,37 @@ function getPrizeInfo( $raffleID ) {
     return $info;
 }
 
-function checkTasks( $user_id, $start, $end ) {
+function checkTasks( $user_id, $start, $end, $type ) {
     $grid_id = 13012;
-    $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
-            join date_tasks dt using (date_task_id) 
-            where dtm.user_id = " . $user_id . " 
-            and dt.grid_id = " . $grid_id . " 
-            and dtm.mark_date >= " . $start . " 
-            and dtm.mark_date <= " . $end;
-    $result = mysql_query($sql);
-    return mysql_fetch_assoc($result)['total'];
+    if ($type == 'weekly') $rollover = 2459167;
+    else if ($type == 'monthly') $rollover = 2459171;
+    if ($start >= $rollover) { // simple calculation
+        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
+                join date_tasks dt using (date_task_id) 
+                where dtm.user_id = " . $user_id . " 
+                and dt.grid_id = " . $grid_id . " 
+                and dtm.mark_date >= " . $start . " 
+                and dtm.mark_date <= " . $end;
+        $result = mysql_query($sql);
+        return mysql_fetch_assoc($result)['total'];
+    } else {
+        // find all tasks marked in date_tasks_marks up to rollover date
+        // then find all tasks marked using grid id for after rollover date
+        // then add the two numbers together
+        $sql1 = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
+                AND dtmarks.mark_date >= $start AND dtmarks.mark_date < $rollover AND daily_task = 0
+                AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+        $sql2 = "select count(distinct mark_date) as total from date_tasks_marks dtm
+                join date_tasks dt using (date_task_id) 
+                where dtm.user_id = " . $user_id . " 
+                and dt.grid_id = " . $grid_id . " 
+                and dtm.mark_date >= " . $rollover . " 
+                and dtm.mark_date <= " . $end;
+        $result1 = mysql_query($sql1);
+        $result2 = mysql_query($sql2);
+        $total = intval(mysql_fetch_assoc($result1)['total']) + intval(mysql_fetch_assoc($result2));
+        return $total;
+    }
 }
 
 function getRaffleHistory( $type, $user_id ) {
@@ -76,11 +97,12 @@ function getRaffleHistory( $type, $user_id ) {
         $days = [];
         $start = $row['start_date'];
         $end = $row['end_date'];
-        while ( $end-- >= $start ) { // check all days in week
+        while ( $end >= $start ) { // check all days in week
             $days[] = [
-                'completed' => checkTasks( $user_id, $end, $end ) > 0 ? true : false,
-                'past'      => $row['date_ran'] > 0 ? true : false
+                'completed' => checkTasks($user_id, $end, $end, $type) > 0 ? true : false,
+                'past'      => $end < unixtojd() ? true : false
             ];
+            $end--;
         }
         $history[] = [
             'parsha'    => $row['name'],
@@ -130,17 +152,17 @@ function getDailyTaskInfo( $user_id, $type ) {
         $target = new DateTime($run_date);
         $interval = $origin->diff($target);
         $days = $interval->days;
-        $total = checkTasks($user_id, $start, $end);
+        $total = checkTasks($user_id, $start, $end, $type);
 
         $info = [];
-        while ($end-- > $start) {
-            $past = $end < unixtojd() ? true : false;
+        while ($end > $start) {
             $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
             $info[$heMonth][] = [
-                'completed' => checkTasks($user_id, $end, $end) > 0 ? true : false,
-                'past' => $past
+                'completed' => checkTasks($user_id, $end, $end, $type) > 0 ? true : false,
+                'past'      => $end < unixtojd() ? true : false
             ];
+            $end--;
         }
         $result[] = [
             'raffleNumber'  => $idx + 1,
