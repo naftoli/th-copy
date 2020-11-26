@@ -53,14 +53,9 @@ class TotalWeeklyTasks {
     }
     // count all the weeks with a task since September 15 2017 (default start date)
     public function total_weeks_with_task( $realtime = false ){
-        $total_weeks = 0; // start with no weeks with tasks
         // realtime or cached....
         if ( $realtime ){
-            foreach($this->week_dates as $week_dates){
-                if( $this->week_has_task( $week_dates["start"], $week_dates["end"], true ) ){ // get the parts of the week by their start and end keys
-                    $total_weeks += 1; // another week has tasks marked for it
-                }
-            };
+            return $this->realtime_total_weeks_with_task($this->week_dates[0]['start'], end($this->week_dates)['end']);
         } else { // pull results from the cache table ( do not calculate the information )
             $total_weeks_query = mysql_query(
                  " SELECT COUNT(*) as total FROM user_yearly_gift WHERE start_date >= '" . $this->week_dates[0]['start'] ."' "
@@ -68,47 +63,66 @@ class TotalWeeklyTasks {
                 ." AND user_id = '" . $this->user_id . "' "
                 ." AND marked = 1 "
             );
-            $total_weeks = mysql_fetch_assoc( $total_weeks_query )['total'];
+            return mysql_fetch_assoc( $total_weeks_query )['total'];
         }
-        
-        return $total_weeks;
     }
-    // check if a single week has a task
-    public function week_has_task($start, $end, $realtime = false, $deleting = false){
 
+    /**
+     * check if a single week has a task.
+     * with options for bypassing and updating the cache
+     * @param int $start start of week julian date
+     * @param int $end end of week julian date
+     * @param bool $realtime bypasses the cache and adds marks to the cache
+     * @param bool $deleting bypasses the cache and adds/removes marks from the cache, overiding $realtime
+     * @return bool
+     */
+    public function week_has_task($start, $end, $realtime = false, $deleting = false){
         if ( !$deleting ) {
-            // check if they are marked in teh yearly gift table
-            $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $this->user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
+            // check if they are marked in the yearly gift table
+            $sql = "SELECT EXISTS(
+                    SELECT * FROM user_yearly_gift WHERE user_id = {$this->user_id} AND start_date = $start AND end_date = $end AND marked = 1
+                ) as marked;"; // check if there is a mark for this user on this week
             $query = mysql_query($sql);
-            if (mysql_num_rows($query) > 0) { // if we have an entry in the table
-                $row = mysql_fetch_assoc($query);
-                if ($row['marked'] == 1) return true; // if it is set to one, then return true otherwise keep checking the marks
+            // if they are marked or realtime is false return the result of the above query
+            if (mysql_fetch_assoc($query)['marked']) {
+                return true;
             }
             if ( !$realtime )
-                return false; // we did not find it above. do not look further
+                return false;
+            // if it's not marked and realtime is true then
+            // continue checking below in case it's not yet in the cache
         }
-        
-        // check if there is any marks during the week period
-        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
-            ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
-            ."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
-            ."where dtmarks.user_id = ".$this->user_id." and ut.user_id = ".$this->user_id." "
-            ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
-            ."group by dtmarks.date_task_id";
-            
-        //if($this->user_id == 50628) echo $sql."<br/><br/>";
 
-        $query = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($query)){
-            if ($row['total'] >= 1 && // if the amount of rows is equal to what is needed (covers daily tasks)
-                ($row['quantity'] ? $row['done_qty'] >= $row['quantity'] : true)){ // make sure that the quanity is good (covers non daily tasks)
-                $this->mark_week_task( $start, $end );
-                return true; // we have a vaid task for the week
-            }
+        if ($this->realtime_total_weeks_with_task($start, $end)){
+            $this->mark_week_task( $start, $end );
+            return true; // we have a vaid task for the week
+        } else {
+            $this->clear_week_task( $start, $end ); // delete it if it is blank
+            return false;
         }
-        $this->clear_week_task( $start, $end ); // delete it if it is blank
-        return false;
     }
+
+    /**
+     * returns the number of weeks where the user did at least one mission
+     * within the $start to $end date range.
+     * also works great for single weeks.
+     */
+    public function realtime_total_weeks_with_task(int $start, int $end) : int {
+        // the 4 would need to be adjusted to {week_start_jd % 7} if the week didn't start on friday
+        $sql = "SELECT DISTINCT
+            ROUND((mark_date - 4) DIV 7, 0) * 7 + 4 AS marked_week_start
+            FROM date_tasks_marks as dtm
+            JOIN date_tasks as dt using (date_task_id)
+            WHERE dtm.user_id = {$this->user_id}
+            and dtm.mark_date >= $start
+            and dtm.mark_date <= $end
+            and ( dt.quantity IS NULL || dtm.done_qty >= dt.quantity)
+        ";
+        $query = mysql_query($sql);
+
+        return intval(mysql_num_rows($query));
+    }
+
     // insert a row into the user_yearly_gift table
     private function mark_week_task( $start, $end ){
         $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked) VALUES ('".$this->user_id."', '$start', '$end', 1)";
@@ -142,4 +156,3 @@ class TotalWeeklyTasks {
         return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true, $deleting );
     }
 }
-
