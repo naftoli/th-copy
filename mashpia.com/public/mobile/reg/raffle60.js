@@ -157,7 +157,7 @@ const load60FlagDonutCharts = () => {
         raffleHeader.appendChild(parshaContainer);
         raffleHeader.appendChild(calendar);
 
-        let rotation = 160;
+        let rotation = 40;
 
         let doughnutContainer = document.getElementById('doughnutContainer' + index);
 
@@ -239,7 +239,7 @@ const load60FlagDonutCharts = () => {
 
             doughnutContainer.appendChild(textSVG);
 
-            rotation += (360 / Object.keys(months).length);
+            rotation -= (360 / Object.keys(months).length);
 
         });
 
