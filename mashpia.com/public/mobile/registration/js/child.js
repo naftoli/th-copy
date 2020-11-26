@@ -111,7 +111,9 @@ var childApp = function(){
         event.preventDefault();
 
         var postData = formToJSON(event.target);
-        
+        // make sure we create first and last hebrew name
+        if (postData['first_he'] === '') postData['first_he'] = postData['first'];
+        if (postData['last_he'] === '') postData['last_he'] = postData['last'];
 
         // validate the DOB is valid input
         if (!postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/)) {
