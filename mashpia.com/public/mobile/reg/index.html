@@ -255,7 +255,7 @@
 
 			</div>
 
-			<div class="span12" style="bottom: 0px;z-index: 9999;">
+			<div class="span12" style="bottom: 0px;z-index: 9999;" id="news-site">
 				<div class="span12 footer">
 					<div class="span3" style="width: 100%">
 						<a href="/mobile/news/?v=3">
@@ -299,6 +299,8 @@
 			// check lang
 			const lang = localStorage.getItem('locallang') || Cookies.get('lang')
 			$("#" + lang).addClass('btn-primary')
+			if (lang === 'he') $("#news-site").hide()
+			else $(".translate").eq(0).trigger('click')
 
 			$("#loginForm").submit(function (event) {
 				// Stop form from submitting normally
@@ -342,9 +344,11 @@
 					if (lang == 'he') {
 						$("#he").addClass('btn-primary')
 						$("#en").removeClass('btn-primary')
+						$("#news-site").hide()
 					} else if (lang == 'en') {
 						$("#en").addClass('btn-primary')
 						$("#he").removeClass('btn-primary')
+						$("#news-site").show()
 					}
 				}
 			})
