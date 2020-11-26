@@ -91,7 +91,7 @@ var sticker_board = function() {
         var progressbarFloat = "";
         var progressTextAlignment = "";
        
-        if (localStorage.getItem("locallang") === 'he' || Cookies.getItem('lang') === 'he') {
+        if (localStorage.getItem("locallang") === 'he' || Cookies.get('lang') === 'he') {
             MissionsText = "משימות";
             CampaignCompleateText = "הקמפיין הושלם!";
             progressbarFloat = "float: right;";
