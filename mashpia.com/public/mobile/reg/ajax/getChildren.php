@@ -57,7 +57,7 @@ if ( !empty( $users ) ) {
 		$reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
 		$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
 		$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
-		$children[$row['user_id']]['school'] 	= $row['school_name'];
+		$children[$row['user_id']]['school'] 	= isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['school_name_he'] : $row['school_name'];
 		$children[$row['user_id']]['city'] 		= $row['school_city'];
 		$children[$row['user_id']]['photo'] 	= empty( $row['user_photo_id'] ) ? null : $row['user_photo_id'];
 		$children[$row['user_id']]['thumb'] 	= 0;
