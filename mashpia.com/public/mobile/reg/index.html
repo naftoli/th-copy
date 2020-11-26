@@ -167,7 +167,7 @@
 <body>
 	<div class="container login-page">
 		<div class="login-header">
-			<span class="span12 i18n" data-key="Title">TZIVOS HASHEM</span>
+			<span class="span12 i18n" data-key="Title" id="top-title">TZIVOS HASHEM</span>
 
 			<div style="float: right;">
 				<button id="en" class="translate btn btn-flat">English</button>
@@ -297,9 +297,14 @@
 			}
 
 			// check lang
-			const lang = localStorage.getItem('locallang') || Cookies.get('lang')
+			let lang = localStorage.getItem('locallang') || Cookies.get('lang')
+			if (!lang) lang = 'en'
 			$("#" + lang).addClass('btn-primary')
-			if (lang === 'he') $("#news-site").hide()
+			if (lang === 'he') {
+				$("#news-site").hide()
+				$("#top-title").attr('dir', 'rtl')
+				$(".translate").eq(1).trigger('click')
+			}
 			else $(".translate").eq(0).trigger('click')
 
 			$("#loginForm").submit(function (event) {
@@ -322,6 +327,10 @@
 								path: '/',
 								expires: 365
 							});
+							Cookies.set('lang', lang, {
+								path: '/',
+								expires: 365
+							})
 						} else {
 							Cookies.set('admin', success, {
 								path: '/',
@@ -340,7 +349,7 @@
 			$(".translate").click( function() {
 				const change = !$(this).hasClass('btn-primary')
 				if (change) {
-					const lang = $(this).attr('id')
+					lang = $(this).attr('id')
 					if (lang == 'he') {
 						$("#he").addClass('btn-primary')
 						$("#en").removeClass('btn-primary')
