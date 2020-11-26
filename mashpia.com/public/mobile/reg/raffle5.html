@@ -211,7 +211,7 @@
         }
 
         .raffleInfo {
-            /* width: 100px; */
+            width: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -231,7 +231,7 @@
             justify-content: center !important;
             z-index: 1;
             align-items: center;
-            height: 88%;
+            height: 100px;
 
         }
 
@@ -375,8 +375,8 @@
         }
 
         #circleText {
-            width: 100%;
-            height: 88%;
+            width: 100px;
+            height: 100px;
             z-index: 1;
             position: absolute;
             fill: transparent;
@@ -455,11 +455,11 @@
         }
 
         .trackRecordCanvas {
-            width: 100%;
+            width: 100px;
+            height: 100px;
             box-sizing: border-box;
             margin: 0;
             z-index: 1;
-            min-width: 100px;
         }
 
         .trackRecordContainer {
@@ -476,17 +476,89 @@
 
         .winningCircle {
             background: #ffd624;
-            width: 80%;
-            height: 80%;
+            width: 100px;
+            height: 100px;
             border-radius: 100%;
             position: absolute;
             z-index: 0;
             bottom: 0;
-            left: 10%;
+            left: 0;
         }
 
         #raffle5Doughnut {
             z-index: 1;
+        }
+
+        @media (min-width: 615px) {
+            .winningCircle {
+                width: 150px;
+                height: 150px;
+            }
+
+            #circleText {
+                width: 150px;
+                height: 150px;
+            }
+
+            .trackRecordCanvas {
+                width: 150px;
+                height: 150px;
+            }
+
+            .raffleInfo {
+                width: 150px;
+            }
+
+            .smallRaffleFlagContainer {
+                height: 150px;
+            }
+
+            .smallRaffleFlagContainer h2 {
+                font-size: 28px;
+                margin-top: 32px;
+                margin-left: -32px;
+            }
+
+            .smallRaffleFlagContainer img {
+                height: 55px;
+                width: 55px;
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .winningCircle {
+                width: 180px;
+                height: 180px;
+            }
+
+            #circleText {
+                width: 180px;
+                height: 180px;
+            }
+
+            .trackRecordCanvas {
+                width: 180px;
+                height: 180px;
+            }
+
+            .raffleInfo {
+                width: 180px;
+            }
+
+            .smallRaffleFlagContainer {
+                height: 180px;
+            }
+
+            .smallRaffleFlagContainer h2 {
+                font-size: 30px;
+                margin-top: 35px;
+                margin-left: -35px;
+            }
+
+            .smallRaffleFlagContainer img {
+                height: 60px;
+                width: 60px;
+            }
         }
     </style>
 </head>
