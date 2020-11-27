@@ -85,7 +85,7 @@ function getRaffleHistory( $type, $user_id ) {
             WHERE
                 type = '$type' AND year = $year
                     AND end_date <= $end
-            ORDER BY end_date desc";
+            ORDER BY start_date";
     $result = mysql_query($sql);
     while ( $row = mysql_fetch_assoc($result) ) {
         // check if user won
@@ -126,13 +126,13 @@ function getDailyTaskInfo( $user_id, $type ) {
         $sql_raffles = "select * from raffles 
                         where type = '" . $type . "' 
                         and year = " . $todayHe[2] . "  
-                        order by run_date desc";
+                        order by run_date";
     } else {
         $today = unixtojd();
         $sql_raffles = "SELECT * FROM raffles
-			WHERE type = '" . $type . "'
-			AND start_date <= " . $today . "
-            AND end_date >= " . $today;
+                        WHERE type = '" . $type . "'
+                        AND start_date <= " . $today . "
+                        AND end_date >= " . $today;
     }
     $result_raffles = mysql_query($sql_raffles);
     while ($row = mysql_fetch_assoc($result_raffles)) {
