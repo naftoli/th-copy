@@ -306,8 +306,10 @@ $he_chars = array(
         <h1 style='text-align: center; font-weight: bold;'>
             <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
                 ?>
-                נראה ש <?=$user->first?> לא רשום כעת לצבאות השם<br /><br />
+            <span style="direction: rtl">
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות ה'<br /><br />
                 נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
+            </span>
                 <?php
             } else {
                 ?>
@@ -325,7 +327,7 @@ $he_chars = array(
         <h1 style='text-align: center; font-weight: bold;'>
             <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
                 ?>
-                נראה ש <?=$user->first?> לא רשום כעת לצבאות השם<br /><br />
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות ה<br /><br />
                 נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
                 <?php
             } else {

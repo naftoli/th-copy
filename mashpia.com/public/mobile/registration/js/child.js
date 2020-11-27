@@ -163,7 +163,7 @@ var childApp = function(){
         //     return showError( "Please upload a profile picture for your child." );
         // }
         const responseMsgText = "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
-        const responseMsgText_he = " נא לדבר עם מטה צבאות השם בטלפון (718-907-8884) או לשלוח מייל בכתובת 'cth@tzivosHashem.org'  "
+        const responseMsgText_he = " נא לדבר עם מטה צבאות ה בטלפון (718-907-8884) או לשלוח מייל בכתובת 'cth@tzivosHashem.org'  "
 
         $.post("/api/core/users.php", postData, function (response) {
             console.log( response );
