@@ -79,7 +79,7 @@
                         <h2>Number of Brochures: 5000</h2>
                         <h2>Already Sold: <span class="brochureSold"></span></h2>
                         <h2>Currently Available: <span class="brochureLeft"></span></h2>
-                        <h2><strong>PLEASE NOTE: YOU MUST MAKE A PURCHASE OF AT LEAST $5 FOR ANY CHARGE TO GO THROUGH</strong></h2>
+<!--                        <h2><strong>PLEASE NOTE: YOU MUST MAKE A PURCHASE OF AT LEAST $5 FOR ANY CHARGE TO GO THROUGH</strong></h2>-->
                     </div>
                     <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
                         <hr />
@@ -219,13 +219,14 @@
                 soldOut = true;
             }
 
-            // soldOut = true;
-            // $("#sold-out").show();
-            // $("#purchases").hide();
+            soldOut = true;
+            $("#sold-out").show();
+            $("#purchases").hide();
 
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 5000;
                 var menorahSold = parseInt( sold );
+                menorahSold = 5000;
                 var menorahLeft = menorahStart - menorahSold;
                 $(".menorahSold").text( menorahSold );
                 $(".menorahLeft").text( menorahLeft );
@@ -242,6 +243,7 @@
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
                 var brochureStart = 5000;
                 var brochureSold = parseInt( sold );
+                brochureSold = 5000;
                 var brochureLeft = brochureStart - brochureSold;
                 $(".brochureSold").text( brochureSold );
                 $(".brochureLeft").text( brochureLeft );
