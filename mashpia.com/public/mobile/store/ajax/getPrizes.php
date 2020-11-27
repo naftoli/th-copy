@@ -13,7 +13,7 @@ $prizes = [];
 $message = false;
 if ( !$row['school_store'] ) {
     if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
-        $message = "בית הספר " . $school_name . " סגר את חנות הפרסים שלו.";
+        $message = "בית הספר / תלמוד תורה שלכם סגר את חנות הפרסים שלו.";
     } else {
         $message = "$school_name has closed it's prize store.";
     }
@@ -44,7 +44,7 @@ else {
     }
     if ( count( $prizes ) == 0 ) {
         if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
-            $message = "נראה שבבית הספר / תלמוד תורה " . $school_name . " אין פרסים זמינים";
+            $message = "נראה שבבית הספר / תלמוד תורה שלכם אין פרסים זמינים";
         } else {
             $message = "It appears that $school_name has no prizes available.";
         }

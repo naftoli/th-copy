@@ -194,7 +194,7 @@ var sticker_board = function() {
             
             return '<div class="campaign-info">' +
                
-                '<p>' +
+                '<p style="font-size: large">' +
                 '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
                 campaign.subject_details_he +
                 '</p>' +

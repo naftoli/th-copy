@@ -823,7 +823,6 @@ var templates = function(){
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form .gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
-            $( '#step-2 form #lang_id' ).val( user.lang_id );
             $( '#step-2 form #non_th_school' ).val( user.non_th_school );
             // add the dropdown for naftali
             var class_select = $( '#step-2 form #class_name select' );

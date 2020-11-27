@@ -605,14 +605,23 @@
                 	pwd : pwd
                 }, function( success ) {
                 	if (success == -1) {
-                		alert('This username or email address is already being used. Please try again.');
+                		if ( localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' )
+                			alert('שם משתמש או כתובת דוא"ל זה כבר בשימוש. בבקשה נסה שוב');
+                		else
+                			alert('This username or email address is already being used. Please try again.');
                 		return;
                 	}
                 	else if (success == 1) {
-                		alert('Your account has been created. You can now login with your username / password.');
+						if ( localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' )
+							alert('החשבון שלך נוצר. כעת אתה יכול להתחבר באמצעות שם המשתמש / הסיסמה שלך');
+						else
+							alert('Your account has been created. You can now login with your username / password.');
                 		window.location = "/mobile/reg";
                 	} else {
-                		alert('There was a problem creating a parent account. Please try again. If this problem persists please contact Tzivos Hashem.');
+						if ( localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' )
+							alert('הייתה בעיה ביצירת חשבון הורים. בבקשה נסה שוב. אם בעיה זו נמשכת אנא צור קשר לצבאות ה ');
+						else
+							alert('There was a problem creating a parent account. Please try again. If this problem persists please contact Tzivos Hashem.');
                 		return;
                 	}
                 });
