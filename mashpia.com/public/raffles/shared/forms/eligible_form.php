@@ -64,11 +64,13 @@ use raffles\shared\Constants as Constants;
                 margin-top: -80px;
                 margin-bottom: -80px;
                 width: 250px;
+                pointer-events: none;
             }
             img.marathonLogo {
                 margin-top: -100px; 
                 margin-bottom: -100px; 
                 width: 650px;
+                pointer-events: none;
             }
         </style>
     </HEAD>
