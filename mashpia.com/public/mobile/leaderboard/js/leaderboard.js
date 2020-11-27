@@ -182,7 +182,9 @@ var leaderboardApp = function(){
         html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
         html +=     '<div class="user_info">';
         html +=         '<h1 class="position">#' + position + '</h1>';
-        html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
+        if (localStorage.getItem('locallang') == 'he')
+            html +=         '<h2 class="name">'+ user.first_he.toLowerCase() + ' ' + user.last_he.toLowerCase() + '</h2>'
+        else html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
         html += '<div class="medal_count">' + user.medal_count + medalsText + ' </div>'
         html += '<div class="mission_count">' + formatNumber(user.mission_count) + missionsText +' </div>'
         html +=     '</div>';
