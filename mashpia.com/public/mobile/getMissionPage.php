@@ -350,7 +350,7 @@ $he_chars = array(
 						
 						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
                        
-						
+						<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) {} else { ?>
 						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
                             <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
                        
@@ -359,6 +359,7 @@ $he_chars = array(
 							</button>
 							
 							</a>
+                        <?php } ?>
                     </div>
                     <div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
                         <a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
@@ -371,7 +372,8 @@ $he_chars = array(
 
                         </a>
                     </div>
-                    <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
+                    <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
+                            style="margin: 0 5px; <?= $desktop ? 'float: right;' : ''?>">
                         Help
                     </button>
                 </div>
