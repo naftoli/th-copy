@@ -271,6 +271,11 @@
     <script src="/mobile/js/authenticate.js" defer></script>
     <script src="/mobile/reg/js/medal-board.js" defer></script>
     <script>
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             $(document).ready(function () {
 

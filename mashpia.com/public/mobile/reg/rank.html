@@ -760,6 +760,11 @@
 </div>
 <script src="/mobile/js/authenticate.js" defer></script>
 <script>
+    if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+        $(".bug-report").hide()
+    }
+</script>
+<script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var carousel = "";
         var loop = 0;

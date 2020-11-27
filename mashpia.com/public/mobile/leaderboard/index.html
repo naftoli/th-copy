@@ -185,6 +185,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    
     <!-- Our JavaScript code -->
     <script src="/mobile/js/js.cookie.js"></script>
     <script src="/mobile/js/authenticate.js"></script>
@@ -192,9 +193,14 @@
     <script src="js/leaderboard.js"></script>
 
     <script src="../js/translation/leaderboard/leaderboard_index.js"></script>
+    <script>
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+    </script>
+
     <!-- Google Anylitics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
-
 
     <script>
         window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); }
