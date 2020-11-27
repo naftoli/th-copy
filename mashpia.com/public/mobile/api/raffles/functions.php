@@ -97,12 +97,12 @@ function getRaffleHistory( $type, $user_id ) {
         $days = [];
         $start = $row['start_date'];
         $end = $row['end_date'];
-        while ( $end >= $start ) { // check all days in week
+        while ( $start <= $end ) { // check all days in week
             $days[] = [
-                'completed' => checkTasks($user_id, $end, $end, $type) > 0 ? true : false,
+                'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $end < unixtojd() ? true : false
             ];
-            $end--;
+            $start++;
         }
         $history[] = [
             'parsha'    => $row['name'],
@@ -155,14 +155,14 @@ function getDailyTaskInfo( $user_id, $type ) {
         $total = checkTasks($user_id, $start, $end, $type);
 
         $info = [];
-        while ($end > $start) {
+        while ($start <= $end) {
             $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
             $info[$heMonth][] = [
-                'completed' => checkTasks($user_id, $end, $end, $type) > 0 ? true : false,
+                'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $end < unixtojd() ? true : false
             ];
-            $end--;
+            $start++;
         }
         $result[] = [
             'raffleNumber'  => $idx + 1,
