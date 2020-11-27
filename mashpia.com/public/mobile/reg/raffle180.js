@@ -159,7 +159,7 @@ const load180FlagDonutCharts = () => {
             }
         });
 
-        let rotation = 115;
+        let rotation = 75;
 
         Object.keys(months).forEach((month, index) => {
             let id = 'curve' + month;
@@ -182,7 +182,7 @@ const load180FlagDonutCharts = () => {
 
             doughnutContainer.appendChild(textSVG);
 
-            rotation += (360) / Object.keys(months).length;
+            rotation -= (360) / Object.keys(months).length;
 
         });
 
