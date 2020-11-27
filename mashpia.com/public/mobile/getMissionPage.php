@@ -1286,17 +1286,19 @@ $he_chars = array(
 		if (Cookies.get('marking') == 'weekly') {
 			$('.dailyBoxes').show();
 			var w = $(".showProgress").width();
-			$(".showProgress").val('Daily View');
+			if (Cookies.get('lang') === 'he') $(".showProgress").val('צפייה לפי יום');
+            else $(".showProgress").val('Daily View');
 			$(".showProgress").width( w );
 		} else if (Cookies.get('marking') == 'daily') {
-			$(".showProgress").val('Weekly View');
+		    if (Cookies.get('lang') === 'he') $(".showProgress").val('צפייה לפי שבוע');
+            else $(".showProgress").val('Weekly View');
 		}
 
 		
 		$(".showProgress").click( function() {
-			if ($(this).val() == 'Weekly View') {
+			if ($(this).val() == 'Weekly View' || $(this).val() == 'צפייה לפי שבוע') {
 				Cookies.set('marking', 'weekly');
-			} else if ($(this).val() == 'Daily View') {
+			} else if ($(this).val() == 'Daily View' || $(this).val() == 'צפייה לפי יום') {
 				Cookies.set('marking', 'daily');
 			}
 			location.reload();

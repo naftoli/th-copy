@@ -48,7 +48,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 		    $total += $newTotal[$barcode];		
 	}
 	*/
-    $sql2 = "SELECT medal_name, missions_required, profile_photo_id FROM medals_subjects 
+    $sql2 = "SELECT medal_name, medal_name_he, missions_required, profile_photo_id FROM medals_subjects 
              JOIN medals USING (medal_ord)    
              WHERE subject_id = " . $subject . " 
              ORDER BY medal_ord"; 
@@ -60,7 +60,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	$tempMedalPics = array();
 	$ctr = 0;
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
-        $tempMedals[$ctr] = $row2['medal_name'];
+        $tempMedals[$ctr] = ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row2['medal_name_he'] : $row2['medal_name'] );
         if ( $row2['profile_photo_id'] ) $tempMedalPics[$ctr] = $row2['profile_photo_id'];
         $required = (int)$row2['missions_required'];
         $base_amount = $needed;
@@ -118,10 +118,10 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $medals = array();
-$sql = "select medal_ord, medal_name from medals";
+$sql = "select medal_ord, medal_name, medal_name_he from medals";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
-	$medals[$row['medal_ord']] = $row['medal_name'];
+	$medals[$row['medal_ord']] = (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['medal_name_he'] : $row['medal_name']);
 }
 
 foreach ( $subjects as $subject ) {

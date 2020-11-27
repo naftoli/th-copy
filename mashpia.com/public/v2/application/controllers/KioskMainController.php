@@ -209,7 +209,8 @@ class KioskMainController extends Zend_Controller_Action
 			if (!$objCard)
 			{
 				// Achievement cards sheet probably wasnt printed
-				$this->view->strScanCodeMessage = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+				if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) $this->view->strScanCodeMessage = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
+				else $this->view->strScanCodeMessage = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
 			}
 			else if($objCard)
 			{
@@ -287,7 +288,8 @@ class KioskMainController extends Zend_Controller_Action
 			if (!$objCard)
 			{
 				// Achievement cards sheet probably wasnt printed
-				$this->view->strScanCodeMessage = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+				if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) $this->view->strScanCodeMessage = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
+				else $this->view->strScanCodeMessage = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
 			}
 			/*
 			else if (
@@ -410,7 +412,8 @@ class KioskMainController extends Zend_Controller_Action
 		if (!$objCard)
 		{
 			// Achievement cards sheet probably wasnt printed
-			print "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+			if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) print $this->view->strScanCodeMessage = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
+			else print "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
 		}
 		/*
 		else if (

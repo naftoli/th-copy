@@ -372,7 +372,9 @@
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
                 if ( response ) {
                     $("#raffleInfoBanner").show();
-                    $("#raffleInfo").append( response );
+                    if ( localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' )
+						$("#raffleInfo").append( '<span style="direction: rtl">' + response + '</span>' );
+					else $("#raffleInfo").append( response );
                 }
 			});
             
@@ -383,7 +385,7 @@
     			var grade = user.class_grade;
     			if (user.class_sub) grade += '-' + user.class_sub;
     			// update the information on the page
-    			$("#rank").text( user.rank_name ? user.rank_name : 'Private' );
+    			$("#rank").text( user.rank_name_he ? user.rank_name_he : 'טוראי' );
     			$("#name").text( user.lang_id === "2" ? user.first_he + ' ' + user.last_he : user.first + ' ' + user.last );
 				$("#serial").text( user.user_serial );
     			$("#grade").text( grade || 'N / A' );

@@ -947,8 +947,10 @@ var templates = function(){
                 + "</div>" );
             });
             // add the total row
+            var text = "Total Balance";
+            if ( Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he' ) text = "איזון כולל";
             $("#charges").append( '<div class="row total-row">' +
-                '<div class="col-9 col-md-10"><strong>Total Balance:</strong></div>' +
+                '<div class="col-9 col-md-10"><strong>' + text + '</strong></div>' +
                 '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
             + "</div>" );
             $("#total").val( total );
@@ -966,6 +968,8 @@ var templates = function(){
             payment_profiles.forEach( function( payment, index ){
                 var cc = payment.payment.creditCard;
                 cc.cardType = cc.cardType || "Unknown";
+                var msg = '<span>' + cc.cardType + ' ending in ' + cc.cardNumber.slice( 4 ) + '</span>';
+                if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg = '<span dir="rtl">כרטיס ' + cc.cardType + ' המסתיים בספרות ' + cc.cardNumber.slice( 4 ) + '</span>'
                 html += 
                 '<div class="payment-option cc-number identified ' + cc.cardType.toLowerCase() + '">' +
                     '<label class="radio-label">' +
@@ -973,17 +977,17 @@ var templates = function(){
                             payment.customerPaymentProfileId + '"' + 
                             ( index === 0 ? "checked" : "" ) + '/>' +
                         '<span class="radio"></span>' +
-                    '</label>&nbsp;' +
-                    '<span>' + cc.cardType + ' ending in ' + cc.cardNumber.slice( 4 ) + '</span>' +
+                    '</label>&nbsp;' + msg +
                 '</div>';
             });
+            var msg2 = '<span>New Card</span>';
+            if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg2 = "<span>כרטיס (אשראי) חדש</span>"
             html +=
             '<div class="payment-option">' + 
-                '<label class="radio-label">' + 
+                '<label class="radio-label">' +
                     '<input type="radio" id="payment_profile" name="payment_profile" value=""/>' +
                     '<span class="radio"></span>' + 
-                '</label>&nbsp;' + 
-                '<span>New Card</span>' +
+                '</label>&nbsp;' + msg2 +
             '</div>';
 
             $("#card-on-file").html( html );

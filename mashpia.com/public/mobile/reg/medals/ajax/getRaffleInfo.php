@@ -27,7 +27,8 @@ function checkYearly( $user_id ) {
     if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
         return [
             "percent_done" => $raffle_info[ "percent_done" ], 
-            "msg" => (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? "($num_days / $quota<span class='hide-small'> ימים נשלמו</span>) תאריך ההגרלה השנתית עבר" :
+            "msg" => (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ?
+                "($num_days / $quota<span class='hide-small'> ימים נשלמו</span>) תאריך ההגרלה השנתית עבר" :
                 "Yearly Raffle Deadline Passed ($num_days / $quota<span class='hide-small'> days completed</span>)"),
             'missed-deadline' => true
         ];

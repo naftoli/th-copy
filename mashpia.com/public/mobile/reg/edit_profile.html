@@ -822,7 +822,8 @@ var image = canvas.toDataURL();
             var email_container = $("#divemail");
             // validate the email client side...
             if (!email.match(/^[_.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z.-]+.)+[a-zA-Z]{2,6}$/i)) {
-              email_error.text("Invalid E-mail Address.");
+                if ( Cookies.get('lang') == 'he' ) email_error.text("כתובת אימיל לא חוקית");
+                else email_error.text("Invalid E-mail Address.");
               email_container.addClass("invalid");
               return false;
             }

@@ -85,26 +85,44 @@ var leaderboardApp = function(){
     function renderLeaderBoard( data, offset ) {
         $(".loader").remove();
         // render the user number
-        if ( data.user_location > 0 ) {
-            $("#user_position").html(
-                "<div class='animated fadeIn'>" + 
-                    "You are number " + formatNumber(data.user_location) + 
-                    " out of " + formatNumber( data.total ) + 
-                "</div>"
-            );
+        if ( localStorage.getItem('locallang') == 'he' ) {
+            if ( data.user_location > 0 ) {
+                $("#user_position").html(
+                    "<div class='animated fadeIn' style='direction: rtl'>" +
+                    "אתה מספר " + formatNumber(data.user_location) +
+                    " מתוך " + formatNumber( data.total ) +
+                    "</div>"
+                );
+            } else {
+                $("#user_position").html(
+                    "<div class='animated fadeIn' style='direction: rtl'>" +
+                    formatNumber( data.total ) + " חיילים!" +
+                    "</div>"
+                );
+            }
         } else {
-            $("#user_position").html(
-                "<div class='animated fadeIn'>" + 
-                    formatNumber( data.total ) + " Soldiers!" + 
-                "</div>"
-            );
+            if ( data.user_location > 0 ) {
+                $("#user_position").html(
+                    "<div class='animated fadeIn'>" +
+                    "You are number " + formatNumber(data.user_location) +
+                    " out of " + formatNumber( data.total ) +
+                    "</div>"
+                );
+            } else {
+                $("#user_position").html(
+                    "<div class='animated fadeIn'>" +
+                    formatNumber( data.total ) + " Soldiers!" +
+                    "</div>"
+                );
+            }
         }
         var html = "";
         if ( data.leaderboard.length == 0 ){
+            var text = '<strong>No soldiers found.</strong><br/>Please adjust your filters.';
+            if ( localStorage.getItem('locallang') == 'he' ) text = '<span dir="rtl"><strong>לא נמצאו חיילים.</strong><br/>נא להתאים את הפילטרים</span>';
+
             html = '<div class="container">' +
-                        '<div class="alert alert-branding">' + 
-                            '<strong>No soldiers found.</strong><br/>Please adjust your filters.' +
-                        '</div>' +
+                        '<div class="alert alert-branding">' + text + '</div>' +
                     '</div>';
         } else {
             data.leaderboard.forEach( function( user, index ) {

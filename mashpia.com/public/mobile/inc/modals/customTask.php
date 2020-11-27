@@ -136,8 +136,8 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" id="create-task-bottom" style="background-color: #5e1c77;border-color:#834999;">Create</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;float: left;">Cancel</button>
+                    <button type="submit" class="btn btn-danger i18n" data-key="create-button" id="create-task-bottom" style="background-color: #5e1c77;border-color:#834999;">Create</button>
+                    <button type="button" class="btn btn-danger i18n" data-key="cancel-button" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;float: left;">Cancel</button>
                 </div>
              </form> <!-- Shamai asked for the button to go on the bottom of the page so the form has to be like this :-( its bad I know but I could not find a way to run the HTML validations otherwise... -->
         </div><!-- /.modal-content -->

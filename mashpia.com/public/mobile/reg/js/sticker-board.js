@@ -72,6 +72,7 @@ var sticker_board = function() {
     }
     // render the response
     function renderPage( campaigns ) {
+        console.log( campaigns )
         var selected_subject = findGetParameter('subject');
         var sliderHtml = '';
         var boardHtml = '';
@@ -149,7 +150,8 @@ var sticker_board = function() {
             // current
             } else if ( total >= last_total && medal_info.running_total > total ) {
                 compleation_status = ( ( total - last_total ) / ( medal_info.running_total - last_total ) ) * 100;
-                status_text = (medal_info.missions_required - (total - last_total)) + ToText + medal_info.medal_name;
+                status_text = (medal_info.missions_required - (total - last_total)) + ToText +
+                    (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' ? medal_info.medal_name_he : medal_info.medal_name);
             // future
             } else {
                 compleation_status = 0; status_text = '';
