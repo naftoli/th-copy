@@ -11,6 +11,13 @@ if ($admin_user['auth'] != 'super') {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
+
+if ( isset($_GET['id']) ) {
+    unset($schools);
+    $schools = [
+        $_GET['id'] => 'School Name'
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html>
