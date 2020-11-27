@@ -294,9 +294,11 @@ $he_chars = array(
 </header>
 
 <div class="personalImg"></div> <? //div to load the users image into ?>
+<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) : {} else: ?>
 <div class="bug-report">
 	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
+<?php endif; ?>
 
 <?php if ( !$user->chayolei ) { ?>
 <div class="container">

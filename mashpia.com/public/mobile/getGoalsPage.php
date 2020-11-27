@@ -98,9 +98,11 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 </header>
 
 <div class="personalImg"></div>
+<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) : {} else: ?>
 <div class="bug-report">
 	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
+<?php endif; ?>
 
 <div class="container">
     <div class="content">

@@ -161,6 +161,11 @@
     
     <script src="js/all.js" defer></script>
     <script>
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             // make sure we have a cookie
             var admin = Cookies.get('admin');
