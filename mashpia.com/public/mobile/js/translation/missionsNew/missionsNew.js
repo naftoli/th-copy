@@ -4,7 +4,7 @@ var jsonhe = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': 'https://test.mashpia.com/mobile/js/translation/missionsNew/lang/he.json',
+        'url': '../js/translation/missionsNew/lang/he.json',
         'dataType': "json",
         'success': function (data) {
             json = data;
@@ -19,7 +19,7 @@ var jsonen = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': 'https://test.mashpia.com/mobile/js/translation/missionsNew/lang/en.json',
+        'url': '../js/translation/missionsNew/lang/en.json',
         'dataType': "json",
         'success': function (data) {
             json = data;
