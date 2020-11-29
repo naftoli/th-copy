@@ -46,7 +46,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 if ( !empty( $users ) ) {
     $children = [];
     //need to have multiple result rows to get highest rank
-    $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
+    $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
         ." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
         ." FROM users u "
@@ -60,7 +60,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_id']   = $row['user_id'];
         $children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
-        $children[$row['user_id']]['school'] 	= $row['school_name'];
+        $children[$row['user_id']]['school'] 	= (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['school_name_he'] : $row['school_name']);
         $children[$row['user_id']]['city'] 		= $row['school_city'];
         $children[$row['user_id']]['photo'] 	= empty( $row['user_photo_id'] ) ? null : $row['user_photo_id'];
         $children[$row['user_id']]['thumb'] 	= 0;
