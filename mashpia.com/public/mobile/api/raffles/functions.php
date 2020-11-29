@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 function getRaffleInfo( $type ) {
     $info = [];
     $today = unixtojd();
@@ -39,6 +40,8 @@ function checkTasks( $user_id, $start, $end, $type ) {
     $grid_id = 13012;
     if ($type == 'weekly') $rollover = 2459167;
     else if ($type == 'monthly') $rollover = 2459171;
+    else if ($type == 'yearly') $rollover = 2459167;
+
     if ($start >= $rollover) { // simple calculation
         $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
                 join date_tasks dt using (date_task_id) 
@@ -116,23 +119,25 @@ function getRaffleHistory( $type, $user_id ) {
 
 function getDailyTaskInfo( $user_id, $type ) {
     $result = [];
-    $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר ב','ניסן','אייר','סיון','תמוז','אב','אלול'];
+    $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
     $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
 
     // get raffles
     $raffles = [];
-    if ($type == 'monthly') {
-        $todayHe = explode('/', jdtojewish( unixtojd() ));
-        $sql_raffles = "select * from raffles 
-                        where type = '" . $type . "' 
-                        and year = " . $todayHe[2] . "  
-                        order by run_date";
-    } else {
+    if ($type == 'weekly') {
         $today = unixtojd();
         $sql_raffles = "SELECT * FROM raffles
-                        WHERE type = '" . $type . "'
-                        AND start_date <= " . $today . "
-                        AND end_date >= " . $today;
+			WHERE type = '" . $type . "'
+			AND start_date <= " . $today . "
+            AND end_date >= " . $today;
+    } else {
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+        $year = GlobalSettings::getCurrentYear();
+        $sql_raffles = "select * from raffles 
+                        where type = '" . $type . "' 
+                        and year = " . $year . " 
+                        and start_date <= " . unixtojd() . "
+                        order by run_date desc";
     }
     $result_raffles = mysql_query($sql_raffles);
     while ($row = mysql_fetch_assoc($result_raffles)) {
@@ -154,10 +159,22 @@ function getDailyTaskInfo( $user_id, $type ) {
         $days = $interval->days;
         $total = checkTasks($user_id, $start, $end, $type);
 
+        // for yearly date return hebrew date
+        if ($type == 'yearly') {
+            $dateOnly = explode(' ', $run_date);
+            $dateInfo = explode('-', $dateOnly[0]);
+            $jd = gregoriantojd($dateInfo[1], $dateInfo[2], $dateInfo[0]);
+            $run_date = jdtojewish($jd, true, CAL_JEWISH_ADD_ALAFIM_GERESH + CAL_JEWISH_ADD_GERESHAYIM);
+        }
+
         $info = [];
         while ($start <= $end) {
             $heDate = explode('/', jdtojewish($end));
             $heMonth = $months[$heDate[0]];
+            // check for leap year
+            $m = array(3, 6, 8, 11, 14, 17, 19);
+            $meuberet = in_array(($heDate[2] % 19), $m);
+            if ($meuberet && $heDate[0] == 7) $heMonth = 'אדר ב';
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $end < unixtojd() ? true : false
