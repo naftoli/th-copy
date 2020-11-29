@@ -32,7 +32,8 @@ if ( isset( $_POST['submit'] ) ) {
     $total = 0;
     if (!empty($rows)) {
         foreach ($rows as $row) {
-            $purchases[$row['user_id']][$row['item_id']] = $row['qty'];
+            if (isset($purchases[$row['user_id']][$row['item_id']])) $purchases[$row['user_id']][$row['item_id']] += $row['qty'];
+            else $purchases[$row['user_id']][$row['item_id']] = $row['qty'];
             $user_ids[] = $row['user_id'];
             $total += $row['qty'];
         }
