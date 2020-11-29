@@ -1,0 +1,449 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title data-key="Title" class="i18n">Tzivos Hashem | Add Child</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">-->
+
+    <link rel="stylesheet"
+          href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If"
+          crossorigin="anonymous">
+    <!-- Cropper -->
+    <link href="../lib/cropper/cropper.min.css" rel="stylesheet">
+    <!-- datepicker -->
+    <link href="lib/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/mobile/css/lib/animate.css" />
+    <!-- our CSS styles -->
+    <link rel="stylesheet" type="text/css" href="css/spinner.css" />
+    <link rel="stylesheet" type="text/css" href="css/image-upload.css" />
+    <link rel="stylesheet" type="text/css" href="css/mainHE.css" />
+    <link rel="stylesheet" type="text/css" href="css/child.css" />
+
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+    <script src="../js/translation/registration/add-child/add-child.js"></script>
+
+
+    <style>
+        .hebrew {
+            font-family: Arial !important;
+        }
+    </style>
+
+
+</head>
+<body>
+    <header>
+        <a href="/mobile/reg/parent_detail.html" class="logout" id="logOff"  >
+            <span data-key="logout" class="i18n" >logout</span>   &nbsp;<img src="/mobile/img_new/lock-color-white-svg.svg" height="18" alt="lock" />
+        </a>
+        <span id="title" data-key="AddChild" class="i18n">Add child</span>
+        <a href="/mobile/reg/parent_detail.html" class="home" >
+            <img src="/mobile/img_new/house-color-white-svg.svg" height="18" alt="home"  />&nbsp; <span data-key="home" class="i18n">home</span>
+        </a>
+    </header>
+    <div id="pages">
+        <section id="th-base" class="animated fadeIn">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success" role="alert" style="text-align:right;">
+                            <p data-key="PleaseNote" class="i18n">
+                                Please note: Your child must be at least 5 years old to join this brigade. 
+                                Stay tuned for the launch of Junior Troops for younger children! 
+                            </p>
+                            <p data-key="Begin" class="i18n">
+                                Begin by selecting your child’s school and grade to add them to your family account.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-12 centered">
+                        <a class="navigation-button btn btn-primary" data-id="no-th-base" href="#">
+                            My child is not in a Base
+                        </a>
+                    </div>
+                </div> -->
+                <form id="th-base-child" class="child-form" style="direction:rtl;text-align:right;">
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="th-school_id" data-key="Base" class="i18n">
+                                Tzivos Hashem Base (School Name)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <select class="form-control form-control-lg"  id="th-school_id" name="school_id" required >
+                                    <option class="i18n" data-key="BaseOption" value="" selected disabled>TH Base (School Name)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="th-class_id" data-key="Platoon" class="i18n">
+                                Platoon (Grade and Class)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" style="padding: 20%;" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="th-class_id" name="class_id" required>
+                                    <option value="" selected disabled data-key="PlatoonOption" class="i18n">Platoon (Grade and Class)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="moreInfo">
+                        <div class="col-12 col-xl-6">
+                            <label for="last" data-key="LastName" class="i18n">
+                                Last Name
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/profile-1-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <!-- <select class="form-control form-control-lg" id="th-last" name="last" required>
+                                    <option value="" selected disabled>Last Name</option>
+                                </select> -->
+                                <input type="text" class="form-control" id="th-last" data-key="lastname_ph" placeholder="Please type last name" required />
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="th-dob" data-key="EnglishDOB" class="i18n">
+                                English Date of Birth
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/calendar-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <input type="date" class="form-control" id="th-dob" name="dob" data-key="dob_ph" placeholder="English Birthday" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-xl-6 order-xl-12">
+                            <button type="submit" class="btn btn-primary i18n" data-key="Add">Add Child</button>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <a href="/mobile/reg/parent_detail.html" class="btn btn-primary i18n" data-key="Cancel" >Cancel</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <label for="no-th-base">
+                                &nbsp;
+                            </label>
+                            <a class="navigation-button btn btn-outline-primary i18n" data-id="no-th-base" href="#" style="margin-top: -30px;" data-key="SchoolNotListed" >
+                                My child's school is not listed
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <section id="no-th-base" class="animated fadeIn">
+            <div class="container">
+                <!-- <div class="row">
+                    <div class="col-12 centered">
+                        <a class="navigation-button btn btn-primary" data-id="th-base" href="#">
+                            My child is already in a Base
+                        </a>
+                    </div>
+                </div> -->
+                <form id="no-th-base-child" class="child-form" style="direction:rtl;text-align:right;">
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-school_id" data-key="Base" class="i18n">
+                                Tzivos Hashem Base (School Name)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="no-th-school_id" name="school_id" required>
+                                    <option value="269" data-key="optionAnashKinder" class="i18n">Anash Kinder (No Base)</option>
+                                    <option value="61" data-key="optionMyShliach" class="i18n" >MyShliach</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-class_id" data-key="Platoon" class="i18n">
+                                Platoon (Grade and Class)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" style="padding: 20%;" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="no-th-class_id" name="class_id" required>
+                                    <option data-key="PlatoonOption" class="i18n" value="" selected disabled>Platoon (Grade and Class)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="non_th_school" data-key="NameSchoolAttending" class="i18n">
+                                Name of Actual School Attending
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <input type="text" class="form-control" id="non_th_school" name="non_th_school" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <input type="hidden" id="mobile_pic" name="mobile_pic" required/>
+                            <img src="//mashpia.com/mobile/reg/images/addphoto.png" alt="profile" id="user-img" data-toggle="modal" data-target="#cropperModal"/>
+                        </div>
+                    </div>
+                    <div class="row centered">
+                        <div class="col-4 offset-2 col-md-3 offset-md-3 col-xl-2 offset-xl-4">
+                            <label class="radio-label">
+                                <input type="radio" class="gender" name="gender" value="M"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span data-key="Boy" class="i18n">Boy</span>
+                        </div>
+                        <div class="col-4 col-md-3 col-xl-2">
+                            <label class="radio-label">
+                                <input type="radio" class="gender" name="gender" value="F"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span data-key="Girl" class="i18n">Girl</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="first" data-key="Name" class="i18n">Name</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="First Name" data-key="first_ph" id="first" name="first" required>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="Last Name" data-key="last_ph"  id="last"  name="last"  required>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="first_he" value="" />
+                    <input type="hidden" name="last_he" value="" />
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <label for="first_he" data-key="HebrewName" class="i18n">Hebrew Name</label>-->
+<!--                        </div>-->
+<!--                        <div class="col-6">-->
+<!--                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required/>-->
+<!--                        </div>-->
+<!--                        <div class="col-6">-->
+<!--                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he" dir="rtl" required/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-dob" data-key="EnglishDOB" class="i18n">
+                                English Date of Birth
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/calendar-color-gray-svg.svg" width="75" /> 
+                                </span>
+                                <input type="date" data-key="englishdob_ph"  class="form-control i18n" id="no-th-dob" name="dob" max="2014-12-31" placeholder="English Birthday" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="lang_id" data-key="MissionLanguage" class="i18n">
+                                Mission Language
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-2-color-gray-svg.svg" width="75" style="padding: 15%;" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="lang_id" name="lang_id" required>
+                                    <option value="1" data-key="English" class="i18n">English</option>
+                                    <option value="2" data-key="Yiddish" class="i18n">Yiddish</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="school_type_id" data-key="TypeMissions" class="i18n">
+                                Type of Missions
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-2-color-gray-svg.svg" width="75" style="padding: 15%;" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="school_type_id" name="school_type_id" required>
+                                    <option value="2" data-key="Chabad" class="i18n">Chabad</option>
+                                    <option value="12" data-key="Frum" class="i18n">Frum</option>
+                                    <option value="4" data-key="CKidsDaySchool" class="i18n">CKids Day School</option>
+                                    <option value="6" data-key="CKidsHebrewSchool" class="i18n">CKids Hebrew School</option>
+                                    <option value="8" data-key="CKidsNoSchool" class="i18n">CKids No School</option>
+                                    <option value="14" data-key="FriendshipCircle" class="i18n">Friendship Circle</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 col-xl-6 order-xl-12">
+                            <button type="submit" class="btn btn-primary i18n" data-key="Add">Add Child</button>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <a href="/mobile/" class="btn btn-primary i18n" data-key="Cancel">Cancel</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <label for="th-base">
+                                &nbsp;
+                            </label>
+                            <a class="navigation-button btn btn-outline-primary i18n" data-key="MyChildBase" data-id="th-base" href="#" style="margin-top: -30px;">
+                                My child is already in a Base
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 data-key="UploadPicture" class="i18n">
+                            Upload Profile Picture
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="cropper-image-upload">
+                            <input type="file" name="profile" id="profile" accept=".png,.jpg,.jpeg"/>
+                            <label for="profile" >
+                                <i class="fas fa-camera"></i>
+                                <span data-key="ChoosePicture" class="i18n"> Choose a picture</span>  
+                            </label>
+                        </div>
+                        <div id="cropper-image-container">
+                            <img id="cropper-image">
+                            <div class="control-buttons btn-group">
+                                <button type="button" class="btn btn-primary" id="cropper-rotate-left">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="cropper-rotate-right">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="cropper-zoom-in">
+                                    <i class="fas fa-search-plus"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="cropper-zoom-out">
+                                    <i class="fas fa-search-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="cropper-scale-x">
+                                    <i class="fas fa-arrows-alt-h"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="cropper-scale-y">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="cropper-image-loader">
+                            <div class="spinner">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger i18n" data-dismiss="modal" data-key="Cancel" >Cancel</button>
+                        <button type="button" class="btn btn-primary i18n" id="submit-image" data-key="Upload" >Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 data-key="Error" class="i18n">Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
+                        </button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger i18n" data-dismiss="modal" data-key="Close" >Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body centered">
+                        <svg id="circle-compleate" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                            <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                            <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                        </svg>
+                        <p id="success" data-key="ChildAddedMessage" class="i18n">Your child has been added to your account!</p>
+                        <div class="alert alert-success i18n" id="fee-paid" role="alert" data-key="title">
+                            <span class="i18n" data-key="ChildAddedMessage2">The registration fee has already been paid for through your child’s school, so no additional payment is needed.</span>  <br /><br />
+                            <span class="i18n" data-key="ChildAddedMessage3"> Wishing you lots of Nachas as you watch your child grow as a Chayol in Tzivos Hashem.</span>
+                        </div>
+                        <div class="alert alert-info i18n" id="fee-not-paid" role="alert" data-key="PleaseNote2" >
+                            Please note that you still need to register your child from the homepage.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary i18n" data-dismiss="modal" data-key="OneMoreChild" >One More Child</button>
+                        <a class="btn btn-success i18n" href="/mobile/reg/parent_detail.html" data-key="Done" >I'm Done</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery, Popper.js and Bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <!-- Cropper.js -->
+    <script src="../lib/cropper/cropper.min.js"></script>
+    <script src="../lib/cropper/jquery-cropper.min.js"></script>
+    <!-- Bootstrap-Datepicker -->
+    <script src="lib/datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- JS Cookie -->
+    <script src="/mobile/js/js.cookie.js"></script>
+    <!-- Our JavaScript files -->
+    <script src="js/main.js"></script>
+    <script src="/mobile/js/authenticate.js"></script>
+    <script src="../lib/hebrew-keyboard/hebrew-keyboard.js"></script>
+    <script src="js/image-upload.js"></script>
+    <script src="js/child.js"></script>
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
+    <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-71974937-1');</script>
+</body>
+</html>

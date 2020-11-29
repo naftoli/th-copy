@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>Mobile Auction</title>
+        <title class="i18n" data-key="title">Mobile Auction</title>
 <style type="text/css">
     @charset "UTF-8";.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transform:translate(0,0)}.fa-4x{font-size:4em}.pull-right{float:right}.pull-left{float:left}.fa-shopping-cart:before{content:"\f07a"}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}header{display:block}b{font-weight:700}h1{margin:.67em 0;font-size:2em}button{margin:0;font:inherit;color:inherit}button{overflow:visible}button{text-transform:none}button{-webkit-appearance:button}button::-moz-focus-inner{padding:0;border:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}button{font-family:inherit;font-size:inherit;line-height:inherit}h1{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h1{margin-top:20px;margin-bottom:10px}h1{font-size:36px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{margin-right:-15px;margin-left:-15px}.col-xs-12{position:relative;min-height:1px;padding-right:15px;padding-left:15px}.col-xs-12{float:left}.col-xs-12{width:100%}.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;background-image:none;border:1px solid transparent;border-radius:4px}.btn-primary{color:#fff;background-color:#428bca;border-color:#357ebd}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.container>.navbar-header{margin-right:-15px;margin-left:-15px}.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}.media{margin-top:15px}.media:first-child{margin-top:0}.media>.pull-right{padding-left:10px}.media-body{display:table-cell;vertical-align:top}.container:after,.container:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{display:table;content:" "}.container:after,.navbar-header:after,.navbar:after,.row:after{clear:both}.center-block{display:block;margin-right:auto;margin-left:auto}.pull-right{float:right!important}.pull-left{float:left!important}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}h1{font-weight:300}h1{font-size:24px}header.navbar{background:#ff1a1a}.page-goals header.navbar h1{font-size:40px;font-weight:700;color:#fff;text-align:center;width:auto;display:block;margin:15px auto}.personalImg{width:50px;height:50px;left:1%;top:1%;border-radius:50%;position:absolute}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media .fa{margin-top:-10px;margin-right:10px}
 </style>
@@ -14,12 +14,15 @@
         <noscript><link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css"></noscript>
 <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
 <script src="js/all.js" defer></script>
+ <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/auction/cart/auction_cart.js"></script>
 </head>
 	<body class="page-goals">
         <header class="navbar" id="top" role="banner">
             <div class="container">
                 <div class="navbar-header">
-                    <h1>Auction Cart</h1>
+                    <h1 class="i18n" data-key="pageTitle">Auction Cart</h1>
                 </div>
             </div>
         </header>
@@ -30,8 +33,8 @@
                 <div class="personalImg"></div>
 				
 				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red">
-                    <b>After ADDING a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart.</b><br />
-                    <b>After UPDATING the quantities, be sure to click "UPDATE" & then "SAVE".</b>
+                    <b class="i18n" data-key="message1">After ADDING a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart.</b><br />
+                    <b class="i18n" data-key="message2">After UPDATING the quantities, be sure to click "UPDATE" & then "SAVE".</b>
 				</div>
                 
                 <div class="alert alert-warning" role="alert" dir="ltr">
@@ -55,20 +58,20 @@
                                             <div class="col-xs-4">
                                                 <div class="avatar-container img-people" align="center" style="position:relative">
                                                     <img class="children-avatar itemImage" src="https://mashpia.com/file_view.php?id={{this.image}}" />
-													<br /><span class="update">{{this.price}} Point(s)</span>
+													<br /><span class="update" >{{this.price}}</span><span class="i18n" data-key="points">Point(s)</span> 
 												</div>
                                             </div>
                                             <div class="col-xs-8">
                                                 <div class="childrens-content" style="line-height: 1.6" id="{{@key}}">
                                                     <div class="childrens-content-h1">{{this.name}}</div>
                                                     <div class="childrens-content-h2">
-                                                        Qty: <input type="text" size="2" value="{{this.qty}}" /><br />
-                                                        <span class="update">Update</span>
+                                                        <span class="i18n" data-key="Qty">Qty</span>: <input type="text" size="2" value="{{this.qty}}" /><br />
+                                                        <span class="update i18n"  data-key="Update">Update</span>
                                                     </div>
                                                     <div style="padding-top: 10px">
                                                         <div class="del">
                                                             <span class="glyphicon glyphicon-trash"></span>
-                                                            <span class="ln-delete"><b>REMOVE</b></span>
+                                                            <span class="ln-delete i18n"  data-key="REMOVE"><b>REMOVE</b></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,9 +83,9 @@
                             </div>
                         </div>
                         <div class="col-xs-12">
-							<button id="back" class="btn btn-primary center-block pull-left"><b>BACK</b></button>
+							<button id="back" class="btn btn-primary center-block pull-left"><b class="i18n" data-key="BACK" >BACK</b></button>
                             <button type="submit" id="purchase" class="btn btn-primary center-block">
-                                <b>SAVE</b>
+                                <b class="i18n" data-key="SAVE">SAVE</b>
                             </button>
                       </div>
                     </div>
@@ -129,15 +132,34 @@
             var cart = [];
             var originalBal = 0;
     		var auction_id = 81;
-            
+
+
+            var totalMilesEraned = "Total Miles Earned: "
+            if (localStorage.getItem("locallang") == "he") {
+                totalMilesEraned = " סך הנקודות שנצברו:";
+
+            }
+
             $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
-                html = "Total Miles Earned: " + info.earned;
-                html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
+                if (localStorage.getItem("locallang") == "he") {
+                    html = "<span style='direction:rtl;' > ";
+                    html += "סך הנקודות שנצברו: " + info.earned;//
+                    html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
+                    html += "</span > ";
+                    //
+                }
+                else {
+                    html = "Total Miles Earned: " + info.earned;
+                    html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
+                }
+                    
+               
                 $(".balance").html(html);
                 originalBal = info.available;
                 setupCart();
                 calcBalance();
+                translate(); 
             });
             
                     

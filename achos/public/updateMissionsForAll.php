@@ -33,8 +33,7 @@ foreach ($parshos as $parsha) {
 	foreach ($users as $user_id) {	    	 
 		$mm = new MissionMarks($user_id, 0, $parsha['start'], $parsha['end']);
 		$mm->checkMissionCompletion();
-		    $medal_updater->update_medal_two($user_id);
-		}
+		$medal_updater->update_medal_two($user_id);
 	}
 }
 ?>

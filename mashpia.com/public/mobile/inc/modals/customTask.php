@@ -38,7 +38,7 @@ while ($parsha = mysql_fetch_assoc($parsha_query)) {
     ];
 }
 // get the labels that the parents can use
-$labels_query = mysql_query("select label_id, label_name from labels where label_id >= 30 and label_id < 70 order by label_name");
+$labels_query = mysql_query("select label_id, label_name from labels where label_id >= 30 order by label_name");
 $labels = [];
 while ($label = mysql_fetch_assoc($labels_query)) {
     $labels[$label['label_id']] = $label['label_name'];
@@ -51,27 +51,28 @@ while ($label = mysql_fetch_assoc($labels_query)) {
             <div class="modal-header">
                 <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="img_new/x-color-white-svg.svg"/></button>
-                <h4 class="modal-title">Create Custom Task For <?=$year?></h4>
+                <h4 class="modal-title">
+                <span class="i18n" data-key="ModalTitle" id="ModalTitle">Create Custom Task For </span> <?=$year?></h4>
             </div>
             <form id="custom-task-form">
                 <div class="modal-body">
-                    <div style="text-align: center; font-weight: 700; font-size: 1.5em;margin-bottom: 15px;">Please note that all fields are required.</div>
+                    <div style="text-align: center; font-weight: 700; font-size: 1.5em;margin-bottom: 15px;" class="i18n" data-key="Please">Please note that all fields are required.</div>
                     <div class="form-group">
-                        <label for="lang" class="control-label">Task Language:</label>
+                        <label for="lang" class="control-label i18n" data-key="Language">Task Language:</label>
                         <label class="checkbox-label">
                             <input type="radio" name="lang" class="lang" value="1" id="lang_radio_1" <?=$lang == 1 ? 'checked="checked"' : ""?>/>
-                            <span class='checkbox-display'></span> English 
+                            <span class='checkbox-display'></span> <span class='i18n' data-key="English">English</span> 
                         </label>
                         <label class="checkbox-label">
                             <input type="radio" name="lang" class="lang" value="2" id="lang_radio_2" <?=$lang == 1 ? "" : 'checked="checked"'?>/>
-                            <span class='checkbox-display'></span> Yiddish
+                            <span class='checkbox-display'></span> <span class='i18n' data-key="Yiddish">Yiddish</span> 
                         </label>
                     </div>
                     
                     <div class="form-group">
-                        <label for="campaign" class="control-label">Task Campaign:</label>
+                        <label for="campaign" class="control-label i18n" data-key="Campaign">Task Campaign:</label>
                         <select name='campaign' id='campaign' class="form-control" required>
-                            <option disabled value="" selected hidden>Choose Campaign</option>
+                            <option class="i18n" disabled value="" selected hidden data-key="Choose">Choose Campaign</option>
                             <?foreach ($campaigns as $id => $campaign) {
                                 if ( !in_array( $id, [ 1, '1', 40, '40', 94, '94' ] ) )
                                     echo "<option value='$id'>" . $campaign . "</option>";
@@ -80,19 +81,19 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                     </div>
                     
                     <div class="form-group">
-                        <label for="shortName" class="control-label">Task Title: (Example: 'Modeh Ani'):</label>
-                        <input name="shortName" size="30" id="shortName" type="text" class="form-control" placeholder="Modeh Ani" required>
+                        <label for="shortName" class="control-label i18n" data-key="TaskTitle">Task Title: (Example: 'Modeh Ani'):</label>
+                        <input name="shortName" size="30" id="shortName" type="text" class="form-control i18n" data-key="ModehAni" placeholder="Modeh Ani" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="name" class="control-label">Task Details: (Example: 'I did my quota of volunteer hours').</label>
-                        <input type='text' name='name' size='80' id='name' class="form-control" placeholder="I did my quota of volunteer hours" required/>
+                        <label for="name" class="control-label i18n" data-key="TaskDetails">Task Details: (Example: 'I did my quota of volunteer hours').</label>
+                        <input type='text' name='name' size='80' id='name' class="form-control i18n" data-key="volunteerHours" placeholder="I did my quota of volunteer hours" required/>
                     </div>
                     
                     <div class="form-group">
-                        <label for="label" class="control-label">Task Category:</label>
+                        <label for="label" class="control-label i18n" data-key="Category">Task Category:</label>
                         <select name='label' id='label' class="form-control" required>
-                            <option  disabled value="" selected hidden>Choose Label</option>
+                            <option  disabled value="" selected hidden class="i18n" data-key="ChooseLabel">Choose Label</option>
                             <?foreach ($labels as $id => $label) {
                                 echo "<option value='$id' class='label_lang_".($id >= 50 ? 2 : 1)."'>" . $label . (in_array($id, [30,31,32,38,50,51,52,58]) ? " (Daily)" : "") . "</option>";
                             } // end foreach campaign?>
@@ -100,7 +101,7 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                     </div>
                     
                     <fieldset style="border: 1px solid #ccc;padding: 10px;margin-bottom: 15px;">
-                        <legend style="width: auto;border-bottom: 0px;padding: 0px 10px;">Children</legend>
+                        <legend style="width: auto;border-bottom: 0px;padding: 0px 10px;" class="i18n" data-key="ModalTitle" >Children</legend>
                         <?
                         foreach ($admin->children as $child) {
                             if($child->allow_parent_tasks) { ?>
@@ -115,8 +116,8 @@ while ($label = mysql_fetch_assoc($labels_query)) {
 		                } // end foreach child?>
                     </fieldset>
                     
-                    <fieldset style="border: 1px solid #ccc;padding: 10px;margin-bottom: 15px;">
-                        <legend style="width: auto;border-bottom: 0px;padding: 0px 10px;">Parshos (Fri before to Thurs after)</legend>
+                    <fieldset id="Parshos" style="border: 1px solid #ccc;padding: 10px;margin-bottom: 15px;">
+                        <legend style="width: auto;border-bottom: 0px;padding: 0px 10px;" class="i18n" data-key="Parshos">Parshos (Fri before to Thurs after)</legend>
                         <div align='center'>
                             <input type='button' id='toggleParshos' class="btn btn-danger" style="background-color: #5e1c77;border-color:#834999;" value='Toggle Parshos' />
                             <br/>
@@ -135,8 +136,8 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" id="create-task-bottom" style="background-color: #5e1c77;border-color:#834999;">Create</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;float: left;">Cancel</button>
+                    <button type="submit" class="btn btn-danger i18n" data-key="create-button" id="create-task-bottom" style="background-color: #5e1c77;border-color:#834999;">Create</button>
+                    <button type="button" class="btn btn-danger i18n" data-key="cancel-button" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;float: left;">Cancel</button>
                 </div>
              </form> <!-- Shamai asked for the button to go on the bottom of the page so the form has to be like this :-( its bad I know but I could not find a way to run the HTML validations otherwise... -->
         </div><!-- /.modal-content -->

@@ -30,7 +30,7 @@ var defined = {
 	sessionStorage: (function() {
 		var x = "qunit-test-string";
 		try {
-			sessionStorage.setItem( x, x );
+			localStorage.setItem( x, x );
 			sessionStorage.removeItem( x );
 			return true;
 		} catch ( e ) {
@@ -1043,7 +1043,7 @@ Test.prototype = {
 
 		// Prioritize previously failed tests, detected from sessionStorage
 		priority = QUnit.config.reorder && defined.sessionStorage &&
-				+sessionStorage.getItem( "qunit-test-" + this.module.name + "-" + this.testName );
+				+localStorage.getItem( "qunit-test-" + this.module.name + "-" + this.testName );
 
 		return synchronize( run, priority );
 	},
@@ -3391,7 +3391,7 @@ var config = QUnit.config,
 		sessionStorage: (function() {
 			var x = "qunit-test-string";
 			try {
-				sessionStorage.setItem( x, x );
+				localStorage.setItem( x, x );
 				sessionStorage.removeItem( x );
 				return true;
 			} catch ( e ) {
@@ -3959,7 +3959,7 @@ QUnit.testStart(function( details ) {
 	running = id( "qunit-testresult" );
 	if ( running ) {
 		bad = QUnit.config.reorder && defined.sessionStorage &&
-			+sessionStorage.getItem( "qunit-test-" + details.module + "-" + details.name );
+			+localStorage.getItem( "qunit-test-" + details.module + "-" + details.name );
 
 		running.innerHTML = ( bad ?
 			"Rerunning previously failed test: <br />" :
@@ -4073,7 +4073,7 @@ QUnit.testDone(function( details ) {
 	// store result when possible
 	if ( config.reorder && defined.sessionStorage ) {
 		if ( bad ) {
-			sessionStorage.setItem( "qunit-test-" + details.module + "-" + details.name, bad );
+			localStorage.setItem( "qunit-test-" + details.module + "-" + details.name, bad );
 		} else {
 			sessionStorage.removeItem( "qunit-test-" + details.module + "-" + details.name );
 		}

@@ -6,7 +6,8 @@ var authenticate;
 // get the ID from get GET params
 var id = findGetParameter("id");
 // make sure we can authenticate the user
-if ( !authenticate ) {
+if (!authenticate) {
+   
     window.location = "/mobile";
 } else {
     authenticate( id ); // get the users ID and authenticate them
@@ -71,6 +72,7 @@ var sticker_board = function() {
     }
     // render the response
     function renderPage( campaigns ) {
+        console.log( campaigns )
         var selected_subject = findGetParameter('subject');
         var sliderHtml = '';
         var boardHtml = '';
@@ -84,21 +86,54 @@ var sticker_board = function() {
         setupSlider( selected_subject );
     }
     // template for top slider
-    function renderMedalSliderItem( campaign ){
+    function renderMedalSliderItem(campaign) {
+        var MissionsText = "Missions";
+        var CampaignCompleateText = "Campaign Compleate!";
+        var progressbarFloat = "";
+        var progressTextAlignment = "";
+       
+        if (localStorage.getItem("locallang") === 'he' || Cookies.get('lang') === 'he') {
+            MissionsText = "משימות";
+            CampaignCompleateText = "הקמפיין הושלם!";
+            progressbarFloat = "float: right;";
+            progressTextAlignment = ' style="direction:rtl !important;" ';
+        }
+
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
-        var progress_text = campaign.total + ' / ' + campaign.subject_total + ' Missions</span>';
-        if ( percent_compleate >= 100 ) progress_text = 'Campaign Compleate!'
-        return  '<div class="medal-slider-item">' +
+        var progress_text = campaign.total + ' / ' + campaign.subject_total + ' ' + MissionsText+'</span>';
+        if (percent_compleate >= 100) progress_text = CampaignCompleateText;
+
+        var result =  '<div class="medal-slider-item">' +
                     '<img src="' + campaign.photo + '">' + 
-                    '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
+                    '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' +
                     '<div class="medal-status progress">' + 
-                        '<div class="progress-bar ' + ( percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;"></div>' +
-                        '<span>' + progress_text + '</span>' +
+            '<div class="progress-bar ' + (percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;' + progressbarFloat +'"></div>' +
+            '<span' + progressTextAlignment +'>' + progress_text + '</span>' +
                     '</div>' +
-                '</div>';
+            '</div>';
+
+       // alert(result);
+
+        return result;
     }
 
-    function renderStickerRows( index, campaign, cache ){
+    function renderStickerRows(index, campaign, cache) {
+        var ToText = " To ";
+        var CampaignCompleateText = "Campaign Compleate!";
+        var progressbarFloat = "";
+        var progressTextAlignment = "";
+        var levelText = "Level ";
+        var styleFloat = "";
+
+        if (localStorage.getItem("locallang") === "he") {
+            ToText = " עד ";
+            CampaignCompleateText = "הקמפיין הושלם!";
+            progressbarFloat = "float: right;";
+            progressTextAlignment = ' style="direction:rtl !important;" ';
+            levelText = "שלב ";
+            styleFloat = ' style="float: right;" ';
+        }
+
         var total = parseInt( campaign.total );
         var html = renderCampaignInfo( campaign ); // variable to store sticker rows, will be added to cache.
         // render the row on the sticker board for each of the medals in the campaign
@@ -115,20 +150,21 @@ var sticker_board = function() {
             // current
             } else if ( total >= last_total && medal_info.running_total > total ) {
                 compleation_status = ( ( total - last_total ) / ( medal_info.running_total - last_total ) ) * 100;
-                status_text = ( medal_info.missions_required - ( total - last_total ) ) + ' to ' + medal_info.medal_name;
+                status_text = (medal_info.missions_required - (total - last_total)) + ToText +
+                    (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' ? medal_info.medal_name_he : medal_info.medal_name);
             // future
             } else {
                 compleation_status = 0; status_text = '';
             }
             
             html += '<hr><div class="row">';
-            html += '<div class="col-8 col-sm-9 order-12 medal-level-stickers">';
+            html += '<div class="col-8 col-sm-9 order-12 medal-level-stickers"' + progressTextAlignment +'>';
             // render all the stickers
             for( var i = 1; i <= medal_info.missions_required; i++ ) {
                 var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
                 var earned = slot_number <= total;
                 var slot_sticker = campaign.sticker_name + ( earned ? '' : '_bw' )
-                html += '<div class="sticker ' + ( earned ? 'earned' : '') + '">' +
+                html += '<div class="sticker ' + (earned ? 'earned' : '') + '" ' + styleFloat +'>' +
                     ( slot_number ) + 
                     '<img src="//mashpia.com/mobile/img_new/stickers/' + slot_sticker + '.gif">'
                 +'</div>';
@@ -137,12 +173,12 @@ var sticker_board = function() {
             html += '</div>';
             // render the medal icon
             html += '<div class="col-4 col-sm-3 medal-level">' +
-                    '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
+                '<span class="levelText">'+ levelText + medal_info.medal_ord + '</span>' + 
                     '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
             if ( status_text !== '' ) {
             html += '<div class="medal-status progress">' + 
-                        '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
-                        '<span>' + status_text + '</span>' +
+                '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;' + progressbarFloat +'"></div>' + 
+                '<span ' + progressTextAlignment +'>' + status_text + '</span>' +
                     '</div>';
             }
             html += '</div></div>';
@@ -152,7 +188,20 @@ var sticker_board = function() {
         return '<div class="sticker-board" id="sticker-board-' + index + '"></div>';
     }
 
-    function renderCampaignInfo( campaign ) {
+    function renderCampaignInfo(campaign) {
+       
+        if (localStorage.getItem("locallang") == "he") {
+            
+            return '<div class="campaign-info">' +
+               
+                '<p style="font-size: large">' +
+                '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
+                campaign.subject_details_he +
+                '</p>' +
+                '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+                '</div>';
+            
+        }
         return '<div class="campaign-info">' +
             '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
             '<p>' +
@@ -208,5 +257,8 @@ var sticker_board = function() {
 
     return { loadPage: loadPage }
 }();
+
+
+
 
 sticker_board.loadPage();

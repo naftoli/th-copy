@@ -44,7 +44,7 @@ while($row = mysql_fetch_row($result))
 
 function csv_escape($str) 
 {
-	$str = str_replace(array('"', ',', "\n", "\r"), array('""', ',', "\n", "\r"), $str, &$count);
+	$str = str_replace(array('"', ',', "\n", "\r"), array('""', ',', "\n", "\r"), $str, $count);
 	
 	if ($count) 
 	{

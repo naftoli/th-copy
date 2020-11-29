@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -10,7 +10,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+    <link rel="stylesheet" href="/mobile/css/bug_report.css" />
     <!-- Animation Libraries -->
     <link rel="stylesheet" type="text/css" href="/mobile/css/lib/animate.css" />
     <link rel="stylesheet" type="text/css" href="css/loader.css" />
@@ -18,8 +18,12 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="css/leaderboard.css" />
     <!-- Bug Report -->
-    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+    <link rel="stylesheet" href="/mobile/css/bug_report.css" />
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+  
+
 </head>
 <body>
     <!-- Navigation -->
@@ -37,24 +41,24 @@
 
     <section id="top-nav">
         <div class="row nav-row">
-                <div class="col-4 active">
-                    <a href="" id="leaderBoardLink">
-                        <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
-                        <span>Leaderboard</span>
-                    </a>
-                </div>
-                <div class="col-4">
-                    <a href="rank.html" id="rankBoardLink">
-                        <img src="/mobile/img_new/trophy-color-orange-svg.svg">
-                        <span>Rank Board</span>
-                    </a>
-                </div>
-                <div class="col-4">
-                    <a href="medals.html" id="medalBoardLink">
-                        <img src="/mobile/img_new/medals-color-orange-svg.svg">
-                        <span>Medal Board</span>
-                    </a>
-                </div>
+            <div class="col-4 active">
+                <a href="" id="leaderBoardLink">
+                    <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
+                    <span>Leaderboard</span>
+                </a>
+            </div>
+            <div class="col-4">
+                <a href="rank.html" id="rankBoardLink">
+                    <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                    <span>Rank Board</span>
+                </a>
+            </div>
+            <div class="col-4">
+                <a href="medals.html" id="medalBoardLink">
+                    <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                    <span>Medal Board</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -69,7 +73,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Filter Leaderboard</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <img src="/mobile/img_new/x-color-white-svg.svg" height="16" width="16"/>
+                            <img src="/mobile/img_new/x-color-white-svg.svg" height="16" width="16" />
                         </button>
                     </div>
                     <div class="modal-body">
@@ -79,15 +83,15 @@
                             </span>
                             <div class="filter-options">
                                 <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="army" checked/>
+                                    <input type="radio" name="location" id="location" value="army" checked />
                                     <span>Army</span>
                                 </label>
                                 <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="base"/>
+                                    <input type="radio" name="location" id="location" value="base" />
                                     <span>Base</span>
                                 </label>
                                 <label class="filter-option">
-                                    <input type="radio" name="location" id="location" value="platoon"/>
+                                    <input type="radio" name="location" id="location" value="platoon" />
                                     <span>Platoon</span>
                                 </label>
                             </div>
@@ -98,15 +102,15 @@
                             </span>
                             <div class="filter-options">
                                 <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="" checked/>
+                                    <input type="radio" name="gender" id="gender" value="" checked />
                                     <span>All</span>
                                 </label>
                                 <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="M"/>
+                                    <input type="radio" name="gender" id="gender" value="M" />
                                     <span>Boys</span>
                                 </label>
                                 <label class="filter-option">
-                                    <input type="radio" name="gender" id="gender" value="F"/>
+                                    <input type="radio" name="gender" id="gender" value="F" />
                                     <span>Girls</span>
                                 </label>
                             </div>
@@ -144,7 +148,7 @@
             </div>
         </div>
     </section>
-    
+
     <section id="leaderboard">
     </section>
 
@@ -176,21 +180,33 @@
             </div>
         </div>
     </footer>
-    
+
     <!-- Jquery, Popper.js and Bootstrap CDN's -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    
     <!-- Our JavaScript code -->
     <script src="/mobile/js/js.cookie.js"></script>
     <script src="/mobile/js/authenticate.js"></script>
     <script src="main.js"></script>
     <script src="js/leaderboard.js"></script>
+
+    <script src="../js/translation/leaderboard/leaderboard_index.js"></script>
+    <script>
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+    </script>
+
     <!-- Google Anylitics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
+
     <script>
-        window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} 
+        window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date()); gtag('config', 'UA-71974937-1');
     </script>
 </body>
+
+
 </html>

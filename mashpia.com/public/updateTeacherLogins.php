@@ -35,7 +35,7 @@ foreach ($classes as $row) {
             // check if we need to update
             if ($aa['id'] != $row['class_id']) {
                 $create[] = "update admin_auths
-                            set id = " . $row['class_id'] "
+                            set id = " . $row['class_id'] . "
                             where id = " . $aa['id'] . "
                             and admin_id = " . $aa['admin_id'] . "
                             and auth = 'class'

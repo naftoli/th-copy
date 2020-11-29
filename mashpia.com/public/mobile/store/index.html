@@ -1,108 +1,545 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>Mobile Store</title>
-<style type="text/css">
-    @charset "UTF-8";.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transform:translate(0,0)}.fa-4x{font-size:4em}.pull-right{float:right}.fa-shopping-cart:before{content:"\f07a"}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}header{display:block}a{background-color:transparent}h1{margin:.67em 0;font-size:2em}img{border:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#428bca;text-decoration:none}img{vertical-align:middle}h1{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h1{margin-top:20px;margin-bottom:10px}h1{font-size:36px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.container>.navbar-header{margin-right:-15px;margin-left:-15px}.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}.media{margin-top:15px}.media:first-child{margin-top:0}.media>.pull-right{padding-left:10px}.media-body{display:table-cell;vertical-align:top}.container:after,.container:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before{display:table;content:" "}.container:after,.navbar-header:after,.navbar:after{clear:both}.pull-right{float:right!important}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}h1{font-weight:300}h1{font-size:24px}header.navbar{background:#ff1a1a}.page-goals header.navbar h1{font-size:40px;font-weight:700;color:#fff;text-align:center;width:auto;display:block;margin:15px auto}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{text-align:center;border-top:2px solid #9f9f9f;display:table;margin-left:auto;margin-right:auto;float:none}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:18px;font-family:font1}.footer .menu-item{width:120px;height:80px;margin:0 auto}.footer .span3 img{width:60px;vertical-align:text-bottom}.footer .span3.active{background-color:#999;background-repeat:repeat-x;background:-webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));background:-webkit-linear-gradient(top,#e9e9e9,#b7b8B9);background:-moz-linear-gradient(top,#e9e9e9,#b7b8B9);background:-ms-linear-gradient(top,#e9e9e9,#b7b8B9);background:-o-linear-gradient(top,#e9e9e9,#b7b8B9)}@media screen and (max-width:1024px){.footer{border-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:18px}}@media screen and (max-width:639px){.footer .menu-item{width:110px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:16px}}@media screen and (max-width:479px){.footer .menu-item{width:70px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}}.personalImg{width:50px;height:50px;left:1%;top:1%;border-radius:50%;position:absolute}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media .fa{margin-top:-10px;margin-right:10px}
-</style>
-		<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
-        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
-<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
-		<script src="js/all.js" defer></script>
-		<!--    Bug Report code -->
-		<link rel="stylesheet" href="/mobile/css/bug_report.css"/>
-		<script src="/mobile/js/bug_report.js?v=2.0" defer></script>
-		<style>
-			.product.light .product-caption .block-name { display: block; }
-			body {
-				position: relative;
-				padding-bottom: 0px;
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<title class="i18n" data-key="Title">Mobile Store</title>
+	<style type="text/css">
+		@charset "UTF-8";
+
+		.fa {
+			display: inline-block;
+			font: normal normal normal 14px/1 FontAwesome;
+			font-size: inherit;
+			text-rendering: auto;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			transform: translate(0,0)
+		}
+
+		.fa-4x {
+			font-size: 4em
+		}
+
+		.pull-right {
+			float: right
+		}
+
+		.fa-shopping-cart:before {
+			content: "\f07a"
+		}
+
+		html {
+			font-family: sans-serif;
+			-webkit-text-size-adjust: 100%;
+			-ms-text-size-adjust: 100%
+		}
+
+		body {
+			margin: 0
+		}
+
+		header {
+			display: block
+		}
+
+		a {
+			background-color: transparent
+		}
+
+		h1 {
+			margin: .67em 0;
+			font-size: 2em
+		}
+
+		img {
+			border: 0
+		}
+
+		* {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box
+		}
+
+		:after, :before {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box
+		}
+
+		html {
+			font-size: 10px
+		}
+
+		body {
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			font-size: 14px;
+			line-height: 1.42857143;
+			color: #333;
+			background-color: #fff
+		}
+
+		a {
+			color: #428bca;
+			text-decoration: none
+		}
+
+		img {
+			vertical-align: middle
+		}
+
+		h1 {
+			font-family: inherit;
+			font-weight: 500;
+			line-height: 1.1;
+			color: inherit
+		}
+
+		h1 {
+			margin-top: 20px;
+			margin-bottom: 10px
+		}
+
+		h1 {
+			font-size: 36px
+		}
+
+		.container {
+			padding-right: 15px;
+			padding-left: 15px;
+			margin-right: auto;
+			margin-left: auto
+		}
+
+		.navbar {
+			position: relative;
+			min-height: 50px;
+			margin-bottom: 20px;
+			border: 1px solid transparent
+		}
+
+		.container > .navbar-header {
+			margin-right: -15px;
+			margin-left: -15px
+		}
+
+		.alert {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px
+		}
+
+		.alert-warning {
+			color: #8a6d3b;
+			background-color: #fcf8e3;
+			border-color: #faebcc
+		}
+
+		.media {
+			margin-top: 15px
+		}
+
+			.media:first-child {
+				margin-top: 0
 			}
-			.subMenu {
-                border-top: none !important;
-                top: -20px !important;
-            }
-			.navbar {
-				margin-bottom: 0 !important;
+
+			.media > .pull-right {
+				padding-left: 10px
 			}
-			.panel-heading {
-				cursor: pointer;
+
+		.media-body {
+			display: table-cell;
+			vertical-align: top
+		}
+
+		.container:after, .container:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before {
+			display: table;
+			content: " "
+		}
+
+		.container:after, .navbar-header:after, .navbar:after {
+			clear: both
+		}
+
+		.pull-right {
+			float: right !important
+		}
+
+		@-ms-viewport {
+			width: device-width
+		}
+
+		body, html {
+			overflow-x: hidden;
+			height: 100%
+		}
+
+		body {
+			background: #fff;
+			font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+			font-weight: 300;
+			padding-bottom: 100px;
+			background-size: cover;
+			background-attachment: fixed
+		}
+
+		h1 {
+			font-weight: 300
+		}
+
+		h1 {
+			font-size: 24px
+		}
+
+		header.navbar {
+			background: #ff1a1a
+		}
+
+		.page-goals header.navbar h1 {
+			font-size: 40px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+			width: auto;
+			display: block;
+			margin: 15px auto
+		}
+
+		.span12 {
+			width: 100%;
+			float: left
+		}
+
+		.span3 {
+			width: 25%;
+			float: left
+		}
+
+		.footer {
+			text-align: center;
+			border-top: 2px solid #9f9f9f;
+			display: table;
+			margin-left: auto;
+			margin-right: auto;
+			float: none
+		}
+
+			.footer .span3 {
+				background-color: #e6e6e6
 			}
+
+				.footer .span3 span {
+					padding: 5px;
+					color: grey;
+					font-size: 18px;
+					font-family: font1
+				}
+
+			.footer .menu-item {
+				width: 120px;
+				height: 80px;
+				margin: 0 auto
+			}
+
+			.footer .span3 img {
+				width: 60px;
+				vertical-align: text-bottom
+			}
+
+			.footer .span3.active {
+				background-color: #999;
+				background-repeat: repeat-x;
+				background: -webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));
+				background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9);
+				background: -moz-linear-gradient(top,#e9e9e9,#b7b8B9);
+				background: -ms-linear-gradient(top,#e9e9e9,#b7b8B9);
+				background: -o-linear-gradient(top,#e9e9e9,#b7b8B9)
+			}
+
+		@media screen and (max-width:1024px) {
+			.footer {
+				border-radius: 0
+			}
+		}
+
+		@media screen and (max-width:900px) {
+			.footer .menu-item {
+				width: 120px;
+				height: 80px
+			}
+
+			.footer .span3 img {
+				width: 60px
+			}
+		}
+
+		@media screen and (max-width:767px) {
+			.footer .menu-item {
+				width: 120px;
+				height: 80px
+			}
+
+			.footer .span3 img {
+				width: 60px
+			}
+
+			.footer .span3 span {
+				font-size: 18px
+			}
+		}
+
+		@media screen and (max-width:639px) {
+			.footer .menu-item {
+				width: 110px;
+				height: 60px
+			}
+
+			.footer .span3 img {
+				width: 50px
+			}
+
+			.footer .span3 span {
+				font-size: 16px
+			}
+		}
+
+		@media screen and (max-width:479px) {
+			.footer .menu-item {
+				width: 70px;
+				height: 40px
+			}
+
+			.footer .span3 img {
+				width: 30px
+			}
+
+			.footer .span3 span {
+				font-size: 8px
+			}
+		}
+
+		.personalImg {
+			width: 50px;
+			height: 50px;
+			left: 1%;
+			top: 1%;
+			border-radius: 50%;
+			position: absolute
+		}
+
+		.fa {
+			display: inline-block;
+			font-family: FontAwesome;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 1;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale
+		}
+
+		.media .fa {
+			margin-top: -10px;
+			margin-right: 10px
+		}
+
+        .hebrew {
+            font-family: Arial !important;
+           
+        }
+	</style>
+	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+	<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+	<noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+	<script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
+	<script src="js/all.js" defer></script>
+	<!--    Bug Report code -->
+	<link rel="stylesheet" href="/mobile/css/bug_report.css" />
+	<script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+	<style>
+		.product.light .product-caption .block-name {
+			display: block;
+		}
+
+		body {
+			position: relative;
+			padding-bottom: 0px;
+		}
+
+		.subMenu {
+			border-top: none !important;
+			top: -20px !important;
+		}
+
+		.navbar {
+			margin-bottom: 0 !important;
+		}
+
+		.panel-heading {
+			cursor: pointer;
+		}
+
+		.product {
+			width: 50%;
+			min-height: 150px;
+		}
+
+		.description {
+			/* overflow: hidden; */
+			word-wrap: break-word;
+			text-overflow: ellipsis;
+		}
+
+		.figure-hover-overlay img {
+			max-height: 150px;
+		}
+
+		.figure-hover-overlay {
+			width: 40%;
+			max-width: 150px;
+			float: left;
+			border: 1px solid;
+			margin: 0px 10px 5px 0px;
+			max-height: 150px;
+		}
+
+		.product.light {
+			margin: 10px 0;
+			min-width: 100%;
+		}
+		/* .product-caption{width: 60%; float: right;} */
+		@media (min-width: 1200px) {
 			.product {
-				width: 50%;
-				min-height: 150px;
+				width: 33%;
 			}
-			.description {
-				/* overflow: hidden; */
-				word-wrap: break-word;
-				text-overflow: ellipsis;
+		}
+
+		@media (max-width: 725px) {
+			.product {
+				width: 100%;
 			}
-			.figure-hover-overlay img{
-				max-height: 150px;
+		}
+		/*			Center the header text*/
+		.container {
+			margin-bottom: 100px;
+		}
+
+			.container > .navbar-header {
+				margin-left: 0px;
 			}
-			.figure-hover-overlay{
-				width: 40%; max-width: 150px; float: left; border: 1px solid;
-				margin: 0px 10px 5px 0px; max-height: 150px;
-			}
-			.product.light{margin: 10px 0; min-width: 100%;}
-			/* .product-caption{width: 60%; float: right;} */
-			@media (min-width: 1200px) {.product {width: 33%;}}
-			@media (max-width: 725px) {.product{width: 100%;}}
-			/*			Center the header text*/
-			.container { margin-bottom: 100px; }
-			.container >.navbar-header{ margin-left: 0px; }
-/*			Switch from absolute to fixed to avoid iOS glitch */
-			.personalImg{
-				position: fixed;
-				z-index: 999;
-				background: #ff1a1a;
-			}
-/*			Dropdown arrows*/
-			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
-			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
-			img#cart-img{height: 52px;}
-			
-			#page-title{
-				text-transform: uppercase;
-				font-size: 25px;font-weight: 700;color: #fff;text-align: center;
-				width: auto;display: block;padding: 5px 0px;transition: .25s;
-			}
-			@media (min-width: 525px){
-				#page-title{font-size: 40px;padding: 10px 0px;}
+		/*			Switch from absolute to fixed to avoid iOS glitch */
+		.personalImg {
+			position: fixed;
+			z-index: 999;
+			background: #ff1a1a;
+		}
+		/*			Dropdown arrows*/
+		i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {
+			background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");
+			width: 10px;
+			height: 15px;
+			background-repeat: no-repeat;
+		}
+
+			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before {
+				content: "";
 			}
 
-			h4#no-prizes-message { font-size: 2em; }
+		img#cart-img {
+			height: 52px;
+		}
 
-			.clearfix:before,
-			.clearfix:after {
-				content: ".";    
-				display: block;    
-				height: 0;    
-				overflow: hidden; 
+		#page-title {
+			text-transform: uppercase;
+			font-size: 25px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+			width: auto;
+			display: block;
+			padding: 5px 0px;
+			transition: .25s;
+		}
+
+		@media (min-width: 525px) {
+			#page-title {
+				font-size: 40px;
+				padding: 10px 0px;
 			}
-			.clearfix:after { clear: both; }
-			.clearfix { zoom: 1; } /* IE < 8 */
+		}
 
-			.balance > div { display: inline-block; }
-			.media-body { display: block; }
-			#balance-box { margin-right: 5%; }
-			#balance { display: none; }
-			#balance-display { font-size: 2em;}
+		h4#no-prizes-message {
+			font-size: 2em;
+		}
 
-			.panel.panel-default .panel-heading { margin-bottom: 0px; transition: .25s; }
-			.panel.panel-default.open > .panel-heading { border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; }
-			.product.light .product-caption .product-price { font-size: 1.15em; font-weight: bold; font-family: Raleway,sans-serif; }
-		</style>
-	</head>
+		.clearfix:before,
+		.clearfix:after {
+			content: ".";
+			display: block;
+			height: 0;
+			overflow: hidden;
+		}
+
+		.clearfix:after {
+			clear: both;
+		}
+
+		.clearfix {
+			zoom: 1;
+		}
+		/* IE < 8 */
+
+		.balance > div {
+			display: inline-block;
+		}
+
+		.media-body {
+			display: block;
+		}
+
+		#balance-box {
+			margin-right: 5%;
+		}
+
+		#balance {
+			display: none;
+		}
+
+		#balance-display {
+			font-size: 2em;
+		}
+
+		.panel.panel-default .panel-heading {
+			margin-bottom: 0px;
+			transition: .25s;
+		}
+
+		.panel.panel-default.open > .panel-heading {
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+
+		.product.light .product-caption .product-price {
+			font-size: 1.15em;
+			font-weight: bold;
+			font-family: Raleway,sans-serif;	
+				
+		}
+        .hebrew {
+			font-family :Arial;
+        }
+	</style>
+	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/store/index/index.js"></script>
+</head>
 	<body class="page-goals">
         <header class="navbar" id="top" role="banner">
 			<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
-				<span id="page-title">My Store</span>
+				<span id="page-title" class="i18n" data-key="MyStore">My Store</span>
 			</div>
         </header>
 		
@@ -114,7 +551,7 @@
 							<img src="../img_new/store-color-red-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Store</span> 
+							<span class="i18n" data-key="Store">Store</span> 
 						</div>
 					</div>
 				</div>
@@ -126,7 +563,7 @@
 							<img src="../img_new/scanner-1-color-red-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Scanner</span> 
+							<span class="i18n" data-key="Scanner">Scanner</span> 
 						</div>
 					</div>
 				</div>
@@ -138,7 +575,7 @@
 							<img src="../img_new/ticket-color-red-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Auction</span>
+							<span class="i18n" data-key="Auction">Auction</span>
 						</div>
 					</div>
 				</div>
@@ -155,7 +592,7 @@
                 
                 <div class="alert alert-warning" role="alert" dir="ltr" style="min-height: 92px;">
                     <div class="media">
-                        <div class="pull-right">
+                        <div class="pull-right" id="img-cart">
                             (<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-brown-svg.svg"/>
                         </div>
                         <div class="media-body">
@@ -167,10 +604,10 @@
                 <div id="main"></div>
 
                 <div id='no-prizes' class='alert alert-danger' style='display: none; text-align: center;'>
-                    <h4 id='no-prizes-message'>
+                    <h4 id='no-prizes-message' class="i18n" data-key="NotPrizesSetup">
                         It appears that your base does not have any prizes setup yet, or all it's prizes are out of stock.
 					</h4>
-					<h5>
+					<h5 class="i18n" data-key="ContactBaseCommander">
 						Please contact your Base Commander for more information.
 					</h5>
                 </div>
@@ -188,7 +625,7 @@
 								<img src="/mobile/img_new/boy-color-green-svg.svg">
 							</div>
 							<div class="span12">
-								<span>Accounts</span>
+								<span class="i18n" data-key="Accounts">Accounts</span>
 							</div>
 						</div>
 					</a>
@@ -200,7 +637,7 @@
 							<img src="/mobile/img_new/square-check-color-purple-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Missions</span>
+							<span class="i18n" data-key="Missions">Missions</span>
 						</div>
 					</div>
 					</a>
@@ -212,7 +649,7 @@
 							<img src="/mobile/img_new/achievements-color-orange-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Achievements</span>
+							<span class="i18n" data-key="Achievements">Achievements</span>
 						</div>
 					</div>
 					</a>
@@ -224,7 +661,7 @@
 							<img src="/mobile/img_new/cart-color-red-svg.svg">
 						</div>
 						<div class="span12">
-							<span>Rewards</span>
+							<span class="i18n" data-key="Rewards">Rewards</span>
 						</div>
 					</div>
 					</a>
@@ -233,7 +670,12 @@
 		</div>
 	</body>
 
-    <script src="/mobile/js/authenticate.js" defer></script>
+	<script src="/mobile/js/authenticate.js" defer></script>
+	<script>
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var url = location.href.toString();
@@ -283,14 +725,26 @@
             var totalPrice = 0;
             var originalBal = 0;
 			var separator = '|';
-            
+			var float_element = "";
+            var availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
+			var totalmilesText = "Total Miles Earned: ";
+            var totalmilesYearText = "Total Miles Earned this Year: ";
+
+			if (localStorage.getItem("locallang") == "he") {
+				$("#img-cart").removeClass('pull-right').addClass('pull-left');
+				float_element = 'style="float:right;direction:rtl; margin-right:8px;"';
+				availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
+                totalmilesText = "סך הנקודות שנצברו  : ";
+                var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
+                var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
+			}
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
-				var html = '<div id="balance-box">';
-				html += 	"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
-				html += '</div><div id="data-box">'
-				html += 	"Total Miles Earned: " + info.tpoints.toLocaleString( navigator.language ) + "<br />";
-                html += 	"Total Miles Earned this Year: " + info.earned.toLocaleString( navigator.language ) + "<br />";
+                var html = '<div id="balance-box" ' + float_element+'>';
+				html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
+                html += '</div><div id="data-box" ' + data_box_css +'>'
+                html += totalmilesText + info.tpoints.toLocaleString( navigator.language ) + "<br />";
+                html += totalmilesYearText + info.earned.toLocaleString( navigator.language ) + "<br />";
 				html += '</div>'
                 $(".balance").html(html);
                 originalBal = info.available;

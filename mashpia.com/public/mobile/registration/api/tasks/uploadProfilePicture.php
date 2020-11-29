@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors',1);
 include_once( dirname(__FILE__) . "/../header.php" );
 // include_once( dirname(__FILE__) . "/../classes/ProfilePicture.php" );
 
@@ -39,7 +38,7 @@ $result = move_uploaded_file($file['tmp_name'], $target_file);
 if ( !$result )
     render_json_error( "Failed to save file. Please check for file corruption." );
 // limit to 500x500px
-//shrink_image( $target_file );
+shrink_image( $target_file );
 // show the response
 return json_response([
     "location" => "/mobile/reg/$file_name",
@@ -78,9 +77,9 @@ function shrink_image( $target_file, $size = 500 ) {
 				$orientation = $exif['Orientation']; // get the orientation
 				if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
 					switch($orientation) {  
-						case 3: $image->rotateimage("#FFF", 180); $image->rotateimage("#FFF", 180); break; // upside down
-						case 6: $image->rotateimage("#FFF", 90); $image->rotateimage("#FFF", 90); break; // rotate 90 degrees CW
-						case 8: $image->rotateimage("#FFF", -90); $image->rotateimage("#FFF", -90);break; // rotate 90 degrees CCW
+						case 3: $image->rotateimage("#FFF", 180); $thumb->rotateimage("#FFF", 180); break; // upside down
+						case 6: $image->rotateimage("#FFF", 90); $thumb->rotateimage("#FFF", 90); break; // rotate 90 degrees CW
+						case 8: $image->rotateimage("#FFF", -90); $thumb->rotateimage("#FFF", -90);break; // rotate 90 degrees CCW
 					}
 				}
 			}

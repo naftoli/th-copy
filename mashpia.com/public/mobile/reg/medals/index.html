@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tzivos Hashem | User Home Page</title>
+        <title class="i18n" data-key="Title">Tzivos Hashem | User Home Page</title>
         <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet">
         <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
@@ -110,7 +110,16 @@
 				left: 2%;
 				z-index: 999999;
 			}
+
+            .hebrew {
+                font-family: Arial !important;
+            }
+
 		</style>
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../../js/translation/reg/medals/index/medals_index.js"></script>		 
 	</head>
 	<body>
         <div class="container">
@@ -120,20 +129,21 @@
                         <div class="header-setting col-xs-4" id="logOff">
                             <img src="/mobile/img_new/lock-color-white-svg.svg" style="float:left;max-height:40px;max-width:40px;">
                             <div style="float: left;">
-                                <span>log out</span>
+                                <span class="i18n" data-key="logout">log out</span>
                             </div>
                         </div>
                         <div class="header-edit col-xs-4">
                             <div style="float: left;">
-                                <span>edit</span>
+                                <span class="i18n" data-key="edit">edit</span>
                             </div>
                             <img src="/mobile/img_new/settings-color-white-svg.svg" style="float:left;max-height:40px;max-width:40px;">
                         </div>
                     </div>
-                </div>
+				</div>
+              			
                 <div class="span12 mt1">
                     <div class="span4">
-                        <div class="top-left-space">
+                        <div id="topleftspace" class="top-left-space">
                             <div class="span12">
                                 <img id="item0" src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="">
                             </div>
@@ -141,10 +151,10 @@
                                 <span class="title" id="rank"></span>
                             </div>
                             <div class="span12">
-                                <span class="descr" id="name"></span>
+                                <span class="descr i18n" id="name"></span>
                             </div>
-							<div class="span12">
-								<span class="title">Serial:</span>
+							<div class="span12" id="serialdiv">
+								<span class="title i18n" data-key="Serial">Serial:</span>
                                 <span class="descr" id="serial"></span>
                             </div>
                         </div>
@@ -154,17 +164,17 @@
                     		<img id="userImg" src="">
                     	</div>
                     </div>
-                    <div class="span4" style="text-align: right;">
-                        <div class="top-right-space">
+                    <div  class="span4" style="text-align: right;">
+                        <div id="toprightspace" class="top-right-space">
                             <div class="span12">
                                 <img id="logo" src="">
                             </div>
-                            <div class="span12" style="margin-top: 10px;">
-                                <span class="title">Commander:<br></span>
+                            <div id="commanderdiv" class="span12" style="margin-top: 10px;">
+                                <span class="title i18n" data-key="Commander">Commander:<br></span>
                                 <span class="descr" id="teacher"></span>
                             </div>
-							<div class="span12">
-                                <span class="title">Platoon:</span>
+							<div id="platoondiv" class="span12">
+                                <span class="title i18n" data-key="Platoon">Platoon:</span>
                                 <span class="descr" id="grade"></span>
                             </div>
                         </div>
@@ -225,14 +235,14 @@
 				
 				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
-                        <span>RAFFLE INFO</span>
+                        <span data-key="RAFFLEINFO" class="i18n">RAFFLE INFO</span>
                     </div>
                 </div>
 				<div id="raffleInfo" class="clearfix"></div>
 				
                 <div class="span12" style="margin-top:15px;">
                     <div class="medal-label">
-                        <span>MEDALS</span>
+                        <span data-key="MEDALS" class="i18n">MEDALS</span>
                     </div>
 				</div>
 				
@@ -248,7 +258,7 @@
 									<img src="/mobile/img_new/boy-color-green-svg.svg">
 								</div>
 								<div class="span12">
-									<span id="main-title">Accounts</span>
+									<span class="i18n" data-key="Accounts" id="main-title">Accounts</span>
 								</div>
 							</div>
 						</a>
@@ -260,7 +270,7 @@
 								<img src="/mobile/img_new/square-check-color-purple-svg.svg">
 							</div>
 							<div class="span12">
-								<span>Missions</span>
+								<span class="i18n" data-key="Missions">Missions</span>
 							</div>
 						</div>
 						</a>
@@ -272,7 +282,7 @@
 								<img src="/mobile/img_new/achievements-color-orange-svg.svg">
 							</div>
 							<div class="span12">
-								<span>Achievements</span>
+								<span class="i18n" data-key="Achievements">Achievements</span>
 							</div>
 						</div>
 						</a>
@@ -284,7 +294,7 @@
 									<img src="/mobile/img_new/cart-color-red-svg.svg">
 								</div>
 								<div class="span12">
-									<span>Rewards</span>
+									<span class="i18n" data-key="Rewards">Rewards</span>
 								</div>
 							</div>
 						</a>
@@ -465,7 +475,7 @@
 			
 			const analyze = text => {
 				if (text.includes('mark')) {
-					const conf = confirm("Are u sure you would like to mark missions?");
+					const conf = confirm(i18nect.t('SureMarkMissions'));
 					if ( conf ) {
 						location.href = "/mobile/missionsNew.html?id=" + id;
 					}
@@ -509,6 +519,7 @@
 		  ga('create', 'UA-71974937-1', 'auto');
 		  ga('send', 'pageview');
 		</script>
-		</div>
+		
 	</body>
+
 </html>

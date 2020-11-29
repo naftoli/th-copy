@@ -1,3 +1,4 @@
+﻿
 var findGetParameter; // requires findGetParameter to be loaded first...
 
 var leaderboardApp = function(){
@@ -16,11 +17,21 @@ var leaderboardApp = function(){
         $( '#filtersModalContainer' ).on( 'hidden.bs.modal',  onModalClose );
         $( '#filtersModalContainer' ).on( 'show.bs.modal',    onModalOpen  );
         // setup event listeners for when an option is changed
-        $("#update-leaderboard").click( function() {
+
+        $("#update-leaderboard").click(function () {
             state.updateClicked = true; // do not update the UI
             getLeaderBoard( 0 ); // get a new leaderboard
             $('#filtersModalContainer').modal('hide');
         });
+
+
+        $("#update-leaderboard-he").click(function () {
+            state.updateClicked = true; // do not update the UI
+            getLeaderBoard(0); // get a new leaderboard
+            $('#filtersModalContainerHE').modal('hide');
+        });
+
+
     }); // end on page load anynomus function
     /**
      * onModalOpen
@@ -74,26 +85,44 @@ var leaderboardApp = function(){
     function renderLeaderBoard( data, offset ) {
         $(".loader").remove();
         // render the user number
-        if ( data.user_location > 0 ) {
-            $("#user_position").html(
-                "<div class='animated fadeIn'>" + 
-                    "You are number " + formatNumber(data.user_location) + 
-                    " out of " + formatNumber( data.total ) + 
-                "</div>"
-            );
+        if ( localStorage.getItem('locallang') == 'he' ) {
+            if ( data.user_location > 0 ) {
+                $("#user_position").html(
+                    "<div class='animated fadeIn' style='direction: rtl'>" +
+                    "אתה מספר " + formatNumber(data.user_location) +
+                    " מתוך " + formatNumber( data.total ) +
+                    "</div>"
+                );
+            } else {
+                $("#user_position").html(
+                    "<div class='animated fadeIn' style='direction: rtl'>" +
+                    formatNumber( data.total ) + " חיילים!" +
+                    "</div>"
+                );
+            }
         } else {
-            $("#user_position").html(
-                "<div class='animated fadeIn'>" + 
-                    formatNumber( data.total ) + " Soldiers!" + 
-                "</div>"
-            );
+            if ( data.user_location > 0 ) {
+                $("#user_position").html(
+                    "<div class='animated fadeIn'>" +
+                    "You are number " + formatNumber(data.user_location) +
+                    " out of " + formatNumber( data.total ) +
+                    "</div>"
+                );
+            } else {
+                $("#user_position").html(
+                    "<div class='animated fadeIn'>" +
+                    formatNumber( data.total ) + " Soldiers!" +
+                    "</div>"
+                );
+            }
         }
         var html = "";
         if ( data.leaderboard.length == 0 ){
+            var text = '<strong>No soldiers found.</strong><br/>Please adjust your filters.';
+            if ( localStorage.getItem('locallang') == 'he' ) text = '<span dir="rtl"><strong>לא נמצאו חיילים.</strong><br/>נא להתאים את הפילטרים</span>';
+
             html = '<div class="container">' +
-                        '<div class="alert alert-branding">' + 
-                            '<strong>No soldiers found.</strong><br/>Please adjust your filters.' +
-                        '</div>' +
+                        '<div class="alert alert-branding">' + text + '</div>' +
                     '</div>';
         } else {
             data.leaderboard.forEach( function( user, index ) {
@@ -104,20 +133,35 @@ var leaderboardApp = function(){
                 );
             });
         }
+
+        var direction = " ";
+        var loadMoreText = "Load More";
+       
+        if (localStorage.getItem("locallang") == "he") {
+            direction = " style='direction:rtl;' ";
+            loadMoreText = "טען עוד ";
+           
+        }
+
+        html = "<div " + direction+ ">" + html + "</div>";
+
+     
+        $("#leaderboard").append(html);
+      
         
-        $("#leaderboard").append( html );
-    
         if ( 
             offset < 75 && 
             offset + data.leaderboard.length < data.total
         ) {
             $("#leaderboard").append(
-                '<div id="load-more-box"><button class="btn btn-branding" id="load-more">Load More</button></div>'
+                '<div id="load-more-box"><button class="btn btn-branding" id="load-more">' + loadMoreText+'</button></div>'
             );
             $("#load-more").click( function() {
                 getLeaderBoard( $(".user").length ); // load the next 25 users
             });
         }
+
+        //console.log($("#leaderboard").html());
     }
     
     function renderUser ( user, start, position, current_user_position ) {
@@ -125,15 +169,24 @@ var leaderboardApp = function(){
         if ( current_user_position == position) {
             user_style = "background: #f9f9f9; color: #f7872a;";
         }
-    
-        var html = '<div class="user animated fadeIn" style="animation-delay: ' + 
+
+        var medalsText = " Medals";
+        var missionsText = " Missions";
+        if (localStorage.getItem("locallang") == "he") {
+            user_style = user_style + " direction:rtl; ";
+            medalsText = " מדליות";
+            missionsText = " משימות";
+        }
+        var html = '<div class="user animated fadeIn" style="animation-delay:' + 
                         ( (position - start) / 10) + 's; ' + user_style + '">';
         html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
         html +=     '<div class="user_info">';
         html +=         '<h1 class="position">#' + position + '</h1>';
-        html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
-        html +=         '<div class="medal_count">' + user.medal_count + ' Medals</div>'
-        html +=         '<div class="mission_count">' + formatNumber(user.mission_count) + ' Missions</div>'
+        if (localStorage.getItem('locallang') == 'he')
+            html +=         '<h2 class="name">'+ user.first_he.toLowerCase() + ' ' + user.last_he.toLowerCase() + '</h2>'
+        else html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
+        html += '<div class="medal_count">' + user.medal_count + medalsText + ' </div>'
+        html += '<div class="mission_count">' + formatNumber(user.mission_count) + missionsText +' </div>'
         html +=     '</div>';
         html +=    '</div>';
         return html;

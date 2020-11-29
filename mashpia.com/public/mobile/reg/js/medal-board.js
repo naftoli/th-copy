@@ -1,4 +1,5 @@
-/**
+
+﻿/**
  * medal-board.js
  * 
  * creates global function medal_board( target ) that renders the medal board on a page
@@ -69,9 +70,23 @@ function Medal( config ) {
         "White", "Red", "Orange", "Yellow", "Green", 
         "Blue", "Purple", "Brown", "Gray", "Black", "Bronze"
     ]
+
+    if (localStorage.getItem("locallang") == "he") {
+        
+        this.colors = [
+            "לבן", "אדום", "כתום", "צהוב", "ירוק",
+            "כחול", "סגול", "חום", "אפור", "שחור", "ברונזה"
+        ]
+
+    }
 }
 
 Medal.prototype.getColor = function( current ) {
+    var CompleationText = "Compleation";
+    if (localStorage.getItem("locallang") == "he") {
+        CompleationText = "הסתיים";
+    }
+
     var index = this.next - 1;
     if ( current && index >= 1 ) {
         index -= 1;
@@ -79,7 +94,7 @@ Medal.prototype.getColor = function( current ) {
     if ( index < this.colors.length ) {
         return this.colors[index];
     } else {
-        return "Compleation";
+        return CompleationText;
     }
 }
 
@@ -91,7 +106,25 @@ Medal.prototype.getColor = function( current ) {
  * returns the standard medal for the Medals based on the config passed to the constructor.
  */
 Medal.prototype.render = function() {
-    if ( this.total > 0 )
+ //   var MissionsText = "Missions";
+    var ToText = " To ";
+    var CampaignCompleateText = "Campaign Compleate!";
+    var progressbarFloat = "";
+    var progressTextAlignment = "";
+
+    if (localStorage.getItem("locallang") == "he") {
+
+        ToText = " עד ";
+        CampaignCompleateText = "הקמפיין הושלם!";
+
+      //  MissionsText = "משימות";
+        CampaignCompleateText = "הקמפיין הושלם!";
+        progressbarFloat = "float: right;";
+        progressTextAlignment = ' style="direction:rtl;" ';
+    }
+    
+
+    if (this.total > 0)
         var status_width =  ( this.total - this.base_amount ) / ( this.needed - this.base_amount ) * 100;
     else
         status_width = 0;
@@ -104,16 +137,18 @@ Medal.prototype.render = function() {
     html +=         '<span>' + this.subject + '</span>';
     html +=     '</div>';
     html +=     '<div class="medal-status progress">';
-    html +=         '<div class="progress-bar ' + this.getColor( true ).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;"></div>';
+    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat +'"></div>';
 
     if ( this.next - 1 < this.colors.length ) {
-        html +=     '<span>' + ( this.needed - this.total ) + " to " + this.getColor( false ) + '</span>';
+        html += '<span ' + progressTextAlignment +'>' + (this.needed - this.total) + ToText + this.getColor( false ) + '</span>';
     } else {
-        html +=     '<span>Complete!</span>';
+        html += '<span ' + progressTextAlignment +'>' + CampaignCompleateText +'</span>';
     }
 
     html +=     '</div>';
     html    += "</div>";
     
     return html;
+
+
 }

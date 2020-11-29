@@ -1,4 +1,4 @@
-cla<?php
+<?php
 ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -106,7 +106,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                     if ($new_img) @imagepng($new_img, $img_url);
                                     else $img_url = '';
                                 }
-
                                 $info[$i++] = [
                                     $rankNames[$rank],
                                     ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))),

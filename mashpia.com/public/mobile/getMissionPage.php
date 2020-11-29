@@ -294,16 +294,30 @@ $he_chars = array(
 </header>
 
 <div class="personalImg"></div> <? //div to load the users image into ?>
+<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) : {} else: ?>
 <div class="bug-report">
 	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
+<?php endif; ?>
 
 <?php if ( !$user->chayolei ) { ?>
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
-            It appears that <?=$user->first?> is currently unenrolled from Chayolei Tzivos Hashem (CTH).<br/><br/>
-            Please contact your base commander regarding enrolling <?=$user->gender == 'M' ? 'him' : 'her'?> in Chayolei Tzivos Hashem.
+            <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                ?>
+            <span style="direction: rtl">
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות ה'<br /><br />
+                נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
+            </span>
+                <?php
+            } else {
+                ?>
+                It appears that <?=$user->first?> is currently unenrolled from Chayolei Tzivos Hashem (CTH).<br/><br/>
+                Please contact your base commander regarding enrolling <?=$user->gender == 'M' ? 'him' : 'her'?> in Chayolei Tzivos Hashem.
+                <?php
+            }
+            ?>
         </h1>
     </div>
 </div>
@@ -311,8 +325,18 @@ $he_chars = array(
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
-            It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
-            Please Register <?=$user->gender == 'M' ? 'him' : 'her'?> before marking missions.
+            <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
+                ?>
+                נראה ש <?=$user->first?> לא רשום כעת לצבאות ה<br /><br />
+                נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
+                <?php
+            } else {
+                ?>
+                It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
+                Please Register  before marking missions.
+                <?php
+            }
+            ?>
         </h1>
     </div>
 </div>
@@ -326,17 +350,34 @@ $he_chars = array(
                 <div id="buttons" style="text-align: center;">
                     <div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
                         <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
-                        <input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
-                        <a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
-                            <input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
-                        </a>
+                      
+						
+						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
+                       
+						<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) {} else { ?>
+						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
+                            <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
+                       
+							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
+								Print Missions
+							</button>
+							
+							</a>
+                        <?php } ?>
                     </div>
                     <div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
                         <a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
-                            <input type="button" class="btn btn-danger btn-sm" value="Personalize" />
+                            <!-- <input type="button" class="btn btn-danger btn-sm i18n" data-key="Personalize" value="Personalize" /> -->
+
+							<button type="button" data-key="Personalize" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
+								Personalize
+							</button>
+
+
                         </a>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
+                    <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
+                            style="margin: 0 5px; <?= $desktop ? 'float: right;' : ''?>">
                         Help
                     </button>
                 </div>
@@ -368,8 +409,10 @@ $he_chars = array(
                             <div class="collapse in" id="#panel_<?=$index?>">
                                 <div class="panel-body dailyPanel">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/>
-                                </div>
+                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs i18n" data-key="CheckAll" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/> 
+								  
+									
+									</div>
                                 <br />
                                 <?//if ($lang == 2) echo '<br />'; // extra space for hebrew ?>
                                 <ul class="list-unstyled">
@@ -509,7 +552,7 @@ $he_chars = array(
                         <div class="collapse">
                             <div class="panel-body">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">
@@ -606,7 +649,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
                                 </div>
                                 <br />
                                 <? endif; ?>
@@ -708,7 +751,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">
@@ -832,7 +875,7 @@ $he_chars = array(
                         <img src="img_new/boy-color-green-svg.svg">
                     </div>
                     <div class="span12">
-                        <span>Accounts</span>
+                       <span class="i18n" data-key="Accounts">Accounts</span>
                     </div>
                 </div>
 			</a>
@@ -844,7 +887,7 @@ $he_chars = array(
 					<img src="img_new/square-check-color-purple-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Missions</span>
+					<span class="i18n" data-key="Missions">Missions</span>
 				</div>
 			</div>
 			</a>
@@ -856,7 +899,7 @@ $he_chars = array(
 					<img src="img_new/achievements-color-orange-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Achievements</span>
+					<span class="i18n" data-key="Achievements">Achievements</span>
 				</div>
 			</div>
 			</a>
@@ -868,7 +911,7 @@ $he_chars = array(
 					<img src="img_new/cart-color-red-svg.svg">
 				</div>
 				<div class="span12">
-					<span>Rewards</span>
+					  <span class="i18n" data-key="Rewards">Rewards</span>
 				</div>
 			</div>
 			</a>
@@ -980,9 +1023,19 @@ $he_chars = array(
 		});
 		/******************* CHECK ALL EVENT LISTENER *******************/
 		$(".checkAll").click( function() {
+
+		var CheckALLText = "Check All";
+		var unCheckALLText = "Uncheck All";
+		 if (localStorage.getItem("locallang") == "he") {
+			  CheckALLText = "סמן הכל";
+			 unCheckALLText = "הסר סימון";
+		 //
+		 }
+		// alert($(this).val() );
+		// alert(CheckALLText);
 			$(this).width(65);
-			if ($(this).val() == 'Check All') {
-				$(this).val('Uncheck All');
+			if ($(this).val() == CheckALLText ) {
+				$(this).val(unCheckALLText);
 				var inputs = $(this).parent().parent().find('.box-check');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -991,8 +1044,8 @@ $he_chars = array(
 						$(input).trigger('click');
 					}
 				}
-			} else if ($(this).val() == 'Uncheck All') {
-				$(this).val('Check All');
+			} else if ($(this).val() == unCheckALLText) {
+				$(this).val(CheckALLText);
 				var inputs = $(this).parent().parent().find('.box-check');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -1005,9 +1058,16 @@ $he_chars = array(
 		});
 		
 		$(".checkAllDaily").click( function() {
+		var CheckALLText = "Check All";
+		var unCheckALLText = "Uncheck All";
+		 if (localStorage.getItem("locallang") == "he") {
+			  CheckALLText = "סמן הכל";
+			 unCheckALLText = "הסר סימון";
+		 //
+		 }
 			$(this).width(65);
-			if ($(this).val() == 'Check All') {
-				$(this).val('Uncheck All');
+			if ($(this).val() == CheckALLText) {
+				$(this).val(unCheckALLText);
 				var inputs = $(this).parent().parent().find('.dMark');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -1018,8 +1078,8 @@ $he_chars = array(
 						$(input).trigger('click');
 					}
 				}
-			} else if ($(this).val() == 'Uncheck All') {
-				$(this).val('Check All');
+			} else if ($(this).val() == unCheckALLText) {
+				$(this).val(CheckALLText);
 				var inputs = $(this).parent().parent().find('.dMark');
 				var l = inputs.length;
 				for (var i = 0; i < l; i++) {
@@ -1232,17 +1292,19 @@ $he_chars = array(
 		if (Cookies.get('marking') == 'weekly') {
 			$('.dailyBoxes').show();
 			var w = $(".showProgress").width();
-			$(".showProgress").val('Daily View');
+			if (Cookies.get('lang') === 'he') $(".showProgress").val('צפייה לפי יום');
+            else $(".showProgress").val('Daily View');
 			$(".showProgress").width( w );
 		} else if (Cookies.get('marking') == 'daily') {
-			$(".showProgress").val('Weekly View');
+		    if (Cookies.get('lang') === 'he') $(".showProgress").val('צפייה לפי שבוע');
+            else $(".showProgress").val('Weekly View');
 		}
 
 		
 		$(".showProgress").click( function() {
-			if ($(this).val() == 'Weekly View') {
+			if ($(this).val() == 'Weekly View' || $(this).val() == 'צפייה לפי שבוע') {
 				Cookies.set('marking', 'weekly');
-			} else if ($(this).val() == 'Daily View') {
+			} else if ($(this).val() == 'Daily View' || $(this).val() == 'צפייה לפי יום') {
 				Cookies.set('marking', 'daily');
 			}
 			location.reload();

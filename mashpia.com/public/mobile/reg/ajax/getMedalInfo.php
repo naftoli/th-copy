@@ -51,7 +51,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
     // Get the users info for each subject
     $user_missions = [];
     $user_missions_query = mysql_query(
-        "SELECT subject_id, subject_name, subject_details, SUM( mission_count ) AS total "
+        "SELECT subject_id, subject_name, subject_details, subject_details_he, SUM( mission_count ) AS total "
         ." FROM date_tasks_mission_marks JOIN subjects USING ( subject_id ) "
         ." WHERE user_id = '$user' AND subject_id IN (" . implode( ',', $subjects ) . ") "
         ." GROUP BY subject_id"
@@ -65,14 +65,15 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
 
     foreach( $subjects as $subject_id ){
         if ( !isset( $user_missions[$subject_id] ) ) {
-            $subject_name_query = mysql_query("SELECT subject_name, subject_details FROM subjects WHERE subject_id = '$subject_id';");
+            $subject_name_query = mysql_query("SELECT subject_name, subject_details, subject_details_he FROM subjects WHERE subject_id = '$subject_id';");
             $missing_subject_info = mysql_fetch_assoc( $subject_name_query );
             $user_missions[$subject_id] = [
-                'sticker_name' => getStickerName( $subject_id ),
+                'sticker_name'  => getStickerName( $subject_id ),
                 'campaign_logo' => getSubjectImage( $subject_id ),
-                'subject_name' => getSubjectName( $subject_id, $missing_subject_info['subject_name'] ),
-                'subject_details' => $missing_subject_info['subject_details'],
-                'subject_id' => $subject_id,
+                'subject_name'  => getSubjectName( $subject_id, $missing_subject_info['subject_name'] ),
+                'subject_details'       => $missing_subject_info['subject_details'],
+                'subject_details_he'    => $missing_subject_info['subject_details_he'],
+                'subject_id'            => $subject_id,
                 'total' => 0
             ];
         }
@@ -80,7 +81,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
     ksort( $user_missions );
 
     $stickers_required_query = mysql_query(
-        " SELECT ms.subject_id, ms.medal_ord, medal_name, missions_required, profile_photo_id, mm.date_awarded "
+        " SELECT ms.subject_id, ms.medal_ord, medal_name, medal_name_he, missions_required, profile_photo_id, mm.date_awarded "
         ." FROM medals_subjects ms JOIN medals USING ( medal_ord ) "
         ." LEFT JOIN medal_marks mm ON ms.subject_id = mm.subject_id AND ms.medal_ord = mm.medal_ord AND user_id = '$user'"
         ." WHERE ms.subject_id IN (" . implode( ',', $subjects ) . ") "

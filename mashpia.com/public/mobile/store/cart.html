@@ -187,6 +187,13 @@
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
                 var html = '<div id="balance-box">';
+                if (localStorage.getItem("locallang") == "he") {
+                    html = "<span style='direction:rtl;' > ";
+                    html += "סך הנקודות שנצברו: " + info.earned;//
+                    html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
+                    html += "</span > ";
+                    //
+                }
                 html += 	"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
                 html += '</div><div id="data-box">'
                 html += 	"Total Miles Earned: " + info.tpoints.toLocaleString( navigator.language ) + "<br />";

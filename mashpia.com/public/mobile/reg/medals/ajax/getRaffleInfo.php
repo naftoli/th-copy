@@ -27,7 +27,9 @@ function checkYearly( $user_id ) {
     if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
         return [
             "percent_done" => $raffle_info[ "percent_done" ], 
-            "msg" => "Yearly Raffle Deadline Passed ($num_days / $quota<span class='hide-small'> days completed</span>)",
+            "msg" => (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ?
+                "($num_days / $quota<span class='hide-small'> ימים נשלמו</span>) תאריך ההגרלה השנתית עבר" :
+                "Yearly Raffle Deadline Passed ($num_days / $quota<span class='hide-small'> days completed</span>)"),
             'missed-deadline' => true
         ];
     } else {
@@ -156,25 +158,25 @@ function formatRaffleInfo( $total, $required, $raffle_name, $type ){
 	if ( $total >= $required ) {
 		switch ( $type ) {
 			case 'yearly':
-				$msg = "Eligible for the 180 flag";
+				$msg = isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "זכאות לדגל ה 180" : "Eligible for the 180 flag";
 				break;
 			case 'monthly':
-				$msg = "Eligible for the upcoming 60 flag";
+				$msg = isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "זכאות לדגל ה 60 הקרוב" : "Eligible for the upcoming 60 flag";
 				break;
 			case 'weekly':
-				$msg = "Eligible for the upcoming 5 flag ($raffle_name)";
+				$msg = isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "זכאות לדגל ה 5 הקרוב" : "Eligible for the upcoming 5 flag ($raffle_name)";
 		}
 	} else {
-		$msg = ( $required - intval( $total ) ) . " days of tasks needed to pass ";
+		$msg = ( $required - intval( $total ) ) . (isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? " ימים של משימות הנדרשים כדי לעבור " : " days of tasks needed to pass ");
 		switch ( $type ) {
 			case 'yearly':
-				$msg .= "the 180 flag";
+				$msg .= isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "הדגל ה 180" : "the 180 flag";
 				break;
 			case 'monthly':
-				$msg .= "the upcoming 60 flag";
+				$msg .= isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "הדגל ה 60 הקרוב" : "the upcoming 60 flag";
 				break;
 			case 'weekly':
-				$msg .= "the upcoming 5 flag ($raffle_name)";
+				$msg .= isset( $_COOKIE['lang'] ) && $_COOKIE['lang'] == 'he' ? "הדגל ה 5 הקרוב" : "the upcoming 5 flag ($raffle_name)";
 		}
     }
 
