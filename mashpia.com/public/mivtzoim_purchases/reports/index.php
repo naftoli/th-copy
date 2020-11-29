@@ -125,10 +125,14 @@ foreach ( $rows as $row ) {
                         <th>Grade</th>
                         <th>Student</th>
                         <?php
+                        $totals = [];
                         foreach ( $types as $type => $details ) {
                             foreach ( $details as $item => $item_id ) {
                                 $chosen_items = explode(',', $items);
-                                if ( in_array( $item_id, $chosen_items ) ) echo "<th>" . $item . "</th>";
+                                if ( in_array( $item_id, $chosen_items ) ) {
+                                    $totals[$item] = 0;
+                                    echo "<th>" . $item . "</th>";
+                                }
                             }
                         }
                         ?>
@@ -144,7 +148,10 @@ foreach ( $rows as $row ) {
                                     foreach ( $details as $item => $item_id ) {
                                         $chosen_items = explode(',', $items);
                                         if ( in_array( $item_id, $chosen_items ) ) {
-                                            if ( isset( $purchase[$item_id]) ) echo "<td>" . $purchase[$item_id] . "</td>";
+                                            if ( isset( $purchase[$item_id]) ) {
+                                                $totals[$item] += $purchase[$item_id];
+                                                echo "<td>" . $purchase[$item_id] . "</td>";
+                                            }
                                             else echo "<td></td>";
                                         }
                                     }
@@ -152,6 +159,13 @@ foreach ( $rows as $row ) {
                                 ?>
                             </tr>
                         <?php endforeach; ?>
+                        <tr><th colspan="2" align="right">Totals:</th>
+                        <?php
+                        foreach ( $types['Chanuka'] as $item => $item_id ) {
+                            echo "<th>" . $totals[$item] . "</th>";
+                        }
+                        ?>
+                        </tr>
                     </tbody>
                 </table>
                 <div style="page-break-after: always"></div>
