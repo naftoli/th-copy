@@ -6,6 +6,7 @@ $mobileURL = "/".explode("/", $_SERVER['REQUEST_URI'])[1]."/"; // get if we are 
 $daily = isset($_GET['daily']) && $_GET['daily']  == "true" ? true : false; // Get if we should render the daily view or not
 $desktop = isset($_GET['desktop']) && $_GET['desktop']  == "true" ? true : false; // Get if we are on a desktop or not
 if($desktop) $daily = false; // only show the weekly view on the desktop...
+
 /********************** LOGOS FOR CAMPAIGNS **********************/
 $campaignLogos = array(
 	1	=>	'Tehillim.gif',
@@ -145,6 +146,14 @@ chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
 //echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
+
+// don't show weekly button for day school kids
+$day_school = false;
+if (in_array($user->school_type_id, [16,17])) {
+    $daily = true;
+    $desktop = false;
+    $day_school = true;
+}
 
 /********************** GET THE PARSHA **********************/
 $sql = "select name from parshos where start = " . $start . " and end = " . $end;
@@ -352,13 +361,13 @@ $he_chars = array(
                         <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
                       
 						
-						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
+						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=!$desktop ? "display: none" : ""?>" />
                        
-						<?php if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) {} else { ?>
+						<?php if ( !isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he' ) { ?>
 						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
                             <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
                        
-							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
+							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;<?=$day_school ? "display: none;" : ""?>">
 								Print Missions
 							</button>
 							
@@ -377,7 +386,7 @@ $he_chars = array(
                         </a>
                     </div>
                     <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
-                            style="margin: 0 5px; <?= $desktop ? 'float: right;' : ''?>">
+                            style="margin: 0 5px; <?= !$desktop ? 'float: right;' : ''?>">
                         Help
                     </button>
                 </div>
