@@ -47,95 +47,115 @@ function checkYearly( $user_id ) {
  */
 function checkMonthly( $user_id ) {
 	// find out current dates
-    $dates = getDates( 'monthly' );
-    if ( $dates === false ) return false;
+    $raffle = getRaffle( 'monthly' );
+    if ( $raffle === false ) return false;
 
+	$total = checkDaily( $user_id, $raffle );
 	$required = Constants::get_monthly_task_requirment();
-    $rollover = 2459171;
-    if ($dates['start'] < $rollover) {
-        $total = checkDaily( $user_id, $dates );
-//        echo "Total: " . $total . " Required: " . $required;
-        if ($total < $required && $total >= ($required - 12)) { // only check if less than 60 but at least 48
-            $start_date = $dates['start']; // default to this start date
-            $end_date = $dates['start'] + 6; // get the end date for the first week
-            // TODO, iterate and check for additional marks...
-            for ($i = 0; $i < 12; $i++) { // loop over the 12 weeks.
-                $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
-                    AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
-                    AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-//            echo $update_total_sql . "<br />";
-                $update_total_query = mysql_query($update_total_sql);
-                $update_total_row = mysql_fetch_assoc($update_total_query);
-                if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
 
-                $start_date = $end_date + 1; // go to the next day for the next start date
-                $end_date = $start_date + 6; // get the end date for the first week
+	if ($total < $required && checkOveride($user_id, $raffle['raffle_id'])) $total = $required;
+
+	if ($total < $required) {
+	    $rollover = 2459171;
+		if ($raffle['start_date'] < $rollover) {
+            if ($total >= $required - 12) { // if it is between 60 and 48 we can check each week to see if we get 60.
+                $start_date = $raffle['start_date']; // default to this start date
+                $end_date = $raffle['start_date'] + 6; // get the end date for the first week
+                // TODO, iterate and check for additional marks...
+                $i = 0; // set $i to 0
+                while ($total < $required && $i < 12) { // while we are still below 60 and have not checked all 12 weeks yet.
+                    $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
+                        AND dtmarks.mark_date >= $start_date AND dtmarks.mark_date <= $end_date AND daily_task = 0
+                        AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+                    $update_total_query = mysql_query($update_total_sql);
+                    $update_total_row = mysql_fetch_assoc($update_total_query);
+                    if ($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
+
+                    // cleanup
+                    $i++; // increment $i
+                    $start_date = $end_date + 1; // go to the next day for the next start date
+                    $end_date = $start_date + 6; // get the end date for the first week
+                }
             }
+        } else {
+            $grid_id = 13012;
+            $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
+                        join date_tasks dt using (date_task_id) 
+                        where dtm.user_id = " . $user_id . " 
+                        and dt.grid_id = " . $grid_id . " 
+                        and dtm.mark_date >= " . $raffle['start_date'] . " 
+                        and dtm.mark_date <= " . $raffle['end_date'];
+            $result = mysql_query($sql);
+            $total = mysql_fetch_assoc($result)['total'];
         }
-    } else {
-        $grid_id = 13012;
-        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
-                    join date_tasks dt using (date_task_id) 
-                    where dtm.user_id = " . $user_id . " 
-                    and dt.grid_id = " . $grid_id . " 
-                    and dtm.mark_date >= " . $dates['start'] . " 
-                    and dtm.mark_date <= " . $dates['end'];
-//        echo $sql; exit;
-        $result = mysql_query($sql);
-        $total = mysql_fetch_assoc($result)['total'];
     }
-//    echo "Total: " . $total . " Required: " . $required;
-    return formatRaffleInfo( $total, $required, $dates['name'], 'monthly' );
+
+    return formatRaffleInfo( $total, $required, $raffle['name'], 'monthly' );
 }
 
 function checkWeekly( $user_id ) {
 	// find out current dates
-    $dates = getDates( 'weekly' );
-    if ( $dates === false ) return false;
+    $raffle = getRaffle( 'weekly' );
+    if ( $raffle === false ) return false;
 
+	$total = checkDaily( $user_id, $raffle );
 	$required = Constants::get_weekly_task_requirment();
-    $rollover = 2459167;
-    if ($dates['start'] < $rollover) {
-        $total = checkDaily( $user_id, $dates );
-        if ($total == $required - 1) { // if it is only (4) we can check for some marks that are not tied to any specific dates
-            // get a total count of all the non daily missions marked between the start and end dates of this raffle
-            $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
-                    " AND dtmarks.mark_date >= ". $dates['start'] ." AND dtmarks.mark_date <= ". $dates['end'] .
-                    " AND daily_task = 0 AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-            $update_total_query = mysql_query($update_total_sql);
-            $update_total_row = mysql_fetch_assoc($update_total_query);
-            // if the user did at least one task then add him to the list (as it brings his total from 4 to 5)
-            if($update_total_row['total'] > 0) {
-                $total = 5; // set the total to 5
+
+	if ($total < $required && checkOveride($user_id, $raffle['raffle_id'])) $total = $required;
+
+	if ($total < $required) {
+	    $rollover = 2459167;
+	    if ($raffle['start_date'] < $rollover) {
+            if ($total == $required - 1) { // if it is only (4) we can check for some marks that are not tied to any specific dates
+                // get a total count of all the non daily missions marked between the start and end dates of this raffle
+                $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
+                        " AND dtmarks.mark_date >= ". $raffle['start_date'] ." AND dtmarks.mark_date <= ". $raffle['end_date'] .
+                        " AND daily_task = 0 AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
+                $update_total_query = mysql_query($update_total_sql);
+                $update_total_row = mysql_fetch_assoc($update_total_query);
+                // if the user did at least one task then add him to the list (as it brings his total from 4 to 5)
+                if ($update_total_row['total'] > 0) {
+                    $total = 5; // set the total to 5
+                }
             }
-        }
-    } else {
-        $grid_id = 13012;
-        // find out how many different days were marked
-        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
+        } else {
+            $grid_id = 13012;
+            // find out how many different days were marked
+            $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
                     join date_tasks dt using (date_task_id) 
                     where dtm.user_id = " . $user_id . " 
                     and dt.grid_id = " . $grid_id . " 
-                    and dtm.mark_date >= " . $dates['start'] . " 
-                    and dtm.mark_date <= " . $dates['end'];
-        $result = mysql_query($sql);
-        $total = mysql_fetch_assoc($result)['total'];
+                    and dtm.mark_date >= " . $raffle['start_date'] . " 
+                    and dtm.mark_date <= " . $raffle['end_date'];
+            $result = mysql_query($sql);
+            $total = mysql_fetch_assoc($result)['total'];
+        }
     }
-
-	return formatRaffleInfo( $total, $required, $dates['name'], 'weekly' );
+	
+	return formatRaffleInfo( $total, $required, $raffle['name'], 'weekly' );
 }
 
-function checkDaily( $user_id, $dates ) {
+function checkDaily( $user_id, $raffle ) {
 	$daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
 				' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
 				' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
 				' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
-				' and dtmarks.mark_date >= '. $dates['start'] .' and dtmarks.mark_date <= ' . $dates['end'] .
+				' and dtmarks.mark_date >= '. $raffle['start_date'] .' and dtmarks.mark_date <= ' . $raffle['end_date'] .
 				' group by dtmarks.mark_date';
 	//echo $daily_sql."\n"; // if you want to debug...
 	$daily_query = mysql_query($daily_sql); // run the query
 	$total = mysql_num_rows( $daily_query ); // get the number of marks
 	return $total;
+}
+
+function checkOveride( $user_id, $raffle_id) {
+	$sql = "SELECT * FROM raffle_eligibility
+			WHERE user_id = $user_id
+			AND raffle_id = $raffle_id
+			AND eligible = 1
+			LIMIT 1";
+	$query = mysql_query($sql);
+	return mysql_num_rows($query);
 }
 
 /**
@@ -183,20 +203,15 @@ function formatRaffleInfo( $total, $required, $raffle_name, $type ){
 	return [ "percent_done" => $percent_done, "msg" => $msg, 'missed-deadline' => false ];
 }
 
-function getDates( $type ) {
+function getRaffle( $type ) {
 	$today = unixtojd();
-	$sql = "SELECT start_date, end_date, name FROM raffles
+	$sql = "SELECT raffle_id, start_date, end_date, name FROM raffles
 			WHERE type = '" . $type . "'
 			AND start_date <= " . $today . "
             AND end_date >= " . $today;
     $result = mysql_query($sql);
     if ( mysql_num_rows( $result ) == 0 ) return false;
-	$row = mysql_fetch_assoc($result);
-	return array(
-		'start'	=>	$row['start_date'],
-        'end'	=>	$row['end_date'], 
-        'name'  =>  $row['name']
-	);
+	return mysql_fetch_assoc($result);
 }
 
 // check raffle eligibilities
