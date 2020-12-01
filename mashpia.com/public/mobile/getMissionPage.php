@@ -149,7 +149,7 @@ chdir('mobile'); // and come back to this folder
 
 // don't show weekly button for day school kids
 $day_school = false;
-if (in_array($user->school_type_id, [16,17])) {
+if (in_array($user->school_type_id, [4,5])) {
     $daily = true;
     $desktop = false;
     $day_school = true;
