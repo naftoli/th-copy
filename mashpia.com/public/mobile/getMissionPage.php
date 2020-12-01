@@ -5,7 +5,7 @@ $days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 $mobileURL = "/".explode("/", $_SERVER['REQUEST_URI'])[1]."/"; // get if we are in /mobile/ or /mobileDev/
 $daily = isset($_GET['daily']) && $_GET['daily']  == "true" ? true : false; // Get if we should render the daily view or not
 $desktop = isset($_GET['desktop']) && $_GET['desktop']  == "true" ? true : false; // Get if we are on a desktop or not
-if($desktop) $daily = false; // only show the weekly view on the desktop...
+if ($desktop) $daily = false; // only show the weekly view on the desktop...
 
 /********************** LOGOS FOR CAMPAIGNS **********************/
 $campaignLogos = array(
@@ -361,7 +361,7 @@ $he_chars = array(
                         <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
                       
 						
-						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=!$desktop ? "display: none" : ""?>" />
+						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop || $day_school ? "display: none" : ""?>" />
                        
 						<?php if ( !isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he' ) { ?>
 						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
@@ -386,7 +386,7 @@ $he_chars = array(
                         </a>
                     </div>
                     <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
-                            style="margin: 0 5px; <?= !$desktop ? 'float: right;' : ''?>">
+                            style="margin: 0 5px; <?= !$desktop && !$daily ? 'float: right;' : ''?>">
                         Help
                     </button>
                 </div>
