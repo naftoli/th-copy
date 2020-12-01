@@ -12,8 +12,8 @@ switch ( $row['school_type_id'] ) {
     case 12: case 13:
         $subjects = [ 1, 4, 21, 27, 41, 42, 45, 90, 92, 93, 94, 100 ];
         break;
-    case 4: case 5: case 6: case 7: case 8: case 9: 
-        $subjects = [ 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120 ];
+    case 4: case 5:
+        $subjects = [ 121, 122, 123 ];
         break;
 }
 
