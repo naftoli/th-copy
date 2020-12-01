@@ -118,7 +118,7 @@ let raffleNavData = {
 
 const fetchRaffleData = async (user_id) => {
     try {
-        let response = await axios.get(`/mobile/api/raffles/dashboard.php`);
+        let response = await axios.get(`/mobile/api/raffles/dashboard.php?user_id=${user_id}`);
         if (response.data) {
             raffleNavData = response.data;
 

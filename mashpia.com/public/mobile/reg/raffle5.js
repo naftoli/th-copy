@@ -150,7 +150,7 @@ const createSmallDonutChart = (donutData, index) => {
 
         container.appendChild(winningCircle);
 
-        //Congrats text. TODO: responsive size based on size of doughnut
+        //Congrats text. 
         let textSVG = document.createElementNS(xmlns, 'svg');
         textSVG.setAttribute('viewBox', '0 0 101 101');
         textSVG.setAttribute('id', 'circleText')
@@ -166,11 +166,33 @@ const createSmallDonutChart = (donutData, index) => {
         textSVG.appendChild(path);
         textSVG.appendChild(text);
 
+        setTimeout(() => {
+            centerTextPath(path, text.firstElementChild, textSVG)
+        }, 1000);
+
         container.appendChild(textSVG);
     }
 
     return container;
 };
+
+function centerTextPath(path, textPath, svg) {
+    let pathLength = path.getTotalLength();
+    let textLength = textPath.getComputedTextLength();
+
+    let textFillPercent = (textLength / pathLength) * 100;
+
+    if (textFillPercent < 50) {
+        let percentToAdd = 50 - textFillPercent;
+        percentToAdd = ((percentToAdd / 100) * 180) + (percentToAdd / 100);
+        svg.style.transform = `rotate(${180 + percentToAdd}deg)`
+    } else {
+        let percentToSubtract = textFillPercent - 50;
+        percentToSubtract = ((percentToSubtract / 100) * 180) - (percentToSubtract / 100);
+        svg.style.transform = `rotate(${180 - percentToSubtract}deg)`
+    }
+
+}
 
 const loadDonutCharts = () => {
     const trackRecordContainer = document.getElementById("trackRecordContainer");
@@ -212,7 +234,7 @@ const clearPastWinners = () => {
 const loadPastWinners = () => {
     const id = new URLSearchParams(window.location.search).get('id');
     document.getElementById('loader').remove();
-    if (pastWinnersData.previous) {
+    if (pastWinnersData.previous && !pastWinnersData.previous.name.toLowerCase().includes('auction')) {
         let previousWinnerParsha = document.getElementById('previousWinnerParsha');
         previousWinnerParsha.onclick = () => fetchPastWinners(pastWinnersData.previous.id, id);
         previousWinnerParsha.innerText = `<< ${pastWinnersData.previous.name}`
