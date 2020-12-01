@@ -361,13 +361,13 @@ $he_chars = array(
                         <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
                       
 						
-						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop || $day_school ? "display: none" : ""?>" />
+						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?= $desktop || $day_school ? "display: none" : ""?>" />
                        
 						<?php if ( !isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he' ) { ?>
 						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
                             <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
                        
-							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;<?=$day_school ? "display: none;" : ""?>">
+							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;<?= $day_school ? "display: none;" : ""?>">
 								Print Missions
 							</button>
 							
@@ -386,7 +386,7 @@ $he_chars = array(
                         </a>
                     </div>
                     <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
-                            style="margin: 0 5px; <?= !$desktop && !$daily ? 'float: right;' : ''?>">
+                            style="margin: 0 5px; <?= $desktop || $day_school ? 'float: right;' : ''?>">
                         Help
                     </button>
                 </div>
