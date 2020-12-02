@@ -71,7 +71,7 @@ class TasksCustomizationNew {
             $this->schoolType = "(12,13)";
         }
 		*/
-		$this->schoolType = "(2,3,12,13)";
+		$this->schoolType = "(2,3,4,5,12,13)";
         $this->school_id = $id;
     }
 	
