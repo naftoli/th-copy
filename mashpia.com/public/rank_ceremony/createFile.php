@@ -65,7 +65,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
     else $r = new RankReport();
     $r->setSchoolId($school);
-    $r->overrideDates(2458865, 2458976);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", '', $limitTo, true); // limit to gender for myshliach / anashKinder
     $ranks = $r->getRanks();
