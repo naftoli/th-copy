@@ -9,7 +9,7 @@ if (isset($_POST['type'])) {
     $sql = "select subject_id, subject_name from subjects s 
             join school_type_subjects sts using (subject_id) 
             where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-            and sts.school_type_id in (2,3,4,5,child12,13) 
+            and sts.school_type_id in (2,3,4,5,12,13) 
             group by s.subject_id 
             order by s.subject_name";
     $result = mysql_query($sql) or die(mysql_error());
