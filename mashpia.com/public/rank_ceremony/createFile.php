@@ -18,8 +18,8 @@ if (!$school) exit;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
 $boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
-    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58];
-$girlsSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
+    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58,472];
+$girlSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
 
 // separate myshliach / anashKinder into separate boys/girls files
 if (in_array($school, [61,269])) {
@@ -28,9 +28,8 @@ if (in_array($school, [61,269])) {
 } else if (in_array($school, [54,255])) {
     generateFileByGrade($school);
 } else {
-    if (array_search($school, $boySchools) !== false) generateFile('boys');
-    else if (array_search($school, $girlsSchools) !== false) generateFile('girls');
-    else exit;
+    if (array_search($school, $girlSchools) !== false) generateFile('girls');
+    else generateFile('boys');;
 }
 
 function createFile($info, $name)
@@ -65,6 +64,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
     else $r = new RankReport();
     $r->setSchoolId($school);
+//    $r->overrideDates(2458865, 2458976);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", '', $limitTo, true); // limit to gender for myshliach / anashKinder
     $ranks = $r->getRanks();
