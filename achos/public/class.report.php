@@ -7,7 +7,7 @@ class Report {
     protected $school_id;
     
     public function __construct() {
-        $this->dates = array( 2456224, 2456259, 2456300, 2456331, 2456359, 2456411, 2456441 );
+        $this->dates = array( 2458978, 2456224, 2456259, 2456300, 2456331, 2456359, 2456411, 2456441 );
         $this->users = array();
         $this->school_id = null;
         $this->setReportDates();
