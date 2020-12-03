@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 600);
 include_once( __DIR__ . "/../header/header.php" );
 require_once( __DIR__ . "/../../class.tasksCustomizationNew.php" );
 
@@ -54,7 +55,7 @@ class PersonalizeRouter {
         $this->tc->setType( $user_id, $class_id, $school_id );
 
         $tasks = $this->tc->getTasks( $subject_id, false );
-        
+
         if ( !$tasks ) {
             json_error('No children found in this grade or no tasks found for this date period.');
             exit;
