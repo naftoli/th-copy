@@ -39,8 +39,8 @@
                 
                 <div class="alert alert-warning" role="alert" dir="ltr">
                     <div class="media">
-                        <div class="pull-right">
-                            (<span id="cartQty">0</span>)<i class="fa fa-shopping-cart fa-4x"></i>
+                        <div id="img-cart" class="pull-right">
+                            (<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-brown-svg.svg" style="height: 52px;" />
                         </div>
                         <div class="media-body">
                             <span class="balance"></span>
@@ -133,36 +133,67 @@
             var cart = [];
             var originalBal = 0;
     		var auction_id = 81;
+            var float_element = "";
+            var availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
+            var totalmilesText = "Total Miles Earned: ";
+            var totalmilesYearText = "Total Miles Earned this Year: ";
 
-
-            var totalMilesEraned = "Total Miles Earned: "
             if (localStorage.getItem("locallang") == "he") {
-                totalMilesEraned = " סך הנקודות שנצברו:";
-
+                $("#img-cart").removeClass('pull-right').addClass('pull-left');
+                float_element = 'style="float:right;direction:rtl; margin-right:8px;"';
+                availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
+                totalmilesText = "סך הנקודות שנצברו  : ";
+                var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
+                var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
             }
-
-            $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getBalance.php', {
+                admin : Cookies.get('admin'),
+                user : user,
+                auction : auction_id
+            }, function( success ) {
                 var info = $.parseJSON(success);
-                if (localStorage.getItem("locallang") == "he") {
-                    html = "<span style='direction:rtl;' > ";
-                    html += "סך הנקודות שנצברו: " + info.earned;//
-                    html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
-                    html += "</span > ";
-                    //
-                }
-                else {
-                    html = "Total Miles Earned: " + info.earned;
-                    html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
-                }
-                    
-               
+                var html = '<div id="balance-box" ' + float_element+'>';
+                html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
+                html += '</div><div id="data-box" ' + data_box_css +'>'
+                html += totalmilesText + info.tpoints.toLocaleString( navigator.language ) + "<br />";
+                html += totalmilesYearText + info.earned.toLocaleString( navigator.language ) + "<br />";
+                html += '</div>'
                 $(".balance").html(html);
                 originalBal = info.available;
                 setupCart();
                 calcBalance();
-                translate(); 
+                translate();
             });
-            
+
+
+            // var totalMilesEraned = "Total Miles Earned: "
+            // if (localStorage.getItem("locallang") == "he") {
+            //     totalMilesEraned = " סך הנקודות שנצברו:";
+            //
+            // }
+            //
+            // $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
+            //     var info = $.parseJSON(success);
+            //     if (localStorage.getItem("locallang") == "he") {
+            //         html = "<span style='direction:rtl;' > ";
+            //         html += "סך הנקודות שנצברו: " + info.earned;//
+            //         html += "<br />נקודות פנויים לשימוש: <span id='balance'>" + info.available + "</span>";
+            //         html += "</span > ";
+            //         //
+            //     }
+            //     else {
+            //         html = "Total Miles Earned: " + info.earned;
+            //         html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
+            //     }
+            //
+            //
+            //     $(".balance").html(html);
+            //     originalBal = info.available;
+            //     setupCart();
+            //     calcBalance();
+            //     translate();
+            // });
+            //
                     
             function setupCart() {
     			if (window.localStorage) {
