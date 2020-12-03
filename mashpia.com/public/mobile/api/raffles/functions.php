@@ -66,8 +66,7 @@ function checkTasks( $user_id, $start, $end, $type ) {
                 and dtm.mark_date <= " . $end;
         $result1 = mysql_query($sql1);
         $result2 = mysql_query($sql2);
-        $total = intval(mysql_fetch_assoc($result1)['total']) + intval(mysql_fetch_assoc($result2));
-        return $total;
+        return intval(mysql_fetch_assoc($result1)['total']) + intval(mysql_fetch_assoc($result2)['total']);
     }
 }
 
@@ -169,12 +168,13 @@ function getDailyTaskInfo( $user_id, $type ) {
 
         $info = [];
         while ($start <= $end) {
-            $heDate = explode('/', jdtojewish($end));
+            $heDate = explode('/', jdtojewish($start));
             $heMonth = $months[$heDate[0]];
             // check for leap year
             $m = array(3, 6, 8, 11, 14, 17, 19);
             $meuberet = in_array(($heDate[2] % 19), $m);
             if ($meuberet && $heDate[0] == 7) $heMonth = 'אדר ב';
+
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $end < unixtojd() ? true : false
