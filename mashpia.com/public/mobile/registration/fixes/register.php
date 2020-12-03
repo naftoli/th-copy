@@ -20,7 +20,11 @@ $stmtUser = $MASHPIA_DB->prepare("
 
 $chayolei = [
     [
-        'serial'    => 7745260,
+        'serial'    => 7776122,
+        'paid'      => 50
+    ],
+    [
+        'serial'    => 7760643,
         'paid'      => 50
     ]
 ];
@@ -33,7 +37,7 @@ $chidon = [
         'paid'      => 45
     ]
 ];
-/*
+
 foreach ($chayolei as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
@@ -50,7 +54,7 @@ foreach ($chayolei as $user) {
     checkRegCharges( $user_id, $school_id, $paid );
     echo "<br />";
 }
-*/
+/*
 foreach ($chidon as $user) {
     $serial = $user['serial'];
     $paid = $user['paid'];
@@ -67,7 +71,7 @@ foreach ($chidon as $user) {
     checkChidonReg( $admin_id, $school_id, $user_id, $paid, $size, $book );
     echo "<br />";
 }
-
+*/
 function updateReg( $user_id ) {
     global $MASHPIA_DB;
     $stmt = $MASHPIA_DB->prepare("
