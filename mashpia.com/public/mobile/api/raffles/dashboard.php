@@ -7,7 +7,7 @@ $monthly = getRaffleInfo('monthly');
 $yearly = getRaffleInfo('yearly');
 
 $user_id = mysql_real_escape_string($_GET['user_id']);
-$raffle5 = 7 - checkTasks( $user_id, $weekly['start'], $weekly['end'], 'weekly' );
+$raffle5 = 5 - checkTasks( $user_id, $weekly['start'], $weekly['end'], 'weekly' );
 $raffle60 = 60 - checkTasks( $user_id, $monthly['start'], $monthly['end'], 'monthly' );
 $raffle180 = 180 - checkTasks( $user_id, $yearly['start'], $yearly['end'], 'yearly' );
 

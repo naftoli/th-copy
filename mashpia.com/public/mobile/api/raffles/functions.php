@@ -159,12 +159,13 @@ function getDailyTaskInfo( $user_id, $type ) {
         $total = checkTasks($user_id, $start, $end, $type);
 
         // for yearly date return hebrew date
-        if ($type == 'yearly') {
-            $dateOnly = explode(' ', $run_date);
-            $dateInfo = explode('-', $dateOnly[0]);
-            $jd = gregoriantojd($dateInfo[1], $dateInfo[2], $dateInfo[0]);
-            $run_date = jdtojewish($jd, true, CAL_JEWISH_ADD_ALAFIM_GERESH + CAL_JEWISH_ADD_GERESHAYIM);
-        }
+        // not working; causing the json_encode function not to work
+//        if ($type == 'yearly') {
+//            $dateOnly = explode(' ', $run_date);
+//            $dateInfo = explode('-', $dateOnly[0]);
+//            $jd = gregoriantojd($dateInfo[1], $dateInfo[2], $dateInfo[0]);
+//            $run_date = jdtojewish($jd, true, CAL_JEWISH_ADD_ALAFIM_GERESH + CAL_JEWISH_ADD_GERESHAYIM);
+//        }
 
         $info = [];
         while ($start <= $end) {
@@ -177,7 +178,7 @@ function getDailyTaskInfo( $user_id, $type ) {
 
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
-                'past'      => $end < unixtojd() ? true : false
+                'past'      => $start < unixtojd() ? true : false
             ];
             $start++;
         }
