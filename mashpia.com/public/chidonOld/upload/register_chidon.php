@@ -11,27 +11,41 @@ $qrys = [];
 if (isset($_FILES['file'])) {
     if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            $user_id = $data[0];
+            $serial = $data[0];
             $sweater = strtolower($data[1]);
             $book = $data[2];
-            // get some details
-            $sql = "select school_id, admin_id from users u 
-                    join admin_auths aa on aa.id = u.user_id 
-                    where u.user_id = " . $user_id;
-            $result = mysql_query($sql);
-            if ($row = mysql_fetch_assoc($result)) {
-                $school_id = $row['school_id'];
-                $admin_id = $row['admin_id'];
-                $qry = "INSERT IGNORE INTO th_chidon 
-                        SET
-                            user_id = $user_id,
-                            year = $year,
-                            size = '$sweater', 
-                            book = $book,
-                            school_id = $school_id, 
-                            parent_id = $admin_id,
-                            reg_date = now()";
-                $qrys[] = $qry;
+            if ($serial) {
+                // get some details
+                $sql = "select school_id, admin_id, user_id from users u 
+                        join admin_auths aa on aa.id = u.user_id 
+                        where u.user_serial = " . $serial;
+                $result = mysql_query($sql);
+                if ($row = mysql_fetch_assoc($result)) {
+                    $user_id = $row['user_id'];
+                    $school_id = $row['school_id'];
+                    $admin_id = $row['admin_id'];
+                    $qry = "INSERT IGNORE INTO th_chidon 
+                            SET
+                                user_id = $user_id,
+                                year = $year,
+                                size = '$sweater', 
+                                book = $book,
+                                school_id = $school_id, 
+                                parent_id = $admin_id,
+                                reg_date = now()";
+                    $qrys[] = $qry;
+                    $reg_qry = "
+                    INSERT IGNORE INTO registration_charges
+                    SET
+                        trans_id = 0, 
+                        user_id = $user_id, 
+                        school_id = $school_id, 
+                        amount = 10, 
+                        year = $year,
+                        date = now(), 
+                        type = 'chidon'";
+                    $qrys[] = $reg_qry;
+                }
             }
         }
         fclose($handle);
@@ -54,7 +68,7 @@ if (isset($_FILES['file'])) {
     else mysql_query('rollback');
     mysql_query('set autocommit=1');
     echo "Inserted: " . $inserted;
-}r
+}
 ?>
 <!DOCTYPE html>
 <html>
