@@ -3,7 +3,6 @@ setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
 // detect the info on the scanner input
 $("#manual-scanner #scanner").keyup( function( event ) {
-    alert();
     if ( event.target.value.length > 18 ) {
         checkNumber( event.target.value );
     }
