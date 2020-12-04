@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *      create_tasks.php
  *
@@ -368,7 +368,7 @@ if (isset($_POST['submit'])) {
                 /*
                 // set the start date from the array if it is full and $startDate is empty
                 if (!empty($arrStart) && empty($startDate)) {
-                    $year = $arrStart[0] == 13 ? 5777 : 5778; 
+                    $year = $arrStart[0] == 13 ? 5777 : 5778;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
                     $year = $arrEnd[0] == 13 ? 5777 : 5778;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
@@ -410,7 +410,7 @@ if (isset($_POST['submit'])) {
                     $end = $endDate;
 //					echo $start . '-' . $end . "<br /><br />"; continue;
 //                    echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
-                    if ($start < unixtojd()) continue;
+                    if ($start <= unixtojd()) continue;
 
 	                //while ($start <= $end) {
 	                    foreach ($types as $type) {
