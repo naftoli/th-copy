@@ -3,7 +3,7 @@
 // use triple equals since it should return 0 which is falsy
 $development = isset( $_SERVER['HTTP_HOST'] ) ? strpos($_SERVER['HTTP_HOST'], "mashpia.com") === false : true;
 
-$global_db_host = $development ? "mashpia.com" : "localhost";
+$global_db_host = $development ? "50.28.66.228" : "localhost"; // mashpia.com was pointing to old ip address so i just put in new ip address
 // DBS credentials
 $global_db_user = 'mashpia_cth';
 $global_db_pass = 'UlqKsfnTUq2A';

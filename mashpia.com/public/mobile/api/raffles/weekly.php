@@ -1,33 +1,38 @@
 <?php
-// make sure we are already logged in
-$admin_auth = ['school', 'user'];
-require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-
-require $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
-use \raffles\weekly\Raffle as Raffle;
+require 'auth.php';
 require 'functions.php';
 
 $action = mysql_real_escape_string($_GET['action']);
 $user_id = mysql_real_escape_string($_GET['user_id']);
+$raffle_id = isset($_GET['raffle_id']) ? mysql_real_escape_string($_GET['raffle_id']) : 0;
 
-$weekly = getRaffleInfo('weekly');
+if (!$raffle_id) {
+    $weekly = getRaffleInfo('weekly');
+    $raffle_id = $weekly['raffle_id'];
+}
 
+require $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
+use \raffles\weekly\Raffle as Raffle;
+
+$result = [];
 switch ($action) {
     case 'prize-info':
-        $prize = getPrizeInfo($weekly['raffle_id']);
-        echo json_encode([
+        $prize = getPrizeInfo($raffle_id);
+        $result = json_encode([
             'img'   => $prize['pic'],
             'thumb' => $prize['thumb'],
             'name'  => $prize['name']
         ]);
         break;
     case 'track-records':
+        $result = getRaffleHistory('weekly', $user_id);
         break;
     case 'completed':
-        $raffle = Raffle::load($weekly['raffle_id']);
+        $raffle = Raffle::load($raffle_id);
         $completed = $raffle->checkWeekly($user_id);
-        echo json_encode([
+        $result = json_encode([
             'days_completed' => $completed
         ]);
         break;
 }
+echo $result;

@@ -1,4 +1,16 @@
 <?php
-// make sure we are already logged in
-$admin_auth = ['school', 'user'];
-require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require 'auth.php';
+require 'functions.php';
+
+$action = mysql_real_escape_string($_GET['action']);
+$user_id = mysql_real_escape_string($_GET['user_id']);
+
+$result = [];
+switch ($action) {
+    case 'raffle-data':
+        $result = json_encode([
+            getDailyTaskInfo($user_id, 'yearly')
+        ]);
+        break;
+}
+echo $result;

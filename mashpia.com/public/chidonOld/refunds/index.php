@@ -1,7 +1,6 @@
 <?php
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-
 if ($admin_user['auth'] != 'super') {
     echo "No permission to be here.";
     exit;

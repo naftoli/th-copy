@@ -887,7 +887,7 @@ class ShabbosMevorchim {
                 AND ut.enrolled =1";                   
         $stmt1 = $this->db->prepare( $sql1 );
  
-		$sql2 = "select dtm.done_qty as total 
+		$sql2 = "select MAX(dtm.done_qty) as total 
 				from date_tasks_marks dtm
 				join date_tasks dt using (date_task_id)
 				join date_tasks_missions dtmm using (date_tasks_mission_id) 
@@ -1012,7 +1012,7 @@ class ShabbosMevorchim {
                     
         $stmt1 = $this->db->prepare( $sql1 );
 
-		$sql2 = "SELECT dtm.done_qty AS total 
+		$sql2 = "SELECT MAX(dtm.done_qty) AS total 
 				FROM date_tasks_marks dtm
 				JOIN date_tasks dt USING (date_task_id)
 				JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
@@ -1111,9 +1111,9 @@ class ShabbosMevorchim {
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
                             $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
-                            if ($sid == 176 && $user['user_id'] == 17267) {
-                                //echo "<pre>"; print_r($stmt2); echo "</pre>";
-                            }
+                            // if ($sid == 176 && $user['user_id'] == 17267) {
+                            //     echo "<pre>"; print_r($stmt2); echo "</pre>";
+                            // }
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];

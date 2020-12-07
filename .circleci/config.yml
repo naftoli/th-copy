@@ -122,6 +122,16 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+
+      # Download dependencies
+      - run: yarn install
+
+      # Save the cache if it chages
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
       # run the build
       - run: yarn build
       # save the results to the worksspace
@@ -131,7 +141,7 @@ jobs:
             - base-commander/build/*
 
   # deploy build artifacts to staging
-  deploy-staging:
+  deploy-testing:
     docker:
       - image: circleci/node:8.12
     # work in the repository
@@ -161,6 +171,45 @@ jobs:
           name: Run the Deployment script
           command: |
             ssh -p 522 mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+
+
+  # deploy build artifacts to test3
+  deploy-raffles:
+    docker:
+      - image: circleci/node:8.12
+    # work in the repository
+    working_directory: ~/repo
+
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - add_ssh_keys:
+          fingerprints:
+            - "75:d5:c7:bb:6a:35:35:6b:24:69:1e:f8:9e:56:79:ad"
+
+      - run:
+          name: Add Test3.Mashpia.com to known_hosts
+          command: |
+            mkdir -p ~/.ssh;
+            ssh-keyscan -p 522 -H test3.mashpia.com >> ~/.ssh/known_hosts;
+
+      - run:
+          name: Create deploy/build
+          command: |
+            ssh -p 522 mashtest3@test3.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+
+      - run:
+          name: Send the react build Over SSH to deploy/build
+          command: |
+            scp -P 522 -r base-commander/build mashtest3@test3.mashpia.com:tzivos-hashem/deploy
+
+      - run:
+          name: Run the Deployment script
+          command: |
+            ssh -p 522 mashtest3@test3.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+
+
 
   # deploy build artifacts to staging
   deploy-production:
@@ -201,27 +250,34 @@ workflows:
   test-deploy:
     jobs:
       # - test-php
-      - test-react
+#      - test-react
 
       - build-react:
           requires:
             # - test-php
-            - test-react
+#            - test-react
           filters:
             branches:
               only:
                 - master
-                - staging
-                - testing
+#                - testing
+                - raffles
 
-      - deploy-staging:
+      - deploy-testing:
           requires:
             - build-react
           filters:
             branches:
               only:
-                - staging
                 - testing
+
+      - deploy-raffles:
+          requires:
+            - build-react
+          filters:
+            branches:
+              only:
+                - raffles
 
       - deploy-production:
           requires:
