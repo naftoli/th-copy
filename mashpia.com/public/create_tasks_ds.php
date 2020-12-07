@@ -21,7 +21,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $sql1 = "select * from subjects 
-        where inst_id = 6 
+        where inst_id = 4 
         order by subject_id";
 $result1 = mysql_query($sql1);
 $campaigns = array();
