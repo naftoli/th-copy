@@ -105,12 +105,6 @@ if (isset($_POST['submit'])) {
     require_once 'PHPExcel/IOFactory.php';
 
     $subject_id = $_POST['subject'];
-    $subjects = [];
-    $sql = "select subject_id, subject_name from subjects where subject_id >= 120";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $subjects[$row['subject_id']] = $row['subject_name'];
-    }
 
     // there is null data in the database under mission_number
     $sql = "select mission_number from date_tasks_missions where subject_id = $subject_id order by mission_number desc limit 1";
@@ -147,9 +141,9 @@ if (isset($_POST['submit'])) {
 
     $langSheet = $_POST['lang'];
     if ($langSheet == 1) {
-        $file = "SystemTasks/" . $subjects[$subject_id] . $missionYear . ".xlsx";
+        $file = "SystemTasks/" . $campaigns[$subject_id] . $missionYear . ".xlsx";
     } else if ($langSheet == 2) {
-        $file = "SystemTasks/Yi" . $subjects[$subject_id] . $missionYear . ".xlsx";
+        $file = "SystemTasks/Yi" . $campaigns[$subject_id] . $missionYear . ".xlsx";
     }
 
     $arrMandatory = array();
