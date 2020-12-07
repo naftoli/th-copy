@@ -30,9 +30,8 @@ $rankNames = [
 ];
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
-$files = [];
-//$images = [];
-$r = new RankReport();
+if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+else $r = new RankReport();
 
 $i = 0;
 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];

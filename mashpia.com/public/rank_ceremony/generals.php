@@ -16,10 +16,15 @@ if ($admin_user['auth'] != 'super') {
         integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
     <script>
+        let date = '';
+        while (date != 'current' && date != 'previous')
+            date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
+        const prev = date === 'previous' ? 1 : 0
+
         function createFile() {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: "createGenerals.php",
+                    url: "createGenerals.php?prev=" + prev,
                     type: 'POST',
                     success: function (data) {
                         resolve(data)
