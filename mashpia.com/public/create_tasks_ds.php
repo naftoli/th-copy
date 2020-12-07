@@ -105,20 +105,12 @@ if (isset($_POST['submit'])) {
     require_once 'PHPExcel/IOFactory.php';
 
     $subject_id = $_POST['subject'];
-    $subjects = [
-        121 => 'Jewish Day',
-        122 => 'Jewish Uniform',
-        123 => 'Mitzvot',
-        124 => 'NA',
-        125 => 'NA2',
-        126 => 'NA3',
-        127 => 'NA4',
-        128 => 'NA5',
-        129 => 'NA6',
-        130 => 'NA7',
-        131 => 'AhavatYisrael',
-        132 => 'NA8'
-    ];
+    $subjects = [];
+    $sql = "select subject_id, subject_name from subjects where subject_id >= 120";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $subjects[$row['subject_id']] = $row['subject_name'];
+    }
 
     // there is null data in the database under mission_number
     $sql = "select mission_number from date_tasks_missions where subject_id = $subject_id order by mission_number desc limit 1";
