@@ -45,8 +45,7 @@ function checkTasks( $user_id, $start, $end, $type ) {
     if ($start >= $rollover) { // simple calculation
         $sql = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
                 JOIN date_tasks dt USING (date_task_id) 
-                WHERE (daily_task = 1 OR (daily_task = 0 AND (dt.quantity IS NULL OR (dt.quantity IS NOT NULL AND dtm.done_qty >= dt.quantity))))
-                AND dtm.user_id = " . $user_id . " 
+                WHERE dtm.user_id = " . $user_id . " 
                 AND dt.grid_id = " . $grid_id . " 
                 AND dtm.mark_date >= " . $start . " 
                 AND dtm.mark_date <= " . $end;
@@ -64,18 +63,17 @@ function checkTasks( $user_id, $start, $end, $type ) {
                 AND dtm.mark_date >= " . $start;
         $sql2 = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
                 JOIN date_tasks dt USING (date_task_id) 
-                WHERE (daily_task = 1 OR (daily_task = 0 AND (dt.quantity IS NULL OR (dt.quantity IS NOT NULL AND dtm.done_qty >= dt.quantity))))
-                AND dtm.user_id = " . $user_id . " 
+                WHERE dtm.user_id = " . $user_id . " 
                 AND dt.grid_id = " . $grid_id . " 
                 AND dtm.mark_date >= " . $rollover . " 
                 AND dtm.mark_date <= " . $end;
         $result1 = mysql_query($sql1);
         $result2 = mysql_query($sql2);
-        if ($user_id == 5455) {
+//        if ($user_id == 5455) {
 //            echo $sql1;
 //            echo "\n" . $sql2;
 //            exit;
-        }
+//        }
         return intval(mysql_fetch_assoc($result1)['total']) + intval(mysql_fetch_assoc($result2)['total']);
     }
 }
