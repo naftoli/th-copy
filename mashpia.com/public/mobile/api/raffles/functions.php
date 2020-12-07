@@ -40,32 +40,40 @@ function checkTasks( $user_id, $start, $end, $type ) {
     $grid_id = 13012;
     if ($type == 'weekly') $rollover = 2459167;
     else if ($type == 'monthly') $rollover = 2459171;
-    else if ($type == 'yearly') $rollover = 2459167;
+    else if ($type == 'yearly') $rollover = 2459171;
 
     if ($start >= $rollover) { // simple calculation
-        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
-                join date_tasks dt using (date_task_id) 
-                where dtm.user_id = " . $user_id . " 
-                and dt.grid_id = " . $grid_id . " 
-                and dtm.mark_date >= " . $start . " 
-                and dtm.mark_date <= " . $end;
+        $sql = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE dtm.user_id = " . $user_id . " 
+                AND dt.grid_id = " . $grid_id . " 
+                AND dtm.mark_date >= " . $start . " 
+                AND dtm.mark_date <= " . $end;
         $result = mysql_query($sql);
         return mysql_fetch_assoc($result)['total'];
     } else {
         // find all tasks marked in date_tasks_marks up to rollover date
         // then find all tasks marked using grid id for after rollover date
         // then add the two numbers together
-        $sql1 = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id
-                AND dtmarks.mark_date >= $start AND dtmarks.mark_date < $rollover AND daily_task = 0
-                AND ((dt.quantity IS NOT NULL AND dtmarks.done_qty >= dt.quantity) OR dt.quantity IS NULL)";
-        $sql2 = "select count(distinct mark_date) as total from date_tasks_marks dtm
-                join date_tasks dt using (date_task_id) 
-                where dtm.user_id = " . $user_id . " 
-                and dt.grid_id = " . $grid_id . " 
-                and dtm.mark_date >= " . $rollover . " 
-                and dtm.mark_date <= " . $end;
+        $sql1 = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE (daily_task = 1 OR (daily_task = 0 AND (dt.quantity IS NULL OR (dt.quantity IS NOT NULL AND dtm.done_qty >= dt.quantity))))
+                AND dtm.user_id = " . $user_id . " 
+                AND dtm.mark_date < " . $rollover . " 
+                AND dtm.mark_date >= " . $start;
+        $sql2 = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE dtm.user_id = " . $user_id . " 
+                AND dt.grid_id = " . $grid_id . " 
+                AND dtm.mark_date >= " . $rollover . " 
+                AND dtm.mark_date <= " . $end;
         $result1 = mysql_query($sql1);
         $result2 = mysql_query($sql2);
+//        if ($user_id == 5455) {
+//            echo $sql1;
+//            echo "\n" . $sql2;
+//            exit;
+//        }
         return intval(mysql_fetch_assoc($result1)['total']) + intval(mysql_fetch_assoc($result2)['total']);
     }
 }
@@ -102,7 +110,7 @@ function getRaffleHistory( $type, $user_id ) {
         while ( $start <= $end ) { // check all days in week
             $days[] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
-                'past'      => $end < unixtojd() ? true : false
+                'past'      => $start < unixtojd() ? true : false
             ];
             $start++;
         }
@@ -182,7 +190,7 @@ function getDailyTaskInfo( $user_id, $type ) {
 
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
-                'past'      => $start < unixtojd() ? true : false
+                'past'      => $start <= unixtojd() ? true : false
             ];
             $start++;
         }
