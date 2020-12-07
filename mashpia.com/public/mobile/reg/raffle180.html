@@ -55,7 +55,6 @@
         .item .raffleFlagContainer img,
         .smallRaffleFlagContainer img {
             height: 50px;
-            width: 50px;
             margin-top: 10px;
         }
 
@@ -462,6 +461,10 @@
             text-transform: uppercase;
         }
 
+        #whoWonTop {
+            padding-top: 70px;
+        }
+
         #whoWonContainer {
             background: #232c7b;
             border-radius: 5px;
@@ -514,8 +517,21 @@
 
         #page-title {
             color: white;
-            font-size: 18px;
+            font-size: 40px;
+            font-weight: 700;
+            padding: 0px;
+            transition: .25s;
+            text-transform: uppercase;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #ffffff;
         }
+
+        @media (max-width: 450px) {
+            #page-title {
+                font-size: 22px;
+            }
+        }
+
 
         #userImg {
             border-radius: 100%;
@@ -590,7 +606,7 @@
                     <p class="details">To qualify do your missions on at least 180 days throughout the school year.</p>
                 </div>
             </div>
-            <a href="#whoWonContainer" id="seeWhoWon">See the most amazing grand raffle prizes!</a>
+            <a href="#whoWonTop" id="seeWhoWon">See the most amazing grand raffle prizes!</a>
 
             <div id="raffle180Container">
                 <div class="raffleHeader" id="raffleHeader"></div>
@@ -599,22 +615,24 @@
                 </div>
             </div>
 
-            <div id="whoWonContainer">
-                <div id="innerWhoWon">
-                    <img src="/mobile/reg/images/180-flag.png" alt="180 Flag" />
-                    <p>Winner can choose from 3 amazing prizes:</p>
+            <div id="whoWonTop">
+                <div id="whoWonContainer">
+                    <div id="innerWhoWon">
+                        <img src="/mobile/reg/images/180-flag.png" alt="180 Flag" />
+                        <p>Winner can choose from 3 amazing prizes:</p>
 
-                    <img src="/mobile/reg/images/180-prize-1.png" alt="Trip to the Rebbe" />
-                    <p class="prizeImage">Trip to the Rebbe!</p>
-                    <p>Win up to $1000 in airfare so that you (and someone else) can visit 770 & the ohel!</p>
+                        <img src="/mobile/reg/images/180-prize-1.png" alt="Trip to the Rebbe" />
+                        <p class="prizeImage">Trip to the Rebbe!</p>
+                        <p>Win up to $1000 in airfare so that you (and someone else) can visit 770 & the ohel!</p>
 
-                    <img src="/mobile/reg/images/180-prize-2.png" alt="Set of Toras Menachem" />
-                    <p class="prizeImage">A full set of Toras Menachem, both parts!</p>
-                    <p>Your learning will be stronger than ever.</p>
+                        <img src="/mobile/reg/images/180-prize-2.png" alt="Set of Toras Menachem" />
+                        <p class="prizeImage">A full set of Toras Menachem, both parts!</p>
+                        <p>Your learning will be stronger than ever.</p>
 
-                    <img src="/mobile/reg/images/180-prize-3.png" alt="Shopping Spree" />
-                    <p class="prizeImage">A $1000 Kingston shopping spree!</p>
-                    <p>Check out what Crown Heights' main avenue has to offer!</p>
+                        <img src="/mobile/reg/images/180-prize-3.png" alt="Shopping Spree" />
+                        <p class="prizeImage">A $1000 Kingston shopping spree!</p>
+                        <p>Check out what Crown Heights' main avenue has to offer!</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -136,8 +136,9 @@ const createBigDonutChart = () => {
 const load60FlagDonutCharts = () => {
     const raffle60Container = document.getElementById('raffle60Container');
     sixtyFlagRaffleData.forEach((raffle, index) => {
-        const { year, endMonth, startMonth, daysTillDrawing, raffleNumber, months, daysCompleted } = raffle;
-        const raffleHeader = document.getElementById('raffleHeader' + index);
+        const { year, endMonth, startMonth, daysTillDrawing, raffleNumber, months, daysCompleted, orderBy } = raffle;
+        const raffleHeader = createElementWithClass('div', 'raffleHeader');
+        raffleHeader.setAttribute('id', 'raffleHeader' + index);
         const div = document.createElement('div');
         const parshaContainer = createElementWithClass('div', 'parshaContainer');
         const parsha = createElementWithClass('p', 'parsha');
@@ -157,15 +158,19 @@ const load60FlagDonutCharts = () => {
         raffleHeader.appendChild(parshaContainer);
         raffleHeader.appendChild(calendar);
 
-        let rotation = 40;
+        let rotation = 160;
 
-        let doughnutContainer = document.getElementById('doughnutContainer' + index);
+        let doughnutContainer = createElementWithClass('div', 'doughnutContainer');
+        doughnutContainer.setAttribute('id', 'doughnutContainer' + index);
+        let canvas = document.createElement('canvas');
+        canvas.id = 'doughnutChart' + index
+        doughnutContainer.appendChild(canvas);
 
         let data = [];
         let backgroundColors = [];
         let totalAmountOfDaysInRaffle = 0;
 
-        Object.keys(months).forEach(month => {
+        orderBy.forEach(month => {
             months[month].forEach(day => {
                 totalAmountOfDaysInRaffle += 1;
                 backgroundColors.push(day.completed ? yellow : day.past ? grey : `#fff9e7`)
@@ -174,6 +179,46 @@ const load60FlagDonutCharts = () => {
 
         data = [...backgroundColors].map(() => 100 / totalAmountOfDaysInRaffle);
 
+        orderBy.forEach((month, monthIndex) => {
+            let id = 'curve' + month;
+
+            // TODO: responsive width based on width of canvas
+            let textSVG = document.createElementNS(xmlns, 'svg');
+            textSVG.setAttribute('viewBox', '10 0 340 340');
+            textSVG.setAttribute('width', '110');
+            textSVG.setAttribute('height', '110');
+            textSVG.setAttribute('class', 'textSVG');
+            let path = document.createElementNS(xmlns, 'path');
+            path.setAttribute('d', 'M60,170a110,110 0 1,0 220,0a110,110 0 1,0 -220,0');
+            path.setAttribute('id', id);
+            path.setAttribute('fill', 'transparent')
+            let text = document.createElementNS(xmlns, 'text');
+            text.setAttribute('width', '500');
+            text.innerHTML = `<textPath xlink:href="#${id}">${month}</textPath>`
+            textSVG.appendChild(path);
+            textSVG.appendChild(text);
+            textSVG.setAttribute('style', `transform: rotate(${rotation}deg)`)
+
+            doughnutContainer.appendChild(textSVG);
+
+            rotation += (360 / Object.keys(months).length);
+
+        });
+
+        let flagContainer = createElementWithClass('div', 'flagContainer');
+        let flag = createElementWithClass('img', 'flag');
+        flag.setAttribute('src', `/mobile/reg/images/60-flag-plain${daysCompleted < 60 ? '-empty' : ''}.png`);
+        let numberOfDays = createElementWithClass('p', 'numberOfDays');
+        numberOfDays.innerText = daysCompleted;
+        flagContainer.appendChild(flag);
+        flagContainer.appendChild(numberOfDays);
+
+
+        doughnutContainer.appendChild(flagContainer);
+
+
+        raffle60Container.appendChild(raffleHeader);
+        raffle60Container.appendChild(doughnutContainer);
 
         new Chart('doughnutChart' + index, {
             // The type of chart we want to create
@@ -217,46 +262,6 @@ const load60FlagDonutCharts = () => {
             }
         });
 
-        Object.keys(months).forEach((month, monthIndex) => {
-            let id = 'curve' + month;
-
-            // TODO: responsive width based on width of canvas
-            let textSVG = document.createElementNS(xmlns, 'svg');
-            textSVG.setAttribute('viewBox', '10 0 340 340');
-            textSVG.setAttribute('width', '110');
-            textSVG.setAttribute('height', '110');
-            textSVG.setAttribute('class', 'textSVG');
-            let path = document.createElementNS(xmlns, 'path');
-            path.setAttribute('d', 'M60,170a110,110 0 1,0 220,0a110,110 0 1,0 -220,0');
-            path.setAttribute('id', id);
-            path.setAttribute('fill', 'transparent')
-            let text = document.createElementNS(xmlns, 'text');
-            text.setAttribute('width', '500');
-            text.innerHTML = `<textPath xlink:href="#${id}">${month}</textPath>`
-            textSVG.appendChild(path);
-            textSVG.appendChild(text);
-            textSVG.setAttribute('style', `transform: rotate(${rotation}deg)`)
-
-            doughnutContainer.appendChild(textSVG);
-
-            rotation -= (360 / Object.keys(months).length);
-
-        });
-
-        let flagContainer = createElementWithClass('div', 'flagContainer');
-        let flag = createElementWithClass('img', 'flag');
-        flag.setAttribute('src', `/mobile/reg/images/60-flag-plain${daysCompleted < 60 ? '-empty' : ''}.png`);
-        let numberOfDays = createElementWithClass('p', 'numberOfDays');
-        numberOfDays.innerText = daysCompleted;
-        flagContainer.appendChild(flag);
-        flagContainer.appendChild(numberOfDays);
-
-
-        doughnutContainer.appendChild(flagContainer);
-
-
-        raffle60Container.appendChild(raffleHeader);
-        raffle60Container.appendChild(doughnutContainer);
     });
 };
 

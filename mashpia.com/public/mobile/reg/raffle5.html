@@ -55,7 +55,6 @@
 
         .item .raffleFlagContainer img {
             height: 50px;
-            width: 50px;
         }
 
         .smallRaffleFlagContainer img {
@@ -180,6 +179,10 @@
         .prizeDetails img {
             height: 120px;
             margin-top: 10px;
+        }
+
+        #whoWonTop {
+            padding-top: 70px;
         }
 
         #seeWhoWon {
@@ -416,8 +419,21 @@
 
         #page-title {
             color: white;
-            font-size: 18px;
+            font-size: 40px;
+            font-weight: 700;
+            padding: 0px;
+            transition: .25s;
+            text-transform: uppercase;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #ffffff;
         }
+
+        @media (max-width: 450px) {
+            #page-title {
+                font-size: 22px;
+            }
+        }
+
 
         #userImg {
             border-radius: 100%;
@@ -600,39 +616,41 @@
                     <p class="details">Fill out missions 5 or more times a week to qualify.</p>
                 </div>
             </div>
-            <a href="#whoWonContainer" id="seeWhoWon">See who won!</a>
+            <a href="#whoWonTop" id="seeWhoWon">See who won!</a>
 
             <div id="trackRecordContainer">
                 <h2>How is your 5-Flag track record?</h2>
             </div>
 
-            <div id="whoWonContainer">
-                <div class="whoWonNav">
-                    <p id="previousWinnerParsha"></p>
-                    <h2>Past Winners</h2>
-                    <p id="nextWinnerParsha"></p>
-                </div>
-                <div id="parshaContainer">
-                    <p id="parsha-header">פרשת </p>
+            <div id="whoWonTop">
+                <div id="whoWonContainer">
                     <div class="whoWonNav">
-                        <div></div>
-                        <div id="parshaPrizeContainer"></div>
-                        <div id="parshaFlagContainer"></div>
+                        <p id="previousWinnerParsha"></p>
+                        <h2>Past Winners</h2>
+                        <p id="nextWinnerParsha"></p>
                     </div>
-                    <div id="namesContainer">
-                        <div class="column" id="boys">
-                            <h2>Boys</h2>
+                    <div id="parshaContainer">
+                        <p id="parsha-header">פרשת </p>
+                        <div class="whoWonNav">
+                            <div></div>
+                            <div id="parshaPrizeContainer"></div>
+                            <div id="parshaFlagContainer"></div>
                         </div>
-                        <div class="column" id="girls">
-                            <h2>Girls</h2>
+                        <div id="namesContainer">
+                            <div class="column" id="boys">
+                                <h2>Boys</h2>
+                            </div>
+                            <div class="column" id="girls">
+                                <h2>Girls</h2>
+                            </div>
                         </div>
                     </div>
+                    <!-- TODO: Add animations -->
+                    <!-- TODO: Updatee for full screens -->
+                    <!-- <div style="min-height: 400px;" id="raffles">
+                    <div class="loader"></div>
+                </div> -->
                 </div>
-                <!-- TODO: Add animations -->
-                <!-- TODO: Updatee for full screens -->
-                <!-- <div style="min-height: 400px;" id="raffles">
-                <div class="loader"></div>
-            </div> -->
             </div>
         </div>
     </div>

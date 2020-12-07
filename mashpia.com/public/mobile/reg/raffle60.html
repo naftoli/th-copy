@@ -55,7 +55,6 @@
         .item .raffleFlagContainer img,
         .smallRaffleFlagContainer img {
             height: 50px;
-            width: 50px;
             margin-top: 10px;
         }
 
@@ -463,6 +462,10 @@
             }
         }
 
+        #whoWonTop {
+            padding-top: 70px;
+        }
+
         #whoWonContainer {
             background: #ffd624;
             border-radius: 5px;
@@ -557,8 +560,21 @@
 
         #page-title {
             color: white;
-            font-size: 18px;
+            font-size: 40px;
+            font-weight: 700;
+            padding: 0px;
+            transition: .25s;
+            text-transform: uppercase;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #ffffff;
         }
+
+        @media (max-width: 450px) {
+            #page-title {
+                font-size: 22px;
+            }
+        }
+
 
         #userImg {
             border-radius: 100%;
@@ -631,10 +647,10 @@
                     <p class="details">Fill out missions 60 or more of those days to qualify.</p>
                 </div>
             </div>
-            <a href="#whoWonContainer" id="seeWhoWon">See what you can win!</a>
+            <a href="#whoWonTop" id="seeWhoWon">See what you can win!</a>
 
             <div id="raffle60Container">
-                <div class="raffleHeader" id="raffleHeader0"></div>
+                <!-- <div class="raffleHeader" id="raffleHeader0"></div>
                 <div class="doughnutContainer" id="doughnutContainer0">
                     <canvas id="doughnutChart0"></canvas>
                 </div>
@@ -649,13 +665,15 @@
                 <div class="raffleHeader" id="raffleHeader3"></div>
                 <div class="doughnutContainer" id="doughnutContainer3">
                     <canvas id="doughnutChart3"></canvas>
-                </div>
+                </div> -->
             </div>
 
-            <div id="whoWonContainer">
-                <div id="innerWhoWon">
-                    <img src="/mobile/reg/images/60-flag.png" alt="60 Flag" />
-                    <p>The Amazing Prizes:</p>
+            <div id="whoWonTop">
+                <div id="whoWonContainer">
+                    <div id="innerWhoWon">
+                        <img src="/mobile/reg/images/60-flag.png" alt="60 Flag" />
+                        <p>The Amazing Prizes:</p>
+                    </div>
                 </div>
             </div>
         </div>
