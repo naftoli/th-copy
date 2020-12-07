@@ -40,7 +40,7 @@ function checkTasks( $user_id, $start, $end, $type ) {
     $grid_id = 13012;
     if ($type == 'weekly') $rollover = 2459167;
     else if ($type == 'monthly') $rollover = 2459171;
-    else if ($type == 'yearly') $rollover = 2459167;
+    else if ($type == 'yearly') $rollover = 2459171;
 
     if ($start >= $rollover) { // simple calculation
         $sql = "SELECT COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
