@@ -110,7 +110,7 @@ function getRaffleHistory( $type, $user_id ) {
         while ( $start <= $end ) { // check all days in week
             $days[] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
-                'past'      => $end < unixtojd() ? true : false
+                'past'      => $start < unixtojd() ? true : false
             ];
             $start++;
         }
@@ -190,7 +190,7 @@ function getDailyTaskInfo( $user_id, $type ) {
 
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
-                'past'      => $start < unixtojd() ? true : false
+                'past'      => $start <= unixtojd() ? true : false
             ];
             $start++;
         }
