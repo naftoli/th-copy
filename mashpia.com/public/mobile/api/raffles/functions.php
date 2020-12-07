@@ -87,7 +87,7 @@ function getRaffleHistory( $type, $user_id ) {
             WHERE
                 type = '$type' AND year = $year
                     AND end_date <= $end
-            ORDER BY start_date";
+            ORDER BY start_date DESC";
     $result = mysql_query($sql);
     while ( $row = mysql_fetch_assoc($result) ) {
         // check if user won
@@ -119,7 +119,7 @@ function getRaffleHistory( $type, $user_id ) {
 function getDailyTaskInfo( $user_id, $type ) {
     $result = [];
     $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
-    $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
+    $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
 
     // get raffles
     $raffles = [];
@@ -142,6 +142,7 @@ function getDailyTaskInfo( $user_id, $type ) {
     while ($row = mysql_fetch_assoc($result_raffles)) {
         $raffles[] = $row;
     }
+    $totalRaffles = count($raffles);
 
     foreach ($raffles as $idx => $raffle) {
         $start = $raffle['start_date'];
@@ -167,14 +168,17 @@ function getDailyTaskInfo( $user_id, $type ) {
 //            $run_date = jdtojewish($jd, true, CAL_JEWISH_ADD_ALAFIM_GERESH + CAL_JEWISH_ADD_GERESHAYIM);
 //        }
 
+        // check for leap year
+        $m = array(3, 6, 8, 11, 14, 17, 19);
+        $meuberet = in_array(($year % 19), $m);
+
         $info = [];
+        $order = [];
         while ($start <= $end) {
             $heDate = explode('/', jdtojewish($start));
             $heMonth = $months[$heDate[0]];
-            // check for leap year
-            $m = array(3, 6, 8, 11, 14, 17, 19);
-            $meuberet = in_array(($heDate[2] % 19), $m);
-            if ($meuberet && $heDate[0] == 7) $heMonth = 'אדר ב';
+            if ($meuberet && $heMonth == 7) $heMonth = 'Adar 2';
+            if (!in_array($heMonth, $order)) $order[] = $heMonth;
 
             $info[$heMonth][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
@@ -183,7 +187,8 @@ function getDailyTaskInfo( $user_id, $type ) {
             $start++;
         }
         $result[] = [
-            'raffleNumber'  => $idx + 1,
+            'orderBy'       => $order,
+            'raffleNumber'  => $totalRaffles--,
             'startMonth'    => $heMonths[$startHe[0]],
             'endMonth'      => $heMonths[$endHe[0]],
             'year'          => $year,
