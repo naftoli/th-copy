@@ -76,7 +76,7 @@ const createBigDonutChart = () => {
 const load180FlagDonutCharts = () => {
     const raffle180Container = document.getElementById('raffle180Container');
     raffleData.forEach(raffle => {
-        const { year, daysTillDrawing, raffleDate, months, daysCompleted } = raffle;
+        const { year, daysTillDrawing, raffleDate, months, daysCompleted, orderBy } = raffle;
         const raffleHeader = document.getElementById('raffleHeader');
         const div = document.createElement('div');
         const parshaContainer = createElementWithClass('div', 'parshaContainer');
@@ -107,7 +107,7 @@ const load180FlagDonutCharts = () => {
         let backgroundColors = [];
         let totalAmountOfDaysInRaffle = 0;
 
-        Object.keys(months).forEach(month => {
+        orderBy.forEach(month => {
             months[month].forEach(day => {
                 totalAmountOfDaysInRaffle += 1;
                 backgroundColors.push(day.completed ? darkBlue : day.past ? grey : `${darkBlue}1a`)
@@ -159,9 +159,9 @@ const load180FlagDonutCharts = () => {
             }
         });
 
-        let rotation = 75;
+        let rotation = 110;
 
-        Object.keys(months).forEach((month, index) => {
+        orderBy.forEach((month, index) => {
             let id = 'curve' + month;
 
             let textSVG = document.createElementNS(xmlns, 'svg');
@@ -182,7 +182,7 @@ const load180FlagDonutCharts = () => {
 
             doughnutContainer.appendChild(textSVG);
 
-            rotation -= (360) / Object.keys(months).length;
+            rotation += (360) / orderBy.length;
 
         });
 
