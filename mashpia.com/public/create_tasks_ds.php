@@ -108,7 +108,16 @@ if (isset($_POST['submit'])) {
     $subjects = [
         121 => 'Jewish Day',
         122 => 'Jewish Uniform',
-        123 => 'Mitzvot'
+        123 => 'Mitzvot',
+        124 => 'NA',
+        125 => 'NA2',
+        126 => 'NA3',
+        127 => 'NA4',
+        128 => 'NA5',
+        129 => 'NA6',
+        130 => 'NA7',
+        131 => 'AhavatYisrael',
+        132 => 'NA8'
     ];
 
     // there is null data in the database under mission_number
@@ -401,7 +410,7 @@ if (isset($_POST['submit'])) {
                     foreach ($types as $type) {
                         $mission = $missionName;
                         $focus = 0;
-                        if ($type % 2 == 0) { // even numbers
+                        if (is_numeric($type) && $type % 2 == 0) { // even numbers
                             $pic = $pic_boys;
                         } else { // odd numbers
                             $pic = $pic_girls;
@@ -456,7 +465,7 @@ if (isset($_POST['submit'])) {
                 $arrEnd = array();
                 $missionName = "";
             }
-            //exit;
+//            exit;
 //            echo "<pre>";
 //            print_r($missions);
 //            echo "</pre>";
