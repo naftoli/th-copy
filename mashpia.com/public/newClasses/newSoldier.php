@@ -15,6 +15,7 @@ class NewSoldier {
 	private $mobile;
 	private $lang;
 	private $setBD;
+	private $school_type;
 	
 	public function __construct($parent, $first, $last, $dob, $gender, $school, $grade, $fnameh = '', $lnameh = '', $photo = null, $mobile = false, $setBD = true) {
 		$this->parent = $parent;	
@@ -30,11 +31,16 @@ class NewSoldier {
 		$this->mobile = $mobile;
 		$this->lang = 1;
 		$this->setBD = $setBD;
+		$this->school_type = 0;
 	}
 	
 	public function setLang( $lang ) {
 		$this->lang = $lang;
 	}
+
+	public function setSchoolType( $type ) {
+	    $this->school_type = $type;
+    }
 	
 	public function create() {
 		//return $this->createAccount();
@@ -50,16 +56,18 @@ class NewSoldier {
 		$barcode = $this->generateCode();
 		$serial = $this->generateSerial();
 		$email = $this->parent->admin_email;
-		switch ($this->gender) {
-			case 'm':
-			case 'M':
-				$school_type_id = 2;
-				break;
-			case 'f':
-			case 'F':
-				$school_type_id = 3;
-				break;
-		}
+		if ($this->gender) {
+            switch ($this->gender) {
+                case 'm':
+                case 'M':
+                    $this->school_type = 2;
+                    break;
+                case 'f':
+                case 'F':
+                    $this->school_type = 3;
+                    break;
+            }
+        }
 		$address1 = $this->parent->admin_address1;
 		$address2 = $this->parent->admin_address2;
 		$city = $this->parent->admin_city;
@@ -73,7 +81,7 @@ class NewSoldier {
 				first = '$this->first', 
 				last = '$this->last', 
 				lang = 'en', 
-				school_type_id = $school_type_id, 
+				school_type_id = $this->school_type, 
 				school_id = $this->school, 
 				class_id = $this->grade, 
 				user_serial = $serial, 
