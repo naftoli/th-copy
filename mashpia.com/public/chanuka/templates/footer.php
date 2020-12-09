@@ -54,6 +54,10 @@
                                <input type="text" class="form-control mission-form-inp col-lg-7" name="last_name" id="last-name-inp" placeholder="">
                                <div id="last-name-msg" class="text-danger d-none offset-lg-4 col-lg-7">Last name not valid</div>
                            </div><br>
+                            <div class="form-group row">
+                                <label for="dob" class="col-lg-4 col-form-label text-left">Your DOB:</label> &nbsp; &nbsp;
+                                <input type="date" class="form-control mission-form-inp col-lg-7" name="dob" id="dob" placeholder="" required>
+                            </div><br>
                            <div class="form-group row">
                                <label for="exampleInputEmail1" class="col-lg-4 col-form-label px-0 text-left">&nbsp;&nbsp;Parent email address:</label> &nbsp; &nbsp;
                                <input type="text" class="form-control mission-form-inp col-lg-7" name="email_address" id="email-inp" aria-describedby="emailHelp" placeholder="">

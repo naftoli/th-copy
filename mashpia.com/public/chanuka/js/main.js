@@ -120,6 +120,7 @@ $("#mission-form-modal").on("submit", (e) => {
     data.first_name = $("#first-name-inp").val();
     data.last_name = $("#last-name-inp").val();
     data.email_address = $("#email-inp").val();
+    data.dob = $("#dob").val();
     data.tasks =  JSON.parse(localStorage.missionNums);
     data.new_account = 1;
     data.serial_number = false;

@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 1);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
@@ -16,9 +15,9 @@ $missions_arr = [
 ];
 
 $info = json_decode($_POST['data']);
-$fields = ['new_account', 'serial_number', 'first_name', 'last_name', 'email_address', 'tasks'];
+$fields = ['new_account', 'serial_number', 'first_name', 'last_name', 'dob', 'email_address', 'tasks'];
 foreach ($fields as $field) {
-    $$field = mysql_real_escape_string($info->$field);
+    $$field = $info->$field;
 }
 
 $user_id = 0;
@@ -44,7 +43,7 @@ if ($new_account) {
     }
 
     if ($parent->admin_id) {
-        $child = new NewSoldier($parent, $first_name, $last_name, '', '', '0', '0', '', '');
+        $child = new NewSoldier($parent, $first_name, $last_name, $dob, '', '0', '0', '', '');
         $child->setSchoolType( 50 ); // indicates new child that needs to have type set when logging into mobile site
         if (
             $child->create()
