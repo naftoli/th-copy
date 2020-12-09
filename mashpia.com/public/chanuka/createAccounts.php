@@ -127,7 +127,6 @@ Tzivos Hashem has missions for you all year round, for which you can win prizes 
     // Additional headers
     $headers[] = 'From: Tzivos Hashem <cth@tzivoshashem.org>';
     $headers[] = 'Reply-To: Tzivos Hashem <cth@tzivoshashem.org>';
-    $headers[] = 'Cc: design@tzivoshashem.org';
     @mail($to, $subject, $msg, implode("\r\n", $headers));
 
     echo json_encode([
