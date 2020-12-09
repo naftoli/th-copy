@@ -94,6 +94,42 @@ if ($user_id) {
 }
 
 if ($success && $marked) {
+    // send email to child
+    $to = $email_address;
+    $subject = "Chanukah Challenge";
+    $msg = "<strong>CONGRATULATIONS!</strong><br />
+Thank you for entering the Chanukah Challenge!<br /><br />
+You have completed the following mission(s):<br />
+<ul>";
+    foreach ($tasks as $task_num) {
+        $msg .= "<li>" . $missions_arr[intval($task_num) - 1]['name'] . "</li>";
+    }
+    $msg .= "
+</ul><br /><br />
+You have entered the grand raffle to win:<br />
+<ul>";
+    foreach ($tasks as $task_num) {
+        $msg .= "<li>" . $missions_arr[intval($task_num) - 1]['prize'] . "</li>";
+    }
+    $msg .= "</ul><br /><br />
+If you did not yet complete all the missions, you can come back to www.chanukahchallenge.com and continue filling out more missions to win more great prizes.
+<br /><br />
+Tzivos Hashem International wishes you a HAPPY CHANUKAH!
+<br /><br />
+<strong>Did you know?</strong><br />
+Tzivos Hashem has missions for you all year round, for which you can win prizes and be promoted in rank to become a general in Hashem's army. 
+<a href='http://mashpia.com/mobile'>Sign up today!</a> 
+";
+
+    // To send HTML mail, the Content-type header must be set
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+    // Additional headers
+    $headers[] = 'From: Tzivos Hashem <cth@tzivoshashem.org>';
+    $headers[] = 'Reply-To: Tzivos Hashem <cth@tzivoshashem.org>';
+    $headers[] = 'Cc: design@tzivoshashem.org';
+    @mail($to, $subject, $msg, implode("\r\n", $headers));
+
     echo json_encode([
         'success'   => true
     ]);
