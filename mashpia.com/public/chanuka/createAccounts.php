@@ -72,9 +72,9 @@ if ($user_id) {
     foreach ($tasks as $task_num) {
         $qrys[] = "insert ignore into chanuka_missions 
                     set user_id = " . $user_id . ", 
-                    task = '" . $missions_arr[intval($task_num) - 1]['name'] . "', 
+                    task = \"" . addslashes($missions_arr[intval($task_num) - 1]['name']) . "\",
                     task_num = " . intval($task_num) . ", 
-                    and year = " . GlobalSettings::getCurrentYear();
+                    year = " . GlobalSettings::getCurrentYear();
     }
     mysql_query('set autocommit=0');
     mysql_query('begin');
