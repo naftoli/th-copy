@@ -1,0 +1,89 @@
+
+
+div.background {
+    background-color: #222430;
+    height: 100%;
+    min-height: 100vh;
+}
+
+
+
+img#home-page-chanuka-logo {
+    width: 400px;
+}
+
+img#home-page-logo {
+    width: 250px;
+}
+
+p.home-page-p {
+    font-size: 1.4em;
+    color: #ffce04;
+}
+
+h2.welcome {
+    font-size: 3em;
+}
+
+h3.missions-header {
+    font-size: 2.5em;
+}
+
+div.mission-box {
+    height: 90%;
+    width: 90%;
+    transition-duration: 500ms;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color:#ffce04;
+    margin: auto;
+    position: relative;
+}
+
+div.mission-box:hover {
+    /* height: 100%;
+    width: 100%; */
+    background-color:#f47a20;
+}
+
+h2.mission-title {
+    font-size: 1.7em;
+}
+
+img.mission-img {
+    width: 75px;
+    object-fit: contain;
+}
+
+div.notes-div {
+    position: absolute;
+    z-index: 1;
+    background-color: #51afe2;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+div.notes-div::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #51afe2 transparent;
+}
+
+button.submit-btn {
+    background-color: #51afe2;
+}
+
+
+
+.text-yellow {
+    color: #ffce04;
+}
+
+.text-orange {
+    color:#f47a20
+}
