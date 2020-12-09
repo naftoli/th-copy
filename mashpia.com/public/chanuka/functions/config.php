@@ -5,38 +5,38 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 
-if (isset($_POST["dataJson"])) {
-    print_r($_POST["dataJson"]);
+if (isset($_POST["data"])) {
+    print_r($_POST["data"]);
 
 
-     // $url = './createAccounts.php';
-     $url = '../testPost.php';
-     $data = $_POST["dataJson"];
+    //  // $url = './createAccounts.php';
+    //  $url = '../testPost.php';
+    //  $data = $_POST["data"];
  
-     $options = array(
-         'http' => array(
-             'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-             'method'  => 'POST',
-             'content' => $data
-         )
-     );
-     
-    //  $context  = stream_context_create($options);
-    //  $result = file_get_contents($url, false, $context);
-    //  if ($result === FALSE) { 
-    //      echo '{ "error": "problem connecting to server"';
-    //   }
+    //  $options = array(
+    //      'http' => array(
+    //          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+    //          'method'  => 'POST',
+    //          'content' => $data
+    //      )
+    //  );
+
+    // //  $context  = stream_context_create($options);
+    // //  $result = file_get_contents($url, false, $context);
+    // //  if ($result === FALSE) { 
+    // //      echo '{ "error": "problem connecting to server"';
+    // //   }
  
-    //  print_r($result);
+    // //  print_r($result);
 
 
-    //  send notification email
+    // //  send notification email
 
-    $mail_to = "";
-    $subject = "";
-    $body = "";
-    $headers = "From: ";
-    // mail($mail_to, $subject, $body, $headers);
+    // $mail_to = "";
+    // $subject = "";
+    // $body = "";
+    // $headers = "From: ";
+    // // mail($mail_to, $subject, $body, $headers);
 
 }
 

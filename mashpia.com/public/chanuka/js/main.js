@@ -1,15 +1,22 @@
 "use strict";
 
+// url to post user info
+let postToUrl = "./createAccounts.php";
+
 
 // by default user not member
 let isMember = false;
 
+// message to send user when successfull form
+let success_message = `<h4>Mazal Tov!</h4><p>Your chanukah missions have been submitted please check back after Ches Teves the 23 of december to see who the lucky winners are.<br>
+                        <a href="http://mashpia.com/mobile">Continue Here
+                        To have your own family account and be able to complete daily missions earn medals and be promoted in Rank.
+                        </a></p>`;
 
-let success_message = `<h4>Mazal Tov</h4><p>Your chanukah missions have been submitted please check back after Ches Teves the 23 of december to see who the lucky winners are.<br>
+// set up local storage
+localStorage.setItem("missionNums", JSON.stringify([]));
 
-<a href="http://mashpia.com/mobile">Continue Here</a>
-To have your own family account and be able to complete daily missions earn medals and be promoted in Rank.
-</p>`;
+
 // notes popover on hover
 
 $("div.mission-box-container").on({
@@ -34,18 +41,24 @@ $("div.mission-box-container").on({
 $("div.mission-box").on("click", (e) => {
     let elem = e.currentTarget;
     let missionNum = elem.dataset.missionNum;
+    let allMissions = JSON.parse(localStorage.missionNums);
 
-    if (localStorage.missionNum == missionNum) {
-        $("div.mission-box").css("background-image","linear-gradient(to right, #ffce04 , #f47a20)");
-        localStorage.removeItem("missionNum");
-        $("#mission-submit-btn-first").prop("disabled", true);
+    // check if exsists in array -> remove
+    const index = allMissions.indexOf(missionNum);
+    if (index > -1) {
+        allMissions.splice(index, 1);
+        localStorage.setItem("missionNums", JSON.stringify(allMissions));
+        $("div.mission-box[data-mission-num="+missionNum+"]").removeClass("mission-selected");
+        if (allMissions.length == 0) {
+            $("#mission-submit-btn-first").prop("disabled", true);
+        }
         return;
     }
 
-    localStorage.setItem("missionNum", missionNum);
-    $("input#mission-num-inp").val(missionNum);
-    $("div.mission-box").css("background-image","linear-gradient(to right, #ffce04 , #f47a20)");
-    elem.style.background = "#2484c6";
+    allMissions = [...allMissions, missionNum];
+    localStorage.setItem("missionNums", JSON.stringify(allMissions));
+    $("input#mission-num-inp").val(JSON.stringify(allMissions));
+    $("div.mission-box[data-mission-num="+missionNum+"]").addClass("mission-selected");
     $("#mission-submit-btn-first").prop("disabled", false);
 });
 
@@ -107,24 +120,34 @@ $("#mission-form-modal").on("submit", (e) => {
     data.first_name = $("#first-name-inp").val();
     data.last_name = $("#last-name-inp").val();
     data.email_address = $("#email-inp").val();
-    data.task_checked_off = $("#mission-num-inp").val();
+    data.tasks =  JSON.parse(localStorage.missionNums);
     data.new_account = 1;
+    data.serial_number = false;
 
-    let dataJson = JSON.stringify(data);
+    data = JSON.stringify(data);
 
     $.ajax({
         // url: '../createAccounts.php',
-        url: './functions/config.php',
+        url: postToUrl,
         method: 'post',
-        data: {dataJson},
+        data: {data},
         success: function (res) {
-            //  check if respons success
-                // send email
 
-                //show the user
+            if (res.includes("<br />")) {
+                console.log("php problem");
+                return;
+            } 
+
+            res = JSON.parse(res);
+
+            if (res.error) {
+                console.log(res.error)
+                $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
+            } else {
                 $("#modal-body").html(success_message)
-            console.log("ajax success!!");
-            console.log(res);
+                console.log("ajax success!!");
+            }
+           
         }
     }).fail(function () {
         $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form</p>");
@@ -137,10 +160,12 @@ $("#mission-form-modal").on("submit", (e) => {
 $("#mission-form-modal-member").on("submit", (e) => {
     e.preventDefault();
 
+    let serialNumber = $("#serial-number-inp").val();
+
     let flag = true;
     
     // val first name
-    if ($("#serial-number-inp").val().length < 2) {
+    if (!valSerialNumber(serialNumber) || serialNumber.length < 7 || serialNumber.length > 7) {
         $("#serial-number-msg").removeClass("d-none");
         flag = false;
     } else {
@@ -155,25 +180,38 @@ $("#mission-form-modal-member").on("submit", (e) => {
 
     let data = {};
     data.serial_number = $("#serial-number-inp").val();
-    data.task_checked_off = $("#mission-num-inp").val();
+    data.tasks =  JSON.parse(localStorage.missionNums);
     data.new_account = 0;
+    data.first_name = false;
+    data.last_name = false;
+    data.email_address = false;
 
-    let dataJson = JSON.stringify(data);
+    data = JSON.stringify(data);
 
     $("#mission-form-submit-modal-member").text("Sending Form...");
 
     $.ajax({
         // url: '../createAccounts.php',
-        url: './functions/config.php',
+        url: postToUrl,
         method: 'post',
-        data: {dataJson},
+        data: {data},
         success: function (res) {
-            //  check if respons success
 
-            //show the user
-            $("#modal-body").html(success_message)
-            console.log("ajax success!!");
-            console.log(res);
+            if (res.includes("<br />")) {
+                console.log("php problem");
+                return;
+            } 
+
+            res = JSON.parse(res);
+
+            if (res.error) {
+                console.log(res.error)
+                $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
+            } else {
+                $("#modal-body").html(success_message)
+                console.log("ajax success!!");
+            }
+           
         }
     }).fail(function () {
         $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form</p>");
@@ -192,7 +230,12 @@ $("#mission-form-modal-member").on("submit", (e) => {
 
 function valEmail (userEmail) {
     userEmail = userEmail.trim();
-    // var emailPattern = /^[A-Za-z1-9.]+@[a-z]+[.][a-z.]+$/;
     var emailPattern = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
     return userEmail.match(emailPattern);
+}
+
+function valSerialNumber (userSN) {
+    userSN = userSN.trim();
+    var serialNumberPattern = /^[0-9]*$/;
+    return userSN.match(serialNumberPattern);
 }

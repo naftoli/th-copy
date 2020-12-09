@@ -15,7 +15,7 @@ require("./templates/header.php");
     Each mission can be completed once throughout Chanukah. <br>
     </p>
 
-    <h4 class="text-orange">Win a prize just for entering!</h4>
+    <h4 class="text-orange" id="second-header">Win a prize just for entering!</h4>
 
     <!-- <hr class="w-50" style="border: 1px solid #f47a20"><br> -->
 
@@ -23,7 +23,7 @@ require("./templates/header.php");
 </div><br>
 
 <!-- <h3 class="missions-header text-orange">Chanukah Missions</h3><br><br> -->
-    <div class="row px-5">
+    <div class="row px-3">
         <?php
         foreach ($missions_arr as $key => $value) :
         ?>
@@ -31,22 +31,22 @@ require("./templates/header.php");
         <div class="col-lg-6 p-4 mission-box-container">
             <div data-mission-num="<?= $key+1; ?>" class="mission-box border text-center d-flex justify-content-between">
                 
-                <div class="mission-imgs-con d-flex p-3">
-                    <img class="mission-img" src="./images/<?= $value['mission-img']?>" alt="mission image">
-                    <h3 class="mission-title"><?= $value['name']; ?></h3>
-                </div>
+                <!-- <div class="mission-imgs-con d-flex p-1"> -->
+                    <img class="mission-img m-2" src="./images/<?= $value['mission-img']?>" alt="mission image">
+                    <div class="align-center"><h3 class="mission-title <?= strlen($value["name"]) < 30? "py-4" : "py-3 px-3" ?>"><?= $value['name']; ?></h3></div>    
+                <!-- </div> -->
                 <div class="prize-img-container"><img class="prize-img " src="./images/<?= $value['prize-img']?>" alt="prize image"></div>
 
                 
                 
             </div><?php if (isset($value['notes'])) : ?>
-                    <div style="display: none" class="notes-div"><b>Note: </b><?= $value['notes']; ?></div>
+                    <div style="display: none" class="notes-div"><b></b><?= $value['notes']; ?></div>
                 <?php endif; ?>
         </div>
 
         <?php endforeach; ?>
     </div><br><br>
-        <button id="mission-submit-btn-first" data-toggle="modal" disabled data-target="#exampleModalCenter" class="submit-btn btn w-25 mt-4">Submit!</button>
+        <button id="mission-submit-btn-first" title="cilck on a mission first" data-toggle="modal" disabled data-target="#exampleModalCenter" class="submit-btn btn w-25 mt-4">Submit!</button>
 
 
 <?php

@@ -27,6 +27,10 @@ p.home-page-p {
     color: #fff;
 }
 
+h4#second-header {
+    font-size: 1.9em;
+}
+
 h2.welcome {
     font-size: 3em;
 }
@@ -58,13 +62,22 @@ div.mission-box:hover {
     background-image: linear-gradient(to right,  #ffce04 , #ff9e04);
 }
 
+div.mission-selected{
+    background-image: linear-gradient(to right,  #ff7e04 , #ff7e04);
+}
+
+div.mission-selected:hover {
+    background-image: linear-gradient(to right,  #ff7e04 , #ff7e04);
+}
+
 h3.mission-title {
     font-size: 1.1em;
 }
 
 img.mission-img {
-    width: 40px;
-    margin: 4px 15px;
+    width: 50px;
+    height: 50px;
+    /* margin: 4px 15px; */
     object-fit: contain;
 }
 
@@ -81,17 +94,18 @@ div.prize-img-container {
 img.prize-img {
     margin: 0px;
     padding: 0px;
-    width: 80px;
-    height: 50px;
+    width: 85px;
+    height: 60px;
     object-fit: contain;
 }
 
 div.notes-div {
     position: absolute;
     z-index: 1;
-    background-color: #51afe2;
+    background-color: #ffbe04;
     border-radius: 15px;
     padding: 10px;
+    width: 400px;
 }
 
 div.notes-div::after {
@@ -102,12 +116,23 @@ div.notes-div::after {
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent #51afe2 transparent;
+    border-color: transparent transparent #ffbe04 transparent;
 }
 
 button.submit-btn {
-    background-color: #51afe2;
-    /* background-color: #ff9e04; */
+    /* background-color: #51afe2; */
+    background-color: #ffce04;
+    color: white;
+}
+
+button.account-btn {
+    background-color: #ffce04;
+    color: white;
+}
+
+button.form-submit-btn {
+    background-color: #ffce04;
+    color: black;
 }
 
 
@@ -133,4 +158,79 @@ input.mission-form-inp {
 
 .text-orange {
     color:#f47a20
+}
+
+
+
+
+/* mobile */
+
+
+
+@media screen and (max-width: 992px) {
+
+    div.container {
+        margin: 5vw;
+        width: 90vw;
+        max-width: 90vw;
+    }
+
+    div.mission-box-container {
+        height: 190px;
+        width: 100%;
+    }
+
+    div.mission-box {
+        height: 120px;
+        width: 100%;
+    }
+
+        
+    h3.mission-title {
+        font-size: 2em;
+        margin-top: 9px;
+    }
+
+    img.mission-img {
+        width: 90px;
+        height: 90px;
+        
+        /* margin: 4px 15px; */
+        object-fit: contain;
+    }
+
+    div.prize-img-container {
+        /* background-color:  #ffce04; */
+        background-color:  #ffce04;
+        border-radius: 15px;
+        width: 20%;
+        height: 100%;
+        /* margin: 0px 15px; */
+        padding: 9px;
+    }
+
+    img.prize-img {
+        margin: 0px;
+        padding: 0px;
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+    }
+
+    div.notes-div {
+        width: 60%;
+        margin-left: 15%;
+        font-size: 35px;
+    }
+
+
+    button#mission-submit-btn-first {
+        width: 50vw!important;
+        height: 10vw;
+    }
+
+    input.form-control {
+        width: 93%;
+    }
+
 }
