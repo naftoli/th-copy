@@ -68,11 +68,11 @@ if ($new_account) {
 // save missions marked to db
 if ($user_id) {
     $qrys = [];
-    foreach ($tasks as $idx => $task) {
+    foreach ($tasks as $task_num) {
         $qrys[] = "insert into chanuka_missions 
                     set user_id = " . $user_id . ", 
-                    task = '" . $missions_arr[$idx]['name'] . "', 
-                    task_num = " . intval($task)  + 1;
+                    task = '" . $missions_arr[intval($task_num) - 1]['name'] . "', 
+                    task_num = " . intval($task_num);
     }
     mysql_query('set autocommit=0');
     mysql_query('begin');
