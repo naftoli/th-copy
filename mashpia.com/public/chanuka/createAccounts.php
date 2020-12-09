@@ -13,9 +13,10 @@ $missions_arr = [
     ['name' => "I did a mitzvah to bring Moshiach", 'mission-img' => 'Asset 2.svg', 'prize' => "Drone", 'prize-img' => "drone.png", 'amount' => 3, 'notes' => "You can choose any random Mitzvah. It might be your Mitzvah that will tip the scale & bring Moshiach!"]
 ];
 
+$info = json_decode($_POST['data']);
 $fields = ['new_account', 'serial_number', 'first_name', 'last_name', 'email_address', 'tasks'];
 foreach ($fields as $field) {
-    $$field = mysql_real_escape_string($_POST['data'][$field]);
+    $$field = mysql_real_escape_string($info[$field]);
 }
 
 $user_id = 0;
