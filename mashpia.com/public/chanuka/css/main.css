@@ -1,7 +1,9 @@
 
 
 div.background {
-    background-color: #222430;
+    background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100%;
     min-height: 100vh;
 }
@@ -13,12 +15,16 @@ img#home-page-chanuka-logo {
 }
 
 img#home-page-logo {
-    width: 250px;
+    width: 80px;
+}
+
+h3#first-header {
+    font-size: 2.2em;
 }
 
 p.home-page-p {
-    font-size: 1.4em;
-    color: #ffce04;
+    font-size: 1.2em;
+    color: #fff;
 }
 
 h2.welcome {
@@ -29,29 +35,54 @@ h3.missions-header {
     font-size: 2.5em;
 }
 
+div.mission-box-container {
+    height: 100px;
+    width: 400px;
+}
+
 div.mission-box {
-    height: 90%;
-    width: 90%;
+    height: 70px;
+    width: 400px;
+    /* height: 90%;
+    width: 90%; */
     transition-duration: 500ms;
-    border-radius: 10px;
+    border-radius: 20px;
     cursor: pointer;
-    background-color:#ffce04;
-    margin: auto;
+    background-image: linear-gradient(to right, #ffce04 , #f47a20);
+    background-color: #ffce04;
     position: relative;
 }
 
 div.mission-box:hover {
-    /* height: 100%;
-    width: 100%; */
-    background-color:#f47a20;
+    transition-duration: 500ms;
+    background-image: linear-gradient(to right,  #ffce04 , #ff9e04);
 }
 
-h2.mission-title {
-    font-size: 1.7em;
+h3.mission-title {
+    font-size: 1.1em;
 }
 
 img.mission-img {
-    width: 75px;
+    width: 40px;
+    margin: 4px 15px;
+    object-fit: contain;
+}
+
+div.prize-img-container {
+    /* background-color:  #ffce04; */
+    background-color:  #ffce04;
+    border-radius: 15px;
+    width: 95px;
+    height: 100%;
+    /* margin: 0px 15px; */
+    padding: 7px;
+}
+
+img.prize-img {
+    margin: 0px;
+    padding: 0px;
+    width: 80px;
+    height: 50px;
     object-fit: contain;
 }
 
@@ -76,9 +107,25 @@ div.notes-div::after {
 
 button.submit-btn {
     background-color: #51afe2;
+    /* background-color: #ff9e04; */
 }
 
 
+
+/* form */
+
+label {
+    font-size: 17px;
+}
+
+input.mission-form-inp {
+    width: 70%;
+}
+
+
+
+
+/* utils */
 
 .text-yellow {
     color: #ffce04;

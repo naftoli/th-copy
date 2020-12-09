@@ -2,7 +2,12 @@
 
     </div> 
         <footer>
+       
             <div class="container text-white text-center p-3 mt-4">
+                <div class="mt-5">
+                    <a class="" href="https://www.tzivoshashem.org"><img id="home-page-logo" src="https://www.tzivoshashem.org/wp-content/uploads/2017/02/Main-Logo.png" alt="logo image"></a>
+                    <div class="text-yellow d-inline">Celebrating 40 years of Tzivos Hashem - World's largest Jewish children's organization.</div><br><br>
+                </div>
                 &copy; Developed by Urisaul <?= date('Y');?>
             </div>
         </footer>
@@ -28,42 +33,58 @@
                      <span aria-hidden="true">&times;</span>
                    </button>
                  </div>
-                 <div class="modal-body text-center">
-                   <button id="has-account-btn" class="submit-btn btn w-100" >I already have an account</button>
-                   <form id="mission-form-modal" action="" method="post" class="mt-4">
-                       <div id="stage-1">
-                           <div class="form-group d-flex">
-                               <label for="exampleInputEmail1">First Name:</label> &nbsp; &nbsp;
-                               <input type="text" class="form-control mission-form-inp w-75" name="first-name" id="first-name-inp" aria-describedby="emailHelp" placeholder="">
+                 <div id="modal-body" class="modal-body text-center">
+                   
+                  
+                   
+
+                    <div id="stage-1">
+                    <button id="has-account-btn" class="submit-btn btn w-100" >I already have an account</button><br><br>
+                        <div>
+                            <h4>Please fill out your details:</h4>
+                        </div>
+                        <form id="mission-form-modal" action="" method="post" class="mt-4">
+                           <div class="form-group row">
+                               <label for="exampleInputEmail1" class="col-lg-4 col-form-label">Your First Name:</label> &nbsp; &nbsp;
+                               <input type="text" class="form-control mission-form-inp col-lg-7" name="first_name" id="first-name-inp" placeholder="">
+                               <div id="first-name-msg" class="text-danger d-none offset-lg-4 col-lg-7">First name not valid</div>
+                           </div><br>
+                           <div class="form-group row">
+                               <label for="exampleInputEmail1" class="col-lg-4 col-form-label">Your Last Name:</label> &nbsp; &nbsp;
+                               <input type="text" class="form-control mission-form-inp col-lg-7" name="last_name" id="last-name-inp" placeholder="">
+                               <div id="last-name-msg" class="text-danger d-none offset-lg-4 col-lg-7">Last name not valid</div>
+                           </div><br>
+                           <div class="form-group row">
+                               <label for="exampleInputEmail1" class="col-lg-4 col-form-label px-0">Parent email address:</label> &nbsp; &nbsp;
+                               <input type="text" class="form-control mission-form-inp col-lg-7" name="email_address" id="email-inp" aria-describedby="emailHelp" placeholder="">
+                               <div id="email-msg" class="text-danger d-none offset-lg-4 col-lg-7">Email not valid</div>
                            </div>
-                           <div class="form-group">
-                               <label for="exampleInputEmail1">Last Name:</label>
-                               <input type="text" class="form-control mission-form-inp" name="last-name" id="last-name-inp" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                               <label for="exampleInputEmail1">Birthday:</label>
-                               <input type="date" class="form-control mission-form-inp" name="birthday" id="birthday-inp" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                               <label for="exampleInputEmail1">School:</label>
-                               <input type="text" class="form-control mission-form-inp" name="school" id="school-inp" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <button type="button" id="mission-form-submit-modal" disabled class="btn btn-primary">Submit</button>
-                       </div>
-                       <div id="stage-2" style="display:none">
-                           <div class="form-group">
-                               <label for="exampleInputEmail1">Email:</label>
-                               <input type="text" class="form-control mission-form-inp" name="email" id="email-inp" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                               <label for="exampleInputEmail1">Password:</label>
-                               <input type="password" class="form-control mission-form-inp" name="password" id="password-inp" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <small>This will be used to inform you if you win and of any future mission campaigns you may be interested in.</small><br>
-                           <input id="mission-num-inp" type="hidden" name="mission-num">
-                           <button type="submit" name="submit" id="mission-form-submit-modal-final" disabled class="btn btn-primary">Join and submit your entry!</button>
-                       </div>
-                   </form>
+                           <div class="px-5">
+                                <small>This will be used to inform you if you win and of any future mission campaigns you may be interested in.</small>
+                           </div><br>
+                           <input id="mission-num-inp" type="hidden" name="task_checked_off">
+                           <button type="submit" name="submit" id="mission-form-submit-modal" class="btn btn-primary">Join and submit your entry!</button>
+                        </form>
+                    </div>
+
+                    <div id="stage-2" style="display:none">
+                    <button id="no-account-btn" class="submit-btn btn w-100" >I don't have an account yet</button><br><br>
+                        <div>
+                            <h4>Please fill out your details:</h4>
+                        </div>
+                       <form id="mission-form-modal-member" action="" method="post" class="mt-4">
+                            <div class="form-group row">
+                               <label for="exampleInputEmail1" class="col-lg-4 col-form-label">Serial Number:</label> &nbsp; &nbsp;
+                               <input type="text" class="form-control mission-form-inp col-lg-7" name="serial_number" id="serial-number-inp" aria-describedby="emailHelp" placeholder="">
+                               <div id="serial-number-msg" class="text-danger d-none offset-lg-4 col-lg-7">Serial number not valid</div>
+                           </div><br>
+                           <input id="mission-num-inp-member" type="hidden" name="task_checked_off">
+                           <button type="submit" name="submit" id="mission-form-submit-modal-member" class="btn btn-primary">Submit your mission!</button>
+                        </form>
+                    </div>
+
+                       
+                      
                  </div>
                  <div class="modal-footer">
                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
