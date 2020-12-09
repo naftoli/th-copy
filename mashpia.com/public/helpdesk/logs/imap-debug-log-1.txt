@@ -1,0 +1,306 @@
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+IMAP DEBUG LOG: 01/December/2020 @ 17:27PM
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Imap ID: 1
+Imap Host: imap.gmail.com
+Imap User: mashpia.helpdesk.notifications@gmail.com
+Imap Port: 993
+Imap SSL: Yes
+Imap Folder: inbox
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:27:18] Action/Info: Imap account found, preparing to connect to mailbox..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:27:18] Action/Info: Fatal error, could not connect to mailbox
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:28:16] Action/Info: Imap account found, preparing to connect to mailbox..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:28:16] Action/Info: Fatal error, could not connect to mailbox
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:28:22] Action/Info: Imap account found, preparing to connect to mailbox..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:28:22] Action/Info: Fatal error, could not connect to mailbox
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Imap account found, preparing to connect to mailbox..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Connection successful: Looping 2 message(s) of 2 in reverse order (oldest first)
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Data from mailbox: 
+
+Array
+(
+    [from] => Google
+    [email] => no-reply@accounts.google.com
+    [subject] => Critical security alert
+    [messageID] => <y_UjN9J-zx2AltuTVtYQhA@notifications.google.com>
+    [timestamp] => 1606861772
+    [charset] => 000000000000367d6d05b56ea942
+    [bytes] => 
+    [encoding] => 0
+    [type] => 1
+    [attribute] => 
+    [mime] => MULTIPART/ALTERNATIVE
+    [ticketID] => Array
+        (
+            [0] => no
+            [1] => 0
+        )
+
+    [body] => [image: Google]
+Access for less secure apps setting has been turned on
+
+
+mashpia.helpdesk.notifications@gmail.com
+Access for less secure apps setting has been turned on for your Google
+Account mashpia.helpdesk.notifications@gmail.com. If you didn't change it,
+you should check what happened.
+Check activity
+
+You can also see security activity
+https://myaccount.google.com/notifications
+You received this email to let you know about important changes to your
+Google Account and services.
+© 2020 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+)
+
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Decoding subject:
+
+Critical security alert
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Parsing comments:
+
+[image: Google]
+Access for less secure apps setting has been turned on
+
+
+mashpia.helpdesk.notifications@gmail.com
+Access for less secure apps setting has been turned on for your Google
+Account mashpia.helpdesk.notifications@gmail.com. If you didn't change it,
+you should check what happened.
+Check activity
+
+You can also see security activity
+https://myaccount.google.com/notifications
+You received this email to let you know about important changes to your
+Google Account and services.
+© 2020 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Preparing to add new ticket..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: New account to be created for email no-reply@accounts.google.com
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Account created successfully. ID: 8475
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Account creation email NOT sent as this option is disabled in setting. Settings & Tools > Settings > General > Imap Settings
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: New ticket added. ID: 1233
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Check for attachments..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Attachments not enabled and ignored
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Preparing to send emails to staff..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Email sent to Tony <tonyleeresume@gmail.com>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:56] Action/Info: Preparing to send to global admin staff member..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Email sent to Mashpia.com Support Staff <support@tzivoshashem.org>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Preparing to send new ticket confirmation to visitor..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Email sent to Google <no-reply@accounts.google.com>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Message flagged for deletion after loop has finished
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Data from mailbox: 
+
+Array
+(
+    [from] => Google
+    [email] => no-reply@accounts.google.com
+    [subject] => Critical security alert
+    [messageID] => <G3FEUZzAeS4UaQo1RwEp1Q@notifications.google.com>
+    [timestamp] => 1606861637
+    [charset] => 000000000000295fba05b56ea1f4
+    [bytes] => 
+    [encoding] => 0
+    [type] => 1
+    [attribute] => 
+    [mime] => MULTIPART/ALTERNATIVE
+    [ticketID] => Array
+        (
+            [0] => no
+            [1] => 0
+        )
+
+    [body] => [image: Google]
+Sign-in attempt was blocked
+
+
+mashpia.helpdesk.notifications@gmail.com
+Someone just used your password to try to sign in to your account from a
+non-Google app. Google blocked them, but you should check what happened.
+Review your account activity to make sure no one else has access.
+Check activity
+
+You can also see security activity
+https://myaccount.google.com/notifications
+You received this email to let you know about important changes to your
+Google Account and services.
+© 2020 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+)
+
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Decoding subject:
+
+Critical security alert
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Parsing comments:
+
+[image: Google]
+Sign-in attempt was blocked
+
+
+mashpia.helpdesk.notifications@gmail.com
+Someone just used your password to try to sign in to your account from a
+non-Google app. Google blocked them, but you should check what happened.
+Review your account activity to make sure no one else has access.
+Check activity
+
+You can also see security activity
+https://myaccount.google.com/notifications
+You received this email to let you know about important changes to your
+Google Account and services.
+© 2020 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Preparing to add new ticket..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Account does exist for no-reply@accounts.google.com
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: New ticket added. ID: 1234
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Check for attachments..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Attachments not enabled and ignored
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Preparing to send emails to staff..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Email sent to Tony <tonyleeresume@gmail.com>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Preparing to send to global admin staff member..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Email sent to Mashpia.com Support Staff <support@tzivoshashem.org>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Preparing to send new ticket confirmation to visitor..
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Email sent to Google <no-reply@accounts.google.com>
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Message flagged for deletion after loop has finished
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Mailbox closed and tickets purged
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+[69.164.131.146-01/December/2020 @ 17:29:57] Action/Info: Operation completed. Information: 
+
+Mailbox Read @ 01 Dec 2020 @ 17:29PM. 2 Messages Found.
+
+0 Tickets Awaiting Assignment.
+0 Tickets Accepted and Flagged as Spam.
+0 Tickets Flagged as Spam and Auto Purged.
+2 New Tickets Opened.
+0 Replies Added.
+0 Attachment(s) Saved.
+
+- - - - -
+
+Memory Used: 0.95MB
+Peak Memory Used: 0.99MB
+Duration: 3.61 seconds
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
