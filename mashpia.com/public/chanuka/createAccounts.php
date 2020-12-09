@@ -13,11 +13,9 @@ $missions_arr = [
     ['name' => "I did a mitzvah to bring Moshiach", 'mission-img' => 'Asset 2.svg', 'prize' => "Drone", 'prize-img' => "drone.png", 'amount' => 3, 'notes' => "You can choose any random Mitzvah. It might be your Mitzvah that will tip the scale & bring Moshiach!"]
 ];
 
-$info = $_POST['info'];
-
 $fields = ['new_account', 'serial_number', 'first_name', 'last_name', 'email_address', 'tasks'];
 foreach ($fields as $field) {
-    $$field = mysql_real_escape_string($_POST[$field]);
+    $$field = mysql_real_escape_string($_POST['data'][$field]);
 }
 
 $user_id = 0;
@@ -28,13 +26,23 @@ if ($new_account) {
     require $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newParent.php';
     require $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newSoldier.php';
 
-    $parent = new NewParent();
-    if (
+    // first find out if there's an admin already that exists with this email
+    $sql = "select * from admins where admin_email = '" . $email_address . "'";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) > 0) {
+        $parent = mysql_fetch_object($result);
+    } else {
+        $parent = new NewParent();
         $parent->action([
+            'username' => $email_address,
+            'password' => '1234',
             'admin_email' => $email_address
-        ])
-    ) {
-        $child = new NewSoldier($parent, $first_name, $last_name, '', '', '', '', '', '');
+        ]);
+    }
+
+    if ($parent->admin_id) {
+        $child = new NewSoldier($parent, $first_name, $last_name, '', '', '0', '0', '', '');
+        $child->setSchoolType( 50 ); // indicates new child that needs to have type set when logging into mobile site
         if (
             $child->create()
         ) {
@@ -48,17 +56,22 @@ if ($new_account) {
 } else {
     $sql = "select user_id from users where user_serial = " . $serial_number;
     $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    $user_id = $row['user_id'];
+    if (mysql_num_rows($result) > 0) {
+        $row = mysql_fetch_assoc($result);
+        $user_id = $row['user_id'];
+    } else {
+        $success = false;
+    }
 }
 
 // save missions marked to db
 if ($user_id) {
     $qrys = [];
-    foreach ($tasks as $task) {
-        $qrys[] = "insert into mashpia_chanuka.missions 
+    foreach ($tasks as $idx => $task) {
+        $qrys[] = "insert into chanuka_missions 
                     set user_id = " . $user_id . ", 
-                    marked = " . intval($task)  + 1;
+                    task = '" . $missions_arr[$idx]['name'] . "', 
+                    task_num = " . intval($task)  + 1;
     }
     mysql_query('set autocommit=0');
     mysql_query('begin');
@@ -83,7 +96,8 @@ if ($success && $marked) {
     ]);
 } else {
     if (!$success && $new_account) $error = 'There was an error creating your account.';
-    else if (!$marked) $error = 'There was an error saving your missions.';
+    else if (!$success && !$new_account) $error = 'Incorrect Serial Number.';
+    else if ($success && !$marked) $error = 'There was an error saving your missions.';
     echo json_encode([
         'success'   => false,
         'error'     => $error
