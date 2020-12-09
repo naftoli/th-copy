@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
@@ -17,7 +18,7 @@ $missions_arr = [
 $info = json_decode($_POST['data']);
 $fields = ['new_account', 'serial_number', 'first_name', 'last_name', 'email_address', 'tasks'];
 foreach ($fields as $field) {
-    $$field = mysql_real_escape_string($info[$field]);
+    $$field = mysql_real_escape_string($info->$field);
 }
 
 $user_id = 0;
