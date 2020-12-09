@@ -1,5 +1,6 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $missions_arr = [
     ['name' => "I lit Menorah", 'mission-img' => 'Asset 10.svg', 'prize' => "Silver menorah", 'prize-img' => "menorah.png", 'amount' => 2],
@@ -69,10 +70,11 @@ if ($new_account) {
 if ($user_id) {
     $qrys = [];
     foreach ($tasks as $task_num) {
-        $qrys[] = "insert into chanuka_missions 
+        $qrys[] = "insert ignore into chanuka_missions 
                     set user_id = " . $user_id . ", 
                     task = '" . $missions_arr[intval($task_num) - 1]['name'] . "', 
-                    task_num = " . intval($task_num);
+                    task_num = " . intval($task_num) . ", 
+                    and year = " . GlobalSettings::getCurrentYear();
     }
     mysql_query('set autocommit=0');
     mysql_query('begin');
