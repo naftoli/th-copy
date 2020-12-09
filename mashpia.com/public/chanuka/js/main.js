@@ -1,7 +1,7 @@
 "use strict";
 
 // url to post user info
-let postToUrl = "../createAccounts.php";
+let postToUrl = "http://mashpia.com/chanuka/createAccounts.php";
 
 
 // by default user not member
