@@ -112,7 +112,7 @@ const createSmallDonutChart = (donutData, index) => {
         data: {
             datasets: [{
                 data: donutData.won ? [100] : data,
-                backgroundColor: donutData.won ? [red] : donutData.days.map(day => day.completed ? red : day.past ? grey : '#ed224b1a'),
+                backgroundColor: donutData.won ? [red] : donutData.days.map(day => day.completed ? red : day.past ? grey : '#fee8e3'),
                 borderWidth: donutData.won ? 0 : 2,
             }]
         },

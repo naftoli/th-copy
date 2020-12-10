@@ -110,7 +110,7 @@ const load180FlagDonutCharts = () => {
         orderBy.forEach(month => {
             months[month].forEach(day => {
                 totalAmountOfDaysInRaffle += 1;
-                backgroundColors.push(day.completed ? darkBlue : day.past ? grey : `${darkBlue}1a`)
+                backgroundColors.push(day.completed ? darkBlue : day.past ? grey : '#e9eaf2')
             })
         })
 
@@ -129,7 +129,7 @@ const load180FlagDonutCharts = () => {
                     borderWidth: 1,
                 }, {
                     data: [100],
-                    backgroundColor: [`${darkBlue}1a`],
+                    backgroundColor: ['#e9eaf2'],
                     borderWidth: 0,
                 }]
             },
