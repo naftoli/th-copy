@@ -113,13 +113,13 @@ You have completed the following mission(s):<br />
         $msg .= "<li>" . $missions_arr[intval($task_num) - 1]['name'] . "</li>";
     }
     $msg .= "
-</ul><br /><br />
+</ul>
 You have entered the grand raffle to win:<br />
 <ul>";
     foreach ($tasks as $task_num) {
         $msg .= "<li>" . $missions_arr[intval($task_num) - 1]['prize'] . "</li>";
     }
-    $msg .= "</ul><br /><br />
+    $msg .= "</ul>
 If you did not yet complete all the missions, you can come back to www.chanukahchallenge.com and continue filling out more missions to win more great prizes.
 <br /><br />
 Tzivos Hashem International wishes you a HAPPY CHANUKAH!";
