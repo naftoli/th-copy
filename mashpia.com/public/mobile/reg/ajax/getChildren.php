@@ -46,8 +46,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
 if ( !empty( $users ) ) {
     $children = [];
     //need to have multiple result rows to get highest rank
-    $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
-        ." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, "
+    $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, "
+        ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
@@ -78,6 +78,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['school_id'] = $row['school_id'];
         $children[$row['user_id']]['shipping'] = $row['shipping_method'];
         $children[$row['user_id']]['chayoleiRegistered'] = false;
+        $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
