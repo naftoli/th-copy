@@ -50,7 +50,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
         echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
-        echo "<div style='float: right'><a href='enterScores.php'><input type='button' value='Edit Test " . $testNumber . " Scores' style='padding: 12px; font-size: large' /></a></div>";
+        echo "<div style='float: right'><a href='enterScores.php?test_num=" . $testNumber . "'><input type='button' value='Edit Test " . $testNumber . " Scores' style='padding: 12px; font-size: large' /></a></div>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
