@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors', 1);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
@@ -79,7 +80,7 @@ if ($user_id) {
     mysql_query('set autocommit=0');
     mysql_query('begin');
     foreach ($qrys as $qry) {
-        if (!mysql_query($qrys)) {
+        if (!mysql_query($qry)) {
             $marked = false;
             break;
         }
