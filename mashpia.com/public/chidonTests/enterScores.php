@@ -14,7 +14,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 
 if (isset($_POST['submit'])) {
     $ct->insertScores($_POST['scores']);
-    header("Location: marks.php");
+    header("Location: marks.php?test_num=" . $testNumber);
     exit;
 }
 
