@@ -65,6 +65,7 @@
                            </div>
                            <div class="px-5">
                                 <small>This will be used to inform you if you win and of any future mission campaigns you may be interested in.</small>
+                               <br /><br />
                            </div>
                            <input id="mission-num-inp" type="hidden" name="task_checked_off">
                            <button type="submit" name="submit" id="mission-form-submit-modal" class="btn form-submit-btn">Join and submit your entry!</button>

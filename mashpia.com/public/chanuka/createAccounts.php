@@ -46,7 +46,7 @@ if ($new_account) {
 
     if ($parent->admin_id) {
         $admin_id = $parent->admin_id;
-        $child = new NewSoldier($parent, $first_name, $last_name, $dob, '', '0', '0', '', '');
+        $child = new NewSoldier($parent, $first_name, $last_name, $dob, '', 640, 6988, '', '');
         $child->setSchoolType( 50 ); // indicates new child that needs to have type set when logging into mobile site
         if (
             $child->create()
@@ -117,12 +117,15 @@ You have entered the grand raffle to win:<br />
     $msg .= "</ul><br /><br />
 If you did not yet complete all the missions, you can come back to www.chanukahchallenge.com and continue filling out more missions to win more great prizes.
 <br /><br />
-Tzivos Hashem International wishes you a HAPPY CHANUKAH!
-<br /><br />
+Tzivos Hashem International wishes you a HAPPY CHANUKAH!";
+
+    if ($new_account) {
+        $msg .= "<br /><br />
 <strong>Did you know?</strong><br />
 Tzivos Hashem has missions for you all year round, for which you can win prizes and be promoted in rank to become a general in Hashem's army. 
 <a href='http://mashpia.com/mobile'>Sign up today!</a> 
 ";
+    }
 
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';

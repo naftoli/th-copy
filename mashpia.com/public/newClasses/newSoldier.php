@@ -104,7 +104,7 @@ class NewSoldier {
 				$sql .= ", user_photo_id = " . $this->photo;
 			}
 		}
-		//echo $sql; exit;
+		echo $sql; exit;
 		//return $sql;
 		if (@mysql_query($sql)) {
 			return mysql_insert_id();
