@@ -10,12 +10,6 @@ $schools = $as->getSchools();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
-
-if (isset($_POST['submit'])) {
-    $ct->insertScores($_POST['scores']);
-}
-
 $info = [];
 $marks = [];
 foreach ($schools as $id => $school) {
@@ -25,6 +19,8 @@ foreach ($schools as $id => $school) {
     $ct->calculateMarks();
     $marks = $ct->getMarks();
 }
+
+$testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,9 +49,8 @@ foreach ($schools as $id => $school) {
         <?php
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
-        echo "<form action='' method='post'>";
         echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
-        echo "<div style='float: right'><a href='enterScores.php'><input type='button' value='Edit Test 1 Scores' style='padding: 12px; font-size: large' /></a></div>";
+        echo "<div style='float: right'><a href='enterScores.php'><input type='button' value='Edit Test " . $testNumber . " Scores' style='padding: 12px; font-size: large' /></a></div>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
@@ -85,7 +80,6 @@ foreach ($schools as $id => $school) {
             }
             echo "</table>";
         }
-        echo "</form>";
         ?>
     </body>
     <script>
