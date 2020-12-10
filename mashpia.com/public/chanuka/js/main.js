@@ -143,15 +143,20 @@ $("#mission-form-modal").on("submit", (e) => {
 
             if (res.error) {
                 console.log(res.error)
-                $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
+                $("#modal-body").html("<p class='text-danger'>There was a problem while sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
             } else {
+                // create cookies needed for login into mashpia.com
+                Cookies.set('admin', res.admin, {
+                    path: '/',
+                    expires: 1
+                });
                 $("#modal-body").html(success_message)
                 console.log("ajax success!!");
             }
            
         }
     }).fail(function () {
-        $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form</p>");
+        $("#modal-body").html("<p class='text-danger'>There was a problem while sending the form</p>");
         console.log('Problem with Ajax');
     });
 });
@@ -207,7 +212,7 @@ $("#mission-form-modal-member").on("submit", (e) => {
 
             if (res.error) {
                 console.log(res.error)
-                $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
+                $("#modal-body").html("<p class='text-danger'>There was a problem while sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
             } else {
                 $("#modal-body").html(success_message)
                 console.log("ajax success!!");
@@ -215,7 +220,7 @@ $("#mission-form-modal-member").on("submit", (e) => {
            
         }
     }).fail(function () {
-        $("#modal-body").html("<p class='text-danger'>There was a problem wail sending the form</p>");
+        $("#modal-body").html("<p class='text-danger'>There was a problem while sending the form</p>");
         console.log('Problem with Ajax');
     });
 });

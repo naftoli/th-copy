@@ -24,6 +24,7 @@ foreach ($fields as $field) {
 $user_id = 0;
 $success = true;
 $marked = true;
+$admin_id = 0;
 
 if ($new_account) {
     require $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newParent.php';
@@ -44,6 +45,7 @@ if ($new_account) {
     }
 
     if ($parent->admin_id) {
+        $admin_id = $parent->admin_id;
         $child = new NewSoldier($parent, $first_name, $last_name, $dob, '', '0', '0', '', '');
         $child->setSchoolType( 50 ); // indicates new child that needs to have type set when logging into mobile site
         if (
@@ -130,8 +132,13 @@ Tzivos Hashem has missions for you all year round, for which you can win prizes 
     $headers[] = 'Reply-To: Tzivos Hashem <cth@tzivoshashem.org>';
     @mail($to, $subject, $msg, implode("\r\n", $headers));
 
+    // encrypt admin ID
+    require $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
+    $admin = encrypt_decrypt('encrypt', $admin_id);
+
     echo json_encode([
-        'success'   => true
+        'success'   => true,
+        'admin'     => $admin
     ]);
 } else {
     if (!$success && $new_account) $error = 'There was an error creating your account.';
