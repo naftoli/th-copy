@@ -50,7 +50,7 @@ if ( !empty( $users ) ) {
         ." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered "
         ." FROM users u "
-        ." LEFT JOIN schools s USING (school_id) "
+        ." JOIN schools s USING (school_id) "
         ." LEFT JOIN classes c ON c.class_id = u.class_id "
         ." WHERE u.user_id IN (" . implode(',', $users) . ") ";
 

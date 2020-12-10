@@ -52,6 +52,11 @@ if ($new_account) {
             $child->create()
         ) {
             $user_id = $child->getUserID();
+            // create private rank for child and update start date in users table
+            $sql1 = "update users set user_start_date = " . unixtojd() . " where user_start_date is null and user_id = " . $user_id;
+            $sql2 = "insert ignore into rank_marks set rank_ord = 1, user_id = " . $user_id . ", date_promoted = " . unixtojd();
+            mysql_query($sql1);
+            mysql_query($sql2);
         } else {
             $success = false;
         }
