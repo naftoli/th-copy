@@ -108,6 +108,7 @@ class NewSoldier {
 		if (@mysql_query($sql)) {
 			return mysql_insert_id();
 		} else {
+		    echo $sql;
 			return 0;
 		}
 	}
@@ -121,6 +122,7 @@ class NewSoldier {
 		if (@mysql_query($sql)) {
 			return true;
 		} else {
+		    echo $sql;
 			return false;
 		}
 	}
