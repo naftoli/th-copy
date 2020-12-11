@@ -259,12 +259,16 @@
                                                     {{#if this.needsReg}}
                                                     {{#if this.allowRemove}}
                                                     {{else}}
+                                                    {{#if this.new_day_school}}
+                                                    <a href="ds_intro.html">
+                                                    {{else}}
                                                     <a href="medals/?id={{@key}}">
+                                                    {{/if}}
                                                         {{/if}}
                                                         {{else}}
-                                                        {{#if this.chayolei}}
-                                                        <a href="medals/?id={{@key}}">
-                                                            {{/if}}
+<!--                                                        {{#if this.chayolei}}-->
+<!--                                                        <a href="medals/?id={{@key}}">-->
+<!--                                                            {{/if}}-->
                                                             {{/if}}
                                                             {{#if this.mobile_pic}}
                                                             <img src="{{mobile_pic}}" class="children-avatar">
@@ -298,12 +302,16 @@
                                                     {{#if this.needsReg}}
                                                     {{#if this.allowRemove}}
                                                     {{else}}
-                                                    <a href="medals/?id={{@key}}">
-                                                        {{/if}}
+                                                    {{#if this.new_day_school}}
+                                                    <a href="ds_intro.html?id={{@key}}">
                                                         {{else}}
-                                                        {{#if this.chayolei}}
                                                         <a href="medals/?id={{@key}}">
                                                             {{/if}}
+                                                        {{/if}}
+                                                        {{else}}
+<!--                                                        {{#if this.chayolei}}-->
+<!--                                                        <a href="medals/?id={{@key}}">-->
+<!--                                                            {{/if}}-->
                                                             {{/if}}
                                                             <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
                                                             <div class="childrens-content-h2">{{school}} - {{city}}</div>

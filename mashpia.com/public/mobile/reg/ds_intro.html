@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tzivos Hashem Signup</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+    <script>
+        !function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
+    <script src="js/all.js" defer></script>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="skin-blue sidebar-mini">
+    <div class="container">
+        <div class="login-header">
+            <span class="span12 i18n" data-key="SubTitle">TZIVOS HASHEM SIGNUP</span>
+        </div>
+        <div class="login-box" style="max-width: 350px; font-size: 18px;">
+            <div class="login-box-body">
+                <div class="row">
+                    <strong>Welcome to Tzivos Hashem!</strong>
+                    <br /><br />
+                    Every Jewish child is a soldier in Hashem’s army, fighting darkness with the light of Torah and mitzvos.
+                    <br /><br />
+                    Create an account to earn medals and go up in rank in recognition of all the mitzvos that you do!
+                    <br /><br />
+                    Join the largest International Jewish Children’s Organization bringing Moshiach now!
+                    <br /><br />
+
+                    Your DOB needs to be accurate because the missions are customized based on your age.
+                    <br /><br />
+                    Please make sure to choose your correct "Mission Type". Missions are customized for different types of Jews, since we are all special!
+                    <br /><br />
+                    <button id="continue" class="btn btn-primary btn-block H8" style="color: #fff;">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const id = urlParams.get('id')
+    const url = "re_register.html?child=" + id + "&e=1"
+    document.getElementById('continue').onclick = () => {
+        location.href = url
+    }
+</script>
+</html>
