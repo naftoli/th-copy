@@ -63,8 +63,6 @@ if ($new_account) {
     } else {
         $success = false;
     }
-    echo "<pre>"; print_r($parent); echo "</pre>";
-    exit;
 } else {
     $sql = "select user_id from users where user_serial = " . $serial_number;
     $result = mysql_query($sql);
@@ -151,6 +149,7 @@ Tzivos Hashem has missions for you all year round, for which you can win prizes 
         'admin'     => $admin
     ]);
 } else {
+    exit;
     if (!$success && $new_account) $error = 'There was an error creating your account.';
     else if (!$success && !$new_account) $error = 'Incorrect Serial Number.';
     else if ($success && !$marked) $error = 'There was an error saving your missions.';
