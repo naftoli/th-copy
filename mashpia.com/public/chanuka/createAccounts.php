@@ -149,7 +149,6 @@ Tzivos Hashem has missions for you all year round, for which you can win prizes 
         'admin'     => $admin
     ]);
 } else {
-    exit;
     if (!$success && $new_account) $error = 'There was an error creating your account.';
     else if (!$success && !$new_account) $error = 'Incorrect Serial Number.';
     else if ($success && !$marked) $error = 'There was an error saving your missions.';
