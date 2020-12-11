@@ -42,6 +42,7 @@ if ($new_account) {
             'password' => '1234',
             'admin_email' => $email_address
         ]);
+        $parent->admin_id = $parent->getAdminID();
     }
 
     if ($parent->admin_id) {

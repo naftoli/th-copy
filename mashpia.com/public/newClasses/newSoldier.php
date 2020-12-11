@@ -68,7 +68,7 @@ class NewSoldier {
                     break;
             }
         } else {
-		    $this->school_type = 50;
+		    if (!isset($this->school_type)) $this->school_type = 50;
         }
 		$address1 = $this->parent->admin_address1;
 		$address2 = $this->parent->admin_address2;
@@ -106,11 +106,9 @@ class NewSoldier {
 				$sql .= ", user_photo_id = " . $this->photo;
 			}
 		}
-		//return $sql;
 		if (@mysql_query($sql)) {
 			return mysql_insert_id();
 		} else {
-		    echo $sql; exit;
 			return 0;
 		}
 	}
