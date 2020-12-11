@@ -62,6 +62,7 @@ if ($new_account) {
         }
     } else {
         $success = false;
+        echo "<pre>"; print_r($parent); echo "</pre>";
     }
 } else {
     $sql = "select user_id from users where user_serial = " . $serial_number;
