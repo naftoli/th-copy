@@ -58,12 +58,13 @@ if ($new_account) {
             mysql_query($sql1);
             mysql_query($sql2);
         } else {
-            exit;
             $success = false;
         }
     } else {
         $success = false;
     }
+    echo "<pre>"; print_r($parent); echo "</pre>";
+    exit;
 } else {
     $sql = "select user_id from users where user_serial = " . $serial_number;
     $result = mysql_query($sql);
