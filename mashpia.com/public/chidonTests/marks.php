@@ -45,7 +45,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Review Marks</h1>
         <h2>Test #<?= $testNumber ?></h2>
-        <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
+        <div class="infobox">The mark has been calculated by the system based on the number of questions answered correctly.</div>
         <?php
         $types = $ct->getTypes();
         $types['trophy'] = 'Trophy';
