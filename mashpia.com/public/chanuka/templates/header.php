@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chanukah Challenge</title>
 
-    <link rel="shortcut icon" href="./images/Asset 1.png" type="image/x-icon">
-
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo&display=swap" rel="stylesheet">
+    <!-- <link href="./css/Exo-Regular.ttf" rel="stylesheet"> -->
     <link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./css/main.css">
 </head>
