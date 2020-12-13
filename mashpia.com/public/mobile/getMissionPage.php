@@ -36,7 +36,6 @@ $campaignLogos = array(
     134 =>  "day-school-honoring parents 250px.png",
     135 =>  ""
 );
-
 /********************** STICKERS **********************/
 $stickerOutlines = array(
 	1	=>	'Shabbos Mevorchim Tehillim.gif', 

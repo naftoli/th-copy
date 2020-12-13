@@ -10,10 +10,10 @@ if ( $admin_user['auth'] != 'super' ) {
     exit;
 }
 
-$raffle_id = 190;
+$raffles = [212, 213, 214, 215];
 
 //load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load("GrandRaffle3Prizes.xlsx");
+$objPHPExcel = PHPExcel_IOFactory::load("GrandRafflePrizes5781.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
 $stmt = $MASHPIA_DB->prepare("
@@ -40,16 +40,18 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     // echo "School: " . $school_id . "<br />";
     // echo "<pre>"; print_r( $prizes ); echo "</pre>";
     // echo "<br /><br />";
-    foreach ( $prizes as $prize ) {
-        if ( $prize > 0 ) {
-            $res = $stmt->execute([
-                ':raffle'   =>  $raffle_id, 
-                ':prize'    =>  $prize, 
-                ':school'   =>  $school_id
-            ]);
-            if ( !$res ) {
-                $succes = false;
-                break 2;
+    foreach ( $raffles as $raffle_id ) {
+        foreach ($prizes as $prize) {
+            if ($prize > 0) {
+                $res = $stmt->execute([
+                    ':raffle' => $raffle_id,
+                    ':prize' => $prize,
+                    ':school' => $school_id
+                ]);
+                if (!$res) {
+                    $succes = false;
+                    break 3;
+                }
             }
         }
     }
