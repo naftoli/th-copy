@@ -21,8 +21,22 @@ $campaignLogos = array(
 	42	=>	'Footsteps.gif',
 	45	=>	'Cheshbon-Hanefesh.gif',
 	90	=>	'Chitas.gif',
-	100	=>	'Brias-Haguf.gif'
+	100	=>	'Brias-Haguf.gif',
+    121 =>  "day-school-Jewish Day 250 px.png",
+    122 =>  "day-school-Jewish Uniform 250px.png",
+    124 =>  "day-school-Health 250px.png",
+    125 =>  "day-school-Torah 250px.png",
+    126 =>  "day-school-Shabbat 250px.png",
+    127 =>  "day-school-Special Days 250px.png",
+    129 =>  "day-school-Kosher 250px.png",
+    130 =>  "day-school-Tefilla.png",
+    131 =>  "day-school-ahavat-yisrael.png",
+    132 =>  "day-school-brachot.png",
+    133 =>  "",
+    134 =>  "day-school-honoring parents 250px.png",
+    135 =>  ""
 );
+
 /********************** STICKERS **********************/
 $stickerOutlines = array(
 	1	=>	'Shabbos Mevorchim Tehillim.gif', 
