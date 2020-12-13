@@ -328,50 +328,50 @@ class Reports
                 'table'     =>  'th_chidon_sponsors',
                 'column'    =>  'num_trips as donations',
             ),
-            'test1a'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test1a'
-            ),
-            'test1b'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test1b'
-            ),
-            'test2a'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test2a'
-            ),                
-            'test2b'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test2b'
-            ),
-            'test3a'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test3a'
-            ),
-            'test3b'        =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'test3b'
-            ),
-            'avg1'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  array('test1a', 'test2a', 'test3a')
-            ),
-            'avg2'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  array('test1b', 'test2b', 'test3b')
-            ),
-            'mm_test1'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'mm_test1'
-            ),
-            'mm_test2'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'mm_test2'
-            ),
-            'mm_test3'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'mm_test3'
-            ),
+//            'test1a'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test1a'
+//            ),
+//            'test1b'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test1b'
+//            ),
+//            'test2a'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test2a'
+//            ),
+//            'test2b'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test2b'
+//            ),
+//            'test3a'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test3a'
+//            ),
+//            'test3b'        =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'test3b'
+//            ),
+//            'avg1'      =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  array('test1a', 'test2a', 'test3a')
+//            ),
+//            'avg2'      =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  array('test1b', 'test2b', 'test3b')
+//            ),
+//            'mm_test1'      =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'mm_test1'
+//            ),
+//            'mm_test2'      =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'mm_test2'
+//            ),
+//            'mm_test3'      =>  array(
+//                'table'     =>  'th_chidon',
+//                'column'    =>  'mm_test3'
+//            ),
             'paid'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'paid'
