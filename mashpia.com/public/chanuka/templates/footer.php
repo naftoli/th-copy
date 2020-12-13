@@ -39,7 +39,7 @@
                    
 
                     <div id="stage-1">
-                    <button id="has-account-btn" class="account-btn btn w-100" >I already have an account</button><br><br>
+                    <button id="has-account-btn" class="account-btn btn w-100" >I already have a Tzivos Hashem account</button><br><br>
                         <div>
                             <h4>Please fill out your details:</h4>
                         </div>

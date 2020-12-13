@@ -8,10 +8,15 @@ let postToUrl = "createAccounts.php";
 let isMember = false;
 
 // message to send user when successfull form
-let success_message = `<h4>Mazal Tov!</h4><p>Your chanukah missions have been submitted please check back after Ches Teves the 23 of december to see who the lucky winners are.<br>
-                        <a href="http://mashpia.com/mobile">Continue Here
-                        To have your own family account and be able to complete daily missions earn medals and be promoted in Rank.
-                        </a></p>`;
+let success_message = `<h4>Mazal Tov!</h4><p>Your chanukah missions have been submitted.<br>
+                            Please check back after Ches Teves (December 23, 2020) to see who the lucky winners are.<br></p>
+                            <h6>Did you know?</h6>
+                            <p>You can create your own Tzivos Hashem family account to complete daily mitzvah missions, earn medals, and be promoted in rank as a soldier in Hashem’s army! <br>
+                            <a href="http://mashpia.com/mobile">Sign me up!</a></p>`;
+
+let success_message_member = `<h4>Mazal Tov!</h4><p>Your chanukah missions have been submitted.<br>
+                            Please check back after Ches Teves (December 23, 2020) to see who the lucky winners are.<br></p>`;
+
 
 // set up local storage
 localStorage.setItem("missionNums", JSON.stringify([]));
@@ -214,7 +219,7 @@ $("#mission-form-modal-member").on("submit", (e) => {
                 console.log(res.error)
                 $("#modal-body").html("<p class='text-danger'>There was a problem while sending the form<br><br><span><b>Error: </b>"+ res.error +"</span></p>")
             } else {
-                $("#modal-body").html(success_message)
+                $("#modal-body").html(success_message_member)
                 console.log("ajax success!!");
             }
            
