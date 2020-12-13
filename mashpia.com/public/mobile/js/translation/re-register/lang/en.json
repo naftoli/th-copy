@@ -38,5 +38,9 @@
     "LastName":"last name",
     "FirstNameHe":"first name hebrew letters",
     "LastNameHe":"last name hebrew letters",
-    "EdateBirth":"English Date of Birth"
+    "EdateBirth":"English Date of Birth",
+    "School": "School",
+    "Class": "Class",
+    "MissionLang": "Mission Language",
+    "MissionType": "Mission Type (determines what tasks you get to do)"
 }
