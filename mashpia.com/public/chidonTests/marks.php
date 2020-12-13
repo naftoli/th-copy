@@ -58,7 +58,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
             foreach ($types as $type => $value) {
                 echo "<th>" . ucwords($value) . " Mark</th>";
             }
-            echo "<th>Avg To Date</th>";
+//            echo "<th>Avg To Date</th>";
             echo "</tr>";
             foreach ($children as $child) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
@@ -78,12 +78,12 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                     echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
                 // figure out avg
-                $total = 0;
-                for ($i = 1; $i <= $testNumber; $i++) {
-                    $total += $marks[$id][$i];
-                }
-                $avg = number_format($total / $testNumber, 2);
-                echo "<td>" . $avg . "</td>";
+//                $total = 0;
+//                for ($i = 1; $i <= $testNumber; $i++) {
+//                    $total += $marks[$id][$i]['maven'];
+//                }
+//                $avg = number_format($total / $testNumber, 2);
+//                echo "<td>" . $avg . "</td>";
                 echo "</tr>";
             }
             echo "</table>";
