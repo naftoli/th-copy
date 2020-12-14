@@ -53,14 +53,14 @@ abstract class MissionDisplay {
 		$this->days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 		
 		$this->campaignLogos = array(
-			1	=>	'Tehillim.gif',		4	=>	'Tefilla.gif',
-			12	=>	'Mivtzoim.gif',		13	=>	'Niggunim.gif',
-			16	=>	'hiskashrus.gif',	21	=>	'sefer-hamitzvos.gif',
-			27	=>	'tanya.gif',		40	=>	'Yom-Dipagra.gif',
-			41	=>	'Father-Son.gif',	42	=>	'Footsteps.gif',
-			45	=>	'Cheshbon-Hanefesh.gif',	90	=>	'Chitas.gif',
-			92	=>	'Niggunim.gif',		93	=>	'Mivtzoim.gif',
-			94	=>	'Yom-Dipagra.gif',	100	=>	'Brias-Haguf.gif,
+			1	=>	'Tehillim.png',		4	=>	'Tefilla.png',
+			12	=>	'Mivtzoim.png',		13	=>	'Niggunim.png',
+			16	=>	'hiskashrus.png',	21	=>	'sefer-hamitzvos.png',
+			27	=>	'tanya.png',		40	=>	'Yom-Dipagra.png',
+			41	=>	'Father-Son.png',	42	=>	'Footsteps.png',
+			45	=>	'Cheshbon-Hanefesh.png',	90	=>	'Chitas.png',
+			92	=>	'Niggunim.png',		93	=>	'Mivtzoim.png',
+			94	=>	'Yom-Dipagra.png',	100	=>	'Brias-Haguf.png,
 			121 =>  "day-school-Jewish Day 250 px.png", 
 			122 =>  "day-school-Jewish Uniform 250px.png",
 			124 =>  "day-school-Health 250px.png",
