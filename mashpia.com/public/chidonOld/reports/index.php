@@ -36,6 +36,10 @@ $info = array(
 		'walking'			=>	'Walk Alone',
 		'walking_group'	=>	'Walking Group',
 		'bunk_number'	=>	'Bunk',
+		'test1'         =>  'Test 1 Mark',
+		'test2'         =>  'Test 2 Mark',
+		'test3'         =>  'Test 3 Mark',
+		'test4'         =>  'Test 4 Mark',
 		//'bus'			=>	'Bus Number',
 		//'seat'			=>	'Seat Number',
 		//'medal'			=>	'Medal Info',
@@ -222,8 +226,8 @@ if (isset($_POST['submit'])) {
 		'parent_name'	=>	array('first', 'last'),
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
-		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
-		'avg2'			=>	array('test1b', 'test2b', 'test3b')
+//		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
+//		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
 }
 ?>
@@ -422,21 +426,22 @@ if (isset($_POST['submit'])) {
 					<input type="radio" name="limitTo" value='notDeleted' /> Not Deleted by BC<br />
 <!--					<input type="radio" name="limitTo" value='confirmed' /> Shabbaton Confirmed-->
 				</fieldset>
-				<fieldset style="margin-top: -20px;">
-					<legend>Mark Avg</legend>
-					<input type="radio" name="avgTests" value="2" /> First 2 tests<br />
-					<input type="radio" name="avgTests" value="3" /> All 3 tests<br />
-					<table>
-						<tr>
-							<td>Low Mark:</td>
-							<td><input type="text" name="avgLow" size="3" /></td>
-						</tr>
-						<tr>
-							<td>High Mark:</td>
-							<td><input type="test" name="avgHigh" size = 3 /></td>
-						</tr>
-					</table>					 
-				</fieldset>
+<!--				<fieldset>-->
+<!--					<legend>Mark Avg</legend>-->
+<!--					<input type="radio" name="avgTests" value="2" /> First 2 tests<br />-->
+<!--					<input type="radio" name="avgTests" value="3" /> First 3 tests<br />-->
+<!--                    <input type="radio" name="avgTests" value="4" /> All 4 tests<br />-->
+<!--					<table>-->
+<!--						<tr>-->
+<!--							<td>Low Mark:</td>-->
+<!--							<td><input type="text" name="avgLow" size="3" /></td>-->
+<!--						</tr>-->
+<!--						<tr>-->
+<!--							<td>High Mark:</td>-->
+<!--							<td><input type="test" name="avgHigh" size = 3 /></td>-->
+<!--						</tr>-->
+<!--					</table>					 -->
+<!--				</fieldset>-->
 				<fieldset>
 					<legend>Limit Chaperone To (Only works when choosing Chaperone Info ONLY)</legend>
 					<input type="radio" name="chidon_type" value='boys'> Boys Chidon<br />
