@@ -32,7 +32,7 @@ $campaignLogos = array(
     130 =>  "day-school_Tefilla.svg",
     131 =>  "day-school-ahavat-yisrael.svg",
     132 =>  "day-school-brachot.svg",
-    133 =>  "",
+    133 =>  "day-school-Tzedaka.svg",
     134 =>  "day-school-honoring parents 250px.svg",
     135 =>  "day-school-Middot-icon.svg"
 );
