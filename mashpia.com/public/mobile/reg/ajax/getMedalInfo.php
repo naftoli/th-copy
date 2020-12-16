@@ -52,9 +52,9 @@ function getSubjectImage( $subject_id ) {
         134 =>  "day-school-honoring parents 250px.svg",
         135 =>  "day-school-Middot-icon.svg"
     );
-    if ( isset( $campaignLogos[$subject_id ] ) )
-        return '/mission_report/campaignLogos/' + $campaignLogos[$subject_id ];
-    return '/mobile/img_new/campaign-logos-bw/cheshbon-hanefesh-black-svg.svg'; // looks like a checkmark
+    //if ( isset( $campaignLogos[$subject_id ] ) )
+        return $campaignLogos[$subject_id ];
+    //return 'cheshbon-hanefesh-black-svg.svg'; // looks like a checkmark
 }
 
 if ( isset( $_GET['v'] ) && $_GET['v'] == 2) { 
