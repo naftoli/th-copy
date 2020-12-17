@@ -36,6 +36,34 @@ foreach ($schools as $school_id => $school) {
     }
 }
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
+// initialize all tests to not be disabled
+$disable = [];
+for ($i = 1; $i <= 4; $i++) {
+    $disable[$i] = false;
+}
+
+// disable marking after certain dates for bc's
+if ($admin_user['auth'] != 'super') {
+    $today = new DateTime();
+    $shutdown1 = new DateTime('2020-12-15 05:00:00');
+    $shutdown2 = new DateTime('2020-12-26 05:00:00');
+    $shutdown3 = new DateTime('2021-01-30 05:00:00');
+    $shutdown4 = new DateTime('2021-02-20 05:00:00');
+
+    if ($today >= $shutdown1) {
+        $disable[1] = true;
+    }
+    if ($today >= $shutdown2) {
+        $disable[2] = true;
+    }
+    if ($today >= $shutdown3) {
+        $disable[3] = true;
+    }
+    if ($today >= $shutdown4) {
+        $disable[4] = true;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,7 +110,9 @@ foreach ($schools as $school_id => $school) {
                     $avg += floatval($mark);
                     $divideBy++;
                 }
-                echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' /></td>";
+                echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' ";
+                if ($disable[$i]) echo "readonly ";
+                echo "/></td>";
             }
             if ($divideBy) $avg = round($avg / $divideBy, 2);
             $class = '';
