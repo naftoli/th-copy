@@ -63,7 +63,7 @@
 
 .cropper-modal {
   opacity: .5;
-  background-color: #000;
+  background-color: #1b2b51;
 
   filter: alpha(opacity=50);
 }

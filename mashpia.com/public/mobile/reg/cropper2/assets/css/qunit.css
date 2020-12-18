@@ -151,7 +151,7 @@
 }
 #qunit-tests li a:hover,
 #qunit-tests li a:focus {
-	color: #000;
+	color: #1b2b51;
 }
 
 #qunit-tests li .runtime {
@@ -211,7 +211,7 @@
 
 /*** Test Counts */
 
-#qunit-tests b.counts                       { color: #000; }
+#qunit-tests b.counts                       { color: #1b2b51; }
 #qunit-tests b.passed                       { color: #5E740B; }
 #qunit-tests b.failed                       { color: #710909; }
 
@@ -251,9 +251,9 @@
 	border-radius: 0 0 5px 5px;
 }
 
-#qunit-tests .fail                          { color: #000; background-color: #EE5757; }
+#qunit-tests .fail                          { color: #1b2b51; background-color: #EE5757; }
 #qunit-tests .fail .test-name,
-#qunit-tests .fail .module-name             { color: #000; }
+#qunit-tests .fail .module-name             { color: #1b2b51; }
 
 #qunit-tests .fail .test-actual             { color: #EE5757; }
 #qunit-tests .fail .test-expected           { color: #008000; }

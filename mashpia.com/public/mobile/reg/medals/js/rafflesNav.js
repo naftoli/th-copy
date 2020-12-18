@@ -1,6 +1,6 @@
-const red = '#ed224b';
-const yellow = '#ffd624';
-const darkBlue = '#232c7b';
+const red = '#e92d41';
+const yellow = '#ffd942';
+const darkBlue = '#1b2b51';
 const grey = '#b3b3b0';
 
 const createElementWithClass = (elm, className) => {

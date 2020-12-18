@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,11 @@
     <!--<noscript>
 
     <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>-->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
+        as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+            rel="stylesheet"></noscript>
     <script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
     <script src="js/all.js" defer></script>
     <script defer src="https://mashpia.com/mobile/js/spin.js"></script>
@@ -33,12 +37,12 @@
             padding-top: 4%;
         }
 
-            #gold img {
-                width: 26%;
-                height: 26%;
-                margin-left: 10%;
-                margin-right: 10%;
-            }
+        #gold img {
+            width: 26%;
+            height: 26%;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
 
         #backs img {
             opacity: 0.3;
@@ -61,7 +65,7 @@
         }
 
         .panel-heading {
-            background-color: #f68829 !important;
+            background-color: #1b2b51 !important;
             border: none;
             font-size: 20px;
         }
@@ -70,9 +74,12 @@
             color: white;
         }
 
-            .panel a:hover, a:active, a:visited, a:link {
-                text-decoration: none;
-            }
+        .panel a:hover,
+        a:active,
+        a:visited,
+        a:link {
+            text-decoration: none;
+        }
 
         .medalInfo {
             float: right;
@@ -88,7 +95,7 @@
             position: absolute;
             display: block;
             width: 95%;
-            color: black;
+            color: #1b2b51;
             text-align: center;
             font-family: 'digi';
             font-size: 14px;
@@ -103,7 +110,7 @@
         .progressMedalText {
             position: absolute;
             width: 60%;
-            color: black;
+            color: #1b2b51;
             text-align: center;
             font-family: 'digi';
             font-size: 14px;
@@ -149,6 +156,10 @@
                 padding: 10px 0px;
             }
         }
+
+        #medals {
+            background: #1b2b51;
+        }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -157,6 +168,7 @@
 
 
 </head>
+
 <body class="rank-page">
     <div class="header-yellow" style="position: relative">
         <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
@@ -177,7 +189,7 @@
                         <div class="span3" style="width: 33%;">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/leaderboard-color-white.svg">
                                 </div>
                                 <div class="span12">
                                     <span>Leaderboard</span>
@@ -189,7 +201,7 @@
                         <div class="span3" style="width:34%">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/trophy-color-white.svg">
                                 </div>
                                 <div class="span12">
                                     <span>Rank Board</span>
@@ -201,7 +213,7 @@
                         <div class="span3 active" style="width:33%">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/medals-color-white.svg">
                                 </div>
                                 <div class="span12">
                                     <span>Medal Board</span>
@@ -221,7 +233,7 @@
                     <a href="/mobile/reg/parent_detail.html" id="mainLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/boy-color-green-svg.svg">
+                                <img src="/mobile/img_new/boy-color-white.svg">
                             </div>
                             <div class="span12">
                                 <span>Accounts</span>
@@ -233,7 +245,7 @@
                     <a href="#" id="missionsLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                                <img src="/mobile/img_new/square-check-color-white.svg">
                             </div>
                             <div class="span12">
                                 <span>Missions</span>
@@ -245,7 +257,7 @@
                     <a href="#" id="rankLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                                <img src="/mobile/img_new/achievements-color-white.svg">
                             </div>
                             <div class="span12">
                                 <span>Achievements</span>
@@ -257,9 +269,9 @@
                     <a href="#" id="storeLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/cart-color-red-svg.svg">
+                                <img src="/mobile/img_new/cart-color-white.svg">
                             </div>
-                            <div class="span12">
+                            <div class=" span12">
                                 <span>Rewards</span>
                             </div>
                         </div>

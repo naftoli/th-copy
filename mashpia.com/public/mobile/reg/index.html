@@ -52,10 +52,10 @@
 			};
 			"undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
 		}("undefined" != typeof global ? global : this),
-		function (e) {
-			if (e.loadCSS) {
-				var t = loadCSS.relpreload = {};
-				if (t.support = function () {
+			function (e) {
+				if (e.loadCSS) {
+					var t = loadCSS.relpreload = {};
+					if (t.support = function () {
 						try {
 							return e.document.createElement("link").relList.supports("preload")
 						} catch (e) {
@@ -68,16 +68,16 @@
 								"media")), r.rel = null)
 						}
 					}, !t.support()) {
-					t.poly();
-					var n = e.setInterval(t.poly, 300);
-					e.addEventListener && e.addEventListener("load", function () {
-						t.poly(), e.clearInterval(n)
-					}), e.attachEvent && e.attachEvent("onload", function () {
-						e.clearInterval(n)
-					})
+						t.poly();
+						var n = e.setInterval(t.poly, 300);
+						e.addEventListener && e.addEventListener("load", function () {
+							t.poly(), e.clearInterval(n)
+						}), e.attachEvent && e.attachEvent("onload", function () {
+							e.clearInterval(n)
+						})
+					}
 				}
-			}
-		}(this);
+			}(this);
 	</script>
 	<!--<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script><script src="js/ajaxupload.js" type="text/javascript"></script>-->
 	<script src="js/all.js" defer></script>
@@ -204,7 +204,7 @@
 							</div>
 						</div>
 						<div id="remembermediv" class="row">
-							<div  class="col-xs-12">
+							<div class="col-xs-12">
 								<div class="form-group no-border remember">
 									<label id="remember">
 										<input type="checkbox">
@@ -229,17 +229,20 @@
 						</div>
 						<div class="row">
 							<div class="col-xs-12">
-								<button type="submit" class="btn btn-primary btn-block H8 i18n" data-key="login"><b>LOG IN</b></button>
+								<button type="submit" class="btn btn-primary btn-block H8 i18n" data-key="login"><b>LOG
+										IN</b></button>
 							</div><!-- /.col -->
 						</div>
 					</form>
 					<br>
 					<div class="row">
 						<div class="col-xs-7 forgot" id="forgotdiv">
-							<div class="error-change"><a href="forgot.html" class="i18n" data-key="forgot">Forgot user/password</a></div>
+							<div class="error-change"><a href="forgot.html" class="i18n" data-key="forgot">Forgot
+									user/password</a></div>
 						</div>
-						<div class="col-xs-5 text-right create-account" id="creatediv" >
-							<a href="parent_register.html" id="createAccount"><b class="i18n" data-key="create">Create account</b></a>
+						<div class="col-xs-5 text-right create-account" id="creatediv">
+							<a href="parent_register.html" id="createAccount"><b class="i18n" data-key="create">Create
+									account</b></a>
 						</div>
 					</div>
 					<!--
@@ -261,7 +264,7 @@
 						<a href="/mobile/news/?v=3">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/news-color-green-svg.svg" alt="news" />
+									<img src="/mobile/img_new/news-color-white.svg" alt="news" />
 								</div>
 								<div class="span12">
 									<span class="i18n" data-key="news">News</span>
@@ -346,7 +349,7 @@
 				});
 			});
 
-			$(".translate").click( function() {
+			$(".translate").click(function () {
 				const change = !$(this).hasClass('btn-primary')
 				if (change) {
 					lang = $(this).attr('id')

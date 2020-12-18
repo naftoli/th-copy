@@ -894,7 +894,7 @@ $he_chars = array(
 			?>
                 <div class="menu-item">
                     <div class="span12">
-                        <img src="img_new/boy-color-green-svg.svg">
+                        <img src="img_new/boy-color-white.svg">
                     </div>
                     <div class="span12">
                        <span class="i18n" data-key="Accounts">Accounts</span>
@@ -906,7 +906,7 @@ $he_chars = array(
 			<a href="#" id="missionsLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="img_new/square-check-color-purple-svg.svg">
+					<img src="img_new/square-check-color-white.svg">
 				</div>
 				<div class="span12">
 					<span class="i18n" data-key="Missions">Missions</span>
@@ -918,7 +918,7 @@ $he_chars = array(
 			<a href="#" id="rankLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="img_new/achievements-color-orange-svg.svg">
+					<img src="img_new/achievements-color-white.svg">
 				</div>
 				<div class="span12">
 					<span class="i18n" data-key="Achievements">Achievements</span>
@@ -930,7 +930,7 @@ $he_chars = array(
 			<a href="#" id="storeLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="img_new/cart-color-red-svg.svg">
+					<img src="img_new/cart-color-white.svg">
 				</div>
 				<div class="span12">
 					  <span class="i18n" data-key="Rewards">Rewards</span>
@@ -945,7 +945,7 @@ $he_chars = array(
 
 <style>
 	.slick-prev, .slick-next {
-		color: #000;
+		color: #1b2b51;
 		font-size: 18px;
 		font-weight: 600;
 		position: absolute;

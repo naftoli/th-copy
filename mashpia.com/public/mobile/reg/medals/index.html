@@ -16,7 +16,7 @@
 		<script src="./js/rafflesNav.js"></script>
 		<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     	<style>
-            .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); background-size: cover; }
+            .header { background-image: url("/mobile/img_new/Navy_Monoline_Background.png"); background-size: cover; }
             .header-edit span, .header-setting span { color: #fff; }
             .clearfix { clear: both; }
             /* carosel */
@@ -28,21 +28,25 @@
             #userImg { border-radius: 50%; border: 2px solid #31559f; margin-left: 5%; }
             .personalImg { border-radius: 50%;  display: block; text-align: center; }
             .top-center {margin: auto;}
-            .body .caption {background-image: url("/mobile/img_new/banner-3-color-green-svg.svg"); margin-bottom: 10px;}
+            .body .caption {background-image: url(""); margin-bottom: 10px;}
             .body .medal-label {
-                background-image: url("/mobile/img_new/banner-4-color-green-svg.svg");
+                background-image: url("");
                 text-align: center;
-                background-size: 100% 100%;
+				background-size: 100% 100%;			
             }
             .body .medal-label span {
 				display: inline-block;
-				color: #004E22;
+				color: #1b2b51;
 				text-transform: uppercase;
-				font-size: 14px;
+				font-size: 26px;
+				font-weight: bold;
+				font-family: Exo;
             }
-            .body .caption span {color: #004E22;}
-            .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
-			
+            .body .caption span {color: #fff; font-family: Exo;}
+            .slider img.active {background: url("/mobile/img_new/circle-color-navy-solid.svg"); content: url("/mobile/img_new/circle-color-navy-solid.svg");}
+			#medalsCarousel, #medalsCarousel > .slider {
+				background: #4258a2;
+			}
 			#raffleInfo {
 				font-size: 20px;
                 font-style: italic; text-align: center; padding-top: 8px;
@@ -52,7 +56,7 @@
                 margin-bottom: 5px; height: 35px; position: relative;
             }
             #raffleInfo .progress-bar {
-                background-color: #f39c12;
+                background-color: #ffd942;
                 height: 100%;
                 background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
                 animation-name: progress-bar-slide;
@@ -60,9 +64,9 @@
             }
             #raffleInfo .progress > span {
                 padding-top: 3px; display: inline-block; font-style: normal;
-                position: absolute; top: 0; right: 0; left: 0; color: #000; font-weight: bold;
+                position: absolute; top: 0; right: 0; left: 0; color: white; font-weight: bold;
             }
-            #raffleInfo .compleate .progress-bar { background-color: #004E22; }
+            #raffleInfo .compleate .progress-bar { background-color: #1b2b51; }
             #raffleInfo .compleate span { color: #fff; }
             #raffleInfo .missed-deadline .progress-bar { background-color: #ef5350; }
 			#raffleInfoContainer {
@@ -141,23 +145,24 @@
 			}
 
 			.body .medal-label span {
-				font-size: 12px;
+				font-size: 22px;
+				font-family: Exo;
 			}
 			
 			@media (min-width: 815px) {
 				.body .medal-label span {
-					font-size: 30px;
+					font-size: 44px;
 				}
 			}
 
 			#raffleInfoContainer .item .raffleFlagContainer img {
 				/* height: 35px; */
-				width: 25%;
+				width: 30%;
 			}
 
 			@media (min-width: 815px) {
 				#raffleInfoContainer .item .raffleFlagContainer img {
-					width: 32%;
+					width: 35%;
 				}
 
 				.raffleDetails p {
@@ -302,6 +307,11 @@
 				}
 			}
 
+			#medalsContainer {
+				background: #1b2b51;
+				padding: 10px 5px;
+			}
+
 		</style>
 
 		<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -369,49 +379,51 @@
                 </div>
 			</div>
 
-            <div class="span12 body" style="margin-bottom: 120px;">
-                <div class="span12" style="margin-top:10px;">
-                    <div class="caption">
-                        <span class="points"></span>
-                    </div>
-                </div>
-                <a id="carouselLink" href="rank.html">
-	                <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
-	                    <div class="sky-carousel-wrapper">
-	                        <ul class="sky-carousel-container">
-	                            <li><img id="item0"  src="images/trophits/1.png"  alt=""></li>
-								<li><img id="item1"  src="images/trophits/2.png"  alt=""></li>
-								<li><img id="item2"  src="images/trophits/3.png"  alt=""></li>
-								<li><img id="item3"  src="images/trophits/4.png"  alt=""></li>
-								<li><img id="item4"  src="images/trophits/5.png"  alt=""></li>
-								<li><img id="item5"  src="images/trophits/6.png"  alt=""></li>
-								<li><img id="item6"  src="images/trophits/7.png"  alt=""></li>
-								<li><img id="item7"  src="images/trophits/8.png"  alt=""></li>
-								<li><img id="item8"  src="images/trophits/9.png"  alt=""></li>
-								<li><img id="item9"  src="images/trophits/10.png" alt=""></li>
-								<li><img id="item10" src="images/trophits/11.png" alt=""></li>
-								<li><img id="item11" src="images/trophits/12.png" alt=""></li>
-								<li><img id="item12" src="images/trophits/13.png" alt=""></li>
-								<li><img id="item13" src="images/trophits/14.png" alt=""></li>
-	                        </ul>
-	                    </div>
-	                </div>
-                </a>
-                <div class="span12 slider" style="margin-top:10px;text-align: center;">
-					<img id="item0" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item1" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item2" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item3" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item4" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item5" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item6" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item7" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item8" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item9" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item10" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item11" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
+			<div class="span12 body" style="margin-bottom: 90px;">
+				<div id="medalsCarousel">
+					<div class="span12" style="margin-top:10px;">
+						<div class="caption">
+							<span class="points"></span>
+						</div>
+					</div>
+					<a id="carouselLink" href="rank.html">
+						<div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+							<div class="sky-carousel-wrapper">
+								<ul class="sky-carousel-container">
+									<li><img id="item0"  src="images/trophits/1.png"  alt=""></li>
+									<li><img id="item1"  src="images/trophits/2.png"  alt=""></li>
+									<li><img id="item2"  src="images/trophits/3.png"  alt=""></li>
+									<li><img id="item3"  src="images/trophits/4.png"  alt=""></li>
+									<li><img id="item4"  src="images/trophits/5.png"  alt=""></li>
+									<li><img id="item5"  src="images/trophits/6.png"  alt=""></li>
+									<li><img id="item6"  src="images/trophits/7.png"  alt=""></li>
+									<li><img id="item7"  src="images/trophits/8.png"  alt=""></li>
+									<li><img id="item8"  src="images/trophits/9.png"  alt=""></li>
+									<li><img id="item9"  src="images/trophits/10.png" alt=""></li>
+									<li><img id="item10" src="images/trophits/11.png" alt=""></li>
+									<li><img id="item11" src="images/trophits/12.png" alt=""></li>
+									<li><img id="item12" src="images/trophits/13.png" alt=""></li>
+									<li><img id="item13" src="images/trophits/14.png" alt=""></li>
+								</ul>
+							</div>
+						</div>
+					</a>
+					<div class="span12 slider" style="padding-top:15px;text-align: center;padding-bottom:15px">
+						<img id="item0" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item1" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item2" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item3" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item4" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item5" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item6" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item7" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item8" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item9" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item10" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item11" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item12" src="/mobile/img_new/circle-color-white-solid.svg">
+						<img id="item13" src="/mobile/img_new/circle-color-white-solid.svg">
+					</div>
 				</div>
 				
 				<!-- <div id="speech">
@@ -439,13 +451,13 @@
 					</div>
 				</div>
 				
-                <div class="span12" style="margin-top:15px;">
+                <div id="medalsContainer" class="span12" style="margin-top:15px;">
                     <div class="medal-label">
-                        <span>MEDALS</span>
+                        <span style="color: white;">MEDALS</span>
                     </div>
+					<div id="medals" class="clearfix"></div>
 				</div>
 				
-				<div id="medals" class="clearfix"></div>
 			</div>
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
@@ -454,7 +466,7 @@
 						<a href="../parent_detail.html" id="mainLink">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/boy-color-green-svg.svg">
+									<img src="/mobile/img_new/boy-color-white.svg">
 								</div>
 								<div class="span12">
 									<span id="main-title">Accounts</span>
@@ -466,7 +478,7 @@
 						<a href="#" id="missionsLink">
 						<div class="menu-item">
 							<div class="span12">
-								<img src="/mobile/img_new/square-check-color-purple-svg.svg">
+								<img src="/mobile/img_new/square-check-color-white.svg">
 							</div>
 							<div class="span12">
 								<span>Missions</span>
@@ -478,7 +490,7 @@
 						<a href="#" id="rankLink">
 						<div class="menu-item">
 							<div class="span12">
-								<img src="/mobile/img_new/achievements-color-orange-svg.svg">
+								<img src="/mobile/img_new/achievements-color-white.svg">
 							</div>
 							<div class="span12">
 								<span>Achievements</span>
@@ -490,7 +502,7 @@
 						<a href="#" id="storeLink">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/cart-color-red-svg.svg">
+									<img src="/mobile/img_new/cart-color-white.svg">
 								</div>
 								<div class="span12">
 									<span>Rewards</span>
@@ -542,7 +554,7 @@
             // update the UI for children over parents
             if( localStorage.getItem( "login" ) == "user" ){
                 $("#mainLink").attr('href', "/mobile/news");
-                $("#mainLink img").attr('src', "/mobile/img_new/news-color-green-svg.svg");
+                $("#mainLink img").attr('src', "/mobile/img_new/news-color-white.svg");
                 $("#mainLink .menu-item #main-title").text("News");
                 $(".header-edit").hide(); // no editing
             }

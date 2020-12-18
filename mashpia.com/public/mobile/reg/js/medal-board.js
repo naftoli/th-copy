@@ -1,11 +1,11 @@
 
-﻿/**
- * medal-board.js
- * 
- * creates global function medal_board( target ) that renders the medal board on a page
- * 
- * Requires jQuery, Medal.js (found in same folder)
- */
+/**
+* medal-board.js
+* 
+* creates global function medal_board( target ) that renders the medal board on a page
+* 
+* Requires jQuery, Medal.js (found in same folder)
+*/
 
 /**
  * @method medal_board renders the medal board
@@ -13,18 +13,18 @@
  * @param target target on the page to render the medal board into
  * @param user_id user_id to use in the request
  */
-function medal_board( target, user_id, url ) {
-    target = $( target ); // cast to jquery
+function medal_board(target, user_id, url) {
+    target = $(target); // cast to jquery
     // set a default url
-    if ( url === undefined ) {
+    if (url === undefined) {
         url = "/mobile/reg/medals3.html";
     };
 
-    $.post( "/mobile/reg/medals/ajax/getMedalInfo.php", { user_id: user_id }, function( response ){
+    $.post("/mobile/reg/medals/ajax/getMedalInfo.php", { user_id: user_id }, function (response) {
         try {
-            response = JSON.parse( response ); // parse the response to JSON
+            response = JSON.parse(response); // parse the response to JSON
             var html = '<div class="medal-board">';
-            for ( var index = 0; index < response.length; index++ ){
+            for (var index = 0; index < response.length; index++) {
                 var medal = response[index];
                 // create a new medal and render it on the page
                 html += new Medal({
@@ -35,10 +35,10 @@ function medal_board( target, user_id, url ) {
                 }).render();
             }
             html += "</div>";
-            target.html( html ); // render the HTML to the page
-        } catch ( e ) { // catch any errors and let the user know
-            console.error( e );
-            target.html( '<div class="alert alert-danger">There was an error loading your medal board. Please email <a href="mailto:bugs@tzivoshashem.org">bugs@tzivoshashem.org</a> for further assistance</div>' );
+            target.html(html); // render the HTML to the page
+        } catch (e) { // catch any errors and let the user know
+            console.error(e);
+            target.html('<div class="alert alert-danger">There was an error loading your medal board. Please email <a href="mailto:bugs@tzivoshashem.org">bugs@tzivoshashem.org</a> for further assistance</div>');
         }
 
     }); // end POST request to get the data
@@ -58,21 +58,21 @@ function medal_board( target, user_id, url ) {
  *      next: next level
  * }
  */
-function Medal( config ) {
+function Medal(config) {
     // set the attributes from the configuration
-    this.subject = config.subject;  this.picture = config.picture;
-    this.url = config.url;          this.needed = config.needed;
-    this.total = config.total;      this.next = config.next;
+    this.subject = config.subject; this.picture = config.picture;
+    this.url = config.url; this.needed = config.needed;
+    this.total = config.total; this.next = config.next;
     this.base_amount = config.base_amount; // the amount that we needed for the last medal
     this.animate = config.animate ? true : false;
     // colors for the medal to show
     this.colors = [
-        "White", "Red", "Orange", "Yellow", "Green", 
+        "White", "Red", "Orange", "Yellow", "Green",
         "Blue", "Purple", "Brown", "Gray", "Black", "Bronze"
     ]
 
     if (localStorage.getItem("locallang") == "he") {
-        
+
         this.colors = [
             "לבן", "אדום", "כתום", "צהוב", "ירוק",
             "כחול", "סגול", "חום", "אפור", "שחור", "ברונזה"
@@ -81,17 +81,17 @@ function Medal( config ) {
     }
 }
 
-Medal.prototype.getColor = function( current ) {
+Medal.prototype.getColor = function (current) {
     var CompleationText = "Compleation";
     if (localStorage.getItem("locallang") == "he") {
         CompleationText = "הסתיים";
     }
 
     var index = this.next - 1;
-    if ( current && index >= 1 ) {
+    if (current && index >= 1) {
         index -= 1;
     }
-    if ( index < this.colors.length ) {
+    if (index < this.colors.length) {
         return this.colors[index];
     } else {
         return CompleationText;
@@ -105,8 +105,8 @@ Medal.prototype.getColor = function( current ) {
  * 
  * returns the standard medal for the Medals based on the config passed to the constructor.
  */
-Medal.prototype.render = function() {
- //   var MissionsText = "Missions";
+Medal.prototype.render = function () {
+    //   var MissionsText = "Missions";
     var ToText = " To ";
     var CampaignCompleateText = "Campaign Compleate!";
     var progressbarFloat = "";
@@ -117,37 +117,37 @@ Medal.prototype.render = function() {
         ToText = " עד ";
         CampaignCompleateText = "הקמפיין הושלם!";
 
-      //  MissionsText = "משימות";
+        //  MissionsText = "משימות";
         CampaignCompleateText = "הקמפיין הושלם!";
         progressbarFloat = "float: right;";
         progressTextAlignment = ' style="direction:rtl;" ';
     }
-    
+
 
     if (this.total > 0)
-        var status_width =  ( this.total - this.base_amount ) / ( this.needed - this.base_amount ) * 100;
+        var status_width = (this.total - this.base_amount) / (this.needed - this.base_amount) * 100;
     else
         status_width = 0;
 
     var html = "<div class='medal'>";
-    html +=     '<a href="' + this.url + '">';
-    html +=         '<img class="medal-img ' + ( this.animate ? "bounceIn animated" : "" ) + '" src="' + this.picture + '" />';
-    html +=     '</a>';
-    html +=     '<div class="medal-subject">';
-    html +=         '<span>' + this.subject + '</span>';
-    html +=     '</div>';
-    html +=     '<div class="medal-status progress">';
-    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat +'"></div>';
+    html += '<a href="' + this.url + '">';
+    html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
+    html += '</a>';
+    html += '<div class="medal-subject">';
+    html += '<span>' + this.subject + '</span>';
+    html += '</div>';
+    html += '<div class="medal-status progress">';
+    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '"></div>';
 
-    if ( this.next - 1 < this.colors.length ) {
-        html += '<span ' + progressTextAlignment +'>' + (this.needed - this.total) + ToText + this.getColor( false ) + '</span>';
+    if (this.next - 1 < this.colors.length) {
+        html += '<span ' + progressTextAlignment + '>' + (this.needed - this.total) + ToText + this.getColor(false) + '</span>';
     } else {
-        html += '<span ' + progressTextAlignment +'>' + CampaignCompleateText +'</span>';
+        html += '<span ' + progressTextAlignment + '>' + CampaignCompleateText + '</span>';
     }
 
-    html +=     '</div>';
-    html    += "</div>";
-    
+    html += '</div>';
+    html += "</div>";
+
     return html;
 
 

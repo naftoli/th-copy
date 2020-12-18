@@ -45,7 +45,7 @@ body{
 }
 .header{
     background-image: url("../images/starbg.png");
-    background-color: #105023;
+    background-color: #1b2b51;
     height: 370px;
 }
 
@@ -58,7 +58,7 @@ body{
     content: url("../images/circle-active.png");
 }
 
-.header .title{color: #ffc100;font-size: 26px;font-family: font1-bold;}
+.header .title{color: #ffd942;font-size: 26px;font-family: font1-bold;}
 .header .descr{color: white;font-size: 26px;font-family: font1;}
 .header-setting{float: left;height: 35px;cursor: pointer;}
 .header-setting span{font-size: 18px;    color: rgba(255,255,255,.6);    margin: 15px;    line-height: 35px;    font-family: font1;}
@@ -86,9 +86,9 @@ body{
 .l-4 .medal-sub{width: 75%;position: relative;margin: 0px 10%;margin-top: -10px;background-repeat: no-repeat;background-size: 100% 100%;}
 .l-4 .medal-sub span{color:white;line-height: 26px;font-family: font1;font-size: 24px;display: block;margin-top: 12px;}
 
-.footer{text-align: center;border-top: 2px solid #9f9f9f;display: table;max-width: 1014px;width: 100%;}
-.footer .span3{background-color: #e6e6e6;}
-.footer .span3 span{ padding:5px; color: #808080; font-size: 20px; font-family: font1;}
+.footer{text-align: center;display: table;max-width: 1014px;width: 100%;}
+.footer .span3{background-color: #4258a2;}
+.footer .span3 span{ padding:5px; color: white; font-size: 20px; font-family: font1;}
 /*.footer .span3:first-child{border-bottom-left-radius: 5px;}*/
 /*.footer .span3:last-child{border-bottom-right-radius: 5px;}*/
 .footer .menu-item{ width : 130px; height:100px;margin: 0 auto;}
@@ -97,13 +97,7 @@ body{
 .slider img{width: 26px;}
 .footer .span3:hover, .footer .span3.active{
     cursor: pointer;
-    background-color: #999999;
-    background-repeat: repeat-x;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#B7B8B9), to(#E9E9E9));
-    background: -webkit-linear-gradient(top, #E9E9E9, #B7B8B9);
-    background: -moz-linear-gradient(top, #E9E9E9, #B7B8B9);
-    background: -ms-linear-gradient(top, #E9E9E9, #B7B8B9);
-    background: -o-linear-gradient(top, #E9E9E9, #B7B8B9);
+    background-color: #343862;
 }
 
 /* parent login  main class : .login-page*/
@@ -149,7 +143,7 @@ input.form-control:not(:focus){border:0px solid transparent;}
 .bootstrap-select.media-group .dropdown-menu li a span.text {font-size: 20px;}
 
 /* forgot page  */
-.forgot-page .error-box{display: none;margin-bottom: 0px;font-family: font1;color: black;}
+.forgot-page .error-box{display: none;margin-bottom: 0px;font-family: font1;color: #1b2b51;}
 .check_mark, .decline_mark{position: absolute;left:50px;top:20px;}
 .forgot-page .error-box {width:100%;font-size:25px;}
 .forgot-page .fa.fa-envelope-o{font-size: 30px;}
@@ -224,7 +218,7 @@ input.form-control:not(:focus){border:0px solid transparent;}
 .fee-page .media-group>.btn:first-child{height: 76px;}
 
 /* rank page */
-.header-yellow{width: 100%;background-color: #f68829;}
+.header-yellow{width: 100%;background-color: #1b2b51;}
 .header-yellow table{font-size: 80px;font-family: font3;color: white;}
 .yellow-star-l img{margin-left:20px;}
 .yellow-star-r img{margin-right:20px;}
