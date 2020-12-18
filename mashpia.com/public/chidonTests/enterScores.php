@@ -26,6 +26,25 @@ foreach ($schools as $id => $school) {
     $ct->setScores();
     $scores[$id] = $ct->getScores();
 }
+
+// initialize all tests to not be disabled
+$disabled = false;
+
+// disable marking after certain dates for bc's
+if ($admin_user['auth'] != 'super') {
+    $today = new DateTime();
+    $shutdown = [];
+    $shutdown[1] = new DateTime('2020-11-20 05:00:00');
+    $shutdown[2] = new DateTime('2020-12-19 05:00:00');
+    $shutdown[3] = new DateTime('2021-01-23 05:00:00');
+    $shutdown[4] = new DateTime('2021-02-17 05:00:00');
+
+    for ($i = 1; $i <= 4; $i++) {
+        if ($testNumber == $i && $today >= $shutdown[$i]) {
+            $disabled = true;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -79,7 +98,9 @@ foreach ($schools as $id => $school) {
                     $class = 'score';
                     if ($type == 'expert') $class = 'expert';
                     $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                    echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' /></td>";
+                    echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
+                    if ($disabled) echo "readonly ";
+                    echo "/></td>";
                 }
                 echo "</tr>";
             }

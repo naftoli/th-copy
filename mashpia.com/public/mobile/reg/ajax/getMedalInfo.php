@@ -25,18 +25,36 @@ function getStickerName( $subject_id ){
 
 function getSubjectImage( $subject_id ) {
     $campaignLogos = array(
-        1	=>	'wwtc-black-svg.svg',   4	=>	'tefillah-black-svg.svg',
-        12	=>	'mivtzoim-black-svg.svg',   13	=>	'nigunnim-black-svg.svg',
-        16	=>	'hiskashrus-black-svg.svg', 21	=>	'sefer-hamitzvos-black-svg.svg',
-        27	=>	'tanya.gif',    40	=>	'yomei-dipagra-black-svg.svg',
-        41	=>	'avos-ubonim-black-svg.svg',    42	=>	'Footsteps.gif',
-        45	=>	'cheshbon-hanefesh-black-svg.svg',  90	=>	'chitas-black-svg.svg',
-        92  => 'nigunnim-black-svg.svg',    93 => 'mivtzoim-black-svg.svg',
-        94  => 'yomei-dipagra-black-svg.svg',  100	=>	'Brias-Haguf.gif'
+        1	=>	'Tehillim.svg',
+        4	=>	'Tefilla.svg',
+        12	=>	'Mivtzoim.svg',
+        13	=>	'Niggunim.svg',
+        16	=>	'hiskashrus.svg',
+        21	=>	'sefer-hamitzvos.svg',
+        27	=>	'tanya.svg',
+        40	=>	'Yom-Dipagra.svg',
+        41	=>	'Father-son.svg',
+        42	=>	'Footsteps.svg',
+        45	=>	'Cheshbon-Hanefesh.svg',
+        90	=>	'Chitas.svg',
+        100	=>	'Brias-Haguf.svg',
+        121 =>  "day-school-Jewish Day 250 px.svg",
+        122 =>  "day-school-Jewish Uniform 250px.svg",
+        124 =>  "day-school-Health 250px.svg",
+        125 =>  "day-school_Torah 250px.svg",
+        126 =>  "day-school_Shabbat 250px.svg",
+        127 =>  "day-school_Special Days 250px.svg",
+        129 =>  "day-school-Kosher 250px.svg",
+        130 =>  "day-school_Tefilla.svg",
+        131 =>  "day-school-ahavat-yisrael.svg",
+        132 =>  "day-school-brachot.svg",
+        133 =>  "day-school-Tzedaka.svg",
+        134 =>  "day-school-honoring parents 250px.svg",
+        135 =>  "day-school-Middot-icon.svg"
     );
-    if ( isset( $campaignLogos[$subject_id ] ) )
+    //if ( isset( $campaignLogos[$subject_id ] ) )
         return $campaignLogos[$subject_id ];
-    return 'cheshbon-hanefesh-black-svg.svg'; // looks like a checkmark
+    //return 'cheshbon-hanefesh-black-svg.svg'; // looks like a checkmark
 }
 
 if ( isset( $_GET['v'] ) && $_GET['v'] == 2) { 
