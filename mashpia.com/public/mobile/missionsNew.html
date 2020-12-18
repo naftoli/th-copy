@@ -63,9 +63,9 @@
 			background-attachment: fixed
 		}
 
-        .hebrew {
-            font-family: Arial !important;
-        }
+		.hebrew {
+			font-family: Arial !important;
+		}
 	</style>
 	<link rel="stylesheet" href="/mobile/css/lib/animate.css">
 	<link rel="preload" href="css/all.css?v=1.6" as="style" onload="this.rel='stylesheet'">
@@ -73,7 +73,7 @@
 		<link rel="stylesheet" href="css/all.css?v=1.3" as="style" onload="this.rel='stylesheet'">
 	</noscript>
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css"
-		  as="style" onload="this.rel='stylesheet'">
+		as="style" onload="this.rel='stylesheet'">
 	<noscript>
 		<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
 	</noscript>
@@ -157,7 +157,7 @@
 			right: 15px;
 			font-size: 12px;
 			max-width: 36px;
-			color: #000;
+			color: #1b2b51;
 			font-weight: bold;
 			padding: 5px;
 		}
@@ -228,7 +228,7 @@
 			padding-left: 60px;
 		}
 
-		.mediumPic + .checkbox .long {
+		.mediumPic+.checkbox .long {
 			padding-left: 130px;
 		}
 
@@ -238,7 +238,7 @@
 			padding-right: 25px;
 		}
 
-		.he .mediumPic + .checkbox .long {
+		.he .mediumPic+.checkbox .long {
 			padding-left: 0px;
 			padding-right: 132px;
 		}
@@ -260,12 +260,12 @@
 			overflow: hidden;
 		}
 
-			.collapse.in {
-				display: block;
-				overflow: hidden;
-				max-height: fit-content;
-				max-height: -moz-fit-content;
-			}
+		.collapse.in {
+			display: block;
+			overflow: hidden;
+			max-height: fit-content;
+			max-height: -moz-fit-content;
+		}
 
 		/* The tasks */
 		.task {
@@ -297,12 +297,12 @@
 			overflow: hidden;
 		}
 
-			.collapse.in {
-				display: block;
-				overflow: hidden;
-				max-height: fit-content;
-				max-height: -moz-fit-content;
-			}
+		.collapse.in {
+			display: block;
+			overflow: hidden;
+			max-height: fit-content;
+			max-height: -moz-fit-content;
+		}
 
 		.he .task {
 			margin-right: 2%;
@@ -345,8 +345,8 @@
 			margin-right: 10px;
 		}
 
-		label.checkbox input[type=checkbox]:checked ~ .check,
-		label.checkbox input[type=checkbox]:checked ~ .box,
+		label.checkbox input[type=checkbox]:checked~.check,
+		label.checkbox input[type=checkbox]:checked~.box,
 		label.checkbox .check,
 		label.checkbox .box {
 			transform: none;
@@ -391,10 +391,10 @@
 			background-repeat: no-repeat;
 		}
 
-			i.glyphicon.glyphicon-chevron-right:before,
-			i.glyphicon.glyphicon-chevron-left:before {
-				content: "";
-			}
+		i.glyphicon.glyphicon-chevron-right:before,
+		i.glyphicon.glyphicon-chevron-left:before {
+			content: "";
+		}
 
 		/* New style dropdown arrows on the hebrew site need to point the other way*/
 		.he .panel.panel-default .panel-heading i {
@@ -402,7 +402,7 @@
 			transform: rotate(180deg);
 		}
 
-		.he .panel.panel-default.open > .panel-heading i {
+		.he .panel.panel-default.open>.panel-heading i {
 			transform: rotate(90deg);
 		}
 
@@ -412,7 +412,7 @@
 			font-weight: 400;
 		}
 
-		.container > .navbar-header {
+		.container>.navbar-header {
 			margin-left: 0px;
 		}
 
@@ -438,10 +438,10 @@
 			transition: transform .15s;
 		}
 
-			.parsha-navigator img {
-				height: 15px;
-				margin: 3px;
-			}
+		.parsha-navigator img {
+			height: 15px;
+			margin: 3px;
+		}
 
 		#previous.parsha-navigator img {
 			transform: rotate(180deg);
@@ -473,13 +473,13 @@
 			border-color: #834999;
 		}
 
-			.btn.btn-danger.btn-sm {
-				width: 100px;
-			}
+		.btn.btn-danger.btn-sm {
+			width: 100px;
+		}
 
-			.btn.btn-danger:hover {
-				transform: scale(1.05)
-			}
+		.btn.btn-danger:hover {
+			transform: scale(1.05)
+		}
 
 		/* New arrow icons for daily slider*/
 		.slick-slider img {
@@ -517,9 +517,9 @@
 			display: inline-block;
 		}
 
-			.page-missions .mandatoryImg img {
-				margin-top: -20px;
-			}
+		.page-missions .mandatoryImg img {
+			margin-top: -20px;
+		}
 
 		/* Reposition it all on mobile*/
 		@media(max-width: 767px) {
@@ -531,20 +531,20 @@
 				min-height: 40px;
 			}
 
-				.dailyBoxes table {
-					float: right;
-					margin-top: 5px;
-					margin-bottom: 5px;
-				}
+			.dailyBoxes table {
+				float: right;
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
 
 			.page-missions .mandatoryImg {
 				float: right;
 				width: 40px;
 			}
 
-				.page-missions .mandatoryImg img {
-					margin-top: 0px;
-				}
+			.page-missions .mandatoryImg img {
+				margin-top: 0px;
+			}
 
 			.page-missions .he .mandatoryImg {
 				float: left;
@@ -568,7 +568,7 @@
 				margin-bottom: 3px;
 			}
 
-			.mediumPic ~ .dailyBoxes {
+			.mediumPic~.dailyBoxes {
 				padding-left: 130px;
 			}
 		}
@@ -607,17 +607,17 @@
 			color: #fff;
 		}
 
-			.modal-header span,
-			.modal-header {
-				color: #fff;
-			}
+		.modal-header span,
+		.modal-header {
+			color: #fff;
+		}
 
-				.modal-header .close {
-					opacity: 1;
-					font-size: 2em;
-					width: 20px;
-					font-weight: 100;
-				}
+		.modal-header .close {
+			opacity: 1;
+			font-size: 2em;
+			width: 20px;
+			font-weight: 100;
+		}
 	</style>
 	<!--<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 
@@ -665,20 +665,23 @@
 						<strong class="i18n" data-key="VisualGuide">Visual Guide</strong>
 					</p>
 					<p>
-						<img src="/mobile/img_new/square-color-purple-svg.svg" height="25" width="25" /> - <span class="i18n"
-																									 data-key="MissionNotMarked"> Mission is not marked </span>
+						<img src="/mobile/img_new/square-color-purple-svg.svg" height="25" width="25" /> - <span
+							class="i18n" data-key="MissionNotMarked"> Mission is not marked </span>
 					</p>
 					<p>
-						<img src="/mobile/img_new/square-check-color-green-svg.svg" height="25" width="25" /> - <span class="i18n" data-key="Missionmarked"> Mission is marked </span>
+						<img src="/mobile/img_new/square-check-color-green-svg.svg" height="25" width="25" /> - <span
+							class="i18n" data-key="Missionmarked"> Mission is marked </span>
 					</p>
 					<p>
 						<img src="/mobile/img_new/square-color-purple-svg.svg" height="25" width="25" />
-						<span id="tSymbol" style="color: grey;margin-left: -20px;font-size: 16px;margin-right: 10px;">T</span>
-						<span id="Missionislater" class="i18n" data-key="Missionislater"> - Mission is later in the week (day is in grey).</span>
+						<span id="tSymbol"
+							style="color: grey;margin-left: -20px;font-size: 16px;margin-right: 10px;">T</span>
+						<span id="Missionislater" class="i18n" data-key="Missionislater"> - Mission is later in the week
+							(day is in grey).</span>
 					</p>
 					<p>
-						<img src="/mobile/img_new/square-x-color-red-svg.svg" height="25" width="25" /> - <span class="i18n"
-																									data-key="Missionisunavailable">Mission is unavailable</span>
+						<img src="/mobile/img_new/square-x-color-red-svg.svg" height="25" width="25" /> - <span
+							class="i18n" data-key="Missionisunavailable">Mission is unavailable</span>
 					</p>
 
 					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
@@ -689,11 +692,14 @@
 						view available on <span class="i18n" data-key="desktops">desktops</span>
 					</p>
 					<ol>
-						<li class="i18n" data-key="EachPages">Each page starts on <i><b class="i18n" data-key="Friday">Friday</b></i> and ends on <i><b class="i18n" data-key="Thursday">Thursday</b></i> </li>
+						<li class="i18n" data-key="EachPages">Each page starts on <i><b class="i18n"
+									data-key="Friday">Friday</b></i> and ends on <i><b class="i18n"
+									data-key="Thursday">Thursday</b></i> </li>
 						<li class="i18n" data-key="Dailytasks1">
 							Daily tasks start with <i><b class="i18n" data-key="Friday">Friday</b></i> on the
 							<i><b class="i18n" data-key="leftEnglish">left for English</b></i> and on
-							the <i><b class="i18n" data-key="Yiddish">right for Yiddish</b></i> and are laid out in one row.
+							the <i><b class="i18n" data-key="Yiddish">right for Yiddish</b></i> and are laid out in one
+							row.
 						</li>
 						<li class="i18n" data-key="TheParsha">
 							The parsha on the top of the page refers to the shabbos that
@@ -721,8 +727,8 @@
 						<span class="i18n" data-key="EncounterIssues">
 							If you encounter any issues that are technical in
 							nature, please send an email to </span>
-								<a href="mailto:bugs@tzivoshashem.org">bugs@tzivoshashem.org</a>
-								<span class="i18n" data-key="EncounterInfol">with the following information</span>:
+						<a href="mailto:bugs@tzivoshashem.org">bugs@tzivoshashem.org</a>
+						<span class="i18n" data-key="EncounterInfol">with the following information</span>:
 					</p>
 					<ol>
 						<li class="i18n" data-key="YourUsername">Your username</li>
@@ -745,7 +751,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger i18n" data-dismiss="modal"
-							style="background-color: #5e1c77;border-color:#834999;" data-key="Title">
+						style="background-color: #5e1c77;border-color:#834999;" data-key="Title">
 						Close
 					</button>
 				</div>
@@ -934,4 +940,5 @@
 		ga('send', 'pageview');
 	</script>
 </body>
+
 </html>

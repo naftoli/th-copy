@@ -19,20 +19,22 @@ $info = [
     'gender'		=>	'Gender',
     'dob'			=>	'Date of Birth',
     'class'			=>	'Class/Grade',
-    'test1a'        =>  'Test 1 Part 1',
-    'test1b'        =>  'Test 1 Part 2', 
-    'test2a'        =>  'Test 2 Part 1', 
-    'test2b'        =>  'Test 2 Part 2', 
-    'test3a'        =>  'Test 3 Part 1', 
-    'test3b'        =>  'Test 3 Part 2',
-    'mm_test1'      =>  'Mitzva Maven Test 1', 
-    'mm_test2'      =>  'Mitzva Maven Test 2', 
-    'mm_test3'      =>  'Mitzva Maven Test 3'
+//    'mm_test1'      =>  'Mitzva Maven Test 1',
+//    'mm_test2'      =>  'Mitzva Maven Test 2',
+//    'mm_test3'      =>  'Mitzva Maven Test 3'
     // 'winner_type'	=>	'Contestant / School Rep.',
     // 'history'		=>	'Previous history (years enrolled prior to 5777)',
     // 'date_paid'		=>	'Enrolled To Shabbaton',
     // 'paid'			=>	'Amount Paid',
     // 'cert_number'	=>  'Certificate Code'
+];
+
+$info3 = [
+    'test1'     =>  'Test 1 Score',
+    'test2'     =>  'Test 2 Score',
+    'test3'     =>  'Test 3 Score',
+    'test4'     =>  'Test 4 Score',
+    'avg'       =>  'Avg of Test Selection (only relevant if choosing one or more test marks)'
 ];
 
 $info2 = [
@@ -110,6 +112,15 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 <?php foreach ( $info as $key => $value ) : ?>
                     <input type="checkbox" id="<?=$key?>"
                     <?php if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
+                    /> <?=$value?><br />
+                <?php endforeach; ?>
+            </fieldset>
+
+            <fieldset>
+                <legend>Test Info</legend>
+                <?php foreach ( $info3 as $key => $value ) : ?>
+                    <input type="checkbox" id="<?=$key?>"
+                        <?php if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
                     /> <?=$value?><br />
                 <?php endforeach; ?>
             </fieldset>
@@ -192,6 +203,13 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                         // get all fields to show
                         var data = [];
                         var info = <?=json_encode( $info )?>;
+                        for (var val in info) {
+                            var id = "#" + val;
+                            if ($(id).is(":checked")) {
+                                data.push( val );
+                            }
+                        }
+                        var info3 = <?=json_encode( $info3 )?>;
                         for (var val in info) {
                             var id = "#" + val;
                             if ($(id).is(":checked")) {

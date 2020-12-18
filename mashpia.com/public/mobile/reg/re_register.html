@@ -341,7 +341,7 @@
 			font-size: 21px;
 			font-weight: 700;
 			line-height: 1;
-			color: #000;
+			color: #1b2b51;
 			text-shadow: #fff 0 1px 0;
 			opacity: .2
 		}
@@ -408,7 +408,7 @@
 		}
 
 		h4 {
-			font-family: 'Source Sans Pro', sans-serif
+			font-family: 'Exo', sans-serif
 		}
 
 		.form-control {
@@ -958,9 +958,11 @@
 				font-size: 18px;
 			}
 		}
-        .hebrew {
-            font-family: Arial !important;
-        }
+
+		.hebrew {
+			font-family: Arial !important;
+		}
+
 		/*	.register-box .has-feedback .form-control{width: 97%;}*/
 	</style>
 	<noscript>
@@ -1006,10 +1008,10 @@
 			};
 			"undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
 		}("undefined" != typeof global ? global : this),
-		function (e) {
-			if (e.loadCSS) {
-				var t = loadCSS.relpreload = {};
-				if (t.support = function () {
+			function (e) {
+				if (e.loadCSS) {
+					var t = loadCSS.relpreload = {};
+					if (t.support = function () {
 						try {
 							return e.document.createElement("link").relList.supports("preload")
 						} catch (e) {
@@ -1022,16 +1024,16 @@
 								"media")), r.rel = null)
 						}
 					}, !t.support()) {
-					t.poly();
-					var n = e.setInterval(t.poly, 300);
-					e.addEventListener && e.addEventListener("load", function () {
-						t.poly(), e.clearInterval(n)
-					}), e.attachEvent && e.attachEvent("onload", function () {
-						e.clearInterval(n)
-					})
+						t.poly();
+						var n = e.setInterval(t.poly, 300);
+						e.addEventListener && e.addEventListener("load", function () {
+							t.poly(), e.clearInterval(n)
+						}), e.attachEvent && e.attachEvent("onload", function () {
+							e.clearInterval(n)
+						})
+					}
 				}
-			}
-		}(this);
+			}(this);
 	</script>
 	<script src="js/all.js" defer></script>
 	<!--[if lt IE 9]>
@@ -1093,7 +1095,7 @@
 		<div class="login-header">
 			<span class="span12 titler i18n" data-key="REGISTRATION5780">REGISTRATION 5780</span>
 		</div>
-		
+
 		<form id="regForm" action="" method="post">
 			<div class="register-box">
 				<div class="register-box-body">
@@ -1276,7 +1278,8 @@
 
 					<div class="row">
 						<div class="col-xs-12">
-							<label for="type" class="i18n" data-key="MissionType">Mission Type (determines what tasks you get to do)</label>
+							<label for="type" class="i18n" data-key="MissionType">Mission Type (determines what tasks
+								you get to do)</label>
 							<div class="form-group has-feedback" id="divclass">
 								<div class="input-group" id="type_select">
 									<span class="input-group-addon"><img
@@ -1335,16 +1338,18 @@
 
 					<div class="row">
 						<div class="col-xs-12">
-							<button type="submit" id="btn_create" class="btn btn-primary btn-block H8 i18n"  data-key="RegisterNextChild1">
+							<button type="submit" id="btn_create" class="btn btn-primary btn-block H8 i18n"
+								data-key="RegisterNextChild1">
 								<!--<b class="i18n" data-key="RegisterNextChild1">REGISTER NEXT CHILD</b>-->
-								<span style="font-weight :bold;" class="i18n" data-key="RegisterNextChild1">REGISTER NEXT CHILD</span>
+								<span style="font-weight :bold;" class="i18n" data-key="RegisterNextChild1">REGISTER
+									NEXT CHILD</span>
 							</button>
 							<button id="btn_cancel" class="btn btn-primary btn-block H8" style="display: none;">
 								<b class="i18n" data-key="CANCEL">CANCEL</b>
-								
+
 							</button>
 
-							
+
 						</div><!-- /.col -->
 					</div>
 
@@ -1630,7 +1635,7 @@
 							$("#lang_select button span.filter-option")
 								.text( // update the text for the dropdown...
 									$("#lang_select li[data-original-index='" + (lang - 1) + "']")
-									.text() // set it to the value of the selected item...
+										.text() // set it to the value of the selected item...
 								);
 
 							// set mission type
@@ -2029,7 +2034,7 @@
 			if (f.value) {
 				try {
 					f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
-				} catch (err) {}
+				} catch (err) { }
 				if (f.value) { //for IE5 ~ IE10
 					var form = document.createElement('form'),
 						ref = f.nextSibling;

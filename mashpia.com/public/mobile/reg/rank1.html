@@ -180,14 +180,12 @@
         }
 
         .footer .span3.active {
-            background-image: -webkit-linear-gradient(top, #e9e9e9, #b7b8b9);
-            background-position: initial initial;
-            background-repeat: initial initial
+            background: #343862;
         }
 
         .header-yellow {
             width: 100%;
-            background-color: #f68829
+            background-color: #1b2b51
         }
 
         .header-yellow table {
@@ -408,10 +406,10 @@
             };
             "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
         }("undefined" != typeof global ? global : this),
-        function (e) {
-            if (e.loadCSS) {
-                var t = loadCSS.relpreload = {};
-                if (t.support = function () {
+            function (e) {
+                if (e.loadCSS) {
+                    var t = loadCSS.relpreload = {};
+                    if (t.support = function () {
                         try {
                             return e.document.createElement("link").relList.supports("preload")
                         } catch (e) {
@@ -424,16 +422,16 @@
                                 .getAttribute("media")), r.rel = null)
                         }
                     }, !t.support()) {
-                    t.poly();
-                    var n = e.setInterval(t.poly, 300);
-                    e.addEventListener && e.addEventListener("load", function () {
-                        t.poly(), e.clearInterval(n)
-                    }), e.attachEvent && e.attachEvent("onload", function () {
-                        e.clearInterval(n)
-                    })
+                        t.poly();
+                        var n = e.setInterval(t.poly, 300);
+                        e.addEventListener && e.addEventListener("load", function () {
+                            t.poly(), e.clearInterval(n)
+                        }), e.attachEvent && e.attachEvent("onload", function () {
+                            e.clearInterval(n)
+                        })
+                    }
                 }
-            }
-        }(this);
+            }(this);
     </script>
     <script src="js/all.js" defer></script>
     <!--    Bug Report code -->
@@ -560,7 +558,8 @@
         }
 
         .slider img.active {
-            background: url("/mobile/img_new/circle-color-orange-solid-svg.svg");
+            background: url("/mobile/img_new/circle-color-navy-solid.svg");
+            content: url("/mobile/img_new/circle-color-navy-solid.svg");
         }
 
         .header-yellow {
@@ -607,15 +606,25 @@
                 width: 25%;
             }
         }
+
+        .carouselContainer {
+            background: #4258a2;
+        }
+
+        .carouselContainer>.slider {
+            margin-top: 0 !important;
+            padding: 10px 0;
+            background: #4258a2;
+        }
     </style>
 
-	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
     <script src="../js/translation/rank/rank.js"></script>
 
 </head>
 
-<body class="rank-page">    
+<body class="rank-page">
     <div class="header-yellow" style="position: relative">
         <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
             <span id="page-title" data-key="PageTitle" class="i18n">MY RANK BOARD</span>
@@ -624,7 +633,7 @@
     <div style="float: right;">
         <button id="en" class="translate">English</button>
         <button id="he" class="translate">עִברִית</button>
-      </div>    
+    </div>
     <div class="personalImg"></div>
     <div class="bug-report">
         <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Rank Board" alt="bug-report" />
@@ -638,7 +647,7 @@
                         <div class="span3" style="width: 33%;">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/leaderboard-color-white.svg">
                                 </div>
                                 <div class="span12">
                                     <span data-key="Leaderboard" class="i18n">Leaderboard</span>
@@ -650,7 +659,7 @@
                         <div class="span3 active" style="width: 34%;">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/trophy-color-white.svg">
                                 </div>
                                 <div class="span12">
                                     <span data-key="RankBoard" class="i18n">Rank Board</span>
@@ -662,10 +671,10 @@
                         <div class="span3" style="width: 33%;">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                                    <img src="/mobile/img_new/medals-color-white.svg">
                                 </div>
                                 <div class="span12">
-                                    <span  data-key="MedalBoard" class="i18n">Medal Board</span>
+                                    <span data-key="MedalBoard" class="i18n">Medal Board</span>
                                 </div>
                             </div>
                         </div>
@@ -673,79 +682,83 @@
                 </div>
             </div>
             <div class="span12 body">
-                <div class="span12">
-                    <div class="caption-general">
-                        <span></span>
+                <div class="clearfix"></div>
+                <div class="carouselContainer">
+                    <div class="span12">
+                        <div class="caption-general">
+                            <span></span>
+                        </div>
                     </div>
-                </div>
-                <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
-                    <div class="sky-carousel-wrapper">
-                        <ul class="sky-carousel-container">
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/1.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/2.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/3.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/4.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/5.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/6.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/7.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/8.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/9.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/10.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/11.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/12.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/13.png" alt="">
-                            </li>
-                            <li>
-                                <img src="/mobile/reg/medals/images/trophits/14.png" alt="">
-                            </li>
-                        </ul>
+                    <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+                        <div class="sky-carousel-wrapper">
+                            <ul class="sky-carousel-container">
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/1.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/2.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/3.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/4.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/5.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/6.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/7.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/8.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/9.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/10.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/11.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/12.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/13.png" alt="">
+                                </li>
+                                <li>
+                                    <img src="/mobile/reg/medals/images/trophits/14.png" alt="">
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="span12 slider" style="margin-top:10px;text-align: center;">
-                    <img id="item0" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item1" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item2" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item3" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item4" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item5" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item6" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item7" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item8" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item9" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item10" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item11" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item12" src="/mobile/img_new/circle-color-orange-svg.svg">
-                    <img id="item13" src="/mobile/img_new/circle-color-orange-svg.svg">
+                    <div class="span12 slider" style="margin-top:10px;text-align: center;">
+                        <img id="item0" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item1" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item2" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item3" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item4" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item5" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item6" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item7" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item8" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item9" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item10" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item11" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item12" src="/mobile/img_new/circle-color-white-solid.svg">
+                        <img id="item13" src="/mobile/img_new/circle-color-white-solid.svg">
+                    </div>
                 </div>
                 <div style="clear: both; margin-bottom: 10px;"></div>
 
                 <div class="well well-sm i18n" data-key="ManyStars" style="margin: 0 auto; width: 75%">
-                    Start as a private and after earning 3 medals of any color or campaign you will be promoted to a Sergeant.
+                    Start as a private and after earning 3 medals of any color or campaign you will be promoted to a
+                    Sergeant.
                     Keep earning medals and rising in rank. Can YOU become a GENERAL WITH MANY STARS?
                 </div>
 
@@ -762,9 +775,9 @@
                     <a href="parent_detail.html" id="mainLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/boy-color-green-svg.svg">
+                                <img src="/mobile/img_new/boy-color-white.svg
                             </div>
-                            <div class="span12">
+                            <div class=" span12">
                                 <span data-key="Accounts" class="i18n">Accounts</span>
                             </div>
                         </div>
@@ -774,7 +787,7 @@
                     <a href="#" id="missionsLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                                <img src="/mobile/img_new/square-check-color-white.svg">
                             </div>
                             <div class="span12">
                                 <span class="i18n" data-key="Missions">Missions</span>
@@ -786,9 +799,9 @@
                     <a href="#" id="rankLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                                <img src="/mobile/img_new/achievements-color-white.svg
                             </div>
-                            <div class="span12">
+                            <div class=" span12">
                                 <span class="i18n" data-key="Achievements">Achievements</span>
                             </div>
                         </div>
@@ -798,9 +811,9 @@
                     <a href="#" id="storeLink">
                         <div class="menu-item">
                             <div class="span12">
-                                <img src="/mobile/img_new/cart-color-red-svg.svg">
+                                <img src="/mobile/img_new/cart-color-white.svg">
                             </div>
-                            <div class="span12">
+                            <div class=" span12">
                                 <span class="i18n" data-key="Rewards">Rewards</span>
                             </div>
                         </div>
@@ -866,17 +879,17 @@
                     $("#item" + item_id).addClass("active");
                     item_id = item_id.replace("item", "");
                     var duration = Math.abs(parseInt(item_id) + 1 -
-                    from_id); // one duration unit for each medal it needs to pass
+                        from_id); // one duration unit for each medal it needs to pass
                     if (item_id == "0") {
                         carousel.select(0, duration);
                     } else {
                         carousel.select(parseInt(item_id),
-                        duration); // index and an ever increasing duration
+                            duration); // index and an ever increasing duration
                     }
                     console.log(parseInt(item_id) + 1);
                 });
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator
-                        .userAgent)) { // on mobile
+                    .userAgent)) { // on mobile
                 }
             });
 
@@ -1029,7 +1042,7 @@
                             selectByClick: false
                         }); // end options
                         carousel
-                    .startAutoSlideshow(); // autmatically start the slideshow
+                            .startAutoSlideshow(); // autmatically start the slideshow
                         // when an item is selected...
                         carousel.on('itemSelected.sc', function (evt) {
                             var item = evt.item.index(); // get the index

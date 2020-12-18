@@ -38,7 +38,7 @@ header, .btn-primary{
     background-color: #2c539e; color: #fff; border-color: #2c419e;
 }
 .btn.btn-danger {
-    background-color: #ff1a1a; color: #fff; border-color: #ff1a1a;
+    background-color: #e92d41; color: #fff; border-color: #e92d41;
 }
 /* Input styles */
 .input-group-btn img {
@@ -128,7 +128,7 @@ input:checked + span.checkbox {
 
 /* Error Modal */
 #errorModal .modal-header {
-    background: #ff1a1a;
+    background: #e92d41;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     color: #fff;

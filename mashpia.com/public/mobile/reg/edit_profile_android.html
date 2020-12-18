@@ -332,7 +332,7 @@
             font-size: 21px;
             font-weight: 700;
             line-height: 1;
-            color: #000;
+            color: #1b2b51;
             text-shadow: #fff 0 1px 0;
             opacity: .2
         }
@@ -419,7 +419,7 @@
         }
 
         h4 {
-            font-family: 'Source Sans Pro', sans-serif
+            font-family: 'Exo', sans-serif
         }
 
         .form-control {
@@ -879,10 +879,10 @@
             };
             "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
         }("undefined" != typeof global ? global : this),
-        function (e) {
-            if (e.loadCSS) {
-                var t = loadCSS.relpreload = {};
-                if (t.support = function () {
+            function (e) {
+                if (e.loadCSS) {
+                    var t = loadCSS.relpreload = {};
+                    if (t.support = function () {
                         try {
                             return e.document.createElement("link").relList.supports("preload")
                         } catch (e) {
@@ -895,16 +895,16 @@
                                 .getAttribute("media")), r.rel = null)
                         }
                     }, !t.support()) {
-                    t.poly();
-                    var n = e.setInterval(t.poly, 300);
-                    e.addEventListener && e.addEventListener("load", function () {
-                        t.poly(), e.clearInterval(n)
-                    }), e.attachEvent && e.attachEvent("onload", function () {
-                        e.clearInterval(n)
-                    })
+                        t.poly();
+                        var n = e.setInterval(t.poly, 300);
+                        e.addEventListener && e.addEventListener("load", function () {
+                            t.poly(), e.clearInterval(n)
+                        }), e.attachEvent && e.attachEvent("onload", function () {
+                            e.clearInterval(n)
+                        })
+                    }
                 }
-            }
-        }(this);
+            }(this);
     </script>
     <!--<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="js/ajaxupload.js" type="text/javascript"></script>-->
@@ -951,7 +951,7 @@
         <div class="container parent-page" id="crop-avatar">
             <div class="login-header">
                 <span class="span12 i18n" data-key="PARENTACCOUNT">PARENT'S ACCOUNT</span>
-               
+
             </div>
 
             <div class="register-box">
@@ -1016,7 +1016,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-user "></span></span>
-                                    <input id="father" name="father" type="text" data-key="Tatty" class="form-control" placeholder="tatty" />
+                                    <input id="father" name="father" type="text" data-key="Tatty" class="form-control"
+                                        placeholder="tatty" />
                                 </div>
                             </div>
                         </div>
@@ -1024,7 +1025,8 @@
                             <div class="form-group has-feedback" id="divmother">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-female "></span></span>
-                                    <input id="mother" name="mother" type="text" class="form-control" data-key="Mommy" placeholder="mommy" />
+                                    <input id="mother" name="mother" type="text" class="form-control" data-key="Mommy"
+                                        placeholder="mommy" />
                                 </div>
                             </div>
                         </div>
@@ -1035,7 +1037,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-user "></span></span>
-                                    <input id="lastname" name="lastname" type="text" class="form-control" data-key="Lastname" placeholder="Lastname" required />
+                                    <input id="lastname" name="lastname" type="text" class="form-control"
+                                        data-key="Lastname" placeholder="Lastname" required />
                                 </div>
                             </div>
                         </div>
@@ -1045,7 +1048,9 @@
                             <div class="form-group has-feedback" id="divemail">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-envelope-o "></span></span>
-                                    <input id="email" name="parentsemail" type="email" class="form-control" data-key="YourEmail" placeholder="Your Email" data-error="Oops, that email address is invalid" required />
+                                    <input id="email" name="parentsemail" type="email" class="form-control"
+                                        data-key="YourEmail" placeholder="Your Email"
+                                        data-error="Oops, that email address is invalid" required />
                                 </div>
                             </div>
                         </div>
@@ -1055,7 +1060,8 @@
                             <div class="form-group has-feedback" id="divaddress">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-home "></span></span>
-                                    <input id="address" name="address" type="text" class="form-control" data-key="HomeAddress" placeholder="Home Address" required />
+                                    <input id="address" name="address" type="text" class="form-control"
+                                        data-key="HomeAddress" placeholder="Home Address" required />
                                 </div>
                             </div>
                         </div>
@@ -1065,8 +1071,8 @@
                             <div class="form-group has-feedback" id="divcity">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-map-marker "></span></span>
-                                    <input id="city" name="city" type="text" class="form-control" datakey="City" placeholder="City"
-                                        required />
+                                    <input id="city" name="city" type="text" class="form-control" datakey="City"
+                                        placeholder="City" required />
                                 </div>
                             </div>
                         </div>
@@ -1076,8 +1082,8 @@
                             <div class="form-group has-feedback" id="divstate">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-sort-desc"></span></span>
-                                    <input id="state" name="state" type="text" class="form-control" data-key="State" placeholder="State"
-                                        required />
+                                    <input id="state" name="state" type="text" class="form-control" data-key="State"
+                                        placeholder="State" required />
                                 </div>
                             </div>
                         </div>
@@ -1085,8 +1091,8 @@
                             <div class="form-group has-feedback" id="divzip">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-long-arrow-right"></span></span>
-                                    <input id="zip" name="zip" type="text" class="form-control" data-key="ZipCode" placeholder="Zip Code"
-                                        required />
+                                    <input id="zip" name="zip" type="text" class="form-control" data-key="ZipCode"
+                                        placeholder="Zip Code" required />
                                 </div>
                             </div>
                         </div>
@@ -1096,8 +1102,8 @@
                             <div class="form-group has-feedback" id="divcountry">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-flag "></span></span>
-                                    <input id="country" name="country" type="text" class="form-control" data-key="Country"
-                                        placeholder="Country" />
+                                    <input id="country" name="country" type="text" class="form-control"
+                                        data-key="Country" placeholder="Country" />
                                 </div>
                             </div>
                         </div>
@@ -1109,8 +1115,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-phone"></span></span>
-                                    <input id="phone" name="phone" type="text" class="form-control" data-key="ContactNumber"
-                                        placeholder="Contact Number" required />
+                                    <input id="phone" name="phone" type="text" class="form-control"
+                                        data-key="ContactNumber" placeholder="Contact Number" required />
                                 </div>
                             </div>
 
@@ -1122,8 +1128,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-user"></span></span>
-                                    <input id="login" name="login" type="text" class="form-control" placeholder="Login" data-key="Login"
-                                        required />
+                                    <input id="login" name="login" type="text" class="form-control" placeholder="Login"
+                                        data-key="Login" required />
                                 </div>
                             </div>
                         </div>
@@ -1134,7 +1140,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-lock "></span></span>
-                                    <input id="pwd" name="pwd" type="password" class="form-control" data-key="Password" placeholder="Password" disabled />
+                                    <input id="pwd" name="pwd" type="password" class="form-control" data-key="Password"
+                                        placeholder="Password" disabled />
                                 </div>
                             </div>
                         </div>
@@ -1145,7 +1152,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span
                                             class="glyphicon glyphicon-lock "></span></span>
-                                    <input id="newpwd" name="newpwd" type="password" data-minlength="6" class="form-control" data-key="NewPassword" placeholder="New Password" />
+                                    <input id="newpwd" name="newpwd" type="password" data-minlength="6"
+                                        class="form-control" data-key="NewPassword" placeholder="New Password" />
                                 </div>
                             </div>
                         </div>
@@ -1330,8 +1338,8 @@
 
                 // access the web cam
                 navigator.mediaDevices.getUserMedia({
-                        video: constraints
-                    })
+                    video: constraints
+                })
                     // permission granted:
                     .then(function (stream) {
                         // video.src = window.URL.createObjectURL(stream);
@@ -1670,7 +1678,7 @@
             if (f.value) {
                 try {
                     f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
-                } catch (err) {}
+                } catch (err) { }
                 if (f.value) { //for IE5 ~ IE10
                     var form = document.createElement('form'),
                         ref = f.nextSibling;

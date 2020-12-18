@@ -100,9 +100,9 @@
 
         /* New shamai changes, 4/8/2018 */
         .page5 .header {
-            background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
+            background-image: url("/mobile/img_new/Navy_Monoline_Background.png");
             background-size: cover;
-            background-color: #105023;
+            background-color: #1b2b51;
         }
 
         .page5 .lb-ico {
@@ -159,8 +159,7 @@
                         <a href="#" id="logOff">
                             <div><img src="/mobile/img_new/lock-color-white-svg.svg" /></div>
                             <div style="margin-left:10px">
-                                <span data-key="LogOut"
-                                      class="lb-ico i18n">logout</span>
+                                <span data-key="LogOut" class="lb-ico i18n">logout</span>
                             </div>
                         </a>
                     </div>
@@ -168,8 +167,7 @@
                         <a href="edit_profile.html">
                             <div><img src="/mobile/img_new/settings-color-white-svg.svg" /></div>
                             <div style="margin-right:10px;">
-                                <span data-key="edit"
-                                      class="lb-ico i18n">edit</span>
+                                <span data-key="edit" class="lb-ico i18n">edit</span>
                             </div>
                         </a>
                     </div>
@@ -481,7 +479,7 @@
                             <div class="menu-item">
                                 <div class="span12">
                                     <picture>
-                                        <img src="/mobile/img_new/news-color-green-svg.svg" alt="news" />
+                                        <img src="/mobile/img_new/news-color-white.svg" alt="news" />
                                     </picture>
                                 </div>
                                 <div class="span12">
@@ -501,7 +499,7 @@
         document.addEventListener("DOMContentLoaded", function () {
 
             if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
-           
+
             // allow parents to swipe to open a child's account.
             function setSwiper() {
                 $("#children .row").each(function () {
@@ -514,7 +512,7 @@
 
                 translate(); // on mobile\js\translation\parent-detail\parent_detail.js
 
-               
+
             }
 
             // make sure we have a cookie

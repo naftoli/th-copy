@@ -50,10 +50,10 @@
             };
             "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
         }("undefined" != typeof global ? global : this),
-        function (e) {
-            if (e.loadCSS) {
-                var t = loadCSS.relpreload = {};
-                if (t.support = function () {
+            function (e) {
+                if (e.loadCSS) {
+                    var t = loadCSS.relpreload = {};
+                    if (t.support = function () {
                         try {
                             return e.document.createElement("link").relList.supports("preload")
                         } catch (e) {
@@ -66,16 +66,16 @@
                                 .getAttribute("media")), r.rel = null)
                         }
                     }, !t.support()) {
-                    t.poly();
-                    var n = e.setInterval(t.poly, 300);
-                    e.addEventListener && e.addEventListener("load", function () {
-                        t.poly(), e.clearInterval(n)
-                    }), e.attachEvent && e.attachEvent("onload", function () {
-                        e.clearInterval(n)
-                    })
+                        t.poly();
+                        var n = e.setInterval(t.poly, 300);
+                        e.addEventListener && e.addEventListener("load", function () {
+                            t.poly(), e.clearInterval(n)
+                        }), e.attachEvent && e.attachEvent("onload", function () {
+                            e.clearInterval(n)
+                        })
+                    }
                 }
-            }
-        }(this);
+            }(this);
     </script>
     <script src="js/all.js" defer></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
@@ -102,6 +102,10 @@
 
         body {
             /*margin-bottom: 100px;*/
+        }
+
+        .footer .span3 span {
+            color: #6fb84a !important;
         }
 
         .disabled {
@@ -249,7 +253,7 @@
         }
 
         #raffle-navigation a {
-            color: #000;
+            color: #1b2b51;
             font-size: 1.3em;
             text-transform: capitalize;
         }
@@ -258,6 +262,10 @@
             height: 1px;
             margin: 5px;
             border-top: 1px solid #ddd;
+        }
+
+        span#main-title {
+            color: white !important;
         }
     </style>
 
@@ -341,8 +349,9 @@
                     <div class="span12"
                         style="margin-top: -10px; margin-bottom: 10px; text-align: center; font-size: 2rem;">
                         <span class="i18n" data-key="Click"> Click </span>
-                        <a href="https://vimeo.com/242843704" target="_blank" class="i18n" data-key="Here">here</a> 
-                        <span class="i18n" data-key="ForVid"> for a video explaining the Weekly Missions Raffle Reward System</span>
+                        <a href="https://vimeo.com/242843704" target="_blank" class="i18n" data-key="Here">here</a>
+                        <span class="i18n" data-key="ForVid"> for a video explaining the Weekly Missions Raffle Reward
+                            System</span>
                     </div>
                     <div class="span12 wrap1">
                         <div class="heDate i18n" data-key="RaffleWinners">Raffle Winners</div>
@@ -370,7 +379,7 @@
                         <a href="/mobile/reg/">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+                                    <img src="/mobile/img_new/boy-color-white.svg" alt="">
                                 </div>
                                 <div class="span12">
                                     <span id="main-title" class="i18n" data-key="Accounts">Accounts</span>
@@ -384,7 +393,7 @@
                         <a href="/mobile/reg/">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+                                    <img src="/mobile/img_new/boy-color-white.svg" alt="">
                                 </div>
                                 <div class="span12">
                                     <span class="i18n" data-key="LogIn">Log In</span>
@@ -398,7 +407,7 @@
                         <a href="/mobile/reg/">
                             <div class="menu-item">
                                 <div class="span12">
-                                    <img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+                                    <img src="/mobile/img_new/boy-color-white.svg" alt="">
                                 </div>
                                 <div class="span12">
                                     <span class="i18n" data-key="Click">Accounts</span>
