@@ -784,10 +784,11 @@
     </div>
     <script src="/mobile/js/authenticate.js" defer></script>
     <script>
-        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+        if (localStorage.getItem('locallang') == 'he') {
             $(".bug-report").hide()
             $(".sky-carousel").attr('direction', 'rtl')
         }
+        else $(".sky-carousel").attr('direction', 'ltr')
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
