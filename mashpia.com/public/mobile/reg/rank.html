@@ -697,7 +697,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="span12 slider" style="margin-top:10px; text-align: center; direction: rtl;">
+                    <div class="span12 slider" style="margin-top:10px; text-align: center;">
                         <img id="item0" src="/mobile/img_new/circle-color-white-solid.svg">
                         <img id="item1" src="/mobile/img_new/circle-color-white-solid.svg">
                         <img id="item2" src="/mobile/img_new/circle-color-white-solid.svg">
@@ -786,6 +786,7 @@
     <script>
         if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
             $(".bug-report").hide()
+            $(".sky-carousel").attr('direction', 'rtl')
         }
     </script>
     <script>
