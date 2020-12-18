@@ -16,7 +16,7 @@
 			?>
                 <div class="menu-item">
                     <div class="span12">
-                        <img src="/mobile/img_new/boy-color-green-svg.svg">
+                        <img src="/mobile/img_new/boy-color-white.svg">
                     </div>
                     <div class="span12">
                         <span data-key="Accounts" class="i18n">Accounts</span>
@@ -28,7 +28,7 @@
 			<a href="#" id="missionsLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="/mobile/img_new/square-check-color-purple-svg.svg">
+					<img src="/mobile/img_new/square-check-color-white.svg">
 				</div>
 				<div class="span12">
 					<span data-key="Missions" class="i18n">Missions</span>
@@ -40,7 +40,7 @@
 			<a href="#" id="rankLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="/mobile/img_new/achievements-color-orange-svg.svg">
+					<img src="/mobile/img_new/achievements-color-white.svg">
 				</div>
 				<div class="span12">
 					<span data-key="Achievements" class="i18n">Achievements</span>
@@ -52,7 +52,7 @@
 			<a href="#" id="storeLink">
 			<div class="menu-item">
 				<div class="span12">
-					<img src="/mobile/img_new/cart-color-red-svg.svg">
+					<img src="/mobile/img_new/cart-color-white.svg">
 				</div>
 				<div class="span12">
 					<span data-key="Rewards" class="i18n">Rewards</span>

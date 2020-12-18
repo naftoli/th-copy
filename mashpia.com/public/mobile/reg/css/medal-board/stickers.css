@@ -1,8 +1,8 @@
 /* Loader */
-.loader,.loader:after,.loader:before{border-radius:50%;width:2.5em;height:2.5em;-webkit-animation:load7 1.8s infinite ease-in-out;animation:load7 1.8s infinite ease-in-out}.loader{color:#f68829;font-size:10px;margin:80px auto;position:relative;text-indent:-9999em;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation-delay:-.16s;animation-delay:-.16s}.loader.bottom{margin-bottom:155px}.loader:after,.loader:before{content:'';position:absolute;top:0}.loader:before{left:-3.5em;-webkit-animation-delay:-.32s;animation-delay:-.32s}.loader:after{left:3.5em}@-webkit-keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}@keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}
+.loader,.loader:after,.loader:before{border-radius:50%;width:2.5em;height:2.5em;-webkit-animation:load7 1.8s infinite ease-in-out;animation:load7 1.8s infinite ease-in-out}.loader{color:#1b2b51;font-size:10px;margin:80px auto;position:relative;text-indent:-9999em;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation-delay:-.16s;animation-delay:-.16s}.loader.bottom{margin-bottom:155px}.loader:after,.loader:before{content:'';position:absolute;top:0}.loader:before{left:-3.5em;-webkit-animation-delay:-.32s;animation-delay:-.32s}.loader:after{left:3.5em}@-webkit-keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}@keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}
 @font-face { font-family: digi; src: url(/mobile/reg/font/DS-DIGIB.TTF); }
 /************************* CSS for all orange pages *************************/
-.modal-header, nav.navbar, .btn-branding { background-color: #f68829; color: #ffffff; }
+.modal-header, nav.navbar, .btn-branding { background-color: #1b2b51; color: #ffffff; }
 /* Navbar */
 nav.navbar { padding: 1.5%; }
 nav.navbar .navbar-title {
@@ -14,12 +14,12 @@ nav.navbar .navbar-title {
     nav.navbar { padding: .5rem 1rem; }
 }
 /* Navigation rows (nav-rows top and bottom) */
-.nav-row { background: #e6e6e6; text-align: center; margin: 0px; line-height: .96; }
+.nav-row { background: #4258a2; text-align: center; margin: 0px; line-height: .96; }
 .nav-row a { display: inline-block; width: 100%; }
 .nav-row a:hover { text-decoration: none; }
-.nav-row .active, .nav-row > div:hover { background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9); cursor: pointer; }
+.nav-row .active, .nav-row > div:hover { background: #343862; cursor: pointer; }
 .nav-row img { height: 40px; width: 40px;  padding-top: 10px;  margin-bottom: 5px; }
-.nav-row span { display: block; padding: 5px; color: grey;  font-size: 8px; transition: .1s; }
+.nav-row span { display: block; padding: 5px; color: white;  font-size: 8px; transition: .1s; }
 select#rank { border-radius: 15px; }
 .btn.focus, .btn:focus { box-shadow: none; }
 @media screen and (min-width: 479px) {
@@ -36,7 +36,7 @@ img#userImg { border-radius: 50%; width: 100%; height: 100%; border: 2px solid #
 /* Top navigation */
 #top-nav { width: 100%; }
 /* Footer */
-footer { position: fixed;    width: 100%;    bottom: 0; border-top: 2px solid #9f9f9f; }
+footer { position: fixed;    width: 100%;    bottom: 0; }
 
 /************************* CSS for progress bars *************************/
 .progress {
@@ -44,7 +44,7 @@ footer { position: fixed;    width: 100%;    bottom: 0; border-top: 2px solid #9
     margin-top: 5px; margin-bottom: 0px; text-align: center; height: 25px;
 }
 .progress-bar {
-    background-color: #f39c12; height: 100%; animation-name: progress-bar-slide; animation-duration: 2.5s;
+    background-color: #ffd942; height: 100%; animation-name: progress-bar-slide; animation-duration: 2.5s;
     background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
 }
 .progress span { position: absolute; top: 0px; right: 0px; left: 0px; font-family: digi, monospace; font-size: 1.3em; }
@@ -53,8 +53,8 @@ section#medal-slider .progress span { font-size: 1.4em; }
 
 .progress-bar.white { background-color: #bbbbbb; }
 .progress-bar.red { background-color: #ef5350; }
-.progress-bar.orange { background-color: #ffa726; }
-.progress-bar.yellow { background-color: #fdd835; }
+.progress-bar.orange { background-color: #ffd942; }
+.progress-bar.yellow { background-color: #ffd942; }
 .progress-bar.green { background-color: #9ccc65; }
 .progress-bar.blue { background-color: #29b6f6; }
 .progress-bar.purple { background-color: #ab47bc; }
@@ -71,8 +71,8 @@ section#medal-slider .progress span { font-size: 1.4em; }
 /************************* CSS for Stickers page *************************/
 img { max-width: 100%; }
 .medal-subject {
-    background-image: url(/mobile/img_new/banner-1-color-orange-svg.svg);
-    background-size: 100% 100%; height: 35px; margin-top: -35px; line-height: 43px; position: relative;
+    background-image: url(/mobile/img_new/medal-ribbon-color-blue.svg);
+    background-size: 100% 130%; height: 35px; margin-top: -35px; line-height: 43px; position: relative;
     transition: .25s; font-size: 1.2em; color: #ffffff; margin-bottom: 10px;
 }
 .medal-subject span { font-family: font1, "Times New Roman"; }
@@ -118,7 +118,7 @@ ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-co
 /* Slider campaign info */
 .campaign-info { 
     display: flex; justify-content: center; font-size: .7em; text-align: center;
-    background: #f39c12; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
+    background: #ffd942; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
 }
 .campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
 span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; }

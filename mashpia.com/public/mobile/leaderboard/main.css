@@ -1,6 +1,6 @@
 /* Branding color */
 .modal-header, nav.navbar, .btn-branding {
-    background-color: #f68829;
+    background-color: #1b2b51;
     color: #ffffff;
 }
 /* Navbar */
@@ -26,7 +26,7 @@ nav.navbar .navbar-title {
 }
 /* Navigation rows (nav-rows top and bottom) */
 .nav-row {
-    background: #e6e6e6; text-align: center;
+    background: #4258a2; text-align: center;
     margin: 0px; line-height: .96;
 }
 .nav-row a {
@@ -37,7 +37,7 @@ nav.navbar .navbar-title {
     text-decoration: none;
 }
 .nav-row .active, .nav-row > div:hover {
-    background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9);
+    background: #343862;
     cursor: pointer;
 }
 .nav-row img {
@@ -46,7 +46,7 @@ nav.navbar .navbar-title {
 }
 .nav-row span {
     display: block; padding: 5px;
-    color: grey;  font-size: 8px;
+    color: white;  font-size: 8px;
     transition: .1s;
 }
 select#rank {
@@ -96,5 +96,4 @@ img#userImg {
 /* Footer */
 footer {
     position: fixed;    width: 100%;    bottom: 0;
-    border-top: 2px solid #9f9f9f;
 } 

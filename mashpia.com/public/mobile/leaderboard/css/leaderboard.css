@@ -26,7 +26,7 @@ h2#user_position {
     vertical-align: middle;
 }
 .filter-option > span {
-    border: 1px solid #f68829;
+    border: 1px solid #1b2b51;
     padding: 6px 10px;
     background: #fff;
     transition: .25s;
@@ -34,10 +34,10 @@ h2#user_position {
 }
 .filter-option > span:hover{
     cursor: pointer;
-    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
+    background: -webkit-linear-gradient(top,#ffcb9d,#1b2b51);
 }
 .filter-option > input[type="radio"]:checked ~ span {
-    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
+    background: -webkit-linear-gradient(top,#ffcb9d,#1b2b51);
 }
 .filter-option:first-child > span {
     border-bottom-left-radius: 10px;
@@ -131,7 +131,7 @@ div#load-more-box {
 }
 
 .alert-branding{
-    background-color: #f68829;
+    background-color: #1b2b51;
     color: #fff; font-size: 1.2em;
     width: 80%; max-width: 400px;
     margin: 10% auto;

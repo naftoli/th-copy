@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+
 html {
-    font-family: sans-serif;
+    font-family: Exo, sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%
 }
@@ -48,7 +51,7 @@ h1 {
 }
 
 mark {
-    color: #000;
+    color: #1b2b51;
     background: #ff0
 }
 
@@ -256,7 +259,7 @@ td, th {
 @font-face {
     font-family: 'Glyphicons Halflings';
     src: url(../fonts/glyphicons-halflings-regular.eot);
-    src: url(../fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),url(../fonts/glyphicons-halflings-regular.woff2) format('woff2'),url(../fonts/glyphicons-halflings-regular.woff) format('woff'),url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg')
+    src: url(../fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),url(../fonts/glyphicons-halflings-regular.ttf) format('woff2'),url(../fonts/glyphicons-halflings-regular.woff) format('woff'),url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg')
 }
 
 .glyphicon {
@@ -905,7 +908,7 @@ html {
 }
 
 body {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Exo', "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
@@ -4302,8 +4305,8 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
     height: 20px;
     margin-bottom: 20px;
     overflow: hidden;
-    background-color: #f5f5f5;
-    border-radius: 4px;
+    background-color: #b5b9d3;
+    border-radius: 15px;
     -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
     box-shadow: inset 0 1px 2px rgba(0,0,0,.1)
 }
@@ -4935,13 +4938,13 @@ a.list-group-item-danger {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: #000;
+    color: #1b2b51;
     text-shadow: 0 1px 0 #fff;
     opacity: .2
 }
 
     .close:focus, .close:hover {
-        color: #000;
+        color: #1b2b51;
         text-decoration: none;
         cursor: pointer;
         opacity: .5
@@ -5104,7 +5107,7 @@ button.close {
     position: absolute;
     z-index: 1070;
     display: block;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: Exo, "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 12px;
     font-weight: 400;
     line-height: 1.4;
@@ -5141,7 +5144,7 @@ button.close {
     color: #fff;
     text-align: center;
     text-decoration: none;
-    background-color: #000;
+    background-color: #1b2b51;
     border-radius: 4px
 }
 
@@ -5225,7 +5228,7 @@ button.close {
     display: none;
     max-width: 276px;
     padding: 1px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family:Exo, "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.42857143;
@@ -5501,7 +5504,7 @@ button.close {
         width: 20px;
         height: 20px;
         margin-top: -10px;
-        font-family: serif;
+        font-family: Exo, serif;
         line-height: 1
     }
 
@@ -9240,7 +9243,12 @@ button.close {
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Sans Pro',sans-serif
+    font-family: 'Exo',sans-serif;
+    color: #1b2b51;
+}
+
+p {
+    color: #1b2b51;
 }
 
 a {
@@ -9383,7 +9391,7 @@ a {
     line-height: 50px;
     text-align: center;
     width: 100%;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Exo', "Helvetica Neue",Helvetica,Arial,sans-serif;
     padding: 0 15px;
     font-weight: 300;
     overflow: hidden
@@ -10186,11 +10194,11 @@ a {
 }
 
 .form-group.has-warning label {
-    color: #f39c12
+    color: #ffd942
 }
 
 .form-group.has-warning .form-control {
-    border-color: #f39c12 !important;
+    border-color: #ffd942 !important;
     box-shadow: none
 }
 
@@ -10307,7 +10315,7 @@ a {
 }
 
 .progress-bar-warning, .progress-bar-yellow {
-    background-color: #f39c12
+    background-color: #ffd942
 }
 
 .progress-striped .progress-bar-warning, .progress-striped .progress-bar-yellow {
@@ -10436,7 +10444,7 @@ a {
     }
 
     .box.box-warning {
-        border-top-color: #f39c12
+        border-top-color: #ffd942
     }
 
     .box.box-success {
@@ -10533,13 +10541,13 @@ a {
                 }
 
         .box.box-solid.box-warning {
-            border: 1px solid #f39c12
+            border: 1px solid #ffd942
         }
 
             .box.box-solid.box-warning > .box-header {
                 color: #fff;
-                background: #f39c12;
-                background-color: #f39c12
+                background: #ffd942;
+                background-color: #ffd942
             }
 
                 .box.box-solid.box-warning > .box-header .btn, .box.box-solid.box-warning > .box-header a {
@@ -10588,7 +10596,7 @@ a {
             left: 50%;
             margin-left: -15px;
             margin-top: -15px;
-            color: #000;
+            color: #1b2b51;
             font-size: 30px
         }
 
@@ -10683,7 +10691,7 @@ a {
         }
 
         .todo-list > li.warning {
-            border-left-color: #f39c12
+            border-left-color: #ffd942
         }
 
         .todo-list > li.info {
@@ -10906,7 +10914,7 @@ a {
     }
 
 .btn-warning {
-    background-color: #f39c12;
+    background-color: #ffd942;
     border-color: #e08e0b
 }
 
@@ -11013,7 +11021,7 @@ a {
     }
 
     .alert .close {
-        color: #000;
+        color: #1b2b51;
         opacity: .2
     }
 
@@ -11470,7 +11478,7 @@ table.text-center, table.text-center td, table.text-center th {
 }
 
 .alert-warning, .bg-yellow, .callout.callout-warning, .modal-warning .modal-body {
-    background-color: #f39c12 !important
+    background-color: #ffd942 !important
 }
 
 .alert-info, .callout.callout-info, .label-info, .modal-info .modal-body {
@@ -11542,7 +11550,7 @@ table.text-center, table.text-center td, table.text-center th {
 }
 
 .text-yellow {
-    color: #f39c12 !important
+    color: #ffd942 !important
 }
 
 .text-blue {
@@ -11657,7 +11665,7 @@ table.text-center, table.text-center td, table.text-center th {
     width: 90px;
     border-radius: 50%;
     border: 1px solid;
-    border-color: #000;
+    border-color: #1b2b51;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -11819,7 +11827,7 @@ table.text-center, table.text-center td, table.text-center th {
     }
 
 @font-face {
-    font-family: font1-bold;
+    font-family: Exo;
     src: url(../fonts/SourceSansPro-Bold.otf);
     src: url(../fonts/SourceSansPro-Bold.otf) format('opentype');
     font-weight: 700;
@@ -11827,7 +11835,7 @@ table.text-center, table.text-center td, table.text-center th {
 }
 
 @font-face {
-    font-family: font1;
+    font-family: Exo;
     src: url(../fonts/SourceSansPro-Regular.otf);
     src: url(../fonts/SourceSansPro-Regular.otf) format('opentype');
     font-weight: 400;
@@ -11865,7 +11873,7 @@ body {
 
 .header {
     background-image: url(../img/starbg.png);
-    background-color: #105023;
+    background-color: #1b2b51;
     height: 370px
 }
 
@@ -11898,15 +11906,15 @@ body {
 }
 
 .header .title {
-    color: #ffc100;
+    color: #ffd942;
     font-size: 26px;
-    font-family: font1-bold
+    font-family: Exo;
 }
 
 .header .descr {
     color: #fff;
     font-size: 26px;
-    font-family: font1
+    font-family: Exo
 }
 
 .header-setting {
@@ -11920,7 +11928,7 @@ body {
         color: rgba(255,255,255,.6);
         margin: 15px;
         line-height: 35px;
-        font-family: font1
+        font-family: Exo
     }
 
 .header-edit {
@@ -11933,7 +11941,7 @@ body {
         color: rgba(255,255,255,.6);
         margin: 15px;
         line-height: 37px;
-        font-family: font1
+        font-family: Exo
     }
 
 .header .top-left-space {
@@ -11968,20 +11976,20 @@ body {
         font-size: 84px;
         color: #dfd835;
         line-height: 115px;
-        font-family: font1
+        font-family: Exo;
     }
 
 .body .medal-label {
     background-image: url(../img/medal-caption.jpg);
     text-align: center;
-    background-size: 100% 100%
+    background-size: 100% 100%;
 }
 
     .body .medal-label span {
-        font-size: 30px;
+        font-size: 34px;
         color: #fff;
         line-height: 60px;
-        font-family: font1
+        font-family: Exo;
     }
 
 .l-3 .medal {
@@ -12006,7 +12014,7 @@ body {
     .l-3 .medal-sub span {
         color: #fff;
         line-height: 26px;
-        font-family: font1;
+        font-family: Exo;
         font-size: 24px;
         display: block;
         margin-top: 12px
@@ -12044,7 +12052,7 @@ body {
         .l-4 .medal-sub span {
             color: #fff;
             line-height: 26px;
-            font-family: font1;
+            font-family: Exo;
             font-size: 24px;
             display: block;
             margin-top: 12px
@@ -12052,7 +12060,6 @@ body {
 
 .footer {
     text-align: center;
-    border-top: 2px solid #9f9f9f;
     display: table;
     width: 100%
 }
@@ -12062,14 +12069,14 @@ body {
 }
 
 .footer .span3 {
-    background-color: #e6e6e6
+    background-color: #4358a2;
 }
 
     .footer .span3 span {
         padding: 5px;
-        color: grey;
+        color: white;
         font-size: 20px;
-        font-family: font1
+        font-family: Exo
     }
 
 .footer .menu-item {
@@ -12090,13 +12097,7 @@ body {
 
 .footer .span3.active, .footer .span3:hover {
     cursor: pointer;
-    background-color: #999;
-    background-repeat: repeat-x;
-    background: -webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));
-    background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9);
-    background: -moz-linear-gradient(top,#e9e9e9,#b7b8B9);
-    background: -ms-linear-gradient(top,#e9e9e9,#b7b8B9);
-    background: -o-linear-gradient(top,#e9e9e9,#b7b8B9)
+    background-color: #343862;
 }
 
 .login-header {
@@ -12107,7 +12108,7 @@ body {
     .login-header span {
         font-size: 48px;
         color: #fff;
-        font-family: font1;
+        font-family: Exo;
         font-weight: 700;
         text-align: center;
         line-height: 80px
@@ -12155,7 +12156,7 @@ body {
     height: 76px;
     border-color: transparent;
     font-size: 30px;
-    font-family: font1
+    font-family: Exo
 }
 
 .login-box-body .input-group-addon {
@@ -12176,7 +12177,7 @@ body {
 }
 
 .login-box-body .btn-primary {
-    font-family: font1-bold;
+    font-family: Exo;
     font-size: 30px
 }
 
@@ -12252,7 +12253,7 @@ input.form-control:not(:focus) {
 
 .bootstrap-select.btn-group .dropdown-toggle .filter-option {
     font-size: 30px;
-    font-family: font1;
+    font-family: Exo;
     color: #555
 }
 
@@ -12271,7 +12272,7 @@ input.form-control:not(:focus) {
 .forgot-page .error-box {
     display: none;
     margin-bottom: 0;
-    font-family: font1;
+    font-family: Exo;
     color: #000
 }
 
@@ -12323,7 +12324,7 @@ input.form-control:not(:focus) {
 .page5 .lb-ico {
     font-size: 20px;
     color: #7fa690;
-    font-family: font1
+    font-family: Exo
 }
 
 .page5 .avatar {
@@ -12405,7 +12406,7 @@ input.form-control:not(:focus) {
 }
 
 .page5 .btn-primary {
-    font-family: font1-bold;
+    font-family: Exo;
     font-size: 30px
 }
 
@@ -12467,7 +12468,7 @@ input.form-control:not(:focus) {
     height: 76px;
     border-color: transparent;
     font-size: 30px;
-    font-family: font1
+    font-family: Exo
 }
 
 .register-box .input-group-addon {
@@ -12479,7 +12480,7 @@ input.form-control:not(:focus) {
 }
 
 .register-box .btn-primary {
-    font-family: font1-bold;
+    font-family: Exo;
     font-size: 30px
 }
 
@@ -12516,7 +12517,7 @@ input.form-control:not(:focus) {
 }
 
 .register-box .btn-primary {
-    font-family: font1-bold;
+    font-family: Exo;
     font-size: 30px
 }
 
@@ -12561,7 +12562,7 @@ input.form-control:not(:focus) {
 
 .header-yellow {
     width: 100%;
-    background-color: #f68829
+    background-color: #1b2b51
 }
 
     .header-yellow table {
@@ -12586,7 +12587,7 @@ input.form-control:not(:focus) {
     font-size: 40px;
     text-align: center;
     color: #2c58ba;
-    font-family: font1-bold;
+    font-family: Exo;
     line-height: 60px
 }
 
@@ -12631,7 +12632,7 @@ input.form-control:not(:focus) {
     }
 
     .body .medal-label span {
-        font-size: 26px;
+        font-size: 30px;
         line-height: 50px
     }
 
@@ -12710,7 +12711,7 @@ input.form-control:not(:focus) {
     }
 
     .body .medal-label span {
-        font-size: 22px;
+        font-size: 26px;
         line-height: 40px
     }
 
@@ -12851,7 +12852,7 @@ input.form-control:not(:focus) {
     }
 
     .body .medal-label span {
-        font-size: 22px;
+        font-size: 26px;
         line-height: 40px
     }
 
@@ -12985,7 +12986,7 @@ input.form-control:not(:focus) {
 
     .bootstrap-select.btn-group .dropdown-toggle .filter-option {
         font-size: 17px;
-        font-family: font1;
+        font-family: Exo;
         color: #555
     }
 
@@ -13017,7 +13018,7 @@ input.form-control:not(:focus) {
     .page5 .lb-ico {
         font-size: 15px;
         color: #7fa690;
-        font-family: font1
+        font-family: Exo
     }
 
     .page5 .profile-name {
@@ -13152,7 +13153,7 @@ input.form-control:not(:focus) {
     }
 
     .register-box .btn-primary {
-        font-family: font1-bold;
+        font-family: Exo;
         font-size: 22px
     }
 
@@ -13280,7 +13281,7 @@ input.form-control:not(:focus) {
     }
 
     .body .medal-label span {
-        font-size: 18px;
+        font-size: 22px;
         line-height: 30px
     }
 
@@ -13422,7 +13423,7 @@ input.form-control:not(:focus) {
 
     .bootstrap-select.btn-group .dropdown-toggle .filter-option {
         font-size: 12px;
-        font-family: font1;
+        font-family: Exo;
         color: #555
     }
 
@@ -13462,7 +13463,7 @@ input.form-control:not(:focus) {
     .page5 .lb-ico {
         font-size: 11px;
         color: #7fa690;
-        font-family: font1
+        font-family: Exo
     }
 
     .page5 .profile-name {
@@ -14726,7 +14727,7 @@ p.bjqs-caption {
 
 .cropper-modal {
     opacity: .5
-    /*background-color: #000;
+    /*background-color: #1b2b51;
     */
 }
 
@@ -15269,7 +15270,7 @@ body {
 
     #keyboardInputMaster * {
         position: static;
-        color: #000;
+        color: #1b2b51;
         background: 0 0;
         font: normal 11px Arial,sans-serif;
         width: auto;

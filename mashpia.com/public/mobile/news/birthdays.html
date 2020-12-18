@@ -119,19 +119,18 @@
 
 		.footer {
 			text-align: center;
-			border-top: 2px solid #9f9f9f;
 			display: table;
 			max-width: 1014px;
 			width: 100%
 		}
 
 		.footer .span3 {
-			background-color: #e6e6e6
+			background-color: #4258a2;
 		}
 
 		.footer .span3 span {
 			padding: 5px;
-			color: grey;
+			color: #6fb84a !important;
 			font-size: 20px;
 			font-family: font1
 		}
@@ -147,13 +146,7 @@
 		}
 
 		.footer .span3.active {
-			background-color: #999;
-			background-repeat: repeat-x;
-			background: -webkit-gradient(linear, 0 0, 0 100%, from(#b7b8b9), to(#e9e9e9));
-			background: -webkit-linear-gradient(top, #e9e9e9, #b7b8B9);
-			background: -moz-linear-gradient(top, #e9e9e9, #b7b8B9);
-			background: -ms-linear-gradient(top, #e9e9e9, #b7b8B9);
-			background: -o-linear-gradient(top, #e9e9e9, #b7b8B9)
+			background-color: #343862;
 		}
 
 		.header-green {
@@ -333,6 +326,10 @@
 		.container .body {
 			background-image: url(images/news/star.png);
 		}
+
+		span#main-title {
+			color: white !important;
+		}
 	</style>
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
@@ -378,10 +375,10 @@
 			};
 			"undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
 		}("undefined" != typeof global ? global : this),
-		function (e) {
-			if (e.loadCSS) {
-				var t = loadCSS.relpreload = {};
-				if (t.support = function () {
+			function (e) {
+				if (e.loadCSS) {
+					var t = loadCSS.relpreload = {};
+					if (t.support = function () {
 						try {
 							return e.document.createElement("link").relList.supports("preload")
 						} catch (e) {
@@ -394,16 +391,16 @@
 								"media")), r.rel = null)
 						}
 					}, !t.support()) {
-					t.poly();
-					var n = e.setInterval(t.poly, 300);
-					e.addEventListener && e.addEventListener("load", function () {
-						t.poly(), e.clearInterval(n)
-					}), e.attachEvent && e.attachEvent("onload", function () {
-						e.clearInterval(n)
-					})
+						t.poly();
+						var n = e.setInterval(t.poly, 300);
+						e.addEventListener && e.addEventListener("load", function () {
+							t.poly(), e.clearInterval(n)
+						}), e.attachEvent && e.attachEvent("onload", function () {
+							e.clearInterval(n)
+						})
+					}
 				}
-			}
-		}(this);
+			}(this);
 	</script>
 	<script src="js/all.js" defer></script>
 	<style>
@@ -458,10 +455,10 @@
 			display: none;
 		}
 	</style>
-	
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-    <script src="../js/translation/news/birthdays/news_birthday.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/news/birthdays/news_birthday.js"></script>
 </head>
 
 <body class="news">
@@ -470,7 +467,7 @@
 			<table style="width: 100%;">
 				<tr>
 					<td class="t-news" style="text-align: center;">
-						<span class="span12 i18n" data-key="CHAYOLIMSBIRTHDAYS" >CHAYOLIM'S BIRTHDAYS</span>
+						<span class="span12 i18n" data-key="CHAYOLIMSBIRTHDAYS">CHAYOLIM'S BIRTHDAYS</span>
 					</td>
 				</tr>
 			</table>
@@ -478,9 +475,9 @@
 		<div style="float: right;">
 			<button type="button" id="en" class="translate">English</button>
 			<button type="button" id="he" class="translate">עִברִית</button>
-		</div>	 
+		</div>
 	</div>
- 
+
 	<div class="container">
 		<div class="span12">
 
@@ -572,7 +569,7 @@
 						<a href="/mobile/reg/">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+									<img src="/mobile/img_new/boy-color-white.svg" alt="">
 								</div>
 								<div class="span12">
 									<span id="main-title" class="i18n" data-key="News">Accounts</span>
@@ -586,7 +583,7 @@
 						<a href="/mobile/reg/">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+									<img src="/mobile/img_new/boy-color-white.svg" alt="">
 								</div>
 								<div class="span12">
 									<span class="i18n" data-key="News">Log In</span>
@@ -600,7 +597,7 @@
 						<a href="/mobile/reg/">
 							<div class="menu-item">
 								<div class="span12">
-									<img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+									<img src="/mobile/img_new/boy-color-white.svg" alt="">
 								</div>
 								<div class="span12">
 									<span class="i18n" data-key="News">Accounts</span>
@@ -688,7 +685,7 @@
 					html += '<div class="mazalTov">!מזל טוב! שנת הצלחה</div>';
 					html += '<div style="width : 90%; margin : 2% 5%;">';
 					html += '<div style="float: left; width: 48%;">';
-					html += '<div class="b-t-title"><span>'+ i18next.t('Boys') +'</span></div>';
+					html += '<div class="b-t-title"><span>' + i18next.t('Boys') + '</span></div>';
 
 					if (boys.length) {
 						for (var p in boys) {
@@ -707,7 +704,7 @@
 					html += '</div>';
 
 					html += '<div style="float: right; width: 48%;">';
-					html += '<div class="b-t-title"><span>'+i18next.t('Girls') +'</span></div>';
+					html += '<div class="b-t-title"><span>' + i18next.t('Girls') + '</span></div>';
 					if (girls.length) {
 						for (var p in girls) {
 							html += '<div class="user"><div class="b-t-description">';

@@ -5,7 +5,7 @@
 
 .medal-board {
     max-width: 994px;
-    margin: 0 auto 10px;
+    margin: 10px auto 10px;
     text-align: center;
 }
 
@@ -21,14 +21,17 @@ img.medal-img {
 }
 
 .medal-board .medal-subject {
-    background-image: url(/mobile/img_new/banner-1-color-orange-svg.svg);
+    background-image: url(/mobile/img_new/medal-ribbon-color-blue.svg);
     background-size: 100% 100%;
+    transform: scale(1.2);
     height: 30px;
     margin-top: -20px;
-    line-height: 33px;
     position: relative;
     transition: .25s;
-    font-size: 1.2em;
+    font-size: 0.7em;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .medal-board .medal-subject span {
@@ -37,19 +40,21 @@ img.medal-img {
     line-height: normal;
     color: #fff;
     font-family: font1, "Times New Roman";
+    margin-bottom: 5px;
 }
 
 .medal-board .medal-status {
     position: relative;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
 }
 
 .medal-board .progress-bar {
-    background-color: #f39c12;
+    background-color: #ffd942;
     height: 100%;
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    /* background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent); */
     animation-name: progress-bar-slide;
+    background-image: linear-gradient(to left, transparent, rgba(255,255,255,.15));
     animation-duration: 2.5s;
 }
 
@@ -61,10 +66,10 @@ img.medal-img {
     background-color: #ef5350;
 }
 .medal-board .progress-bar.orange {
-    background-color: #ffa726;
+    background-color: #ffd942;
 }
 .medal-board .progress-bar.yellow {
-    background-color: #fdd835;
+    background-color: #ffd942;
 }
 .medal-board .progress-bar.green {
     background-color: #9ccc65;
@@ -90,11 +95,13 @@ img.medal-img {
 
 .medal-status span {
     position: absolute;
-    top: 0px;
+    top: 3px;
     right: 0px;
     left: 0px;    
-    font-family: digi, monospace;
-    font-size: 1.1em;
+    font-family: Exo;
+    font-size: 0.8em;
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
 .medal-status.progress {
@@ -108,7 +115,7 @@ img.medal-img {
 
 @media ( max-width: 322px ) {
     .medal-board .medal-subject {
-        font-size: 1em;
+        font-size: 0.5em;
     }
 }
 
@@ -130,7 +137,7 @@ img.medal-img {
         height: 40px;
         margin-top: -25px;
         line-height: 45px;
-        font-size: 1.4em;
+        font-size: 0.9em;
     }
 }
 
@@ -139,7 +146,7 @@ img.medal-img {
         height: 40px;
         margin-top: -30px;
         line-height: 45px;
-        font-size: 1.6em;
+        font-size: 1.1em;
     }
 
     .medal-status.progress {
@@ -156,7 +163,7 @@ img.medal-img {
         height: 50px;
         margin-top: -30px;
         line-height: 55px;
-        font-size: 1.6em;
+        font-size: 1.1em;
     }
 }
 
@@ -172,6 +179,6 @@ img.medal-img {
 
 @media ( min-width: 900px ) {
     .medal-board .medal-subject {
-        font-size: 2em;
+        font-size: 1.5em;
     }
 }

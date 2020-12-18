@@ -1,221 +1,231 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <title>Auction</title>
-    <meta content="IE=edge" http-equiv="x-ua-compatible">
-    <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="yes" name="apple-touch-fullscreen">
 
-    <!-- Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+<head>
+	<title>Auction</title>
+	<meta content="IE=edge" http-equiv="x-ua-compatible">
+	<meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="yes" name="apple-touch-fullscreen">
 
-    <!-- Icons -->
-    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" media="all" rel="stylesheet" type="text/css">
+	<!-- Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
 
-    <!-- Styles -->
-    <link href="css/keyframes.css" rel="stylesheet" type="text/css">
-    <link href="css/materialize.min.css" rel="stylesheet" type="text/css">
-    <link href="css/swiper.css" rel="stylesheet" type="text/css">
-    <link href="css/swipebox.min.css" rel="stylesheet" type="text/css">
-    <link href="css/style.css" rel="stylesheet" type="text/css">
-	
-		<style>
-			.children {
-				/*border: 1px solid #ddd !important;*/
-				padding-bottom: 0 !important;
-				height: auto;
-			}
-			.children li {
-				padding-left: 10px !important;
-			}
-			.span3 {
-				float: left;
-				width: 50%;
-			}
-			.span3:hover {
-				cursor: pointer;
-				background-color: #999999;
-				background-repeat: repeat-x;
-				background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#B7B8B9), to(#E9E9E9));
-				background: -webkit-linear-gradient(top, #E9E9E9, #B7B8B9);
-				background: -moz-linear-gradient(top, #E9E9E9, #B7B8B9);
-				background: -ms-linear-gradient(top, #E9E9E9, #B7B8B9);
-				background: -o-linear-gradient(top, #E9E9E9, #B7B8B9);
-			}
+	<!-- Icons -->
+	<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" media="all" rel="stylesheet"
+		type="text/css">
 
-			.span12 {
-				width: 100%;
-				text-align: center;
-			}
-			.span12 img {
-				margin: 0 auto;
-			}
-			.span12 span {
-				color: #808080;
-				font-size: 18px;
-			}
-			.footer {
-				border-top: 2px solid #9f9f9f;
-				display: table;
-				max-width: 1020px;
-				width: 100%;
-				background-color: #e6e6e6;
-			}
+	<!-- Styles -->
+	<link href="css/keyframes.css" rel="stylesheet" type="text/css">
+	<link href="css/materialize.min.css" rel="stylesheet" type="text/css">
+	<link href="css/swiper.css" rel="stylesheet" type="text/css">
+	<link href="css/swipebox.min.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+
+	<style>
+		.children {
+			/*border: 1px solid #ddd !important;*/
+			padding-bottom: 0 !important;
+			height: auto;
+		}
+
+		.children li {
+			padding-left: 10px !important;
+		}
+
+		.span3 {
+			float: left;
+			width: 50%;
+		}
+
+		.span3:hover {
+			cursor: pointer;
+			background-color: #343862;
+		}
+
+		.span12 {
+			width: 100%;
+			text-align: center;
+		}
+
+		.span12 img {
+			margin: 0 auto;
+		}
+
+		.span12 span {
+			color: #808080;
+			font-size: 18px;
+		}
+
+		.footer {
+			display: table;
+			max-width: 1020px;
+			width: 100%;
+			background-color: #e6e6e6;
+		}
+
+		.footer .menu-item {
+			width: 130px;
+			margin: 0 auto;
+		}
+
+		@media screen and (max-width: 900px) {
 			.footer .menu-item {
-				width: 130px;
-				margin: 0 auto;
+				width: 120px;
 			}
-			
-			@media screen and (max-width: 900px) {
-				.footer .menu-item {
-						width: 120px;
-				}
-				.footer .span12 img {
-					width: 80px;
-				}
+
+			.footer .span12 img {
+				width: 80px;
 			}
-			
-			@media screen and (max-width: 767px) {
-				.footer .menu-item {
-						width: 120px;
-				}
-				.footer .span12 img {
-					width: 60px;
-				}
-				.footer .span12 span {
-					font-size: 14px;
-				}
+		}
+
+		@media screen and (max-width: 767px) {
+			.footer .menu-item {
+				width: 120px;
 			}
-			
-			@media screen and (max-width: 639px) {
-				.footer .menu-item {
-						width: 100px;
-						height: 60px;
-				}
-				.footer .span12 img {
-					width: 50px;
-				}
-				.footer .span12 span {
-					font-size: 12px;
-				}
+
+			.footer .span12 img {
+				width: 60px;
 			}
-			
-			@media screen and (max-width: 479px) {
-				.footer .menu-item {
-						width: 60px;
-						height: 50px;
-				}
-				.footer .span12 img {
-					width: 30px;
-				}
-				.footer .span12 span {
-					font-size: 8px;
-				}
+
+			.footer .span12 span {
+				font-size: 14px;
 			}
-		</style>
+		}
+
+		@media screen and (max-width: 639px) {
+			.footer .menu-item {
+				width: 100px;
+				height: 60px;
+			}
+
+			.footer .span12 img {
+				width: 50px;
+			}
+
+			.footer .span12 span {
+				font-size: 12px;
+			}
+		}
+
+		@media screen and (max-width: 479px) {
+			.footer .menu-item {
+				width: 60px;
+				height: 50px;
+			}
+
+			.footer .span12 img {
+				width: 30px;
+			}
+
+			.footer .span12 span {
+				font-size: 8px;
+			}
+		}
+	</style>
 </head>
 
-  <body>
-    <div id="main"> <!-- Main Container -->
-		
-      <div id="spinner"></div>
-    	
-      <!-- Sidebar -->
-      <ul id="slide-out" class="side-nav primary-color collapsible menu">
-        
-      </ul>
-      <!-- End of Sidebars -->
-			
-			<!-- Sidebar -->
-			<!--
+<body>
+	<div id="main">
+		<!-- Main Container -->
+
+		<div id="spinner"></div>
+
+		<!-- Sidebar -->
+		<ul id="slide-out" class="side-nav primary-color collapsible menu">
+
+		</ul>
+		<!-- End of Sidebars -->
+
+		<!-- Sidebar -->
+		<!--
       <ul id="slide-out-left" class="side-nav primary-color collapsible children">
 			-->
-        
-      </ul>
-      <!-- End of Sidebars -->
-      
-      <!-- Toolbar -->
-      <div id="toolbar" class="primary-color">
-				<div class="title"></div>
-				<!--
+
+		</ul>
+		<!-- End of Sidebars -->
+
+		<!-- Toolbar -->
+		<div id="toolbar" class="primary-color">
+			<div class="title"></div>
+			<!--
 				<div class="open-left" id="open-left" data-activates="slide-out-left">
 					<i class="ion-android-arrow-dropdown"></i>
         </div>
 				-->
-        <div class="open-right" id="open-right" data-activates="slide-out">
-          <i class="ion-android-menu"></i>
-        </div>
-      </div>
-      <!-- End of Toolbar -->
-      
-      <!-- Page Contents -->
-      <div class="page animated fadeinright">
-				
-				<div class="notification notification-warning" style="text-align: center">
-          <p><span id='desc'></span><span id="points">0</span> points original</p>
-          <p><span id="pointsLeft">0</span> points left</p>
-        </div>
-        
-        <div id="prizes">
-            
-        </div>
+			<div class="open-right" id="open-right" data-activates="slide-out">
+				<i class="ion-android-menu"></i>
+			</div>
+		</div>
+		<!-- End of Toolbar -->
 
-        <div class="clr"></div>
-				
-				
+		<!-- Page Contents -->
+		<div class="page animated fadeinright">
 
-      </div> 
-      <!-- End of Page Contents -->
-			
-			<div class="footer" style="bottom: 0px; z-index: 99999;">
-					<div class="span3">
-							<a href="/mobile/reg/parent_detail.html">
-									<div class="menu-item">
-											<div class="span12">
-													<img src="/mobile/reg/medals/images/menu1.png">
-											</div>
-											<div class="span12">
-													<span>Accounts</span>
-											</div>
-									</div>
-							</a>
+			<div class="notification notification-warning" style="text-align: center">
+				<p><span id='desc'></span><span id="points">0</span> points original</p>
+				<p><span id="pointsLeft">0</span> points left</p>
+			</div>
+
+			<div id="prizes">
+
+			</div>
+
+			<div class="clr"></div>
+
+
+
+		</div>
+		<!-- End of Page Contents -->
+
+		<div class="footer" style="bottom: 0px; z-index: 99999;">
+			<div class="span3">
+				<a href="/mobile/reg/parent_detail.html">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="/mobile/reg/medals/images/menu1.png">
+						</div>
+						<div class="span12">
+							<span>Accounts</span>
+						</div>
 					</div>
-					<div class="span3" style="border-left: 1px solid #9f9f9f;">
-						<a href="/mobile/news">
-								<div class="menu-item">
-										<div class="span12">
-												<img src="news.gif">
-										</div>
-										<div class="span12">
-												<span>News</span>
-										</div>
-								</div>
-						</a>
+				</a>
+			</div>
+			<div class="span3" style="border-left: 1px solid #9f9f9f;">
+				<a href="/mobile/news">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="news.gif">
+						</div>
+						<div class="span12">
+							<span>News</span>
+						</div>
 					</div>
-				</div>
+				</a>
+			</div>
+		</div>
 
-    </div><!-- End of Main Container -->
-    
-    <script src="js/jquery-2.1.0.min.js"></script>
-    <script src="js/jquery.swipebox.min.js"></script>   
-    <script src="js/materialize.min.js"></script> 
-    <script src="js/swiper.min.js"></script>  
-    <script src="js/jquery.mixitup.min.js"></script>
-    <script src="js/masonry.min.js"></script>
-    <script src="js/chart.min.js"></script>
-    <script src="js/functions.js"></script>
-    <script src="/mobile/reg/js/js.cookie.js"></script>
-    <script type="text/javascript" src="/mobile/js/spin.js"></script>
-    
-    <script>
-    	var admin = Cookies.get('admin');
-    	if (!admin) {
-    		window.location = "/mobile";
-    	}
-    	
-    	var opts = {
-			  lines: 10 // The number of lines to draw
+	</div><!-- End of Main Container -->
+
+	<script src="js/jquery-2.1.0.min.js"></script>
+	<script src="js/jquery.swipebox.min.js"></script>
+	<script src="js/materialize.min.js"></script>
+	<script src="js/swiper.min.js"></script>
+	<script src="js/jquery.mixitup.min.js"></script>
+	<script src="js/masonry.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/functions.js"></script>
+	<script src="/mobile/reg/js/js.cookie.js"></script>
+	<script type="text/javascript" src="/mobile/js/spin.js"></script>
+
+	<script>
+		var admin = Cookies.get('admin');
+		if (!admin) {
+			window.location = "/mobile";
+		}
+
+		var opts = {
+			lines: 10 // The number of lines to draw
 			, length: 26 // The length of each line
 			, width: 12 // The line thickness
 			, radius: 26 // The radius of the inner circle
@@ -238,14 +248,14 @@
 		}
 		var target = document.getElementById('spinner');
 		var spinner = new Spinner(opts).spin(target);
-			
+
 		var auction = 70;
 		Cookies.set('auction', auction);
-		
+
 		var url = location.toString();
-		var pos = url.indexOf('='); 
-		var id = url.substring( pos+1 ); 
-		
+		var pos = url.indexOf('=');
+		var id = url.substring(pos + 1);
+
 		var cart = [];
 		initCart();
 		//if (Cookies.get('cart' + id) !== undefined) {
@@ -253,23 +263,23 @@
 		//} else {
 		//  initCart();
 		//}
-        
+
 		var p = id.indexOf('&');
 		var cat = 0;
 		if (p > 0) {
-				var temp = id.substring( p+1 );
-				id = id.substring( 0, p );
-				
-				var tPos = temp.indexOf('=');
-				cat = parseInt( temp.substring( tPos+1 ) );
+			var temp = id.substring(p + 1);
+			id = id.substring(0, p);
+
+			var tPos = temp.indexOf('=');
+			cat = parseInt(temp.substring(tPos + 1));
 		}
-						
+
 		//get user info
-		$.post('ajax/getUserInfo.php', { user : id }, function( success ) {
-				var user = $.parseJSON( success );
-				$(".title").html(user.rank + ' ' + user.name);
+		$.post('ajax/getUserInfo.php', { user: id }, function (success) {
+			var user = $.parseJSON(success);
+			$(".title").html(user.rank + ' ' + user.name);
 		});
-		
+
 		/*
 		//setup children dropdown
 		$.post('ajax/getSiblings.php', { user : id }, function( success ) {
@@ -288,38 +298,38 @@
 		*/
 		//get user points
 		var initPoints;
-		$.post('ajax/getUserPoints.php', { user : id, auction : auction }, function( success ) {
-				var points = $.parseJSON( success );
-				initPoints = Math.floor(points.cur);
-				calcPoints();
+		$.post('ajax/getUserPoints.php', { user: id, auction: auction }, function (success) {
+			var points = $.parseJSON(success);
+			initPoints = Math.floor(points.cur);
+			calcPoints();
 		});
-		
+
 		//figure out number of items in cart
 		var numItems = 0;
 		for (var i in cart) {
-				numItems += cart[i].qty;
+			numItems += cart[i].qty;
 		}
-		
+
 		//setup menu
-		$.post('ajax/menu.php', { auction : auction }, function( success ) {
-			var menu = $.parseJSON( success );
+		$.post('ajax/menu.php', { auction: auction }, function (success) {
+			var menu = $.parseJSON(success);
 			var html = '<li><a onclick="saveCart()" class="no-child"><i class="ion-ios-cart-outline"></i><span class="badge cartNum">' + numItems + '</span>Cart</a></li>';
 			for (var m in menu) {
 				html += '<li><a onclick="setPrizes(' + menu[m].points + ')" class="no-child">' + menu[m].points + ' Point Prizes<span class="badge">' + menu[m].total + '</span></a></li>'
 			}
 			$(".menu").append(html);
 		});
-		
-		function setPrizes( cat ) {
+
+		function setPrizes(cat) {
 			var open = $("#slide-out").css('right');
 			if (open == '0px') $("#open-right").trigger('click');
 			$("#prizes").empty();
-			$.post('ajax/prizes.php', { cat : cat, auction : auction }, function( success ) {
-				var prizes = $.parseJSON( success );
+			$.post('ajax/prizes.php', { cat: cat, auction: auction }, function (success) {
+				var prizes = $.parseJSON(success);
 				var html = "";
 				for (var p in prizes) {
-						var image = "http://mashpia.com/file_view.php?id=" + prizes[p].prize_image_id;
-						html += '<div id="product1">\
+					var image = "http://mashpia.com/file_view.php?id=" + prizes[p].prize_image_id;
+					html += '<div id="product1">\
 				<div class="product half">\
 					<div class="swiper-container slider">\
 						<div class="swiper-wrapper">\
@@ -344,29 +354,29 @@
 					</a></div>\
 				</div>\
 			</div>';
-				} 
+				}
 				$("#prizes").append(html);
 				$("#spinner").empty();
 			});
 		}
-	    
-		$(function() {
+
+		$(function () {
 			setPrizes();
 		});
 
-		$(document).on('click', '.cartBtn', function( e ) {
+		$(document).on('click', '.cartBtn', function (e) {
 			e.preventDefault();
-						
+
 			var prize = parseInt($(this).attr('id'));
 			var name = $(this).attr('name');
 			var qty = parseInt($(this).parent().find('#qty').val());
 			var points = parseInt($(this).parent().find('#prizePoints').val());
 			var img = $(this).parent().find('#prizeImg').val();
-			
+
 			//check if user has enough points
 			var left = parseInt($("#pointsLeft").text());
 			if (left >= (points * qty)) {
-				
+
 				//if already in cart add to qty else add to cart
 				var found = false;
 				for (var i in cart) {
@@ -375,40 +385,40 @@
 						break;
 					}
 				}
-				
+
 				if (found !== false) {
 					cart[found].qty += qty;
 				} else {
 					cart.push({
-						'id'	: prize,
-						'name' 	: name,
-						'qty'	: qty, 
-						'price'	: points, 
-						'pic'	: img
+						'id': prize,
+						'name': name,
+						'qty': qty,
+						'price': points,
+						'pic': img
 					});
 				}
 				//Cookies.set('cart' + id, cart);
 				Materialize.toast(qty + ' ' + name + ' added to cart', 1500);
 				calcPoints();
-				
+
 			} else {
 				alert('You do not have enough points to do this.');
 				return;
 			}
 		});
-		
+
 		function initCart() {
-			$.post('ajax/getTickets.php', { auction : auction, id : id }, function( success ) {
-				var tickets = $.parseJSON( success );
+			$.post('ajax/getTickets.php', { auction: auction, id: id }, function (success) {
+				var tickets = $.parseJSON(success);
 				if (tickets.length) {
 					for (var t in tickets) {
 						var ticket = tickets[t];
 						cart.push({
-							'id' : parseInt(ticket.prize_id),
-							'name' : ticket.prize_name,
-							'qty' : parseInt(ticket.quantity),
-							'price' : parseInt(ticket.prize_points),
-							'pic' : ticket.prize_image_id
+							'id': parseInt(ticket.prize_id),
+							'name': ticket.prize_name,
+							'qty': parseInt(ticket.quantity),
+							'price': parseInt(ticket.prize_points),
+							'pic': ticket.prize_image_id
 						});
 					}
 					//Cookies.set('cart' + id, cart);
@@ -416,7 +426,7 @@
 				}
 			});
 		}
-		
+
 		function calcPoints() {
 			var total = 0;
 			var items = 0;
@@ -429,25 +439,28 @@
 			$("#pointsLeft").text(initPoints - total);
 			$(".cartNum").text(items);
 		}
-		
+
 		function saveCart() {
 			var auction = parseInt(Cookies.get('auction'));
-			$.post('ajax/purchaseTickets.php', { 
-				auction : auction, 
-				user : id, 
-				info : cart 
-			}, function( success ) {
+			$.post('ajax/purchaseTickets.php', {
+				auction: auction,
+				user: id,
+				info: cart
+			}, function (success) {
 				if (success == 0) location.href = "checkout2.html?id=" + id;
 			});
 		}
 	</script>
 	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-71974937-1', 'auto');
-	ga('send', 'pageview');
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-71974937-1', 'auto');
+		ga('send', 'pageview');
 	</script>
-  </body>
+</body>
+
 </html>
