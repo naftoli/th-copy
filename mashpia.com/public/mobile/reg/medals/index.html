@@ -633,6 +633,8 @@
                 // set the images to be the correct size
     	        $(".sky-carousel-container li img").css( { "width" : "100px" , "height" : "180px" } );
                 $(".sky-carousel").css( { "width" : "100%", "margin" : "0px" } );
+                if (localStorage.getItem('locallang') == 'he') $(".sky-carousel").attr('direction', 'rtl')
+				else $(".sky-carousel").attr('direction', 'ltr')
                 // setup the carosel in 1 second
     	        setTimeout( function() {
     	            $( function() {

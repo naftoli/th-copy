@@ -373,8 +373,15 @@
                                                     </div>
                                                     {{/if}}
 
+                                                    {{#if this.chayoleiRegistered}}
+                                                    <div class="button-spacing">
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH" class="i18n"> Registered for Chayolei TH </span> {{ this.reg_year }}</div>
+                                                    </div>
+                                                    {{/if}}
+
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
                                                         {{#if this.showChidonPic}}
                                                         <!-- <div style="margin: 10px 0px">
                                                             <button class="btn btn-info chidonPhoto">Upload Chidon Photo</button>
@@ -402,11 +409,6 @@
                                                         <!-- <div style="margin:10px 0px">
                                                             <button class="btn btn-primary editChidon">Edit Sweater Size</button>
                                                         </div> -->
-                                                    </div>
-                                                    {{/if}}
-                                                    {{#if this.chayoleiRegistered}}
-                                                    <div class="button-spacing">
-                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH" class="i18n"> Registered for Chayolei TH </span> {{ this.reg_year }}</div>
                                                     </div>
                                                     {{/if}}
                                                     <!--

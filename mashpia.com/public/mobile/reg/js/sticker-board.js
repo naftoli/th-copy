@@ -198,12 +198,14 @@ var sticker_board = function () {
                 '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
                 campaign.subject_details_he +
                 '</p>' +
-                '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+                //'<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+                '<img src="/mission_report/campaignLogos/' + campaign.campaign_logo + '" alt="icon" />' +
                 '</div>';
 
         }
         return '<div class="campaign-info">' +
-            '<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+            //'<img src="/mobile/img_new/campaign-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+            '<img src="/mission_report/campaignLogos/' + campaign.campaign_logo + '" alt="icon" />' +
             '<p>' +
             '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
             campaign.subject_details +

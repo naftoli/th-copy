@@ -16,8 +16,8 @@ add_action('wp_enqueue_scripts','chidoncalendar_init');
 function chidoncalendar_register_settings() {
     add_option('chidoncalendar_registration-en', 'June 13 - September 17, 2019');
     add_option('chidoncalendar_registration-hb', ' י”ג סיון - י”ז אלול תשע”ט ');
-    register_setting('chidoncalendar_options_group', 'chidoncalendar_registration-en');
-    register_setting('chidoncalendar_options_group', 'chidoncalendar_registration-hb');
+    register_setting('chidoncalendar_options_group-registration', 'chidoncalendar_registration-en');
+    register_setting('chidoncalendar_options_group-registration', 'chidoncalendar_registration-hb');
 
 
     add_option('chidoncalendar_test1-en', 'June 13 - September 17, 2019');
@@ -64,6 +64,21 @@ function chidoncalendar_register_settings() {
     register_setting('chidoncalendar_options_group', 'chidoncalendar_test3-grade6');
     register_setting('chidoncalendar_options_group', 'chidoncalendar_test3-grade7');
     register_setting('chidoncalendar_options_group', 'chidoncalendar_test3-grade8');
+
+    add_option('chidoncalendar_test4-en', 'June 13 - September 17, 2019');
+    add_option('chidoncalendar_test4-hb', ' י”ג סיון - י”ז אלול תשע”ט ');
+    add_option('chidoncalendar_test4-grade4', 'Units 31-45');
+    add_option('chidoncalendar_test4-grade5', 'Units 81-99');
+    add_option('chidoncalendar_test4-grade6', 'Units 136-156');
+    add_option('chidoncalendar_test4-grade7', 'Units 193-208');
+    add_option('chidoncalendar_test4-grade8', 'Units 240-257');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-en');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-hb');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-grade4');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-grade5');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-grade6');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-grade7');
+    register_setting('chidoncalendar_options_group', 'chidoncalendar_test4-grade8');
 
     add_option('chidoncalendar_shabbaton-girls-en', 'June 13 - September 17, 2019');
     add_option('chidoncalendar_shabbaton-girls-hb', ' י”ג סיון - י”ז אלול תשע”ט ');
@@ -206,6 +221,38 @@ function chidoncalendar_options_page() {
             </tr>
         </table>
         <br>
+        <h3>Test 4</h3>
+        <table>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-en">Date - Secular</label></th>
+                <td><input type="text" id="chidoncalendar_test4-en" name="chidoncalendar_test4-en" value="<?php echo get_option('chidoncalendar_test4-en'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-hb">Date - Hebrew</label></th>
+                <td><input type="text" id="chidoncalendar_test4-hb" name="chidoncalendar_test4-hb" value="<?php echo get_option('chidoncalendar_test4-hb'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-grade4">4th Grade</label></th>
+                <td><input type="text" id="chidoncalendar_test4-grade4" name="chidoncalendar_test4-grade4" value="<?php echo get_option('chidoncalendar_test4-grade4'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-grade5">5th Grade</label></th>
+                <td><input type="text" id="chidoncalendar_test4-grade5" name="chidoncalendar_test4-grade5" value="<?php echo get_option('chidoncalendar_test4-grade5'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-grade6">6th Grade</label></th>
+                <td><input type="text" id="chidoncalendar_test4-grade6" name="chidoncalendar_test4-grade6" value="<?php echo get_option('chidoncalendar_test4-grade6'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-grade7">7th Grade</label></th>
+                <td><input type="text" id="chidoncalendar_test4-grade7" name="chidoncalendar_test4-grade7" value="<?php echo get_option('chidoncalendar_test4-grade7'); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="chidoncalendar_test4-grade8">8th Grade</label></th>
+                <td><input type="text" id="chidoncalendar_test4-grade8" name="chidoncalendar_test4-grade8" value="<?php echo get_option('chidoncalendar_test4-grade8'); ?>" /></td>
+            </tr>
+        </table>
+        <br>
         <h3>Shabbaton</h3>
         <table>
             <tr valign="top">
@@ -308,6 +355,20 @@ function chidon_calander_shortcodes( $atts ) {
             $data .= '<p><span class="grade">6th Grade</span>: '.get_option('chidoncalendar_test3-grade6').'</p>';
             $data .= '<p><span class="grade">7th Grade</span>: '.get_option('chidoncalendar_test3-grade7').'</p>';
             $data .= '<p><span class="grade">8th Grade</span>: '.get_option('chidoncalendar_test3-grade8').'</p>';
+            $data .= '</div>';
+            break;
+        case 'test4':
+            $data = '<div class="link-box chidon-calendar test">';
+            $date_en = get_option('chidoncalendar_test4-en');
+            $date_hb = get_option('chidoncalendar_test4-hb');
+            $data .= '<div class="title"><img src="'.plugin_dir_url( __FILE__ ).'images/test.png"><h6>Test 4</h6></div>';
+            $data .= '<div class="info"><p class="date hebrew">'.$date_hb.'</p><p class="date">'.$date_en.'</p></div>';
+            $data .= '<div class="units">';
+            $data .= '<p><span class="grade">4th Grade</span>: '.get_option('chidoncalendar_test4-grade4').'</p>';
+            $data .= '<p><span class="grade">5th Grade</span>: '.get_option('chidoncalendar_test4-grade5').'</p>';
+            $data .= '<p><span class="grade">6th Grade</span>: '.get_option('chidoncalendar_test4-grade6').'</p>';
+            $data .= '<p><span class="grade">7th Grade</span>: '.get_option('chidoncalendar_test4-grade7').'</p>';
+            $data .= '<p><span class="grade">8th Grade</span>: '.get_option('chidoncalendar_test4-grade8').'</p>';
             $data .= '</div>';
             break;
         case 'shabbaton':
