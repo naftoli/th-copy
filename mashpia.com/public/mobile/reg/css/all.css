@@ -12068,6 +12068,14 @@ body {
     border-top: none !important
 }
 
+.subMenu .span3 {
+    background-color: #343862 !important;
+}
+
+.subMenu .span3.active, .subMenu .span3:hover {
+    background-color: #4358a2 !important;
+}
+
 .footer .span3 {
     background-color: #4358a2;
 }

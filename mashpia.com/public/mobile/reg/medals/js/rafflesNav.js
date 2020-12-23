@@ -87,7 +87,8 @@ const loadRaffleContainer = (flag, data) => {
     daysLeft.style.color = stroke;
     daysLeft.innerText = data.daysLeft === 0 ? 'MAZAL TOV!' : `${data.daysLeft} MORE DAYS`;
     let daysLeft2 = document.createElement('p');
-    daysLeft2.innerText = data.daysLeft === 0 ? `you have been entered into ${data.raffleName}` : `of missions to enter ${data.raffleName}`;
+    let raffleName = flag === 5 ? `the ${data.raffleName} raffle` : data.raffleName;
+    daysLeft2.innerText = data.daysLeft === 0 ? `you have been entered into ${raffleName}` : `of missions to enter ${raffleName}`;
     let details = createElementWithClass('p', 'details');
     details.innerText = 'details >>';
     raffleDetails.appendChild(daysLeft);
