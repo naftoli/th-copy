@@ -267,7 +267,7 @@ class Raffle
         // on reports we need to hide the soldiers who already won
         if (!$report)
             // $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
-            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners WHERE raffle_id IN (SELECT raffle_id FROM raffles WHERE type = 'monthly' AND year = $year))";
+            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners WHERE raffle_id IN (SELECT raffle_id FROM raffles WHERE type in ('monthly', 'weekly') AND year = $year))";
         // if a user is passed in, then limit it to this user
         if ($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
