@@ -64,7 +64,7 @@ $campaigns = getCampaigns($user_id, false);
                 }// end if they have campaigns to still enroll in... ?>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;">Cancel</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #1b2b51;border-color:#1b2b51;">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

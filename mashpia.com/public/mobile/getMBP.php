@@ -55,5 +55,5 @@ $i = 1;
     	</div>
     </div>
     <? endforeach; ?>
-    <p><button id="save" class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>
+    <p><button id="save" class='btn btn-danger btn-sm save' style='background-color : #1b2b51;border-color:#1b2b51;'>Save</button></p>
 </div>

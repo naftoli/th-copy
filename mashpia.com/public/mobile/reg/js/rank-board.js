@@ -66,7 +66,7 @@ function rank_board(target, user_id, url) {
         if (medal.photo)
             html += '<img src="/file_view.php?id=' + medal.photo + '" />';
         else
-            html += '<img src="/kiosk/images/medals/holder.png" />';
+            html += '<img src="/mobile/reg/medals/images/Empty-Medal-Holder.png" />';
         html += '</a></div>';
         return html;
     }
