@@ -7,7 +7,7 @@ $edit_row = false;
 
 if(!empty($action)) switch($action) {
   case 'add':
-    $result = mq("SELECT -1 subject_id, 0 subject_ord, '' subject_name, -1 inst_id, '' subject_type, NULL subject_image_id, NULL subject_gold_image_id, NULL subject_black_image_id, '' subject_slogan, '' subject_description, '' subject_commitments" );
+    $result = mq("SELECT -1 subject_id, 0 subject_ord, '' subject_name, -1 inst_id, '' subject_type, NULL subject_image_id, NULL subject_gold_image_id, NULL subject_black_image_id, '' subject_slogan, '' subject_description, '' subject_details, '' subject_details_he, '' subject_commitments" );
     $edit_row = mysql_fetch_assoc($result);
     $school_type_ids = array();
     break;
@@ -21,6 +21,8 @@ if(!empty($action)) switch($action) {
     $slogan = gr('slogan');
     $description = gr('description');
     $commitments = gr('commitments');
+    $subject_details = gr('subject_details');
+    $subject_details_he = gr('subject_details_he');
     $result = mq('SELECT 1 FROM subjects WHERE subject_name = ' . ms($subject_name) . " AND inst_id = $inst_id");
 
     if(mysql_num_rows($result)) {
@@ -36,7 +38,7 @@ if(!empty($action)) switch($action) {
       if(isset($_FILES['image'])) $subject_image_id = addFile($_FILES['image'], $subject_image_id);
       if(isset($_FILES['gold_image'])) $subject_gold_image_id = addFile($_FILES['gold_image'], $subject_gold_image_id);
       if(isset($_FILES['black_image'])) $subject_black_image_id = addFile($_FILES['black_image'], $subject_black_image_id);
-      mq('INSERT INTO subjects (subject_name, subject_ord, inst_id, subject_type, subject_image_id, subject_gold_image_id, subject_black_image_id, subject_slogan, subject_description, subject_commitments) VALUES (' . ms($subject_name) . ", $subject_ord, $inst_id, " . ms($subject_type) . ", $subject_image_id, $subject_gold_image_id, $subject_black_image_id, " . ms($slogan) . ', ' . ms($description) . ', ' . ms($commitments) . ')');
+      mq('INSERT INTO subjects (subject_name, subject_ord, inst_id, subject_type, subject_image_id, subject_gold_image_id, subject_black_image_id, subject_slogan, subject_description, subject_details, subject_details_he, subject_commitments) VALUES (' . ms($subject_name) . ", $subject_ord, $inst_id, " . ms($subject_type) . ", $subject_image_id, $subject_gold_image_id, $subject_black_image_id, " . ms($slogan) . ', ' . ms($description) . ', ' . ms($subject_details) . ', ' . ms($subject_details_he) . ', ' . ms($commitments) . ')');
 
       $subject_id = mysql_insert_id();
       foreach($school_type_ids as $school_type_id) {
@@ -65,7 +67,7 @@ if(!empty($action)) switch($action) {
     $subject_id = gri('subject_id', -1);
     $result = mq("SELECT school_type_id FROM school_type_subjects WHERE subject_id = $subject_id");
     $school_type_ids = mysql_fetch_column($result);
-    $result = mq("SELECT subject_id, subject_name, subject_ord, inst_id, subject_type, subject_image_id, subject_gold_image_id, subject_black_image_id, subject_slogan, subject_description, subject_commitments FROM subjects WHERE subject_id = $subject_id");
+    $result = mq("SELECT subject_id, subject_name, subject_ord, inst_id, subject_type, subject_image_id, subject_gold_image_id, subject_black_image_id, subject_slogan, subject_description, subject_details, subject_details_he,  subject_commitments FROM subjects WHERE subject_id = $subject_id");
     $edit_row = mysql_fetch_assoc($result);
     $medals = mq("SELECT medals.medal_ord, medal_name, missions_required, medals_subjects.medal_on_image_id, medals_subjects.medal_off_image_id, medals_subjects.medal_photo_id, medals_subjects.profile_photo_id FROM medals LEFT JOIN medals_subjects ON (medals.medal_ord = medals_subjects.medal_ord AND subject_id = $subject_id) ORDER BY medal_ord");
     break;
@@ -80,6 +82,8 @@ if(!empty($action)) switch($action) {
     $commitments = gr('commitments');
     $subject_id = gri('subject_id', -1);
     $school_type_ids = array_filter(gra('school_type_ids', array()), 'is_numeric');
+    $subject_details = gr('subject_details');
+    $subject_details_he = gr('subject_details_he');
 
     $result = mq('SELECT 1 FROM subjects WHERE subject_name = ' . ms($subject_name) . " AND inst_id = $inst_id AND subject_id != $subject_id");
 
@@ -103,7 +107,7 @@ if(!empty($action)) switch($action) {
       if($subject_gold_image_id !== 'subject_gold_image_id') mq("DELETE FROM files USING files JOIN subjects ON (files.file_id = subjects.subject_gold_image_id) WHERE subject_id = $subject_id");
       if($subject_black_image_id !== 'subject_black_image_id') mq("DELETE FROM files USING files JOIN subjects ON (files.file_id = subjects.subject_black_image_id) WHERE subject_id = $subject_id");
 
-      mq('UPDATE subjects SET subject_name = ' . ms($subject_name) . ', subject_type = ' . ms($subject_type) . ", subject_ord = $subject_ord, subject_image_id = $subject_image_id, subject_gold_image_id = $subject_gold_image_id, subject_black_image_id = $subject_black_image_id, subject_slogan=" . ms($slogan) . ', subject_description=' . ms($description) . ', subject_commitments=' . ms($commitments) . " WHERE subject_id = $subject_id");
+      mq('UPDATE subjects SET subject_name = ' . ms($subject_name) . ', subject_type = ' . ms($subject_type) . ", subject_ord = $subject_ord, subject_image_id = $subject_image_id, subject_gold_image_id = $subject_gold_image_id, subject_black_image_id = $subject_black_image_id, subject_slogan=" . ms($slogan) . ', subject_description=' . ms($description) . ', subject_details = ' . ms($subject_details) . ', subject_details_he = ' . ms($subject_details_he) . ',  subject_commitments=' . ms($commitments) . " WHERE subject_id = $subject_id");
       mq("DELETE FROM school_type_subjects WHERE subject_id = $subject_id AND school_type_id NOT IN (" . implode(',', array_merge(array(-1), $school_type_ids)) . ")");
       foreach($school_type_ids as $school_type_id) {
         mq("INSERT IGNORE INTO school_type_subjects (subject_id, school_type_id) VALUE ($subject_id, $school_type_id)");
@@ -219,12 +223,16 @@ $institution_result = mq('SELECT inst_id, inst_name FROM institutions ORDER BY i
 <?=linkImgFile($edit_row['subject_black_image_id'],100)?><BR>
 </LABEL>
 <?endif?>
-<LABEL><?=T_('Subject Slogan')?>:<BR> <TEXTAREA NAME="slogan" ROWS="5" COLS="50"><?=$edit_row['subject_slogan']?></TEXTAREA><BR>
+<LABEL><?=T_('Subject Details')?>:<BR> <TEXTAREA NAME="subject_details" ROWS="5" COLS="50"><?=$edit_row['subject_details']?></TEXTAREA><BR>
 </LABEL>
-<LABEL><?=T_('Subject Description')?>:<BR> <TEXTAREA NAME="description" ROWS="5" COLS="50"><?=$edit_row['subject_description']?></TEXTAREA><BR>
+<LABEL><?=T_('Subject Details Hebrew')?>:<BR> <TEXTAREA NAME="subject_details_he" ROWS="5" COLS="50"><?=$edit_row['subject_details_he']?></TEXTAREA><BR>
 </LABEL>
-<LABEL><?=T_('Subject Commitments')?>:<BR> <TEXTAREA NAME="commitments" ROWS="5" COLS="50"><?=$edit_row['subject_commitments']?></TEXTAREA><BR>
-</LABEL>
+<!--<LABEL>--><?//=T_('Subject Slogan')?><!--:<BR> <TEXTAREA NAME="slogan" ROWS="5" COLS="50">--><?//=$edit_row['subject_slogan']?><!--</TEXTAREA><BR>-->
+<!--</LABEL>-->
+<!--<LABEL>--><?//=T_('Subject Description')?><!--:<BR> <TEXTAREA NAME="description" ROWS="5" COLS="50">--><?//=$edit_row['subject_description']?><!--</TEXTAREA><BR>-->
+<!--</LABEL>-->
+<!--<LABEL>--><?//=T_('Subject Commitments')?><!--:<BR> <TEXTAREA NAME="commitments" ROWS="5" COLS="50">--><?//=$edit_row['subject_commitments']?><!--</TEXTAREA><BR>-->
+<!--</LABEL>-->
 </P>
 
 <?if(isset($medals)):?>
