@@ -9247,12 +9247,12 @@ button.close {
     color: #1b2b51;
 }
 
-p {
+p, input, span, button {
     color: #1b2b51;
 }
 
 a {
-    color: #3c8dbc
+    color: #3c8dbc;
 }
 
     a:active, a:focus, a:hover {

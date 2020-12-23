@@ -70,7 +70,7 @@
 		<link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	</noscript>
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css"
-		  as="style" onload="this.rel='stylesheet'">
+		as="style" onload="this.rel='stylesheet'">
 	<noscript>
 		<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
 	</noscript>
@@ -142,10 +142,27 @@
 	<!-- Place favicon.ico in the root directory -->
 	<link rel="stylesheet" href="css/bug_report.css" />
 	<style>
-		.container-fluid > .navbar-collapse,
-		.container-fluid > .navbar-header,
-		.container > .navbar-collapse,
-		.container > .navbar-header {
+		html,
+		body,
+		span,
+		p,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		div,
+		button,
+		i,
+		input {
+			color: #1b2b51;
+		}
+
+		.container-fluid>.navbar-collapse,
+		.container-fluid>.navbar-header,
+		.container>.navbar-collapse,
+		.container>.navbar-header {
 			margin: 0px;
 		}
 
@@ -224,7 +241,7 @@
 			display: inline-block;
 		}
 
-		label.checkbox-label input:checked + .checkbox-display {
+		label.checkbox-label input:checked+.checkbox-display {
 			width: 20px;
 			height: 20px;
 			background: url("//mashpia.com/mobile/img_new/square-check-color-green-svg.svg");
@@ -255,10 +272,10 @@
 			background-repeat: no-repeat;
 		}
 
-			i.glyphicon.glyphicon-chevron-right:before,
-			i.glyphicon.glyphicon-chevron-left:before {
-				content: "";
-			}
+		i.glyphicon.glyphicon-chevron-right:before,
+		i.glyphicon.glyphicon-chevron-left:before {
+			content: "";
+		}
 
 		/*			And flip them to the other side on for hebrew...*/
 		.he .panel.panel-default .panel-heading i {
@@ -266,7 +283,7 @@
 			transform: rotate(180deg);
 		}
 
-		.he .panel.panel-default.open > .panel-heading i {
+		.he .panel.panel-default.open>.panel-heading i {
 			transform: rotate(90deg);
 		}
 
@@ -284,17 +301,17 @@
 			color: #fff;
 		}
 
-			.modal-header span,
-			.modal-header {
-				color: #fff;
-			}
+		.modal-header span,
+		.modal-header {
+			color: #fff;
+		}
 
-				.modal-header .close {
-					opacity: 1;
-					font-size: 2em;
-					width: 20px;
-					font-weight: 100;
-				}
+		.modal-header .close {
+			opacity: 1;
+			font-size: 2em;
+			width: 20px;
+			font-weight: 100;
+		}
 
 		/*			Links on top of page...*/
 		a#back-link,
@@ -309,10 +326,10 @@
 			transition: .1s;
 		}
 
-			a#back-link:hover,
-			a#create-link:hover {
-				text-decoration: none
-			}
+		a#back-link:hover,
+		a#create-link:hover {
+			text-decoration: none
+		}
 
 		a#create-link,
 		.he a#back-link {
@@ -324,11 +341,11 @@
 			float: left;
 		}
 
-			a#back-link img {
-				height: 20px;
-				width: 20px;
-				padding: 2px;
-			}
+		a#back-link img {
+			height: 20px;
+			width: 20px;
+			padding: 2px;
+		}
 
 		.navbar-header {
 			min-height: 48px;
@@ -363,11 +380,11 @@
 				font-size: .9em;
 			}
 
-				a#back-link img {
-					height: 15px;
-					width: 15px;
-					padding: 1px;
-				}
+			a#back-link img {
+				height: 15px;
+				width: 15px;
+				padding: 1px;
+			}
 		}
 
 		@media (max-width: 370px) {
@@ -390,13 +407,14 @@
 				margin-right: 0px;
 			}
 		}
-		.hebrew{
-			font-family:Arial;
+
+		.hebrew {
+			font-family: Arial;
 		}
 	</style>
 
 
-	
+
 
 
 </head>
@@ -462,7 +480,7 @@
 					$.get('getGoalsPage.php?id=' + str + version, function (html) {
 						$("#main").empty();
 						$("#main").append(html);
-						
+
 						initTranslation();
 						translate(); // call the translate funtion
 						$("#main").addClass("animated fadeIn");
