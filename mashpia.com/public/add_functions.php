@@ -671,7 +671,7 @@ function add_mark($parameters, $update = true)
 		$mission_updater->mission_update($user_id, $date_tasks_mission_id);
 
 		// if it's a tanya mark or mishna mark update the yud alef nissan tables
-		$gridIds = [21001,21002,21003,21004,21005,21006,21014];
+		$gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
 		if (isset($grid_id) && in_array($grid_id, $gridIds)) {
 
 			require_once 'class.globalSettings.php';
@@ -686,7 +686,7 @@ function add_mark($parameters, $update = true)
 			}
 
 			$campaign = $tanyaCampaign;
-			if ($grid_id == 21014) $campaign = $mishnaCampaign;
+			if ($grid_id % 2 == 0) $campaign = $mishnaCampaign; // mishna campaigns are even numbers
 
 			$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
 			if (mysql_num_rows($exists_query) > 0) {
@@ -705,11 +705,11 @@ function add_mark($parameters, $update = true)
 				$user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
 				$user_info = mysql_fetch_assoc($user_info_query);
 				$insert_sql = "INSERT INTO lines_learned SET "
-						."campaign_id = " . $campaign . ", "
-						."user_id = " . $user_id . ", "
-						."mission_sheet_amount = " . $user_mark . ", "
-						."school_id = " . $user_info['school_id'] . ", "
-						."class_id = " . $user_info['class_id'];
+                            ."campaign_id = " . $campaign . ", "
+                            ."user_id = " . $user_id . ", "
+                            ."mission_sheet_amount = " . $user_mark . ", "
+                            ."school_id = " . $user_info['school_id'] . ", "
+                            ."class_id = " . $user_info['class_id'];
 				mysql_query($insert_sql);
 			}
 		}
