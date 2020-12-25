@@ -440,9 +440,9 @@ if (isset($_POST['submit'])) {
 //                                }
 //                            }
                             $focus = 0;
-                            if (in_array($type, array(2,12,14))) {
+                            if (is_numeric($type) && $type % 2 == 0) {
                                 $pic = $pic_boys;
-                            } else if (in_array($type, array(3,13,15))) {
+                            } else {
                                 $pic = $pic_girls;
                             }
 
