@@ -379,8 +379,30 @@
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 
     <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: white;
+        }
+
+        #ManyStars {
+            color: #1b2b51;
+        }
+
         body {
             margin-bottom: 120px;
+            background: #1b2b51;
         }
 
         .medal,
@@ -697,7 +719,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="span12 slider" style="margin-top:10px; text-align: center; direction: rtl;">
+                    <div class="span12 slider" style="margin-top:10px; text-align: center;">
                         <img id="item0" src="/mobile/img_new/circle-color-white-solid.svg">
                         <img id="item1" src="/mobile/img_new/circle-color-white-solid.svg">
                         <img id="item2" src="/mobile/img_new/circle-color-white-solid.svg">
@@ -784,9 +806,11 @@
     </div>
     <script src="/mobile/js/authenticate.js" defer></script>
     <script>
-        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+        if (localStorage.getItem('locallang') == 'he') {
             $(".bug-report").hide()
+            $(".sky-carousel").attr('direction', 'rtl')
         }
+        else $(".sky-carousel").attr('direction', 'ltr')
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
@@ -958,7 +982,8 @@
                                 html += '</a>';
                             }
                         } else {
-                            html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" />';
+                            html += '<img class="medal" src="./medals/images/Empty-Medal-Holder.png" />';
+
                             showRankAfterSlideShow = false;
                         }
                         html += '</div>';

@@ -128,7 +128,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 	<span class="i18n" data-key="Personalize2">Personalize the tasks that you would like to see for  </span>	<?=$first?><span class="i18n" data-key="Personalize3">'s missions.</span></div>
     	<!--
     	<div class="text-left" style="margin-bottom: 20px;">
-			<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #5e1c77;border-color:#834999;" />
+			<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #1b2b51;border-color:#1b2b51;" />
 		</div>
     	-->
 
@@ -343,7 +343,7 @@ include 'inc/modals/enrollChild.php';
 							}
 						}
 						if (lang == 2) str += '<br />'; // extra space on hebrew browsers....
-						str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>"; // add the save button....
+						str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #1b2b51;border-color:#1b2b51;'>Save</button></p>"; // add the save button....
 		                // append the campaign to the page....
 						var campaign_dom_object = $("#" + campaign);
 						campaign_dom_object.find("ul").append(str);

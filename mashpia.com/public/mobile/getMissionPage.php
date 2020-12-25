@@ -431,7 +431,7 @@ $he_chars = array(
                             <div class="collapse in" id="#panel_<?=$index?>">
                                 <div class="panel-body dailyPanel">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs i18n" data-key="CheckAll" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/> 
+                                    <input id="checkAll"  type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs i18n" data-key="CheckAll" value="Check All" style="background-color : #1b2b51;border-color:#1b2b51; <?//$desktop ? "" : "display: none"; ?>"/> 
 								  
 									
 									</div>
@@ -574,7 +574,7 @@ $he_chars = array(
                         <div class="collapse">
                             <div class="panel-body">
                                 <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #1b2b51;border-color:#1b2b51;" />
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">
@@ -671,7 +671,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #1b2b51;border-color:#1b2b51;" />
                                 </div>
                                 <br />
                                 <? endif; ?>
@@ -773,7 +773,7 @@ $he_chars = array(
                                 <? else : ?>
                                     <div class="text-right">
                                 <? endif; ?>
-                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
+                                    <input type="button" class="checkAll btn btn-danger btn-xs i18n" data-key="CheckAll"  value="Check All" style="background-color : #1b2b51;border-color:#1b2b51;"/>
                                 </div>
                                 <br />
                                 <ul class="list-unstyled">

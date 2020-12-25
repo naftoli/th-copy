@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A simple jQuery image cropping plugin.">
-  <meta name="keywords" content="HTML, CSS, JS, JavaScript, jQuery plugin, image cropping, image crop, image move, image zoom, image rotate, image scale, front-end, frontend, web development">
+  <meta name="keywords"
+    content="HTML, CSS, JS, JavaScript, jQuery plugin, image cropping, image crop, image move, image zoom, image rotate, image scale, front-end, frontend, web development">
   <meta name="author" content="Fengyuan Chen">
   <title>Cropper</title>
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -15,6 +17,24 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/cropper.min.css">
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    html,
+    body,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    div,
+    button,
+    i,
+    input {
+      color: #1b2b51;
+    }
+  </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -22,6 +42,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
+
 <body>
   <!--[if lt IE 8]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -58,7 +79,8 @@
       <p class="lead">A simple jQuery image cropping plugin.</p>
       <div class="docs-carbonads-container">
         <div class="docs-carbonads">
-          <script type="text/javascript" id="_carbonads_js" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=fengyuanchen" async></script>
+          <script type="text/javascript" id="_carbonads_js"
+            src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=fengyuanchen" async></script>
         </div>
       </div>
     </div>
@@ -125,12 +147,14 @@
         <!-- <h3 class="page-header">Toolbar:</h3> -->
         <div class="btn-group">
           <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="move" title="Move">
-            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
+            <span class="docs-tooltip" data-toggle="tooltip"
+              title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
               <span class="fa fa-arrows"></span>
             </span>
           </button>
           <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="crop" title="Crop">
-            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
+            <span class="docs-tooltip" data-toggle="tooltip"
+              title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
               <span class="fa fa-crop"></span>
             </span>
           </button>
@@ -150,22 +174,26 @@
         </div>
 
         <div class="btn-group">
-          <button type="button" class="btn btn-primary" data-method="move" data-option="-10" data-second-option="0" title="Move Left">
+          <button type="button" class="btn btn-primary" data-method="move" data-option="-10" data-second-option="0"
+            title="Move Left">
             <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, -10, 0)">
               <span class="fa fa-arrow-left"></span>
             </span>
           </button>
-          <button type="button" class="btn btn-primary" data-method="move" data-option="10" data-second-option="0" title="Move Right">
+          <button type="button" class="btn btn-primary" data-method="move" data-option="10" data-second-option="0"
+            title="Move Right">
             <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 10, 0)">
               <span class="fa fa-arrow-right"></span>
             </span>
           </button>
-          <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="-10" title="Move Up">
+          <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="-10"
+            title="Move Up">
             <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 0, -10)">
               <span class="fa fa-arrow-up"></span>
             </span>
           </button>
-          <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="10" title="Move Down">
+          <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="10"
+            title="Move Down">
             <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 0, 10)">
               <span class="fa fa-arrow-down"></span>
             </span>
@@ -249,20 +277,25 @@
               Get Cropped Canvas
             </span>
           </button>
-          <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 160, &quot;height&quot;: 90 }">
-            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 160, height: 90 })">
+          <button type="button" class="btn btn-primary" data-method="getCroppedCanvas"
+            data-option="{ &quot;width&quot;: 160, &quot;height&quot;: 90 }">
+            <span class="docs-tooltip" data-toggle="tooltip"
+              title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 160, height: 90 })">
               160&times;90
             </span>
           </button>
-          <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }">
-            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 320, height: 180 })">
+          <button type="button" class="btn btn-primary" data-method="getCroppedCanvas"
+            data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }">
+            <span class="docs-tooltip" data-toggle="tooltip"
+              title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 320, height: 180 })">
               320&times;180
             </span>
           </button>
         </div>
 
         <!-- Show the cropped image in modal -->
-        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true"
+          aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -399,7 +432,8 @@
         </div>
 
         <div class="dropdown dropup docs-options">
-          <button type="button" class="btn btn-primary btn-block dropdown-toggle" id="toggleOptions" data-toggle="dropdown" aria-expanded="true">
+          <button type="button" class="btn btn-primary btn-block dropdown-toggle" id="toggleOptions"
+            data-toggle="dropdown" aria-expanded="true">
             Toggle Options
             <span class="caret"></span>
           </button>
@@ -523,7 +557,8 @@
           </ul>
         </div><!-- /.dropdown -->
 
-        <a class="btn btn-default btn-block" data-toggle="tooltip" href="https://fengyuanchen.github.io/cropperjs" title="Cropper without jQuery">Cropper.js</a>
+        <a class="btn btn-default btn-block" data-toggle="tooltip" href="https://fengyuanchen.github.io/cropperjs"
+          title="Cropper without jQuery">Cropper.js</a>
 
       </div><!-- /.docs-toggles -->
     </div>
@@ -551,4 +586,5 @@
   <script src="js/cropper.min.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>

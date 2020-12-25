@@ -121,7 +121,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
             if ( isset( $user_missions[ $last_subject_id ] ) && !isset( $user_missions[ $last_subject_id ]['photo'] ) )
                 $user_missions[ $last_subject_id ]['photo'] = $last_photo_location;
             $running_total = $amount_required;
-            $last_photo_location = '/kiosk/images/medals/holder.png';
+            $last_photo_location = '/mobile/reg/medals/images/Empty-Medal-Holder.png';
         }
         $row['running_total'] = $running_total;
         // convert julian date to hebrew utf8

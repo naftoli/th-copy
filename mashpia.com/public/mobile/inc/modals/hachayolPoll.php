@@ -26,8 +26,8 @@
               <textarea name="notes" id="poll-notes"></textarea>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" id="submit-poll" style="background-color: #5e1c77;border-color:#834999;">Submit</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;">Cancel</button>
+                <button type="submit" class="btn btn-danger" id="submit-poll" style="background-color: #1b2b51;border-color:#1b2b51;">Submit</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #1b2b51;border-color:#1b2b51;">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

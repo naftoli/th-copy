@@ -73,7 +73,7 @@ $campaignLogos = array(
             <div class="content">
             	<!--
             	<div class="text-left" style="margin-bottom: 20px;">
-					<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #5e1c77;border-color:#834999;" />
+					<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #1b2b51;border-color:#1b2b51;" />
 				</div>
             	-->
             	<? foreach ( $campaigns as $id => $campaign ) : ?>
@@ -222,7 +222,7 @@ $campaignLogos = array(
     							str += "</div>";
     						}
     					}
-    					str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>";
+    					str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #1b2b51;border-color:#1b2b51;'>Save</button></p>";
                         $("#" + campaign).find("ul").append(str);
                         $(".spinner").empty();
                         
