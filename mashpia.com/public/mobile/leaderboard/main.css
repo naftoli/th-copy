@@ -40,6 +40,15 @@ nav.navbar .navbar-title {
     background: #343862;
     cursor: pointer;
 }
+
+.nav-row.subMenu {
+    background: #343862 !important;
+}
+
+.nav-row.subMenu .active, .nav-row.subMenu > div:hover {
+    background: #4258a2 !important;
+    cursor: pointer;
+}
 .nav-row img {
     height: 40px; width: 40px; 
     padding-top: 10px;  margin-bottom: 5px;

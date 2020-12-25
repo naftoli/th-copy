@@ -379,8 +379,30 @@
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 
     <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: white;
+        }
+
+        #ManyStars {
+            color: #1b2b51;
+        }
+
         body {
             margin-bottom: 120px;
+            background: #1b2b51;
         }
 
         .medal,
@@ -960,7 +982,8 @@
                                 html += '</a>';
                             }
                         } else {
-                            html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" />';
+                            html += '<img class="medal" src="./medals/images/Empty-Medal-Holder.png" />';
+
                             showRankAfterSlideShow = false;
                         }
                         html += '</div>';

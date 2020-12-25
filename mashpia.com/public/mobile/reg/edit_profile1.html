@@ -59,10 +59,10 @@
       };
       "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
     }("undefined" != typeof global ? global : this),
-    function (e) {
-      if (e.loadCSS) {
-        var t = loadCSS.relpreload = {};
-        if (t.support = function () {
+      function (e) {
+        if (e.loadCSS) {
+          var t = loadCSS.relpreload = {};
+          if (t.support = function () {
             try {
               return e.document.createElement("link").relList.supports("preload")
             } catch (e) {
@@ -75,16 +75,16 @@
                 r.rel = null)
             }
           }, !t.support()) {
-          t.poly();
-          var n = e.setInterval(t.poly, 300);
-          e.addEventListener && e.addEventListener("load", function () {
-            t.poly(), e.clearInterval(n)
-          }), e.attachEvent && e.attachEvent("onload", function () {
-            e.clearInterval(n)
-          })
+            t.poly();
+            var n = e.setInterval(t.poly, 300);
+            e.addEventListener && e.addEventListener("load", function () {
+              t.poly(), e.clearInterval(n)
+            }), e.attachEvent && e.attachEvent("onload", function () {
+              e.clearInterval(n)
+            })
+          }
         }
-      }
-    }(this);
+      }(this);
   </script>
   <script src="js/all.js" defer></script>
   <!--[if lt IE 9]>
@@ -92,6 +92,23 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
   <style>
+    html,
+    body,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    div,
+    button,
+    i,
+    input {
+      color: #1b2b51;
+    }
+
     body {
       background: #fff;
     }
@@ -159,9 +176,9 @@
       }
     }
 
-      .hebrew {
-          font-family: Arial !important;
-      }
+    .hebrew {
+      font-family: Arial !important;
+    }
   </style>
 
   <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
@@ -174,7 +191,7 @@
     <div class="container parent-page" id="crop-avatar">
       <div class="login-header">
         <span class="span12 i18n" data-key="SubTitle">FAMILY ACCOUNT</span>
-              
+
       </div>
 
       <div id="email_error" style="display: none;" class="alert alert-success">
@@ -211,7 +228,8 @@
               <div class="form-group has-feedback" id="divfather">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-                  <input id="father" name="father" type="text" class="form-control" data-key="FathersName" placeholder="Father" required />
+                  <input id="father" name="father" type="text" class="form-control" data-key="FathersName"
+                    placeholder="Father" required />
                 </div>
               </div>
             </div>
@@ -220,7 +238,8 @@
               <div class="form-group has-feedback" id="divmother">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/woman-color-gray-svg.svg" /></span>
-                  <input id="mother" name="mother" type="text"  data-key="MothersName" class="form-control" placeholder="Mother" required />
+                  <input id="mother" name="mother" type="text" data-key="MothersName" class="form-control"
+                    placeholder="Mother" required />
                 </div>
               </div>
             </div>
@@ -231,8 +250,8 @@
               <div class="form-group has-feedback" id="divlastname">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-                  <input id="lastname" name="lastname" type="text" class="form-control" data-key="Lastname_ph" placeholder="Lastname"
-                    required />
+                  <input id="lastname" name="lastname" type="text" class="form-control" data-key="Lastname_ph"
+                    placeholder="Lastname" required />
                 </div>
               </div>
             </div>
@@ -244,8 +263,8 @@
               <div class="form-group has-feedback" id="divaddress">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/house-color-gray-svg.svg" /></span>
-                  <input id="address" name="address" type="text" class="form-control" data-key="HomeAddress_ph" placeholder="Home Address"
-                    required />
+                  <input id="address" name="address" type="text" class="form-control" data-key="HomeAddress_ph"
+                    placeholder="Home Address" required />
                 </div>
               </div>
             </div>
@@ -257,7 +276,8 @@
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/location-color-gray-svg.svg"
                       style="padding: 10%;" /></span>
-                  <input id="city" name="city" type="text" class="form-control" data-key="city_ph" placeholder="City" required />
+                  <input id="city" name="city" type="text" class="form-control" data-key="city_ph" placeholder="City"
+                    required />
                 </div>
               </div>
             </div>
@@ -269,7 +289,8 @@
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/location-color-gray-svg.svg"
                       style="padding: 10%;" /></span>
-                  <input id="state" name="state" type="text" class="form-control" data-key="state_ph" placeholder="State" required />
+                  <input id="state" name="state" type="text" class="form-control" data-key="state_ph"
+                    placeholder="State" required />
                 </div>
               </div>
             </div>
@@ -279,7 +300,8 @@
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/location-color-gray-svg.svg"
                       style="padding: 10%;" /></span>
-                  <input id="zip" name="zip" type="text" class="form-control" data-key="zip_ph" placeholder="Zip Code" required />
+                  <input id="zip" name="zip" type="text" class="form-control" data-key="zip_ph" placeholder="Zip Code"
+                    required />
                 </div>
               </div>
             </div>
@@ -566,7 +588,8 @@
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/phone-color-gray-svg.svg"
                       style="padding: 8%;" /></span>
-                  <input id="phone" name="phone" type="tel" class="form-control" data-key="FatherCell_ph" placeholder="Father's Cell" required />
+                  <input id="phone" name="phone" type="tel" class="form-control" data-key="FatherCell_ph"
+                    placeholder="Father's Cell" required />
                 </div>
               </div>
             </div>
@@ -578,8 +601,8 @@
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/phone-color-gray-svg.svg"
                       style="padding: 8%;" /></span>
-                  <input id="phone2" name="phone2" type="tel" data-key="MotherCell_ph" class="form-control" placeholder="Mother's Cell"
-                    required />
+                  <input id="phone2" name="phone2" type="tel" data-key="MotherCell_ph" class="form-control"
+                    placeholder="Mother's Cell" required />
                 </div>
               </div>
             </div>
@@ -591,7 +614,8 @@
               <div class="form-group has-feedback" id="divfamily">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-                  <input id="login" name="login" type="text" data-key="Username_ph" class="form-control" placeholder="Login" required />
+                  <input id="login" name="login" type="text" data-key="Username_ph" class="form-control"
+                    placeholder="Login" required />
                 </div>
               </div>
             </div>
@@ -602,8 +626,8 @@
               <div class="form-group has-feedback" id="divemail">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/mail-color-gray-svg.svg" /></span>
-                  <input id="email" name="parentsemail" data-key="email_ph" type="email" class="form-control" placeholder="Your Email"
-                    data-error="Oops, that email address is invalid" required />
+                  <input id="email" name="parentsemail" data-key="email_ph" type="email" class="form-control"
+                    placeholder="Your Email" data-error="Oops, that email address is invalid" required />
                 </div>
               </div>
               <div class="invalid-feedback"></div>
@@ -615,7 +639,8 @@
               <div class="form-group has-feedback" id="divpwd">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-svg.svg" /></span></span>
-                  <input id="pwd" name="pwd" type="password" class="form-control" data-key="CurrentPassword_ph" placeholder="Current Password" />
+                  <input id="pwd" name="pwd" type="password" class="form-control" data-key="CurrentPassword_ph"
+                    placeholder="Current Password" />
                 </div>
               </div>
             </div>
@@ -626,8 +651,8 @@
               <div class="form-group has-feedback" id="divnewpwd">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-svg.svg" /></span>
-                  <input id="newpwd" name="newpwd" type="password" data-key="NewPassword_lbl" data-minlength="6" class="form-control"
-                    placeholder="New Password" />
+                  <input id="newpwd" name="newpwd" type="password" data-key="NewPassword_lbl" data-minlength="6"
+                    class="form-control" placeholder="New Password" />
                 </div>
               </div>
             </div>
@@ -638,8 +663,9 @@
               <div class="form-group has-feedback" id="divpnewwd2">
                 <div class="input-group">
                   <span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-svg.svg" /></span>
-                  <input id="newpwd2" name="newpwd2" type="password" class="form-control" data-key="ConfirmNewPassword_ph" data-match="#newpwd"
-                    data-match-error="Whoops, these don't match" placeholder="Re-type New Password" />
+                  <input id="newpwd2" name="newpwd2" type="password" class="form-control"
+                    data-key="ConfirmNewPassword_ph" data-match="#newpwd" data-match-error="Whoops, these don't match"
+                    placeholder="Re-type New Password" />
                 </div>
               </div>
             </div>
@@ -660,7 +686,7 @@
           </div>
         </div><!-- /.form-box -->
       </div><!-- /.register-box -->
-        </div>
+    </div>
   </form>
   <!-- Cropping modal -->
   <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog"
@@ -694,10 +720,10 @@
                     var video = document.querySelector('video')
                       , canvas;
 
-                    
+
                       // generates a still frame image from the stream in the <video>
                     //appends the image to the <body>
-                    
+
                     function takeSnapshot() {
                       var img = document.querySelector('img') || document.createElement('img');
                       var context;
@@ -713,9 +739,9 @@
 
                       //img.src = canvas.toDataURL('image/png');
                       //document.body.appendChild(img);
-                  
-                  //document.getElementById("avatarInput").value = 
-                  
+
+                  //document.getElementById("avatarInput").value =
+
                 //var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
                 var image = canvas.toDataURL();
 
@@ -724,7 +750,7 @@
                   $.ajax({
                   type: "POST",
                   url: "saveImage.php",
-                  data: { 
+                  data: {
                   imgBase64: image
                   },
                   success:function(data) {
@@ -732,11 +758,11 @@
                   document.getElementById("avatarInput").value = data;
                     }
                   }).done(function(o) {
-                  console.log('saved'); 
-                  
-                  // If you want the file to be visible in the browser 
+                  console.log('saved');
+
+                  // If you want the file to be visible in the browser
                   // - please modify the callback in javascript. All you
-                  // need is to return the url to the file, you just saved 
+                  // need is to return the url to the file, you just saved
                   // and than put the image in your browser.
                 });
                     }
@@ -1110,7 +1136,7 @@
       if (f.value) {
         try {
           f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
-        } catch (err) {}
+        } catch (err) { }
         if (f.value) { //for IE5 ~ IE10
           var form = document.createElement('form'),
             ref = f.nextSibling;

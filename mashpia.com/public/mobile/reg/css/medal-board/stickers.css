@@ -20,6 +20,14 @@ nav.navbar .navbar-title {
 .nav-row .active, .nav-row > div:hover { background: #343862; cursor: pointer; }
 .nav-row img { height: 40px; width: 40px;  padding-top: 10px;  margin-bottom: 5px; }
 .nav-row span { display: block; padding: 5px; color: white;  font-size: 8px; transition: .1s; }
+.nav-row.subMenu {
+    background: #343862 !important;
+}
+
+.nav-row.subMenu .active, .nav-row.subMenu > div:hover {
+    background: #4258a2 !important;
+    cursor: pointer;
+}
 select#rank { border-radius: 15px; }
 .btn.focus, .btn:focus { box-shadow: none; }
 @media screen and (min-width: 479px) {
@@ -40,16 +48,17 @@ footer { position: fixed;    width: 100%;    bottom: 0; }
 
 /************************* CSS for progress bars *************************/
 .progress {
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.1); position: relative;
+    background-color: #343862;
+    border-radius: 15px; position: relative;
     margin-top: 5px; margin-bottom: 0px; text-align: center; height: 25px;
 }
 .progress-bar {
     background-color: #ffd942; height: 100%; animation-name: progress-bar-slide; animation-duration: 2.5s;
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: linear-gradient(to left, transparent, rgba(255,255,255,.15));
 }
-.progress span { position: absolute; top: 0px; right: 0px; left: 0px; font-family: digi, monospace; font-size: 1.3em; }
+.progress span { position: absolute; top: 0px; right: 0px; left: 0px; font-size: 1.2em; color: white; text-transform: uppercase;}
 section#medal-slider .progress { height: 26px; max-width: 95%; margin: 0 auto; }
-section#medal-slider .progress span { font-size: 1.4em; }
+section#medal-slider .progress span { font-size: 1.3em; }
 
 .progress-bar.white { background-color: #bbbbbb; }
 .progress-bar.red { background-color: #ef5350; }
@@ -72,13 +81,14 @@ section#medal-slider .progress span { font-size: 1.4em; }
 img { max-width: 100%; }
 .medal-subject {
     background-image: url(/mobile/img_new/medal-ribbon-color-blue.svg);
-    background-size: 100% 130%; height: 35px; margin-top: -35px; line-height: 43px; position: relative;
+    background-size: 100% 100%;
+    transform: scale(1.2); height: 35px; margin-top: -35px; line-height: 43px; position: relative;
     transition: .25s; font-size: 1.2em; color: #ffffff; margin-bottom: 10px;
 }
-.medal-subject span { font-family: font1, "Times New Roman"; }
+.medal-subject span { font-family: font1, "Times New Roman"; color: white; font-size: 0.8em; }
 /* Slider */
 section#medal-slider, #medal-stickers { display: none; position: relative; max-width: 900px; margin: 0 auto; }
-section#medal-slider { animation-delay: .5s; }
+section#medal-slider { animation-delay: .5s; background: #1b2b51;}
 #medal-stickers { width: 95%; margin: 10px auto 100px; }
 .medal-slider-item { text-align: center; transition: .25s ease; }
 .medal-slider-item img { height: 125px; margin: 10px auto 10px; }
@@ -89,7 +99,7 @@ section#medal-slider { animation-delay: .5s; }
     /* fade out on desktop at the edges */
     #medal-slider .slick-list.draggable:before {
         content: ""; top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1;
-        background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 15%,  rgba(255, 255, 255, 0) 85%, rgba(255, 255, 255, 1) 100%);
+        background: linear-gradient(to right, #1b2c50 0%, transparent 15%,  transparent 85%, #1b2c50 100%);
         filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1);   
     }
 }
@@ -109,20 +119,20 @@ section#medal-slider { animation-delay: .5s; }
 .slick-dots li button { display: none; }
 ul.slick-dots { list-style: none; text-align: center; padding: 0px; margin: 15px 0px 0px;}
 ul.slick-dots li {
-    background-image: url('/mobile/img_new/circle-color-orange-svg.svg');
+    background-image: url('/mobile/img_new/circle-color-white.svg');
     height: 20px; width: 20px; display: inline-block; margin: 2px 5px; cursor: pointer;
 }
-ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-color-orange-solid-svg.svg'); }
+ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-color-white-solid.svg'); }
 
 .slick-slide { user-select: text; }
 /* Slider campaign info */
 .campaign-info { 
     display: flex; justify-content: center; font-size: .7em; text-align: center;
-    background: #ffd942; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
+    background: #4258a2; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
 }
 .campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
-span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; }
-.campaign-info > p { flex: 1; margin-bottom: 0px; }
+span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; color: #fff; }
+.campaign-info > p { flex: 1; margin-bottom: 0px; color: #fff; width: 100%; }
 
 /* Sticker row info */
 .medal-level { text-align: center; } .medal-img.earned { opacity: 1; }

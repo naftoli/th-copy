@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -7,7 +8,26 @@
   <title>Cropper</title>
   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/cropper.css">
+  <style>
+    html,
+    body,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    div,
+    button,
+    i,
+    input {
+      color: #1b2b51;
+    }
+  </style>
 </head>
+
 <body>
 
   <div class="container">
@@ -45,44 +65,45 @@
       var $previews = $('.preview');
 
       $('#image').cropper({
-          build: function (e) {
-            var $clone = $(this).clone();
+        build: function (e) {
+          var $clone = $(this).clone();
 
-            $clone.css({
-              display: 'block',
-              width: '100%',
-              minWidth: 0,
-              minHeight: 0,
-              maxWidth: 'none',
-              maxHeight: 'none'
+          $clone.css({
+            display: 'block',
+            width: '100%',
+            minWidth: 0,
+            minHeight: 0,
+            maxWidth: 'none',
+            maxHeight: 'none'
+          });
+
+          $previews.css({
+            width: '100%',
+            overflow: 'hidden'
+          }).html($clone);
+        },
+
+        crop: function (e) {
+          var imageData = $(this).cropper('getImageData');
+          var previewAspectRatio = e.width / e.height;
+
+          $previews.each(function () {
+            var $preview = $(this);
+            var previewWidth = $preview.width();
+            var previewHeight = previewWidth / previewAspectRatio;
+            var imageScaledRatio = e.width / previewWidth;
+
+            $preview.height(previewHeight).find('img').css({
+              width: imageData.naturalWidth / imageScaledRatio,
+              height: imageData.naturalHeight / imageScaledRatio,
+              marginLeft: -e.x / imageScaledRatio,
+              marginTop: -e.y / imageScaledRatio
             });
-
-            $previews.css({
-              width: '100%',
-              overflow: 'hidden'
-            }).html($clone);
-          },
-
-          crop: function (e) {
-            var imageData = $(this).cropper('getImageData');
-            var previewAspectRatio = e.width / e.height;
-
-            $previews.each(function () {
-              var $preview = $(this);
-              var previewWidth = $preview.width();
-              var previewHeight = previewWidth / previewAspectRatio;
-              var imageScaledRatio = e.width / previewWidth;
-
-              $preview.height(previewHeight).find('img').css({
-                width: imageData.naturalWidth / imageScaledRatio,
-                height: imageData.naturalHeight / imageScaledRatio,
-                marginLeft: -e.x / imageScaledRatio,
-                marginTop: -e.y / imageScaledRatio
-              });
-            });
-          }
-        });
+          });
+        }
+      });
     });
   </script>
 </body>
+
 </html>
