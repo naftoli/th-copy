@@ -371,14 +371,25 @@ if (isset($_POST['submit'])) {
                 //     $endDate = $today;
                 // }
 
-                // create mission for each day
-                $startTemp = $defaultStart;
-                $endTemp = $defaultEnd;
-                while ($startTemp < $endTemp) {
-                    $arrStart[] = $startTemp;
-                    $arrEnd[] = $startTemp;
-                    $startTemp++;
+                // if no dates were entered create array based on default start and end dates
+                if (empty($arrStart)) {
+                    $startTemp = $defaultStart;
+                    $endTemp = $defaultEnd;
+                    while ($startTemp < $endTemp) {
+                        $arrStart[] = $startTemp;
+                        $arrEnd[] = $startTemp + 6;
+                        $startTemp += 7;
+                    }
                 }
+
+                // create mission for each day
+//                $startTemp = $defaultStart;
+//                $endTemp = $defaultEnd;
+//                while ($startTemp < $endTemp) {
+//                    $arrStart[] = $startTemp;
+//                    $arrEnd[] = $startTemp;
+//                    $startTemp++;
+//                }
 //                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
                 // This takes the array of start dates and creates new missions based on that
@@ -390,7 +401,7 @@ if (isset($_POST['submit'])) {
                     $end = $endDate;
 //					echo $start . '-' . $end . "<br /><br />"; continue;
 //                    echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
-//                    if ($start < unixtojd()) continue;
+                    if ($start < unixtojd()) continue;
 
                     //while ($start <= $end) {
                     foreach ($types as $type) {
@@ -452,10 +463,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 //            exit;
-//            echo "<pre>";
-//            print_r($missions);
-//            echo "</pre>";
-//            exit;
+            echo "<pre>";
+            print_r($missions);
+            echo "</pre>";
+            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
