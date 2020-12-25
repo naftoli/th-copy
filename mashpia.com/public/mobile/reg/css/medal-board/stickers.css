@@ -20,6 +20,14 @@ nav.navbar .navbar-title {
 .nav-row .active, .nav-row > div:hover { background: #343862; cursor: pointer; }
 .nav-row img { height: 40px; width: 40px;  padding-top: 10px;  margin-bottom: 5px; }
 .nav-row span { display: block; padding: 5px; color: white;  font-size: 8px; transition: .1s; }
+.nav-row.subMenu {
+    background: #343862 !important;
+}
+
+.nav-row.subMenu .active, .nav-row.subMenu > div:hover {
+    background: #4258a2 !important;
+    cursor: pointer;
+}
 select#rank { border-radius: 15px; }
 .btn.focus, .btn:focus { box-shadow: none; }
 @media screen and (min-width: 479px) {
@@ -111,20 +119,20 @@ section#medal-slider { animation-delay: .5s; background: #1b2b51;}
 .slick-dots li button { display: none; }
 ul.slick-dots { list-style: none; text-align: center; padding: 0px; margin: 15px 0px 0px;}
 ul.slick-dots li {
-    background-image: url('/mobile/img_new/circle-color-orange-svg.svg');
+    background-image: url('/mobile/img_new/circle-color-white.svg');
     height: 20px; width: 20px; display: inline-block; margin: 2px 5px; cursor: pointer;
 }
-ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-color-orange-solid-svg.svg'); }
+ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-color-white-solid.svg'); }
 
 .slick-slide { user-select: text; }
 /* Slider campaign info */
 .campaign-info { 
     display: flex; justify-content: center; font-size: .7em; text-align: center;
-    background: #ffd942; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
+    background: #4258a2; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
 }
 .campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
-span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; }
-.campaign-info > p { flex: 1; margin-bottom: 0px; }
+span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; color: #fff; }
+.campaign-info > p { flex: 1; margin-bottom: 0px; color: #fff; width: 100%; }
 
 /* Sticker row info */
 .medal-level { text-align: center; } .medal-img.earned { opacity: 1; }
