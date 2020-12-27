@@ -34,7 +34,7 @@ class mission_marks_updater {
 		}
 	}
 	
-	function mission_marks_update_by_subject_id($user_id, $subject_id) 
+	function mission_marks_update_by_subject_id($user_id, $subject_id, $start = 0)
 	{
 		require_once("user_track.php");
 		require_once("date_tasks_mission.php");
@@ -51,7 +51,7 @@ class mission_marks_updater {
 		{
 			$user_track = new user_track($row);
 			$user_track->set_school_type_id();
-			//$user_track->check_missions();
+			$user_track->check_missions(false, false, $start);
 		}
 	}
 } 

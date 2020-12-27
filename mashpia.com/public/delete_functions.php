@@ -128,6 +128,29 @@ function delete_daily_task_mark($parameters) {
 		$sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
 		$query = mysql_query($sql);
 	}
+
+	// day schools work differently
+    $daySchool = false;
+    $sql_type = "select school_type_id from users where user_id = " . $user_id;
+	$result_type = mysql_query($sql_type);
+	$row_type = mysql_fetch_assoc($result_type);
+    if (in_array($row_type['school_type_id'], [4, 5])) {
+        $daySchool = true;
+    }
+
+    if ($daySchool) {
+        $totalMissions = $row['total']; // total times the task is marked is the total amount of mission the child should have
+        if ($totalMissions == 0) {
+            $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+            $query = mysql_query($sql);
+        } else {
+            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+            $query = mysql_query($sql);
+        }
+    }
+
+    // update the users information in the user_yearly_gift table
+    TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
 	/*
 	require_once("classes/rank_updater.php");
 	require_once("classes/medal_updater.php");
@@ -157,7 +180,7 @@ function delete_daily_task_mark2($parameters) {
 	$query = mysql_query($sql);
 	
 	if ($query) {
-        // update the user for the yearly gift
+        // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
         echo 0;
     } else {
