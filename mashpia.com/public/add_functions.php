@@ -367,6 +367,23 @@ function add_daily_task_mark($parameters, $update = true)
 
 					$insert_sql = "INSERT INTO date_tasks_mission_marks SET user_id=" . $user_id . ", date_tasks_mission_id=" . $date_tasks_mission_id . ", subject_id=" . $row['subject_id'] . ", mission_value=" . $row['mission_value'] . ", mission_name='" . mysql_real_escape_string($row['mission_name']) . "', mark_date=" . $mark_date . ", mark_override=0";
 					$insert_query = mysql_query($insert_sql);
+
+                    // day schools work differently
+                    $daySchool = false;
+                    $sql_type = "select school_type_id from users where user_id = " . $user_id;
+                    $result_type = mysql_query($sql_type);
+                    $row_type = mysql_fetch_assoc($result_type);
+                    if (in_array($row_type['school_type_id'], [4, 5])) {
+                        $daySchool = true;
+                    }
+
+                    if ($daySchool) {
+                        $totalMissions = $num_rows; // total times the task is marked is the total amount of mission the child should have
+                        if ($totalMissions > 1) {
+                            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+                            $query = mysql_query($sql);
+                        }
+                    }
 					/*
 					if ($update) {
 						require_once("classes/mission_marks_updater.php");
@@ -390,7 +407,8 @@ function add_daily_task_mark($parameters, $update = true)
 
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
-
+        // update the users information in the user_yearly_gift table
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
 	}
 	else
 	{
@@ -480,6 +498,23 @@ function add_daily_task_mark2($parameters, $update = true)
 
 					$insert_sql = "INSERT INTO date_tasks_mission_marks SET user_id=" . $user_id . ", date_tasks_mission_id=" . $date_tasks_mission_id . ", subject_id=" . $row['subject_id'] . ", mission_value=" . $row['mission_value'] . ", mission_name='" . mysql_real_escape_string($row['mission_name']) . "', mark_date=" . $mark_date . ", mark_override=0";
 					$insert_query = mysql_query($insert_sql);
+
+                    // day schools work differently
+                    $daySchool = false;
+                    $sql_type = "select school_type_id from users where user_id = " . $user_id;
+                    $result_type = mysql_query($sql_type);
+                    $row_type = mysql_fetch_assoc($result_type);
+                    if (in_array($row_type['school_type_id'], [4, 5])) {
+                        $daySchool = true;
+                    }
+
+                    if ($daySchool) {
+                        $totalMissions = $num_rows; // total times the task is marked is the total amount of mission the child should have
+                        if ($totalMissions > 1) {
+                            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+                            $query = mysql_query($sql);
+                        }
+                    }
 					/*
 					if ($update) {
 						require_once("classes/mission_marks_updater.php");
