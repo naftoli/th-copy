@@ -213,7 +213,7 @@ class TasksCustomizationNew {
         $inst_id = mysql_fetch_assoc($result)['inst_id'];
         if ($inst_id == 4) {
             $type_ids = "4,5";
-        } else ($inst_id == 2) {
+        } else if ($inst_id == 2) {
             $type_ids = "2,3,12,13";
         }
 		$sql = "select subject_id, subject_name from subjects s 
