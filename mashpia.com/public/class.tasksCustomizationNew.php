@@ -213,7 +213,7 @@ class TasksCustomizationNew {
         $inst_id = mysql_fetch_assoc($result)['inst_id'];
         if ($inst_id == 4) {
             $type_ids = "4,5";
-        } else {
+        } else ($inst_id == 2) {
             $type_ids = "2,3,12,13";
         }
 		$sql = "select subject_id, subject_name from subjects s 
@@ -226,16 +226,19 @@ class TasksCustomizationNew {
 		while ($row = mysql_fetch_assoc($result)) {
 			$campaigns[$row['subject_id']] = $row['subject_name'];
 		}
-		
-		$keys = array_keys( $campaigns );
-		$english = array( 92, 93, 94, 99 );
-		foreach ( $english as $id ) {
-			if ( in_array($id, $keys) ) {
-				$name = $campaigns[$id];
-				unset( $campaigns[$id] );
-				$campaigns[$id] = $name;
-			}
-		}
+
+		if ($inst_id == 2) {
+		    // rearrange array to show english at end
+            $keys = array_keys($campaigns);
+            $english = array(92, 93, 94, 99);
+            foreach ($english as $id) {
+                if (in_array($id, $keys)) {
+                    $name = $campaigns[$id];
+                    unset($campaigns[$id]);
+                    $campaigns[$id] = $name;
+                }
+            }
+        }
         
         return $campaigns;
     }
