@@ -208,18 +208,18 @@ class TasksCustomizationNew {
         }
         */
         // find out school type by school id
-        $sql = "select inst_id from schools where school_id = " . $school_id;
-        $result = mysql_query($sql);
-        $inst_id = mysql_fetch_assoc($result)['inst_id'];
-        if ($inst_id == 4) {
-            $type_ids = "4,5";
-        } else if ($inst_id == 2) {
-            $type_ids = "2,3,12,13";
-        }
+//        $sql = "select inst_id from schools where school_id = " . $school_id;
+//        $result = mysql_query($sql);
+//        $inst_id = mysql_fetch_assoc($result)['inst_id'];
+//        if ($inst_id == 4) {
+//            $type_ids = "4,5";
+//        } else if ($inst_id == 2) {
+//            $type_ids = "2,3,12,13";
+//        }
 		$sql = "select subject_id, subject_name from subjects s 
 				join school_type_subjects sts using (subject_id) 
 				where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-				and sts.school_type_id in ($type_ids) 
+				and sts.school_type_id in (2,3,4,5,12,13) 
 				group by s.subject_id 
 				order by s.subject_name";
 		$result = mysql_query($sql) or die(mysql_error());
@@ -227,16 +227,14 @@ class TasksCustomizationNew {
 			$campaigns[$row['subject_id']] = $row['subject_name'];
 		}
 
-		if ($inst_id == 2) {
-		    // rearrange array to show english at end
-            $keys = array_keys($campaigns);
-            $english = array(92, 93, 94, 99);
-            foreach ($english as $id) {
-                if (in_array($id, $keys)) {
-                    $name = $campaigns[$id];
-                    unset($campaigns[$id]);
-                    $campaigns[$id] = $name;
-                }
+        // rearrange array to show english at end
+        $keys = array_keys($campaigns);
+        $english = array(92, 93, 94, 99);
+        foreach ($english as $id) {
+            if (in_array($id, $keys)) {
+                $name = $campaigns[$id];
+                unset($campaigns[$id]);
+                $campaigns[$id] = $name;
             }
         }
         
