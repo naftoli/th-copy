@@ -116,11 +116,10 @@ foreach ( $users as $grade => $other ) {
     }
 }
 $users = $temp;
-//echo "<pre>"; print_r( $users ); echo "</pre>";
+echo "<pre>"; print_r( $users ); echo "</pre>";
 
 // find out what the fields returned are
-$columns = array_keys( $users[0] );
-
+$columns = array_values($fields);
 $niceFields = $_POST['niceFields'];
 
 /***************** RENDER REPORT **********************/

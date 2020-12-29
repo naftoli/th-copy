@@ -29,13 +29,13 @@ $info = [
     // 'cert_number'	=>  'Certificate Code'
 ];
 
-$info3 = [
-    'test1'     =>  'Test 1 Score',
-    'test2'     =>  'Test 2 Score',
-    'test3'     =>  'Test 3 Score',
-    'test4'     =>  'Test 4 Score',
-    'avg'       =>  'Avg of Test Selection (only relevant if choosing one or more test marks)'
-];
+//$info3 = [
+//    'test1'     =>  'Test 1 Score',
+//    'test2'     =>  'Test 2 Score',
+//    'test3'     =>  'Test 3 Score',
+//    'test4'     =>  'Test 4 Score',
+//    'avg'       =>  'Avg of Test Selection (only relevant if choosing one or more test marks)'
+//];
 
 $info2 = [
     'parent_name'           => 'Parent Name',
@@ -116,14 +116,14 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 <?php endforeach; ?>
             </fieldset>
 
-            <fieldset>
-                <legend>Test Info</legend>
-                <?php foreach ( $info3 as $key => $value ) : ?>
-                    <input type="checkbox" id="<?=$key?>"
-                        <?php if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
-                    /> <?=$value?><br />
-                <?php endforeach; ?>
-            </fieldset>
+<!--            <fieldset>-->
+<!--                <legend>Test Info</legend>-->
+<!--                --><?php //foreach ( $info3 as $key => $value ) : ?>
+<!--                    <input type="checkbox" id="--><?//=$key?><!--"-->
+<!--                        --><?php //if ( in_array( $key, $required ) ) echo " checked='checked' disabled "; ?>
+<!--                    /> --><?//=$value?><!--<br />-->
+<!--                --><?php //endforeach; ?>
+<!--            </fieldset>-->
 
             <!-- <fieldset>
                 <legend>Choose the years:</legend>
@@ -182,6 +182,8 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                         alert("Please select a school"); return false;
                     }
 
+                    var data = [];
+
                     // make sure at least one year was selected
                     // if ( !$("input.year:checked").length ) {
                     //     alert("You must choose at least one year.");
@@ -201,37 +203,29 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                         return false;
                     } else {
                         // get all fields to show
-                        var data = [];
-                        var info = <?=json_encode( $info )?>;
-                        for (var val in info) {
-                            var id = "#" + val;
-                            if ($(id).is(":checked")) {
-                                data.push( val );
-                            }
-                        }
-                        var info3 = <?=json_encode( $info3 )?>;
-                        for (var val in info) {
-                            var id = "#" + val;
-                            if ($(id).is(":checked")) {
-                                data.push( val );
-                            }
-                        }
-                        var info2 = <?=json_encode( $info2 )?>;
-                        for (var val in info2) {
-                            var id = "#" + val;
-                            if ($(id).is(":checked")) {
-                                data.push( val );
+                        let info_arr = []
+                        info_arr.push(<?=json_encode($info)?>);
+                        info_arr.push(<?=json_encode($info2)?>);
+                        //info_arr.push(<?//=json_encode($info3)?>//);
+
+                        for (let arr of info_arr) {
+                            for (let val in arr) {
+                                let id = "#" + val;
+                                if ($(id).is(":checked")) {
+                                    data.push(val)
+                                }
                             }
                         }
                     }
                     data.push('teacher'); // show teacher name
+                    console.log(data)
 
-                    var showCTH = $("#onlyCTH").is(":checked");
-                    var showUnreg = $("#unregistered").is(":checked");
+                    const showCTH = $("#onlyCTH").is(":checked");
+                    const showUnreg = $("#unregistered").is(":checked");
                     
                     //$("#qryBuilder").hide();
                     $("#report").html("<div class='loader'></div>");
-                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: <?= json_encode($info + $info2) ?> };
+                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: <?= json_encode($info + $info2 + $info3) ?> };
                     $.post("ajax/snapshot.php", ajaxData, function( data ) {
                         $("#report").html(data);
                         //$("#generate_report").hide();
@@ -240,13 +234,13 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 }
                 
                 function generate_csv() {
-                    var universalBOM = "\uFEFF";
-                    var csvContent = '';
+                    const universalBOM = "\uFEFF";
+                    let csvContent = '';
                     
                     // add headers
-                    var row = [];
+                    let row = [];
                     $.each($("tr").eq(0).find("th"), function(index, td) {
-                        row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+                        row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaining stuff...
                     });
                     row = row.join(",");
                     csvContent += row + "\n";
@@ -254,7 +248,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     // add body
                     $.each($("tr"), function(index, tr) {
                         tr = $(tr); // cast to jquery;
-                        var row = [];
+                        let row = [];
                         $.each(tr.find("td"), function(index, td) {
                             row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
                         });
@@ -262,7 +256,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                         csvContent += row + "\n";
                     });
                     
-                    var hiddenElement = document.createElement('a');
+                    const hiddenElement = document.createElement('a');
                     hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
                     hiddenElement.target = '_blank'; // in a new tab
                     hiddenElement.download = 'chidon-report.csv'; // with this file_name
