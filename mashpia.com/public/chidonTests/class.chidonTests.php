@@ -15,6 +15,7 @@ class ChidonTests
     private $types;
     private $testQuestions;
     private $marks;
+    private $genderOnly;
 
     public function __construct() {
         global $MASHPIA_DB;
@@ -35,6 +36,11 @@ class ChidonTests
             'expert'=> 15,
             'trophy'=> 10
         ];
+        $this->genderOnly = false;
+    }
+
+    public function setGender($gender) {
+        $this->genderOnly = $gender;
     }
 
     public function setStudents($school_id = 0) {
@@ -58,13 +64,20 @@ class ChidonTests
                 tc.year = :year 
         ";
         if ($school_id) $qry .= " AND u.school_id = :school";
+        if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
         $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
         $stmt = $this->db->prepare($qry);
         if (!$school_id) $res = $stmt->execute([':year' => $this->year]);
+        else if (!$this->genderOnly)
+            $res = $stmt->execute([
+                ':year' => $this->year,
+                ':school'   => $school_id
+            ]);
         else $res = $stmt->execute([
             ':year' => $this->year,
-            ':school'   => $school_id
+            ':school'   => $school_id,
+            ':gender'   => strtoupper($this->genderOnly)
         ]);
         if ($res) {
             $this->children = $stmt->fetchAll();
