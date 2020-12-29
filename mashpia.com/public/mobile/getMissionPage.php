@@ -540,7 +540,11 @@ $he_chars = array(
                                                             </table>
                                                             <? if ($daily_task->mandatory_qty) { // if it is mandatory get the stickers info
                                                                 echo "<div class='mandatoryImg'><img src=\"" . HOME . "/5of7stickers/" . $dailyStickers[$daily_task->subject_id] . "\" /></div>";
-                                                            }?>
+                                                            }
+                                                            if ($daily_task->grid_id == 13012) {
+                                                                echo "<div class='mandatoryImg'><img src=\"" . HOME . "/mission_marathon/tiny.png\" /></div>";
+                                                            }
+                                                            ?>
                                                         </div>
                                                         <div class="dailyBoxesLine"></div>
                                                     <? } // end if daily or not ?>

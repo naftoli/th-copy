@@ -374,6 +374,14 @@ abstract class MissionDisplay {
 												echo " secondColumn";
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
+									    if ($daily_task->grid_id == 13012) {
+                                            echo "<div class='mandatoryImg";
+                                            if ($firstColumn)
+                                                echo " firstColumn";
+                                            else
+                                                echo " secondColumn";
+                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                        }
 									    ?>
 										
 										<?php
