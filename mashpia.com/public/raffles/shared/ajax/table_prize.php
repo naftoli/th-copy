@@ -36,12 +36,13 @@ $prizes = Prize::loadAll($filter);
 <table>
     <thead>
         <tr>
-            <th>Name</th><th>Type</th><th>Created On</th><th>Tumbnail</th><th>Actions</th>
+            <th>Prize ID</th><th>Name</th><th>Type</th><th>Created On</th><th>Thumbnail</th><th>Actions</th>
         </tr>
     </thead>
     <tbody>
         <? foreach($prizes as $prize) { // generate a row for each raffle
             echo "<tr>"; // start the row
+            echo "<td>".$prize->prize_id."</td>";
             echo "<td>".$prize->name."</td>"; // show the name
             echo "<td>".$prize->type_of_prize."</td>"; // show the type
             echo "<td>".$prize->date_created->format('m/d/Y')."</td>"; // show the date created

@@ -20,11 +20,7 @@ $stmtUser = $MASHPIA_DB->prepare("
 
 $chayolei = [
     [
-        'serial'    => 7776122,
-        'paid'      => 50
-    ],
-    [
-        'serial'    => 7760643,
+        'serial'    => 7747833,
         'paid'      => 50
     ]
 ];
