@@ -20,7 +20,9 @@ if (in_array('M', $fields)) {
 } else if (in_array('F', $fields)) {
     $ct->setGender('F');
 }
-$ct->setStudents($_POST['school_id']);
+$school_id = $_POST['school_id'];
+if ($school_id > 0) $ct->setStudents($school_id);
+else $ct->setStudents();
 $ct->setScores();
 $ct->calculateMarks();
 
