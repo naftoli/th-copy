@@ -10,7 +10,7 @@ foreach ($fields as $field) {
         $tests[] = $info[1];
     }
 }
-//echo "<pre>"; print_r($_POST); echo "</pre>";
+echo "<pre>"; print_r($_POST); echo "</pre>";
 
 require 'class.chidonTests.php';
 $ct = new ChidonTests();
