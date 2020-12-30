@@ -239,6 +239,9 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 <img src="/images/icon_add.png" height="12" alt="tickets"/>
                 <span class="link-text">Create New Prize</span>
             </a>
+            <a href="" class="button">
+                <span class="link-text" id="generate_csv">Download CSV</span>
+            </a>
         </div>
         <h2>Prizes</h2>
         <div id="prizes"></div>
@@ -247,6 +250,37 @@ if($debug) echo "</pre>"; // end debugging preformatting
             $(document).ready(function(){
                 $.post("/raffles/shared/ajax/table_prize.php" + (debug_mode ? "?debug=true" : ""), {type: "weekly"}, function(data){
                     $("#prizes").html(data);
+
+                    $("#generate_csv").click(generate_csv);
+                    function generate_csv() {
+                        const universalBOM = "\uFEFF";
+                        let csvContent = '';
+
+                        // add headers
+                        let row = [];
+                        $.each($("#prizes tr").eq(0).find("th"), function(index, td) {
+                            if (index < 3) row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaining stuff...
+                        });
+                        row = row.join(",");
+                        csvContent += row + "\n";
+
+                        // add body
+                        $.each($("#prizes tr"), function(index, tr) {
+                            tr = $(tr); // cast to jquery;
+                            let row = [];
+                            $.each(tr.find("td"), function(index, td) {
+                                if (index < 3) row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+                            });
+                            row = row.join(",");
+                            csvContent += row + "\n";
+                        });
+
+                        const hiddenElement = document.createElement('a');
+                        hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
+                        hiddenElement.target = '_blank'; // in a new tab
+                        hiddenElement.download = 'chidon-report.csv'; // with this file_name
+                        hiddenElement.click(); // and click it
+                    }
                 });
             });
         </script>
