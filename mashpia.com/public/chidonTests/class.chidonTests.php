@@ -68,17 +68,25 @@ class ChidonTests
         // order by
         $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
         $stmt = $this->db->prepare($qry);
-        if (!$school_id) $res = $stmt->execute([':year' => $this->year]);
-        else if (!$this->genderOnly)
+        if ($school_id && $this->genderOnly) {
+            $res = $stmt->execute([
+                ':year' => $this->year,
+                ':school'   => $school_id,
+                ':gender'   => strtoupper($this->genderOnly)
+            ]);
+        } else if ($school_id && !$this->genderOnly) {
             $res = $stmt->execute([
                 ':year' => $this->year,
                 ':school'   => $school_id
             ]);
-        else $res = $stmt->execute([
-            ':year' => $this->year,
-            ':school'   => $school_id,
-            ':gender'   => strtoupper($this->genderOnly)
-        ]);
+        } else if (!$school_id && $this->genderOnly) {
+            $res = $stmt->execute([
+                ':year' => $this->year,
+                ':gender'   => strtoupper($this->genderOnly)
+            ]);
+        } else if (!$school_id && !$this->genderOnly) {
+            $res = $stmt->execute([':year' => $this->year]);
+        }
         if ($res) {
             $this->children = $stmt->fetchAll();
         }
