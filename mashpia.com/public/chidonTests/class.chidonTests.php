@@ -46,7 +46,7 @@ class ChidonTests
     public function setStudents($school_id = 0) {
         $qry = "
             SELECT 
-                tc.th_chidon_id, tc.user_id, tc.test_type,
+                tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id,
                 u.first,
                 u.last,
                 c.class_grade,

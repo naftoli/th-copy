@@ -34,6 +34,7 @@ $show_avg = in_array('avg', $fields);
 <table>
     <tr>
         <th>Chidon ID</th>
+        <th>Family ID</th>
         <th>School</th>
         <th>Grade</th>
         <th>Student</th>
@@ -51,8 +52,8 @@ $show_avg = in_array('avg', $fields);
         $id = $user['th_chidon_id'];
         $type = $user['test_type'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-        echo "<tr><td>" . $id . "</td><td>" . $user['school_name'] . "</td><td>" . $grade . "</td><td>" .
-            $user['first'] . ' ' . $user['last'] . "</td><td>" . $type . "</td>";
+        echo "<tr><td>" . $id . "</td><td>" . $user['parent_id'] . "</td><td>" . $user['school_name'] . "</td><td>" .
+                $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>" . $type . "</td>";
         foreach ($tests as $test_num) {
             $mark = $marks[$id][$test_num][$type];
             echo "<td>" . $mark . "</td>";
