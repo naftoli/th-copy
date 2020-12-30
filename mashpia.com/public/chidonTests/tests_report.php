@@ -10,7 +10,7 @@ foreach ($fields as $field) {
         $tests[] = $info[1];
     }
 }
-echo "<pre>"; print_r($_POST); echo "</pre>";
+//echo "<pre>"; print_r($_POST); echo "</pre>";
 
 require 'class.chidonTests.php';
 $ct = new ChidonTests();
@@ -51,8 +51,9 @@ $show_avg = in_array('avg', $fields);
         $total = 0; // for avg if needed
         $id = $user['th_chidon_id'];
         $type = $user['test_type'];
+        $admin_id = $user['parent_id'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-        echo "<tr><td>" . $id . "</td><td>" . $user['parent_id'] . "</td><td>" . $user['school_name'] . "</td><td>" .
+        echo "<tr><td>" . $id . "</td><td>" . $admin_id . "</td><td>" . $user['school_name'] . "</td><td>" .
                 $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>" . $type . "</td>";
         foreach ($tests as $test_num) {
             $mark = $marks[$id][$test_num][$type];
