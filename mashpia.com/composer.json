@@ -1,5 +1,5 @@
 {
-    "name": "Mashpia.com",
+    "name": "tzivos-hashem/mashpia.com",
     "description": "Tzivos Hashem Private Source Code",
     "config": {
         "platform": {
@@ -10,11 +10,21 @@
         "dshafik/php7-mysql-shim": "^0.2.0",
         "php-activerecord/php-activerecord": "^1.2",
         "google/apiclient": "^2.2",
-        "picqer/php-barcode-generator": "^0.2.2", 
-        "authorizenet/authorizenet": "2.0.0", 
-        "swiftmailer/swiftmailer": "^6.0"
+        "picqer/php-barcode-generator": "^0.2.2",
+        "authorizenet/authorizenet": "2.0.0",
+        "swiftmailer/swiftmailer": "^6.0",
+        "monolog/monolog": "^2.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^7"
+    },
+    "scripts": {
+        "tail-logs": [
+            "Composer\\Config::disableProcessTimeout",
+            "tail -f ./tmp/.log"
+        ]
+    },
+    "scripts-descriptions": {
+        "tail-logs": "display a live view of all logs created with the $logger"
     }
 }
