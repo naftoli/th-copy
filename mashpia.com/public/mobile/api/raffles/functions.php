@@ -21,17 +21,29 @@ function getRaffleInfo( $type ) {
     return $info;
 }
 
-function getPrizeInfo( $raffleID ) {
+function getPrizeInfo( $raffleID, $type = 'weekly' ) {
     $info = [];
-    $sql = "SELECT name, picture, thumbnail
-            FROM prizes p 
-            JOIN raffle_prizes rp USING (prize_id) 
-            WHERE rp.raffle_id = " . $raffleID;
-    $result = mysql_query($sql);
-    if ($row = mysql_fetch_assoc($result)) {
-        $info['name'] = $row['name'];
-        $info['pic'] = $row['picture'];
-        $info['thumb'] = $row['thumb'];
+    if ($type == 'weekly') {
+        $sql = "SELECT name, picture, thumbnail
+                FROM prizes p 
+                JOIN raffle_prizes rp USING (prize_id) 
+                WHERE rp.raffle_id = " . $raffleID;
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $info['name'] = $row['name'];
+            $info['pic'] = $row['picture'];
+            $info['thumb'] = $row['thumb'];
+        }
+    } else if ($type == 'monthly') {
+        $sql = "SELECT prize_name, prize_image_id
+                FROM prizes_auction p 
+                JOIN raffles_monthly rm USING (prize_id) 
+                WHERE rm.raffle_id = " . $raffleID;
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $info['name'] = $row['prize_name'];
+            $info['pic'] = $_SERVER['DOCUMENT_ROOT'] . '/file_view.php?id=' . $row['prize_image_id'];
+        }
     }
     return $info;
 }
@@ -228,16 +240,16 @@ function getWinnersInfo( $type, $year ) {
     }
 
     foreach ($raffles as $id => $raffle_id) {
-        $prize = getPrizeInfo($raffle_id);
+        $prize = getPrizeInfo($raffle_id, $type);
         if (!empty($prize)) {
             $raffleInfo = [];
             $sql_raffles = "
                 SELECT 
+                    u.user_id, 
                     u.first,
                     u.last,
                     u.gender,
                     s.school_name,
-                    MAX(rank_ord) AS rank,
                     c.class_grade,
                     c.class_sub
                 FROM
@@ -255,6 +267,11 @@ function getWinnersInfo( $type, $year ) {
             $result_raffles = mysql_query($sql_raffles);
             if (mysql_num_rows($result_raffles) > 0) {
                 while ($row = mysql_fetch_assoc($result_raffles)) {
+                    // get child's rank
+                    $sql_rank = "select MAX(rank_ord) AS rank from rank_marks where user_id = " . $row['user_id'];
+                    $res_rank = mysql_query($sql_rank);
+                    $row_rank = mysql_fetch_assoc($res_rank);
+                    $rank = $row_rank['rank'];
                     $gender = '';
                     if ($row['gender'] == 'M') {
                         $gender = 'boys';
@@ -265,7 +282,7 @@ function getWinnersInfo( $type, $year ) {
                         $gender => [
                             'name' => $row['first'] . ' ' . $row['last'],
                             'grade' => $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']),
-                            'rank' => $ranks[$row['rank']],
+                            'rank' => $ranks[$rank],
                             'school' => $row['school_name']
                         ]
                     ];
@@ -278,7 +295,7 @@ function getWinnersInfo( $type, $year ) {
                 'prize' => [
                     'name' => $prize['name'],
                     'img' => $prize['pic'],
-                    'thumb' => $prize['thumb']
+                    'thumb' => isset($prize['thumb']) ? $prize['thumb'] : ''
                 ],
                 'year' => $year,
                 'raffles' => $raffleInfo
