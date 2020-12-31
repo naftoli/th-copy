@@ -137,18 +137,18 @@ require('header.php');
 			    $stickers[$row['subject_id']] = $row['subject_image_id'];
 				$subjects[$row['subject_name']] = $row['subject_id'];
 			}
-			
+
             $start = $_POST['from'];
-			$sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and start_date = " . $start;	
+			$sql = "SELECT * FROM parshos WHERE start_date = " . $start;
 			$result = mysql_query($sql);
 			$row = mysql_fetch_assoc($result);
-			$start_report = $row['report_name'];
+			$start_report = $row['name'];
 			
 			$end = $_POST['to'];
-			$sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and end_date = " . $end;	
+			$sql = "SELECT * FROM parshos where end_date = " . $end;
 			$result = mysql_query($sql);
 			$row = mysql_fetch_assoc($result);
-			$end_report = $row['report_name'];
+			$end_report = $row['name'];
              
             foreach ($schools as $id => $school) {
                 $m = new MissionsDone($id);
