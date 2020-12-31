@@ -118,10 +118,12 @@ class Points
     }
 
     private function getStoreResetDate() {
-		if ($this->store_reset > 0) { 
-            $reset_date = $this->store_reset;
-        } else {
+        if (is_null($this->store_reset)) {
             $reset_date = $this->yearStart;
+        } else if ($this->store_reset === 0) {
+            $reset_date = 2451544; // 01/01/2000
+        } else {
+            $reset_date = $this->store_reset;
         }
         return $reset_date;
     }
