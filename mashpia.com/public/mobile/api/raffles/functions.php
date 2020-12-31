@@ -42,7 +42,7 @@ function getPrizeInfo( $raffleID, $type = 'weekly' ) {
         $result = mysql_query($sql);
         if ($row = mysql_fetch_assoc($result)) {
             $info['name'] = $row['prize_name'];
-            $info['pic'] = $_SERVER['DOCUMENT_ROOT'] . '/file_view.php?id=' . $row['prize_image_id'];
+            $info['pic'] = 'http://mashpia.com/file_view.php?id=' . $row['prize_image_id'];
         }
     }
     return $info;
