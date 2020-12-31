@@ -29,14 +29,16 @@ class Campaign extends Component {
 
   render() {
     const {
-      enrolled,   subject_name, tasks,
-      subject_id, getMissions,  personalize
+      enrolled, mandatory, subject_name, tasks,
+      subject_id, getMissions,  personalize,
     } = this.props;
 
     const classNames = classnames({
       'Campaign': true,
       'open': this.state.isOpen
     })
+
+    const redStyle = { color: red }
 
     return (
       <div className={ classNames }>
@@ -47,6 +49,7 @@ class Campaign extends Component {
             onChange={ this.personalize } />
 
           <FontAwesome icon='caret-right'/> { subject_name }
+          { mandatory && <span style={ redStyle }>*</span> }
         </span>
 
         <Collapse isOpen={ this.state.isOpen }>
