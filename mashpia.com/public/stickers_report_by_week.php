@@ -124,16 +124,16 @@ require('header.php');
             
             //print_r( $_POST );
             $start = $_POST['from'];
-			$sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and start_date = " . $start;	
+			$sql = "SELECT * FROM parshos where start = " . $start;
 			$result = mysql_query($sql);
 			$row = mysql_fetch_assoc($result);
-			$start_report = $row['report_name'];
+			$start_report = $row['name'];
 			
 			$end = $_POST['to'];
-			$sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and end_date = " . $end;	
+			$sql = "SELECT * FROM parshos where end = " . $end;
 			$result = mysql_query($sql);
 			$row = mysql_fetch_assoc($result);
-			$end_report = $row['report_name'];
+			$end_report = $row['name'];
 			
             $missionsPosted = $_POST['missions'];
 			
@@ -335,11 +335,9 @@ require('header.php');
                         require_once 'class.globalSettings.php';
                         $curDates = GlobalSettings::getCurYearDates();
 	                    $dates = array();
-						$sql = "SELECT * FROM reports
-                                WHERE report_type='mission_cover_sheet'
-                                AND visibility != 'none'
-                                and start_date > " . $curDates['start'] . "
-                                ORDER BY start_date";	
+						$sql = "SELECT * FROM parshos
+                                where start > " . $curDates['start'] . "
+                                ORDER BY start";
 						$result = mysql_query($sql);
 						while ($row = mysql_fetch_assoc($result)) {
 							$dates[] = $row;
@@ -348,14 +346,14 @@ require('header.php');
 						From beginning of: <select name='from'>
 						<?
 						foreach ($dates as $date) {
-							echo "<option value='" . $date['start_date'] . "'>" . $date['report_name'] . "</option>";
+							echo "<option value='" . $date['start'] . "'>" . $date['name'] . "</option>";
 						}
 						?>
 						</select><br />
 						Until end of: <select name='to'>
 						<?
 						foreach ($dates as $date) {
-							echo "<option value='" . $date['end_date'] . "'>" . $date['report_name'] . "</option>";
+							echo "<option value='" . $date['end'] . "'>" . $date['name'] . "</option>";
 						}
 						?>
 						</select><br />
