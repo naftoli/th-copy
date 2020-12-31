@@ -38,7 +38,7 @@ class Campaign extends Component {
       'open': this.state.isOpen
     })
 
-    const redStyle = { color: red }
+    const redStyle = { color: "red" }
 
     return (
       <div className={ classNames }>
