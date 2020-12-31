@@ -32,15 +32,17 @@ class Task extends Component {
 
   render() {
     let {
-      task,   enrolled, disabled, 
+      task, enrolled, disabled,
       labels, missions, subject_id,
-      personalize
+      personalize, mandatory
     } = this.props;
 
     const classNames = classnames({
       'Task': true,
       'open': this.state.isOpen
     });
+
+    const redStyle = { color: "red" }
 
     return (
       <div className={ classNames }>
@@ -53,6 +55,7 @@ class Task extends Component {
         
         <p className='task' onClick={ this.toggle }>
           <FontAwesome icon='caret-right'/> { task }
+          { mandatory && <span style={ redStyle }>*</span> }
         </p>
 
         { labels.map( ( label, index) =>
