@@ -398,7 +398,7 @@ class TasksCustomizationNew {
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         
         if ( $this->type == 'user' ) {
-			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on "
+			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty "
 				." FROM date_tasks dt "
                 ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
 				." JOIN user_tracks ut USING (subject_id, level, track_id) "
@@ -417,7 +417,8 @@ class TasksCustomizationNew {
         } else if ($this->type == 'class') {
             $users = $this->getUsersInGrade($this->id);
             if ( empty($users) ) return false;
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on from date_tasks dt 
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
+                    from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
                     join users u using (user_id) 
@@ -432,7 +433,8 @@ class TasksCustomizationNew {
                     and dtm.lang_id = " . $this->lang;
 			 //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
         } else {
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on from date_tasks dt 
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
+                    from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     where dtm.subject_id = " . $subject_id . " 
                     and dtm.start_date >= " . $this->start . " 
