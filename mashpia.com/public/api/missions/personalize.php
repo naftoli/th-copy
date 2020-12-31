@@ -64,11 +64,12 @@ class PersonalizeRouter {
         // * Format the response to something sane and consistent
         $response = [];
         // go through each cat
-        foreach( $tasks as $cat => $labels ) {
+        foreach( $tasks['taskInfo'] as $cat => $labels ) {
             $task = [ 'task' => $cat ];
             // missions is weird, but the array key is a 1 or 0 for if it is checked,
             // then that has an array with all the details as key values again...
             $task['enrolled'] = !!array_keys( $labels )[0];
+            $task['mandatory'] = $tasks['mandatory'][$cat];
             // array_values just skips another foreach which is somehow more confusing
             foreach( $labels[ array_keys( $labels )[0] ] as $label => $school_types ) {
 

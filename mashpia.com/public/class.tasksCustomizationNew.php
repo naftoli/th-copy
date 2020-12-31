@@ -389,10 +389,11 @@ class TasksCustomizationNew {
         return false;
     }
 
-    public function getTasks( $subject_id, $debug = false ) {
+    public function getTasks( $subject_id, $debug = false, $forPersonalization = false ) {
     	$this->debug = $debug;
         $tasks = array();
         $info = array();
+        $mandatory = array();
         
         $orderBy = " order by dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
@@ -458,6 +459,7 @@ class TasksCustomizationNew {
             //be on or off be default we need to store in array and then determine category default next
             $tasks[$row['cat']][] = $row['default_on'];
             $info[$row['cat']][$row['name']][$row['school_type_id']][$row['level']] = $row['quantity'];
+            if ($forPersonalization) $mandatory[$row['cat']] = $row['mandatory_qty'];
         }
         
         //if even one level/type has default on, the cat will show default on
@@ -617,7 +619,11 @@ class TasksCustomizationNew {
         $allInfo = array();
         foreach( $tasks as $task => $enrolled ) {
             if ( isset( $friendly[$task] ) ) {
-                $allInfo[$task][$enrolled] = $friendly[$task];
+                if ($forPersonalization) {
+                    $allInfo['taskInfo'][$task][$enrolled] = $friendly[$task];
+                    $allInfo['mandatory'][$task] = $mandatory[$task];
+                }
+                else $allInfo[$task][$enrolled] = $friendly[$task];
             }
         }
         return $allInfo;
