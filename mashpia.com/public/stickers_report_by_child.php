@@ -328,7 +328,7 @@ require('header.php');
     ?>
 	<script>
 		function export_csv() {
-			alert("Please note that is feature is in BETA and may not work correctly in all readers. It has been only been tested with Microsoft Excel 2016 and your milage may vary.");
+			// alert("Please note that is feature is in BETA and may not work correctly in all readers. It has been only been tested with Microsoft Excel 2016 and your milage may vary.");
 			var rows = []; // the rows for the csv export
 			var csvContent = ""; // the baisc csv file
 			var universalBOM = "\uFEFF";
