@@ -120,6 +120,18 @@ img.medal-img {
     }
 }
 
+@media ( max-width: 870px ) {
+    .medal-board .medal-subject span {
+        font-size: 12px;
+    }
+}
+
+@media ( max-width: 470px ) {
+    .medal-board .medal-subject span {
+        font-size: 10px;
+    }
+}
+
 @media ( min-width: 400px ) {
     .medal-board .medal {
         padding: 1% 2%;
