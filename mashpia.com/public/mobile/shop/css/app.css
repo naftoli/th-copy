@@ -345,7 +345,7 @@ label.checkbox input[type=checkbox]:checked ~ .check {
 .span12{width: 100%; float: left;}
 .span6{width: 50%;float: left;}
 .span3{width: 25%;float: left;}
-.footer{max-width: 1140px;
+.footer{
     text-align: center;
     display: table;
     margin-left: auto;
