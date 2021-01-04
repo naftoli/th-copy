@@ -99,6 +99,18 @@ class Points
         $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
+
+    public function getV2Points() {
+        $reset_date = $this->getStoreResetDate();
+        $arrParams['user_code'] = $this->usercode;
+        $arrParams['start_date'] = $reset_date;
+        $arrPoints = header_store_points( $arrParams );
+        if ( $this->debug ) {
+            echo "<pre>";
+            print_r( $arrPoints );
+            echo "</pre>";
+        }
+    }
     
     // used in statement.php line 628
     public function getMashpiaStorePoints() {

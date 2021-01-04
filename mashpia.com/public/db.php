@@ -829,7 +829,7 @@ function header_points($arrParams) {
 		$error = curl_error($objCurl);
 		$info = curl_getinfo($objCurl);
 	}
-	//echo $strResult; exit;
+//	echo "<pre>"; print_r($strResult); echo "</pre>"; exit;
 
 	if (0&&preg_match("/Sorry, there was an error/", $strResult))
 	{
