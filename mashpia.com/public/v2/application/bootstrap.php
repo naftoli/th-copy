@@ -1,5 +1,4 @@
 <?php
-
 // Index:
 // j3h4j5h324 - Global variables and functions
 
@@ -82,8 +81,8 @@ $db = Zend_Db::factory($config->db);
 Zend_Db_Table::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 
-require dirname(__FILE__) . '/../../../includes/globals.php';
-require dirname(__FILE__) . '/mysql.php';
+require_once dirname(__FILE__) . '/../../../includes/globals.php';
+//require_once dirname(__FILE__) . '/mysql.php';
 $link = mysql_connect($global_db_host.':3306', $global_db_user, $global_db_pass);
  
 $frontController = Zend_Controller_Front::getInstance();
