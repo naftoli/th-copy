@@ -9,15 +9,19 @@ $totalWeeklyTasks = new TotalWeeklyTasks(0, unixtojd());
 // generate the week_dates
 $totalWeeklyTasks->get_week_dates();
 
-$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
-$users_query = mysql_query(
-    "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first limit $limit, 500"
-);
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 100;
+$offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+$sql = "SELECT user_id, first, last FROM users WHERE user_registered IS NOT NULL ORDER BY last, first limit $limit offset $offset";
+$users_query = mysql_query($sql) or die(json_encode(["errors" => "invalid params"]));
 
-$user_count = mysql_num_rows( $users_query );
+$message = "";
 while ( $user = mysql_fetch_assoc( $users_query ) ) {
     $totalWeeklyTasks->user_id = $user['user_id'];
-    $total = $totalWeeklyTasks->total_weeks_with_task( true );
-    echo $user['last'] . ", " . $user['first'] . " - " . $total . "\n";
+    $totalWeeklyTasks->update_all_weeks();
+    $message .= $user['last'] . ", " . $user['first'] . "\n";
 }
-echo "done.";
+$user_count = mysql_num_rows($users_query);
+$message .=  "done $user_count users.\n";
+$done = $user_count !== $limit;
+
+echo json_encode(["message" => $message, "done" => $done]);

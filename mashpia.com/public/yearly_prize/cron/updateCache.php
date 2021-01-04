@@ -25,9 +25,9 @@ $time_start = microtime(true);
 
 while( $user = mysql_fetch_assoc( $users_query ) ){
     $totalWeeklyTasks->user_id = $user['user_id'];
-    $total = $totalWeeklyTasks->total_weeks_with_task( true ); // run for the current week (the only week)
+    $totalWeeklyTasks->update_all_weeks(); // run for the current week (the only week)
 
-    echo $user['last'] . ", " . $user['first'] . " - " . $total . "\n";
+    echo $user['last'] . ", " . $user['first'] . "\n";
 }
 $time_end = microtime(true);
 

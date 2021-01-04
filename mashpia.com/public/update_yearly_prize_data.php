@@ -1,4 +1,8 @@
 <?php
+
+// dead code hasn't been working since 5778.
+// it's been replaced by yearly_prize/tasks/updateCacheAll.php
+
 require 'db.php';
 require 'class.parshos.php';
 $parshos = Parshos::getParshos(5778);

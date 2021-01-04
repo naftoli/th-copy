@@ -67,7 +67,7 @@ class MarkRouter {
                     $mark_date
                 );
                 // update the cache as each mission is marked
-                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date, false );
+                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date );
             }
         }
 
