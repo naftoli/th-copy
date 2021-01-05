@@ -518,7 +518,7 @@ class user {
 				
 			if (!in_array($key, $this->daily_labels)) {
 				if (array_key_exists($frequency_id, $this->sorted_daily_labels)) {
-					$logger->warn(
+					$logger->warning(
 						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
 						[user_id => $this->user_id, labels => [$this->sorted_daily_labels[$frequency_id], $key]]
 					);
@@ -544,7 +544,7 @@ class user {
 			
 			if (!in_array($label_name, $this->weekly_labels)) {
 				if (array_key_exists($frequency_id, $this->sorted_weekly_labels)) {
-					$logger->warn(
+					$logger->warning(
 						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
 						[user_id => $this->user_id, labels => [$this->sorted_weekly_labels[$frequency_id], $label_name]]
 					);
@@ -563,7 +563,7 @@ class user {
 			
 			if (!in_array($label_name, $this->shabbos_labels)) {
 				if (array_key_exists($frequency_id, $this->sorted_shabbos_labels)) {
-					$logger->warn(
+					$logger->warning(
 						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
 						[user_id => $this->user_id, labels => [$this->sorted_shabbos_labels[$frequency_id], $label_name]]
 					);
