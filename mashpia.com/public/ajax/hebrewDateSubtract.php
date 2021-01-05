@@ -6,6 +6,7 @@ $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 $dob = $row['dob'];
 
+if (!$dob) die(); // must already have date of birth set to adjust jewish birthday
 $arrDate = explode('-', $dob);
 $jd = gregoriantojd($arrDate[1], $arrDate[2], $arrDate[0]);
 $jewish = jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH);
