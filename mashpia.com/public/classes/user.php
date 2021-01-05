@@ -517,10 +517,11 @@ class user {
 			//echo "<input type='hidden' name='DAILY TASKS INFO TWO' value='" . $this->daily_tasks[$dtno]->task_name . "-" . $key . "-" . $in_array . "'>\n";
 				
 			if (!in_array($key, $this->daily_labels)) {
-				if (array_key_exists($frequency_id, $this->sorted_daily_labels)) {
+				if (array_key_exists($frequency_id, $this->sorted_daily_labels) && explode(":", $this->sorted_daily_labels[$frequency_id])[0] != $label_name) {
+					$missing_label = explode(":", $this->sorted_daily_labels[$frequency_id])[0];
 					$logger->warning(
-						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
-						[user_id => $this->user_id, labels => [$this->sorted_daily_labels[$frequency_id], $key]]
+						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
+						[user_id => $this->user_id]
 					);
 				}
 				//echo "<input type='hidden' name='DAILY LABEL PUSH' value='" . $this->daily_tasks[$dtno]->task_name . "-" . $key . "-" . $in_array . "'>\n";
@@ -544,9 +545,10 @@ class user {
 			
 			if (!in_array($label_name, $this->weekly_labels)) {
 				if (array_key_exists($frequency_id, $this->sorted_weekly_labels)) {
+					$missing_label = $this->sorted_weekly_labels[$frequency_id];
 					$logger->warning(
-						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
-						[user_id => $this->user_id, labels => [$this->sorted_weekly_labels[$frequency_id], $label_name]]
+						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
+						[user_id => $this->user_id]
 					);
 				}
 				array_push($this->weekly_labels, $label_name);
@@ -563,9 +565,10 @@ class user {
 			
 			if (!in_array($label_name, $this->shabbos_labels)) {
 				if (array_key_exists($frequency_id, $this->sorted_shabbos_labels)) {
+					$missing_label = $this->sorted_shabbos_labels[$frequency_id];
 					$logger->warning(
-						"some missions are hidden because multple labels with the same frequency_id exist for the same users missions",
-						[user_id => $this->user_id, labels => [$this->sorted_shabbos_labels[$frequency_id], $label_name]]
+						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
+						[user_id => $this->user_id]
 					);
 				}
 				array_push($this->shabbos_labels, $label_name);
