@@ -77,7 +77,7 @@ $info = array(
 		'airport'		=>	'Airport after Event', 
 		'flight'		=>	'Time of flight',
 		'snack_way_back'=>	'Snack / Sandwich for after Event', 
-		'school_name'	=>	'Non TH School Name', 
+		'non_th_school'	=>	'Non TH School Name',
 		'affiliation'	=>	'Affiliation',
 		'home_address'	=>	'Home Address (AK)', 
 		'home_city'		=>	'Home City (AK)', 
@@ -169,7 +169,7 @@ if (isset($_POST['submit'])) {
     $r = new Reports( $year );
 	
 	// find out if we need to limit to certain avg
-	if ($_POST['avgLow'] != '' || $_POST['avgHigh'] != 0) {
+	if ((isset($_POST['avgLow']) && $_POST['avgLow'] != '') || (isset($_POST['avgHigh']) && $_POST['avgHigh'] != 0)) {
 		$avgs = array(
 			'tests' => $_POST['avgTests'],
 			'low'	=> empty($_POST['avgLow']) ? 0 : $_POST['avgLow'],

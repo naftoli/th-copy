@@ -240,9 +240,9 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('plaque', 'plaque_number')
             ),
-            'school_name'   =>  array(
-                'table'     =>  'th_chidon', 
-                'column'    =>  'school_name'
+            'non_th_school'   =>  array(
+                'table'     =>  'users',
+                'column'    =>  'non_th_school'
             ), 
             'affiliation'   =>  array(
                 'table'     =>  'th_chidon', 
