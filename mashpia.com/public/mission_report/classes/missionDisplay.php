@@ -19,6 +19,7 @@ abstract class MissionDisplay {
 	protected $end;
 	public $user_id;
 	public $lang_id;
+	private $daySchoolSubjects;
 	
 	public function __construct( $mission ) {
 		global $MASHPIA_DB;
@@ -102,7 +103,17 @@ abstract class MissionDisplay {
 			92	=>	'niggunim 5 of 7.png',		93	=>	'mivtzoyim 5 of 7.png',
 			94	=>	'yoma dipagra 5 of 7.png',	100	=>	'brias haguf 5 of 7.png'
 		);
+
+		$this->setDaySchoolSubjects();
 	}
+
+	private function setDaySchoolSubjects() {
+	    $sql = "select subject_id from subjects where inst_id = 4";
+	    $result = mysql_query($sql);
+	    while ($row = mysql_fetch_assoc($result)) {
+	        $this->daySchoolSubjects[] = $row['subject_id'];
+        }
+    }
 	
 	public function setDateDisplay( $val ) {	
 		$this->dateDisplay = $val;
@@ -366,7 +377,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+									    if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -1003,7 +1014,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+                                        if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -1011,6 +1022,14 @@ abstract class MissionDisplay {
 												echo " secondColumn";
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
+                                        if ($daily_task->grid_id == 13012) {
+                                            echo "<div class='mandatoryImg";
+                                            if ($firstColumn)
+                                                echo " firstColumn";
+                                            else
+                                                echo " secondColumn";
+                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                        }
 									    ?>
 										<?php
 										// find out the marks dates to know if this task is only on specific dates
@@ -1619,7 +1638,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+                                        if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -1627,6 +1646,14 @@ abstract class MissionDisplay {
 												echo " secondColumn";
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
+                                        if ($daily_task->grid_id == 13012) {
+                                            echo "<div class='mandatoryImg";
+                                            if ($firstColumn)
+                                                echo " firstColumn";
+                                            else
+                                                echo " secondColumn";
+                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                        }
 									    ?>
 											
 										<?php
