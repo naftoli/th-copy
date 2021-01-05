@@ -339,7 +339,8 @@ abstract class MissionDisplay {
 				$page = 1;
 				$labelAdded = 0;
 				$firstColumn = true;
-				
+				$firstColumnDS = true; // flag for day schools mission sheet
+
 				$numDaily = count($user->daily_labels);
 				if ($numDaily) {
 					foreach ($user->sorted_daily_labels as $key0 => $value) {
@@ -358,14 +359,18 @@ abstract class MissionDisplay {
 									if ($user->daily_tasks[$dtno]->label_name == $label) {
 										$daily_task = $user->daily_tasks[$dtno];
 										$rendered++;
+										if ($firstColumnDS && in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
+										    $labelAdded += 2; // for day school mission sheets there's lots of labels on first column so add 2 so that it breaks the column earlier
+										    $firstColumnDS = false;
+                                        }
 										?>
 										<div class="taskRow">
 							            <div class="row">
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
+                                                <div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
 												<div class="focus">
@@ -508,7 +513,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -614,7 +619,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -723,7 +728,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
@@ -1001,7 +1006,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
@@ -1145,7 +1150,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -1257,7 +1262,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -1385,7 +1390,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
@@ -1625,7 +1630,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
@@ -1803,7 +1808,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -1912,7 +1917,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -2037,7 +2042,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
