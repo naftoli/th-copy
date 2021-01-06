@@ -39,8 +39,9 @@ img.medal-img {
     vertical-align: middle;
     line-height: normal;
     color: #fff;
-    font-family: font1, "Times New Roman";
+    font-family: Tkuma, Exo;
     margin-bottom: 5px;
+    font-size: 16px;
 }
 
 .medal-board .medal-status {
@@ -66,7 +67,7 @@ img.medal-img {
     background-color: #ef5350;
 }
 .medal-board .progress-bar.orange {
-    background-color: #ffd942;
+    background-color: #d55027;
 }
 .medal-board .progress-bar.yellow {
     background-color: #ffd942;
@@ -116,6 +117,18 @@ img.medal-img {
 @media ( max-width: 322px ) {
     .medal-board .medal-subject {
         font-size: 0.5em;
+    }
+}
+
+@media ( max-width: 870px ) {
+    .medal-board .medal-subject span {
+        font-size: 12px;
+    }
+}
+
+@media ( max-width: 470px ) {
+    .medal-board .medal-subject span {
+        font-size: 10px;
     }
 }
 

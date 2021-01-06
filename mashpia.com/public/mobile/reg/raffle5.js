@@ -370,6 +370,9 @@ const init = () => {
         document.getElementById("flagLink5").setAttribute('href', '/mobile/reg/raffle5.html?id=' + id);
         document.getElementById("flagLink60").setAttribute('href', '/mobile/reg/raffle60.html?id=' + id);
         document.getElementById("flagLink180").setAttribute('href', '/mobile/reg/raffle180.html?id=' + id);
+        document.getElementById("missionsLink").setAttribute('href', '/mobile/missionsNew.html?id=' + id);
+        document.getElementById("rankLink").setAttribute('href', '/mobile/reg/rank.html?id=' + id);
+        document.getElementById("storeMenu").setAttribute('href', '/mobile/store/index.html?id=' + id);
         let raffleNumber = window.location.pathname.split('.html')[0].split('raffle').pop();
         document.getElementById("flagLink" + raffleNumber).classList.add('activeFlagLink');
     }

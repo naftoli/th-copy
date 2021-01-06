@@ -3565,7 +3565,7 @@ select[multiple].form-group-lg .form-control,textarea.form-group-lg .form-contro
 
 .btn-danger{
 	color:#fff;
-	background-color:#d9534f;
+	background-color:#e92d41;
 	border-color:#d43f3a
 }
 
@@ -3580,12 +3580,12 @@ select[multiple].form-group-lg .form-control,textarea.form-group-lg .form-contro
 }
 
 .btn-danger.disabled,.btn-danger.disabled.active,.btn-danger.disabled.focus,.btn-danger.disabled:active,.btn-danger.disabled:focus,.btn-danger.disabled:hover,.btn-danger[disabled],.btn-danger[disabled].active,.btn-danger[disabled].focus,.btn-danger[disabled]:active,.btn-danger[disabled]:focus,.btn-danger[disabled]:hover,fieldset[disabled] .btn-danger,fieldset[disabled] .btn-danger.active,fieldset[disabled] .btn-danger.focus,fieldset[disabled] .btn-danger:active,fieldset[disabled] .btn-danger:focus,fieldset[disabled] .btn-danger:hover{
-	background-color:#d9534f;
+	background-color:#e92d41;
 	border-color:#d43f3a
 }
 
 .btn-danger .badge{
-	color:#d9534f;
+	color:#e92d41;
 	background-color:#fff
 }
 
@@ -5196,7 +5196,7 @@ a.label:focus,a.label:hover{
 }
 
 .label-danger{
-	background-color:#d9534f
+	background-color:#e92d41
 }
 
 .label-danger[href]:focus,.label-danger[href]:hover{
@@ -5522,7 +5522,7 @@ a.thumbnail.active,a.thumbnail:focus,a.thumbnail:hover{
 }
 
 .progress-bar-danger{
-	background-color:#d9534f
+	background-color:#e92d41
 }
 
 .progress-striped .progress-bar-danger{
