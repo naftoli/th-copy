@@ -364,7 +364,12 @@
                                                         {{#if this.schoolTypeRegistered}}
                                                         {{#if this.reg_types.chayolei }}
                                                         <button class="btn btn-primary re_register">
-                                                            <span data-key="RegisterChayolei" class="i18n"> Register Chayolei </span> {{ this.chayolei_year }} <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}
+                                                            {{#if this.confirmationOnly}}
+                                                            <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>
+                                                            {{else}}
+                                                            <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
+<!--                                                            <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}-->
+                                                            {{/if}}
                                                             {{#if this.reg_types.chidon }}
                                                             / Chidon {{ this.chidon_year }}
                                                             {{/if}}
