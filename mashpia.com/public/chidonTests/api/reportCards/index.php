@@ -4,7 +4,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
-$as = new AdminSchools( 3, 'super', true, true ); // add chidon schools
+$as = new AdminSchools( 175069, 'super', true, true ); // add chidon schools
 $schools = $as->getSchools();
 
 $ct = new ChidonTests();
@@ -33,6 +33,7 @@ foreach ($info as $school => $users) {
         for ($i = 1; $i <= 4; $i++) {
             $test['mivtzahMaven'] = floatval(($marks[$id][$i]['maven'] / $questions) * 100);
             $test['shabbatonMark'] = floatval(($marks[$id][$i][$test_type] / $questions) * 100);
+            $tests[] = $test;
         }
         $result[] = [
             'id' => $id,
