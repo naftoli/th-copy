@@ -31,8 +31,8 @@ foreach ($info as $school => $users) {
         else $questions = 10;
         $tests = [];
         for ($i = 1; $i <= 4; $i++) {
-            $test['mivtzahMaven'] = floatval(($marks[$id][$i]['maven'] / $questions) * 100);
-            $test['shabbatonMark'] = floatval(($marks[$id][$i][$test_type] / $questions) * 100);
+            $test['mivtzahMaven'] = number_format(floatval(($marks[$id][$i]['maven'] / $questions) * 100), 2);
+            $test['shabbatonMark'] = number_format(floatval(($marks[$id][$i][$test_type] / $questions) * 100), 2);
             $tests[] = $test;
         }
         $result[] = [
