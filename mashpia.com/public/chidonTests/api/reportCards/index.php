@@ -20,25 +20,27 @@ foreach ($schools as $id => $school) {
 }
 
 $result = [];
-foreach ($info as $user) {
-    $id = $user['th_chidon_id'];
-    $name = $user['first'] . ' ' . $user['last'];
-    $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-    $avgRequired = 70;
-    $test_type = $user['test_type'];
-    if ($test_type == 'expert') $questions = 15;
-    else $questions = 10;
-    $tests = [];
-    for ($i = 1; $i <= 4; $i++) {
-        $test['mivtzahMaven'] = floatval(($marks[$id][$i]['maven'] / $questions) * 100);
-        $test['shabbatonMark'] = floatval(($marks[$id][$i][$test_type] / $questions) * 100);
+foreach ($info as $school => $users) {
+    foreach ($users as $user) {
+        $id = $user['th_chidon_id'];
+        $name = $user['first'] . ' ' . $user['last'];
+        $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
+        $avgRequired = 70;
+        $test_type = $user['test_type'];
+        if ($test_type == 'expert') $questions = 15;
+        else $questions = 10;
+        $tests = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $test['mivtzahMaven'] = floatval(($marks[$id][$i]['maven'] / $questions) * 100);
+            $test['shabbatonMark'] = floatval(($marks[$id][$i][$test_type] / $questions) * 100);
+        }
+        $result[] = [
+            'id' => $id,
+            'name' => $name,
+            'grade' => $grade,
+            'avgRequired' => $avgRequired,
+            'tests' => $tests
+        ];
     }
-    $result[] = [
-        'id'    => $id,
-        'name'  => $name,
-        'grade' => $grade,
-        'avgRequired'   => $avgRequired,
-        'tests' => $tests
-    ];
 }
 echo json_encode($result);
