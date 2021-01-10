@@ -260,7 +260,7 @@ workflows:
             branches:
               only:
                 - master
-#                - testing
+                - testing
                 - daySchools
 
       - deploy-testing:
