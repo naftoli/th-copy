@@ -19,7 +19,8 @@ while ($row = mysql_fetch_assoc( $result )) {
     else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 }
 
-$limit = isset($_REQUEST['limit']) && $_REQUEST['limit'] ? $_REQUEST['limit'] * 100 : 0;
+$end = 500;
+$limit = isset($_REQUEST['limit']) && $_REQUEST['limit'] ? $_REQUEST['limit'] * $end : 0;
 
 $marks = [];
 $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm 
@@ -27,8 +28,7 @@ $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm
         join date_tasks_missions dtm using (date_tasks_mission_id) 
         where dt.grid_id in (21001,21002,21003,21004,21005,21006,21007,21008,21013,21014) 
         and dtm.start_date >= 2459027 
-        limit $limit, 500";
-echo $sql;
+        limit $limit, $end";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $marks[] = $row;
