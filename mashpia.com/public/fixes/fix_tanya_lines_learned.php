@@ -19,12 +19,15 @@ while ($row = mysql_fetch_assoc( $result )) {
     else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 }
 
+$limit = isset($_POST['limit']) && $_POST['limit'] ? $_POST['limit'] * 100 : 0;
+
 $marks = [];
 $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm 
         join date_tasks dt using (date_task_id) 
         join date_tasks_missions dtm using (date_tasks_mission_id) 
         where dt.grid_id in (21001,21002,21003,21004,21005,21006,21007,21008,21013,21014) 
-        and dtm.start_date >= 2459027";
+        and dtm.start_date >= 2459027 
+        limit $limit, 1000";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $marks[] = $row;
