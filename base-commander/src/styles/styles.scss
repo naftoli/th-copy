@@ -34,3 +34,13 @@ $rccs-cvc-font-size: 12px;
 
 @import 'branding.scss';
 @import 'index.css';
+
+@font-face {
+  font-family: 'Bould';
+  src: local('Bould'), url(../fonts/Bould-Regular.woff) format('woff'), url(../fonts/Bould-Bold.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Bould Bold';
+  src: local('Bould Bold'), url(../fonts/Bould-Bold.woff) format('woff');
+}
