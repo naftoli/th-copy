@@ -27,7 +27,7 @@ $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm
         join date_tasks_missions dtm using (date_tasks_mission_id) 
         where dt.grid_id in (21001,21002,21003,21004,21005,21006,21007,21008,21013,21014) 
         and dtm.start_date >= 2459027 
-        limit $limit, 1000";
+        limit $limit, 500";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $marks[] = $row;
