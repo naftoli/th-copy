@@ -19,7 +19,7 @@ while ($row = mysql_fetch_assoc( $result )) {
     else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 }
 
-$limit = isset($_POST['limit']) && $_POST['limit'] ? $_POST['limit'] * 100 : 0;
+$limit = isset($_REQUEST['limit']) && $_REQUEST['limit'] ? $_REQUEST['limit'] * 100 : 0;
 
 $marks = [];
 $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm 
