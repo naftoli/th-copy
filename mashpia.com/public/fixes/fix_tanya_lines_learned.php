@@ -1,6 +1,8 @@
 <?php
+ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
@@ -8,7 +10,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 // get campaigns for current year
-$sql = "SELECT * FROM line_campaigns WHERE year = " . $year;
+$sql = "SELECT * FROM line_campaigns WHERE year = " . GlobalSettings::getChidonYear();
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
