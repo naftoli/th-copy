@@ -38,13 +38,17 @@ foreach ($marks as $row) {
     $exists_query = mysql_query($campaign_qry);
     if (mysql_num_rows($exists_query) > 0) {
         $exists_row = mysql_fetch_assoc($exists_query);
-        if ( $mark > 0 && $mark > $exists_row['t'] ) {
+        if ( $mark > 0 ) {
             $update_sql = "UPDATE lines_learned"
                 ." SET mission_sheet_amount = " . $mark
                 ." WHERE campaign_id = " . $campaign
                 ." AND user_id = " . $user_id;
-            if (mysql_query($update_sql)) $updated++;
+        } else {
+            $update_sql = "DELETE FROM lines_learned"
+                ." WHERE campaign_id = " . $campaign
+                ." AND user_id = " . $user_id;
         }
+        if (mysql_query($update_sql)) $updated++;
     } else {
         $user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
         $user_info = mysql_fetch_assoc($user_info_query);

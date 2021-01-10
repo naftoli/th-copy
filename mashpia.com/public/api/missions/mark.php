@@ -40,7 +40,7 @@ class MarkRouter {
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
         $date_task_query = ' SELECT u.user_id, dt.date_task_id, dt.grid_id, '
-            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, dt.short_name '
+            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, dt.short_name, '
             .' dtm.date_tasks_mission_id, dtm.start_date, dtm.end_date, '
             .' dtm.subject_id, dtm.mission_value, dtm.mission_name '
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
