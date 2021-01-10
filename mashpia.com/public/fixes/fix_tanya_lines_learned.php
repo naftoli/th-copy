@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('max_execution_time', 600);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
