@@ -40,7 +40,7 @@ class MarkRouter {
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
         $date_task_query = ' SELECT u.user_id, dt.date_task_id, dt.grid_id, '
-            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, '
+            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, dt.short_name '
             .' dtm.date_tasks_mission_id, dtm.start_date, dtm.end_date, '
             .' dtm.subject_id, dtm.mission_value, dtm.mission_name '
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
@@ -82,8 +82,9 @@ class MarkRouter {
                         if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
                         else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
                     }
+                    $campaign = $tanyaCampaign;
+                    if (in_array($user_task['short_name'], ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
-                    $campaign = $grid_id % 2 == 0 ? $mishnaCampaign : $tanyaCampaign; // mishna campaigns are even numbers
                     $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
                     $exists_query = mysql_query($campaign_qry);
                     if (mysql_num_rows($exists_query) > 0) {

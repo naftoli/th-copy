@@ -14,10 +14,9 @@ while ($row = mysql_fetch_assoc( $result )) {
     if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
     else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 }
-$campaign = $grid_id % 2 == 0 ? $mishnaCampaign : $tanyaCampaign; // mishna campaigns are even numbers
 
 $marks = [];
-$sql = "select dtmm.* from date_tasks_marks dtmm 
+$sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm 
         join date_tasks dt using (date_task_id) 
         join date_tasks_missions dtm using (date_tasks_mission_id) 
         where dt.grid_id in (21001,21002,21003,21004,21005,21006,21007,21008,21013,21014) 
@@ -31,6 +30,9 @@ $updated = 0;
 foreach ($marks as $row) {
     $mark = $row['done_qty'];
     $user_id = $row['user_id'];
+    $short_name = $row['short_name'];
+    $campaign = $tanyaCampaign;
+    if (in_array($short_name, ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
     $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
     $exists_query = mysql_query($campaign_qry);
