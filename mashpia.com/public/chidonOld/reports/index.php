@@ -11,6 +11,7 @@ if (!$admin_user || $admin_user['auth'] != 'super') {
 $info = array(
 	'Chidon User Info' => array(
 		'chidon_id'		=>	'Chidon ID',
+		'user_serial'   =>  'Serial Number',
 		'first_name'	=>	'First Name',
 		'last_name'		=>	'Last Name',
 		'he_first_name'	=>	'Hebrew First Name',
@@ -77,7 +78,7 @@ $info = array(
 		'airport'		=>	'Airport after Event', 
 		'flight'		=>	'Time of flight',
 		'snack_way_back'=>	'Snack / Sandwich for after Event', 
-		'school_name'	=>	'Non TH School Name', 
+		'non_th_school'	=>	'Non TH School Name',
 		'affiliation'	=>	'Affiliation',
 		'home_address'	=>	'Home Address (AK)', 
 		'home_city'		=>	'Home City (AK)', 
@@ -95,6 +96,7 @@ $info = array(
 		'parent_id'		=>	'Admin ID',
 		'parent_name'	=>	'Parent Name',
 		'parent_email'	=>	'Parent Email',
+		'parent_address'=>  'Parent Address',
 		'parent_number'	=>	'Parent Contact Number',
 		'parent_login'	=>	'Parent Login Info',
 		'donations'		=>	'Number of Trips Sponsored'
@@ -169,7 +171,7 @@ if (isset($_POST['submit'])) {
     $r = new Reports( $year );
 	
 	// find out if we need to limit to certain avg
-	if ($_POST['avgLow'] != '' || $_POST['avgHigh'] != 0) {
+	if ((isset($_POST['avgLow']) && $_POST['avgLow'] != '') || (isset($_POST['avgHigh']) && $_POST['avgHigh'] != 0)) {
 		$avgs = array(
 			'tests' => $_POST['avgTests'],
 			'low'	=> empty($_POST['avgLow']) ? 0 : $_POST['avgLow'],
@@ -226,6 +228,7 @@ if (isset($_POST['submit'])) {
 		'parent_name'	=>	array('first', 'last'),
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
+        'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
 //		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
@@ -327,7 +330,7 @@ if (isset($_POST['submit'])) {
 											echo "<td>Private Ride</td>";
 											break;
 									}
-								} else {
+                                } else {
 									echo "<td>" . $row[$column] . "</td>";
 								}
 							} else {

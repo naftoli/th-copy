@@ -7,6 +7,7 @@ require_once( API_ROOT . '/../mission_report/classes/missions.php' );
 require_once( API_ROOT . '/../yearly_prize/classes/TotalWeeklyTasks.php' );
 require_once( API_ROOT . '/../classes/medal_updater.php' );
 require_once( API_ROOT . '/../classes/rank_updater.php' );
+require_once( API_ROOT . '/../class.globalSettings.php' );
 
 class MarkRouter {
 
@@ -39,7 +40,7 @@ class MarkRouter {
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
         $date_task_query = ' SELECT u.user_id, dt.date_task_id, dt.grid_id, '
-            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, '
+            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, dt.short_name, '
             .' dtm.date_tasks_mission_id, dtm.start_date, dtm.end_date, '
             .' dtm.subject_id, dtm.mission_value, dtm.mission_name '
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
@@ -57,17 +58,59 @@ class MarkRouter {
             while( $row = $date_task_query->fetch() )
                 $date_task_ids[ $row['user_id'] ] = $row;
             
-            foreach( $date_task_ids as $user_task ) {
+            foreach( $date_task_ids as $user_id => $user_task ) {
                 // update the task
                 $this->updateTask( $user_task, $mark, $mark_date );
                 // update the mission
-                $this->updateMission( 
-                    $user_task['user_id'], 
-                    $user_task['date_tasks_mission_id'], 
+                $this->updateMission(
+                    $user_task['user_id'],
+                    $user_task['date_tasks_mission_id'],
                     $mark_date
                 );
                 // update the cache as each mission is marked
-                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date );
+                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date, false );
+
+                // if it's a tanya mark or mishna mark update the yud alef nissan tables
+                $gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
+                if (in_array($grid_id, $gridIds)) {
+                    $year = GlobalSettings::getChidonYear();
+
+                    // get campaigns for current year
+                    $sql = "SELECT * FROM line_campaigns WHERE year = " . $year;
+                    $result = mysql_query( $sql );
+                    while ($row = mysql_fetch_assoc( $result )) {
+                        if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
+                        else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
+                    }
+                    $campaign = $tanyaCampaign;
+                    if (in_array($user_task['short_name'], ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
+
+                    $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
+                    $exists_query = mysql_query($campaign_qry);
+                    if (mysql_num_rows($exists_query) > 0) {
+                        if ( $mark > 0 ) {
+                            $update_sql = "UPDATE lines_learned"
+                                ." SET mission_sheet_amount = " . $mark
+                                ." WHERE campaign_id = " . $campaign
+                                ." AND user_id = " . $user_id;
+                        } else {
+                            $update_sql = "DELETE FROM lines_learned"
+                                ." WHERE campaign_id = " . $campaign
+                                ." AND user_id = " . $user_id;
+                        }
+                        mysql_query($update_sql);
+                    } else {
+                        $user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
+                        $user_info = mysql_fetch_assoc($user_info_query);
+                        $insert_sql = "INSERT INTO lines_learned SET "
+                            ."campaign_id = " . $campaign . ", "
+                            ."user_id = " . $user_id . ", "
+                            ."mission_sheet_amount = " . $mark . ", "
+                            ."school_id = " . $user_info['school_id'] . ", "
+                            ."class_id = " . $user_info['class_id'];
+                        mysql_query($insert_sql);
+                    }
+                }
             }
         }
 

@@ -55,17 +55,14 @@ $start = $end - 83;
 
 // ***** REPORT DATES ***** //
 include("../classes/report.php");
-$reports = array();
-$sql = "SELECT * FROM reports 
-		WHERE report_type='mission_cover_sheet' 
-		AND visibility != 'none' 
-		and start_date >= $start 
-		and end_date <= $end 
-		ORDER BY start_date";    
+$parshos = array();
+$sql = "SELECT * FROM parshos
+		where start >= $start 
+		and end <= $end 
+		ORDER BY start";    
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query)) {
-    $report = new report($row);
-    array_push($reports, $report);
+    array_push($parshos, $row);
 }
 
 
@@ -90,7 +87,7 @@ if($debug) echo "<pre>";
 if($debug) print_r($children);
 if($debug) echo "</pre>";
 
-//$startReport = $end - 55;
+//$weekStart = $end - 55;
 $diff = 0;
 switch ($day) {
 	case 1:
@@ -114,13 +111,13 @@ switch ($day) {
 		$diff = 2;
 		break;
 }
-$startReport = $d - $diff;
-$endReport = $startReport + 6;
+$weekStart = $d - $diff;
+$weekEnd = $weekStart + 6;
 
 if (isset($_GET['start'])) {
 	if ($_GET['user'] != -1) $user_id = $_GET['user'];
-	$startReport 	= $_GET['start'];
-	$endReport		= $_GET['end']; 
+	$weekStart 	= $_GET['start'];
+	$weekEnd		= $_GET['end']; 
 }
 ?>
 <!DOCTYPE html>
@@ -162,13 +159,13 @@ if (isset($_GET['start'])) {
 					<div class="arrow-left"></div>
 					<select name='parsha' id="parshaSelection">
 						<?
-						foreach ($reports as $report) {
-							if ($startReport == $report->start_date) {
-								echo "<option value='" . $report->start_date . ':' . $report->end_date . 
-									"' selected='selected'>" . $report->report_name . "</option>";
+						foreach ($parshos as $parsha) {
+							if ($weekStart == $parsha['start']) {
+								echo "<option value='" . $parsha['start'] . ':' . $parsha['end'] . 
+									"' selected='selected'>" . $parsha['name'] . "</option>";
 							} else {
-								echo "<option value='" . $report->start_date . ':' . $report->end_date . 
-									"'>" . $report->report_name . "</option>";
+								echo "<option value='" . $parsha['start'] . ':' . $parsha['end'] . 
+									"'>" . $parsha['name'] . "</option>";
 							}
 						}
 						?>
@@ -199,12 +196,12 @@ if (isset($_GET['start'])) {
 		
 		$missions = array();		
 		if ( isset($user_id) ) {
-			$m = new Missions( $startReport, $endReport, $user_id );
+			$m = new Missions( $weekStart, $weekEnd, $user_id );
 			$missions[] = $m->getMissions();
 			//echo "<pre>"; print_r($m->getMissions()); echo "</pre>"; exit;
 		} else {
 			foreach ($children as $child) {
-				$m = new Missions( $startReport, $endReport, $child->user_id );
+				$m = new Missions( $weekStart, $weekEnd, $child->user_id );
 				$missions[] = $m->getMissions();
 			}
 		}

@@ -85,7 +85,7 @@ img { max-width: 100%; }
     transform: scale(1.2); height: 35px; margin-top: -35px; line-height: 43px; position: relative;
     transition: .25s; font-size: 1.2em; color: #ffffff; margin-bottom: 10px;
 }
-.medal-subject span { font-family: font1, "Times New Roman"; color: white; font-size: 0.8em; }
+.medal-subject span { font-family: Tkuma, Exo; color: white; font-size: 0.8em; }
 /* Slider */
 section#medal-slider, #medal-stickers { display: none; position: relative; max-width: 900px; margin: 0 auto; }
 section#medal-slider { animation-delay: .5s; background: #1b2b51;}
@@ -127,10 +127,10 @@ ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-co
 .slick-slide { user-select: text; }
 /* Slider campaign info */
 .campaign-info { 
-    display: flex; justify-content: center; font-size: .7em; text-align: center;
+    display: flex; font-size: .7em; text-align: center;
     background: #4258a2; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
 }
-.campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
+.campaign-info img { max-height: 75px; max-width: 75px; }
 span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; color: #fff; }
 .campaign-info > p { flex: 1; margin-bottom: 0px; color: #fff; width: 100%; }
 

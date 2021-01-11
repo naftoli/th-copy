@@ -1,6 +1,7 @@
-<? 
+<?php
 ini_set('max_execution_time', 600);
 ini_set('display_errors', 1);
+error_reporting(E_ALL);
 $admin_auth = array('school','user'); 
 require('header.php'); 
 ?>
@@ -35,7 +36,7 @@ require('header.php');
         margin-right: auto;
     }
     .percent {
-        color: red;
+        color: #ff0000;
         font-weight: bold;
     }
     .loader {
@@ -78,7 +79,7 @@ require('header.php');
 
 <body>
 	<!--<div class="loader"></div>-->
-<? 
+<?php
 require_once('admin_header.php');
 require_once 'class.shabbosMevorchim.php';
 
@@ -109,7 +110,7 @@ $key = key( $reportDates );
 </div>
 <br />
 <div align="center" id="smPage">
-<? 
+<?php
 require_once 'class.adminSchools.php';      
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
@@ -117,48 +118,9 @@ $schools = $as->getSchools();
 foreach ( $schools as $school_id => $name ) {
     $sm->setSchool( $school_id );
     $sm->setSchoolResults( $school_id );
-    /*
-    //get school logo
-    $sql = "select school_logo_id from schools where school_id = " . $admin->school_id;
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    if ( !is_null($row['school_logo_id']) ) {
-        require_once 'file_save.php';
-        echo "<div class='logo'>";
-        echo linkImgFile($row['school_logo_id'], NULL, '100'); 
-        echo "</div>";
-    }
-	 * 
-	 */
-    ?>
-    <!--
-    <div class='hayomYom'>
-    <p align="right"> היום יום - כ"ה שבט </p>
-    <p align="right"> 
-    גּוֹמֵר זַיין דעֶם תְּהִלִּים שַׁבָּת מְבָרְכִים - דאָס דאַרף מעֶן אָפּהִיטעֶן, דאָס אִיז נוֹגֵעַ אִיהם, זַיינעֶ קִינְדעֶר אוּן קִינְדס קִינְדעֶר
-    </p>    
-    <p>
-        "One should be careful to say Tehillim everyday and to say the whole Tehillim on Shabbos Mevorchim.
-        These things are important for every person, his children and grandchildren."
-    </p>
-    <p>
-        <br />
-        <a href='shabbos_mevorchim_summary2.php?date=<?=$date?>'>Click here for visual charts!</a>
-    </p>
-    </div>
-    -->    
-    <div>
-    	<?=$sm->getSchoolName()?> - שבת מברכים <?=$sm->getHebrewMonth($key)?><br /><br />
-    </div>
-    <? 
-    //if ( !$sm->showDone( $date ) ) 
-        //echo "<div style='float: left'>";
-    
-    //if ( !$sm->showDone( $date ) ) 
-        //echo "</div>";
-    //else 
-        //echo "<br />";
-	
+
+    echo "<div>" . $sm->getSchoolName() . " - שבת מברכים " . $sm->getHebrewMonth($key) . "<br /><br /></div>";
+
 	echo "<div style='float: left; width: 50%'>";
 	$sm->generateArmyTable( $key, $date );
 	echo "</div>";
@@ -169,15 +131,8 @@ foreach ( $schools as $school_id => $name ) {
     ?>
     <div style="clear: both"></div>
     <br />
-    <!--
-    <? if ( !is_null($row['school_logo_id']) ) { ?>
-    <br />
-    <br />
-    <br />
-    <? } ?>
-    -->
     <div class="main" id="main">
-    <?
+    <?php
     $sm->setASR( $date );
     $sm->generateArmyAccomplishedReport();
     ?>
@@ -189,14 +144,13 @@ foreach ( $schools as $school_id => $name ) {
     <div id="chart2"></div>
     <br />
     <div class="page-break"></div>
-    <?
+    <?php
     echo "<input type='hidden' id='tasks' value='" . json_encode( $sm->getKeys() ) . "'>";
 	echo "<input type='hidden' id='kapitelach' value='" . json_encode( $sm->getAccomplishedKapitelach() ) . "'>";
 	echo "<input type='hidden' id='minutes' value='" . json_encode( $sm->getAccomplishedMinutes() ) . "'>";
 	echo "<input type='hidden' id='pieK' value='" . json_encode( $sm->getPieKapitelach() ) . "'>";
-	?>
-	
-<? } ?>
+}
+?>
 </div>
 
 <script>

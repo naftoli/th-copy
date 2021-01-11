@@ -973,7 +973,7 @@ hr {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 0;
-    border-top: 1px solid #eee
+    border-top: 1px solid #4358a2;
 }
 
 .sr-only {
@@ -2929,7 +2929,7 @@ fieldset[disabled] .btn {
 
 .btn-danger {
     color: #fff;
-    background-color: #d9534f;
+    background-color: #e92d41;
     border-color: #d43f3a
 }
 
@@ -2944,7 +2944,7 @@ fieldset[disabled] .btn {
     }
 
     .btn-danger.disabled, .btn-danger.disabled.active, .btn-danger.disabled.focus, .btn-danger.disabled:active, .btn-danger.disabled:focus, .btn-danger.disabled:hover, .btn-danger[disabled], .btn-danger[disabled].active, .btn-danger[disabled].focus, .btn-danger[disabled]:active, .btn-danger[disabled]:focus, .btn-danger[disabled]:hover, fieldset[disabled] .btn-danger, fieldset[disabled] .btn-danger.active, fieldset[disabled] .btn-danger.focus, fieldset[disabled] .btn-danger:active, fieldset[disabled] .btn-danger:focus, fieldset[disabled] .btn-danger:hover {
-        background-color: #d9534f;
+        background-color: #e92d41;
         border-color: #d43f3a
     }
 
@@ -4146,7 +4146,7 @@ a.label:focus, a.label:hover {
     }
 
 .label-danger {
-    background-color: #d9534f
+    background-color: #e92d41
 }
 
     .label-danger[href]:focus, .label-danger[href]:hover {
@@ -4243,11 +4243,9 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
         color: #245269
     }
 
-.alert-warning {
-    color: #8a6d3b;
-    background-color: #fcf8e3;
-    border-color: #faebcc
-}
+    .alert-warning{
+        background: #4258a2;
+    }
 
     .alert-warning hr {
         border-top-color: #f7e1b5
@@ -4388,7 +4386,7 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
 }
 
 .progress-bar-danger {
-    background-color: #d9534f
+    background-color: #e92d41
 }
 
 .progress-striped .progress-bar-danger {
@@ -15115,7 +15113,9 @@ body {
     border: 1px solid #e7e7e7;
     background: #f5f5f5;
     overflow: hidden;
-    margin: 0 auto
+    margin: 0 auto;
+    max-width: 1024px;
+        margin: auto !important;
 }
 
     .sky-carousel .sky-carousel-container {

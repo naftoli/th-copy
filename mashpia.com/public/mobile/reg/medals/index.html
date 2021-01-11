@@ -39,7 +39,8 @@
             .sky-carousel .sky-carousel-container li img{ display: none; }
             .sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
             .sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
-            .sky-carousel { height: 200px; }
+            .sky-carousel { height: 200px;max-width: 1024px;
+				margin: auto !important; }
             /* page header */
             #userImg { border-radius: 50%; border: 2px solid #31559f; margin-left: 5%; }
             .personalImg { border-radius: 50%;  display: block; text-align: center; }
@@ -89,6 +90,8 @@
 				display: flex;
 				justify-content: space-around;
 				margin-top: 15px;
+				max-width: 1024px;
+				margin: auto;
 			}
 			
             /*			MEDIA QUERIES */
@@ -326,6 +329,18 @@
 			#medalsContainer {
 				background: #1b2b51;
 				padding: 10px 5px;
+				padding-bottom: 30px;
+			}
+
+			.span12.row {
+				float: initial;
+			}
+
+			.span12.mt1 {
+				float: initial;
+				display: flex;
+				justify-content: space-between;
+				margin-top: 30px;
 			}
 
 		</style>
@@ -395,7 +410,7 @@
                 </div>
 			</div>
 
-			<div class="span12 body" style="margin-bottom: 90px;">
+			<div class="span12 body" style="margin-bottom: 60px;">
 				<div id="medalsCarousel">
 					<div class="span12" style="margin-top:10px;">
 						<div class="caption">
@@ -403,7 +418,7 @@
 						</div>
 					</div>
 					<a id="carouselLink" href="rank.html">
-						<div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+						<div class="sky-carousel" style="width: 96%;margin: auto;">
 							<div class="sky-carousel-wrapper">
 								<ul class="sky-carousel-container">
 									<li><img id="item0"  src="images/trophits/1.png"  alt=""></li>

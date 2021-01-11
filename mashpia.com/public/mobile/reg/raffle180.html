@@ -484,6 +484,7 @@
 
         #whoWonTop {
             padding-top: 70px;
+            margin-bottom: 90px;
         }
 
         #whoWonContainer {
@@ -571,7 +572,11 @@
             align-items: center;
             justify-content: space-around;
             background: #4258a2;
-            margin-top: 70px;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            z-index: 2;
         }
 
         .navRaffleFlagContainer>* {
@@ -579,6 +584,10 @@
             display: flex;
             justify-content: center;
             padding: 10px;
+        }
+
+        .headerRaffleInfo {
+            margin-top: 140px;
         }
 
         .flagImg {
@@ -654,6 +663,58 @@
                         <p class="prizeImage">A $1000 Kingston shopping spree!</p>
                         <p>Check out what Crown Heights' main avenue has to offer!</p>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+            <div class="span12 footer">
+                <div class="span3">
+                    <a href="/mobile/reg/parent_detail.html" id="mainLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/boy-color-white.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Accounts</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="missionsLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/square-check-color-white.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Missions</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="rankLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/achievements-color-white.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Achievements</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="span3">
+                    <a href="#" id="storeLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/cart-color-white.svg">
+                            </div>
+                            <div class=" span12">
+                                <span>Rewards</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

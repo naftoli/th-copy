@@ -34,7 +34,11 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'th_chidon_id as chidon_id'
             ),
-            'first_name'   =>  array(
+            'user_serial'   =>  array(
+                'table'     =>  'users',
+                'column'    =>  'user_serial'
+            ),
+            'first_name'    =>  array(
                 'table'     =>  'users',
                 'column'    =>  'first as first_name',
             ),
@@ -240,9 +244,9 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('plaque', 'plaque_number')
             ),
-            'school_name'   =>  array(
-                'table'     =>  'th_chidon', 
-                'column'    =>  'school_name'
+            'non_th_school'   =>  array(
+                'table'     =>  'users',
+                'column'    =>  'non_th_school'
             ), 
             'affiliation'   =>  array(
                 'table'     =>  'th_chidon', 
@@ -315,6 +319,10 @@ class Reports
             'parent_email'  =>  array(
                 'table'     =>  'admins',
                 'column'    =>  'admin_email as parent_email',
+            ),
+            'parent_address'    =>  array(
+                'table'     =>  'admins',
+                'column'    =>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country')
             ),
             'parent_number' =>  array(
                 'table'     =>  'admins',

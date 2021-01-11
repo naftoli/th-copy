@@ -108,11 +108,17 @@
 
         /*		Remove this to make it take up the whole page*/
         .page5>.span12.body {
-            max-width: 1024px;
             width: 100%;
             margin: 0 auto;
             float: none;
             margin-bottom: 0px
+        }
+
+        .page5 .header>*,
+        .row.add_child,
+        .childrens {
+            max-width: 1024px;
+            margin: auto;
         }
 
         /* New shamai changes, 4/8/2018 */
@@ -161,6 +167,10 @@
         #no-children {
             display: none;
             text-align: center;
+        }
+
+        button > span {
+            color: #fff;
         }
     </style>
 </head>
@@ -337,9 +347,11 @@
                                                         {{#if this.schoolTypeRegistered}}
                                                         {{#if this.reg_types.chayolei }}
                                                         <button class="btn btn-primary re_register">
-                                                            <span data-key="RegisterChayolei" class="i18n"> Register Chayolei </span> {{ this.chayolei_year }} <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}
-                                                            {{#if this.reg_types.chidon }}
-                                                            / Chidon {{ this.chidon_year }}
+                                                            {{#if this.confirmationOnly}}
+                                                            <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>
+                                                            {{else}}
+                                                            <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
+                                                            <!--                                                            <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}-->
                                                             {{/if}}
                                                         </button>
                                                         {{else}}
@@ -470,7 +482,7 @@
       </div>
     </div>
     -->
-            <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;max-width: 1024px;">
+            <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;">
                 <div class="span12 footer">
                     <div class="span3" style="width: 100%">
                         <a href="/mobile/news?v=3">

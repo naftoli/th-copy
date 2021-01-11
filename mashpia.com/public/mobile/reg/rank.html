@@ -342,7 +342,9 @@
             overflow: hidden;
             margin: 0 auto;
             background-position: initial initial;
-            background-repeat: initial initial
+            background-repeat: initial initial;
+            max-width: 1024px;
+            margin: auto !important;
         }
 
         .sky-carousel .sky-carousel-container {
@@ -441,11 +443,12 @@
         }
 
         .rankName {
-            font-weight: bold;
+            font-weight: 600;
             margin: 0 auto;
             line-height: 1.1;
-            font-size: 22px;
+            font-size: 20px;
             width: 95%;
+            text-transform: uppercase;
         }
 
         @media screen and (max-width: 1024px) {
@@ -517,6 +520,8 @@
 
         .sky-carousel {
             height: 200px;
+            max-width: 1024px;
+            margin: auto !important;
         }
 
         .slider img.active {
@@ -622,7 +627,7 @@
     </div>
 
     <div class="container">
-        <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
+        <div class="span12" style="width:100%;margin:0 auto;float:none;margin-bottom: 100px">
             <div class="span12 body">
                 <div class="span12 footer media-group subMenu" style="width: 100%;">
                     <a href="" id="leaderMenu">
@@ -671,7 +676,7 @@
                             <span></span>
                         </div>
                     </div>
-                    <div class="sky-carousel" style="width: 96%; margin: 0px 2%">
+                    <div class="sky-carousel" style="width: 96%; margin: auto;">
                         <div class="sky-carousel-wrapper">
                             <ul class="sky-carousel-container">
                                 <li>
@@ -738,13 +743,14 @@
                 </div>
                 <div style="clear: both; margin-bottom: 10px;"></div>
 
-                <div id="ManyStars" class="well well-sm i18n" data-key="ManyStars" style="margin: 0 auto; width: 75%">
+                <div id="ManyStars" class="well well-sm i18n" data-key="ManyStars"
+                    style="margin: 0 auto; width: 85%; max-width: 1024px;">
                     Start as a private and after earning 3 medals of any color or campaign you will be promoted to a
                     Sergeant.
                     Keep earning medals and rising in rank. Can <b>YOU</b> become a <b>GENERAL WITH MANY STARS?</b>
                 </div>
 
-                <div style="float: left;width: 90%;margin: 0px 2%;">
+                <div style="width: 90%; margin: auto; max-width: 1024px;">
                     <div class="l-4" id="ranks">
 
                     </div>

@@ -239,6 +239,17 @@ $he_chars = array(
 	21	=>	'כא',	22	=>	'כב',	23	=>	'כג',	24	=>	'כד',	25	=>	'כה',
 	26	=>	'כו',	27	=>	'כז',	28	=>	'כח',	29	=>	'כט',	30	=>	'ל'
 );
+
+function setDaySchoolSubjects() {
+    $sql = "select subject_id from subjects where inst_id = 4";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $daySchoolSubjects[] = $row['subject_id'];
+    }
+    return $daySchoolSubjects;
+}
+$daySchoolSubjects = setDaySchoolSubjects();
+
 /********************** LOAD UP THE SLIDING BAR ON THE TOP OF THE PAGE **********************/
 ?>
 <header class="navbar" id="top" role="banner">
@@ -538,7 +549,8 @@ $he_chars = array(
                                                                 }?>
                                                                 </tr>
                                                             </table>
-                                                            <? if ($daily_task->mandatory_qty) { // if it is mandatory get the stickers info
+                                                            <?
+                                                            if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $daySchoolSubjects)) { // if it is mandatory get the stickers info
                                                                 echo "<div class='mandatoryImg'><img src=\"" . HOME . "/5of7stickers/" . $dailyStickers[$daily_task->subject_id] . "\" /></div>";
                                                             }
                                                             if ($daily_task->grid_id == 13012) {

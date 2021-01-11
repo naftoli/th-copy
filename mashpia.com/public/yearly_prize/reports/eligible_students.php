@@ -121,7 +121,7 @@ if($debug) echo "</pre>";
             <select id="type">
 <!--                <option value="combined">Combined Report</option>-->
                 <option value="summary" <?= $get_type == "summary" ? "selected": "";?>>Summary Report</option>
-<!--                <option value="form" --><?//= $get_type == "form" ? "selected": "";?><!-->Detailed Report</option>-->
+<!--                <option value="form" <?//= $get_type == "form" ? "selected": "";?>>Detailed Report</option>-->
             </select>
             <a class="button" id="refresh">
                 <i class="fa fa-spinner" aria-hidden="true"></i> Load

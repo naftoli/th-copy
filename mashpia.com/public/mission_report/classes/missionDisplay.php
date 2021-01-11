@@ -19,6 +19,7 @@ abstract class MissionDisplay {
 	protected $end;
 	public $user_id;
 	public $lang_id;
+	private $daySchoolSubjects;
 	
 	public function __construct( $mission ) {
 		global $MASHPIA_DB;
@@ -102,7 +103,17 @@ abstract class MissionDisplay {
 			92	=>	'niggunim 5 of 7.png',		93	=>	'mivtzoyim 5 of 7.png',
 			94	=>	'yoma dipagra 5 of 7.png',	100	=>	'brias haguf 5 of 7.png'
 		);
+
+		$this->setDaySchoolSubjects();
 	}
+
+	private function setDaySchoolSubjects() {
+	    $sql = "select subject_id from subjects where inst_id = 4";
+	    $result = mysql_query($sql);
+	    while ($row = mysql_fetch_assoc($result)) {
+	        $this->daySchoolSubjects[] = $row['subject_id'];
+        }
+    }
 	
 	public function setDateDisplay( $val ) {	
 		$this->dateDisplay = $val;
@@ -328,7 +339,8 @@ abstract class MissionDisplay {
 				$page = 1;
 				$labelAdded = 0;
 				$firstColumn = true;
-				
+				$firstColumnDS = true; // flag for day schools mission sheet
+
 				$numDaily = count($user->daily_labels);
 				if ($numDaily) {
 					foreach ($user->sorted_daily_labels as $key0 => $value) {
@@ -347,14 +359,18 @@ abstract class MissionDisplay {
 									if ($user->daily_tasks[$dtno]->label_name == $label) {
 										$daily_task = $user->daily_tasks[$dtno];
 										$rendered++;
+										if ($firstColumnDS && in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
+										    $labelAdded += 2; // for day school mission sheets there's lots of labels on first column so add 2 so that it breaks the column earlier
+										    $firstColumnDS = false;
+                                        }
 										?>
 										<div class="taskRow">
 							            <div class="row">
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
+                                                <div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
 												<div class="focus">
@@ -366,7 +382,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+									    if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -497,7 +513,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -603,7 +619,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -712,7 +728,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
@@ -990,7 +1006,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
@@ -1003,7 +1019,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+                                        if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -1011,6 +1027,14 @@ abstract class MissionDisplay {
 												echo " secondColumn";
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
+                                        if ($daily_task->grid_id == 13012) {
+                                            echo "<div class='mandatoryImg";
+                                            if ($firstColumn)
+                                                echo " firstColumn";
+                                            else
+                                                echo " secondColumn";
+                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                        }
 									    ?>
 										<?php
 										// find out the marks dates to know if this task is only on specific dates
@@ -1126,7 +1150,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -1238,7 +1262,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -1366,7 +1390,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
@@ -1606,7 +1630,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
@@ -1619,7 +1643,7 @@ abstract class MissionDisplay {
 									    </div>
 									    
 									    <?
-									    if ($daily_task->mandatory_qty) {
+                                        if ($daily_task->mandatory_qty && !in_array($daily_task->subject_id, $this->daySchoolSubjects)) {
 									    	echo "<div class='mandatoryImg";
 											if ($firstColumn) 
 												echo " firstColumn";
@@ -1627,6 +1651,14 @@ abstract class MissionDisplay {
 												echo " secondColumn";
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
+                                        if ($daily_task->grid_id == 13012) {
+                                            echo "<div class='mandatoryImg";
+                                            if ($firstColumn)
+                                                echo " firstColumn";
+                                            else
+                                                echo " secondColumn";
+                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                        }
 									    ?>
 											
 										<?php
@@ -1776,7 +1808,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
@@ -1885,7 +1917,7 @@ abstract class MissionDisplay {
 											<div class="rowImg">
 												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
-											<? if ($this->missionType == 2) { ?>
+											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
@@ -2010,7 +2042,7 @@ abstract class MissionDisplay {
 									<div class="rowImg">
 										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
-									<? if ($this->missionType == 2) { ?>
+									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>

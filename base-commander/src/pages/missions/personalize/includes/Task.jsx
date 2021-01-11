@@ -55,7 +55,7 @@ class Task extends Component {
         
         <p className='task' onClick={ this.toggle }>
           <FontAwesome icon='caret-right'/> { task }
-          { mandatory && <span style={ redStyle }> * </span> }
+          { mandatory === 1 && <span style={ redStyle }> * </span> }
         </p>
 
         { labels.map( ( label, index) =>

@@ -260,8 +260,8 @@ workflows:
             branches:
               only:
                 - master
-#                - testing
-                - daySchools
+                - testing
+                - updates
 
       - deploy-testing:
           requires:
@@ -277,7 +277,7 @@ workflows:
           filters:
             branches:
               only:
-                - daySchools
+                - updates
 
       - deploy-production:
           requires:
