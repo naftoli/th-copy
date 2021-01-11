@@ -19,7 +19,7 @@ while ($row = mysql_fetch_assoc( $result )) {
     else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 }
 
-$end = 500;
+$end = 1000;
 $limit = isset($_REQUEST['limit']) && $_REQUEST['limit'] ? $_REQUEST['limit'] * $end : 0;
 
 $marks = [];
@@ -34,6 +34,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $marks[] = $row;
 }
 
+$qrys = [];
 $updated = 0;
 foreach ($marks as $row) {
     $mark = $row['done_qty'];
@@ -56,7 +57,7 @@ foreach ($marks as $row) {
                 ." WHERE campaign_id = " . $campaign
                 ." AND user_id = " . $user_id;
         }
-        if (mysql_query($update_sql)) $updated++;
+        $qrys[] = $update_sql;
     } else {
         $user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
         $user_info = mysql_fetch_assoc($user_info_query);
@@ -66,7 +67,8 @@ foreach ($marks as $row) {
             ."mission_sheet_amount = " . $mark . ", "
             ."school_id = " . $user_info['school_id'] . ", "
             ."class_id = " . $user_info['class_id'];
-        if (mysql_query($insert_sql)) $updated++;
+        $qrys[] = $update_sql;
     }
 }
+//echo "<pre>"; print_r($qrys); echo "</pre>";
 echo "Updated: " . $updated;
