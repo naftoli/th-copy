@@ -116,7 +116,6 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 foreach ( $schools as $school_id => $name ) {
-    if ($school_id == 612) continue;
     $sm->setSchool( $school_id );
     $sm->setSchoolResults( $school_id );
 

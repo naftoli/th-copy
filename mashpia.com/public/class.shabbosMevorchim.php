@@ -477,7 +477,8 @@ class ShabbosMevorchim {
                 where school_era is null 
                 and s.subject_id = 1 
                 and schools.chayolei = 1 
-                and school_id not in (82)";
+                and schools.test_school = 0                   
+                and school_id not in (82, 612)";
 		if ($col) $sql .= " and col_show = 1";
         $sql .= " order by school_name";
         foreach ( $this->db->query( $sql ) as $row ) {
