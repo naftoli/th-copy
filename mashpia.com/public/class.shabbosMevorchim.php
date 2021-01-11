@@ -421,7 +421,6 @@ class ShabbosMevorchim {
                 and dtmm.end_date = ?
                 and dt.grid_id = ?
                 and u.school_id = ?";
-				
         
         $stmt2 = $this->db->prepare( $sql2 );
 		
