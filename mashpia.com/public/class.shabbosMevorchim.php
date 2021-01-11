@@ -477,6 +477,7 @@ class ShabbosMevorchim {
                 join school_subjects s using (school_id) 
                 where school_era is null 
                 and s.subject_id = 1 
+                and schools.chayolei = 1 
                 and school_id not in (82)";
 		if ($col) $sql .= " and col_show = 1";
         $sql .= " order by school_name";
