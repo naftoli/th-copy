@@ -48,24 +48,13 @@ class TotalWeeklyTasks {
             $date += 1; // move up one for the next start date (since the start date is included in the equation)
         }
     }
+
     // count all the weeks with a task since default start date
-    public function total_weeks_with_task( $realtime = false ){
+    public function total_weeks_with_task( $update = false ){
         // realtime or cached....
-        if ( $realtime ){
-            foreach ($this->week_dates as $week_dates) {
-                if ( $this->week_has_task( $week_dates["start"], $week_dates["end"], true, true ) ) { // get the parts of the week by their start and end keys
-                    $total_weeks += 1; // another week has tasks marked for it
-                }
-            };
-        } else { // pull results from the cache table ( do not calculate the information )
-            $total_weeks_query = mysql_query(
-                 " SELECT COUNT(*) as total FROM user_yearly_gift WHERE start_date >= '" . $this->week_dates[0]['start'] ."' "
-                ." AND end_date <= '" . end( $this->week_dates )["end"] . "' "
-                ." AND user_id = '" . $this->user_id . "' "
-                ." AND marked = 1 "
-            );
-            return mysql_fetch_assoc( $total_weeks_query )['total'];
-        }
+        if ( $update ) $this->update_all_weeks();
+        // pull results from the cache table ( do not calculate the information )
+        return $this->cached_total_weeks_with_task($this->week_dates[0]['start'], end( $this->week_dates )["end"]);
     }
 
     /**
@@ -73,41 +62,16 @@ class TotalWeeklyTasks {
      * with options for bypassing and updating the cache
      * @param int $start start of week julian date
      * @param int $end end of week julian date
-     * @param bool $realtime bypasses the cache and adds marks to the cache
-     * @param bool $deleting bypasses the cache and adds/removes marks from the cache, overiding $realtime
+     * @param bool $realtime bypasses the cache and updates the cache
      * @return bool
      */
-    public function week_has_task($start, $end, $realtime = false, $deleting = false){
-        if ( !$deleting ) {
-            // check if they are marked in the yearly gift table
-            $sql = "SELECT EXISTS(
-                    SELECT * FROM user_yearly_gift WHERE user_id = {$this->user_id} AND start_date = $start AND end_date = $end AND marked = 1
-                ) as marked;"; // check if there is a mark for this user on this week
-            $query = mysql_query($sql);
-            // if they are marked or realtime is false return the result of the above query
-            if (mysql_fetch_assoc($query)['marked']) {
-                return true;
-            }
-            if ( !$realtime )
-                return false;
-            // if it's not marked and realtime is true then
-            // continue checking below in case it's not yet in the cache
-        }
+    public function week_has_task($start, $end, $update = false){
+        $row = $this->cached_weeks_with_task($start, $end)[0];
+        // if they are marked or realtime is false return the result of the above query
+        if ( !$update || !($row && $row['is_override']) )
+            return ($row && $row['marked']);
 
-        // check if there is any marks during the week period
-//        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
-//            ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
-//            ."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
-//            ."where dtmarks.user_id = ".$this->user_id." and ut.user_id = ".$this->user_id." "
-//            ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
-//            ."group by dtmarks.date_task_id";
-        $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from date_tasks_missions dtm "
-            ."join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id) "
-            ."where dtmarks.user_id = ".$this->user_id." and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
-            ."group by dtmarks.date_task_id";
-        //if($this->user_id == 50628) echo $sql."<br/><br/>";
-
-        if ($this->realtime_total_weeks_with_task($start, $end)){
+        if ($this->realtime_weeks_with_task($start, $end)->length){
             $this->mark_week_task( $start, $end );
             return true; // we have a vaid task for the week
         } else {
@@ -117,37 +81,115 @@ class TotalWeeklyTasks {
     }
 
     /**
+     * sql for realtime query
+     */
+    private function realtime_sql(int $start, int $end) : string {
+        return "SELECT DISTINCT start, end
+            from (
+                SELECT
+                    ROUND((mark_date - 4) DIV 7, 0) * 7 + 4 AS start,
+                    ROUND((mark_date - 4) DIV 7, 0) * 7 + 10 AS end
+                FROM date_tasks_marks as dtm
+                JOIN date_tasks as dt using (date_task_id)
+                WHERE dtm.user_id = {$this->user_id}
+                and dtm.mark_date >= $start
+                and dtm.mark_date <= $end
+                and ( dt.quantity IS NULL || dtm.done_qty >= dt.quantity)
+                UNION
+                SELECT start_date AS start, end_date as end FROM user_yearly_gift
+                WHERE user_id = {$this->user_id}
+                and start_date >= $start
+                and end_date <= $end
+                and marked = 1
+                and is_override = 1
+            ) as marks
+            order by start
+        ";
+    }
+    /**
+     * returns the an array weeks ( as [$start =>, $end =>]) where the user did at least one mission
+     * within the $start to $end date range.
+     * also works great for single weeks.
+     */
+    public function realtime_weeks_with_task(int $start, int $end) : array {
+        return mysql_fetch_all_assoc(mysql_query($this->realtime_sql($start, $end)));
+    }
+
+    /**
      * returns the number of weeks where the user did at least one mission
      * within the $start to $end date range.
      * also works great for single weeks.
      */
     public function realtime_total_weeks_with_task(int $start, int $end) : int {
-        // the 4 would need to be adjusted to {week_start_jd % 7} if the week didn't start on friday
-        $sql = "SELECT DISTINCT
-            ROUND((mark_date - 4) DIV 7, 0) * 7 + 4 AS marked_week_start
-            FROM date_tasks_marks as dtm
-            JOIN date_tasks as dt using (date_task_id)
-            WHERE dtm.user_id = {$this->user_id}
-            and dtm.mark_date >= $start
-            and dtm.mark_date <= $end
-            and ( dt.quantity IS NULL || dtm.done_qty >= dt.quantity)
-        ";
-        $query = mysql_query($sql);
+        return mysql_num_rows(mysql_query($this->realtime_sql($start, $end)));
+    }
 
-        return intval(mysql_num_rows($query));
+    /**
+     * sql for cached query
+     */
+    public function cached_sql(int $start, int $end){
+        return "SELECT * FROM user_yearly_gift
+            WHERE start_date >= '$start'
+            AND end_date <= '$end'
+            AND user_id = '$this->user_id'
+            AND marked = 1
+            order by start_date
+        ";
+    }
+
+    // get all the weeks with a task since default start date
+    public function cached_weeks_with_task(int $start, int $end){
+        return mysql_fetch_all_assoc(mysql_query($this->cached_sql($start, $end)));
+    }
+
+    // get all the weeks with a task since default start date
+    public function cached_total_weeks_with_task(int $start, int $end){
+        return mysql_num_rows(mysql_query($this->cached_sql($start, $end)));
     }
 
     // insert a row into the user_yearly_gift table
-    private function mark_week_task( $start, $end ){
-        $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked) VALUES ('".$this->user_id."', '$start', '$end', 1)";
+    private function mark_week_task( $start, $end, $is_override = false){
+        $is_override = $is_override ? 1 : 0;
+        $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked, is_override) VALUES ('".$this->user_id."', '$start', '$end', 1, $is_override)";
         return mysql_query($sql);
     }
 
-    public function clear_week_task( $start, $end ) {
-        return mysql_query(
-             " DELETE FROM user_yearly_gift WHERE user_id = '" . $this->user_id . "' "
-            ." AND start_date = '$start' AND end_date = '$end' " 
-        );
+    public function clear_week_task( $start, $end, $clear_override = false) {
+        $sql = " DELETE FROM user_yearly_gift WHERE user_id = $this->user_id AND start_date = $start AND end_date = $end";
+        $sql .= $clear_override ? "" : " AND is_override = 0 ";
+        $result = mysql_query($sql);
+        return $result;
+    }
+    
+    public function update_all_weeks() {
+        if ((!$this->week_dates) || !count($this->week_dates)) $this->get_week_dates();
+
+        $marked_weeks = $this->realtime_weeks_with_task($this->week_dates[0]['start'], end( $this->week_dates )["end"]);
+        $cached_weeks = $this->cached_weeks_with_task($this->week_dates[0]['start'], end( $this->week_dates )["end"]);
+
+        foreach($this->week_dates as $week) {
+            $cached = false;
+            foreach($cached_weeks as $cached_week) {
+                if ($cached_week['start_date'] == $week['start'] && $cached_week['end_date'] == $week['end']) {
+                    $cached = true;
+                    break;
+                }
+            }
+            $marked = false;
+            foreach($marked_weeks as $marked_week) {
+                if ($marked_week['start'] == $week['start'] && $marked_week['end'] == $week['end']) {
+                    $marked = true;
+                    break;
+                }
+            }
+
+            if ($marked && !$cached) {
+                $this->mark_week_task( $week['start'], $week['end']);
+            }
+            if ($cached && !$marked) {
+                $this->clear_week_task( $week['start'], $week['end']);
+            }
+        }
     }
 
     /**
@@ -155,11 +197,11 @@ class TotalWeeklyTasks {
      * 
      * static funciton that creates an instance under the hood and updates the cache
      *
-     * @param [type] $user_id
-     * @param [type] $mark_date
+     * @param int $user_id
+     * @param int $mark_date
      * @return void
      */
-    public static function updateUser( $user_id, $mark_date, $deleting = false ){
+    public static function updateUser( $user_id, $mark_date ){
         $current_parsha_query = mysql_query(
             "SELECT * FROM parshos WHERE start <= '$mark_date' AND end >= '$mark_date' ORDER BY end DESC LIMIT 1;"
         );
@@ -167,6 +209,37 @@ class TotalWeeklyTasks {
 
         $instance = new self( $user_id, $current_parsha['end'] );
         
-        return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true, $deleting );
+        return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true );
     }
+
+    /**
+     * updateUserAll
+     * 
+     * static funciton that creates an instance under the hood and updates the cache
+     *
+     * @param int $user_id
+     * @param int $mark_date
+     * @return void
+     */
+    public static function updateAllWeeks( $user_id ){
+        $week_end_date = round((unixtojd() - 4) / 7) * 7 + 10;
+        $instance = new self( $user_id, $week_end_date );
+        
+        return $instance->update_all_weeks();
+    }
+}
+
+
+/**
+ * Fetches each row's associative array and return them in an array .
+ * @param resource|false $mysql_query_result the return value from mysql_query() on a select statement
+ * @return array of mysql_fetch_assoc's rows
+ */
+function mysql_fetch_all_assoc($mysql_query_result) : array {
+	if (!$mysql_query_result) return [];
+	$rows = [];
+	while ($row = mysql_fetch_assoc($mysql_query_result)) { // for each row
+		$rows[] = $row;
+	}
+	return $rows;
 }

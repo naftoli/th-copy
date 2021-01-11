@@ -1,4 +1,7 @@
 <?
+
+// non linked page, doesn't seem to be working, probably dead code
+
 $admin_auth = array('school'); 
 require('header.php');
 require_once('file_save.php'); 

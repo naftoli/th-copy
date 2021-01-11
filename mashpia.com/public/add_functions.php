@@ -236,7 +236,7 @@ function add_task_mark($parameters, $update = true) {
         }
 
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
 		return json_encode(true);
 	}
@@ -408,7 +408,7 @@ function add_daily_task_mark($parameters, $update = true)
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{
@@ -538,7 +538,7 @@ function add_daily_task_mark2($parameters, $update = true)
         echo 0;
         
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{

@@ -1,5 +1,9 @@
 <?php
 
+// dead code
+// was    used in mashpia.com\public\js\admin\total_weekly_task_form.php.js
+// that's used in mashpia.com\public\total_weekly_task_form.php
+
 require_once '../../db.php';
 // make sure that params was passed in
 if (!isset($_POST["params"])){

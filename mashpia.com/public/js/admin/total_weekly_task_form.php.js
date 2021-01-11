@@ -1,3 +1,6 @@
+// dead code
+// was used in mashpia.com\public\total_weekly_task_form.php
+
 // set up on page load
 $(document).ready(function(){
     console.log("it works");
