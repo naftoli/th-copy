@@ -2,23 +2,6 @@
 //ini_set("display_errors", 1);
 /***************** IMPORTS **********************/
 require_once( $_SERVER["DOCUMENT_ROOT"].'/db.php' ); // load the db so that the raffle can do its thing
-// die();
-
-if (!function_exists('mysql_fetch_all_assoc')) {
-    /**
-     * Fetches each row's associative array and return them in an array .
-     * @param resource|false $mysql_query_result the return value from mysql_query() on a select statement
-     * @return array of mysql_fetch_assoc's rows
-     */
-    function mysql_fetch_all_assoc($mysql_query_result) : array {
-        if (!$mysql_query_result) return [];
-        $rows = [];
-        while ($row = mysql_fetch_assoc($mysql_query_result)) { // for each row
-            $rows[] = $row;
-        }
-        return $rows;
-    } 
-}
 
 // enforce admins only
 if ( isset( $_COOKIE['admin_id'] ) ){
@@ -71,7 +54,6 @@ $logger->debug($sql);
 
 $query = mysql_query($sql);
 
-// $row = mysql_fetch_all_assoc($row);
 $auction_winners = [];
 while ($row = mysql_fetch_assoc($query)) {
     $row['grade'] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
@@ -79,6 +61,5 @@ while ($row = mysql_fetch_assoc($query)) {
     unset($row['class_sub']);
     $auction_winners[] = $row;
 }
-// $auction_winners = array($query);
 
 echo json_encode($auction_winners);
