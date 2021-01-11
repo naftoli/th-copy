@@ -50,7 +50,6 @@ $sql = "SELECT
         ". ($school_id ? "AND u.school_id = $school_id " : "") ."
         ORDER BY $order_sql
 ";
-$logger->debug($sql);
 
 $query = mysql_query($sql);
 
