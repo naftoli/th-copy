@@ -165,5 +165,16 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <?} // end admin only links ?>
         </div>
         
+        <h2>Auction</h2>
+        <div id="action-links">
+            <a href="/auction/winners">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                    <span class="link-text">Auction Winners</span>
+                </div>
+            </a>
+        </div>
+
+        <div style="margin-bottom: 30px;"> </div>
     </body>
 </html>
