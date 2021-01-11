@@ -70,5 +70,7 @@ foreach ($marks as $row) {
         $qrys[] = $update_sql;
     }
 }
-//echo "<pre>"; print_r($qrys); echo "</pre>";
+foreach ($qrys as $qry) {
+    if (mysql_query($qry)) $updated++;
+}
 echo "Updated: " . $updated;
