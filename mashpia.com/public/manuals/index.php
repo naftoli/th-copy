@@ -40,7 +40,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Mivtzoim</span>
                 </div>
             </a>
-            <a href="https://docs.google.com/document/d/1Y2yIQHo89t3THTZTa3yHUu5yK53pR2oIe3wGCY4PAp4/edit">
+            <a href="https://docs.google.com/document/d/1hoTFLPfwthQEc0jOZSOcnOML_PG5m8sOeuUR9zIgUDM/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/th.png" height="32"/>
                     <span class="link-text">Mivtza Yom Huledes</span>
@@ -74,6 +74,18 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <div class="button">
                     <img src="/images/th.png" height="32" alt="tickets"/>
                     <span class="link-text">Mivtza Cheder Tzivos Hashem</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1cANJHApSTrtNkYG3i2BAt896Y-ccqs9thjrpgawVE74/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtza Lulov Manual</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1Cl2nPANWmSSXYQpz4yhOgL643Bm_BHe5RvXJgoEq7YM/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtza Chanukah Manual</span>
                 </div>
             </a>
         </div>
@@ -182,6 +194,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <div class="button">
                     <img src="/images/th.png" height="32" alt="tickets"/>
                     <span class="link-text">Sources from the Rebbe Why TH</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1duiGG4O5cSJNEhTaMz89Mlcef-IcvU-_PLsZ7n38s5Y/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Teacher Resources Manual</span>
                 </div>
             </a>
         </div>
