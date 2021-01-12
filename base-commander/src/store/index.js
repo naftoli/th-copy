@@ -14,28 +14,28 @@ import missions from './missions';
 
 export const reducer = combineReducers({
   // nested
-  rewards,  base,   missions,
+  rewards, base, missions,
   // flat
-  payments, login,  home,
+  payments, login, home,
 });
 
-const rootReducer = ( state, action ) => {
+const rootReducer = (state, action) => {
   // reset the state on logout
-  if ( action.type === types.LOGOUT )
+  if (action.type === types.LOGOUT)
     state = undefined;
   // reset all non-login state when login is changed
-  if ( action.type === types.CHANGE_LOGIN )
+  if (action.type === types.CHANGE_LOGIN)
     state = Object.assign({}, { login: state.login });
   // return the reducer
-  return reducer( state, action );
+  return reducer(state, action);
 }
 
 let extension = f => f;
 // * only connect to devtools in development
-if ( window.__REDUX_DEVTOOLS_EXTENSION__ && process.env.NODE_ENV !== 'production' ) {
+if (window.__REDUX_DEVTOOLS_EXTENSION__ && process.env.NODE_ENV !== 'production') {
   extension = window.__REDUX_DEVTOOLS_EXTENSION__();
 }
 
-export default createStore( rootReducer, compose(
-  applyMiddleware( thunk ), extension
+export default createStore(rootReducer, compose(
+  applyMiddleware(thunk), extension
 ));
