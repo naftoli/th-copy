@@ -7,6 +7,7 @@ require_once( API_ROOT . '/../mission_report/classes/missions.php' );
 require_once( API_ROOT . '/../yearly_prize/classes/TotalWeeklyTasks.php' );
 require_once( API_ROOT . '/../classes/medal_updater.php' );
 require_once( API_ROOT . '/../classes/rank_updater.php' );
+require_once( API_ROOT . '/../class.globalSettings.php' );
 
 class MarkRouter {
 
@@ -39,7 +40,7 @@ class MarkRouter {
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
         $date_task_query = ' SELECT u.user_id, dt.date_task_id, dt.grid_id, '
-            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, '
+            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, dt.short_name, '
             .' dtm.date_tasks_mission_id, dtm.start_date, dtm.end_date, '
             .' dtm.subject_id, dtm.mission_value, dtm.mission_name '
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
@@ -61,9 +62,9 @@ class MarkRouter {
                 // update the task
                 $this->updateTask( $user_task, $mark, $mark_date );
                 // update the mission
-                $this->updateMission( 
-                    $user_task['user_id'], 
-                    $user_task['date_tasks_mission_id'], 
+                $this->updateMission(
+                    $user_task['user_id'],
+                    $user_task['date_tasks_mission_id'],
                     $mark_date
                 );
                 // update the cache as each mission is marked
@@ -72,9 +73,6 @@ class MarkRouter {
                 // if it's a tanya mark or mishna mark update the yud alef nissan tables
                 $gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
                 if (in_array($grid_id, $gridIds)) {
-
-                    require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-                    require_once  $_SERVER['DOCUMENT_ROOT'] . 'class.globalSettings.php';
                     $year = GlobalSettings::getChidonYear();
 
                     // get campaigns for current year
@@ -84,11 +82,11 @@ class MarkRouter {
                         if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
                         else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
                     }
-
                     $campaign = $tanyaCampaign;
-                    if ($grid_id % 2 == 0) $campaign = $mishnaCampaign; // mishna campaigns are even numbers
+                    if (in_array($user_task['short_name'], ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
-                    $exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
+                    $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
+                    $exists_query = mysql_query($campaign_qry);
                     if (mysql_num_rows($exists_query) > 0) {
                         if ( $mark > 0 ) {
                             $update_sql = "UPDATE lines_learned"

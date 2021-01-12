@@ -421,7 +421,6 @@ class ShabbosMevorchim {
                 and dtmm.end_date = ?
                 and dt.grid_id = ?
                 and u.school_id = ?";
-				
         
         $stmt2 = $this->db->prepare( $sql2 );
 		
@@ -477,7 +476,9 @@ class ShabbosMevorchim {
                 join school_subjects s using (school_id) 
                 where school_era is null 
                 and s.subject_id = 1 
-                and school_id not in (82)";
+                and schools.chayolei = 1 
+                and schools.test_school = 0                   
+                and school_id not in (82, 612)";
 		if ($col) $sql .= " and col_show = 1";
         $sql .= " order by school_name";
         foreach ( $this->db->query( $sql ) as $row ) {

@@ -15,8 +15,6 @@ if (!isset($_POST["params"])){
     die();
 }
 
-$table_name = 'user_yearly_gift'; // this allows us to change the table name easily :-)
-
 // handle paramaters user_id:start_date:end_date:mark
 $params = explode(":", $_POST["params"]); // separate the post requests condenced params
 // use ms() as defined in db.php to avoid SQL injection
@@ -26,13 +24,13 @@ $end_date = ms($params[2]);
 $marked = ms($params[3]);
 
 // check if it already exists in the database
-$sql = "SELECT * FROM $table_name WHERE user_id = $user_id AND start_date = $start_date AND end_date = $end_date";
+$sql = "SELECT * FROM user_yearly_gift WHERE user_id = $user_id AND start_date = $start_date AND end_date = $end_date";
 $query = mq($sql);
-//
+
 if (mysql_num_rows($query) > 0){ // if we do, just update the row
-    $sql = "UPDATE $table_name SET marked=$marked WHERE user_id=$user_id AND start_date = $start_date AND end_date = $end_date";
+    $sql = "UPDATE user_yearly_gift SET marked=$marked, is_override=1 WHERE user_id=$user_id AND start_date = $start_date AND end_date = $end_date";
 } else { // if we do not have the data, then insert the new row
-    $sql = "INSERT INTO $table_name (user_id, start_date, end_date, marked) VALUES ($user_id, $start_date, $end_date, $marked)";
+    $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked, is_override) VALUES ($user_id, $start_date, $end_date, $marked, 1)";
 }
 
 $result = mysql_query($sql);

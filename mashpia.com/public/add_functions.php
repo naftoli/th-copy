@@ -236,7 +236,7 @@ function add_task_mark($parameters, $update = true) {
         }
 
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
 		return json_encode(true);
 	}
@@ -408,7 +408,7 @@ function add_daily_task_mark($parameters, $update = true)
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{
@@ -538,7 +538,7 @@ function add_daily_task_mark2($parameters, $update = true)
         echo 0;
         
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{
@@ -627,6 +627,7 @@ function add_mark($parameters, $update = true)
 	$mark_quantity = $row['quantity'];
 	$grid_id = $row['grid_id'];
 	$mandatory = $row['mandatory_qty'];
+	$short_name = $row['short_name'];
 
 	// need to make sure marks in system aren't greater than or less than current mission dates
 	if ($mark_date > $row['end_date']) {
@@ -719,9 +720,8 @@ function add_mark($parameters, $update = true)
 				if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
 				else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 			}
-
 			$campaign = $tanyaCampaign;
-			if ($grid_id % 2 == 0) $campaign = $mishnaCampaign; // mishna campaigns are even numbers
+			if (in_array($short_name, ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
 			$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
 			if (mysql_num_rows($exists_query) > 0) {

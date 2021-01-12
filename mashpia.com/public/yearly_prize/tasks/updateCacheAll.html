@@ -5,19 +5,21 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script>
-        let limit = 0
-        let counter = 0
-        const id = setInterval(function() {
-            $.get('updateCacheAll.php', { limit: limit })
-            limit += 500
-            counter++
-            if (counter > 18) {
-                clearInterval(id)
-            }
-        }, 500)
+        function updateCache(offset = 0, limit = 100) {
+            $.get('updateCacheAll.php', { offset: offset, limit: limit }, function (json) {
+                let data = JSON.parse(json);
+                $("#result").append(data.message);
+                if (offset < 50000 && !data.done) {
+                    updateCache(offset + limit, limit)
+                }
+            })
+        }
+        let urlParams = new URLSearchParams(window.location.search)
+        updateCache(Number(urlParams.get('start_at')) || 0, Number(urlParams.get('page_size')) || 100 )
     </script>
 </head>
 <body>
-
+<pre id="result">
+</pre>
 </body>
 </html>

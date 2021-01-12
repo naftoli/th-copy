@@ -95,7 +95,7 @@ function delete_task_mark($parameters) {
 			*/
         }
         // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
 		return 1;
 	}
@@ -150,7 +150,7 @@ function delete_daily_task_mark($parameters) {
     }
 
     // update the users information in the user_yearly_gift table
-    TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+    TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	/*
 	require_once("classes/rank_updater.php");
 	require_once("classes/medal_updater.php");
@@ -181,7 +181,7 @@ function delete_daily_task_mark2($parameters) {
 	
 	if ($query) {
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
         echo 0;
     } else {
         echo 1;
