@@ -26,7 +26,7 @@ export class App extends Component {
   state = {
     message: '',
     isOpen: false,
-    refreshing: false, // by default the app is refreshing as we have nothing in redux
+    refreshing: true, // by default the app is refreshing as we have nothing in redux
   }
 
   static defaultProps = {
@@ -151,85 +151,7 @@ export class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-  // const { current_login, current_user, title } = state.login;
-  const current_user = {
-    "admin_id": 175069,
-    "username": "cthAdmin",
-    "title": "",
-    "first": "Tzivos Hashem",
-    "last": "Headquarters",
-    "lang": "en",
-    "admin_phone_work": "514-481-8563 x235",
-    "admin_phone_mobile": "514-566-9420",
-    "admin_email": "bugs@tizvoshashem.org",
-    "photo": "",
-    "chabad_org_shliach_id": null,
-    "google_id": "104105156041462281602",
-    "beta": 1,
-    "logins": [
-      {
-        "type": "HQ",
-        "id": 175069,
-        "code": "HQ",
-        "name": "Tzivos Hashem Headquarters",
-        "img": "/mobile/img_new/TH Logo-colorful-svg.svg",
-        "legacy": true,
-        "active": true,
-        "school_id": false,
-        "inst_id": false,
-        "class_id": false,
-        "modules": {
-          "chayolei": true,
-          "chidon": true,
-          "tehillim": true,
-          "tanya": true,
-          "rewards": true
-        },
-        "role": "Headquarters"
-      },
-      {
-        "type": "school",
-        "id": 61,
-        "code": "BC",
-        "name": "MyShliach",
-        "img": "/schoolLogos/MyShliach_logo.png",
-        "legacy": true,
-        "active": true,
-        "school_id": 61,
-        "inst_id": 2,
-        "class_id": false,
-        "modules": {
-          "chayolei": true,
-          "chidon": true,
-          "tehillim": true,
-          "tanya": true,
-          "rewards": true
-        },
-        "role": "Base Commander"
-      }
-    ]
-  };
-  const current_login = {
-    "type": "HQ",
-    "id": 175069,
-    "code": "HQ",
-    "name": "Tzivos Hashem Headquarters",
-    "img": "/mobile/img_new/TH Logo-colorful-svg.svg",
-    "legacy": true,
-    "active": true,
-    "school_id": false,
-    "inst_id": false,
-    "class_id": false,
-    "modules": {
-      "chayolei": true,
-      "chidon": true,
-      "tehillim": true,
-      "tanya": true,
-      "rewards": true
-    },
-    "role": "Headquarters"
-  };
-  const title = "Home Page";
+  const { current_login, current_user, title } = state.login;
   return {
     current_user, title,
     login: current_login,

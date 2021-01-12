@@ -147,7 +147,7 @@ const ReportCards = (props) => {
     return (
         <div>
             <Row className={classes.selects}>
-                {/* <Col sm={6}>
+                <Col sm={6}>
                     <label>Base</label>
                     <BaseSelect
                         placeholder='Select School...'
@@ -157,7 +157,7 @@ const ReportCards = (props) => {
                         isDisabled={!isAdmin(code)}
                     />
                     <input type='hidden' value={schoolId} name='school_id' />
-                </Col> */}
+                </Col>
 
                 <Col sm={6}>
                     <label>Platoon</label>
@@ -171,7 +171,7 @@ const ReportCards = (props) => {
                     />
                 </Col>
 
-                {/* <Col sm={6}>
+                <Col sm={6}>
                     <label>Soldier</label>
                     <SoldierSelect
                         value={userId}
@@ -182,7 +182,7 @@ const ReportCards = (props) => {
                         onChange={handleUpdateUser}
                         placeholder='Select Soldier...'
                     />
-                </Col> */}
+                </Col>
 
                 <Col sm={6}>
                     <label>Test</label>
