@@ -9,9 +9,9 @@ import bwheader from 'img/reportCards/bwReportCardHeader.png';
 const useStyles = createUseStyles(theme => ({
     root: {
         boxSizing: 'border-box',
-        size: '145mm 209mm',
-        height: '209mm',
-        width: '145mm',
+        size: '148mm 8.25in',
+        height: '8.25in',
+        width: '148mm',
         background: colors.blue,
         padding: '60px 40px',
         display: 'flex',

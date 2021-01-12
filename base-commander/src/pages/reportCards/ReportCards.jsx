@@ -150,7 +150,7 @@ const ReportCards = (props) => {
                 <Col sm={6}>
                     <label>Base</label>
                     <BaseSelect
-                        placeholder='Select School...'
+                        placeholder='All Schools'
                         name='school_id'
                         onChange={handleUpdateSchool}
                         value={schoolId}
@@ -162,7 +162,7 @@ const ReportCards = (props) => {
                 <Col sm={6}>
                     <label>Platoon</label>
                     <PlatoonSelect
-                        placeholder='Select Platoon...'
+                        placeholder='All Platoons'
                         value={classId}
                         isDisabled={!isBC(code)}
                         openMenuOnFocus={false}
@@ -180,7 +180,7 @@ const ReportCards = (props) => {
                         classIds={[classId]}
                         openMenuOnFocus={false}
                         onChange={handleUpdateUser}
-                        placeholder='Select Soldier...'
+                        placeholder='All Soldiers'
                     />
                 </Col>
 
