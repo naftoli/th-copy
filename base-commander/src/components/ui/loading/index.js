@@ -5,10 +5,10 @@ import './Spinner.scss';
 import './LoadingScreen.scss';
 
 export const InlineSync = ({ loading, icon }) => {
-  return <FontAwesome icon={ !loading && icon ? icon : 'sync-alt' } spin={ loading } />;
+  return <FontAwesome icon={!loading && icon ? icon : 'sync-alt'} spin={loading} />;
 }
 
-export class Spinner extends Component{
+export class Spinner extends Component {
   static defaultProps = { size: 10 }
 
   render() {
@@ -22,7 +22,7 @@ export class LoadingScreen extends Component {
   render() {
     return (
       <div id='LoadingScreen'>
-        <img src={logo} id='logo' alt='logo' />
+        {!this.props.hideLogo && <img src={logo} id='logo' alt='logo' />}
         <Spinner />
       </div>
     )
