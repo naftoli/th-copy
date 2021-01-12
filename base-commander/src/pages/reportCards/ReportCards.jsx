@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
@@ -59,8 +59,34 @@ const useStyles = createUseStyles(theme => ({
         borderBottomLeftRadius: 0
     },
     selects: {
+        '& > div > .Select': {
+            cursor: 'pointer',
+            '& > div > div': {
+                cursor: 'pointer',
+            }
+        },
         '@media print': {
             display: 'none'
+        }
+    },
+    generateButton: {
+        margin: 'auto',
+        marginTop: 15,
+        borderRadius: 4,
+        padding: '5px 20px',
+        background: colors.white,
+        color: colors.darkBlue,
+        border: '1px solid',
+        transition: 'background 0.2s',
+        '&:focus': {
+            outline: 0,
+        },
+        '&:disabled': {
+            cursor: 'no-drop',
+            background: '#e4e4e4',
+            color: '#b9b9b9',
+            border: 'none',
+            transition: 'background 0.2s'
         }
     }
 }), { name: 'ReportCards' });
@@ -72,6 +98,7 @@ const ReportCards = (props) => {
     const [bw, setBw] = useState(false);
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [reportsGenerated, setReportsGenerated] = useState(false);
     const [test, setTest] = useState();
     const [userId, setUserId] = useState('-1');
     const [classId, setClassId] = useState(class_id || '-1');
@@ -79,7 +106,7 @@ const ReportCards = (props) => {
 
     const toggleBW = useCallback(() => setBw(!bw), [bw]);
 
-    useEffect(() => {
+    const generateReports = useCallback(() => {
         const fetchReportCards = async () => {
             setLoading(true);
             const { data, status } = await axios.get(`http://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId}&class_id=${classId}&user_id=${userId}`);
@@ -87,6 +114,7 @@ const ReportCards = (props) => {
                 setReports(data);
             }
             setLoading(false);
+            setReportsGenerated(true);
         };
 
         if (test) fetchReportCards();
@@ -165,6 +193,14 @@ const ReportCards = (props) => {
                         placeholder='Select Test...'
                     />
                 </Col>
+
+                <button
+                    disabled={!test}
+                    onClick={generateReports}
+                    className={classes.generateButton}
+                >
+                    Generate Report Cards
+                </button>
             </Row>
 
             {loading
@@ -172,14 +208,16 @@ const ReportCards = (props) => {
                     <LoadingScreen hideLogo />
                 ) : (
                     <React.Fragment>
-                        <div className={classes.toggle} onClick={toggleBW}>
-                            <div className={clsx(!bw ? classes.toggledOn : classes.toggledOff, classes.leftToggle)}>
-                                Colored
-                        </div>
-                            <div className={clsx(bw ? classes.toggledOn : classes.toggledOff, classes.rightToggle)}>
-                                Black and White
-                        </div>
-                        </div>
+                        {reportsGenerated && (
+                            <div className={classes.toggle} onClick={toggleBW}>
+                                <div className={clsx(!bw ? classes.toggledOn : classes.toggledOff, classes.leftToggle)}>
+                                    Colored
+                            </div>
+                                <div className={clsx(bw ? classes.toggledOn : classes.toggledOff, classes.rightToggle)}>
+                                    Black and White
+                            </div>
+                            </div>
+                        )}
 
                         <div className={classes.reports}>
 
