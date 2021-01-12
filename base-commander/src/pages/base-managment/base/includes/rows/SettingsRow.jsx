@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // components
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Input } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
 // functions
 import julian from 'julian';
@@ -37,7 +37,8 @@ export class SettingsRow extends Component {
     const { base } = this.props;
     let { 
       pic_mission_type,   store_reset,  school_gender,
-      print_parent_tasks, allow_parent_tasks, rewards 
+      print_parent_tasks, allow_parent_tasks, rewards,
+      chidon_posters_boys, chidon_posters_girls
     } = base;
 
     const store_reset_jd = parseInt(store_reset, 10);
@@ -98,6 +99,45 @@ export class SettingsRow extends Component {
             Include on printable mission sheets
           </Checkbox>
         </Col>
+
+        {school_gender === 'M' &&
+        <Col xs={12} sm={6} xl={4}>
+          <Label>Amount of Chidon Posters</Label>
+          <Input type='number'
+              name='chidon_posters_boys'
+              onChange={ this.onNumberChange }
+              value={ chidon_posters_boys || 0 } />
+        </Col>
+        }
+
+        {school_gender === 'F' &&
+        <Col xs={12} sm={6} xl={4}>
+          <Label>Amount of Chidon Posters</Label>
+          <Input type='number'
+              name='chidon_posters_girls'
+              onChange={ this.onNumberChange }
+              value={ chidon_posters_girls || 0 } />
+        </Col>
+        }
+
+        {school_gender === 'B' &&
+        <Fragment>
+          <Col xs={12} sm={6} xl={4}>
+            <Label>Amount of Boys Chidon Posters</Label>
+            <Input type='number'
+                name='chidon_posters_boys'
+                onChange={ this.onNumberChange }
+                value={ chidon_posters_boys || 0 } />
+          </Col>
+          <Col xs={12} sm={6} xl={4}>
+            <Label>Amount of Girls Chidon Posters</Label>
+            <Input type='number'
+                name='chidon_posters_girls'
+                onChange={ this.onNumberChange }
+                value={ chidon_posters_girls || 0 } />
+          </Col>
+        </Fragment>
+        }
 
       { rewards > 0 &&
       <Fragment>
