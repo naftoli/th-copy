@@ -39,7 +39,7 @@ class ReportBasic {
 		if ($previousStart) {
             $k = array_search(($start-1), $this->dates);
             $end = $this->dates[$k];
-			$start = $this->dates[--$k]+1;;
+			$start = $this->dates[--$k]+1;
 		}
 			
         $this->reportDates['start'] = $start;
