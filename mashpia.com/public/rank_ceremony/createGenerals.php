@@ -40,7 +40,8 @@ $boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,48
     3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58];
 $girlsSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
 
-$ords = [9,10,11,12,13,14];
+//$ords = [9,10,11,12,13,14];
+$ords = [9];
 foreach ($ords as $ord) {
     $r->setRanks('byRankFirst', $ord, "<br>", '', true); // make sure to add break in name between first name and last name and reverse he names
     $ranks = $r->getRanks();
