@@ -679,6 +679,11 @@ function add_mark($parameters, $update = true)
 
 	if ($row)
 	{
+		// set date_task_id to the existing date_task_id
+		// in case the task being marked doesn't match the existing task ie: the users track (or lang) changed
+		// this way the old task can be deleted and the user will see the correct task for there lang/track
+		$date_task_id = $row['date_task_id'];
+
 		// if done qty is set to 0, delete date task mark
 		if ($user_mark == 0) {
 			$sql = "delete from date_tasks_marks where user_id = " . $user_id . " and date_task_id = " . $date_task_id;
