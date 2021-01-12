@@ -109,7 +109,7 @@ const ReportCards = (props) => {
     const generateReports = useCallback(() => {
         const fetchReportCards = async () => {
             setLoading(true);
-            const { data, status } = await axios.get(`http://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId}&class_id=${classId}&user_id=${userId}`);
+            const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId}&class_id=${classId}&user_id=${userId}`);
             if (status === 200) {
                 setReports(data);
             }
