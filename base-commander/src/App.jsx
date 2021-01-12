@@ -19,7 +19,7 @@ import ConfirmationModal from 'components/modals/ConfirmationModal';
 // functions
 import { loginStoreChanged } from 'functions/login';
 import { validateLogin } from 'store/login/operations';
-import ReportCards from 'pages/missions/reportCards/ReportCards';
+import ReportCards from 'pages/reportCards/ReportCards';
 
 export class App extends Component {
   // state for confirmation modal
