@@ -43,7 +43,7 @@ class ChidonTests
         $this->genderOnly = $gender;
     }
 
-    public function setStudents($school_id = 0) {
+    public function setStudents($school_id = 0, $class_id = 0, $user_id = 0) {
         $qry = "
             SELECT 
                 tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id,
@@ -63,29 +63,63 @@ class ChidonTests
             WHERE
                 tc.year = :year 
         ";
-        if ($school_id) $qry .= " AND u.school_id = :school";
+        if ($school_id > 0) $qry .= " AND u.school_id = :school";
+        if ($class_id > 0) $qry .= " AND u.class_id = :grade";
+        if ($user_id > 0) $qry .= " AND u.user_id = :user";
         if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
         $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
         $stmt = $this->db->prepare($qry);
-        if ($school_id && $this->genderOnly) {
-            $res = $stmt->execute([
-                ':year' => $this->year,
-                ':school'   => $school_id,
-                ':gender'   => strtoupper($this->genderOnly)
-            ]);
-        } else if ($school_id && !$this->genderOnly) {
-            $res = $stmt->execute([
-                ':year' => $this->year,
-                ':school'   => $school_id
-            ]);
-        } else if (!$school_id && $this->genderOnly) {
-            $res = $stmt->execute([
-                ':year' => $this->year,
-                ':gender'   => strtoupper($this->genderOnly)
-            ]);
-        } else if (!$school_id && !$this->genderOnly) {
-            $res = $stmt->execute([':year' => $this->year]);
+        if ($this->genderOnly) {
+            if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                    ':grade'    => $class_id,
+                    ':user'     => $user_id,
+                    ':gender'   => strtoupper($this->genderOnly)
+                ]);
+            } else if ($school_id > 0 && $class_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                    ':grade'    => $class_id,
+                    ':gender'   => strtoupper($this->genderOnly)
+                ]);
+            } else if ($school_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                    ':gender'   => strtoupper($this->genderOnly)
+                ]);
+            } else {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':gender'   => strtoupper($this->genderOnly)
+                ]);
+            }
+        } else {
+            if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                    ':grade'    => $class_id,
+                    ':user'     => $user_id
+                ]);
+            } else if ($school_id > 0 && $class_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                    ':grade'    => $class_id
+                ]);
+            } else if ($school_id > 0) {
+                $res = $stmt->execute([
+                    ':year' => $this->year,
+                    ':school'   => $school_id,
+                ]);
+            } else {
+                $res = $stmt->execute([':year' => $this->year]);
+            }
         }
         if ($res) {
             $this->children = $stmt->fetchAll();

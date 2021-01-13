@@ -43,7 +43,7 @@ $list2 = scandir($dir . '/images');
 $files = extractFiles($list);
 $images = extractFiles($list2);
 
-$filename = "tsv.zip";
+$filename = "Data.zip";
 createZip($files, $images, $filename);
 
 header('Content-Description: File Transfer');
