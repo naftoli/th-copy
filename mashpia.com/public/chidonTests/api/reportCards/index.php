@@ -38,9 +38,11 @@ foreach ($info as $school => $users) {
         $name = $user['first'] . ' ' . $user['last'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
 
+        $tests = [];
         $test_type = $user['test_type'];
         $test['mivtzahMaven'] = $marks[$id][$test_num]['maven'];
         $test['shabbatonMark'] = $marks[$id][$test_num][$test_type];
+        $tests[] = $test;
 
         $totalMarks = 0;
         for ($i = 1; $i <= $test_num; $i++) {
@@ -54,7 +56,7 @@ foreach ($info as $school => $users) {
             'name' => $name,
             'grade' => $grade,
             'avgRequired' => $avgRequired,
-            'tests' => $test
+            'tests' => $tests
         ];
     }
 }
