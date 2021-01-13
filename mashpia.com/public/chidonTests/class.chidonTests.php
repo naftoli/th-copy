@@ -122,7 +122,6 @@ class ChidonTests
             }
         }
         if ($res) {
-            $stmt->debugDumpParams();
             $this->children = $stmt->fetchAll();
         }
     }
