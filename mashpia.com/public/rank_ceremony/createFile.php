@@ -22,10 +22,10 @@ $boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,48
 $girlSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
 
 // separate myshliach / anashKinder into separate boys/girls files
-if (in_array($school, [61,269])) {
+if (in_array($school, [61,81,269])) {
     generateFile('boys', 'M');
     generateFile('girls', 'F');
-} else if (in_array($school, [54,255])) {
+} else if (in_array($school, [54,106,255])) {
     generateFileByGrade($school);
 } else {
     if (array_search($school, $girlSchools) !== false) generateFile('girls');
@@ -124,8 +124,8 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         }
         $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
         if (count($ranks)) {
-            if ($limitTo == 'M') $file_name = str_replace(' ', '_', $schools[$school]) . " Boys.csv";
-            else if ($limitTo == 'F') $file_name = str_replace(' ', '_', $schools[$school]) . " Girls.csv";
+            if ($limitTo == 'M') $file_name = $schools[$school] . " Boys.csv";
+            else if ($limitTo == 'F') $file_name = $schools[$school] . " Girls.csv";
             else $file_name = $schools[$school] . ".csv";
             createFile($info, $file_name);
         }
@@ -153,7 +153,7 @@ function generateFileByGrade() {
 
     $r = new RankReport();
     $r->setSchoolId($school);
-    $r->setRanks('byGradeRank', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
+    $r->setRanks('byGradeOnlyRank', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -208,7 +208,7 @@ function generateFileByGrade() {
 
                         $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
                         if (count($ranks)) {
-                            $file_name = $schools[$school] . "_" . $grade . ".csv";
+                            $file_name = $schools[$school] . " " . $grade . ".csv";
                             createFile($info, $file_name);
                         }
                     }
