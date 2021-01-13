@@ -8,6 +8,7 @@ class BirthdayYi {
     private $errors;
 	private $year;
 	private $enablePrev;
+    private $grid_ids;
 	
     public function __construct( $user_id = 0 ) {
 		$this->enablePrev = false;
@@ -39,7 +40,12 @@ class BirthdayYi {
             '10' => "איך האב געלערנט א טייל פון א מאמר אויףאויסווייניק, און עסגע'חזר'ט (אויפןטאג פון מיין יום הולדת, אדערדער שבת נאךדעם). וועלכער מאמר האסטוגע'חזר'ט? _____________________",
             '13' => "שבת פאר מיין יום הולדת (אויב מיין יום הולדת איז שבת, איזאויף שבת) האב איך געהאט אן עלי' לתורה"
         );
-        
+
+        // initialize grid ids to more than the needed tasks
+        for ($i = 1001; $i <= 1015; $i++) {
+            $this->grid_ids[] = $i;
+        }
+
         $this->errors = array();
         require_once 'db.php';
         require_once 'class.NewTasks.php';
@@ -152,28 +158,29 @@ class BirthdayYi {
 	                    if ( $t->needToCreateTasks() ) {
 	                        $points = 0.5;
 	                        $t->setCategory('יום הולדת');
+                            $grid_id_idx = 0;
 	
 	                        foreach( $this->mandTasks as $task ) {
-	                            if ( !$t->createTask( $task, $points, 1 ) ) {
+	                            if ( !$t->createTask( $task, $points, 1, null, $this->grid_ids[$grid_id_idx++] ) ) {
 	                                $this->errors[$user_id][] = "problem creating task " . mysql_error();
 	                            }
 	                        }
 	
 	                        foreach( $this->optTasks as $task ) {
-	                            if ( !$t->createTask( $task, $points, 0 ) ) {
+	                            if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
 	                                $this->errors[$user_id][] = "problem creating task " . mysql_error();
 	                            }
 	                        }
 	
 	                        foreach( $this->qtyTasks as $qty => $task ) {
-	                            if ( !$t->createTask( $task, $points, 1, $qty ) ) {
+	                            if ( !$t->createTask( $task, $points, 1, $qty, $this->grid_ids[$grid_id_idx++] ) ) {
 	                                $this->errors[$user_id][] = "problem creating task " . mysql_error();
 	                            }
 	                        }
 	
 	                        foreach( $this->ageTasks as $age => $task ) {
 	                            if ( $year >= $age && $gender == 'M' ){  
-	                                if ( !$t->createTask( $task, $points, 0 ) ) {
+	                                if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
 	                                    $this->errors[$user_id][] = "problem creating task " . mysql_error();
 	                                }
 	                            }

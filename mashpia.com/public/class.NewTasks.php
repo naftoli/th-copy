@@ -164,7 +164,7 @@ class NewTasks {
         $this->category = $cat;
     }
     
-    public function createTask( $name, $points, $mandatory, $qty = null ) {
+    public function createTask( $name, $points, $mandatory, $qty = null, $grid_id = 0 ) {
         if ( !$this->createTasks ) {
             return false;
         }
@@ -186,6 +186,9 @@ class NewTasks {
         }
         if ( !is_null($this->category) ) {
             $sql .= ", cat = '" . $this->category . "'";
+        }
+        if ( $grid_id ) {
+            $sql .= ", grid_id = " . $grid_id;
         }
         if ( $result = mysql_query( $sql ) ) {
             return true;
