@@ -115,9 +115,7 @@ $posters = array(
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
 
-                <? if (isset($school['chidon_posters'])) { ?>
-                    Number of posters: <?=$school['chidon_posters']?><br />
-                <? } elseif (isset($school['chidon_posters_boys']) || isset($school['chidon_posters_girls'])) { ?>
+                <? if (isset($school['chidon_posters_boys']) || isset($school['chidon_posters_girls'])) { ?>
                     Number of boys posters: <?= $school['chidon_posters_boys'] || 0 ?><br />
                     Number of girls posters: <?= $school['chidon_posters_girls'] || 0 ?><br />
                 <? } elseif ( isset( $posters[$id] ) ) { ?>

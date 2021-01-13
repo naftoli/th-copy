@@ -100,44 +100,20 @@ export class SettingsRow extends Component {
           </Checkbox>
         </Col>
 
-        {school_gender === 'M' &&
         <Col xs={12} sm={6} xl={4}>
-          <Label>Amount of Chidon Posters</Label>
+          <Label>Amount of Boys Chidon Posters</Label>
           <Input type='number'
               name='chidon_posters_boys'
               onChange={ this.onNumberChange }
               value={ chidon_posters_boys || 0 } />
         </Col>
-        }
-
-        {school_gender === 'F' &&
         <Col xs={12} sm={6} xl={4}>
-          <Label>Amount of Chidon Posters</Label>
+          <Label>Amount of Girls Chidon Posters</Label>
           <Input type='number'
               name='chidon_posters_girls'
               onChange={ this.onNumberChange }
               value={ chidon_posters_girls || 0 } />
         </Col>
-        }
-
-        {school_gender === 'B' &&
-        <Fragment>
-          <Col xs={12} sm={6} xl={4}>
-            <Label>Amount of Boys Chidon Posters</Label>
-            <Input type='number'
-                name='chidon_posters_boys'
-                onChange={ this.onNumberChange }
-                value={ chidon_posters_boys || 0 } />
-          </Col>
-          <Col xs={12} sm={6} xl={4}>
-            <Label>Amount of Girls Chidon Posters</Label>
-            <Input type='number'
-                name='chidon_posters_girls'
-                onChange={ this.onNumberChange }
-                value={ chidon_posters_girls || 0 } />
-          </Col>
-        </Fragment>
-        }
 
       { rewards > 0 &&
       <Fragment>

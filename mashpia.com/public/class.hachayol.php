@@ -51,15 +51,8 @@ class Hachayol {
             $this->schools[$method][$school]['shipping_requests'] = $row['shipping_requests'];
             $this->schools[$method][$school]['type'] = $row['school_gender'] == 'M' ? 'boys' : ( $row['school_gender'] == 'F' ? 'girls' : 'mixed' );
             $this->schools[$method][$school]['shipping_name'] = $row['shipping_first'] . ' ' . $row['shipping_last'];
-            
-            if ($row['school_gender'] == 'M') {
-                $this->schools[$method][$school]['chidon_posters'] = $row['chidon_posters_boys'];
-            } elseif ($row['school_gender'] == 'F') {
-                $this->schools[$method][$school]['chidon_posters'] = $row['chidon_posters_girls'];
-            } else {
-                $this->schools[$method][$school]['chidon_posters_boys'] = $row['chidon_posters_boys'];
-                $this->schools[$method][$school]['chidon_posters_girls'] = $row['chidon_posters_girls'];
-            }
+            $this->schools[$method][$school]['chidon_posters_boys'] = $row['chidon_posters_boys'];
+            $this->schools[$method][$school]['chidon_posters_girls'] = $row['chidon_posters_girls'];
             
             $sql2 = "select a.first, a.last 
                      from admins a 
