@@ -7,15 +7,24 @@ require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
-$as = new AdminSchools( 175069, 'super', true, true ); // add chidon schools
-$schools = $as->getSchools();
+$test_num = intval($_GET['test']);
+$school_id = intval($_GET['school_id']);
+$class_id = intval($_GET['class_id']);
+$user_id = intval($_GET['user_id']);
+
+if ($school_id > 0) {
+    $schools = [$school_id => 'school'];
+} else {
+    $as = new AdminSchools(175069, 'super', true, true); // add chidon schools
+    $schools = $as->getSchools();
+}
 
 $ct = new ChidonTests();
 
 $info = [];
 $marks = [];
 foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
+    $ct->setStudents($id, $class_id, $user_id);
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
