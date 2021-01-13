@@ -36,17 +36,14 @@ class RankReport extends Report {
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
             FROM rank_marks rm
-            JOIN ranks r
-            USING ( rank_ord )
-            JOIN users u
-            USING ( user_id )
-            JOIN schools s
-            USING ( school_id )
-            JOIN classes c
-            ON ( u.class_id = c.class_id ) 
+            JOIN ranks r USING ( rank_ord )
+            JOIN users u USING ( user_id )
+            JOIN schools s USING ( school_id )
+            JOIN classes c ON ( u.class_id = c.class_id ) 
             WHERE date_promoted >= $start 
             AND date_promoted <= $end 
-            AND u.user_registered > 0 ";
+            AND u.user_registered > 0 
+            AND s.inst_id != 4";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
         }
