@@ -65,8 +65,8 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     else $r = new RankReport();
     $r->setSchoolId($school);
 //    $r->overrideDates(2458865, 2458976);
-    if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
-    else $r->setRanks('byGender', 0, "<br>", '', $limitTo, true); // limit to gender for myshliach / anashKinder
+    if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
+    else $r->setRanks('byGender', 0, "<br>", $limitTo, true); // limit to gender for myshliach / anashKinder
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
@@ -153,7 +153,7 @@ function generateFileByGrade() {
 
     $r = new RankReport();
     $r->setSchoolId($school);
-    $r->setRanks('byGradeOnlyRank', 0, "<br>", '', '', true); // make sure to add break in name between first name and last name
+    $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();
