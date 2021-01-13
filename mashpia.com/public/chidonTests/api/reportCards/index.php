@@ -37,22 +37,28 @@ foreach ($info as $school => $users) {
         $id = $user['th_chidon_id'];
         $name = $user['first'] . ' ' . $user['last'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-        $avgRequired = 70;
+
         $test_type = $user['test_type'];
         if ($test_type == 'expert') $questions = 15;
         else $questions = 10;
+
         $tests = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $test['mivtzahMaven'] = $marks[$id][$i]['maven'];
-            $test['shabbatonMark'] = $marks[$id][$i][$test_type];
-            $tests[] = $test;
+        $test['mivtzahMaven'] = $marks[$id][$test_num]['maven'];
+        $test['shabbatonMark'] = $marks[$id][$test_num][$test_type];
+
+        $totalMarks = 0;
+        for ($i = 1; $i <= $test_num; $i++) {
+            $totalMarks += $marks[$id][$i][$test_type];
         }
+        $testsLeft = 4 - $test_num;
+        $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0;
+
         $result[] = [
             'id' => $id,
             'name' => $name,
             'grade' => $grade,
             'avgRequired' => $avgRequired,
-            'tests' => $tests
+            'tests' => $test
         ];
     }
 }
