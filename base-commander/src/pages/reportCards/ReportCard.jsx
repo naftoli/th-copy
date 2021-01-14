@@ -181,7 +181,7 @@ function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
                                 </tr>
                             ))}
                             {tests.length > 1 && (
-                                <tr>
+                                <tr className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
                                     <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
                                         Avg.
                                     </td>
