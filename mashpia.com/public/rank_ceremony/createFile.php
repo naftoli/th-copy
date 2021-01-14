@@ -29,7 +29,7 @@ if (in_array($school, [61,81,269])) {
     generateFileByGrade($school);
 } else {
     if (array_search($school, $girlSchools) !== false) generateFile('girls');
-    else generateFile('boys');;
+    else generateFile('boys');
 }
 
 function createFile($info, $name)
