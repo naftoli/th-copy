@@ -9,9 +9,9 @@ import bwheader from 'img/reportCards/bwReportCardHeader.png';
 const useStyles = createUseStyles(theme => ({
     root: {
         boxSizing: 'border-box',
-        size: '148mm 8.25in',
-        height: '8.25in',
-        width: '148mm',
+        size: '5.5in 8.5in',
+        height: '8.5in',
+        width: '5.5in',
         background: colors.blue,
         padding: '60px 40px',
         display: 'flex',
@@ -24,7 +24,10 @@ const useStyles = createUseStyles(theme => ({
         color: `${colors.black} !important`
     },
     bwBorderBottom: {
-        borderBottom: `1px solid ${colors.black} !important`
+        borderBottom: `1px solid ${colors.black} !important`,
+        '&:last-child': {
+            borderBottom: 'none !important'
+        }
     },
     bwBorderRight: {
         borderRight: `1px solid ${colors.black} !important`,
@@ -71,7 +74,10 @@ const useStyles = createUseStyles(theme => ({
         borderBottom: `1px solid ${colors.purple}`
     },
     tableRow: {
-        borderBottom: `1px solid ${colors.purple}`
+        borderBottom: `1px solid ${colors.purple}`,
+        '&:last-child': {
+            borderBottom: 'none'
+        }
     },
     tableHeader: {
         color: colors.purple,
@@ -160,32 +166,34 @@ function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
                                 </th>
                             </tr>
                         </thead>
-                        {tests.map((test, index) => (
-                            <tr key={index} className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    {index + 1}
-                                </td>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    {Math.round(test.mivtzahMaven)}
-                                </td>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    {Math.round(test.shabbatonMark)}
-                                </td>
-                            </tr>
-                        ))}
-                        {tests.length > 1 && (
-                            <tr>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    Avg.
-                                </td>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    {Math.round(tests.reduce((a, b) => a + b.mivtzahMaven, 0) / tests.length)}
-                                </td>
-                                <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                    {Math.round(tests.reduce((a, b) => a + b.shabbatonMark, 0) / tests.length)}
-                                </td>
-                            </tr>
-                        )}
+                        <tbody>
+                            {tests.map((test, index) => (
+                                <tr key={index} className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        {index + 1}
+                                    </td>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        {Math.round(test.mivtzahMaven)}
+                                    </td>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        {Math.round(test.shabbatonMark)}
+                                    </td>
+                                </tr>
+                            ))}
+                            {tests.length > 1 && (
+                                <tr>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        Avg.
+                                    </td>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        {Math.round(tests.reduce((a, b) => a + b.mivtzahMaven, 0) / tests.length)}
+                                    </td>
+                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                        {Math.round(tests.reduce((a, b) => a + b.shabbatonMark, 0) / tests.length)}
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
                     </table>
                 </div>
                 <div className={classes.avgRequiredContainer}>
