@@ -109,7 +109,7 @@ const ReportCards = (props) => {
     const generateReports = useCallback(() => {
         const fetchReportCards = async () => {
             setLoading(true);
-            const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId}&class_id=${classId}&user_id=${userId}`);
+            const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId || '-1'}&class_id=${classId || '-1'}&user_id=${userId || '-1'}`);
             if (status === 200) {
                 setReports(data);
             }
@@ -122,19 +122,20 @@ const ReportCards = (props) => {
     }, [test, userId, classId, schoolId])
 
     const handleUpdateSchool = (selected) => {
-        setSchoolId(selected.value || null);
+        setSchoolId((selected && selected.value) ? selected.value : '-1');
     };
 
     const handleUpdateUser = (selected) => {
-        setUserId(selected.value || '-1')
+        console.log(selected)
+        setUserId((selected && selected.value) ? selected.value : '-1')
     };
 
     const handleUpdateClass = (selected) => {
-        setClassId(selected.value || null)
+        setClassId((selected && selected.value) ? selected.value : '-1')
     };
 
     const handleUpdateTest = (selected) => {
-        setTest(selected.value || null);
+        setTest((selected && selected.value) ? selected.value : null);
     };
 
     const testOptions = useMemo(() => [
@@ -151,10 +152,11 @@ const ReportCards = (props) => {
                     <label>Base</label>
                     <BaseSelect
                         placeholder='All Schools'
+                        isClearable
                         name='school_id'
-                        onChange={handleUpdateSchool}
                         value={schoolId}
                         isDisabled={!isAdmin(code)}
+                        onChange={handleUpdateSchool}
                     />
                     <input type='hidden' value={schoolId} name='school_id' />
                 </Col>
