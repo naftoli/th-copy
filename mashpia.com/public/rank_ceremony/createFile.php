@@ -164,7 +164,7 @@ function generateFileByGrade() {
         foreach ($ranks as $school_name => $other) {
             foreach ($other as $teacher => $more) {
                 foreach ($more as $grade => $other) {
-                    if ($school == 255) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
+                    if (in_array($school, [106, 255])) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
                     else if ($school == 54) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
                     $logo_img = @imagecreatefromstring($logoContent);
                     $logo_url = 'images/' . $school . '.png';
