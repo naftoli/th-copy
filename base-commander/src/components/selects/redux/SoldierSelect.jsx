@@ -33,9 +33,23 @@ export class SoldierSelect extends Component {
   // update if the login changed or the schoolId/classId prop changed
   componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId }) {
     // if the school ID changed, get the new platoons into redux
-    const { schoolId, classId } = this.props;
+    const { schoolId, value, isClearable, isMulti, classId } = this.props;
     if ((prevSchoolId !== schoolId) || (prevClassId !== classId)) {
       this.loadSoldiers();
+    }
+
+    // if we have a value and it is not selected, select it
+    const options = this.getOptions();
+    const selected = findOption(options, value && value.toString());
+
+    console.log('this is the options', options)
+    console.log('this is the value', value)
+    console.log('this is the selected', selected)
+    if (!selected && options.length > 0) {
+      // if it is clearable and we have a value, clear it.
+      if (isClearable && value) this.props.onChange(false);
+      // if it is not clearable select the first value
+      else if (!isClearable && !isMulti) this.props.onChange(options[0]);
     }
   }
 
