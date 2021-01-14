@@ -1,10 +1,10 @@
 <?
 $id = $_POST['id'];
 require_once '../db.php';
-require_once '../class.birthday.php';
+require_once '../class.birthdayEn.php';
 require_once '../class.birthdayYi.php';
 
-$b = new Birthday($id);
+$b = new BirthdayEn($id);
 $b->setBirthday();
 $errors = $b->getErrors();
 

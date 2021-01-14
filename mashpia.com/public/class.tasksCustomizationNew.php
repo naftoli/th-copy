@@ -1297,9 +1297,9 @@ class TasksCustomizationNew {
 				//if enrolling into yoma depagra we need to create birthday mission
 				/*
 				if ($campaign == 40) {
-					require_once 'class.birthday.php';
+					require_once 'class.birthdayEn.php';
 					require_once 'class.birthdayYi.php';
-					$b = new Birthday($user_id);
+					$b = new BirthdayEn($user_id);
 					$b->setBirthday();
 					$b = new BirthdayYi($user_id);
 					$b->setBirthday();

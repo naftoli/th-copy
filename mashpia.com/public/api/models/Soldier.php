@@ -649,13 +649,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } catch (EnrollmentException $e) {}
     }
     public function setupBirthdayMissions(){
-        require_once( __DIR__ . '/../../class.birthday.php' );
+        require_once( __DIR__ . '/../../class.birthdayEn.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
         require_once( __DIR__ . '/../../class.heDob.php' );
         require_once( __DIR__ . '/../../class.wpBirthday.php' );
 
         // run the functions
-        $b = new Birthday( $this->user_id );      
+        $b = new BirthdayEn( $this->user_id );      
         @$b->enablePrevious();
         @$b->setBirthday();
         $bi = new BirthdayYi( $this->user_id );   

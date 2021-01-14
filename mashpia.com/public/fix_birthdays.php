@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('max_execution_time', 600);
 
 require 'db.php';
-require 'class.birthday.php';
+require 'class.birthdayEn.php';
 require 'class.birthdayYi.php';
 require 'class.heDob.php';
 
@@ -19,15 +19,13 @@ while ($row = mysql_fetch_assoc( $result )) {
 //$users = [ 62386 ];
 
 foreach ($users as $user_id) {
-    $b = new Birthday( $user_id );
+    $b = new BirthdayEn( $user_id );
 //    $b->enablePrevious();
     $b->setBirthday();
     $errors = $b->getErrors();
     if ( $errors ) {
-        foreach ($errors as $info) {
-            foreach ($info as $error) {
-                echo $error . "<br />";
-            }
+        foreach ($errors as $error) {
+            echo $error . "<br />";
         }
         echo "<br />";
     }
@@ -36,10 +34,8 @@ foreach ($users as $user_id) {
     $bi->setBirthday();
     $errors = $bi->getErrors();
     if ( $errors ) {
-        foreach ($errors as $info) {
-            foreach ($info as $error) {
-                echo $error . "<br />";
-            }
+        foreach ($errors as $error) {
+            echo $error . "<br />";
         }
         echo "<br />";
     }

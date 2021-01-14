@@ -161,8 +161,8 @@ if ( isset( $_FILES['file'] ) ) {
 			mysql_query($sql);
 	
             //add birthday mission/tasks
-            require_once 'class.birthday.php';
-            $b = new Birthday( $user_id );
+            require_once 'class.birthdayEn.php';
+            $b = new BirthdayEn( $user_id );
             $b->setBirthday();
 			require_once 'class.birthdayYi.php';
 			$by = new BirthdayYi( $user_id );
