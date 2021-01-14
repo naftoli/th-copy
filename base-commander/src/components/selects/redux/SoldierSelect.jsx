@@ -40,7 +40,7 @@ export class SoldierSelect extends Component {
 
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
-    const selected = findOption(options, value && value.toString());
+    const selected = findOption(options, value);
 
     console.log('this is the options', options)
     console.log('this is the value', value)
