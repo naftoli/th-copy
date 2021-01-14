@@ -39,14 +39,13 @@ foreach ($info as $school => $users) {
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
 
         $tests = [];
-        $test_type = $user['test_type'];
-        $test['mivtzahMaven'] = $marks[$id][$test_num]['maven'];
-        $test['shabbatonMark'] = $marks[$id][$test_num][$test_type];
-        $tests[] = $test;
-
         $totalMarks = 0;
+        $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
             $totalMarks += intval($marks[$id][$i][$test_type]);
+            $test['mivtzahMaven'] = $marks[$id][$i]['maven'];
+            $test['shabbatonMark'] = $marks[$id][$i][$test_type];
+            $tests[] = $test;
         }
         $testsLeft = 4 - $test_num;
         $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0;
