@@ -2,11 +2,6 @@
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
 /***************** LOAD SCHOOLS **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
@@ -17,6 +12,7 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php';
 $chidonYear = GlobalSettings::getChidonYear();
 
 $info = [
+    'email'         =>  'Email Address',
     'test_1'        =>  'Test 1 Mark',
     'test_2'        =>  'Test 2 Mark',
     'test_3'        =>  'Test 3 Mark',
@@ -101,8 +97,8 @@ include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
 
     <fieldset>
         <legend>Limit to</legend>
-        <input type="radio" name="gender" id="gender" value="m" /> Boys<br />
-        <input type="radio" name="gender" id="gender" value="f" /> Girls<br />
+        <input type="radio" name="gender" id="gender" value="M" /> Boys<br />
+        <input type="radio" name="gender" id="gender" value="F" /> Girls<br />
     </fieldset>
 </div>
 

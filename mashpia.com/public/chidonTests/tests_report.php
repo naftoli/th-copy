@@ -4,10 +4,13 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 $fields = $_POST['fields'];
 $tests = [];
+$email = false;
 foreach ($fields as $field) {
     if (strpos($field, '_')) {
         $info = explode('_', $field);
         $tests[] = $info[1];
+    } else if ($field == 'email') {
+        $email = true;
     }
 }
 //echo "<pre>"; print_r($_POST); echo "</pre>";
@@ -38,6 +41,7 @@ $show_avg = in_array('avg', $fields);
         <th>School</th>
         <th>Grade</th>
         <th>Student</th>
+        <?php if ($email) : ?><th>Email Address</th><?php endif; ?>
         <th>Test Type</th>
         <?php
         foreach ($tests as $test_num) {
@@ -54,7 +58,9 @@ $show_avg = in_array('avg', $fields);
         $admin_id = $user['parent_id'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
         echo "<tr><td>" . $id . "</td><td>" . $admin_id . "</td><td>" . $user['school_name'] . "</td><td>" .
-                $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>" . $type . "</td>";
+                $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>";
+        if ($email) echo $user['admin_email'] . "</td><td>";
+        echo $type . "</td>";
         foreach ($tests as $test_num) {
             $mark = $marks[$id][$test_num][$type];
             echo "<td>" . $mark . "</td>";
