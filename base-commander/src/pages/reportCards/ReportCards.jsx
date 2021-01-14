@@ -163,27 +163,30 @@ const ReportCards = (props) => {
                     <label>Platoon</label>
                     <PlatoonSelect
                         placeholder='All Platoons'
+                        isClearable
                         registeredOnly
                         value={classId}
                         schoolId={schoolId}
-                        classIds={[classId]}
                         openMenuOnFocus={false}
                         isDisabled={!isBC(code)}
                         onChange={handleUpdateClass}
                     />
+                    <input type='hidden' value={classId} name='class_id' />
                 </Col>
 
                 <Col sm={6}>
                     <label>Soldier</label>
                     <SoldierSelect
-                        value={userId}
+                        isClearable
                         registeredOnly
+                        value={userId}
+                        classId={classId}
                         schoolId={schoolId}
-                        classIds={[classId]}
                         openMenuOnFocus={false}
                         onChange={handleUpdateUser}
                         placeholder='All Soldiers'
                     />
+                    <input type='hidden' value={userId} name='user_id' />
                 </Col>
 
                 <Col sm={6}>
