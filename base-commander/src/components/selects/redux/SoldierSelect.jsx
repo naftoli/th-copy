@@ -42,9 +42,6 @@ export class SoldierSelect extends Component {
     const options = this.getOptions();
     const selected = findOption(options, value);
 
-    console.log('this is the options', options)
-    console.log('this is the value', value)
-    console.log('this is the selected', selected)
     if (!selected && options.length > 0) {
       // if it is clearable and we have a value, clear it.
       if (isClearable && value) this.props.onChange(false);
