@@ -17,16 +17,13 @@ class MedalReport extends Report{
         $sql = "
             SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
             FROM medal_marks mm
-            JOIN medals m
-            USING ( medal_ord )
-            JOIN users u
-            USING ( user_id )
-            JOIN subjects s
-            USING ( subject_id )
-            JOIN schools sch
-            USING ( school_id )
+            JOIN medals m USING ( medal_ord )
+            JOIN users u USING ( user_id )
+            JOIN subjects s  USING ( subject_id )
+            JOIN schools sch USING ( school_id )
             WHERE mm.date_awarded >= $start 
-            AND mm.date_awarded <= $end ";
+            AND mm.date_awarded <= $end 
+            AND sch.inst_id != 4 ";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
         $sql .= "
