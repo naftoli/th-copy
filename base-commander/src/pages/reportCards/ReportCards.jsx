@@ -126,7 +126,6 @@ const ReportCards = (props) => {
     };
 
     const handleUpdateUser = (selected) => {
-        console.log(selected)
         setUserId((selected && selected.value) ? selected.value : '-1')
     };
 
