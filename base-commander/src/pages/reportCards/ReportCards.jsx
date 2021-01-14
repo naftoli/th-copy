@@ -163,10 +163,12 @@ const ReportCards = (props) => {
                     <label>Platoon</label>
                     <PlatoonSelect
                         placeholder='All Platoons'
+                        registeredOnly
                         value={classId}
-                        isDisabled={!isBC(code)}
-                        openMenuOnFocus={false}
                         schoolId={schoolId}
+                        classIds={[classId]}
+                        openMenuOnFocus={false}
+                        isDisabled={!isBC(code)}
                         onChange={handleUpdateClass}
                     />
                 </Col>
