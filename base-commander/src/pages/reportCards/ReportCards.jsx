@@ -99,7 +99,14 @@ const useStyles = createUseStyles(theme => ({
         '& > span': {
             marginLeft: '-15px',
             marginTop: 10,
-            display: 'inline-block'
+            display: 'inline-block',
+            '&:first-child': {
+                marginTop: 0,
+                marginBottom: 10,
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                color: '#909090',
+            }
         }
     }
 }), { name: 'ReportCards' });
@@ -161,6 +168,7 @@ const ReportCards = (props) => {
         <div>
             <Row className={classes.selects}>
                 <ol className={classes.instructions}>
+                    <span>Printing Instructions:</span>
                     <li>Choose Colored or Black and White</li>
                     <li>Press CTRL+P to open the Print dialog and wait for the preview to load</li>
                     <li>Set the layout to Landscape</li>
