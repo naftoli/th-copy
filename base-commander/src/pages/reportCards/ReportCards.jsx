@@ -88,6 +88,26 @@ const useStyles = createUseStyles(theme => ({
             border: 'none',
             transition: 'background 0.2s'
         }
+    },
+    instructions: {
+        fontSize: 14,
+        background: '#f2f2f2',
+        width: '100%',
+        margin: '15px 20px',
+        borderRadius: 4,
+        padding: '20px 20px 20px 40px',
+        '& > span': {
+            marginLeft: '-15px',
+            marginTop: 10,
+            display: 'inline-block',
+            '&:first-child': {
+                marginTop: 0,
+                marginBottom: 10,
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                color: '#909090',
+            }
+        }
     }
 }), { name: 'ReportCards' });
 
@@ -147,6 +167,16 @@ const ReportCards = (props) => {
     return (
         <div>
             <Row className={classes.selects}>
+                <ol className={classes.instructions}>
+                    <span>Printing Instructions:</span>
+                    <li>Choose Colored or Black and White</li>
+                    <li>Press CTRL+P to open the Print dialog and wait for the preview to load</li>
+                    <li>Set the layout to Landscape</li>
+                    <li>Open More Settings and set your Margins to "None"</li>
+                    <li>Ensure that the paper size is Letter and the scale is set to 100%</li>
+                    <li>If you are printing the colored version, turn on the "background graphics" checkbox</li>
+                    <span>It should show up nicely with two on each page. Print and cut in half and return to your Chayolim :)</span>
+                </ol>
                 <Col sm={6}>
                     <label>Base</label>
                     <BaseSelect
