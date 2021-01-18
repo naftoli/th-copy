@@ -22,7 +22,7 @@ class BirthdayEn extends Birthday {
 	protected $qtyTasks = array(
 		'1-150' =>  'I said extra tehillim. How many extra kapitelach did you say?'
 	);
-	protected $ageTasks = array(
+	protected $boysAgeTasks = array(
 		'10' => 'I learned part of a Maamer by heart and reviewed it (on my birthday or on the Shabbos after). Which Maamer did you learn? __________________',
 		'13' => 'On the Shabbos before my birthday (and if my birthday fell out on a day the Torah is read, on that day) I was called up for an Aliya.'
 	);

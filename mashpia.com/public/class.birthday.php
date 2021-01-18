@@ -2,13 +2,6 @@
 require_once 'db.php';
 require_once 'class.NewTasks.php';
 
-// this is actually just a function that takes two or three lines two call
-// $b = new Birthday( $user_id );
-// // $b->enablePrevious();
-// $b->setBirthday();
-// instead of
-// updateBirthdayMissions( $user_id, $ options = ["enablePrevious" => false, "lang" => 1] );
-
 abstract class Birthday {
 	private $user_id;
 	private $errors = array();
@@ -22,8 +15,8 @@ abstract class Birthday {
 	/* abstract */ protected $mandTasks = array();
 	/* abstract */ protected $optTasks = array();
 	/* abstract */ protected $qtyTasks = array();
-	/* abstract */ protected $ageTasks = array();
-	 abstract protected function missionName($yomHoledes, $yearsOld);
+	/* abstract */ protected $boysAgeTasks = array();
+	abstract protected function missionName($yomHoledes, $yearsOld);
 
 	public function __construct( $user_id ) {
 		$this->user_id = $user_id;
@@ -32,10 +25,6 @@ abstract class Birthday {
 		for ($i = 1001; $i <= 1015; $i++) {
 			$this->grid_ids[] = $i;
 		}
-
-
-		//require_once 'class.globalSettings.php';
-		//$this->year = GlobalSettings::getBirthdayYear();
 
 		// dynamically get the current year ...
 		// get the current jewish date from the julian date from the unix timestamp,
@@ -47,7 +36,16 @@ abstract class Birthday {
 		$this->enablePrev = true;
 	}
 
-	public function setBirthday() {
+	/**
+	 * creates birthday tasks if not yet created for the users birthday and links the user to that mission
+	 * 
+	 * @param bool|string $clear_existing records from the birthdays table for this user bwefore creating new ones
+	 * the default maintains the previous behaivour of only clearing it before creating english missions as that ran first
+	 */
+	public function setBirthday($clear_existing = "english_only") {
+		if ($clear_existing === "english_only") {
+			$clear_existing = $this->lang_id === 1;
+		}
 		$t = new NewTasks( $this->user_id, $this->lang_id );
 
 		if ( !$t->setUserInfo() ) {
@@ -147,45 +145,42 @@ abstract class Birthday {
 			$this->errors[] = $this->user_id . " is not signed up to a class and is not signed up to yoma depagra / yom tov";
 			return false;
 		}
-		if ( !$t->needToCreateTasks() ) {
-			// tasks already created
-			return true;
-		}
-		$points = 0.5;
-		$t->setCategory($this->category);
-		$grid_id_idx = 0;
+		if ( $t->needToCreateTasks() ) {
+			$points = 0.5;
+			$t->setCategory($this->category);
+			$grid_id_idx = 0;
 
-		foreach( $this->mandTasks as $task ) {
-			if ( !$t->createTask( $task, $points, 1, null, $this->grid_ids[$grid_id_idx++] ) ) {
-				$this->errors[] = "problem creating task " . mysql_error();
+			foreach( $this->mandTasks as $task ) {
+				if ( !$t->createTask( $task, $points, 1, null, $this->grid_ids[$grid_id_idx++] ) ) {
+					$this->errors[] = "problem creating task " . mysql_error();
+				}
 			}
-		}
 
-		foreach( $this->optTasks as $task ) {
-			if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
-				$this->errors[] = "problem creating task " . mysql_error();
-			}
-		}
-
-		foreach( $this->qtyTasks as $qty => $task ) {
-			if ( !$t->createTask( $task, $points, 1, $qty, $this->grid_ids[$grid_id_idx++] ) ) {
-				$this->errors[] = "problem creating task " . mysql_error();
-			}
-		}
-
-		foreach( $this->ageTasks as $age => $task ) {
-			if ( $year >= $age && $user['gender'] == 'M' ){
+			foreach( $this->optTasks as $task ) {
 				if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
-					$this->errors[] = "problm creating task " . mysql_error();
+					$this->errors[] = "problem creating task " . mysql_error();
+				}
+			}
+
+			foreach( $this->qtyTasks as $qty => $task ) {
+				if ( !$t->createTask( $task, $points, 1, $qty, $this->grid_ids[$grid_id_idx++] ) ) {
+					$this->errors[] = "problem creating task " . mysql_error();
+				}
+			}
+
+			foreach( $this->boysAgeTasks as $age => $task ) {
+				if ( $year >= $age && $user['gender'] == 'M' ){
+					if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
+						$this->errors[] = "problm creating task " . mysql_error();
+					}
 				}
 			}
 		}
 
-		if ($this->lang_id === 1) {
-			//check if user already has birthday missions and delete - only for english b/c it's the first one to run
+		if ($clear_existing) {
 			$sql = "delete from birthdays where user_id = " . $this->user_id;
-			@mysql_query( $sql );
-		}
+			mysql_query( $sql );
+		};
 
 		//add user_id and mission_id to birthday database
 		$mission_id = $t->getMissionID();
