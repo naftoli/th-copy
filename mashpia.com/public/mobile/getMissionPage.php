@@ -303,21 +303,15 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						<div class="date"><?=$start_date?> - <?=$end_date?> / <span class="hebrew"><?=$j_start_date?> - <?=$j_end_date?></span></div>
 					</div>
 					<div id="navigation-buttons">
-						<? // create the parsha locator for the links
-						$parsha_locator = [];
-						foreach($parshos as $date => $parsha) {
-							$parsha_locator[] = $date;
-						}
-						$pos = array_search($end, $parsha_locator);
-						if($pos > 0) {?>
-							<span id="previous" class="parsha-navigator" data-d="<?=$end - 7?>">
+						<? if($end - 7 >= unixtojd() - 28) { ?>
+							<a id="previous" class="parsha-navigator" href="<?="..{$mobileURL}missionsNew.html?id=$user_id&d=" . ($end - 7)?>">
 								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$end - 7]?>
-							</span>
-						<?}
-						if($pos < (count($parshos) - 1)) {?>
-							<span id="next" class="parsha-navigator" data-d="<?=$end + 7?>">
+							</a>
+						<? } ?>
+						<? if($end + 7 < unixtojd() + 7) { ?>
+							<a id="next" class="parsha-navigator" href="<?="..{$mobileURL}missionsNew.html?id=$user_id" . ($end + 7 < unixtojd() ? "&d=" . ($end + 7) : "")?>">
 								<?=$parshos[$end + 7]?> <img src="img_new/arrow-1-color-white-svg.svg" />
-							</span>
+							</a>
 						<? } ?>
 					</div>
 				<? }?>
@@ -990,14 +984,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 <script src="/js/utils/browser_detect.js"></script>
 <script>
-	function ToJulian( date ) {
-		var d = date.getDate();
-		var y = date.getFullYear();
-		var m = date.getMonth() + 1;
-
-		return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
-	};
-
 	/******************* DATE SLIDER *******************/
 	var currentSlide = <?=$jd-$start?>;
 	var bSlid = localStorage.getItem('achos-missions-slid');
@@ -1348,13 +1334,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			location.reload();
 			//$(this).parent().parent().find('.dInfo').toggle();
 			//$(this).parent().parent().find('.dMark').toggle();
-		});
-		
-		$(".parsha-navigator").click(function(event){
-			var date = event.target.dataset.d;
-			if (date >= ToJulian( new Date() )) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
-			else var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
-			window.location.href = url;
 		});
 		
 		//$("#dateSelection").change(function() {
