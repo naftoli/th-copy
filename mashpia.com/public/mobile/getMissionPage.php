@@ -78,9 +78,9 @@ $curParsha = array();
 // 	print_r( $_GET );
 // 	exit;
 // }
-if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
-	$jd = floor(unixtojd());
+	$jd = unixtojd();
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
 	switch ($today) {
 		case 0:
@@ -110,7 +110,7 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if t
 	$curParsha['end'] = $end;
 } else { // if the date was provided by the user
 	$jd = intval($_GET['d']);
-	$jd = $jd < unixtojd() ? $jd : floor(unixtojd()); // make sure that they cannot go to far back into the future
+	$jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go to far back into the future
 	$today = intval(date('w', jdtounix($jd)));
 	if (isset($_GET['s']) && $_GET['s'] == 1) {
 		$start = $jd;
@@ -180,7 +180,7 @@ else define('HOME', '../mission_report');
 /********************** GET ALL THE PARSHIOS **********************/
 $parshos = array();
 if (isset($_GET['d'])) {
-	$jdTemp = floor(unixtojd());
+	$jdTemp = unixtojd();
 	$today = intval(date('w', jdtounix($jdTemp))); //sunday starts 0
 	switch ($today) {
 		case 0:
@@ -277,7 +277,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						</div>
 						<?
 						// if it's friday we need to also load shabbos so that the swiper works
-						if (floor(unixtojd($timestamp)) >= floor(unixtojd()) && $from > 1) { 
+						if (unixtojd($timestamp) >= unixtojd() && $from > 1) { 
 							break;
 						}
 					} 
@@ -794,7 +794,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                             $no_label_task = $user->no_label_tasks[$j];
                                             
                                             // if daily marking, hide yoma depagra not relevant to today 
-                                            $today = floor(unixtojd($timestamp));
+                                            $today = unixtojd($timestamp);
                                             if (
                                                 ($_COOKIE['marking'] == 'daily' ||
                                                 ($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
@@ -886,7 +886,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
             
             </div>
             <? // quit the loop if the timestamp is today
-                if (floor(unixtojd($timestamp)) == floor(unixtojd())) {
+                if (unixtojd($timestamp) == unixtojd()) {
                     break;
                 }
             }
@@ -1292,7 +1292,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						var date = $('.slick-slider').find('.item').eq(currentSlide).attr('data-date');
 						$('.content .tasks-day').fadeOut('fast').filter('[data-date=' + date + ']').fadeIn('fast');
 					} else {
-						//var today = <?=floor(unixtojd())?>;
+						//var today = <?=unixtojd()?>;
 						var start = <?=$start?>;
 						var end = start + 6;
 						if (currentSlide == 0 && d.currentSlide == 0) {
