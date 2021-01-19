@@ -14,6 +14,9 @@ class MedalReport extends Report {
     private $medalOrds;
     private $subjects;
     private $schoolExceptions;
+    private $totalSchools = 0;
+    private $totalGrades = 0;
+    private $totalStudents = 0;
     
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -86,6 +89,8 @@ class MedalReport extends Report {
         $end = $this->reportDates['end']; 
 
         foreach ( $this->users as $school_id => $school ) {
+            $this->totalSchools++;
+            $prevGrade = '';
             foreach ( $school as $name => $user ) {
             	$students = $this->users[$school_id][$name];
                 //foreach ( $user as $student ) {
@@ -94,14 +99,10 @@ class MedalReport extends Report {
                         SELECT s.subject_name, m.medal_name, u.user_id, u.last, u.first, 
                         c.class_grade, c.class_sub, c.class_teacher, mm.*, s.subject_id
                         FROM medal_marks mm
-                        JOIN medals m
-                        USING ( medal_ord )
-                        JOIN users u
-                        USING ( user_id )
-                        JOIN subjects s
-                        USING ( subject_id )
-                        JOIN schools sch
-                        USING ( school_id ) 
+                        JOIN medals m USING ( medal_ord )
+                        JOIN users u USING ( user_id )
+                        JOIN subjects s USING ( subject_id )
+                        JOIN schools sch USING ( school_id ) 
                         LEFT JOIN classes c using (class_id)  
                         WHERE mm.date_awarded >= $start 
                         AND mm.date_awarded <= $end  
@@ -114,9 +115,14 @@ class MedalReport extends Report {
                     $result = mysql_query($sql) or die(mysql_error());
                     while ($row = mysql_fetch_assoc($result)) {
                         if ($row['last'] != "") {
+                            $this->totalStudents++;
                             $user_id = $row['user_id'];
                             $teacher = $row['class_teacher']; 
                             $grade = $row['class_grade'] . (empty( $row['class_sub']) ? '' : "-" . $row['class_sub']);
+                            if ($prevGrade != $grade) {
+                                $this->totalGrades++;
+                                $prevGrade = $grade;
+                            }
                             $user_name = $row['first'] . " " . $row['last']; 
                             $subject = $row['subject_name'];
                             if ( $subject == 'שבת מברכים תהילים' ) $subject = "WWTC";
@@ -176,6 +182,18 @@ class MedalReport extends Report {
             }
         }
         return $this->subjects;
+    }
+
+    public function getTotalSchools() {
+        return $this->totalSchools;
+    }
+
+    public function getTotalGrades() {
+        return $this->totalGrades;
+    }
+
+    public function getTotalStudents() {
+        return $this->totalStudents;
     }
 }
 ?>
