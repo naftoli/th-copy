@@ -19,6 +19,11 @@ if ( isset($_GET['go']) && $_GET['go'] == 'back' ) {
 $heDates = $m->getHeReportDates();
 $m->setMedalSummary();
 $summary = $m->getMedalSummary();
+
+$m->setMedalDetails();
+$totalSchools = $m->getTotalSchools();
+$totalGrades = $m->getTotalGrades();
+$totalStudents = $m->getTotalStudents();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -89,10 +94,19 @@ $summary = $m->getMedalSummary();
         </div>
         
 		<div id="report_div" name="report_div">
+            <h2>Totals</h2>
+            <p>
+                Total Schools: <?=$totalSchools;?><br />
+                Total Classes: <?=$totalGrades;?><br />
+                Total Students: <?=$totalStudents?><br />
+            </p>
+
+            <h2>Medals Summary</h2>
 			<div class='page'>
 			<? 
 			$grandtotals = array();
 			foreach ($summary as $school => $line) {
+			    $totalSchools++;
 			    echo "Medals Summary for " . $school . "<br /><br />"; 
 				foreach ($line as $subject => $medals) {
 				    echo "<div class='label'>" . $subject . "<br />";

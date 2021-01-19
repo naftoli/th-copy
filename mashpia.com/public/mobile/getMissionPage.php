@@ -78,9 +78,9 @@ $curParsha = array();
 // 	print_r( $_GET );
 // 	exit;
 // }
-if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
-	$jd = floor(unixtojd());
+	$jd = unixtojd();
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
 	switch ($today) {
 		case 0:
@@ -110,7 +110,7 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if t
 	$curParsha['end'] = $end;
 } else { // if the date was provided by the user
 	$jd = intval($_GET['d']);
-	$jd = $jd < unixtojd() ? $jd : floor(unixtojd()); // make sure that they cannot go to far back into the future
+	$jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go to far back into the future
 	$today = intval(date('w', jdtounix($jd)));
 	if (isset($_GET['s']) && $_GET['s'] == 1) {
 		$start = $jd;
@@ -180,7 +180,7 @@ else define('HOME', '../mission_report');
 /********************** GET ALL THE PARSHIOS **********************/
 $parshos = array();
 if (isset($_GET['d'])) {
-	$jdTemp = floor(unixtojd());
+	$jdTemp = unixtojd();
 	$today = intval(date('w', jdtounix($jdTemp))); //sunday starts 0
 	switch ($today) {
 		case 0:
@@ -277,7 +277,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						</div>
 						<?
 						// if it's friday we need to also load shabbos so that the swiper works
-						if (floor(unixtojd($timestamp)) >= floor(unixtojd()) && $from > 1) { 
+						if (unixtojd($timestamp) >= unixtojd() && $from > 1) { 
 							break;
 						}
 					} 
@@ -303,21 +303,15 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						<div class="date"><?=$start_date?> - <?=$end_date?> / <span class="hebrew"><?=$j_start_date?> - <?=$j_end_date?></span></div>
 					</div>
 					<div id="navigation-buttons">
-						<? // create the parsha locator for the links
-						$parsha_locator = [];
-						foreach($parshos as $date => $parsha) {
-							$parsha_locator[] = $date;
-						}
-						$pos = array_search($end, $parsha_locator);
-						if($pos > 0) {?>
-							<span id="previous" class="parsha-navigator" data-d="<?=$end - 7?>">
+						<? if($end - 7 >= unixtojd() - 28) { ?>
+							<a id="previous" class="parsha-navigator" href="<?="..{$mobileURL}missionsNew.html?id=$user_id&d=" . ($end - 7)?>">
 								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$end - 7]?>
-							</span>
-						<?}
-						if($pos < (count($parshos) - 1)) {?>
-							<span id="next" class="parsha-navigator" data-d="<?=$end + 7?>">
+							</a>
+						<? } ?>
+						<? if($end + 7 < unixtojd() + 7) { ?>
+							<a id="next" class="parsha-navigator" href="<?="..{$mobileURL}missionsNew.html?id=$user_id" . ($end + 7 < unixtojd() ? "&d=" . ($end + 7) : "")?>">
 								<?=$parshos[$end + 7]?> <img src="img_new/arrow-1-color-white-svg.svg" />
-							</span>
+							</a>
 						<? } ?>
 					</div>
 				<? }?>
@@ -800,7 +794,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                             $no_label_task = $user->no_label_tasks[$j];
                                             
                                             // if daily marking, hide yoma depagra not relevant to today 
-                                            $today = floor(unixtojd($timestamp));
+                                            $today = unixtojd($timestamp);
                                             if (
                                                 ($_COOKIE['marking'] == 'daily' ||
                                                 ($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
@@ -892,7 +886,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
             
             </div>
             <? // quit the loop if the timestamp is today
-                if (floor(unixtojd($timestamp)) == floor(unixtojd())) {
+                if (unixtojd($timestamp) == unixtojd()) {
                     break;
                 }
             }
@@ -990,14 +984,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 <script src="/js/utils/browser_detect.js"></script>
 <script>
-	function ToJulian( date ) {
-		var d = date.getDate();
-		var y = date.getFullYear();
-		var m = date.getMonth() + 1;
-
-		return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
-	};
-
 	/******************* DATE SLIDER *******************/
 	var currentSlide = <?=$jd-$start?>;
 	var bSlid = localStorage.getItem('achos-missions-slid');
@@ -1306,7 +1292,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						var date = $('.slick-slider').find('.item').eq(currentSlide).attr('data-date');
 						$('.content .tasks-day').fadeOut('fast').filter('[data-date=' + date + ']').fadeIn('fast');
 					} else {
-						//var today = <?=floor(unixtojd())?>;
+						//var today = <?=unixtojd()?>;
 						var start = <?=$start?>;
 						var end = start + 6;
 						if (currentSlide == 0 && d.currentSlide == 0) {
@@ -1348,13 +1334,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			location.reload();
 			//$(this).parent().parent().find('.dInfo').toggle();
 			//$(this).parent().parent().find('.dMark').toggle();
-		});
-		
-		$(".parsha-navigator").click(function(event){
-			var date = event.target.dataset.d;
-			if (date >= ToJulian( new Date() )) var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>";
-			else var url = "..<?=$mobileURL?>missionsNew.html?id=<?=$user_id?>" + (date ? "&d=" + date : "");
-			window.location.href = url;
 		});
 		
 		//$("#dateSelection").change(function() {
