@@ -7,9 +7,9 @@ while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row['user_id'];
 }
 
-require_once 'class.birthday.php';
+require_once 'class.birthdayEn.php';
 foreach ($users as $user) {
-    $b = new Birthday($user);
+    $b = new BirthdayEn($user);
     $b->setBirthday();
     $errors = $b->getErrors();
     if ($errors) {

@@ -15,7 +15,7 @@ $j = iconv('WINDOWS-1255', 'UTF-8', $jewish);
 $sql = "update users set dob_he = '" . mysql_real_escape_string( $j ) . "', dob_he_offset = 0 where user_id = " . $user_id;
 mysql_query( $sql );
 
-require_once '../class.birthday.php';
-$b = new Birthday( $user_id );
+require_once '../class.birthdayEn.php';
+$b = new BirthdayEn( $user_id );
 $b->setBirthday();
 ?>

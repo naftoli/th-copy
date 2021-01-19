@@ -7,8 +7,8 @@ require_once 'class.campaignEnrollment.php';
 $c = new CampaignEnrollment( $user_id );
 $c->enroll();
 
-require_once 'class.birthday.php';
-$b = new Birthday( $user_id );
+require_once 'class.birthdayEn.php';
+$b = new BirthdayEn( $user_id );
 $b->setBirthday();
 require_once 'class.birthdayYi.php';
 $bi = new BirthdayYi( $user_id );

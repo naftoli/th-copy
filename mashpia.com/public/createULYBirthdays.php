@@ -1,4 +1,10 @@
 <?
+
+// the $user_id needs to be passed to the new Birthday($user_id) not to setBirthday()
+// also it dosn't handle yidish missions
+echo "error: broken script";
+die();
+
 require_once 'db.php';
 
 $users = array();

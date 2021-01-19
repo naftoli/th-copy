@@ -77,8 +77,8 @@ $success = mysql_query( $sql );
 if ( $success ) {
 	if ( $dobChanged ) {
 		//update birthday
-		require 'class.birthday.php';
-		$b = new Birthday( $user_id );
+		require 'class.birthdayEn.php';
+		$b = new BirthdayEn( $user_id );
 		$b->setBirthday();
 		require 'class.birthdayYi.php';
 		$b = new BirthdayYi( $user_id );

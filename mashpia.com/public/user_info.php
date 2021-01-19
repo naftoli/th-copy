@@ -227,8 +227,8 @@ if ( isset( $_FILES['file'] ) ) {
                 break;
             }
             //add birthday mission/tasks
-            require_once 'class.birthday.php';
-            $b = new Birthday( $user_id );
+            require_once 'class.birthdayEn.php';
+            $b = new BirthdayEn( $user_id );
             $b->setBirthday();
         }
         if ( $msg == "" ) {
