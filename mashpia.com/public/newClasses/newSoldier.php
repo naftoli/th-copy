@@ -129,8 +129,8 @@ class NewSoldier {
 	private function setupStudent() {
 		if ($this->setBD) {
 			//add birthday mission/task
-			require_once( dirname(__FILE__) . '/../class.birthday.php' );
-			$b = new Birthday( $this->user_id );
+			require_once( dirname(__FILE__) . '/../class.birthdayEn.php' );
+			$b = new BirthdayEn( $this->user_id );
 			$b->setBirthday();
 			require_once( dirname(__FILE__) . '/../class.birthdayYi.php' );
 			$bi = new BirthdayYi( $this->user_id );

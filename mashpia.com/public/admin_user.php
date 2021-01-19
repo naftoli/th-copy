@@ -215,8 +215,8 @@ if(!empty($action)) {
 			}
 
 			// create birthday missions
-			require_once 'class.birthday.php';
-			$b = new Birthday( $new_user_id );
+			require_once 'class.birthdayEn.php';
+			$b = new BirthdayEn( $new_user_id );
 			$b->setBirthday();
 			require_once 'class.birthdayYi.php';
 			$by = new BirthdayYi( $new_user_id );
@@ -354,8 +354,8 @@ if(!empty($action)) {
 					$sql = "delete from birthdays where user_id = " . gri('user_id', -1);
 					mysql_query($sql);
 
-					require_once 'class.birthday.php';
-					$b = new Birthday( gri('user_id', -1) );
+					require_once 'class.birthdayEn.php';
+					$b = new BirthdayEn( gri('user_id', -1) );
 					$b->setBirthday();
 					require_once 'class.birthdayYi.php';
 					$by = new BirthdayYi( gri('user_id', -1) );

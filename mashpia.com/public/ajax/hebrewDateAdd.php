@@ -16,7 +16,7 @@ $sql = "update users set dob_he = '" . mysql_real_escape_string( $j ) . "', dob_
 //echo $sql;
 mysql_query( $sql );
 
-require_once '../class.birthday.php';
-$b = new Birthday( $user_id );
+require_once '../class.birthdayEn.php';
+$b = new BirthdayEn( $user_id );
 $b->setBirthday();
 ?>

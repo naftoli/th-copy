@@ -11,7 +11,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 require 'class.campaignEnrollment.php';
-require 'class.birthday.php';
+require 'class.birthdayEn.php';
 require 'class.birthdayYi.php';
 require 'class.heDob.php';
 
@@ -29,7 +29,7 @@ foreach ($users as $user_id) {
     $hdob->setHeDob();
         
     // create birthday missions
-    $b = new Birthday( $user_id );
+    $b = new BirthdayEn( $user_id );
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();

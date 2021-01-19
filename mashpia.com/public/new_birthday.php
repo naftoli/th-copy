@@ -6,8 +6,8 @@
     <body>
 <?
 require_once 'db.php';
-require_once 'class.birthday.php';
-$b = new Birthday();
+require_once 'class.birthdayEn.php';
+$b = new BirthdayEn();
 $b->setBirthday();
 
 echo "<pre>";

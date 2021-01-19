@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require_once 'db.php';
 require_once 'class.heDob.php';
-require_once 'class.birthday.php';
+require_once 'class.birthdayEn.php';
 require_once 'class.birthdayYi.php';
 /*
 $users = array();
@@ -17,7 +17,7 @@ foreach ($users as $user_id) {
 	$h = new HeDob( $user_id, true );
 	$h->setHeDob();
 	// create birthday missions
-    $b = new Birthday( $user_id );
+    $b = new BirthdayEn( $user_id );
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();

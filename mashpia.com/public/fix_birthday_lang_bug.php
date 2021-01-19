@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 require 'db.php';
-require 'class.birthday.php';
+require 'class.birthdayEn.php';
 require 'class.birthdayYi.php';
 
 $users = array();
@@ -35,12 +35,12 @@ foreach ($users as $user) {
             $updated++;
         } else if (array_key_exists(2, $missions) && !array_key_exists(1, $missions)) {
             // create english mission
-            $b = new Birthday($user);
+            $b = new BirthdayEn($user);
             $b->setBirthday();
             $updated++;
         }
     } else {
-        $b = new Birthday($user);
+        $b = new BirthdayEn($user);
         $b->setBirthday();
         $by = new BirthdayYi($user);
         $by->setBirthday();

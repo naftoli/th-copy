@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 }
 // import the required files
 require_once( dirname(__FILE__) . '/../class.heDob.php' );
-require_once( dirname(__FILE__) . '/../class.birthday.php' );
+require_once( dirname(__FILE__) . '/../class.birthdayEn.php' );
 require_once( dirname(__FILE__) . '/../class.birthdayYi.php' );
 // April 15 2019
 $cutoff = "2458589"; // all birthdays after this date will be deleted and remade.
@@ -41,7 +41,7 @@ while( $row = mysql_fetch_assoc( $query ) ){
     $h = new HeDob( $user_id, true );
 	$h->setHeDob();
 	// create birthday missions
-    $b = new Birthday( $user_id );
+    $b = new BirthdayEn( $user_id );
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();
