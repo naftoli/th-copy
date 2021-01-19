@@ -3,12 +3,12 @@ import React from 'react';
 import { Row, Col } from 'reactstrap';
 import { Radio } from 'components/inputs';
 import { isAdmin, isBC } from 'functions/login';
-import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect } from 'components/selects';
+import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect, MissionTypeUngenderedSelect } from 'components/selects';
 
 const OptionsRow = props => {
   const { 
     login,    school_id,  class_id,
-    user_id,  parsha_id,  lang,
+    user_id,  parsha_id,  school_type_id, lang,
     onSelectChange,       onLangChange
   } = props;
 
@@ -57,8 +57,17 @@ const OptionsRow = props => {
           openMenuOnFocus={ false }
           onChange={ onSelectChange('parsha_id') } />
       </Col>
+      <Col sm={6}>
+        <label>Mission types</label>
+        <MissionTypeUngenderedSelect
+          isClearable
+          value={ school_type_id }
+          placeholder='All Mission Types'
+          openMenuOnFocus={ false }
+          onChange={ onSelectChange('school_type_id') } />
+      </Col>
 
-      <Col sm={{ size: 6, offset: 3 }} className='lang-options'>
+      <Col sm={6} className='lang-options'>
         <strong>Language</strong>
         <Radio
             value='1'
