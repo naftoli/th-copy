@@ -8,8 +8,8 @@ const options = [
   { value: '2,3', label: 'Chabad' },
   { value: '12,13', label: 'Frum' },
   { value: '4,5', label: 'Day School' },
-  { value: '6,7', label: 'Hebrew School' },
-  { value: '14,15', label: 'Friendship Circle' }
+  // { value: '6,7', label: 'Hebrew School' },
+  // { value: '14,15', label: 'Friendship Circle' }
 ];
 
 /* finds the intersection of 

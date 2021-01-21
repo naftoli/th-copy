@@ -8,7 +8,7 @@ import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect, MissionTypeUnge
 const OptionsRow = props => {
   const { 
     login,    school_id,  class_id,
-    user_id,  parsha_id,  school_type_id, lang,
+    user_id,  parsha_id,  school_type_ids, lang,
     onSelectChange,       onLangChange
   } = props;
 
@@ -61,10 +61,10 @@ const OptionsRow = props => {
         <label>Mission types</label>
         <MissionTypeUngenderedSelect
           isClearable
-          value={ school_type_id }
+          value={ school_type_ids }
           placeholder='All Mission Types'
           openMenuOnFocus={ false }
-          onChange={ onSelectChange('school_type_id') } />
+          onChange={ onSelectChange('school_type_ids') } />
       </Col>
 
       <Col sm={6} className='lang-options'>
