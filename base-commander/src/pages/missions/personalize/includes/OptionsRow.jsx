@@ -58,7 +58,7 @@ const OptionsRow = props => {
           onChange={ onSelectChange('parsha_id') } />
       </Col>
       <Col sm={6}>
-        <label>Mission types</label>
+        <label>Campaign type</label>
         <MissionTypeUngenderedSelect
           isClearable
           value={ school_type_ids }
