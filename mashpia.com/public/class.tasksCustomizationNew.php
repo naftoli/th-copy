@@ -86,7 +86,7 @@ class TasksCustomizationNew {
 	}
     
     //for parent accounts
-    public function getCampaignsForChild( $user, $not_enrolled = false, $school_type_ids = [2,3,4,5,12,13] ) {
+    public function getCampaignsForChild( $user, $not_enrolled = false, $school_type_ids = false ) {
 		// find out if child is in "chabad" or "frum"
 		$sql = "select school_type_id from users where user_id = " . mysql_real_escape_string($user);
 		$result = mysql_query($sql);
@@ -117,7 +117,7 @@ class TasksCustomizationNew {
                 ."join users u using (user_id) "
                 ."join school_type_subjects sts using (subject_id) "
                 ."where u.user_id = " . $user . " "
-                ."and sts.school_type_id in (" . implode(',', $school_type_ids) . ")  ";
+                . ($school_type_ids ? "and sts.school_type_id in (" . implode(',', $school_type_ids) . ")  " : "");
 		if(!$not_enrolled){ // if not enrolled is not set to true, limit the results to the enrolled campaigns
 			$sql .= "and ut.enrolled = 1 ";
 		}
@@ -150,7 +150,7 @@ class TasksCustomizationNew {
         return $both;
     }
 	
-    public function getCampaigns( $school_id, $school_type_ids = [2,3,4,5,12,13]) {
+    public function getCampaigns( $school_id, $school_type_ids = false) {
         $campaigns = array(); 
         /*
         //find out institution type
@@ -221,7 +221,7 @@ class TasksCustomizationNew {
 		$sql = "select subject_id, subject_name from subjects s 
 				join school_type_subjects sts using (subject_id) 
 				where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-				and sts.school_type_id in (" . implode(',', $school_type_ids) . ") 
+				" . ($school_type_ids ? "and sts.school_type_id in (" . implode(',', $school_type_ids) . ") " : "") . "
 				group by s.subject_id 
 				order by s.subject_name";
 		$result = mysql_query($sql) or die(mysql_error());

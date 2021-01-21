@@ -207,7 +207,7 @@ class PersonalizeRouter {
 
         $params['school_type_ids'] = isset( $_POST['school_type_ids'] ) && $_POST['school_type_ids']
             ? array_map('intval', explode(",", $_POST['school_type_ids']))
-            : [2,3,4,5,12,13];
+            : false;
 
         if ( isset( $_POST['parsha_id'] ) && $_POST['parsha_id'] > 0 ) {
             $parsha = \Parsha::find([ $_POST['parsha_id'] ]);
