@@ -218,7 +218,7 @@ class TasksCustomizationNew {
 //        } else if ($inst_id == 2) {
 //            $type_ids = "2,3,12,13";
 //        }
-$sql = "select subject_id, subject_name from subjects s 
+		$sql = "select subject_id, subject_name from subjects s 
 				join school_type_subjects sts using (subject_id) 
 				where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
 				and sts.school_type_id in (" . implode(',', $school_type_ids) . ") 
