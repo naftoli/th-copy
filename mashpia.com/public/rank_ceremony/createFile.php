@@ -162,6 +162,7 @@ function generateFileByGrade() {
     ];
 
     $r = new RankReport();
+    $r->overrideDates(2459180,2459207);
     $r->setSchoolId($school);
     $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
