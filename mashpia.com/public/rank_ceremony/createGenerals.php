@@ -40,7 +40,7 @@ $rankNames = [
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
 else $r = new RankReport();
-$r->overrideDates(2459180,2459207);
+//$r->overrideDates(2459180,2459207);
 
 $i = 0;
 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
