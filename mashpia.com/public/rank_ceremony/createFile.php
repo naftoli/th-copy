@@ -44,7 +44,8 @@ function createFile($info, $name)
 
 function createTextFile($file_name, $dates) {
     $fp = fopen($file_name, "w");
-    fputs($fp, "start date: " . $dates['start'] . " end date: " . $dates['end']);
+    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+    fputs($fp, "start date: " . $dates['start_he'] . "\nend date: " . $dates['end_he']);
     fclose($fp);
 }
 
@@ -135,7 +136,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             else $file_name = $schools[$school] . ".csv";
             createFile($info, $file_name);
 
-            $dates = $r->getReportDates();
+            $dates = $r->getHeReportDates();
             createTextFile("dates.txt", $dates);
         }
     }
@@ -220,7 +221,7 @@ function generateFileByGrade() {
                             $file_name = $schools[$school] . " " . $grade . ".csv";
                             createFile($info, $file_name);
 
-                            $dates = $r->getReportDates();
+                            $dates = $r->getHeReportDates();
                             createTextFile("dates.txt", $dates);
                         }
                     }
