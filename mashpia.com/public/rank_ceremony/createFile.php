@@ -42,6 +42,12 @@ function createFile($info, $name)
     fclose($fp);
 }
 
+function createTextFile($file_name, $dates) {
+    $fp = fopen($file_name, "w");
+    fputs($fp, "start date: " . $dates['start'] . " end date: " . $dates['end']);
+    fclose($fp);
+}
+
 function generateFile( $logoType = '', $limitTo = '' ) {
     global $school, $schools;
 
@@ -63,7 +69,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
 
     if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
     else $r = new RankReport();
-    $r->overrideDates(2459146,2459179);
+    $r->overrideDates(2459180,2459207);
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", $limitTo, true); // limit to gender for myshliach / anashKinder
@@ -128,6 +134,9 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             else if ($limitTo == 'F') $file_name = $schools[$school] . " Girls.csv";
             else $file_name = $schools[$school] . ".csv";
             createFile($info, $file_name);
+
+            $dates = $r->getReportDates();
+            createTextFile("dates.txt", $dates);
         }
     }
 }
@@ -210,6 +219,9 @@ function generateFileByGrade() {
                         if (count($ranks)) {
                             $file_name = $schools[$school] . " " . $grade . ".csv";
                             createFile($info, $file_name);
+
+                            $dates = $r->getReportDates();
+                            createTextFile("dates.txt", $dates);
                         }
                     }
                 }

@@ -20,6 +20,12 @@ function createFile($info, $name) {
     fclose($fp);
 }
 
+function createTextFile($file_name, $dates) {
+    $fp = fopen($file_name, "w");
+    fputs($fp, "start date: " . $dates['start'] . " end date: " . $dates['end']);
+    fclose($fp);
+}
+
 $rankNames = [
     'General'           =>  'general',
     '1* General'        =>  'one_star_general',
@@ -32,7 +38,7 @@ $rankNames = [
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
 else $r = new RankReport();
-$r->overrideDates(2459146,2459179);
+$r->overrideDates(2459180,2459207);
 
 $i = 0;
 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
@@ -114,6 +120,9 @@ foreach ($ords as $ord) {
 $info[$i] = ['outro', 'outro']; // outro
 $file_name = "generals.csv";
 createFile($info, $file_name);
+
+$dates = $r->getReportDates();
+createTextFile("dates.txt", $dates);
 
 echo json_encode([
     'success' => true
