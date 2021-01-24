@@ -12,19 +12,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-function createFile($info, $name) {
+function createFile($name, $info) {
     $fp = fopen($name, "w");
     fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
-    foreach ($info as $fields) {
-        fputcsv($fp, $fields, "\t", ' ');
+    if (is_array($info)) {
+        foreach ($info as $fields) {
+            fputcsv($fp, $fields, "\t", ' ');
+        }
+    } else {
+        fputs($fp, $info);
     }
-    fclose($fp);
-}
-
-function createTextFile($file_name, $dates) {
-    $fp = fopen($file_name, "w");
-    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
-    fputs($fp, "start date: " . $dates['start_he'] . "\nend date: " . $dates['end_he']);
     fclose($fp);
 }
 
@@ -40,7 +37,7 @@ $rankNames = [
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
 else $r = new RankReport();
-$r->overrideDates(2459180,2459207);
+//$r->overrideDates(2459180,2459207);
 
 $i = 0;
 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
@@ -121,10 +118,11 @@ foreach ($ords as $ord) {
 }
 $info[$i] = ['outro', 'outro']; // outro
 $file_name = "generals.csv";
-createFile($info, $file_name);
+createFile($file_name, $info);
 
 $dates = $r->getHeReportDates();
-createTextFile("dates.txt", $dates);
+$str = "Generals:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+createFile("dates.txt", $str);
 
 echo json_encode([
     'success' => true

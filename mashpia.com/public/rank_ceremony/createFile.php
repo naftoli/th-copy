@@ -32,20 +32,16 @@ if (in_array($school, [61,81,269])) {
     else generateFile('boys');
 }
 
-function createFile($info, $name)
-{
+function createFile($name, $info) {
     $fp = fopen($name, "w");
     fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
-    foreach ($info as $fields) {
-        fputcsv($fp, $fields, "\t", ' ');
+    if (is_array($info)) {
+        foreach ($info as $fields) {
+            fputcsv($fp, $fields, "\t", ' ');
+        }
+    } else {
+        fputs($fp, $info);
     }
-    fclose($fp);
-}
-
-function createTextFile($file_name, $dates) {
-    $fp = fopen($file_name, "w");
-    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
-    fputs($fp, "start date: " . $dates['start_he'] . "\nend date: " . $dates['end_he']);
     fclose($fp);
 }
 
@@ -70,7 +66,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
 
     if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
     else $r = new RankReport();
-    $r->overrideDates(2459180,2459207);
+//    $r->overrideDates(2459180,2459207);
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", $limitTo, true); // limit to gender for myshliach / anashKinder
@@ -134,10 +130,11 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             if ($limitTo == 'M') $file_name = $schools[$school] . " Boys.csv";
             else if ($limitTo == 'F') $file_name = $schools[$school] . " Girls.csv";
             else $file_name = $schools[$school] . ".csv";
-            createFile($info, $file_name);
+            createFile($file_name, $info);
 
             $dates = $r->getHeReportDates();
-            createTextFile("dates.txt", $dates);
+            $str = "Regular Schools:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+            createFile("dates.txt", $str);
         }
     }
 }
@@ -161,7 +158,9 @@ function generateFileByGrade() {
         '5* General' => 'five_star_general'
     ];
 
-    $r = new RankReport();
+    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+    else $r = new RankReport();
+//    $r->overrideDates(2459180,2459207);
     $r->setSchoolId($school);
     $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
@@ -219,10 +218,11 @@ function generateFileByGrade() {
                         $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
                         if (count($ranks)) {
                             $file_name = $schools[$school] . " " . $grade . ".csv";
-                            createFile($info, $file_name);
+                            createFile($file_name, $info);
 
                             $dates = $r->getHeReportDates();
-                            createTextFile("dates.txt", $dates);
+                            $str = "Schools By Grade:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+                            createFile("dates2.txt", $str);
                         }
                     }
                 }
