@@ -229,6 +229,7 @@ if (isset($_POST['submit'])) {
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
         'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
+        'grade'         =>  array('class_grade', 'class_sub')
 //		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
@@ -366,8 +367,10 @@ if (isset($_POST['submit'])) {
 										$html .= 'trophy contestant';
 									}
 								} else {
+								    $sep = ', ';
+								    if ($column == 'grade') $sep = '-';
 									foreach ($lookup[$column] as $val) {
-										$html .= $row[$val] . ", ";
+										$html .= $row[$val] . $sep;
 									}
 									$html = substr($html, 0, strlen($html) - 2);
 								}

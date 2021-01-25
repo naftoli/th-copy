@@ -51,8 +51,8 @@ class Reports
                 'column'    =>  'school_name as school',
             ),
             'grade'     =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'grade'
+                'table'     =>  'classes',
+                'column'    =>  ['class_grade', 'class_sub']
             ),
             'book'      =>  array(
                 'table'     =>  'th_chidon',
