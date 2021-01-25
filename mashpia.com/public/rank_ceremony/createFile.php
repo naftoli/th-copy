@@ -160,7 +160,7 @@ function generateFileByGrade() {
 
     if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
     else $r = new RankReport();
-    $r->overrideDates(2459180,2459207);
+//    $r->overrideDates(2459180,2459207);
     $r->setSchoolId($school);
     $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
