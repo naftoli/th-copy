@@ -11,6 +11,17 @@ class TasksCustomizationNew {
 	private $parent_id; // the parent ID to load the i
     private $d;
 	private $debug;
+    private $mission_type_subjects = array(
+        'chabad' => array(
+            1,  4,  12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90,             100 #=> 12, 13, 40
+        ),
+        'frum' => array(
+            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
+        ), 
+        'day_school' =>  array(
+            121, 122, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135
+        )
+    );
 
     public function __construct() {
         $this->start = null;
@@ -86,7 +97,7 @@ class TasksCustomizationNew {
 	}
     
     //for parent accounts
-    public function getCampaignsForChild( $user, $not_enrolled = false, $school_type_ids = false ) {
+    public function getCampaignsForChild( $user, $not_enrolled = false, $mission_type = false ) {
 		// find out if child is in "chabad" or "frum"
 		$sql = "select school_type_id from users where user_id = " . mysql_real_escape_string($user);
 		$result = mysql_query($sql);
@@ -115,9 +126,8 @@ class TasksCustomizationNew {
 				."from subjects s "
 				."join user_tracks ut using (subject_id) "
                 ."join users u using (user_id) "
-                ."join school_type_subjects sts using (subject_id) "
                 ."where u.user_id = " . $user . " "
-                . ($school_type_ids ? "and sts.school_type_id in (" . implode(',', $school_type_ids) . ")  " : "");
+				. ($mission_type ? "and s.subject_id in (" . implode(',', $this->mission_type_subjects[$mission_type]) . ") " : "");
 		if(!$not_enrolled){ // if not enrolled is not set to true, limit the results to the enrolled campaigns
 			$sql .= "and ut.enrolled = 1 ";
 		}
@@ -150,7 +160,7 @@ class TasksCustomizationNew {
         return $both;
     }
 	
-    public function getCampaigns( $school_id, $school_type_ids = false) {
+    public function getCampaigns( $school_id, $mission_type = false) {
         $campaigns = array(); 
         /*
         //find out institution type
@@ -218,10 +228,13 @@ class TasksCustomizationNew {
 //        } else if ($inst_id == 2) {
 //            $type_ids = "2,3,12,13";
 //        }
+        global $logger;
+        // $logger->debug($mission_type, [$this->mission_type_subjects[$mission_type]]);
 		$sql = "select subject_id, subject_name from subjects s 
 				join school_type_subjects sts using (subject_id) 
 				where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-				" . ($school_type_ids ? "and sts.school_type_id in (" . implode(',', $school_type_ids) . ") " : "") . "
+                and sts.school_type_id in (2,3,4,5,12,13)  
+                " . ($mission_type ? "and s.subject_id in (" . implode(',', $this->mission_type_subjects[$mission_type]) . ") " : "") . "
 				group by s.subject_id 
 				order by s.subject_name";
 		$result = mysql_query($sql) or die(mysql_error());

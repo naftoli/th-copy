@@ -20,9 +20,9 @@ class PersonalizeRouter {
         extract( $this->getParams() );
 
         if ( $user_id > 0 ) {
-            extract( $this->tc->getCampaignsForChild( $user_id, true, $school_type_ids ) );
+            extract( $this->tc->getCampaignsForChild( $user_id, true, $mission_type ) );
         } else if ( $school_id > 0 ) {
-            $campaigns = $this->tc->getCampaigns( $school_id, $school_type_ids );
+            $campaigns = $this->tc->getCampaigns( $school_id, $mission_type );
             $enrolled = $this->tc->getCampaignsEnrolled( $school_id, $class_id, $user_id );
         } else
             return json_error( 'School ID Required' );
@@ -204,10 +204,7 @@ class PersonalizeRouter {
         $params['user_id']    = isset( $_POST['user_id'] )    && $_POST['user_id']    ? $_POST['user_id']    : 0;
         $params['lang']       = isset( $_POST['lang'] )       && $_POST['lang']       ? $_POST['lang']       : 1;
         $params['task']       = isset( $_POST['task'] )       && $_POST['task']       ? $_POST['task']       : false;
-
-        $params['school_type_ids'] = isset( $_POST['school_type_ids'] ) && $_POST['school_type_ids']
-            ? array_map('intval', explode(",", $_POST['school_type_ids']))
-            : false;
+        $params['mission_type'] = isset( $_POST['mission_type'] ) && $_POST['mission_type'] ? $_POST['mission_type'] : false;
 
         if ( isset( $_POST['parsha_id'] ) && $_POST['parsha_id'] > 0 ) {
             $parsha = \Parsha::find([ $_POST['parsha_id'] ]);

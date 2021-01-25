@@ -5,11 +5,9 @@ import { Select } from './Select';
 import { findOption } from 'functions/selects';
 
 const options = [
-  { value: '2,3', label: 'Chabad' },
-  { value: '12,13', label: 'Frum' },
-  { value: '4,5', label: 'Day School' },
-  // { value: '6,7', label: 'Hebrew School' },
-  // { value: '14,15', label: 'Friendship Circle' }
+  { value: 'chabad', label: 'Chabad' },
+  { value: 'frum', label: 'Frum' },
+  { value: 'day_school', label: 'Day School' },
 ];
 
 export function MissionTypeUngenderedSelect(props) {
@@ -22,5 +20,3 @@ export function MissionTypeUngenderedSelect(props) {
       options={options} />
   );
 }
-
-// MissionTypeUnGenderedSelect.propTypes = Select.propTypes
