@@ -89,7 +89,7 @@ class RankReport extends Report {
             else if ( $orderType == 'byGradeRank')
                 $this->ranks[$school][$teacher][$grade][$rank][] = $user_id;
             else if ( $orderType == 'byGradeOnlyRank')
-                $this->ranks[$school][$teacher][$row['class_grade']][$rank][] = $user_id;
+                $this->ranks[$school][$row['class_grade']][$rank][] = $user_id;
             else if ( $orderType == 'byRank' )
                 $this->ranks[$school][$rank][$teacher][$grade][] = $user_id;
             else if ( $orderType == 'byRankFirst' )
