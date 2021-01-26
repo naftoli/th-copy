@@ -125,6 +125,12 @@ if ($admin_user['auth'] != 'super') {
             $('body').show();
             alert('Please make sure to SAVE after entering scores.');
         })
+        $(".score").focus( function() {
+            let val = $(this).val()
+            if (parseInt(val) == 0) {
+                $(this).val('')
+            }
+        })
         $(".score").keyup( function() {
             const max = 10;
             let val = $(this).val();
@@ -134,6 +140,12 @@ if ($admin_user['auth'] != 'super') {
                 $(this).focus();
             }
         });
+        $(".expert").focus( function() {
+            let val = $(this).val()
+            if (parseInt(val) == 0) {
+                $(this).val('')
+            }
+        })
         $(".expert").keyup( function() {
             const max = 15;
             let val = $(this).val();
