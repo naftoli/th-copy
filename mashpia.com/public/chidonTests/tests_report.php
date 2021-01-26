@@ -4,16 +4,19 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 $fields = $_POST['fields'];
 $tests = [];
+$trophies = [];
 $email = false;
 foreach ($fields as $field) {
-    if (strpos($field, '_')) {
+    if (strpos($field, '_') !== false) {
         $info = explode('_', $field);
-        $tests[] = $info[1];
+        $number = $info[1];
+        if ($info[0] == 'test') $tests[] = $number;
+        else if ($info[0] == 'trophy') $trophies[] = $number;
     } else if ($field == 'email') {
         $email = true;
     }
 }
-//echo "<pre>"; print_r($_POST); echo "</pre>";
+//echo "<pre>"; print_r($tests); print_r($trophies); echo "</pre>";
 
 require 'class.chidonTests.php';
 $ct = new ChidonTests();
@@ -44,10 +47,18 @@ $show_avg = in_array('avg', $fields);
         <?php if ($email) : ?><th>Email Address</th><?php endif; ?>
         <th>Test Type</th>
         <?php
-        foreach ($tests as $test_num) {
-            echo "<th>Test #" . $test_num . "</th>";
+        if (!empty($tests)) {
+            foreach ($tests as $test_num) {
+                echo "<th>Test #" . $test_num . "</th>";
+            }
+            if ($show_avg) echo "<th>Test Avg</th>";
         }
-        if ($show_avg) echo "<th>Avg</th>";
+        if (!empty($trophies)) {
+            foreach ($trophies as $num) {
+                echo "<th>Trophy Test #" . $num . "</th>";
+            }
+            if ($show_avg) echo "<th>Trophy Avg</th>";
+        }
         ?>
     </tr>
     <?php
@@ -61,6 +72,7 @@ $show_avg = in_array('avg', $fields);
                 $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>";
         if ($email) echo $user['admin_email'] . "</td><td>";
         echo $type . "</td>";
+        // show tests
         foreach ($tests as $test_num) {
             $mark = $marks[$id][$test_num][$type];
             echo "<td>" . $mark . "</td>";
@@ -70,6 +82,18 @@ $show_avg = in_array('avg', $fields);
         if ($show_avg) {
             $avg = $total / count($tests);
             echo "<td>" . $avg . "</td>";
+        }
+        // show trophies
+        $trophy_total = 0;
+        foreach ($trophies as $test_num) {
+            $mark = $marks[$id][$test_num]['trophy'];
+            echo "<td>" . $mark . "</td>";
+            $trophy_total += $mark;
+        }
+        // if we need avg, calculate it
+        if ($show_avg) {
+            $trophy_avg = $trophy_total / count($trophies);
+            echo "<td>" . $trophy_avg . "</td>";
         }
         echo "</tr>";
     }

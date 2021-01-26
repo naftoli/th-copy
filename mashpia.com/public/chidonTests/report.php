@@ -17,6 +17,10 @@ $info = [
     'test_2'        =>  'Test 2 Mark',
     'test_3'        =>  'Test 3 Mark',
     'test_4'        =>  'Test 4 Mark',
+    'trophy_1'      =>  'Trophy Test 1 Mark',
+    'trophy_2'      =>  'Trophy Test 2 Mark',
+    'trophy_3'      =>  'Trophy Test 3 Mark',
+    'trophy_4'      =>  'Trophy Test 4 Mark',
     'avg'           =>  'Avg Mark (for chosen tests)'
 ];
 ?>
