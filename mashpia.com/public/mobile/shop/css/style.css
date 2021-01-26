@@ -109,8 +109,6 @@ body {
 .nav li {
     position: relative;
 }
-
- }
 .nav > li > .parent {
     background-image: url("images/downArrow.png");
     background-repeat: no-repeat;
