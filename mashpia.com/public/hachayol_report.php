@@ -162,7 +162,7 @@ $posters = array(
                     Extra: <?=$extra?><br />
                 <?php } ?>
 
-                Total: <?=$total?><br />
+                <span style="font-size: larger; font-weight: bold;">Total: <?=$total?></span><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id] ?? 0?><br />
                 Number of boys posters: <?=$school['chidon_posters_boys'] ?? 0?><br />
