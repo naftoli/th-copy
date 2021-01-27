@@ -5,23 +5,24 @@ const grey = '#b3b3b0';
 const xmlns = "http://www.w3.org/2000/svg";
 
 const loadColumn = (arr, elm) => {
-    arr.forEach(item => {
-        let container = document.createElement('div');
-        let name = document.createElement('p');
-        name.innerText = `${item.rank || ''} ${item.name || ''}`;
-        let school = document.createElement('p');
-        school.innerText = item.school;
-        let grade = document.createElement('p');
-        grade.innerText = `Grade: ${item.grade}`;
-        container.appendChild(name);
-        container.appendChild(school);
-        container.appendChild(grade);
-        elm.appendChild(container);
-    })
+    if (Array.isArray(arr)) {
+        arr.forEach(item => {
+            let container = document.createElement('div');
+            let name = document.createElement('p');
+            name.innerText = `${item.rank || ''} ${item.name || ''}`;
+            let school = document.createElement('p');
+            school.innerText = item.school;
+            let grade = document.createElement('p');
+            grade.innerText = `Grade: ${item.grade}`;
+            container.appendChild(name);
+            container.appendChild(school);
+            container.appendChild(grade);
+            elm.appendChild(container);
+        })
+    }
 };
 
 const loadPastWinners = () => {
-
     Object.keys(sixtyFlagWinnerData).forEach(raffleNumer => {
         const { prize = {}, year = '', raffles = {} } = sixtyFlagWinnerData[raffleNumer];
         const winnersContainer = createElementWithClass('div', 'winnersContainer');
