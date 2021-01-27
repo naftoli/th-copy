@@ -2,6 +2,7 @@ export * from './static/Select';
 export * from './static/RoleSelect';
 export * from './static/GradeSelect';
 export * from './static/MissionTypeSelect';
+export * from './static/MissionTypeUngenderedSelect';
 // redux connected components
 export { default as SMSelect } from './redux/SMSelect';
 export { default as BaseSelect } from './redux/BaseSelect';

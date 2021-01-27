@@ -8,9 +8,20 @@ class TasksCustomizationNew {
     private $id;
     private $schoolType;
     private $school_id;
-	private $parent_id; // the parent ID to load the i
+    private $parent_id; // the parent ID to load the i
     private $d;
-	private $debug;
+    private $debug;
+    private $mission_type_subjects = array(
+        'chabad' => array(
+            1,  4,  12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90,             100 #=> 12, 13, 40
+        ),
+        'frum' => array(
+            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
+        ), 
+        'day_school' =>  array(
+            121, 122, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135
+        )
+    );
 
     public function __construct() {
         $this->start = null;
@@ -86,7 +97,7 @@ class TasksCustomizationNew {
 	}
     
     //for parent accounts
-    public function getCampaignsForChild( $user, $not_enrolled = false ) {
+    public function getCampaignsForChild( $user, $not_enrolled = false, $mission_type = false ) {
 		// find out if child is in "chabad" or "frum"
 		$sql = "select school_type_id from users where user_id = " . mysql_real_escape_string($user);
 		$result = mysql_query($sql);
@@ -111,11 +122,12 @@ class TasksCustomizationNew {
 		$sql .= "group by s.subject_id 
                 order by s.subject_name";
         */
-		$sql = "select s.subject_id, s.subject_name, ut.enrolled "
-				."from subjects s "
-				."join user_tracks ut using (subject_id) "
+        $sql = "select s.subject_id, s.subject_name, ut.enrolled "
+                ."from subjects s "
+                ."join user_tracks ut using (subject_id) "
                 ."join users u using (user_id) "
-                ."where u.user_id = " . $user . " ";
+                ."where u.user_id = " . $user . " "
+                . ($mission_type ? "and s.subject_id in (" . implode(',', $this->mission_type_subjects[$mission_type]) . ") " : "");
 		if(!$not_enrolled){ // if not enrolled is not set to true, limit the results to the enrolled campaigns
 			$sql .= "and ut.enrolled = 1 ";
 		}
@@ -148,7 +160,7 @@ class TasksCustomizationNew {
         return $both;
     }
 	
-    public function getCampaigns( $school_id, $additional = true ) {
+    public function getCampaigns( $school_id, $mission_type = false) {
         $campaigns = array(); 
         /*
         //find out institution type
@@ -216,12 +228,13 @@ class TasksCustomizationNew {
 //        } else if ($inst_id == 2) {
 //            $type_ids = "2,3,12,13";
 //        }
-		$sql = "select subject_id, subject_name from subjects s 
-				join school_type_subjects sts using (subject_id) 
-				where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-				and sts.school_type_id in (2,3,4,5,12,13) 
-				group by s.subject_id 
-				order by s.subject_name";
+        $sql = "select subject_id, subject_name from subjects s 
+                join school_type_subjects sts using (subject_id) 
+                where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
+                and sts.school_type_id in (2,3,4,5,12,13)  
+                " . ($mission_type ? "and s.subject_id in (" . implode(',', $this->mission_type_subjects[$mission_type]) . ") " : "") . "
+                group by s.subject_id 
+                order by s.subject_name";
 		$result = mysql_query($sql) or die(mysql_error());
 		while ($row = mysql_fetch_assoc($result)) {
 			$campaigns[$row['subject_id']] = $row['subject_name'];
@@ -265,17 +278,14 @@ class TasksCustomizationNew {
             $users = $this->getUsersInGrade($class);
             $classEnrolled = array();
             foreach ($enrolled as $subject) {
-                foreach ($users as $user) {
-                    $sql = "select subject_id from user_tracks ut 
-                            where ut.user_id = $user 
-                            and ut.enrolled = 1 
-                            and ut.subject_id = $subject";
-                    $result = mysql_query( $sql );
-                    if (mysql_num_rows($result) > 0) {
-                        if (!in_array($subject, $classEnrolled)) {
-                            $classEnrolled[] = $subject;
-                            break;
-                        }
+                $sql = "select subject_id from user_tracks ut
+                        where ut.user_id in (" . implode( ',', $users ) . ")
+                        and ut.enrolled = 1 
+                        and ut.subject_id = $subject";
+                $result = mysql_query( $sql );
+                if (mysql_num_rows($result) > 0) {
+                    if (!in_array($subject, $classEnrolled)) {
+                        $classEnrolled[] = $subject;
                     }
                 }
             } 
@@ -1554,7 +1564,7 @@ class TasksCustomizationNew {
 			$users[] = $row['user_id'];
 		}
         
-		//$campaigns = $this->getCampaigns($school_id, FALSE);
+		//$campaigns = $this->getCampaigns($school_id);
 		$sql = "update user_tracks set enrolled = 1 where user_id in (" . implode(",", $users) . ")";
 		//echo $sql;
         if (!mysql_query($sql)) {

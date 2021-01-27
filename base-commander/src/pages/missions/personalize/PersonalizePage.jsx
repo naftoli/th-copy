@@ -18,11 +18,11 @@ import { showError } from 'functions/notifications';
 
 class PersonalizePage extends Component {
 
-  state = { 
-    school_id:  false,  class_id:   false,
-    user_id:    false,  parsha_id:  false,  lang: '1',
+  state = {
+    school_id: false, class_id: false, user_id: false,
+    parsha_id: false, mission_type: false, lang: '1',
     // keep track of what is loading and what the selected options are
-    loading:    false,  current_options:  {},
+    loading: false, current_options: {},
   };
 
   componentDidMount() {
