@@ -101,8 +101,8 @@ include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
 
     <fieldset>
         <legend>Limit to</legend>
-        <input type="radio" name="gender" id="gender" value="M" /> Boys<br />
-        <input type="radio" name="gender" id="gender" value="F" /> Girls<br />
+        <input type="radio" name="gender" class="gender" value="M" /> Boys<br />
+        <input type="radio" name="gender" class="gender" value="F" /> Girls<br />
     </fieldset>
 </div>
 
@@ -153,10 +153,11 @@ include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
                 }
             }
             console.log(data)
-            if ($("#gender").is(":checked")) {
-                const val = $("#gender:checked").val()
-                data.push(val.toUpperCase())
-            }
+            $(".gender").each( function() {
+                if ($(this).is(":checked")) {
+                    data.push($(this).val())
+                }
+            })
 
             //$("#qryBuilder").hide();
             $("#report").html("<div class='loader'></div>");

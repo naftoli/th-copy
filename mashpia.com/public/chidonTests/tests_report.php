@@ -74,24 +74,24 @@ $show_avg = in_array('avg', $fields);
         echo $type . "</td>";
         // show tests
         foreach ($tests as $test_num) {
-            $mark = $marks[$id][$test_num][$type];
+            $mark = isset($marks[$id][$test_num][$type]) ? $marks[$id][$test_num][$type] : 0;
             echo "<td>" . $mark . "</td>";
             $total += $mark;
         }
         // if we need avg, calculate it
-        if ($show_avg) {
+        if ($show_avg && count($tests)) {
             $avg = $total / count($tests);
             echo "<td>" . $avg . "</td>";
         }
         // show trophies
         $trophy_total = 0;
         foreach ($trophies as $test_num) {
-            $mark = $marks[$id][$test_num]['trophy'];
+            $mark = isset($marks[$id][$test_num]['trophy']) ? $marks[$id][$test_num]['trophy'] : 0;
             echo "<td>" . $mark . "</td>";
             $trophy_total += $mark;
         }
         // if we need avg, calculate it
-        if ($show_avg) {
+        if ($show_avg && count($trophies)) {
             $trophy_avg = $trophy_total / count($trophies);
             echo "<td>" . $trophy_avg . "</td>";
         }
