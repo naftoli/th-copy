@@ -113,7 +113,7 @@ $posters = array(
                 else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                 if ($extra != 0) echo "Extra: " . $extra . "<br />";
                 ?>
-                <span style="font-size: larger; font-weight: bold;">Total: <?=$total?></span><br />
+                <span style="font-size: 50px; font-weight: bold;">Total: <?=$total?></span><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id] ?? 0?><br />
                 Number of boys posters: <?=$school['chidon_posters_boys'] ?? 0?><br />
