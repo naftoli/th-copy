@@ -28,6 +28,6 @@ if ( !defined( 'GOOGLE_CLIENT_SECRET' ) )
 if ( $development )
     $domain = 'http://localhost:3000';
 
-// // initialize the $logger global variable
-// // for usage see the monolog docs at https://github.com/Seldaek/monolog/blob/main/doc/01-usage.md
-// require_once( __DIR__ . "/../utils/logger.php" );
+// initialize the $logger global variable
+// for usage see the monolog docs at https://github.com/Seldaek/monolog/blob/main/doc/01-usage.md
+require_once( __DIR__ . "/../utils/logger.php" );
