@@ -28,6 +28,7 @@ nav.navbar .navbar-title {
 .nav-row {
     background: #4258a2; text-align: center;
     margin: 0px; line-height: .96;
+    margin: auto; max-width: 1024px;
 }
 .nav-row a {
     display: inline-block;

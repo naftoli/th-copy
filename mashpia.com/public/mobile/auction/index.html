@@ -237,7 +237,9 @@
 			display: table;
 			margin-left: auto;
 			margin-right: auto;
-			float: none
+			float: none;
+			max-width: 1024px;
+			margin: auto;
 		}
 
 		.footer .span3 {
@@ -432,12 +434,6 @@
 		window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')
 	</script>
 	<style>
-		.subMenu {
-			border-top: none !important;
-			margin-top: -20px;
-			margin-bottom: 20px;
-		}
-
 		.subMenu .span3 {
 			background-color: #343862 !important;
 		}
@@ -497,11 +493,16 @@
 		#balance {
 			color: white !important;
 		}
+
+		.content {
+			max-width: 1024px;
+			margin: auto;
+		}
 	</style>
 </head>
 
 <body class="page-goals">
-	<header class="navbar" id="top" role="banner">
+	<header class="navbar" id="top" role="banner" style="margin-bottom: 0;">
 		<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
 			<span id="page-title" class="i18n" data-key="pageTitle">AUCTION</span>
 
@@ -509,43 +510,45 @@
 	</header>
 
 
-	<div class="span12 footer media-group subMenu" style="width: 100%; margin-bottom: 0px;">
-		<a href="" id="storeMenu">
-			<div class="span3" style="width:33.3%">
-				<div class="menu-item">
-					<div class="span12">
-						<img src="../img_new/store-color-white.svg">
-					</div>
-					<div class="span12">
-						<span class="i18n" data-key="Store">Store</span>
-					</div>
-				</div>
-			</div>
-		</a>
-		<a href="" id="scanMenu">
-			<div class="span3" style="width:33.3%">
-				<div class="menu-item">
-					<div class="span12">
-						<img src="../img_new/scanner-1-color-white.svg">
-					</div>
-					<div class="span12">
-						<span class="i18n" data-key="Scanner">Scanner</span>
+	<div style="display: flex; background: #343862;">
+		<div class="span12 footer media-group subMenu" style="width: 100%;">
+			<a href="" id="storeMenu">
+				<div class="span3" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/store-color-white.svg">
+						</div>
+						<div class="span12">
+							<span class="i18n" data-key="Store">Store</span>
+						</div>
 					</div>
 				</div>
-			</div>
-		</a>
-		<a href="" id="auctionMenu">
-			<div class="span3 active" style="width:33.3%">
-				<div class="menu-item">
-					<div class="span12">
-						<img src="../img_new/ticket-color-white.svg">
-					</div>
-					<div class="span12">
-						<span class="i18n" data-key="Auction">Auction</span>
+			</a>
+			<a href="" id="scanMenu">
+				<div class="span3" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/scanner-1-color-white.svg">
+						</div>
+						<div class="span12">
+							<span class="i18n" data-key="Scanner">Scanner</span>
+						</div>
 					</div>
 				</div>
-			</div>
-		</a>
+			</a>
+			<a href="" id="auctionMenu">
+				<div class="span3 active" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/ticket-color-white.svg">
+						</div>
+						<div class="span12">
+							<span class="i18n" data-key="Auction">Auction</span>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
 	</div>
 
 	<div class="container">
@@ -589,7 +592,7 @@
 
 	<div id="spinner"></div>
 
-	<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
+	<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;">
 		<div class="span12 footer">
 			<div class="span3">
 				<a href="../reg/parent_detail.html" id="mainLink">

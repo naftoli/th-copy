@@ -7,7 +7,7 @@
                 </div>
             </nav>
         </div>-->
-    <div style="position: fixed;width: 100%;bottom:0px; ">
+    <div style="position: fixed;width: 100%;bottom:0px; background:#4258a2; display:flex;">
         <div class="span12 footer">
         		<div class="span3">
 			<? 

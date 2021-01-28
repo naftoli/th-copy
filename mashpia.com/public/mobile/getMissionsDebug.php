@@ -805,7 +805,7 @@ $he_chars = array(
         </div>
     </div>
 <?php } ?>
-<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
+<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background:#4258a2; display:flex;">
     <div class="span12 footer">
 		<div class="span3" id="mainLink">
 			<? 

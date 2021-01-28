@@ -564,10 +564,7 @@
         }
 
         .navRaffleFlagContainer {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            background: #4258a2;
+            background: #343862;
             position: fixed;
             top: 70px;
             left: 0;
@@ -575,7 +572,15 @@
             z-index: 2;
         }
 
-        .navRaffleFlagContainer>* {
+        .navRaffleFlagContainer>div {
+            max-width: 1024px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .navRaffleFlagContainer>div>* {
             flex: 1 1 auto;
             display: flex;
             justify-content: center;
@@ -591,7 +596,7 @@
         }
 
         .activeFlagLink {
-            background: #343862;
+            background: #4358a2;
         }
     </style>
 </head>
@@ -609,15 +614,20 @@
             </a>
         </div>
         <div class="navRaffleFlagContainer">
-            <a href="#" id="flagLink5">
-                <img class="flagImg" src="/mobile/reg/images/5-flag.png" data-category="Medal Board" alt="bug-report">
-            </a>
-            <a href="#" id="flagLink60">
-                <img class="flagImg" src="/mobile/reg/images/60-flag.png" data-category="Medal Board" alt="bug-report">
-            </a>
-            <a href="#" id="flagLink180">
-                <img class="flagImg" src="/mobile/reg/images/180-flag.png" data-category="Medal Board" alt="bug-report">
-            </a>
+            <div>
+                <a href="#" id="flagLink5">
+                    <img class="flagImg" src="/mobile/reg/images/5-flag.png" data-category="Medal Board"
+                        alt="bug-report">
+                </a>
+                <a href="#" id="flagLink60">
+                    <img class="flagImg" src="/mobile/reg/images/60-flag.png" data-category="Medal Board"
+                        alt="bug-report">
+                </a>
+                <a href="#" id="flagLink180">
+                    <img class="flagImg" src="/mobile/reg/images/180-flag.png" data-category="Medal Board"
+                        alt="bug-report">
+                </a>
+            </div>
         </div>
         <div class="rafflesContainer">
             <div class="headerRaffleInfo">
@@ -662,7 +672,8 @@
                 </div>
             </div>
         </div>
-        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+        <div class="span12"
+            style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;">
             <div class="span12 footer">
                 <div class="span3">
                     <a href="/mobile/reg/parent_detail.html" id="mainLink">

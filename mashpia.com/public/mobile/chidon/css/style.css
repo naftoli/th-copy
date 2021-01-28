@@ -86,7 +86,7 @@ body{
 .l-4 .medal-sub{width: 75%;position: relative;margin: 0px 10%;margin-top: -10px;background-repeat: no-repeat;background-size: 100% 100%;}
 .l-4 .medal-sub span{color:white;line-height: 26px;font-family: font1;font-size: 24px;display: block;margin-top: 12px;}
 
-.footer{text-align: center;display: table;max-width: 1014px;width: 100%;}
+.footer{text-align: center;display: table;max-width: 1024px;width: 100%;}
 .footer .span3{background-color: #4258a2;}
 .footer .span3 span{ padding:5px; color: white; font-size: 20px; font-family: font1;}
 /*.footer .span3:first-child{border-bottom-left-radius: 5px;}*/
@@ -162,7 +162,8 @@ input.form-control:not(:focus){border:0px solid transparent;}
 .page5 .lb-add-child{color:#35559f;font-size:30px;}
 .page5 .lb-new-registration{color:#075025;font-size:30px;}
 .page5 .chilrens{width:100%;list-style-type:none}
-.page5 .chilrens .row {border-top:1px solid #e6e6e6;padding-top:10px;padding-bottom:20px}
+.page5 .chilrens .row {border-top:1px solid #e6e6e6;padding-top:10px;padding-bottom:20px;    max-width: 1024px;
+    margin: auto;}
 .page5 .children-avatar{background:#31559f;border-radius:50%;padding: 5px;}
 .page5 .children-mark{position: absolute;bottom: -10px;right: 10px;width:40%}
 .page5 .avatar-container{position:relative;padding-bottom:20px}
