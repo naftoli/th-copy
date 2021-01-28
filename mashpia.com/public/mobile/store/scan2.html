@@ -307,7 +307,9 @@
 			display: table;
 			margin-left: auto;
 			margin-right: auto;
-			float: none
+			float: none;
+			max-width: 1024px;
+			margin: auto;
 		}
 
 		.footer .span3 {
@@ -457,6 +459,11 @@
 		#scanner {
 			max-width: 200px;
 		}
+
+		.content {
+			max-width: 1024px;
+			margin: auto;
+		}
 	</style>
 </head>
 
@@ -471,44 +478,45 @@
 
 	<div class="container">
 		<div class="content">
-
-			<div class="span12 footer media-group subMenu" style="width: 100%;">
-				<a href="" id="storeMenu">
-					<div class="span3" style="width:50%">
-						<div class="menu-item">
-							<div class="span12">
-								<img src="store.gif">
-							</div>
-							<div class="span12">
-								<span>Store</span>
-							</div>
-						</div>
-					</div>
-				</a>
-				<a href="" id="scanMenu">
-					<div class="span3 active" style="width:50%">
-						<div class="menu-item">
-							<div class="span12">
-								<img src="scanner.gif">
-							</div>
-							<div class="span12">
-								<span>Scanner</span>
+			<div style="display: flex; background: #343862;">
+				<div class="span12 footer media-group subMenu" style="width: 100%;">
+					<a href="" id="storeMenu">
+						<div class="span3" style="width:50%">
+							<div class="menu-item">
+								<div class="span12">
+									<img src="store.gif">
+								</div>
+								<div class="span12">
+									<span>Store</span>
+								</div>
 							</div>
 						</div>
-					</div>
-				</a>
-				<!-- <a href="" id="auctionMenu">
-                        <div class="span3" style="width:33.3%">
-                            <div class="menu-item">
-                                <div class="span12">
-                                    <img src="/mobile/reg/icons/auction.gif">
-                                </div>
-                                <div class="span12">
-                                    <span>Auction</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a> -->
+					</a>
+					<a href="" id="scanMenu">
+						<div class="span3 active" style="width:50%">
+							<div class="menu-item">
+								<div class="span12">
+									<img src="scanner.gif">
+								</div>
+								<div class="span12">
+									<span>Scanner</span>
+								</div>
+							</div>
+						</div>
+					</a>
+					<!-- <a href="" id="auctionMenu">
+							<div class="span3" style="width:33.3%">
+								<div class="menu-item">
+									<div class="span12">
+										<img src="/mobile/reg/icons/auction.gif">
+									</div>
+									<div class="span12">
+										<span>Auction</span>
+									</div>
+								</div>
+							</div>
+						</a> -->
+				</div>
 			</div>
 
 			<div class="personalImg"></div>
@@ -532,7 +540,7 @@
 
 	<div id="spinner"></div>
 
-	<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
+	<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;">
 		<div class="span12 footer">
 			<div class="span3">
 				<a href="/mobile/reg/parent_detail.html" id="mainLink">

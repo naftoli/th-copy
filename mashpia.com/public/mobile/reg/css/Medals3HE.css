@@ -102,11 +102,10 @@ body {
 
 .footer {
     text-align: center;
-    border-top-width: 2px;
-    border-top-style: solid;
-    border-top-color: #9f9f9f;
     display: table;
-    width: 100%
+    width: 100%;
+    max-width: 1024px;
+    margin: auto;
 }
 
     .footer .span3 {
@@ -131,7 +130,6 @@ body {
     }
 
     .footer .span3.active {
-        background-image: -webkit-linear-gradient(top,#e9e9e9,#b7b8b9);
         background-position: initial initial;
         background-repeat: initial initial
     }

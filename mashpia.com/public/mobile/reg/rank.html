@@ -148,11 +148,10 @@
 
         .footer {
             text-align: center;
-            border-top-width: 2px;
-            border-top-style: solid;
-            border-top-color: #9f9f9f;
             display: table;
-            width: 100%
+            width: 100%;
+            max-width: 1024px;
+            margin: auto;
         }
 
         .footer .span3 {
@@ -628,7 +627,7 @@
 
     <div class="container">
         <div class="span12" style="width:100%;margin:0 auto;float:none;margin-bottom: 100px">
-            <div class="span12 body">
+            <div class="span12 body" style="display: flex; background: #343862;">
                 <div class="span12 footer media-group subMenu" style="width: 100%;">
                     <a href="" id="leaderMenu">
                         <div class="span3" style="width: 33%;">
@@ -757,7 +756,8 @@
                 </div>
             </div>
         </div>
-        <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+        <div class="span12"
+            style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;">
             <div class="span12 footer">
                 <div class="span3">
                     <a href="parent_detail.html" id="mainLink">

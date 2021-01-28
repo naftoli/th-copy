@@ -350,7 +350,9 @@ label.checkbox input[type=checkbox]:checked ~ .check {
     display: table;
     margin-left: auto;
     margin-right: auto;
-    float: none;}
+	float: none;
+	max-width: 1024px;
+    margin: auto;}
 .footer .span3{background-color: #4258a2;}
 .footer .span3 span{ padding:5px; color: white; font-size:18px; font-family: font1;}
 .footer .menu-item{ width : 120px; height:80px;margin: 0 auto;}
