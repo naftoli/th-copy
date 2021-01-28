@@ -12059,7 +12059,9 @@ body {
 .footer {
     text-align: center;
     display: table;
-    width: 100%
+    width: 100%;
+    max-width: 1024px;
+    margin: auto;
 }
 
 .subMenu {
@@ -12364,7 +12366,9 @@ input.form-control:not(:focus) {
     .page5 .chilrens .row {
         border-top: 1px solid #e6e6e6;
         padding-top: 10px;
-        padding-bottom: 20px
+        padding-bottom: 20px;
+        max-width: 1024px;
+        margin: auto;
     }
 
     .page5 .chilrens .inner .row {
@@ -12433,7 +12437,9 @@ input.form-control:not(:focus) {
 }
 
 .page5 .footer {
-    background: #e6e6e6
+    background: #e6e6e6;
+    max-width: 1024px;
+    margin: auto;
 }
 
 .register-box {
@@ -13040,7 +13046,9 @@ input.form-control:not(:focus) {
     }
 
     .page5 .chilrens .row {
-        padding-bottom: 10px
+        padding-bottom: 10px;
+        max-width: 1024px;
+        margin: auto;
     }
 
     .page5 .childrens-content-h1 {
@@ -13490,7 +13498,9 @@ input.form-control:not(:focus) {
 
     .page5 .chilrens .row {
         padding-bottom: 0;
-        padding-top: 5px
+        padding-top: 5px;
+        max-width: 1024px;
+        margin: auto;
     }
 
     .page5 .childrens-content-h1 {

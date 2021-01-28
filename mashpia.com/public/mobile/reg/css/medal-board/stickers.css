@@ -14,7 +14,7 @@ nav.navbar .navbar-title {
     nav.navbar { padding: .5rem 1rem; }
 }
 /* Navigation rows (nav-rows top and bottom) */
-.nav-row { background: #4258a2; text-align: center; margin: 0px; line-height: .96; }
+.nav-row { background: #4258a2; text-align: center; margin: 0px; line-height: .96; max-width: 1024px; margin: auto; }
 .nav-row a { display: inline-block; width: 100%; }
 .nav-row a:hover { text-decoration: none; }
 .nav-row .active, .nav-row > div:hover { background: #343862; cursor: pointer; }
