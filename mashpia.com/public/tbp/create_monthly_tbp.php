@@ -16,7 +16,7 @@ $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $mission_number = $row['mission_number'] + 1;
 
-$id = 21001;
+$id = 21005;
 $pic = '6Chazorah-Tanya';
 
 $school_types = [
@@ -100,7 +100,6 @@ for ($i = 1; $i <= 13; $i++) {
                                         mandatory_qty = 0, 
                                         optional_qty = 1, 
                                         daily_task = 0, 
-                                        label_id = 33, 
                                         needed = 1, 
                                         focus_task = 0, 
                                         default_on = " . (in_array($type, [2, 3]) ? 1 : 0) . ", 
