@@ -35,18 +35,16 @@ for ($i = 6; $i <= 14; $i++) {
 }
 
 // create monthly task
-$task = "By now, you should know lines 1 - x of תניא בעל פה. Enter the total amount of lines that you have been tested on (by a parent or teacher).";
-$task_he = "ביז יעצט, דו דארפסט שוין וויסן פון שורה א' - x פון תניא בעל פה. שרייב אויף וויפיל שורות ביסטו שוין פארהערט געווארן (דורך אן עלטערן אדער מלמד(ת))";
 for ($i = 1; $i <= 13; $i++) {
     $jd = jewishtojd($i, 1, 5781);
     if ($jd < 2459251) continue; // only upload tasks after feb 5, 2021
     foreach ($school_types as $lang => $types) {
         if ($lang == 1) {
-            $short_name = '';
-            $task = '';
+            $short_name = 'Tanya Testing';
+            $task = 'By now, you should know lines 1 - x of תניא בעל פה. Enter the total amount of lines that you have been tested on (by a parent or teacher).';
         } else if ($lang == 2) {
-            $short_name = '';
-            $task = '';
+            $short_name = 'מבחן תניא';
+            $task = "ביז יעצט, דו דארפסט שוין וויסן פון שורה א' - x פון תניא בעל פה. שרייב אויף וויפיל שורות ביסטו שוין פארהערט געווארן (דורך אן עלטערן אדער מלמד(ת))";
         }
         foreach ($types as $type) {
             foreach ($ladders as $ladder) {
