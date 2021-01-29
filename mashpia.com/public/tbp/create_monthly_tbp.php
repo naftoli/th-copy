@@ -35,7 +35,7 @@ for ($i = 6; $i <= 14; $i++) {
 }
 
 // create monthly task
-for ($i = 1; $i <= 13; $i++) {
+for ($i = 7; $i <= 13; $i++) { // only start from rosh chodesh adar
     $jd = jewishtojd($i, 1, 5781);
     if ($jd < 2459251) continue; // only upload tasks after feb 5, 2021
 
