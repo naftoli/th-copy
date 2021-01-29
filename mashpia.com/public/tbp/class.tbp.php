@@ -17,7 +17,7 @@ class TanyaBalPeh {
         while ($row = mysql_fetch_assoc($result)) {
             $this->weeks[] = $row;
         }
-        $this->grid_id = [21100];
+        $this->grid_id = [21013,21015];
         $this->subject_id = 27;
         $this->start = 0;
         $this->end = 0;
@@ -34,7 +34,7 @@ class TanyaBalPeh {
     }
 
     public function setQuota($type, $id = 0) {
-        $sql = "select sum(qty) as total 
+        $sql = "select sum(quantity) as total 
                 from date_tasks dt 
                 join date_tasks_missions dtm using (date_tasks_mission_id) 
                 join user_tracks ut using (subject_id, level, track_id) 
@@ -47,7 +47,8 @@ class TanyaBalPeh {
         if ($this->start) $sql .= " and mark_date >= " . $this->start;
         if ($this->end) $sql .= " and mark_date <= " . $this->end;
         $result = mysql_query($sql);
-        $this->quota = $result['total'];
+        $row = mysql_fetch_assoc($result);
+        $this->quota = $row['total'];
     }
 
     public function setDone($type, $id = 0) {
@@ -65,7 +66,8 @@ class TanyaBalPeh {
         if ($this->start) $sql .= " and mark_date >= " . $this->start;
         if ($this->end) $sql .= " and mark_date <= " . $this->end;
         $result = mysql_query($sql);
-        $this->done = $result['total'];
+        $row = mysql_fetch_assoc($result);
+        $this->done = $row['total'];
     }
 
     public function getQuota() {
