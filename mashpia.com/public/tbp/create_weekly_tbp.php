@@ -34,6 +34,7 @@ if (($handle = fopen("ladders.csv", "r")) !== FALSE) {
         $type = $data[$i++]; // if it's new lines or reviewing existing lines
         $start_date = $data[$i++];
         if (!is_numeric($start_date)) continue;
+        if ($start_date < 2459251) continue; // only upload tasks after feb 5, 2021
         $date_types[$start_date] = $type;
         while (isset($data[$i])) {
             for ($j = 0; $j < 3; $j++) {
@@ -52,10 +53,8 @@ if (($handle = fopen("ladders.csv", "r")) !== FALSE) {
         }
     }
 }
-echo "<pre>";
-//print_r($date_types);
-//print_r($ladders);
-echo "</pre>";
+
+$uploaded = 0;
 
 $school_types = [
     1 => [2, 3, 12, 13],
@@ -72,29 +71,29 @@ foreach ($ladders as $start_date => $missions) {
                                 and level = " . $missions['age'][$i] . " 
                                 and track_id = " . $missions['ladder'][$i] . " 
                                 and lang_id = " . $lang;
-                echo $mission_qry . "<br />";
-//                $mission_res = mysql_query($mission_qry);
-//                if (mysql_num_rows($mission_res) > 0) {
-//                    $mission_id = mysql_fetch_assoc($mission_res)['date_tasks_mission_id'];
-//                } else {
-//                    $mission_qry = "insert into date_tasks_missions
-//                                    set subject_id = 27,
-//                                    mission_value = 1.0,
-//                                    mission_number = " . ($mission_number++) . ",
-//                                    mission_name = 'תניא בעל פה',
-//                                    mission_description = 'תניא בעל פה',
-//                                    school_type_id = " . $type . ",
-//                                    start_date = " . $start_date . ",
-//                                    end_date = " . ($start_date + 6) . ",
-//                                    default_on = " . (in_array($type, [2,3]) ? 1 : 0) . ",
-//                                    level = " . $missions['age'][$i] . ",
-//                                    track_id = " . $missions['ladder'][$i] . ",
-//                                    lang_id = " . $lang;
-//                    if (mysql_query($mission_qry)) {
-//                        $mission_id = mysql_insert_id();
-//                    }
-//                }
-                $mission_id = 1111;
+//                echo $mission_qry . "<br />";
+                $mission_res = mysql_query($mission_qry);
+                if (mysql_num_rows($mission_res) > 0) {
+                    $mission_id = mysql_fetch_assoc($mission_res)['date_tasks_mission_id'];
+                } else {
+                    $mission_qry = "insert into date_tasks_missions
+                                    set subject_id = 27,
+                                    mission_value = 1.0,
+                                    mission_number = " . ($mission_number++) . ",
+                                    mission_name = 'תניא בעל פה',
+                                    mission_description = 'תניא בעל פה',
+                                    school_type_id = " . $type . ",
+                                    start_date = " . $start_date . ",
+                                    end_date = " . ($start_date + 6) . ",
+                                    default_on = " . (in_array($type, [2,3]) ? 1 : 0) . ",
+                                    level = " . $missions['age'][$i] . ",
+                                    track_id = " . $missions['ladder'][$i] . ",
+                                    lang_id = " . $lang;
+                    if (mysql_query($mission_qry)) {
+                        $mission_id = mysql_insert_id();
+                    }
+                }
+//                $mission_id = 1111;
                 if ($mission_id) {
                     $id = $ids[$date_types[$start_date]];
                     $pic = $pics[$date_types[$start_date]];
@@ -134,32 +133,11 @@ foreach ($ladders as $start_date => $missions) {
                                 medium_pic = '" . $pic . "', 
                                 mission_marking = 1, 
                                 grid_marking = 1";
-                    echo $task_qry . "<br /><br />";
+//                    echo $task_qry . "<br /><br />";
+                    if (mysql_query($task_qry)) $uploaded++;
                 }
             }
         }
     }
 }
-
-$ladders = [];
-for ($i = 1; $i <= 5; $i++) {
-    $ladders[] = $i;
-}
-
-$years = [];
-for ($i = 6; $i <= 14; $i++) {
-    $years[] = $i;
-}
-
-// create monthly task
-$task = "By now, you should know lines 1 - x of תניא בעל פה. Enter the total amount of lines that you have been tested on (by a parent or teacher).";
-for ($i = 1; $i <= 13; $i++) {
-    $jd = jewishtojd($i, 1, 5781);
-    foreach ($school_types as $type) {
-        foreach ($ladders as $ladder) {
-            foreach ($years as $year) {
-
-            }
-        }
-    }
-}
+echo "Created: " . $uploaded . " tasks.";
