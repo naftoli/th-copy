@@ -87,7 +87,7 @@ for ($i = 1; $i <= 13; $i++) {
                                         level = " . $year . ",
                                         track_id = " . $ladder . ",
                                         lang_id = " . $lang;
-                        echo $mission_qry . "<br />";
+//                        echo $mission_qry . "<br />";
                         if (mysql_query($mission_qry)) {
                             $mission_id = mysql_insert_id();
 //                            $mission_id = 9999;
