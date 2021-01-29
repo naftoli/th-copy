@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -8,6 +6,8 @@ if ($admin_user['auth'] != 'super') {
     echo "No permission.";
     exit;
 }
+
+$created = 0;
 
 $subject_id = 27;
 
@@ -55,10 +55,11 @@ for ($i = 1; $i <= 13; $i++) {
                                 where subject_id = 27 
                                 and school_type_id = " . $type . " 
                                 and level = " . $year . " 
-                                and ladder_id = " . $ladder . " 
+                                and track_id = " . $ladder . " 
                                 and lang_id = " . $lang . " 
                                 and start_date = " . $start_date. " 
-                                and grid_id = in (21013, 21015)";
+                                and grid_id in (21013, 21015)";
+//                    echo $quota_qry . "<br />";
                     $quota_res = mysql_query($quota_qry);
                     if (mysql_num_rows($quota_res)) {
                         $quota_row = mysql_fetch_assoc($quota_res);
@@ -87,9 +88,9 @@ for ($i = 1; $i <= 13; $i++) {
                                         track_id = " . $ladder . ",
                                         lang_id = " . $lang;
                         echo $mission_qry . "<br />";
-//                        if (mysql_query($mission_qry)) {
-//                            $mission_id = mysql_insert_id();
-                            $mission_id = 9999;
+                        if (mysql_query($mission_qry)) {
+                            $mission_id = mysql_insert_id();
+//                            $mission_id = 9999;
                             $task_qry = "insert into date_tasks 
                                         set date_tasks_mission_id = " . $mission_id . ", 
                                         name = '" . $task . "', 
@@ -108,11 +109,13 @@ for ($i = 1; $i <= 13; $i++) {
                                         medium_pic = '" . $pic . "', 
                                         mission_marking = 1, 
                                         grid_marking = 1";
-                            echo $task_qry . "<br /><br />";
-//                        }
+//                            echo $task_qry . "<br /><br />";
+                            if (mysql_query($task_qry)) $created++;
+                        }
                     }
                 }
             }
         }
     }
 }
+echo "Created: " . $created . " tasks.";
