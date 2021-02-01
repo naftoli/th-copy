@@ -153,6 +153,14 @@ $row = mysql_fetch_assoc($query); // and get the user
 $lang = $row['lang_id']; // update the language
 $user = new user($row); // create a new user
 
+$school = $user->school_id;
+$grade = $user->class_id;
+
+if (in_array($school, [180])) {
+    echo "Your school does not allow missions to be entered here.";
+    exit;
+}
+
 $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
@@ -225,11 +233,11 @@ $detect = new Mobile_Detect;
 
 /********************** LOAD UP THE MISHNA INFO **********************/
 require '../class.mishnaInfo.php';
-$sql = "select school_id, class_id from users where user_id = " . $user_id; // get the school and class id from the users table for the given user
-$result = mysql_query($sql);
-$row = mysql_fetch_assoc($result);
-$school = $row['school_id'];
-$grade = $row['class_id'];
+//$sql = "select school_id, class_id from users where user_id = " . $user_id; // get the school and class id from the users table for the given user
+//$result = mysql_query($sql);
+//$row = mysql_fetch_assoc($result);
+//$school = $row['school_id'];
+//$grade = $row['class_id'];
 $assigned = MishnaInfo::getAssignedAll( $school, $grade, $user_id, true );
 $he_chars = array(
 	1	=>	'א',	2	=>	'ב',	3	=>	'ג',		4	=>	'ד',		5	=>	'ה',
