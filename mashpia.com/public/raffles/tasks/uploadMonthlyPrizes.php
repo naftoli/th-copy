@@ -46,22 +46,22 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
             $prizes[] = intval( $value );
         }
     }
-     echo "School: " . $school_number . "<br />";
-     echo "<pre>"; print_r( $prizes ); echo "</pre>";
-     echo "<br /><br />";
-//    foreach ($prizes as $prize) {
-//        if ($prize > 0) {
-//            $res = $stmt->execute([
-//                ':raffle' => $raffle_id,
-//                ':prize'  => $prize,
-//                ':school' => $schools[$school_number]
-//            ]);
-//            if (!$res) {
-//                $success = false;
-//                break 2;
-//            }
-//        }
-//    }
+//     echo "School: " . $school_number . "<br />";
+//     echo "<pre>"; print_r( $prizes ); echo "</pre>";
+//     echo "<br /><br />";
+    foreach ($prizes as $prize) {
+        if ($prize > 0) {
+            $res = $stmt->execute([
+                ':raffle' => $raffle_id,
+                ':prize'  => $prize,
+                ':school' => $schools[$school_number]
+            ]);
+            if (!$res) {
+                $success = false;
+                break 2;
+            }
+        }
+    }
 }
 if ( $success ) {
     $MASHPIA_DB->commit();
