@@ -22,7 +22,8 @@ foreach ($rows as $row) {
 }
 
 //load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load("GrandRafflePrizes5781_2.xlsx");
+$i = isset($_GET['id']) ? '_' . $_GET['id'] : '';
+$objPHPExcel = PHPExcel_IOFactory::load("GrandRafflePrizes5781{i}.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
 $stmt = $MASHPIA_DB->prepare("
