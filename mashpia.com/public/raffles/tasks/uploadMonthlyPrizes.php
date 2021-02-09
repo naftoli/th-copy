@@ -12,13 +12,28 @@ if ( $admin_user['auth'] != 'super' ) {
     exit;
 }
 
-$raffle_id = 213;
-
 $schools = [];
 $result = $MASHPIA_DB->query("select school_number, school_id from schools");
 $rows = $result->fetchAll();
 foreach ($rows as $row) {
     $schools[$row['school_number']] = $row['school_id'];
+}
+
+$i = '';
+$raffle_id = 213;
+if (isset($_GET['id'])) {
+    $i = '_' . $_GET['id'];
+    switch (intval($_GET['id'])) {
+        case 2:
+            $raffle_id = 213;
+            break;
+        case 3:
+            $raffle_id = 214;
+            break;
+        case 4:
+            $raffle_id = 215;
+            break;
+    }
 }
 
 //load spreadsheet
