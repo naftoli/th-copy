@@ -37,7 +37,6 @@ if (isset($_GET['id'])) {
 }
 
 //load spreadsheet
-$i = isset($_GET['id']) ? '_' . $_GET['id'] : '';
 $objPHPExcel = PHPExcel_IOFactory::load("GrandRafflePrizes5781{$i}.xlsx");
 $objWorksheet = $objPHPExcel->getActiveSheet();
 
