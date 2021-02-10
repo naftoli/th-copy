@@ -13,6 +13,7 @@ switch ( $row['school_type_id'] ) {
         $subjects = [ 1, 4, 21, 27, 41, 42, 45, 90, 92, 93, 94, 100 ];
         break;
     case 4: case 5:
+        $subjects = [];
         $sql = "select subject_id from subjects where inst_id = 4";
         $res = mysql_query($sql);
         while ($row = mysql_fetch_assoc($res)) {
