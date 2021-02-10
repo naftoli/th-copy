@@ -232,7 +232,8 @@ require_once('calendar.php');
                             $middle *= 2;
                             echo "</div><div class='missionSelection'>";
                         }
-                        echo "<input type='checkbox' class='mission' name='missions[]' value='" . $id . "' />" . $mission . "<br />";
+                        echo "<input type='checkbox' class='mission' name='missions[]' value='" . $id . "' />" . $mission['name'] .
+                            " <span style='font-size: 12px'>(" . $mission['type'] . ")</span><br />";
                     }
                     echo "</div>";
                 }

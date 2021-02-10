@@ -21,12 +21,17 @@ class MissionsDone {
     }
     
     public static function getAllMissions() {
-        $sql = "select subject_id, subject_name from subjects 
+        $sql = "select inst_id, subject_id, subject_name from subjects 
                 where subject_type not in ('school_points', 'Hakhel') 
-                and subject_id not in (91, 99)"; 
+                and subject_id not in (91, 99) 
+                and inst_id in (2, 4)
+                order by inst_id, subject_id";
         $result = mysql_query( $sql );
         while ( $row = mysql_fetch_assoc( $result ) ) {
-            $missions[$row['subject_id']] = $row['subject_name'];
+            $missions[$row['subject_id']] = [
+                'name'  => $row['subject_name'],
+                'type'  => $row['inst_id'] == 2 ? 'Chayolei' : 'Day Schools'
+            ];
         }
         return $missions;
     }
