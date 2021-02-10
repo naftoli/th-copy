@@ -73,7 +73,7 @@ abstract class MissionDisplay {
 			125 =>  "day-school_Torah 250px.svg",
 			126 =>  "day-school_Shabbat 250px.svg",
 			127 =>  "day-school_Special Days 250px.svg",
-			129 =>  "day-school-Kosher 250px.svg",
+			129 =>  "day-school_Kosher 250px.svg",
 			130 =>  "day-school_Tefilla.svg",
 		    131 =>  "day-school-ahavat-yisrael.svg",
 		    132 =>  "day-school-brachot.svg",
@@ -608,7 +608,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($shabbos_task->mandatory_qty) {
+										    if ($shabbos_task->mandatory_qty && !in_array($shabbos_task->subject_id, $this->daySchoolSubjects)) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
