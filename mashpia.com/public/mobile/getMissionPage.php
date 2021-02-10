@@ -903,6 +903,9 @@ $daySchoolSubjects = setDaySchoolSubjects();
         </div>
     </div>
 <?php } ?>
+
+<div class="footer-spacer"></div>
+
 <div style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background:#4258a2; display:flex;">
     <div class="span12 footer">
 		<div class="span3" id="mainLink">
@@ -979,15 +982,23 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		right: 0px;
 	}
 	textarea {
-  width: 100%;
-  height: 150px;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  resize: none;
-}
+		width: 100%;
+		height: 150px;
+		padding: 12px 20px;
+		box-sizing: border-box;
+		border: 2px solid #ccc;
+		border-radius: 4px;
+		background-color: #f8f8f8;
+		resize: none;
+	}
+	.footer-spacer {
+		margin-top: 93.66px;
+	}
+	@media screen and (max-width: 639px) {
+		.footer-spacer {
+			margin-top: 63.66px;
+		}
+	}
 </style>
 
 <script src="/js/utils/browser_detect.js"></script>
