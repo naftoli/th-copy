@@ -8,10 +8,11 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+$grades = [];
 $info = [];
 foreach ($schools as $id => $school) {
     $sql = "SELECT 
-                u.user_id, first, last, school_name, class_grade, class_sub, ut.*
+                u.user_id, first, last, school_name, c.class_id, class_grade, class_sub, ut.*
             FROM
                 users u
                     JOIN
@@ -29,6 +30,7 @@ foreach ($schools as $id => $school) {
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $grade = $row['class_grade'] . ' ' . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+        $grades[$row['class_grade']][$row['class_id']] = $grade;
         $info[$id][$grade][] = $row;
     }
 }
@@ -54,11 +56,16 @@ foreach ($schools as $id => $school) {
         Use the following form to choose the tbp ladder you would like the children to be on.
     </p>
     <p>
-        Change all children in Year / Age
-        <select id="fromAge">
-            <?php for ($i = 6; $i <= 14; $i++) : ?>
-                <option value="<?=$i?>"><?=$i?></option>
-            <?php endfor; ?>
+        Change all children in Grade
+        <select id="fromGrade">
+            <?php
+            foreach ($grades as $grade => $classes) {
+                echo "<option value='grade_" . $grade . "'>" . $grade . "</option>";
+                foreach ($classes as $class_id => $class_name) {
+                    echo "<option value='class_" . $class_id . ">" . $class_name . "</option>";
+                }
+            }
+            ?>
         </select>
         to ladder
         <select id="toLadder">
@@ -83,7 +90,7 @@ foreach ($schools as $id => $school) {
             foreach ($more as $grade => $ladders) {
                 foreach ($ladders as $row) {
                     echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] .
-                        "</td><td class='level_" . $row['level'] . "'>" . $row['level'] . "</td><td>";
+                        "</td><td>" . $row['level'] . "</td><td>";
                     echo "<select name='ladder' class='ladder' id=" . $row['user_id'] . ">";
                     for ($i = 1; $i <= 5; $i++) {
                         echo "<option value=" . $i;
@@ -99,10 +106,11 @@ foreach ($schools as $id => $school) {
     </table>
 </body>
 <script>
+    const grades = <?=$grades?>;
     $(".ladder").change( function() {
         let id = $(this).attr('id')
         let val = $(this).val()
-        $.post('changeLadder.php', { users: [id], ladder: val }, function(success) {
+        $.post('changeLadder.php', { user: id, ladder: val }, function(success) {
             if (!success) {
                 alert('Error updating ladder.')
             } else {
@@ -112,28 +120,28 @@ foreach ($schools as $id => $school) {
     })
 
     $("#changeLadders").click( function() {
-        const age = $("#fromAge").val();
+        const grade = $("#fromGrade").val();
         const ladder = $("#toLadder").val();
-        changeAll(age, ladder);
-    })
-
-    function changeAll(age, ladder) {
-        let users = []
-        $(".level_" + age).each( function() {
-            const ladderElem = $(this).parent().find('.ladder')
-            const curLadder = $(ladderElem).val()
-            if (ladder != curLadder) {
-                $(ladderElem).val(ladder)
-                users.push($(ladderElem).attr('id'))
-            }
-        })
-        $.post('changeLadder.php', { users: users, ladder: ladder }, function(success) {
+        // figure out what grade refers to
+        let class_grade = 0
+        let class_id = 0
+        if (grade.includes('grade')) {
+            // it's a grade not a class
+            const pos = grade.indexOf('grade_')
+            class_grade = grade.substring(pos + 6)
+        } else if (grade.includes('class')) {
+            // get class
+            const pos = grade.indexOf('class_')
+            class_id = grade.substring(pos + 6)
+        }
+        $.post('changeLadder.php', { grade: class_grade, id: class_id, ladder: ladder }, function(success) {
             if (!success) {
                 alert('Error updating ladders.')
             } else {
                 alert('Ladders changed.')
+                location.reload()
             }
         })
-    }
+    })
 </script>
 </html>
