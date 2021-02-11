@@ -19,7 +19,8 @@
       { "label": "Parents", "path": "/bm/parents" },
       { "label": "Staff", "path": "/bm/staff" },
       { "label": "Bases", "user_types": [ "HQ", "INST" ], "path": "/bm/base" },
-      { "label": "Base", "user_types": [ "BC" ], "path": "/bm/base" }
+      { "label": "Base", "user_types": [ "BC" ], "path": "/bm/base" },
+      { "label": "Modules", "path": "/bm/modules" }
     ]
   },
   {

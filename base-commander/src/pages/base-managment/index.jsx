@@ -7,6 +7,7 @@ import SoldiersPages from './soldiers';
 import PlatoonPages from './platoons';
 import ParentPages from './parents';
 import StaffPages from './staff';
+import ModulePages from './module';
 import BasePages from './base';
 // functions
 import { isBC } from 'functions/login';
@@ -21,6 +22,7 @@ export class BaseManagmentIndexPage extends Component {
       <Route key={1} path={`${path}/platoons`} component={ PlatoonPages } />,
       <Route key={2} path={`${path}/parents`} component={ ParentPages } />,
       <Route key={3} path={`${path}/staff`} component={ StaffPages } />,
+      <Route key={3} path={`${path}/modules`} component={ ModulePages } />,
       <Route key={4} path={`${path}/base`} component={ BasePages } />,
     ];
 
