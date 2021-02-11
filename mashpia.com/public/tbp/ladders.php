@@ -53,6 +53,23 @@ foreach ($schools as $id => $school) {
     <p>
         Use the following form to choose the tbp ladder you would like the children to be on.
     </p>
+    <p>
+        Change all children in Year / Age
+        <select id="fromAge">
+            <?php for ($i = 6; $i <= 14; $i++) : ?>
+                <option value="<?=$i?>"><?=$i?></option>
+            <?php endfor; ?>
+        </select>
+        to ladder
+        <select id="toLadder">
+            <?php
+            for ($i = 1; $i <= 5; $i++) {
+                echo "<option value=" . $i . ">" . $i . "</option>";
+            }
+            ?>
+        </select>
+        <button id="changeLadders">Apply</button>
+    </p>
     <table>
         <tr>
             <th>School</th>
@@ -66,7 +83,7 @@ foreach ($schools as $id => $school) {
             foreach ($more as $grade => $ladders) {
                 foreach ($ladders as $row) {
                     echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] .
-                        "</td><td>" . $row['level'] . "</td><td>";
+                        "</td><td class='level_" . $row['level'] . "'>" . $row['level'] . "</td><td>";
                     echo "<select name='ladder' class='ladder' id=" . $row['user_id'] . ">";
                     for ($i = 1; $i <= 5; $i++) {
                         echo "<option value=" . $i;
@@ -85,7 +102,7 @@ foreach ($schools as $id => $school) {
     $(".ladder").change( function() {
         let id = $(this).attr('id')
         let val = $(this).val()
-        $.post('changeLadder.php', { user: id, ladder: val }, function(success) {
+        $.post('changeLadder.php', { users: [id], ladder: val }, function(success) {
             if (!success) {
                 alert('Error updating ladder.')
             } else {
@@ -93,5 +110,30 @@ foreach ($schools as $id => $school) {
             }
         })
     })
+
+    $("#changeLadders").click( function() {
+        const age = $("#fromAge").val();
+        const ladder = $("#toLadder").val();
+        changeAll(age, ladder);
+    })
+
+    function changeAll(age, ladder) {
+        let users = []
+        $(".level_" + age).each( function() {
+            const ladderElem = $(this).parent().find('.ladder')
+            const curLadder = $(ladderElem).val()
+            if (ladder != curLadder) {
+                $(ladderElem).val(ladder)
+                users.push($(ladderElem).attr('id'))
+            }
+        })
+        $.post('changeLadder.php', { users: users, ladder: ladder }, function(success) {
+            if (!success) {
+                alert('Error updating ladders.')
+            } else {
+                alert('Ladders changed.')
+            }
+        })
+    }
 </script>
 </html>
