@@ -32,7 +32,7 @@ $(".userMission").each( function() {
                 125 :  "day-school_Torah 250px.svg",
                 126 :  "day-school_Shabbat 250px.svg",
                 127 :  "day-school_Special Days 250px.svg",
-                129 :  "day-school-Kosher 250px.svg",
+                129 :  "day-school_Kosher 250px.svg",
                 130 :  "day-school_Tefilla.svg",
                 131 :  "day-school-ahavat-yisrael.svg",
                 132 :  "day-school-brachot.svg",
