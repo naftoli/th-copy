@@ -140,9 +140,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         else if ( $subject_id > 120 && subject_id <= 135 ) {
             if ( !in_array( $subject_id, [ 126, 127, 135 ] ) ) {
                 // daily subjects / tasks
-                $row['photo'] = 'images/backs/daySchools/daily' . $medal_name . '.png';
-            } else {
-                $row['photo'] = '';
+                $row['photo'] = 'images/backs/daySchools/daily/' . $medal_name . '.png';
             }
         }
         // 375 missions
