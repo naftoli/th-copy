@@ -136,6 +136,15 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         // 585 total missions
         else if ( in_array( $subject_id, [ 40, 94 ] ) )
             $row['photo'] = 'images/backs/yd/'.$medal_name.'.gif';
+        // day schools subjects
+        else if ( $subject_id > 120 && subject_id <= 135 ) {
+            if ( !in_array( $subject_id, [ 126, 127, 135 ] ) ) {
+                // daily subjects / tasks
+                $row['photo'] = 'images/backs/daySchools/daily' . $medal_name . '.png';
+            } else {
+                $row['photo'] = '';
+            }
+        }
         // 375 missions
         else
             $row['photo'] = 'images/backs/weekly/'.$medal_name.'.gif';
