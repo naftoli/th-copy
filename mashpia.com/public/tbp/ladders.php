@@ -51,8 +51,13 @@ foreach ($schools as $id => $school) {
 </head>
 <body>
     <?php require '../admin_header.php'; ?>
-    <h1>Choose TBP Ladder</h1>
+    <h1>Tanya in 5 Ladder Assignment</h1>
     <p>
+        Not sure which ladder to choose?<br />
+        Review the Tanya in 5 Ladder Overview and Growth Plan <a href="https://www.dropbox.com/s/dceat087m523my2/Tanya%20in%205%20Overview.pdf?dl=0">here</a> (pages 5-6)!
+        <br /><br />
+        Remember to visit the <a href="https://www.dropbox.com/sh/qm3jbn09qky9xny/AAAd4rc1vXOK2uaxZIPAimRZa?dl=0">Resource Library</a> for comprehensive resources including Tanya Cards, Yearly Schedules, and Audio tracks personalized for every grade and every ladder!
+        <br /><br />
         Use the following form to choose the tbp ladder you would like the children to be on.
     </p>
     <p>
