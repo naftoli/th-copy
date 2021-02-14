@@ -7,38 +7,46 @@ import { InlineSync } from 'components/ui';
 import { getModule, updateModule } from 'store/base/modules/operations';
 
 
-function ModuleControlRow (props) {
-  const {
-    moduleKey, title, module, loading, moduleLoading, selections,
-    canEnable, canDisable,
-    getModule, updateModule
-  } = props
+function ModuleControlRow ({
+  moduleKey, title, description, loading, updating, updatingValue, selections,
+  canEnable, canDisable,
+  getModule, updateModule
+}) {
 
-  const updateSetting = (value) => {
-    updateModule(moduleKey, selections)
+  const handleToggle = (value) => {
+    const {user_ids, class_ids, school_id } = selections
+    let data = {value, ...(user_ids.length ? {user_ids} : class_ids.length ? {class_ids} : {school_id})}
+    updateModule(moduleKey, data )
   }
   
   // componentDidMount
   useEffect(() => {
-    // console.log("in ModuleControlRow useEffect")
-    console.log(getModule)
     getModule(moduleKey);
   }, [])
 
   return (
     <Fragment>
       <Row>
-        <Col sm={6}>
-          {title}
+        <Col sm={8}>
+          <strong>{title}</strong>
+          <p>{description}</p>
         </Col>
-        <Col sm={6} style={{ textAlign: "end" }}>
-          <InlineSync loading={moduleLoading}/>
+        <Col sm={4} style={{ textAlign: "end", alignSelf: "center" }}>
+          {loading && !updating &&
+            <Fragment><InlineSync loading={true}/>{' '}</Fragment>
+          }
           <ButtonGroup>
-            <Button color="primary" onClick={() => updateSetting(false)} disabled={!canDisable}>
+            <Button color="primary" outline={canDisable} disabled={!canDisable} onClick={() => handleToggle(false)}>
               OFF
+              {updating && updatingValue === false &&
+                <Fragment>{' '}<InlineSync loading={true}/></Fragment>
+              }
             </Button>
-            <Button color="primary" onClick={() => updateSetting(true)} disabled={!canEnable}>
+            <Button color="primary" outline={canEnable} disabled={!canEnable} onClick={() => handleToggle(true)}>
               ON
+              {updating && updatingValue === true &&
+                <Fragment>{' '}<InlineSync loading={true}/></Fragment>
+              }
             </Button>
           </ButtonGroup>
         </Col>
@@ -49,34 +57,48 @@ function ModuleControlRow (props) {
 }
 const mapStateToProps = ({ base }, props) => {
   const { modules, bases: allBases, platoons: allPlatoons, soldiers: allSoldiers } = base
-  const { moduleKey, selectionScope, selectionIds} = props
+  const { moduleKey, selectionScope} = props;
+  const selectionIds = props.selectionIds ? props.selectionIds.map(id => parseInt(id, 10)) : []
   const module = modules[moduleKey]
-  console.log("modules", modules)
-  const loading = allBases.loading || allPlatoons.loading || allSoldiers.loading
-  const moduleLoading = !module || module.loading
+  const loading = !module || module.loading || (
+    selectionScope === "school" ? allBases.loading || allPlatoons.loading || allSoldiers.loading
+    : selectionScope === "class" ? allPlatoons.loading || allSoldiers.loading
+    : selectionScope === "user" ? allSoldiers.loading
+    : false
+  )
 
-  const isRecordSelected = r => {
-    // console.log(r, selectionScope+"_id", r[selectionScope+"_id"])
-    return selectionIds.includes(r[selectionScope+"_id"])
+  const updating = module && typeof module.loading === 'object'
+  const updatingValue = updating ? module.loading.value : undefined
+
+  const mapRecordIdsToInt = (records) => {
+    return records.map(r => ({
+      ...r,
+      ...(r.user_id ? {user_id: parseInt(r.user_id, 10)} : {}),
+      ...(r.class_id ? {class_id: parseInt(r.class_id, 10)} : {}),
+      ...(r.school_id ? {school_id: parseInt(r.school_id, 10)} : {})
+    }))
   }
-  const bases = ["school"].includes(selectionScope) ? allBases.bases.filter(isRecordSelected) : []
-  const platoons = ["school", "class"].includes(selectionScope) ? allPlatoons.platoons.filter(isRecordSelected) : []
-  const soldiers = selectionScope ? allSoldiers.soldiers.filter(isRecordSelected) : []
 
-  console.log(bases)
-  console.log(platoons)
-  console.log(soldiers)
+  const isRecordSelected = r => selectionIds.includes( parseInt(r[selectionScope+"_id"], 10) )
 
-  if ( selectionScope === null) { console.log("fix selectionScope")}
-  const canEnable = bases.find(b=> module.schools[b.school_id] !== true)
+  const bases = ["school"].includes(selectionScope) ? mapRecordIdsToInt(allBases.bases).filter(isRecordSelected) : []
+  const platoons = ["school", "class"].includes(selectionScope) ? mapRecordIdsToInt(allPlatoons.platoons).filter(isRecordSelected) : []
+  const soldiers = selectionScope ? mapRecordIdsToInt(allSoldiers.soldiers).filter(isRecordSelected) : []
+
+  const canEnable = selectionScope && module && module.users && !module.loading && !loading && !!(
+    bases.find(b=> module.schools[b.school_id] !== true)
     || platoons.find(p=> module.classes[p.class_id] !== true)
     || soldiers.find(s=> module.users[s.user_id] !== true)
+  )
 
-  const canDisable = bases.find(b=> module.schools[b.school_id] !== false)
+  const canDisable = selectionScope && module && module.users && !module.loading && !loading && !!(
+    bases.find(b=> module.schools[b.school_id] !== false)
     || platoons.find(p=> module.classes[p.class_id] !== false)
     || soldiers.find(s=> module.users[s.user_id] !== false)
+  )
 
-  return { module, moduleLoading, loading, bases, platoons, soldiers, canEnable, canDisable }
+
+  return { module, loading, updating, updatingValue, bases, platoons, soldiers, canEnable, canDisable }
 }
 
 const mapDispatchToProps = { getModule, updateModule }

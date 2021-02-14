@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Callout, InlineSync } from 'components/ui';
+import { Callout } from 'components/ui';
 import { Row, Col } from 'reactstrap';
 import { PlatoonSelect, SoldierSelect, BaseSelect } from 'components/inputs';
 import ModuleControlRow from './ModuleControlRow'
@@ -11,13 +11,14 @@ import { isAdmin, isBC } from 'functions/login';
 // style
 import './ModulesPage.scss';
 
+// when adding modules also update the whitelist at mashpia.com\public\api\core\modules.php
 const modules = [
-  { moduleKey: "hachayols", title: "Hachayols" },
-  { moduleKey: "medals_ranks", title: "Physical Medals / Rankbooks" }
+  { moduleKey: "hachayols", title: "Hachayols", description: "Chayol will be removed from the Hachayol mailing list or in their school." },
+  { moduleKey: "medals_ranks", title: "Physical Medals / Rankbooks", description: "Chayol will be removed all HQ medals and rankbooks reports." }
 ]
 
 function ModulesPage (props) {
-  const { login, laoding } = props;
+  const { login } = props;
   const [ selections, setSelections ] = useState({school_id: false, class_ids: [], user_ids: []})
   const { school_id, class_ids, user_ids } = selections;
   const selectionScope = user_ids && user_ids.length ? "user"
@@ -48,7 +49,7 @@ function ModulesPage (props) {
     <div id='ModulesPage'>
       <Callout title='Modules'>
         <p>
-          Turn modules on or off for a base, plattons, or solddiers.
+          Turn modules on or off for by base, plattons, or soldiers.
         </p>
       </Callout>
 
@@ -80,20 +81,11 @@ function ModulesPage (props) {
         </Col>
       </Row>
 
-      <p style={{ marginTop: "1rem", marginBottom: "1rem", textAlign: "center"}}>
-        {
-          laoding ? <InlineSync loading/>
-          : !school_id ? "Nothing selected"
-          : user_ids.length ? user_ids.length + " soldier(s) selected."
-          : class_ids.length ? class_ids.length + " platoon(s) selected."
-          : "Base selected."
-        }
-      </p>
       <hr />
 
       {modules.map(module => 
         <ModuleControlRow
-          key={module.setting}
+          key={module.moduleKey}
           {...module}
           selectionScope={selectionScope}
           selectionIds={selectionIds}
@@ -105,9 +97,8 @@ function ModulesPage (props) {
   );
 }
 
-const mapStateToProps = ({ login, base }) => ({
-  login: login.current_login,
-  laoding: base.bases.loading || base.platoons.loading || base.soldiers.loading
+const mapStateToProps = ({ login }) => ({
+  login: login.current_login
 });
 
 const mapDispatchToProps = () => ({
