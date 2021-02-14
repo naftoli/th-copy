@@ -33,7 +33,7 @@ if ( $res ) {
 
   echo json_encode([
     'success' =>  true, 
-    'total'   =>  intval( $totalDonation ) + intval( $totalReg ) + 350000
+    'total'   =>  intval( $totalDonation ) + intval( $totalReg )
   ]);
 } else {
   echo json_encode([

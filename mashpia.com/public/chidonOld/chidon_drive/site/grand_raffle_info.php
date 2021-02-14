@@ -4,6 +4,6 @@
 
     </head>
     <body>
-        <img src="img/Chidon-Drive-57802-web.jpg" style="max-width: 100%;" />
+        <img src="img/chidon drive raffle info.png" style="width: 95%; margin: auto;" />
     </body>
 </html>

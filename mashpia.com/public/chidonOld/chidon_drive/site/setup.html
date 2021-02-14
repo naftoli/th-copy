@@ -114,7 +114,7 @@
 						<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
 						<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
 					</div>
-					<p>&copy; 2019 Tzivos Hashem - All Rights Reserved</p>
+					<p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
 				</div>
 			</div>
 		</footer>
@@ -136,7 +136,7 @@
                     $('header nav').toggleClass('open');
                 });
 
-                const cost = 350;
+                const cost = 370;
                 $(document).on('blur', '.goal', function() {
                     if ( $(this).val() < cost ) {
                         alert("Your goal cannot be less than " + cost);
@@ -205,7 +205,8 @@
                         }
                         html += `
                             </table>
-                        <p>You child will be automatically given one entry into <a href="grand_raffle_info.php" target="_blank">the grand ChidonDrive raffle</a> for every $50 they raise! </p>
+                        <p>You child will be automatically given one entry into the grand ChidonDrive raffle for every $50 they raise! </p>
+                        <p><a href="grand_raffle_info.php" target="_blank" style="font-size: 18px; color: #85abda; text-decoration: underline;">Grand Chidon Raffle</a></p>
                             <div class="field">
                                 <p>
                                     <label class="checkbox"><input type="checkbox" id="agree" checked="checked" /><span></span></label>
@@ -230,10 +231,10 @@
 						let totalRaised = 0;
 						let tickets = '<br /><h5>Tickets</h5>';
 						for ( child of res.info.children ) {
-							const cost = 350;
+							const cost = 370;
 							const raised = Math.round( child.raised );
 							const percent = Math.round((raised / cost) * 100);
-							const rohr = raised >= 275 ? 75 : 0;							
+							const rohr = raised >= 270 ? 100 : 0;
 							const rohrPercent = Math.round(((raised + rohr) / cost) * 100);
 							const remaining = cost - raised - rohr;
 
@@ -316,7 +317,7 @@
 							
 							const numTickets = parseInt( Math.round(raised) / 50 );
 							let grandTickets = 0;
-							if ( raised >= 275 ) grandTickets++;
+							if ( raised >= 270 ) grandTickets++;
 							if ( raised >= 500 ) grandTickets = 4;
 							
 							tickets += `
