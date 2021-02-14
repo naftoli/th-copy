@@ -3,7 +3,6 @@ $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../class.rankReport.php';
 
-// show dates
 if (isset($_POST['submit'])) {
     $from = explode('-', $_POST['fromDate']);
     $to = explode('-', $_POST['toDate']);
