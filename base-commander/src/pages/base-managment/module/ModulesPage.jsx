@@ -13,8 +13,8 @@ import './ModulesPage.scss';
 
 // when adding modules also update the whitelist at mashpia.com\public\api\core\modules.php
 const modules = [
-  { moduleKey: "medals_ranks", title: "Physical Medals / Rankbooks", description: "Chayol will be removed from all HQ medals and rankbooks reports." },
-  { moduleKey: "hachayols", title: "Hachayols", description: "Chayol will be removed from the Hachayol mailing list or from their school." }
+  { moduleKey: "medals_ranks", title: "Physical Medals / Rankbooks", description: "Chayol(im) will be removed from all HQ medal and rankbook reports." },
+  { moduleKey: "hachayols", title: "Hachayols", description: "Chayol(im) will be removed from the Hachayol mailing list." }
 ]
 
 function ModulesPage (props) {
@@ -49,7 +49,7 @@ function ModulesPage (props) {
     <div id='ModulesPage'>
       <Callout title='Modules'>
         <p>
-          Turn modules on or off for by base, plattons, or soldiers.
+          Turn modules on or off for by base, platoons, or soldiers.
         </p>
       </Callout>
 
