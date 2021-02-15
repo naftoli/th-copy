@@ -15,8 +15,8 @@ function ModuleControlRow ({
 
   const handleToggle = (value) => {
     const {user_ids, class_ids, school_id } = selections
-    let data = {value, ...(user_ids.length ? {user_ids} : class_ids.length ? {class_ids} : {school_id})}
-    updateModule(moduleKey, data )
+    const selection = user_ids && user_ids.length ? {user_ids} : class_ids && class_ids.length ? {class_ids} : {school_id}
+    updateModule(moduleKey, {value, ...selection})
   }
   
   // componentDidMount
@@ -70,28 +70,28 @@ const mapStateToProps = ({ base }, props) => {
   const updating = module && typeof module.loading === 'object'
   const updatingValue = updating ? module.loading.value : undefined
 
-  const mapRecordIdsToInt = (records) => {
-    return records.map(r => ({
-      ...r,
-      ...(r.user_id ? {user_id: parseInt(r.user_id, 10)} : {}),
-      ...(r.class_id ? {class_id: parseInt(r.class_id, 10)} : {}),
-      ...(r.school_id ? {school_id: parseInt(r.school_id, 10)} : {})
-    }))
-  }
+  const recordIdsToInt = r => ({
+    ...r,
+    ...(r.user_id ? {user_id: parseInt(r.user_id, 10)} : {}),
+    ...(r.class_id ? {class_id: parseInt(r.class_id, 10)} : {}),
+    ...(r.school_id ? {school_id: parseInt(r.school_id, 10)} : {})
+  })
 
-  const isRecordSelected = r => selectionIds.includes( parseInt(r[selectionScope+"_id"], 10) )
+  const isRecordSelected = r => selectionIds.includes(r[selectionScope+"_id"])
 
-  const bases = ["school"].includes(selectionScope) ? mapRecordIdsToInt(allBases.bases).filter(isRecordSelected) : []
-  const platoons = ["school", "class"].includes(selectionScope) ? mapRecordIdsToInt(allPlatoons.platoons).filter(isRecordSelected) : []
-  const soldiers = selectionScope ? mapRecordIdsToInt(allSoldiers.soldiers).filter(isRecordSelected) : []
+  const bases = ["school"].includes(selectionScope) ? allBases.bases.map(recordIdsToInt).filter(isRecordSelected) : []
+  const platoons = ["school", "class"].includes(selectionScope) ? allPlatoons.platoons.map(recordIdsToInt).filter(isRecordSelected) : []
+  const soldiers = selectionScope ? allSoldiers.soldiers.map(recordIdsToInt).filter(isRecordSelected) : []
 
-  const canEnable = selectionScope && module && module.users && !module.loading && !loading && !!(
+  // ensure everything is loaded and there are soldiers, classes, or users to enable
+  const canEnable = !loading && module.users && !!(
     bases.find(b=> module.schools[b.school_id] !== true)
     || platoons.find(p=> module.classes[p.class_id] !== true)
     || soldiers.find(s=> module.users[s.user_id] !== true)
   )
 
-  const canDisable = selectionScope && module && module.users && !module.loading && !loading && !!(
+  // ensure everything is loaded and there are soldiers, classes, or users to disable
+  const canDisable = !loading && module.users && !!(
     bases.find(b=> module.schools[b.school_id] !== false)
     || platoons.find(p=> module.classes[p.class_id] !== false)
     || soldiers.find(s=> module.users[s.user_id] !== false)

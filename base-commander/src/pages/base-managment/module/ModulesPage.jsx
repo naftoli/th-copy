@@ -49,7 +49,7 @@ function ModulesPage (props) {
     <div id='ModulesPage'>
       <Callout title='Modules'>
         <p>
-          Turn modules on or off for by base, platoons, or soldiers.
+          Turn modules on or off by base, platoons, or soldiers.
         </p>
       </Callout>
 
@@ -101,8 +101,4 @@ const mapStateToProps = ({ login }) => ({
   login: login.current_login
 });
 
-const mapDispatchToProps = () => ({
-  // getSoldiers
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ModulesPage);
+export default connect(mapStateToProps)(ModulesPage);
