@@ -64,9 +64,11 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         '5* General' => 'five_star_general'
     ];
 
-    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
-    else $r = new RankReport();
+//    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+//    else $r = new RankReport();
 //    $r->overrideDates(2459180,2459207);
+    $r = new RankReport();
+    $r->overrideDates($_GET['start'], $_GET['end']);
     $r->setSchoolId($school);
     if (empty($limitTo)) $r->setRanks('byGender', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     else $r->setRanks('byGender', 0, "<br>", $limitTo, true); // limit to gender for myshliach / anashKinder
@@ -158,9 +160,11 @@ function generateFileByGrade() {
         '5* General' => 'five_star_general'
     ];
 
-    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
-    else $r = new RankReport();
+//    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+//    else $r = new RankReport();
 //    $r->overrideDates(2459180,2459207);
+    $r = new RankReport();
+    $r->overrideDates($_GET['start'], $_GET['end']);
     $r->setSchoolId($school);
     $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();

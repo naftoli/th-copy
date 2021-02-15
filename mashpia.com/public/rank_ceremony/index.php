@@ -18,6 +18,15 @@ if ( isset($_GET['id']) ) {
         $_GET['id'] => 'School Name'
     ];
 }
+
+$submit = false;
+if (isset($_POST['submit'])) {
+    $submit = true;
+    $from = explode('-', $_POST['fromDate']);
+    $to = explode('-', $_POST['toDate']);
+    $start = gregoriantojd($from[1], $from[2], $from[0]);
+    $end = gregoriantojd($to[1], $to[2], $to[0]);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,15 +37,18 @@ if ( isset($_GET['id']) ) {
         integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
     <script>
-        let date = '';
-        while (date != 'current' && date != 'previous')
-            date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
-        const prev = date === 'previous' ? 1 : 0
+        // let date = '';
+        // while (date != 'current' && date != 'previous')
+        //     date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
+        // const prev = date === 'previous' ? 1 : 0
+        const submit = <?= $submit ?>;
 
-        function createFile(school, prev) {
+        function createFile(school) {
+            const start = <?= $start ?>;
+            const end = <?= $end ?>;
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: "createFile.php?prev=" + prev,
+                    url: `createFile.php?start=${start}&end=${end}`,
                     type: 'POST',
                     data: {
                         school: school,
@@ -51,20 +63,29 @@ if ( isset($_GET['id']) ) {
             })
         }
 
-        let i = 1;
-        let p = [];
-        const schools = <?= json_encode($schools) ?>;
-        for (let school in schools) {
-            p[i++] = createFile(school, prev)
+        if (submit) {
+            let i = 1;
+            let p = [];
+            const schools = <?= json_encode($schools) ?>;
+            for (let school in schools) {
+                p[i++] = createFile(school)
+            }
+            Promise.all([...p])
+                .then(values => {
+                    console.log(values)
+                    location.href = 'createZip.php'
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
-        Promise.all([...p])
-            .then(values => {
-                console.log(values)
-                location.href = 'createZip.php'
-            })
-            .catch(error => {
-                console.log(error)
-            })
     </script>
 </head>
+<?php if (!isset($_POST['submit'])) : ?>
+    <form action="" method="post">
+        From date: <input type="date" name="fromDate" /><br />
+        To date: <input type="date" name="toDate" />
+        <input type="submit" name="submit" value="submit" />
+    </form>
+<?php endif; ?>
 </html>

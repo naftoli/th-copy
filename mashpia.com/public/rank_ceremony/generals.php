@@ -6,6 +6,15 @@ if ($admin_user['auth'] != 'super') {
     echo "No Permission to be here.";
     exit;
 }
+
+$submit = false;
+if (isset($_POST['submit'])) {
+    $submit = true;
+    $from = explode('-', $_POST['fromDate']);
+    $to = explode('-', $_POST['toDate']);
+    $start = gregoriantojd($from[1], $from[2], $from[0]);
+    $end = gregoriantojd($to[1], $to[2], $to[0]);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,15 +25,18 @@ if ($admin_user['auth'] != 'super') {
         integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
     <script>
-        let date = '';
-        while (date != 'current' && date != 'previous')
-            date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
-        const prev = date === 'previous' ? 1 : 0
+        // let date = '';
+        // while (date != 'current' && date != 'previous')
+        //     date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
+        // const prev = date === 'previous' ? 1 : 0
+        const submit = <?= $submit ?>;
 
         function createFile() {
+            const start = <?= $start ?>;
+            const end = <?= $end ?>;
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: "createGenerals.php?prev=" + prev,
+                    url: `createGenerals.php?start=${start}&end=${end}`,
                     type: 'POST',
                     success: function (data) {
                         resolve(data)
@@ -36,14 +48,25 @@ if ($admin_user['auth'] != 'super') {
             })
         }
 
-        createFile()
-            .then(values => {
-                console.log(values)
-                location.href = 'createZip.php'
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        if (submit) {
+            createFile()
+                .then(values => {
+                    console.log(values)
+                    location.href = 'createZip.php'
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
     </script>
 </head>
+<body>
+<?php if (!isset($_POST['submit'])) : ?>
+    <form action="" method="post">
+        From date: <input type="date" name="fromDate" /><br />
+        To date: <input type="date" name="toDate" />
+        <input type="submit" name="submit" value="submit" />
+    </form>
+<?php endif; ?>
+</body>
 </html>

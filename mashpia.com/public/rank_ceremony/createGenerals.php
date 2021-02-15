@@ -35,8 +35,10 @@ $rankNames = [
 ];
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
-if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
-else $r = new RankReport();
+//if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
+//else $r = new RankReport();
+$r = new RankReport();
+$r->overrideDates($_GET['start'], $_GET['end']);
 //$r->overrideDates(2459180,2459207);
 
 $i = 0;
