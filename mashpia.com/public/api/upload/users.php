@@ -16,8 +16,8 @@ class UsersUploadRouter {
         if ( !isset( $_FILES['users'] ) )
             json_error("No File Sent", 'UPLOAD-USERS-17');
         
-        $ckids = false;
-        if ( $current_user->login->inst_id == 10 ) {
+        $daySchool = false;
+        if ( $current_user->login->inst_id == 4 ) {
             // columns to create users
             $columnNames = [
                 "First Name",  "Last Name", 
@@ -26,7 +26,7 @@ class UsersUploadRouter {
             $dbColumnNames = [
                 'first', 'last', 'dob', 'gender', 'school_type_id'
             ];
-            $ckids = true;
+            $daySchool = true;
         } else {
             // columns to create users
             $columnNames = [
@@ -80,7 +80,7 @@ class UsersUploadRouter {
                     $value = trim($cell->getValue());
                     $errorString = "Error on line $errorLine:  ";
                     // validate required rows
-                    if( $ckids ) {
+                    if( $daySchool ) {
                         if ( $value == '' ) {
                             $errors[] = $errorString . " All fields are mandatory.";
                         }
@@ -228,6 +228,12 @@ class UsersUploadRouter {
             $user->chayolei = $school->chayolei;
             $user->chidon   = $school->chidon;
             $user->yan      = $school->tanya;
+
+            // if it's day school, change hachayol and medals/ranks modules to be turned off
+            if ($daySchool) {
+                $user->hachayols = 0;
+                $user->medals_ranks = 0;
+            }
             
             $user->save();
         }

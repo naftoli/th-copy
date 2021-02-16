@@ -87,6 +87,11 @@ class UsersRouter {
         $cur_user = $current_user; // apparently there's a duplicate $current_user variable created by WP at some point in this function which is causing bugs
 
         $user = Soldier::build( $_POST );
+        // if it's day school, change hachayol and medals/ranks modules to be turned off
+        if ($cur_user->login->inst_id == 4) {
+            $user->hachayols = 0;
+            $user->medals_ranks = 0;
+        }
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];

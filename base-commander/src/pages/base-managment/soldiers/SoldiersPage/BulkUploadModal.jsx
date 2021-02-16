@@ -38,7 +38,8 @@ export class BulkUploadModal extends Component {
   render() {
     const { inst, isOpen, centered, toggle } = this.props;
     const { loading, errors } = this.state;
-    const url = inst === 10 ? '//mashpia.com/ckids.xls' : '//mashpia.com/students.xls';
+    const daySchool = 4;
+    const url = inst === daySchool ? '//mashpia.com/daySchool.xls' : '//mashpia.com/students.xls';
 
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='bulk-upload-modal'>
@@ -59,7 +60,7 @@ export class BulkUploadModal extends Component {
                       Please Note: You MUST have ALL FIELDS filled out.
                     </strong>
                   }
-                  { inst !== 10 && 
+                  { inst !== daySchool &&
                       <strong>
                       Please Note: You MUST have the First Name, Last Name, 
                       First Name Hebrew, Last name Hebrew, English Date of Birth, Gender, 
