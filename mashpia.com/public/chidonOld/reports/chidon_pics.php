@@ -20,6 +20,33 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;
 }
 // echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+
+function createZip($files, $filename) {
+    $zip = new ZipArchive;
+    $success = $zip->open($filename, ZipArchive::CREATE);
+    if ($success !== true) {
+        exit("cannot open <$filename>\n");
+    }
+    foreach($files as $file) {
+        $zip->addFromString($file, file_get_contents($file));
+        unlink($file);
+    }
+    $zip->close();
+
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($filename));
+    flush(); // Flush system output buffer
+    readfile($filename);
+    unlink($filename);
+
+}
+
+$imgs = []; // array for keeping track of all pictures that are showing up
 ?>
 <!DOCTYPE html>
 <HTML>
@@ -47,6 +74,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <BODY>
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Chidon Pictures</h1>
+        <a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>
         <?php foreach ( $info as $id => $children ) : ?>
             <h2><?= $schools[$id] ?></h2>
             <table class="pics">
@@ -79,6 +107,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                     } 
                     echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
+                    if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
+                        $imgs[] = $img;
+                    }
                 }
                 ?>
             </table>
