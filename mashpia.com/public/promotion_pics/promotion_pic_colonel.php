@@ -15,7 +15,6 @@ if (isset($_POST['submit'])) {
     $ranks = $r->getRanks();
     $logos = $r->getSchoolLogos();
 }
-$logos = $r->getSchoolLogos();
 //echo "<pre>"; print_r( $ranks ); echo "</pre>";
 ?>
 <!DOCTYPE html>
