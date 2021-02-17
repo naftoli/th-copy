@@ -42,6 +42,7 @@ class MyShliachShipLabels extends Report {
 				and mm.date_awarded >= " . $this->start . "  
 				AND mm.date_awarded <= " . $this->end . "  
 				and u.school_id = " . $this->school . " 
+				and u.medals_ranks = 1 
 				ORDER BY s.subject_id, mm.medal_ord";
 		$result = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($result)) {

@@ -14,7 +14,8 @@ class MyShliachHachayol {
 				join users u on aa.id = u.user_id 
 				where aa.auth = 'user' 
 				and u.school_id = $id  
-				and u.user_registered > 0 ";
+				and u.user_registered > 0 
+				and u.hachayols = 1 ";
 		if ($noShip) {
 			$sql .= "and no_shipping = 0 ";
 		}

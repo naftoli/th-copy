@@ -40,7 +40,7 @@ class MedalReport extends Report {
             WHERE mm.date_awarded >= $start 
             AND mm.date_awarded <= $end
 			AND s.subject_id != 106 
-			AND sch.inst_id != 4";
+			AND u.medals_ranks = 1";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
         $sql .= "
