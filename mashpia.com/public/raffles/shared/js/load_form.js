@@ -13,12 +13,25 @@ function load_form(type) {
     $.get("/raffles/"+type+"/forms/raffle_form.php", function(data){// get the form for the type selected
         $("#detailed_inputs").html(data); // set the page to the data
         // when an option from the list is selected
-        $("select.week_start").change(function(event){
-            fill_name($("option[value="+event.target.value+"]").html()); // autofill the name field
+        $("#week").change(function(event){
+            fill_name($("option[value="+event.target.value+"]").html()); // update the name field
+            const [startDate, endDate] = $(this).val().split(",")
+            $("#start_date").val(startDate) // update the start_date field
+            $("#end_date").val(endDate) // update the end_date field
         });
-        // autofill the name when the page loads
-        fill_name($($("select.week_start").children()[0]).text())
 
+        $("#start_week").change(function () {
+            $("#start_date").val($(this).val()) // update the start_date field
+        })
+
+        $("#end_week").change(function () {
+            $("#end_date").val($(this).val()) // update the end_date field
+        })
+
+        // autofill the name and start/end dates
+        if ($("#week").length) $("#week").change()
+        if ($("#start_week").length) $("#start_week").change()
+        if ($("#end_week").length) $("#end_week").val($("#end_week").children()[3].value).change()
 
     });
 }
