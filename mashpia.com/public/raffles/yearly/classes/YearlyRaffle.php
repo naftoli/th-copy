@@ -40,28 +40,11 @@ class YearlyRaffle {
         $this->deadline = $row['end_date'];
         $this->start = $row['start_date'];
         $this->grid_id = 13012;
-        $this->cutoff = 2459166;
-        $this->numDays = 49;
+        $this->cutoff = 2459171;
     }
 // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
-        $eligibility_query = $this->db_conn->query(
-             " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
-            ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date >= " . $this->start . " "
-            ." AND mark_date <= " . $this->cutoff . " "
-            ." AND school_id = '$school_id' "
-            ." GROUP BY user_id;"
-        );
-        // load all the eligible users
-        $this->eligibility = [];
-        while ( $row = $eligibility_query->fetch_assoc() ) {
-            // find out how many tasks were done after cutoff by looking at new task
-            $row['days'] += $this->checkDays($row['user_id']);
-            $this->eligibility[$row['user_id']] = $row['days'];
-//            if ( intval($row['days']) > $this->DAY_COUNT )
-                $this->cacheUser( $row['user_id'], $row['days'] );
-        }
+        $this->eligibility = $this->getAndCacheEligibility($school_id);
         return $this->eligibility;
     }
 
@@ -85,24 +68,8 @@ class YearlyRaffle {
             $this->eligibility[$user_id] = $row['days'];
             return $this->eligibility;
         }
-        // default to generating the information
-        $eligibility_query = $this->db_conn->query(
-             " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
-            ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date >= " . $this->start . " "
-            ." AND mark_date <= " . $this->cutoff . " "
-            ." AND user_id = '$user_id' "
-        );
-
-        // load all the eligible users
-        while ( $row = $eligibility_query->fetch_assoc() ) {
-            // find out how many tasks were done after cutoff by looking at new task
-            $row['days'] += $this->checkDays($user_id);
-            $this->eligibility[ $user_id ] = $row['days'];
-            // cache the user if they are eligible
-//            if ( intval($row['days']) > $this->DAY_COUNT )
-                $this->cacheUser( $user_id, $row['days'] );
-        }
+        // otherwize update the cache
+        $this->eligibility[$user_id] = $this->getAndCacheEligibility(false, $user_id)[$user_id];
         
         return $this->eligibility;
     }
@@ -117,60 +84,100 @@ class YearlyRaffle {
      * @return array
      */
     public function get_eligible_users( $realtime = false, $school_id = false ) {
+        // if realtime update cache first
+        if ( $realtime ) {
+            $this->getAndCacheEligibility($school_id);
+        }
         // generate the SQL to run
         // fist find out how many tasks were done before cutoff
-        if ( $realtime )
-            $users_sql = "SELECT user_id, user_serial, school_name, first, last, COUNT(DISTINCT (mark_date)) AS days, class_grade, class_sub "
-                ." FROM date_tasks_marks JOIN users USING (user_id) "
-                ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-                ." WHERE mark_date >= " . $this->start . " "
-                ." AND mark_date <= " . $this->cutoff . " "
-                .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
-                ." GROUP BY user_id "
-                ." HAVING days >= " . $this->numDays . " "
-                ." ORDER BY school_name, class_grade, class_sub, last, first ";
-        else
-            $users_sql = "SELECT user_id, user_serial, school_name, first, last, days, class_grade, class_sub"
-                ." FROM user_yearly_raffle JOIN users USING (user_id) "
-                ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-                ." WHERE days >= " . $this->DAY_COUNT . " "
-                ." AND year = " . $this->year . " "
-                .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
-                ." ORDER BY school_name, class_grade, class_sub, last, first, days ";
+        $users_sql = "SELECT user_id, user_serial, school_name, first, last, days, class_grade, class_sub"
+            ." FROM user_yearly_raffle JOIN users USING (user_id) "
+            ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
+            ." WHERE days >= " . $this->DAY_COUNT . " "
+            ." AND year = " . $this->year . " "
+            .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
+            ." ORDER BY school_name, class_grade, class_sub, last, first, days ";
 
         $users_query = $this->db_conn->query( $users_sql );
 
         $eligible_users = [];
         while( $row = $users_query->fetch_assoc() ) {
             $eligible_users[] = $row;
-            if ( $realtime ) {
-                // find out how many tasks were done after cutoff by looking at new task
-                $row['days'] += $this->checkDays($row['user_id']);
-                $this->cacheUser($row['user_id'], $row['days']);
-            }
         }
 
         return $eligible_users;
     }
 
     /**
-     * checkDays
-     *
-     * finds out how many days of tasks were marked on same day as task (new task created at end of cheshvon)
-     *
-     * @param string $user_id
-     * @return int
+     * getEligibility
+     * 
+     * gets the amount of eligibile days per user.
+     * 
+     * @param int $school_id scope to a school 
+     * @param int $user_id scope to a user
+     * @return array user_id => eligble_days key value pairs
+     * 
      */
-    private function checkDays($user_id) {
-        $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
-                join date_tasks dt using (date_task_id) 
-                where dtm.user_id = " . $user_id . " 
-                and dt.grid_id = " . $this->grid_id . " 
-                and dtm.mark_date > " . $this->cutoff . " 
-                and dtm.mark_date <= " . $this->deadline;
-//        echo $sql; exit;
-        $result = $this->db_conn->query($sql);
-        return intval($result->fetch_assoc()['total']);
+    private function getEligibility( $school_id = false, $user_id = false ){
+        global $logger;
+        if ($user_id) {
+            $users_filter = "dtm.user_id = ". $user_id;
+        } else if ($school_id) {
+            $users_filter = "dtm.user_id in (select user_id from users where school_id = $school_id)";
+        } else {
+            $users_filter = "true";
+        }
+
+        // find all tasks marked in date_tasks_marks up to rollover date
+        // then find all tasks marked using grid id for after rollover date
+        // then add the two numbers together
+        $sql1 = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE (daily_task = 1 OR (daily_task = 0 AND (dt.quantity IS NULL OR (dt.quantity IS NOT NULL AND dtm.done_qty >= dt.quantity))))
+                AND $users_filter 
+                AND dtm.mark_date >= " . $this->start . "
+                AND dtm.mark_date < " . $this->cutoff ."
+                group by user_id";
+        $sql2 = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE $users_filter
+                AND dt.grid_id = " . $this->grid_id . " 
+                AND dtm.mark_date >= " . $this->cutoff . " 
+                AND dtm.mark_date <= " . $this->deadline ."
+                group by user_id";
+        $result1 = mysql_query($sql1);
+        $result2 = mysql_query($sql2);
+        while($row = mysql_fetch_array($result1)) {
+            if ($row['user_id'] == 18453) $logger->debug("sql1 result {$row['total']}", [$sql1]);
+            $totals[$row['user_id']] = $row['total'];
+        }
+        while($row = mysql_fetch_array($result2)) {
+            if ($row['user_id'] == 18453) $logger->debug("sql2 result {$row['total']}", [$sql2]);
+            if (array_key_exists($row['user_id'], $totals)) {
+                $totals[$row['user_id']] += $row['total'];
+            } else {
+                $totals[$row['user_id']] = $row['total'];
+            }
+        }
+        return $totals;
+    }
+
+    /**
+     * getAndCacheEligibility
+     * 
+     * gets the amount of eligibile days per user and updates the cache with the result.
+     * 
+     * @param int $school_id scope to a school 
+     * @param int $user_id scope to a user
+     * @return array
+     * 
+     */
+    private function getAndCacheEligibility($school_id = false, $user_id = false) {
+        $totals = $this->getEligibility($school_id, $user_id);
+        foreach($totals as $user_id => $total) {
+            $this->cacheUser( $user_id,  $total );
+        }
+        return $totals;
     }
 
     /**
