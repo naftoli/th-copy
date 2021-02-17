@@ -18,7 +18,6 @@ function createZip($files, $filename) {
     }
     foreach($files as $file) {
         $zip->addFromString($file, file_get_contents($file));
-        unlink($file);
     }
     $zip->close();
 }
