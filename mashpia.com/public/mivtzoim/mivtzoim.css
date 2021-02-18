@@ -5,3 +5,9 @@ tr, th, td {
 input.disabled {
     color: grey !important;
 }
+.th-sticky-top th {
+    /* overide DataTables position relative */
+    position: sticky !important;
+    top: 0;
+    background-color: white;
+}

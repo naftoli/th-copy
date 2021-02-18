@@ -713,7 +713,7 @@ class MivtzoimReport {
 
         // output html
         $names = $this->m->getShortNames();
-        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead class=\"th-sticky-top\"><tr>";
         echo "<th>School</th>";
         echo "<th>Registered Chayolim</th>";
         foreach ( $names as $name ) {
@@ -759,7 +759,7 @@ class MivtzoimReport {
         //     } 
         //     echo "</tbody></table>";
         // } else {
-            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead class=\"th-sticky-top\"><tr>";
             echo "<th>School</th>";
             echo "<th>Grade</th>";
             echo "<th>Student</th>";
