@@ -40,28 +40,32 @@ $valid = true; // will be changed if anything is invalid
 $error = "";
 $raffle_props = []; // properties to create the raffle with
 
+function html_date_to_jd ($html_date) {
+    return $html_date ? gregoriantojd(DateTime::createFromFormat("Y-m-d", $html_date)) : null;
+}
+function jd_to_html_date ($jd) {
+    if (!$jd) return "";
+    $date = DateTime::createFromFormat("m/d/Y", jdtogregorian($jd));
+    if (!$date) return "";
+    return $date->format("Y-m-d");
+}
+
 /********************* PERFORM VALIDATIONS **********************/
 if($action == "create" || $action == "update"){ // for both create and update, run the validations
     // make sure that the weeks where posted
     /********************* VALIDATE DATES **********************/
-    if ($_POST['type'] == "weekly" ) { // weekly raffles
-        $raffle_props['type'] = 'weekly'; // set the type
-        $raffle_props['start_date'] = $_POST['week_start']; // get the start date
-        $raffle_props['end_date'] = $_POST['week_start'] + 6; // and add 6 to get to the end of the week
-        //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm. Add 6 to    
-    } else if ($_POST['type'] == "monthly") { // monthly raffles
-        $raffle_props['type'] = 'monthly'; // set the type
-        $raffle_props['start_date'] = $_POST['start_date'];
-        $raffle_props['end_date'] = $_POST['end_date'];
-        //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm
-    } else {
+    $raffle_props['type'] = $_POST['type']; // set the type
+    $raffle_props['start_date'] = parseDatetoJd($_POST['start_date']); // get the start date
+    $raffle_props['end_date'] = parseDatetoJd($_POST['end_date']); // get the end date
+    if (!in_array($_POST['type'], ["weekly", "monthly"])) {
         $error .= "Type is invalid<br/>";
         $valid = false;
     }
+    //$raffle_props['run_date'] = new DateTime(formatJdToDate($raffle_props['end_date'] + 6) . " 11:59 PM"); // cast to datetime at 11:59 pm
 
     // set run date
     $run_date = $_POST['run_date'];
-    $format_run_date = date('Y-n-j', strtotime($run_date));
+    $format_run_date = date('Y-m-d', strtotime($run_date));
     $format_run_date = explode('-', $format_run_date);
     
     $runYear  = $format_run_date[0];
@@ -181,7 +185,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 </div>
                 <div class="input_group input_half">
                     Type*:
-                    <select class="grey" name="type">
+                    <select id="raffle_type" class="grey" name="type">
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                     </select>
@@ -272,5 +276,3 @@ if($debug) echo "</pre>"; // end debugging preformatting
         <script src="/raffles/weekly/js/change_prize.js"></script>
     </body>
 </html>
-
-

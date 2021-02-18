@@ -657,4 +657,11 @@ class Raffle
         $total = mysql_num_rows($daily_query); // get the number of marks
         return $total;
     }
+
+    function instantiated_start_date() {
+        return DateTime::createFromFormat("m/d/Y", jdtogregorian($this->start_date));
+    }
+    function instantiated_end_date() {
+        return DateTime::createFromFormat("m/d/Y", jdtogregorian($this->end_date));
+    }
 }
