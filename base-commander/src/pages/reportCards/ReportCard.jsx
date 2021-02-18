@@ -128,11 +128,15 @@ const useStyles = createUseStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    h5: {
+        fontWeight: 'bold',
+        marginTop: 30
     }
 }), { name: 'ReportCard' });
 
 
-function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
+function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw, hideShabbatonTests }) {
     const classes = useStyles();
 
     const [tests, setTests] = useState([]);
@@ -161,9 +165,11 @@ function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
                                 <th className={clsx(classes.tableHeader, bw && classes.bwBorderRight)}>
                                     Mitzvah Maven <br /> Test Mark
                                 </th>
-                                <th className={clsx(classes.tableHeader, bw && classes.bwBorderRight)}>
-                                    Shabbaton <br /> Test Mark
-                                </th>
+                                {!hideShabbatonTests && (
+                                    <th className={clsx(classes.tableHeader, bw && classes.bwBorderRight)}>
+                                        Shabbaton <br /> Test Mark
+                                    </th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -175,9 +181,11 @@ function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
                                     <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
                                         {Math.round(test.mivtzahMaven)}
                                     </td>
-                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                        {Math.round(test.shabbatonMark)}
-                                    </td>
+                                    {!hideShabbatonTests && (
+                                        <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                            {Math.round(test.shabbatonMark)}
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                             {tests.length > 1 && (
@@ -188,25 +196,30 @@ function ReportCard({ id, name, grade, avgRequired, tests: _tests, bw }) {
                                     <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
                                         {Math.round(tests.reduce((a, b) => a + b.mivtzahMaven, 0) / tests.length)}
                                     </td>
-                                    <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-                                        {Math.round(tests.reduce((a, b) => a + b.shabbatonMark, 0) / tests.length)}
-                                    </td>
+                                    {!hideShabbatonTests && (
+                                        <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
+                                            {Math.round(tests.reduce((a, b) => a + b.shabbatonMark, 0) / tests.length)}
+                                        </td>
+                                    )}
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
-                <div className={classes.avgRequiredContainer}>
-                    <div className={classes.placeholder} />
-                    <p className={clsx(classes.description, bw && classes.bwText)}>
-                        Average required on the next tests
-                        <br /> to earn a place on the Chidon Shabbaton
-                        (In whichever format it will be taking place this year):
-                    </p>
-                    <div className={clsx(classes.averageDuration, bw && classes.bwBorder)}>
-                        {avgRequired}
+                {tests.length < 4 ? (
+                    <div className={classes.avgRequiredContainer}>
+                        <div className={classes.placeholder} />
+                        <p className={clsx(classes.description, bw && classes.bwText)}>
+                            Average required on the next tests
+                            <br /> to earn a place on the Chidon Shabbaton
+                            (In whichever format it will be taking place this year):
+                        </p>
+                        <div className={clsx(classes.averageDuration, bw && classes.bwBorder)}>
+                            {avgRequired}
+                        </div>
                     </div>
-                </div>
+                ) : <h5 className={classes.h5}>!מחיל אל חיל</h5>
+                }
             </div>
             <img src={footer} alt="Footer" />
         </div>
