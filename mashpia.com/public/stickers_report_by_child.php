@@ -192,7 +192,7 @@ require('header.php');
 							if (isset($week[$parsha['name']])) {
 		                    	foreach ($week[$parsha['name']] as $mission => $total) {
 		                    		$subject_id = $subjects[$mission];
-			                        echo  "<img src='images/stickers/Sticker-" . $stickers[$subject_id] .  ".gif'><br />" . $missions[$subject_id] . '-' . $total . "<br />"; 
+			                        echo  "<img src='images/stickers/Sticker-" . $stickers[$subject_id] .  ".gif'><br />" . $missions[$subject_id]['name'] . '-' . $total . "<br />"; 
 								}
 							}
 							echo "</div></td>";
@@ -229,7 +229,7 @@ require('header.php');
 						if ($id <= 90) {
 							echo "checked='checked' ";
 						}
-						echo "/>" . $mission . "<br />";
+						echo "/>" . $mission['name'] . "<br />";
                     }
                     echo "</div>";
                 }

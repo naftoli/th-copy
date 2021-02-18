@@ -155,7 +155,7 @@ while ($row2 = mysql_fetch_assoc($result2)) {
 		                    <option value='0'>Choose Campaign</option>
 		                    <?
 		                    foreach ($missions as $id => $mission) {
-		                        echo "<option value='$id'>" . $mission . "</option>";
+		                        echo "<option value='$id'>" . $mission['name'] . "</option>";
 		                    }
 		                    ?>
 		                </select>

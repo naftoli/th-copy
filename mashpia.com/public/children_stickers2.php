@@ -246,7 +246,7 @@ function getMedalsRequired($subject, $medal) {
                             $middle *= 2;
                             echo "</div><div class='missionSelection'>";
                         }
-                        echo "<input type='checkbox' class='mission' name='missions[]' value='" . $id . "' />" . $mission . "<br />";
+                        echo "<input type='checkbox' class='mission' name='missions[]' value='" . $id . "' />" . $mission['name'] . "<br />";
                     }
                     echo "</div>";
                 }
@@ -285,7 +285,7 @@ function getMedalsRequired($subject, $medal) {
 					$rank['name'] . " " . $user . "<img src='file_view.php?id=" . $img . "' height='60' class='userPhoto' /></td></tr>";
 		        echo "<tr><th align='center'>Campaign</th>";
 		        foreach ( $missionsSelected as $m ) {
-		            echo "<th align='center'>" . $missions[$m] . "</th>";
+		            echo "<th align='center'>" . $missions[$m]['name'] . "</th>";
 		        }
 		        echo "</tr>";
 				
@@ -302,14 +302,14 @@ function getMedalsRequired($subject, $medal) {
 				
 				echo "<tr><td>Missions Completed<br />(Stickers Earned)</td>";
 	            foreach ( $missionsSelected as $m ) {
-	                if ( !isset( $mission[$missions[$m]] ) ) {
+	                if ( !isset( $mission[$missions[$m]['name']] ) ) {
 	                    echo "<td>&nbsp;</td>";                            
 	                } else {
-	                    $missionsDone = $mission[$missions[$m]];
+	                    $missionsDone = $mission[$missions[$m]['name']];
 	                    $sticker = $s->calculateSticker( $m, $missionsDone );
 	                    $k = key( $sticker );
 	                    echo  "<td>";
-						echo "<img class='sticker' src='images/stickers/Sticker-" . $stickers[$m][$missions[$m]] . ".gif'><br />";
+						echo "<img class='sticker' src='images/stickers/Sticker-" . $stickers[$m][$missions[$m]['name']] . ".gif'><br />";
 						$req = (int)getMedalsRequired($m, $k);
 						echo $sticker[$k] . "/" . $req . " of " . $medals[$k] . "</td>"; 
 	                }
