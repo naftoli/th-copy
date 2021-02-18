@@ -214,9 +214,11 @@ function getStartEnd($arr) {
                                 break;
                             case 5:
                                 if ($val == '') $val = 6; // default start age
+                                ${$fieldNames[$i]} = $val;
                                 break;
                             case 6:
                                 if ($val == '') $val = 14; // default end age
+                                ${$fieldNames[$i]} = $val;
                                 break;
                             // school types
                             case 7:
