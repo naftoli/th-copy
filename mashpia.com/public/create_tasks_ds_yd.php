@@ -269,11 +269,11 @@ function getStartEnd($arr) {
                     $r++;
 
                     // make sure we don't have incorrect yiddish label for english task or vice versa
-                    if ($lang == 1) {
-                        if ($labelID > 49) $labelID -= 20;
-                    } else if ($lang == 2) {
-                        if ($labelID > 29 && $labelID < 50) $labelID += 20;
-                    }
+//                    if ($lang == 1) {
+//                        if ($labelID > 49) $labelID -= 20;
+//                    } else if ($lang == 2) {
+//                        if ($labelID > 29 && $labelID < 50) $labelID += 20;
+//                    }
 
                     // set the start date from the array if it is full and $startDate is empty
                     if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
