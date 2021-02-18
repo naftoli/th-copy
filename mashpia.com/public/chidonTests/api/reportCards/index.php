@@ -55,7 +55,8 @@ foreach ($info as $school => $users) {
             'name' => $name,
             'grade' => $grade,
             'avgRequired' => $avgRequired,
-            'tests' => $tests
+            'tests' => $tests,
+            'hideShabbatonTests' => $test_type == 'maven' ? 1 : 0
         ];
     }
 }
