@@ -48,8 +48,8 @@ class ChidonTests
             SELECT 
                 tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id,
                 u.first, u.last,
-                c.class_grade, c.class_sub,
-                s.school_name, a.admin_email
+                c.class_id, c.class_grade, c.class_sub,
+                s.school_id, s.school_name, a.admin_email
             FROM
                 th_chidon tc
                     JOIN

@@ -11,6 +11,12 @@ $schools = $as->getSchools();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
+function getNeededMark($school_id, $class_id) {
+    if (in_array($school_id, [106, 255])) return 80;
+    if (in_array($class_id, [6088, 6089, 6090])) return 75;
+    return 70;
+}
+
 $info = [];
 $marks = [];
 foreach ($schools as $id => $school) {
@@ -45,16 +51,16 @@ foreach ($schools as $id => $school) {
 <?php
 $types = $ct->getTypes();
 $types['trophy'] = 'Trophy';
-echo "<table><tr><th>Chidon ID</th><th>School</th></th><th>Grade</th><th>Student</th><th>Test Type</th><th>Sweater</th><th>Gifts</th>
-        <th>Prize & Trips</th><th>Trophy Contestant</th>";
+echo "<table><tr><th>Chidon ID</th><th>School</th></th><th>Grade</th><th>First Name</th><th>Last Name</th>
+        <th>Test Type</th><th>Sweater</th><th>Gifts</th><th>Prize & Trips</th><th>Trophy Contestant</th>";
 echo "</tr>";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
     foreach ($children as $child) {
         $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
-        $name = $child['first'] . ' ' . $child['last'];
         $id = $child['th_chidon_id'];
-        echo "<tr><td>" . $id . "</td><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+        echo "<tr><td>" . $id . "</td><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" .
+            $child['first'] . "</td><td>" . $child['last'] . "</td>";
         foreach ($types as $type => $value) {
             if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
         }
@@ -70,7 +76,7 @@ foreach ($info as $school => $children) {
                 case 'maven':
                 case 'pro':
                 case 'expert':
-                    if ($final >= 70) $eligible = 'yes';
+                    if ($final >= getNeededMark($child['school_id'], $child['class_id'])) $eligible = 'yes';
                     else $eligible = 'no';
                     if ($type == 'pro') $pro_elig = $eligible;
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes' && $type == 'expert') $eligible = 'yes';
