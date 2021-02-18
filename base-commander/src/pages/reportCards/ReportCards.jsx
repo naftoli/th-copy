@@ -257,14 +257,15 @@ const ReportCards = (props) => {
 
                         <div className={classes.reports}>
 
-                            {reports.map(({ id, name, grade, avgRequired, tests }) => (
+                            {reports.map(({ id, name, grade, avgRequired, tests, hideShabbatonTests }) => (
                                 <ReportCard
+                                    bw={bw}
                                     key={id}
                                     name={name}
+                                    tests={tests}
                                     grade={grade}
                                     avgRequired={avgRequired}
-                                    tests={tests}
-                                    bw={bw}
+                                    hideShabbatonTests={hideShabbatonTests}
                                 />
                             ))}
                         </div>
