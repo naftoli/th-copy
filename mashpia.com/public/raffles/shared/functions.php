@@ -11,6 +11,15 @@ function check_valid_date($date_string){
 function formatJdToDate($jd, $format="Y-m-d"){
     return date($format, jdtounix($jd)); // cast to unix timestamp and get the date
 }
+function parseDateToJd($date, $format="Y-m-d"){
+    $parsed_date = DateTime::createFromFormat($format, $date);
+    if (!$parsed_date) return null;
+    $unix_date = $parsed_date->getTimestamp();
+    if (!$unix_date) return null;
+    $jd_date = unixtojd($unix_date);
+    if (!$jd_date) return null;
+    return $jd_date;
+}
 
 function get_parshos($year=false) { // set the year to be an optional paramater
     //if(!$year) $year = GlobalSettings::getCurrentYear(); // if a year is not passed in get it from the global settings
