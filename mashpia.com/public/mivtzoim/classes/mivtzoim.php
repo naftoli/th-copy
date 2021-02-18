@@ -729,7 +729,9 @@ class MivtzoimReport {
             }
             echo "</tr>";
         } 
-        echo "</tbody></table>";
+        echo "</tbody><tfoot><tr><th style='text-align: right'>Totals/Averages:</th><th></th>";
+        foreach ( $names as $name ) echo "<th></th><th></th>";
+        echo "</tr></tfoot></table>";
     }
 
     public function createIndividualBoard( $school ) {
