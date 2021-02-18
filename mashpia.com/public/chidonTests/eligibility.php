@@ -45,17 +45,16 @@ foreach ($schools as $id => $school) {
 <?php
 $types = $ct->getTypes();
 $types['trophy'] = 'Trophy';
+echo "<table><tr><th>Chidon ID</th><th>School</th></th><th>Grade</th><th>Student</th><th>Test Type</th><th>Sweater</th><th>Gifts</th>
+        <th>Prize & Trips</th><th>Trophy Contestant</th>";
+echo "</tr>";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
-    echo "<h2>" . $schools[$school] . "</h2>";
-    echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Sweater</th><th>Gifts</th>
-        <th>Prize & Trips</th><th>Trophy Contestant</th>";
-    echo "</tr>";
     foreach ($children as $child) {
         $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
         $name = $child['first'] . ' ' . $child['last'];
         $id = $child['th_chidon_id'];
-        echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+        echo "<tr><td>" . $id . "</td><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
         foreach ($types as $type => $value) {
             if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
         }
@@ -85,8 +84,8 @@ foreach ($info as $school => $children) {
         }
         echo "</tr>";
     }
-    echo "</table>";
 }
+echo "</table>";
 ?>
 </body>
 </html>
