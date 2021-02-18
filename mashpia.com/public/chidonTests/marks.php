@@ -17,7 +17,7 @@ foreach ($schools as $id => $school) {
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
-    $marks = $ct->getMarks();
+    $marks += $ct->getMarks();
 }
 
 $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
