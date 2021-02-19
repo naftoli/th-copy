@@ -47,7 +47,11 @@ foreach ($schools as $id => $school) {
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Eligibility Report</h1>
-<div class="infobox">The eligibility has been calculated by the system based on the number of questions answered correctly.</div>
+<div class="infobox">
+    The eligibility has been calculated by the system based on the number of questions answered correctly on the four Chidon tests.
+    <br /><br/>
+    When it says 'Yes' in the Trophy column, it means that this child is eligible to take the Trophy Final because they have a passing average on their 4 Trophy tests. (Not that this child is a Representative)
+</div>
 <?php
 $types = $ct->getTypes();
 $types['trophy'] = 'Trophy';
