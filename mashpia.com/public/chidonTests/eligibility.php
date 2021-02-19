@@ -50,7 +50,8 @@ foreach ($schools as $id => $school) {
 <div class="infobox">
     The eligibility has been calculated by the system based on the number of questions answered correctly on the four Chidon tests.
     <br /><br/>
-    When it says 'Yes' in the Trophy column, it means that this child is eligible to take the Trophy Final because they have a passing average on their 4 Trophy tests. (Not that this child is a Representative)
+    When it says 'Yes' in the Trophy Contestant column, it means that this child is eligible to take the Trophy Final
+    because they have a passing average on their 4 Trophy tests. (Not that this child is a Representative).
 </div>
 <?php
 $types = $ct->getTypes();
