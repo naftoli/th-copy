@@ -30,6 +30,7 @@ class UsersRouter {
             $users[] = [
                 'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 
                 'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
+                'first_he' => $row['first_he'], 'last_he' => $row['last_he'], 
                 'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
                 'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
                 'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
