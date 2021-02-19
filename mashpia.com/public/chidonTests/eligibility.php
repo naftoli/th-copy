@@ -87,7 +87,7 @@ foreach ($info as $school => $children) {
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes' && $type == 'expert') $eligible = 'yes';
                     break;
                 case 'trophy':
-                    if ($final > 80) $eligible = 'yes';
+                    if ($final >= 80) $eligible = 'yes';
                     else $eligible = 'no';
                     break;
             }
