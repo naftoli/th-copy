@@ -290,7 +290,7 @@ function getMedalsRequired($subject, $medal) {
 					$rank['name'] . " " . $user . "<img src='file_view.php?id=" . $img . "' height='60' class='userPhoto' /></td></tr>";
 		        echo "<tr><th align='center'>Campaign</th>";
 		        foreach ( $missionsSelected as $m ) {
-		            echo "<th align='center'>" . [$missions[$m]['name']] . "</th>";
+		            echo "<th align='center'>" . $missions[$m]['name'] . "</th>";
 		        }
 		        echo "</tr>";
 				
