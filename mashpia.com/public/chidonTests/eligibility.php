@@ -74,11 +74,9 @@ foreach ($info as $school => $children) {
             $total = 0;
             for ($i = 1; $i <= 4; $i++) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
-                if ($type == 'trophy' && $i == 1) continue;
-                else $total += $mark;
+                $total += $mark;
             }
-            if ($type == 'trophy') $final = round($total / 3, 2);
-            else $final = round($total / 4, 2);
+             $final = round($total / 4, 2);
 
             switch ($type) {
                 case 'maven':

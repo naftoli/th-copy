@@ -210,7 +210,6 @@ class ChidonTests
                 foreach ($this->testQuestions as $type => $questions) {
                     switch ($type) {
                         case 'maven':
-                        case 'trophy':
                             $mark = floatval($details[$type] / $questions);
                             break;
                         case 'pro':
@@ -219,6 +218,11 @@ class ChidonTests
                         case 'expert':
                             $mark = floatval(($details['pro'] + $details[$type]) / ($this->testQuestions['pro'] + $questions));
                             break;
+                        case 'trophy':
+                            $mark = floatval(
+                                ($details['pro'] + $details['expert'] + $details[$type]) /
+                                ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $questions)
+                            );
                     }
                     $this->marks[$id][$testNum][$type] = $mark * 100;
                 }
