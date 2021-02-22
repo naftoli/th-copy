@@ -176,17 +176,17 @@ function getMedalsRequired($subject, $medal) {
 	                echo "<table>";
 	                echo "<tr><th>Soldier</th>";
 	                foreach ( $missionsPosted as $mp ) {
-	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]] . ".gif'><br />". $missions[$mp] . "</th>";
+	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]['name']] . ".gif'><br />". $missions[$mp]['name'] . "</th>";
 	                }
 	                echo "</tr>";
                     foreach ( $user as $name => $mission ) {
                     	$rank = getRank(array_search($name, $userInfo[$school]));
                         echo "<tr><td>" . $rank['name'] . ' ' . $name . "</td>"; 
                         foreach ( $missionsPosted as $m ) {
-                            if ( !isset( $mission[$missions[$m]] ) ) {
+                            if ( !isset( $mission[$missions[$m]['name']] ) ) {
                                 echo "<td>&nbsp;</td>";                            
                             } else {
-                                $missionsDone = $mission[$missions[$m]];
+                                $missionsDone = $mission[$missions[$m]['name']];
                                 $sticker = $s->calculateSticker( $m, $missionsDone );
                                 $k = key( $sticker );
 								$req = (int)getMedalsRequired($m, $k);
@@ -229,7 +229,7 @@ function getMedalsRequired($subject, $medal) {
 							if ($id != 21)
 								echo "checked='checked' ";
 						}
-						echo "/>" . $mission . "<br />";
+						echo "/>" . $mission['name'] . "<br />";
                     }
                     echo "</div>";
                 }

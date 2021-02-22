@@ -167,17 +167,17 @@ require('header.php');
 	                echo "<table>";
 	                echo "<tr><th>Grade</th><th>Student</th>";
 	                foreach ( $missionsPosted as $mp ) {
-	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]] . ".gif'><br />". $missions[$mp] . "</th>";
+	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]['name']] . ".gif'><br />". $missions[$mp]['name'] . "</th>";
 	                }
 	                echo "</tr>";
 	                foreach ( $users as $class => $user ) {
 	                    foreach ( $user as $name => $mission ) {
 	                        echo "<tr><td>" . $class . "</td><td>" . $name . "</td>"; 
 	                        foreach ( $missionsPosted as $m ) {
-	                            if ( !isset( $mission[$missions[$m]] ) ) {
+	                            if ( !isset( $mission[$missions[$m]['name']] ) ) {
 	                                echo "<td>&nbsp;</td>";                            
 	                            } else { 
-	                                $missionsDone = $mission[$missions[$m]];
+	                                $missionsDone = $mission[$missions[$m]['name']];
 	                                $sticker = $s->calculateSticker( $m, $missionsDone );
 	                                $k = key( $sticker );
 									
@@ -215,10 +215,10 @@ require('header.php');
 	                    foreach ( $user as $name => $mission ) {
 	                        echo "<tr><td>" . $name . "</td>"; 
 	                        foreach ( $missionsPosted as $m ) {
-	                            if ( !isset( $mission[$missions[$m]] ) ) {
+	                            if ( !isset( $mission[$missions[$m]]['name'] ) ) {
 	                                echo "<td>&nbsp;</td>";                            
 	                            } else { 
-	                                $missionsDone = $mission[$missions[$m]];
+	                                $missionsDone = $mission[$missions[$m]['name']];
 	                                $sticker = $s->calculateSticker( $m, $missionsDone );
 	                                $k = key( $sticker );
 									
@@ -270,7 +270,7 @@ require('header.php');
 						if ($id <= 90) {
 							echo "checked='checked' ";
 						}
-						echo "/>" . $mission . "<br />";
+						echo "/>" . $mission['name'] . "<br />";
                     }
                     echo "</div>";
                 }
