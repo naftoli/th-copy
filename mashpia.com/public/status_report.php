@@ -275,10 +275,10 @@ function generatePdf() {
 	                echo "<table>";
 	                echo "<tr><th>Rank</th><th>Soldier</th>";
 	                foreach ( $missionsPosted as $mp ) {
-	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]];
+	                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]['name']];
 						if ($mp == 100) echo ".jpg";
 						else echo ".gif";
-						echo "'><br />". $missions[$mp] . "</th>";
+						echo "'><br />". $missions[$mp]['name'] . "</th>";
 	                }
 	                echo "</tr>";
 	                $i = 1;
@@ -300,7 +300,7 @@ function generatePdf() {
 						echo "</td>";
                          
                         foreach ( $missionsPosted as $m ) {
-                            if ( !isset( $mission[$missions[$m]] ) ) {
+                            if ( !isset( $mission[$missions[$m]['name']] ) ) {
                             	//check if user is enrolled
                             	$sql = "select * from user_tracks where user_id = $user_id and subject_id = $m and enrolled = 1";
 								$result = mysql_query($sql);
@@ -314,7 +314,7 @@ function generatePdf() {
                                 	echo "<td style='vertical-align: middle'>Not Enrolled</td>";  
 								}                          
                             } else {
-                                $missionsDone = $mission[$missions[$m]];
+                                $missionsDone = $mission[$missions[$m]['name']];
                                 $sticker = $s->calculateSticker( $m, $missionsDone );
                                 $k = key( $sticker );
 								$req = (int)getMedalsRequired($m, $k);
@@ -333,10 +333,10 @@ function generatePdf() {
 			                echo "<table>";
 			                echo "<tr><th>Rank</th><th>Soldier</th>";
 			                foreach ( $missionsPosted as $mp ) {
-			                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]];
+			                    echo "<th align='center'><img class='sticker' src='images/stickers/Sticker-" . $stickers[$mp][$missions[$mp]['name']];
 								if ($mp == 100) echo ".jpg";
 								else echo ".gif";
-								echo "'><br />". $missions[$mp] . "</th>";
+								echo "'><br />". $missions[$mp]['name'] . "</th>";
 			                }
 			                echo "</tr>";
 							$i = 1;
@@ -376,7 +376,7 @@ function generatePdf() {
 							if ($id != 21)
 								echo "checked='checked' ";
 						}
-						echo "/>" . $mission . "<br />";
+						echo "/>" . $mission['name'] . "<br />";
                     }
                     echo "</div>";
                 }

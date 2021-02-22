@@ -205,7 +205,7 @@ while ($row2 = mysql_fetch_assoc($result2)) {
                     foreach ($missions as $id => $mission) { //  for each mission in the array of missions that we pulled from the database on line 24
                         if (in_array($id, array(1, 40, 94)))
                             continue;  // skip numbers 1, 40 and 94
-                        echo "<option value='$id'>" . $mission . "</option>"; // the rest render as options
+                        echo "<option value='$id'>" . $mission['name'] . "</option>"; // the rest render as options
                     }
                     ?>
                 </select>

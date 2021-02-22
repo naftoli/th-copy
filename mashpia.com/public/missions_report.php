@@ -145,7 +145,7 @@ require_once('calendar.php');
             $totals = array();
             $grandTotals = array();
             foreach ( $missionsPosted as $m ) {
-                $grandTotals[$missions[$m]] = 0;
+                $grandTotals[$missions[$m]['name']] = 0;
             }
                         
             foreach ( $userMissions as $school => $users ) {
@@ -155,23 +155,23 @@ require_once('calendar.php');
                 echo "<table>";
                 echo "<tr><th>Grade</th><th>Student</th>";
                 foreach ( $missionsPosted as $mp ) {
-                    echo "<th>" . $missions[$mp] . "</th>";
+                    echo "<th>" . $missions[$mp]['name'] . "</th>";
                     //initialize totals for this school
-                    $totals[$school][$missions[$mp]] = 0;
+                    $totals[$school][$missions[$mp]['name']] = 0;
                 }
                 echo "</tr>";
                 foreach ( $users as $class => $user ) {
                     foreach ( $user as $name => $mission ) {
                         echo "<tr><td>" . $class . "</td><td>" . $name . "</td>"; 
                         foreach ( $missionsPosted as $m ) {
-                            if ( !isset( $mission[$missions[$m]] ) ) {
+                            if ( !isset( $mission[$missions[$m]['name']] ) ) {
                                 echo "<td>0</td>";                            
                             } else {
-                                echo  "<td>" . number_format( $mission[$missions[$m]] ) . "</td>";
+                                echo  "<td>" . number_format( $mission[$missions[$m]['name']] ) . "</td>";
                                 //add to totals per school
-                                $totals[$school][$missions[$m]] += $mission[$missions[$m]];
+                                $totals[$school][$missions[$m]['name']] += $mission[$missions[$m]['name']];
                                 //add to grand totals per campaign
-                                $grandTotals[$missions[$m]] += $mission[$missions[$m]];                                 
+                                $grandTotals[$missions[$m]['name']] += $mission[$missions[$m]['name']];                                 
                             }
                         }
                         echo "</tr>";
@@ -180,7 +180,7 @@ require_once('calendar.php');
                 
                 echo "<tr class='totals'><td colspan='2' align='right'>Totals:</td>";
                 foreach ( $missionsPosted as $m ) {
-                    echo "<td>" . number_format( $totals[$school][$missions[$m]] ) . "</td>";
+                    echo "<td>" . number_format( $totals[$school][$missions[$m]['name']] ) . "</td>";
                 }
                 echo "</tr>";
                   
@@ -193,19 +193,19 @@ require_once('calendar.php');
             echo "<p>Missions earned between " . $start_he . " and " . $end_he . "</p>";
             echo "<table><tr><th>School</th>";
             foreach ( $missionsPosted as $m ) {
-                echo "<th>" . $missions[$m] . "</th>";
+                echo "<th>" . $missions[$m]['name'] . "</th>";
             }
             echo "</tr>";
             foreach ( $totals as $school => $info ) {
                 echo "<tr><td>" . $schools[$school] . "</td>";
                 foreach ( $missionsPosted as $m ) {
-                    echo "<td>" . number_format( $info[$missions[$m]] ) . "</td>";
+                    echo "<td>" . number_format( $info[$missions[$m]['name']] ) . "</td>";
                 }
                 echo "</tr>";
             }
             echo "<tr class='totals'><td align='right'>Grand Totals:</td>";
             foreach ( $missionsPosted as $m ) {
-                echo "<td>" . number_format( $grandTotals[$missions[$m]] ) . "</td>";
+                echo "<td>" . number_format( $grandTotals[$missions[$m]['name']] ) . "</td>";
             }
             echo "</tr></table>"; 
         } else {          
