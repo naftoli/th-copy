@@ -326,8 +326,8 @@ $year = GlobalSettings::getChidonYear();
             }
 
             let school_id = $("#school_id").val()
-            if ( school_id ) {
-                $.post('/ajax/chidon/registerSchool2.php', { school_id: school_id, cc_info: cc, info: info }, function( error ) {
+            if ( school_id > 0 ) {
+                $.post('/ajax/chidon/registerSchool2.php', { school_id: school_id, ...info, ...cc }, function( error ) {
                     if ( error ) alert( error );
                     else {
                         alert("You have successfully enrolled your school to the Shabbaton.");
