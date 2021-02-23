@@ -286,6 +286,11 @@ $year = GlobalSettings::getChidonYear();
                 return false;
             }
 
+            if ( !$("#agreement").is(":checked") || !$("#agreement2").is(":checked") ) {
+                alert("You must agree to all terms!");
+                return false;
+            }
+
             let [total_hold, total_charge] = calculateTotal()
             let info = []
             info['hold'] = total_hold
