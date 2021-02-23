@@ -19,6 +19,8 @@ use classes\authorize\PaymentProfile;
 $school_id = mysql_real_escape_string( $_POST['school_id'] );
 if (!$school_id) { echo "No School ID was passed."; exit; }
 $hold = $_POST['hold'] ?? 0;
+$toRent = $_POST['rent'] ?? 0;
+$toBuy = $_POST['buy'] ?? 0;
 $charge = $_POST['charge'] ?? 0;
 $choice = $_POST['choice'] ?? 0;
 $expiry = $_POST['exp'] ?? 0;
@@ -102,6 +104,8 @@ if ($customer_id && $payment_id) {
             . " year = " . $year . ", "
             . " payment_profile_id = " . $payment_id . ", "
             . " option = '" . $choice . "', "
+            . " goggles_rent = " . $toRent . ", "
+            . " goggles_buy = " . $toBuy . ", "
             . " registered = 1";
         $res = mysql_query($sql);
         if (!$res) {

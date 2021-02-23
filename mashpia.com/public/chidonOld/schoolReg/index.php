@@ -259,7 +259,7 @@ $year = GlobalSettings::getChidonYear();
         $("#total_hold").text(total_hold)
         $("#total_charge").text(total_charge)
 
-        return [total_hold, total_charge]
+        return [rent, buy, total_hold, total_charge]
     }
 
     $( function() {
@@ -291,8 +291,10 @@ $year = GlobalSettings::getChidonYear();
                 return false;
             }
 
-            let [total_hold, total_charge] = calculateTotal()
+            let [rent, buy, total_hold, total_charge] = calculateTotal()
             let info = []
+            info['rent'] = rent
+            info['buy'] = buy
             info['hold'] = total_hold
             info['charge'] = total_charge
             info['choice'] = choice
