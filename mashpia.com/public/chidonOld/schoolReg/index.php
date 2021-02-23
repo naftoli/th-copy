@@ -325,7 +325,7 @@ $year = GlobalSettings::getChidonYear();
                 cc.cvc = cvc;
             }
 
-            let school_id = $("#school_id").val();
+            let school_id = $("#school_id").val()
             if ( school_id ) {
                 $.post('/ajax/chidon/registerSchool2.php', { school_id: school_id, cc_info: cc, info: info }, function( error ) {
                     if ( error ) alert( error );

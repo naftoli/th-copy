@@ -11,8 +11,13 @@ $schools = $as->getSchools();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-function getNeededMark($school_id, $class_id) {
-    if (in_array($school_id, [106, 255])) return 80;
+function getNeededMark($school_id, $class_id, $type = '') {
+    if (in_array($school_id, [5])) return 85;
+    if (in_array($school_id, [81])) return 80;
+    if (in_array($school_id, [106]) && $type != 'maven') return 80;
+    if (in_array($school_id, [255]) && $type != 'maven') return 75;
+    if (in_array($school_id, [255]) && $type == 'maven') return 80;
+    if (in_array($school_id, [4])) return 77;
     if (in_array($class_id, [6088, 6089, 6090])) return 75;
     return 70;
 }
@@ -82,7 +87,7 @@ foreach ($info as $school => $children) {
                 case 'maven':
                 case 'pro':
                 case 'expert':
-                    if ($final >= getNeededMark($child['school_id'], $child['class_id'])) $eligible = 'yes';
+                    if ($final >= getNeededMark($child['school_id'], $child['class_id'], $type)) $eligible = 'yes';
                     else $eligible = 'no';
                     if ($type == 'pro') $pro_elig = $eligible;
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes' && $type == 'expert') $eligible = 'yes';
