@@ -21,7 +21,6 @@ $sql = "INSERT INTO chidon_prizes (
 ";
 
 mysql_query($sql);
-$logger->debug($sql);
 if (mysql_affected_rows() > 0) {
     http_response_code(302);
     header('Location: ./index.php');

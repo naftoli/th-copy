@@ -8,7 +8,7 @@ if( isset($_GET['debug'])){
 }
 
 $id = isset($_GET['id']) ? mysql_real_escape_string($_GET['id']) : false;
-if (!id){
+if (!$id){
     http_response_code(302);
     header('Location: ./index.php');
     exit;
@@ -25,7 +25,6 @@ if (!$prize){
 
 $sql = "DELETE FROM chidon_prizes WHERE prize_id = '$id'";
 $query = mysql_query($sql);
-$prize = mysql_fetch_assoc($query);
 
 http_response_code(302);
 header('Location: ./index.php');
