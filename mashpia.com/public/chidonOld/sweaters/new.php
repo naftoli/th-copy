@@ -33,17 +33,17 @@ if( isset($_GET['debug'])){
         <p style="margin: 20px 10px">
             <a href="./index.php" class="button">Back to All Sweaters</a>
         </p>
-        <form method="post" action="./create.php">
+        <form method="post" action="./create.php" enctype="multipart/form-data">
 
             <div class="form_control">
                 <label for="sweater_name">Sweater Name</label>
                 <input type="text" id="sweater_name" name="sweater_name" required/>
             </div>
 
-            <!-- <div class="form_control">
+            <div class="form_control">
                 <label for="sweater_picture">Sweater Picture</label>
                 <input type="file" id="sweater_picture" name="sweater_picture" />
-            </div> -->
+            </div>
 
             <div class="form_control">
                 <label for="quantity">Quantity</label>

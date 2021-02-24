@@ -2,6 +2,7 @@
 
 $admin_auth = array('school');
 require('../../header.php');
+require('./shared.php');
 
 
 $id = isset($_POST['id']) ? mysql_real_escape_string($_POST['id']) : false;
@@ -31,9 +32,25 @@ $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "n
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
 
 
+$sweater_picture = false;
+if (isset($_POST['sweater_picture'])) {
+    switch($_FILES['sweater_picture']) {
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+        case UPLOAD_ERR_PARTIAL:
+        case UPLOAD_ERR_NO_FILE:
+        break;
+        default: // if an image was uploaded succesfully save it
+            $sweater_picture = save_image($_FILES['sweater_picture'], "/chidonOld/sweaters", $sweater['sweater_picture']);
+        break;
+    }
+}
+
+$sweater_picture = $sweater_picture ? $sweater['sweater_picture'] : $sweater_picture;
 
 $sql = "UPDATE chidon_sweaters 
         SET sweater_name = '$sweater_name',
+            sweater_picture = '$sweater_picture',
             quantity = '$quantity',
             size = '$size',
             gender = '$gender',

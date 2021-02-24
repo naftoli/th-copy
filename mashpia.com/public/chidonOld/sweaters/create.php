@@ -1,6 +1,7 @@
 <?
 $admin_auth = array('school');
 require('../../header.php');
+require('./shared.php');
 
 // $sweater_picture = isset($_POST['sweater_picture']) ? mysql_real_escape_string($_POST['sweater_picture']) : "null";
 $sweater_name = isset($_POST['sweater_name']) ? mysql_real_escape_string($_POST['sweater_name']) : "";
@@ -10,14 +11,39 @@ $gender = isset($_POST['gender']) ? mysql_real_escape_string($_POST['gender']) :
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
 
+
+$sweater_picture = false;
+switch($_FILES['sweater_picture']) {
+    case UPLOAD_ERR_INI_SIZE:
+        $logger->debug(__LINE__);
+        break;
+    case UPLOAD_ERR_FORM_SIZE:
+        $logger->debug(__LINE__);
+        break;
+    case UPLOAD_ERR_PARTIAL:
+        $logger->debug(__LINE__);
+        break;
+    case UPLOAD_ERR_NO_FILE:
+        $logger->debug(__LINE__);
+        break;
+    default: // if an image was uploaded succesfully save it
+        $sweater_picture = save_image($_FILES['sweater_picture'], "/chidon_sweaters/img");
+        $logger->debug(__LINE__.$sweater_picture);
+        break;
+}
+if (!$sweater_picture) $sweater_picture = null;
+
 $sql = "INSERT INTO chidon_sweaters ( 
-          sweater_name,   quantity,   size,    gender,   price,  our_price
+          sweater_name,   sweater_picture,   quantity,   size,    gender,    price,    our_price
     ) VALUES (
-        '$sweater_name', $quantity, '$size', '$gender', '$price', '$our_price'
+        '$sweater_name','$sweater_picture', $quantity, '$size', '$gender', '$price', '$our_price'
     )
 ";
 
-mysql_query($sql);
+$logger->debug(__LINE__.$sql);
+$result = mysql_query($sql);
+
+$logger->debug(__LINE__, [$result]);
 if (mysql_affected_rows() > 0) {
     http_response_code(302);
     header('Location: ./index.php');

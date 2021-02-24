@@ -47,10 +47,14 @@ if (!$sweater){
     <BODY>
         <? include('../../admin_header.php'); ?>
         <h1>Edit Chidon Sweater</h1>
+        <h2><?= $sweater['sweater_name'] ?></h2>
+        <? if ($sweater['sweater_picture']){ ?>
+            <img src="<?= $sweater['sweater_picture'] ?>"/>
+        <? } ?>
         <p style="margin: 20px 10px">
             <a href="./index.php" class="button">Back to All Sweaters</a>
         </p>
-        <form method="post" action="./update.php">
+        <form method="post" action="./update.php" enctype="multipart/form-data">
             <input type="hidden" id="id" name="id" value="<?= $sweater['sweater_id']?>" required/>
 
             <div class="form_control">
@@ -58,10 +62,10 @@ if (!$sweater){
                 <input type="text" id="sweater_name" name="sweater_name" value="<?= $sweater['sweater_name']?>" required/>
             </div>
 
-            <!-- <div class="form_control">
+            <div class="form_control">
                 <label for="sweater_picture">Sweater Picture</label>
                 <input type="file" id="sweater_picture" name="sweater_picture" />
-            </div> -->
+            </div>
 
             <div class="form_control">
                 <label for="quantity">Quantity</label>

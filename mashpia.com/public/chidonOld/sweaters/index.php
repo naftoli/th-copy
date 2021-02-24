@@ -50,7 +50,11 @@ if( isset($_GET['debug'])){
                 $query = mysql_query($sql);
                 while($row = mysql_fetch_assoc($query)) { ?>
                     <tr>
-                        <td><?= $row['sweater_picture'] ?></td>
+                        <td>
+                            <? if ($row['sweater_picture']) { ?>
+                                <img src="<?= $row['sweater_picture'] ?>" width="50" />
+                            <? } ?>
+                        </td>
                         <td><?= $row['sweater_name'] ?></td>
                         <td><?= $row['quantity'] ?></td>
                         <td><?= $row['size'] ?></td>
