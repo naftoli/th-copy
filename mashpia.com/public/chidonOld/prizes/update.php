@@ -61,7 +61,6 @@ $sql = "UPDATE chidon_prizes
         WHERE prize_id = '{$prize['prize_id']}'
     ";
 mysql_query($sql);
-$logger->debug($sql);
 
 if (mysql_affected_rows() > 0) {
     

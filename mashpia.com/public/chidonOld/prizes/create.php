@@ -22,7 +22,6 @@ switch($_FILES['sweater_picture']) {
         break;
     default: // if an image was uploaded succesfully save it
         $sweater_picture = save_image($_FILES['sweater_picture'], "/chidonOld/sweaters/img");
-        $logger->debug(__LINE__.$sweater_picture);
         break;
 }
 
