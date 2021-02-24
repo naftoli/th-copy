@@ -91,7 +91,11 @@ foreach ($info as $school => $children) {
         foreach ($types as $type => $value) {
             if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
         }
+
+        $pro_elig = '';
+        $expert_elig = '';
         foreach ($marks as $type => $final) {
+            if ($type == 'trophy_extra') continue;
             switch ($type) {
                 case 'maven':
                 case 'pro':
