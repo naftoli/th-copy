@@ -35,7 +35,7 @@ $qry = "
   WHERE
       tc.parent_id = :admin AND tc.year = :year 
         AND tc.can_enroll = 1 
-        AND (tc.khk = 1 or tc.school_rep = 1 or tc.trophy_contestant = 1 or tc.contestant = 1)
+        AND (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert = 1 or tc.shabbaton_trophy = 1)
     ORDER BY u.first
 ";
 
@@ -103,14 +103,15 @@ if ( $res ) {
         $rows[$idx]['total_donation'] = $row2['total_donation'];
       }
     }
-    if ( !empty( $rows ) ) $data['children'] = $rows;
-    else {
-        echo json_encode([
-            'success' =>  false,
-            'message' =>  "Could not find any children that have a school with enough staff setup. Please contact your child(ren)'s school."
-        ]);
-        exit;
-    }
+      $data['children'] = $rows;
+//    if ( !empty( $rows ) ) $data['children'] = $rows;
+//    else {
+//        echo json_encode([
+//            'success' =>  false,
+//            'message' =>  "Could not find any children that have a school with enough staff setup. Please contact your child(ren)'s school."
+//        ]);
+//        exit;
+//    }
   } else {
     echo json_encode([
       'success' =>  false,

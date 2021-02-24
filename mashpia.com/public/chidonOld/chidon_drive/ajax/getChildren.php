@@ -15,12 +15,12 @@ if ( $admin_id ) {
         users u
             JOIN
         th_chidon tc USING (user_id) 
-            JOIN
+            LEFT JOIN
         th_chidon_schools tcs on (tcs.school_id = tc.school_id and tcs.year = tc.year) 
     WHERE
         tc.year = :year AND tc.parent_id = :admin
             AND tc.can_enroll = 1 
-            AND (tc.khk = 1 or tc.school_rep = 1 or tc.trophy_contestant = 1 or tc.contestant = 1)
+            AND (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert = 1 or tc.shabbaton_trophy = 1)
   ");
   $res = $stmt->execute([
     ':year'   =>  $year, 
@@ -80,22 +80,22 @@ if ( $admin_id ) {
         }
       } else {
         $schoolNotReady++;
-        unset( $children[$idx] );
+//        unset( $children[$idx] );
       }
     }
     if ( $children ) {
-      if ( $schoolNotReady > 0 ) {
-        echo json_encode([
-          'success'   =>  true,
-          'children'  =>  $children, 
-          'error'     =>  "Not all of your children's schools have their chaperones and walking supervisors setup yet. Therefore, not all eligible children will show up on enrollment form."
-        ]);
-      } else {
+//      if ( $schoolNotReady > 0 ) {
+//        echo json_encode([
+//          'success'   =>  true,
+//          'children'  =>  $children,
+//          'error'     =>  "Not all of your children's schools have their chaperones and walking supervisors setup yet. Therefore, not all eligible children will show up on enrollment form."
+//        ]);
+//      } else {
         echo json_encode([
           'success'   =>  true,
           'children'  =>  $children
         ]);
-      }
+//      }
     } else {
       if ( $schoolNotReady > 0 ) {
         echo json_encode([
