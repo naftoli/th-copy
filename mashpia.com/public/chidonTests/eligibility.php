@@ -61,29 +61,37 @@ foreach ($schools as $id => $school) {
 <?php
 $types = $ct->getTypes();
 $types['trophy'] = 'Trophy';
+$types['trophy_extra'] = '';
+
 echo "<table><tr><th>Chidon ID</th><th>School</th></th><th>Grade</th><th>First Name</th><th>Last Name</th>
         <th>Test Type</th><th>Sweater</th><th>Gifts</th><th>Prize & Trips</th><th>Trophy Contestant</th>";
 echo "</tr>";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
     foreach ($children as $child) {
-        $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
         $id = $child['th_chidon_id'];
+
+        // figure out marks
+        $marks = [];
+        foreach ($types as $type => $value) {
+            $total = 0;
+            for ($i = 1; $i <= 4; $i++) {
+                $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
+                if ($type == 'trophy_extra' && $i == 1) continue;
+                $total += $mark;
+            }
+            if ($type == 'trophy_extra') $final = round($total / 3, 2);
+            else $final = round($total / 4, 2);
+            $marks[$type] = $final;
+        }
+
+        $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
         echo "<tr><td>" . $id . "</td><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" .
             $child['first'] . "</td><td>" . $child['last'] . "</td>";
         foreach ($types as $type => $value) {
             if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
         }
-        $pro_elig = '';
-        $expert_elig = '';
-        foreach ($types as $type => $value) {
-            $total = 0;
-            for ($i = 1; $i <= 4; $i++) {
-                $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
-                $total += $mark;
-            }
-            $final = round($total / 4, 2);
-
+        foreach ($marks as $type => $final) {
             switch ($type) {
                 case 'maven':
                 case 'pro':
@@ -95,7 +103,9 @@ foreach ($info as $school => $children) {
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes' && $type == 'expert') $eligible = 'yes';
                     break;
                 case 'trophy':
-                    if ($expert_elig && $final >= 80) $eligible = 'yes';
+                    if (
+                        ($expert_elig && $final >= 80) || ($marks['trophy_extra'] >= 80)
+                    ) $eligible = 'yes';
                     else $eligible = 'no';
                     break;
             }

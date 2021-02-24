@@ -219,16 +219,13 @@ class ChidonTests
                         case 'expert':
                             $mark = floatval(($details['pro'] + $details[$type]) / ($this->testQuestions['pro'] + $questions));
                             break;
-//                        case 'trophy':
-//                            // eligibility for trophy can come in one of 2 ways
-//                            // 1. child gets an 80 avg on parts 2/3/4
-//                            // 2. child gets a 70 avg on parts 2/3 and an 80 avg on part 4
-//                            $mark = floatval(
-//                                ($details['pro'] + $details['expert'] + $details[$type]) /
-//                                ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $questions)
-//                            );
                     }
                     $this->marks[$id][$testNum][$type] = $mark * 100;
+                    // eligibility for trophy can come in this way as well
+                    $this->marks[$id][$testNum]['trophy_extra'] = floatval(
+                        ($details['pro'] + $details['expert'] + $details['trophy']) /
+                        ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $this->testQuestions['trophy'])
+                    ) * 100;
                 }
             }
         }
