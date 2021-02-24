@@ -75,13 +75,14 @@ foreach ($info as $school => $children) {
             if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
         }
         $pro_elig = '';
+        $expert_elig = '';
         foreach ($types as $type => $value) {
             $total = 0;
             for ($i = 1; $i <= 4; $i++) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
-             $final = round($total / 4, 2);
+            $final = round($total / 4, 2);
 
             switch ($type) {
                 case 'maven':
@@ -90,10 +91,11 @@ foreach ($info as $school => $children) {
                     if ($final >= getNeededMark($child['school_id'], $child['class_id'], $type)) $eligible = 'yes';
                     else $eligible = 'no';
                     if ($type == 'pro') $pro_elig = $eligible;
+                    if ($type == 'expert') $expert_elig = $eligible;
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes' && $type == 'expert') $eligible = 'yes';
                     break;
                 case 'trophy':
-                    if ($final >= 80) $eligible = 'yes';
+                    if ($expert_elig && $final >= 80) $eligible = 'yes';
                     else $eligible = 'no';
                     break;
             }
