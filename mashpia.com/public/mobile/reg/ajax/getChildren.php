@@ -250,7 +250,9 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['shabbatonConfirmed'] = 0;
 
         //if ( $row['school_id'] != 54 ) { // don't let beis rivka ch enroll
-        $cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and (contestant = 1 or school_rep = 1 or khk = 1 or trophy_contestant = 1) and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
+        $cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and 
+                  (shabbaton_maven = 1 or shabbaton_pro = 1 or shabbaton_expert = 1 or shabbaton_trophy = 1) 
+                  and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
         $cRes = mysql_query($cSql);
         if (mysql_num_rows($cRes) > 0) {
             $cRow = mysql_fetch_assoc($cRes);
