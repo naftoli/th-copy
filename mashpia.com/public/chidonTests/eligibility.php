@@ -13,12 +13,12 @@ $ct = new ChidonTests();
 
 function getNeededMark($school_id, $class_id, $type = '') {
     if (in_array($school_id, [5])) return 85;
-    if (in_array($school_id, [81])) return 80;
     if (in_array($school_id, [106]) && $type != 'maven') return 80;
     if (in_array($school_id, [255]) && $type != 'maven') return 75;
     if (in_array($school_id, [255]) && $type == 'maven') return 80;
     if (in_array($school_id, [4])) return 77;
     if (in_array($class_id, [6088, 6089, 6090])) return 75;
+    if (in_array($class_id, [6061, 6260, 6376, 6579, 6821])) return 80;
     return 70;
 }
 
