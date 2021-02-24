@@ -53,7 +53,11 @@ if( isset($_GET['debug'])){
                 $query = mysql_query($sql);
                 while($row = mysql_fetch_assoc($query)) { ?>
                     <tr>
-                        <td><?= $row['prize_picture'] ?></td>
+                        <td>
+                            <? if ($row['prize_picture']) { ?>
+                                <img src="<?= $row['prize_picture'] ?>" width="50" />
+                            <? } ?>
+                        </td>
                         <td><?= $row['prize_name'] ?></td>
                         <td><?= $row['quantity'] ?></td>
                         <td><?= $row['made_possible_by'] ?></td>

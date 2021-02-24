@@ -50,7 +50,13 @@ if (!$prize){
         <p style="margin: 20px 10px">
             <a href="./index.php" class="button">Back to All Prizes</a>
         </p>
-        <form method="post" action="./update.php">
+        <h2><?= $prize['prize_name'] ?></h2>
+        <? if ($prize['prize_picture']){ ?>
+            <div class="form_control">
+                Current Picture: <br><img src="<?= $prize['prize_picture'] ?>" width="175" /><br><br>
+            </div>
+        <? } ?>
+        <form method="post" action="./update.php" enctype="multipart/form-data">
             <input type="hidden" id="id" name="id" value="<?= $prize['prize_id']?>" required/>
 
             <div class="form_control">
@@ -58,10 +64,10 @@ if (!$prize){
                 <input type="text" id="prize_name" name="prize_name" value="<?= $prize['prize_name']?>" required/>
             </div>
 
-            <!-- <div class="form_control">
+            <div class="form_control">
                 <label for="prize_picture">Prize Picture</label>
                 <input type="file" id="prize_picture" name="prize_picture" />
-            </div> -->
+            </div>
 
             <div class="form_control">
                 <label for="quantity">Quantity</label>

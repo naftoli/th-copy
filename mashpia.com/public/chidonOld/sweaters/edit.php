@@ -38,6 +38,9 @@ if (!$sweater){
             .form_control {
                 padding: 5px 10px;
             }
+            .existing-picture {
+                padding: 5px 10px;
+            }
             .page-break {
                 page-break-after: always;
             }
@@ -47,13 +50,15 @@ if (!$sweater){
     <BODY>
         <? include('../../admin_header.php'); ?>
         <h1>Edit Chidon Sweater</h1>
-        <h2><?= $sweater['sweater_name'] ?></h2>
-        <? if ($sweater['sweater_picture']){ ?>
-            <img src="<?= $sweater['sweater_picture'] ?>"/>
-        <? } ?>
         <p style="margin: 20px 10px">
             <a href="./index.php" class="button">Back to All Sweaters</a>
         </p>
+        <h2><?= $sweater['sweater_name'] ?></h2>
+        <? if ($sweater['sweater_picture']){ ?>
+            <div class="form_control">
+                Current Picture: <br><img src="<?= $sweater['sweater_picture'] ?>" width="175" /><br><br>
+            </div>
+        <? } ?>
         <form method="post" action="./update.php" enctype="multipart/form-data">
             <input type="hidden" id="id" name="id" value="<?= $sweater['sweater_id']?>" required/>
 
