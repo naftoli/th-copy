@@ -221,12 +221,12 @@ class ChidonTests
                             break;
                     }
                     $this->marks[$id][$testNum][$type] = $mark * 100;
-                    // eligibility for trophy can come in this way as well
-                    $this->marks[$id][$testNum]['trophy_extra'] = floatval(
-                        ($details['pro'] + $details['expert'] + $details['trophy']) /
-                        ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $this->testQuestions['trophy'])
-                    ) * 100;
                 }
+                // eligibility for trophy can come in this way as well
+                $this->marks[$id][$testNum]['trophy_extra'] = floatval(
+                    ($details['pro'] + $details['expert'] + $details['trophy']) /
+                    ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $this->testQuestions['trophy'])
+                ) * 100;
             }
         }
     }

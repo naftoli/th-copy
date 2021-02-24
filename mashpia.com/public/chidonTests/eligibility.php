@@ -72,7 +72,7 @@ foreach ($info as $school => $children) {
         $id = $child['th_chidon_id'];
 
         // figure out marks
-        $marks = [];
+        $child_marks = [];
         foreach ($types as $type => $value) {
             $total = 0;
             for ($i = 1; $i <= 4; $i++) {
@@ -82,8 +82,9 @@ foreach ($info as $school => $children) {
             }
             if ($type == 'trophy_extra') $final = round($total / 3, 2);
             else $final = round($total / 4, 2);
-            $marks[$type] = $final;
+            $child_marks[$type] = $final;
         }
+//        echo "<pre>"; print_r($child_marks); echo "</pre>";
 
         $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
         echo "<tr><td>" . $id . "</td><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" .
@@ -94,7 +95,7 @@ foreach ($info as $school => $children) {
 
         $pro_elig = '';
         $expert_elig = '';
-        foreach ($marks as $type => $final) {
+        foreach ($child_marks as $type => $final) {
             if ($type == 'trophy_extra') continue;
             switch ($type) {
                 case 'maven':
@@ -108,7 +109,7 @@ foreach ($info as $school => $children) {
                     break;
                 case 'trophy':
                     if (
-                        ($expert_elig == 'yes' && $final >= 80) || ($marks['trophy_extra'] >= 80)
+                        ($expert_elig == 'yes' && $final >= 80) || ($child_marks['trophy_extra'] >= 80)
                     ) $eligible = 'yes';
                     else $eligible = 'no';
                     break;
