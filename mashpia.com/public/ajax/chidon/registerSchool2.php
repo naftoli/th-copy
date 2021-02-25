@@ -33,11 +33,13 @@ $sql =
     . " year = " . $year . ", "
     . " option = '" . $choice . "', "
     . " registered = 1";
-if ($toRent) {
-    $sql .= ", goggles_rent = " . $toRent;
-}
-if ($toBuy) {
-    $sql .= ", goggles_buy = " . $toBuy;
+if ($choice == 'B') {
+    if ($toRent) {
+        $sql .= ", goggles_rent = " . $toRent;
+    }
+    if ($toBuy) {
+        $sql .= ", goggles_buy = " . $toBuy;
+    }
 }
 $res = mysql_query($sql);
 if (!$res) {

@@ -71,6 +71,7 @@ $year = GlobalSettings::getChidonYear();
     <br /><br/>
     In order to participate in Shabbaton, please read carefully.
     <br /><br/>
+    Now is the time to:
     <ul>
         <li>Congratulate each of your Chayolim for their incredible success.
         <li>To motivate them to do their best on the Chidon Final and for your Representatives to shine on stage.
@@ -140,7 +141,6 @@ $year = GlobalSettings::getChidonYear();
 
     <h4>Kol Hatorah Kula kids</h4>
     <ul>
-        <li>Click here for the Kol Hatorah Kula letter to give to the KHK kids.
         <li>Make a special meeting with your Kol Hatorah Kula Chayolim
         <li>Tell them that they have achieved the Chidon dream and have learned all 613 Mitzvos
         <li>Remind them that if they get 70% on the Kol Hatorah Kula Final, they are going to receive the special
@@ -237,7 +237,7 @@ $year = GlobalSettings::getChidonYear();
         </div>
         -->
         <h2>Terms</h2>
-        <input type="checkbox" name="agreement" id="agreement" /> I accept the school responsibilities as well as any fees that we may incur.<br />
+<!--        <input type="checkbox" name="agreement" id="agreement" /> I accept the school responsibilities as well as any fees that we may incur.<br />-->
         <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process.
         <br />
 
@@ -298,8 +298,8 @@ $year = GlobalSettings::getChidonYear();
                 return false;
             }
 
-            if ( !$("#agreement").is(":checked") || !$("#agreement2").is(":checked") ) {
-                alert("You must agree to all terms!");
+            if ( !$("#agreement2").is(":checked") ) {
+                alert("You must agree to terms!");
                 return false;
             }
 
