@@ -37,6 +37,9 @@ $year = GlobalSettings::getChidonYear();
             margin-left: 20px;
             list-style: decimal !important;
         }
+        h5 {
+            font-size: smaller;
+        }
     </style>
 </head>
 
@@ -64,10 +67,10 @@ $year = GlobalSettings::getChidonYear();
 
 <div id="school_shabbaton">
     <h2>School Responsibilities</h2>
-    In order to participate in Shabbaton, you will need to fulfill the following requirements:
-    <br /><br />
-    Dear Chidon Coordinator,<br />
-    Now is the time to:<br />
+    Dear Chidon Coordinator,
+    <br /><br/>
+    In order to participate in Shabbaton, please read carefully.
+    <br /><br/>
     <ul>
         <li>Congratulate each of your Chayolim for their incredible success.
         <li>To motivate them to do their best on the Chidon Final and for your Representatives to shine on stage.
@@ -83,27 +86,32 @@ $year = GlobalSettings::getChidonYear();
     After you announce to the children what they received no changes can be made.
     <br /><br />
 
-    <h4>Mitzvah Maven</h4>
-    Click <a href="https://docs.google.com/document/d/137vSz1wutOzSLJmatnd317TiD3WJPdBgvuPkUNvPTvw/edit?usp=sharing">here</a>
-    for the Mitzvah Maven Letter to be given to all children who went for the Shabbaton, but only passed Mitzvah Maven.
-    <br /><br />
+    <h4>Distribute Letters to Eligible Chayolim</h4>
+    <br/>
 
-    <h4>Maven Pro</h4>
-    The Maven/Pro Letter for all children (
-    <a href="https://docs.google.com/document/d/1QuFdoOsyRUx2zjHCDF2ams2s--LMdNQgsqlI08dEM9s/edit?usp=sharing">boys</a>,
-    <a href="https://docs.google.com/document/d/1UtXImBW-onFjek0zCMjnFaEoDfHEOQzlYSdUPlJcbsU/edit?usp=sharing">girls</a>
-    ) who went for the Pro/Expert test but only passed Maven/pro tests (but were not moved onto the Mavin/pro track).
-    <br /><br />
+    <div style="margin-left: 50px;">
+        <h5>Mitzvah Maven</h5>
+        Click <a href="https://docs.google.com/document/d/137vSz1wutOzSLJmatnd317TiD3WJPdBgvuPkUNvPTvw/edit?usp=sharing">here</a>
+        for the Mitzvah Maven Letter to be given to all children who went for the Shabbaton, but only passed Mitzvah Maven.
+        <br /><br />
 
-    <h4>Pro Expert</h4>
-    Click <a href="https://docs.google.com/document/d/1J0PdNSL2CYHo96qFPF5LuoWKM4FIfwwdnuWMfS-N0Ps/edit">here</a>
-    for the Pro/Expert Letter for all children who passed Pro/Expert or children who were put on the Mavin Pro and passed on their track.
-    <br /><br />
+        <h5>Maven Pro</h5>
+        The Maven/Pro Letter for all children (
+        <a href="https://docs.google.com/document/d/1QuFdoOsyRUx2zjHCDF2ams2s--LMdNQgsqlI08dEM9s/edit?usp=sharing">boys</a>,
+        <a href="https://docs.google.com/document/d/1UtXImBW-onFjek0zCMjnFaEoDfHEOQzlYSdUPlJcbsU/edit?usp=sharing">girls</a>
+        ) who went for the Pro/Expert test but only passed Maven/pro tests (but were not moved onto the Mavin/pro track).
+        <br /><br />
 
-    <h4>Trophy contestant</h4>
-    Click <a href="https://docs.google.com/document/d/1ueSXopH6tA-Zbcg9l9zHmFYQa3JceBsxFyxNexttxxA/edit">here</a>
-    for the Trophy Contestant Letter for all children who are eligible to compete for the Chidon Trophy.
-    <br /><br />
+        <h5>Pro Expert</h5>
+        Click <a href="https://docs.google.com/document/d/1J0PdNSL2CYHo96qFPF5LuoWKM4FIfwwdnuWMfS-N0Ps/edit">here</a>
+        for the Pro/Expert Letter for all children who passed Pro/Expert or children who were put on the Mavin Pro and passed on their track.
+        <br /><br />
+
+        <h5>Trophy contestant</h5>
+        Click <a href="https://docs.google.com/document/d/1ueSXopH6tA-Zbcg9l9zHmFYQa3JceBsxFyxNexttxxA/edit">here</a>
+        for the Trophy Contestant Letter for all children who are eligible to compete for the Chidon Trophy.
+        <br /><br />
+    </div>
 
     <h4>Encourage your students to learn</h4>
     I will do everything in my power to encourage the Chayolim to prepare for the final.
@@ -135,8 +143,10 @@ $year = GlobalSettings::getChidonYear();
         <li>Click here for the Kol Hatorah Kula letter to give to the KHK kids.
         <li>Make a special meeting with your Kol Hatorah Kula Chayolim
         <li>Tell them that they have achieved the Chidon dream and have learned all 613 Mitzvos
-        <li>Remind them that they (even if they are not going to be a Representative if they get 70% on the Kol Hatorah Kula final they are going to receive the special Kol Hatorah Kula Plaque.
-        <li>Remind the Representatives to watch the Kol Hatorah kula rapid response from last year now and prepare to be able to answer their question. It could make or break the entire game show. No pressure.
+        <li>Remind them that if they get 70% on the Kol Hatorah Kula Final, they are going to receive the special
+            Kol Hatorah Kula Plaque (even if they are not going to be a Representative).
+        <li>Remind the Representatives to watch the Kol Hatorah kula rapid response from last year now and prepare to
+            be able to answer their question. It could make or break the entire game show. No pressure.
     </ul>
     <br />
 
@@ -180,11 +190,11 @@ $year = GlobalSettings::getChidonYear();
         $100 Prizes<br />
         <input type="radio" name="choice" class="choice" value="B" /> I would like to go with Option B. I understand that my school must confirm their trip budget in order to receive the trip money
         <br /><br />
-        <h4>Rent Kosher VR goggles</h4>
+        <h5>Rent Kosher VR goggles</h5>
         I would like to rent <input type="number" id="rent" class="vr" size="2" style="width: 30px;" /> Goggles for our school. There will be a $365 hold on your credit card per Goggles until we receive them back at HQ
         <br /><br />
 
-        <h4>Buying Kosher VR goggles<h4></h4>
+        <h5>Buying Kosher VR goggles<h4></h4>
         Our School would like to purchase the VR Goggles to keep:
         <br />
         1 - 9 Googles $500 each<br />
@@ -201,6 +211,7 @@ $year = GlobalSettings::getChidonYear();
         <h4>Total Hold: $<span id="total_hold">0</span></h4>
         <h4>Total Charge: $<span id="total_charge">0</span></h4>
 
+        <!--
         <h2>Credit Card Info</h2>
         <div id="ccOnFile">
             <input type="radio" name="cc_info" class="cc_info" value="0" checked /> Use Credit Card on file<br />
@@ -224,6 +235,7 @@ $year = GlobalSettings::getChidonYear();
                 <input type="text" id="cvc" name="cvc" class="cvc" placeholder="XXX" />
             </label>
         </div>
+        -->
         <h2>Terms</h2>
         <input type="checkbox" name="agreement" id="agreement" /> I accept the school responsibilities as well as any fees that we may incur.<br />
         <input type="checkbox" name="agreement2" id="agreement2" /> I understand that enrollment will not open for my students until I have completed the registration process.
@@ -263,11 +275,11 @@ $year = GlobalSettings::getChidonYear();
     }
 
     $( function() {
-        getCCInfo();
+        // getCCInfo();
 
-        $("#school_id").change( function() {
-            getCCInfo();
-        });
+        // $("#school_id").change( function() {
+        //     getCCInfo();
+        // });
 
         $(".vr").change(calculateTotal)
 
@@ -299,37 +311,37 @@ $year = GlobalSettings::getChidonYear();
             info['charge'] = total_charge
             info['choice'] = choice
 
-            let cc = {};
-            if ( $(".cc_info:checked").val() == 1 ) {
-                // cc info must be filled out
-                let cardnum = $("#cardnumber").val().trim();
-                let exp = $("#exp").val().trim();
-                let cvc = $(".cvc").val().trim();
-
-                if ( cardnum == '' || exp == '' || cvc == '' ) {
-                    alert("All Card Info must be entered.");
-                    return false;
-                }
-
-                if ( cardnum.length < 15 || cardnum.length > 16 ) {
-                    alert( cardnum.length );
-                    alert("Cardnumber must be 15 or 16 digits.");
-                    return false;
-                }
-
-                if ( exp.indexOf('/') == -1 || exp.length != 5 ) {
-                    alert("Invalid Expiry format. No spaces allowed.");
-                    return false;
-                }
-
-                cc.card = cardnum;
-                cc.exp = exp;
-                cc.cvc = cvc;
-            }
+            // let cc = {};
+            // if ( $(".cc_info:checked").val() == 1 ) {
+            //     // cc info must be filled out
+            //     let cardnum = $("#cardnumber").val().trim();
+            //     let exp = $("#exp").val().trim();
+            //     let cvc = $(".cvc").val().trim();
+            //
+            //     if ( cardnum == '' || exp == '' || cvc == '' ) {
+            //         alert("All Card Info must be entered.");
+            //         return false;
+            //     }
+            //
+            //     if ( cardnum.length < 15 || cardnum.length > 16 ) {
+            //         alert( cardnum.length );
+            //         alert("Cardnumber must be 15 or 16 digits.");
+            //         return false;
+            //     }
+            //
+            //     if ( exp.indexOf('/') == -1 || exp.length != 5 ) {
+            //         alert("Invalid Expiry format. No spaces allowed.");
+            //         return false;
+            //     }
+            //
+            //     cc.card = cardnum;
+            //     cc.exp = exp;
+            //     cc.cvc = cvc;
+            // }
 
             let school_id = $("#school_id").val()
             if ( school_id > 0 ) {
-                $.post('/ajax/chidon/registerSchool2.php', { school_id: school_id, ...info, ...cc }, function( error ) {
+                $.post('/ajax/chidon/registerSchool2.php', { school_id: school_id, ...info }, function( error ) {
                     if ( error ) alert( error );
                     else {
                         alert("You have successfully enrolled your school to the Shabbaton.");

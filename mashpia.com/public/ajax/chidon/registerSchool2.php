@@ -8,26 +8,44 @@ require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
-
-use classes\authorize\AuthorizeAPIRequest;
-use classes\authorize\CustomerProfile;
-use classes\authorize\PaymentProfile;
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+//
+//use classes\authorize\AuthorizeAPIRequest;
+//use classes\authorize\CustomerProfile;
+//use classes\authorize\PaymentProfile;
 
 $school_id = mysql_real_escape_string( $_POST['school_id'] );
 if (!$school_id) { echo "No School ID was passed."; exit; }
 $hold = $_POST['hold'] ?? 0;
+$charge = $_POST['charge'] ?? 0;
 $toRent = $_POST['rent'] ?? 0;
 $toBuy = $_POST['buy'] ?? 0;
-$charge = $_POST['charge'] ?? 0;
 $choice = $_POST['choice'] ?? 0;
 $expiry = $_POST['exp'] ?? 0;
 $card = $_POST['card'] ?? 0;
 $cvc = $_POST['cvc'] ?? 0;
 
+$sql =
+    " INSERT INTO th_chidon_schools "
+    . " SET school_id = " . $school_id . ", "
+    . " year = " . $year . ", "
+    . " option = '" . $choice . "', "
+    . " registered = 1";
+if ($toRent) {
+    $sql .= ", goggles_rent = " . $toRent;
+}
+if ($toBuy) {
+    $sql .= ", goggles_buy = " . $toBuy;
+}
+$res = mysql_query($sql);
+if (!$res) {
+    echo "Error registering school for Chidon Shabbaton " . $year;
+}
+
 // find out if the school has a customer id and profile id
+/*
 $sql = "select * from schools where school_id = " . $school_id;
 $result = mysql_query($sql);
 $school = mysql_fetch_assoc($result);
@@ -93,6 +111,7 @@ if ($customer_id && $payment_id) {
     }
 
     //***************** REGISTER SCHOOL **********************/
+/*
     if (($hold > 0 || $charge > 0) && $choice == 'B') {
         $success = true;
         mysql_query('set autocommit = 0');
@@ -184,3 +203,4 @@ if ($customer_id && $payment_id) {
         }
     }
 }
+*/
