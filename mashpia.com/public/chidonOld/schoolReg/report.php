@@ -39,7 +39,7 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Goggles To Buy</th>
         </tr>
         <?php
-        foreach ($info as $school => $option) {
+        foreach ($info as $school => $row) {
             echo "<tr><td>" . $school . "</td><td>Option " . $row['option'] . "</td><td>" . $row['goggles_rent'] .
                 "</td><td>" . $row['goggles_buy'] . "</td></tr>";
         }

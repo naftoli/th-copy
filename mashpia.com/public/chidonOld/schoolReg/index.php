@@ -252,12 +252,14 @@ $year = GlobalSettings::getChidonYear();
         let total_hold = 0;
         let total_charge = 0;
 
-        const rent = parseInt($("#rent").val())
+        let rent = parseInt($("#rent").val())
+        if (isNaN(rent)) rent = 0
         if (rent > 0) {
             total_hold += 365 * rent
         }
 
-        const buy = parseInt($("#buy").val())
+        let buy = parseInt($("#buy").val())
+        if (isNaN(buy)) buy = 0
         if (buy > 0) {
             if (buy < 10) {
                 total_charge += 500 * buy

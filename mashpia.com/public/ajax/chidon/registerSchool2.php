@@ -44,6 +44,7 @@ if ($choice == 'B') {
 $res = mysql_query($sql);
 if (!$res) {
     echo "Error registering school for Chidon Shabbaton " . $year;
+    echo $sql;
 }
 
 // find out if the school has a customer id and profile id
