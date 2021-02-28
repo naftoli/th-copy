@@ -90,4 +90,22 @@ foreach ($info as $school => $children) {
         }
     }
 }
-echo "<pre>"; print_r($eligibility); echo "</pre>";
+//echo "<pre>"; print_r($eligibility); echo "</pre>";
+$qrys = [];
+foreach ($eligibility as $id => $value) {
+    switch ($value) {
+        case 'sweater':
+            $qrys[] = "update th_chidon set shabbaton_maven = 1 where th_chidon_id = $id";
+            break;
+        case 'gifts':
+            $qrys[] = "update th_chidon set shabbaton_pro = 1 where th_chidon_id = $id";
+            break;
+        case 'trips':
+            $qrys[] = "update th_chidon set shabbaton_expert = 1 where th_chidon_id = $id";
+            break;
+        case 'trophy':
+            $qrys[] = "update th_chidon set shabbaton_trophy = 1 where th_chidon_id = $id";
+            break;
+    }
+}
+echo "<pre>"; print_r($qrys); echo "</pre>";
