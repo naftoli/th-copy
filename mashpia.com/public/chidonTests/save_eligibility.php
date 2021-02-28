@@ -108,4 +108,21 @@ foreach ($eligibility as $id => $value) {
             break;
     }
 }
-echo "<pre>"; print_r($qrys); echo "</pre>";
+//echo "<pre>"; print_r($qrys); echo "</pre>";
+$success = true;
+mysql_query('set autocommit = 0');
+mysql_query('begin');
+foreach ($qrys as $sql) {
+    if (!mysql_query($sql)) {
+        $success = false;
+        break;
+    }
+}
+if ($success)
+    mysql_query('commit');
+else {
+    mysql_query('rollback');
+    echo mysql_error();
+}
+mysql_query('set autocommit = 1');
+echo 'done.';
