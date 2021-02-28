@@ -129,13 +129,13 @@ foreach ($child_marks as $school => $more) {
     $(function() {
         $(".contestant").click( function() {
             let id = $(this).attr('id')
-            let checked = $(this).is(":checked")
+            let checked = $(this).is(":checked") ? 1 : 0
             update(id, checked, 'school_rep')
         })
 
         $(".khk").click( function() {
             let id = $(this).attr('id')
-            let checked = $(this).is(":checked")
+            let checked = $(this).is(":checked") ? 1 : 0
             update(id, checked, 'khk_rep')
         })
 
