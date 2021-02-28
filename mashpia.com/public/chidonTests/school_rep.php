@@ -95,6 +95,17 @@ foreach ($child_marks as $school => $more) {
                     if ($child_info[$id]['rep']) echo " checked ";
                     echo " disabled /></td></tr>";
                 }
+                ?>
+                <tr>
+                    <th>Chidon ID</th>
+                    <th>Grade</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Avg (3 Parts)</th>
+                    <th>KHK Rep</th>
+                    <th>Actual School Rep</th>
+                </tr>
+            <?php
             }
         ?>
         </tbody>

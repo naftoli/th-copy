@@ -106,6 +106,17 @@ foreach ($child_marks as $school => $more) {
                 echo "</td></tr>";
                 if (!$child_info[$id]['khk']) $i++;
             }
+            ?>
+            <tr>
+                <th>Chidon ID</th>
+                <th>Grade</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Avg (3 Parts)</th>
+                <th>KHK Rep</th>
+                <th>Actual School Rep</th>
+            </tr>
+            <?php
         }
         ?>
         </tbody>
