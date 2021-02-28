@@ -102,6 +102,9 @@
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       { "label": "Chidon Drive Letter", "legacy": true, "path": "/chidonOld/shabbaton_letter.php" },
 
+      { "label": "Chidon Sweaters", "legacy": true, "path": "/chidonOld/sweaters" },
+      { "label": "Chidon Prizes", "legacy": true, "path": "/chidonOld/prizes" },
+
       { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
       
