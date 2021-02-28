@@ -28,11 +28,11 @@ foreach ($info as $school => $children) {
         $id = $child['th_chidon_id'];
         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
         $total = 0;
-        for ($i = 2; $i <= 4; $i++) {
+        for ($i = 1; $i <= 4; $i++) {
             $mark = isset($marks[$id][$i]['trophy_extra']) ? $marks[$id][$i]['trophy_extra'] : 0;
             $total += $mark;
         }
-        $final = round($total / 3, 2);
+        $final = round($total / 4, 2);
         $child_marks[$schools[$school]][$grade][$id] = $final;
         $child_info[$id] = [
             'first' =>  $child['first'],
