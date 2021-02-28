@@ -26,7 +26,7 @@ $child_info = [];
 foreach ($info as $school => $children) {
     foreach ($children as $child) {
         $id = $child['th_chidon_id'];
-        $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+        $grade = $child['class_grade'];
         $total = 0;
         for ($i = 1; $i <= 4; $i++) {
             $mark = isset($marks[$id][$i]['trophy_extra']) ? $marks[$id][$i]['trophy_extra'] : 0;
