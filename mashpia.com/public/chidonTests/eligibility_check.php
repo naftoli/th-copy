@@ -47,6 +47,9 @@ foreach ($schools as $id => $school) {
         td:not(.type) {
             vertical-align: top;
         }
+        td:nth-child(6), td:nth-child(8), td:nth-child(10), td:nth-child(12) {
+            border-right: 1px solid black;
+        }
     </style>
 </head>
 <body>
@@ -105,12 +108,12 @@ foreach ($info as $school => $children) {
                 case 'pro':
                     if ($final >= getNeededMark($child['school_id'], $child['class_id'], $type)) $eligible = 'gifts';
                     else $eligible = '';
-                    $pro_elig = 'yes';
+                    if ($eligible == 'gifts') $pro_elig = 'yes';
                     break;
                 case 'expert':
                     if ($final >= getNeededMark($child['school_id'], $child['class_id'], $type)) $eligible = 'trips';
                     else $eligible = '';
-                    $expert_elig = 'yes';
+                    if ($eligible == 'trips') $expert_elig = 'yes';
                     if ($child['test_type'] == 'pro' && $pro_elig == 'yes') $eligible = 'trips';
                     break;
                 case 'trophy':
