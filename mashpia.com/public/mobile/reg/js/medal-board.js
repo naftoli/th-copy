@@ -105,12 +105,36 @@ Medal.prototype.getColor = function (current) {
  * 
  * returns the standard medal for the Medals based on the config passed to the constructor.
  */
+
+// function to get GET paramaters
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+
+let campaigns = [];
+var user_id = findGetParameter('id');
+$.get('ajax/getMedalInfo.php', { user_id: user_id, subject_id: 5 }, setCampaigns);
+function setCampaigns(data) {
+    campaigns = JSON.parse(data);
+    campaigns.forEach(campaign => {
+        console.log(campaign)
+    });
+}
+
 Medal.prototype.render = function () {
     //   var MissionsText = "Missions";
     var ToText = " To ";
     var CampaignCompleateText = "Campaign Compleate!";
     var progressbarFloat = "";
     var progressTextAlignment = "";
+
 
     if (localStorage.getItem("locallang") == "he") {
 
@@ -123,27 +147,38 @@ Medal.prototype.render = function () {
         progressTextAlignment = ' style="direction:rtl;" ';
     }
 
-
     if (this.total > 0)
-        var status_width = (this.total - this.base_amount) / (this.needed - this.base_amount) * 100;
+        var status_width = (this.total) / (this.needed) * 100;
     else
         status_width = 0;
 
     var html = "<div class='medal'>";
+    html += '<div class="medal-header">';
     html += '<a href="' + this.url + '">';
     html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
     html += '</a>';
-    html += '<div class="medal-subject">';
-    html += '<span>' + this.subject + '</span>';
+    html += '<div class="medal-header2">';
+    html += '<div class="medal-header2-flex">';
+    html += '<div class="medal-header2-details">';
+    html += '<h2>' + this.subject + '</h2>';
+    html += '<p><span>' + this.total + ' of ' + this.needed + '</span> monthly missions earned</p>';
+    html += '</div>';
+    html += "<div class='cornerLabel'>Don't miss a month to earn your medal by ב״א שבט</div>";
     html += '</div>';
     html += '<div class="medal-status progress">';
-    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '"></div>';
+    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '">'
 
     if (this.next - 1 < this.colors.length) {
         html += '<span ' + progressTextAlignment + '>' + (this.needed - this.total) + ToText + this.getColor(false) + '</span>';
     } else {
         html += '<span ' + progressTextAlignment + '>' + CampaignCompleateText + '</span>';
     }
+
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="medal-footer"></div>';
+
 
     html += '</div>';
     html += "</div>";
