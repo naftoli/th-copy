@@ -114,6 +114,7 @@ foreach ($child_marks as $school => $more) {
                 <th>Last Name</th>
                 <th>Avg (3 Parts)</th>
                 <th>KHK Rep</th>
+                <th>Suggested School Rep</th>
                 <th>Actual School Rep</th>
             </tr>
             <?php
