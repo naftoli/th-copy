@@ -66,9 +66,9 @@ foreach ($info as $school => $children) {
 }
 // sort by mark desc
 foreach ($child_marks as $school => $more) {
-    foreach ($more as $grade => $other) {
-        foreach ($other as $gender => $more) {
-            arsort($child_marks[$school][$grade][$gender]);
+    foreach ($more as $gender => $other) {
+        foreach ($other as $grade => $more) {
+            arsort($child_marks[$school][$gender][$grade]);
         }
     }
 }
@@ -115,7 +115,7 @@ foreach ($child_marks as $school => $more) {
             <?php
             foreach ($other as $grade => $more) {
                 $i = 1;
-                foreach ($other as $id => $avg) {
+                foreach ($more as $id => $avg) {
                     echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $child_info[$id]['first'] . "</td><td>" .
                         $child_info[$id]['last'] . "</td><td>" . $child_info[$id]['old_avg'] . "</td><td>" . $avg . "</td><td>";
                     echo "<input type='checkbox' class='khk' id='$id' ";
