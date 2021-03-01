@@ -110,8 +110,8 @@ foreach ($child_marks as $school => $more) {
                 }
                 echo "</td><td><input type='checkbox' id='$id' ";
                 if ($child_info[$id]['rep']) echo " checked ";
-                echo "disabled /></td></tr>";
-                echo "</td><td><input type='checkbox' class='contestant' id='$id' />";
+                echo "disabled /></td><td>";
+                echo "<input type='checkbox' class='contestant' id='$id' />";
                 echo "</td></tr>";
                 if (!$child_info[$id]['khk']) $i++;
             }
