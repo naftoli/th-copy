@@ -94,9 +94,11 @@ foreach ($child_marks as $school => $more) {
 foreach ($child_marks as $school => $more) {
     echo "<h2>" . $school . "</h2>";
     foreach ($more as $gender => $other) {
+        if ($gender == 'M') echo "<h2>Boys</h2>";
+        else if ($gender == 'F') echo "<h2>Girls</h2>";
+        else echo "<h2></h2>";
         ?>
         <table>
-            <caption><?= $gender ?></caption>
             <thead>
             <tr>
                 <th>Chidon ID</th>
