@@ -4,11 +4,6 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
 $schools = $as->getSchools();
