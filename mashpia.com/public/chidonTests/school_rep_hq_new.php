@@ -44,7 +44,7 @@ foreach ($info as $school => $children) {
             $totalAvg += $avg;
         }
         $final = $totalAvg / 2;
-        $child_marks[$schools[$school]][$grade][$id] = $final;
+        $child_marks[$schools[$school]][$child['gender']][$grade][$id] = $final;
 
         // add old avg
         $total = 0;
@@ -67,7 +67,9 @@ foreach ($info as $school => $children) {
 // sort by mark desc
 foreach ($child_marks as $school => $more) {
     foreach ($more as $grade => $other) {
-        arsort($child_marks[$school][$grade]);
+        foreach ($other as $gender => $more) {
+            arsort($child_marks[$school][$grade][$gender]);
+        }
     }
 }
 //echo "<pre>"; print_r($child_marks); echo "</pre>";
@@ -91,44 +93,11 @@ foreach ($child_marks as $school => $more) {
 <?php
 foreach ($child_marks as $school => $more) {
     echo "<h2>" . $school . "</h2>";
-    ?>
-    <table>
-        <thead>
-        <tr>
-            <th>Chidon ID</th>
-            <th>Grade</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Avg (3 Parts)</th>
-            <th>Avg (Expert + Trophy)</th>
-            <th>KHK Rep</th>
-            <th>Suggested School Rep</th>
-            <th>Current School Rep</th>
-            <th>New School Rep</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($more as $grade => $other) {
-            $i = 1;
-            foreach ($other as $id => $avg) {
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $child_info[$id]['first'] . "</td><td>" .
-                    $child_info[$id]['last'] . "</td><td>" . $child_info[$id]['old_avg'] . "</td><td>" . $avg . "</td><td>";
-                echo "<input type='checkbox' class='khk' id='$id' ";
-                if ($child_info[$id]['khk']) echo " checked ";
-                echo "/></td><td>";
-                if ($i == 1 && $avg >= 84.0 && !$child_info[$id]['khk']) {
-                    echo "&check;";
-                }
-                echo "</td><td><input type='checkbox' id='$id' ";
-                if ($child_info[$id]['rep_old']) echo " checked ";
-                echo "disabled /></td><td>";
-                echo "<input type='checkbox' class='contestant' id='$id' ";
-                if ($child_info[$id]['rep']) echo " checked ";
-                echo "/></td></tr>";
-                if (!$child_info[$id]['khk']) $i++;
-            }
-            ?>
+    foreach ($more as $gender => $other) {
+        ?>
+        <table>
+            <caption><?= $gender ?></caption>
+            <thead>
             <tr>
                 <th>Chidon ID</th>
                 <th>Grade</th>
@@ -141,12 +110,48 @@ foreach ($child_marks as $school => $more) {
                 <th>Current School Rep</th>
                 <th>New School Rep</th>
             </tr>
+            </thead>
+            <tbody>
             <?php
-        }
-        ?>
-        </tbody>
-    </table>
-    <?php
+            foreach ($other as $grade => $more) {
+                $i = 1;
+                foreach ($other as $id => $avg) {
+                    echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $child_info[$id]['first'] . "</td><td>" .
+                        $child_info[$id]['last'] . "</td><td>" . $child_info[$id]['old_avg'] . "</td><td>" . $avg . "</td><td>";
+                    echo "<input type='checkbox' class='khk' id='$id' ";
+                    if ($child_info[$id]['khk']) echo " checked ";
+                    echo "/></td><td>";
+                    if ($i == 1 && $avg >= 84.0 && !$child_info[$id]['khk']) {
+                        echo "&check;";
+                    }
+                    echo "</td><td><input type='checkbox' id='$id' ";
+                    if ($child_info[$id]['rep_old']) echo " checked ";
+                    echo "disabled /></td><td>";
+                    echo "<input type='checkbox' class='contestant' id='$id' ";
+                    if ($child_info[$id]['rep']) echo " checked ";
+                    echo "/></td></tr>";
+                    if (!$child_info[$id]['khk']) $i++;
+                }
+                ?>
+                <tr>
+                    <th>Chidon ID</th>
+                    <th>Grade</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Avg (3 Parts)</th>
+                    <th>Avg (Expert + Trophy)</th>
+                    <th>KHK Rep</th>
+                    <th>Suggested School Rep</th>
+                    <th>Current School Rep</th>
+                    <th>New School Rep</th>
+                </tr>
+                <?php
+            }
+            ?>
+            </tbody>
+        </table>
+        <?php
+    }
 }
 ?>
 </body>
