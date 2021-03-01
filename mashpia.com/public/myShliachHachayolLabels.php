@@ -1,6 +1,13 @@
 <?php
 $admin_auth = array('school'); 
-require('header.php'); 
+require('header.php');
+
+function checkChidon($id) {
+    $sql = "select * from th_chidon where year = 5781 and user_id in (
+            select id from admin_auths where admin_id = $id and auth = 'user')";
+    $result = mysql_query($sql);
+    return mysql_num_rows($result);
+}
 
 require 'class.myShliachHachayol.php';
 $m = new MyShliachHachayol( true );
@@ -159,7 +166,9 @@ $parents = $m->getSortedAdmins();
 					
 					echo "<div class='label'>";
 					echo "<span class='name'>";
-					echo "<b>" . $name . " Family (" . $num . ")</b><br />" . $address . "</span></div>";
+					echo "<b>";
+                    if (checkChidon($admin_id)) echo "*";
+					echo $name . " Family </b><br />" . $address . "</span></div>";
 					checkForBreak();
 					/*
 					echo "<div class='label'>";
