@@ -102,7 +102,6 @@ foreach ($child_marks as $school => $more) {
             <th>Avg (3 Parts)</th>
             <th>Avg (Expert + Trophy)</th>
             <th>KHK Rep</th>
-            <th>Suggested School Rep</th>
             <th>Current School Rep</th>
             <th>New School Rep</th>
         </tr>
@@ -117,10 +116,7 @@ foreach ($child_marks as $school => $more) {
                 echo "<input type='checkbox' class='khk' id='$id' ";
                 if ($child_info[$id]['khk']) echo " checked ";
                 echo "disabled /></td><td>";
-                if ($i == 1 && $avg >= 84.0 && !$child_info[$id]['khk']) {
-                    echo "&check;";
-                }
-                echo "</td><td><input type='checkbox' id='$id' ";
+                echo "<input type='checkbox' id='$id' ";
                 if ($child_info[$id]['rep_old']) echo " checked ";
                 echo "disabled /></td><td>";
                 echo "<input type='checkbox' class='contestant' id='$id' ";
@@ -137,7 +133,6 @@ foreach ($child_marks as $school => $more) {
                 <th>Avg (3 Parts)</th>
                 <th>Avg (Expert + Trophy)</th>
                 <th>KHK Rep</th>
-                <th>Suggested School Rep</th>
                 <th>Current School Rep</th>
                 <th>New School Rep</th>
             </tr>
