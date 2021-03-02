@@ -111,5 +111,6 @@ foreach ($child_marks as $gender => $more) {
             else echo 'no' . "</td><td></td></tr>";
         }
     }
+    echo "</table>";
 }
 ?>

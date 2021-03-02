@@ -108,5 +108,6 @@ foreach ($child_marks as $gender => $more) {
         if ($child_info[$id]['khk']) echo 'yes' . "</td><td>" . $child_info[$id]['khk_avg'] . "</td></tr>";
         else echo 'no' . "</td><td></td></tr>";
     }
+    echo "</table>";
 }
 ?>
