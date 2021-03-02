@@ -48,7 +48,6 @@ foreach ($students as $child) {
         'last'  =>  $child['last'],
         'khk'   =>  $child['khk_rep'],
         'rep'   =>  $child['school_rep'],
-        'rep_old'   =>  $child['school_rep_old'],
         'school'    =>  $child['school_name'],
         'khk_avg'   =>  $khkAvg,
         'grade'     =>  $grade
