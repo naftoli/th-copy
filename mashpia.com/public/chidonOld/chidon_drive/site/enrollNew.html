@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta name="viewport" content="width=device-width">
+	<meta charset="UTF-8">
+	<meta name="google" content="notranslate">
+	<title>Shabbaton Enrollment | Chidon Drive</title>
+	<meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
+	<link rel="icon" type="image/png" href="img/favicon.png" />
+	<link rel="stylesheet" href="css/font.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+	<link rel="stylesheet" href="css/enroll.css" type="text/css" />
+</head>
+
+<body>
+
+<header>
+	<div class="wrapper">
+		<div class="left">
+			<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+			<a href="index.html" class="logo">
+				<h1>Chidon</h1><img src="img/chidon.png?v=1" alt="Chidon" />
+			</a>
+			<nav>
+				<a href="index.html">Home</a>
+				<a href="donate.html">Donate</a>
+				<a href="leaderboard.html">Leaderboard</a>
+				<a href="story.html">Our Story</a>
+			</nav>
+		</div>
+		<div class="icons">
+			<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+			<a href="#"><img src="img/army.png" alt="Tzivos Hashem" /></a>
+		</div>
+	</div>
+</header>
+<div class="main">
+	<div class="wrapper">
+		<h2 class="title">Shabbaton Enrollment</h2>
+		<div class="form login" style="display: none;">
+			<form id="loginForm">
+				<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
+				<div class="field">
+					<label>Username: <input type="text" id="username" name="username" required /></label>
+				</div>
+				<div class="field">
+					<label>Password: <input type="password" id="password" name="password" required /></label>
+				</div>
+				<input type="submit" class="button" value="LOGIN" />
+			</form>
+		</div>
+		<div class="form kids-wrapper blue-circle" style="display: none;"></div>
+
+		<!-- FORM A -->
+
+		<div class="form formA" style="display: none;">
+			<form class="personalInfo">
+				<h5 class="formDetails">
+					We are so proud of your dedication and commitment to learning Hashem's Mitzvos.
+					You have qualified for the Chidon on the <b>Mitzvah Maven Track!</b>
+				</h5>
+				<h5 class="formDetails">
+					You are eligible for the Chidon Sweater and a Chidon Certificate recognizing your achievements.
+				</h5>
+				<h5 class="formDetails">
+					We look forward to you joining in the grand Chidon Event and Award Ceremony on <b>Sunday, 12
+					Sivan 5781 / May 23, 2021</b> with your families!
+				</h5>
+				<br />
+				<h5 class="formTitle">Chidon Registration:</h5>
+				<div class="field flex">
+					<input type="checkbox" name="registerForChidon" id="registerForChidon" class="inputCheckbox" />
+					<label class="checkboxLabel" for="registerForChidon">
+						I would like to register to receive the Chidon sweater and certificate. They will be
+						shipped to my school for $25.
+					</label>
+				</div>
+				<div class="group save-detail"></div>
+			</form>
+		</div>
+
+		<!-- FORM B -->
+
+		<div class="form formB" style="display: none;">
+			<form class="personalInfo">
+				<h5 class="formDetails">
+					We are so proud of your dedication and commitment to learning Hashem's Mitzvos. You have
+					qualified for the Chidon on the <b>Maven/Pro Track</b>.
+				</h5>
+				<h5 class="formDetails">
+					You are eligible for the Chidon Sweater, Certificate, and the Chidon Gifts!
+				</h5>
+				<h5 class="formDetails">
+					We look forward to you joining in the grand Chidon Event and Award Ceremony on <b>Sunday, 12
+					Sivan 5781 / May 23, 2021</b> with your families!
+				</h5>
+				<br />
+				<h5 class="formTitle">Chidon Registration:</h5>
+				<div class="field flex">
+					<input type="checkbox" name="registerForChidon" id="registerForChidon" class="inputCheckbox" />
+					<label class="checkboxLabel" for="registerForChidon">
+						I would like to register for the Chidon and receive the Chidon Sweater, Certificate and
+						Chidon Gifts.
+					</label>
+				</div>
+				<p class="checkboxDetails">
+					Boys will be receiving a Chidon iKippah Yarmulka, and girls a beautiful Chidon charm bracelet.
+					Plus, both girls and boys will receive another surprise gift!
+				</p>
+				<p class="checkboxDetails">The sweater and gifts will be shipped to my school for $25.</p>
+				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+					<div class="field flex small-select">
+						<label>Please select your Yarmulka Size</label>
+						<select id="yarmulkaSize" name="yarmulkaSize">
+							<option value='3'>Size 3</option>
+							<option value='4'>Size 4</option>
+							<option value='5'>Size 5</option>
+							<option value='6'>Size 6</option>
+						</select>
+					</div>
+				</div>
+				<div class="group save-detail"></div>
+			</form>
+		</div>
+
+		<!-- FORM C -->
+
+		<div class="form formC" style="display: none;">
+			<form class="personalInfo">
+				<h5 class="formDetails">
+					We are so proud of your dedication and commitment to learning Hashem's Mitzvos. You qualified
+					for the <b>Chidon Experience</b>. This is a huge accomplishment!
+				</h5>
+				<br />
+				<h5 class="formDetails">You are eligible for:</h5>
+				<div class="listSection">
+					<ul>
+						<li>The Chidon <b>Sweater</b></li>
+						<li>The Chidon <b>Gifts</b>: Boys will be receiving a Chidon iKippah Yarmulka, and girls a
+							beautiful Chidon charm bracelet. Plus, both girls and boys will receive another surprise
+							gift!
+						</li>
+						<li id="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
+							experience
+						</li>
+						<li id="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
+							catalog
+						</li>
+						<li>Your Chidon <b>Awards</b> (certificate, plaque, medal, or trophy)</li>
+					</ul>
+				</div>
+				<br />
+				<h5 class="formDetails">
+					You are also eligible to take the <b>Chidon Final</b> to earn an award, and the <b>Chidon Trophy
+					Final</b> to compete for one of the three trophies awarded to your grade.
+				</h5>
+				<h5 class="formDetails">The finals will be held on the following dates:</h5>
+				<div class="listSection">
+					<ul>
+						<li><b>Chidon Final:</b> Thursday, 5 Nissan 5781 / March 18, 2021</li>
+						<li><b>Trophy Final:</b> Sunday, 8 Nissan 5781 / March 21 2021.</li>
+					</ul>
+				</div>
+				<h5 class="formDetails">As a bonus, every finalist will receive the following items:</h5>
+				<div class="listSection">
+					<ul>
+						<li>A personalized Chidon flag</li>
+						<li>A Chidon trophy stress ball</li>
+						<li>A Chidon ID tag</li>
+					</ul>
+				</div>
+				<h5 class="formDetails">
+					Your family will also receive your very own <b>Chidon Celebration Box</b> so you can join in the
+					grand Chidon Event and Award Ceremony on <b>Sunday, 12 Sivan 5781 / May 23, 2021</b> with great
+					fanfare.
+				</h5>
+				<h5 class="formTitle">Chidon Registration:</h5>
+				<div class="field">
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="registerForChidonExperience"
+							   name="registration">
+						<label class="checkboxLabel" for="registerForChidonExperience">
+							Yes! I would like to register for the Chidon Experience and receive all of the above
+							items.
+						</label>
+					</div>
+					<h5 class="formDetails">I understand that participation in the <b>Chidon Experience</b> costs
+						$370.
+					</h5>
+					<div class="field flex small-select">
+						<label>I would like to pay:</label>
+						<select id="paymentAmount" name="pay">
+							<option value='370'>$370</option>
+							<option value='300'>$300</option>
+							<option value='270'>$270 (activates the Rohr Grant to cover the last $100) </option>
+							<option value='225'>$225</option>
+							<option value='185'>$185</option>
+						</select>
+					</div>
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="registerForChidonGifts" name="registration">
+						<label class="checkboxLabel" for="registerForChidonGifts">
+							I would like to register to ONLY receive the Chidon Sweater and Gifts
+							for a fee of $25. I will not be taking the Chidon Final or join the Chidon
+							Experience.
+						</label>
+					</div>
+				</div>
+
+				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+					<div class="field flex small-select">
+						<label>Please select your Yarmulka Size</label>
+						<select id="yarmulkaSize" name="yarmulkaSize">
+							<option value='3'>Size 3</option>
+							<option value='4'>Size 4</option>
+							<option value='5'>Size 5</option>
+							<option value='6'>Size 6</option>
+						</select>
+					</div>
+				</div>
+				<div class="group save-detail"></div>
+			</form>
+		</div>
+
+		<!-- FORM D -->
+
+		<div class="form formD" style="display: none;">
+			<form class="personalInfo">
+				<h5 class="formDetails">
+					We are so proud of your dedication and commitment to learning Hashem's Mitzvos. You qualified
+					for the <b>Chidon Experience and as a Trophy Finalist</b>. This is a huge accomplishment!
+				</h5>
+				<br />
+				<h5 class="formDetails">You are eligible for:</h5>
+				<div class="listSection">
+					<ul>
+						<li>The Chidon <b>Sweater</b></li>
+						<li>The Chidon <b>Gifts</b>: Boys will be receiving a Chidon iKippah Yarmulka, and girls a
+							beautiful Chidon charm bracelet. Plus, both girls and boys will receive another surprise
+							gift!
+						</li>
+						<li id="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
+							experience
+						</li>
+						<li id="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
+							catalog
+						</li>
+						<li>Your Chidon <b>Awards</b> (certificate, plaque, medal, or trophy)</li>
+					</ul>
+				</div>
+				<br />
+				<h5 class="formDetails">
+					You are also eligible to take the <b>Chidon Final</b> to earn an award, and the <b>Chidon Trophy
+					Final</b> to compete for one of the three trophies awarded to your grade.
+				</h5>
+				<h5 class="formDetails">The finals will be held on the following dates:</h5>
+				<div class="listSection">
+					<ul>
+						<li><b>Chidon Final:</b> Thursday, 5 Nissan 5781 / March 18, 2021</li>
+						<li><b>Trophy Final:</b> Sunday, 8 Nissan 5781 / March 21 2021.</li>
+					</ul>
+				</div>
+				<h5 class="formDetails">As a bonus, every finalist will receive the following items:</h5>
+				<div class="listSection">
+					<ul>
+						<li>A personalized Chidon flag</li>
+						<li>A Chidon trophy stress ball</li>
+						<li>A Chidon ID tag</li>
+					</ul>
+				</div>
+				<h5 class="formDetails">
+					Your family will also receive your very own <b>Chidon Celebration Box</b> so you can join in the
+					grand Chidon Event and Award Ceremony on <b>Sunday, 12 Sivan 5781 / May 23, 2021</b> with great
+					fanfare.
+				</h5>
+				<h5 class="formTitle">Chidon Registration:</h5>
+				<div class="field">
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="registerForChidonExperience"
+							   name="registration">
+						<label class="checkboxLabel" for="registerForChidonExperience">
+							Yes! I would like to register for the Chidon Experience and receive all of the above
+							items.
+						</label>
+					</div>
+					<h5 class="formDetails">I understand that participation in the <b>Chidon Experience</b> costs
+						$370.
+					</h5>
+					<div class="field flex small-select">
+						<label>I would like to pay:</label>
+						<select id="paymentAmount" name="pay">
+							<option value='370'>$370</option>
+							<option value='300'>$300</option>
+							<option value='270'>$270 (activates the Rohr Grant to cover the last $100) </option>
+							<option value='225'>$225</option>
+							<option value='185'>$185</option>
+						</select>
+					</div>
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="registerForChidonGifts" name="registration">
+						<label class="checkboxLabel" for="registerForChidonGifts">
+							I would like to register to ONLY receive the Chidon Sweater and Gifts
+							for a fee of $25. I will not be taking the Chidon Final or join the Chidon
+							Experience.
+						</label>
+					</div>
+				</div>
+
+				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+					<div class="field flex small-select">
+						<label>Please select your Yarmulka Size</label>
+						<select id="yarmulkaSize" name="yarmulkaSize">
+							<option value='3'>Size 3</option>
+							<option value='4'>Size 4</option>
+							<option value='5'>Size 5</option>
+							<option value='6'>Size 6</option>
+						</select>
+					</div>
+				</div>
+				<div class="group save-detail"></div>
+			</form>
+		</div>
+
+		<!-- FORM PART 2 -->
+
+		<div class="form form2" style="display: none;">
+			<form id="formPart2">
+				<h5 class="formDetails"><b>Celebration Box:</b></h5>
+				<h5 class="formDetails">
+					<!-- TODO: update span.amountOfBoxes to say 'a' or a number for the amount of boxes -->
+					Since <b>your child,</b> <b class="first_name"></b> is eligible for the Chidon Experience, you
+					can receive <span class="amountOfBoxes"></span> <b>Chidon Celebration Box</b> as part of your
+					registration so your family can
+					celebrate when we watch the Chidon on Sunday, Yud Beis Sivan 5781/May 23, 2021 with great
+					fanfare.
+				</h5>
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="celebrationBox" name="celebrationBox">
+					<label class="checkboxLabel" for="celebrationBox">
+						<!-- TODO: add max attr to input field - max should be the max number of boxes allowed -->
+						Yes! I would like to receive <input class="numberInput" type="number"
+															id="numberOfCelebrationBoxes"> Chidon
+						Celebration
+						Box(es) with the following items:
+					</label>
+				</div>
+				<div class="listSection">
+					<ul>
+						<li>10 Chidon Plates</li>
+						<li>10 Chidon Cups</li>
+						<li>10 Chidon Napkins</li>
+						<li>7 Chidon Latex Balloons (with stand)</li>
+						<li>1 Chidon Foil Balloon</li>
+						<li>1 Chidon Tablecloth</li>
+						<li>2 Laminated Benching Cards</li>
+					</ul>
+				</div>
+				<h5 class="formDetails"><b>Additional Chidon Celebration Boxes: $20</b></h5>
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="additionalCelebrationBox"
+						   name="additionalCelebrationBox">
+					<label class="checkboxLabel" for="additionalCelebrationBox">
+						I would like to order an additional Chidon Celebration Box.
+					</label>
+				</div>
+				<div class="listSection" id="additionalCelebrationBoxDetails" style="display: none;">
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="shippedToSchool" name="shippingLocation">
+						<label class="checkboxLabel" for="shippedToSchool">
+							to be shipped to my school.
+						</label>
+					</div>
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="shippedToAddress" name="shippingLocation">
+						<label class="checkboxLabel" for="shippedToAddress">
+							+$10 to be shipped to an address in the USA
+						</label>
+					</div>
+					<input id="shippedToAddressInput" type="text" placeholder="Address">
+				</div>
+
+				<h5 class="formDetails"><b>Parents and Grandparents Sweaters:</b></h5>
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="sweaterForMother" name="sweaterForFamily">
+					<label class="checkboxLabel" for="sweaterForMother">
+						$25 Mother
+					</label>
+				</div>
+				<div id="sweaterForMotherDetails" style="display: none;">
+					<div class="field flex medium-select">
+						<label>Select Size</label>
+						<!-- TODO: Update amount of sweaters left for each size -->
+						<select id="sweaterForMotherSize" name="pay">
+							<option value='xs'>Adult XS (50 left)</option>
+							<option value='small'>Adult Small (50 left)</option>
+							<option value='medium'>Adult Medium (100 left)</option>
+							<option value='large'>Adult Large (50 Left)</option>
+							<option value='xl'>Adult XL large (50 Left)</option>
+						</select>
+					</div>
+					<div class="listSection">
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="motherSweaterShippedToSchool"
+								   name="motherSweaterShippingLocation">
+							<label class="checkboxLabel" for="motherSweaterShippedToSchool">
+								to be shipped to my school.
+							</label>
+						</div>
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="motherSweaterShippedToAddress"
+								   name="motherSweaterShippingLocation">
+							<label class="checkboxLabel" for="motherSweaterShippedToAddress">
+								+$10 to be shipped to an address in the USA
+							</label>
+						</div>
+						<input id="motherSweaterShippedToAddressInput" type="text" placeholder="Address">
+					</div>
+				</div>
+
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="sweaterForFather" name="sweaterForFamily">
+					<label class="checkboxLabel" for="sweaterForFather">
+						$25 Father
+					</label>
+				</div>
+				<div id="sweaterForFatherDetails" style="display: none;">
+					<div class="field flex medium-select">
+						<label>Select Size</label>
+						<!-- TODO: Update amount of sweaters left for each size -->
+						<select id="sweaterForFatherSize" name="pay">
+							<option value='xs'>Adult XS (50 left)</option>
+							<option value='small'>Adult Small (50 left)</option>
+							<option value='medium'>Adult Medium (100 left)</option>
+							<option value='large'>Adult Large (50 Left)</option>
+							<option value='xl'>Adult XL large (50 Left)</option>
+						</select>
+					</div>
+					<div class="listSection">
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="fatherSweaterShippedToSchool"
+								   name="fatherSweaterShippingLocation">
+							<label class="checkboxLabel" for="fatherSweaterShippedToSchool">
+								to be shipped to my school.
+							</label>
+						</div>
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="fatherSweaterShippedToAddress"
+								   name="fatherSweaterShippingLocation">
+							<label class="checkboxLabel" for="fatherSweaterShippedToAddress">
+								+$10 to be shipped to an address in the USA
+							</label>
+						</div>
+						<input id="fatherSweaterShippedToAddressInput" type="text" placeholder="Address">
+					</div>
+				</div>
+
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="sweaterForBubby" name="sweaterForFamily">
+					<label class="checkboxLabel" for="sweaterForBubby">
+						$25 Bubby
+					</label>
+				</div>
+				<div id="sweaterForBubbyDetails" style="display: none;">
+					<div class="field flex medium-select">
+						<label>Select Size</label>
+						<!-- TODO: Update amount of sweaters left for each size -->
+						<select id="sweaterForBubbySize" name="pay">
+							<option value='xs'>Adult XS (50 left)</option>
+							<option value='small'>Adult Small (50 left)</option>
+							<option value='medium'>Adult Medium (100 left)</option>
+							<option value='large'>Adult Large (50 Left)</option>
+							<option value='xl'>Adult XL large (50 Left)</option>
+						</select>
+					</div>
+					<div class="listSection">
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="bubbySweaterShippedToSchool"
+								   name="bubbySweaterShippingLocation">
+							<label class="checkboxLabel" for="bubbySweaterShippedToSchool">
+								to be shipped to my school.
+							</label>
+						</div>
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="bubbySweaterShippedToAddress"
+								   name="bubbySweaterShippingLocation">
+							<label class="checkboxLabel" for="bubbySweaterShippedToAddress">
+								+$10 to be shipped to an address in the USA
+							</label>
+						</div>
+						<input id="bubbySweaterShippedToAddressInput" type="text" placeholder="Address">
+					</div>
+				</div>
+
+				<div class="flex">
+					<input class="inputCheckbox" type="checkbox" id="sweaterForZaidy" name="sweaterForFamily">
+					<label class="checkboxLabel" for="sweaterForZaidy">
+						$25 Zaidy
+					</label>
+				</div>
+				<div id="sweaterForZaidyDetails" style="display: none;">
+					<div class="field flex medium-select">
+						<label>Select Size</label>
+						<!-- TODO: Update amount of sweaters left for each size -->
+						<select id="sweaterForZaidySize" name="pay">
+							<option value='xs'>Adult XS (50 left)</option>
+							<option value='small'>Adult Small (50 left)</option>
+							<option value='medium'>Adult Medium (100 left)</option>
+							<option value='large'>Adult Large (50 Left)</option>
+							<option value='xl'>Adult XL large (50 Left)</option>
+						</select>
+					</div>
+					<div class="listSection">
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="zaidySweaterShippedToSchool"
+								   name="zaidySweaterShippingLocation">
+							<label class="checkboxLabel" for="zaidySweaterShippedToSchool">
+								to be shipped to my school.
+							</label>
+						</div>
+						<div class="flex">
+							<input class="inputCheckbox" type="radio" id="zaidySweaterShippedToAddress"
+								   name="zaidySweaterShippingLocation">
+							<label class="checkboxLabel" for="zaidySweaterShippedToAddress">
+								+$10 to be shipped to an address in the USA
+							</label>
+						</div>
+						<input id="zaidySweaterShippedToAddressInput" type="text" placeholder="Address">
+					</div>
+				</div>
+
+				<div id="form2Receipt">
+					<!-- TODO: load receipt info -->
+					<h5 class="formDetails"><b>Receipt:</b></h5>
+				</div>
+
+				<h5 class="formDetails">
+					<b>Please note:</b> All items will be received before the Chidon Event & Awards Ceremony on
+					Sunday, 12 Sivan 5781, May 23rd 2021.
+				</h5>
+				<h5 class="formDetails"><b>Chidon Registration Payment:</b></h5>
+				<div class="listSection">
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="chargeCard" name="chidonRegistrationPayment">
+						<label class="checkboxLabel" for="chargeCard">
+							Please charge my card now.
+						</label>
+					</div>
+					<div class="flex">
+						<input class="inputCheckbox" type="radio" id="holdMoney" name="chidonRegistrationPayment">
+						<label class="checkboxLabel" for="holdMoney">
+							Please hold the money on my card until the Chidon Drive ends on Tuesday, 3 Nissan, March
+							16, 2021. If there is still any money that needs to be charged, please charge it then.
+						</label>
+					</div>
+				</div>
+				<div class="flexCenter">
+					<a href="chidondrive.com/setup" targer="_blank" rel="noopener noreferrer" class="linkButton">
+						Continue to set up my Chidon Drive platform
+					</a>
+				</div>
+			</form>
+		</div>
+
+		<!-- END OF FORMS -->
+
+		<div align="center" style="padding-top: 20px;" id="logoffDiv" style="display: none;">
+			<a href="#" style="color: red; font-size: 18px;" id="logoff">Logoff</a>
+		</div>
+	</div>
+</div>
+
+<footer>
+	<div class="wrapper">
+		<a href="#" id="top">Back to top</a>
+
+		<div class="credits">
+			<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+			<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+				לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+		</div>
+
+		<div class="footer-main">
+			<div class="footer-about">
+				<div class="icon-wrapper">
+					<a href="https://thechidon.com" target="blank">
+						<img src="img/chidon-logo.png" alt="Chidon" />
+					</a>
+				</div>
+				<div class="icon-wrapper">
+					<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+				</div>
+				<div class="icon-wrapper">
+					<img src="img/army-color.png" alt="Tzivos Hashem" />
+				</div>
+				<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+			</div>
+			<nav>
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="donate.html">Donate</a></li>
+					<li><a href="leaderboard.html">Leaderboard</a></li>
+					<li><a href="story.html">Our Story</a></li>
+				</ul>
+				<ul>
+					<li>
+						<h5>Quick Links</h5>
+					</li>
+					<li><a href="family.html">Find a Family</a></li>
+					<li><a href="sponsor.html">Sponsors</a></li>
+					<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
+				</ul>
+				<ul>
+					<li>
+						<h5>Contact Us</h5>
+					</li>
+					<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+					<li><a href="tel:7189078884">718.907.8884</a></li>
+				</ul>
+			</nav>
+		</div>
+
+		<div class="footer-bottom">
+			<div class="social">
+				<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+				<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
+			</div>
+			<p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/circletype.min.js"></script>
+<script src="js/jquery.nice-select.min.js"></script>
+<script src='js/circles.min.js'></script>
+<script src="js/js.cookie.js"></script>
+<script type="text/javascript">
+	// alert("Enrollment is now closed.");
+	// location.href = "/";
+	if (location.protocol != 'https:') {
+		let url = window.location.href;
+		let pos = url.indexOf(':');
+		let newUrl = 'https' + url.substring(pos);
+		location.href = newUrl;
+	}
+
+	let selectedChildId;
+
+	$('.formB input[type="checkbox"]#registerForChidon').click(function () {
+		var registerForChidonChecked = $(this)[0].checked;
+		let child = children[selectedChildId];
+		if (registerForChidonChecked && child.gender === 'M') {
+			$('.formB #boysOnlyYarmulkaSizes').show();
+		} else {
+			$('.formB #boysOnlyYarmulkaSizes').hide();
+		}
+	});
+
+	$('.formC input[type="radio"]#registerForChidonExperience').click(function () {
+		var registerForChidonExperienceChecked = $(this)[0].checked;
+		let child = children[selectedChildId];
+		if (registerForChidonExperienceChecked && child.gender === 'M') {
+			$('.formC #boysOnlyYarmulkaSizes').show();
+		} else {
+			$('.formC #boysOnlyYarmulkaSizes').hide();
+		}
+	});
+
+	$('.formC input[type="radio"]#registerForChidonGifts').click(function () {
+		var registerForChidonGiftsChecked = $(this)[0].checked;
+		let child = children[selectedChildId];
+		if (registerForChidonGiftsChecked && child.gender === 'M') {
+			$('.formC #boysOnlyYarmulkaSizes').show();
+		} else {
+			$('.formC #boysOnlyYarmulkaSizes').hide();
+		}
+	});
+
+	$('.formD input[type="radio"]#registerForChidonExperience').click(function () {
+		var registerForChidonExperienceChecked = $(this)[0].checked;
+		let child = children[selectedChildId];
+		if (registerForChidonExperienceChecked && child.gender === 'M') {
+			$('.formD #boysOnlyYarmulkaSizes').show();
+		} else {
+			$('.formD #boysOnlyYarmulkaSizes').hide();
+		}
+	});
+
+	$('.formD input[type="radio"]#registerForChidonGifts').click(function () {
+		var registerForChidonGiftsChecked = $(this)[0].checked;
+		let child = children[selectedChildId];
+		if (registerForChidonGiftsChecked && child.gender === 'M') {
+			$('.formD #boysOnlyYarmulkaSizes').show();
+		} else {
+			$('.formD #boysOnlyYarmulkaSizes').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#additionalCelebrationBox').click(function () {
+		var additionalCelebrationBoxChecked = $(this)[0].checked;
+		if (additionalCelebrationBoxChecked) {
+			$('.form2 #additionalCelebrationBoxDetails').show();
+		} else {
+			$('.form2 #additionalCelebrationBoxDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForMother').click(function () {
+		var sweaterForMotherChecked = $(this)[0].checked;
+		if (sweaterForMotherChecked) {
+			$('.form2 #sweaterForMotherDetails').show();
+		} else {
+			$('.form2 #sweaterForMotherDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForFather').click(function () {
+		var sweaterForFatherChecked = $(this)[0].checked;
+		if (sweaterForFatherChecked) {
+			$('.form2 #sweaterForFatherDetails').show();
+		} else {
+			$('.form2 #sweaterForFatherDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForBubby').click(function () {
+		var sweaterForBubbyChecked = $(this)[0].checked;
+		if (sweaterForBubbyChecked) {
+			$('.form2 #sweaterForBubbyDetails').show();
+		} else {
+			$('.form2 #sweaterForBubbyDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForZaidy').click(function () {
+		var sweaterForZaidyChecked = $(this)[0].checked;
+		if (sweaterForZaidyChecked) {
+			$('.form2 #sweaterForZaidyDetails').show();
+		} else {
+			$('.form2 #sweaterForZaidyDetails').hide();
+		}
+	});
+
+
+	let url = window.location.href;
+	let pos = url.indexOf('?a=');
+	if (pos > 0) {
+		let admin = url.substring(pos + 3);
+		Cookies.set('chidon_admin', admin);
+	}
+
+	if (Cookies.get('chidon_admin')) {
+		getChildren(Cookies.get('chidon_admin'));
+		$("#logoffDiv").show();
+	}
+	else {
+		$(".login").show();
+		$("#logoffDiv").hide();
+	}
+
+	$('#menu-opener').click(function (e) {
+		$('header nav').toggleClass('open');
+	});
+
+	var children = []; // global variable for children info
+	var children_ids = []; // global variable to keep track of order of children and ids
+	var completed = [] // global variable for making sure all children's forms have been completed
+	var numChildren; // global variable to track number of children
+
+	function getChildren(admin) {
+		$.post('../ajax/getChildren.php', { admin: admin }, function (result) {
+			let info = JSON.parse(result);
+			if (info.success) {
+				if (info.error) alert(info.error);
+				let html = '';
+				numChildren = info.children.length;
+				for (c in info.children) {
+					let child = info.children[c];
+					if (parseInt(child.date_paid) > 0) continue;
+					children[child.user_id] = child;
+					children_ids.push(child.user_id);
+					let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+					html += `
+									<div class="kid">
+										<div class="image-wrapper">
+												<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
+										</div>
+										<h6>${child.first} <br>${child.last}</h6>
+										<a href="#" class="button enroll" id="${child.user_id}">enroll now</a>
+									</div>
+								`;
+				}
+				if (!children.length) {
+					alert("All children have been enrolled.");
+					location.href = "edit.html";
+					return false;
+				}
+				$(".login").hide();
+				$("#logoffDiv").show();
+				$(".kids-wrapper").empty();
+				$(".kids-wrapper").append(html);
+				$(".kids-wrapper").show();
+			} else {
+				alert(info.error);
+			}
+		});
+	}
+
+	function nextChild() {
+		// figure out which form to show
+		let next_user = 0;
+		let next = false;
+		while (!next_user) {
+			for (c in children_ids) {
+				let id = children_ids[c];
+				if (next) {
+					next_user = id;
+					break;
+				}
+				if (id == selectedChildId) {
+					next = true;
+				}
+			}
+		}
+		showForm(next_user)
+	}
+
+	function showForm(id) {
+		const child = children[id]
+		console.log(child)
+		if (parseInt(child.shabbaton_maven)) {
+			$(".formA").show()
+			$(".formB").hide()
+			$(".formC").hide()
+			$(".formD").hide()
+		}
+		else if (parseInt(child.shabbaton_pro)) {
+			$(".formA").hide()
+			$(".formB").show()
+			$(".formC").hide()
+			$(".formD").hide()
+		}
+		else if (parseInt(child.shabbaton_expert)) {
+			$(".formA").hide()
+			$(".formB").hide()
+			$(".formC").show()
+			$(".formD").hide()
+		}
+		else if (parseInt(child.shabbaton_trophy)) {
+			$(".formA").hide()
+			$(".formB").hide()
+			$(".formC").hide()
+			$(".formD").show()
+		}
+	}
+
+	$(document).ready(function (e) {
+		$(".formA").show()
+		$(".formB").show()
+		$(".formC").show()
+		$(".formD").show()
+		$(".form2").show()
+
+		// Select
+		$('select').niceSelect();
+		$('select.children').change(function (e) {
+			var val = $(this).find('option:selected').text();
+			$('.children-change').val('$' + val + '.00');
+		});
+
+		$("#loginForm").submit(function (evt) {
+			evt.preventDefault();
+			let user = $("#username").val();
+			let pass = $("#password").val();
+			$.post('../ajax/login.php', { username: user, password: pass }, function (result) {
+				let info = JSON.parse(result);
+				if (info.success) {
+					Cookies.set('chidon_admin', info.admin);
+					Cookies.set('from_enrollment', 1);
+					$.post('../ajax/checkForSetup.php', { admin: info.admin }, function (result) {
+						const res = JSON.parse(result);
+						if (res.success) {
+							const admin_info = res.info;
+							// console.log( admin_info );
+							if (parseInt(admin_info.setup) > 0) {
+								getChildren(info.admin);
+							} else {
+								location.href = "intro.html";
+							}
+						} else {
+							location.href = "intro.html";
+						}
+					});
+				} else {
+					alert(info.error);
+				}
+			});
+		});
+
+		$(document).on('click', '.enroll', function (evt) {
+			evt.preventDefault();
+			selectedChildId = parseInt($(this).attr('id'));
+			// TODO: Display correct form based on child.
+			showForm(selectedChildId)
+
+			let html = '';
+			if (numChildren > 1) {
+				html += `<input type="submit" class="button submit next" value="save & next child" />
+													<input type="submit" class="button submit pay" value="save & go to payment" />`;
+			} else {
+				html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
+			}
+			$(".save-detail").empty();
+			$(".save-detail").append(html);
+		});
+
+		$(document).on('click', '.next', function( evt ) {
+			evt.preventDefault()
+			const elem = $(this).parent().parent().parent()
+			const form = elem[0].classList[1]
+			checkForm(form)
+			nextChild()
+		})
+
+		$(document).on('click', '.pay', function( evt ) {
+			evt.preventDefault()
+
+		})
+
+		$("form.personalInfo").submit(function (evt) {
+			evt.preventDefault();
+
+
+			console.log(errors);
+			//}
+
+			if (errors != '') {
+				alert(errors);
+				return false;
+			} else {
+				$.post('../ajax/enrollChild.php', { child: info }, function (result) {
+					//if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
+					let res = JSON.parse(result);
+					if (res.success) {
+						alert(res.message);
+						if (next) {
+							// refresh children
+							getChildren(Cookies.get('chidon_admin'));
+							alert('Showing form for next child.');
+							nextChild();
+						} else if (pay) {
+							location.href = "payment-information.html";
+							// if ( checkForms() )	location.href = "enroll-2.html";
+							// else alert("You cannot go to payment until you have completed the form for all of your children.");
+						}
+					} else {
+						alert(res.error);
+					}
+				});
+			}
+		});
+
+		$("#logoff").click(function () {
+			Cookies.remove('chidon_admin');
+			location.href = "enrollNew.html";
+		});
+	});
+</script>
+
+<script>
+	$(function () {
+		var header = $("header");
+		$(window).scroll(function () {
+			var scroll = $(window).scrollTop();
+
+			if (scroll >= 100) {
+				header.addClass("header-alt");
+				console.log('called');
+			} else {
+				header.removeClass('header-alt');
+			}
+		});
+	});
+</script>
+
+</body>
+
+</html>
