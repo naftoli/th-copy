@@ -102,7 +102,8 @@ foreach ($child_marks as $gender => $more) {
         $i = 1;
         foreach ($other as $id => $avg) {
             echo "<tr><td>" . $i++ . "</td><td>" . $child_info[$id]['school'] . "</td><td>" . $grade . "</td><td>" .
-                $id . "</td><td>" . $child_info['first'] . "</td><td>" . $child_info['last'] . "</td><td>" . $avg . "</td><td>";
+                $id . "</td><td>" . $child_info[$id]['first'] . "</td><td>" . $child_info[$id]['last'] . "</td><td>" .
+                $avg . "</td><td>";
             if ($child_info[$id]['rep']) echo 'yes';
             else echo 'no';
             echo "</td><td>" . $child_info[$id]['khk_avg'] . "</td><td>";
