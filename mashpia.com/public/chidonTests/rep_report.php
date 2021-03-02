@@ -38,7 +38,7 @@ foreach ($students as $child) {
     // khk avg
     $khkTotal = 0;
     for ($i = 1; $i <= 4; $i++) {
-        $mark = isset($child["khk_test_$i"]) ?? 0;
+        $mark = isset($child["khk_test_$i"]) ? $child["khk_test_$i"] : 0;
         $khkTotal += $mark;
     }
     $khkAvg = round($khkTotal / 4, 2);
