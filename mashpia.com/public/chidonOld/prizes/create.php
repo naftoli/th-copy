@@ -26,9 +26,9 @@ switch($_FILES['sweater_picture']) {
 }
 
 $sql = "INSERT INTO chidon_prizes ( 
-          prize_name,   sweater_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
+          prize_name,   prize_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
     ) VALUES (
-        '$prize_name', '$sweater_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
+        '$prize_name', '$prize_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
     )
 ";
 
