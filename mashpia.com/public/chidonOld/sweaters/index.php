@@ -6,6 +6,10 @@ if( isset($_GET['debug'])){
 	//error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+$sweaters = Capsule::table('chidon_sweaters')->get()
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -45,27 +49,28 @@ if( isset($_GET['debug'])){
                 <th>Our Price</th>
             </tr>
             
-            <?
-                $sql = 'SELECT * FROM chidon_sweaters';
-                $query = mysql_query($sql);
-                while($row = mysql_fetch_assoc($query)) { ?>
-                    <tr>
-                        <td>
-                            <? if ($row['sweater_picture']) { ?>
-                                <img src="<?= $row['sweater_picture'] ?>" width="50" />
-                            <? } ?>
-                        </td>
-                        <td><?= $row['sweater_name'] ?></td>
-                        <td><?= $row['quantity'] ?></td>
-                        <td><?= $row['size'] ?></td>
-                        <td><?= $row['gender'] === 'M' ? 'Boys / Mens' : ($row['gender'] === 'F' ? 'Girls / Womens' : "") ?></td>
-                        <td><?= $row['price'] ?></td>
-                        <td><?= $row['our_price'] ?> </td>
-                        <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$row['sweater_id']?>"> EDIT</a> </td>
-                        <td> <form action="./delete.php?id=<?=$row['sweater_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
-                    </tr>
-                <? }
-            ?>
+            <? foreach($sweaters as $sweater) { ?>
+                <tr>
+                    <td>
+                        <? if ($sweater->sweater_picture ) { ?>
+                            <img src="<?= $sweater->sweater_picture ?>" width="50" />
+                        <? } ?>
+                    </td>
+                    <td><?= $sweater->sweater_name ?></td>
+                    <td><?= $sweater->quantity ?></td>
+                    <td><?= $sweater->size ?></td>
+                    <td><?= $sweater->gender === 'M' ? 'Boys / Mens' : 'Girls / Womens' ?></td>
+                    <td><?= $sweater->price ?></td>
+                    <td><?= $sweater->our_price ?> </td>
+                    <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$sweater->sweater_id ?>">EDIT</a> </td>
+                    <td>
+                        <form action="./delete.php" method="post">
+                            <input type="submit" value="DELETE"/>
+                            <input type="hidden" name="id" value="<?= $sweater->sweater_id ?>" />
+                        </form>
+                    </td>
+                </tr>
+            <? } ?>
         </table>
     </body>
 </html>

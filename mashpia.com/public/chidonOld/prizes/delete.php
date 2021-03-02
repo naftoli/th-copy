@@ -7,24 +7,12 @@ if( isset($_GET['debug'])){
     ini_set("display_errors", 1);
 }
 
-$id = isset($_GET['id']) ? mysql_real_escape_string($_GET['id']) : false;
-if (!$id){
-    http_response_code(302);
-    header('Location: ./index.php');
-    exit;
-}
-$sql = "SELECT * FROM chidon_prizes WHERE prize_id = '$id'";
-$query = mysql_query($sql);
-$prize = mysql_fetch_assoc($query);
+use Illuminate\Database\Capsule\Manager as Capsule;
 
-if (!$prize){
-    http_response_code(302);
-    header('Location: ./index.php');
-    exit;
-}
-
-$sql = "DELETE FROM chidon_prizes WHERE prize_id = '$id'";
-$query = mysql_query($sql);
+$id = isset($_POST['id']) ? $_POST['id'] : false;
+$prize_picture = Capsule::table('chidon_prizes')->select("prize_picture")->where('prize_id', $id)->first()->prize_picture;
+if ($prize_picture) unlink($_SERVER["DOCUMENT_ROOT"].$prize_picture);
+$deleted = Capsule::table('chidon_prizes')->where('prize_id', $id)->delete();
 
 http_response_code(302);
 header('Location: ./index.php');

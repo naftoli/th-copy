@@ -2,38 +2,19 @@
 
 $admin_auth = array('school');
 require('../../header.php');
-require('./shared.php');
+require_once('./shared.php');
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 
-$id = isset($_POST['id']) ? mysql_real_escape_string($_POST['id']) : false;
-if (!$id){
-    
-    http_response_code(302);
-    header('Location: ./index.php');
-    exit;
-}
-$sql = "SELECT * FROM chidon_prizes WHERE prize_id = '$id'";
-$query = mysql_query($sql);
-$prize = mysql_fetch_assoc($query);
+$allowed_params = [ "prize_name", "quantity", "made_possible_by", "personalization", "color", "size", "note", "price", "our_price"];
 
-if (!$prize){
-    
-    http_response_code(302);
-    header('Location: ./edit.php?id='.$_POST['id']);
-    exit;
-}
+$prize_params = array_filter($_POST, function($k) use($allowed_params) {
+    return in_array($k, $allowed_params);
+}, ARRAY_FILTER_USE_KEY);
 
-$prize_name = isset($_POST['prize_name']) ? mysql_real_escape_string($_POST['prize_name']) : "";
-$quantity = isset($_POST['quantity']) ? mysql_real_escape_string($_POST['quantity']) : "0";
-$made_possible_by = isset($_POST['made_possible_by']) ? mysql_real_escape_string($_POST['made_possible_by']) : "null";
-$personalization = isset($_POST['personalization']) ? mysql_real_escape_string($_POST['personalization']) : "null";
-$color = isset($_POST['color']) ? mysql_real_escape_string($_POST['color']) : "null";
-$size = isset($_POST['size']) ? mysql_real_escape_string($_POST['size']) : "null";
-$note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null";
-$price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
-$our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
+$id = isset($_POST['id']) ? $_POST['id'] : false;
 
-$prize_picture = "";
+$prize_picture = Capsule::table('chidon_prizes')->select("prize_picture")->where('prize_id', $id)->first()->prize_picture;
 switch($_FILES['prize_picture']) {
     case UPLOAD_ERR_INI_SIZE:
     case UPLOAD_ERR_FORM_SIZE:
@@ -41,33 +22,16 @@ switch($_FILES['prize_picture']) {
     case UPLOAD_ERR_NO_FILE:
     break;
     default: // if an image was uploaded succesfully save it
-        $prize_picture = save_image($_FILES['prize_picture'], "/chidonOld/prizes/img", $prize['prize_picture']);
+        $prize_params['prize_picture'] = save_image($_FILES['prize_picture'], "/storage/chidon_prizes", $prize_picture);
     break;
 }
-if (!$prize_picture) $prize_picture = "";
 
-$sql = "UPDATE chidon_prizes 
-        SET prize_name = '$prize_name',
-            prize_picture = '$prize_picture',
-            quantity = '$quantity',
-            made_possible_by = '$made_possible_by',
-            personalization = '$personalization',
-            color = '$color',
-            quantity = '$quantity',
-            size = '$size',
-            note = '$note',
-            price = '$price',
-            our_price = '$our_price'
-        WHERE prize_id = '{$prize['prize_id']}'
-    ";
-mysql_query($sql);
+$updated = Capsule::table('chidon_prizes')->where('prize_id', $id)->update($prize_params);
 
-if (mysql_affected_rows() > 0) {
-    
+if ($updated) {
     http_response_code(302);
     header('Location: ./index.php');
 } else {
-    
     http_response_code(302);
     header('Location: ./edit.php?id='.$_POST['id']);
 }
