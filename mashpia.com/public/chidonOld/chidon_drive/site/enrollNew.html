@@ -22,6 +22,25 @@
 		.login input.button {
 			top: 10px;
 		}
+
+		.floating-div {
+			background: rgba(6, 9, 47, .8);
+			border-radius: .5rem;
+			width: auto;
+			padding: 2rem;
+			margin: auto;
+			z-index: 100;
+			position: fixed;
+			bottom: 0;
+			right: 0;
+		}
+		.floating-div p {
+			color: #85abda;
+			font-size: 1.4rem;
+			font-weight: bold;
+			text-transform: uppercase;
+			font-family: 'Gotham Narrow', sans-serif;
+		}
 	</style>
 </head>
 
@@ -63,6 +82,10 @@
 			</form>
 		</div>
 		<div class="form kids-wrapper blue-circle" style="display: none;"></div>
+
+		<div class="floating-div">
+			<p>Total: $<span id="total">0</span></p>
+		</div>
 
 		<!-- FORM A -->
 
