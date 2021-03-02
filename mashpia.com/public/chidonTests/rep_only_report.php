@@ -62,8 +62,8 @@ foreach ($child_info as $gender => $more) {
         </tr>
     <?php
     foreach ($more as $grade => $other) {
+        $i = 1;
         foreach ($other as $school => $more) {
-            $i = 1;
             foreach ($more as $id => $child) {
                 echo "<tr><td>" . $i++ . "</td><td>" . $grade . "</td><td>" . $school . "</td><td>" . $id . "</td><td>" .
                     $child['first'] . "</td><td>" . $child['last'] . "</td><td>";
