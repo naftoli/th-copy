@@ -94,8 +94,8 @@ foreach ($child_marks as $gender => $more) {
             <th>Last Name</th>
             <th>Pro/Expert + Trophy Avg</th>
             <th>Representative</th>
-            <th>KHK Avg</th>
             <th>KHK</th>
+            <th>KHK Avg</th>
         </tr>
     <?php
     foreach ($more as $grade => $other) {
@@ -106,10 +106,9 @@ foreach ($child_marks as $gender => $more) {
                 $avg . "</td><td>";
             if ($child_info[$id]['rep']) echo 'yes';
             else echo 'no';
-            echo "</td><td>" . $child_info[$id]['khk_avg'] . "</td><td>";
-            if ($child_info[$id]['khk']) echo 'yes';
-            else echo 'no';
-            echo "</td></tr>";
+            echo "</td><td>";
+            if ($child_info[$id]['khk']) echo 'yes' . "</td><td>" . $child_info[$id]['khk_avg'] . "</td></tr>";
+            else echo 'no' . "</td><td></td></tr>";
         }
     }
 }
