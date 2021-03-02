@@ -67,9 +67,9 @@ foreach ($child_info as $gender => $more) {
             foreach ($more as $id => $child) {
                 echo "<tr><td>" . $i++ . "</td><td>" . $grade . "</td><td>" . $school . "</td><td>" . $id . "</td><td>" .
                     $child['first'] . "</td><td>" . $child['last'] . "</td><td>";
-                if ($child_info[$id]['rep']) echo 'yes' . "</td><td>";
+                if ($child['rep']) echo 'yes' . "</td><td>";
                 else echo 'no' . "</td><td>";
-                if ($child_info[$id]['khk']) echo 'yes' . "</td></tr>";
+                if ($child['khk']) echo 'yes' . "</td></tr>";
                 else echo 'no' . "</td></tr>";
             }
         }
