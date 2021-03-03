@@ -1,29 +1,40 @@
 <?
 $admin_auth = array('school');
 require('../../header.php');
-require_once('./shared.php');
-use Illuminate\Database\Capsule\Manager as Capsule;
+require('./shared.php');
 
-$allowed_params = [ "prize_name", "quantity", "made_possible_by", "personalization", "color", "size", "note", "price", "our_price"];
+$prize_name = isset($_POST['prize_name']) ? mysql_real_escape_string($_POST['prize_name']) : "";
+$quantity = isset($_POST['quantity']) ? mysql_real_escape_string($_POST['quantity']) : "0";
+$made_possible_by = isset($_POST['made_possible_by']) ? mysql_real_escape_string($_POST['made_possible_by']) : "null";
+$personalization = isset($_POST['personalization']) ? mysql_real_escape_string($_POST['personalization']) : "null";
+$color = isset($_POST['color']) ? mysql_real_escape_string($_POST['color']) : "null";
+$size = isset($_POST['size']) ? mysql_real_escape_string($_POST['size']) : "null";
+$note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null";
+$price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
+$our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
 
-$prize_params = array_filter($_POST, function($k) use($allowed_params) {
-    return in_array($k, $allowed_params);
-}, ARRAY_FILTER_USE_KEY);
-
-switch($_FILES['prize_picture']) {
+$sweater_picture = "";
+switch($_FILES['sweater_picture']) {
     case UPLOAD_ERR_INI_SIZE:
     case UPLOAD_ERR_FORM_SIZE:
     case UPLOAD_ERR_PARTIAL:
     case UPLOAD_ERR_NO_FILE:
         break;
     default: // if an image was uploaded succesfully save it
-        $prize_params['prize_picture'] = save_image($_FILES['prize_picture'], "/storage/chidon_prizes");
-    break;
+        $sweater_picture = save_image($_FILES['sweater_picture'], "/chidonOld/sweaters/img");
+        break;
 }
 
-$inserted = Capsule::table('chidon_prizes')->insert($prize_params);
+$sql = "INSERT INTO chidon_prizes ( 
+          prize_name,   sweater_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
+    ) VALUES (
+        '$prize_name', '$sweater_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
+    )
+";
 
-if ($inserted) {
+mysql_query($sql);
+
+if (mysql_affected_rows() > 0) {
     http_response_code(302);
     header('Location: ./index.php');
 } else {

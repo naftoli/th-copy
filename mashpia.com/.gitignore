@@ -54,6 +54,3 @@ composer.lock
 public/chidonOld/chidon_drive/ajax/phplog
 
 public/chidon/
-
-# uploaded files
-public/storage/*
