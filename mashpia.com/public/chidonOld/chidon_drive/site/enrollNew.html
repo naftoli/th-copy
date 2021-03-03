@@ -936,6 +936,7 @@
 				name = child.first + ' ' + child.last
 			}
 			for (item of cart[id]) {
+				if (item.desc.contains('addr')) continue;
 				if (item.desc == 'reg') {
 					html += `<li>Registration for ${name} - $${item.amount}</li>`
 				} else {
