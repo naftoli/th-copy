@@ -26,7 +26,7 @@
 		.floating-div {
 			background: rgba(6, 9, 47, .8);
 			border-radius: .5rem;
-			width: auto;
+			width: 150px;
 			padding: 2rem;
 			margin: auto;
 			z-index: 100;
@@ -105,8 +105,8 @@
 				<br />
 				<h5 class="formTitle">Chidon Registration:</h5>
 				<div class="field flex">
-					<input type="checkbox" name="registerForChidon" id="registerForChidon" class="inputCheckbox" />
-					<label class="checkboxLabel" for="registerForChidon">
+					<input type="checkbox" name="registerForChidon" id="registerForChidonA" class="inputCheckbox" />
+					<label class="checkboxLabel" for="registerForChidonA">
 						I would like to register to receive the Chidon sweater and certificate. They will be
 						shipped to my school for $25.
 					</label>
@@ -133,8 +133,8 @@
 				<br />
 				<h5 class="formTitle">Chidon Registration:</h5>
 				<div class="field flex">
-					<input type="checkbox" name="registerForChidon" id="registerForChidon" class="inputCheckbox" />
-					<label class="checkboxLabel" for="registerForChidon">
+					<input type="checkbox" name="registerForChidon" id="registerForChidonB" class="inputCheckbox" />
+					<label class="checkboxLabel" for="registerForChidonB">
 						I would like to register for the Chidon and receive the Chidon Sweater, Certificate and
 						Chidon Gifts.
 					</label>
@@ -213,9 +213,9 @@
 				<h5 class="formTitle">Chidon Registration:</h5>
 				<div class="field">
 					<div class="flex">
-						<input class="inputCheckbox" type="radio" id="registerForChidonExperience"
+						<input class="inputCheckbox" type="radio" id="registerForChidonExperienceA"
 							   name="registration">
-						<label class="checkboxLabel" for="registerForChidonExperience">
+						<label class="checkboxLabel" for="registerForChidonExperienceA">
 							Yes! I would like to register for the Chidon Experience and receive all of the above
 							items.
 						</label>
@@ -234,8 +234,8 @@
 						</select>
 					</div>
 					<div class="flex">
-						<input class="inputCheckbox" type="radio" id="registerForChidonGifts" name="registration">
-						<label class="checkboxLabel" for="registerForChidonGifts">
+						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsA" name="registration">
+						<label class="checkboxLabel" for="registerForChidonGiftsA">
 							I would like to register to ONLY receive the Chidon Sweater and Gifts
 							for a fee of $25. I will not be taking the Chidon Final or join the Chidon
 							Experience.
@@ -312,9 +312,9 @@
 				<h5 class="formTitle">Chidon Registration:</h5>
 				<div class="field">
 					<div class="flex">
-						<input class="inputCheckbox" type="radio" id="registerForChidonExperience"
+						<input class="inputCheckbox" type="radio" id="registerForChidonExperienceB"
 							   name="registration">
-						<label class="checkboxLabel" for="registerForChidonExperience">
+						<label class="checkboxLabel" for="registerForChidonExperienceB">
 							Yes! I would like to register for the Chidon Experience and receive all of the above
 							items.
 						</label>
@@ -333,8 +333,8 @@
 						</select>
 					</div>
 					<div class="flex">
-						<input class="inputCheckbox" type="radio" id="registerForChidonGifts" name="registration">
-						<label class="checkboxLabel" for="registerForChidonGifts">
+						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsB" name="registration">
+						<label class="checkboxLabel" for="registerForChidonGiftsB">
 							I would like to register to ONLY receive the Chidon Sweater and Gifts
 							for a fee of $25. I will not be taking the Chidon Final or join the Chidon
 							Experience.
@@ -777,6 +777,99 @@
 		}
 	});
 
+	let cart = []
+	let cart_total = 0
+
+	function addToCart(id, amount) {
+		if (!cart[id]) {
+			cart[id] = []
+		}
+		const item = {
+			desc: 'reg',
+			amount: amount
+		}
+		// if item doesn't already exist add to cart
+		let add = true;
+		for (let i of cart[id]) {
+			if (i.desc == item.desc) {
+				add = false
+				break
+			}
+		}
+		if (add) cart[id].push(item)
+		calculateTotal()
+	}
+
+	function subtractFromCart(id, amount) {
+		for (let c in cart[id]) {
+			if (cart[id][c].amount == amount) {
+				cart[id].splice(c, 1)
+			}
+		}
+		calculateTotal()
+	}
+
+	function calculateTotal() {
+		total = 0
+		for (let id in cart) {
+			for (let item of cart[id]) {
+				total += item.amount
+			}
+		}
+		// update total on page
+		$("#total").text(total)
+		cart_total = total
+	}
+
+	$("#registerForChidonA").click( function() {
+		const amount = 25
+		const checked = $(this).is(":checked")
+		if (checked) {
+			addToCart(selectedChildId, amount)
+		} else {
+			subtractFromCart(selectedChildId, amount)
+		}
+	})
+
+	$("#registerForChidonB").click( function() {
+		const amount = 25
+		const checked = $(this).is(":checked")
+		if (checked) {
+			addToCart(selectedChildId, amount)
+		} else {
+			subtractFromCart(selectedChildId, amount)
+		}
+	})
+
+	$("#registerForChidonGiftsA").click( function() {
+		subtractFromCart(selectedChildId, $("#paymentAmount").val())
+		const amount = 25
+		addToCart(selectedChildId, amount)
+	})
+
+	$("#registerForChidonGiftsB").click( function() {
+		subtractFromCart(selectedChildId, $("#paymentAmount").val())
+		const amount = 25
+		addToCart(selectedChildId, amount)
+	})
+
+	$("#registerForChidonExperienceA").click( function() {
+		subtractFromCart(selectedChildId, 25)
+		const amount = parseInt($("#paymentAmount").val())
+		addToCart(selectedChildId, amount)
+	})
+
+	$("#paymentAmount").change( function() {
+		// find amount in cart and change it
+		const amount = parseInt($(this).val())
+		for (let c in cart[selectedChildId]) {
+			if (cart[selectedChildId][c].desc == 'reg') {
+				cart[selectedChildId][c].amount = amount
+			}
+		}
+		console.log(cart)
+		calculateTotal()
+	})
 
 	let url = window.location.href;
 	let pos = url.indexOf('?a=');
@@ -954,7 +1047,6 @@
 			evt.preventDefault()
 			const elem = $(this).parent().parent().parent()
 			const form = elem[0].classList[1]
-			checkForm(form)
 			nextChild()
 		})
 
