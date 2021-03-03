@@ -6,6 +6,10 @@ if( isset($_GET['debug'])){
 	//error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+$prizes = Capsule::table('chidon_prizes')->get()
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -48,30 +52,31 @@ if( isset($_GET['debug'])){
                 <th>Our Price</th>
             </tr>
             
-            <?
-                $sql = 'SELECT * FROM chidon_prizes';
-                $query = mysql_query($sql);
-                while($row = mysql_fetch_assoc($query)) { ?>
-                    <tr>
-                        <td>
-                            <? if ($row['prize_picture']) { ?>
-                                <img src="<?= $row['prize_picture'] ?>" width="50" />
-                            <? } ?>
-                        </td>
-                        <td><?= $row['prize_name'] ?></td>
-                        <td><?= $row['quantity'] ?></td>
-                        <td><?= $row['made_possible_by'] ?></td>
-                        <td><?= $row['personalization'] ?></td>
-                        <td><?= $row['color'] ?></td>
-                        <td><?= $row['size'] ?></td>
-                        <td><?= $row['note'] ?></td>
-                        <td><?= $row['price'] ?></td>
-                        <td><?= $row['our_price'] ?> </td>
-                        <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$row['prize_id']?>"> EDIT</a> </td>
-                        <td> <form action="./delete.php?id=<?=$row['prize_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
-                    </tr>
-                <? }
-            ?>
+            <? foreach ($prizes as $prize) { ?>
+                <tr>
+                    <td>
+                        <? if ($prize->prize_picture) { ?>
+                            <img src="<?= $prize->prize_picture ?>" width="50" />
+                        <? } ?>
+                    </td>
+                    <td><?= $prize->prize_name ?></td>
+                    <td><?= $prize->quantity ?></td>
+                    <td><?= $prize->made_possible_by ?></td>
+                    <td><?= $prize->personalization ?></td>
+                    <td><?= $prize->color ?></td>
+                    <td><?= $prize->size ?></td>
+                    <td><?= $prize->note ?></td>
+                    <td><?= $prize->price ?></td>
+                    <td><?= $prize->our_price ?> </td>
+                    <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?= $prize->prize_id ?>">EDIT</a> </td>
+                    <td>
+                        <form action="./delete.php" method="post">
+                            <input type="submit" value="DELETE"/>
+                            <input type="hidden" name="id" value="<?= $prize->prize_id ?>" />
+                        </form>
+                    </td>
+                </tr>
+            <? } ?>
         </table>
     </body>
 </html>
