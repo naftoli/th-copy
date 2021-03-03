@@ -103,7 +103,7 @@ foreach ($child_marks as $school => $other) {
                 <th>Avg (3 Parts)</th>
                 <th>Avg (Expert + Trophy)</th>
                 <th>KHK Rep</th>
-                <th>Current School Rep</th>
+                <th>Old School Rep</th>
                 <th>New School Rep</th>
             </tr>
             </thead>
@@ -134,7 +134,7 @@ foreach ($child_marks as $school => $other) {
                     <th>Avg (3 Parts)</th>
                     <th>Avg (Expert + Trophy)</th>
                     <th>KHK Rep</th>
-                    <th>Current School Rep</th>
+                    <th>Old School Rep</th>
                     <th>New School Rep</th>
                 </tr>
                 <?php
