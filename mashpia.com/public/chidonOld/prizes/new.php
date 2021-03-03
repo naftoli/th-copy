@@ -21,6 +21,10 @@ if( isset($_GET['debug'])){
             .form_control {
                 padding: 5px 10px;
             }
+            .form_control>*:first-child { 
+                display: inline-block; 
+                width: 175px; 
+            }
             .page-break {
                 page-break-after: always;
             }

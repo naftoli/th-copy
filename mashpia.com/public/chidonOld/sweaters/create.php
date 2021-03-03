@@ -18,7 +18,7 @@ switch($_FILES['sweater_picture']) {
     case UPLOAD_ERR_NO_FILE:
         break;
     default: // if an image was uploaded succesfully save it
-        $sweater_picture = save_image($_FILES['sweater_picture'], "/chidonOld/sweaters/img");
+        $sweater_picture = save_image($_FILES['sweater_picture'], "/storage/sweaters");
         break;
 }
 
