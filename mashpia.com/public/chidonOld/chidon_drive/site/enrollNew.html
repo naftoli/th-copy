@@ -111,7 +111,7 @@
 						shipped to my school for $25.
 					</label>
 				</div>
-				<div class="group save-detail"></div>
+				<div class="group save-detail"><input type="submit" class="button continue" value="Continue to Part 2" /></div>
 			</form>
 		</div>
 
@@ -155,7 +155,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="group save-detail"></div>
+				<div class="group save-detail"><input type="submit" class="button continue" value="Continue to Part 2" /></div>
 			</form>
 		</div>
 
@@ -254,7 +254,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="group save-detail"></div>
+				<div class="group save-detail"><input type="submit" class="button continue" value="Continue to Part 2" /></div>
 			</form>
 		</div>
 
@@ -353,7 +353,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="group save-detail"></div>
+				<div class="group save-detail"><input type="submit" class="button continue" value="Continue to Part 2" /></div>
 			</form>
 		</div>
 
@@ -370,15 +370,16 @@
 					celebrate when we watch the Chidon on Sunday, Yud Beis Sivan 5781/May 23, 2021 with great
 					fanfare.
 				</h5>
-				<div class="flex">
+				<div class="flex small-select">
 					<input class="inputCheckbox" type="checkbox" id="celebrationBox" name="celebrationBox">
 					<label class="checkboxLabel" for="celebrationBox">
 						<!-- TODO: add max attr to input field - max should be the max number of boxes allowed -->
-						Yes! I would like to receive <input class="numberInput" type="number"
-															id="numberOfCelebrationBoxes"> Chidon
-						Celebration
-						Box(es) with the following items:
+						Yes! I would like to receive
+						Chidon Celebration Box(es) with the following items:
 					</label>
+					<select id="numberOfCelebrationBoxes">
+
+					</select>
 				</div>
 				<div class="listSection">
 					<ul>
@@ -565,8 +566,9 @@
 				</div>
 
 				<div id="form2Receipt">
-					<!-- TODO: load receipt info -->
 					<h5 class="formDetails"><b>Receipt:</b></h5>
+					<!-- TODO: load receipt info -->
+					<div id="receiptDetails"></div>
 				</div>
 
 				<h5 class="formDetails">
@@ -590,11 +592,86 @@
 					</div>
 				</div>
 				<div class="flexCenter">
-					<a href="chidondrive.com/setup" targer="_blank" rel="noopener noreferrer" class="linkButton">
-						Continue to set up my Chidon Drive platform
-					</a>
+					<a href="" class="button pay" style="text-align: center; margin-top: 20px;">Continue to Payment</a>
 				</div>
 			</form>
+		</div>
+
+		<div class="payment-box" id="paymentInfo" style="display: none">
+			<div class="form">
+				<form id="paymentForm">
+					<div class="field">
+						<label>Name on Credit Card:</label>
+						<input type="text" id="name" placeholder="Full Name" required />
+					</div>
+					<div class="field">
+						<label>Email <span>(for receipt)</span>:</label>
+						<input type="text" id="email" placeholder="Email" required />
+					</div>
+					<div class="field">
+						<label>Card Number:</label>
+						<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
+					</div>
+					<div class="group">
+						<div class="field">
+							<label>Exp. Month:</label>
+							<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+						</div>
+						<div class="field">
+							<label>Exp. Year:</label>
+							<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+								<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+						</div>
+						<div class="field">
+							<label>CVV:</label>
+							<input type="text" id="cc_cvv" placeholder="CVV" required />
+						</div>
+					</div>
+					<h5>Billing Address</h5>
+					<div class="field">
+						<label>Country:</label>
+						<select id="bill_country">
+							<option>United States</option>
+							<option>Canada</option>
+							<option>England</option>
+							<option>Australia</option>
+							<option>S Africa</option>
+							<option>France</option>
+							<option>Europe</option>
+							<option>S America</option>
+						</select>
+					</div>
+					<div class="field">
+						<label>Address:</label>
+						<input type="text" id="bill_address" placeholder="Address" required />
+					</div>
+					<div class="field">
+						<label>Apt./Suite:</label>
+						<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
+					</div>
+					<div class="group">
+						<div class="field">
+							<label>Zip/Postcode:</label>
+							<input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
+						</div>
+						<div class="field">
+							<label>City:</label>
+							<input type="text" id="bill_city" placeholder="City" required />
+						</div>
+						<div class="field">
+							<label>State/Prov/Region:</label>
+							<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
+						</div>
+					</div>
+					<input type="submit" class="button processPayment" value="Pay" />
+				</form>
+			</div>
+		</div>
+
+		<div class="flexCenter" id="chidonDriveSetup" style="display: none">
+			<a href="chidondrive.com/setup" target="_blank" rel="noopener noreferrer" class="linkButton">
+				Continue to set up my Chidon Drive platform
+			</a>
 		</div>
 
 		<!-- END OF FORMS -->
@@ -780,13 +857,9 @@
 	let cart = []
 	let cart_total = 0
 
-	function addToCart(id, amount) {
+	function addToCart(id, item) {
 		if (!cart[id]) {
 			cart[id] = []
-		}
-		const item = {
-			desc: 'reg',
-			amount: amount
 		}
 		// if item doesn't already exist add to cart
 		let add = true;
@@ -800,13 +873,27 @@
 		calculateTotal()
 	}
 
-	function subtractFromCart(id, amount) {
+	function subtractFromCart(id, item) {
 		for (let c in cart[id]) {
-			if (cart[id][c].amount == amount) {
+			if (cart[id][c].desc == item.desc) {
 				cart[id].splice(c, 1)
 			}
 		}
 		calculateTotal()
+	}
+
+	function editCart(id, item) {
+		for (i of cart[id]) {
+			if (i.desc == item.desc) {
+				if (item.address) {
+					i.value = item.address
+				} else if (item.size) {
+					i.size = item.size
+				} else if (item.qty) {
+					i.qty = item.qty
+				}
+			}
+		}
 	}
 
 	function calculateTotal() {
@@ -819,44 +906,100 @@
 		// update total on page
 		$("#total").text(total)
 		cart_total = total
+		updateReceiptDetails()
+	}
+
+	function updateReceiptDetails() {
+		const options = {
+			celeb_box: 'Celebration Box',
+			celeb_box_add: 'Additional Celebration Box',
+			celeb_box_add_ship: 'Ship Additional Celebration Box',
+			celeb_box_add_addr: 'Additional Celebration Box Shipping Address',
+			sweater_mother: 'Mother Sweater',
+			sweater_mother_ship: 'Shipping for Mother Sweater',
+			sweater_mother_ship_addr: 'Mother Sweater Shipping Address',
+			sweater_father: 'Father Sweater',
+			sweater_father_ship: 'Shipping for Father Sweater',
+			sweater_father_ship_addr: 'Father Sweater Shipping Address',
+			sweater_bubby: 'Bubby Sweater',
+			sweater_bubby_ship: 'Shipping for Bubby Sweater',
+			sweater_bubby_ship_addr: 'Shipping Address for Bubby Sweater',
+			sweater_zaidy: 'Zaidy Sweater',
+			sweater_zaidy_ship: 'Shipping for Zaidy Sweater',
+			sweater_zaidy_ship_addr: 'Zaidy Sweater Shipping Address'
+		}
+		let html = '<ul>'
+		for (id in cart) {
+			let name = ''
+			if (children[id]) {
+				const child = children[id]
+				name = child.first + ' ' + child.last
+			}
+			for (item of cart[id]) {
+				if (item.desc == 'reg') {
+					html += `<li>Registration for ${name} - $${item.amount}</li>`
+				} else {
+					html += `<li>${options[item.desc]} - $${item.amount}</li>`
+				}
+			}
+		}
+		html += '</ul>'
+		$("#receiptDetails").empty()
+		$("#receiptDetails").append(html)
 	}
 
 	$("#registerForChidonA").click( function() {
-		const amount = 25
+		const item = {
+			desc: 'reg',
+			amount: 25
+		}
 		const checked = $(this).is(":checked")
 		if (checked) {
-			addToCart(selectedChildId, amount)
+			addToCart(selectedChildId, item)
 		} else {
-			subtractFromCart(selectedChildId, amount)
+			subtractFromCart(selectedChildId, item)
 		}
 	})
 
 	$("#registerForChidonB").click( function() {
-		const amount = 25
+		const item = {
+			desc: 'reg',
+			amount: 25
+		}
 		const checked = $(this).is(":checked")
 		if (checked) {
-			addToCart(selectedChildId, amount)
+			addToCart(selectedChildId, item)
 		} else {
-			subtractFromCart(selectedChildId, amount)
+			subtractFromCart(selectedChildId, item)
 		}
 	})
 
 	$("#registerForChidonGiftsA").click( function() {
 		subtractFromCart(selectedChildId, $("#paymentAmount").val())
-		const amount = 25
-		addToCart(selectedChildId, amount)
+		const item = {
+			desc: 'reg',
+			amount: 25
+		}
+		addToCart(selectedChildId, item)
 	})
 
 	$("#registerForChidonGiftsB").click( function() {
 		subtractFromCart(selectedChildId, $("#paymentAmount").val())
-		const amount = 25
-		addToCart(selectedChildId, amount)
+		const item = {
+			desc: 'reg',
+			amount: 25
+		}
+		addToCart(selectedChildId, item)
 	})
 
 	$("#registerForChidonExperienceA").click( function() {
-		subtractFromCart(selectedChildId, 25)
-		const amount = parseInt($("#paymentAmount").val())
-		addToCart(selectedChildId, amount)
+		let item = {
+			desc: 'reg',
+			amount: 25
+		}
+		subtractFromCart(selectedChildId, item)
+		item.amount = parseInt($("#paymentAmount").val())
+		addToCart(selectedChildId, item)
 	})
 
 	$("#paymentAmount").change( function() {
@@ -868,6 +1011,276 @@
 			}
 		}
 		console.log(cart)
+		calculateTotal()
+	})
+
+	$("#celebrationBox").click( function() {
+		const checked = document.getElementById('celebrationBox').checked
+		const item = {
+			desc: 'celeb_box' ,
+			amount: 0,
+			qty: $("#numberOfCelebrationBoxes").val()
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+	})
+
+	$("#numberOfCelebrationBoxes").change( function() {
+		const item = {
+			desc: 'celeb_box' ,
+			amount: 0,
+			qty: $(this).val()
+		}
+		editCart(0, item)
+	})
+
+	$("#additionalCelebrationBox").click( function() {
+		const checked = document.getElementById('additionalCelebrationBox').checked
+		const item = {
+			desc: 'celeb_box_add',
+			amount: 20
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#shippedToSchool").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'celeb_box_add_ship',
+			amount: 10
+		}
+		if (checked) subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#shippedToAddress").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'celeb_box_add_ship',
+			amount: 10
+		}
+		if (checked) addToCart(0, item)
+		calculateTotal()
+	})
+
+	$("#shippedToAddressInput").blur( function() {
+		const item = {
+			desc: 'celeb_box_add_addr',
+			amount: 0,
+			address: $(this).val()
+		}
+		addToCart(0, item)
+		editCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForMother").click( function() {
+		const checked = document.getElementById('sweaterForMother').checked
+		const item = {
+			desc: 'sweater_mother',
+			amount: 25,
+			size: $("#sweaterForMotherSize").val()
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForMotherSize").change( function() {
+		// find item in cart and update
+		for (item of cart[0]) {
+			if (item.desc == 'sweater_mother') {
+				item.size = $(this).val()
+			}
+		}
+	})
+
+	$("#motherSweaterShippedToSchool").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_mother_ship',
+			amount: 10
+		}
+		if (checked) subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#motherSweaterShippedToAddress").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_mother_ship',
+			amount: 10
+		}
+		if (checked) addToCart(0, item)
+		calculateTotal()
+	})
+
+	$("#motherSweaterShippedToAddressInput").blur( function() {
+		const item = {
+			desc: 'sweater_mother_ship_addr',
+			amount: 0,
+			address: $(this).val()
+		}
+		addToCart(0, item)
+		editCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForFather").click( function() {
+		const checked = document.getElementById('sweaterForFather').checked
+		const item = {
+			desc: 'sweater_father',
+			amount: 25,
+			size: $("#sweaterForFatherSize").val()
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForFatherSize").change( function() {
+		// find item in cart and update
+		for (item of cart[0]) {
+			if (item.desc == 'sweater_father') {
+				item.size = $(this).val()
+			}
+		}
+	})
+
+	$("#fatherSweaterShippedToSchool").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_father_ship',
+			amount: 10
+		}
+		if (checked) subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#fatherSweaterShippedToAddress").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_father_ship',
+			amount: 10
+		}
+		if (checked) addToCart(0, item)
+		calculateTotal()
+	})
+
+	$("#fatherSweaterShippedToAddressInput").blur( function() {
+		const item = {
+			desc: 'sweater_father_ship_addr',
+			amount: 0,
+			address: $(this).val()
+		}
+		addToCart(0, item)
+		editCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForBubby").click( function() {
+		const checked = document.getElementById('sweaterForBubby').checked
+		const item = {
+			desc: 'sweater_bubby',
+			amount: 25,
+			size: $("#sweaterForBubbySize").val()
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForBubbySize").change( function() {
+		// find item in cart and update
+		for (item of cart[0]) {
+			if (item.desc == 'sweater_bubby') {
+				item.size = $(this).val()
+			}
+		}
+	})
+
+	$("#bubbySweaterShippedToSchool").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_bubby_ship',
+			amount: 10
+		}
+		if (checked) subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#bubbySweaterShippedToAddress").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_bubby_ship',
+			amount: 10
+		}
+		if (checked) addToCart(0, item)
+		calculateTotal()
+	})
+
+	$("#bubbySweaterShippedToAddressInput").blur( function() {
+		const item = {
+			desc: 'sweater_bubby_ship_addr',
+			amount: 0,
+			address: $(this).val()
+		}
+		addToCart(0, item)
+		editCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForZaidy").click( function() {
+		const checked = document.getElementById('sweaterForZaidy').checked
+		const item = {
+			desc: 'sweater_zaidy',
+			amount: 25,
+			size: $("#sweaterForZaidySize").val()
+		}
+		if (checked) addToCart(0, item)
+		else subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#sweaterForZaidySize").change( function() {
+		// find item in cart and update
+		for (item of cart[0]) {
+			if (item.desc == 'sweater_zaidy') {
+				item.size = $(this).val()
+			}
+		}
+	})
+
+	$("#zaidySweaterShippedToSchool").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_zaidy_ship',
+			amount: 10
+		}
+		if (checked) subtractFromCart(0, item)
+		calculateTotal()
+	})
+
+	$("#zaidySweaterShippedToAddress").click( function() {
+		const checked = $(this).is(":checked")
+		const item = {
+			desc: 'sweater_zaidy_ship',
+			amount: 10
+		}
+		if (checked) addToCart(0, item)
+		calculateTotal()
+	})
+
+	$("#zaidySweaterShippedToAddressInput").blur( function() {
+		const item = {
+			desc: 'sweater_zaidy_ship_addr',
+			amount: 0,
+			address: $(this).val()
+		}
+		addToCart(0, item)
+		editCart(0, item)
 		calculateTotal()
 	})
 
@@ -895,6 +1308,7 @@
 	var children_ids = []; // global variable to keep track of order of children and ids
 	var completed = [] // global variable for making sure all children's forms have been completed
 	var numChildren; // global variable to track number of children
+	let numCelebrationBoxes = 0;
 
 	function getChildren(admin) {
 		$.post('../ajax/getChildren.php', { admin: admin }, function (result) {
@@ -906,6 +1320,7 @@
 				for (c in info.children) {
 					let child = info.children[c];
 					if (parseInt(child.date_paid) > 0) continue;
+					if (child.shabbaton_expert || child.shabbaton_trophy) numCelebrationBoxes++
 					children[child.user_id] = child;
 					children_ids.push(child.user_id);
 					let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
@@ -929,10 +1344,59 @@
 				$(".kids-wrapper").empty();
 				$(".kids-wrapper").append(html);
 				$(".kids-wrapper").show();
+				$(".amountOfBoxes").text(numCelebrationBoxes)
+				let options = '';
+				for (let i = 1; i <= numCelebrationBoxes; i++) {
+					options += `<option value=${i}>${i}</option>`;
+				}
+				$("#numberOfCelebrationBoxes").append(options)
+				$('.form2 select').niceSelect('update');
 			} else {
 				alert(info.error);
 			}
 		});
+	}
+
+	function clearForm(form) {
+		let frm = "." + form
+		if (form == 'formA') {
+			document.getElementById('registerForChidonA').checked = false
+		} else if (form == 'formB') {
+			document.getElementById('registerForChidonB').checked = false
+		} else if (form == 'formC') {
+			document.getElementById('registerForChidonExperienceA').checked = false
+			document.getElementById('registerForChidonGiftsA').checked = false
+		}  else if (form == 'formD') {
+			document.getElementById('registerForChidonExperienceB').checked = false
+			document.getElementById('registerForChidonGiftsB').checked = false
+		}
+		updateForm(form, selectedChildId)
+	}
+
+	function updateForm(form, id) {
+		// find out if we need to check off anything
+		if (cart[id]) {
+			for (item of cart[id]) {
+				if (item.desc == 'reg') {
+					if (form == 'formA') {
+						document.getElementById('registerForChidonA').checked = true
+					} else if (form == 'formB') {
+						document.getElementById('registerForChidonB').checked = false
+					} else if (form == 'formC' || form == 'formD') {
+						const amount = item.amount
+						if (amount == 25) {
+							if (form == 'formC') document.getElementById('registerForChidonGiftsA').checked = true
+							else if (form == 'formD') document.getElementById('registerForChidonGiftsB').checked = true
+						} else {
+							document.getElementById('paymentAmount').value = amount
+							$('select').niceSelect('update');
+							if (form == 'formC') document.getElementById('registerForChidonExperienceA').checked = true
+							else if (form == 'formD') document.getElementById('registerForChidonExperienceB').checked = true
+						}
+					}
+				}
+			}
+		}
 	}
 
 	function nextChild() {
@@ -958,24 +1422,28 @@
 		const child = children[id]
 		console.log(child)
 		if (parseInt(child.shabbaton_maven)) {
+			clearForm("formA");
 			$(".formA").show()
 			$(".formB").hide()
 			$(".formC").hide()
 			$(".formD").hide()
 		}
 		else if (parseInt(child.shabbaton_pro)) {
+			clearForm("formB");
 			$(".formA").hide()
 			$(".formB").show()
 			$(".formC").hide()
 			$(".formD").hide()
 		}
 		else if (parseInt(child.shabbaton_expert)) {
+			clearForm("formC");
 			$(".formA").hide()
 			$(".formB").hide()
 			$(".formC").show()
 			$(".formD").hide()
 		}
 		else if (parseInt(child.shabbaton_trophy)) {
+			clearForm("formD");
 			$(".formA").hide()
 			$(".formB").hide()
 			$(".formC").hide()
@@ -984,11 +1452,11 @@
 	}
 
 	$(document).ready(function (e) {
-		$(".formA").show()
-		$(".formB").show()
-		$(".formC").show()
-		$(".formD").show()
-		$(".form2").show()
+		// $(".formA").show()
+		// $(".formB").show()
+		// $(".formC").show()
+		// $(".formD").show()
+		// $(".form2").show()
 
 		// Select
 		$('select').niceSelect();
@@ -1032,15 +1500,15 @@
 			// TODO: Display correct form based on child.
 			showForm(selectedChildId)
 
-			let html = '';
-			if (numChildren > 1) {
-				html += `<input type="submit" class="button submit next" value="save & next child" />
-													<input type="submit" class="button submit pay" value="save & go to payment" />`;
-			} else {
-				html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
-			}
-			$(".save-detail").empty();
-			$(".save-detail").append(html);
+			// let html = '';
+			// if (numChildren > 1) {
+			// 	html += `<input type="submit" class="button submit next" value="next child" />
+			// 										<input type="submit" class="button submit pay" value="go to payment" />`;
+			// } else {
+			// 	html += `<input type="submit" class="button submit pay" value="go to payment" />`;
+			// }
+			// $(".save-detail").empty();
+			// $(".save-detail").append(html);
 		});
 
 		$(document).on('click', '.next', function( evt ) {
@@ -1050,43 +1518,42 @@
 			nextChild()
 		})
 
-		$(document).on('click', '.pay', function( evt ) {
+		$(document).on('click', '.continue', function( evt ) {
 			evt.preventDefault()
-
+			$(".formA").hide()
+			$(".formB").hide()
+			$(".formC").hide()
+			$(".formD").hide()
+			$(".form2").show()
+			$(window).scrollTop(400)
 		})
 
-		$("form.personalInfo").submit(function (evt) {
-			evt.preventDefault();
+		$(document).on('click', '.pay', function( evt ) {
+			evt.preventDefault()
+			if (! ($("#chargeCard").is(":checked") || $("#holdMoney").is(":checked")) ) {
+				alert('You must indicate whether you would like to be charged now or later!')
+				return false
+			} else $("#paymentInfo").show()
+		})
 
+		$(document).on('click', '.processPayment', function( evt ) {
+			evt.preventDefault()
 
-			console.log(errors);
-			//}
+			let cc = {}
+			cc.num = $("#cc_num").val();
+			cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+			cc.cvv = $("#cc_cvv").val();
 
-			if (errors != '') {
-				alert(errors);
-				return false;
-			} else {
-				$.post('../ajax/enrollChild.php', { child: info }, function (result) {
-					//if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
-					let res = JSON.parse(result);
-					if (res.success) {
-						alert(res.message);
-						if (next) {
-							// refresh children
-							getChildren(Cookies.get('chidon_admin'));
-							alert('Showing form for next child.');
-							nextChild();
-						} else if (pay) {
-							location.href = "payment-information.html";
-							// if ( checkForms() )	location.href = "enroll-2.html";
-							// else alert("You cannot go to payment until you have completed the form for all of your children.");
-						}
-					} else {
-						alert(res.error);
-					}
-				});
-			}
-		});
+			let billing = {}
+			billing.apt = $("#bill_apt").val();
+			billing.address = $("#bill_address").val();
+			billing.city = $("#bill_city").val();
+			billing.state = $("#bill_state").val();
+			billing.zip = $("#bill_zip").val();
+			billing.country = $("#bill_country").val();
+			cc.billing = billing;
+
+		})
 
 		$("#logoff").click(function () {
 			Cookies.remove('chidon_admin');

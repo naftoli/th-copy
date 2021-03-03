@@ -10,17 +10,30 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 if ( $admin_id ) {
   $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        u.user_id, u.first, u.last, u.first_he, u.last_he, u.mobile_pic, u.user_photo_id, u.gender, tc.*  
+        u.user_id,
+        u.first,
+        u.last,
+        u.first_he,
+        u.last_he,
+        u.mobile_pic,
+        u.user_photo_id,
+        u.gender,
+        tc.*
     FROM
         users u
             JOIN
-        th_chidon tc USING (user_id) 
+        th_chidon tc USING (user_id)
             LEFT JOIN
-        th_chidon_schools tcs on (tcs.school_id = tc.school_id and tcs.year = tc.year) 
+        th_chidon_schools tcs ON (tcs.school_id = tc.school_id
+            AND tcs.year = tc.year)
     WHERE
         tc.year = :year AND tc.parent_id = :admin
-            AND tc.can_enroll = 1 
-            AND (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert = 1 or tc.shabbaton_trophy = 1)
+            AND tc.can_enroll = 1
+            AND (tc.shabbaton_maven = 1
+            OR tc.shabbaton_pro = 1
+            OR tc.shabbaton_expert = 1
+            OR tc.shabbaton_trophy = 1)
+    GROUP BY u.user_id
   ");
   $res = $stmt->execute([
     ':year'   =>  $year, 
