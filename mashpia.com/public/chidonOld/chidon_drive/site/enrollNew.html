@@ -144,10 +144,10 @@
 					Plus, both girls and boys will receive another surprise gift!
 				</p>
 				<p class="checkboxDetails">The sweater and gifts will be shipped to my school for $25.</p>
-				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+				<div id="boysOnlyYarmulkaSizesB" style="display: none;">
 					<div class="field flex small-select">
 						<label>Please select your Yarmulka Size</label>
-						<select id="yarmulkaSize" name="yarmulkaSize">
+						<select id="yarmulkaSizeB" name="yarmulkaSize">
 							<option value='3'>Size 3</option>
 							<option value='4'>Size 4</option>
 							<option value='5'>Size 5</option>
@@ -176,10 +176,10 @@
 							beautiful Chidon charm bracelet. Plus, both girls and boys will receive another surprise
 							gift!
 						</li>
-						<li id="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
+						<li class="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
 							experience
 						</li>
-						<li id="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
+						<li class="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
 							catalog
 						</li>
 						<li>Your Chidon <b>Awards</b> (certificate, plaque, medal, or trophy)</li>
@@ -243,10 +243,10 @@
 					</div>
 				</div>
 
-				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+				<div id="boysOnlyYarmulkaSizesC" style="display: none;">
 					<div class="field flex small-select">
 						<label>Please select your Yarmulka Size</label>
-						<select id="yarmulkaSize" name="yarmulkaSize">
+						<select id="yarmulkaSizeC" name="yarmulkaSize">
 							<option value='3'>Size 3</option>
 							<option value='4'>Size 4</option>
 							<option value='5'>Size 5</option>
@@ -342,10 +342,10 @@
 					</div>
 				</div>
 
-				<div id="boysOnlyYarmulkaSizes" style="display: none;">
+				<div id="boysOnlyYarmulkaSizesD" style="display: none;">
 					<div class="field flex small-select">
 						<label>Please select your Yarmulka Size</label>
-						<select id="yarmulkaSize" name="yarmulkaSize">
+						<select id="yarmulkaSizeD" name="yarmulkaSize">
 							<option value='3'>Size 3</option>
 							<option value='4'>Size 4</option>
 							<option value='5'>Size 5</option>
@@ -759,55 +759,103 @@
 
 	let selectedChildId;
 
-	$('.formB input[type="checkbox"]#registerForChidon').click(function () {
+	$('.formB input[type="checkbox"]#registerForChidonB').click(function () {
 		var registerForChidonChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
 		if (registerForChidonChecked && child.gender === 'M') {
-			$('.formB #boysOnlyYarmulkaSizes').show();
+			$('.formB #boysOnlyYarmulkaSizesB').show();
+			// add yarmulka to cart
+			const item = {
+				desc: 'yarmulka',
+				amount: 0,
+				size: $("#yarmulkaSizeB").val()
+			}
+			addToCart(selectedChildId, item)
 		} else {
-			$('.formB #boysOnlyYarmulkaSizes').hide();
+			$('.formB #boysOnlyYarmulkaSizesB').hide();
+			subtractFromCart(selectedChildId, item)
 		}
 	});
 
-	$('.formC input[type="radio"]#registerForChidonExperience').click(function () {
+	$('.formC input[type="radio"]#registerForChidonExperienceA').click(function () {
 		var registerForChidonExperienceChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
 		if (registerForChidonExperienceChecked && child.gender === 'M') {
-			$('.formC #boysOnlyYarmulkaSizes').show();
+			$('.formC #boysOnlyYarmulkaSizesC').show();
+			const item = {
+				desc: 'yarmulka',
+				amount: 0,
+				size: $("#yarmulkaSizeC").val()
+			}
+			addToCart(selectedChildId, item)
 		} else {
-			$('.formC #boysOnlyYarmulkaSizes').hide();
+			$('.formC #boysOnlyYarmulkaSizesC').hide();
+			subtractFromCart(selectedChildId, item)
 		}
 	});
 
-	$('.formC input[type="radio"]#registerForChidonGifts').click(function () {
+	$('.formC input[type="radio"]#registerForChidonGiftsA').click(function () {
 		var registerForChidonGiftsChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
 		if (registerForChidonGiftsChecked && child.gender === 'M') {
-			$('.formC #boysOnlyYarmulkaSizes').show();
+			$('.formC #boysOnlyYarmulkaSizesC').show();
+			const item = {
+				desc: 'yarmulka',
+				amount: 0,
+				size: $("#yarmulkaSizeC").val()
+			}
+			addToCart(selectedChildId, item)
 		} else {
-			$('.formC #boysOnlyYarmulkaSizes').hide();
+			$('.formC #boysOnlyYarmulkaSizesC').hide();
+			subtractFromCart(selectedChildId, item)
 		}
 	});
 
-	$('.formD input[type="radio"]#registerForChidonExperience').click(function () {
+	$('.formD input[type="radio"]#registerForChidonExperienceB').click(function () {
 		var registerForChidonExperienceChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
 		if (registerForChidonExperienceChecked && child.gender === 'M') {
-			$('.formD #boysOnlyYarmulkaSizes').show();
+			$('.formD #boysOnlyYarmulkaSizesD').show();
+			const item = {
+				desc: 'yarmulka',
+				amount: 0,
+				size: $("#yarmulkaSizeD").val()
+			}
+			addToCart(selectedChildId, item)
 		} else {
-			$('.formD #boysOnlyYarmulkaSizes').hide();
+			$('.formD #boysOnlyYarmulkaSizesD').hide();
+			subtractFromCart(selectedChildId, item)
 		}
 	});
 
-	$('.formD input[type="radio"]#registerForChidonGifts').click(function () {
+	$('.formD input[type="radio"]#registerForChidonGiftsB').click(function () {
 		var registerForChidonGiftsChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
 		if (registerForChidonGiftsChecked && child.gender === 'M') {
-			$('.formD #boysOnlyYarmulkaSizes').show();
+			$('.formD #boysOnlyYarmulkaSizesD').show();
+			const item = {
+				desc: 'yarmulka',
+				amount: 0,
+				size: $("#yarmulkaSizeD").val()
+			}
+			addToCart(selectedChildId, item)
 		} else {
-			$('.formD #boysOnlyYarmulkaSizes').hide();
+			$('.formD #boysOnlyYarmulkaSizesD').hide();
+			subtractFromCart(selectedChildId, item)
 		}
 	});
+
+	$("#yarmulkaSizeB").change( function() {
+		changeYarmulka(this)
+	})
+
+	$("#yarmulkaSizeC").change( function() {
+		changeYarmulka(this)
+	})
+
+	$("#yarmulkaSizeD").change( function() {
+		changeYarmulka(this)
+	})
 
 	$('.form2 input[type="checkbox"]#additionalCelebrationBox').click(function () {
 		var additionalCelebrationBoxChecked = $(this)[0].checked;
@@ -853,6 +901,15 @@
 			$('.form2 #sweaterForZaidyDetails').hide();
 		}
 	});
+
+	function changeYarmulka(elem) {
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $(elem).val()
+		}
+		editCart(selectedChildId, item)
+	}
 
 	let cart = []
 	let cart_total = 0
@@ -911,7 +968,7 @@
 
 	function updateReceiptDetails() {
 		const options = {
-			celeb_box: 'Celebration Box',
+			celeb_box: 'Celebration Box(es)',
 			celeb_box_add: 'Additional Celebration Box',
 			celeb_box_add_ship: 'Ship Additional Celebration Box',
 			celeb_box_add_addr: 'Additional Celebration Box Shipping Address',
@@ -936,9 +993,11 @@
 				name = child.first + ' ' + child.last
 			}
 			for (item of cart[id]) {
-				if (item.desc.contains('addr')) continue;
+				if (item.desc.indexOf('addr') != -1) continue
 				if (item.desc == 'reg') {
 					html += `<li>Registration for ${name} - $${item.amount}</li>`
+				} else if (item.desc == 'yarmulka') {
+					html += `<li>Yarmulka for ${name}, Size: ${item.size} - $${item.amount}</li>`
 				} else {
 					html += `<li>${options[item.desc]} - $${item.amount}</li>`
 				}
