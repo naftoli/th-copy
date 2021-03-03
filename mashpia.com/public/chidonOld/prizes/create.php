@@ -13,22 +13,22 @@ $note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
 
-$sweater_picture = "";
-switch($_FILES['sweater_picture']) {
+$prize_picture = "";
+switch($_FILES['prize_picture']) {
     case UPLOAD_ERR_INI_SIZE:
     case UPLOAD_ERR_FORM_SIZE:
     case UPLOAD_ERR_PARTIAL:
     case UPLOAD_ERR_NO_FILE:
         break;
     default: // if an image was uploaded succesfully save it
-        $sweater_picture = save_image($_FILES['sweater_picture'], "/chidonOld/sweaters/img");
+        $prize_picture = save_image($_FILES['prize_picture'], "/storage/chidon_prizes");
         break;
 }
 
 $sql = "INSERT INTO chidon_prizes ( 
-          prize_name,   sweater_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
+          prize_name,   prize_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
     ) VALUES (
-        '$prize_name', '$sweater_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
+        '$prize_name', '$prize_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
     )
 ";
 
