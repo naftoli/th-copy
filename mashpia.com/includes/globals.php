@@ -31,6 +31,3 @@ if ( $development )
 // initialize the $logger global variable
 // for usage see the monolog docs at https://github.com/Seldaek/monolog/blob/main/doc/01-usage.md
 require_once( __DIR__ . "/../utils/logger.php" );
-
-// initialize Illuminate Database (laravel Eloquent ORM, Query Builder, and more.)
-require_once( __DIR__ . "/illuminate_db_capsule.php" ); 
