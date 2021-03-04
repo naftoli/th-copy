@@ -757,150 +757,9 @@
 		location.href = newUrl;
 	}
 
-	let selectedChildId;
-
-	$('.formB input[type="checkbox"]#registerForChidonB').click(function () {
-		var registerForChidonChecked = $(this)[0].checked;
-		let child = children[selectedChildId];
-		const item = {
-			desc: 'yarmulka',
-			amount: 0,
-			size: $("#yarmulkaSizeB").val()
-		}
-		if (registerForChidonChecked && child.gender === 'M') {
-			$('.formB #boysOnlyYarmulkaSizesB').show();
-			// add yarmulka to cart
-			addToCart(selectedChildId, item)
-		} else {
-			$('.formB #boysOnlyYarmulkaSizesB').hide();
-			subtractFromCart(selectedChildId, item)
-		}
-	});
-
-	$('.formC input[type="radio"]#registerForChidonExperienceA').click(function () {
-		var registerForChidonExperienceChecked = $(this)[0].checked;
-		let child = children[selectedChildId];
-		const item = {
-			desc: 'yarmulka',
-			amount: 0,
-			size: $("#yarmulkaSizeC").val()
-		}
-		if (registerForChidonExperienceChecked && child.gender === 'M') {
-			$('.formC #boysOnlyYarmulkaSizesC').show();
-			addToCart(selectedChildId, item)
-		} else {
-			$('.formC #boysOnlyYarmulkaSizesC').hide();
-			subtractFromCart(selectedChildId, item)
-		}
-	});
-
-	$('.formC input[type="radio"]#registerForChidonGiftsA').click(function () {
-		var registerForChidonGiftsChecked = $(this)[0].checked;
-		let child = children[selectedChildId];
-		const item = {
-			desc: 'yarmulka',
-			amount: 0,
-			size: $("#yarmulkaSizeC").val()
-		}
-		if (registerForChidonGiftsChecked && child.gender === 'M') {
-			$('.formC #boysOnlyYarmulkaSizesC').show();
-			addToCart(selectedChildId, item)
-		} else {
-			$('.formC #boysOnlyYarmulkaSizesC').hide();
-			subtractFromCart(selectedChildId, item)
-		}
-	});
-
-	$('.formD input[type="radio"]#registerForChidonExperienceB').click(function () {
-		var registerForChidonExperienceChecked = $(this)[0].checked;
-		let child = children[selectedChildId];
-		const item = {
-			desc: 'yarmulka',
-			amount: 0,
-			size: $("#yarmulkaSizeD").val()
-		}
-		if (registerForChidonExperienceChecked && child.gender === 'M') {
-			$('.formD #boysOnlyYarmulkaSizesD').show();
-			addToCart(selectedChildId, item)
-		} else {
-			$('.formD #boysOnlyYarmulkaSizesD').hide();
-			subtractFromCart(selectedChildId, item)
-		}
-	});
-
-	$('.formD input[type="radio"]#registerForChidonGiftsB').click(function () {
-		var registerForChidonGiftsChecked = $(this)[0].checked;
-		let child = children[selectedChildId];
-		const item = {
-			desc: 'yarmulka',
-			amount: 0,
-			size: $("#yarmulkaSizeD").val()
-		}
-		if (registerForChidonGiftsChecked && child.gender === 'M') {
-			$('.formD #boysOnlyYarmulkaSizesD').show();
-			addToCart(selectedChildId, item)
-		} else {
-			$('.formD #boysOnlyYarmulkaSizesD').hide();
-			subtractFromCart(selectedChildId, item)
-		}
-	});
-
-	$("#yarmulkaSizeB").change( function() {
-		changeYarmulka(this)
-	})
-
-	$("#yarmulkaSizeC").change( function() {
-		changeYarmulka(this)
-	})
-
-	$("#yarmulkaSizeD").change( function() {
-		changeYarmulka(this)
-	})
-
-	$('.form2 input[type="checkbox"]#additionalCelebrationBox').click(function () {
-		var additionalCelebrationBoxChecked = $(this)[0].checked;
-		if (additionalCelebrationBoxChecked) {
-			$('.form2 #additionalCelebrationBoxDetails').show();
-		} else {
-			$('.form2 #additionalCelebrationBoxDetails').hide();
-		}
-	});
-
-	$('.form2 input[type="checkbox"]#sweaterForMother').click(function () {
-		var sweaterForMotherChecked = $(this)[0].checked;
-		if (sweaterForMotherChecked) {
-			$('.form2 #sweaterForMotherDetails').show();
-		} else {
-			$('.form2 #sweaterForMotherDetails').hide();
-		}
-	});
-
-	$('.form2 input[type="checkbox"]#sweaterForFather').click(function () {
-		var sweaterForFatherChecked = $(this)[0].checked;
-		if (sweaterForFatherChecked) {
-			$('.form2 #sweaterForFatherDetails').show();
-		} else {
-			$('.form2 #sweaterForFatherDetails').hide();
-		}
-	});
-
-	$('.form2 input[type="checkbox"]#sweaterForBubby').click(function () {
-		var sweaterForBubbyChecked = $(this)[0].checked;
-		if (sweaterForBubbyChecked) {
-			$('.form2 #sweaterForBubbyDetails').show();
-		} else {
-			$('.form2 #sweaterForBubbyDetails').hide();
-		}
-	});
-
-	$('.form2 input[type="checkbox"]#sweaterForZaidy').click(function () {
-		var sweaterForZaidyChecked = $(this)[0].checked;
-		if (sweaterForZaidyChecked) {
-			$('.form2 #sweaterForZaidyDetails').show();
-		} else {
-			$('.form2 #sweaterForZaidyDetails').hide();
-		}
-	});
+	let selectedChildId
+	let cart = []
+	let cart_total = 0
 
 	function changeYarmulka(elem) {
 		const item = {
@@ -910,9 +769,6 @@
 		}
 		editCart(selectedChildId, item)
 	}
-
-	let cart = []
-	let cart_total = 0
 
 	function addToCart(id, item) {
 		if (!cart[id]) {
@@ -1008,6 +864,63 @@
 		$("#receiptDetails").append(html)
 	}
 
+	$("#yarmulkaSizeB").change( function() {
+		changeYarmulka(this)
+	})
+
+	$("#yarmulkaSizeC").change( function() {
+		changeYarmulka(this)
+	})
+
+	$("#yarmulkaSizeD").change( function() {
+		changeYarmulka(this)
+	})
+
+	$('.form2 input[type="checkbox"]#additionalCelebrationBox').click(function () {
+		var additionalCelebrationBoxChecked = $(this)[0].checked;
+		if (additionalCelebrationBoxChecked) {
+			$('.form2 #additionalCelebrationBoxDetails').show();
+		} else {
+			$('.form2 #additionalCelebrationBoxDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForMother').click(function () {
+		var sweaterForMotherChecked = $(this)[0].checked;
+		if (sweaterForMotherChecked) {
+			$('.form2 #sweaterForMotherDetails').show();
+		} else {
+			$('.form2 #sweaterForMotherDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForFather').click(function () {
+		var sweaterForFatherChecked = $(this)[0].checked;
+		if (sweaterForFatherChecked) {
+			$('.form2 #sweaterForFatherDetails').show();
+		} else {
+			$('.form2 #sweaterForFatherDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForBubby').click(function () {
+		var sweaterForBubbyChecked = $(this)[0].checked;
+		if (sweaterForBubbyChecked) {
+			$('.form2 #sweaterForBubbyDetails').show();
+		} else {
+			$('.form2 #sweaterForBubbyDetails').hide();
+		}
+	});
+
+	$('.form2 input[type="checkbox"]#sweaterForZaidy').click(function () {
+		var sweaterForZaidyChecked = $(this)[0].checked;
+		if (sweaterForZaidyChecked) {
+			$('.form2 #sweaterForZaidyDetails').show();
+		} else {
+			$('.form2 #sweaterForZaidyDetails').hide();
+		}
+	});
+
 	$("#registerForChidonA").click( function() {
 		const item = {
 			desc: 'reg',
@@ -1022,56 +935,142 @@
 	})
 
 	$("#registerForChidonB").click( function() {
-		const item = {
+		let child = children[selectedChildId];
+		const checked = $(this).is(":checked")
+
+		const item1 = {
 			desc: 'reg',
 			amount: 25
 		}
-		const checked = $(this).is(":checked")
+		const item2 = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeB").val()
+		}
+
 		if (checked) {
-			addToCart(selectedChildId, item)
+			addToCart(selectedChildId, item1)
+			if (child.gender === 'M') {
+				$('#boysOnlyYarmulkaSizesB').show();
+				addToCart(selectedChildId, item2)
+			}
 		} else {
-			subtractFromCart(selectedChildId, item)
+			subtractFromCart(selectedChildId, item1)
+			$('#boysOnlyYarmulkaSizesB').hide();
+			subtractFromCart(selectedChildId, item2)
 		}
 	})
 
 	$("#registerForChidonGiftsA").click( function() {
-		subtractFromCart(selectedChildId, $("#paymentAmountA").val())
-		const item = {
+		let child = children[selectedChildId];
+		const item1 = {
+			desc: 'reg',
+			amount: parseInt($("#paymentAmountA").val())
+		}
+		subtractFromCart(selectedChildId, item1)
+
+		const item2 = {
 			desc: 'reg',
 			amount: 25
 		}
-		addToCart(selectedChildId, item)
+		addToCart(selectedChildId, item2)
+
+		const item3 = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeC").val()
+		}
+		if (child.gender === 'M') {
+			$('.formC #boysOnlyYarmulkaSizesC').show();
+			addToCart(selectedChildId, item3)
+		} else {
+			$('.formC #boysOnlyYarmulkaSizesC').hide();
+			subtractFromCart(selectedChildId, item3)
+		}
 	})
 
 	$("#registerForChidonGiftsB").click( function() {
-		subtractFromCart(selectedChildId, $("#paymentAmountB").val())
-		const item = {
+		let child = children[selectedChildId];
+		const item1 = {
+			desc: 'reg',
+			amount: parseInt($("#paymentAmountB").val())
+		}
+		subtractFromCart(selectedChildId, item1)
+
+		const item2 = {
 			desc: 'reg',
 			amount: 25
 		}
-		addToCart(selectedChildId, item)
+		addToCart(selectedChildId, item2)
+
+		const item3 = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeD").val()
+		}
+		if (child.gender === 'M') {
+			$('.formD #boysOnlyYarmulkaSizesD').show();
+			addToCart(selectedChildId, item3)
+		} else {
+			$('.formD #boysOnlyYarmulkaSizesD').hide();
+			subtractFromCart(selectedChildId, item3)
+		}
 	})
 
 	$("#registerForChidonExperienceA").click( function() {
-		// first remove item with 25 amount then item with current amount
-		let item = {
+		let child = children[selectedChildId];
+		let item1 = {
 			desc: 'reg',
 			amount: 25
 		}
-		subtractFromCart(selectedChildId, item)
-		item.amount = parseInt($("#paymentAmountA").val())
-		addToCart(selectedChildId, item)
+		subtractFromCart(selectedChildId, item1)
+
+		let item2 = {
+			desc: 'reg',
+			amount: parseInt($("#paymentAmountA").val())
+		}
+		addToCart(selectedChildId, item2)
+
+		const item3 = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeC").val()
+		}
+		if (child.gender === 'M') {
+			$('#boysOnlyYarmulkaSizesC').show();
+			addToCart(selectedChildId, item3)
+		} else {
+			$('#boysOnlyYarmulkaSizesC').hide();
+			subtractFromCart(selectedChildId, item3)
+		}
 	})
 
 	$("#registerForChidonExperienceB").click( function() {
-		// first remove item with 25 amount then item with current amount
-		let item = {
+		let child = children[selectedChildId];
+		let item1 = {
 			desc: 'reg',
 			amount: 25
 		}
-		subtractFromCart(selectedChildId, item)
-		item.amount = parseInt($("#paymentAmountB").val())
-		addToCart(selectedChildId, item)
+		subtractFromCart(selectedChildId, item1)
+
+		let item2 = {
+			desc: 'reg',
+			amount: parseInt($("#paymentAmountB").val())
+		}
+		addToCart(selectedChildId, item2)
+
+		const item3 = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeD").val()
+		}
+		if (child.gender === 'M') {
+			$('#boysOnlyYarmulkaSizesD').show();
+			addToCart(selectedChildId, item3)
+		} else {
+			$('#boysOnlyYarmulkaSizesD').hide();
+			subtractFromCart(selectedChildId, item3)
+		}
 	})
 
 	$("#paymentAmountA").change( function() {
@@ -1473,12 +1472,11 @@
 							if (form == 'formC') {
 								document.getElementById('registerForChidonExperienceA').checked = true
 								document.getElementById('paymentAmountA').value = amount
-								$('select').niceSelect('update');
 							} else if (form == 'formD') {
 								document.getElementById('registerForChidonExperienceB').checked = true
 								document.getElementById('paymentAmountB').value = amount
-								$('select').niceSelect('update');
 							}
+							$('select').niceSelect('update');
 						}
 					}
 				}
