@@ -21,7 +21,7 @@ switch($_FILES['prize_picture']) {
     case UPLOAD_ERR_NO_FILE:
         break;
     default: // if an image was uploaded succesfully save it
-        $prize_picture = save_image($_FILES['prize_picture'], "/storage/chidon_prizes");
+        $prize_picture = save_image($_FILES['prize_picture'], "/chidonOld/sweaters/img");
         break;
 }
 

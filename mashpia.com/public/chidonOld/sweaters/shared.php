@@ -11,7 +11,10 @@ function save_image($file, $directory, $old_file_path = null){
             $file_name = 'v' . $i++ .".". $file['name'];
             $target = $_SERVER["DOCUMENT_ROOT"].substr($directory.'/'.$file_name, 0, 100); // move the file to the right place
         }
-        mkdir($_SERVER["DOCUMENT_ROOT"] . $directory); // ensure folder exists first
+        if (!is_dir($_SERVER["DOCUMENT_ROOT"] . $directory)) {
+            throw new Exception("missing folder ".$_SERVER["DOCUMENT_ROOT"] . $directory);
+            return false;
+        }
         if (move_uploaded_file($file['tmp_name'], $target)) { // actually move it
             if($old_file_path) {
                 unlink($_SERVER["DOCUMENT_ROOT"].$old_file_path);
