@@ -225,7 +225,7 @@
 					</h5>
 					<div class="field flex small-select">
 						<label>I would like to pay:</label>
-						<select id="paymentAmount" name="pay">
+						<select id="paymentAmountA" name="pay">
 							<option value='370'>$370</option>
 							<option value='300'>$300</option>
 							<option value='270'>$270 (activates the Rohr Grant to cover the last $100) </option>
@@ -324,7 +324,7 @@
 					</h5>
 					<div class="field flex small-select">
 						<label>I would like to pay:</label>
-						<select id="paymentAmount" name="pay">
+						<select id="paymentAmountB" name="pay">
 							<option value='370'>$370</option>
 							<option value='300'>$300</option>
 							<option value='270'>$270 (activates the Rohr Grant to cover the last $100) </option>
@@ -1035,7 +1035,7 @@
 	})
 
 	$("#registerForChidonGiftsA").click( function() {
-		subtractFromCart(selectedChildId, $("#paymentAmount").val())
+		subtractFromCart(selectedChildId, $("#paymentAmountA").val())
 		const item = {
 			desc: 'reg',
 			amount: 25
@@ -1044,7 +1044,7 @@
 	})
 
 	$("#registerForChidonGiftsB").click( function() {
-		subtractFromCart(selectedChildId, $("#paymentAmount").val())
+		subtractFromCart(selectedChildId, $("#paymentAmountB").val())
 		const item = {
 			desc: 'reg',
 			amount: 25
@@ -1053,16 +1053,28 @@
 	})
 
 	$("#registerForChidonExperienceA").click( function() {
+		// first remove item with 25 amount then item with current amount
 		let item = {
 			desc: 'reg',
 			amount: 25
 		}
 		subtractFromCart(selectedChildId, item)
-		item.amount = parseInt($("#paymentAmount").val())
+		item.amount = parseInt($("#paymentAmountA").val())
 		addToCart(selectedChildId, item)
 	})
 
-	$("#paymentAmount").change( function() {
+	$("#registerForChidonExperienceB").click( function() {
+		// first remove item with 25 amount then item with current amount
+		let item = {
+			desc: 'reg',
+			amount: 25
+		}
+		subtractFromCart(selectedChildId, item)
+		item.amount = parseInt($("#paymentAmountB").val())
+		addToCart(selectedChildId, item)
+	})
+
+	$("#paymentAmountA").change( function() {
 		// find amount in cart and change it
 		const amount = parseInt($(this).val())
 		for (let c in cart[selectedChildId]) {
@@ -1070,7 +1082,17 @@
 				cart[selectedChildId][c].amount = amount
 			}
 		}
-		console.log(cart)
+		calculateTotal()
+	})
+
+	$("#paymentAmountB").change( function() {
+		// find amount in cart and change it
+		const amount = parseInt($(this).val())
+		for (let c in cart[selectedChildId]) {
+			if (cart[selectedChildId][c].desc == 'reg') {
+				cart[selectedChildId][c].amount = amount
+			}
+		}
 		calculateTotal()
 	})
 
@@ -1448,10 +1470,15 @@
 							if (form == 'formC') document.getElementById('registerForChidonGiftsA').checked = true
 							else if (form == 'formD') document.getElementById('registerForChidonGiftsB').checked = true
 						} else {
-							document.getElementById('paymentAmount').value = amount
-							$('select').niceSelect('update');
-							if (form == 'formC') document.getElementById('registerForChidonExperienceA').checked = true
-							else if (form == 'formD') document.getElementById('registerForChidonExperienceB').checked = true
+							if (form == 'formC') {
+								document.getElementById('registerForChidonExperienceA').checked = true
+								document.getElementById('paymentAmountA').value = amount
+								$('select').niceSelect('update');
+							} else if (form == 'formD') {
+								document.getElementById('registerForChidonExperienceB').checked = true
+								document.getElementById('paymentAmountB').value = amount
+								$('select').niceSelect('update');
+							}
 						}
 					}
 				}
