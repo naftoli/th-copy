@@ -762,14 +762,14 @@
 	$('.formB input[type="checkbox"]#registerForChidonB').click(function () {
 		var registerForChidonChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeB").val()
+		}
 		if (registerForChidonChecked && child.gender === 'M') {
 			$('.formB #boysOnlyYarmulkaSizesB').show();
 			// add yarmulka to cart
-			const item = {
-				desc: 'yarmulka',
-				amount: 0,
-				size: $("#yarmulkaSizeB").val()
-			}
 			addToCart(selectedChildId, item)
 		} else {
 			$('.formB #boysOnlyYarmulkaSizesB').hide();
@@ -780,13 +780,13 @@
 	$('.formC input[type="radio"]#registerForChidonExperienceA').click(function () {
 		var registerForChidonExperienceChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeC").val()
+		}
 		if (registerForChidonExperienceChecked && child.gender === 'M') {
 			$('.formC #boysOnlyYarmulkaSizesC').show();
-			const item = {
-				desc: 'yarmulka',
-				amount: 0,
-				size: $("#yarmulkaSizeC").val()
-			}
 			addToCart(selectedChildId, item)
 		} else {
 			$('.formC #boysOnlyYarmulkaSizesC').hide();
@@ -797,13 +797,13 @@
 	$('.formC input[type="radio"]#registerForChidonGiftsA').click(function () {
 		var registerForChidonGiftsChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeC").val()
+		}
 		if (registerForChidonGiftsChecked && child.gender === 'M') {
 			$('.formC #boysOnlyYarmulkaSizesC').show();
-			const item = {
-				desc: 'yarmulka',
-				amount: 0,
-				size: $("#yarmulkaSizeC").val()
-			}
 			addToCart(selectedChildId, item)
 		} else {
 			$('.formC #boysOnlyYarmulkaSizesC').hide();
@@ -814,13 +814,13 @@
 	$('.formD input[type="radio"]#registerForChidonExperienceB').click(function () {
 		var registerForChidonExperienceChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeD").val()
+		}
 		if (registerForChidonExperienceChecked && child.gender === 'M') {
 			$('.formD #boysOnlyYarmulkaSizesD').show();
-			const item = {
-				desc: 'yarmulka',
-				amount: 0,
-				size: $("#yarmulkaSizeD").val()
-			}
 			addToCart(selectedChildId, item)
 		} else {
 			$('.formD #boysOnlyYarmulkaSizesD').hide();
@@ -831,13 +831,13 @@
 	$('.formD input[type="radio"]#registerForChidonGiftsB').click(function () {
 		var registerForChidonGiftsChecked = $(this)[0].checked;
 		let child = children[selectedChildId];
+		const item = {
+			desc: 'yarmulka',
+			amount: 0,
+			size: $("#yarmulkaSizeD").val()
+		}
 		if (registerForChidonGiftsChecked && child.gender === 'M') {
 			$('.formD #boysOnlyYarmulkaSizesD').show();
-			const item = {
-				desc: 'yarmulka',
-				amount: 0,
-				size: $("#yarmulkaSizeD").val()
-			}
 			addToCart(selectedChildId, item)
 		} else {
 			$('.formD #boysOnlyYarmulkaSizesD').hide();
@@ -1599,6 +1599,14 @@
 		$(document).on('click', '.processPayment', function( evt ) {
 			evt.preventDefault()
 
+			if (!cart_total) {
+				alert('You have not checked off any registration!')
+				return false
+			}
+
+			const name = $("#name").val()
+			const email = $("#email").val()
+
 			let cc = {}
 			cc.num = $("#cc_num").val();
 			cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
@@ -1613,6 +1621,30 @@
 			billing.country = $("#bill_country").val();
 			cc.billing = billing;
 
+			if (! (name && email && cc.num && cc.exp && cc.cvv && billing.address && billing.city && billing.state && billing.country) ) {
+				alert('You must fill in Name, Email, All Credit Card and Billing Info!');
+				return false;
+			}
+
+			let method = ''
+			if ($("#chargeCard").is(":checked")) method = 'charge'
+			else if ($("#holdMoney").is(":checked")) method = 'hold'
+
+			if (method != '') {
+				$.post('../ajax/processPaymentNew.php', {
+					amount: cart_total,
+					details: JSON.stringify(cart),
+					method: method,
+					cc: cc,
+					name: name,
+					email: email
+				}, function(result) {
+
+				})
+			} else {
+				alert('You must indicate whether you want to be charged now or later!')
+				return false
+			}
 		})
 
 		$("#logoff").click(function () {
