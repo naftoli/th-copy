@@ -292,12 +292,12 @@ foreach ($cart as $user_id => $items) {
     }
 }
 $message .= "</ul><br />";
-@mail($email, $subject, implode("\r\n", $headers));
+$mail_success = mail($email, $subject, implode("\r\n", $headers));
 
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
 if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
 if ($cartProcessed['purchase']) $res_msg .= "Your purchases are being processed.\n";
-$res_msg .= "You should be getting a confirmation email shortly.\nThank You!";
+if ($mail_success) $res_msg .= "You should be getting a confirmation email shortly.\nThank You!";
 
 echo json_encode([
     'success'   =>  true,
