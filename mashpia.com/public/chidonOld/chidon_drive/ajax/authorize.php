@@ -8,7 +8,7 @@ use includes\authorize\AuthorizeConstants as Constants;
 
 define("AUTHORIZENET_LOG_FILE", "phplog");
 
-function chargeCreditCard( $amount, $cc_info )
+function chargeCreditCard( $amount, $cc_info, $transType = "authCaptureTransaction" )
 {
     /* Create a merchantAuthenticationType object with authentication details
        retrieved from the constants file */
@@ -45,7 +45,7 @@ function chargeCreditCard( $amount, $cc_info )
 
     // Create a TransactionRequestType object and add the previous objects to it
     $transactionRequestType = new AnetAPI\TransactionRequestType();
-    $transactionRequestType->setTransactionType("authCaptureTransaction");
+    $transactionRequestType->setTransactionType($transType);
     $transactionRequestType->setAmount($amount);
     $transactionRequestType->setOrder($order);
     $transactionRequestType->setPayment($paymentOne);
