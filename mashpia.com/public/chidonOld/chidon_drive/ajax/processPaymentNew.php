@@ -218,6 +218,54 @@ function processCart($auth_id, $auth_desc) {
 //    echo $qry;
     $purchase_result = mysql_query($qry);
 
+    // for sweater purchases update purchased amount in chidon_sweaters table
+    $updates = [];
+    $sizes = [
+        'xs'    =>  'Adult XS',
+        'small' =>  'Adult Small',
+        'medium'=>  'Adult Medium',
+        'large' =>  'Adult Large',
+        'xl'    =>  'Adult XL'
+    ];
+    foreach ($cart as $user_id => $items) {
+        foreach ($items as $item) {
+            if ($item->desc != 'reg') {
+                $desc = $item->desc;
+                switch ($desc) {
+                    case 'sweater_mother':
+                        $updates[] = "update chidon_sweaters set purchased = purchased + 1 
+                                      where sweater_name = 'Proud Chidon Mother' 
+                                      and size = '" . $sizes[$item->size] . "'";
+                        break;
+                    case 'sweater_father':
+                        $updates[] = "update chidon_sweaters set purchased = purchased + 1 
+                                      where sweater_name = 'Proud Chidon Father' 
+                                      and size = '" . $sizes[$item->size] . "'";
+                        break;
+                    case 'sweater_bubby':
+                        $updates[] = "update chidon_sweaters set purchased = purchased + 1 
+                                      where sweater_name = 'Proud Chidon Bubby' 
+                                      and size = '" . $sizes[$item->size] . "'";
+                        break;
+                    case 'sweater_zaidy':
+                        $updates[] = "update chidon_sweaters set purchased = purchased + 1 
+                                      where sweater_name = 'Proud Chidon Zaidy' 
+                                      and size = '" . $sizes[$item->size] . "'";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    foreach ($updates as $update) {
+        if (!mysql_query($update)) {
+            $subject = "Errror in Sweater Purchase";
+            $msg = "Sweater has been purchased but there was an error updating it in the database.";
+            mail('chidon@tzivoshashem.org', $subject, $msg);
+        }
+    }
+
     return [
         'reg'   =>  $reg_result,
         'purchase'  =>  $purchase_result
@@ -297,8 +345,8 @@ $mail_success = mail($email, $subject, implode("\r\n", $headers));
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
 if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
 if ($cartProcessed['purchase']) $res_msg .= "Your purchases are being processed.\n";
-if ($mail_success) $res_msg .= "You should be getting a confirmation email shortly.\n
-$res_msg .= Thank You!";
+if ($mail_success) $res_msg .= "You should be getting a confirmation email shortly.\n";
+$res_msg .= "Thank You!";
 
 echo json_encode([
     'success'   =>  true,

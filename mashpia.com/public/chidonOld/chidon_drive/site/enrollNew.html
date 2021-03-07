@@ -449,11 +449,11 @@
 						<label>Select Size</label>
 						<!-- TODO: Update amount of sweaters left for each size -->
 						<select id="sweaterForMotherSize" name="pay">
-							<option value='xs'>Adult XS (50 left)</option>
-							<option value='small'>Adult Small (50 left)</option>
-							<option value='medium'>Adult Medium (100 left)</option>
-							<option value='large'>Adult Large (50 Left)</option>
-							<option value='xl'>Adult XL large (50 Left)</option>
+<!--							<option value='xs'>Adult XS (50 left)</option>-->
+<!--							<option value='small'>Adult Small (50 left)</option>-->
+<!--							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--							<option value='large'>Adult Large (50 Left)</option>-->
+<!--							<option value='xl'>Adult XL large (50 Left)</option>-->
 						</select>
 					</div>
 					<div class="listSection">
@@ -486,11 +486,11 @@
 						<label>Select Size</label>
 						<!-- TODO: Update amount of sweaters left for each size -->
 						<select id="sweaterForFatherSize" name="pay">
-							<option value='xs'>Adult XS (50 left)</option>
-							<option value='small'>Adult Small (50 left)</option>
-							<option value='medium'>Adult Medium (100 left)</option>
-							<option value='large'>Adult Large (50 Left)</option>
-							<option value='xl'>Adult XL large (50 Left)</option>
+<!--							<option value='xs'>Adult XS (50 left)</option>-->
+<!--							<option value='small'>Adult Small (50 left)</option>-->
+<!--							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--							<option value='large'>Adult Large (50 Left)</option>-->
+<!--							<option value='xl'>Adult XL large (50 Left)</option>-->
 						</select>
 					</div>
 					<div class="listSection">
@@ -523,11 +523,11 @@
 						<label>Select Size</label>
 						<!-- TODO: Update amount of sweaters left for each size -->
 						<select id="sweaterForBubbySize" name="pay">
-							<option value='xs'>Adult XS (50 left)</option>
-							<option value='small'>Adult Small (50 left)</option>
-							<option value='medium'>Adult Medium (100 left)</option>
-							<option value='large'>Adult Large (50 Left)</option>
-							<option value='xl'>Adult XL large (50 Left)</option>
+<!--							<option value='xs'>Adult XS (50 left)</option>-->
+<!--							<option value='small'>Adult Small (50 left)</option>-->
+<!--							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--							<option value='large'>Adult Large (50 Left)</option>-->
+<!--							<option value='xl'>Adult XL large (50 Left)</option>-->
 						</select>
 					</div>
 					<div class="listSection">
@@ -560,11 +560,11 @@
 						<label>Select Size</label>
 						<!-- TODO: Update amount of sweaters left for each size -->
 						<select id="sweaterForZaidySize" name="pay">
-							<option value='xs'>Adult XS (50 left)</option>
-							<option value='small'>Adult Small (50 left)</option>
-							<option value='medium'>Adult Medium (100 left)</option>
-							<option value='large'>Adult Large (50 Left)</option>
-							<option value='xl'>Adult XL large (50 Left)</option>
+<!--							<option value='xs'>Adult XS (50 left)</option>-->
+<!--							<option value='small'>Adult Small (50 left)</option>-->
+<!--							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--							<option value='large'>Adult Large (50 Left)</option>-->
+<!--							<option value='xl'>Adult XL large (50 Left)</option>-->
 						</select>
 					</div>
 					<div class="listSection">
@@ -885,6 +885,8 @@
 					html += `<li>Registration for ${name} - $${item.amount}</li>`
 				} else if (item.desc == 'yarmulka') {
 					html += `<li>Yarmulka for ${name}, Size: ${item.size} - $${item.amount}</li>`
+				} else if (item.desc.includes('sweater') && !item.desc.includes('ship')) {
+					html += `<li>${options[item.desc]}, Size: ${item.size} - $${item.amount}</li>`
 				} else {
 					html += `<li>${options[item.desc]} - $${item.amount}</li>`
 				}
@@ -1195,12 +1197,36 @@
 			amount: 25,
 			size: $("#sweaterForMotherSize").val()
 		}
-		if (checked) addToCart(0, item)
-		else subtractFromCart(0, item)
+		if (checked) {
+			// make sure there's some stock left
+			if (item.size != 0)
+				addToCart(0, item)
+			else {
+				alert('There are no sweaters left in stock for this size, please choose a different size.')
+				return false
+			}
+		}
+		else {
+			subtractFromCart(0, item)
+			// check if shipping was added for this sweater and remove as well
+			if ($("#motherSweaterShippedToAddress").is(":checked")) {
+				const item2 = {
+					desc: 'sweater_mother_ship',
+					amount: 10
+				}
+				subtractFromCart(0, item2)
+				document.getElementById('motherSweaterShippedToAddress').checked = false
+			}
+		}
 		calculateTotal()
 	})
 
 	$("#sweaterForMotherSize").change( function() {
+		// make sure there's some stock left
+		if ($(this).val() == 0) {
+			alert('There are no sweaters left in stock for this size, please choose a different size.')
+			return false
+		}
 		// find item in cart and update
 		for (item of cart[0]) {
 			if (item.desc == 'sweater_mother') {
@@ -1247,12 +1273,35 @@
 			amount: 25,
 			size: $("#sweaterForFatherSize").val()
 		}
-		if (checked) addToCart(0, item)
-		else subtractFromCart(0, item)
+		if (checked) {
+			if (item.size != 0)
+				addToCart(0, item)
+			else {
+				alert('There are no sweaters left in stock for this size, please choose a different size.')
+				return false
+			}
+		}
+		else {
+			subtractFromCart(0, item)
+			// check if shipping was added for this sweater and remove as well
+			if ($("#fatherSweaterShippedToAddress").is(":checked")) {
+				const item2 = {
+					desc: 'sweater_father_ship',
+					amount: 10
+				}
+				subtractFromCart(0, item2)
+				document.getElementById('fatherSweaterShippedToAddress').checked = false
+			}
+		}
 		calculateTotal()
 	})
 
 	$("#sweaterForFatherSize").change( function() {
+		// make sure there's stock left
+		if ($(this).val() == 0) {
+			alert('There are no sweaters left in stock for this size, please choose a different size.')
+			return false
+		}
 		// find item in cart and update
 		for (item of cart[0]) {
 			if (item.desc == 'sweater_father') {
@@ -1299,12 +1348,35 @@
 			amount: 25,
 			size: $("#sweaterForBubbySize").val()
 		}
-		if (checked) addToCart(0, item)
-		else subtractFromCart(0, item)
+		if (checked) {
+			if (item.size != 0)
+				addToCart(0, item)
+			else {
+				alert('There are no sweaters left in stock for this size, please choose a different size.')
+				return false
+			}
+		}
+		else {
+			subtractFromCart(0, item)
+			// check if shipping was added for this sweater and remove as well
+			if ($("#bubbySweaterShippedToAddress").is(":checked")) {
+				const item2 = {
+					desc: 'sweater_bubby_ship',
+					amount: 10
+				}
+				subtractFromCart(0, item2)
+				document.getElementById('bubbySweaterShippedToAddress').checked = false
+			}
+		}
 		calculateTotal()
 	})
 
 	$("#sweaterForBubbySize").change( function() {
+		// check stock
+		if ($(this).val() == 0) {
+			alert('There are no sweaters left in stock for this size, please choose a different size.')
+			return false
+		}
 		// find item in cart and update
 		for (item of cart[0]) {
 			if (item.desc == 'sweater_bubby') {
@@ -1351,12 +1423,35 @@
 			amount: 25,
 			size: $("#sweaterForZaidySize").val()
 		}
-		if (checked) addToCart(0, item)
-		else subtractFromCart(0, item)
+		if (checked) {
+			if (item.size != 0)
+				addToCart(0, item)
+			else {
+				alert('There are no sweaters left in stock for this size, please choose a different size.')
+				return false
+			}
+		}
+		else {
+			subtractFromCart(0, item)
+			// check if shipping was added for this sweater and remove as well
+			if ($("#zaidySweaterShippedToAddress").is(":checked")) {
+				const item2 = {
+					desc: 'sweater_zaidy_ship',
+					amount: 10
+				}
+				subtractFromCart(0, item2)
+				document.getElementById('zaidySweaterShippedToAddress').checked = false
+			}
+		}
 		calculateTotal()
 	})
 
 	$("#sweaterForZaidySize").change( function() {
+		// check for stock
+		if ($(this).val() == 0) {
+			alert('There are no sweaters left in stock for this size, please choose a different size.')
+			return false
+		}
 		// find item in cart and update
 		for (item of cart[0]) {
 			if (item.desc == 'sweater_zaidy') {
@@ -1406,6 +1501,7 @@
 	if (Cookies.get('chidon_admin')) {
 		getChildren(Cookies.get('chidon_admin'));
 		$("#logoffDiv").show();
+		getSweaterInfo()
 	}
 	else {
 		$(".login").show();
@@ -1429,10 +1525,14 @@
 				if (info.error) alert(info.error);
 				let html = '';
 				numChildren = info.children.length;
+				let first_name = ''
 				for (c in info.children) {
 					let child = info.children[c];
 					if (parseInt(child.date_paid) > 0) continue;
-					if (parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) numCelebrationBoxes++
+					if (parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
+						numCelebrationBoxes++
+						first_name += child.first + ', ';
+					}
 					children[child.user_id] = child;
 					children_ids.push(child.user_id);
 					let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
@@ -1446,6 +1546,7 @@
 									</div>
 								`;
 				}
+				$(".first_name").text(first_name)
 				if (!children.length) {
 					alert("All children have been enrolled.");
 					location.href = "edit.html";
@@ -1467,6 +1568,51 @@
 				alert(info.error);
 			}
 		});
+	}
+
+	function getSweaterInfo() {
+		$.post('../ajax/sweaterInfo.php', function( result ) {
+			const sweaters = JSON.parse( result )
+			console.log( sweaters )
+			for (let type in sweaters) {
+				createSweaterSelect(type, sweaters[type])
+			}
+		})
+	}
+
+	function createSweaterSelect(type, options) {
+		let elem = ''
+		switch (type) {
+			case 'mother':
+				elem = '#sweaterForMotherSize'
+				break
+			case 'father':
+				elem = '#sweaterForFatherSize'
+				break
+			case 'bubby':
+				elem = '#sweaterForBubbySize'
+				break
+			case 'zaidy':
+				elem = '#sweaterForZaidySize'
+				break
+		}
+		const sizes = {
+			xs: 'Adult XS',
+			small: 'Adult Small',
+			medium: 'Adult Medium',
+			large: 'Adult Large',
+			xl: 'Adult XL'
+		}
+		let html = ''
+		for (let size in sizes) {
+			if (options[sizes[size]] > 0)
+				html += `<option value='${size}'>${sizes[size]} (${options[sizes[size]]} left)</option>`
+			else
+				html += `<option value=0>${sizes[size]} (${options[sizes[size]]} left)</option>`
+		}
+		$(elem).empty()
+		$(elem).append(html)
+		$(elem).niceSelect('update')
 	}
 
 	function clearForm(form) {
@@ -1711,7 +1857,7 @@
 					return false;
 				}
 			}
-			cc.skip = 1
+			// cc.skip = 1
 
 			let method = ''
 			if ($("#chargeCard").is(":checked")) method = 'charge'
