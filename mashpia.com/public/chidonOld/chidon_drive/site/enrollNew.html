@@ -198,7 +198,7 @@
 						<li class="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
 							experience
 						</li>
-						<li class="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
+						<li class="listItemChidonCash">$<span class="maxPrizes"></span> worth of Chidon <b>prizes</b> selected from our
 							catalog
 						</li>
 						<li>Your Chidon <b>Awards</b> (certificate, plaque, medal, or trophy)</li>
@@ -303,7 +303,7 @@
 						<li id="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
 							experience
 						</li>
-						<li id="listItemChidonCash">$100/$200 worth of Chidon <b>prizes</b> selected from our
+						<li id="listItemChidonCash">$<span class="maxPrizes"></span> worth of Chidon <b>prizes</b> selected from our
 							catalog
 						</li>
 						<li>Your Chidon <b>Awards</b> (certificate, plaque, medal, or trophy)</li>
@@ -1637,6 +1637,7 @@
 		$(form).hide()
 		$.post('../ajax/chidon_prizes.php', function(result) {
 			const amount = children[id].option == 'C' ? 200 : 100
+			$(form).find(".maxPrizes").text(amount)
 			const prizes = JSON.parse(result)
 			let html = `<h5 class="formTitle chidon_prizes">Chidon Prizes</h5>`
 			html += `
