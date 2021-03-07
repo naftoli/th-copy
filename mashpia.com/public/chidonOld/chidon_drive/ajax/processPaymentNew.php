@@ -281,6 +281,8 @@ function processPrizes() {
         foreach ($prize_items as $prize) {
             $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
             mysql_query($sql);
+            $sql = "update chidon_prizes set purchased = purchased + 1 where prize_id = " . $prize->id;
+            mysql_query($sql);
         }
     }
     return true;
