@@ -18,7 +18,8 @@ if ( $admin_id ) {
         u.mobile_pic,
         u.user_photo_id,
         u.gender,
-        tc.*
+        tc.*, 
+        tcs.option
     FROM
         users u
             JOIN

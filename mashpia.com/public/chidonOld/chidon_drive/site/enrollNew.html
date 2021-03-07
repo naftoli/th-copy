@@ -46,6 +46,10 @@
 			padding-bottom: 5px;
 		}
 
+		.prizes {
+			padding: 10px;
+		}
+
 		/*.form input[type='checkbox'], .form input[type='radio'] {*/
 		/*	margin-top: -15px;*/
 		/*}*/
@@ -269,6 +273,9 @@
 						</select>
 					</div>
 				</div>
+				<div class="prizes field">
+
+				</div>
 				<div class="save-detail">
 
 				</div>
@@ -385,7 +392,7 @@
 				<h5 class="formDetails"><b>Celebration Box:</b></h5>
 				<h5 class="formDetails">
 					<!-- TODO: update span.amountOfBoxes to say 'a' or a number for the amount of boxes -->
-					Since <b>your child,</b> <b class="first_name"></b> is eligible for the Chidon Experience, you
+					Since <b class="first_name"></b> is/are eligible for the Chidon Experience, you
 					can receive <span class="amountOfBoxes"></span> <b>Chidon Celebration Box</b> as part of your
 					registration so your family can
 					celebrate when we watch the Chidon on Sunday, Yud Beis Sivan 5781/May 23, 2021 with great
@@ -913,8 +920,18 @@
 		var additionalCelebrationBoxChecked = $(this)[0].checked;
 		if (additionalCelebrationBoxChecked) {
 			$('.form2 #additionalCelebrationBoxDetails').show();
+			document.getElementById('shippedToSchool').checked = true
 		} else {
 			$('.form2 #additionalCelebrationBoxDetails').hide();
+			// remove shipping from cart if exists
+			if (document.getElementById('shippedToAddress').checked) {
+				document.getElementById('shippedToAddress').checked = false
+				const item = {
+					desc: 'celeb_box_add_ship',
+					amount: 10
+				}
+				subtractFromCart(0, item)
+			}
 		}
 	});
 
@@ -922,6 +939,7 @@
 		var sweaterForMotherChecked = $(this)[0].checked;
 		if (sweaterForMotherChecked) {
 			$('.form2 #sweaterForMotherDetails').show();
+			document.getElementById('motherSweaterShippedToSchool').checked = true
 		} else {
 			$('.form2 #sweaterForMotherDetails').hide();
 		}
@@ -931,6 +949,7 @@
 		var sweaterForFatherChecked = $(this)[0].checked;
 		if (sweaterForFatherChecked) {
 			$('.form2 #sweaterForFatherDetails').show();
+			document.getElementById('fatherSweaterShippedToSchool').checked = true
 		} else {
 			$('.form2 #sweaterForFatherDetails').hide();
 		}
@@ -940,6 +959,7 @@
 		var sweaterForBubbyChecked = $(this)[0].checked;
 		if (sweaterForBubbyChecked) {
 			$('.form2 #sweaterForBubbyDetails').show();
+			document.getElementById('bubbySweaterShippedToSchool').checked = true
 		} else {
 			$('.form2 #sweaterForBubbyDetails').hide();
 		}
@@ -949,6 +969,7 @@
 		var sweaterForZaidyChecked = $(this)[0].checked;
 		if (sweaterForZaidyChecked) {
 			$('.form2 #sweaterForZaidyDetails').show();
+			document.getElementById('zaidySweaterShippedToSchool').checked = true
 		} else {
 			$('.form2 #sweaterForZaidyDetails').hide();
 		}
@@ -1517,6 +1538,7 @@
 	var completed = [] // global variable for making sure all children's forms have been completed
 	var numChildren; // global variable to track number of children
 	let numCelebrationBoxes = 0;
+	let prizes = {};
 
 	function getChildren(admin) {
 		$.post('../ajax/getChildren.php', { admin: admin }, function (result) {
@@ -1551,6 +1573,8 @@
 					alert("All children have been enrolled.");
 					location.href = "edit.html";
 					return false;
+				} else if (children.length == 1) {
+					$(".save-detail").find('a').remove()
 				}
 				$(".login").hide();
 				$("#logoffDiv").show();
@@ -1576,26 +1600,12 @@
 			console.log( sweaters )
 			for (let type in sweaters) {
 				createSweaterSelect(type, sweaters[type])
+				addSweaterImage(type, sweaters[type]['Adult XS']['img']);
 			}
 		})
 	}
 
 	function createSweaterSelect(type, options) {
-		let elem = ''
-		switch (type) {
-			case 'mother':
-				elem = '#sweaterForMotherSize'
-				break
-			case 'father':
-				elem = '#sweaterForFatherSize'
-				break
-			case 'bubby':
-				elem = '#sweaterForBubbySize'
-				break
-			case 'zaidy':
-				elem = '#sweaterForZaidySize'
-				break
-		}
 		const sizes = {
 			xs: 'Adult XS',
 			small: 'Adult Small',
@@ -1605,14 +1615,94 @@
 		}
 		let html = ''
 		for (let size in sizes) {
-			if (options[sizes[size]] > 0)
-				html += `<option value='${size}'>${sizes[size]} (${options[sizes[size]]} left)</option>`
+			if (options[sizes[size]]['qty'] > 0)
+				html += `<option value='${size}'>${sizes[size]} (${options[sizes[size]]['qty']} left)</option>`
 			else
-				html += `<option value=0>${sizes[size]} (${options[sizes[size]]} left)</option>`
+				html += `<option value=0>${sizes[size]} (<i>sold out</i>)</option>`
 		}
+		let elem = type.charAt(0).toUpperCase() + type.slice(1);
+		elem = "#sweaterFor" + elem + "Size";
 		$(elem).empty()
 		$(elem).append(html)
 		$(elem).niceSelect('update')
+	}
+
+	function addSweaterImage(type, img) {
+		let elem = type.charAt(0).toUpperCase() + type.slice(1);
+		elem = "#sweaterFor" + elem;
+		$(elem).parent().find('label').after("<img src='http://mashpia.com" + img + "' style='max-height: 100px; margin: 10px;' />")
+	}
+
+	function getPrizesInfo(form, id) {
+		$(form).hide()
+		$.post('../ajax/chidon_prizes.php', function(result) {
+			const amount = children[id].option == 'C' ? 200 : 100
+			const prizes = JSON.parse(result)
+			let html = `<h5 class="formTitle chidon_prizes">Chidon Prizes</h5>`
+			html += `
+				<h5 class="formDetails">
+				You can choose up to $${amount} worth of prizes from this section
+				</h5>
+			`
+			for (let id in prizes) {
+				let prize = prizes[id]
+				html += `
+					<div class="field flex">
+						<input class="inputCheckbox" type="checkbox" id="prize_${id}" name="prize_${id}" data-info="${id}:${prize['price']}" />
+						<label class="checkboxLabel" for="prize_${id}">
+					`
+				html += `
+					<span style='float: left'>
+						<img src="http://mashpia.com${prize['prize_picture']}" style='max-height: 100px; padding-right: 10px;' /></span>
+							${prize['prize_name']}
+				`
+				if (prize['size']) html += `<br />Size: ${prize['size']} `;
+				if (prize['color']) html += `<br />Color: ${prize['color']} `
+				html += ` - $${prize['price']} (${parseInt(prize['quantity']) - parseInt(prize['purchased'])} available in stock)`
+				html += `
+						</label>
+					</div>
+				`
+			}
+			$(form).find('.prizes').empty()
+			$(form).find('.prizes').append(html)
+			$(form).show()
+		})
+	}
+
+	function addToPrizes(prize_item) {
+		if (!prizes[selectedChildId]) {
+			prizes[selectedChildId] = []
+		}
+
+		// first check if child has enough points to get this prize
+		const max = children[selectedChildId].option == 'C' ? 200 : 100
+		let total = 0
+		for (let prize of prizes[selectedChildId]) {
+			total += parseFloat(prize.amount)
+		}
+		if ((total + parseFloat(prize_item.amount)) > max) {
+			alert("Sorry, You do not have enough money to add this prize.")
+			return false
+		}
+
+		// check if prize already exists in cart
+		let add = true
+		for (let prize of prizes[selectedChildId]) {
+			if (prize_item.id == prize.id) {
+				add = false
+			}
+		}
+		if (add) prizes[selectedChildId].push(prize_item)
+		return true
+	}
+
+	function removeFromPrizes(prize) {
+		for (let p in prizes[selectedChildId]) {
+			if (prizes[selectedChildId][p].id == prize.id) {
+				prizes[selectedChildId].splice(p, 1)
+			}
+		}
 	}
 
 	function clearForm(form) {
@@ -1706,6 +1796,7 @@
 			$(".formB").hide()
 			$(".formC").show()
 			$(".formD").hide()
+			getPrizesInfo(".formC", id)
 		}
 		else if (parseInt(child.shabbaton_trophy)) {
 			clearForm("formD");
@@ -1713,6 +1804,7 @@
 			$(".formB").hide()
 			$(".formC").hide()
 			$(".formD").show()
+			getPrizesInfo(".formD", id)
 		}
 	}
 
@@ -1787,6 +1879,10 @@
 			}
 			$(".save-detail").empty();
 			$(".save-detail").append(html);
+
+			// hide any other forms
+			$(".form2").hide()
+			$("#paymentInfo").hide()
 		});
 
 		$(document).on('click', '.next', function( evt ) {
@@ -1821,6 +1917,22 @@
 				$("#paymentInfo").show()
 				$(window).scrollTop(400)
 			}
+		})
+
+		$(document).on('click', '.prizes input', function( evt ) {
+			// get id and amount
+			const info = $(this).data('info').split(':')
+			const prize = {
+				id: info[0],
+				amount: info[1]
+			}
+			console.log(prize)
+			if ($(this).is(":checked")) {
+				if (!addToPrizes(prize)) {
+					$(this).trigger('click')
+				}
+			}
+			else removeFromPrizes(prize)
 		})
 
 		$(document).on('click', '.processPayment', function( evt ) {
@@ -1871,7 +1983,8 @@
 					method: method,
 					cc: cc,
 					name: name,
-					email: email
+					email: email,
+					prizes: JSON.stringify(prizes)
 				}, function(result) {
 					const res = JSON.parse(result)
 					console.log(res)

@@ -24,6 +24,9 @@ while ( $row = mysql_fetch_assoc($result) ) {
             $type = 'zaidy';
             break;
     }
-    $sweaters[$type][$row['size']] = intval($row['quantity']) - intval($row['purchased']);
+    $sweaters[$type][$row['size']] = [
+        'qty'   =>  intval($row['quantity']) - intval($row['purchased']),
+        'img'   =>  $row['sweater_picture']
+    ];
 }
 echo json_encode( $sweaters );

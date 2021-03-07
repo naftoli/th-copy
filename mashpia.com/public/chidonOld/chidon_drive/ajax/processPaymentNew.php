@@ -29,6 +29,7 @@ $amount = $_POST['amount'];
 $method = $_POST['method'];
 $cc = $_POST['cc'];
 $cart = json_decode($_POST['details']);
+$prizes = json_decode($_POST['prizes']);
 
 function getCustomerID() {
     global $admin_id;
@@ -272,6 +273,18 @@ function processCart($auth_id, $auth_desc) {
     ];
 }
 
+function processPrizes() {
+    global $prizes, $year;
+    if (empty($prizes)) return false;
+
+    foreach ($prizes as $user_id => $prize_items) {
+        foreach ($prize_items as $prize) {
+            $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
+            mysql_query($sql);
+        }
+    }
+}
+
 // process payment / hold
 if ($cc['skip']) {
     $trans_id = 1;
@@ -307,6 +320,9 @@ if ($cc['skip']) {
 // go through cart and figure out who to register and which things to save as purchases
 $cartProcessed = processCart($trans_id, $trans_info);
 
+// process user prizes
+$prizesProcessed = processPrizes();
+
 // get email for admin
 $sql = 'select admin_email from admins where admin_id = ' . $admin_id;
 $result = mysql_query($sql);
@@ -326,8 +342,9 @@ $message = "Thank you for your payment of $" . $amount . ". Your transaction id 
     The details for your transaction is: <br />" . $details . "<br /><br />";
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the shabbaton.<br /><br />";
 else $message .= "There was an error registering your child(ren) for the shabbaton. Please contact HQ (718-907-8884).<br /><br />";
-if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.";
-else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).";
+if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
+else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
+if ($prizesProcessed) $message .= "Your prize selection has been saved.";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
 foreach ($cart as $user_id => $items) {
@@ -345,6 +362,7 @@ $mail_success = mail($email, $subject, implode("\r\n", $headers));
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
 if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
 if ($cartProcessed['purchase']) $res_msg .= "Your purchases are being processed.\n";
+if ($prizesProcessed) $res_msg .= "Your prize selection has been saved.\n";
 if ($mail_success) $res_msg .= "You should be getting a confirmation email shortly.\n";
 $res_msg .= "Thank You!";
 
