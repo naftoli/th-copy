@@ -283,6 +283,7 @@ function processPrizes() {
             mysql_query($sql);
         }
     }
+    return true;
 }
 
 // process payment / hold
