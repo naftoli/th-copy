@@ -416,6 +416,7 @@
 						const amount = calcAmount();
 						if ( !amount ) {
 							alert("You have not entered any amount!");
+							return false
 						}
 
 						const name = $("#name").val().trim();
@@ -423,6 +424,7 @@
 						const email = $("#email").val().trim();
 						if ( !name || !display_name || !email ) {
 							alert("Name, Display Name, and Email are mandatory fields!");
+							return false
 						}
 					},
 					createOrder: function(data, actions) {
