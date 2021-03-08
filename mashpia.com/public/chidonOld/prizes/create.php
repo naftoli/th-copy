@@ -2,6 +2,7 @@
 $admin_auth = array('school');
 require('../../header.php');
 require('./shared.php');
+require_once('../../class.globalSettings.php');
 
 $prize_name = isset($_POST['prize_name']) ? mysql_real_escape_string($_POST['prize_name']) : "";
 $quantity = isset($_POST['quantity']) ? mysql_real_escape_string($_POST['quantity']) : "0";
@@ -12,6 +13,7 @@ $size = isset($_POST['size']) ? mysql_real_escape_string($_POST['size']) : "null
 $note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null";
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
+$year = GlobalSettings::getChidonYear();
 
 $prize_picture = "";
 switch($_FILES['prize_picture']) {
@@ -26,9 +28,9 @@ switch($_FILES['prize_picture']) {
 }
 
 $sql = "INSERT INTO chidon_prizes ( 
-          prize_name,   prize_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price
+          prize_name,    prize_picture,    quantity,    made_possible_by,    personalization,    color,    size,    note,   price,  our_price,  year
     ) VALUES (
-        '$prize_name', '$prize_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price
+        '$prize_name', '$prize_picture', '$quantity', '$made_possible_by', '$personalization', '$color', '$size', '$note', $price, $our_price, $year
     )
 ";
 
