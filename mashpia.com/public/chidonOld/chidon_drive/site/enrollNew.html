@@ -48,6 +48,7 @@
 
 		.prizes {
 			padding: 10px;
+			display: none;
 		}
 
 		/*.form input[type='checkbox'], .form input[type='radio'] {*/
@@ -195,7 +196,8 @@
 							beautiful Chidon charm bracelet. Plus, both girls and boys will receive another surprise
 							gift!
 						</li>
-						<li class="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
+						<li class="listItemChidonTrips">The Chidon local <span class="trips" style="display:none"><b>Trips</b></span>
+							<span class="vr" style="display: none"><b>Virtual Reality</b></span>
 							experience
 						</li>
 						<li class="listItemChidonCash">$<span class="maxPrizes"></span> worth of Chidon <b>prizes</b> selected from our
@@ -300,7 +302,8 @@
 							beautiful Chidon charm bracelet. Plus, both girls and boys will receive another surprise
 							gift!
 						</li>
-						<li id="listItemChidonTrips">The Chidon local <b>Trips</b> or <b>Virtual Reality</b>
+						<li class="listItemChidonTrips">The Chidon local <span class="trips" style="display:none"><b>Trips</b></span>
+							<span class="vr" style="display: none"><b>Virtual Reality</b></span>
 							experience
 						</li>
 						<li id="listItemChidonCash">$<span class="maxPrizes"></span> worth of Chidon <b>prizes</b> selected from our
@@ -378,6 +381,9 @@
 							<option value='6'>Size 6</option>
 						</select>
 					</div>
+				</div>
+				<div class="prizes field">
+
 				</div>
 				<div class="save-detail">
 
@@ -600,8 +606,9 @@
 				</div>
 
 				<h5 class="formDetails">
-					<b>Please note:</b> All items will be received before the Chidon Event & Awards Ceremony on
-					Sunday, 12 Sivan 5781, May 23rd 2021.
+					<b>Please note:</b> We are doing our best to ensure all items will be received at your school or at
+					the US addresses specified before the Chidon Event & Awards Ceremony on Sunday, 12 Sivan 5781, May 23rd 2021.
+					We do not take responsibility in case of unforeseen circumstances.
 				</h5>
 				<h5 class="formDetails"><b>Chidon Registration Payment:</b></h5>
 				<div class="listSection">
@@ -887,8 +894,9 @@
 				name = child.first + ' ' + child.last
 			}
 			for (item of cart[id]) {
-				if (item.desc.indexOf('addr') != -1) continue
-				if (item.desc == 'reg') {
+				if (item.desc.indexOf('addr') != -1) {
+					html += `<li>${options[item.desc]} - ${item.address}</li>`
+				} else if (item.desc == 'reg') {
 					html += `<li>Registration for ${name} - $${item.amount}</li>`
 				} else if (item.desc == 'yarmulka') {
 					html += `<li>Yarmulka for ${name}, Size: ${item.size} - $${item.amount}</li>`
@@ -900,6 +908,7 @@
 			}
 		}
 		html += '</ul>'
+		html += `<h5 class="formDetails">Total Cost: $${cart_total}</h5>`
 		$("#receiptDetails").empty()
 		$("#receiptDetails").append(html)
 	}
@@ -1022,6 +1031,8 @@
 			amount: parseInt($("#paymentAmountA").val())
 		}
 		subtractFromCart(selectedChildId, item1)
+		// hide prizes
+		$(".formC .prizes").hide()
 
 		const item2 = {
 			desc: 'reg',
@@ -1050,6 +1061,8 @@
 			amount: parseInt($("#paymentAmountB").val())
 		}
 		subtractFromCart(selectedChildId, item1)
+		// hide prizes
+		$(".formD .prizes").hide()
 
 		const item2 = {
 			desc: 'reg',
@@ -1084,6 +1097,8 @@
 			amount: parseInt($("#paymentAmountA").val())
 		}
 		addToCart(selectedChildId, item2)
+		// show prizes
+		$(".formC .prizes").show()
 
 		const item3 = {
 			desc: 'yarmulka',
@@ -1112,6 +1127,8 @@
 			amount: parseInt($("#paymentAmountB").val())
 		}
 		addToCart(selectedChildId, item2)
+		// show prizes
+		$(".formD .prizes").show()
 
 		const item3 = {
 			desc: 'yarmulka',
@@ -1547,14 +1564,9 @@
 				if (info.error) alert(info.error);
 				let html = '';
 				numChildren = info.children.length;
-				let first_name = ''
 				for (c in info.children) {
 					let child = info.children[c];
 					if (parseInt(child.date_paid) > 0) continue;
-					if (parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
-						numCelebrationBoxes++
-						first_name += child.first + ', ';
-					}
 					children[child.user_id] = child;
 					children_ids.push(child.user_id);
 					let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
@@ -1568,7 +1580,6 @@
 									</div>
 								`;
 				}
-				$(".first_name").text(first_name)
 				if (!children.length) {
 					alert("All children have been enrolled.");
 					location.href = "edit.html";
@@ -1581,13 +1592,6 @@
 				$(".kids-wrapper").empty();
 				$(".kids-wrapper").append(html);
 				$(".kids-wrapper").show();
-				$(".amountOfBoxes").text(numCelebrationBoxes)
-				let options = '';
-				for (let i = 1; i <= numCelebrationBoxes; i++) {
-					options += `<option value=${i}>${i}</option>`;
-				}
-				$("#numberOfCelebrationBoxes").append(options)
-				$('.form2 select').niceSelect('update');
 			} else {
 				alert(info.error);
 			}
@@ -1638,10 +1642,16 @@
 		$.post('../ajax/chidon_prizes.php', function(result) {
 			const amount = children[id].option == 'C' ? 200 : 100
 			$(form).find(".maxPrizes").text(amount)
+			if (amount == 200) {
+				$(form).find('.listItemChidonTrips').remove()
+			} else {
+				if (children[id].option == 'A') $(form).find('.trips').show();
+				else if (children[id].option == 'B') $(form).find('.vr').show()
+			}
 			const prizes = JSON.parse(result)
 			let html = `<h5 class="formTitle chidon_prizes">Chidon Prizes</h5>`
 			html += `
-				<h5 class="formDetails">
+				<h5 class="formDetails" style="font-weight: bold;">
 				You can choose up to $${amount} worth of prizes from this section
 				</h5>
 			`
@@ -1659,7 +1669,21 @@
 				`
 				if (prize['size']) html += `<br />Size: ${prize['size']} `;
 				if (prize['color']) html += `<br />Color: ${prize['color']} `
-				html += ` - $${prize['price']} (${parseInt(prize['quantity']) - parseInt(prize['purchased'])} available in stock)`
+				html += ` - $${prize['price']} (${parseInt(prize['quantity']) - parseInt(prize['purchased'])} available)`
+				if (prize['made_possible_by']) html += `<br />Made possible by: ${prize['made_possible_by']}`
+
+				// for menorah add line
+				if (prize['prize_name'].includes('Menorah')) {
+					html += "<br /><br />Please note: Menorahs will arrive in time for Chanukah 5782 (later than other prizes).";
+				}
+
+				// add box for name if it's tefillin or leather sefer
+				if (prize['prize_name'].includes('Tefillin') || prize['prize_name'].includes('Leather')) {
+					html += `<br /><br />Please write your name in Hebrew as you would want it on your item. Once submitted,
+						there will be <span style="font-weight: bold">no</span> name changes allowed.
+						<input type="text" class="field" class="he_name" name="he_${id}" data-id="${id}" style="width: 200px;" />`
+				}
+
 				html += `
 						</label>
 					</div>
@@ -1690,7 +1714,7 @@
 		// check if prize already exists in cart
 		let add = true
 		for (let prize of prizes[selectedChildId]) {
-			if (prize_item.id == prize.id) {
+			if (prize_item.id == prize.id && prize_item.amount == prize.amount) {
 				add = false
 			}
 		}
@@ -1904,6 +1928,40 @@
 			$(".formB").hide()
 			$(".formC").hide()
 			$(".formD").hide()
+
+			// check if we need to disable the celebration box or not
+			let numCelebrationBoxes = 0
+			let first_name = ''
+			for (let id in cart) {
+				for (let item of cart[id]) {
+					if (item.desc == 'reg') {
+						let child = children[id]
+						if (child.shabbaton_expert || child.shabbaton_trophy) {
+							if (item.amount > 25) {
+								numCelebrationBoxes++
+								first_name += child.first + ', '
+							}
+						}
+					}
+				}
+			}
+			$(".first_name").text(first_name)
+
+			if (!numCelebrationBoxes) {
+				$(".amountOfBoxes").text(0)
+				$("#celebrationBox").attr('disabled', true)
+				alert('You do not have any eligible children paying for the Shabbaton Experience in order to qualify for a free complimentary Celebration Box.')
+			} else {
+				$("#celebrationBox").attr('disabled', false)
+				$(".amountOfBoxes").text(numCelebrationBoxes)
+				let options = '';
+				for (let i = 1; i <= numCelebrationBoxes; i++) {
+					options += `<option value=${i}>${i}</option>`;
+				}
+				$("#numberOfCelebrationBoxes").append(options)
+				$('.form2 select').niceSelect('update');
+			}
+
 			$(".form2").show()
 			$(window).scrollTop(400)
 		})
@@ -1920,7 +1978,7 @@
 			}
 		})
 
-		$(document).on('click', '.prizes input', function( evt ) {
+		$(document).on('click', '.prizes input[type=checkbox]', function( evt ) {
 			// get id and amount
 			const info = $(this).data('info').split(':')
 			const prize = {
@@ -1934,6 +1992,17 @@
 				}
 			}
 			else removeFromPrizes(prize)
+		})
+
+		$(document).on('blur', '.prizes input[type=text]', function( evt ) {
+			// get id and amount
+			const id = $(this).data('id')
+			const he_name = {
+				id: id,
+				amount: 0,
+				he_name: $(this).val()
+			}
+			addToPrizes(he_name)
 		})
 
 		$(document).on('click', '.processPayment', function( evt ) {

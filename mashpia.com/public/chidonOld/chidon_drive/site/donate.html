@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 	<head>
@@ -422,7 +422,7 @@
 						const name = $("#name").val().trim();
 						const display_name = $("#display_name").val().trim();
 						const email = $("#email").val().trim();
-						if ( !name || !display_name || !email ) {
+						if (! (name && display_name && email) ) {
 							alert("Name, Display Name, and Email are mandatory fields!");
 							return false
 						}

@@ -279,10 +279,15 @@ function processPrizes() {
 
     foreach ($prizes as $user_id => $prize_items) {
         foreach ($prize_items as $prize) {
-            $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
-            mysql_query($sql);
-            $sql = "update chidon_prizes set purchased = purchased + 1 where prize_id = " . $prize->id;
-            mysql_query($sql);
+            if (isset($prize->he_name)) {
+                $sql = "update chidon_user_prizes set he_name = '" . mysql_real_escape_string($prize->he_name) . "' where prize_id = " . $prize->id . " and year = " . $year;
+                mysql_query($sql);
+            } else {
+                $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
+                mysql_query($sql);
+                $sql = "update chidon_prizes set purchased = purchased + 1 where prize_id = " . $prize->id;
+                mysql_query($sql);
+            }
         }
     }
     return true;
