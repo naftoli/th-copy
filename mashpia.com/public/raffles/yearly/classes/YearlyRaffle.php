@@ -119,7 +119,6 @@ class YearlyRaffle {
      * 
      */
     private function getEligibility( $school_id = false, $user_id = false ){
-        global $logger;
         if ($user_id) {
             $users_filter = "dtm.user_id = ". $user_id;
         } else if ($school_id) {
@@ -147,12 +146,16 @@ class YearlyRaffle {
                 group by user_id";
         $result1 = mysql_query($sql1);
         $result2 = mysql_query($sql2);
+
+        $totals = [];
+        // if $user_id is provided default to zero instead of the key not existing
+        if ($user_id) {
+            $totals[$user_id] = 0;
+        }
         while($row = mysql_fetch_array($result1)) {
-            if ($row['user_id'] == 18453) $logger->debug("sql1 result {$row['total']}", [$sql1]);
             $totals[$row['user_id']] = $row['total'];
         }
         while($row = mysql_fetch_array($result2)) {
-            if ($row['user_id'] == 18453) $logger->debug("sql2 result {$row['total']}", [$sql2]);
             if (array_key_exists($row['user_id'], $totals)) {
                 $totals[$row['user_id']] += $row['total'];
             } else {
