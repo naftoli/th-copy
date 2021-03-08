@@ -10,9 +10,9 @@ require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
 //require 'regFeeSchools.php';
-require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
-use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
-$yearly_raffle = new YearlyRaffle();
+// require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
+// use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+// $yearly_raffle = new YearlyRaffle();
 
 // needed for checking about mivtzoim purchases
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -314,18 +314,18 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['thumb']	= $pRow['thumb'];
         }
 
-        // get number of days that tasks were done
-        if ($row['user_registered']) {
-            // set the eligibility for the user and get it back
-            $yearly_raffle->set_user_eligibility( $row['user_id'] );
-            $numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
-            // send them a message with how many days left/done
-            if ($numTasks >= 160) {
-                $children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
-            } else {
-                $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
-            }
-        }
+        // // get number of days that tasks were done
+        // if ($row['user_registered']) {
+        //     // set the eligibility for the user and get it back
+        //     $yearly_raffle->set_user_eligibility( $row['user_id'] );
+        //     $numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
+        //     // send them a message with how many days left/done
+        //     if ($numTasks >= 160) {
+        //         $children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+        //     } else {
+        //         $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+        //     }
+        // }
 
         //if ($row['user_id'] == 26598) {
         //	$children[$row['user_id']]['chidonShow'] = 1;
