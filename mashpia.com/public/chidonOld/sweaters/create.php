@@ -2,6 +2,7 @@
 $admin_auth = array('school');
 require('../../header.php');
 require('./shared.php');
+require_once('../../class.globalSettings.php');
 
 $sweater_name = isset($_POST['sweater_name']) ? mysql_real_escape_string($_POST['sweater_name']) : "";
 $quantity = isset($_POST['quantity']) ? mysql_real_escape_string($_POST['quantity']) : "0";
@@ -9,6 +10,7 @@ $size = isset($_POST['size']) ? mysql_real_escape_string($_POST['size']) : "null
 $gender = isset($_POST['gender']) ? mysql_real_escape_string($_POST['gender']) : "null";
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
+$year = GlobalSettings::getChidonYear();
 
 $sweater_picture = "";
 switch($_FILES['sweater_picture']) {
@@ -23,9 +25,9 @@ switch($_FILES['sweater_picture']) {
 }
 
 $sql = "INSERT INTO chidon_sweaters ( 
-          sweater_name,   sweater_picture,  quantity,   size,    gender,    price,    our_price
+          sweater_name,    sweater_picture,   quantity,   size,    gender,    price,    our_price,   year
     ) VALUES (
-        '$sweater_name', '$sweater_picture', $quantity, '$size', '$gender', '$price', '$our_price'
+        '$sweater_name', '$sweater_picture', $quantity, '$size', '$gender', '$price', '$our_price', $year
     )
 ";
 
