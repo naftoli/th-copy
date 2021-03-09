@@ -867,6 +867,7 @@
 				total += item.amount
 			}
 		}
+		if (total < 0) total = 0
 		// update total on page
 		$("#total").text(total)
 		cart_total = total
