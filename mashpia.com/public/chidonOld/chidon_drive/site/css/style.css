@@ -430,6 +430,7 @@ footer nav {
 	justify-content: space-between;
 	align-items: flex-start;
 	text-align: left;
+	flex-wrap: wrap;
 }
 footer nav ul {
 	list-style: none;
