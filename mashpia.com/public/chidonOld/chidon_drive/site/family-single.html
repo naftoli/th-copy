@@ -386,21 +386,21 @@
 									if (amount && name && display_name && email) actions.enable()
 								})
 								document.getElementById('name').addEventListener('blur', function(event) {
-									const amount = calcAmount();
+									const amount = $("#donationAmount").val();
 									const name = $("#name").val().trim();
 									const display_name = $("#display_name").val().trim();
 									const email = $("#email").val().trim();
 									if (amount && name && display_name && email) actions.enable()
 								})
 								document.getElementById('display_name').addEventListener('blur', function(event) {
-									const amount = calcAmount();
+									const amount = $("#donationAmount").val();
 									const name = $("#name").val().trim();
 									const display_name = $("#display_name").val().trim();
 									const email = $("#email").val().trim();
 									if (amount && name && display_name && email) actions.enable()
 								})
 								document.getElementById('email').addEventListener('blur', function(event) {
-									const amount = calcAmount();
+									const amount = $("#donationAmount").val();
 									const name = $("#name").val().trim();
 									const display_name = $("#display_name").val().trim();
 									const email = $("#email").val().trim();
