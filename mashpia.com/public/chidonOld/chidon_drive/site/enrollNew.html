@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width">
 	<meta charset="UTF-8">
 	<meta name="google" content="notranslate">
-	<title>Shabbaton Enrollment | Chidon Drive</title>
+	<title>Chidon Enrollment | Chidon Drive</title>
 	<meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
 	<link rel="icon" type="image/png" href="img/favicon.png" />
 	<link rel="stylesheet" href="css/font.css" type="text/css" />
@@ -81,10 +81,10 @@
 </header>
 <div class="main">
 	<div class="wrapper">
-		<h2 class="title">Shabbaton Enrollment</h2>
+		<h2 class="title">Chidon Enrollment</h2>
 		<div class="form login" style="display: none;">
 			<form id="loginForm">
-				<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
+				<p>Please log in to your Mashpia.com account to proceed with Chidon enrollment</p>
 				<div class="field">
 					<label>Username: <input type="text" id="username" name="username" required /></label>
 				</div>
@@ -117,7 +117,12 @@
 					Sivan 5781 / May 23, 2021</b> with your families!
 				</h5>
 				<br />
-				<h5 class="formTitle">Chidon Registration:</h5>
+				<h5 class="formTitle">Chidon Registration:*</h5>
+				<h5 class="formDetails">
+					*<i>At the next step, you will have the option to charge your card immediately OR
+					to put a credit card on hold until Chidon Drive is over, which will only charge the remaining
+					balance based on the amount that you fundraise.</i>
+				</h5>
 				<div class="field flex">
 					<input type="checkbox" name="registerForChidon" id="registerForChidonA" class="inputCheckbox" />
 					<label class="checkboxLabel" for="registerForChidonA">
@@ -149,6 +154,11 @@
 				</h5>
 				<br />
 				<h5 class="formTitle">Chidon Registration:</h5>
+				<h5 class="formDetails">
+					*<i>At the next step, you will have the option to charge your card immediately OR
+					to put a credit card on hold until Chidon Drive is over, which will only charge the remaining
+					balance based on the amount that you fundraise.</i>
+				</h5>
 				<div class="field flex">
 					<input type="checkbox" name="registerForChidon" id="registerForChidonB" class="inputCheckbox" />
 					<label class="checkboxLabel" for="registerForChidonB">
@@ -214,7 +224,6 @@
 				<div class="listSection">
 					<ul>
 						<li><b>Chidon Final:</b> Thursday, 5 Nissan 5781 / March 18, 2021</li>
-						<li><b>Trophy Final:</b> Sunday, 8 Nissan 5781 / March 21 2021.</li>
 					</ul>
 				</div>
 				<h5 class="formDetails">As a bonus, every finalist will receive the following items:</h5>
@@ -231,6 +240,11 @@
 					fanfare.
 				</h5>
 				<h5 class="formTitle">Chidon Registration:</h5>
+				<h5 class="formDetails">
+					*<i>At the next step, you will have the option to charge your card immediately OR
+					to put a credit card on hold until Chidon Drive is over, which will only charge the remaining
+					balance based on the amount that you fundraise.</i>
+				</h5>
 				<div class="field">
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonExperienceA"
@@ -252,8 +266,10 @@
 							<option value='225'>$225</option>
 							<option value='185'>$185</option>
 						</select>
-						<label>*Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</label>
 					</div>
+					<h5 class="formDetails" style="margin-top: -10px;">
+						*<i>Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</i>
+					</h5>
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsA" name="registration">
 						<label class="checkboxLabel" for="registerForChidonGiftsA">
@@ -338,6 +354,11 @@
 					fanfare.
 				</h5>
 				<h5 class="formTitle">Chidon Registration:</h5>
+				<h5 class="formDetails">
+					*<i>At the next step, you will have the option to charge your card immediately OR
+					to put a credit card on hold until Chidon Drive is over, which will only charge the remaining
+					balance based on the amount that you fundraise.</i>
+				</h5>
 				<div class="field">
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonExperienceB"
@@ -359,8 +380,10 @@
 							<option value='225'>$225</option>
 							<option value='185'>$185</option>
 						</select>
-						<label>*Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</label>
 					</div>
+					<h5 class="formDetails" style="margin-top: -10px;">
+						*<i>Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</i>
+					</h5>
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsB" name="registration">
 						<label class="checkboxLabel" for="registerForChidonGiftsB">
@@ -1655,19 +1678,19 @@
 				if (children[id].option == 'A') $(form).find('.trips').show();
 				else if (children[id].option == 'B') $(form).find('.vr').show()
 			}
-			const prizes = JSON.parse(result)
+			const prizes_list = JSON.parse(result)
 			let html = `<h5 class="formTitle chidon_prizes">Chidon Prizes</h5>`
 			html += `
 				<h5 class="formDetails" style="font-weight: bold;">
 				You can choose up to $${amount} worth of prizes from this section
 				</h5>
 			`
-			for (let id in prizes) {
-				let prize = prizes[id]
+			for (let prize_id in prizes_list) {
+				let prize = prizes_list[prize_id]
 				html += `
 					<div class="field flex">
-						<input class="inputCheckbox" type="checkbox" id="prize_${id}" name="prize_${id}" data-info="${id}:${prize['price']}" />
-						<label class="checkboxLabel" for="prize_${id}">
+						<input class="inputCheckbox" type="checkbox" id="prize_${prize_id}" name="prize_${prize_id}" data-info="${prize_id}:${prize['price']}" />
+						<label class="checkboxLabel" for="prize_${prize_id}">
 					`
 				html += `
 					<span style='float: left'>
@@ -1688,7 +1711,7 @@
 				if (prize['prize_name'].includes('Tefillin') || prize['prize_name'].includes('Leather')) {
 					html += `<br /><br />Please write your name in Hebrew as you would want it on your item. Once submitted,
 						there will be <span style="font-weight: bold">no</span> name changes allowed.
-						<input type="text" class="field" class="he_name" name="he_${id}" data-id="${id}" style="width: 200px;" />`
+						<input type="text" class="field he_name" name="he_${id}" data-id="${id}" style="width: 200px;" />`
 				}
 
 				html += `
@@ -1699,6 +1722,21 @@
 			$(form).find('.prizes').empty()
 			$(form).find('.prizes').append(html)
 			$(form).show()
+
+			$(".he_name").blur( function() {
+				if ($(this).val() != '') {
+					let elem = $(this).parent().parent().find('input.inputCheckBox')
+					if (! $(elem).is(":checked") ) $(elem).trigger('click')
+				}
+			})
+
+			// check off existing prizes in prize cart
+			if (prizes[id]) {
+				for (let prize of prizes[id]) {
+					let elem = "prize_" + prize.id
+					document.getElementById(elem.toString()).checked = true
+				}
+			}
 		})
 	}
 
@@ -1904,6 +1942,8 @@
 			selectedChildId = parseInt($(this).attr('id'));
 			// TODO: Display correct form based on child.
 			showForm(selectedChildId)
+			$(window).scrollTop(400)
+			alert("Please note: Logging out in the middle of registration will cause your information to be lost.")
 
 			// let html = '';
 			// if (numChildren > 1) {
@@ -1973,7 +2013,7 @@
 			if (!numCelebrationBoxes) {
 				$(".amountOfBoxes").text(0)
 				$("#celebrationBox").attr('disabled', true)
-				alert('You do not have any eligible children paying for the Shabbaton Experience in order to qualify for a free complimentary Celebration Box.')
+				alert('You do not have any eligible children paying for the Chidon Experience in order to qualify for a free complimentary Celebration Box.')
 			} else {
 				$("#celebrationBox").attr('disabled', false)
 				$(".amountOfBoxes").text(numCelebrationBoxes)
@@ -1981,8 +2021,14 @@
 				for (let i = 1; i <= numCelebrationBoxes; i++) {
 					options += `<option value=${i}>${i}</option>`;
 				}
+				$("#numberOfCelebrationBoxes").empty()
 				$("#numberOfCelebrationBoxes").append(options)
 				$('.form2 select').niceSelect('update');
+
+				$("#numberOfCelebrationBoxes").change( function() {
+					let elem = $(this).parent().find('input.inputCheckbox');
+					if (! $(elem).is(':checked')) $(elem).trigger('click')
+				})
 			}
 
 			$(".form2").show()
