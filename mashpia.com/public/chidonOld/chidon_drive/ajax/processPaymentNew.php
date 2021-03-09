@@ -273,6 +273,23 @@ function processCart($auth_id, $auth_desc) {
     ];
 }
 
+function processVouchers() {
+    global $cart;
+    // find out if any vouchers were entered
+    foreach ($cart as $user_id => $items) {
+        foreach ($items as $item) {
+            if ($item->desc == 'voucher') {
+                $qry = "update coupon_codes set used = 1, date_redeemed = now() where coupon_code_id = " . $item->id;
+                if (mysql_query($qry)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+}
+
 function processPrizes() {
     global $prizes, $year;
     if (empty($prizes)) return false;
@@ -328,6 +345,9 @@ if ($cc['skip']) {
 // go through cart and figure out who to register and which things to save as purchases
 $cartProcessed = processCart($trans_id, $trans_info);
 
+// process vouchers / coupon codes if any exist
+$voucherProcessed = processVouchers();
+
 // process user prizes
 $prizesProcessed = processPrizes();
 
@@ -352,6 +372,7 @@ if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully r
 else $message .= "There was an error registering your child(ren) for the shabbaton. Please contact HQ (718-907-8884).<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
 else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
+if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
 if ($prizesProcessed) $message .= "Your prize selection has been saved.";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
@@ -361,6 +382,7 @@ foreach ($cart as $user_id => $items) {
         if (strpos($desc, 'addr') !== false) continue;
         if ($desc == 'reg') $message .= "<li>Registration for User ID: " . $user_id . " - $" . $item->amount . "</li>";
         else if ($desc == 'yarmulka') $message .= "<li>Yarmulka for User ID: . " . user_id . ", Size: " . $item->size . " - $" . $item->amount . "</li>";
+        else if ($desc == 'voucher') $message .= "<li>Coupon code deduction: -$" . $item->amount . "</li>";
         else $message .= "<li>" . $desc . " - $" . $item->amount . "</li>";
     }
 }
@@ -370,6 +392,7 @@ $mail_success = mail($email, $subject, implode("\r\n", $headers));
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
 if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
 if ($cartProcessed['purchase']) $res_msg .= "Your purchases are being processed.\n";
+if ($voucherProcessed) $res_msg .= "Your coupon code was applied.\n";
 if ($prizesProcessed) $res_msg .= "Your prize selection has been saved.\n";
 if ($mail_success) $res_msg .= "You should be getting a confirmation email shortly.\n";
 $res_msg .= "Thank You!";

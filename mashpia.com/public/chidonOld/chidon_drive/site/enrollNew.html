@@ -636,6 +636,12 @@
 			<div class="form">
 				<form id="paymentForm">
 					<div class="flex">
+						<div class="field">
+							<label style="display: inline;">Coupon Code / Voucher:</label>
+							<input type="text" name="code" id="code" style="width: 100px;" />
+						</div>
+					</div>
+					<div class="flex">
 						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" value="1" />
 						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>
 					</div>
@@ -1833,6 +1839,22 @@
 		}
 	}
 
+	function checkForVoucher() {
+		// find out if admin has a coupon code to use
+		$.post('../ajax/checkForVoucher.php', { admin: Cookies.get('chidon_admin') }, function (result) {
+			const res = JSON.parse(result)
+			if (res.success) {
+				const item = {
+					id: parseInt(res.code.id),
+					desc: 'voucher',
+					amount: parseFloat(res.code.amount) * -1
+				}
+				addToCart(0, item)
+				alert('We have applied a coupon code to your cart!\nYour total is now $' + parseFloat(res.code.amount) + " less than before!")
+			}
+		})
+	}
+
 	$(document).ready(function (e) {
 		// $(".formA").show()
 		// $(".formB").show()
@@ -1975,6 +1997,7 @@
 				$(".form2").hide()
 				$("#paymentInfo").show()
 				$(window).scrollTop(400)
+				checkForVoucher()
 			}
 		})
 
@@ -2004,6 +2027,26 @@
 			}
 			addToPrizes(he_name)
 		})
+
+		$("#code").blur( function() {
+			const code = $(this).val();
+			if ( code ) {
+				$.post("../ajax/findCode.php", { code : code }, function( result ) {
+					const res = JSON.parse( result );
+					if (res.success) {
+						const item = {
+							id: parseInt(res.id),
+							desc: 'voucher',
+							amount: parseFloat(res.amount) * -1
+						}
+						addToCart(0, item)
+						alert('We have applied a coupon code to your cart!\nYour total is now $' + parseFloat(res.amount) + " less than before!")
+					} else {
+						alert(res.error)
+					}
+				});
+			}
+		});
 
 		$(document).on('click', '.processPayment', function( evt ) {
 			evt.preventDefault()
