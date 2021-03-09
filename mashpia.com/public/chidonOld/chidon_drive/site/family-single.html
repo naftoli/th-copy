@@ -671,7 +671,7 @@
 									let sponsor = info.data.sponsors[i];
 									let dedication = sponsor.notes ? sponsor.notes : '';
 									let name = sponsor.display_name ? sponsor.display_name : sponsor.name;
-									if ( sponsor.anonymous ) name = "Anonymous";
+									if ( parseInt(sponsor.anonymous) == 1 ) name = "Anonymous";
 									sponsorList += `
 										<div class="recent-sponsor">
 											<div class="sponsor-name">
