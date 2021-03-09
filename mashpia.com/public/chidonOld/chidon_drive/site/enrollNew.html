@@ -2052,7 +2052,7 @@
 		$(document).on('click', '.processPayment', function( evt ) {
 			evt.preventDefault()
 
-			if (!cart_total) {
+			if (!cart_total && !cart) {
 				alert('You have not checked off any registration!')
 				return false
 			}

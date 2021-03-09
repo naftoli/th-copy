@@ -328,18 +328,20 @@ if ($cc['skip']) {
         }
     }
 
-    $ccResult = processCC($customer_id);
-    if ($ccResult['error']) {
-        echo json_encode([
-            'success' => false,
-            'msg' => $ccResult['error']
-        ]);
-        exit;
-    }
+    if ($amount > 0) {
+        $ccResult = processCC($customer_id);
+        if ($ccResult['error']) {
+            echo json_encode([
+                'success' => false,
+                'msg' => $ccResult['error']
+            ]);
+            exit;
+        }
 
-    $trans_id = $ccResult['id'];
-    $trans_info = $ccResult['info'];
-    $details = $ccResult['msg'];
+        $trans_id = $ccResult['id'];
+        $trans_info = $ccResult['info'];
+        $details = $ccResult['msg'];
+    }
 }
 
 // go through cart and figure out who to register and which things to save as purchases
