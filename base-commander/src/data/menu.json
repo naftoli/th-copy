@@ -95,7 +95,7 @@
           { "label": "KHK Tests", "legacy": true, "path": "/chidonTests/khk_tests.php" },
           { "label": "Report", "legacy": true, "path": "/chidonTests/report.php" },
           { "label":  "Report Cards", "path":  "/chidonTests/reportCards" },
-          { "label":  "Eligibility Report", "legacy": true, "path": "/chidonTests/eligibility.php" }
+          { "label":  "Eligibility Report", "legacy": true, "path": "/chidonTests/eligibility_check.php" }
         ]
       },
 
