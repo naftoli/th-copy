@@ -376,21 +376,54 @@
 								label: 'paypal',
 								
 							},
-							createOrder: function(data, actions) {
+							onInit: function(data, actions) {
+								actions.disable()
+								document.getElementById('donationAmount').addEventListener('blur', function(event) {
+									const amount = $(this).val();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('name').addEventListener('blur', function(event) {
+									const amount = calcAmount();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('display_name').addEventListener('blur', function(event) {
+									const amount = calcAmount();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('email').addEventListener('blur', function(event) {
+									const amount = calcAmount();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+							},
+							onClick: function() {
 								const amount = $("#donationAmount").val();
 								if ( !amount ) {
 									alert("You have not entered any amount!");
-									return false;
+									return false
 								}
 
 								const name = $("#name").val().trim();
 								const display_name = $("#display_name").val().trim();
 								const email = $("#email").val().trim();
-								if ( !name || !display_name || !email ) {
+								if (! (name && display_name && email) ) {
 									alert("Name, Display Name, and Email are mandatory fields!");
-									return false;
+									return false
 								}
-
+							},
+							createOrder: function(data, actions) {
+								const amount = $("#donationAmount").val();
 								return actions.order.create({
 									purchase_units: [{
 										amount: {
