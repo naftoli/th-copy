@@ -152,7 +152,7 @@ function processReg( $qrys ) {
 }
 
 function processCart($auth_id, $auth_desc) {
-    global $cart, $admin_id, $year, $method;
+    global $cart, $admin_id, $year, $method, $amount;
 
     $reg_qrys = [];
     foreach ($cart as $user_id => $items) {
@@ -181,7 +181,8 @@ function processCart($auth_id, $auth_desc) {
             authorize_id = '" . $auth_id . "', 
             authorize_desc = \"" . $auth_desc . "\", 
             authorize_trans_type = '" . $method . "', 
-            purchase_date = now()";
+            purchase_date = now(), 
+            amount = " . $amount;
     foreach ($cart as $user_id => $items) {
         foreach ($items as $item) {
             if ($item->desc != 'reg') {
@@ -386,7 +387,9 @@ $descriptions = [
 ];
 
 $subject = "Chidon Registration for " . $year;
-$message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . "<br />
+$message = "Thank you for your payment of $" . $amount . ".";
+if ($method == 'hold') $message .= " Your payment has been put on hold. ";
+$message .= "Your transaction id is: " . $trans_id . "<br />
     The details for your transaction is: <br />" . $details . "<br /><br />";
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
 else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
