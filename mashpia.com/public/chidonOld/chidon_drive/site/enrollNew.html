@@ -669,11 +669,11 @@
 						</div>
 					</div>
 					<div class="flex">
-						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" value="1" />
+						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />
 						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>
 					</div>
 					<div class="flex">
-						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" value="0" />
+						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />
 						<label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>
 					</div>
 					<div class="field">
@@ -741,7 +741,7 @@
 							<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
 						</div>
 					</div>
-					<input type="submit" class="button processPayment" value="Pay" />
+					<input type="submit" class="button processPayment" value="Pay" style="cursor: pointer" />
 				</form>
 			</div>
 		</div>
@@ -2113,7 +2113,7 @@
 			const email = $("#email").val()
 
 			let cc = {}
-			if ($(".cc_on_file").is(":checked") && $(".cc_on_file").val() == 1) {
+			if ($(".cc_on_file_yes").is(":checked")) {
 				cc.on_file = 1
 			} else {
 				cc.on_file = 0
