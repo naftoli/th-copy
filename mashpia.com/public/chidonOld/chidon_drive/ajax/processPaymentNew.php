@@ -389,7 +389,7 @@ foreach ($cart as $user_id => $items) {
     }
 }
 $message .= "</ul><br />";
-$mail_success = mail($email, $subject, implode("\r\n", $headers));
+$mail_success = mail($email, $subject, $message, implode("\r\n", $headers));
 
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
 if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
