@@ -45,7 +45,7 @@ function processCC( $customer_id )
     global $cc, $method, $admin_id, $year, $amount, $name;
 
     $response = '';
-    $desc = "Chidon Shabbaton Registration " . $year . " for family (admin_id): " . $admin_id;
+    $desc = "Chidon Registration " . $year . " for family (admin_id): " . $admin_id;
     if ( $customer_id ) {
         $cp = new CustomerProfile( $customer_id );
         if ($method == 'charge') $response = $cp->chargeCard( $amount, null, null, null, $desc );
@@ -367,11 +367,30 @@ $headers[] = 'From: chidon@tzivoshashem.org';
 $headers[] = 'Reply-to: chidon@tzivoshashem.org';
 $headers[] = 'Cc: ' . $admin_email;
 
-$subject = "Chidon Shabbaton Registration for " . $year;
+$descriptions = [
+    'celeb_box'                 => 'Celebration Box(es)',
+    'celeb_box_add'             => 'Additional Celebration Box',
+    'celeb_box_add_ship'        => 'Ship Additional Celebration Box',
+    'celeb_box_add_addr'        => 'Additional Celebration Box Shipping Address',
+    'sweater_mother'            => 'Mother Sweater',
+    'sweater_mother_ship'       => 'Shipping for Mother Sweater',
+    'sweater_mother_ship_addr'  => 'Mother Sweater Shipping Address',
+    'sweater_father'            => 'Father Sweater',
+    'sweater_father_ship'       => 'Shipping for Father Sweater',
+    'sweater_father_ship_addr'  => 'Father Sweater Shipping Address',
+    'sweater_bubby'             => 'Bubby Sweater',
+    'sweater_bubby_ship'        => 'Shipping for Bubby Sweater',
+    'sweater_bubby_ship_addr'   => 'Shipping Address for Bubby Sweater',
+    'sweater_zaidy'             => 'Zaidy Sweater',
+    'sweater_zaidy_ship'        => 'Shipping for Zaidy Sweater',
+    'sweater_zaidy_ship_addr'   => 'Zaidy Sweater Shipping Address'
+];
+
+$subject = "Chidon Registration for " . $year;
 $message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . "<br />
     The details for your transaction is: <br />" . $details . "<br /><br />";
-if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the shabbaton.<br /><br />";
-else $message .= "There was an error registering your child(ren) for the shabbaton. Please contact HQ (718-907-8884).<br /><br />";
+if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
+else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
 else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
@@ -385,14 +404,15 @@ foreach ($cart as $user_id => $items) {
         if ($desc == 'reg') $message .= "<li>Registration for User ID: " . $user_id . " - $" . $item->amount . "</li>";
         else if ($desc == 'yarmulka') $message .= "<li>Yarmulka for User ID: . " . user_id . ", Size: " . $item->size . " - $" . $item->amount . "</li>";
         else if ($desc == 'voucher') $message .= "<li>Coupon code deduction: -$" . $item->amount . "</li>";
-        else $message .= "<li>" . $desc . " - $" . $item->amount . "</li>";
+        else if (isset($item->amount)) $message .= "<li>" . $descriptions[$desc] . " - $" . $item->amount . "</li>";
+        else if (isset($item->size)) $message .= "<li>" . $descriptions[$desc] . ", Size:" . $item->size . "</li>";
     }
 }
 $message .= "</ul><br />";
 $mail_success = mail($email, $subject, $message, implode("\r\n", $headers));
 
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";
-if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Shabbaton.\n";
+if ($cartProcessed['reg']) $res_msg .= "Your child(ren) have been registered for the Chidon.\n";
 if ($cartProcessed['purchase']) $res_msg .= "Your purchases are being processed.\n";
 if ($voucherProcessed) $res_msg .= "Your coupon code was applied.\n";
 if ($prizesProcessed) $res_msg .= "Your prize selection has been saved.\n";
