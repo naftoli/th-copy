@@ -394,7 +394,7 @@ else $message .= "There was an error registering your child(ren) for the chidon.
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
 else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
-if ($prizesProcessed) $message .= "Your prize selection has been saved.";
+if ($prizesProcessed) $message .= "Your prize selection has been saved.<br /><br />";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
 foreach ($cart as $user_id => $items) {
