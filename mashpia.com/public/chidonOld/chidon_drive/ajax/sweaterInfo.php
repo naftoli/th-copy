@@ -2,8 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require __DIR__ . '/../../../db.php';
+require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $sweaters = [];

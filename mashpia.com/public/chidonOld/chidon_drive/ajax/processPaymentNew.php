@@ -2,18 +2,17 @@
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', E_ALL);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require __DIR__ . '/../../../db.php';
+require __DIR__ . '/../../../api/header/db.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
+require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
+require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 
 use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
