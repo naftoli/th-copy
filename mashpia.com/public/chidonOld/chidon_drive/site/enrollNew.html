@@ -274,6 +274,27 @@
 					<h5 class="formDetails" style="margin-top: -10px;">
 						*<i>Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</i>
 					</h5>
+					<div class="tripOptions" style="display: none;">
+						<label class="checkboxLabel">
+							For my trip I will be:
+						</label>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionA" class="inputCheckbox tripOption" value="1" />
+							<label class="checkboxLabel" for="tripOptionA">Joining the New York Trip</label>
+						</div>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionB" class="inputCheckbox tripOption" value="2" />
+							<label class="checkboxLabel" for="tripOptionB">Joining the California Trip</label>
+						</div>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionC" class="inputCheckbox tripOption" value="3" />
+							<label class="checkboxLabel" for="tripOptionC">
+								Treating my child/ren to an exciting experience of their own. Please email your plans to
+								<span class="tripOptionSchool"></span>. Once they approve it, they will give you a $100 voucher off your registration.
+							</label>
+						</div>
+					</div>
+					<br />
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsA" name="registration">
 						<label class="checkboxLabel" for="registerForChidonGiftsA">
@@ -388,6 +409,27 @@
 					<h5 class="formDetails" style="margin-top: -10px;">
 						*<i>Select the $270 option to activate the $100 Rohr grant so your child’s Chidon Experience will be completely covered.</i>
 					</h5>
+					<div class="tripOptions" style="display: none;">
+						<label class="checkboxLabel">
+							For my trip I will be:
+						</label>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionA" class="inputCheckbox tripOption" value="1" />
+							<label class="checkboxLabel" for="tripOptionA">Joining the New York Trip</label>
+						</div>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionB" class="inputCheckbox tripOption" value="2" />
+							<label class="checkboxLabel" for="tripOptionB">Joining the California Trip</label>
+						</div>
+						<div class="flex">
+							<input type="radio" name="tripOption" id="tripOptionC" class="inputCheckbox tripOption" value="3" />
+							<label class="checkboxLabel" for="tripOptionC">
+								Treating my child/ren to an exciting experience of their own. Please email your plans to
+								<span class="tripOptionSchool"></span>. Once they approve it, they will give you a $100 voucher off your registration.
+							</label>
+						</div>
+					</div>
+					<br />
 					<div class="flex">
 						<input class="inputCheckbox" type="radio" id="registerForChidonGiftsB" name="registration">
 						<label class="checkboxLabel" for="registerForChidonGiftsB">
@@ -856,6 +898,8 @@
 		let add = true;
 		for (let i of cart[id]) {
 			if (i.desc == item.desc) {
+				// if it's trip option update option value
+				if (item.option) i.option = item.option
 				add = false
 				break
 			}
@@ -1828,6 +1872,21 @@
 				}
 			}
 		}
+		// show trip options for myshliach / anash kinder kids
+		const child = children[id]
+		if (parseInt(child.school_id) == 61 || parseInt(child.school_id) == 269) {
+			if (parseInt(child.school_id) == 61) {
+				if (form == 'formC') $(".formC .tripOptionSchool").text("MyShliach")
+				else if (form == 'formD') $(".formD .tripOptionSchool").text("MyShliach")
+			} else if (parseInt(child.school_id) == 269) {
+				if (form == 'formC') $(".formC .tripOptionSchool").text("Anash Kinder")
+				else if (form == 'formD') $(".formD .tripOptionSchool").text("Anash Kinder")
+			}
+			if (form == 'formC') $(".formC .tripOptions").show()
+			else if (form == 'formD') $(".formD .tripOptions").show()
+		} else {
+			$(".tripOptions").hide()
+		}
 	}
 
 	function nextChild() {
@@ -1942,6 +2001,16 @@
 				}
 			});
 		});
+
+		$(".tripOption").click( function() {
+			const trip = $(this).val()
+			const item = {
+				desc: 'trip_option',
+				option: trip,
+				amount: 0
+			}
+			addToCart(selectedChildId, item)
+		})
 
 		$(document).on('click', '.enroll', function (evt) {
 			evt.preventDefault();
@@ -2136,7 +2205,7 @@
 				}
 			}
 			cc.skip = 0
-			// cc.skip = 1
+			cc.skip = 1
 
 			let method = ''
 			if ($("#chargeCard").is(":checked")) method = 'charge'

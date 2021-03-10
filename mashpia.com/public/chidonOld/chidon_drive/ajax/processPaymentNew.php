@@ -171,6 +171,12 @@ function processCart($auth_id, $auth_desc) {
                         where user_id = " . $user_id . " 
                         and year = " . $year;
                 $reg_qrys[] = $sql;
+            } else if ($item->desc == 'trip_option') {
+                $sql = "update th_chidon
+                        set trip_option = " . $item->option . " 
+                        where user_id = " . $user_id . " 
+                        and year = " . $year;
+                $reg_qrys[] = $sql;
             }
         }
     }
