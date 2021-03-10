@@ -257,47 +257,49 @@ if ( !empty( $users ) ) {
         if (mysql_num_rows($cRes) > 0) {
             $cRow = mysql_fetch_assoc($cRes);
             $children[$row['user_id']]['chidonRegistered'] = 1;
+            if (in_array($row['school_id'], [3, 265, 432])) $children[$row['user_id']]['enrollShabbaton'] = 1;
+//            $children[$row['user_id']]['enrollShabbaton'] = 1;
             // $children[$row['user_id']]['allowRemove'] = 0;
 
             // figure out which kids can be refunded
-            if ($cRow['date_paid'] > 0) {
-                $children[$row['user_id']]['shabbatonRegistered'] = 1;
-                if ($parent['showRefund'] && !$parent['alreadyRefunded']) {
-                    $children[$row['user_id']]['showRefund'] = 1;
-                    $children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
-                } else {
-                    $children[$row['user_id']]['showRefund'] = 0;
-                    $children[$row['user_id']]['shabbatonPaid'] = 0;
-                }
-            }
-
-            // make sure school is registered and has enough staff
-            $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $chidon_year . " AND registered = 1";
-            $chapRes = mysql_query( $chapSql );
-            if (mysql_num_rows($chapRes) > 0) {
-                // check chap
-                $sqlChaps = "select * from th_chidon_chaps where chap_type = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
-                $resChaps = mysql_query( $sqlChaps );
-                if ( mysql_num_rows( $resChaps ) > 0 ) {
-                    $sqlWalking = "select * from th_chidon_chaps_needed where school_id = " . $row['school_id'] . " and year = " . $chidon_year;
-                    $resWalking = mysql_query( $sqlWalking );
-                    $rowWalking = mysql_fetch_assoc( $resWalking );
-                    $needed = $rowWalking['needed'];
-                    $sqlSupers = "select * from th_chidon_chaps where is_walking = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
-                    $resSupers = mysql_query( $sqlSupers );
-                    if ( mysql_num_rows( $resSupers ) >= $needed ) {
-                        $children[$row['user_id']]['enrollShabbaton'] = 1;
-                        $children[$row['user_id']]['showChidonPic'] = 1;
-
-                        if ($cRow['allow_edit']) {
-                            $children[$row['user_id']]['shabbatonEdit'] = 1;
-                        }
-                        if ($cRow['confirmed']) {
-                            $children[$row['user_id']]['shabbatonConfirmed'] = 1;
-                        }
-                    }
-                }
-            }
+//            if ($cRow['date_paid'] > 0) {
+//                $children[$row['user_id']]['shabbatonRegistered'] = 1;
+//                if ($parent['showRefund'] && !$parent['alreadyRefunded']) {
+//                    $children[$row['user_id']]['showRefund'] = 1;
+//                    $children[$row['user_id']]['shabbatonPaid'] = $cRow['paid'];
+//                } else {
+//                    $children[$row['user_id']]['showRefund'] = 0;
+//                    $children[$row['user_id']]['shabbatonPaid'] = 0;
+//                }
+//            }
+//
+//            // make sure school is registered and has enough staff
+//            $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $chidon_year . " AND registered = 1";
+//            $chapRes = mysql_query( $chapSql );
+//            if (mysql_num_rows($chapRes) > 0) {
+//                // check chap
+//                $sqlChaps = "select * from th_chidon_chaps where chap_type = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+//                $resChaps = mysql_query( $sqlChaps );
+//                if ( mysql_num_rows( $resChaps ) > 0 ) {
+//                    $sqlWalking = "select * from th_chidon_chaps_needed where school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+//                    $resWalking = mysql_query( $sqlWalking );
+//                    $rowWalking = mysql_fetch_assoc( $resWalking );
+//                    $needed = $rowWalking['needed'];
+//                    $sqlSupers = "select * from th_chidon_chaps where is_walking = 1 and school_id = " . $row['school_id'] . " and year = " . $chidon_year;
+//                    $resSupers = mysql_query( $sqlSupers );
+//                    if ( mysql_num_rows( $resSupers ) >= $needed ) {
+//                        $children[$row['user_id']]['enrollShabbaton'] = 1;
+//                        $children[$row['user_id']]['showChidonPic'] = 1;
+//
+//                        if ($cRow['allow_edit']) {
+//                            $children[$row['user_id']]['shabbatonEdit'] = 1;
+//                        }
+//                        if ($cRow['confirmed']) {
+//                            $children[$row['user_id']]['shabbatonConfirmed'] = 1;
+//                        }
+//                    }
+//                }
+//            }
         }
         //}
 

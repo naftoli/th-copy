@@ -394,6 +394,7 @@
                                                     </div>
                                                     {{/if}}
 
+
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
@@ -401,6 +402,9 @@
                                                         <!-- <div style="margin: 10px 0px">
                                                             <button class="btn btn-info chidonPhoto">Upload Chidon Photo</button>
                                                         </div> -->
+                                                        {{/if}}
+                                                        {{#if this.enrollShabbaton}}
+                                                        <button class="btn btn-primary shabbaton">Pay for Chidon {{this.chidon_year}} (ID: {{this.th_chidon_id}})</button>
                                                         {{/if}}
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
@@ -710,10 +714,12 @@
                 location.href = "upload_photo.html?id=" + id;
             });
 
-            // $(document).on('click', '.shabbaton', function() {
-            //     var id = $(this).parent().parent().parent().attr('id');
-            //     location.href = "/mobile/chidon/index2.html?id=" + id;
-            // });
+            $(document).on('click', '.shabbaton', function() {
+                // var id = $(this).parent().parent().parent().attr('id');
+                // location.href = "/mobile/chidon/index2.html?id=" + id;
+                let url = "https://chidondrive.com/site/enroll.html?a=" + Cookies.get('admin');
+                location.href = url;
+            });
 
             //$(document).on('click', '.shabbatonEdit', function() {
             //	var id = $(this).parent().parent().parent().attr('id');
