@@ -2113,7 +2113,7 @@
 			const email = $("#email").val()
 
 			let cc = {}
-			if ($(".cc_on_file_yes").is(":checked")) {
+			if ($("#cc_on_file_yes").is(":checked")) {
 				cc.on_file = 1
 			} else {
 				cc.on_file = 0
