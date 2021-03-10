@@ -1999,7 +1999,6 @@
 			$(".formD").hide()
 
 			// check if we need to disable the celebration box or not and if we should show the hold option or not
-			let showHold = false
 			let numCelebrationBoxes = 0
 			let first_name = ''
 			for (let id in cart) {
@@ -2010,7 +2009,6 @@
 							if (item.amount > 25) {
 								numCelebrationBoxes++
 								first_name += child.first + ', '
-								showHold = true
 							}
 						}
 					}
@@ -2037,10 +2035,6 @@
 					let elem = $(this).parent().find('input.inputCheckbox');
 					if (! $(elem).is(':checked')) $(elem).trigger('click')
 				})
-			}
-			if (!showHold) {
-				$(".form2 #chargeCard").trigger('click')
-				$(".form2 #holdMoney").parent().remove()
 			}
 
 			$(".form2").show()
