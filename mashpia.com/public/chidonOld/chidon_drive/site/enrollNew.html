@@ -710,14 +710,14 @@
 							<input type="text" name="code" id="code" style="width: 100px;" />
 						</div>
 					</div>
-					<div class="flex">
-						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />
-						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>
-					</div>
-					<div class="flex">
-						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />
-						<label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>
-					</div>
+<!--					<div class="flex">-->
+<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />-->
+<!--						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>-->
+<!--					</div>-->
+<!--					<div class="flex">-->
+<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />-->
+<!--						<label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>-->
+<!--					</div>-->
 					<div class="field">
 						<label>Name on Credit Card:</label>
 						<input type="text" id="name" placeholder="Full Name" required />
@@ -2182,9 +2182,9 @@
 			const email = $("#email").val()
 
 			let cc = {}
-			if ($("#cc_on_file_yes").is(":checked")) {
-				cc.on_file = 1
-			} else {
+			// if ($("#cc_on_file_yes").is(":checked")) {
+			// 	cc.on_file = 1
+			// } else {
 				cc.on_file = 0
 				cc.num = $("#cc_num").val();
 				cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
@@ -2203,7 +2203,7 @@
 					alert('You must fill in Name, Email, All Credit Card and Billing Info!');
 					return false;
 				}
-			}
+			// }
 			cc.skip = 0
 			// cc.skip = 1
 
