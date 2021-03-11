@@ -257,7 +257,7 @@ if ( !empty( $users ) ) {
         if (mysql_num_rows($cRes) > 0) {
             $cRow = mysql_fetch_assoc($cRes);
             $children[$row['user_id']]['chidonRegistered'] = 1;
-            if (in_array($row['school_id'], [3, 265, 432])) $children[$row['user_id']]['enrollShabbaton'] = 1;
+            $children[$row['user_id']]['enrollShabbaton'] = 1;
 //            $children[$row['user_id']]['enrollShabbaton'] = 1;
             // $children[$row['user_id']]['allowRemove'] = 0;
 
