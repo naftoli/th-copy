@@ -27,8 +27,8 @@ $sql = "select a.admin_id, a.first, a.last, a.admin_address1, a.admin_city, a.ad
         a.authorize_customer_profile_id, tcpp.authorize_trans_type, tcpp.amount, tcpp.purchase_date  
         from admins a 
         join th_chidon_parent_purchases tcpp using (admin_id) 
-        where tcpp.authorize_id = 1 
-        and a.admin_id in (3, 1264) 
+        where (tcpp.authorize_id = 1 or tcpp.authorize_id = '') 
+        and a.admin_id not in (3, 1264) 
         group by a.admin_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
