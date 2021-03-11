@@ -3,6 +3,21 @@ chdir('../../../');
 require 'db.php';
 
 $user_id = mysql_real_escape_string(  $_POST['user_id'] );
+
+// auth
+require 'encrypt.php';
+$admin_id = mysql_real_escape_string( $_COOKIE['admin'] );
+$admin_id = encrypt_decrypt('decrypt', $admin_id);
+$sql = "select user_id from users u 
+		join admin_auths aa on aa.id = u.user_id && aa.auth = 'user'
+		where u.user_id = " . $user_id ."
+		and aa.admin_id = " . $admin_id;
+$result = mysql_query( $sql );
+if ( !$result ) {
+	echo false;
+	exit;
+}
+
 $first = mysql_real_escape_string( $_POST['fname'] );
 $last = mysql_real_escape_string( $_POST['last'] );
 $firstHe = mysql_real_escape_string( $_POST['fhname'] );
