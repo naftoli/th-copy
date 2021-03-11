@@ -43,6 +43,7 @@ foreach ($info as $row) {
     $cp = new CustomerProfile($customer_id);
     if ($method == 'charge') $response = $cp->chargeCard($amount, null, null, null, $desc);
     else if ($method == 'hold') $response = $cp->chargeCard($amount, null, null, null, $desc, 'authOnlyTransaction');
+    echo "Admin ID: " . $row['admin_id'] . "<br />";
     echo "<pre>"; print_r($response); echo "</pre>";
     if (is_arrray($response)) {
         if ($response->getMessages()->getResultCode() == "Ok") {
