@@ -28,7 +28,6 @@ $sql = "select a.admin_id, a.first, a.last, a.admin_address1, a.admin_city, a.ad
         from admins a 
         join th_chidon_parent_purchases tcpp using (admin_id) 
         where (tcpp.authorize_id = 1 or tcpp.authorize_id = '') 
-        and tcpp.authorize_trans_type = 'charge' 
         and a.admin_id not in (3, 1264) 
         group by a.admin_id";
 $result = mysql_query($sql);
