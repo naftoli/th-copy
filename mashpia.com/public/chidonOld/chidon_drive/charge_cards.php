@@ -57,7 +57,7 @@ foreach ($info as $row) {
                     where admin_id = " . $row['admin_id'] . ", 
                     and year = " . $year . " 
                     and purchase_date = '" . $row['purchase_date'] . "' 
-                    and authorize_id = 1";
+                    and (authorize_id = 1 or authorize_id = '')";
             if (!mysql_query($sql)) echo "error updating db.<br />" . $sql;
         }
     }
