@@ -17,7 +17,6 @@ $sql = "select * from chidon_user_prizes cup
         join schools s using (school_id) 
         join classes c using (class_id) 
         where s.school_id in (" . implode(',', array_keys($schools)) . ")  
-        group by cup.user_id 
         order by school_name, class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
