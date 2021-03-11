@@ -107,15 +107,19 @@ function checkResponse( $response ) {
             }
             // Or, print errors if the API request wasn't successful
         } else {
-            $error_msg .= "Transaction Failed \n";
-            $tresponse = $response->getTransactionResponse();
-
-            if ($tresponse != null && $tresponse->getErrors() != null) {
-                $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-                $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+            if (!is_array($response)) {
+                $error_msg .= $response;
             } else {
-                $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
-                $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+                $error_msg .= "Transaction Failed \n";
+                $tresponse = $response->getTransactionResponse();
+
+                if ($tresponse != null && $tresponse->getErrors() != null) {
+                    $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                    $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+                } else {
+                    $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+                    $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+                }
             }
         }
     } else {
