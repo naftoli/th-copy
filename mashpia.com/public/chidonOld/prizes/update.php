@@ -33,22 +33,25 @@ $note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
 
-$prize_picture = "";
-switch($_FILES['prize_picture']) {
-    case UPLOAD_ERR_INI_SIZE:
-    case UPLOAD_ERR_FORM_SIZE:
-    case UPLOAD_ERR_PARTIAL:
-    case UPLOAD_ERR_NO_FILE:
-    break;
-    default: // if an image was uploaded succesfully save it
-        $prize_picture = save_image($_FILES['prize_picture'], "/chidonOld/prizes/img", $prize['prize_picture']);
-    break;
+$prize_picture = null;
+if ($_FILES['prize_picture']['size'] > 0) {
+    switch($_FILES['prize_picture']) {
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+        case UPLOAD_ERR_PARTIAL:
+        case UPLOAD_ERR_NO_FILE:
+        break;
+        default: // if an image was uploaded succesfully save it
+            $prize_picture = save_image($_FILES['prize_picture'], "/chidonOld/prizes/img", $prize['prize_picture']);
+        break;
+    }
 }
-if (!$prize_picture) $prize_picture = "";
+
+if ($prize_picture) $prize_picture = mysql_real_escape_string($prize_picture);
 
 $sql = "UPDATE chidon_prizes 
         SET prize_name = '$prize_name',
-            prize_picture = '$prize_picture',
+            " . ($prize_picture ? "prize_picture = '$prize_picture', " : " ") . "
             quantity = '$quantity',
             made_possible_by = '$made_possible_by',
             personalization = '$personalization',
