@@ -1,6 +1,8 @@
 <?php
+//ini_set('display_errors', 1);
+
 $admin_auth = ['school'];
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
