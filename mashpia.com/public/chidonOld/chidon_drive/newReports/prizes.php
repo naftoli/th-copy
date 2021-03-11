@@ -3,7 +3,12 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-require_once __DIR__ . '/../../../db.php';
+require_once __DIR__ . '/../../../header.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo "No permission.";
+    exit;
+}
 
 $info = [];
 $sql = "select * from chidon_prizes";
