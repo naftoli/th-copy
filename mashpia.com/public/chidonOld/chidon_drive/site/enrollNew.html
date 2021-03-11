@@ -1699,7 +1699,7 @@
 		}
 		let html = ''
 		for (let size in sizes) {
-			if (options[sizes[size]]['qty'] > 0)
+			if (options[sizes[size]] && options[sizes[size]]['qty'] > 0)
 				html += `<option value='${size}'>${sizes[size]} (${options[sizes[size]]['qty']} left)</option>`
 			else
 				html += `<option value=0>${sizes[size]} (<i>sold out</i>)</option>`
@@ -1787,6 +1787,16 @@
 					document.getElementById(elem.toString()).checked = true
 				}
 			}
+
+			// find out which prizes user has already purhased
+			$.post('../ajax/chidon_user_prizes.php', { user: id }, function(result) {
+				const res = JSON.parse(result)
+				for (let prize of res) {
+					let elem = "#prize_" + prize.prize_id
+					$(elem).trigger('click')
+					$(elem).parent().find('.he_name').val(prize.he_name)
+				}
+			})
 		})
 	}
 

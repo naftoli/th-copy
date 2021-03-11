@@ -305,6 +305,16 @@ function processPrizes() {
     if (empty($prizes)) return false;
 
     foreach ($prizes as $user_id => $prize_items) {
+        // remove existing prizes for this user
+        $delete = [];
+        $qry = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
+        $result = mysql_query($qry);
+        while ($row = mysql_fetch_assoc($result)) {
+            $delete[] = "delete from chidon_user_prizes where prize_id = " . $row['prize_id'] . " and user_id = " . $user_id . " and year = " . $year;
+            $delete[] = "update chidon_prizes set purchased = purchased + 1 where prize_id = " . $row['prize_id'];
+        }
+        foreach ($delete as $qry) mysql_query($qry);
+        // add prizes to db
         foreach ($prize_items as $prize) {
             if (isset($prize->he_name)) {
                 $sql = "update chidon_user_prizes set he_name = '" . mysql_real_escape_string($prize->he_name) . "' where prize_id = " . $prize->id . " and year = " . $year;
@@ -414,7 +424,7 @@ foreach ($cart as $user_id => $items) {
         $desc = $item->desc;
         if (strpos($desc, 'addr') !== false) continue;
         if ($desc == 'reg') $message .= "<li>Registration for User ID: " . $user_id . " - $" . $item->amount . "</li>";
-        else if ($desc == 'yarmulka') $message .= "<li>Yarmulka for User ID: . " . user_id . ", Size: " . $item->size . " - $" . $item->amount . "</li>";
+        else if ($desc == 'yarmulka') $message .= "<li>Yarmulka for User ID: . " . $user_id . ", Size: " . $item->size . " - $" . $item->amount . "</li>";
         else if ($desc == 'voucher') $message .= "<li>Coupon code deduction: -$" . $item->amount . "</li>";
         else if (isset($item->amount)) $message .= "<li>" . $descriptions[$desc] . " - $" . $item->amount . "</li>";
         else if (isset($item->size)) $message .= "<li>" . $descriptions[$desc] . ", Size:" . $item->size . "</li>";
