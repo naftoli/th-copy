@@ -4,6 +4,8 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once __DIR__ . '/../../../header.php';
+require_once __DIR__ . '/../../../class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
@@ -11,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $info = [];
-$sql = "select * from chidon_prizes";
+$sql = "select * from chidon_prizes where year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
@@ -38,12 +40,14 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Size</th>
             <th>Color</th>
             <th>Quantity</th>
-            <th>Already Purchased</th>
+            <th>Purchased</th>
+            <th>Amount Left</th>
         </tr>
         <?php
         foreach ($info as $prize) {
             echo "<tr><td>" . $prize['prize_name'] . "</td><td>" . $prize['size'] . "</td><td>" . $prize['color'] .
-                "</td><td>" . $prize['quantity'] . "</td><td>" . $prize['purchased'] . "</td></tr>";
+                "</td><td>" . $prize['quantity'] . "</td><td>" . $prize['purchased'] . "</td><td>" .
+                ($prize['quantity'] - $prize['purchased']) . "</td></tr>";
         }
         ?>
     </table>
