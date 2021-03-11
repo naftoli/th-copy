@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['school'];
-require_once __DIR__ . '../../../db.php';
+require_once __DIR__ . '/../../../db.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
