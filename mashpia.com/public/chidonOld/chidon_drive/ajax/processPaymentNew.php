@@ -343,7 +343,7 @@ if ($cc['skip']) {
         if (empty($customer_id)) {
             echo json_encode([
                 'success' => false,
-                'msg' => 'You do not have a credit card on file, please put enter credit card info and try again.'
+                'msg' => 'You do not have a credit card on file, please enter credit card info and try again.'
             ]);
             exit;
         }
