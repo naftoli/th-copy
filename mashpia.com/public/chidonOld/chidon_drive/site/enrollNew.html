@@ -1969,6 +1969,22 @@
 		})
 	}
 
+	function checkForPayment() {
+		// check if admin already payed for registration
+		$.post('../ajax/checkForPayment', { admin: Cookies.get('chidon_admin') }, function(result) {
+			const res = JSON.parse(result)
+			if (res.success) {
+				const item = {
+					id: parseInt(res.payment.id),
+					desc: 'payment',
+					amount: parseFloat(res.payment.amount) * -1
+				}
+				addToCart(0, item)
+				alert("We have applied your previous payment to your cart!")
+			}
+		})
+	}
+
 	$(document).ready(function (e) {
 		// $(".formA").show()
 		// $(".formB").show()
@@ -2130,6 +2146,7 @@
 				$("#paymentInfo").show()
 				$(window).scrollTop(400)
 				checkForVoucher()
+				checkForPayment()
 			}
 		})
 
