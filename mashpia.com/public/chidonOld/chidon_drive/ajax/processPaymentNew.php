@@ -408,7 +408,8 @@ $descriptions = [
     'sweater_bubby_ship_addr'   => 'Shipping Address for Bubby Sweater',
     'sweater_zaidy'             => 'Zaidy Sweater',
     'sweater_zaidy_ship'        => 'Shipping for Zaidy Sweater',
-    'sweater_zaidy_ship_addr'   => 'Zaidy Sweater Shipping Address'
+    'sweater_zaidy_ship_addr'   => 'Zaidy Sweater Shipping Address',
+    'past_payment'              => 'Previous Payment'
 ];
 
 $subject = "Chidon Registration for " . $year;

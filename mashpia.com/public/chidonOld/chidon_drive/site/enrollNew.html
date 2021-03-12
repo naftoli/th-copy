@@ -964,7 +964,8 @@
 			sweater_bubby_ship_addr: 'Shipping Address for Bubby Sweater',
 			sweater_zaidy: 'Zaidy Sweater',
 			sweater_zaidy_ship: 'Shipping for Zaidy Sweater',
-			sweater_zaidy_ship_addr: 'Zaidy Sweater Shipping Address'
+			sweater_zaidy_ship_addr: 'Zaidy Sweater Shipping Address',
+			past_payment: 'Previous Payment'
 		}
 		let html = '<ul>'
 		for (id in cart) {
@@ -1976,11 +1977,12 @@
 			if (res.success) {
 				const item = {
 					id: parseInt(res.payment.id),
-					desc: 'payment',
+					desc: 'past_payment',
 					amount: parseFloat(res.payment.amount) * -1
 				}
 				addToCart(0, item)
 				alert("We will now apply your previous payment to your cart!")
+				calculateTotal()
 			}
 		})
 	}
