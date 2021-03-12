@@ -307,7 +307,8 @@ function processPrizes() {
     foreach ($prizes as $user_id => $prize_items) {
         // remove existing prizes for this user
         $delete = [];
-        $qry = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
+        $qry = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year . " and prize_id not in (
+        select prize_id from chidon_prizes where purchased >= quantity)";
         $result = mysql_query($qry);
         while ($row = mysql_fetch_assoc($result)) {
             $delete[] = "delete from chidon_user_prizes where prize_id = " . $row['prize_id'] . " and user_id = " . $user_id . " and year = " . $year;
