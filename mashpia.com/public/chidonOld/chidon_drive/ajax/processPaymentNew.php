@@ -362,6 +362,10 @@ if ($cc['skip']) {
         $trans_id = $ccResult['id'];
         $trans_info = $ccResult['info'];
         $details = $ccResult['msg'];
+    } else {
+        $trans_id = 0;
+        $trans_info = "0 balance.";
+        $details = "0 balance.";
     }
 }
 
