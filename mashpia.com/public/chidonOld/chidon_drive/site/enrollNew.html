@@ -783,7 +783,7 @@
 							<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
 						</div>
 					</div>
-					<input type="submit" class="button processPayment" value="Pay" style="cursor: pointer" />
+					<input type="submit" class="button processPayment" value="Pay / Register" style="cursor: pointer" />
 				</form>
 			</div>
 		</div>
@@ -1762,7 +1762,7 @@
 				if (prize['prize_name'].includes('Tefillin') || prize['prize_name'].includes('Leather')) {
 					html += `<br /><br />Please write your name in Hebrew as you would want it on your item. Once submitted,
 						there will be <span style="font-weight: bold">no</span> name changes allowed.
-						<input type="text" class="field he_name" name="he_${id}" data-id="${id}" style="width: 200px;" />`
+						<input type="text" class="field he_name" name="he_${prize_id}" data-id="${prize_id}" style="width: 200px;" />`
 				}
 
 				html += `
@@ -1773,13 +1773,6 @@
 			$(form).find('.prizes').empty()
 			$(form).find('.prizes').append(html)
 			$(form).show()
-
-			$(".he_name").blur( function() {
-				if ($(this).val() != '') {
-					let elem = $(this).parent().parent().find('input.inputCheckBox')
-					if (! $(elem).is(":checked") ) $(elem).trigger('click')
-				}
-			})
 
 			// check off existing prizes in prize cart
 			if (prizes[id]) {
@@ -2177,6 +2170,8 @@
 				he_name: $(this).val()
 			}
 			addToPrizes(he_name)
+			let elem = $(this).parent().parent().find('input.inputCheckBox')
+			if (! $(elem).is(":checked") ) $(elem).trigger('click')
 		})
 
 		$("#code").blur( function() {
@@ -2228,7 +2223,7 @@
 				billing.country = $("#bill_country").val();
 				cc.billing = billing;
 
-				if (!(name && email && cc.num && cc.exp && cc.cvv && billing.address && billing.city && billing.state && billing.country)) {
+				if (cart_total && !(name && email && cc.num && cc.exp && cc.cvv && billing.address && billing.city && billing.state && billing.country)) {
 					alert('You must fill in Name, Email, All Credit Card and Billing Info!');
 					return false;
 				}

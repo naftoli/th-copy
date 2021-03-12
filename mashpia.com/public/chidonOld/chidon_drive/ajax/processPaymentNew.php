@@ -318,7 +318,7 @@ function processPrizes() {
         // add prizes to db
         foreach ($prize_items as $prize) {
             if (isset($prize->he_name)) {
-                $sql = "update chidon_user_prizes set he_name = '" . mysql_real_escape_string($prize->he_name) . "' where prize_id = " . $prize->id . " and year = " . $year;
+                $sql = "update chidon_user_prizes set he_name = \"" . mysql_real_escape_string($prize->he_name) . "\" where prize_id = " . $prize->id . " and year = " . $year;
                 mysql_query($sql);
             } else {
                 $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
@@ -413,10 +413,15 @@ $descriptions = [
 ];
 
 $subject = "Chidon Registration for " . $year;
-$message = "Thank you for your payment of $" . $amount . ".";
-if ($method == 'hold') $message .= " Your payment has been put on hold. ";
-$message .= "Your transaction id is: " . $trans_id . "<br />
-    The details for your transaction is: <br />" . $details . "<br /><br />";
+$message = '';
+if ($amount) {
+    $message .= "Thank you for your payment of $" . $amount . ".";
+    if ($method == 'hold') $message .= " Your payment has been put on hold. ";
+    $message .= "Your transaction id is: " . $trans_id . "<br />
+        The details for your transaction is: <br />" . $details . "<br /><br />";
+} else {
+    $message .= "Thank you for submitting your application.<br /><br />";
+}
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
 else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
