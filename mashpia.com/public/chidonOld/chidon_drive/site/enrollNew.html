@@ -1971,7 +1971,7 @@
 
 	function checkForPayment() {
 		// check if admin already payed for registration
-		$.post('../ajax/checkForPayment', { admin: Cookies.get('chidon_admin') }, function(result) {
+		$.post('../ajax/checkPayment.php', { admin: Cookies.get('chidon_admin') }, function(result) {
 			const res = JSON.parse(result)
 			if (res.success) {
 				const item = {
