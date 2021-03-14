@@ -316,7 +316,7 @@ function processPrizes() {
         // add prizes to db
         foreach ($prize_items as $prize) {
             if (isset($prize->he_name)) {
-                $sql = "update chidon_user_prizes set he_name = \"" . mysql_real_escape_string($prize->he_name) . "\" where prize_id = " . $prize->id . " and year = " . $year;
+                $sql = "update chidon_user_prizes set he_name = \"" . mysql_real_escape_string($prize->he_name) . "\" where prize_id = " . $prize->id . " and year = " . $year . " and user_id = " . $user_id;
                 mysql_query($sql);
             } else {
                 $sql = "insert into chidon_user_prizes set user_id = " . $user_id . ", prize_id = " . $prize->id . ", year = " . $year;
