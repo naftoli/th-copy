@@ -2352,65 +2352,67 @@
 			}
 
 			// add section detailing what parents already paid for / reserved
-			for (item of cart[0]) {
-				switch (item.desc) {
-					case 'celeb_box_add':
-						$("#additionalCelebrationBox").trigger('click')
-						break
-					case 'celeb_box_add_ship':
-						document.getElementById('shippedToAddress').checked = true
-						break
-					case 'celeb_box_add_addr':
-						$("#shippedToAddressInput").val(item.address)
-						break
-					case 'sweater_mother':
-						document.getElementById('sweaterForMother').checked = true
-						$("#sweaterForMotherSize").val(item.size)
-						$('#sweaterForMotherDetails select').niceSelect('update');
-						$("#sweaterForMotherDetails").show()
-						break;
-					case 'sweater_mother_ship':
-						document.getElementById("motherSweaterShippedToAddress").checked = true
-						break
-					case 'sweater_mother_ship_addr':
-						$("#motherSweaterShippedToAddressInput").val(item.address)
-						break
-					case 'sweater_father':
-						document.getElementById('sweaterForFather').checked = true
-						$("#sweaterForFatherSize").val(item.size)
-						$('#sweaterForFatherDetails select').niceSelect('update');
-						$("#sweaterForFatherDetails").show()
-						break;
-					case 'sweater_father_ship':
-						document.getElementById("fatherSweaterShippedToAddress").checked = true
-						break
-					case 'sweater_father_ship_addr':
-						$("#fatherSweaterShippedToAddressInput").val(item.address)
-						break
-					case 'sweater_bubby':
-						document.getElementById('sweaterForBubby').checked = true
-						$("#sweaterForBubbySize").val(item.size)
-						$('#sweaterForBubbyDetails select').niceSelect('update');
-						$("#sweaterForBubbyDetails").show()
-						break;
-					case 'sweater_bubby_ship':
-						document.getElementById("bubbySweaterShippedToAddress").checked = true
-						break
-					case 'sweater_bubby_ship_addr':
-						$("#bubbySweaterShippedToAddressInput").val(item.address)
-						break
-					case 'sweater_zaidy':
-						document.getElementById('sweaterForZaidy').checked = true
-						$("#sweaterForZaidySize").val(item.size)
-						$('#sweaterForZaidyDetails select').niceSelect('update');
-						$("#sweaterForZaidyDetails").show()
-						break;
-					case 'sweater_zaidy_ship':
-						document.getElementById("zaidySweaterShippedToAddress").checked = true
-						break
-					case 'sweater_zaidy_ship_addr':
-						$("#zaidySweaterShippedToAddressInput").val(item.address)
-						break
+			if (cart[0]) {
+				for (item of cart[0]) {
+					switch (item.desc) {
+						case 'celeb_box_add':
+							$("#additionalCelebrationBox").trigger('click')
+							break
+						case 'celeb_box_add_ship':
+							document.getElementById('shippedToAddress').checked = true
+							break
+						case 'celeb_box_add_addr':
+							$("#shippedToAddressInput").val(item.address)
+							break
+						case 'sweater_mother':
+							document.getElementById('sweaterForMother').checked = true
+							$("#sweaterForMotherSize").val(item.size)
+							$('#sweaterForMotherDetails select').niceSelect('update');
+							$("#sweaterForMotherDetails").show()
+							break;
+						case 'sweater_mother_ship':
+							document.getElementById("motherSweaterShippedToAddress").checked = true
+							break
+						case 'sweater_mother_ship_addr':
+							$("#motherSweaterShippedToAddressInput").val(item.address)
+							break
+						case 'sweater_father':
+							document.getElementById('sweaterForFather').checked = true
+							$("#sweaterForFatherSize").val(item.size)
+							$('#sweaterForFatherDetails select').niceSelect('update');
+							$("#sweaterForFatherDetails").show()
+							break;
+						case 'sweater_father_ship':
+							document.getElementById("fatherSweaterShippedToAddress").checked = true
+							break
+						case 'sweater_father_ship_addr':
+							$("#fatherSweaterShippedToAddressInput").val(item.address)
+							break
+						case 'sweater_bubby':
+							document.getElementById('sweaterForBubby').checked = true
+							$("#sweaterForBubbySize").val(item.size)
+							$('#sweaterForBubbyDetails select').niceSelect('update');
+							$("#sweaterForBubbyDetails").show()
+							break;
+						case 'sweater_bubby_ship':
+							document.getElementById("bubbySweaterShippedToAddress").checked = true
+							break
+						case 'sweater_bubby_ship_addr':
+							$("#bubbySweaterShippedToAddressInput").val(item.address)
+							break
+						case 'sweater_zaidy':
+							document.getElementById('sweaterForZaidy').checked = true
+							$("#sweaterForZaidySize").val(item.size)
+							$('#sweaterForZaidyDetails select').niceSelect('update');
+							$("#sweaterForZaidyDetails").show()
+							break;
+						case 'sweater_zaidy_ship':
+							document.getElementById("zaidySweaterShippedToAddress").checked = true
+							break
+						case 'sweater_zaidy_ship_addr':
+							$("#zaidySweaterShippedToAddressInput").val(item.address)
+							break
+					}
 				}
 			}
 
