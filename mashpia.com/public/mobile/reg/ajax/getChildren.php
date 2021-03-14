@@ -258,6 +258,11 @@ if ( !empty( $users ) ) {
             $cRow = mysql_fetch_assoc($cRes);
             $children[$row['user_id']]['chidonRegistered'] = 1;
             $children[$row['user_id']]['enrollShabbaton'] = 1;
+            $children[$row['user_id']]['shabbatonPaid'] = 0;
+            // check if child is registered for chidon shabbaton
+            if ($cRow['paid'] > 0) {
+                $children[$row['user_id']]['shabbatonPaid'] = 1;
+            }
 //            $children[$row['user_id']]['enrollShabbaton'] = 1;
             // $children[$row['user_id']]['allowRemove'] = 0;
 
