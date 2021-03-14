@@ -439,7 +439,7 @@
 					$.post('../ajax/getTotalDonation.php', function( result ) {
 						let res = JSON.parse( result );
 						if ( res.success ) {
-							let amount = res.total;
+							let amount = res.total + 450000;
 							let budget = 1332000;
 							$('#section0 .leader').each(function(){
 								$(this).data('amount', Math.round(amount));
