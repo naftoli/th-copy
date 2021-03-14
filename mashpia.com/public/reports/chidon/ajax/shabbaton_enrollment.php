@@ -83,6 +83,7 @@ if (count($users) > 0) { ?>
     <table>
         <thead>
             <th>Grade</th><th>Name</th><th>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th><th>Status</th>
+            <th>Eligible For</th>
         </thead>
         <tbody>
             <? foreach($users as $user) {?>
@@ -113,6 +114,14 @@ if (count($users) > 0) { ?>
                     if ($user['date_paid'] > 0) echo "registered";
                     else if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
                     else echo "not yet registered";
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    if ($user['shabbaton_trophy']) echo "Trophy Finalist";
+                    else if ($user['shabbaton_expert']) echo "Full Chidon Experience";
+                    else if ($user['shabbaton_pro']) echo "Chidon Gifts";
+                    else if ($user['shabbaton_maven']) echo "Chidon Sweater";
                     ?>
                 </td>
             </tr>
