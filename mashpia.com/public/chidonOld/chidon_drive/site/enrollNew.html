@@ -2334,10 +2334,12 @@
 				$("#numberOfCelebrationBoxes").append(options)
 
 				// check if cart already has celebration box info
-				for (item of cart[0]) {
-					if (item.desc == 'celeb_box') {
-						document.getElementById('celebrationBox').checked = true
-						$("#numberOfCelebrationBoxes").val(item.qty)
+				if (cart[0]) {
+					for (item of cart[0]) {
+						if (item.desc == 'celeb_box') {
+							document.getElementById('celebrationBox').checked = true
+							$("#numberOfCelebrationBoxes").val(item.qty)
+						}
 					}
 				}
 
