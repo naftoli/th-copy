@@ -171,7 +171,7 @@
 					</label>
 				</div>
 				<p class="checkboxDetails" style="margin-left: 20px;">
-					For this year’s Chidon Gifts, boys will be receiving a Chidon iKippah Yarmulka, and girls a beautiful Chidon charm bracelet.
+					For this year’s Chidon Gifts, boys will be receiving a Chidon Yarmulka, and girls a beautiful Chidon charm bracelet.
 					Plus, both girls and boys will receive another surprise gift!
 				</p>
 				<p class="checkboxDetails">The sweater, gifts, and certificate will be shipped to my school for $25.</p>
@@ -925,6 +925,14 @@
 						const item = {
 							desc: 'reg',
 							amount: parseInt(child.paid)
+						}
+						addToCart(user_id, item)
+					}
+					if (parseInt(child.yarmulka)) {
+						const item = {
+							desc: 'yarmulka',
+							amount: 0,
+							size: child.yarmulka
 						}
 						addToCart(user_id, item)
 					}
@@ -2050,12 +2058,29 @@
 							if (form == 'formC') {
 								document.getElementById('registerForChidonExperienceA').checked = true
 								document.getElementById('paymentAmountA').value = amount
+								$(".formC .prizes").show()
 							} else if (form == 'formD') {
 								document.getElementById('registerForChidonExperienceB').checked = true
 								document.getElementById('paymentAmountB').value = amount
+								$(".formD .prizes").show()
 							}
 							$('select').niceSelect('update');
 						}
+					}
+				} else if (item.desc == 'yarmulka') {
+					switch (form) {
+						case 'formB':
+							$("#yarmulkaSizeB").val(item.size)
+							$("#boysOnlyYarmulkaSizesB select").niceSelect('update')
+							break
+						case 'formC':
+							$("#yarmulkaSizeC").val(item.size)
+							$("#boysOnlyYarmulkaSizesC select").niceSelect('update')
+							break
+						case 'formD':
+							$("#yarmulkaSizeD").val(item.size)
+							$("#boysOnlyYarmulkaSizesD select").niceSelect('update')
+							break
 					}
 				}
 			}
