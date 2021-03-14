@@ -1149,7 +1149,9 @@
 
 	function calculateTotal() {
 		total = 0
+		let hide = false
 		for (let id in cart) {
+			hide = true
 			for (let item of cart[id]) {
 				total += item.amount
 			}
@@ -1161,7 +1163,7 @@
 		updateReceiptDetails()
 
 		$("#paymentFormDetails").show()
-		if (cart.length && total == 0) {
+		if (total == 0 && hide) {
 			$("#paymentFormDetails").hide()
 			$("input.processPayment").val('Confirm Registration')
 		}
