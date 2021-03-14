@@ -1161,7 +1161,7 @@
 		updateReceiptDetails()
 
 		$("#paymentFormDetails").show()
-		if (total == 0) {
+		if (cart.length && total == 0) {
 			$("#paymentFormDetails").hide()
 			$("input.processPayment").val('Confirm Registration')
 		}
