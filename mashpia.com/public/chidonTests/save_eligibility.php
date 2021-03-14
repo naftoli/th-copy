@@ -93,6 +93,8 @@ foreach ($info as $school => $children) {
 //echo "<pre>"; print_r($eligibility); echo "</pre>";
 $qrys = [];
 foreach ($eligibility as $id => $value) {
+    // first delete current value
+    $qrys[] = "update th_chidon set shabbaton_maven = 0, shabbaton_pro = 0, shabbaton_expert = 0, shabbaton_trophy = 0 where th_chidon_id = " . $id;
     switch ($value) {
         case 'sweater':
             $qrys[] = "update th_chidon set shabbaton_maven = 1 where th_chidon_id = $id";
