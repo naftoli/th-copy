@@ -30,6 +30,7 @@ $users_query = mysql_query(
     ." JOIN classes c USING (class_id) "
     ." JOIN admins a ON parent_id = admin_id "
     ." WHERE th.school_id = $school_id AND th.year = $year "
+    ." AND (th.shabbaton_maven = 1 or th.shabbaton_pro = 1 or th.shabbaton_expert = 1 or th.shabbaton_trophy = 1)"
     ." ORDER BY class_grade, class_sub, u.last "
 );
 
@@ -109,8 +110,8 @@ if (count($users) > 0) { ?>
 <!--                <td>--><?//=$user['walking'] ? "Yes" : "No"?><!--</td>-->
                 <td>
                     <?php
-                    if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
-                    else if ($user['date_paid'] > 0) echo "registered";
+                    if ($user['date_paid'] > 0) echo "registered";
+                    else if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
                     else echo "not yet registered";
                     ?>
                 </td>
