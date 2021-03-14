@@ -704,86 +704,88 @@
 		<div class="payment-box" id="paymentInfo" style="display: none">
 			<div class="form">
 				<form id="paymentForm">
-					<div class="flex">
-						<div class="field">
-							<label style="display: inline;">Coupon Code / Voucher:</label>
-							<input type="text" name="code" id="code" style="width: 100px;" />
+					<div id="paymentFormDetails">
+						<div class="flex">
+							<div class="field">
+								<label style="display: inline;">Coupon Code / Voucher:</label>
+								<input type="text" name="code" id="code" style="width: 100px;" />
+							</div>
 						</div>
-					</div>
-<!--					<div class="flex">-->
-<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />-->
-<!--						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>-->
-<!--					</div>-->
-<!--					<div class="flex">-->
-<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />-->
-<!--						<label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>-->
-<!--					</div>-->
-					<div class="field">
-						<label>Name on Credit Card:</label>
-						<input type="text" id="name" placeholder="Full Name" required />
-					</div>
-					<div class="field">
-						<label>Email <span>(for receipt)</span>:</label>
-						<input type="text" id="email" placeholder="Email" required />
-					</div>
-					<div class="field">
-						<label>Card Number:</label>
-						<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
-					</div>
-					<div class="group">
+	<!--					<div class="flex">-->
+	<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />-->
+	<!--						<label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>-->
+	<!--					</div>-->
+	<!--					<div class="flex">-->
+	<!--						<input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />-->
+	<!--						<label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>-->
+	<!--					</div>-->
 						<div class="field">
-							<label>Exp. Month:</label>
-							<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+							<label>Name on Credit Card:</label>
+							<input type="text" id="name" placeholder="Full Name" required />
 						</div>
 						<div class="field">
-							<label>Exp. Year:</label>
-							<select id="exp_yy">
-								<option>2021</option><option>2022</option><option>2023</option><option>2024</option>
-								<option>2025</option><option>2026</option><option>2027</option><option>2028</option>
+							<label>Email <span>(for receipt)</span>:</label>
+							<input type="text" id="email" placeholder="Email" required />
+						</div>
+						<div class="field">
+							<label>Card Number:</label>
+							<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
+						</div>
+						<div class="group">
+							<div class="field">
+								<label>Exp. Month:</label>
+								<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+							</div>
+							<div class="field">
+								<label>Exp. Year:</label>
+								<select id="exp_yy">
+									<option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+									<option>2025</option><option>2026</option><option>2027</option><option>2028</option>
+								</select>
+							</div>
+							<div class="field">
+								<label>CVV:</label>
+								<input type="text" id="cc_cvv" placeholder="CVV" required />
+							</div>
+						</div>
+						<h5>Billing Address</h5>
+						<div class="field">
+							<label>Country:</label>
+							<select id="bill_country">
+								<option>United States</option>
+								<option>Canada</option>
+								<option>England</option>
+								<option>Australia</option>
+								<option>S Africa</option>
+								<option>France</option>
+								<option>Europe</option>
+								<option>S America</option>
 							</select>
 						</div>
 						<div class="field">
-							<label>CVV:</label>
-							<input type="text" id="cc_cvv" placeholder="CVV" required />
-						</div>
-					</div>
-					<h5>Billing Address</h5>
-					<div class="field">
-						<label>Country:</label>
-						<select id="bill_country">
-							<option>United States</option>
-							<option>Canada</option>
-							<option>England</option>
-							<option>Australia</option>
-							<option>S Africa</option>
-							<option>France</option>
-							<option>Europe</option>
-							<option>S America</option>
-						</select>
-					</div>
-					<div class="field">
-						<label>Address:</label>
-						<input type="text" id="bill_address" placeholder="Address" required />
-					</div>
-					<div class="field">
-						<label>Apt./Suite:</label>
-						<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
-					</div>
-					<div class="group">
-						<div class="field">
-							<label>Zip/Postcode:</label>
-							<input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
+							<label>Address:</label>
+							<input type="text" id="bill_address" placeholder="Address" required />
 						</div>
 						<div class="field">
-							<label>City:</label>
-							<input type="text" id="bill_city" placeholder="City" required />
+							<label>Apt./Suite:</label>
+							<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
 						</div>
-						<div class="field">
-							<label>State/Prov/Region:</label>
-							<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
+						<div class="group">
+							<div class="field">
+								<label>Zip/Postcode:</label>
+								<input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
+							</div>
+							<div class="field">
+								<label>City:</label>
+								<input type="text" id="bill_city" placeholder="City" required />
+							</div>
+							<div class="field">
+								<label>State/Prov/Region:</label>
+								<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
+							</div>
 						</div>
 					</div>
-					<input type="submit" class="button processPayment" value="Pay / Register" style="cursor: pointer" />
+					<input type="submit" class="button processPayment" value="Pay" style="cursor: pointer" />
 				</form>
 			</div>
 		</div>
@@ -881,6 +883,210 @@
 	let cart = {}
 	let cart_total = 0
 
+	let url = window.location.href;
+	let pos = url.indexOf('?a=');
+	if (pos > 0) {
+		let admin = url.substring(pos + 3);
+		Cookies.set('chidon_admin', admin);
+	}
+
+	if (Cookies.get('chidon_admin')) {
+		getChildren(Cookies.get('chidon_admin'));
+		$("#logoffDiv").show();
+		getSweaterInfo()
+	}
+	else {
+		$(".login").show();
+		$("#logoffDiv").hide();
+	}
+
+	$('#menu-opener').click(function (e) {
+		$('header nav').toggleClass('open');
+	});
+
+	var children = []; // global variable for children info
+	var children_ids = []; // global variable to keep track of order of children and ids
+	var completed = [] // global variable for making sure all children's forms have been completed
+	var numChildren; // global variable to track number of children
+	let numCelebrationBoxes = 0;
+	let prizes = {};
+	let past_reg_info = {} // keep global var of past reg info bc of screwup
+
+	function getPreviousPurchaseInfo() {
+		// get whatever purchases were already done
+		$.post('../ajax/getPastReg.php', { admin: Cookies.get('chidon_admin') }, function(result) {
+			const res = JSON.parse(result)
+			console.log(res)
+			past_reg_info = res
+			if (res.children) {
+				for (let user_id in res.children) {
+					const child = res.children[user_id]
+					if (child.paid) {
+						const item = {
+							desc: 'reg',
+							amount: parseInt(child.paid)
+						}
+						addToCart(user_id, item)
+					}
+				}
+
+				const celeb_box = res.parent.celeb_box
+				if (parseInt(celeb_box)) {
+					const item = {
+						desc: 'celeb_box',
+						amount: 0,
+						qty: celeb_box
+					}
+					addToCart(0, item)
+				}
+
+				const celeb_box_add = res.parent.celeb_box_add
+				if (parseInt(celeb_box_add) == 1) {
+					const item = {
+						desc: 'celeb_box_add',
+						amount: 20
+					}
+					addToCart(0, item)
+				}
+
+				const celeb_box_add_ship = res.parent.celeb_box_add_ship
+				if (parseInt(celeb_box_add_ship) == 1) {
+					const item = {
+						desc: 'celeb_box_add_ship',
+						amount: 10
+					}
+					addToCart(0, item)
+				}
+
+				const celeb_box_add_addr = res.parent.celeb_box_add_addr
+				if (celeb_box_add_addr && celeb_box_add_addr.length) {
+					const item = {
+						desc: 'celeb_box_add_addr',
+						amount: 0,
+						address: celeb_box_add_addr
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_mother = res.parent.sweater_mother
+				if (sweater_mother) {
+					const item = {
+						desc: 'sweater_mother',
+						amount: 25,
+						size: sweater_mother
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_mother_ship = res.parent.sweater_mother_ship
+				if (parseInt(sweater_mother_ship) == 1) {
+					const item = {
+						desc: 'sweater_mother_ship',
+						amount: 10
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_mother_ship_addr = res.parent.sweater_mother_ship_addr
+				if (sweater_mother_ship_addr && sweater_mother_ship_addr.length) {
+					const item = {
+						desc: 'sweater_mother_ship_addr',
+						amount: 0,
+						address: sweater_mother_ship_addr
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_father = res.parent.sweater_father
+				if (sweater_father) {
+					const item = {
+						desc: 'sweater_father',
+						amount: 25,
+						size: sweater_father
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_father_ship = res.parent.sweater_father_ship
+				if (parseInt(sweater_father_ship) == 1) {
+					const item = {
+						desc: 'sweater_father_ship',
+						amount: 10
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_father_ship_addr = res.parent.sweater_father_ship_addr
+				if (sweater_father_ship_addr && sweater_father_ship_addr.length) {
+					const item = {
+						desc: 'sweater_father_ship_addr',
+						amount: 0,
+						address: sweater_father_ship_addr
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_bubby = res.parent.sweater_bubby
+				if (sweater_bubby) {
+					const item = {
+						desc: 'sweater_bubby',
+						amount: 25,
+						size: sweater_bubby
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_bubby_ship = res.parent.sweater_bubby_ship
+				if (parseInt(sweater_bubby_ship) == 1) {
+					const item = {
+						desc: 'sweater_bubby_ship',
+						amount: 10
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_bubby_ship_addr = res.parent.sweater_bubby_ship_addr
+				if (sweater_bubby_ship_addr && sweater_bubby_ship_addr.length) {
+					const item = {
+						desc: 'sweater_bubby_ship_addr',
+						amount: 0,
+						address: sweater_bubby_ship_addr
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_zaidy = res.parent.sweater_zaidy
+				if (sweater_zaidy) {
+					const item = {
+						desc: 'sweater_zaidy',
+						amount: 25,
+						size: sweater_zaidy
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_zaidy_ship = res.parent.sweater_zaidy_ship
+				if (parseInt(sweater_zaidy_ship) == 1) {
+					const item = {
+						desc: 'sweater_zaidy_ship',
+						amount: 10
+					}
+					addToCart(0, item)
+				}
+
+				const sweater_zaidy_ship_addr = res.parent.sweater_zaidy_ship_addr
+				if (sweater_zaidy_ship_addr && sweater_zaidy_ship_addr.length) {
+					const item = {
+						desc: 'sweater_zaidy_ship_addr',
+						amount: 0,
+						address: sweater_zaidy_ship_addr
+					}
+					addToCart(0, item)
+				}
+			}
+		})
+	}
+
 	function changeYarmulka(elem) {
 		const item = {
 			desc: 'yarmulka',
@@ -945,6 +1151,11 @@
 		$("#total").text(total)
 		cart_total = total
 		updateReceiptDetails()
+
+		if (total == 0) {
+			$("#paymentFormDetails").hide()
+			$("input.processPayment").val('Confirm Registration')
+		}
 	}
 
 	function updateReceiptDetails() {
@@ -1610,35 +1821,8 @@
 		calculateTotal()
 	})
 
-	let url = window.location.href;
-	let pos = url.indexOf('?a=');
-	if (pos > 0) {
-		let admin = url.substring(pos + 3);
-		Cookies.set('chidon_admin', admin);
-	}
-
-	if (Cookies.get('chidon_admin')) {
-		getChildren(Cookies.get('chidon_admin'));
-		$("#logoffDiv").show();
-		getSweaterInfo()
-	}
-	else {
-		$(".login").show();
-		$("#logoffDiv").hide();
-	}
-
-	$('#menu-opener').click(function (e) {
-		$('header nav').toggleClass('open');
-	});
-
-	var children = []; // global variable for children info
-	var children_ids = []; // global variable to keep track of order of children and ids
-	var completed = [] // global variable for making sure all children's forms have been completed
-	var numChildren; // global variable to track number of children
-	let numCelebrationBoxes = 0;
-	let prizes = {};
-
 	function getChildren(admin) {
+		getPreviousPurchaseInfo()
 		$.post('../ajax/getChildren.php', { admin: admin }, function (result) {
 			let info = JSON.parse(result);
 			if (info.success) {
@@ -1647,7 +1831,7 @@
 				numChildren = info.children.length;
 				for (c in info.children) {
 					let child = info.children[c];
-					if (parseInt(child.date_paid) > 0) continue;
+					// if (parseInt(child.date_paid) > 0) continue;
 					children[child.user_id] = child;
 					children_ids.push(child.user_id);
 					let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
@@ -2039,7 +2223,8 @@
 			// TODO: Display correct form based on child.
 			showForm(selectedChildId)
 			$(window).scrollTop(400)
-			alert("Please note: Logging out in the middle of registration will cause your information to be lost.")
+
+			// alert("Please note: Logging out in the middle of registration will cause your information to be lost.")
 
 			// let html = '';
 			// if (numChildren > 1) {
@@ -2119,6 +2304,15 @@
 				}
 				$("#numberOfCelebrationBoxes").empty()
 				$("#numberOfCelebrationBoxes").append(options)
+
+				// check if cart already has celebration box info
+				for (item of cart[0]) {
+					if (item.desc == 'celeb_box') {
+						document.getElementById('celebrationBox').checked = true
+						$("#numberOfCelebrationBoxes").val(item.qty)
+					}
+				}
+
 				$('.form2 select').niceSelect('update');
 
 				$("#numberOfCelebrationBoxes").change( function() {
@@ -2127,6 +2321,70 @@
 				})
 			}
 
+			// add section detailing what parents already paid for / reserved
+			for (item of cart[0]) {
+				switch (item.desc) {
+					case 'celeb_box_add':
+						$("#additionalCelebrationBox").trigger('click')
+						break
+					case 'celeb_box_add_ship':
+						document.getElementById('shippedToAddress').checked = true
+						break
+					case 'celeb_box_add_addr':
+						$("#shippedToAddressInput").val(item.address)
+						break
+					case 'sweater_mother':
+						document.getElementById('sweaterForMother').checked = true
+						$("#sweaterForMotherSize").val(item.size)
+						$('#sweaterForMotherDetails select').niceSelect('update');
+						$("#sweaterForMotherDetails").show()
+						break;
+					case 'sweater_mother_ship':
+						document.getElementById("motherSweaterShippedToAddress").checked = true
+						break
+					case 'sweater_mother_ship_addr':
+						$("#motherSweaterShippedToAddressInput").val(item.address)
+						break
+					case 'sweater_father':
+						document.getElementById('sweaterForFather').checked = true
+						$("#sweaterForFatherSize").val(item.size)
+						$('#sweaterForFatherDetails select').niceSelect('update');
+						$("#sweaterForFatherDetails").show()
+						break;
+					case 'sweater_father_ship':
+						document.getElementById("fatherSweaterShippedToAddress").checked = true
+						break
+					case 'sweater_father_ship_addr':
+						$("#fatherSweaterShippedToAddressInput").val(item.address)
+						break
+					case 'sweater_bubby':
+						document.getElementById('sweaterForBubby').checked = true
+						$("#sweaterForBubbySize").val(item.size)
+						$('#sweaterForBubbyDetails select').niceSelect('update');
+						$("#sweaterForBubbyDetails").show()
+						break;
+					case 'sweater_bubby_ship':
+						document.getElementById("bubbySweaterShippedToAddress").checked = true
+						break
+					case 'sweater_bubby_ship_addr':
+						$("#bubbySweaterShippedToAddressInput").val(item.address)
+						break
+					case 'sweater_zaidy':
+						document.getElementById('sweaterForZaidy').checked = true
+						$("#sweaterForZaidySize").val(item.size)
+						$('#sweaterForZaidyDetails select').niceSelect('update');
+						$("#sweaterForZaidyDetails").show()
+						break;
+					case 'sweater_zaidy_ship':
+						document.getElementById("zaidySweaterShippedToAddress").checked = true
+						break
+					case 'sweater_zaidy_ship_addr':
+						$("#zaidySweaterShippedToAddressInput").val(item.address)
+						break
+				}
+			}
+
+			$('.form2 select').niceSelect('update');
 			$(".form2").show()
 			$(window).scrollTop(400)
 		})
