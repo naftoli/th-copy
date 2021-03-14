@@ -10,7 +10,7 @@ $year = GlobalSettings::getChidonYear();
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
-$sql = "select * from th_chidon_parent_purchases where authorize_id > 1 and admin_id = " . $admin_id;
+$sql = "select sum(amount) as total from th_chidon_parent_purchases where authorize_id > 1 and admin_id = " . $admin_id;
 $result = mysql_query($sql);
 if (mysql_num_rows($result) > 0) {
     $row = mysql_fetch_assoc($result);
@@ -18,7 +18,7 @@ if (mysql_num_rows($result) > 0) {
         'success'   => true,
         'payment'   => [
             'id'    => $row['th_chidon_parent_purchase_id'],
-            'amount'    => $row['amount']
+            'amount'    => $row['total']
         ]
     ]);
     exit;

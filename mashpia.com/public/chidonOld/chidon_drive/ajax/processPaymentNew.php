@@ -12,11 +12,9 @@ $year = GlobalSettings::getChidonYear();
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
 require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
-require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 
 use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
-use classes\authorize\PaymentProfile;
 
 require __DIR__ . '/../encrypt.php';
 $admin = $_COOKIE['chidon_admin'];
