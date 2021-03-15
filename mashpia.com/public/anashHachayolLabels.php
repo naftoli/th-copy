@@ -115,7 +115,7 @@ $parents = $m->getSortedAdmins();
 					echo "<span class='name'>";
 					echo "<b>";
                     if (checkChidon($admin_id)) echo "*";
-					echo $name . " Family </b><br />" . $address . "</span></div>";
+					echo $name . " Family (AK) </b><br />" . $address . "</span></div>";
 					checkForBreak();
 					/*
 					echo "<div class='label'>";
