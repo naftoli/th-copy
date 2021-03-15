@@ -58,18 +58,19 @@ foreach ($transactions as $admin_id => $details) {
     <tr>
         <th>Admin ID</th>
         <th>Name</th>
+        <th>Date</th>
         <th>Amount</th>
         <th>Type</th>
         <th>Desc</th>
-        <th>Date</th>
         <th>Children Registrations</th>
     </tr>
     <?php
     foreach ($transactions as $admin_id => $more) {
         foreach ($more as $transaction) {
-            echo "<tr><td>" . $admin_id . "</td><td>" . $transaction['first'] . ' ' . $transaction['last'] . "</td><td>" .
+            echo "<tr><td>" . $admin_id . "</td><td>" . $transaction['first'] . ' ' . $transaction['last'] .
+                "</td><td>" . $transaction['purchase_date'] . "</td><td>" .
                 $transaction['amount'] . "</td><td>" . $transaction['authorize_trans_type'] . "</td><td>" .
-                $transaction['authorize_desc'] . "</td><td>" . $transaction['purchase_date'] . "</td><td><table>";
+                $transaction['authorize_desc'] . "</td><td><table>";
             foreach ($children[$admin_id] as $child) {
                 echo "<tr><td>" . $child['user_id'] . "</td><td>" . $child['first'] . "</td><td>" . $child['paid'] .
                         "</td><td>" . $child['date_paid'] . "</td></tr>";
