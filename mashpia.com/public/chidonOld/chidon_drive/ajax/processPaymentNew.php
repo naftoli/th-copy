@@ -413,7 +413,7 @@ $descriptions = [
 
 $subject = "Chidon Registration for " . $year;
 $message = '';
-if ($amount) {
+if (parseInt($amount) > 0) {
     $message .= "Thank you for your payment of $" . $amount . ".";
     if ($method == 'hold') $message .= " Your payment has been put on hold. ";
     $message .= "Your transaction id is: " . $trans_id . "<br />
