@@ -22,6 +22,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_id']][] = $row;
 }
+//echo "<pre>"; print_r($info); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,8 +59,8 @@ foreach ($info as $school_id => $prizes) {
         echo "<tr><td>" . $grade . "</td><td>" . $prize['first'] . ' ' . $prize['last'] . "</td><td>" .
             $prize['prize_name'] . "</td><td>" . $prize['size'] . "</td><td>" . $prize['color'] . "</td></tr>";
     }
+    echo "</table>";
 }
 ?>
-</table>
 </body>
 </html>
