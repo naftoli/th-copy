@@ -14,7 +14,7 @@ if ($admin_user['auth'] != 'super') {
 
 $transactions = [];
 $sql = "select tc.*, a.first, a.last from th_chidon_parent_purchases tc 
-        join admins using (admin_id)
+        join admins a using (admin_id)
         order by admin_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
