@@ -42,6 +42,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
 <h1>Prizes Report</h1>
 <?php
+$prize_totals = [];
 foreach ($info as $school_id => $prizes) {
     echo "<h2>" . $schools[$school_id] . "</h2>";
     ?>
@@ -55,12 +56,21 @@ foreach ($info as $school_id => $prizes) {
         </tr>
     <?php
     foreach ($prizes as $prize) {
+        if (isset($prize_totals[$prize['prize_name']])) $prize_totals[$prize['prize_name']]++;
+        else $prize_totals[$prize['prize_name']] = 1;
         $grade = $prize['class_grade'] . (empty($prize['class_sub']) ? '' : '-' . $prize['class_sub']);
         echo "<tr><td>" . $grade . "</td><td>" . $prize['first'] . ' ' . $prize['last'] . "</td><td>" .
             $prize['prize_name'] . "</td><td>" . $prize['size'] . "</td><td>" . $prize['color'] . "</td></tr>";
     }
     echo "</table>";
 }
+
+echo "<h2>Prize Totals</h2>";
+echo "<table><tr><th>Prize</th><th>Total</th></tr>";
+foreach ($prize_totals as $prize => $total) {
+    echo "<tr><td>" . $prize . "</td><td>" . $total . "</td></tr>";
+}
+echo "</table>";
 ?>
 </body>
 </html>
