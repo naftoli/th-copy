@@ -13,7 +13,8 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $transactions = [];
-$sql = "select tc.*, a.first, a.last from th_chidon_parent_purchases tc 
+$sql = "select tc.*, a.first, a.last 
+        from th_chidon_parent_purchases tc 
         join admins a using (admin_id)
         order by admin_id, purchase_date";
 $result = mysql_query($sql);
@@ -63,6 +64,7 @@ foreach ($transactions as $admin_id => $details) {
         <th>Type</th>
         <th>Desc</th>
         <th>Children Registrations</th>
+        <th>Purchases</th>
     </tr>
     <?php
     foreach ($transactions as $admin_id => $more) {
@@ -75,6 +77,17 @@ foreach ($transactions as $admin_id => $details) {
                 echo "<tr><td>" . $child['user_id'] . "</td><td>" . $child['first'] . "</td><td>" . $child['paid'] .
                         "</td><td>" . $child['date_paid'] . "</td></tr>";
             }
+            echo "</table></td><td><table>";
+            if ($transaction['celeb_box_add']) echo "<tr><td>Additional Celebration Box - $20</td></tr>";
+            if ($transaction['celeb_box_add_ship']) echo "<tr><td>Shipping for Additional Celebration Box - $10</td></tr>";
+            if ($transaction['sweater_mother']) echo "<tr><td>Sweater for Mother, Size: " . $transaction['sweater_mother'] . " - $25</td></tr>";
+            if ($transaction['sweater_mother_ship']) echo "<tr><td>Shipping for mother sweater - $10</td></tr>";
+            if ($transaction['sweater_father']) echo "<tr><td>Sweater for Father, Size: " . $transaction['sweater_father'] . " - $25</td></tr>";
+            if ($transaction['sweater_father_ship']) echo "<tr><td>Shipping for father sweater - $10</td></tr>";
+            if ($transaction['sweater_bubby']) echo "<tr><td>Sweater for Bubby, Size: " . $transaction['sweater_bubby'] . " - $25</td></tr>";
+            if ($transaction['sweater_bubby_ship']) echo "<tr><td>Shipping for bubby sweater - $10</td></tr>";
+            if ($transaction['sweater_zaidy']) echo "<tr><td>Sweater for Zaidy, Size: " . $transaction['sweater_zaidy'] . " - $25</td></tr>";
+            if ($transaction['sweater_zaidy_ship']) echo "<tr><td>Shipping for zaidy sweater - $10</td></tr>";
             echo "</table></td></tr>";
         }
     }
