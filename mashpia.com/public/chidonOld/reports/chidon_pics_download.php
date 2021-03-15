@@ -17,9 +17,16 @@ function createZip($files, $filename) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
+        $file_contents = @file_get_contents($file);
+        if ($file_contents) {
+            $zip->addFromString($file, $file_contents);
+        }
     }
     $zip->close();
+}
+
+function custom_urlencode($url) {
+    return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
 $info = [];
@@ -37,14 +44,14 @@ foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
         $img = 'http://mashpia.com/mobile/reg/img/addphoto.png';
         if (!empty($child['chidon_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['chidon_pic'];
+            $img = 'http://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic']);
         } else if (!empty($child['mobile_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['mobile_pic'];
+            $img = 'http://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic']);
         } else if (
             !empty($child['thumb'])
-            && file_exists('http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'])
+            && file_exists('http://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb']))
         ) {
-            $img = 'http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'];
+            $img = 'http://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb']);
         } else if (!empty($child['user_photo_id'])) {
             $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
         }
