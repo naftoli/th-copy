@@ -306,7 +306,7 @@ function processPrizes() {
         // remove existing prizes for this user
         $delete = [];
         $qry = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year . " and prize_id not in (
-        select prize_id from chidon_prizes where purchased >= quantity)";
+                select prize_id from chidon_prizes where purchased >= quantity)";
         $result = mysql_query($qry);
         while ($row = mysql_fetch_assoc($result)) {
             $delete[] = "delete from chidon_user_prizes where prize_id = " . $row['prize_id'] . " and user_id = " . $user_id . " and year = " . $year;
@@ -422,9 +422,9 @@ if ($amount) {
     $message .= "Thank you for submitting your application.<br /><br />";
 }
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
-else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
+//else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
-else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
+//else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
 if ($prizesProcessed) $message .= "Your prize selection has been saved.<br /><br />";
 
