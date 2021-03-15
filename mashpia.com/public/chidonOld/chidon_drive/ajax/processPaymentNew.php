@@ -413,7 +413,7 @@ $descriptions = [
 
 $subject = "Chidon Registration for " . $year;
 $message = '';
-if (parseInt($amount) > 0) {
+if ($amount > 0) {
     $message .= "Thank you for your payment of $" . $amount . ".";
     if ($method == 'hold') $message .= " Your payment has been put on hold. ";
     $message .= "Your transaction id is: " . $trans_id . "<br />
@@ -421,6 +421,7 @@ if (parseInt($amount) > 0) {
 } else {
     $message .= "Thank you for submitting your application.<br /><br />";
 }
+
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
 else $message .= "There was an error registering your child(ren) for the chidon. We are looking into this. We will contact you if we need more information.<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
@@ -428,7 +429,7 @@ else $message .= "There was an error saving your extra purchases. We are looking
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
 if ($prizesProcessed) $message .= "Your prize selection has been saved.<br /><br />";
 
-if (!$cartProcessed['reg'] || !$cartProcessed['purchase']) $headers[] = "Cc: support@tzivoshashem.org";
+if (!$cartProcessed['reg'] || !$cartProcessed['purchase']) $headers[] = "Bcc: support@tzivoshashem.org";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
 foreach ($cart as $user_id => $items) {
@@ -443,6 +444,7 @@ foreach ($cart as $user_id => $items) {
     }
 }
 $message .= "</ul><br />";
+
 $mail_success = mail($email, $subject, $message, implode("\r\n", $headers));
 
 $res_msg = "Your transaction has been processed. Your transaction ID is: " . $trans_id . ".\n";

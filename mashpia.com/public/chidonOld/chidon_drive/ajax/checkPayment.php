@@ -17,7 +17,6 @@ if (mysql_num_rows($result) > 0) {
     echo json_encode([
         'success'   => true,
         'payment'   => [
-            'id'    => $row['th_chidon_parent_purchase_id'],
             'amount'    => $row['total']
         ]
     ]);

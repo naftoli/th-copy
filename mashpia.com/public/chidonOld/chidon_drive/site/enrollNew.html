@@ -2198,9 +2198,9 @@
 		// check if admin already payed for registration
 		$.post('../ajax/checkPayment.php', { admin: Cookies.get('chidon_admin') }, function(result) {
 			const res = JSON.parse(result)
-			if (res.success && res.payment.id) {
+			if (res.success && res.payment.amount) {
 				const item = {
-					id: parseInt(res.payment.id),
+					id: 0,
 					desc: 'past_payment',
 					amount: parseFloat(res.payment.amount) * -1
 				}
