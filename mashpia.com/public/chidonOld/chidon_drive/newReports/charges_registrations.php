@@ -21,7 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $children = [];
 foreach ($transactions as $admin_id => $details) {
-    $sql = "select user_id, paid from th_chidon where parent_id = " . $admin_id . " and year = " . $year;
+    $sql = "select user_id, paid, date_paid from th_chidon where parent_id = " . $admin_id . " and year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $children[$admin_id][] = $row;
@@ -49,15 +49,17 @@ foreach ($transactions as $admin_id => $details) {
         <th>Amount</th>
         <th>Type</th>
         <th>Desc</th>
+        <th>Date</th>
         <th>Children</th>
     </tr>
     <?php
     foreach ($transactions as $admin_id => $more) {
         foreach ($more as $transaction) {
             echo "<tr><td>" . $admin_id . "</td><td>" . $transaction['amount'] . "</td><td>" .
-                $transaction['authorize_trans_type'] . "</td><td>" . $transaction['authorize_desc'] . "</td><td><table>";
+                $transaction['authorize_trans_type'] . "</td><td>" . $transaction['authorize_desc'] . "</td><td>" .
+                $transaction['purchase_date'] . "</td><td><table>";
             foreach ($children[$admin_id] as $child) {
-                echo "<tr><td>" . $child['user_id'] . "</td><td>" . $child['amount'] . "</td></tr>";
+                echo "<tr><td>" . $child['user_id'] . "</td><td>" . $child['paid'] . "</td><td>" . $child['date_paid'] . "</td></tr>";
             }
             echo "</table></td></tr>";
         }
