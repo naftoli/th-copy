@@ -13,7 +13,9 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $transactions = [];
-$sql = "select * from th_chidon_parent_purchases order by admin_id";
+$sql = "select tc.*, a.first, a.last from th_chidon_parent_purchases tc 
+        join admins using (admin_id)
+        order by admin_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $transactions[$row['admin_id']][] = $row;
@@ -39,6 +41,12 @@ foreach ($transactions as $admin_id => $details) {
             font-size: 14px;
             padding: 10px;
         }
+        tr {
+            margin-bottom: 1px solid black;
+        }
+        td {
+            vertical-align: top;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +54,7 @@ foreach ($transactions as $admin_id => $details) {
 <table>
     <tr>
         <th>Admin ID</th>
+        <th>Name</th>
         <th>Amount</th>
         <th>Type</th>
         <th>Desc</th>
@@ -55,9 +64,9 @@ foreach ($transactions as $admin_id => $details) {
     <?php
     foreach ($transactions as $admin_id => $more) {
         foreach ($more as $transaction) {
-            echo "<tr><td>" . $admin_id . "</td><td>" . $transaction['amount'] . "</td><td>" .
-                $transaction['authorize_trans_type'] . "</td><td>" . $transaction['authorize_desc'] . "</td><td>" .
-                $transaction['purchase_date'] . "</td><td><table>";
+            echo "<tr><td>" . $admin_id . "</td><td>" . $transaction['first'] . ' ' . $transaction['last'] . "</td><td>" .
+                $transaction['amount'] . "</td><td>" . $transaction['authorize_trans_type'] . "</td><td>" .
+                $transaction['authorize_desc'] . "</td><td>" . $transaction['purchase_date'] . "</td><td><table>";
             foreach ($children[$admin_id] as $child) {
                 echo "<tr><td>" . $child['user_id'] . "</td><td>" . $child['paid'] . "</td><td>" . $child['date_paid'] . "</td></tr>";
             }
