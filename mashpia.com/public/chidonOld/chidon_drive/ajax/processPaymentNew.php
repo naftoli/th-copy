@@ -428,7 +428,7 @@ else $message .= "There was an error saving your extra purchases. We are looking
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
 if ($prizesProcessed) $message .= "Your prize selection has been saved.<br /><br />";
 
-if (!$cartProcessed['reg'] || !$cartProcessed['purchase']) $headers[] = "CC: support@tzivoshashem.org";
+if (!$cartProcessed['reg'] || !$cartProcessed['purchase']) $headers[] = "Cc: support@tzivoshashem.org";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
 foreach ($cart as $user_id => $items) {
