@@ -422,11 +422,13 @@ if ($amount) {
     $message .= "Thank you for submitting your application.<br /><br />";
 }
 if ($cartProcessed['reg']) $message .= "Your child(ren) have been successfully registered for the chidon.<br /><br />";
-//else $message .= "There was an error registering your child(ren) for the chidon. Please contact HQ (718-907-8884).<br /><br />";
+else $message .= "There was an error registering your child(ren) for the chidon. We are looking into this. We will contact you if we need more information.<br /><br />";
 if ($cartProcessed['purchase']) $message .= "You extra purchases have been saved.<br /><br />";
-//else $message .= "There was an error saving your extra purchases. Please contact HQ (718-907-8884).<br /><br />";
+else $message .= "There was an error saving your extra purchases. We are looking into this. We will contact you if we need more information.<br /><br />";
 if ($voucherProcessed) $message .= "Your coupon code was applied.<br /><br />";
 if ($prizesProcessed) $message .= "Your prize selection has been saved.<br /><br />";
+
+if (!$cartProcessed['reg'] || !$cartProcessed['purchase']) $headers[] = "CC: support@tzivoshashem.org";
 
 $message .= "The details of your purchases are as follows:<br /><br /><ul>";
 foreach ($cart as $user_id => $items) {
