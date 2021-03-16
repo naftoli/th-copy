@@ -89,26 +89,21 @@ $imgs = []; // array for keeping track of all pictures that are showing up
                 </tr>
                 <?php
                 foreach ( $children as $child ) {
-                    $img = 'http://mashpia.com/mobile/reg/img/addphoto.png';
-                    if ( !empty($child['chidon_pic']) ) {
-                        $img = 'http://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic']);
-                    } 
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png'
-                        && !empty($child['mobile_pic']) 
-                        ) {
-                        $img = 'http://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic']);
-                    } 
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png' 
-                        && !empty($child['thumb']) 
-                        && file_exists('http://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb']))
-                        ) {
-                        $img = 'http://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb']);
+                    $img_fallbacks = [
+                        ['val' => $child['chidon_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic'])],
+                        ['val' => $child['mobile_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+                        ['val' => $child['thumb'],          'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+                        ['val' => $child['user_photo_id'],  'url' => 'https://mashpia.com/file_view.php?id=' . $child['user_photo_id']],
+                        ['val' => true,                     'url' => 'https://mashpia.com/mobile/reg/img/addphoto.png']
+                    ];
+                    $img = null;
+                    // find first valid image
+                    foreach($img_fallbacks as $img_fallback) {
+                        if ( !empty($img_fallback['val']) && $img_fallback['val'] !== 'img/addphoto.png' ) {
+                            $img = $img_fallback['url'];
+                            break;
+                        }
                     }
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png' 
-                        && !empty($child['user_photo_id']) 
-                        ) {
-                        $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
-                    } 
                     echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
                     if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
