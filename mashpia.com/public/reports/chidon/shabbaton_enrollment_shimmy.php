@@ -23,7 +23,7 @@ $users_query = mysql_query(
     ." JOIN users u USING (user_id) "
     ." JOIN classes c USING (class_id) "
     ." JOIN admins a ON parent_id = admin_id "
-    ." WHERE th.school_id = $school_id AND th.year = $year "
+    ." WHERE th.year = $year "
     ." AND (th.shabbaton_maven = 1 or th.shabbaton_pro = 1 or th.shabbaton_expert = 1 or th.shabbaton_trophy = 1) "
     ." AND th.date_paid is null "
     ." ORDER BY class_grade, class_sub, u.last "
@@ -33,7 +33,7 @@ $users = [];
 while($row = mysql_fetch_assoc($users_query)){
     $users[$row['school_id']] = $row;
 }
-
+echo "<pre>"; print_r($users); echo "</pre>";
 $skipped = [
     13547,13548,13551,13552,13553,13554,13581,13585,13586,13591,13592,13593,13594,13595,13599,13600,13601,13605,13606,
     13608,13609,13610,13611,13612,13613,13614,13616,13617,13619,13628,13632,13633,13634,13635,13636,13637,13640,13644,13645,
