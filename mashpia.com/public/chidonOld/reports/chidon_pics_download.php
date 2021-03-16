@@ -17,10 +17,13 @@ function createZip($files, $filename) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file_with_fallbacks) {
-        foreach($file_with_fallbacks as $file) {
+        $filename = $file_with_fallbacks['filename'];
+        $fallbacks = $file_with_fallbacks['fallbacks'];
+        foreach($fallbacks as $file) {
             $file_contents = @file_get_contents($file);
             if ($file_contents) {
-                $zip->addFromString($file, $file_contents);
+                $extension = end(explode('.', $file));
+                $zip->addFromString("$filename.$extension", $file_contents);
                 break;
             }
         }
@@ -56,7 +59,7 @@ foreach ( $info as $id => $children ) {
             return !empty($img['val']) && $img['val'] !== 'img/addphoto.png';
         });
         // map to urls,
-        $imgs[] = array_column($img_fallbacks, 'url');
+        $imgs[] = ['filename' => $child['th_chidon_id'], 'fallbacks' => array_column($img_fallbacks, 'url')];
     }
 }
 
