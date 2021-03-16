@@ -2000,6 +2000,7 @@
 					let elem = "#prize_" + prize.prize_id
 					$(elem).trigger('click')
 					$(elem).parent().find('.he_name').val(prize.he_name)
+					$(elem).parent().find('.he_name').trigger('blur')
 				}
 			})
 		})
@@ -2025,6 +2026,7 @@
 		let add = true
 		for (let prize of prizes[selectedChildId]) {
 			if (prize_item.id == prize.id && prize_item.amount == prize.amount) {
+				if (prize_item.he_name) prize.he_name = prize_item.he_name
 				add = false
 			}
 		}
@@ -2461,7 +2463,6 @@
 				id: info[0],
 				amount: info[1]
 			}
-			console.log(prize)
 			if ($(this).is(":checked")) {
 				if (!addToPrizes(prize)) {
 					$(this).trigger('click')

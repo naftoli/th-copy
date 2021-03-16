@@ -1,0 +1,80 @@
+<?php
+require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
+require 'encrypt.php';
+$admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
+
+$purchases = [];
+$sql = "select * from th_chidon_parent_purchases where authorize_id > 1 and admin_id = " . $admin_id;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $purchases[$row['admin_id']][] = $row;
+}
+
+$info = [];
+$fields = ['celeb_box', 'celeb_box_add', 'celeb_box_add_ship', 'celeb_box_add_addr', 'sweater_mother', 'sweater_mother_ship',
+    'sweater_mother_ship_addr', 'sweater_father', 'sweater_father_ship', 'sweater_father_ship_addr', 'sweater_bubby',
+    'sweater_bubby_ship', 'sweater_bubby_ship_addr', 'sweater_zaidy', 'sweater_zaidy_ship', 'sweater_zaidy_ship_addr'];
+foreach ($purchases as $admin => $details) {
+    foreach ($details as $purchase) {
+        foreach ($fields as $field) {
+            if (!isset($info[$field])) $info[$field] = $purchase[$field];
+            else {
+                switch ($field) {
+                    case 'celeb_box':
+                    case 'celeb_box_add':
+                    case 'celeb_box_add_ship':
+                    case 'sweater_mother_ship':
+                    case 'sweater_father_ship':
+                    case 'sweater_bubby_ship':
+                    case 'sweater_zaidy_ship':
+                        if ($purchase[$field] > $info[$field]) $info[$field] = $purchase[$field];
+                        break;
+                    case 'sweater_mother':
+                    case 'sweater_father':
+                    case 'sweater_bubby':
+                    case 'sweater_zaidy':
+                    case 'celeb_box_add_addr':
+                    case 'sweater_mother_ship_addr':
+                    case 'sweater_father_ship_addr':
+                    case 'sweater_bubby_ship_addr':
+                    case 'sweater_zaidy_ship_addr':
+                        if (!empty($purchase[$field])) $info[$field] = $purchase[$field];
+                }
+            }
+        }
+    }
+}
+
+$children = [];
+$sql = "select user_id, first, paid 
+        from th_chidon tc 
+        join users using (user_id) 
+        where tc.year = " . $year . " 
+        and tc.parent_id = " . $admin_id;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $children[$row['user_id']] = $row;
+}
+
+$prizes = [];
+foreach ($children as $user_id => $child) {
+    $sql = "select cp.prize_name, cup.he_name 
+            from chidon_user_prizes cup 
+            join chidon_prizes cp using (prize_id) 
+            where cup.user_id = " . $user_id . " 
+            and cup.year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$user_id][] = $row;
+    }
+}
+
+echo json_encode([
+    'transactions' => $purchases,
+    'purchases' => $info,
+    'children'  => $children,
+    'prizes'    => $prizes
+]);
