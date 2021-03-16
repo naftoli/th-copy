@@ -16,10 +16,23 @@ function createZip($files, $filename) {
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
-    foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
+    foreach($files as $file_with_fallbacks) {
+        $filename = $file_with_fallbacks['filename'];
+        $fallbacks = $file_with_fallbacks['fallbacks'];
+        foreach($fallbacks as $file) {
+            $file_contents = @file_get_contents($file);
+            if ($file_contents) {
+                $extension = end(explode('.', $file));
+                $zip->addFromString("$filename.$extension", $file_contents);
+                break;
+            }
+        }
     }
     $zip->close();
+}
+
+function custom_urlencode($url) {
+    return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
 $info = [];
@@ -35,22 +48,18 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
-        $img = 'http://mashpia.com/mobile/reg/img/addphoto.png';
-        if (!empty($child['chidon_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['chidon_pic'];
-        } else if (!empty($child['mobile_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['mobile_pic'];
-        } else if (
-            !empty($child['thumb'])
-            && file_exists('http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'])
-        ) {
-            $img = 'http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'];
-        } else if (!empty($child['user_photo_id'])) {
-            $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
-        }
-        if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
-            $imgs[] = $img;
-        }
+        $img_fallbacks = [
+            ['val' => $child['chidon_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic'])],
+            ['val' => $child['mobile_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+            ['val' => $child['thumb'],          'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+            ['val' => $child['user_photo_id'],  'url' => 'https://mashpia.com/file_view.php?id=' . $child['user_photo_id']]
+        ];
+        // filter blank/invalid values
+        $img_fallbacks = array_filter($img_fallbacks, function($img){
+            return !empty($img['val']) && $img['val'] !== 'img/addphoto.png';
+        });
+        // map to urls,
+        $imgs[] = ['filename' => $child['th_chidon_id'], 'fallbacks' => array_column($img_fallbacks, 'url')];
     }
 }
 

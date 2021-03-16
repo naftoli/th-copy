@@ -46,6 +46,10 @@ function createZip($files, $filename) {
 
 }
 
+function custom_urlencode($url) {
+    return implode('/', array_map('rawurlencode', explode('/', $url)));
+}
+
 $imgs = []; // array for keeping track of all pictures that are showing up
 ?>
 <!DOCTYPE html>
@@ -74,7 +78,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
     <BODY>
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Chidon Pictures</h1>
-        <a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>
+        <a href="chidon_pics_download.php" target="__blank" download="chidonPics.zip"><button id="downloadPics">Download Pictures</button></a>
         <?php foreach ( $info as $id => $children ) : ?>
             <h2><?= $schools[$id] ?></h2>
             <table class="pics">
@@ -85,26 +89,21 @@ $imgs = []; // array for keeping track of all pictures that are showing up
                 </tr>
                 <?php
                 foreach ( $children as $child ) {
-                    $img = 'http://mashpia.com/mobile/reg/img/addphoto.png';
-                    if ( !empty($child['chidon_pic']) ) {
-                        $img = 'http://mashpia.com/mobile/reg/' . $child['chidon_pic'];
-                    } 
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png'
-                        && !empty($child['mobile_pic']) 
-                        ) {
-                        $img = 'http://mashpia.com/mobile/reg/' . $child['mobile_pic'];
-                    } 
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png' 
-                        && !empty($child['thumb']) 
-                        && file_exists('http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'])
-                        ) {
-                        $img = 'http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'];
+                    $img_fallbacks = [
+                        ['val' => $child['chidon_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic'])],
+                        ['val' => $child['mobile_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+                        ['val' => $child['thumb'],          'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+                        ['val' => $child['user_photo_id'],  'url' => 'https://mashpia.com/file_view.php?id=' . $child['user_photo_id']],
+                        ['val' => true,                     'url' => 'https://mashpia.com/mobile/reg/img/addphoto.png']
+                    ];
+                    $img = null;
+                    // find first valid image
+                    foreach($img_fallbacks as $img_fallback) {
+                        if ( !empty($img_fallback['val']) && $img_fallback['val'] !== 'img/addphoto.png' ) {
+                            $img = $img_fallback['url'];
+                            break;
+                        }
                     }
-                    if ( $img == 'http://mashpia.com/mobile/reg/img/addphoto.png' 
-                        && !empty($child['user_photo_id']) 
-                        ) {
-                        $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
-                    } 
                     echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
                     if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
