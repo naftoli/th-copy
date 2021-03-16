@@ -97,16 +97,16 @@ foreach ($eligibility as $id => $value) {
     $qrys[] = "update th_chidon set shabbaton_maven = 0, shabbaton_pro = 0, shabbaton_expert = 0, shabbaton_trophy = 0 where th_chidon_id = " . $id;
     switch ($value) {
         case 'sweater':
-            $qrys[] = "update th_chidon set shabbaton_maven = 1 where th_chidon_id = $id";
+            $qrys[] = "update th_chidon set can_enroll = 1, shabbaton_maven = 1 where th_chidon_id = $id";
             break;
         case 'gifts':
-            $qrys[] = "update th_chidon set shabbaton_pro = 1 where th_chidon_id = $id";
+            $qrys[] = "update th_chidon set can_enroll = 1, shabbaton_pro = 1 where th_chidon_id = $id";
             break;
         case 'trips':
-            $qrys[] = "update th_chidon set shabbaton_expert = 1 where th_chidon_id = $id";
+            $qrys[] = "update th_chidon set can_enroll = 1, shabbaton_expert = 1 where th_chidon_id = $id";
             break;
         case 'trophy':
-            $qrys[] = "update th_chidon set shabbaton_trophy = 1 where th_chidon_id = $id";
+            $qrys[] = "update th_chidon set can_enroll = 1, shabbaton_trophy = 1 where th_chidon_id = $id";
             break;
     }
 }
