@@ -31,7 +31,7 @@ $users_query = mysql_query(
 
 $users = [];
 while($row = mysql_fetch_assoc($users_query)){
-    $users[$row['school_id']] = $row;
+    $users[$row['school_id']][] = $row;
 }
 
 $skipped = [
