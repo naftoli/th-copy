@@ -4,11 +4,6 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
 /***************** LOAD SCHOOLS **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
@@ -23,7 +18,7 @@ $users_query = mysql_query(
     ." JOIN users u USING (user_id) "
     ." JOIN classes c USING (class_id) "
     ." JOIN admins a ON parent_id = admin_id "
-    ." WHERE th.year = $year "
+    ." WHERE th.year = $year and u.school_id in (" . implode(',', array_keys($schools)) . ") "
     ." AND (th.shabbaton_maven = 1 or th.shabbaton_pro = 1 or th.shabbaton_expert = 1 or th.shabbaton_trophy = 1) "
     ." AND th.date_paid is null "
     ." ORDER BY class_grade, class_sub, u.last "
@@ -96,6 +91,7 @@ $skipped = [
             ?>
             <table>
                 <tr>
+                    <th>School</th>
                     <th>Grade</th>
                     <th>Name</th>
                     <th>Father Cell</th>
@@ -107,7 +103,8 @@ $skipped = [
                 <?php
                 foreach ($details as $user) {
                     $grade = $user['class_grade'] . (empty($user['class_sub'] ? '' : '-' . $user['class_sub']));
-                    echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>" .
+                    echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" .
+                        $user['first'] . ' ' . $user['last'] . "</td><td>" .
                         $user['admin_phone_mobile'] . "</td><td>" . $user['admin_phone_mobile2'] . "</td><td>" .
                         $user['admin_email'] . "</td><td>";
                     if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
