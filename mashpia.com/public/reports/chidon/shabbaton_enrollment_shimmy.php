@@ -91,6 +91,7 @@ $skipped = [
             ?>
             <table>
                 <tr>
+                    <th></th>
                     <th>School</th>
                     <th>Grade</th>
                     <th>Name</th>
@@ -101,9 +102,9 @@ $skipped = [
                     <th>Eligible For</th>
                 </tr>
                 <?php
-                foreach ($details as $user) {
-                    $grade = $user['class_grade'] . (empty($user['class_sub'] ? '' : '-' . $user['class_sub']));
-                    echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" .
+                foreach ($details as $idx => $user) {
+                    $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
+                    echo "<tr><td>" . ($idx + 1) . "</td><td>" . $schools[$school_id] . "</td><td>" . $grade . "</td><td>" .
                         $user['first'] . ' ' . $user['last'] . "</td><td>" .
                         $user['admin_phone_mobile'] . "</td><td>" . $user['admin_phone_mobile2'] . "</td><td>" .
                         $user['admin_email'] . "</td><td>";
