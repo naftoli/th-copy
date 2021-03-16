@@ -77,6 +77,13 @@ $skipped = [
     <meta charset="utf8" />
     <link href="/admin_styles.css" rel="stylesheet" type="text/css">
     <title>Needs to Register Report</title>
+    <style>
+        tr, th, td {
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 14px;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
