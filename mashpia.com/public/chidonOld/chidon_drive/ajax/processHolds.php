@@ -10,6 +10,19 @@ $year = GlobalSettings::getChidonYear();
 
 require 'authorize.php';
 
+// find parents with duplicates so that we don't process holds as of now
+$duplicates = [];
+$sql = "select admin_id, count(*) as total 
+        from th_chidon_parent_purchases 
+        where authorize_trans_type = 'hold' 
+        and authorize_id > 1 
+        group by admin_id 
+        having total > 1";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $duplicates[] = $row['admin_id'];
+}
+
 // find parents with holds and their trans id numbers
 $parents = [];
 $sql = "SELECT 
@@ -21,6 +34,8 @@ $sql = "SELECT
                 AND authorize_id > 1";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
+    // skip parents with duplicated
+    if (in_array($row['admin_id'], $duplicates)) continue;
     $parents[] = $row;
 }
 
@@ -40,13 +55,20 @@ foreach ($parents as $idx => $parent) {
 }
 
 foreach ($parents as $idx => $parent) {
+    if ($idx == 5) break;
     echo $idx + 1 . ") ";
     // figure out how much to charge
     $charge = floatval($parent['amount']) - floatval($parent['raised']);
     if ($charge <= 0) {
         echo "Parent ID: " . $parent['admin_id'] . " raised more than they were charged. 
             Raised: " . $parent['raised'] . " On Hold: " . $parent['amount'] . "<br />";
-        continue; // don't charge
+        $response = releaseHold($parent['authorize_id'], true);
+    } else {
+        echo "Parent ID: " . $parent['admin_id'] . " will be charged: " . $charge . "<br />";
+        $response = chargeHold($charge, $parent['authorize_id'], true);
     }
-    echo "Parent ID: " . $parent['admin_id'] . " will be charged: " . $charge . "<br />";
+    echo "<pre>";
+    print_r($response);
+    print_r(parseResponse($response));
+    echo "</pre>";
 }
