@@ -38,11 +38,12 @@ $sql = "SELECT
             authorize_id > 1";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    // skip parents with duplicated
+    // skip parents with duplicates
     if (in_array($row['admin_id'], $duplicates)) continue;
     $parents[] = $row;
 }
 
+$parentsToRemove = [];
 $children = [];
 foreach ($parents as $parent) {
     $admin_id = $parent['admin_id'];
@@ -53,7 +54,22 @@ foreach ($parents as $parent) {
             and tc.parent_id = " . $admin_id;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        if (!$row['paid'] || $row['paid'] > 185) {
+            $parentsToRemove[] = $admin_id;
+        }
         $children[$admin_id][] = $row;
+    }
+}
+
+// remove from list
+foreach ($parents as $idx => $parent) {
+    if (in_array($parent['admin_id'], $parentsToRemove)) {
+        unset($parents[$idx]);
+    }
+}
+foreach ($children as $admin_id => $details) {
+    if (in_array($admin_id, $parentsToRemove)) {
+        unset($children[$admin_id]);
     }
 }
 
@@ -110,7 +126,8 @@ foreach ($children as $admin_id => $more) {
             <th>Total Non-Registration Charges</th>
             <th>ChidonDrive Raised</th>
             <th>Rohr Subsidy</th>
-            <th>ChidonDrive Subsidy</th>
+            <th>Total ChidonDrive Subsidy</th>
+            <th>50% Subsidy for Registration</th>
             <th>Balance</th>
         </tr>
         <?php
@@ -170,7 +187,21 @@ foreach ($children as $admin_id => $more) {
             foreach ($children[$parent['admin_id']] as $child) {
                 echo $child['first'] . ": " . $subsidy[$child['user_id']] . "<br />";
             }
-            echo "</td><td></td></tr>";
+            echo "</td><td>";
+            foreach ($children[$parent['admin_id']] as $child) {
+                echo $child['first'] . ": " . floatval($subsidy[$child['user_id']] / 2) . "<br />";
+            }
+            echo "</td><td>";
+            // balance is registration charge minus 50% subsidy per child plus non registration charges
+            $balance = 0;
+            foreach ($children[$parent['admin_id']] as $child) {
+                $regAfterSubsidy = intval($child['paid']) - floatval($subsidy[$child['user_id']] / 2);
+                if ($regAfterSubsidy < 0) $regAfterSubsidy = 0;
+                $balance += $regAfterSubsidy;
+            }
+            $balance += $non_reg_total;
+            echo $balance;
+            echo "</td></tr>";
         }
         ?>
     </table>
