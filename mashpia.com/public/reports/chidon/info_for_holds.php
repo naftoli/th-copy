@@ -208,7 +208,7 @@ foreach ($children as $admin_id => $more) {
             echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]'";
             if ($parent['refund']) echo " value='" . $parent['refund'] . "'";
             echo " /></td><td>
-                <input type='button' name='refund' class='refund' value='Refund' /></td></tr>";
+                <input type='button' name='refund' class='refund' value='Save' style='width: 50px' /></td></tr>";
         }
         ?>
     </table>
