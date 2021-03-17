@@ -158,9 +158,16 @@ foreach ($parents as $parent) {
             if ($balance < 0) $balance = 0;
 
             echo $rohr . "</td><td>" . $subsidy . "</td><td>" . $balance . "</td><td>";
-            if ($balance == 0) echo "Total Refund" . "</td><td>" . $reg_total;
-            else if ($subsidy) echo "Partial Refund" . "</td><td>" . $subsidy;
-            else echo "No Refund" . "</td><td>";
+
+            if ($parent['authorize_trans_type'] == 'charge') {
+                if ($balance == 0) echo "Refund" . "</td><td>" . $reg_total;
+                else if ($subsidy) echo "Refund" . "</td><td>" . $subsidy;
+                else echo "No Refund" . "</td><td>";
+            } else if ($parent['authorize_trans_type'] == 'hold') {
+                if ($balance == 0) echo "Remove From Hold" . "</td><td>" . $reg_total;
+                else if ($subsidy) echo "Remove From Hold" . "</td><td>" . $subsidy;
+                else echo "Charge Entire Hold" . "</td><td>";
+            }
             echo "</td></tr>";
         }
         ?>
