@@ -159,7 +159,8 @@
                 for (p of prizes[id]) {
                     html += `Prize: ${p.prize_name}<br />`
                     if (p.prize_id >= 44 && p.prize_id <= 60) html += `Hebrew Name:
-                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" /><br />`
+                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
+                         <input type="button" value="Save" /><br />`
                 }
                 html += '<br />'
             }
