@@ -170,7 +170,7 @@ foreach ($children as $admin_id => $more) {
             }
             echo "</td><td>";
             foreach ($children[$parent['admin_id']] as $child) {
-                echo $child['first'] . ": " . $subsidy[$child['user_id']] . "</td><td>";
+                echo $child['first'] . ": " . $subsidy[$child['user_id']] . "<br />";
             }
             echo "</td><td></td></tr>";
         }
