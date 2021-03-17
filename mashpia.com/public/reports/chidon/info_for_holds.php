@@ -18,8 +18,7 @@ $year = GlobalSettings::getChidonYear();
 $duplicates = [];
 $sql = "select admin_id, count(*) as total 
         from th_chidon_parent_purchases 
-        where authorize_trans_type = 'hold' 
-        and authorize_id > 1 
+        where authorize_id > 1 
         group by admin_id 
         having total > 1";
 $result = mysql_query($sql);
@@ -36,8 +35,7 @@ $sql = "SELECT
         JOIN
             admins a USING (admin_id) 
         WHERE
-            authorize_trans_type = 'hold'
-                AND authorize_id > 1";
+            authorize_id > 1";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     // skip parents with duplicated
