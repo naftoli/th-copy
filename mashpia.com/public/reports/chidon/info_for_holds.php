@@ -161,20 +161,16 @@ foreach ($children as $admin_id => $more) {
                 }
             }
             echo "</td><td>";
-            foreach ($children as $admin_id => $details) {
-                foreach ($details as $child) {
-                    if (floatval($child['raised']) >= 270) {
-                        $subsidy[$child['user_id']] += 100;
-                        echo $child['first'] . ": 100<br />";
-                    } else
-                        echo $child['first'] . ": 0<br />";
-                }
+            foreach ($children[$parent['admin_id']] as $child) {
+                if (floatval($child['raised']) >= 270) {
+                    $subsidy[$child['user_id']] += 100;
+                    echo $child['first'] . ": 100<br />";
+                } else
+                    echo $child['first'] . ": 0<br />";
             }
             echo "</td><td>";
-            foreach ($children as $admin_id => $details) {
-                foreach ($details as $child) {
-                    echo $child['first'] . ": " . $subsidy[$child['user_id']] . "</td><td>";
-                }
+            foreach ($children[$parent['admin_id']] as $child) {
+                echo $child['first'] . ": " . $subsidy[$child['user_id']] . "</td><td>";
             }
             echo "</td><td></td></tr>";
         }
