@@ -130,13 +130,26 @@
             for (id in transactions) {
                 for (t of transactions[id]) {
                     html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
-                        Transaction ID: ${t.authorize_id}<br /><br />`
+                        Transaction ID: ${t.authorize_id}<br />Method: `
+                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br /><br />'
+                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br /><br />'
                 }
             }
             html += '<h4>Registrations</h4>'
             for (id in children) {
                 html += `User ID: ${children[id].user_id}<br />Name: ${children[id].first}<br />
-                    Paid: ${children[id].paid ? children[id].paid : 'NOT YET REGISTERED'}<br /><br/>`
+                    Paid: ${children[id].paid ? children[id].paid : 'NOT YET REGISTERED'}<br />`
+                if (children[id].gender == 'M') {
+                    const size = parseInt(children[id].yarmulka)
+                    html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${children[id].user_id}">`
+                    for (let i = 3; i <= 6; i++) {
+                        html += `<option value=${i}`
+                        if (i == size) html += ' selected'
+                        html += `>${i}</option>`
+                    }
+                    html += '</select><br />'
+                }
+                html += '<br />'
             }
 
             html += '<h4>Prizes:</h4>'
@@ -144,27 +157,41 @@
                 const name = children[id].first
                 html += `<h5>${name}</h5>`
                 for (p of prizes[id]) {
-                    html += `Prize: ${p.prize_name}<br />Hebrew Name: ${p.he_name ? p.he_name : ''}<br />`
+                    html += `Prize: ${p.prize_name}<br />`
+                    if (p.prize_id >= 44 && p.prize_id <= 60) html += `Hebrew Name:
+                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" /><br />`
                 }
+                html += '<br />'
             }
 
-            html += '<br /><h4>Extras</h4>'
-            html += `
-                Celebration Box(es): ${purchases.celeb_box}<br />
-                Extra Celebration Box - $20: ${purchases.celeb_box_add ? 'yes' : 'no'}<br />
-                Mother Sweater - $25: ${purchases.sweater_mother ? purchases.sweater_mother : 'none'}<br />
-                Mother Sweater Shipping - $10: ${parseInt(purchases.sweater_mother_ship) ? 'yes' : 'n/a'}<br />
-                Mother Sweater Shipping Address: ${purchases.sweater_mother_ship_addr ? purchases.sweater_mother_ship_addr : 'n/a'}<br/>
-                Father Sweater - $25: ${purchases.sweater_father ? purchases.sweater_father : 'none'}<br />
-                Father Sweater Shipping - $10: ${parseInt(purchases.sweater_father_ship) ? 'yes' : 'n/a'}<br />
-                Father Sweater Shipping Address: ${purchases.sweater_father_ship_addr ? purchases.sweater_father_ship_addr : 'n/a'}<br />
-                Bubby Sweater - $25: ${purchases.sweater_bubby ? purchases.sweater_bubby : 'none'}<br />
-                Bubby Sweater Shipping - $10: ${parseInt(purchases.sweater_bubby_ship) ? 'yes' : 'n/a'}<br />
-                Bubby Sweater Shipping Address: ${purchases.sweater_bubby_ship_addr ? purchases.sweater_bubby_ship_addr : 'n/a'}<br />
-                Zaidy Sweater - $25: ${purchases.sweater_zaidy ? purchases.sweater_zaidy : 'none'}<br />
-                Zaidy Sweater Shipping - $10: ${parseInt(purchases.sweater_zaidy_ship) ? 'yes' : 'n/a'}<br />
-                Zaidy Sweater Shipping Address: ${purchases.sweater_zaidy_ship_addr ? purchases.sweater_zaidy_ship_addr : 'n/a'}<br />
-            `
+            html += `<h4>Celebration Box(es): ${purchases.celeb_box}</h4>`
+
+            html += '<h4>Extras / Sweaters</h4>'
+            if (parseInt(purchases.celeb_box_add)) html += 'Extra Celebration Box - $20<br />'
+            if (purchases.sweater_mother) {
+                html += `Mother Sweater - $25, Size: ${purchases.sweater_mother}<br />`
+            }
+            if (parseInt(purchases.sweater_mother_ship)) {
+                html += `Mother Sweater Shipping - $10, Address: ${purchases.sweater_mother_ship_addr}<br />`
+            }
+            if (purchases.sweater_father) {
+                html += `Father Sweater - $25, Size: ${purchases.sweater_father}<br />`
+            }
+            if (parseInt(purchases.sweater_father_ship)) {
+                html += `Father Sweater Shipping - $10, Address: ${purchases.sweater_father_ship_addr}<br />`
+            }
+            if (purchases.sweater_bubby) {
+                html += `Bubby Sweater - $25, Size: ${purchases.sweater_bubby}<br />`
+            }
+            if (parseInt(purchases.sweater_bubby_ship)) {
+                html += `Bubby Sweater Shipping - $10, Address: ${purchases.sweater_bubby_ship_addr}<br />`
+            }
+            if (purchases.sweater_zaidy) {
+                html += `Zaidy Sweater - $25, Size: ${purchases.sweater_zaidy}<br />`
+            }
+            if (parseInt(purchases.sweater_zaidy_ship)) {
+                html += `Zaidy Sweater Shipping - $10, Address: ${purchases.sweater_zaidy_ship_addr}<br />`
+            }
 
             $("#purchaseInfo").append(html)
         })
@@ -173,6 +200,28 @@
             e.preventDefault()
             Cookies.set('chidon_admin', Cookies.get('admin'))
             location.href = 'http://chidondrive.com/site/enrollNew.html'
+        })
+
+        $(document).on('change', '.yarmulka', function() {
+            const id = $(this).attr('id')
+            const size = $(this).val()
+            $.post('ajax/updateYarmulka.php', { user: id, size: size }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Updated.')
+                else alert('Error updating.')
+            })
+        })
+
+        $(document).on('blur', '.he_name', function() {
+            const info = $(this).data('id').split(':')
+            const user_id = info[0]
+            const prize_id = info[1]
+            const name = $(this).val()
+            $.post('ajax/updateHeName.php', { user: user_id, prize: prize_id, he_name: name }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Updated.')
+                else alert('Error updating.')
+            })
         })
     });
 </script>

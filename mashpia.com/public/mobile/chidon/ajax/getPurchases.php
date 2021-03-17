@@ -49,7 +49,7 @@ foreach ($purchases as $admin => $details) {
 }
 
 $children = [];
-$sql = "select user_id, first, paid 
+$sql = "select user_id, first, paid, yarmulka, gender 
         from th_chidon tc 
         join users using (user_id) 
         where tc.year = " . $year . " 
@@ -61,7 +61,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $prizes = [];
 foreach ($children as $user_id => $child) {
-    $sql = "select cp.prize_name, cup.he_name 
+    $sql = "select cp.prize_id, cp.prize_name, cup.he_name 
             from chidon_user_prizes cup 
             join chidon_prizes cp using (prize_id) 
             where cup.user_id = " . $user_id . " 
