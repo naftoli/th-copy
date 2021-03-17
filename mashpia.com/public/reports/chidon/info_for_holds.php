@@ -205,7 +205,9 @@ foreach ($children as $admin_id => $more) {
             }
             $balance += $non_reg_total;
             echo $balance;
-            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]' /></td><td>
+            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]'";
+            if ($parent['refund']) echo " value='" . $parent['refund'] . "'";
+            echo " /></td><td>
                 <input type='button' name='refund' class='refund' value='Refund' /></td></tr>";
         }
         ?>
@@ -217,9 +219,9 @@ foreach ($children as $admin_id => $more) {
         crossorigin="anonymous"></script>
 <script>
     $(function() {
-        $(".refund").click( function( e) {
+        $(".refund").click( function(e) {
             e.preventDefault()
-            const info = $(this).parent().find('.toRefund')
+            const info = $(this).parent().parent().find('.toRefund')
             const admin = $(info).data('id')
             const amount = $(info).val()
             $.post('ajax/refund.php', { admin: admin, amount: amount }, function(result) {
