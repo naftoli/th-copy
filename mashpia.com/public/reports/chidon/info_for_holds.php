@@ -59,7 +59,7 @@ foreach ($parents as $parent) {
 
 // get chidondrive info
 foreach ($children as $admin_id => $more) {
-    foreach ($more as $child) {
+    foreach ($more as $idx => $child) {
         $sql = "SELECT 
                     SUM(subsidy_amount) AS total
                 FROM
@@ -74,7 +74,7 @@ foreach ($children as $admin_id => $more) {
                             chidon_year = " . $year . " AND for_family_id = " . $admin_id . ")";
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
-        $child['raised'] = $row['total'];
+        $children[$admin_id][$idx]['raised'] = $row['total'];
     }
 }
 ?>
