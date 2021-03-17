@@ -35,7 +35,9 @@ $sql = "SELECT
         JOIN
             admins a USING (admin_id) 
         WHERE
-            authorize_id > 1";
+            authorize_id > 1
+        ORDER BY
+            authorize_trans_type, admin_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     // skip parents with duplicates
@@ -203,7 +205,7 @@ foreach ($children as $admin_id => $more) {
             }
             $balance += $non_reg_total;
             echo $balance;
-            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]' />
+            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]' /></td><td>
                 <input type='button' name='refund' class='refund' value='Refund' /></td></tr>";
         }
         ?>
@@ -220,7 +222,11 @@ foreach ($children as $admin_id => $more) {
             const info = $(this).parent().find('.toRefund')
             const admin = $(info).data('id')
             const amount = $(info).val()
-            console.log(admin, amount)
+            $.post('ajax/refund.php', { admin: admin, amount: amount }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Success.')
+                else alert('Error.')
+            })
         })
     })
 </script>
