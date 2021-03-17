@@ -204,9 +204,24 @@ foreach ($children as $admin_id => $more) {
             $balance += $non_reg_total;
             echo $balance;
             echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]' />
-                <input type='button' name='refund' class='refund' /></td></tr>";
+                <input type='button' name='refund' class='refund' value='Refund' /></td></tr>";
         }
         ?>
     </table>
 </body>
+<script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+<script>
+    $(function() {
+        $(".refund").click( function( e) {
+            e.preventDefault()
+            const info = $(this).parent().find('.toRefund')
+            const admin = $(info).data('id')
+            const amount = $(info).val()
+            console.log(admin, amount)
+        })
+    })
+</script>
 </html>
