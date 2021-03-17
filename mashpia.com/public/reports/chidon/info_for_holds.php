@@ -104,6 +104,7 @@ foreach ($parents as $parent) {
             <th>Shipping Charges</th>
             <th>Total Non-Registration Charges</th>
             <th>ChidonDrive Raised</th>
+            <th>Rohr Subsidy</th>
             <th>ChidonDrive Subsidy</th>
             <th>Balance</th>
             <th>Type of Action</th>
@@ -150,10 +151,13 @@ foreach ($parents as $parent) {
             }
             echo "</td><td>" . $non_reg_total . "</td><td>" . $parent['raised'] . "</td><td>";
 
-            $subsidy = floatval($parent['raised'] / 2);
+            $rohr = 0;
+            if (floatval($parent['raised']) >= 270) $rohr = 100;
+            $subsidy = (floatval($parent['raised']) + $rohr) / 2;
             $balance = $reg_total - $subsidy;
             if ($balance < 0) $balance = 0;
-            echo $subsidy . "</td><td>" . $balance . "</td><td>";
+
+            echo $rohr . "</td><td>" . $subsidy . "</td><td>" . $balance . "</td><td>";
             if ($balance == 0) echo "Total Refund" . "</td><td>" . $reg_total;
             else if ($subsidy) echo "Partial Refund" . "</td><td>" . $subsidy;
             else echo "No Refund" . "</td><td>";
