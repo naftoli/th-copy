@@ -119,7 +119,7 @@ foreach ($parents as $parent) {
             $reg_total = 0;
             foreach ($children[$parent['admin_id']] as $child) {
                 $reg_total += intval($child['paid']);
-                echo $child['user_id'] . ': ' . $child . " - Registration Charge: " . $child['paid'] . "<br />";
+                echo $child['user_id'] . ': ' . $child['first'] . " - Registration Charge: " . $child['paid'] . "<br />";
             }
             $non_reg_total = 0;
             echo "</td><td>" . $reg_total . "</td><td>";
@@ -128,7 +128,7 @@ foreach ($parents as $parent) {
                 echo "$20";
             }
             echo "</td><td>";
-            if (intval($parent['extra_celeb_box_ship'])) {
+            if (intval($parent['celeb_box_add_ship'])) {
                 $non_reg_total += 10;
                 echo "$10";
             }
