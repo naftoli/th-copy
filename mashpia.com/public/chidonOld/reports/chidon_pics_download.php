@@ -29,15 +29,15 @@ function createZip($files, $filename) {
                 $file_contents = $row['file_data'];
                 $file_name_split = explode('.', $row['file_name']);
                 $origanal_extension = end($file_name_split);
-                // for debugging without zip extension
-                // if ($file_contents) echo '<img width="200px" src="data:image/png;base64, ' . base64_encode($file_contents) . '">';
             } else {
-                $file_contents = @file_get_contents($file);
+                $file_contents = @file_get_contents($file['url']);
                 $url_split = explode('.', $file['url']);
                 $origanal_extension = end($url_split);
             }
             if ($file_contents) {
                 $extension = in_array($origanal_extension, $image_extensions) ? $origanal_extension : "jpg";
+                // for debugging without zip extension
+                // echo '<img width="100px" src="data:image/png;base64, ' . base64_encode($file_contents) . '">';
                 $zip->addFromString("$filename.$extension", $file_contents);
                 break;
             }
