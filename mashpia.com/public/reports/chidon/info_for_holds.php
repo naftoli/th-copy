@@ -131,6 +131,7 @@ foreach ($children as $admin_id => $more) {
             <th>Total ChidonDrive Subsidy</th>
             <th>50% Subsidy for Registration</th>
             <th>Balance</th>
+            <th>Difference</th>
             <th>Amount Refunded</th>
             <th></th>
         </tr>
@@ -204,11 +205,12 @@ foreach ($children as $admin_id => $more) {
                 $balance += $regAfterSubsidy;
             }
             $balance += $non_reg_total;
-            echo $balance;
-            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]'";
+            $difference = floatval($parent['amount']) - floatval($balance);
+            echo $balance . "</td><td>" . $difference . "</td><td>";
+            echo "<input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]'";
             if ($parent['refund']) echo " value='" . $parent['refund'] . "'";
             echo " /></td><td>
-                <input type='button' name='refund' class='refund' value='Save' style='width: 50px' /></td></tr>";
+                <input type='button' name='refund' class='refund' value='Save' style='width: 50px;' /></td></tr>";
         }
         ?>
     </table>
