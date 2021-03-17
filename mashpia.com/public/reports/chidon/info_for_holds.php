@@ -129,6 +129,8 @@ foreach ($children as $admin_id => $more) {
             <th>Total ChidonDrive Subsidy</th>
             <th>50% Subsidy for Registration</th>
             <th>Balance</th>
+            <th>Amount Refunded</th>
+            <th></th>
         </tr>
         <?php
         foreach ($parents as $parent) {
@@ -201,7 +203,8 @@ foreach ($children as $admin_id => $more) {
             }
             $balance += $non_reg_total;
             echo $balance;
-            echo "</td></tr>";
+            echo "</td><td><input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]' />
+                <input type='button' name='refund' class='refund' /></td></tr>";
         }
         ?>
     </table>
