@@ -121,7 +121,7 @@ foreach ($children as $admin_id => $more) {
             $reg_total = 0;
             foreach ($children[$parent['admin_id']] as $child) {
                 $reg_total += intval($child['paid']);
-                echo $child['user_id'] . ': ' . $child['first'] . " - Registration Charge: " . $child['paid'] . "<br />";
+                echo $child['first'] . ": " . $child['paid'] . "<br />";
             }
             $non_reg_total = 0;
             echo "</td><td>" . $reg_total . "</td><td>";
