@@ -43,22 +43,6 @@ while ($row = mysql_fetch_assoc($result)) {
     $parents[] = $row;
 }
 
-// find how much was raised
-foreach ($parents as $idx => $parent) {
-    $sql = "SELECT 
-                SUM(donation_amount) as total 
-            FROM
-                mashpiadb.chidon_donations
-            WHERE
-                for_family_id = " . $parent['admin_id'] . " AND chidon_year = " . $year;
-    $result = mysql_query($sql);
-    if (mysql_num_rows($result) > 0) {
-        $row = mysql_fetch_assoc($result);
-        $total = $row['total'];
-        $parents[$idx]['raised'] = $total;
-    }
-}
-
 $children = [];
 foreach ($parents as $parent) {
     $admin_id = $parent['admin_id'];
@@ -70,6 +54,27 @@ foreach ($parents as $parent) {
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $children[$admin_id][] = $row;
+    }
+}
+
+// get chidondrive info
+foreach ($children as $admin_id => $more) {
+    foreach ($more as $child) {
+        $sql = "SELECT 
+                    SUM(subsidy_amount) AS total
+                FROM
+                    mashpiadb.chidon_user_subsidies
+                WHERE
+                    user_id = " . $child['user_id'] . " 
+                        AND chidon_donation_id IN (SELECT 
+                            chidon_donation_id
+                        FROM
+                            chidon_donations
+                        WHERE
+                            chidon_year = " . $year . " AND for_family_id = " . $admin_id . ")";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $child['raised'] = $row['total'];
     }
 }
 ?>
@@ -124,12 +129,12 @@ foreach ($parents as $parent) {
             echo "</td><td>" . $reg_total . "</td><td>";
             if (intval($parent['celeb_box_add'])) {
                 $non_reg_total += 20;
-                echo "$20";
+                echo "20";
             }
             echo "</td><td>";
             if (intval($parent['celeb_box_add_ship'])) {
                 $non_reg_total += 10;
-                echo "$10";
+                echo "10";
             }
             echo "</td><td>";
             // figure out sweaters and sweater shipping
@@ -142,33 +147,38 @@ foreach ($parents as $parent) {
             }
             foreach ($sweaters as $type) {
                 $non_reg_total += 25;
-                echo $type . " - $25<br />";
+                echo $type . " - 25<br />";
             }
             echo "</td><td>";
             foreach ($shipping as $type) {
                 $non_reg_total += 10;
-                echo $type . " - $10<br />";
+                echo $type . " - 10<br />";
             }
-            echo "</td><td>" . $non_reg_total . "</td><td>" . $parent['raised'] . "</td><td>";
-
-            $rohr = 0;
-            if (floatval($parent['raised']) >= 270) $rohr = 100;
-            $subsidy = (floatval($parent['raised']) + $rohr) / 2;
-            $balance = $reg_total - $subsidy;
-            if ($balance < 0) $balance = 0;
-
-            echo $rohr . "</td><td>" . $subsidy . "</td><td>" . $balance . "</td><td>";
-
-            if ($parent['authorize_trans_type'] == 'charge') {
-                if ($balance == 0) echo "Refund" . "</td><td>" . $reg_total;
-                else if ($subsidy) echo "Refund" . "</td><td>" . $subsidy;
-                else echo "No Refund" . "</td><td>";
-            } else if ($parent['authorize_trans_type'] == 'hold') {
-                if ($balance == 0) echo "Remove From Hold" . "</td><td>" . $reg_total;
-                else if ($subsidy) echo "Remove From Hold" . "</td><td>" . $subsidy;
-                else echo "Charge Entire Hold" . "</td><td>";
+            echo "</td><td>" . $non_reg_total . "</td><td>";
+            $subsidy = [];
+            foreach ($children as $admin_id => $details) {
+                foreach ($details as $child) {
+                    $subsidy[$child['user_id']] = floatval($child['raised']);
+                    echo $child['first'] . ": " . $child['raised'] . "<br />";
+                }
             }
-            echo "</td></tr>";
+            echo "</td><td>";
+            foreach ($children as $admin_id => $details) {
+                foreach ($details as $child) {
+                    if (floatval($child['raised']) >= 270) {
+                        $subsidy[$child['user_id']] += 100;
+                        echo $child['first'] . ": 100<br />";
+                    } else
+                        echo $child['first'] . ": 0<br />";
+                }
+            }
+            echo "</td><td>";
+            foreach ($children as $admin_id => $details) {
+                foreach ($details as $child) {
+                    echo $subsidy[$child['user_id']] . "</td><td>";
+                }
+            }
+            echo "</td><td></td><td></td><td></td></tr>";
         }
         ?>
     </table>
