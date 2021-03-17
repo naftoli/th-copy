@@ -154,11 +154,9 @@ foreach ($children as $admin_id => $more) {
             }
             echo "</td><td>" . $non_reg_total . "</td><td>";
             $subsidy = [];
-            foreach ($children as $admin_id => $details) {
-                foreach ($details as $child) {
-                    $subsidy[$child['user_id']] = floatval($child['raised']);
-                    echo $child['first'] . ": " . $child['raised'] . "<br />";
-                }
+            foreach ($children[$parent['admin_id']] as $child) {
+                $subsidy[$child['user_id']] = floatval($child['raised']);
+                echo $child['first'] . ": " . $child['raised'] . "<br />";
             }
             echo "</td><td>";
             foreach ($children[$parent['admin_id']] as $child) {
