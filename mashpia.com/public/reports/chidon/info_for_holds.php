@@ -112,8 +112,6 @@ foreach ($children as $admin_id => $more) {
             <th>Rohr Subsidy</th>
             <th>ChidonDrive Subsidy</th>
             <th>Balance</th>
-            <th>Type of Action</th>
-            <th>Amount</th>
         </tr>
         <?php
         foreach ($parents as $parent) {
@@ -178,7 +176,7 @@ foreach ($children as $admin_id => $more) {
                     echo $subsidy[$child['user_id']] . "</td><td>";
                 }
             }
-            echo "</td><td></td><td></td><td></td></tr>";
+            echo "</td><td></td></tr>";
         }
         ?>
     </table>
