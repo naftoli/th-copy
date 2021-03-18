@@ -129,7 +129,7 @@ foreach ($children as $admin_id => $more) {
     <?php
     foreach ($parents as $parent) {
         echo "<tr><td>" . $parent['admin_id'] . "</td><td>" . $parent['first'] . ' ' . $parent['last'] . "</td><td>";
-        foreach ($charges as $charge) {
+        foreach ($charges[$parent['admin_id']] as $charge) {
             echo $charge['authorize_id'] . " - " . $charge['authorize_trans_type'] . " : " . $charge['amount'] . "<br />";
         }
         echo "</td><td>";
@@ -199,7 +199,7 @@ foreach ($children as $admin_id => $more) {
         }
         $balance += $non_reg_total;
         $parent_amount = 0;
-        foreach ($charges as $charge) {
+        foreach ($charges[$parent['admin_id']] as $charge) {
             $parent_amount += floatval($charge['amount']);
         }
         $difference = $parent_amount - floatval($balance);
