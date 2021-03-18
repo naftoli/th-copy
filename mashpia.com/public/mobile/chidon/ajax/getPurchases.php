@@ -72,9 +72,30 @@ foreach ($children as $user_id => $child) {
     }
 }
 
+$chidondrive = [];
+foreach ($children as $user_id => $child) {
+    $sql = "SELECT 
+                SUM(subsidy_amount) AS total
+            FROM
+                mashpiadb.chidon_user_subsidies
+            WHERE
+                user_id = " . $user_id . " 
+                    AND chidon_donation_id IN (SELECT 
+                        chidon_donation_id
+                    FROM
+                        chidon_donations
+                    WHERE
+                        chidon_year = " . $year . " AND for_family_id = " . $admin_id . ")";
+    $result = mysql_query($sql);
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $chidondrive[$user_id]['raised'] = $row['total'];
+}
+
 echo json_encode([
     'transactions' => $purchases,
     'purchases' => $info,
     'children'  => $children,
-    'prizes'    => $prizes
+    'prizes'    => $prizes,
+    'chidondrive' => $chidondrive
 ]);

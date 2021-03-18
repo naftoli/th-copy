@@ -107,6 +107,7 @@
                         <div class="col-sm-12">
                             <br />
                             <button id="update" class="btn btn-primary btn-block">Edit Chidon Purchase</button>
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Info / Purchases</button>
                         </div>
                     </div>
                 </div>
@@ -125,6 +126,7 @@
             const purchases = res.purchases
             const children = res.children
             const prizes = res.prizes
+            const chidondrive = res.chidondrive
 
             let html = '<br /><br /><h4>Payments:</h4>'
             for (id in transactions) {
@@ -132,7 +134,9 @@
                     html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
                         Transaction ID: ${t.authorize_id}<br />Method: `
                     if (t.authorize_trans_type == 'charge') html += 'Card Charged<br /><br />'
-                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br /><br />'
+                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
+                    if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
+                    html += '<br />'
                 }
             }
             html += '<h4>Registrations</h4>'
@@ -150,6 +154,15 @@
                     html += '</select><br />'
                 }
                 html += '<br />'
+            }
+
+            html += '<h4>ChidonDrive Raised</h4>';
+            for (id in chidondrive) {
+                let raised = parseFloat(chidondrive[id].raised)
+                let rohr = raised >= 270 ? 100 : 0
+                let subsidy = parseFloat((raised + rohr) / 2)
+                html += `Name: ${children[id].first}<br />Raised: ${raised}<br />Rohr Grant: ${rohr}<br />
+                        Subsidy available to apply to Registration Charge: ${subsidy}<br/><br />`
             }
 
             html += '<h4>Prizes:</h4>'
@@ -222,6 +235,17 @@
                 const res = JSON.parse(result)
                 if (res.success) alert('Updated.')
                 else alert('Error updating.')
+            })
+        })
+
+        $("#confirmation").click( function() {
+            $.post('ajax/confirmation.php', { admin: Cookies.get('admin') }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Confirmed.')
+                else {
+                    alert(res.error)
+                    console.log(res.sql)
+                }
             })
         })
     });
