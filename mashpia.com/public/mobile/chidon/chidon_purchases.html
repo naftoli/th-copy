@@ -133,7 +133,7 @@
                 for (t of transactions[id]) {
                     html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
                         Transaction ID: ${t.authorize_id}<br />Method: `
-                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br /><br />'
+                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
                     else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
                     if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
                     html += '<br />'
