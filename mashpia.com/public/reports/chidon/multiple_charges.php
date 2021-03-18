@@ -44,7 +44,7 @@ while ($row = mysql_fetch_assoc($result)) {
     // only show parents with duplicates
     if (!in_array($row['admin_id'], $duplicates)) continue;
     $charges[$row['admin_id']][] = $row;
-    $parents[] = [
+    $parents[$row['admin_id']] = [
         'admin_id'  => $row['admin_id'],
         'first'     => $row['first'],
         'last'      => $row['last']
@@ -52,8 +52,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $children = [];
-foreach ($parents as $parent) {
-    $admin_id = $parent['admin_id'];
+foreach ($parents as $admin_id => $details) {
     $sql = "select u.user_id, u.first, tc.paid 
             from th_chidon tc 
             join users u using (user_id) 
@@ -121,31 +120,34 @@ foreach ($children as $admin_id => $more) {
         <th>Rohr Subsidy</th>
         <th>Total ChidonDrive Subsidy</th>
         <th>50% Subsidy for Registration</th>
-        <th>Balance</th>
-        <th>Difference</th>
+<!--        <th>Balance</th>-->
+<!--        <th>Difference</th>-->
         <th>Amount Refunded</th>
         <th></th>
     </tr>
     <?php
+    $prevAdmin = 0;
     foreach ($parents as $parent) {
-        echo "<tr><td>" . $parent['admin_id'] . "</td><td>" . $parent['first'] . ' ' . $parent['last'] . "</td><td>";
-        foreach ($charges[$parent['admin_id']] as $charge) {
-            echo $charge['authorize_id'] . " - " . $charge['authorize_trans_type'] . " : " . $charge['amount'] . "<br />";
+        $admin_id = $parent['admin_id'];
+        $numOfCharges = count($charges[$admin_id]);
+        echo "<tr><td>" . $admin_id . "</td><td>" . $parent['first'] . ' ' . $parent['last'] . "</td><td>";
+        foreach ($charges[$admin_id] as $charge) {
+            echo $charge['authorize_trans_type'] . " : " . $charge['amount'] . " (" . $charge['authorize_id'] . ")<br />";
         }
         echo "</td><td>";
         $reg_total = 0;
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             $reg_total += intval($child['paid']);
             echo $child['first'] . ": " . $child['paid'] . "<br />";
         }
-        $non_reg_total = 0;
         echo "</td><td>" . $reg_total . "</td><td>";
-        if (intval($parent['celeb_box_add'])) {
+        $non_reg_total = 0;
+        if (intval($charges[$numOfCharges-1]['celeb_box_add'])) {
             $non_reg_total += 20;
             echo "20";
         }
         echo "</td><td>";
-        if (intval($parent['celeb_box_add_ship'])) {
+        if (intval($charges[$numOfCharges-1]['celeb_box_add_ship'])) {
             $non_reg_total += 10;
             echo "10";
         }
@@ -155,8 +157,8 @@ foreach ($children as $admin_id => $more) {
         $shipping = [];
         $types = ['mother', 'father', 'bubby', 'zaidy'];
         foreach ($types as $type) {
-            if ($parent["sweater_$type"]) $sweaters[] = $type;
-            if (intval($parent["sweater_{$type}_ship"])) $shipping[] = $type;
+            if ($charges[$numOfCharges-1]["sweater_$type"]) $sweaters[] = $type;
+            if (intval($charges[$numOfCharges-1]["sweater_{$type}_ship"])) $shipping[] = $type;
         }
         foreach ($sweaters as $type) {
             $non_reg_total += 25;
@@ -169,12 +171,12 @@ foreach ($children as $admin_id => $more) {
         }
         echo "</td><td>" . $non_reg_total . "</td><td>";
         $subsidy = [];
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             $subsidy[$child['user_id']] = floatval($child['raised']);
             echo $child['first'] . ": " . $child['raised'] . "<br />";
         }
         echo "</td><td>";
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             if (floatval($child['raised']) >= 270) {
                 $subsidy[$child['user_id']] += 100;
                 echo $child['first'] . ": 100<br />";
@@ -182,29 +184,31 @@ foreach ($children as $admin_id => $more) {
                 echo $child['first'] . ": 0<br />";
         }
         echo "</td><td>";
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             echo $child['first'] . ": " . $subsidy[$child['user_id']] . "<br />";
         }
         echo "</td><td>";
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             echo $child['first'] . ": " . floatval($subsidy[$child['user_id']] / 2) . "<br />";
         }
         echo "</td><td>";
         // balance is registration charge minus 50% subsidy per child plus non registration charges
+        /*
         $balance = 0;
-        foreach ($children[$parent['admin_id']] as $child) {
+        foreach ($children[$admin_id] as $child) {
             $regAfterSubsidy = intval($child['paid']) - floatval($subsidy[$child['user_id']] / 2);
             if ($regAfterSubsidy < 0) $regAfterSubsidy = 0;
             $balance += $regAfterSubsidy;
         }
         $balance += $non_reg_total;
         $parent_amount = 0;
-        foreach ($charges[$parent['admin_id']] as $charge) {
+        foreach ($charges[$admin_id] as $charge) {
             $parent_amount += floatval($charge['amount']);
         }
         $difference = $parent_amount - floatval($balance);
         echo $balance . "</td><td>" . $difference . "</td><td>";
-        echo "<input type='text' name='toRefund' class='toRefund' data-id='$parent[admin_id]'";
+        */
+        echo "<input type='text' name='toRefund' class='toRefund' data-id='$admin_id'";
         if ($parent['refund']) echo " value='" . $parent['refund'] . "'";
         echo " /></td><td>
                 <input type='button' name='refund' class='refund' value='Save' /></td></tr>";
