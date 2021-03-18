@@ -89,7 +89,7 @@ foreach ($children as $user_id => $child) {
     $result = mysql_query($sql);
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
-    $chidondrive[$user_id]['raised'] = $row['total'];
+    $chidondrive[$user_id]['raised'] = $row['total'] ?? 0;
 }
 
 echo json_encode([
