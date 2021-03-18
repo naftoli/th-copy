@@ -209,7 +209,7 @@ foreach ($children as $admin_id => $more) {
         echo $balance . "</td><td>" . $difference . "</td><td>";
         */
         echo "<input type='text' name='toRefund' class='toRefund' data-id='$admin_id'";
-        if ($parent['refund']) echo " value='" . $parent['refund'] . "'";
+        if ($charges[$admin_id][$numOfCharges-1]['refund']) echo " value='" . $charges[$admin_id][$numOfCharges-1]['refund'] . "'";
         echo " /></td><td>
                 <input type='button' name='refund' class='refund' value='Save' /></td></tr>";
     }
