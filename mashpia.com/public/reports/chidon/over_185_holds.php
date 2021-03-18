@@ -55,11 +55,14 @@ foreach ($parents as $parent) {
             where tc.year = " . $year . " 
             and tc.parent_id = " . $admin_id;
     $result = mysql_query($sql);
+    $paid185 = 0;
     while ($row = mysql_fetch_assoc($result)) {
-        if ($row['paid'] == 185) {
-            $parentsToRemove[] = $admin_id;
-        }
+        if ($row['paid'] == 185) $paid185++;
         $children[$admin_id][] = $row;
+    }
+    // if all kids paid 185 remove from lists
+    if ($paid185 == mysql_num_rows($result)) {
+        $parentsToRemove[] = $admin_id;
     }
 }
 
