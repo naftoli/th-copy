@@ -142,12 +142,12 @@ foreach ($children as $admin_id => $more) {
         }
         echo "</td><td>" . $reg_total . "</td><td>";
         $non_reg_total = 0;
-        if (intval($charges[$numOfCharges-1]['celeb_box_add'])) {
+        if (intval($charges[$admin_id][$numOfCharges-1]['celeb_box_add'])) {
             $non_reg_total += 20;
             echo "20";
         }
         echo "</td><td>";
-        if (intval($charges[$numOfCharges-1]['celeb_box_add_ship'])) {
+        if (intval($charges[$admin_id][$numOfCharges-1]['celeb_box_add_ship'])) {
             $non_reg_total += 10;
             echo "10";
         }
@@ -157,8 +157,8 @@ foreach ($children as $admin_id => $more) {
         $shipping = [];
         $types = ['mother', 'father', 'bubby', 'zaidy'];
         foreach ($types as $type) {
-            if ($charges[$numOfCharges-1]["sweater_$type"]) $sweaters[] = $type;
-            if (intval($charges[$numOfCharges-1]["sweater_{$type}_ship"])) $shipping[] = $type;
+            if ($charges[$admin_id][$numOfCharges-1]["sweater_$type"]) $sweaters[] = $type;
+            if (intval($charges[$admin_id][$numOfCharges-1]["sweater_{$type}_ship"])) $shipping[] = $type;
         }
         foreach ($sweaters as $type) {
             $non_reg_total += 25;
