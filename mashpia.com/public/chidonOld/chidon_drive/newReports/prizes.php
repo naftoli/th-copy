@@ -13,7 +13,20 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $info = [];
-$sql = "select * from chidon_prizes where year = " . $year;
+$sql = "SELECT 
+            p.prize_id,
+            prize_name,
+            size,
+            color,
+            quantity,
+            COUNT(*) AS purchased
+        FROM
+            chidon_prizes p
+                JOIN
+            chidon_user_prizes USING (prize_id)
+        WHERE
+            p.year = $year
+        GROUP BY prize_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
