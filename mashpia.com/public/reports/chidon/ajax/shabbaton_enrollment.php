@@ -19,12 +19,44 @@ $year = GlobalSettings::getChidonYear();
 /***************** POST PARAMS **********************/
 $school_id = mysql_real_escape_string($_POST['school_id']);
 
+// find parents that have no payments even though kids are showing paid
+$info = [];
+$sql = "select * from th_chidon_parent_purchases";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $info[$row['admin_id']][] = $row;
+}
+
+// take out parents that have a charge
+$remove = [];
+foreach ($info as $admin_id => $details) {
+    foreach ($details as $row) {
+        if ($row['authorize_id'] > 1) {
+            if (!in_array($admin_id, $remove)) {
+                $remove[] = $admin_id;
+                continue 2;
+            }
+        }
+    }
+}
+
+foreach ($remove as $admin_id) {
+    unset($info[$admin_id]);
+}
+
+function missingPayment($admin) {
+    global $info;
+    $admins = array_keys($info);
+    if (in_array($admin, $admins)) return true;
+    return false;
+}
+
 /***************** LOAD DATA **********************/
 $users_query = mysql_query(
     "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
     ." c.class_grade, c.class_sub, "
     ." th.*, "
-    ." a.admin_phone_mobile, a.admin_phone_mobile2 "
+    ." a.admin_id, a.admin_phone_mobile, a.admin_phone_mobile2 "
     ." FROM th_chidon th "
     ." JOIN users u USING (user_id) "
     ." JOIN classes c USING (class_id) "
@@ -111,7 +143,10 @@ if (count($users) > 0) { ?>
 <!--                <td>--><?//=$user['walking'] ? "Yes" : "No"?><!--</td>-->
                 <td>
                     <?php
-                    if ($user['date_paid'] > 0) echo "registered";
+                    if ($user['date_paid'] > 0) {
+                        if (missingPayment($user['admin_id'])) echo "needs to re-register";
+                        else echo "registered";
+                    }
                     else if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
                     else echo "not yet registered";
                     ?>
