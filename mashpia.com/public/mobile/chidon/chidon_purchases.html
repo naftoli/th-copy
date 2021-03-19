@@ -108,7 +108,7 @@
                         <div class="col-sm-12">
                             <br />
                             <button id="update" class="btn btn-primary btn-block">Edit Chidon Purchase</button>
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Info / Purchases</button>
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm All</button>
                         </div>
                     </div>
                 </div>
@@ -128,6 +128,8 @@
             const children = res.children
             const prizes = res.prizes
             const chidondrive = res.chidondrive
+
+            if (!transactions.length) $("#update").text("Pay for Chidon")
 
             let html = '<br />'
 
