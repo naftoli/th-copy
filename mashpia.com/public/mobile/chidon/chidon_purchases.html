@@ -90,12 +90,13 @@
                 <div id="regInfo">
                     <div class="row">
                         <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-                            Please review your purchases. If something doesn't seem right, or you need to change
-                            something, please use link below to update your chidon registration / purchase.
-                            PLEASE NOTE: IF YOU CHOOSE TO EDIT THE PURCHASE, THE LINK WILL TAKE YOU BACK TO THE ENROLLMENT
-                            FORM. ALL YOU NEED TO DO IS EDIT THE THINGS THAT YOU WANT TO CHANGE. WHEN YOU GET TO THE
-                            PAYMENT SECTION, IT WILL AUTOMATICALLY APPLY YOUR PAST PAYMENT SO THAT YOU WILL NOT ACTUALLY
-                            BE CHARGED, UNLESS YOU ARE ADDING SOMETHING THAT YOU HAVEN'T PAID FOR YET.
+                            <b>Please review and confirm your purchases.</b>
+                            <br /><br />
+                            In this form you can update your yarmulke size and Hebrew name.
+                            <br /><br />
+                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.
+                            Please click below to edit your purchase. This will take you to the Enrollment form,
+                            where you can edit or make the changes or buy additional purchases.
                         </div>
                     </div>
                     <div class="row">
@@ -128,59 +129,29 @@
             const prizes = res.prizes
             const chidondrive = res.chidondrive
 
-            let html = '<br /><br /><h4>Payments:</h4>'
-            for (id in transactions) {
-                for (t of transactions[id]) {
-                    html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
-                        Transaction ID: ${t.authorize_id}<br />Method: `
-                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
-                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
-                    if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
-                    html += '<br />'
-                }
-            }
+            let html = '<br />'
+
             html += '<h4>Registrations</h4>'
             for (id in children) {
                 html += `User ID: ${children[id].user_id}<br />Name: ${children[id].first}<br />
-                    Paid: ${children[id].paid ? children[id].paid : 'NOT YET REGISTERED'}<br />`
-                if (children[id].gender == 'M') {
-                    const size = parseInt(children[id].yarmulka)
-                    html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${children[id].user_id}">`
-                    for (let i = 3; i <= 6; i++) {
-                        html += `<option value=${i}`
-                        if (i == size) html += ' selected'
-                        html += `>${i}</option>`
-                    }
-                    html += '</select><br />'
-                }
-                html += '<br />'
+                    Registered: ${children[id].date_paid ? children[id].date_paid : 'NOT YET REGISTERED'}<br /><br/>`
             }
 
-            html += '<h4>ChidonDrive Raised</h4>';
+            html += '<h4>Registration Fee:</h4>';
             for (id in chidondrive) {
                 let raised = parseFloat(chidondrive[id].raised)
                 let rohr = raised >= 270 ? 100 : 0
                 let subsidy = parseFloat((raised + rohr) / 2)
-                html += `Name: ${children[id].first}<br />Raised: ${raised}<br />Rohr Grant: ${rohr}<br />
-                        Subsidy available to apply to Registration Charge: ${subsidy}<br/><br />`
+                html += `Name: ${children[id].first}<br />Registration Fee: ${children[id].paid ? children[id].paid : 185.00}`
+                if (!children[id].paid || !transactions.length) html += ' <b>Not Yet Paid</b>'
+                else html += " <b>Paid</b>"
+                html += `<br />Raised: ${raised}<br />Rohr Grant: ${rohr}<br />Total: ${raised + rohr}<br />
+                        50% Registration fee subsidy: ${subsidy}<br/><br />`
             }
 
-            html += '<h4>Prizes:</h4>'
-            for (id in prizes) {
-                const name = children[id].first
-                html += `<h5>${name}</h5>`
-                for (p of prizes[id]) {
-                    html += `Prize: ${p.prize_name}<br />`
-                    if (p.prize_id >= 44 && p.prize_id <= 60) html += `Hebrew Name:
-                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
-                         <input type="button" value="Save" /><br />`
-                }
-                html += '<br />'
-            }
+            html += `<h4>Celebration Box(es): ${purchases.celeb_box ? purchases.celeb_box : 0}</h4>`
 
-            html += `<h4>Celebration Box(es): ${purchases.celeb_box}</h4>`
-
-            html += '<h4>Extras / Sweaters</h4>'
+            html += '<h4>Extra Celebration Boxes & Sweaters</h4>'
             if (parseInt(purchases.celeb_box_add)) html += 'Extra Celebration Box - $20<br />'
             if (purchases.sweater_mother) {
                 html += `Mother Sweater - $25, Size: ${purchases.sweater_mother}<br />`
@@ -207,11 +178,52 @@
                 html += `Zaidy Sweater Shipping - $10, Address: ${purchases.sweater_zaidy_ship_addr}<br />`
             }
 
+            html += '<h4>Payments:</h4>'
+            if (!transactions.length) html += "NO Payments Found<br /><br />"
+            for (id in transactions) {
+                for (t of transactions[id]) {
+                    html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
+                        Transaction ID: ${t.authorize_id}<br />Method: `
+                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
+                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
+                    if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
+                    html += '<br />'
+                }
+            }
+
+            html += '<h4>Prizes:</h4>'
+            for (id in prizes) {
+                const name = children[id].first
+                const gender = children[id].gender
+                html += `<h5>${name}</h5>`
+                if (gender == 'M') {
+                    const size = parseInt(children[id].yarmulka)
+                    html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${children[id].user_id}">`
+                    for (let i = 3; i <= 6; i++) {
+                        html += `<option value=${i}`
+                        if (i == size) html += ' selected'
+                        html += `>${i}</option>`
+                    }
+                    html += '</select><br />'
+                }
+                for (p of prizes[id]) {
+                    html += `Prize: ${p.prize_name}<br />`
+                    if (p.prize_id >= 44 && p.prize_id <= 60) html += `Hebrew Name:
+                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
+                         <input type="button" value="Save" /><br />`
+                }
+
+                html += '<br />'
+            }
+
             $("#purchaseInfo").append(html)
         })
 
         $("#update").click( function( e ) {
             e.preventDefault()
+            alert("Please note: Even if you are just making edits WHEN YOU GET TO THE PAYMENT SECTION, YOU MUST PUT IN YOUR CREDIT CARD. " +
+                "Your card will only be charged if you add a  purchase that you have not yet paid for. " +
+                "If you are just making edits your card will not be charged.")
             Cookies.set('chidon_admin', Cookies.get('admin'))
             location.href = 'http://chidondrive.com/site/enrollNew.html'
         })

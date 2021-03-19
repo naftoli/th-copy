@@ -49,7 +49,7 @@ foreach ($purchases as $admin => $details) {
 }
 
 $children = [];
-$sql = "select user_id, first, paid, yarmulka, gender 
+$sql = "select user_id, first, date_paid, paid, yarmulka, gender, parent_id  
         from th_chidon tc 
         join users using (user_id) 
         where tc.year = " . $year . " 
@@ -94,8 +94,8 @@ foreach ($children as $user_id => $child) {
 
 echo json_encode([
     'transactions' => $purchases,
-    'purchases' => $info,
-    'children'  => $children,
-    'prizes'    => $prizes,
-    'chidondrive' => $chidondrive
+    'purchases'    => $info,
+    'children'     => $children,
+    'prizes'       => $prizes,
+    'chidondrive'  => $chidondrive
 ]);
