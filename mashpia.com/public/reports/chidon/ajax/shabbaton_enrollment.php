@@ -144,7 +144,7 @@ if (count($users) > 0) { ?>
                 <td>
                     <?php
                     if ($user['date_paid'] > 0) {
-                        if (missingPayment($user['admin_id'])) echo "needs to re-register";
+                        if (missingPayment($user['admin_id'])) echo "registered but needs to pay";
                         else echo "registered";
                     }
                     else if (in_array($user['th_chidon_id'], $skipped)) echo "needs to re-register";
