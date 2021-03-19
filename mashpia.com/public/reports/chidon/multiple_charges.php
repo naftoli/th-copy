@@ -109,6 +109,7 @@ foreach ($children as $admin_id => $more) {
         <th>Parent ID</th>
         <th>Parent Name</th>
         <th>Transactions</th>
+        <th>Refunds</th>
         <th>Registrations</th>
         <th>Total Registration Charges</th>
         <th>Extra Celebration Box</th>
@@ -122,8 +123,6 @@ foreach ($children as $admin_id => $more) {
         <th>50% Subsidy for Registration</th>
 <!--        <th>Balance</th>-->
 <!--        <th>Difference</th>-->
-        <th>Amount Refunded</th>
-        <th></th>
     </tr>
     <?php
     $prevAdmin = 0;
@@ -133,6 +132,11 @@ foreach ($children as $admin_id => $more) {
         echo "<tr><td>" . $admin_id . "</td><td>" . $parent['first'] . ' ' . $parent['last'] . "</td><td>";
         foreach ($charges[$admin_id] as $charge) {
             echo $charge['authorize_trans_type'] . " : " . $charge['amount'] . " (" . $charge['authorize_id'] . ")<br />";
+        }
+        echo "</td><td>";
+        foreach ($charges[$admin_id] as $charge) {
+            echo "<input type='text' size='4' class='toRefund' data-id='" . $admin_id . ':' . $charge['authorize_id'] . "' />
+                <input type='button' class='refund' value='save' /><br />";
         }
         echo "</td><td>";
         $reg_total = 0;
@@ -191,7 +195,7 @@ foreach ($children as $admin_id => $more) {
         foreach ($children[$admin_id] as $child) {
             echo $child['first'] . ": " . floatval($subsidy[$child['user_id']] / 2) . "<br />";
         }
-        echo "</td><td>";
+        echo "</td></tr>";
         // balance is registration charge minus 50% subsidy per child plus non registration charges
         /*
         $balance = 0;
@@ -208,10 +212,10 @@ foreach ($children as $admin_id => $more) {
         $difference = $parent_amount - floatval($balance);
         echo $balance . "</td><td>" . $difference . "</td><td>";
         */
-        echo "<input type='text' name='toRefund' class='toRefund' data-id='$admin_id'";
-        if ($charges[$admin_id][$numOfCharges-1]['refund']) echo " value='" . $charges[$admin_id][$numOfCharges-1]['refund'] . "'";
-        echo " /></td><td>
-                <input type='button' name='refund' class='refund' value='Save' /></td></tr>";
+//        echo "<input type='text' name='toRefund' class='toRefund' data-id='$admin_id'";
+//        if ($charges[$admin_id][$numOfCharges-1]['refund']) echo " value='" . $charges[$admin_id][$numOfCharges-1]['refund'] . "'";
+//        echo " /></td><td>
+//                <input type='button' name='refund' class='refund' value='Save' /></td></tr>";
     }
     ?>
 </table>
@@ -225,9 +229,11 @@ foreach ($children as $admin_id => $more) {
         $(".refund").click( function(e) {
             e.preventDefault()
             const info = $(this).parent().parent().find('.toRefund')
-            const admin = $(info).data('id')
+            const ids = $(info).data('id').split(':')
+            const admin = ids[0]
+            const trans_id = ids[1]
             const amount = $(info).val()
-            $.post('ajax/refund.php', { admin: admin, amount: amount }, function(result) {
+            $.post('ajax/refundMultiple.php', { admin: admin, trans: trans_id, amount: amount }, function(result) {
                 const res = JSON.parse(result)
                 if (res.success) alert('Success.')
                 else alert('Error.')
