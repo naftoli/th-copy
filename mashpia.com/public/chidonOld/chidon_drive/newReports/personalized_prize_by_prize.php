@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, cup.he_name, confirmed_chidon_5781, class_grade, class_sub
+$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, cup.he_name, confirmed_chidon_5781
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join th_chidon tc using (user_id) 
@@ -22,10 +22,10 @@ $sql = "SELECT th_chidon_id, prize_name, color, s.school_name, cup.he_name, conf
         join admins a using (admin_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
         and prize_id in (44, 45, 48, 50, 53, 54, 59, 60)
-        order by school_name, class_grade, class_sub, u.last, u.first, th_chidon_id";
+        order by prize_name, color, s.school_name, cup.he_name, user_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $info[$row['school_name']][] = $row;
+    $info[$row['prize_name'] . " - " . $row['color']][] = $row;
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
 ?>
@@ -48,15 +48,14 @@ while ($row = mysql_fetch_assoc($result)) {
 <h1>Personalized Prizes Report</h1>
 <?php
 $prize_totals = [];
-foreach ($info as $school_name => $user_prizes) {
-    echo "<h2>" . $school_name . "</h2>";
+foreach ($info as $prize_name => $user_prizes) {
+    echo "<h2>" . $prize_name . "</h2>";
     ?>
     <table>
         <tr>
             <th>Chidon ID</th>
             <th>Prize Name - color</th>
             <th>School</th>
-            <th>Grade</th>
             <th>Personalized name</th>
             <th>Confirmed</th>
         </tr>
@@ -64,13 +63,11 @@ foreach ($info as $school_name => $user_prizes) {
     foreach ($user_prizes as $prize) {
         if (isset($prize_totals[$prize['prize_name']])) $prize_totals[$prize['prize_name']]++;
         else $prize_totals[$prize['prize_name']] = 1;
-        $grade = $prize['class_grade'] . (empty($prize['class_sub']) ? '' : '-' . $prize['class_sub']);
         ?>
             <tr>
                 <td> <?= $prize['th_chidon_id'] ?> </td>
                 <td> <?= $prize['prize_name'] ?> - <?= $prize['color'] ?> </td>
                 <td> <?= $prize['school_name'] ?> </td>
-                <td> <?= $grade ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
             </tr>
