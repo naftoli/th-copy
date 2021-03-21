@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT prize_name, color, school_name, cup.he_name, confirmed_chidon_5781
+$sql = "SELECT user_id, prize_name, color, school_name, cup.he_name, confirmed_chidon_5781
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join chidon_prizes cp using (prize_id)
@@ -21,7 +21,7 @@ $sql = "SELECT prize_name, color, school_name, cup.he_name, confirmed_chidon_578
         join admins a using (admin_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
         and prize_id in (44, 45, 48, 50, 53, 54, 59, 60)
-        order by prize_name, color, school_name, cup.he_name";
+        order by prize_name, color, school_name, cup.he_name, user_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['prize_name'] . " - " . $row['color']][] = $row;
@@ -52,6 +52,7 @@ foreach ($info as $prize_name => $user_prizes) {
     ?>
     <table>
         <tr>
+            <th>User ID</th>
             <th>Prize Name - color</th>
             <th>School</th>
             <th>Personalized name</th>
@@ -63,6 +64,7 @@ foreach ($info as $prize_name => $user_prizes) {
         else $prize_totals[$prize['prize_name']] = 1;
         ?>
             <tr>
+                <td> <?= $prize['user_id'] ?> </td>
                 <td> <?= $prize['prize_name'] ?> - <?= $prize['color'] ?> </td>
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
