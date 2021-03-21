@@ -74,7 +74,7 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $grade ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
-                <td> <?= $prize['first'] ?> - <?= $prize['last'] ?> </td>
+                <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
             </tr>
         <?
