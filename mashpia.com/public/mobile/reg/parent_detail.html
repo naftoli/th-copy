@@ -408,7 +408,7 @@
                                                             {{else}}
                                                             <button class="btn btn-primary shabbaton">Pay for Chidon {{this.chidon_year}} (ID: {{this.th_chidon_id}})</button>
                                                             {{/if}}
-                                                            <button class="btn btn-primary shabbaton" style="margin-top: 10px;">Confirm Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button>
+                                                            <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button>
                                                         {{/if}}
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
@@ -722,6 +722,11 @@
                 // var id = $(this).parent().parent().parent().attr('id');
                 // location.href = "/mobile/chidon/index2.html?id=" + id;
                 let url = "https://chidondrive.com/site/enrollNew.html?a=" + Cookies.get('admin');
+                location.href = url;
+            });
+
+            $(document).on('click', '.shabbatonConfirm', function() {
+                let url = "/mobile/chidon/chidon_purchases.html";
                 location.href = url;
             });
 

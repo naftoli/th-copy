@@ -139,13 +139,20 @@
                     Registered: ${children[id].date_paid ? children[id].date_paid : 'NOT YET REGISTERED'}<br /><br/>`
             }
 
+            // is there transactions
+            let noTransactionsFound = true
+            for (id in transactions) {
+                noTransactionsFound = false
+                break
+            }
+
             html += '<h4>Registration Fee:</h4>';
             for (id in chidondrive) {
                 let raised = parseFloat(chidondrive[id].raised)
                 let rohr = raised >= 270 ? 100 : 0
                 let subsidy = parseFloat((raised + rohr) / 2)
                 html += `Name: ${children[id].first}<br />Registration Fee: ${children[id].paid ? children[id].paid : 185.00}`
-                if (!children[id].paid || !transactions.length) html += ' <b>Not Yet Paid</b>'
+                if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
                 else html += " <b>Paid</b>"
                 html += `<br />Raised: ${raised}<br />Rohr Grant: ${rohr}<br />Total: ${raised + rohr}<br />
                         50% Registration fee subsidy: ${subsidy}<br/><br />`
@@ -181,7 +188,7 @@
             }
 
             html += '<h4>Payments:</h4>'
-            if (!transactions.length) html += "NO Payments Found<br /><br />"
+            if (noTransactionsFound) html += "NO Payments Found<br /><br />"
             for (id in transactions) {
                 for (t of transactions[id]) {
                     html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
