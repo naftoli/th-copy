@@ -22,6 +22,7 @@ $sql = "SELECT th_chidon_id, prize_name, color, s.school_name, cup.he_name, conf
         join admins a using (admin_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
         and prize_id in (44, 45, 48, 50, 53, 54, 59, 60)
+        and tc.year = $year
         order by school_name, class_grade, class_sub, u.last, u.first, th_chidon_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
