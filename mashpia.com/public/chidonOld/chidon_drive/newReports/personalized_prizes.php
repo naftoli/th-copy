@@ -58,8 +58,8 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Prize Name - color</th>
             <th>School</th>
             <th>Grade</th>
-            <th>Name</th>
             <th>Personalized name</th>
+            <th>Name</th>
             <th>Confirmed</th>
         </tr>
     <?php
