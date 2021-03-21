@@ -18,24 +18,28 @@ $products = [
     [23, 'sweater_mother', "medium"],
     [24, 'sweater_mother', "large"],
     [25, 'sweater_mother', "xl"],
+    [null, 'sweater_mother', ""],
 
     [15, 'sweater_father', "xs"],
     [38, 'sweater_father', "small"],
     [18, 'sweater_father', "medium"],
     [19, 'sweater_father', "large"],
     [20, 'sweater_father', "xl"],
+    [null, 'sweater_father', ""],
     
     [26, 'sweater_bubby', "xs"],
     [27, 'sweater_bubby', "small"],
     [28, 'sweater_bubby', "medium"],
     [29, 'sweater_bubby', "large"],
     [30, 'sweater_bubby', "xl"],
+    [null, 'sweater_bubby', ""],
     
     [31, 'sweater_zaidy', "xs"],
     [32, 'sweater_zaidy', "small"],
     [33, 'sweater_zaidy', "medium"],
     [34, 'sweater_zaidy', "large"],
     [35, 'sweater_zaidy', "xl"],
+    [null, 'sweater_zaidy', ""],
 ];
 
 $info = [];
@@ -44,19 +48,23 @@ foreach($products as $product) {
     $field = $product[1];
     $size = $product[2];
 
-    $purchaes_sql = "SELECT COUNT(*) AS purchased
-        FROM th_chidon_parent_purchases
+    $purchaes_sql = "SELECT COUNT(*) AS purchased FROM th_chidon_parent_purchases
         WHERE $field = '$size'";
-        $logger->debug($purchaes_sql);
     $purchaes_result = mysql_query($purchaes_sql);
     $purchaes_row = mysql_fetch_assoc($purchaes_result);
-
-    $sweater_sql = "SELECT *
-        FROM chidon_sweaters
-        WHERE sweater_id = $sweater_id";
-        $logger->debug($sweater_sql);
-    $sweater_result = mysql_query($sweater_sql);
-    $sweater_row = mysql_fetch_assoc($sweater_result);
+    if ($sweater_id) {
+        $sweater_sql = "SELECT * FROM chidon_sweaters
+            WHERE sweater_id = $sweater_id";
+        $sweater_result = mysql_query($sweater_sql);
+        $sweater_row = mysql_fetch_assoc($sweater_result);
+    } else {
+        $sweater_row = [
+            'sweater_name' => $field,
+            'size' => 'Unknown',
+            'gender' => '',
+            'quantity' => 0
+        ];
+    }
     $info[] = array_merge($purchaes_row, $sweater_row);
 }
 ?>
