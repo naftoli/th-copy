@@ -58,8 +58,8 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Prize Name - color</th>
             <th>School</th>
             <th>Grade</th>
-            <th>Personalized name</th>
             <th>Name</th>
+            <th>Personalized name</th>
             <th>Confirmed</th>
         </tr>
     <?php
@@ -73,8 +73,8 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $prize['prize_name'] ?> - <?= $prize['color'] ?> </td>
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $grade ?> </td>
-                <td> <?= $prize['he_name'] ?> </td>
                 <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
+                <td> <?= $prize['he_name'] ?> </td>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
             </tr>
         <?
