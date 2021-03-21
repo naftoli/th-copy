@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, cup.he_name, confirmed_chidon_5781, class_grade, class_sub
+$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, u.last, u.first, cup.he_name, confirmed_chidon_5781, class_grade, class_sub
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join th_chidon tc using (user_id) 
@@ -58,6 +58,7 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Prize Name - color</th>
             <th>School</th>
             <th>Grade</th>
+            <th>Name</th>
             <th>Personalized name</th>
             <th>Confirmed</th>
         </tr>
@@ -73,6 +74,7 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $grade ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
+                <td> <?= $prize['first'] ?> - <?= $prize['last'] ?> </td>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
             </tr>
         <?
