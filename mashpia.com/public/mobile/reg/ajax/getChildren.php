@@ -22,7 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSe
 $info = array();
 
 $parent = array();
-$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded FROM admins WHERE admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded, confirmed_chidon_5781 FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -33,6 +33,7 @@ $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
 $parent['showRefund'] = intval($row['show_chidon_refund']);
 $parent['alreadyRefunded'] = intval($row['already_refunded']);
+$parent['confirmed_chidon_5781'] = boolval($row['confirmed_chidon_5781']);
 
 $info['parent'] = $parent;
 
@@ -273,6 +274,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['shabbatonRegistered'] = 0;
         $children[$row['user_id']]['shabbatonEdit'] = 0;
         $children[$row['user_id']]['shabbatonConfirmed'] = 0;
+        $children[$row['user_id']]['confirmed_chidon_5781'] = $parent['confirmed_chidon_5781'];
 
         //if ( $row['school_id'] != 54 ) { // don't let beis rivka ch enroll
         $cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and 
