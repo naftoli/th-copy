@@ -272,6 +272,7 @@
                     <div class="chilrens" id="children">
                         <script id="childrenTpl" type="text/x-handlebars-template">
                             {{#each children}}
+                            {{log this}}
                             <div class="row" id="r{{@key}}">
                                 <div class="col-xs-12">
                                     <table width="100%" style="margin-left:-10px">
@@ -410,6 +411,9 @@
                                                             {{/if}}
                                                             <!-- <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button> -->
                                                             <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Personalizations {{this.chidon_year}} (ID: {{this.user_id}})</button>
+                                                            {{#if this.confirmed_chidon_5781}}
+                                                                <div class="chidonRegInfo"><span>Personalizations Confirmed {{this.chidon_year}} (ID: {{this.user_id}})</span></div>
+                                                            {{/if}}
                                                         {{/if}}
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
@@ -649,6 +653,7 @@
                     Cookies.set('toRegister', childrenToRegister);
 
                     // Grab the template script
+                    console.log(parent)
                     var tplScript = $("#childrenTpl").html();
 
                     // Compile the template
