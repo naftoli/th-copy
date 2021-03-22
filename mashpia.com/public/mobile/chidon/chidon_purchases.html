@@ -93,24 +93,24 @@
                             <b>Please review and confirm your purchases.</b>
                             <br /><br />
                             In this form you can update your yarmulke size and Hebrew name.
-                            <br /><br />
-                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.
-                            Please click below to edit your purchase. This will take you to the Enrollment form,
-                            where you can edit or make the changes or buy additional purchases.
-                        </div>
+<!--                            <br /><br />-->
+<!--                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.-->
+<!--                            Please click below to edit your purchase. This will take you to the Enrollment form,-->
+<!--                            where you can edit or make the changes or buy additional purchases.-->
+<!--                        </div>-->
                     </div>
                     <div class="row">
                         <div class="col-sm-12" id="purchaseInfo">
 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <br />
-                            <button id="update" class="btn btn-primary btn-block">Edit Chidon Purchase</button>
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm All</button>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-sm-12">-->
+<!--                            <br />-->
+<!--                            <button id="update" class="btn btn-primary btn-block">Edit Chidon Purchase</button>-->
+<!--                            <button id="confirmation" class="btn btn-primary btn-block">Confirm All</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -129,10 +129,8 @@
             const prizes = res.prizes
             const chidondrive = res.chidondrive
 
-            if (!transactions.length) $("#update").text("Pay for Chidon")
-
             let html = '<br />'
-
+            /*
             html += '<h4>Registrations</h4>'
             for (id in children) {
                 html += `User ID: ${children[id].user_id}<br />Name: ${children[id].first}<br />
@@ -145,6 +143,7 @@
                 noTransactionsFound = false
                 break
             }
+            if (noTransactionsFound) $("#update").text("Pay for Chidon")
 
             html += '<h4>Registration Fee:</h4>';
             for (id in chidondrive) {
@@ -199,7 +198,7 @@
                     html += '<br />'
                 }
             }
-
+            */
             html += '<h4>Prizes:</h4>'
             for (id in prizes) {
                 const name = children[id].first
@@ -216,10 +215,12 @@
                     html += '</select><br />'
                 }
                 for (p of prizes[id]) {
-                    html += `Prize: ${p.prize_name}<br />`
-                    if (p.prize_id >= 44 && p.prize_id <= 60) html += `Hebrew Name:
-                        <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
-                         <input type="button" value="Save" /><br />`
+                    if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
+                        html += `Prize: ${p.prize_name}<br />`
+                        html += `Hebrew Name:
+                            <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
+                             <input type="button" value="Save" /><br />`
+                    }
                 }
 
                 html += '<br />'
