@@ -154,7 +154,7 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
             ),
-            'trophy_cont'   =>  array(
+            'shabbaton_trophy'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'shabbaton_trophy'
             ),
