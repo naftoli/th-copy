@@ -154,7 +154,7 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Sweaters inventory Report</title>
+    <title>Sweaters</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;

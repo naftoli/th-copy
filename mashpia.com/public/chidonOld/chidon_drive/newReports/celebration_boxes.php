@@ -65,7 +65,7 @@ while($row = mysql_fetch_assoc($result)) {
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Sweaters inventory Report</title>
+    <title>Extra Celebration Boxes</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
