@@ -12,34 +12,53 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$skus = [
-    [21, 'sweater_mother', "xs"],
-    [22, 'sweater_mother', "small"],
-    [23, 'sweater_mother', "medium"],
-    [24, 'sweater_mother', "large"],
-    [25, 'sweater_mother', "xl"],
-    [null, 'sweater_mother', ""],
+if (isset($_POST['action']) && $_POST['action'] === "delete") {
+    if (!isset($_POST['th_chidon_parent_purchase_id'], $_POST['person_relation_key'])) {
+        exit("missing required params");
+    }
+    $th_chidon_parent_purchase_id = $_POST['th_chidon_parent_purchase_id'];
+    $person_relation_key = $_POST['person_relation_key'];
+    $sql = "UPDATE th_chidon_parent_purchases
+        set $person_relation_key = null,
+            {$person_relation_key}_ship = 0,
+            {$person_relation_key}_ship_addr = null
+        where th_chidon_parent_purchase_id = $th_chidon_parent_purchase_id";
+    $query = mysql_query($sql);
+    if (!$query) {
+        exit("failed to update");
+    }
+}
 
-    [15, 'sweater_father', "xs"],
-    [38, 'sweater_father', "small"],
-    [18, 'sweater_father', "medium"],
-    [19, 'sweater_father', "large"],
-    [20, 'sweater_father', "xl"],
-    [null, 'sweater_father', ""],
+$only_flagged = isset($_GET['only_flagged']) && $_GET['only_flagged'];
+
+$skus = [
+    [21, 'sweater_mother', "xs", "Proud Chidon Mother"],
+    [22, 'sweater_mother', "small", "Proud Chidon Mother"],
+    [23, 'sweater_mother', "medium", "Proud Chidon Mother"],
+    [24, 'sweater_mother', "large", "Proud Chidon Mother"],
+    [25, 'sweater_mother', "xl", "Proud Chidon Mother"],
+    [null, 'sweater_mother', "", "Proud Chidon Mother"],
+
+    [15, 'sweater_father', "xs", "Proud Chidon Father"],
+    [38, 'sweater_father', "small", "Proud Chidon Father"],
+    [18, 'sweater_father', "medium", "Proud Chidon Father"],
+    [19, 'sweater_father', "large", "Proud Chidon Father"],
+    [20, 'sweater_father', "xl", "Proud Chidon Father"],
+    [null, 'sweater_father', "", "Proud Chidon Father"],
     
-    [26, 'sweater_bubby', "xs"],
-    [27, 'sweater_bubby', "small"],
-    [28, 'sweater_bubby', "medium"],
-    [29, 'sweater_bubby', "large"],
-    [30, 'sweater_bubby', "xl"],
-    [null, 'sweater_bubby', ""],
+    [26, 'sweater_bubby', "xs", "Proud Chidon Bubby"],
+    [27, 'sweater_bubby', "small", "Proud Chidon Bubby"],
+    [28, 'sweater_bubby', "medium", "Proud Chidon Bubby"],
+    [29, 'sweater_bubby', "large", "Proud Chidon Bubby"],
+    [30, 'sweater_bubby', "xl", "Proud Chidon Bubby"],
+    [null, 'sweater_bubby', "", "Proud Chidon Bubby"],
     
-    [31, 'sweater_zaidy', "xs"],
-    [32, 'sweater_zaidy', "small"],
-    [33, 'sweater_zaidy', "medium"],
-    [34, 'sweater_zaidy', "large"],
-    [35, 'sweater_zaidy', "xl"],
-    [null, 'sweater_zaidy', ""],
+    [31, 'sweater_zaidy', "xs", "Proud Chidon Zaidy"],
+    [32, 'sweater_zaidy', "small", "Proud Chidon Zaidy"],
+    [33, 'sweater_zaidy', "medium", "Proud Chidon Zaidy"],
+    [34, 'sweater_zaidy', "large", "Proud Chidon Zaidy"],
+    [35, 'sweater_zaidy', "xl", "Proud Chidon Zaidy"],
+    [null, 'sweater_zaidy', "", "Proud Chidon Zaidy"],
 ];
 $sweaters = [];
 
@@ -57,21 +76,23 @@ $summary = [];
 $purchases = [];
 $purchase_keys = [];
 $duplicate_purchase_keys = [];
+$flagged_admins = [];
 foreach($skus as $sku) {
     $sweater_id = $sku[0];
-    $field = $sku[1];
+    $person_relation_key = $sku[1];
     $size = $sku[2];
+    $sweater_name = $sku[3];
 
     // summamry
     $summary_sql = "SELECT COUNT(*) AS purchased FROM th_chidon_parent_purchases
-        WHERE $field = '$size'";
+        WHERE $person_relation_key = '$size'";
     $summary_result = mysql_query($summary_sql);
     $summary_row = mysql_fetch_assoc($summary_result);
     if ($sweater_id) {
         $sweater_row = $sweaters[$sweater_id];
     } else {
         $sweater_row = [
-            'sweater_name' => $field,
+            'sweater_name' => $sweater_name,
             'size' => 'Unknown',
             'gender' => '',
             'quantity' => 0
@@ -80,16 +101,19 @@ foreach($skus as $sku) {
     $summary[] = array_merge($summary_row, $sweater_row);
 
     // purchases
-    $purchases_sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last, {$field}_ship_addr as ship_addr
+    $purchases_sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
+        a.admin_phone_mobile AS father_cell, a.admin_phone_mobile2 as mother_cell,
+        {$person_relation_key}_ship_addr as ship_addr
         FROM th_chidon_parent_purchases tcpp 
         join admins a using (admin_id)
-        WHERE $field = '$size'
+        WHERE $person_relation_key = '$size'
         order by a.last, a.first, a.admin_id";
     $purchases_result = mysql_query($purchases_sql);
     while($purchases_row = mysql_fetch_assoc($purchases_result)) {
-        $purchase_key = $purchases_row['admin_id'].":".$field;
+        $purchase_key = $purchases_row['admin_id'].":".$person_relation_key;
         if (array_key_exists($purchase_key, $purchase_keys)) {
             $duplicate_purchase_keys[$purchase_key] = true;
+            $flagged_admins[$purchases_row['admin_id']] = true;
         }
         $purchase_keys[$purchase_key] = true;
 
@@ -97,7 +121,7 @@ foreach($skus as $sku) {
             $sweater_row = $sweaters[$sweater_id];
         } else {
             $sweater_row = [
-                'sweater_name' => $field,
+                'sweater_name' => $sweater_name,
                 'size' => 'Unknown',
             ];
         }
@@ -115,7 +139,7 @@ foreach($skus as $sku) {
         ";
         $child_result = mysql_query($child_sql);
         $child_row = mysql_fetch_assoc($child_result);
-        $purchases[] = array_merge($purchases_row, $sweater_row, $child_row, ['purchase_key' => $purchase_key]);
+        $purchases[] = array_merge($purchases_row, $sweater_row, $child_row, ['purchase_key' => $purchase_key, 'person_relation_key' => $person_relation_key]);
     }
 }
 
@@ -159,40 +183,51 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
             background-color: yellow;
         }
     </style>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
 </head>
 <body>
     <h1>Sweaters</h1>
 
-    <h2>Inventory Summary</h1>
-    <table>
-        <tr>
-            <th>Sweater Name</th>
-            <th>Size</th>
-            <th>Gender</th>
-            <th>Quantity</th>
-            <th>Purchased</th>
-            <th>Amount Left</th>
-        </tr>
-        <? foreach ($summary as $sweater) { ?>
+    <? if(!$only_flagged) { ?>
+        <h2>Inventory Summary</h1>
+        <table>
             <tr>
-                <td> <?= $sweater['sweater_name'] ?> </td>
-                <td> <?= $sweater['size'] ?> </td>
-                <td> <?= $sweater['gender'] ?> </td>
-                <td> <?= $sweater['quantity'] ?> </td>
-                <td> <?= $sweater['purchased'] ?> </td>
-                <td> <?= ($sweater['quantity'] - $sweater['purchased']) ?> </td>
+                <th>Sweater Name</th>
+                <th>Size</th>
+                <th>Gender</th>
+                <th>Quantity</th>
+                <th>Purchased</th>
+                <th>Amount Left</th>
             </tr>
-        <? } ?>
-    </table>
-    <br />
-    <br />
+            <? foreach ($summary as $sweater) { ?>
+                <tr>
+                    <td> <?= $sweater['sweater_name'] ?> </td>
+                    <td> <?= $sweater['size'] ?> </td>
+                    <td> <?= $sweater['gender'] ?> </td>
+                    <td> <?= $sweater['quantity'] ?> </td>
+                    <td> <?= $sweater['purchased'] ?> </td>
+                    <td> <?= ($sweater['quantity'] - $sweater['purchased']) ?> </td>
+                </tr>
+            <? } ?>
+        </table>
+        <br />
+        <br />
+    <? } ?>
 
-    <h1>Purchases</h1>
+    <h1><?= $only_flagged  ? "Flagged " : ""?>Purchases</h1>
     <table>
         <tr>
-            <th>Canceled</th>
+            <th>Cancel</th>
             <th>Admin ID</th>
-            <th>Child Name</th>
+            <? if ($only_flagged) { ?>
+                <th>Fathers cell</th>
+                <th>Mothers cell</th>
+            <? } ?>
+            <th>Parent</th>
+            <th>Child</th>
             <th>Sweater Name</th>
             <th>Size</th>
             <th>school</th>
@@ -204,11 +239,27 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
             $duplicate = array_key_exists($purchase['purchase_key'], $duplicate_purchase_keys);
             $missing_size = $purchase['size'] === "Unknown";
             $skipped_payment = $purchase['authorize_desc'] === "skipped credit card payment";
-            $warn = $duplicate || $missing_size || $skipped_payment;
+            $flagged_admin = isset($flagged_admins[$purchase['admin_id']]) && $flagged_admins[$purchase['admin_id']];
+            $flagged = $flagged_admin || $duplicate || $missing_size || $skipped_payment;
+            if ($only_flagged && !$flagged) {
+                continue;
+            };
         ?>
             <tr>
-                <td><input type="checkbox" name="cancel"/></td>
+                <td>
+                    <form class="cancel-sweater-form" method="post" action="./cancel_sweater.php">
+                        <input type="hidden" name="action" value="delete"/>
+                        <input type="hidden" name="th_chidon_parent_purchase_id" value="<?= $purchase['th_chidon_parent_purchase_id'] ?>"/>
+                        <input type="hidden" name="person_relation_key" value="<?= $purchase['person_relation_key'] ?>"/>
+                        <input type="submit" value="Cancel"/>
+                    </form>
+                </td>
                 <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['admin_id'] ?> </td>
+                <? if ($only_flagged) { ?>
+                    <td> <?= $purchase['father_cell'] ?> </td>
+                    <td> <?= $purchase['mother_cell'] ?> </td>
+                <? } ?>
+                <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['admin_first'] ?> <?= $purchase['admin_last'] ?> </td>
                 <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['user_first'] ?> <?= $purchase['user_last'] ?> </td>
                 <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['sweater_name'] ?> </td>
                 <td class="<?= $missing_size ? " warning" : ""?>"> <?= $purchase['size'] ?> </td>
@@ -219,5 +270,27 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
             </tr>
         <? } ?>
     </table>
+    <script>
+        $(document).ready(function () {
+            $(".cancel-sweater-form").submit(function (event) {
+                event.preventDefault();
+                var form = $(this)
+                form.find(':submit').attr("disabled","disabled")
+                $.ajax({
+                    type: "POST",
+                    url: form.attr("action"),
+                    data: form.serialize(),
+                    encode: true,
+                }).done(function (data) {
+                    if (data === "1") {
+                        form.replaceWith("Canceled");
+                    } else if (data === "0") {
+                        form.find(':submit').removeAttr("disabled")
+                    } 
+                });
+
+            });
+        });
+    </script>
 </body>
 </html>
