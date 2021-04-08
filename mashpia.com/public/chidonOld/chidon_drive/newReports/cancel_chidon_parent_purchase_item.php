@@ -17,10 +17,11 @@ if (!isset($_POST['th_chidon_parent_purchase_id'], $_POST['person_relation_key']
 }
 $th_chidon_parent_purchase_id = $_POST['th_chidon_parent_purchase_id'];
 $person_relation_key = $_POST['person_relation_key'];
+$ship_address_col = $person_relation_key === "celeb_box_add" ? "{$person_relation_key}_addr" : "{$person_relation_key}_ship_addr";
 $sql = "UPDATE th_chidon_parent_purchases
     set $person_relation_key = null,
         {$person_relation_key}_ship = 0,
-        {$person_relation_key}_ship_addr = null
+        $ship_address_col = null
     where th_chidon_parent_purchase_id = $th_chidon_parent_purchase_id";
 $query = mysql_query($sql);
 echo $query ? "1" : "0";
