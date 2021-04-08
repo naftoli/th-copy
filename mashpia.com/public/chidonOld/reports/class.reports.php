@@ -154,6 +154,18 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
             ),
+            'trophy_cont'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'shabbaton_trophy'
+            ),
+            'khk_rep'       =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'khk_rep'
+            ),
+            'school_rep'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'school_rep'
+            ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
                 'column'    =>  'year'
