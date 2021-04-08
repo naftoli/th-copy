@@ -142,7 +142,7 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'walking_group'
             ),
-            'winner_type'   =>  array(
+            'test_type' =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'test_type'
             ),

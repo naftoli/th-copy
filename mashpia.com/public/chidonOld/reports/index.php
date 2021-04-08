@@ -33,7 +33,7 @@ $info = array(
 		'sandwich'		=>	'Sandwich',
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
-		'winner_type'	=>	'Eligibility Status',
+		'test_type' 	=>	'Eligibility Status',
 		'walking'			=>	'Walk Alone',
 		'walking_group'	=>	'Walking Group',
 		'bunk_number'	=>	'Bunk',
@@ -223,7 +223,6 @@ if (isset($_POST['submit'])) {
 		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
 		'host_address'	=>	array('host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
-		//'winner_type'	=>	array('contestant', 'school_rep', 'khk', 'trophy_contestant'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
@@ -369,16 +368,6 @@ if (isset($_POST['submit'])) {
 									}
 								} else if ( $column == 'between_streets' ) {
 									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
-								} else if ($column == 'winner_type') {
-									if (intval($row[$lookup[$column][1]])) {
-										$html .= 'school rep';
-									} else if (intval($row[$lookup[$column][0]])) {
-										$html .= 'contestant';
-									} else if (intval($row[$lookup[$column][2]])) {
-										$html .= 'khk';
-									} else if (intval($row[$lookup[$column][3]])) {
-										$html .= 'trophy contestant';
-									}
 								} else {
 								    $sep = ', ';
 								    if ($column == 'grade') $sep = '-';
