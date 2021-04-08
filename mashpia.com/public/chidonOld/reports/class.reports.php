@@ -144,7 +144,7 @@ class Reports
             ),
             'winner_type'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('khk', 'trophy_contestant', 'contestant', 'school_rep')
+                'column'    =>  'test_type'
             ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
@@ -295,6 +295,10 @@ class Reports
             'morning_pickup'    =>  array(
                 'table'     =>  'th_chidon', 
                 'column'    =>  'morning_pickup'
+            ),
+            'trip_option'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'trip_option'
             ),
             // 'bus'       =>  array(
             //     'table'     =>  'th_chidon',

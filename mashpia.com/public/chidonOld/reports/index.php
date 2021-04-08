@@ -90,7 +90,8 @@ $info = array(
 		'anash_airport'	=>	'Airport (AK)', 
 		'anash_arrival'	=>	'Arrival (AK)',
 		'known_family'	=>	'Known Family', 
-		'morning_pickup'=>	'Morning Pickup'
+		'morning_pickup'=>	'Morning Pickup',
+        'trip_option'   =>  'Trip Option'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
@@ -222,7 +223,7 @@ if (isset($_POST['submit'])) {
 		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
 		'host_address'	=>	array('host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
-		'winner_type'	=>	array('contestant', 'school_rep', 'khk', 'trophy_contestant'),
+		//'winner_type'	=>	array('contestant', 'school_rep', 'khk', 'trophy_contestant'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
@@ -331,6 +332,18 @@ if (isset($_POST['submit'])) {
 											echo "<td>Private Ride</td>";
 											break;
 									}
+                                } else if ($column == 'trip_option') {
+                                    switch ( intval($row[$column]) ) {
+                                        case 1:
+                                            echo "<td>New York Trip</td>";
+                                            break;
+                                        case 2:
+                                            echo "<td>California Trip</td>";
+                                            break;
+                                        case 3:
+                                            echo "<td>Family Trip</td>";
+                                            break;
+                                    }
                                 } else {
 									echo "<td>" . $row[$column] . "</td>";
 								}
