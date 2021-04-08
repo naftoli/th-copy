@@ -23,7 +23,7 @@ $info = array(
 		'school_id'     =>  'School ID',
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
-		'host_number'		=>	'Host Number',
+		'host_number'	=>	'Host Number',
 		'host_address_num'	=>	'Accomodation Address Number',
 		'host_address'	=>	'Accomodation Address',
 		'between_streets'	=>	'Cross Streets',
@@ -34,8 +34,9 @@ $info = array(
 		'sandwich'		=>	'Sandwich',
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
-		'test_type' 	=>	'Eligibility Status',
-		'walking'			=>	'Walk Alone',
+		'test_type' 	=>	'Track',
+		'eligibility'   =>  'Eligibility Status',
+		'walking'		=>	'Walk Alone',
 		'walking_group'	=>	'Walking Group',
 		'bunk_number'	=>	'Bunk',
 		'test1'         =>  'Test 1 Mark',
@@ -230,7 +231,8 @@ if (isset($_POST['submit'])) {
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
         'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
-        'grade'         =>  array('class_grade', 'class_sub')
+        'grade'         =>  array('class_grade', 'class_sub'),
+        'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
 //		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
@@ -369,6 +371,14 @@ if (isset($_POST['submit'])) {
 									}
 								} else if ( $column == 'between_streets' ) {
 									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
+                                } else if ( $column == 'eligibility' ) {
+								    if ( intval($row[$lookup[$column][0]]) ) {
+								        $html .= 'Sweater';
+                                    } else if ( intval($row[$lookup[$column][1]]) ) {
+								        $html .= "Sweater and Gifts";
+                                    } else if ( intval($row[$lookup[$column][2]] ) ) {
+								        $html .= "Prizes and Trips";
+                                    }
 								} else {
 								    $sep = ', ';
 								    if ($column == 'grade') $sep = '-';

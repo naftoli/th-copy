@@ -150,6 +150,10 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'test_type'
             ),
+            'eligibility'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
+            ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
                 'column'    =>  'year'
