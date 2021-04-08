@@ -12,23 +12,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-if (isset($_POST['action']) && $_POST['action'] === "delete") {
-    if (!isset($_POST['th_chidon_parent_purchase_id'], $_POST['person_relation_key'])) {
-        exit("missing required params");
-    }
-    $th_chidon_parent_purchase_id = $_POST['th_chidon_parent_purchase_id'];
-    $person_relation_key = $_POST['person_relation_key'];
-    $sql = "UPDATE th_chidon_parent_purchases
-        set $person_relation_key = null,
-            {$person_relation_key}_ship = 0,
-            {$person_relation_key}_ship_addr = null
-        where th_chidon_parent_purchase_id = $th_chidon_parent_purchase_id";
-    $query = mysql_query($sql);
-    if (!$query) {
-        exit("failed to update");
-    }
-}
-
 $only_flagged = isset($_GET['only_flagged']) && $_GET['only_flagged'];
 
 $skus = [
@@ -247,7 +230,7 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
         ?>
             <tr>
                 <td>
-                    <form class="cancel-sweater-form" method="post" action="./cancel_sweater.php">
+                    <form class="cancel-sweater-form" method="post" action="./cancel_chidon_parent_purchase_item.php">
                         <input type="hidden" name="action" value="delete"/>
                         <input type="hidden" name="th_chidon_parent_purchase_id" value="<?= $purchase['th_chidon_parent_purchase_id'] ?>"/>
                         <input type="hidden" name="person_relation_key" value="<?= $purchase['person_relation_key'] ?>"/>
