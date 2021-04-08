@@ -9,6 +9,7 @@ require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 require 'authorize.php';
+define('SANDBOX', true);
 
 // find parents with duplicates so that we don't process holds as of now
 $duplicates = [];
@@ -62,10 +63,10 @@ foreach ($parents as $idx => $parent) {
     if ($charge <= 0) {
         echo "Parent ID: " . $parent['admin_id'] . " raised more than they were charged. 
             Raised: " . $parent['raised'] . " On Hold: " . $parent['amount'] . "<br />";
-        $response = releaseHold($parent['authorize_id'], true);
+        $response = releaseHold($parent['authorize_id'], SANDBOX);
     } else {
         echo "Parent ID: " . $parent['admin_id'] . " will be charged: " . $charge . "<br />";
-        $response = chargeHold($charge, $parent['authorize_id'], true);
+        $response = chargeHold($charge, $parent['authorize_id'], SANDBOX);
     }
     echo "<pre>";
     print_r($response);

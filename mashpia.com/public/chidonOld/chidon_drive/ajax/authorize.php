@@ -90,6 +90,7 @@ function chargeHold($amount, $transID, $test = false) {
 
     // Assemble the complete transaction request
     $request = new AnetAPI\CreateTransactionRequest();
+    $request->setRefId($refId);
     $request->setMerchantAuthentication($merchantAuthentication);
     $request->setTransactionRequest($transactionRequestType);
 
@@ -127,6 +128,7 @@ function releaseHold($transID, $test = false) {
 
     // Assemble the complete transaction request
     $request = new AnetAPI\CreateTransactionRequest();
+    $request->setRefId($refId);
     $request->setMerchantAuthentication($merchantAuthentication);
     $request->setTransactionRequest($transactionRequestType);
 
