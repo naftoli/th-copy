@@ -20,6 +20,7 @@ $info = array(
 		'dob'			=>	'Date of Birth',
 		'book'			=>	'Book',
 		'grade'			=>	'Grade',
+		'school_id'     =>  'School ID',
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',

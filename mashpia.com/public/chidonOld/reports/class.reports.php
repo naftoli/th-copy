@@ -46,6 +46,10 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'last as last_name',
             ),
+            'school_id' =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_id'
+            ),
             'school'    =>  array(
                 'table'     =>  'schools',
                 'column'    =>  'school_name as school',
