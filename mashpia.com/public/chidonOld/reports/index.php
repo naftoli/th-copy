@@ -349,6 +349,9 @@ if (isset($_POST['submit'])) {
                                             echo "<td>Family Trip</td>";
                                             break;
                                     }
+                                } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
+                                    if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
+                                    else echo "<td>No</td>";
                                 } else {
 									echo "<td>" . $row[$column] . "</td>";
 								}
