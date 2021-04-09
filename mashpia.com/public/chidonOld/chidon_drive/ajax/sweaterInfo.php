@@ -24,8 +24,17 @@ while ( $row = mysql_fetch_assoc($result) ) {
             $type = 'zaidy';
             break;
     }
+    // find out real quantity/stock
+    $arrSize = explode(' ', $row['size']);
+    $size = strtolower($arrSize[1]);
+    $sqlQty = "select count(*) as total from th_chidon_parent_purchases 
+                where sweater_{$type} = '$size'";
+//    echo $sqlQty;
+    $resQty = mysql_query($sqlQty);
+    $rowQty = mysql_fetch_assoc($resQty);
     $sweaters[$type][$row['size']] = [
-        'qty'   =>  intval($row['quantity']) - intval($row['purchased']),
+        // 'qty'   =>  intval($row['quantity']) - intval($row['purchased']),
+        'qty'   =>  intval($row['quantity']) - intval($rowQty['total']),
         'img'   =>  $row['sweater_picture']
     ];
 }
