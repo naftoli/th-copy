@@ -96,7 +96,11 @@ $info = array(
 		'anash_arrival'	=>	'Arrival (AK)',
 		'known_family'	=>	'Known Family', 
 		'morning_pickup'=>	'Morning Pickup',
-        'trip_option'   =>  'Trip Option'
+        'trip_option'   =>  'Trip Option',
+        'raised'        =>  'Chidon Drive Raised',
+        'cd_rohr'       =>  'Rohr',
+        'cd_total'      =>  'Total Chidon Drive',
+        'cd_balance'    =>  'Registration Balance'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
@@ -162,12 +166,21 @@ if (isset($_POST['submit'])) {
 	$limit = false;
 	$chidonType = '';
 	$byAvg = array();
+	$rohr = false;
+	$cd_total = false;
+	$cd_balance = false;
 	foreach ($_POST as $k => $v) {
 		if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
 		else if ($k == 'genderLimit') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
 		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
+		else if (strpos($k, 'cd_') !== false) {
+            if ($k == 'cd_rohr') $rohr = true;
+            else if ($k == 'cd_total') $cd_total = true;
+            else if ($k == 'cd_balance') $cd_balance = true;
+		    continue; // don't add chidon drive extras to data
+        }
 		else if ( !in_array( $k, $data ) ) $data[] = mysql_real_escape_string($k);
 		if ( $k == 'accomodations' ) $data[] = 'between_streets'; // add between streets to accomodation info
 	}
@@ -217,6 +230,7 @@ if (isset($_POST['submit'])) {
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
 		$result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
 		while ($row = mysql_fetch_assoc($result)) {
+
 			$report[] = $row;
 		}
 	} else {
@@ -295,6 +309,12 @@ if (isset($_POST['submit'])) {
 							foreach ($info as $legend => $other) {
 								if (array_key_exists($column, $info[$legend])) {
 									echo "<th>" . $info[$legend][$column] . "</th>";
+                                    if ($column == 'raised') {
+                                        // check if we need to add any chidon drive stuff
+                                        if ($rohr) echo "<th>Rohr</th>";
+                                        if ($cd_total) echo "<th>Total Chidon Drive</th>";
+                                        if ($cd_balance) echo "<th>Registration Balance</th>";
+                                    }
 								}
 							}
 						}
@@ -354,6 +374,24 @@ if (isset($_POST['submit'])) {
                                     else echo "<td>No</td>";
                                 } else {
 									echo "<td>" . $row[$column] . "</td>";
+                                    if ($column == 'raised') {
+                                        // check if we need to add any chidon drive stuff
+                                        if ($rohr) {
+                                            if (intval($row[$column]) >= 270) echo "<td>100</td>";
+                                            else echo "<td>0</td>";
+                                        }
+                                        if ($cd_total) {
+                                            $total = intval($row[$column]);
+                                            if ($total >= 270) $total += 100;
+                                            echo "<td>" . $total . "</td>";
+                                        }
+                                        if ($cd_balance) {
+                                            $half = intval($row[$column]) / 2;
+                                            $balance = 185 - $half;
+                                            if ($balance < 0) $balance = 0;
+                                            echo "<td>" . $balance . "</td>";
+                                        }
+                                    }
 								}
 							} else {
 								// build html output

@@ -27,7 +27,8 @@ class Reports
             'th_chidon_bunks'       =>  'tcb',
             'th_chidon_walking_bunks'  =>  'tcwb',
             'th_chidon_walking_chaperones' => 'tcwc', 
-            'classes'               =>  'cl'
+            'classes'               =>  'cl',
+            'chidon_user_subsidies' =>  'cus'
         );
         $this->fields = array(
             'chidon_id'     =>  array(
@@ -580,8 +581,12 @@ class Reports
                 'column'    =>  'phone as walking_chaperone_number'
             ),
             'walking_chaperone_zone' => array (
-                'table'     => 'th_chidon_walking_chaperones',
+                'table'     =>  'th_chidon_walking_chaperones',
                 'column'    =>  'walking_zone as walking_chaperone_zone'
+            ),
+            'raised'        =>  array(
+                'table'     =>  'chidon_user_subsidies',
+                'column'    =>  'SUM(cus.subsidy_amount) as raised'
             )
         );
     }
@@ -612,7 +617,9 @@ class Reports
                             $sql .= $this->aliases[$table] . "." . $column . ", ";
                         }
                     } else {
-                        $sql .= $this->aliases[$table] . "." . $columns . ", ";
+                        // do NOT USE ALIAS WHEN USING SUM, COUNT, etc
+                        if ($table == 'chidon_user_subsidies') $sql .= $columns . ", ";
+                        else $sql .= $this->aliases[$table] . "." . $columns . ", ";
                     }
                 }
             }
@@ -652,6 +659,9 @@ class Reports
                                 break;
                             case 'th_chidon_walking_chaperones':
                                 $sql .= " left join th_chidon_chaps tcwc on tcwc.walking_zone = tc.walking_zone COLLATE utf8_unicode_ci";
+                                break;
+                            case 'chidon_user_subsidies':
+                                $sql .= " left join chidon_user_subsidies cus on cus.user_id = tc.user_id and cus.chidon_year = " . $this->year;
                                 break;
                         }
                         break;
