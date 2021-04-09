@@ -16,6 +16,10 @@ if ( isset($_GET['go']) && $_GET['go'] == 'back' ) {
     $m->setNextDates();
 }
 
+if (isset($_GET['start']) && isset($_GET['end'])) {
+    $m->overrideDates($_GET['start'], $_GET['end']);
+}
+
 $heDates = $m->getHeReportDates();
 $m->setMedalSummary();
 $summary = $m->getMedalSummary();
