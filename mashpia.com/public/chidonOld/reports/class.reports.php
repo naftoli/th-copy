@@ -153,7 +153,11 @@ class Reports
             ),
             'eligibility'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
+                'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy')
+            ),
+            'chidon_final_mark' =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'chidon_final_mark'
             ),
             'shabbaton_trophy'   =>  array(
                 'table'     =>  'th_chidon',
@@ -169,7 +173,7 @@ class Reports
             ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
-                'column'    =>  'year'
+    'column'    =>  'year'
             ),
             'poll'      =>  array(
                 'table'     =>  'th_chidon', 
