@@ -376,6 +376,8 @@ if (isset($_POST['submit'])) {
                                 } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
                                     if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
                                     else echo "<td>No</td>";
+                                } else if ($column == 'chidon_final_mark') {
+								    echo "<td>" . intval($row[$column]) * 2 . "%</td>";
                                 } else {
 									echo "<td>" . $row[$column] . "</td>";
                                     if ($column == 'raised') {
