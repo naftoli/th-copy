@@ -249,7 +249,7 @@ if (isset($_POST['submit'])) {
 		'parent_login'	=>	array('username', 'password'),
         'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
         'grade'         =>  array('class_grade', 'class_sub'),
-        'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert')
+        'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy')
 //		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
@@ -423,7 +423,7 @@ if (isset($_POST['submit'])) {
 								        $html .= 'Sweater';
                                     } else if ( intval($row[$lookup[$column][1]]) ) {
 								        $html .= "Sweater and Gifts";
-                                    } else if ( intval($row[$lookup[$column][2]] ) ) {
+                                    } else if ( intval($row[$lookup[$column][2]]) || intval($row[$lookup][$column][3]) ) {
 								        $html .= "Prizes and Trips";
                                     }
 								} else {
