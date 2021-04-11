@@ -424,7 +424,7 @@ if (isset($_POST['submit'])) {
 								        $html .= 'Sweater';
                                     } else if ( intval($row[$lookup[$column][1]]) ) {
 								        $html .= "Sweater and Gifts";
-                                    } else if ( intval($row[$lookup[$column][2]]) || intval($row[$lookup][$column][3]) ) {
+                                    } else if ( intval($row[$lookup[$column][2]]) || intval($row[$lookup[$column][3]]) ) {
 								        $html .= "Prizes and Trips";
                                     }
 								} else {
