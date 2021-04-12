@@ -148,7 +148,6 @@ function array_sort_by_props(&$array, $props) {
 }
 
 array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -175,7 +174,7 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
     <h1>Sweaters</h1>
 
     <? if(!$only_flagged) { ?>
-        <h2>Inventory Summary</h1>
+        <h1>Inventory Summary</h1>
         <table>
             <tr>
                 <th>Sweater Name</th>
