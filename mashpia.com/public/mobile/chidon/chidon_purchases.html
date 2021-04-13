@@ -286,7 +286,7 @@
                 html += "<br />"
             }
 
-            if (coupon_code) {
+            if (coupon_code.length) {
                 html += '<h4>Coupon Code</h4>'
                 html += `Code: ${coupon_code.code}<br />`
                 html += `Amount: ${coupon_code.value}<br />`
