@@ -91,13 +91,13 @@
                     <div class="row">
                         <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
                             <b>Please review and confirm your purchases.</b>
-                            <br /><br />
-                            In this form you can update your yarmulke size and Hebrew name.
 <!--                            <br /><br />-->
-<!--                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.-->
-<!--                            Please click below to edit your purchase. This will take you to the Enrollment form,-->
-<!--                            where you can edit or make the changes or buy additional purchases.-->
-<!--                        </div>-->
+<!--                            In this form you can update your yarmulke size and Hebrew name.-->
+                            <br /><br />
+                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.
+                            Please click below to edit your purchase. This will take you to the Enrollment form,
+                            where you can edit or make the changes or buy additional purchases.
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12" id="purchaseInfo">
@@ -106,8 +106,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <br />
-<!--                            <button id="update" class="btn btn-primary btn-block">Edit Chidon Purchase</button>-->
+                            <button id="update" class="btn btn-primary btn-block">Edit</button>
                             <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
                         </div>
                     </div>
@@ -130,60 +129,125 @@
             const chidondrive = res.chidondrive
 
             let html = '<br />'
-            /*
-            html += '<h4>Registrations</h4>'
-            for (id in children) {
-                html += `User ID: ${children[id].user_id}<br />Name: ${children[id].first}<br />
-                    Registered: ${children[id].date_paid ? children[id].date_paid : 'NOT YET REGISTERED'}<br /><br/>`
-            }
 
             // is there transactions
             let noTransactionsFound = true
+            let admin_id, family
             for (id in transactions) {
+                admin_id = id
+                family = transactions[id][0].last
                 noTransactionsFound = false
                 break
             }
             if (noTransactionsFound) $("#update").text("Pay for Chidon")
-
-            html += '<h4>Registration Fee:</h4>';
-            for (id in chidondrive) {
-                let raised = parseFloat(chidondrive[id].raised)
-                let rohr = raised >= 270 ? 100 : 0
-                let subsidy = parseFloat((raised + rohr) / 2)
-                html += `Name: ${children[id].first}<br />Registration Fee: ${children[id].paid ? children[id].paid : 185.00}`
-                if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
-                else html += " <b>Paid</b>"
-                html += `<br />Raised: ${raised}<br />Rohr Grant: ${rohr}<br />Total: ${raised + rohr}<br />
-                        50% Registration fee subsidy: ${subsidy}<br/><br />`
+            else {
+                html += `Family ${family}<br />
+                         Family ID: ${admin_id}`
             }
 
-            html += `<h4>Celebration Box(es): ${purchases.celeb_box ? purchases.celeb_box : 0}</h4>`
+            html += '<h4>Registration</h4>'
+            for (id in children) {
+                const child = children[id]
+                html += `${child.th_chidon_id} ${child.first} ${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
+            }
 
-            html += '<h4>Extra Celebration Boxes & Sweaters</h4>'
-            if (parseInt(purchases.celeb_box_add)) html += 'Extra Celebration Box - $20<br />'
+            html += '<h4>Prizes and Celebration Items</h4>'
+            html += '<h5>Prizes and Gifts</h5>'
+            let celeb_boxes = purchases.celeb_box ? purchases.celeb_box : 0
+            for (id in children) {
+                let status
+                const child = children[id]
+                if (parseInt(child.shabbaton_maven)) status = "Mivtzah Maven - Eligible for Chidon Sweater"
+                else if (parseInt(child.shabbaton_pro)) status = "Maven / Pro - Eligible for Chidon Sweater & Gifts"
+                else if (parseInt(child.shabbaton_expert)) status = "Expert - Eligible for Full Chidon Experience"
+                else if (parseInt(child.shabbaton_trophy)) status = "Trophy - Eligible for Full Chidon Experience + Trophy Finalist"
+                html += `<b>${child.first} : ${status}</b><br />`
+                html += `Sweater size: ${child.size}<br />`
+
+                if (parseInt(child.shabbaton_pro) || parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
+                    const gender = child.gender
+                    if (gender == 'M') {
+                        const size = parseInt(children[id].yarmulka)
+                        html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${id}">`
+                        for (let i = 3; i <= 6; i++) {
+                            html += `<option value=${i}`
+                            if (i == size) html += ' selected'
+                            html += `>${i}</option>`
+                        }
+                        html += '</select><br />'
+                    } else {
+                        html += 'Chidon Necklace<br />'
+                    }
+                    if (prizes[id]) {
+                        for (p of prizes[id]) {
+                            html += `Prize: ${p.prize_name}<br />`
+                            if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
+                                html += `Hebrew Name:
+                                    <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
+                                     <input type="button" value="Save" /><br />`
+                            }
+                        }
+                    }
+                    if (celeb_boxes) {
+                        if (parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
+                            html += "Celebration Box<br />"
+                            celeb_boxes--
+                        }
+                    }
+                    html += "<br />"
+                }
+            }
+
+            let school
+            for (id in children) {
+                school = children[id].school_name
+                break
+            }
+
+            html += '<h4>Extra Sweaters</h4>'
             if (purchases.sweater_mother) {
-                html += `Mother Sweater - $25, Size: ${purchases.sweater_mother}<br />`
+                html += `Mother: ${purchases.sweater_mother} - $25 - shipped to `
+                if (parseInt(purchases.sweater_mother_ship)) {
+                    html += `${purchases.sweater_mother_ship_addr}<br />`
+                } else {
+                    html += `school<br />`
+                }
             }
-            if (parseInt(purchases.sweater_mother_ship)) {
-                html += `Mother Sweater Shipping - $10, Address: ${purchases.sweater_mother_ship_addr}<br />`
-            }
+
             if (purchases.sweater_father) {
-                html += `Father Sweater - $25, Size: ${purchases.sweater_father}<br />`
+                html += `Father: ${purchases.sweater_father} - $25 - shipped to `
+                if (parseInt(purchases.sweater_father_ship)) {
+                    html += `${purchases.sweater_father_ship_addr}<br />`
+                } else {
+                    html += `school<br />`
+                }
             }
-            if (parseInt(purchases.sweater_father_ship)) {
-                html += `Father Sweater Shipping - $10, Address: ${purchases.sweater_father_ship_addr}<br />`
-            }
+
             if (purchases.sweater_bubby) {
-                html += `Bubby Sweater - $25, Size: ${purchases.sweater_bubby}<br />`
+                html += `Bubby: ${purchases.sweater_bubby} - $25 - shipped to `
+                if (parseInt(purchases.sweater_bubby_ship)) {
+                    html += `${purchases.sweater_bubby_ship_addr}<br />`
+                } else {
+                    html += `school<br />`
+                }
             }
-            if (parseInt(purchases.sweater_bubby_ship)) {
-                html += `Bubby Sweater Shipping - $10, Address: ${purchases.sweater_bubby_ship_addr}<br />`
-            }
+
             if (purchases.sweater_zaidy) {
-                html += `Zaidy Sweater - $25, Size: ${purchases.sweater_zaidy}<br />`
+                html += `Zaidy: ${purchases.sweater_zaidy} - $25 - shipped to `
+                if (parseInt(purchases.sweater_zaidy_ship)) {
+                    html += `${purchases.sweater_zaidy_ship_addr}<br />`
+                } else {
+                    html += `school<br />`
+                }
             }
-            if (parseInt(purchases.sweater_zaidy_ship)) {
-                html += `Zaidy Sweater Shipping - $10, Address: ${purchases.sweater_zaidy_ship_addr}<br />`
+
+            if (parseInt(purchases.celeb_box_add)) {
+                html += '<h4>Celebration Boxes</h4>'
+                html += '1 Extra Celebration Box - $20<br />'
+                if (parseInt(purchases.celeb_box_add_ship)) {
+                    html += '$10 Shipping<br />'
+                    html += purchases.celeb_box_add_addr + "<br />"
+                }
             }
 
             html += '<h4>Payments:</h4>'
@@ -198,32 +262,18 @@
                     html += '<br />'
                 }
             }
-            */
-            html += '<h4>Prizes:</h4>'
-            for (id in prizes) {
-                const name = children[id].first
-                const gender = children[id].gender
-                html += `<h5>${name}</h5>`
-                if (gender == 'M') {
-                    const size = parseInt(children[id].yarmulka)
-                    html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${children[id].user_id}">`
-                    for (let i = 3; i <= 6; i++) {
-                        html += `<option value=${i}`
-                        if (i == size) html += ' selected'
-                        html += `>${i}</option>`
-                    }
-                    html += '</select><br />'
-                }
-                for (p of prizes[id]) {
-                    if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
-                        html += `Prize: ${p.prize_name}<br />`
-                        html += `Hebrew Name:
-                            <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
-                             <input type="button" value="Save" /><br />`
-                    }
-                }
 
-                html += '<br />'
+            html += '<h4>Chidon Drive</h4>';
+            for (id in chidondrive) {
+                let raised = parseFloat(chidondrive[id].raised)
+                let rohr = raised >= 270 ? 100 : 0
+                let total = raised + rohr
+                let subsidy = parseFloat((raised + rohr) / 2)
+                html += `${children[id].first}<br />$${raised} Raised + $${rohr} Rohr = $${total}<br />`
+                html += `Registration Fee Balance: $${185 - subsidy}<br />`
+                if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
+                else html += " <b>Paid</b>"
+                html += "<br /><br />"
             }
 
             $("#purchaseInfo").append(html)

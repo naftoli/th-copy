@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
@@ -7,7 +10,7 @@ require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
 
 $purchases = [];
-$sql = "select * from th_chidon_parent_purchases where authorize_id > 1 and admin_id = " . $admin_id;
+$sql = "select * from th_chidon_parent_purchases tcpp join admins using (admin_id) where authorize_id > 1 and tcpp.admin_id = " . $admin_id;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $purchases[$row['admin_id']][] = $row;
@@ -49,9 +52,11 @@ foreach ($purchases as $admin => $details) {
 }
 
 $children = [];
-$sql = "select user_id, first, date_paid, paid, yarmulka, gender, parent_id  
+$sql = "select th_chidon_id, s.school_name, user_id, first, date_paid, paid, yarmulka, gender, parent_id, size, 
+            shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy  
         from th_chidon tc 
-        join users using (user_id) 
+        join users u using (user_id) 
+        join schools s on s.school_id = u.school_id
         where tc.year = " . $year . " 
         and tc.parent_id = " . $admin_id;
 $result = mysql_query($sql);
