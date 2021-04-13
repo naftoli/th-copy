@@ -96,10 +96,10 @@ while($row = mysql_fetch_assoc($result)) {
             <th>Parent</th>
             <th>Child</th>
             <th>Amount</th>
-            <th>school</th>
+            <th>School</th>
             <th>authorize_desc</th>
             <th>authorize_trans_type</th>
-            <th>Adrress</th>
+            <th>Address</th>
         </tr>
         <? foreach ($purchases as $purchase) {
             $skipped_payment = $purchase['authorize_desc'] === "skipped credit card payment";
