@@ -270,10 +270,19 @@
                 let total = raised + rohr
                 let subsidy = parseFloat((raised + rohr) / 2)
                 html += `${children[id].first}<br />$${raised} Raised + $${rohr} Rohr = $${total}<br />`
+                html +- `Registration Fee: $185<br />`
+                html += `50% raised from Chidon Drive applied to fee: $${subsidy}<br />`
                 html += `Registration Fee Balance: $${185 - subsidy}<br />`
                 if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
                 else html += " <b>Paid</b>"
-                html += "<br /><br />"
+                html += "<br />"
+                const tickets = parseInt(raised / 50)
+                let grandTickets = 0
+                if (raised >= 500) grandTickets = 4
+                else if (raised >= 270) grandTickets = 1
+                if (tickets) html += `${tickets} tickets in Chidon Drive Raffle<br />`
+                if (grandTickets) html += `${grandTickets} tickets in Chidon Drive Grand Raffle<br />`
+                html += "<br />"
             }
 
             $("#purchaseInfo").append(html)
