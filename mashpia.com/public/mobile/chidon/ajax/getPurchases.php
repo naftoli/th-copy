@@ -97,10 +97,18 @@ foreach ($children as $user_id => $child) {
     $chidondrive[$user_id]['raised'] = $row['total'] ?? 0;
 }
 
+$coupon = [];
+$sql = "select * from coupon_codes where year = $year and admin_id = $admin_id and date_redeemed is not null";
+$result = mysql_query($sql);
+if (mysql_num_rows($result) > 0) {
+    $coupon = mysql_fetch_assoc($result);
+}
+
 echo json_encode([
     'transactions' => $purchases,
     'purchases'    => $info,
     'children'     => $children,
     'prizes'       => $prizes,
-    'chidondrive'  => $chidondrive
+    'chidondrive'  => $chidondrive,
+    'coupon'       => $coupon
 ]);

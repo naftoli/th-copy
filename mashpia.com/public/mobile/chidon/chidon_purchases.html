@@ -127,6 +127,7 @@
             const children = res.children
             const prizes = res.prizes
             const chidondrive = res.chidondrive
+            const coupon_code = res.coupon
 
             let html = '<br />'
 
@@ -283,6 +284,13 @@
                 if (tickets) html += `${tickets} tickets in Chidon Drive Raffle<br />`
                 if (grandTickets) html += `${grandTickets} tickets in Chidon Drive Grand Raffle<br />`
                 html += "<br />"
+            }
+
+            if (coupon_code) {
+                html += '<h4>Coupon Code</h4>'
+                html += `Code: ${coupon_code.code}<br />`
+                html += `Amount: ${coupon_code.value}<br />`
+                html += `Given For: ${coupon_code.reason}<br />`
             }
 
             $("#purchaseInfo").append(html)
