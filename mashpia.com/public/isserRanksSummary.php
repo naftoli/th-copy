@@ -92,9 +92,9 @@ $schools = $as->getSchools();
 
     <p>
         <? if ($prev) : ?>
-            <a href="isserRanks.php">Show next shipment</a>
+            <a href="isserRanksSummary.php">Show next shipment</a>
         <? else : ?>
-            <a href="isserRanks.php?prev=1">Show previous shipment</a>
+            <a href="isserRanksSummary.php?prev=1">Show previous shipment</a>
         <? endif; ?>
     </p>
 
