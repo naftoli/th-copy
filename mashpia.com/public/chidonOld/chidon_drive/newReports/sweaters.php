@@ -212,10 +212,10 @@ array_sort_by_props($purchases, ['admin_last', 'admin_first', 'sweater_name']);
             <th>Child</th>
             <th>Sweater Name</th>
             <th>Size</th>
-            <th>school</th>
+            <th>School</th>
             <th>authorize_desc</th>
             <th>authorize_trans_type</th>
-            <th>Adrress</th>
+            <th>Address</th>
         </tr>
         <? foreach ($purchases as $purchase) {
             $duplicate = array_key_exists($purchase['purchase_key'], $duplicate_purchase_keys);
