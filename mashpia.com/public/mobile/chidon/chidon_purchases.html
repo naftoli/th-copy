@@ -106,7 +106,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button id="update" class="btn btn-primary btn-block">Edit</button>
+                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>
                             <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
                         </div>
                     </div>
@@ -132,28 +132,28 @@
             let html = '<br />'
 
             // is there transactions
-            let noTransactionsFound = true
-            let admin_id, family
-            for (id in transactions) {
-                admin_id = id
-                family = transactions[id][0].last
-                noTransactionsFound = false
-                break
-            }
-            if (noTransactionsFound) $("#update").text("Pay for Chidon")
-            else {
-                html += `Family ${family}<br />
-                         Family ID: ${admin_id}`
-            }
+            // let noTransactionsFound = true
+            // let admin_id, family
+            // for (id in transactions) {
+            //     admin_id = id
+            //     family = transactions[id][0].last
+            //     noTransactionsFound = false
+            //     break
+            // }
+            // if (noTransactionsFound) $("#update").text("Pay for Chidon")
+            // else {
+            //     html += `Family ${family}<br />
+            //              Family ID: ${admin_id}`
+            // }
+            //
+            // html += '<h4>Registration</h4>'
+            // for (id in children) {
+            //     const child = children[id]
+            //     html += `${child.th_chidon_id} ${child.first} ${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
+            // }
 
-            html += '<h4>Registration</h4>'
-            for (id in children) {
-                const child = children[id]
-                html += `${child.th_chidon_id} ${child.first} ${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
-            }
-
-            html += '<h4>Prizes and Celebration Items</h4>'
-            html += '<h5>Prizes and Gifts</h5>'
+            // html += '<h4>Prizes and Celebration Items</h4>'
+            // html += '<h5>Prizes and Gifts</h5>'
             let celeb_boxes = purchases.celeb_box ? purchases.celeb_box : 0
             for (id in children) {
                 let status
@@ -162,6 +162,7 @@
                 else if (parseInt(child.shabbaton_pro)) status = "Maven / Pro - Eligible for Chidon Sweater & Gifts"
                 else if (parseInt(child.shabbaton_expert)) status = "Expert - Eligible for Full Chidon Experience"
                 else if (parseInt(child.shabbaton_trophy)) status = "Trophy - Eligible for Full Chidon Experience + Trophy Finalist"
+                html += "<div style='font-size: 18px; line-height: 1.5;'>"
                 html += `<b>${child.first} : ${status}</b><br />`
                 html += `Sweater size: ${child.size}<br />`
 
@@ -195,114 +196,115 @@
                             celeb_boxes--
                         }
                     }
-                    html += "<br />"
+                    html += "<br /></div>"
                 }
             }
 
-            let school
-            for (id in children) {
-                school = children[id].school_name
-                break
-            }
-
-            html += '<h4>Extra Sweaters</h4>'
-            if (purchases.sweater_mother) {
-                html += `Mother: ${purchases.sweater_mother} - $25 - shipping to `
-                if (parseInt(purchases.sweater_mother_ship)) {
-                    html += `${purchases.sweater_mother_ship_addr}<br />`
-                } else {
-                    html += `school<br />`
-                }
-            }
-
-            if (purchases.sweater_father) {
-                html += `Father: ${purchases.sweater_father} - $25 - shipping to `
-                if (parseInt(purchases.sweater_father_ship)) {
-                    html += `${purchases.sweater_father_ship_addr}<br />`
-                } else {
-                    html += `school<br />`
-                }
-            }
-
-            if (purchases.sweater_bubby) {
-                html += `Bubby: ${purchases.sweater_bubby} - $25 - shipping to `
-                if (parseInt(purchases.sweater_bubby_ship)) {
-                    html += `${purchases.sweater_bubby_ship_addr}<br />`
-                } else {
-                    html += `school<br />`
-                }
-            }
-
-            if (purchases.sweater_zaidy) {
-                html += `Zaidy: ${purchases.sweater_zaidy} - $25 - shipping to `
-                if (parseInt(purchases.sweater_zaidy_ship)) {
-                    html += `${purchases.sweater_zaidy_ship_addr}<br />`
-                } else {
-                    html += `school<br />`
-                }
-            }
-
-            if (parseInt(purchases.celeb_box_add)) {
-                html += '<h4>Celebration Boxes</h4>'
-                html += '1 Extra Celebration Box - $20<br />'
-                if (parseInt(purchases.celeb_box_add_ship)) {
-                    html += '$10 Shipping<br />'
-                    html += purchases.celeb_box_add_addr + "<br />"
-                }
-            }
-
-            html += '<h4>Payments:</h4>'
-            if (noTransactionsFound) html += "NO Payments Found<br /><br />"
-            for (id in transactions) {
-                for (t of transactions[id]) {
-                    html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
-                        Transaction ID: ${t.authorize_id}<br />Method: `
-                    if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
-                    else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
-                    if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
-                    html += '<br />'
-                }
-            }
-
-            html += '<h4>Chidon Drive</h4>';
-            for (id in chidondrive) {
-                let raised = parseFloat(chidondrive[id].raised)
-                let rohr = raised >= 270 ? 100 : 0
-                let total = raised + rohr
-                let subsidy = parseFloat((raised + rohr) / 2)
-                html += `${children[id].first}<br />$${raised} Raised + $${rohr} Rohr = $${total}<br />`
-                html +- `Registration Fee: $185<br />`
-                html += `50% raised from Chidon Drive applied to fee: $${subsidy}<br />`
-                html += `Registration Fee Balance: $${185 - subsidy}<br />`
-                if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
-                else html += " <b>Paid</b>"
-                html += "<br />"
-                const tickets = parseInt(raised / 50)
-                let grandTickets = 0
-                if (raised >= 500) grandTickets = 4
-                else if (raised >= 270) grandTickets = 1
-                if (tickets) html += `${tickets} tickets in Chidon Drive Raffle<br />`
-                if (grandTickets) html += `${grandTickets} tickets in Chidon Drive Grand Raffle<br />`
-                html += "<br />"
-            }
-
-            if (coupon_code.length) {
-                html += '<h4>Coupon Code</h4>'
-                html += `Code: ${coupon_code.code}<br />`
-                html += `Amount: ${coupon_code.value}<br />`
-                html += `Given For: ${coupon_code.reason}<br />`
-            }
+            // let school
+            // for (id in children) {
+            //     school = children[id].school_name
+            //     break
+            // }
+            //
+            // html += '<h4>Extra Sweaters</h4>'
+            // if (purchases.sweater_mother) {
+            //     html += `Mother: ${purchases.sweater_mother} - $25 - shipping to `
+            //     if (parseInt(purchases.sweater_mother_ship)) {
+            //         html += `${purchases.sweater_mother_ship_addr}<br />`
+            //     } else {
+            //         html += `school<br />`
+            //     }
+            // }
+            //
+            // if (purchases.sweater_father) {
+            //     html += `Father: ${purchases.sweater_father} - $25 - shipping to `
+            //     if (parseInt(purchases.sweater_father_ship)) {
+            //         html += `${purchases.sweater_father_ship_addr}<br />`
+            //     } else {
+            //         html += `school<br />`
+            //     }
+            // }
+            //
+            // if (purchases.sweater_bubby) {
+            //     html += `Bubby: ${purchases.sweater_bubby} - $25 - shipping to `
+            //     if (parseInt(purchases.sweater_bubby_ship)) {
+            //         html += `${purchases.sweater_bubby_ship_addr}<br />`
+            //     } else {
+            //         html += `school<br />`
+            //     }
+            // }
+            //
+            // if (purchases.sweater_zaidy) {
+            //     html += `Zaidy: ${purchases.sweater_zaidy} - $25 - shipping to `
+            //     if (parseInt(purchases.sweater_zaidy_ship)) {
+            //         html += `${purchases.sweater_zaidy_ship_addr}<br />`
+            //     } else {
+            //         html += `school<br />`
+            //     }
+            // }
+            //
+            // if (parseInt(purchases.celeb_box_add)) {
+            //     html += '<h4>Celebration Boxes</h4>'
+            //     html += '1 Extra Celebration Box - $20<br />'
+            //     if (parseInt(purchases.celeb_box_add_ship)) {
+            //         html += '$10 Shipping<br />'
+            //         html += purchases.celeb_box_add_addr + "<br />"
+            //     }
+            // }
+            //
+            // html += '<h4>Payments:</h4>'
+            // if (noTransactionsFound) html += "NO Payments Found<br /><br />"
+            // for (id in transactions) {
+            //     for (t of transactions[id]) {
+            //         html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
+            //             Transaction ID: ${t.authorize_id}<br />Method: `
+            //         if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
+            //         else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
+            //         if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
+            //         html += '<br />'
+            //     }
+            // }
+            //
+            // html += '<h4>Chidon Drive</h4>';
+            // for (id in chidondrive) {
+            //     let raised = parseFloat(chidondrive[id].raised)
+            //     let rohr = raised >= 270 ? 100 : 0
+            //     let total = raised + rohr
+            //     let subsidy = parseFloat((raised + rohr) / 2)
+            //     html += `${children[id].first}<br />$${raised} Raised + $${rohr} Rohr = $${total}<br />`
+            //     html +- `Registration Fee: $185<br />`
+            //     html += `50% raised from Chidon Drive applied to fee: $${subsidy}<br />`
+            //     html += `Registration Fee Balance: $${185 - subsidy}<br />`
+            //     if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
+            //     else html += " <b>Paid</b>"
+            //     html += "<br />"
+            //     const tickets = parseInt(raised / 50)
+            //     let grandTickets = 0
+            //     if (raised >= 500) grandTickets = 4
+            //     else if (raised >= 270) grandTickets = 1
+            //     if (tickets) html += `${tickets} tickets in Chidon Drive Raffle<br />`
+            //     if (grandTickets) html += `${grandTickets} tickets in Chidon Drive Grand Raffle<br />`
+            //     html += "<br />"
+            // }
+            //
+            // if (coupon_code.length) {
+            //     html += '<h4>Coupon Code</h4>'
+            //     html += `Code: ${coupon_code.code}<br />`
+            //     html += `Amount: ${coupon_code.value}<br />`
+            //     html += `Given For: ${coupon_code.reason}<br />`
+            // }
 
             $("#purchaseInfo").append(html)
         })
 
         $("#update").click( function( e ) {
             e.preventDefault()
-            alert("Please note: Even if you are just making edits WHEN YOU GET TO THE PAYMENT SECTION, YOU MUST PUT IN YOUR CREDIT CARD. " +
-                "Your card will only be charged if you add a  purchase that you have not yet paid for. " +
-                "If you are just making edits your card will not be charged.")
-            Cookies.set('chidon_admin', Cookies.get('admin'))
-            location.href = 'http://chidondrive.com/site/enrollNew.html'
+            // alert("Please note: Even if you are just making edits WHEN YOU GET TO THE PAYMENT SECTION, YOU MUST PUT IN YOUR CREDIT CARD. " +
+            //     "Your card will only be charged if you add a  purchase that you have not yet paid for. " +
+            //     "If you are just making edits your card will not be charged.")
+            // Cookies.set('chidon_admin', Cookies.get('admin'))
+            // location.href = 'http://chidondrive.com/site/enrollNew.html'
+            location.href = 'chidon_prizes.html'
         })
 
         $(document).on('change', '.yarmulka', function() {

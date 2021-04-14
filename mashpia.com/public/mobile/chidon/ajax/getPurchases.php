@@ -53,11 +53,14 @@ foreach ($purchases as $admin => $details) {
 
 $children = [];
 $sql = "select th_chidon_id, s.school_name, user_id, first, date_paid, paid, yarmulka, gender, parent_id, size, 
-            shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy  
+            shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, tcs.option   
         from th_chidon tc 
         join users u using (user_id) 
-        join schools s on s.school_id = u.school_id
+        join schools s on s.school_id = u.school_id 
+        join th_chidon_schools tcs on tcs.school_id = u.school_id and tcs.year = tc.year
         where tc.year = " . $year . " 
+        and (shabbaton_expert = 1 or shabbaton_trophy = 1) 
+        and tc.paid > 25 
         and tc.parent_id = " . $admin_id;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -76,16 +79,16 @@ foreach ($children as $user_id => $child) {
         $prizes[$user_id][] = $row;
     }
 }
-
+/*
 $chidondrive = [];
 foreach ($children as $user_id => $child) {
-    $sql = "SELECT 
+    $sql = "SELECT
                 SUM(subsidy_amount) AS total
             FROM
                 mashpiadb.chidon_user_subsidies
             WHERE
-                user_id = " . $user_id . " 
-                    AND chidon_donation_id IN (SELECT 
+                user_id = " . $user_id . "
+                    AND chidon_donation_id IN (SELECT
                         chidon_donation_id
                     FROM
                         chidon_donations
@@ -103,12 +106,12 @@ $result = mysql_query($sql);
 if (mysql_num_rows($result) > 0) {
     $coupon = mysql_fetch_assoc($result);
 }
-
+*/
 echo json_encode([
     'transactions' => $purchases,
     'purchases'    => $info,
     'children'     => $children,
     'prizes'       => $prizes,
-    'chidondrive'  => $chidondrive,
-    'coupon'       => $coupon
+//    'chidondrive'  => $chidondrive,
+//    'coupon'       => $coupon
 ]);
