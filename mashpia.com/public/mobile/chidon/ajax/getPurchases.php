@@ -59,8 +59,7 @@ $sql = "select th_chidon_id, s.school_name, user_id, first, date_paid, paid, yar
         join schools s on s.school_id = u.school_id 
         join th_chidon_schools tcs on tcs.school_id = u.school_id and tcs.year = tc.year
         where tc.year = " . $year . " 
-        and (shabbaton_expert = 1 or shabbaton_trophy = 1) 
-        and tc.paid > 25 
+        and (shabbaton_maven = 1 or shabbaton_pro = 1 or shabbaton_expert = 1 or shabbaton_trophy = 1) 
         and tc.parent_id = " . $admin_id;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
