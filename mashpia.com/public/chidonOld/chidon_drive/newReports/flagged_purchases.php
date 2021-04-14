@@ -22,7 +22,7 @@ function get_celebration_box_purchases() {
         FROM th_chidon_parent_purchases tcpp 
         join admins a using (admin_id)
         WHERE celeb_box_add > 0
-        order by a.last, a.first, a.admin_id limit 300";
+        order by a.last, a.first, a.admin_id";
     $result = mysql_query($sql);
     $purchases = [];
     while($row = mysql_fetch_assoc($result)) {

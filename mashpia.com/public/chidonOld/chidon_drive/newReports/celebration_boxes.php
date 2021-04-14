@@ -33,7 +33,7 @@ $sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
     FROM th_chidon_parent_purchases tcpp 
     join admins a using (admin_id)
     WHERE celeb_box_add > 0
-    order by a.last, a.first, a.admin_id limit 300";
+    order by a.last, a.first, a.admin_id";
 $result = mysql_query($sql);
 while($row = mysql_fetch_assoc($result)) {
     $admin_id = $row['admin_id'];
