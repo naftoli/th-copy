@@ -16,7 +16,9 @@ function get_celebration_box_purchases() {
     global $year;
     // purchases
     $sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
-        a.admin_phone_mobile AS father_cell, a.admin_phone_mobile2 as mother_cell, celeb_box_add_addr as ship_addr
+        a.admin_phone_mobile AS father_cell, a.admin_phone_mobile2 as mother_cell,
+        celeb_box_add_ship as ship,
+        celeb_box_add_addr as ship_addr
         FROM th_chidon_parent_purchases tcpp 
         join admins a using (admin_id)
         WHERE celeb_box_add > 0
@@ -26,7 +28,7 @@ function get_celebration_box_purchases() {
     while($row = mysql_fetch_assoc($result)) {
         $admin_id = $row['admin_id'];
         // get oldest child registered for the chidon
-        $child_sql = "SELECT s.school_name, u.first as user_first, u.last as user_last from users u
+        $child_sql = "SELECT s.school_id, s.school_name, u.first as user_first, u.last as user_last from users u
             join admin_auths aa on (aa.id = u.user_id and aa.auth = 'user')
             join th_chidon c on (c.user_id = u.user_id and c.year = $year and (
                 c.shabbaton_maven = 1 or c.shabbaton_pro = 1 or c.shabbaton_expert = 1 or c.shabbaton_trophy = 1
@@ -99,6 +101,7 @@ function get_sweater_purchases() {
 
         $purchases_sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
             a.admin_phone_mobile AS father_cell, a.admin_phone_mobile2 as mother_cell,
+            {$person_relation_key}_ship as ship,
             {$person_relation_key}_ship_addr as ship_addr
             FROM th_chidon_parent_purchases tcpp 
             join admins a using (admin_id)
@@ -118,7 +121,7 @@ function get_sweater_purchases() {
                 ];
             }
             // get oldest child registered for the chidon
-            $child_sql = "SELECT s.school_name, u.first as user_first, u.last as user_last from users u
+            $child_sql = "SELECT s.school_id, s.school_name, u.first as user_first, u.last as user_last from users u
                 join admin_auths aa on (aa.id = u.user_id and aa.auth = 'user')
                 join th_chidon c on (c.user_id = u.user_id and c.year = $year and (
                     c.shabbaton_maven = 1 or c.shabbaton_pro = 1 or c.shabbaton_expert = 1 or c.shabbaton_trophy = 1
@@ -199,6 +202,14 @@ foreach ($purchases as $i => $purchase) {
     } else {
         $purchases[$i]['skipped_payment'] = false;
     }
+
+    // if missing shipping info
+    if ( $purchase['ship'] ? empty($purchase['ship_addr']) : !$purchase['school_id']) {
+        $flagged_admin_ids[$purchase['admin_id']] = true;
+        $purchases[$i]['shipping_issue'] = true;
+    } else {
+        $purchases[$i]['shipping_issue'] = false;
+    }
 }
 
 
@@ -277,11 +288,13 @@ foreach ($purchases as $i => $purchase) {
                     <td> <?= $purchase['user_first'] ?> <?= $purchase['user_last'] ?> </td>
                     <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['sweater_name'] ?> </td>
                     <td class="<?= $purchase['missing_size'] || $duplicate ? " warning" : ""?>"> <?= $purchase['size'] ?> </td>
-                    <td> <?= $purchase['ship_addr'] || !$purchase['school_name'] ? "No" : $purchase['school_name'] ?> </td>
+                    <td> <?= $purchase['school_name'] ?? "N/A" ?> </td>
                     <td> $<?= $purchase['amount'] ?> </td>
                     <td class="<?= $purchase['skipped_payment'] ? " warning" : ""?>"> <?= $purchase['authorize_desc'] ?> </td>
                     <td> <?= $purchase['authorize_trans_type'] ?> </td>
-                    <td> <?= $purchase['ship_addr'] ?> </td>
+                    <td class="<?= $purchase['shipping_issue'] ? " warning" : ""?>">
+                        <?= $purchase['ship'] ? (empty($purchase['ship_addr']) ? "Missing address" : $purchase['ship_addr']) : ($purchase['school_id'] ? "" : "Missing (physical) school and shippping request") ?>
+                    </td>
                 </tr>
             <? } else { ?>
                 <tr class="<?= $color_background ? " background-grey" : "" ?>">
@@ -300,11 +313,13 @@ foreach ($purchases as $i => $purchase) {
                     <td> <?= $purchase['user_first'] ?> <?= $purchase['user_last'] ?> </td>
                     <td class="<?= $duplicate ? " warning" : ""?>"> Celebration Box </td>
                     <td class="<?= $duplicate ? " warning" : ""?>"> <?= $purchase['celeb_box_add'] ?></td>
-                    <td> <?= $purchase['ship_addr'] || !$purchase['school_name'] ? "No" : $purchase['school_name'] ?> </td>
+                    <td> <?= $purchase['school_name'] ?? "N/A" ?> </td>
                     <td> $<?= $purchase['amount'] ?> </td>
                     <td class="<?= $purchase['skipped_payment'] ? " warning" : ""?>"> <?= $purchase['authorize_desc'] ?> </td>
                     <td> <?= $purchase['authorize_trans_type'] ?> </td>
-                    <td> <?= $purchase['ship_addr'] ?> </td>
+                    <td class="<?= $purchase['shipping_issue'] ? " warning" : ""?>">
+                        <?= $purchase['ship'] ? (empty($purchase['ship_addr']) ? "Missing address" : $purchase['ship_addr']) : ($purchase['school_id'] ? "" : "Missing (physical) school and shippping request") ?>
+                    </td>
                 </tr>
             <? } ?>
         <? } ?>
