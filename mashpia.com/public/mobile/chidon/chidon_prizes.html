@@ -105,7 +105,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Prizes</button>
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,18 @@
         }
         if (add) {
             if (!cart[user_id]) cart[user_id] = []
+            // make sure child has enough money to add
+            const cap = children[currentUser].option == 'C' ? 200 : 100
+            let total = 0
+            for (item of cart[user_id]) {
+                total += parseInt(item.price)
+            }
+            if ((total + parseInt(itemToAdd.price)) > cap) {
+                alert('You do not have enough money to add this prize!')
+                return false
+            }
             cart[user_id].push(itemToAdd)
+            return true
         }
     }
 
@@ -161,7 +172,10 @@
         let html = "<select name='child' id='child' class='form-control btn btn-primary'>";
         for (let id in children) {
             const child = children[id]
-            html += `<option value=${id}>${child.first}</option>`
+            // only show children that can choose prizes
+            if (parseInt(child.shabbaton_expert) == 1 || parseInt(child.shabbaton_trophy) == 1) {
+                if (child.paid > 25) html += `<option value=${id}>${child.first}</option>`
+            }
         }
         html += "</select><br /><br />"
         $("#children").append(html)
@@ -175,13 +189,14 @@
 
     const setupPrizes = () => {
         $("#prizes").empty()
-        let html = ''
+        const total = children[currentUser].option == 'C' ? 200 : 100
+        let html = `<div style='font-size: 18px; margin-bottom: 20px;'>You can choose up to $${total} worth of prizes.</div>`
         // loop through prizes checking off the ones that the child already chose
         for (prize_id in prizes) {
             const prize = prizes[prize_id]
             html += `<div style="height: 85px;">
                         <input type="checkbox" id="prize_${prize_id}" name="prize_${prize_id}" class='prize'"
-                        data-info="${prize_id}:${prize.prize_name}:${prize.he_name ? prize.he_name : ''}"`
+                        data-info="${prize_id}:${prize.price}:${prize.prize_name}:${prize.he_name ? prize.he_name : ''}"`
             // check cart if prize was chosen
             if (cart[currentUser]) {
                 for (let item of cart[currentUser]) {
@@ -225,13 +240,16 @@
         const details = info.split(':')
         const item = {
             prize_id: details[0],
-            prize_name: details[1],
-            he_name: details[2] ? details[2] : null
+            price: details[1],
+            prize_name: details[2],
+            he_name: details[3] ? details[3] : null
         }
         console.log(item)
         const checked = $(this).is(":checked")
         if (checked) {
-            addToCart(currentUser, item)
+            if (!addToCart(currentUser, item)) {
+                $(this).attr('checked', false)
+            }
         } else {
             removeFromCart(currentUser, item)
         }
@@ -241,6 +259,19 @@
         const he = $(this).val()
         const prize_id = $(this).data('id')
         modifyCart(currentUser, prize_id, he)
+    })
+
+    $("#confirmation").click( function () {
+        $.post('ajax/savePrizes.php', { admin: Cookies.get('admin'), cart: cart }, function (result) {
+            const res = JSON.parse(result)
+            console.log(res)
+            if (res.success) {
+                alert('Saved.')
+            } else {
+                console.log(res.info)
+                alert(res.error)
+            }
+        })
     })
 
     $(function () {
