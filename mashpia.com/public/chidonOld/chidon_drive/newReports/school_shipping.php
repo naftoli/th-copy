@@ -331,8 +331,8 @@ foreach($purchases_by_admin_id as $purchases) {
         <h3><?= $school_name ?></h3>
         <table>
             <tr>
-                <th>Class</th>
                 <th>Serial</th>
+                <th>Class</th>
                 <th>Name</th>
                 <th>Purchases</th>
             </tr>
