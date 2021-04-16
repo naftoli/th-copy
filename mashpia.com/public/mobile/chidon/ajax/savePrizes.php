@@ -45,6 +45,6 @@ if ($success) {
     echo json_encode([
         'success'   =>  false,
         'info'      =>  mysql_error(),
-        'error'     =>  'There was an error saving your cart.'
+        'error'     =>  'There was an error saving your prizes.'
     ]);
 }
