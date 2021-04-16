@@ -335,7 +335,7 @@
         })
 
         $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { admin: Cookies.get('admin') }, function(result) {
+            $.post('ajax/confirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
                 const res = JSON.parse(result)
                 if (res.success) alert('Confirmed.')
                 else {
