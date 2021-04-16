@@ -90,9 +90,14 @@
                 <div id="regInfo">
                     <div class="row">
                         <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-                            <b>Please review and confirm your prizes.</b>
-                            <br /><br />
-                            In this form you can update your yarmulke size and Hebrew name.
+                            Your family’s Chidon prize selections and sizes are listed below. Please review for accuracy and update if necessary.
+                            (Please note that sweater sizes cannot be changed at this time.)
+                            <br />
+                            Use the "Edit Prizes" button at the bottom to change your prize selection.
+
+                            <!--                            <b>Please review and confirm your prizes.</b>-->
+<!--                            <br /><br />-->
+<!--                            In this form you can update your yarmulke size and Hebrew name.-->
 <!--                            <br /><br />-->
 <!--                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.-->
 <!--                            Please click below to edit your purchase. This will take you to the Enrollment form,-->
@@ -182,7 +187,7 @@
                     }
                     if (prizes[id]) {
                         for (p of prizes[id]) {
-                            html += `Prize: ${p.prize_name}<br />`
+                            html += `Prize: ${p.prize_name} ($${p.price})<br />`
                             if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
                                 html += `Hebrew Name:
                                     <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
