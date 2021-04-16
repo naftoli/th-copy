@@ -89,8 +89,8 @@
             <div class="login-box-body">
                 <div id="regInfo">
                     <div class="row">
-                        <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-
+                        <div class="col-sm-12" style="font-size: 18px; margin-bottom: 15px;">
+                            <a href="chidon_purchases.html">Back to Prize Summary</a>
                         </div>
                     </div>
                     <div class="row">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Prizes</button>
+                            <button id="confirmation" class="btn btn-primary btn-block">Update Prize Selection</button>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
 
     const setupChildren = () => {
         let html = "<div style='font-size: 18px; line-height: 1.5; margin-bottom: 20px;'>Please select a child to edit their prize selections.<br/>" +
-            "<b>Be sure to click \"Confirm\" at the bottom of the page to ensure your changes are recorded.</b></div>"
+            "<b>Be sure to click \"Update Prize Selection\" at the bottom of the page to ensure your changes are recorded.</b></div>"
         html += "<select name='child' id='child' class='form-control btn btn-primary'>";
         for (let id in children) {
             const child = children[id]
@@ -282,6 +282,7 @@
             console.log(res)
             if (res.success) {
                 alert('Saved.')
+                $(document).scrollTop(0)
             } else {
                 console.log(res.info)
                 alert(res.error)
