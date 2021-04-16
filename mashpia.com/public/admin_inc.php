@@ -63,6 +63,8 @@ if (!isset($menu_type))
             <li><a href="anashShipLabels.php">Anash Kinder Medals Shipping Labels</a></li>    
             <li></li><br />   
             <li><a href="isserRanks.php">Isser's Rank Summary Report</a></li>
+            <li><a href="isserRanksSummary.php.php">Isser's Rank Summary Only Report</a></li>
+            <li></li><br />
             <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?></A>
 			<li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
             <li></li><br />      
