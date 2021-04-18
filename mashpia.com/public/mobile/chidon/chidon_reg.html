@@ -136,17 +136,24 @@
       // }
 
       // is there transactions
-      let noTransactionsFound = true
+      let admin_id
       html += '<b>Registration</b><br /><br />'
       for (id in children) {
           const child = children[id]
           html += `${child.th_chidon_id} ${child.first} `
-          if (!children[id].date_paid) $("#update").show()
-          html += `${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
-          noTransactionsFound = false
-      } if (noTransactionsFound) {
-        html += "No Transactions Found."
-        $("#update").show()
+          if (!children[id].date_paid) {
+            html += 'NOT YET REGISTERED'
+            $("#update").show()
+          } else {
+            // check if there's actual payment
+            admin_id = child.parent_id
+            if (!transactions[admin_id]) {
+              html += 'REGISTERED BUT NO PAYMENT FOUND'
+            } else {
+              html += 'REGISTERED'
+            }
+          }
+          html += '<br />'
       }
 
       $("#purchaseInfo").append(html)
