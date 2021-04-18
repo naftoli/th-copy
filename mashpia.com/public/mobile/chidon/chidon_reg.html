@@ -125,15 +125,7 @@
 
       let html = '<br /><div style="font-size: 18px; line-height: 1.5;">'
 
-      // is there transactions
-      let noTransactionsFound = true
       // let admin_id, family
-      for (id in transactions) {
-          // admin_id = id
-          // family = transactions[id][0].last
-          noTransactionsFound = false
-          break
-      }
       // if (noTransactionsFound) {
       //   html += 'No Transactions found.'
       //   $("#update").show()
@@ -143,12 +135,15 @@
       //              Family ID: ${admin_id}<br /><br />`
       // }
 
+      // is there transactions
+      let noTransactionsFound = true
       html += '<b>Registration</b><br /><br />'
       for (id in children) {
           const child = children[id]
           html += `${child.th_chidon_id} ${child.first} `
           if (!children[id].date_paid) $("#update").show()
           html += `${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
+          noTransactionsFound = false
       } if (noTransactionsFound) {
         html += "No Transactions Found."
         $("#update").show()
