@@ -10,16 +10,13 @@ $admin_auth = ['school'];
 require_once __DIR__ . '/../../../header.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-$sql_limit = isset($_GET['limit']) ? (" limit ".(int)$_GET['limit']) : "";
 
+$only_totals = isset($_GET['only_totals']) && $_GET['only_totals'];
+$only_details = isset($_GET['only_details']) && $_GET['only_details'];
 $show_details = true;
 $show_totals = true;
-if (isset($_GET['only_totals'])) {
-    $show_details = false;
-}
-if (isset($_GET['only_details'])) {
-    $show_totals = false;
-}
+if ($only_totals) { $show_details = false; }
+if ($only_details) { $show_totals = false; }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
@@ -36,32 +33,18 @@ $users_query = mysql_query($users_sql);
 $users_by_school = [];
 $users_by_admin = [];
 while($user = mysql_fetch_assoc($users_query)) {
-    // var_dump($user);
-    if (array_key_exists($user['school_id'], $users_by_school)){
-        $users_by_school[$user['school_id']][] = $user;
-    } else {
-        $users_by_school[$user['school_id']] = [$user];
-    }
-    if (array_key_exists($user['admin_id'], $users_by_admin)){
-        $users_by_admin[$user['admin_id']][] = $user;
-    } else {
-        $users_by_admin[$user['admin_id']] = [$user];
-    }
+    if (!array_key_exists($user['school_id'], $users_by_school)) { $users_by_school[$user['school_id']] = []; }
+    $users_by_school[$user['school_id']][] = $user;
+    if (!array_key_exists($user['admin_id'], $users_by_admin)) { $users_by_admin[$user['admin_id']] = []; }
+    $users_by_admin[$user['admin_id']][] = $user;
 }
-// var_dump($schools);
-// var_dump($users_by_school);
-// var_dump(array_keys($schools));
-// var_dump(array_values($schools));
-// exit;
+
 function get_celebration_box_purchases() {
-    global $year, $sql_limit, $logger;
-    // purchases
     $sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
         celeb_box as celeb_box_amount, 0 as ship, null as ship_addr
         FROM th_chidon_parent_purchases tcpp 
         join admins a using (admin_id)
-        WHERE (celeb_box is not null and celeb_box > 0)
-        $sql_limit";
+        WHERE (celeb_box is not null and celeb_box > 0)";
     $result = mysql_query($sql);
     $purchases = [];
     while($row = mysql_fetch_assoc($result)) {
@@ -71,14 +54,11 @@ function get_celebration_box_purchases() {
 }
 
 function get_extra_celebration_box_purchases() {
-    global $year, $sql_limit,$logger;
-    // purchases
     $sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
         celeb_box_add as celeb_box_amount, celeb_box_add_ship as ship, celeb_box_add_addr as ship_addr
         FROM th_chidon_parent_purchases tcpp 
         join admins a using (admin_id)
-        WHERE (celeb_box_add is not null and celeb_box_add > 0)
-        $sql_limit";
+        WHERE (celeb_box_add is not null and celeb_box_add > 0)";
     $result = mysql_query($sql);
     $purchases = [];
     while($row = mysql_fetch_assoc($result)) {
@@ -88,7 +68,6 @@ function get_extra_celebration_box_purchases() {
 }
 
 function get_sweater_purchases() {
-    global $year, $sql_limit, $logger;
     $skus = [
         [21, 'sweater_mother', "xs"],
         [22, 'sweater_mother', "small"],
@@ -130,8 +109,7 @@ function get_sweater_purchases() {
             {$person_relation_key}_ship_addr as ship_addr
             FROM th_chidon_parent_purchases tcpp 
             join admins a using (admin_id)
-            WHERE $person_relation_key = '$size'
-            $sql_limit";
+            WHERE $person_relation_key = '$size'";
         $result = mysql_query($sql);
         while($row = mysql_fetch_assoc($result)) {
             $purchases[] = array_merge($row, $sweaters[$sweater_id],
@@ -146,30 +124,6 @@ function get_sweater_purchases() {
     return $purchases;
 }
 
-function array_sort_by_props(&$array, $props) {
-    for($i = 0; $i < count($props); $i++) {
-        if (is_array($props[$i])) {
-            $props[$i][1] = !($props[$i][1] === "desc" || $props[$i][1] === -1);
-        } else {
-            $props[$i] = [$props[$i], false];
-        }
-    }
-    usort($array, function($a, $b) use ($props) {
-        foreach($props as $prop) {
-            $name = $prop[0];
-            $desc = $prop[1];
-            // allow missing keys (always gows to end)
-            if (!array_key_exists($name, $a) && !array_key_exists($name, $a)) { continue; }
-            elseif (!array_key_exists($name, $a)) { return 1; }
-            elseif (!array_key_exists($name, $b)) { return -1; }
-            $diff = $desc ? ($b[$name] <=> $a[$name]) : ($a[$name] <=> $b[$name]);
-            if ($diff !== 0 ) {
-                return $diff;
-            }
-        }
-        return 0;
-    });
-}
 
 // $func returns the key used for grouping the items
 function array_group_by($array, $func) {
@@ -183,69 +137,145 @@ function array_group_by($array, $func) {
 
 // *** load purchases ***
 $all_purchases = array_merge(get_celebration_box_purchases(), get_sweater_purchases(), get_extra_celebration_box_purchases());
-// array_sort_by_props($all_purchases, ['school_name', 'admin_last', 'admin_id', 'sweater_name']);
 
 // *** filter out home shippments ***
-$all_purchases = array_filter($all_purchases, function($purchase) { return !$purchase['ship']; });
+// $all_purchases = array_filter($all_purchases, function($purchase) { return !$purchase['ship']; });
 
 // *** group by admin_id ***
-$purchases_by_admin_id = array_group_by($all_purchases, function($purchase) { return $purchase['admin_id']; });
+// $purchases_by_admin_id = array_group_by($all_purchases, function($purchase) { return $purchase['admin_id']; });
+$purchases_by_admin_id = [];
+foreach ($all_purchases as $purchase) {
+    if (!array_key_exists($purchase['admin_id'], $purchases_by_admin_id)) { $purchases_by_admin_id[$purchase['admin_id']] = []; }
+    $purchases_by_admin_id[$purchase['admin_id']][] = $purchase;
+}
 
-$grouped_purchases = [];
-$school_summaries = [];
+$school_purchases = [];
+$all_schools_summaries = [];
+$summaries_by_school = [];
+$ak_ms_summaries = [];
+$home_summaries = [];
+$unknown_summaries = [];
+$unknown_purchases = [];
 
-// *** regroup purchases by school_id > user_id and convert to product to string ***
+$full_summaries = [];
+
+// *** convert to product to string and group based on shipping categories***
+// school_purchases by user > product > amount
+// all_schools_summaries by school > product > amount
+// summaries_by_school by product => amount
+// ak_ms_summaries (anash kinder myshliach) by product > amount
+// home_summaries (direct to home shipments) by product > amount
+// unknown_summaries (no registered children found) by product > amount
+// unknown_purchases by admin_id > product > amount
+
 foreach($purchases_by_admin_id as $purchases) {
     $admin_id = $purchases[0]['admin_id'];
-    $items = [];
     $celeb_box_amount = 0;
     $children = array_key_exists($admin_id, $users_by_admin) ? $users_by_admin[$admin_id] : [];
-    if (!count($children)) {
-        // $logger->debug("no Children found for admin $admin_id");
-        continue;
-    }
-    $children = array_filter($children, function ($child) { return !in_array($child['school_id'], [269, 61, 6561]); });
-    if (!count($children)) {
-        // $logger->debug("no Children in shipable school found for admin $admin_id");
-        continue;
-    }
-    usort($children, function ($a, $b) { return $a['dob'] <=> $b['dob']; });
-    $child = $children[0];
-    // $logger->debug('children', $children);
+    $children_in_real_school = array_filter($children, function ($child) { return !in_array($child['school_id'], [269, 61]); });
+    $children_in_virtual_school = array_filter($children, function ($child) { return in_array($child['school_id'], [269, 61]); });
+    usort($children_in_real_school, function ($a, $b) { return $a['dob'] <=> $b['dob']; });
+    $child = count($children_in_real_school) ? $children_in_real_school[0] : false;
+    $has_child_in_real_school = !!count($children_in_real_school);
+    $has_child_in_virtual_school = !!count($children_in_virtual_school);
+
     foreach($purchases as $purchase) {
-        if ($purchase['type'] === "sweater") {
-            $school_id = array_key_exists('school_id', $child) ? $child['school_id'] : 0;
-            $user_id = array_key_exists('user_id', $child) ? $child['user_id'] : 0;
-            // update user purchases
-            if (!array_key_exists($user_id, $grouped_purchases)) { $grouped_purchases[$user_id] = ['celebration_boxes' => 0, 'sweaters' => []]; }
-            $product_name = "Sweater " . $purchase['sweater_name'] . " - " . $purchase['size'];
-            $grouped_purchases[$user_id]['sweaters'][] = $product_name;
-            // update school summary
-            if (!array_key_exists($school_id, $school_summaries)) { $school_summaries[$school_id] = []; }
-            if (!array_key_exists($product_name, $school_summaries[$school_id])) { $school_summaries[$school_id][$product_name] = 0; }
-            $school_summaries[$school_id][$product_name] += 1;
+        $product_name = $purchase['type'] === "sweater" ?  "Sweater " . $purchase['sweater_name'] . " - " . $purchase['size'] : "Celebration Boxes";
+
+        // school shipment
+        if ($has_child_in_real_school && !$purchase['ship']) {
+            if ($purchase['type'] === "sweater") {
+                $school_id = array_key_exists('school_id', $child) ? $child['school_id'] : 0;
+                $user_id = array_key_exists('user_id', $child) ? $child['user_id'] : 0;
+                // update user purchases
+                if (!array_key_exists($user_id, $school_purchases)) { $school_purchases[$user_id] = ['celebration_boxes' => 0, 'sweaters' => []]; }
+                $school_purchases[$user_id]['sweaters'][] = $product_name;
+                // update by school summary
+                if (!array_key_exists($school_id, $summaries_by_school)) { $summaries_by_school[$school_id] = []; }
+                if (!array_key_exists($product_name, $summaries_by_school[$school_id])) { $summaries_by_school[$school_id][$product_name] = 0; }
+                $summaries_by_school[$school_id][$product_name] += 1;
+                // update all schools summary
+                if (!array_key_exists($product_name, $all_schools_summaries)) { $all_schools_summaries[$product_name] = 0; }
+                $all_schools_summaries[$product_name] += 1;
+                // update full summary
+                if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = 0; }
+                $full_summaries[$product_name] += 1;
+            } else {
+                if (isset($purchase['celeb_box_amount'])) {
+                    $celeb_box_amount += $purchase['celeb_box_amount'];
+                    // update all schools summary
+                    if (!array_key_exists($product_name, $all_schools_summaries)) { $all_schools_summaries[$product_name] = 0; }
+                    $all_schools_summaries[$product_name] += 1;
+                    // update full summary
+                    if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = 0; }
+                    $full_summaries[$product_name] += 1;
+                }
+            }
+
+        // for anash kinder / myshliach
+        } else if ($has_child_in_virtual_school) {
+            //  update ak/ms summary
+            if (!array_key_exists($product_name, $ak_ms_summaries)) { $ak_ms_summaries[$product_name] = 0; }
+            $ak_ms_summaries[$product_name] += 1;
+            // update full summary
+            if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = 0; }
+            $full_summaries[$product_name] += 1;
+
+        // direct home shipment
+        } else if ($purchase['ship']) {
+            //  update home summary
+            if (!array_key_exists($product_name, $home_summaries)) { $home_summaries[$product_name] = 0; }
+            $home_summaries[$product_name] += 1;
+            // update full summary
+            if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = 0; }
+            $full_summaries[$product_name] += 1;
+
+        // no registered children found
         } else {
-            if (isset($purchase['celeb_box_amount'])) {
-                $celeb_box_amount += $purchase['celeb_box_amount'];
+            //  update unknown summary
+            if (!array_key_exists($product_name, $unknown_summaries)) { $unknown_summaries[$product_name] = 0; }
+            $unknown_summaries[$product_name] += 1;
+            // update full summary
+            if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = 0; }
+            $full_summaries[$product_name] += 1;
+            
+            if (!array_key_exists($admin_id, $unknown_purchases)) { $unknown_purchases[$admin_id] = ['celebration_boxes' => 0, 'sweaters' => []]; }
+            if ($purchase['type'] === "sweater") {
+                $unknown_purchases[$admin_id]['sweaters'][] = $product_name;
+            } else {
+                $unknown_purchases[$admin_id]['celebration_boxes'] += $purchase['celeb_box_amount'];
+            }
+
+        }
+    }
+    if ($has_child_in_real_school) {
+        // distribute celebration boxes
+        foreach($children_in_real_school as $i => $child) {
+            if ($celeb_box_amount > $i) {
+                if (!array_key_exists('school_id', $child)) { $logger->debug("missing school_id"); }
+                if (!array_key_exists('user_id', $child)) { $logger->debug("missing user_id"); }
+                $school_id = array_key_exists('school_id', $child) ? $child['school_id'] : 0;
+                $user_id = array_key_exists('user_id', $child) ? $child['user_id'] : 0;
+                // update user purchases
+                if (!array_key_exists($user_id, $school_purchases)) { $school_purchases[$user_id] = ['celebration_boxes' => 0, 'sweaters' => []]; }
+                $amount = $celeb_box_amount > count($children) + $i ? 2 : 1;
+                $school_purchases[$user_id]['celebration_boxes'] += $amount;
+                // update by school summary
+                if (!array_key_exists($school_id, $summaries_by_school)) { $summaries_by_school[$school_id] = []; }
+                if (!array_key_exists("Celebration Boxes", $summaries_by_school[$school_id])) { $summaries_by_school[$school_id]["Celebration Boxes"] = 0; }
+                $summaries_by_school[$school_id]["Celebration Boxes"] += 1;
             }
         }
     }
-    // distribute celebration boxes
-    foreach($children as $i => $child) {
-        if ($celeb_box_amount > $i) {
-            $school_id = array_key_exists('school_id', $child) ? $child['school_id'] : 0;
-            $user_id = array_key_exists('user_id', $child) ? $child['user_id'] : 0;
-            // update user purchases
-            if (!array_key_exists($user_id, $grouped_purchases)) { $grouped_purchases[$user_id] = ['celebration_boxes' => 0, 'sweaters' => []]; }
-            $amount = $celeb_box_amount > count($children) + $i ? 2 : 1;
-            $grouped_purchases[$user_id]['celebration_boxes'] += $amount;
-            // update school summary
-            if (!array_key_exists($school_id, $school_summaries)) { $school_summaries[$school_id] = []; }
-            if (!array_key_exists("Celebration Boxes", $school_summaries[$school_id])) { $school_summaries[$school_id]["Celebration Boxes"] = 0; }
-            $school_summaries[$school_id]["Celebration Boxes"] += 1;
-        }
-    }
 }
+
+$summaries = [
+    "Full summary of all Sweaters and Celebration Boxes" => $full_summaries,
+    "Summary of all school shipments" => $all_schools_summaries,
+    "Summary of Anash Kinder and MyShliach shipments" => $ak_ms_summaries,
+    "Summary of Direct to home shipments" => $home_summaries,
+    "Summary of Unknown" => $unknown_summaries
+];
 
 ?>
 <!DOCTYPE html>
@@ -286,9 +316,27 @@ foreach($purchases_by_admin_id as $purchases) {
         <a class="filter-links" href="?only_details=1">Shipment Details</a>
         <a class="filter-links" href="?">All</a>
     </p>
+    <? if ($show_totals) { ?>
+        <? foreach ($summaries as $title => &$summary) { ?>
+            <? if (!count($summary)) { continue; } ?>
+            <br>
+            <table>
+                <tr>
+                    <th colspan="2"><?= $title ?></th>
+                </tr>
+                <? ksort($summary); ?>
+                <? foreach($summary as $product => $amount) { ?>
+                    <tr>
+                        <td> <?= $amount ?> </td>
+                        <td> <?= $product ?> </td>
+                    </tr>
+                <? } ?>
+            </table>
+        <? } ?>
+    <? } ?>
 
     <? foreach ($schools as $school_id => $school_name) { ?>
-        <? if (!array_key_exists($school_id, $school_summaries)) { continue; } ?>
+        <? if (!array_key_exists($school_id, $summaries_by_school)) { continue; } ?>
         <section class="page-break-defore">
             <h3><?= $school_name ?></h3>
             <? if ($show_totals) { ?>
@@ -297,8 +345,8 @@ foreach($purchases_by_admin_id as $purchases) {
                     <tr>
                         <th colspan="2">Totals</th>
                     </tr>
-                    <? ksort($school_summaries[$school_id]); ?>
-                    <? foreach($school_summaries[$school_id] as $product => $amount) { ?>
+                    <? ksort($summaries_by_school[$school_id]); ?>
+                    <? foreach($summaries_by_school[$school_id] as $product => $amount) { ?>
                         <tr>
                             <td> <?= $amount ?> </td>
                             <td> <?= $product ?> </td>
@@ -311,24 +359,26 @@ foreach($purchases_by_admin_id as $purchases) {
                 <br>
                 <table>
                     <tr>
-                        <th>Chidon ID</th>
+                        <th>School</th>
                         <th>Class</th>
+                        <th>Chidon ID</th>
                         <th>Name</th>
                         <th>Purchases</th>
                     </tr>
                     <? foreach($users_by_school[$school_id] as $user) { ?>
                         <? $user_id = $user['user_id']; ?>
-                        <? if (array_key_exists($user_id, $grouped_purchases)
-                            && (count($grouped_purchases[$user_id]['sweaters']) > 0 || $grouped_purchases[$user_id]['celebration_boxes'] > 0 )
+                        <? if (array_key_exists($user_id, $school_purchases)
+                            && (count($school_purchases[$user_id]['sweaters']) > 0 || $school_purchases[$user_id]['celebration_boxes'] > 0 )
                         ) { ?>
-                            <? $celebration_box_amount = $grouped_purchases[$user_id]['celebration_boxes'] ?>
+                            <? $celebration_box_amount = $school_purchases[$user_id]['celebration_boxes'] ?>
                             <tr>
-                                <td> <?= $user['th_chidon_id'] ?> </td>
+                                <td> <?= $schools[$user['school_id']] ?> </td>
                                 <td> <?= $user['class_grade'] . ($user['class_sub'] ? ' - '.$user['class_sub'] : '') ?> </td>
+                                <td> <?= $user['th_chidon_id'] ?> </td>
                                 <td> <?= $user['first'] . " " . $user['last'] ?> </td>
                                 <td>
                                     <?= implode('<br>', array_merge(
-                                        $grouped_purchases[$user_id]['sweaters'],
+                                        $school_purchases[$user_id]['sweaters'],
                                         ($celebration_box_amount ? ["$celebration_box_amount Celebration box" . ($celebration_box_amount > 1 ? "es" : "")] : [])
                                     )) ?>
                                 </td>

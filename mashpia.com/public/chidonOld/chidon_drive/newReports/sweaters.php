@@ -81,7 +81,7 @@ foreach($skus as $sku) {
             'quantity' => 0
         ];
     }
-    $summary[] = array_merge($summary_row, $sweater_row);
+    $summary[] = array_merge($sweater_row, $summary_row);
 
     // purchases
     $purchases_sql = "SELECT tcpp.*, a.admin_id, a.first as admin_first, a.last as admin_last,
