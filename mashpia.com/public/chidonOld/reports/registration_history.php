@@ -57,6 +57,7 @@ $users = [];
             <th>School</th>
             <th>Class</th>
             <th>Name</th>
+            <th>Total Eligible&nbsp;/ Enrolled</th>
             <th>Eligible</th>
             <th>Enrolled</th>
             <th>Enrolled 5780</th>
@@ -64,13 +65,17 @@ $users = [];
             <th>Enrolled 5778</th>
             <th>Enrolled 5777</th>
         </tr>
-        <? while($user = mysql_fetch_assoc($users_query)) { ?>
+        <? while($user = mysql_fetch_assoc($users_query)) {
+            $enrolled = $user['shabbaton_maven'] || $user['shabbaton_pro'] || $user['shabbaton_expert'] || $user['shabbaton_trophy'];
+            $total = count(array_filter([$enrolled || $user['enrolled_5781'], $user['enrolled_5780'], $user['enrolled_5779'], $user['enrolled_5778'], $user['enrolled_5777']]));
+        ?>
             <tr>
                 <td> <?= $user['chidon_id'] ?> </td>
                 <td> <?= $user['school_name'] ?> </td>
                 <td> <?= $user['class_grade'] . ($user['class_sub'] ? ' - '.$user['class_sub'] : '') ?> </td>
                 <td> <?= $user['first'] ?> - <?= $user['last'] ?> </td>
-                <td> <?= ($user['shabbaton_maven'] || $user['shabbaton_pro'] || $user['shabbaton_expert'] || $user['shabbaton_trophy']) ? "1" : "0" ?> </td>
+                <td> <?= $total ?? "0" ?> </td>
+                <td> <?= $enrolled ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5781'] ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5780'] ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5779'] ? "1" : "0" ?> </td>
