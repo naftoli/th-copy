@@ -66,8 +66,8 @@ $users = [];
             <th>Enrolled 5777</th>
         </tr>
         <? while($user = mysql_fetch_assoc($users_query)) {
-            $enrolled = $user['shabbaton_maven'] || $user['shabbaton_pro'] || $user['shabbaton_expert'] || $user['shabbaton_trophy'];
-            $total = count(array_filter([$enrolled || $user['enrolled_5781'], $user['enrolled_5780'], $user['enrolled_5779'], $user['enrolled_5778'], $user['enrolled_5777']]));
+            $eligible = $user['shabbaton_maven'] || $user['shabbaton_pro'] || $user['shabbaton_expert'] || $user['shabbaton_trophy'];
+            $total = count(array_filter([$eligible || $user['enrolled_5781'], $user['enrolled_5780'], $user['enrolled_5779'], $user['enrolled_5778'], $user['enrolled_5777']]));
         ?>
             <tr>
                 <td> <?= $user['chidon_id'] ?> </td>
@@ -75,7 +75,7 @@ $users = [];
                 <td> <?= $user['class_grade'] . ($user['class_sub'] ? ' - '.$user['class_sub'] : '') ?> </td>
                 <td> <?= $user['first'] ?> - <?= $user['last'] ?> </td>
                 <td> <?= $total ?? "0" ?> </td>
-                <td> <?= $enrolled ? "1" : "0" ?> </td>
+                <td> <?= $eligible ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5781'] ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5780'] ? "1" : "0" ?> </td>
                 <td> <?= $user['enrolled_5779'] ? "1" : "0" ?> </td>
