@@ -31,7 +31,7 @@ while ($row = mysql_fetch_assoc($result)) {
 $remove = [];
 foreach ($info as $admin_id => $details) {
     foreach ($details as $row) {
-        if ($row['authorize_id'] > 1) {
+        if ($row['authorize_id'] > 1 || $row['authorize_desc'] == '0 balance.') {
             if (!in_array($admin_id, $remove)) {
                 $remove[] = $admin_id;
                 continue 2;
