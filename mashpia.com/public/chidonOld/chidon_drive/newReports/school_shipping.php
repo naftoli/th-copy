@@ -22,6 +22,14 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
+$school_shipping_sql = "select school_id, shipping_address1, shipping_address2, shipping_city, shipping_state, shipping_postal, shipping_country from schools
+where school_id in (" . implode(',', array_keys($schools)) . ")";
+$school_shipping_query = mysql_query($school_shipping_sql);
+$school_shipping = [];
+while($school = mysql_fetch_assoc($school_shipping_query)) {
+    $school_shipping[$school['school_id']] = $school;
+}
+
 // *** load users ***
 $users_sql = "SELECT aa.admin_id, tc.th_chidon_id, u.school_id, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.dob from users u
     join classes c on c.class_id = u.class_id
@@ -161,18 +169,20 @@ $full_summaries = [];
 
 // *** convert to product to string and group based on shipping categories***
 // school_purchases by user > product > amount
-// all_schools_summaries by school > product > amount
-// summaries_by_school by product => amount
+// unknown_purchases by admin_id > product > amount
+
+// all_schools_summaries by product > amount
+// summaries_by_school by school > product > amount
 // ak_ms_summaries (anash kinder myshliach) by product > amount
 // home_summaries (direct to home shipments) by product > amount
 // unknown_summaries (no registered children found) by product > amount
-// unknown_purchases by admin_id > product > amount
+// full_summaries by product > amount
 
 foreach($purchases_by_admin_id as $purchases) {
     $admin_id = $purchases[0]['admin_id'];
     $celeb_box_amount = 0;
     $children = array_key_exists($admin_id, $users_by_admin) ? $users_by_admin[$admin_id] : [];
-    $children_in_real_school = array_filter($children, function ($child) { return !in_array($child['school_id'], [269, 61]); });
+    $children_in_real_school = array_filter($children, function ($child) { return !in_array($child['school_id'], [269, 61, 612]); });
     $children_in_virtual_school = array_filter($children, function ($child) { return in_array($child['school_id'], [269, 61]); });
     usort($children_in_real_school, function ($a, $b) { return $a['dob'] <=> $b['dob']; });
     $child = count($children_in_real_school) ? $children_in_real_school[0] : false;
@@ -269,13 +279,57 @@ foreach($purchases_by_admin_id as $purchases) {
     }
 }
 
+
+// get lanyard, plastics and stress balls totals by school > grade 
+$lanyard_sql = "SELECT s.school_name, s.school_id, c.class_grade,
+    count(if((shabbaton_maven + shabbaton_pro + shabbaton_expert + shabbaton_trophy) > 0, 1, 0)) as total
+    from users u
+    join th_chidon tc on (tc.user_id = u.user_id and tc.year = 5781)
+    join classes c on c.class_id = u.class_id
+    join schools s on s.school_id = u.school_id
+    group by s.school_name, c.class_grade
+";
+$lanyard_query = mysql_query($lanyard_sql);
+while($row = mysql_fetch_assoc($lanyard_query)) {
+    $g = $row['class_grade'];
+    $school_id = $row['school_id'];
+    $total = $row['total'];
+
+    // lanyard color (fallsback to blue for the two kids set to pre1a and 3rd grade)
+    $color = $g === '4' ? 'Blue' : ($g === '5' ? 'Red' : ($g === '6' ? 'Purple' : ($g === '7' ? 'Green' : ($g === '8' ? 'Yellow' : 'Blue'))));
+    $product_names = ["Plastics", "Stress balls", "Lanyard - $color"];
+    foreach($product_names as $product_name) {
+        if (in_array($school_id, [269, 61])) {
+            //  update ak/ms summary
+            if (!array_key_exists($product_name, $ak_ms_summaries)) { $ak_ms_summaries[$product_name] = 0; }
+            $ak_ms_summaries[$product_name] += $total;
+        } else if( $school_id == 612) {
+            //  update unknown summary
+            if (!array_key_exists($product_name, $unknown_summaries)) { $unknown_summaries[$product_name] = 0; }
+            $unknown_summaries[$product_name] += $total;
+        } else {
+            // update by school summary
+            if (!array_key_exists($school_id, $summaries_by_school)) { $summaries_by_school[$school_id] = []; }
+            if (!array_key_exists($product_name, $summaries_by_school[$school_id])) { $summaries_by_school[$school_id][$product_name] = 0; }
+            $summaries_by_school[$school_id][$product_name] += $total;
+            // update all schools summary
+            if (!array_key_exists($product_name, $all_schools_summaries)) { $all_schools_summaries[$product_name] = 0; }
+            $all_schools_summaries[$product_name] += $total;
+        }
+        // update full summary
+        if (!array_key_exists($product_name, $full_summaries)) { $full_summaries[$product_name] = $total; }
+        $full_summaries[$product_name] += $total;
+    }
+}
+
 $summaries = [
-    "Full summary of all Sweaters and Celebration Boxes" => $full_summaries,
+    "Full summary of all shipments" => $full_summaries,
     "Summary of all school shipments" => $all_schools_summaries,
     "Summary of Anash Kinder and MyShliach shipments" => $ak_ms_summaries,
-    "Summary of Direct to home shipments" => $home_summaries,
-    "Summary of Unknown" => $unknown_summaries
+    "Summary of home shipments" => $home_summaries,
+    "Summary of Unknown / 'Unassigned Students'" => $unknown_summaries
 ];
+
 
 ?>
 <!DOCTYPE html>
@@ -337,8 +391,13 @@ $summaries = [
 
     <? foreach ($schools as $school_id => $school_name) { ?>
         <? if (!array_key_exists($school_id, $summaries_by_school)) { continue; } ?>
+        <? $address = $school_shipping[$school_id] ?>
         <section class="page-break-defore">
             <h3><?= $school_name ?></h3>
+            <p>
+                <?=$address['shipping_address1']?>, <?=$address['shipping_address2']?><br/>
+                <?=$address['shipping_city']?>, <?=$address['shipping_state']?> <?=$address['shipping_postal']?>, <?=$address['shipping_country']?>
+            </p>
             <? if ($show_totals) { ?>
                 <br>
                 <table>
