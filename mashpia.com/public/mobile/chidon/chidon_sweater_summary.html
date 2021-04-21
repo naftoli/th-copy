@@ -113,6 +113,11 @@
 <script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 <script src="js/js.cookie.js" type="text/javascript"></script>
 <script>
+    function capitalize(s)
+    {
+        return s && s[0].toUpperCase() + s.slice(1);
+    }
+
     $(function () {
         $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function(result) {
             const res = JSON.parse(result)
@@ -123,100 +128,107 @@
             const chidondrive = res.chidondrive
             const coupon_code = res.coupon
 
-            let html = '<br />'
+            $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
+                const sweaters = JSON.parse(result)
 
-            // is there transactions
-            // let noTransactionsFound = true
-            // let admin_id, family
-            // for (id in transactions) {
-            //     admin_id = id
-            //     family = transactions[id][0].last
-            //     noTransactionsFound = false
-            //     break
-            // }
-            // if (noTransactionsFound) $("#update").text("Pay for Chidon")
-            // else {
-            //     html += `Family ${family}<br />
-            //              Family ID: ${admin_id}`
-            // }
-            //
-            // html += '<h4>Registration</h4>'
-            // for (id in children) {
-            //     const child = children[id]
-            //     html += `${child.th_chidon_id} ${child.first} ${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
-            // }
-
-            let school
-            for (id in children) {
-                school = children[id].school_name
-                break
-            }
-
-            html += '<div style="font-size: 18px; line-height: 1.5; margin-bottom: 20px;"><b>Sweaters & Extra Celebration Boxes</b><br /><br />'
-            if (purchases.length == 0) {
-                html += 'No sweater or celebration box purchases were found.<br />'
-            }
-
-            if (purchases.sweater_mother) {
-                html += "Sweater Type: Mother<br />"
-                html += `Sweater Size: ${purchases.sweater_mother}<br />`
-                html += `Paid: $25<br />`
-                if (parseInt(purchases.sweater_mother_ship)) {
-                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_mother_ship_addr}<br />`
-                } else {
-                    html += `Shipping Address: ${school}<br />`
+                let school
+                for (id in children) {
+                    school = children[id].school_name
+                    break
                 }
-                html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
-            }
 
-            if (purchases.sweater_father) {
-                html += "Sweater Type: Father<br />"
-                html += `Sweater Size: ${purchases.sweater_father}<br />`
-                html += `Paid: $25<br />`
-                if (parseInt(purchases.sweater_father_ship)) {
-                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_father_ship_addr}<br />`
-                } else {
-                    html += `Shipping Address: ${school}<br />`
+                let html = '<br />'
+                html += '<div style="font-size: 18px; line-height: 1.5; margin-bottom: 20px;"><b>Sweaters & Extra Celebration Boxes</b><br /><br />'
+                if (purchases.length == 0) {
+                    html += 'No sweater or celebration box purchases were found.<br />'
                 }
-                html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
-            }
 
-            if (purchases.sweater_bubby) {
-                html += "Sweater Type: Bubby<br />"
-                html += `Sweater Size: ${purchases.sweater_bubby}<br />`
-                html += `Paid: $25<br />`
-                if (parseInt(purchases.sweater_bubby_ship)) {
-                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_bubby_ship_addr}<br />`
-                } else {
-                    html += `Shipping Address: ${school}<br />`
+                const sizes = {
+                    'Adult XS': 'xs',
+                    'Adult Small': 'small',
+                    'Adult Medium': 'medium',
+                    'Adult Large': 'large',
+                    'Adult XL': 'xl'
                 }
-                html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
-            }
 
-            if (purchases.sweater_zaidy) {
-                html += "Sweater Type: Zaidy<br />"
-                html += `Sweater Size: ${purchases.sweater_zaidy}<br />`
-                html += `Paid: $25<br />`
-                if (parseInt(purchases.sweater_zaidy_ship)) {
-                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_zaidy_ship_addr}<br />`
-                } else {
-                    html += `Shipping Address: ${school}<br />`
+                if (purchases.sweater_mother) {
+                    const type = 'sweater_mother'
+                    html += "Sweater Type: Mother<br />"
+                    html += `Sweater Size: ${purchases.sweater_mother}
+                            <select name='sweater_mother' class='sweater'>
+                            <option value="0">Select New Size</option>`
+
+                    for (let size in sizes) {
+                        if (sweaters[type][size].qty < 1) {
+                            html += `<option value="${sizes[size]}:0"`
+                            if (purchased_size == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - SOLD OUT</option>`
+                        } else {
+                            html += `<option value="${type}:${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchased_size == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                        }
+                    }
+
+                    html += '</select><br /><br />'
+                    html += `Paid: $25<br />`
+                    if (parseInt(purchases.sweater_mother_ship)) {
+                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_mother_ship_addr}<br />`
+                    } else {
+                        html += `Shipping Address: ${school}<br />`
+                    }
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
                 }
-                html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
-            }
 
-            if (parseInt(purchases.celeb_box_add)) {
-                html += '<h4>Celebration Boxes</h4>'
-                html += '1 Extra Celebration Box - $20<br />'
-                if (parseInt(purchases.celeb_box_add_ship)) {
-                    html += '$10 Shipping<br />'
-                    html += purchases.celeb_box_add_addr + "<br />"
+                if (purchases.sweater_father) {
+                    html += "Sweater Type: Father<br />"
+                    html += `Sweater Size: ${purchases.sweater_father}<br />`
+                    html += `Paid: $25<br />`
+                    if (parseInt(purchases.sweater_father_ship)) {
+                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_father_ship_addr}<br />`
+                    } else {
+                        html += `Shipping Address: ${school}<br />`
+                    }
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
                 }
-            }
 
-            html += '</div>'
+                if (purchases.sweater_bubby) {
+                    html += "Sweater Type: Bubby<br />"
+                    html += `Sweater Size: ${purchases.sweater_bubby}<br />`
+                    html += `Paid: $25<br />`
+                    if (parseInt(purchases.sweater_bubby_ship)) {
+                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_bubby_ship_addr}<br />`
+                    } else {
+                        html += `Shipping Address: ${school}<br />`
+                    }
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                }
 
-            $("#purchaseInfo").append(html)
+                if (purchases.sweater_zaidy) {
+                    html += "Sweater Type: Zaidy<br />"
+                    html += `Sweater Size: ${purchases.sweater_zaidy}<br />`
+                    html += `Paid: $25<br />`
+                    if (parseInt(purchases.sweater_zaidy_ship)) {
+                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_zaidy_ship_addr}<br />`
+                    } else {
+                        html += `Shipping Address: ${school}<br />`
+                    }
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                }
+
+                if (parseInt(purchases.celeb_box_add)) {
+                    html += '<h4>Celebration Boxes</h4>'
+                    html += '1 Extra Celebration Box - $20<br />'
+                    if (parseInt(purchases.celeb_box_add_ship)) {
+                        html += '$10 Shipping<br />'
+                        html += purchases.celeb_box_add_addr + "<br />"
+                    }
+                }
+
+                html += '</div>'
+
+                $("#purchaseInfo").append(html)
+            })
         })
 
         $("#update").click( function( e ) {
