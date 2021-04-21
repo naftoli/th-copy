@@ -152,25 +152,24 @@
                 }
 
                 if (purchases.sweater_mother) {
-                    const type = 'sweater_mother'
+                    const type = 'mother'
                     html += "Sweater Type: Mother<br />"
-                    html += `Sweater Size: ${purchases.sweater_mother}
-                            <select name='sweater_mother' class='sweater'>
-                            <option value="0">Select New Size</option>`
+                    html += `Sweater Size: <select name='sweater_mother' class='sweater'>
+                            <option value="0:0">Select New Size</option>`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
                             html += `<option value="${sizes[size]}:0"`
-                            if (purchased_size == sizes[size]) html += ' selected '
+                            if (purchases.sweater_mother == sizes[size]) html += ' selected '
                             html += `>${capitalize(size)} - SOLD OUT</option>`
                         } else {
-                            html += `<option value="${type}:${sizes[size]}:${sweaters[type][size].qty}"`
-                            if (purchased_size == sizes[size]) html += ' selected '
+                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchases.sweater_mother == sizes[size]) html += ' selected '
                             html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
                         }
                     }
 
-                    html += '</select><br /><br />'
+                    html += '</select><br />'
                     html += `Paid: $25<br />`
                     if (parseInt(purchases.sweater_mother_ship)) {
                         html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_mother_ship_addr}<br />`
@@ -181,8 +180,24 @@
                 }
 
                 if (purchases.sweater_father) {
+                    const type = 'father'
                     html += "Sweater Type: Father<br />"
-                    html += `Sweater Size: ${purchases.sweater_father}<br />`
+                    html += `Sweater Size: <select name='sweater_father' class='sweater'>
+                            <option value="0">Select New Size</option>`
+
+                    for (let size in sizes) {
+                        if (sweaters[type][size].qty < 1) {
+                            html += `<option value="${sizes[size]}:0"`
+                            if (purchases.sweater_father == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - SOLD OUT</option>`
+                        } else {
+                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchases.sweater_father == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                        }
+                    }
+
+                    html += '</select><br />'
                     html += `Paid: $25<br />`
                     if (parseInt(purchases.sweater_father_ship)) {
                         html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_father_ship_addr}<br />`
@@ -193,8 +208,24 @@
                 }
 
                 if (purchases.sweater_bubby) {
+                    const type = 'bubby'
                     html += "Sweater Type: Bubby<br />"
-                    html += `Sweater Size: ${purchases.sweater_bubby}<br />`
+                    html += `Sweater Size: <select name='sweater_bubby' class='sweater'>
+                            <option value="0">Select New Size</option>`
+
+                    for (let size in sizes) {
+                        if (sweaters[type][size].qty < 1) {
+                            html += `<option value="${sizes[size]}:0"`
+                            if (purchases.sweater_bubby == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - SOLD OUT</option>`
+                        } else {
+                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchases.sweater_bubby == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                        }
+                    }
+
+                    html += '</select><br />'
                     html += `Paid: $25<br />`
                     if (parseInt(purchases.sweater_bubby_ship)) {
                         html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_bubby_ship_addr}<br />`
@@ -205,8 +236,24 @@
                 }
 
                 if (purchases.sweater_zaidy) {
+                    const type = 'zaidy'
                     html += "Sweater Type: Zaidy<br />"
-                    html += `Sweater Size: ${purchases.sweater_zaidy}<br />`
+                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater'>
+                            <option value="0">Select New Size</option>`
+
+                    for (let size in sizes) {
+                        if (sweaters[type][size].qty < 1) {
+                            html += `<option value="${sizes[size]}:0"`
+                            if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - SOLD OUT</option>`
+                        } else {
+                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                        }
+                    }
+
+                    html += '</select><br />'
                     html += `Paid: $25<br />`
                     if (parseInt(purchases.sweater_zaidy_ship)) {
                         html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_zaidy_ship_addr}<br />`
@@ -221,7 +268,7 @@
                     html += '1 Extra Celebration Box - $20<br />'
                     if (parseInt(purchases.celeb_box_add_ship)) {
                         html += '$10 Shipping<br />'
-                        html += purchases.celeb_box_add_addr + "<br />"
+                        html += 'Shipping Address: ' + purchases.celeb_box_add_addr + "<br />"
                     }
                 }
 
