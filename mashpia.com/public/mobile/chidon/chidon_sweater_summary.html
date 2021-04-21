@@ -153,6 +153,10 @@
             }
 
             html += '<div style="font-size: 18px; line-height: 1.5; margin-bottom: 20px;"><b>Sweaters & Extra Celebration Boxes</b><br /><br />'
+            if (purchases.length == 0) {
+                html += 'No sweater or celebration box purchases were found.<br />'
+            }
+
             if (purchases.sweater_mother) {
                 html += `Mother: ${purchases.sweater_mother} - $25 - shipping to `
                 if (parseInt(purchases.sweater_mother_ship)) {
