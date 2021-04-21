@@ -158,38 +158,46 @@
             }
 
             if (purchases.sweater_mother) {
-                html += `Mother: ${purchases.sweater_mother} - $25 - shipping to `
+                html += "Sweater Type: Mother<br />"
+                html += `Sweater Size: ${purchases.sweater_mother}<br />`
+                html += `Paid: $25<br />`
                 if (parseInt(purchases.sweater_mother_ship)) {
-                    html += `${purchases.sweater_mother_ship_addr}<br />`
+                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_mother_ship_addr}<br />`
                 } else {
-                    html += `school<br />`
+                    html += `Shipping Address: ${school}<br />`
                 }
             }
 
             if (purchases.sweater_father) {
-                html += `Father: ${purchases.sweater_father} - $25 - shipping to `
+                html += "Sweater Type: Father<br />"
+                html += `Sweater Size: ${purchases.sweater_father}<br />`
+                html += `Paid: $25<br />`
                 if (parseInt(purchases.sweater_father_ship)) {
-                    html += `${purchases.sweater_father_ship_addr}<br />`
+                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_father_ship_addr}<br />`
                 } else {
-                    html += `school<br />`
+                    html += `Shipping Address: ${school}<br />`
                 }
             }
 
             if (purchases.sweater_bubby) {
-                html += `Bubby: ${purchases.sweater_bubby} - $25 - shipping to `
+                html += "Sweater Type: Bubby<br />"
+                html += `Sweater Size: ${purchases.sweater_bubby}<br />`
+                html += `Paid: $25<br />`
                 if (parseInt(purchases.sweater_bubby_ship)) {
-                    html += `${purchases.sweater_bubby_ship_addr}<br />`
+                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_bubby_ship_addr}<br />`
                 } else {
-                    html += `school<br />`
+                    html += `Shipping Address: ${school}<br />`
                 }
             }
 
             if (purchases.sweater_zaidy) {
-                html += `Zaidy: ${purchases.sweater_zaidy} - $25 - shipping to `
+                html += "Sweater Type: Zaidy<br />"
+                html += `Sweater Size: ${purchases.sweater_zaidy}<br />`
+                html += `Paid: $25<br />`
                 if (parseInt(purchases.sweater_zaidy_ship)) {
-                    html += `${purchases.sweater_zaidy_ship_addr}<br />`
+                    html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_zaidy_ship_addr}<br />`
                 } else {
-                    html += `school<br />`
+                    html += `Shipping Address: ${school}<br />`
                 }
             }
 
