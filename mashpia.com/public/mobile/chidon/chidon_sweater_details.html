@@ -189,7 +189,7 @@
                             html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
                         }
                     }
-                    html += '</select><br />'
+                    html += '</select> (+$25)<br />'
                     html += `<div style="margin-left: 30px;"><input type="checkbox" name="sweater_${type}_shipping" class="sweater_${type}_shipping" value="sweater_${type}_shipping"`
                     if (parseInt(purchases[`sweater_${type}_ship`])) html += ' checked '
                     html += `/> Ship to: <input type='text' size='30' name="sweater_${type}_ship_addr" class="sweater_${type}_ship_addr"`
