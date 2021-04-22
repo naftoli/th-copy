@@ -82,7 +82,7 @@
 <body>
 <div class="container login-page" id="crop-avatar">
     <div class="login-header">
-        <span class="span12">Chidon Purchases</span>
+        <span class="span12">Chidon Sweaters</span>
     </div>
     <div class="span12 body">
         <div class="login-box">
@@ -153,9 +153,8 @@
 
                 if (purchases.sweater_mother) {
                     const type = 'mother'
-                    html += "Sweater Type: Mother<br />"
-                    html += `Sweater Size: <select name='sweater_mother' class='sweater'>
-                            <option value="0:0">Select New Size</option>`
+                    html += "<div>Sweater Type: Mother<br />"
+                    html += `Sweater Size: <select name='sweater_mother' class='sweater'>`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -171,19 +170,25 @@
 
                     html += '</select><br />'
                     html += `Paid: $25<br />`
+
                     if (parseInt(purchases.sweater_mother_ship)) {
-                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_mother_ship_addr}<br />`
+                        html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_mother_ship_addr}<br />`
+                        html += `Please Enter Full Shipping Address:
+                                <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
+                                <input type="text" size="14" name="city" class="city" placeholder="city" />
+                                <input type="text" size="1" name="state" class="state" placeholder="state" />
+                                <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping Address: ${school}<br />`
+                        html += `Shipping To: ${school}<br />`
                     }
-                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
 
                 if (purchases.sweater_father) {
                     const type = 'father'
-                    html += "Sweater Type: Father<br />"
-                    html += `Sweater Size: <select name='sweater_father' class='sweater'>
-                            <option value="0">Select New Size</option>`
+                    html += "<div>Sweater Type: Father<br />"
+                    html += `Sweater Size: <select name='sweater_father' class='sweater'>`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -199,19 +204,25 @@
 
                     html += '</select><br />'
                     html += `Paid: $25<br />`
+
                     if (parseInt(purchases.sweater_father_ship)) {
-                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_father_ship_addr}<br />`
+                        html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_father_ship_addr}<br />`
+                        html += `Please Enter Full Shipping Address:
+                                <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
+                                <input type="text" size="14" name="city" class="city" placeholder="city" />
+                                <input type="text" size="1" name="state" class="state" placeholder="state" />
+                                <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping Address: ${school}<br />`
+                        html += `Shipping To: ${school}<br />`
                     }
-                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
 
                 if (purchases.sweater_bubby) {
                     const type = 'bubby'
-                    html += "Sweater Type: Bubby<br />"
-                    html += `Sweater Size: <select name='sweater_bubby' class='sweater'>
-                            <option value="0">Select New Size</option>`
+                    html += "<div>Sweater Type: Bubby<br />"
+                    html += `Sweater Size: <select name='sweater_bubby' class='sweater'>`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -227,19 +238,25 @@
 
                     html += '</select><br />'
                     html += `Paid: $25<br />`
+
                     if (parseInt(purchases.sweater_bubby_ship)) {
-                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_bubby_ship_addr}<br />`
+                        html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_bubby_ship_addr}<br />`
+                        html += `Please Enter Full Shipping Address:
+                                <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
+                                <input type="text" size="14" name="city" class="city" placeholder="city" />
+                                <input type="text" size="1" name="state" class="state" placeholder="state" />
+                                <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping Address: ${school}<br />`
+                        html += `Shipping To: ${school}<br />`
                     }
-                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
 
                 if (purchases.sweater_zaidy) {
                     const type = 'zaidy'
-                    html += "Sweater Type: Zaidy<br />"
-                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater'>
-                            <option value="0">Select New Size</option>`
+                    html += "<div>Sweater Type: Zaidy<br />"
+                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater'>`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -255,12 +272,19 @@
 
                     html += '</select><br />'
                     html += `Paid: $25<br />`
+
                     if (parseInt(purchases.sweater_zaidy_ship)) {
-                        html += `Shipping Fee: $10<br />Shipping Address: ${purchases.sweater_zaidy_ship_addr}<br />`
+                        html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_zaidy_ship_addr}<br />`
+                        html += `Please Enter Full Shipping Address:
+                                <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
+                                <input type="text" size="14" name="city" class="city" placeholder="city" />
+                                <input type="text" size="1" name="state" class="state" placeholder="state" />
+                                <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping Address: ${school}<br />`
+                        html += `Shipping To: ${school}<br />`
                     }
-                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" />'
+                    html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
 
                 if (parseInt(purchases.celeb_box_add)) {
@@ -275,17 +299,46 @@
                 html += '</div>'
 
                 $("#purchaseInfo").append(html)
+
+                $(".sweater").change( function (e) {
+                    e.preventDefault()
+                    const info = $(this).val().split(':')
+                    const size = info[0]
+                    const qty = info[1]
+                    if (qty < 1) {
+                        alert('This size is sold out, please make sure to choose a different size.')
+                        return false
+                    } else {
+                        alert(size)
+                    }
+                })
             })
         })
 
-        $("#update").click( function( e ) {
-            e.preventDefault()
-            // alert("Please note: Even if you are just making edits WHEN YOU GET TO THE PAYMENT SECTION, YOU MUST PUT IN YOUR CREDIT CARD. " +
-            //     "Your card will only be charged if you add a  purchase that you have not yet paid for. " +
-            //     "If you are just making edits your card will not be charged.")
-            // Cookies.set('chidon_admin', Cookies.get('admin'))
-            // location.href = 'http://chidondrive.com/site/enrollNew.html'
-            location.href = 'chidon_edit_sweaters.html'
+        $(document).on('click', '.update', function () {
+            const type = $(this).data('type')
+            const address = $(this).parent().find('.address').val()
+            const city = $(this).parent().find('.city').val()
+            const state = $(this).parent().find('.state').val()
+            const zip = $(this).parent().find('.zip').val()
+            if ( !(address && city && state && zip) ) {
+                alert('You must fill in all address fields.')
+                if (!address) $(this).parent().find('.address').focus()
+                else if (!city) $(this).parent().find('.city').focus()
+                else if (!state) $(this).parent().find('.state').focus()
+                else if (!zip) $(this).parent().find('.zip').focus()
+                return false
+            } else {
+                const fullAddress = address + ' ' + city + ', ' + state + ' ' + zip
+                $.post('ajax/updateSweaterAddress.php', { admin: Cookies.get('admin'), type: type, address: fullAddress }, function(result) {
+                    console.log(result)
+                    /*
+                    const res = JSON.parse(result)
+                    if (res.success) alert('Updated.')
+                    else alert
+                    */
+                })
+            }
         })
 
         $("#confirmation").click( function() {
