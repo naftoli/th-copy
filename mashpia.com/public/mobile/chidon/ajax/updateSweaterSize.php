@@ -12,7 +12,7 @@ $size = $_POST['size'];
 
 $sql = "update th_chidon_parent_purchases 
         set sweater_{$type_of_sweater} =  '" . mysql_real_escape_string($size) . "' 
-        where admin_id = $admin_id and authorize_id > 1";
+        where admin_id = $admin_id";
 if (mysql_query($sql))
     echo json_encode([
         'success'   =>  true

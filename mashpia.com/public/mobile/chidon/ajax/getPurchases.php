@@ -10,7 +10,7 @@ require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
 
 $purchases = [];
-$sql = "select * from th_chidon_parent_purchases tcpp join admins using (admin_id) where authorize_id > 1 and tcpp.admin_id = " . $admin_id;
+$sql = "select * from th_chidon_parent_purchases tcpp join admins using (admin_id) where tcpp.admin_id = " . $admin_id;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $purchases[$row['admin_id']][] = $row;

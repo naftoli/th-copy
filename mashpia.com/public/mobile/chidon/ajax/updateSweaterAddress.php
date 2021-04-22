@@ -12,7 +12,7 @@ $address = $_POST['address'];
 
 $sql = "update th_chidon_parent_purchases 
         set sweater_{$type_of_sweater}_ship_addr =  \"" . mysql_real_escape_string($address) . "\" 
-        where admin_id = $admin_id and authorize_id > 1";
+        where admin_id = $admin_id";
 if (mysql_query($sql))
     echo json_encode([
         'success'   =>  true
