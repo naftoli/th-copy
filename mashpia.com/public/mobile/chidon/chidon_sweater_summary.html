@@ -154,7 +154,7 @@
                 if (purchases.sweater_mother) {
                     const type = 'mother'
                     html += "<div>Sweater Type: Mother<br />"
-                    html += `Sweater Size: <select name='sweater_mother' class='sweater'>`
+                    html += `Sweater Size: <select name='sweater_mother' class='sweater' id="${type}">`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -188,7 +188,7 @@
                 if (purchases.sweater_father) {
                     const type = 'father'
                     html += "<div>Sweater Type: Father<br />"
-                    html += `Sweater Size: <select name='sweater_father' class='sweater'>`
+                    html += `Sweater Size: <select name='sweater_father' class='sweater' id="${type}">`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -222,7 +222,7 @@
                 if (purchases.sweater_bubby) {
                     const type = 'bubby'
                     html += "<div>Sweater Type: Bubby<br />"
-                    html += `Sweater Size: <select name='sweater_bubby' class='sweater'>`
+                    html += `Sweater Size: <select name='sweater_bubby' class='sweater' id="${type}">`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -256,7 +256,7 @@
                 if (purchases.sweater_zaidy) {
                     const type = 'zaidy'
                     html += "<div>Sweater Type: Zaidy<br />"
-                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater'>`
+                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater' id="${type}">`
 
                     for (let size in sizes) {
                         if (sweaters[type][size].qty < 1) {
@@ -299,20 +299,25 @@
                 html += '</div>'
 
                 $("#purchaseInfo").append(html)
-
-                $(".sweater").change( function (e) {
-                    e.preventDefault()
-                    const info = $(this).val().split(':')
-                    const size = info[0]
-                    const qty = info[1]
-                    if (qty < 1) {
-                        alert('This size is sold out, please make sure to choose a different size.')
-                        return false
-                    } else {
-                        alert(size)
-                    }
-                })
             })
+        })
+
+        $(document).on('change', '.sweater', function () {
+            const info = $(this).val().split(':')
+            const size = info[0]
+            const qty = info[1]
+            const type = $(this).attr('id')
+            if (qty < 1) {
+                alert('This size is sold out, please make sure to choose a different size.')
+                return false
+            } else {
+                $.post('ajax/updateSweaterSize.php', { admin: Cookies.get('admin'), type: type, size: size }, function(result) {
+                    console.log(result)
+                    const res = JSON.parse(result)
+                    if (res.success) alert('Size Updated.')
+                    else alert('Error updating size.')
+                })
+            }
         })
 
         $(document).on('click', '.update', function () {
@@ -332,11 +337,9 @@
                 const fullAddress = address + ' ' + city + ', ' + state + ' ' + zip
                 $.post('ajax/updateSweaterAddress.php', { admin: Cookies.get('admin'), type: type, address: fullAddress }, function(result) {
                     console.log(result)
-                    /*
                     const res = JSON.parse(result)
-                    if (res.success) alert('Updated.')
-                    else alert
-                    */
+                    if (res.success) alert('Address Updated.')
+                    else alert("Error updating address.")
                 })
             }
         })
