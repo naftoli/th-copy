@@ -80,9 +80,11 @@ foreach ($purchases as $admin => $details) {
         <meta charset="utf8" />
         <title>MyShliach Sweater Report</title>
         <style>
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-size: 14px;
-            padding: 5px;
+            tr, th, td {
+                font-family: 'Arial, Helvetica, sans-serif';
+                font-size: 14px;
+                padding: 5px;
+            }
         </style>
     </head>
     <body>
