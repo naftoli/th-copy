@@ -85,6 +85,9 @@ foreach ($purchases as $admin => $details) {
                 font-size: 14px;
                 padding: 5px;
             }
+            th, td {
+                border: 1px solid; black;
+            }
         </style>
     </head>
     <body>
