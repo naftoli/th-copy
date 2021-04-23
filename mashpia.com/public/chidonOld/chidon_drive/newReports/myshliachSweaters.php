@@ -72,7 +72,7 @@ foreach ($purchases as $admin => $details) {
         }
     }
 }
-//echo "<pre>"; print_r($info); echo "</pre>";
+echo "<pre>"; print_r($info); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -100,10 +100,10 @@ foreach ($purchases as $admin => $details) {
             foreach ($info as $admin_id => $row) {
                 echo "<tr><td>" . $admin_id . "</td><td>" . $row['celeb_box'] . "</td><td>" . $row['celeb_box_add'] .
                     "</td><td>" . $row['celeb_box_add_addr'] . "</td><td>" . $row['sweater_mother'] . "</td><td>" .
-                    $row['sweater_mother_addr'] . "</td><td>" . $row['sweater_father'] . "</td><td>" .
-                    $row['sweater_father_addr'] . "</td><td>" . $row['sweater_bubby'] . "</td><td>" .
-                    $row['sweater_bubby_addr'] . "</td><td>" . $row['sweater_zaidy'] . "</td><td>" .
-                    $row['sweater_zaidy_addr'] . "</td></tr>";
+                    $row['sweater_mother_ship_addr'] . "</td><td>" . $row['sweater_father'] . "</td><td>" .
+                    $row['sweater_father_ship_addr'] . "</td><td>" . $row['sweater_bubby'] . "</td><td>" .
+                    $row['sweater_bubby_ship_addr'] . "</td><td>" . $row['sweater_zaidy'] . "</td><td>" .
+                    $row['sweater_zaidy_ship_addr'] . "</td></tr>";
             }
             ?>
         </table>
