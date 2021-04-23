@@ -72,7 +72,7 @@ foreach ($purchases as $admin => $details) {
         }
     }
 }
-echo "<pre>"; print_r($info); echo "</pre>";
+//echo "<pre>"; print_r($info); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
