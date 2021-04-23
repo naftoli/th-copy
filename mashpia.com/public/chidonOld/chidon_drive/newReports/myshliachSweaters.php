@@ -12,6 +12,7 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+// find out which parents are getting extra celeb boxes
 $extra = [];
 $sql = "select parent_id, count(user_id) as total 
         from th_chidon 
@@ -96,15 +97,13 @@ foreach ($purchases as $admin => $details) {
                 <th>Ship to</th>
             </tr>
             <?php
-            foreach ($info as $admin_id => $details) {
-                foreach ($details as $row) {
-                    echo "<tr><td>" . $admin_id . "</td><td>" . $row['celeb_box'] . "</td><td>" . $row['celeb_box_add'] .
-                        "</td><td>" . $row['celeb_box_add_addr'] . "</td><td>" . $row['sweater_mother'] . "</td><td>" .
-                        $row['sweater_mother_addr'] . "</td><td>" . $row['sweater_father'] . "</td><td>" .
-                        $row['sweater_father_addr'] . "</td><td>" . $row['sweater_bubby'] . "</td><td>" .
-                        $row['sweater_bubby_addr'] . "</td><td>" . $row['sweater_zaidy'] . "</td><td>" .
-                        $row['sweater_zaidy_addr'] . "</td></tr>";
-                }
+            foreach ($info as $admin_id => $row) {
+                echo "<tr><td>" . $admin_id . "</td><td>" . $row['celeb_box'] . "</td><td>" . $row['celeb_box_add'] .
+                    "</td><td>" . $row['celeb_box_add_addr'] . "</td><td>" . $row['sweater_mother'] . "</td><td>" .
+                    $row['sweater_mother_addr'] . "</td><td>" . $row['sweater_father'] . "</td><td>" .
+                    $row['sweater_father_addr'] . "</td><td>" . $row['sweater_bubby'] . "</td><td>" .
+                    $row['sweater_bubby_addr'] . "</td><td>" . $row['sweater_zaidy'] . "</td><td>" .
+                    $row['sweater_zaidy_addr'] . "</td></tr>";
             }
             ?>
         </table>
