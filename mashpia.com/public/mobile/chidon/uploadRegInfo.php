@@ -15,8 +15,13 @@ if (isset($_POST['submit'])) {
     if (move_uploaded_file($file, "regInfo.csv")) {
         if (($handle = fopen('regInfo.csv', "r")) !== FALSE) {
             $qrys = [];
-            $i = 0;
+            $first = true;
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($first) {
+                    $first = false;
+                    continue;
+                }
+                $i = 0;
                 $admin_id = $data[$i++];
                 $chidon_id = $data[$i++];
                 $reg_fee = $data[$i++];
