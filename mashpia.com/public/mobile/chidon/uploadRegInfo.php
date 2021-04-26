@@ -38,13 +38,15 @@ if (isset($_POST['submit'])) {
                         chidon_drive = $chidon_drive, 
                         subsidy = $subsidy, 
                         coupon = '$coupon', 
-                        coupon_readon = '$coupon_reason', 
+                        coupon_reason = '$coupon_reason', 
                         paid = $paid, 
                         balance = $balance";
-                echo $qry;
+//                echo $qry;
                 $qrys[] = $qry;
             }
             fclose($handle);
+            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error());
+            echo "done.";
         }
     } else {
         echo "Error saving file.";
