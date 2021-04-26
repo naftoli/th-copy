@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
                         reg_fee = $reg_fee, 
                         chidon_drive = $chidon_drive, 
                         subsidy = $subsidy, 
-                        coupon = '$coupon', 
+                        coupon = $coupon, 
                         coupon_reason = '$coupon_reason', 
                         paid = $paid, 
                         balance = $balance";
