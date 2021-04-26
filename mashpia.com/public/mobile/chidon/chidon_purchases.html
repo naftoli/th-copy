@@ -90,11 +90,13 @@
                 <div id="regInfo">
                     <div class="row">
                         <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-                            Your family’s Chidon prize selections and sizes are listed below. Please review for accuracy and update if necessary.
+                            Your family’s Chidon prize selections and sizes are listed below.
+                            Please review for accuracy.
+<!--                            and update if necessary.-->
                             (Please note that sweater sizes cannot be changed at this time.)
                             <br /><br/>
-                            Use the "Edit Prizes" button at the bottom to change your prize selection.
-                            <br />
+<!--                            Use the "Edit Prizes" button at the bottom to change your prize selection.-->
+<!--                            <br />-->
                             <!--                            <b>Please review and confirm your prizes.</b>-->
 <!--                            <br /><br />-->
 <!--                            In this form you can update your yarmulke size and Hebrew name.-->
@@ -111,7 +113,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>
+<!--                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>-->
                             <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
                         </div>
                     </div>
@@ -131,34 +133,9 @@
             const purchases = res.purchases
             const children = res.children
             const prizes = res.prizes
-            const chidondrive = res.chidondrive
-            const coupon_code = res.coupon
 
             let html = '<br />'
 
-            // is there transactions
-            // let noTransactionsFound = true
-            // let admin_id, family
-            // for (id in transactions) {
-            //     admin_id = id
-            //     family = transactions[id][0].last
-            //     noTransactionsFound = false
-            //     break
-            // }
-            // if (noTransactionsFound) $("#update").text("Pay for Chidon")
-            // else {
-            //     html += `Family ${family}<br />
-            //              Family ID: ${admin_id}`
-            // }
-            //
-            // html += '<h4>Registration</h4>'
-            // for (id in children) {
-            //     const child = children[id]
-            //     html += `${child.th_chidon_id} ${child.first} ${children[id].date_paid ? 'REGISTERED' : 'NOT YET REGISTERED'}<br />`
-            // }
-
-            // html += '<h4>Prizes and Celebration Items</h4>'
-            // html += '<h5>Prizes and Gifts</h5>'
             let celeb_boxes = purchases.celeb_box ? purchases.celeb_box : 0
             for (id in children) {
                 let status
@@ -175,7 +152,7 @@
                     const gender = child.gender
                     if (gender == 'M') {
                         const size = parseInt(children[id].yarmulka)
-                        html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${id}">`
+                        html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${id}"><option value="0">Select Size</option>`
                         for (let i = 3; i <= 6; i++) {
                             html += `<option value=${i}`
                             if (i == size) html += ' selected'
@@ -205,101 +182,17 @@
                 }
             }
 
-            // let school
-            // for (id in children) {
-            //     school = children[id].school_name
-            //     break
-            // }
-            //
-            // html += '<h4>Extra Sweaters</h4>'
-            // if (purchases.sweater_mother) {
-            //     html += `Mother: ${purchases.sweater_mother} - $25 - shipping to `
-            //     if (parseInt(purchases.sweater_mother_ship)) {
-            //         html += `${purchases.sweater_mother_ship_addr}<br />`
-            //     } else {
-            //         html += `school<br />`
-            //     }
-            // }
-            //
-            // if (purchases.sweater_father) {
-            //     html += `Father: ${purchases.sweater_father} - $25 - shipping to `
-            //     if (parseInt(purchases.sweater_father_ship)) {
-            //         html += `${purchases.sweater_father_ship_addr}<br />`
-            //     } else {
-            //         html += `school<br />`
-            //     }
-            // }
-            //
-            // if (purchases.sweater_bubby) {
-            //     html += `Bubby: ${purchases.sweater_bubby} - $25 - shipping to `
-            //     if (parseInt(purchases.sweater_bubby_ship)) {
-            //         html += `${purchases.sweater_bubby_ship_addr}<br />`
-            //     } else {
-            //         html += `school<br />`
-            //     }
-            // }
-            //
-            // if (purchases.sweater_zaidy) {
-            //     html += `Zaidy: ${purchases.sweater_zaidy} - $25 - shipping to `
-            //     if (parseInt(purchases.sweater_zaidy_ship)) {
-            //         html += `${purchases.sweater_zaidy_ship_addr}<br />`
-            //     } else {
-            //         html += `school<br />`
-            //     }
-            // }
-            //
-            // if (parseInt(purchases.celeb_box_add)) {
-            //     html += '<h4>Celebration Boxes</h4>'
-            //     html += '1 Extra Celebration Box - $20<br />'
-            //     if (parseInt(purchases.celeb_box_add_ship)) {
-            //         html += '$10 Shipping<br />'
-            //         html += purchases.celeb_box_add_addr + "<br />"
-            //     }
-            // }
-            //
-            // html += '<h4>Payments:</h4>'
-            // if (noTransactionsFound) html += "NO Payments Found<br /><br />"
-            // for (id in transactions) {
-            //     for (t of transactions[id]) {
-            //         html += `Amount Paid: ${t.amount}<br />Date Paid: ${t.purchase_date}<br />
-            //             Transaction ID: ${t.authorize_id}<br />Method: `
-            //         if (t.authorize_trans_type == 'charge') html += 'Card Charged<br />'
-            //         else if (t.authorize_trans_type == 'hold') html += 'Money taken out on Hold<br />'
-            //         if (t.refunded) html += `<h4>Refund: ${t.refund}<br/>Refunded On: ${t.refunded}</h4>`
-            //         html += '<br />'
-            //     }
-            // }
-            //
-            // html += '<h4>Chidon Drive</h4>';
-            // for (id in chidondrive) {
-            //     let raised = parseFloat(chidondrive[id].raised)
-            //     let rohr = raised >= 270 ? 100 : 0
-            //     let total = raised + rohr
-            //     let subsidy = parseFloat((raised + rohr) / 2)
-            //     html += `${children[id].first}<br />$${raised} Raised + $${rohr} Rohr = $${total}<br />`
-            //     html +- `Registration Fee: $185<br />`
-            //     html += `50% raised from Chidon Drive applied to fee: $${subsidy}<br />`
-            //     html += `Registration Fee Balance: $${185 - subsidy}<br />`
-            //     if (!children[id].paid || noTransactionsFound) html += ' <b>Not Yet Paid</b>'
-            //     else html += " <b>Paid</b>"
-            //     html += "<br />"
-            //     const tickets = parseInt(raised / 50)
-            //     let grandTickets = 0
-            //     if (raised >= 500) grandTickets = 4
-            //     else if (raised >= 270) grandTickets = 1
-            //     if (tickets) html += `${tickets} tickets in Chidon Drive Raffle<br />`
-            //     if (grandTickets) html += `${grandTickets} tickets in Chidon Drive Grand Raffle<br />`
-            //     html += "<br />"
-            // }
-            //
-            // if (coupon_code.length) {
-            //     html += '<h4>Coupon Code</h4>'
-            //     html += `Code: ${coupon_code.code}<br />`
-            //     html += `Amount: ${coupon_code.value}<br />`
-            //     html += `Given For: ${coupon_code.reason}<br />`
-            // }
-
             $("#purchaseInfo").append(html)
+
+            // if already confirmed disable all selects / inputs
+            $.post('ajax/checkConfirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
+                if (parseInt(result) == 1) {
+                    $("select").attr('disabled', true)
+                    $("input").attr('disabled', true)
+                    $("button").attr('disabled', true)
+                    $("#confirmation").text('Already Confirmed')
+                }
+            })
         })
 
         $("#update").click( function( e ) {
@@ -315,11 +208,16 @@
         $(document).on('change', '.yarmulka', function() {
             const id = $(this).attr('id')
             const size = $(this).val()
-            $.post('ajax/updateYarmulka.php', { user: id, size: size }, function(result) {
-                const res = JSON.parse(result)
-                if (res.success) alert('Updated.')
-                else alert('Error updating.')
-            })
+            if (size == 0) {
+                alert('You must select a yarmulka size!')
+                return false
+            } else {
+                $.post('ajax/updateYarmulka.php', {user: id, size: size}, function (result) {
+                    const res = JSON.parse(result)
+                    if (res.success) alert('Updated.')
+                    else alert('Error updating.')
+                })
+            }
         })
 
         $(document).on('blur', '.he_name', function() {
