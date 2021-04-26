@@ -30,7 +30,9 @@ if (isset($_POST['submit'])) {
                 $coupon = $data[$i++];
                 $coupon_reason = $data[$i++];
                 $paid = $data[$i++];
+                if (empty($paid)) $paid = 0;
                 $balance = $data[$i++];
+                if (empty($balance)) $balance = 0;
                 $qry = "insert into th_chidon_zelda 
                         set th_chidon_id = $chidon_id, 
                         admin_id = $admin_id, 
