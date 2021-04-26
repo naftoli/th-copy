@@ -128,8 +128,8 @@
             const chidondrive = res.chidondrive
             const coupon_code = res.coupon
 
-            $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
-                const sweaters = JSON.parse(result)
+            // $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
+            //     const sweaters = JSON.parse(result)
 
                 let school
                 for (id in children) {
@@ -157,21 +157,22 @@
                 if (purchases.sweater_mother) {
                     const type = 'mother'
                     html += "<div>Sweater Type: Mother<br />"
-                    html += `Sweater Size: <select name='sweater_mother' class='sweater' id="${type}">`
-
-                    for (let size in sizes) {
-                        if (sweaters[type][size].qty < 1) {
-                            html += `<option value="${sizes[size]}:0"`
-                            if (purchases.sweater_mother == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - SOLD OUT</option>`
-                        } else {
-                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
-                            if (purchases.sweater_mother == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
-                        }
-                    }
-
-                    html += '</select><br />'
+                    html += `Sweater Size: ${purchases.sweater_mother}<br />`
+                    // html += `Sweater Size: <select name='sweater_mother' class='sweater' id="${type}">`
+                    //
+                    // for (let size in sizes) {
+                    //     if (sweaters[type][size].qty < 1) {
+                    //         html += `<option value="${sizes[size]}:0"`
+                    //         if (purchases.sweater_mother == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - SOLD OUT</option>`
+                    //     } else {
+                    //         html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                    //         if (purchases.sweater_mother == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                    //     }
+                    // }
+                    //
+                    // html += '</select><br />'
                     html += `Paid: $25<br />`
 
                     if (parseInt(purchases.sweater_mother_ship)) {
@@ -183,7 +184,7 @@
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping To: ${school}<br />`
+                        html += `Shipped To: ${school}<br />`
                     }
                     html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
@@ -191,21 +192,22 @@
                 if (purchases.sweater_father) {
                     const type = 'father'
                     html += "<div>Sweater Type: Father<br />"
-                    html += `Sweater Size: <select name='sweater_father' class='sweater' id="${type}">`
-
-                    for (let size in sizes) {
-                        if (sweaters[type][size].qty < 1) {
-                            html += `<option value="${sizes[size]}:0"`
-                            if (purchases.sweater_father == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - SOLD OUT</option>`
-                        } else {
-                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
-                            if (purchases.sweater_father == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
-                        }
-                    }
-
-                    html += '</select><br />'
+                    html += `Sweater Size: ${purchases.sweater_father}<br />`
+                    // html += `Sweater Size: <select name='sweater_father' class='sweater' id="${type}">`
+                    //
+                    // for (let size in sizes) {
+                    //     if (sweaters[type][size].qty < 1) {
+                    //         html += `<option value="${sizes[size]}:0"`
+                    //         if (purchases.sweater_father == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - SOLD OUT</option>`
+                    //     } else {
+                    //         html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                    //         if (purchases.sweater_father == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                    //     }
+                    // }
+                    //
+                    // html += '</select><br />'
                     html += `Paid: $25<br />`
 
                     if (parseInt(purchases.sweater_father_ship)) {
@@ -217,7 +219,7 @@
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping To: ${school}<br />`
+                        html += `Shipped To: ${school}<br />`
                     }
                     html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
@@ -225,21 +227,22 @@
                 if (purchases.sweater_bubby) {
                     const type = 'bubby'
                     html += "<div>Sweater Type: Bubby<br />"
-                    html += `Sweater Size: <select name='sweater_bubby' class='sweater' id="${type}">`
-
-                    for (let size in sizes) {
-                        if (sweaters[type][size].qty < 1) {
-                            html += `<option value="${sizes[size]}:0"`
-                            if (purchases.sweater_bubby == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - SOLD OUT</option>`
-                        } else {
-                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
-                            if (purchases.sweater_bubby == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
-                        }
-                    }
-
-                    html += '</select><br />'
+                    html += `Sweater Size: ${purchases.sweater_bubby}<br />`
+                    // html += `Sweater Size: <select name='sweater_bubby' class='sweater' id="${type}">`
+                    //
+                    // for (let size in sizes) {
+                    //     if (sweaters[type][size].qty < 1) {
+                    //         html += `<option value="${sizes[size]}:0"`
+                    //         if (purchases.sweater_bubby == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - SOLD OUT</option>`
+                    //     } else {
+                    //         html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                    //         if (purchases.sweater_bubby == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                    //     }
+                    // }
+                    //
+                    // html += '</select><br />'
                     html += `Paid: $25<br />`
 
                     if (parseInt(purchases.sweater_bubby_ship)) {
@@ -251,7 +254,7 @@
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping To: ${school}<br />`
+                        html += `Shipped To: ${school}<br />`
                     }
                     html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
@@ -259,21 +262,22 @@
                 if (purchases.sweater_zaidy) {
                     const type = 'zaidy'
                     html += "<div>Sweater Type: Zaidy<br />"
-                    html += `Sweater Size: <select name='sweater_zaidy' class='sweater' id="${type}">`
-
-                    for (let size in sizes) {
-                        if (sweaters[type][size].qty < 1) {
-                            html += `<option value="${sizes[size]}:0"`
-                            if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - SOLD OUT</option>`
-                        } else {
-                            html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
-                            if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
-                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
-                        }
-                    }
-
-                    html += '</select><br />'
+                    html += `Sweater Size: ${purchases.sweater_zaidy}<br />`
+                    // html += `Sweater Size: <select name='sweater_zaidy' class='sweater' id="${type}">`
+                    //
+                    // for (let size in sizes) {
+                    //     if (sweaters[type][size].qty < 1) {
+                    //         html += `<option value="${sizes[size]}:0"`
+                    //         if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - SOLD OUT</option>`
+                    //     } else {
+                    //         html += `<option value="${sizes[size]}:${sweaters[type][size].qty}"`
+                    //         if (purchases.sweater_zaidy == sizes[size]) html += ' selected '
+                    //         html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                    //     }
+                    // }
+                    //
+                    // html += '</select><br />'
                     html += `Paid: $25<br />`
 
                     if (parseInt(purchases.sweater_zaidy_ship)) {
@@ -285,7 +289,7 @@
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
-                        html += `Shipping To: ${school}<br />`
+                        html += `Shipped To: ${school}<br />`
                     }
                     html += '<hr style="width: 90%; border-top: 1px solid #2c539e; margin-bottom: 15px;" /></div>'
                 }
@@ -312,7 +316,7 @@
                         $("#confirmation").text('Already Confirmed')
                     }
                 })
-            })
+            // })
         })
 
         $(document).on('change', '.sweater', function () {
@@ -360,8 +364,10 @@
         $("#confirmation").click( function() {
             $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
                 const res = JSON.parse(result)
-                if (res.success) alert('Confirmed.')
-                else {
+                if (res.success) {
+                    alert('Confirmed.')
+                    location.reload()
+                } else {
                     alert(res.error)
                     console.log(res.sql)
                 }

@@ -155,8 +155,10 @@
                             if (info[child.th_chidon_id]) {
                                 const child_info = info[child.th_chidon_id]
                                 html += `<br />Registration Fee: $${child_info.reg_fee}`
-                                html += `<br />Chidon Drive Total Raised: $${child_info.chidon_drive}`
-                                html += `<br />Chidon Drive Subsidy: $${child_info.subsidy}`
+                                if (parseInt(child_info.chidon_drive) > 0) {
+                                    html += `<br />Chidon Drive Total Raised: $${child_info.chidon_drive}`
+                                    html += `<br />Chidon Drive Subsidy: $${child_info.subsidy}`
+                                }
                                 if (child_info.coupon) html += `<br />Coupon: $${child_info.coupon} - ${child_info.coupon_reason}`
                                 html += `<br />Paid: $${child_info.paid}`
                                 html += `<br />Registration Balance: $${child_info.balance}`
@@ -167,6 +169,14 @@
                         html += '<b>Total Registration Balance: $' + total + '</b><br /><br />'
 
                         $("#purchaseInfo").append(html)
+
+                        // if already confirmed disable all selects / inputs
+                        $.post('ajax/checkConfirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
+                            if (parseInt(result) == 1) {
+                                $("button").attr('disabled', true)
+                                $("#confirmation").text('Already Confirmed')
+                            }
+                        })
                     })
                     .catch(error => {
                         alert('There was an error.')
@@ -181,8 +191,10 @@
         $("#confirmation").click( function() {
             $.post('ajax/confirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
                 const res = JSON.parse(result)
-                if (res.success) alert('Confirmed.')
-                else {
+                if (res.success) {
+                    alert('Confirmed.')
+                    location.reload()
+                } else {
                     alert(res.error)
                     console.log(res.sql)
                 }
