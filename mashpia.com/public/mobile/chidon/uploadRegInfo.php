@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
                 $qrys[] = $qry;
             }
             fclose($handle);
-            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error());
+            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
             echo "done.";
         }
     } else {
