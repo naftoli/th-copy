@@ -181,7 +181,7 @@
                                     html += `<br />Chidon Drive Total Raised: $${child_info.chidon_drive}`
                                     html += `<br />Chidon Drive Subsidy: $${child_info.subsidy}`
                                 }
-                                if (child_info.coupon) html += `<br />Coupon: $${child_info.coupon} - ${child_info.coupon_reason}`
+                                if (parseInt(child_info.coupon) > 0) html += `<br />Coupon: -$${child_info.coupon} - ${child_info.coupon_reason}`
                                 html += `<br />Paid: $${child_info.paid}`
                                 html += `<br />Registration Balance: $${child_info.balance}`
                                 html += '<br /><br />'
