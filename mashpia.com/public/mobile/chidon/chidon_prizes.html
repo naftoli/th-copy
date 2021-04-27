@@ -136,8 +136,8 @@
         if (add) {
             if (!cart[user_id]) cart[user_id] = []
             // make sure child has enough money to add
-            const cap = children[currentUser].option == 'C' ? 200 : 100
-            const total = getCartTotal()
+            const cap = children[user_id].option == 'C' ? 200 : 100
+            const total = getCartTotal(user_id)
             if ((total + parseInt(itemToAdd.price)) > cap) {
                 alert('You do not have enough money to add this prize!')
                 return false
@@ -167,16 +167,16 @@
         }
     }
 
-    const getCartTotal = () => {
+    const getCartTotal = (user_id) => {
         let total = 0
-        for (item of cart[currentUser]) {
+        for (item of cart[user_id]) {
             total += parseInt(item.price)
         }
         return total
     }
 
     const updateRunningTotal = () => {
-        const total = getCartTotal()
+        const total = getCartTotal(currentUser)
         $("#currentTotal").text(total)
     }
 
@@ -248,6 +248,7 @@
         const child = $(this).val()
         currentUser = child
         setupPrizes()
+        updateRunningTotal()
     })
 
     $(document).on('click', '.prize', function () {
