@@ -156,6 +156,11 @@
             for (id in children) {
                 let status
                 const child = children[id]
+
+                // skip child if not registered
+                if (!child.date_paid) continue;
+                if (!transactions[child.parent_id]) continue;
+
                 if (parseInt(child.shabbaton_maven)) status = "Mivtzah Maven - Eligible for Chidon Sweater"
                 else if (parseInt(child.shabbaton_pro)) status = "Maven / Pro - Eligible for Chidon Sweater & Gifts"
                 else if (parseInt(child.shabbaton_expert)) status = "Expert - Eligible for Full Chidon Experience"
@@ -205,7 +210,7 @@
                 if (parseInt(result) == 1) {
                     $("input").attr('disabled', true)
                     $("button").attr('disabled', true)
-                    $("#confirmation").text('Already Confirmed')
+                    location.href = 'confirmation.html'
                 }
             })
         })

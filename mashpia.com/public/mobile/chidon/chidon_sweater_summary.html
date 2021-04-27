@@ -117,7 +117,8 @@
                                 <button id="back" class="btn btn-primary btn-block">Back</button>
                             </a>
                             <br />
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
+                            <button id="continue" class="btn btn-primary btn-block">Continue</button>
+<!--                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>-->
                         </div>
                     </div>
                 </div>
@@ -146,6 +147,7 @@
 
             // $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
             //     const sweaters = JSON.parse(result)
+            let totalCost = 0
 
                 let school
                 for (id in children) {
@@ -189,15 +191,18 @@
                     // }
                     //
                     // html += '</select><br />'
-                    html += `Paid: $25<br />`
+                    html += `Cost: $25<br />`
+                    totalCost += 25
 
                     if (parseInt(purchases.sweater_mother_ship)) {
+                        totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_mother_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
                                 <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
                                 <input type="text" size="14" name="city" class="city" placeholder="city" />
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
                         html += `Shipped To: ${school}<br />`
@@ -224,15 +229,18 @@
                     // }
                     //
                     // html += '</select><br />'
-                    html += `Paid: $25<br />`
+                    html += `Cost: $25<br />`
+                    totalCost += 25
 
                     if (parseInt(purchases.sweater_father_ship)) {
+                        totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_father_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
                                 <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
                                 <input type="text" size="14" name="city" class="city" placeholder="city" />
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
                         html += `Shipped To: ${school}<br />`
@@ -259,15 +267,18 @@
                     // }
                     //
                     // html += '</select><br />'
-                    html += `Paid: $25<br />`
+                    html += `Cost: $25<br />`
+                    totalCost += 25
 
                     if (parseInt(purchases.sweater_bubby_ship)) {
+                        totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_bubby_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
                                 <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
                                 <input type="text" size="14" name="city" class="city" placeholder="city" />
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
                         html += `Shipped To: ${school}<br />`
@@ -294,15 +305,18 @@
                     // }
                     //
                     // html += '</select><br />'
-                    html += `Paid: $25<br />`
+                    html += `Cost: $25<br />`
+                    totalCost += 25
 
                     if (parseInt(purchases.sweater_zaidy_ship)) {
+                        totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_zaidy_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
                                 <input type="text" size="30" name="address" class="address" placeholder="address line 1" style="margin-bottom: 5px;" /><br />
                                 <input type="text" size="14" name="city" class="city" placeholder="city" />
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
+                                <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
                                 <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
                     } else {
                         html += `Shipped To: ${school}<br />`
@@ -311,13 +325,19 @@
                 }
 
                 if (parseInt(purchases.celeb_box_add)) {
+                    totalCost += 20
                     html += '<h4>Celebration Boxes</h4>'
                     html += '1 Extra Celebration Box - $20<br />'
                     if (parseInt(purchases.celeb_box_add_ship)) {
+                        totalCost += 10
                         html += '$10 Shipping<br />'
-                        html += 'Shipping Address: ' + purchases.celeb_box_add_addr + "<br />"
+                        html += 'Shipping Address: ' + purchases.celeb_box_add_addr + "<br /><br />"
                     }
                 }
+
+                html += `Total Cost for Purchases: $${totalCost} <br />
+                        Amount received for purchases: <br />
+                        Purchase Balance: <br />`
 
                 html += '</div>'
 
@@ -329,7 +349,8 @@
                         $("select").attr('disabled', true)
                         $("input").attr('disabled', true)
                         $("button").attr('disabled', true)
-                        $("#confirmation").text('Already Confirmed')
+                        // $("#confirmation").text('Already Confirmed')
+                        location.href = 'confirmation.html'
                     }
                 })
             // })
@@ -359,15 +380,17 @@
             const city = $(this).parent().find('.city').val()
             const state = $(this).parent().find('.state').val()
             const zip = $(this).parent().find('.zip').val()
-            if ( !(address && city && state && zip) ) {
+            const country = $(this).parent().find('.country').val()
+            if ( !(address && city && state && zip && country) ) {
                 alert('You must fill in all address fields.')
                 if (!address) $(this).parent().find('.address').focus()
                 else if (!city) $(this).parent().find('.city').focus()
                 else if (!state) $(this).parent().find('.state').focus()
                 else if (!zip) $(this).parent().find('.zip').focus()
+                else if (!country) $(this).parent().find('.country').focus()
                 return false
             } else {
-                const fullAddress = address + ' ' + city + ', ' + state + ' ' + zip
+                const fullAddress = address + ' ' + city + ', ' + state + ' ' + zip + ' ' + country
                 $.post('ajax/updateSweaterAddress.php', { admin: Cookies.get('admin'), type: type, address: fullAddress }, function(result) {
                     console.log(result)
                     const res = JSON.parse(result)
@@ -388,6 +411,23 @@
                     console.log(res.sql)
                 }
             })
+        })
+
+        $("#continue").click( function () {
+            const fields = ['address', 'city', 'state', 'zip', 'country']
+            let missing = false
+            for (let field of fields) {
+                if (!missing) {
+                    const elem = "." + field
+                    $(elem).each(function () {
+                        if ($(this).val() == '') {
+                            alert('You must fill in all ' + field + ' fields!')
+                            missing = true
+                            return false
+                        }
+                    })
+                }
+            }
         })
     });
 </script>

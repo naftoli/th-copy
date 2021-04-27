@@ -150,18 +150,25 @@
                         let html = '<br /><div style="font-size: 18px; line-height: 1.5;">'
 
                         html += '<b>Registration Info</b><br /><br />'
+                        let family_id
+                        for (let id in children) {
+                            family_id = info[children[id].th_chidon_id].admin_id
+                            break
+                        }
+                        html += `Family ID: ${family_id}<br /><br />`
+
                         for (let id in children) {
                             const child = children[id]
                             html += `Chidon ID: ${child.th_chidon_id} <br />Name: ${child.first} `
                             html += "<br />Registration Status: "
-                            if (!children[id].date_paid) {
-                                html += 'NOT REGISTERED'
+                            if (!child.date_paid) {
+                                html += '<span style="color: red">NOT REGISTERED</span>'
                                 $("#update").show()
                             } else {
                                 // check if there's actual payment
                                 const admin_id = child.parent_id
                                 if (!transactions[admin_id]) {
-                                    html += 'REGISTERED BUT NO PAYMENT FOUND (' + children[id].date_paid + ')'
+                                    html += '<span style="color: red">REGISTERED BUT NO PAYMENT FOUND (' + children[id].date_paid + ')</span>'
                                 } else {
                                     html += 'REGISTERED (' + children[id].date_paid + ')'
                                 }
@@ -181,7 +188,10 @@
                                 total += parseFloat(child_info.balance)
                             }
                         }
-                        html += '<b>Total Registration Balance: $' + total + '</b><br /><br />'
+                        if (total) html += '<span style="color: red">'
+                        html += '<b>Total Registration Balance: $' + total + '</b>'
+                        if (total) html += '</span>'
+                        html += '<br /><br />'
 
                         $("#purchaseInfo").append(html)
 
@@ -189,7 +199,8 @@
                         $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                             if (parseInt(result) == 1) {
                                 $("button").attr('disabled', true)
-                                $("#confirmation").text('Already Confirmed')
+                                // $("#confirmation").text('Already Confirmed')
+                                location.href = 'confirmation.html'
                             }
                         })
                     })
