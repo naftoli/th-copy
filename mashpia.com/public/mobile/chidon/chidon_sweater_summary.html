@@ -76,6 +76,18 @@
             font-family: font3;
             line-height: 1.2;
         }
+
+        #instructions {
+            font-size: 18px;
+            line-height: 1.5;
+            background-color: lightgrey;
+            padding: 10px;
+            border: 1px solid darkgrey;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -89,8 +101,8 @@
             <div class="login-box-body">
                 <div id="regInfo">
                     <div class="row">
-                        <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-
+                        <div class="col-sm-12" id="instructions">
+                            Please update all shipping addresses by filling out all relevant fields.
                         </div>
                     </div>
                     <div class="row">
@@ -101,6 +113,10 @@
                     <div class="row">
                         <div class="col-sm-12">
 <!--                            <button id="update" class="btn btn-primary btn-block">Edit Sweaters</button>-->
+                            <a href="chidon_purchases.html">
+                                <button id="back" class="btn btn-primary btn-block">Back</button>
+                            </a>
+                            <br />
                             <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
                         </div>
                     </div>
@@ -308,7 +324,7 @@
                 $("#purchaseInfo").append(html)
 
                 // if already confirmed disable all selects / inputs
-                $.post('ajax/checkConfirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
+                $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                     if (parseInt(result) == 1) {
                         $("select").attr('disabled', true)
                         $("input").attr('disabled', true)
@@ -362,7 +378,7 @@
         })
 
         $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
+            $.post('ajax/confirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                 const res = JSON.parse(result)
                 if (res.success) {
                     alert('Confirmed.')

@@ -76,6 +76,18 @@
             font-family: font3;
             line-height: 1.2;
         }
+
+        #instructions {
+            font-size: 18px;
+            line-height: 1.5;
+            background-color: lightgrey;
+            padding: 10px;
+            border: 1px solid darkgrey;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -89,21 +101,11 @@
             <div class="login-box-body">
                 <div id="regInfo">
                     <div class="row">
-                        <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-                            Your family’s Chidon prize selections and sizes are listed below.
+                        <div class="col-sm-12" id="instructions">
+                            Your family's Chidon prize selections and sizes are listed below.
                             Please review for accuracy.
-<!--                            and update if necessary.-->
                             (Please note that sweater sizes cannot be changed at this time.)
-                            <br /><br/>
-<!--                            Use the "Edit Prizes" button at the bottom to change your prize selection.-->
-<!--                            <br />-->
-                            <!--                            <b>Please review and confirm your prizes.</b>-->
-<!--                            <br /><br />-->
-<!--                            In this form you can update your yarmulke size and Hebrew name.-->
-<!--                            <br /><br />-->
-<!--                            If you want to change prizes, or purchase a parent or grandparent sweater, chidon celebration box.-->
-<!--                            Please click below to edit your purchase. This will take you to the Enrollment form,-->
-<!--                            where you can edit or make the changes or buy additional purchases.-->
+                            <br />
                         </div>
                     </div>
                     <div class="row">
@@ -112,9 +114,23 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-12" id="instructions">
+                            Please note: Prizes have already been finalized.
+                            If your prize selection is not reflecting the order you made or there was a problem while registering,
+                            please contact your Base Commander.
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
                         <div class="col-sm-12">
 <!--                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>-->
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
+                            <a href="chidon_reg.html">
+                                <button id="back" class="btn btn-primary btn-block">Back</button>
+                            </a>
+                            <br />
+                            <a href="chidon_sweater_summary.html">
+                                <button id="continue" class="btn btn-primary btn-block">Continue</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -185,7 +201,7 @@
             $("#purchaseInfo").append(html)
 
             // if already confirmed disable all selects / inputs
-            $.post('ajax/checkConfirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
+            $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                 if (parseInt(result) == 1) {
                     $("input").attr('disabled', true)
                     $("button").attr('disabled', true)
@@ -231,18 +247,18 @@
             })
         })
 
-        $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
-                const res = JSON.parse(result)
-                if (res.success) {
-                    alert('Confirmed.')
-                    location.reload()
-                } else {
-                    alert(res.error)
-                    console.log(res.sql)
-                }
-            })
-        })
+        // $("#confirmation").click( function() {
+        //     $.post('ajax/confirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
+        //         const res = JSON.parse(result)
+        //         if (res.success) {
+        //             alert('Confirmed.')
+        //             location.reload()
+        //         } else {
+        //             alert(res.error)
+        //             console.log(res.sql)
+        //         }
+        //     })
+        // })
     });
 </script>
 <script>

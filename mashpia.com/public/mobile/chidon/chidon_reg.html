@@ -76,6 +76,18 @@
             font-family: font3;
             line-height: 1.2;
         }
+
+        #instructions {
+            font-size: 18px;
+            line-height: 1.5;
+            background-color: lightgrey;
+            padding: 10px;
+            border: 1px solid darkgrey;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -89,8 +101,9 @@
             <div class="login-box-body">
                 <div id="regInfo">
                     <div class="row">
-                        <div class="col-sm-12" style="font-size: 18px; line-height: 1.5">
-
+                        <div class="col-sm-12" id="instructions">
+                            Please review the details of your registration carefully.
+                            If the balance is incorrect, please email accounting@tzivoshashem.org with a screenshot of this page.
                         </div>
                     </div>
                     <div class="row">
@@ -100,7 +113,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>
+                            <a href="chidon_purchases.html">
+                                <button id="continue" class="btn btn-primary btn-block">Continue</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -140,7 +155,7 @@
                             html += `Chidon ID: ${child.th_chidon_id} <br />Name: ${child.first} `
                             html += "<br />Registration Status: "
                             if (!children[id].date_paid) {
-                                html += 'NOT YET REGISTERED'
+                                html += 'NOT REGISTERED'
                                 $("#update").show()
                             } else {
                                 // check if there's actual payment
@@ -171,7 +186,7 @@
                         $("#purchaseInfo").append(html)
 
                         // if already confirmed disable all selects / inputs
-                        $.post('ajax/checkConfirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
+                        $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                             if (parseInt(result) == 1) {
                                 $("button").attr('disabled', true)
                                 $("#confirmation").text('Already Confirmed')
@@ -188,18 +203,18 @@
                 console.log(error)
             })
 
-        $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
-                const res = JSON.parse(result)
-                if (res.success) {
-                    alert('Confirmed.')
-                    location.reload()
-                } else {
-                    alert(res.error)
-                    console.log(res.sql)
-                }
-            })
-        })
+        // $("#confirmation").click( function() {
+        //     $.post('ajax/confirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
+        //         const res = JSON.parse(result)
+        //         if (res.success) {
+        //             alert('Confirmed.')
+        //             location.reload()
+        //         } else {
+        //             alert(res.error)
+        //             console.log(res.sql)
+        //         }
+        //     })
+        // })
     });
 </script>
 <script>
