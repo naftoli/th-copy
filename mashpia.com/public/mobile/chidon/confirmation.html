@@ -135,62 +135,18 @@
 <script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 <script src="js/js.cookie.js" type="text/javascript"></script>
 <script>
-  // wrap ajax calls in promise
-  function getAjax(url, data) {
-    return new Promise((resolve, reject) => {
-      $.post(url, data, function (result) {
-        resolve(JSON.parse(result))
-      })
-    })
-  }
-
-  let balance = 0
+  let reg_balance = 0
+  let extra_balance = 0
+  let total_balance = 0
   let paid = false
 
   $(function () {
-    getAjax('ajax/getRegInfo.php', { admin: Cookies.get('admin') })
-      .then(res => {
-        const info = res.info
-        let reg = 0
-        let extra = 0
-        for (id in info) {
-          const child = info[id]
-          reg += parseFloat(child.balance)
-        }
-        balance = reg + extra
-        if (balance) {
-          let html = ''
-          html += `Balance owing from Registration: $${reg}<br />`
-          html += `Balance owing from Extra Purchases: $${extra}<br />`
-          html += `Please use the form below to pay for what's owed.<br /><br />`
-          $("#confirmInfo").append(html)
-          $("#total").text(balance)
-          $("#payment").show()
-        }
-      })
-      .catch(error => {
-        alert('There was an error.')
-        console.log(error)
-      })
-
-    $("#confirmation").click( function() {
-      if (balance || extra) {
-        if (!paid) {
-          alert('You must pay the amount owing before you can confirm!')
-          return false
-        }
-      }
-      $.post('ajax/confirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
-        const res = JSON.parse(result)
-        if (res.success) {
-            alert('Confirmed.')
-            location.reload()
-        } else {
-            alert(res.error)
-            console.log(res.sql)
-        }
-      })
-    })
+    reg_balance = localStorage.getItem('reg_balance') || Cookies.get('reg_balance')
+    extra_balance = localStorage.getItem('extra_balance') || Cookies.get('extra_balance')
+    if (!reg_balance) reg_balance = 0 // make sure we don't end up with NaN
+    if (!extra_balance) extra_balance = 0 // make sure we don't end up with NaN
+    total_balance = parseFloat(reg_balance) + parseFloat(extra_balance)
+    $("#total").text(total_balance)
   })
 </script>
 <script>

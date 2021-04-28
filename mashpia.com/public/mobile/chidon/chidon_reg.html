@@ -197,6 +197,10 @@
 
                         $("#purchaseInfo").append(html)
 
+                        // update cookies / cart regarding total balance
+                        Cookies.set('reg_balance', total)
+                        if (localStorage) localStorage.setItem('reg_balance', total)
+
                         // if already confirmed disable all selects / inputs
                         // $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
                         //     if (parseInt(result) == 1) {

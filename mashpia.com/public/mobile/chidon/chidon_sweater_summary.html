@@ -348,6 +348,10 @@
 
                 $("#purchaseInfo").append(html)
 
+                // update cookies / cart regarding sweater balance
+                Cookies.set('extra_balance', balance)
+                if (localStorage) localStorage.setItem('extra_balance', balance)
+
                 // if already confirmed disable all selects / inputs
                 $.post('ajax/checkConfirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
                     if (parseInt(result) == 1) {
