@@ -100,11 +100,11 @@
     <div class="login-box">
       <div class="login-box-body">
         <div id="regInfo">
-          <div class="row">
-            <div class="col-sm-12" id="instructions">
-              Thank you for reviewing your Chidon Registration details. Please note that by clicking confirm here, all changes will be finalized.
-            </div>
-          </div>
+<!--          <div class="row">-->
+<!--            <div class="col-sm-12" id="instructions">-->
+<!--              Thank you for reviewing your Chidon Registration details. Please note that by clicking confirm here, all changes will be finalized.-->
+<!--            </div>-->
+<!--          </div>-->
           <br />
           <div class="row">
             <div class="col-sm-12" id="confirmInfo" style="font-size: 18px; line-height: 1.5;">
@@ -113,13 +113,79 @@
           </div>
           <div class="row">
             <div class="col-sm-12" id="payment" style="font-size: 18px; line-height: 1.5;">
-              Total Payment: $<span id="total"></span><br />
-
+              Total Payment: $<span id="total"></span><br /><br />
+              <div id="paymentForm" style="display:none;">
+                <div class="field">
+                  <label>Name on Credit Card:</label>
+                  <input type="text" id="name" placeholder="Full Name" class="form-control" required />
+                </div>
+                <div class="field">
+                  <label>Credit Card Number:</label>
+                  <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" class="form-control" required />
+                </div>
+                <div class="group">
+                  <div class="field">
+                    <label>Exp. Month:</label>
+                    <select id="exp_mm" class="form-control" style="width: 200px;">
+                      <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
+                      <option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Exp. Year:</label>
+                    <select id="exp_yy" class="form-control" style="width: 200px;">
+                      <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+                      <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>CVV:</label>
+                    <input type="text" id="cc_cvv" class="form-control" style="width: 200px;" placeholder="CVV" required />
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Address:</label>
+                  <input type="text" id="bill_address" class="form-control" placeholder="Address" required />
+                </div>
+                <div class="field">
+                  <label>Apt./Suite:</label>
+                  <input type="text" id="bill_apt" class="form-control" placeholder="Apt./Suite (optional)" />
+                </div>
+                <div class="group">
+                  <div class="field">
+                    <label>Zip/Postcode:</label>
+                    <input type="text" id="bill_zip" class="form-control" placeholder="Zip/Postcode" required />
+                  </div>
+                  <div class="field">
+                    <label>City:</label>
+                    <input type="text" id="bill_city" class="form-control" placeholder="City" required />
+                  </div>
+                  <div class="field">
+                    <label>State/Prov/Region:</label>
+                    <input type="text" id="bill_state" class="form-control" placeholder="State/Prov/Region" required />
+                  </div>
+                  <div class="field">
+                    <label>Country:</label>
+                    <select id="bill_country" class="form-control">
+                      <option>United States</option>
+                      <option>Canada</option>
+                      <option>England</option>
+                      <option>Australia</option>
+                      <option>S Africa</option>
+                      <option>France</option>
+                      <option>Europe</option>
+                      <option>S America</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <br />
           <div class="row">
             <div class="col-sm-12">
+              <button id="pay" class="btn btn-primary btn-block" style="display: none;">Pay</button>
+              <br />
               <a href="chidon_sweater_summary.html">
                 <button id="back" class="btn btn-primary btn-block">Back</button>
               </a>
@@ -148,6 +214,41 @@
     if (!extra_balance) extra_balance = 0 // make sure we don't end up with NaN
     total_balance = parseFloat(reg_balance) + parseFloat(extra_balance)
     $("#total").text(total_balance)
+    if (total_balance) {
+      $("#paymentForm").show()
+      $("#pay").show()
+    }
+
+    $("#pay").click( function () {
+      const name = $("#name").val()
+      let cc_num = $("#cc_num").val()
+      cc_num = cc_num.replace(/ /g,'')
+      const mm = $("#exp_mm").val()
+      const yy = $("#exp_yy").val()
+      const cvv = $("#cc_cvv").val()
+      const address = $("#bill_address").val()
+      const apt = $("#bill_apt").val()
+      const city = $("#bill_city").val()
+      const state = $("#bill_state").val()
+      const zip = $("#bill_zip").val()
+      const country = $("#bill_country").val()
+      if ( !(name && cc && mm && yy && cvv && address && city && state && zip && country) ) {
+        alert('You must fill in all the fields!')
+        return false
+      }
+      cc = {}
+      cc.name = name
+      cc.num = cc_num
+      cc.mm = mm
+      cc.yy = yy
+      cc.cvv = cvv
+      cc.address = address + ' ' + apt
+      cc.city = city
+      cc.state = state
+      cc.zip = zip
+      cc.country = country
+      $.post('ajax/')
+    })
   })
 </script>
 <script>
