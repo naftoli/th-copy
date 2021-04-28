@@ -31,8 +31,8 @@ if (isset($_POST['submit'])) {
                 $coupon_reason = $data[$i++];
                 $paid = $data[$i++];
                 if (empty($paid)) $paid = 0;
-                $balance = $data[$i++];
-                if (empty($balance)) $balance = 0;
+                $balance = floatval($data[$i++]);
+                if (empty($balance) || $balance < 6.00) $balance = 0;
                 $qry = "insert into th_chidon_zelda 
                         set th_chidon_id = $chidon_id, 
                         admin_id = $admin_id, 
@@ -43,11 +43,11 @@ if (isset($_POST['submit'])) {
                         coupon_reason = '$coupon_reason', 
                         paid = $paid, 
                         balance = $balance";
-//                echo $qry;
+                echo $qry;
                 $qrys[] = $qry;
             }
             fclose($handle);
-            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
+//            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
             echo "done.";
         }
     } else {
