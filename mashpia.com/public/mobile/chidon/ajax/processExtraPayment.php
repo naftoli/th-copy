@@ -42,7 +42,10 @@ if (intval($cc['on_file']) == 1) {
         exit;
     } else {
         // update tables
-
+        $sql = "update th_chidon_zelda set balance = 0 where admin_id = " . $admin_id;
+        mysql_query($sql);
+        $sql = "update th_chidon_zelda_extra set extra = 0 where admin_id = " . $admin_id;
+        mysql_query($sql);
         echo json_encode([
             'success'   => true,
             'msg'   => $ccResult['success']
