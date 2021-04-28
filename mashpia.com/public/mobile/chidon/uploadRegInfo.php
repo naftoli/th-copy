@@ -28,6 +28,7 @@ if (isset($_POST['submit'])) {
                 $chidon_drive = $data[$i++];
                 $subsidy = $data[$i++];
                 $coupon = $data[$i++];
+                if (empty($coupon)) $coupon = 0;
                 $coupon_reason = $data[$i++];
                 $paid = $data[$i++];
                 if (empty($paid)) $paid = 0;
@@ -43,11 +44,11 @@ if (isset($_POST['submit'])) {
                         coupon_reason = '$coupon_reason', 
                         paid = $paid, 
                         balance = $balance";
-                echo $qry;
+//                echo $qry;
                 $qrys[] = $qry;
             }
             fclose($handle);
-//            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
+            foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
             echo "done.";
         }
     } else {
