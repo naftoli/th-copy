@@ -272,7 +272,7 @@
         cc.zip = zip
         cc.country = country
       }
-      $.post('ajax/processExtraPayment.php', { extra: extra_balance, amount: total_balance, cc: cc }, function (result) {
+      $.post('ajax/processExtraPayment.php', { admin_id: Cookies.get('admin'), extra: extra_balance, amount: total_balance, cc: cc }, function (result) {
         const res = JSON.parse(result)
         if (res.success) {
           alert('Your payment has been received. Thank you!')

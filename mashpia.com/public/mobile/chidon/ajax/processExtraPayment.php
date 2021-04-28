@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
 use classes\authorize\CustomerProfile;
 
 require __DIR__ . '/encrypt.php';
-$admin = $_COOKIE['admin'];
+$admin = $_POST['admin_id'];
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
 $amount = $_POST['amount'];
