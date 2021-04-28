@@ -51,8 +51,18 @@ if (is_string($ccResult)) {
         // update tables
         $sql = "update th_chidon_zelda set balance = 0 where admin_id = " . $admin_id;
         mysql_query($sql);
-        $sql = "update th_chidon_zelda_extra set extra = 0 where admin_id = " . $admin_id;
+        // make sure amount for extra purchases gets zeroed out
+        $sql = "select * from th_chidon_zelda_extra where admin_id = " . $admin_id;
+        $result = mysql_query($sql);
+        if (mysql_num_rows($result) > 0) {
+            $sql = "update th_chidon_zelda_extra set extra = " . mysql_real_escape_string($_POST['extra']) . " where admin_id = " . $admin_id;
+        } else {
+            $sql = "insert into th_chidon_zelda_extra set admin_id = $admin_id, extra = " . mysql_real_escape_string($_POST['extra']);
+        }
         mysql_query($sql);
+
+        // send email ?
+
         echo json_encode([
             'success' => true,
             'msg' => $response['success']
