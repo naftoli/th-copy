@@ -105,8 +105,15 @@
               Thank you for reviewing your Chidon Registration details. Please note that by clicking confirm here, all changes will be finalized.
             </div>
           </div>
+          <br />
           <div class="row">
-            <div class="col-sm-12" id="confirmInfo">
+            <div class="col-sm-12" id="confirmInfo" style="font-size: 18px; line-height: 1.5;">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12" id="payment" style="font-size: 18px; line-height: 1.5;">
+              Total Payment: $<span id="total"></span><br />
 
             </div>
           </div>
@@ -137,11 +144,29 @@
     })
   }
 
+  let balance = 0
+  let paid = false
+
   $(function () {
     getAjax('ajax/getRegInfo.php', { admin: Cookies.get('admin') })
       .then(res => {
         const info = res.info
-
+        let reg = 0
+        let extra = 0
+        for (id in info) {
+          const child = info[id]
+          reg += parseFloat(child.balance)
+        }
+        balance = reg + extra
+        if (balance) {
+          let html = ''
+          html += `Balance owing from Registration: $${reg}<br />`
+          html += `Balance owing from Extra Purchases: $${extra}<br />`
+          html += `Please use the form below to pay for what's owed.<br /><br />`
+          $("#confirmInfo").append(html)
+          $("#total").text(balance)
+          $("#payment").show()
+        }
       })
       .catch(error => {
         alert('There was an error.')
@@ -149,6 +174,12 @@
       })
 
     $("#confirmation").click( function() {
+      if (balance || extra) {
+        if (!paid) {
+          alert('You must pay the amount owing before you can confirm!')
+          return false
+        }
+      }
       $.post('ajax/confirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
         const res = JSON.parse(result)
         if (res.success) {

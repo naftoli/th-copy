@@ -113,6 +113,8 @@
                     <div class="row">
                         <div class="col-sm-12">
 <!--                            <button id="update" class="btn btn-primary btn-block">Edit Sweaters</button>-->
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Sweaters</button>
+                            <br />
                             <a href="chidon_purchases.html">
                                 <button id="back" class="btn btn-primary btn-block">Back</button>
                             </a>
@@ -344,13 +346,14 @@
                 $("#purchaseInfo").append(html)
 
                 // if already confirmed disable all selects / inputs
-                $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
+                $.post('ajax/checkConfirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
                     if (parseInt(result) == 1) {
                         $("select").attr('disabled', true)
                         $("input").attr('disabled', true)
-                        $("button").attr('disabled', true)
-                        // $("#confirmation").text('Already Confirmed')
-                        location.href = 'confirmation.html'
+                        $("button.update").attr('disabled', true)
+                        $("button#confirmation").attr('disabled', true)
+                        $("#confirmation").text('Already Confirmed')
+                        // location.href = 'confirmation.html'
                     }
                 })
             // })
@@ -401,7 +404,7 @@
         })
 
         $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
+            $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
                 const res = JSON.parse(result)
                 if (res.success) {
                     alert('Confirmed.')

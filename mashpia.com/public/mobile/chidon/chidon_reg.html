@@ -196,13 +196,13 @@
                         $("#purchaseInfo").append(html)
 
                         // if already confirmed disable all selects / inputs
-                        $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
-                            if (parseInt(result) == 1) {
-                                $("button").attr('disabled', true)
-                                // $("#confirmation").text('Already Confirmed')
-                                location.href = 'confirmation.html'
-                            }
-                        })
+                        // $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
+                        //     if (parseInt(result) == 1) {
+                        //         $("button").attr('disabled', true)
+                        //         // $("#confirmation").text('Already Confirmed')
+                        //         location.href = 'confirmation.html'
+                        //     }
+                        // })
                     })
                     .catch(error => {
                         alert('There was an error.')
