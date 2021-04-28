@@ -172,7 +172,7 @@ function parseResponse( $response ) {
             }
             // Or, print errors if the API request wasn't successful
         } else {
-            if (!is_array($response)) {
+            if (!is_object($response)) {
                 $error_msg .= $response;
             } else {
                 $error_msg .= "Transaction Failed \n";

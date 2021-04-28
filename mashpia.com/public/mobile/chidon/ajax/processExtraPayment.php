@@ -25,21 +25,28 @@ $cc = $_POST['cc'];
 $customer_id = 0;
 if (intval($cc['on_file']) == 1) {
     $customer_id = getCustomerID();
-    if (empty($customer_id)) {
+    if (!$customer_id || empty($customer_id)) {
         echo json_encode([
             'success' => false,
             'msg' => 'You do not have a credit card on file, please enter credit card info and try again.'
         ]);
         exit;
     }
+}
+
+$ccResult = processCC($customer_id);
+if (is_string($ccResult)) {
+    echo json_encode([
+        'success'   => false,
+        'msg'       => $ccResult
+    ]);
 } else {
-    $ccResult = processCC($customer_id);
-    if ($ccResult['error']) {
+    $response = parseResponse($ccResult);
+    if (!empty($response['error'])) {
         echo json_encode([
             'success' => false,
-            'msg' => $ccResult['error']
+            'msg' => $response['error']
         ]);
-        exit;
     } else {
         // update tables
         $sql = "update th_chidon_zelda set balance = 0 where admin_id = " . $admin_id;
@@ -47,10 +54,9 @@ if (intval($cc['on_file']) == 1) {
         $sql = "update th_chidon_zelda_extra set extra = 0 where admin_id = " . $admin_id;
         mysql_query($sql);
         echo json_encode([
-            'success'   => true,
-            'msg'   => $ccResult['success']
+            'success' => true,
+            'msg' => $response['success']
         ]);
-        exit;
     }
 }
 
@@ -90,5 +96,5 @@ function processCC( $customer_id )
         $response = chargeCreditCard($amount, $cc_info);
     }
 
-    return parseResponse($response);
+    return $response;
 }
