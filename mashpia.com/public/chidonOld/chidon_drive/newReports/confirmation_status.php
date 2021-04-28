@@ -44,13 +44,13 @@ function convertBool($val) {
                 <th>Name</th>
                 <th>Confirmed Prizes</th>
                 <th>Confirmed Sweaters</th>
-                <th>Confirmed Registration</th>
+<!--                <th>Confirmed Registration</th>-->
             </tr>
             <?php
             foreach ($admins as $admin) {
                 echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>" .
-                    convertBool($admin['confirmed_prizes']) . "</td><td>" . convertBool($admin['confirmed_sweaters']) .
-                    "</td><td>" . convertBool($admin['confirmed_reg']) . "</td></tr>";
+                    convertBool($admin['confirmed_prizes']) . "</td><td>" . convertBool($admin['confirmed_sweaters']) . "</td></tr>";
+//                    "</td><td>" . convertBool($admin['confirmed_reg']) .
             }
             ?>
         </table>
