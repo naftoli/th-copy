@@ -144,16 +144,17 @@
             const purchases = res.purchases
             const children = res.children
             const prizes = res.prizes
-            const chidondrive = res.chidondrive
-            const coupon_code = res.coupon
+            const extra = res.extra
 
             // $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
             //     const sweaters = JSON.parse(result)
-            let totalCost = 0
 
-                let school
+                let totalCost = 0
+
+                let school, admin_id
                 for (id in children) {
                     school = children[id].school_name
+                    admin_id = children[id].parent_id
                     break
                 }
 
@@ -337,9 +338,11 @@
                     }
                 }
 
+                const received = parseInt(extra[admin_id])
+                const balance = totalCost - received
                 html += `Total Cost for Purchases: $${totalCost} <br />
-                        Amount received for purchases: <br />
-                        Purchase Balance: <br />`
+                        Amount received for purchases: $${recieved}<br />
+                        Purchase Balance: $${balance}<br />`
 
                 html += '</div>'
 

@@ -78,6 +78,16 @@ foreach ($children as $user_id => $child) {
         $prizes[$user_id][] = $row;
     }
 }
+
+// get purchases paid balance
+$extra = [];
+$sql = "select * from th_chidon_zelda_extra where admin_id = " . $admin_id;
+$result = mysql_query($sql);
+if (mysql_num_rows($result) > 0) {
+    $extra[$admin_id] = mysql_fetch_assoc($result)['extra'];
+} else {
+    $extra[$admin_id] = 0;
+}
 /*
 $chidondrive = [];
 foreach ($children as $user_id => $child) {
@@ -111,6 +121,7 @@ echo json_encode([
     'purchases'    => $info,
     'children'     => $children,
     'prizes'       => $prizes,
+    'extra'        => $extra
 //    'chidondrive'  => $chidondrive,
 //    'coupon'       => $coupon
 ]);

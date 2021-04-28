@@ -103,7 +103,7 @@
                     <div class="row">
                         <div class="col-sm-12" id="instructions">
                             Please review the details of your registration carefully.
-                            If the balance is incorrect, please email accounting@tzivoshashem.org with a screenshot of this page.
+                            If the balance is incorrect, please email zelda@tzivoshashem.org with a screenshot of this page.
                         </div>
                     </div>
                     <div class="row">
@@ -163,7 +163,7 @@
                             html += "<br />Registration Status: "
                             if (!child.date_paid) {
                                 html += '<span style="color: red">NOT REGISTERED</span>'
-                                $("#update").show()
+                                // $("#update").show()
                             } else {
                                 // check if there's actual payment
                                 const admin_id = child.parent_id
@@ -181,11 +181,13 @@
                                     html += `<br />Chidon Drive Total Raised: $${child_info.chidon_drive}`
                                     html += `<br />Chidon Drive Subsidy: $${child_info.subsidy}`
                                 }
-                                if (parseInt(child_info.coupon) > 0) html += `<br />Coupon: -$${child_info.coupon} - ${child_info.coupon_reason}`
+                                if (parseInt(child_info.coupon) > 0) html += `<br />Coupon: $${child_info.coupon} - ${child_info.coupon_reason}`
                                 html += `<br />Paid: $${child_info.paid}`
                                 html += `<br />Registration Balance: $${child_info.balance}`
                                 html += '<br /><br />'
                                 total += parseFloat(child_info.balance)
+                            } else {
+                                html += '<br /><br />'
                             }
                         }
                         if (total) html += '<span style="color: red">'
