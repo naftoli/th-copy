@@ -233,34 +233,54 @@
     })
 
     $("#pay").click( function () {
-      const name = $("#name").val()
-      let cc_num = $("#cc_num").val()
-      cc_num = cc_num.replace(/ /g,'')
-      const mm = $("#exp_mm").val()
-      const yy = $("#exp_yy").val()
-      const cvv = $("#cc_cvv").val()
-      const address = $("#bill_address").val()
-      const apt = $("#bill_apt").val()
-      const city = $("#bill_city").val()
-      const state = $("#bill_state").val()
-      const zip = $("#bill_zip").val()
-      const country = $("#bill_country").val()
-      if ( !(name && cc && mm && yy && cvv && address && city && state && zip && country) ) {
-        alert('You must fill in all the fields!')
+      // make sure cc on file is checked off
+      if (!$(".cc_on_file:checked").length) {
+        alert('You must indicate how you will pay your balance due!')
         return false
       }
-      cc = {}
-      cc.name = name
-      cc.num = cc_num
-      cc.mm = mm
-      cc.yy = yy
-      cc.cvv = cvv
-      cc.address = address + ' ' + apt
-      cc.city = city
-      cc.state = state
-      cc.zip = zip
-      cc.country = country
-      $.post('ajax/')
+
+      let cc = {}
+      const on_file = parseInt($(".cc_on_file:checked").val())
+      cc.on_file = on_file
+
+      if (!on_file) {
+        const name = $("#name").val()
+        let cc_num = $("#cc_num").val()
+        cc_num = cc_num.replace(/ /g,'')
+        const mm = $("#exp_mm").val()
+        const yy = $("#exp_yy").val()
+        const cvv = $("#cc_cvv").val()
+        const address = $("#bill_address").val()
+        const apt = $("#bill_apt").val()
+        const city = $("#bill_city").val()
+        const state = $("#bill_state").val()
+        const zip = $("#bill_zip").val()
+        const country = $("#bill_country").val()
+        if ( !(name && cc && mm && yy && cvv && address && city && state && zip && country) ) {
+          alert('You must fill in all the fields!')
+          return false
+        }
+
+        cc.name = name
+        cc.num = cc_num
+        cc.mm = mm
+        cc.yy = yy
+        cc.cvv = cvv
+        cc.address = address + ' ' + apt
+        cc.city = city
+        cc.state = state
+        cc.zip = zip
+        cc.country = country
+      }
+      $.post('ajax/processExtraPayment.php', { amount: total_balance, cc: cc }, function (result) {
+        const res = JSON.parse(result)
+        if (res.success) {
+          alert('Your payment has been received. Thank you!')
+          console.log(res.msg)
+        } else {
+          alert(res.msg)
+        }
+      })
     })
   })
 </script>
