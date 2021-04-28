@@ -16,7 +16,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[$row['user_id']] = $row['class_id'];
 }
 
-$subjects = [ 1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 100 ];
 $levels = [
     'Pre1a' =>  6, 
     '1'     =>  7, 
