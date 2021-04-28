@@ -115,67 +115,71 @@
             <div class="col-sm-12" id="payment" style="font-size: 18px; line-height: 1.5;">
               Total Payment: $<span id="total"></span><br /><br />
               <div id="paymentForm" style="display:none;">
-                <div class="field">
-                  <label>Name on Credit Card:</label>
-                  <input type="text" id="name" placeholder="Full Name" class="form-control" required />
-                </div>
-                <div class="field">
-                  <label>Credit Card Number:</label>
-                  <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" class="form-control" required />
-                </div>
-                <div class="group">
+                <input type="radio" name="cc_on_file" class="cc_on_file" value="1" /> Use Credit Card on File<br />
+                <input type="radio" name="cc_on_file" class="cc_on_file" value="0" /> Use other Credit Card<br /><br />
+                <div id="ccInfo" style="display: none;">
                   <div class="field">
-                    <label>Exp. Month:</label>
-                    <select id="exp_mm" class="form-control" style="width: 200px;">
-                      <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
-                      <option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
-                    </select>
+                    <label>Name on Credit Card:</label>
+                    <input type="text" id="name" placeholder="Full Name" class="form-control" required />
                   </div>
                   <div class="field">
-                    <label>Exp. Year:</label>
-                    <select id="exp_yy" class="form-control" style="width: 200px;">
-                      <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
-                      <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
-                    </select>
+                    <label>Credit Card Number:</label>
+                    <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" class="form-control" required />
+                  </div>
+                  <div class="group">
+                    <div class="field">
+                      <label>Exp. Month:</label>
+                      <select id="exp_mm" class="form-control" style="width: 200px;">
+                        <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
+                        <option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label>Exp. Year:</label>
+                      <select id="exp_yy" class="form-control" style="width: 200px;">
+                        <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+                        <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label>CVV:</label>
+                      <input type="text" id="cc_cvv" class="form-control" style="width: 200px;" placeholder="CVV" required />
+                    </div>
                   </div>
                   <div class="field">
-                    <label>CVV:</label>
-                    <input type="text" id="cc_cvv" class="form-control" style="width: 200px;" placeholder="CVV" required />
-                  </div>
-                </div>
-                <div class="field">
-                  <label>Address:</label>
-                  <input type="text" id="bill_address" class="form-control" placeholder="Address" required />
-                </div>
-                <div class="field">
-                  <label>Apt./Suite:</label>
-                  <input type="text" id="bill_apt" class="form-control" placeholder="Apt./Suite (optional)" />
-                </div>
-                <div class="group">
-                  <div class="field">
-                    <label>Zip/Postcode:</label>
-                    <input type="text" id="bill_zip" class="form-control" placeholder="Zip/Postcode" required />
+                    <label>Address:</label>
+                    <input type="text" id="bill_address" class="form-control" placeholder="Address" required />
                   </div>
                   <div class="field">
-                    <label>City:</label>
-                    <input type="text" id="bill_city" class="form-control" placeholder="City" required />
+                    <label>Apt./Suite:</label>
+                    <input type="text" id="bill_apt" class="form-control" placeholder="Apt./Suite (optional)" />
                   </div>
-                  <div class="field">
-                    <label>State/Prov/Region:</label>
-                    <input type="text" id="bill_state" class="form-control" placeholder="State/Prov/Region" required />
-                  </div>
-                  <div class="field">
-                    <label>Country:</label>
-                    <select id="bill_country" class="form-control">
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>England</option>
-                      <option>Australia</option>
-                      <option>S Africa</option>
-                      <option>France</option>
-                      <option>Europe</option>
-                      <option>S America</option>
-                    </select>
+                  <div class="group">
+                    <div class="field">
+                      <label>Zip/Postcode:</label>
+                      <input type="text" id="bill_zip" class="form-control" placeholder="Zip/Postcode" required />
+                    </div>
+                    <div class="field">
+                      <label>City:</label>
+                      <input type="text" id="bill_city" class="form-control" placeholder="City" required />
+                    </div>
+                    <div class="field">
+                      <label>State/Prov/Region:</label>
+                      <input type="text" id="bill_state" class="form-control" placeholder="State/Prov/Region" required />
+                    </div>
+                    <div class="field">
+                      <label>Country:</label>
+                      <select id="bill_country" class="form-control">
+                        <option>United States</option>
+                        <option>Canada</option>
+                        <option>England</option>
+                        <option>Australia</option>
+                        <option>S Africa</option>
+                        <option>France</option>
+                        <option>Europe</option>
+                        <option>S America</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -218,6 +222,15 @@
       $("#paymentForm").show()
       $("#pay").show()
     }
+
+    $(".cc_on_file").click( function () {
+      const val = $(this).val()
+      if (parseInt(val) == 0) {
+        $("#ccInfo").show()
+      } else {
+        $("#ccInfo").hide()
+      }
+    })
 
     $("#pay").click( function () {
       const name = $("#name").val()
