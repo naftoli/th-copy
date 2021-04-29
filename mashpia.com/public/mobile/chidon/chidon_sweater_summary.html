@@ -135,6 +135,7 @@
 
     let updated = 0
     let toUpdate = 0
+    let confirmed = false
 
     $(function () {
         $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function(result) {
@@ -358,11 +359,11 @@
                 // if already confirmed disable all selects / inputs
                 $.post('ajax/checkConfirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
                     if (parseInt(result) == 1) {
+                        confirmed = true
                         $("select").attr('disabled', true)
                         $("input").attr('disabled', true)
                         $("button.update").attr('disabled', true)
-                        $("button#confirmation").attr('disabled', true)
-                        $("#confirmation").text('Already Confirmed')
+                        $("#continue").text('(Already Confirmed) Continue')
                         // location.href = 'confirmation.html'
                     }
                 })
@@ -430,36 +431,43 @@
         // })
 
         $("#continue").click( function () {
-            const fields = ['address', 'city', 'state', 'zip', 'country']
-            let missing = false
-            for (let field of fields) {
+            if (!confirmed) {
+                const fields = ['address', 'city', 'state', 'zip', 'country']
+                let missing = false
+                for (let field of fields) {
+                    if (!missing) {
+                        const elem = "." + field
+                        $(elem).each(function () {
+                            if ($(this).val() == '') {
+                                alert('You must fill in all ' + field + ' fields!')
+                                missing = true
+                                return false
+                            }
+                        })
+                    }
+                }
+                // make sure all addresses were updated
+                if (toUpdate > updated) {
+                    alert('You must update all addresses to be able to continue.')
+                    return false
+                }
                 if (!missing) {
-                    const elem = "." + field
-                    $(elem).each(function () {
-                        if ($(this).val() == '') {
-                            alert('You must fill in all ' + field + ' fields!')
-                            missing = true
-                            return false
+                    $.post('ajax/confirmation.php', {
+                        field: 'confirmed_sweaters',
+                        admin: Cookies.get('admin')
+                    }, function (result) {
+                        const res = JSON.parse(result)
+                        if (res.success) {
+                            alert('Confirmed.')
+                            location.href = 'confirmation.html'
+                        } else {
+                            alert(res.error)
+                            console.log(res.sql)
                         }
                     })
                 }
-            }
-            // make sure all addresses were updated
-            if (toUpdate > updated) {
-                alert('You must update all addresses to be able to continue.')
-                return false
-            }
-            if (!missing) {
-                $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
-                    const res = JSON.parse(result)
-                    if (res.success) {
-                        alert('Confirmed.')
-                        location.href = 'confirmation.html'
-                    } else {
-                        alert(res.error)
-                        console.log(res.sql)
-                    }
-                })
+            } else {
+                location.href = 'confirmation.html'
             }
         })
     });

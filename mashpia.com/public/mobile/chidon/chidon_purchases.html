@@ -140,6 +140,7 @@
 <script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 <script src="js/js.cookie.js" type="text/javascript"></script>
 <script>
+    let confirmed = false
     $(function () {
         $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function(result) {
             const res = JSON.parse(result)
@@ -206,10 +207,10 @@
             // if already confirmed disable all selects / inputs
             $.post('ajax/checkConfirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
                 if (parseInt(result) == 1) {
+                    confirmed = true
                     $("input").attr('disabled', true)
                     $("button.save").attr('disabled', true)
-                    $("button#confirmation").attr('disabled', true)
-                    $("#confirmation").text('Already Confirmed')
+                    $("#confirmation").text('(Already Confirmed) Continue')
                     // location.href = 'confirmation.html'
                 }
             })
@@ -253,16 +254,23 @@
         })
 
         $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
-                const res = JSON.parse(result)
-                if (res.success) {
-                    alert('Confirmed.')
-                    location.href = 'chidon_sweater_summary.html'
-                } else {
-                    alert(res.error)
-                    console.log(res.sql)
-                }
-            })
+            if (!confirmed) {
+                $.post('ajax/confirmation.php', {
+                    field: 'confirmed_prizes',
+                    admin: Cookies.get('admin')
+                }, function (result) {
+                    const res = JSON.parse(result)
+                    if (res.success) {
+                        alert('Confirmed.')
+                        location.href = 'chidon_sweater_summary.html'
+                    } else {
+                        alert(res.error)
+                        console.log(res.sql)
+                    }
+                })
+            } else {
+                location.href = 'chidon_sweater_summary.html'
+            }
         })
     });
 </script>
