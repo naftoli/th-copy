@@ -20,7 +20,7 @@ $sql = "select * from th_chidon tc
         and tc.year = 5781 
         and (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert = 1 or tc.shabbaton_trophy = 1) 
         group by u.user_id 
-        order by school_id, class_grade, class_sub, last, first";
+        order by u.school_id, class_grade, class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_id']][] = $row;
