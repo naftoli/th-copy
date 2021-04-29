@@ -66,7 +66,30 @@ if (is_string($ccResult)) {
             mysql_query($sql);
         }
 
-        // send email ?
+        // get admin email
+        $sql = "select admin_email from admins where admin_id = " . $admin_id;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $email = $row['admin_email'];
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+            $headers[] = 'From: chidon@tzivoshashem.org';
+            $headers[] = 'Reply-to: chidon@tzivoshashem.org';
+
+            $subject = 'Chidon Registration Confirmation';
+
+            $msg = "Thank you for confirming your Chidon Registration details.
+            <br /><br />
+            Your payment of $$amount has been received. Your transaction ID is: $trans_id.
+            <br /><br />
+            Your registration is now complete.
+            <br /><br />
+            All orders and prizes will be sent out as soon as possible! Mechayil el chayil!";
+
+            // send email
+            @mail($email, $subject, $msg, implode("\r\n", $headers));
+        }
 
         echo json_encode([
             'success' => true,
