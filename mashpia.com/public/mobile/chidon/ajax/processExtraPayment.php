@@ -41,6 +41,7 @@ if (is_string($ccResult)) {
         'msg'       => $ccResult
     ]);
 } else {
+    $trans_id = $ccResult->getTransactionResponse()->getTransId();
     $response = parseResponse($ccResult);
     if (!empty($response['error'])) {
         echo json_encode([
@@ -60,6 +61,10 @@ if (is_string($ccResult)) {
             $sql = "insert into th_chidon_zelda_extra set admin_id = $admin_id, extra = " . mysql_real_escape_string($_POST['extra']);
         }
         mysql_query($sql);
+        if ($trans_id) {
+            $sql = "update admins set confirmed_chidon_trans_id = '" . $trans_id . "' where admin_id = " . $admin_id;
+            mysql_query($sql);
+        }
 
         // send email ?
 
