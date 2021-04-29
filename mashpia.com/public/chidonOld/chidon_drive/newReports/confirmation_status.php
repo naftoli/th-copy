@@ -46,7 +46,7 @@ function convertBool($val) {
     <body>
     <?php
     include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
-
+    echo "<h1>Confirmation Status</h1>";
     foreach ($schools as $school_id => $school_name) {
         if (isset($info[$school_id])) {
             echo "<h2>" . $school_name . "</h2>";
