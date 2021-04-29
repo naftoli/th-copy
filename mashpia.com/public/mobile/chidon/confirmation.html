@@ -107,8 +107,9 @@
 <!--          </div>-->
           <br />
           <div class="row">
-            <div class="col-sm-12" id="confirmInfo" style="font-size: 18px; line-height: 1.5;">
-
+            <div class="col-sm-12" id="confirmInfo" style="font-size: 18px; line-height: 1.5; display: none;">
+              Thank you for confirming your Chidon Registration details.<br /> Your registration is now complete.<br />
+              All orders and prizes will be sent out as soon as possible! Mechayil el chayil!
             </div>
           </div>
           <div class="row">
@@ -209,7 +210,6 @@
   let reg_balance = 0
   let extra_balance = 0
   let total_balance = 0
-  let paid = false
 
   $(function () {
     reg_balance = localStorage.getItem('reg_balance') || Cookies.get('reg_balance')
@@ -221,6 +221,8 @@
     if (total_balance) {
       $("#paymentForm").show()
       $("#pay").show()
+    } else {
+      $("#confirmInfo").show()
     }
 
     $(".cc_on_file").click( function () {
@@ -272,6 +274,7 @@
         cc.zip = zip
         cc.country = country
       }
+      $("#pay").attr('disabled', true)
       $.post('ajax/processExtraPayment.php', { admin_id: Cookies.get('admin'), extra: extra_balance, amount: total_balance, cc: cc }, function (result) {
         const res = JSON.parse(result)
         if (res.success) {
@@ -284,6 +287,7 @@
           location.href = '/mobile/reg/parent_detail.html'
         } else {
           alert(res.msg)
+          $("#pay").attr('disabled', false)
         }
       })
     })
