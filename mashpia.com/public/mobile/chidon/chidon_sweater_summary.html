@@ -112,15 +112,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-<!--                            <button id="update" class="btn btn-primary btn-block">Edit Sweaters</button>-->
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Sweaters</button>
-                            <br />
                             <a href="chidon_purchases.html">
                                 <button id="back" class="btn btn-primary btn-block">Back</button>
                             </a>
                             <br />
-                            <button id="continue" class="btn btn-primary btn-block">Continue</button>
-<!--                            <button id="confirmation" class="btn btn-primary btn-block">Confirm</button>-->
+                            <button id="continue" class="btn btn-primary btn-block">Confirm & Continue</button>
                         </div>
                     </div>
                 </div>
@@ -420,18 +416,18 @@
             }
         })
 
-        $("#confirmation").click( function() {
-            $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
-                const res = JSON.parse(result)
-                if (res.success) {
-                    alert('Confirmed.')
-                    location.reload()
-                } else {
-                    alert(res.error)
-                    console.log(res.sql)
-                }
-            })
-        })
+        // $("#confirmation").click( function() {
+        //     $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
+        //         const res = JSON.parse(result)
+        //         if (res.success) {
+        //             alert('Confirmed.')
+        //             location.reload()
+        //         } else {
+        //             alert(res.error)
+        //             console.log(res.sql)
+        //         }
+        //     })
+        // })
 
         $("#continue").click( function () {
             const fields = ['address', 'city', 'state', 'zip', 'country']
@@ -453,7 +449,18 @@
                 alert('You must update all addresses to be able to continue.')
                 return false
             }
-            if (!missing) location.href = 'confirmation.html'
+            if (!missing) {
+                $.post('ajax/confirmation.php', { field: 'confirmed_sweaters', admin: Cookies.get('admin') }, function(result) {
+                    const res = JSON.parse(result)
+                    if (res.success) {
+                        alert('Confirmed.')
+                        location.href = 'confirmation.html'
+                    } else {
+                        alert(res.error)
+                        console.log(res.sql)
+                    }
+                })
+            }
         })
     });
 </script>

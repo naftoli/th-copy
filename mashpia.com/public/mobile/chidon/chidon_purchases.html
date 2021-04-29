@@ -124,15 +124,11 @@
                     <div class="row">
                         <div class="col-sm-12">
 <!--                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>-->
-                            <button id="confirmation" class="btn btn-primary btn-block">Confirm Prizes</button>
-                            <br />
                             <a href="chidon_reg.html">
                                 <button id="back" class="btn btn-primary btn-block">Back</button>
                             </a>
                             <br />
-                            <a href="chidon_sweater_summary.html">
-                                <button id="continue" class="btn btn-primary btn-block">Continue</button>
-                            </a>
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm & Continue</button>
                         </div>
                     </div>
                 </div>
@@ -261,7 +257,7 @@
                 const res = JSON.parse(result)
                 if (res.success) {
                     alert('Confirmed.')
-                    location.reload()
+                    location.href = 'chidon_sweater_summary.html'
                 } else {
                     alert(res.error)
                     console.log(res.sql)
