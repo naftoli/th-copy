@@ -202,8 +202,11 @@
 
         // set current user to first child
         for (let id in children) {
-            currentUser = id
-            break
+            const child = children[id]
+            if (parseInt(child.edit_prizes) == 1) {
+                currentUser = id
+                break
+            }
         }
     }
 
