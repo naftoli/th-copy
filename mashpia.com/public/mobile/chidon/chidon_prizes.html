@@ -191,7 +191,7 @@
         for (let id in children) {
             const child = children[id]
             // only show children that can choose prizes
-            if (parseInt(child.shabbaton_expert) == 1 || parseInt(child.shabbaton_trophy) == 1) {
+            if (parseInt(child.edit_prizes) == 1) {
                 if (child.paid > 25) html += `<option value=${id}>${child.first}</option>`
             }
         }

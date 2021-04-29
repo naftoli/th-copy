@@ -123,7 +123,12 @@
                     <br />
                     <div class="row">
                         <div class="col-sm-12">
-<!--                            <button id="update" class="btn btn-primary btn-block">Edit Prizes</button>-->
+                            <div id="editPrizes" style="display: none;">
+                                <a href="chidon_prizes.html">
+                                    <button id="edit" class="btn btn-primary btn-block">Edit Prizes</button>
+                                </a>
+                                <br />
+                            </div>
                             <a href="chidon_reg.html">
                                 <button id="back" class="btn btn-primary btn-block">Back</button>
                             </a>
@@ -141,6 +146,8 @@
 <script src="js/js.cookie.js" type="text/javascript"></script>
 <script>
     let confirmed = false
+    let allowEdit = false
+
     $(function () {
         $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function(result) {
             const res = JSON.parse(result)
@@ -159,6 +166,8 @@
                 // skip child if not registered
                 if (!child.date_paid) continue;
                 if (!transactions[child.parent_id]) continue;
+
+                if (parseInt(child.edit_prizes) == 1) allowEdit = true
 
                 if (parseInt(child.shabbaton_maven)) status = "Mivtzah Maven - Eligible for Chidon Sweater"
                 else if (parseInt(child.shabbaton_pro)) status = "Maven / Pro - Eligible for Chidon Sweater & Gifts"
@@ -214,6 +223,10 @@
                     // location.href = 'confirmation.html'
                 }
             })
+            
+            if (allowEdit) {
+                $("#editPrizes").show()
+            }
         })
 
         $("#update").click( function( e ) {

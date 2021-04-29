@@ -52,7 +52,7 @@ foreach ($purchases as $admin => $details) {
 }
 
 $children = [];
-$sql = "select th_chidon_id, s.school_name, user_id, first, date_paid, paid, yarmulka, gender, parent_id, size, 
+$sql = "select th_chidon_id, s.school_name, user_id, first, date_paid, paid, yarmulka, gender, parent_id, size, edit_prizes, 
             shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, tcs.option   
         from th_chidon tc 
         join users u using (user_id) 
