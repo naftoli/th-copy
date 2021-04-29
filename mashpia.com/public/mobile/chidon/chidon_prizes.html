@@ -173,8 +173,10 @@
 
     const getCartTotal = (user_id) => {
         let total = 0
-        for (item of cart[user_id]) {
-            total += parseInt(item.price)
+        if (cart[user_id]) {
+            for (item of cart[user_id]) {
+                total += parseInt(item.price)
+            }
         }
         return total
     }
