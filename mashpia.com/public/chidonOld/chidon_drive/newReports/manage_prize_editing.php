@@ -49,12 +49,13 @@ while ($row = mysql_fetch_assoc($result)) {
                     <th>Grade</th>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>Serial Number</th>
                     <th>Allow Editing of Prizes</th>
                 </tr>
                 <?php
                 foreach ($info[$school_id] as $row) {
                     $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
+                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['user_serial'] .
                         "</td><td><input type='checkbox' name='edit[]' class='edit' id='" . $row['th_chidon_id'] . "' ";
                     if (intval($row['edit_prizes']) == 1) echo "checked ";
                     echo "/></td></tr>";
