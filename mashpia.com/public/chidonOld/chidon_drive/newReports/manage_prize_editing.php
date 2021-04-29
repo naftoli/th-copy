@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -19,6 +21,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_id']][] = $row;
 }
+//echo "<pre>"; print_r($info); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,12 +34,6 @@ while ($row = mysql_fetch_assoc($result)) {
                 font-size: 14px;
                 padding: 5px;
             }
-            td:not(.type) {
-                vertical-align: top;
-            }
-            body {
-                display: none;
-            }
         </style>
     </head>
     <body>
@@ -44,23 +41,44 @@ while ($row = mysql_fetch_assoc($result)) {
     <h1>Chidon Prize Editing</h1>
     <?php
     foreach ($schools as $school_id => $school_name) {
-        echo "<h1>" . $school_name . "</h1>";
-        ?>
-        <table>
-            <tr>
-                <th>Grade</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Allow Editing of Prizes</th>
-            </tr>
-            <?php
-            foreach ($info[$school_id] as $row) {
-                $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-                echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
-                    "</td><td><input type='checkbox' name='edit[]' class='edit' data-id='" . $row['th_chidon_id'] . "' /></td></tr>";
-            }
-        echo "</table>";
+        if (isset($info[$school_id])) {
+            echo "<h2>" . $school_name . "</h2>";
+            ?>
+            <table>
+                <tr>
+                    <th>Grade</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Allow Editing of Prizes</th>
+                </tr>
+                <?php
+                foreach ($info[$school_id] as $row) {
+                    $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
+                        "</td><td><input type='checkbox' name='edit[]' class='edit' data-id='" . $row['th_chidon_id'] . "' ";
+                    if (intval($row['edit_prizes']) == 1) echo "checked ";
+                    echo "/></td></tr>";
+                }
+            echo "</table>";
+        }
     }
     ?>
     </body>
+    <script>
+        $( function () {
+            $(".edit").click( function () {
+                const id = $(this).data('id')
+                const checked = $(this).is(":checked") ? 1 : 0
+                if (id) {
+                    $.post('../ajax/updateEditing.php', { chidon_id: id, checked: checked }, function(result) {
+                        if (parseInt(result) == 1) {
+                            alert('Updated.')
+                        } else {
+                            alert('Error updating.')
+                        }
+                    })
+                }
+            })
+        })
+    </script>
 </html>
