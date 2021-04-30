@@ -14,7 +14,8 @@ $sql = "select * from th_chidon tc
         join users u using (user_id) 
         join classes c on u.class_id = c.class_id 
         where tc.year = 5781 
-        and (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert or tc.shabbaton_trophy = 1)
+        and (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert or tc.shabbaton_trophy = 1) 
+        and tc.paid > 0 
         and u.school_id in (" . implode(',', array_keys($schools)) . ") 
         order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);

@@ -19,6 +19,7 @@ $sql = "select * from th_chidon tc
         " . implode(',', array_keys($schools)) . ") 
         and tc.year = 5781 
         and (tc.shabbaton_maven = 1 or tc.shabbaton_pro = 1 or tc.shabbaton_expert = 1 or tc.shabbaton_trophy = 1) 
+        and tc.paid > 0
         group by u.user_id 
         order by u.school_id, class_grade, class_sub, u.last, u.first";
 $result = mysql_query($sql);
@@ -67,9 +68,19 @@ function convertBool($val) {
                     $result = mysql_query($sql);
                     $row2 = mysql_fetch_assoc($result);
                     $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" .
-                        convertBool($row2['confirmed_prizes']) . "</td><td>" . convertBool($row2['confirmed_sweaters']) .
-                        "</td><td>" . $row['balance'] . "</td></tr>";
+                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
+                    if (!$row2['confirmed_prizes']) echo "<span style='color: red'>";
+                    echo convertBool($row2['confirmed_prizes']);
+                    if (!$row2['confirmed_prizes']) echo "</span>";
+                    echo "</td><td>";
+                    if (!$row2['confirmed_sweaters']) echo "<span style='color: red'>";
+                    echo convertBool($row2['confirmed_sweaters']);
+                    if (!$row2['confirmed_sweaters']) echo "</span>";
+                    echo "</td><td>";
+                    if ($row['balance']) echo "<span style='color: red'>";
+                    echo $row['balance'];
+                    if ($row['balance']) echo "</span>";
+                    echo "</td></tr>";
                 }
                 ?>
             </table>
