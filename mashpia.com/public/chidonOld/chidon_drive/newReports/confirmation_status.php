@@ -77,7 +77,7 @@ function convertBool($val) {
                     echo convertBool($row2['confirmed_sweaters']);
                     if (!$row2['confirmed_sweaters']) echo "</span>";
                     echo "</td><td>";
-                    if ($row['balance']) echo "<span style='color: red'>";
+                    if (floatval($row['balance']) > 0) echo "<span style='color: red'>";
                     echo $row['balance'];
                     if ($row['balance']) echo "</span>";
                     echo "</td></tr>";
