@@ -88,6 +88,18 @@
         a:link {
             text-decoration: none;
         }
+        .success,
+        .warning {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #bdff87;
+        }
+        .warning {
+            background-color: #ffcc12;
+        }
     </style>
 </head>
 
@@ -133,8 +145,20 @@
         return s && s[0].toUpperCase() + s.slice(1);
     }
 
+    function oxfordJoin(arr, conjunction, ifEmpty = ""){
+        let l = arr.length;
+        if (!l) return ifEmpty;
+        if (l<2) return arr[0];
+        if (l<3) return arr.join(` ${conjunction} `);
+        arr = arr.slice();
+        arr[l-1] = `${conjunction} ${arr[l-1]}`;
+        return arr.join(", ");
+    }
+
     let updated = 0
+    let updatedTypes = {}
     let toUpdate = 0
+    let toUpdateDetails = {}
     let confirmed = false
 
     $(function () {
@@ -199,6 +223,7 @@
 
                     if (parseInt(purchases.sweater_mother_ship)) {
                         toUpdate++
+                        toUpdateDetails[type] = true
                         totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_mother_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
@@ -207,7 +232,8 @@
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
-                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>
+                                <span id="${type}-status"></span>`
                     } else {
                         html += `Shipped To: ${school}<br />`
                     }
@@ -238,6 +264,7 @@
 
                     if (parseInt(purchases.sweater_father_ship)) {
                         toUpdate++
+                        toUpdateDetails[type] = true
                         totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_father_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
@@ -246,7 +273,8 @@
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
-                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>
+                                <span id="${type}-status"></span>`
                     } else {
                         html += `Shipped To: ${school}<br />`
                     }
@@ -277,6 +305,7 @@
 
                     if (parseInt(purchases.sweater_bubby_ship)) {
                         toUpdate++
+                        toUpdateDetails[type] = true
                         totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_bubby_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
@@ -285,7 +314,8 @@
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
-                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>
+                                <span id="${type}-status"></span>`
                     } else {
                         html += `Shipped To: ${school}<br />`
                     }
@@ -316,6 +346,7 @@
 
                     if (parseInt(purchases.sweater_zaidy_ship)) {
                         toUpdate++
+                        toUpdateDetails[type] = true
                         totalCost += 10
                         html += `Shipping Fee: $10<br />Shipping To: ${purchases.sweater_zaidy_ship_addr}<br />`
                         html += `Please Enter Full Shipping Address:
@@ -324,7 +355,8 @@
                                 <input type="text" size="1" name="state" class="state" placeholder="state" />
                                 <input type="text" size="3" name="zip" class="zip" placeholder="zip" /><br />
                                 <input type="text" size="14" name="country" class="country" placeholder="country" style="margin-top: 5px;" /><br />
-                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>`
+                                <button class="update" style="margin-top: 5px;" data-type="${type}">Update Address</button>
+                                <span id="${type}-status"></span>`
                     } else {
                         html += `Shipped To: ${school}<br />`
                     }
@@ -346,7 +378,8 @@
                 const balance = totalCost - received
                 html += `Total Cost for Purchases: $${totalCost} <br />
                         Amount received for purchases: $${received}<br />
-                        Purchase Balance: $${balance}<br />`
+                        Purchase Balance: $${balance}<br />
+                        <span id="form-completion-status"></span>`
 
                 html += '</div>'
 
@@ -409,11 +442,12 @@
                     console.log(result)
                     const res = JSON.parse(result)
                     if (res.success) {
-                        alert('Address Updated.')
                         updated++
+                        updatedTypes[type] = true
+                        $(`#${type}-status`).html('<span class="success">Updated</span>')
                     }
-                    else alert("Error updating address.")
-                })
+                    else $(`#${type}-status`).html('<span class="warning">Error updating</span>') 
+                }).fail(function () { $(`#${type}-status`).html('<span class="warning">Error updating</span>') })
             }
         })
 
@@ -433,25 +467,34 @@
         $("#continue").click( function () {
             if (!confirmed) {
                 const fields = ['address', 'city', 'state', 'zip', 'country']
-                let missing = false
+                let missingFeild = false
                 for (let field of fields) {
-                    if (!missing) {
+                    if (!missingFeild) {
                         const elem = "." + field
                         $(elem).each(function () {
                             if ($(this).val() == '') {
                                 alert('You must fill in all ' + field + ' fields!')
-                                missing = true
+                                missingFeild = true
                                 return false
                             }
                         })
                     }
                 }
                 // make sure all addresses were updated
-                if (toUpdate > updated) {
-                    alert('You must update all addresses to be able to continue.')
+                missingUpdates = Object.keys(toUpdateDetails).filter(function(type){ return !updatedTypes[type] })
+                if (missingUpdates.length > 0) {
+                // if (toUpdate > updated) {
+                    missingUpdates.forEach(function(type) {
+                        $(`#${type}-status`).html('<span class="warning">Not updated</span>')
+                    }) 
+                    $("#form-completion-status").html(`<div class="warning">
+                        You must update the Addresses for the 
+                        ${oxfordJoin(missingUpdates.map(capitalize(type)), "and")}'s
+                        sweaters before continuing.
+                    </div>`)
                     return false
                 }
-                if (!missing) {
+                if (!missingFeild) {
                     $.post('ajax/confirmation.php', {
                         field: 'confirmed_sweaters',
                         admin: Cookies.get('admin')
