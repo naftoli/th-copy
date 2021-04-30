@@ -145,16 +145,6 @@
         return s && s[0].toUpperCase() + s.slice(1);
     }
 
-    function oxfordJoin(arr, conjunction, ifEmpty = ""){
-        let l = arr.length;
-        if (!l) return ifEmpty;
-        if (l<2) return arr[0];
-        if (l<3) return arr.join(` ${conjunction} `);
-        arr = arr.slice();
-        arr[l-1] = `${conjunction} ${arr[l-1]}`;
-        return arr.join(", ");
-    }
-
     let updated = 0
     let updatedTypes = {}
     let toUpdate = 0
@@ -378,8 +368,7 @@
                 const balance = totalCost - received
                 html += `Total Cost for Purchases: $${totalCost} <br />
                         Amount received for purchases: $${received}<br />
-                        Purchase Balance: $${balance}<br />
-                        <span id="form-completion-status"></span>`
+                        Purchase Balance: $${balance}<br />`
 
                 html += '</div>'
 
@@ -482,16 +471,11 @@
                 }
                 // make sure all addresses were updated
                 missingUpdates = Object.keys(toUpdateDetails).filter(function(type){ return !updatedTypes[type] })
-                if (missingUpdates.length > 0) {
-                // if (toUpdate > updated) {
-                    missingUpdates.forEach(function(type) {
-                        $(`#${type}-status`).html('<span class="warning">Not updated</span>')
-                    }) 
-                    $("#form-completion-status").html(`<div class="warning">
-                        You must update the Addresses for the 
-                        ${oxfordJoin(missingUpdates.map(capitalize(type)), "and")}'s
-                        sweaters before continuing.
-                    </div>`)
+                missingUpdates.forEach(function(type) {
+                    $(`#${type}-status`).html('<span class="warning">Not updated</span>')
+                })
+                if (missingUpdates.length > 0 && !missingFeild) {
+                    alert("You must update all addresses (marked in orange) to continue.")
                     return false
                 }
                 if (!missingFeild) {
