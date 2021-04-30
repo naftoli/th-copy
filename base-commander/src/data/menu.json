@@ -99,9 +99,21 @@
           { "label":  "Eligibility Report", "legacy": true, "path": "/chidonTests/eligibility_check.php" }
         ]
       },
-
-      { "label": "Confirmation Status", "legacy": true, "path":  "/chidonOld/chidon_drive/newReports/confirmation_status.php" },
-      { "label":  "Allow Prize Changes", "legacy": true, "path": "/chidonOld/chidon_drive/newReports/manage_prize_editing.php" },
+      {
+        "label": "Confirmation",
+        "items": [
+          {
+            "label": "Confirmation Status",
+            "legacy": true,
+            "path": "/chidonOld/chidon_drive/newReports/confirmation_status.php"
+          },
+          {
+            "label": "Allow Prize Changes",
+            "legacy": true,
+            "path": "/chidonOld/chidon_drive/newReports/manage_prize_editing.php"
+          }
+        ]
+      },
 
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       { "label": "Chidon Drive Letter", "legacy": true, "path": "/chidonOld/shabbaton_letter.php" },
