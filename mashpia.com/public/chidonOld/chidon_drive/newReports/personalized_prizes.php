@@ -75,7 +75,7 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Grade</th>
             <th>Name</th>
             <th>Personalized name</th>
-            <th>Confirmed</th>
+<!--            <th>Confirmed</th>-->
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
@@ -90,7 +90,7 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $grade ?> </td>
                 <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
-                <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
+<!--                <td> --><?//= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?><!-- </td>-->
             </tr>
         <?
     }
