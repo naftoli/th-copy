@@ -61,10 +61,11 @@ function convertBool($val) {
                     <th>Confirmed Prizes</th>
                     <th>Confirmed Sweaters</th>
                     <th>Registration Balance</th>
+                    <th>Parent Email</th>
                 </tr>
                 <?php
                 foreach ($info[$school_id] as $row) {
-                    $sql = "select confirmed_prizes, confirmed_sweaters from admins where admin_id = " . $row['parent_id'];
+                    $sql = "select admin_email, confirmed_prizes, confirmed_sweaters from admins where admin_id = " . $row['parent_id'];
                     $result = mysql_query($sql);
                     $row2 = mysql_fetch_assoc($result);
                     $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
@@ -80,7 +81,7 @@ function convertBool($val) {
                     if (floatval($row['balance']) > 0) echo "<span style='color: red'>";
                     echo $row['balance'];
                     if ($row['balance']) echo "</span>";
-                    echo "</td></tr>";
+                    echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td></tr>";
                 }
                 ?>
             </table>
