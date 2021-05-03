@@ -44,11 +44,12 @@ while ($row = mysql_fetch_assoc($result)) {
                 <th>Coupon Reason</th>
                 <th>Paid</th>
                 <th>Balance</th>
+                <th>Action</th>
             </tr>
             <?php
             foreach ($info as $row) {
                 echo "<tr data-id='" . $row['th_chidon_id'] . "'>" .
-                    "<td><input type='text' class='chidon_id' size='5' value='" . $row['th_chidon_id'] . "' />" .
+                    "<td>" . $row['th_chidon_id'] .
                     "</td><td><input type='text' class='admin_id' size='5' value='" . $row['admin_id'] . "' />" .
                     "</td><td><input type='text' class='reg_fee' size='6' value='" . $row['reg_fee'] . "' />" .
                     "</td><td><input type='text' class='chidon_drive' size='7' value='" . $row['chidon_drive'] . "' />" .
@@ -56,52 +57,30 @@ while ($row = mysql_fetch_assoc($result)) {
                     "</td><td><input type='text' class='coupon' size='5' value='" . $row['coupon'] . "' />" .
                     "</td><td><textarea class='coupon_reason' cols='15' rows='2'>" . $row['coupon_reason'] . "</textarea>" .
                     "</td><td><input type='text' class='paid' size='6' value='". $row['paid'] . "' />" .
-                    "</td><td><input type='text' class='balance' size='6' value='" . $row['balance'] . "' /></td></tr>";
+                    "</td><td><input type='text' class='balance' size='6' value='" . $row['balance'] . "' />" .
+                    "</td><td><button class='save'>Save</button></td></tr>";
             }
             ?>
         </table>
     </body>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script>
-        function update(elem, field) {
-            const id = $(elem).parent().parent().data('id')
-            const value = $(elem).val()
-            $.post('ajax/updateRegInfo.php', { chidon_id: id, field: field, val: value }, function (result) {
+        $(".save").click( function () {
+            const elem = $(this).parent().parent()
+            const id = $(elem).data('id')
+            const data = {}
+            const fields = ['admin_id', 'reg_fee', 'chidon_drive', 'subsidy', 'coupon', 'coupon_reason', 'paid', 'balance']
+            for (let field of fields) {
+                let str = "." + field
+                data[field] = $(elem).find(str).val()
+            }
+            console.log(data)
+            $.post('ajax/updateRegInfo.php', { chidon_id: id, updates: data }, function (result) {
                 if (parseInt(result) == 1) {
                     alert('Updated.')
                 } else {
                     alert('Error updating.')
                 }
-            })
-        }
-
-        $(function () {
-            $(".chidon_id").blur(function () {
-                update(this, 'th_chidon_id')
-            })
-            $(".admin_id").blur(function () {
-                update(this, 'admin_id')
-            })
-            $(".reg_fee").blur(function () {
-                update(this, 'reg_fee')
-            })
-            $(".chidon_drive").blur(function () {
-                update(this, 'chidon_drive')
-            })
-            $(".subsidy").blur(function () {
-                update(this, 'subsidy')
-            })
-            $(".coupon").blur(function () {
-                update(this, 'coupon')
-            })
-            $(".coupon_reason").blur(function () {
-                update(this, 'coupon_reason')
-            })
-            $(".paid").blur(function () {
-                update(this, 'paid')
-            })
-            $(".balance").blur(function () {
-                update(this, 'balance')
             })
         })
     </script>
