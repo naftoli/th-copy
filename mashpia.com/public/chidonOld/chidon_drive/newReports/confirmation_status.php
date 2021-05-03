@@ -14,7 +14,6 @@ $sql = "select * from th_chidon tc
         join users u on tc.user_id = u.user_id 
         join classes c on c.class_id = u.class_id 
         join schools s on s.school_id = u.school_id 
-        join th_chidon_zelda tcz on tc.parent_id = tcz.admin_id 
         where u.school_id in (
         " . implode(',', array_keys($schools)) . ") 
         and tc.year = 5781 
@@ -68,6 +67,15 @@ function convertBool($val) {
                     $sql = "select admin_email, confirmed_prizes, confirmed_sweaters from admins where admin_id = " . $row['parent_id'];
                     $result = mysql_query($sql);
                     $row2 = mysql_fetch_assoc($result);
+                    // get balance
+                    $sql = "select balance from th_chidon_zelda where th_chidon_id = " . $row['th_chidon_id'];
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) {
+                        $row3 = mysql_fetch_assoc($result);
+                        $balance = $row3['balance'];
+                    } else {
+                        $balance = 0;
+                    }
                     $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
                     echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
                     if (!$row2['confirmed_prizes']) echo "<span style='color: red'>";
@@ -78,9 +86,9 @@ function convertBool($val) {
                     echo convertBool($row2['confirmed_sweaters']);
                     if (!$row2['confirmed_sweaters']) echo "</span>";
                     echo "</td><td>";
-                    if (floatval($row['balance']) > 0) echo "<span style='color: red'>";
-                    echo $row['balance'];
-                    if ($row['balance']) echo "</span>";
+                    if (floatval($balance) > 0) echo "<span style='color: red'>";
+                    echo $balance;
+                    if ($balance) echo "</span>";
                     echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td></tr>";
                 }
                 ?>
