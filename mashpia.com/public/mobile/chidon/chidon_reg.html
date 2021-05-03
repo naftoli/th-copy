@@ -153,7 +153,8 @@
                         html += '<b>Registration Info</b><br /><br />'
                         let family_id
                         for (let id in children) {
-                            family_id = info[children[id].th_chidon_id].admin_id
+                            if (info[children[id].th_chidon_id].admin_id) family_id = info[children[id].th_chidon_id].admin_id
+                            else family_id = children[id].parent_id
                             break
                         }
                         html += `Family ID: ${family_id}<br /><br />`
