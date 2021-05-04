@@ -197,7 +197,7 @@ function checkForPurchases($child) {
                         else echo "<span style='color: red'>Not Registered</span>";
                         echo "</td><td>";
                         // balance
-                        if (isset($balances[$child['th_chidon_id']])) echo $balances[$child['th_chidon_id']];
+                        if (isset($balances[$child['th_chidon_id']])) echo "<span style='color: red'>" . $balances[$child['th_chidon_id']] . "</span>";
                         echo "</td><td>";
                         // stuff to ship
                         echo "Sweater Size: " . $child['size'] . "<br />";
