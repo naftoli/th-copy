@@ -163,6 +163,7 @@ function checkForPurchases($child) {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
                 font-size: 14px;
                 padding: 5px;
+                border: 1px solid darkcyan;
             }
         </style>
     </head>
