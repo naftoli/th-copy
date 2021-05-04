@@ -197,7 +197,10 @@ function checkForPurchases($child) {
                         else echo "<span style='color: red'>Not Registered</span>";
                         echo "</td><td>";
                         // balance
-                        if (isset($balances[$child['th_chidon_id']]) && $balances[$child['th_chidon_id']] > 0) echo "<span style='color: red'>" . $balances[$child['th_chidon_id']] . "</span>";
+                        if (isset($balances[$child['th_chidon_id']])) {
+                            if (floatval($balances[$child['th_chidon_id']]) > 0) echo "<span style='color: red'>" . $balances[$child['th_chidon_id']] . "</span>";
+                            else echo $balances[$child['th_chidon_id']];
+                        }
                         echo "</td><td>";
                         // stuff to ship
                         echo "Sweater Size: " . $child['size'] . "<br />";
