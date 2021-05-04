@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 if (isset($_POST['submit'])) {
-    $file = $_FILES['certInfo']['tmp_name'];
+    $file = $_FILES['khkInfo']['tmp_name'];
     if (move_uploaded_file($file, "khkInfo.csv")) {
         if (($handle = fopen('khkInfo.csv', "r")) !== FALSE) {
             $qrys = [];
