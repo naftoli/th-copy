@@ -134,15 +134,6 @@ foreach ($purchases as $admin => $details) {
     }
 }
 
-// check for extra celeb boxes
-//$boxesTotal = 0;
-//foreach ($info as $admin => $details) {
-//    foreach ($details as $field => $total) {
-//        if ($field == 'celeb_box_add') $boxesTotal += intval($total);
-//    }
-//}
-//echo $boxesTotal;
-
 $balances = [];
 $sql = "select * from th_chidon_zelda";
 $result = mysql_query($sql);
