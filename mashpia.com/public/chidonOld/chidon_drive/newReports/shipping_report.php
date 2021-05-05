@@ -11,6 +11,9 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
+$totals = [];
+$grandTotals = [];
+
 // get oldest child for each admin
 $oldestChild = [];
 $sql = "select parent_id, user_id, first, last, class_grade, class_sub from th_chidon 
@@ -26,7 +29,8 @@ while ($row = mysql_fetch_assoc($result)) {
 
 // get children
 $children = [];
-$sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, date_paid, paid, yarmulka,  
+$parentChildren = [];
+$sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.dob, date_paid, paid, yarmulka,  
             parent_id, size, edit_prizes, shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, award_type, khk_trophy, test_type  
         from th_chidon tc 
         join users u using (user_id) 
@@ -39,6 +43,13 @@ $sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $children[$row['school_id']][] = $row;
+    $parentChildren[$row['parent_id']][] = $row;
+}
+// sort kids by age
+foreach ($parentChildren as $parent => $more) {
+    usort($parentChildren[$parent], function ($a, $b) {
+        return $a['dob'] <=> $b['dob'];
+    });
 }
 
 // find out which parents are getting extra celeb boxes
@@ -66,6 +77,24 @@ while ($row = mysql_fetch_assoc($result)) {
         $row['celeb_box'] = $extra[$row['admin_id']];
     }
     $purchases[$row['admin_id']][] = $row;
+}
+
+// figure out which kids are getting celeb boxes
+$celebBoxes = [];
+foreach ($purchases as $admin => $items) {
+    foreach ($items as $purchase) {
+        if (isset($purchase['celeb_box'])) {
+            $boxes = $purchase['celeb_box'];
+            if ($boxes > 0) {
+                foreach ($parentChildren[$admin] as $child) {
+                    do {
+                        $celebBoxes[$child['th_chidon_id']] = 1;
+                        $boxes--;
+                    } while ($boxes > 0);
+                }
+            }
+        }
+    }
 }
 
 $info = [];
@@ -111,27 +140,17 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 function checkForPurchases($child) {
-    global $info, $oldestChild;
+    global $info, $oldestChild, $celebBoxes, $totals, $grandTotals;
 
     $admin_id = $child['parent_id'];
     if (isset($info[$admin_id])) {
         // celebration boxes
-        if (isset($info[$admin_id]['celeb_box'])) {
-            $boxes = intval($info[$admin_id]['celeb_box']);
-            if ($boxes > 0) {
-                if (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])) {
-                    // show celebration box for each child based on how many were chosen
-                    // after showing for one child decrement amount
-                    // if we are down to 0, remove from info array
-                    echo "Celebration Box<br />";
-                    $boxes--;
-                    if ($boxes == 0) {
-                        unset($GLOBALS['info'][$admin_id]['celeb_box']);
-                    } else {
-                        $GLOBALS['info'][$admin_id]['celeb_box'] = $boxes;
-                    }
-                }
-            }
+        if (isset($celebBoxes[$child['th_chidon_id']])) {
+            echo "Celebration Box<br />";
+            if (!isset($totals[$child['school_id']]['celeb_boxes'])) $totals[$child['school_id']]['celeb_boxes'] = 0;
+            $totals[$child['school_id']]['celeb_boxes']++;
+            if (!isset($grandTotals['celeb_boxes'])) $grandTotals['celeb_boxes'] = 0;
+            $grandTotals['celeb_boxes']++;
         }
 
         // give extra purchases to oldest child
@@ -139,6 +158,10 @@ function checkForPurchases($child) {
             // extra celebration boxes
             if (isset($info[$admin_id]['celeb_box_add']) && !intval($info[$admin_id]['celeb_box_add_ship'])) {
                 echo "Extra Celebration Box<br />";
+                if (!isset($totals[$child['school_id']]['extra_celeb_boxes'])) $totals[$child['school_id']]['extra_celeb_boxes'] = 0;
+                $totals[$child['school_id']]['extra_celeb_boxes']++;
+                if (!isset($grandTotals['extra_celeb_boxes'])) $grandTotals['extra_celeb_boxes'] = 0;
+                $grandTotals['extra_celeb_boxes']++;
             }
 
             // sweaters
@@ -219,7 +242,21 @@ function checkForPurchases($child) {
                 }
                 ?>
             </table>
+            <h2>Totals for <?= $school ?></h2><hr />
+            <?php
+            if (isset($totals[$school_id])) {
+                foreach ($totals[$school_id] as $type => $total) {
+                    echo $type . ": " . $total . "<br />";
+                }
+            }
+            ?>
             <div style="page-break-after: always;"></div>
         <?php endforeach; ?>
+        <h2>Grand Totals</h2><hr />
+        <?php
+        foreach ($grandTotals as $type => $total) {
+            echo $type . ": " . $total . "<br />";
+        }
+        ?>
     </body>
 </html>
