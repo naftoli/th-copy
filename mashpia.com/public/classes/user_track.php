@@ -504,21 +504,21 @@ class user_track
 				if ($done) {
 					$ins = "insert into date_tasks_mission_marks ".
 							" set user_id = " . $this->user_id . 
-							" and date_tasks_mission_id = " . $row['date_tasks_mission_id'] .
-							" and subject_id = " . $this->subject_id .
-							" and mission_value = " . $row['mission_value'] .
-							" and mission_name = ''" .
-							" and mark_date = " . $row['end_date'] .
-							" and mark_override = 0" .
-							" and missions_updated = 0";
-					//if ($output) 
+							", date_tasks_mission_id = " . $row['date_tasks_mission_id'] .
+							", subject_id = " . $this->subject_id .
+							", mission_value = " . $row['mission_value'] .
+							", mission_name = ''" .
+							", mark_date = " . $row['end_date'] .
+							", mark_override = 0" .
+							", missions_updated = 0";
+					if ($output) 
 						echo $ins . "<br />";
 					if (mysql_query($ins)) {
-						//if ($output) 
+						if ($output) 
 							echo "inserted<br />";
 						$inserted++;
-					} //else
-						//echo mysql_error() . "<br />";
+					} else
+						echo mysql_error() . "<br />";
 				}
 			}
 			//if ($output)
