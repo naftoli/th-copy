@@ -205,6 +205,7 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
             <h2><?= $school ?></h2><hr />
             <table>
                 <tr>
+                    <th>Chidon ID</th>
                     <th>Grade</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -219,7 +220,8 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
                         $award =  $child['award_type'];
                         if ($award == 'Medal') $award = "Plaque + Medal";
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-                        echo "<tr><td>" . $grade . "</td><td>" . $child['first'] . "</td><td>" . $child['last'] . "</td><td>";
+                        echo "<tr><td>" $child['th_chidon_id'] . "</td><td>" . $grade . "</td><td>" . $child['first'] .
+                            "</td><td>" . $child['last'] . "</td><td>";
                         // eligibility
                         if (intval($child['shabbaton_maven'])) echo "Sweater";
                         else if (intval($child['shabbaton_pro'])) echo "Sweater and Gifts";
