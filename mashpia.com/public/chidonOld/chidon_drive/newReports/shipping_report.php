@@ -205,13 +205,15 @@ function checkForPurchases($child) {
                         }
                         echo "</td><td>";
                         // stuff to ship
-                        echo "Sweater Size: " . $child['size'] . "<br />";
-                        if (floatval($child['paid']) > 25 && (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])))
-                            echo "Stress ball, table flag, ID card<br />";
-                        echo "Award: " . $award . "<br />";
-                        if ($child['khk_trophy']) echo "Kol Hatorah Kulah Plaque";
-                        // extra sweaters, celebration box
-                        checkForPurchases($child);
+                        if (floatval($child['paid']) > 0 && (!isset($balances[$child['th_chidon_id']]) || floatval($balances[$child['th_chidon_id']]) == 0)) {
+                            echo "Sweater Size: " . $child['size'] . "<br />";
+                            if (floatval($child['paid']) > 25 && (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])))
+                                echo "Stress ball, table flag, ID card<br />";
+                            echo "Award: " . $award . "<br />";
+                            if ($child['khk_trophy']) echo "Kol Hatorah Kulah Plaque";
+                            // extra sweaters, celebration box
+                            checkForPurchases($child);
+                        }
                         echo "</td></tr>";
                     }
                 }
