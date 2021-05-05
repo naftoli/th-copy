@@ -189,8 +189,10 @@ function checkForPurchases($child) {
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr><td>" . $grade . "</td><td>" . $child['first'] . "</td><td>" . $child['last'] . "</td><td>";
                         // eligibility
-                        if ($child['test_type'] == 'pro') echo "Maven Pro";
-                        else echo ucwords($child['test_type']);
+                        if (intval($child['shabbaton_maven'])) echo "Maven";
+                        else if (intval($child['shabbaton_pro'])) echo "Maven Pro";
+                        else if (intval($child['shabbaton_expert'])) echo "Expert";
+                        else if (intval($child['shabbaton_trophy'])) echo "Trophy";
                         echo "</td><td>";
                         // registered
                         if (floatval($child['paid'])) echo "Registered";
