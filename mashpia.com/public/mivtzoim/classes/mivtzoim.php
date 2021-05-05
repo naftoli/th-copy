@@ -63,7 +63,7 @@ class Mivtzoim {
     */
     public function saveShortNames( array $short_names ) {
         global $MASHPIA_DB;
-        
+
         $sth1 = $MASHPIA_DB->prepare("delete from mivtzoim_tasks where mivtzoim_id = :id");
         $sth2 = $MASHPIA_DB->prepare("insert into mivtzoim_tasks set mivtzoim_id = :id, short_name = :name");
         try {
@@ -407,6 +407,7 @@ class MivtzoimSetup {
                     AND dtm.start_date >= :start
                     AND dtm.end_date <= :end
                     AND dtm.personal = 0 
+                    AND dtm.school_type_id NOT IN (14,15)
             GROUP BY short_name 
             ORDER BY short_name
         ");
