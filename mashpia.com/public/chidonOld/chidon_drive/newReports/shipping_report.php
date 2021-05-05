@@ -16,11 +16,11 @@ $grandTotals = [];
 
 // get oldest child for each admin
 $oldestChild = [];
-$sql = "select parent_id, user_id, first, last, class_grade, class_sub from th_chidon 
+$sql = "select parent_id, user_id, first, last, class_grade, class_sub, dob from th_chidon 
         join users u using (user_id) 
         join classes c using (class_id) 
         where year = $year 
-        order by parent_id, class_grade, class_sub, first";
+        order by parent_id, dob desc";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     // last one is oldest
@@ -126,6 +126,7 @@ foreach ($purchases as $admin => $details) {
                     case 'sweater_bubby_ship_addr':
                     case 'sweater_zaidy_ship_addr':
                         if (!empty($purchase[$field])) $info[$admin][$field] = $purchase[$field];
+                        break;
                 }
             }
         }
@@ -156,7 +157,7 @@ function checkForPurchases($child) {
         // give extra purchases to oldest child
         if ($child['user_id'] == $oldestChild[$admin_id]) {
             // extra celebration boxes
-            if (isset($info[$admin_id]['celeb_box_add']) && !intval($info[$admin_id]['celeb_box_add_ship'])) {
+            if (intval($info[$admin_id]['celeb_box_add']) && !intval($info[$admin_id]['celeb_box_add_ship'])) {
                 echo "Extra Celebration Box<br />";
                 if (!isset($totals[$child['school_id']]['extra_celeb_boxes'])) $totals[$child['school_id']]['extra_celeb_boxes'] = 0;
                 $totals[$child['school_id']]['extra_celeb_boxes']++;
@@ -170,11 +171,18 @@ function checkForPurchases($child) {
                 $ship = "sweater_" . $sweater . "_ship";
                 if (isset($info[$admin_id]["sweater_$sweater"]) && !intval($info[$admin_id][$ship])) {
                     echo "Sweater $sweater, Size: " . $info[$admin_id]["sweater_$sweater"] . "<br />";
+                    if (!isset($totals[$child['school_id']]["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]]))
+                        $totals[$child['school_id']]["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]] = 0;
+                    $totals[$child['school_id']]["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]]++;
+                    if (!isset($grandTotals["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]]))
+                        $grandTotals["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]] = 0;
+                    $grandTotals["sweater_$sweater"][$info[$admin_id]["sweater_$sweater"]]++;
                 }
             }
         }
     }
 }
+$fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby', 'sweater_zaidy'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -212,10 +220,10 @@ function checkForPurchases($child) {
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr><td>" . $grade . "</td><td>" . $child['first'] . "</td><td>" . $child['last'] . "</td><td>";
                         // eligibility
-                        if (intval($child['shabbaton_maven'])) echo "Maven";
-                        else if (intval($child['shabbaton_pro'])) echo "Maven Pro";
-                        else if (intval($child['shabbaton_expert'])) echo "Expert";
-                        else if (intval($child['shabbaton_trophy'])) echo "Trophy";
+                        if (intval($child['shabbaton_maven'])) echo "Sweater";
+                        else if (intval($child['shabbaton_pro'])) echo "Sweater and Gifts";
+                        else if (intval($child['shabbaton_expert'])) echo "Prizes and Trips";
+                        else if (intval($child['shabbaton_trophy'])) echo "Prizes and Trips";
                         echo "</td><td>";
                         // registered
                         if (floatval($child['paid'])) echo "Registered";
@@ -230,10 +238,31 @@ function checkForPurchases($child) {
                         // stuff to ship
                         if (floatval($child['paid']) > 0 && (!isset($balances[$child['th_chidon_id']]) || floatval($balances[$child['th_chidon_id']]) == 0)) {
                             echo "Sweater Size: " . $child['size'] . "<br />";
-                            if (floatval($child['paid']) > 25 && (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])))
+                            if (!isset($totals[$child['school_id']]['sweater_child'][$child['size']])) $totals[$child['school_id']]['sweater_child'][$child['size']] = 0;
+                            $totals[$child['school_id']]['sweater_child'][$child['size']]++;
+                            if (!isset($grandTotals['sweater_child'][$child['size']])) $grandTotals['sweater_child'][$child['size']] = 0;
+                            $grandTotals['sweater_child'][$child['size']]++;
+
+                            if (floatval($child['paid']) > 25 && (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy']))) {
                                 echo "Stress ball, table flag, ID card<br />";
+                                if (!isset($totals[$child['school_id']]['stress_balls_flag_id_card'])) $totals[$child['school_id']]['stress_balls_flag_id_card'] = 0;
+                                $totals[$child['school_id']]['stress_balls_flag_id_card']++;
+                                if (!isset($grandTotals['stress_balls_flag_id_card'])) $grandTotals['stress_balls_flag_id_card'] = 0;
+                                $grandTotals['stress_balls_flag_id_card']++;
+                            }
+
                             echo "Award: " . $award . "<br />";
+                            if (!isset($totals[$child['school_id']][$award])) $totals[$child['school_id']][$award] = 0;
+                            $totals[$child['school_id']][$award]++;
+                            if (!isset($grandTotals[$award])) $grandTotals[$award] = 0;
+                            $grandTotals[$award]++;
+
                             if ($child['khk_trophy']) echo "Kol Hatorah Kulah Plaque";
+                            if (!isset($totals[$child['school_id']]['khk_trophy'])) $totals[$child['school_id']]['khk_trophy'] = 0;
+                            $totals[$child['school_id']]['khk_trophy']++;
+                            if (!isset($grandTotals['khk_trophy'])) $grandTotals['khk_trophy'] = 0;
+                            $grandTotals['khk_trophy']++;
+
                             // extra sweaters, celebration box
                             checkForPurchases($child);
                         }
@@ -242,11 +271,22 @@ function checkForPurchases($child) {
                 }
                 ?>
             </table>
+            <div style="page-break-after: always;"></div>
             <h2>Totals for <?= $school ?></h2><hr />
             <?php
             if (isset($totals[$school_id])) {
+                ksort($totals[$school_id]);
                 foreach ($totals[$school_id] as $type => $total) {
+                    if (is_array($total)) continue; // sweaters need to be done separately
                     echo $type . ": " . $total . "<br />";
+                }
+                foreach ($fields as $field) {
+                    if (isset($totals[$school_id][$field])) {
+                        ksort($totals[$school_id][$field]);
+                        foreach ($totals[$school_id][$field] as $type => $total) {
+                            echo $field . " - " . $type . ": " . $total . "<br />";
+                        }
+                    }
                 }
             }
             ?>
@@ -255,7 +295,14 @@ function checkForPurchases($child) {
         <h2>Grand Totals</h2><hr />
         <?php
         foreach ($grandTotals as $type => $total) {
+            if (is_array($total)) continue; // sweaters need to be done separately
             echo $type . ": " . $total . "<br />";
+        }
+        foreach ($fields as $field) {
+            ksort($totals[$school_id][$field]);
+            foreach ($totals[$school_id][$field] as $type => $total) {
+                echo $field . " - " . $type . ": " . $total . "<br />";
+            }
         }
         ?>
     </body>
