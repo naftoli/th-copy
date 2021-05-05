@@ -294,12 +294,13 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
         <?php endforeach; ?>
         <h2>Grand Totals</h2><hr />
         <?php
+        ksort($grandTotals);
         foreach ($grandTotals as $type => $total) {
             if (is_array($total)) continue; // sweaters need to be done separately
             echo $type . ": " . $total . "<br />";
         }
         foreach ($fields as $field) {
-            ksort($totals[$school_id][$field]);
+            ksort($grandTotals[$field]);
             foreach ($totals[$school_id][$field] as $type => $total) {
                 echo $field . " - " . $type . ": " . $total . "<br />";
             }
