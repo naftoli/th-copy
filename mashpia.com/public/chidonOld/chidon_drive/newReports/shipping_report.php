@@ -31,7 +31,7 @@ while ($row = mysql_fetch_assoc($result)) {
 $children = [];
 $parentChildren = [];
 $sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.dob, date_paid, paid, yarmulka,  
-            parent_id, size, edit_prizes, shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, award_type, khk_trophy, test_type  
+            parent_id, size, edit_prizes, shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, award_type, khk_plaque, test_type  
         from th_chidon tc 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
@@ -56,8 +56,7 @@ foreach ($parentChildren as $parent => $more) {
 $extra = [];
 $sql = "select parent_id, count(user_id) as total 
         from th_chidon 
-        where year = $year 
-        and (shabbaton_expert = 1 or shabbaton_trophy = 1) 
+        where year = $year  
         and parent_id not in (
             select admin_id from th_chidon_parent_purchases where celeb_box >= 1) 
         group by parent_id 
@@ -87,10 +86,12 @@ foreach ($purchases as $admin => $items) {
             $boxes = $purchase['celeb_box'];
             if ($boxes > 0) {
                 foreach ($parentChildren[$admin] as $child) {
-                    do {
-                        $celebBoxes[$child['th_chidon_id']] = 1;
-                        $boxes--;
-                    } while ($boxes > 0);
+                    if (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])) {
+                        do {
+                            $celebBoxes[$child['th_chidon_id']] = 1;
+                            $boxes--;
+                        } while ($boxes > 0);
+                    }
                 }
             }
         }
@@ -133,6 +134,15 @@ foreach ($purchases as $admin => $details) {
     }
 }
 
+// check for extra celeb boxes
+//$boxesTotal = 0;
+//foreach ($info as $admin => $details) {
+//    foreach ($details as $field => $total) {
+//        if ($field == 'celeb_box_add') $boxesTotal += intval($total);
+//    }
+//}
+//echo $boxesTotal;
+
 $balances = [];
 $sql = "select * from th_chidon_zelda";
 $result = mysql_query($sql);
@@ -143,17 +153,17 @@ while ($row = mysql_fetch_assoc($result)) {
 function checkForPurchases($child) {
     global $info, $oldestChild, $celebBoxes, $totals, $grandTotals;
 
+    // celebration boxes
+    if (isset($celebBoxes[$child['th_chidon_id']])) {
+        echo "Celebration Box<br />";
+        if (!isset($totals[$child['school_id']]['celeb_boxes'])) $totals[$child['school_id']]['celeb_boxes'] = 0;
+        $totals[$child['school_id']]['celeb_boxes']++;
+        if (!isset($grandTotals['celeb_boxes'])) $grandTotals['celeb_boxes'] = 0;
+        $grandTotals['celeb_boxes']++;
+    }
+
     $admin_id = $child['parent_id'];
     if (isset($info[$admin_id])) {
-        // celebration boxes
-        if (isset($celebBoxes[$child['th_chidon_id']])) {
-            echo "Celebration Box<br />";
-            if (!isset($totals[$child['school_id']]['celeb_boxes'])) $totals[$child['school_id']]['celeb_boxes'] = 0;
-            $totals[$child['school_id']]['celeb_boxes']++;
-            if (!isset($grandTotals['celeb_boxes'])) $grandTotals['celeb_boxes'] = 0;
-            $grandTotals['celeb_boxes']++;
-        }
-
         // give extra purchases to oldest child
         if ($child['user_id'] == $oldestChild[$admin_id]) {
             // extra celebration boxes
@@ -257,11 +267,13 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
                             if (!isset($grandTotals[$award])) $grandTotals[$award] = 0;
                             $grandTotals[$award]++;
 
-                            if ($child['khk_trophy']) echo "Kol Hatorah Kulah Plaque";
-                            if (!isset($totals[$child['school_id']]['khk_trophy'])) $totals[$child['school_id']]['khk_trophy'] = 0;
-                            $totals[$child['school_id']]['khk_trophy']++;
-                            if (!isset($grandTotals['khk_trophy'])) $grandTotals['khk_trophy'] = 0;
-                            $grandTotals['khk_trophy']++;
+                            if (intval($child['khk_plaque'])) {
+                                echo "Kol Hatorah Kulah Plaque<br />";
+                                if (!isset($totals[$child['school_id']]['khk_plaque'])) $totals[$child['school_id']]['khk_plaque'] = 0;
+                                $totals[$child['school_id']]['khk_plaque']++;
+                                if (!isset($grandTotals['khk_plaque'])) $grandTotals['khk_plaque'] = 0;
+                                $grandTotals['khk_plaque']++;
+                            }
 
                             // extra sweaters, celebration box
                             checkForPurchases($child);
