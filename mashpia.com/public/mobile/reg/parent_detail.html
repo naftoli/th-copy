@@ -397,9 +397,6 @@
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
 <!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
-<!--                                                        <div style="margin: 10px 0px">-->
-<!--                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>-->
-<!--                                                        </div>-->
                                                         {{#if this.enrollShabbaton}}
                                                             {{#if this.shabbatonPaid}}
                                                             <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
@@ -414,6 +411,9 @@
 <!--                                                            {{/if}}-->
                                                         {{/if}}
                                                         <button class="btn btn-primary confirmation">Confirm Chidon Registration</button>
+                                                        <div style="margin: 10px 0px">
+                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>
+                                                        </div>
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="EnrolledChidon_msg1" class="i18n"> Chidon Shabbaton Enrolled - Chidon ID: </span>{{this.th_chidon_id}}</div>
