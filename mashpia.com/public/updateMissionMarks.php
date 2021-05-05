@@ -3,8 +3,10 @@ ini_set('display_errors', 1);
 ini_set('max_execution_time', 600);
 $limit= isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 $offset= isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-$all = isset($_GET['all']) ? intval($_GET['all']) : 0;
+$continue = isset($_GET['continue']) ? intval($_GET['continue']) : 0;
 $output = isset($_GET['output']) ? intval($_GET['output']) : 0;
+$metals = isset($_GET['metals']) ? intval($_GET['metals']) : 0;
+$ranks = isset($_GET['ranks']) ? intval($_GET['ranks']) : 0;
 ?>
 <html>
 <head>
@@ -13,17 +15,19 @@ $output = isset($_GET['output']) ? intval($_GET['output']) : 0;
 <body>
 	<p>
 		<? if ($offset-$limit >= 0) { ?>
-			<a id="previous" href="<?= "/updateMissionMarks.php?all=$all&output=$output&limit=$limit&offset=".($offset-$limit)?>">previous</a>
+			<a id="previous" href="<?= "/updateMissionMarks.php?continue=$continue&output=$output&limit=$limit&offset=".($offset-$limit)."&metals=$metals&ranks=$ranks"?>">previous</a>
 		<? } else { ?>
 			<span>previous</span>
 		<? } ?>
-		<a id="next" href="<?= "/updateMissionMarks.php?all=$all&output=$output&limit=$limit&offset=".($offset+$limit)?>">next</a>
+		<a id="next" href="<?= "/updateMissionMarks.php?continue=$continue&output=$output&limit=$limit&offset=".($offset+$limit)."&metals=$metals&ranks=$ranks"?>">next</a>
 	</p>
 	<?
+		echo "<p>Loading...</p>";
+
 		require_once('db.php');
 		require_once('classes/mission_marks_updater.php');
-		//require_once('classes/medal_updater.php');
-		//require_once('classes/rank_updater.php');
+		require_once('classes/medal_updater.php');
+		require_once('classes/rank_updater.php');
 
 		$users = array();
 		$sql = "select user_id from users where user_registered > 0 order by user_id limit $limit offset $offset";
@@ -33,16 +37,17 @@ $output = isset($_GET['output']) ? intval($_GET['output']) : 0;
 		}
 
 		$mmupdater = new mission_marks_updater();
-		//$mupdater = new medal_updater();
-		//$rupdater = new rank_updater();
+		if ($metals) $mupdater = new medal_updater();
+		if ($ranks) $rupdater = new rank_updater();
 
 		foreach ($users as $user) {
 			$mmupdater->mission_marks_update($user, $output);
-			//$mupdater->update_medal_two($user);
-			//$rupdater->update_rank_two($user);
+			if ($metals) $mupdater->update_medal_two($user);
+			if ($ranks) $rupdater->update_rank_two($user);
 		}
+		echo "<p>Done</p>";
 	?>
-	<? if ($all && count($users) > 0) { ?>
+	<? if ($continue && count($users) > 0) { ?>
 		<script>
 			setTimeout(() => {
 				document.getElementById("next").click()
