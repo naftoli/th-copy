@@ -5,6 +5,9 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+$super = false;
+if ($admin_user['auth'] == 'super') $super = true;
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
@@ -61,6 +64,12 @@ function convertBool($val) {
                     <th>Confirmed Sweaters</th>
                     <th>Registration Balance</th>
                     <th>Parent Email</th>
+                    <?php if ($super): ?>
+                        <th>Eligibility</th>
+                        <th>Registration Fee</th>
+                        <th>Coupon Amount</th>
+                        <th>Coupon Reason</th>
+                    <?php endif; ?>
                 </tr>
                 <?php
                 foreach ($info[$school_id] as $row) {
@@ -68,12 +77,18 @@ function convertBool($val) {
                     $result = mysql_query($sql);
                     $row2 = mysql_fetch_assoc($result);
                     // get balance
-                    $sql = "select balance from th_chidon_zelda where th_chidon_id = " . $row['th_chidon_id'];
+                    $sql = "select coupon, coupon_reason, reg_fee, balance from th_chidon_zelda where th_chidon_id = " . $row['th_chidon_id'];
                     $result = mysql_query($sql);
                     if (mysql_num_rows($result) > 0) {
                         $row3 = mysql_fetch_assoc($result);
                         $balance = $row3['balance'];
+                        $coupon = $row3['coupon'];
+                        $coupon_reason = $row3['coupon_reason'];
+                        $reg_fee = $row3['reg_fee'];
                     } else {
+                        $coupon = '';
+                        $coupon_reason = '';
+                        $reg_fee = '';
                         $balance = 0;
                     }
                     $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
@@ -89,7 +104,16 @@ function convertBool($val) {
                     if (floatval($balance) > 0) echo "<span style='color: red'>";
                     echo $balance;
                     if ($balance) echo "</span>";
-                    echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td></tr>";
+                    echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td>";
+                    if ($super) {
+                        echo "<td>";
+                        if (intval($row['shabbaton_maven'])) echo "Sweater";
+                        else if (intval($row['shabbaton_pro'])) echo "Sweater and Gifts";
+                        else if (intval($row['shabbaton_expert'])) echo "Prizes and Trips";
+                        else if (intval($row['shabbaton_trophy'])) echo "Prizes and Trips";
+                        echo "</td><td>" . $reg_fee . "</td><td>" . $coupon . "</td><td>" . $coupon_reason . "</td>";
+                    }
+                    echo "</tr>";
                 }
                 ?>
             </table>
