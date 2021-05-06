@@ -82,7 +82,7 @@ foreach ($info as $prize_name => $user_prizes) {
                 <?php if ($super) : ?>
                 <td><input type="text" name="he_name" class="he_name" value="<?= $prize['he_name'] ?>" /></td>
                 <?php else : ?>
-                <td> <?= $prize['he_name'] ?>" </td>
+                <td> <?= $prize['he_name'] ?> </td>
                 <?php endif; ?>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
                 <td> <?= $prize['confirmed_prizes'] ? "✅" : "❌" ?> </td>
