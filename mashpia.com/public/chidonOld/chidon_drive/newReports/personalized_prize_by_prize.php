@@ -6,6 +6,8 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+$super = $admin['auth'] == 'super';
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
@@ -62,22 +64,29 @@ foreach ($info as $prize_name => $user_prizes) {
             <th>Personalized name</th>
             <th>Confirmed before Pesach</th>
             <th>Confirmed Now</th>
+            <?php if ($super) : ?>
             <th>Sent to Store</th>
             <th>Picked up from Store</th>
+            <?php endif; ?>
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
         if (isset($prize_totals[$prize['prize_name']])) $prize_totals[$prize['prize_name']]++;
         else $prize_totals[$prize['prize_name']] = 1;
         ?>
-            <tr data-id="<?= $prize['user_id'] ?>">
+            <tr id="<?= $prize['user_id'] ?>">
                 <td> <?= $prize['th_chidon_id'] ?> </td>
                 <td> <?= $prize['prize_name'] ?> - <?= $prize['color'] ?> </td>
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $prize['first'] . ' ' . $prize['last'] ?> </td>
+                <?php if ($super) : ?>
                 <td><input type="text" name="he_name" class="he_name" value="<?= $prize['he_name'] ?>" /></td>
+                <?php else : ?>
+                <td> <?= $prize['he_name'] ?>" </td>
+                <?php endif; ?>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
                 <td> <?= $prize['confirmed_prizes'] ? "✅" : "❌" ?> </td>
+                <?php if ($super) : ?>
                 <td><input type="checkbox" name="sent_to_store" class="sent"
                     <?php
                     if (intval($prize['sent_to_store'])) echo "checked";
@@ -88,6 +97,7 @@ foreach ($info as $prize_name => $user_prizes) {
                         if (intval($prize['picked_up'])) echo "checked";
                         ?>
                     /></td>
+                <?php endif; ?>
             </tr>
         <?
     }
@@ -104,7 +114,7 @@ echo "</table>";
 </body>
 <script>
     $(".he_name").blur( function () {
-        const id = $(this).parent().parent().data('id')
+        const id = $(this).parent().parent().attr('id')
         const name = $(this).val()
         $.post('../ajax/updateHeName.php', { user_id: id, he_name: name }, function(result) {
             if (parseInt(result)) alert("Updated")
@@ -112,7 +122,7 @@ echo "</table>";
         })
     })
     $(".sent").click( function () {
-        const id = $(this).parent().parent().data('id')
+        const id = $(this).parent().parent().attr('id')
         const checked = $(this).is(":checked") ? 1 : 0
         $.post('../ajax/updatePrize.php', { field: 'sent_to_store', user_id: id, val: checked }, function(result) {
             if (parseInt(result)) alert("Updated")
@@ -120,7 +130,7 @@ echo "</table>";
         })
     })
     $(".pickedUp").click( function () {
-        const id = $(this).parent().parent().data('id')
+        const id = $(this).parent().parent().attr('id')
         const checked = $(this).is(":checked") ? 1 : 0
         $.post('../ajax/updatePrize.php', { field: 'picked_up', user_id: id, val: checked }, function(result) {
             if (parseInt(result)) alert("Updated")
