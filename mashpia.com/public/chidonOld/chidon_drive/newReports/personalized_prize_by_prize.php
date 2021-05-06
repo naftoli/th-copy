@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, u.first, u.last, cup.he_name, confirmed_chidon_5781, confirmed_prizes
+$sql = "SELECT th_chidon_id, prize_name, color, s.school_name, u.first, u.last, u.user_id, cup.he_name, confirmed_chidon_5781, confirmed_prizes
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join th_chidon tc using (user_id) 
@@ -61,18 +61,20 @@ foreach ($info as $prize_name => $user_prizes) {
             <th>Personalized name</th>
             <th>Confirmed before Pesach</th>
             <th>Confirmed Now</th>
+            <th>Sent to Store</th>
+            <th>Picked up from Store</th>
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
         if (isset($prize_totals[$prize['prize_name']])) $prize_totals[$prize['prize_name']]++;
         else $prize_totals[$prize['prize_name']] = 1;
         ?>
-            <tr>
+            <tr data-id="<?= $prize['user_id'] ?>">
                 <td> <?= $prize['th_chidon_id'] ?> </td>
                 <td> <?= $prize['prize_name'] ?> - <?= $prize['color'] ?> </td>
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $prize['first'] . ' ' . $prize['last'] ?> </td>
-                <td> <?= $prize['he_name'] ?> </td>
+                <td><input type="text" name="he_name" class="he_name" value="<?= $prize['he_name'] ?>" /></td>
                 <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
                 <td> <?= $prize['confirmed_prizes'] ? "✅" : "❌" ?> </td>
             </tr>
@@ -89,4 +91,14 @@ foreach ($prize_totals as $prize => $total) {
 echo "</table>";
 ?>
 </body>
+<script>
+    $(".he_name").blur( function () {
+        const id = $(this).parent().data('id')
+        const name = $(this).val()
+        $.post('../ajax/updateHeName.php', { user_id: id, he_name: name }, function(result) {
+            if (parseInt(result)) alert("Updated")
+            else alert("Error Updating")
+        })
+    })
+</script>
 </html>
