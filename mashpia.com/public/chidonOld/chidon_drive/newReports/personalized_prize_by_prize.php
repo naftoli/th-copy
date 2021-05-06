@@ -59,7 +59,8 @@ foreach ($info as $prize_name => $user_prizes) {
             <th>School</th>
             <th>Name</th>
             <th>Personalized name</th>
-            <th>Confirmed</th>
+            <th>Confirmed before Pesach</th>
+            <th>Confirmed Now</th>
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
@@ -72,7 +73,8 @@ foreach ($info as $prize_name => $user_prizes) {
                 <td> <?= $prize['school_name'] ?> </td>
                 <td> <?= $prize['first'] . ' ' . $prize['last'] ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
-                <td> <?= $prize['confirmed_chidon_5781'] || $prize['confirmed_prizes'] ? "✅" : "❌" ?> </td>
+                <td> <?= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?> </td>
+                <td> <?= $prize['confirmed_prizes'] ? "✅" : "❌" ?> </td>
             </tr>
         <?
     }
