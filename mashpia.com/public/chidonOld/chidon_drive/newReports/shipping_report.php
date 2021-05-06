@@ -30,7 +30,7 @@ while ($row = mysql_fetch_assoc($result)) {
 // get children
 $children = [];
 $parentChildren = [];
-$sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.dob, date_paid, paid, yarmulka,  
+$sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.dob, u.gender, date_paid, paid, yarmulka,  
             parent_id, size, edit_prizes, shabbaton_maven, shabbaton_pro, shabbaton_expert, shabbaton_trophy, award_type, khk_plaque, test_type  
         from th_chidon tc 
         join users u using (user_id) 
@@ -42,7 +42,7 @@ $sql = "select th_chidon_id, s.school_id, s.school_name, c.class_grade, c.class_
         order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $children[$row['school_id']][] = $row;
+    $children[$row['school_id']][$row['gender']][] = $row;
     $parentChildren[$row['parent_id']][] = $row;
 }
 // sort kids by age
@@ -201,23 +201,28 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
     </head>
     <body>
         <h1>Chidon Shipping Report</h1>
-        <?php foreach ($schools as $school_id => $school) : ?>
-            <h2><?= $school ?></h2><hr />
-            <table>
-                <tr>
-                    <th>Chidon ID</th>
-                    <th>Grade</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Eligibility</th>
-                    <th>Registered</th>
-                    <th>Registration Balance</th>
-                    <th>To Ship</th>
-                </tr>
-                <?php
-                if (isset($children[$school_id])) {
-                    foreach ($children[$school_id] as $child) {
-                        $award =  $child['award_type'];
+        <?php
+        foreach ($schools as $school_id => $school) {
+            if (isset($children[$school_id])) {
+                foreach ($children[$school_id] as $gender => $details) {
+                    if ($gender == 'M') $schoolType = "Boys";
+                    else if ($gender == 'F') $schoolType = "Girls";
+                    ?>
+                    <h2><?= $school . ' ' . $schoolType ?></h2><hr />
+                    <table>
+                        <tr>
+                            <th>Chidon ID</th>
+                            <th>Grade</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Eligibility</th>
+                            <th>Registered</th>
+                            <th>Registration Balance</th>
+                            <th>To Ship</th>
+                        </tr>
+                    <?php
+                    foreach ($details as $child) {
+                        $award = $child['award_type'];
                         if ($award == 'Medal') $award = "Plaque + Medal";
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $grade . "</td><td>" . $child['first'] .
@@ -273,30 +278,33 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
                         }
                         echo "</td></tr>";
                     }
-                }
-                ?>
-            </table>
-            <div style="page-break-after: always;"></div>
-            <h2>Totals for <?= $school ?></h2><hr />
-            <?php
-            if (isset($totals[$school_id])) {
-                ksort($totals[$school_id]);
-                foreach ($totals[$school_id] as $type => $total) {
-                    if (is_array($total)) continue; // sweaters need to be done separately
-                    echo $type . ": " . $total . "<br />";
-                }
-                foreach ($fields as $field) {
-                    if (isset($totals[$school_id][$field])) {
-                        ksort($totals[$school_id][$field]);
-                        foreach ($totals[$school_id][$field] as $type => $total) {
-                            echo $field . " - " . $type . ": " . $total . "<br />";
+                    ?>
+                    </table>
+                    <div style="page-break-after: always;"></div>
+                    <h2>Totals for <?= $school . ' ' . $schoolType ?></h2><hr />
+                    <?php
+                    if (isset($totals[$school_id])) {
+                        ksort($totals[$school_id]);
+                        foreach ($totals[$school_id] as $type => $total) {
+                            if (is_array($total)) continue; // sweaters need to be done separately
+                            echo $type . ": " . $total . "<br />";
+                        }
+                        foreach ($fields as $field) {
+                            if (isset($totals[$school_id][$field])) {
+                                ksort($totals[$school_id][$field]);
+                                foreach ($totals[$school_id][$field] as $type => $total) {
+                                    echo $field . " - " . $type . ": " . $total . "<br />";
+                                }
+                            }
                         }
                     }
+                    ?>
+                    <div style="page-break-after: always;"></div>
+                    <?php
                 }
             }
-            ?>
-            <div style="page-break-after: always;"></div>
-        <?php endforeach; ?>
+        }
+        ?>
         <h2>Grand Totals</h2><hr />
         <?php
         ksort($grandTotals);
