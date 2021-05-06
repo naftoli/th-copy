@@ -6,7 +6,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-$super = $admin['auth'] == 'super';
+$super = $admin_user['auth'] == 'super';
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
