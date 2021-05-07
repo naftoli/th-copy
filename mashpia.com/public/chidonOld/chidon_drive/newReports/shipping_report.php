@@ -7,6 +7,8 @@ require_once $_SERVER['DOCUMENT_ROOT']  . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT']  . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+$super = $admin_user['auth'] == 'super';
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
@@ -15,17 +17,17 @@ $totals = [];
 $grandTotals = [];
 
 // get oldest child for each admin
-$oldestChild = [];
-$sql = "select parent_id, user_id, first, last, class_grade, class_sub, dob from th_chidon 
-        join users u using (user_id) 
-        join classes c using (class_id) 
-        where year = $year 
-        order by parent_id, dob desc";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    // last one is oldest
-    $oldestChild[$row['parent_id']] = $row['user_id'];
-}
+//$oldestChild = [];
+//$sql = "select parent_id, user_id, first, last, class_grade, class_sub, dob from th_chidon
+//        join users u using (user_id)
+//        join classes c using (class_id)
+//        where year = $year
+//        order by parent_id, dob desc";
+//$result = mysql_query($sql);
+//while ($row = mysql_fetch_assoc($result)) {
+//    // last one is oldest
+//    $oldestChild[$row['parent_id']] = $row['user_id'];
+//}
 
 // get children
 $children = [];
@@ -48,7 +50,7 @@ while ($row = mysql_fetch_assoc($result)) {
 // sort kids by age
 foreach ($parentChildren as $parent => $more) {
     usort($parentChildren[$parent], function ($a, $b) {
-        return $a['dob'] <=> $b['dob'];
+        return $a['dob'] <=> $b['dob']; // sort asc with oldest child first in array
     });
 }
 
@@ -68,7 +70,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 // get extra purchases
 $purchases = [];
-$sql = "select * from th_chidon_parent_purchases";
+$sql = "select * from th_chidon_parent_purchases where admin_id in (" . implode(',', array_keys($parentChildren)) . ")";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     // add extra celeb boxes where needed
@@ -105,7 +107,7 @@ $fields = ['celeb_box', 'celeb_box_add', 'celeb_box_add_ship', 'celeb_box_add_ad
 foreach ($purchases as $admin => $details) {
     foreach ($details as $purchase) {
         foreach ($fields as $field) {
-            if (!isset($info[$field])) $info[$admin][$field] = $purchase[$field];
+            if (!isset($info[$admin][$field])) $info[$admin][$field] = $purchase[$field];
             else {
                 switch ($field) {
                     case 'celeb_box':
@@ -115,7 +117,7 @@ foreach ($purchases as $admin => $details) {
                     case 'sweater_father_ship':
                     case 'sweater_bubby_ship':
                     case 'sweater_zaidy_ship':
-                        if ($purchase[$field] > $info[$admin][$field]) $info[$admin][$field] = $purchase[$field];
+                        if (intval($purchase[$field]) > intval($info[$admin][$field])) $info[$admin][$field] = $purchase[$field];
                         break;
                     case 'sweater_mother':
                     case 'sweater_father':
@@ -142,7 +144,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 function checkForPurchases($child) {
-    global $info, $oldestChild, $celebBoxes, $totals, $grandTotals;
+    global $info, $parentChildren, $celebBoxes, $totals, $grandTotals;
 
     // celebration boxes
     if (isset($celebBoxes[$child['th_chidon_id']])) {
@@ -156,7 +158,7 @@ function checkForPurchases($child) {
     $admin_id = $child['parent_id'];
     if (isset($info[$admin_id])) {
         // give extra purchases to oldest child
-        if ($child['user_id'] == $oldestChild[$admin_id]) {
+        if ($child['th_chidon_id'] == $parentChildren[$admin_id][0]['th_chidon_id']) {
             // extra celebration boxes
             if (intval($info[$admin_id]['celeb_box_add']) && !intval($info[$admin_id]['celeb_box_add_ship'])) {
                 echo "Extra Celebration Box<br />";
@@ -304,18 +306,20 @@ $fields = ['sweater_child', 'sweater_mother', 'sweater_father', 'sweater_bubby',
                 }
             }
         }
-        ?>
-        <h2>Grand Totals</h2><hr />
-        <?php
-        ksort($grandTotals);
-        foreach ($grandTotals as $type => $total) {
-            if (is_array($total)) continue; // sweaters need to be done separately
-            echo $type . ": " . $total . "<br />";
-        }
-        foreach ($fields as $field) {
-            ksort($grandTotals[$field]);
-            foreach ($totals[$school_id][$field] as $type => $total) {
-                echo $field . " - " . $type . ": " . $total . "<br />";
+        if ($super) {
+            ?>
+            <h2>Grand Totals</h2><hr />
+            <?php
+            ksort($grandTotals);
+            foreach ($grandTotals as $type => $total) {
+                if (is_array($total)) continue; // sweaters need to be done separately
+                echo $type . ": " . $total . "<br />";
+            }
+            foreach ($fields as $field) {
+                ksort($grandTotals[$field]);
+                foreach ($totals[$school_id][$field] as $type => $total) {
+                    echo $field . " - " . $type . ": " . $total . "<br />";
+                }
             }
         }
         ?>
