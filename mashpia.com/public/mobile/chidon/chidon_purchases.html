@@ -193,8 +193,9 @@
                     }
                     if (prizes[id]) {
                         for (p of prizes[id]) {
-                            html += `Prize: ${p.prize_name} ($${p.price})<br />`
-                            if (p.color) html += `Color: ${p.color}<br />`
+                            html += `Prize: ${p.prize_name} ($${p.price})`
+                            if (p.color) html += ` - ${p.color}`
+                            html += '<br />'
                             if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
                                 html += `Hebrew Name:
                                     <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
