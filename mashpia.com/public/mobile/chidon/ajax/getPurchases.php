@@ -68,7 +68,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $prizes = [];
 foreach ($children as $user_id => $child) {
-    $sql = "select cp.prize_id, cp.price, cp.prize_name, cup.he_name 
+    $sql = "select cp.prize_id, cp.price, cp.prize_name, cp.color, cup.he_name 
             from chidon_user_prizes cup 
             join chidon_prizes cp using (prize_id) 
             where cup.user_id = " . $user_id . " 
