@@ -11,6 +11,8 @@ import { isBC } from 'functions/login';
 import { findOption } from 'functions/selects';
 import { FontAwesome } from 'components/ui/Icons';
 import { onCheckboxChange, onSelectChange, onJSONChange } from 'functions/events';
+// data
+import { allMissionLanguages } from 'data/languages.json'
 
 class SettingsTab extends Component {
   // props we are expecting for this component
@@ -48,12 +50,6 @@ class SettingsTab extends Component {
       user_id,  chayolei, yan,  chidon, lang_id,  pic_mission_type,
       parentAccount,  allow_parent_tasks, print_parent_tasks,
     } = soldier;
-    // language options
-    const language_options = [
-      { value: 1, label: 'English' },
-      { value: 2, label: 'Yiddish' },
-      { value: 3, label: 'French' }
-    ];
     const checkboxProps = {
       onChange: this.onCheckboxChange
     }
@@ -76,9 +72,9 @@ class SettingsTab extends Component {
               <label htmlFor='mission_lang'>Mission Language</label>
               <Select
                 required id='mission_lang'
-                options={language_options}
+                options={allMissionLanguages}
                 onChange={ this.onSelectChange('lang_id') }
-                value={ findOption( language_options, lang_id ) } />
+                value={ findOption( allMissionLanguages, lang_id ) } />
             </Col>
           </Row>
 
