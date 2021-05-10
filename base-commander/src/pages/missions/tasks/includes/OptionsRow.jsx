@@ -8,6 +8,8 @@ import {
   GradeSelect, SubjectSelect, MissionTypeSelect
 } from 'components/selects';
 import { isAdmin } from 'functions/login';
+// data
+import { availableMissionLanguages } from 'data/languages.json'
 
 const OptionsRow = props => {
   const {
@@ -73,14 +75,12 @@ const OptionsRow = props => {
 
         <Col sm={ 6 }>
           <Label>Language</Label>
-          <Radio value='1'  name='lang' required
-            checked={ lang === '1' } onChange={ onInputChange }>
-            English
-          </Radio>
-          <Radio value='2'  name='lang' required
-            checked={ lang === '2' } onChange={ onInputChange }>
-            Yiddish
-          </Radio>
+          {availableMissionLanguages.map(language =>
+            <Radio key={language.value} value={language.value} name='lang' required
+              checked={ Number(lang) === language.value } onChange={ onInputChange }>
+              {language.label}
+            </Radio>
+          )}
         </Col>
 
         <Col sm={ 6 }>

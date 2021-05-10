@@ -1,0 +1,13 @@
+{
+  "allMissionLanguages": [
+    { "value": 1, "label": "English" },
+    { "value": 2, "label": "Yiddish" },
+    { "value": 3, "label": "French" },
+    { "value": 4, "label": "Hebrew" }
+  ],
+  "availableMissionLanguages": [
+    { "value": 1, "label": "English" },
+    { "value": 2, "label": "Yiddish" },
+    { "value": 4, "label": "Hebrew" }
+  ]
+}

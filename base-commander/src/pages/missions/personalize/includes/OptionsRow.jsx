@@ -4,6 +4,8 @@ import { Row, Col } from 'reactstrap';
 import { Radio } from 'components/inputs';
 import { isAdmin, isBC } from 'functions/login';
 import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect, MissionTypeUngenderedSelect } from 'components/selects';
+// data
+import { availableMissionLanguages } from 'data/languages.json'
 
 const OptionsRow = props => {
   const { 
@@ -69,20 +71,16 @@ const OptionsRow = props => {
 
       <Col sm={{ size: 6, offset: 3 }} className='lang-options'>
         <strong>Language</strong>
-        <Radio
-            value='1'
-            name='lang'
-            checked={ lang === '1' }
-            onChange={ onLangChange }>
-          English
-        </Radio>
-        <Radio
-            value='2'
-            name='lang'
-            checked={ lang === '2' }
-            onChange={ onLangChange }>
-          Yiddish
-        </Radio>
+        {availableMissionLanguages.map(language =>
+          <Radio
+              key={language.value}
+              value={language.value}
+              name='lang'
+              checked={ Number(lang) === language.value }
+              onChange={ onLangChange }>
+            {language.label}
+          </Radio>
+        )}
       </Col>
     </Row>
   )
