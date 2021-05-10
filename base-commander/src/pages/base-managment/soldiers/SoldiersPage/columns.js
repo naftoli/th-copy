@@ -6,7 +6,7 @@ import { ProfilePicture, DateDisplay } from 'components/ui';
 
 import { isBC, isAdmin } from 'functions/login';
 import { DEFAULT_PROFILE } from 'components/constants';
-import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
+import { dateFilter, yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
 export default ( login, editPicture, updateToggle ) => {
   // define the table for the page
@@ -38,8 +38,9 @@ export default ( login, editPicture, updateToggle ) => {
       Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>,
     }, {
-      Header: 'Date Of Birth', accessor: 'dob', filterable: false,
+      Header: 'Date Of Birth', accessor: 'dob',
       Cell: props => <DateDisplay value={ props.value } format = 'l'/>,
+      filterMethod: dateFilter,
     }
   ];
 
