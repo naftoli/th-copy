@@ -69,7 +69,7 @@ const OptionsRow = props => {
           onChange={ onSelectChange('mission_type') } />
       </Col>
 
-      <Col sm={{ size: 6, offset: 3 }} className='lang-options'>
+      <Col className='lang-options'>
         <strong>Language</strong>
         {availableMissionLanguages.map(language =>
           <Radio
