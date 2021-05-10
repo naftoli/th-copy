@@ -24,7 +24,7 @@ $sql = "SELECT th_chidon_id, prize_name, color, s.school_name, u.first, u.last, 
         join admin_auths aa ON (u.user_id = aa.id AND aa.auth = 'user')
         join admins a using (admin_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
-        and prize_id in (44, 45, 48, 50, 53, 54, 59, 60)
+        and prize_id in (36, 44, 45, 48, 50, 53, 54, 59, 60)
         and tc.year = $year
         order by prize_name, color, s.school_name, cup.he_name, user_id";
 $result = mysql_query($sql);
