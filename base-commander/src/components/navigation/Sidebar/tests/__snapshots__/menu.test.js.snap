@@ -105,6 +105,13 @@ Array [
           "INST",
         ],
       },
+      Object {
+        "label": "Modules",
+        "path": "/bm/modules",
+        "user_types": Array [
+          "HQ",
+        ],
+      },
     ],
     "label": "Base Management",
   },
