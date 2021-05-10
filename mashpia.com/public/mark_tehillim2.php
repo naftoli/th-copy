@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     else
         $sql .= "AND classes.school_id = '$school' ";
     
-    $sql .=	"ORDER BY class_grade, last, first";
+    $sql .=	"ORDER BY class_grade, class_sub, last, first";
 
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
