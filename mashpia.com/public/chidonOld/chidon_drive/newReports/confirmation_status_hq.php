@@ -60,6 +60,7 @@ function convertBool($val) {
         <th>Confirmed Sweaters</th>
         <th>Registration Balance</th>
         <th>Parent Email</th>
+        <th>Phone Number(s)</th>
         <th>Eligibility</th>
         <th>Registration Fee</th>
         <th>Coupon Amount</th>
@@ -69,7 +70,7 @@ function convertBool($val) {
     foreach ($schools as $school_id => $school_name) {
         if (isset($info[$school_id])) {
             foreach ($info[$school_id] as $row) {
-                $sql = "select admin_email, confirmed_prizes, confirmed_sweaters from admins where admin_id = " . $row['parent_id'];
+                $sql = "select admin_phone_mobile, admin_phone_mobile2, admin_phone_work, admin_phone_home, admin_email, confirmed_prizes, confirmed_sweaters from admins where admin_id = " . $row['parent_id'];
                 $result = mysql_query($sql);
                 $row2 = mysql_fetch_assoc($result);
                 // get balance
@@ -100,8 +101,12 @@ function convertBool($val) {
                 if (floatval($balance) > 0) echo "<span style='color: red'>";
                 echo $balance;
                 if ($balance) echo "</span>";
-                echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td>";
-                echo "<td>";
+                echo "</td><td><a href='mailto:" . $row2['admin_email'] . "'>" . $row2['admin_email'] . "</a></td><td>";
+                echo "Cell: " . $row2['admin_phone_mobile'] . "<br />";
+                echo "Cell2: " . $row2['admin_phone_mobile2'] . "<br />";
+                echo "Work: " . $row2['admin_phone_work'] . "<br />";
+                echo "Home: " . $row2['admin_phone_home'];
+                echo "</td><td>";
                 if (intval($row['shabbaton_maven'])) echo "Sweater";
                 else if (intval($row['shabbaton_pro'])) echo "Sweater and Gifts";
                 else if (intval($row['shabbaton_expert'])) echo "Prizes and Trips";
