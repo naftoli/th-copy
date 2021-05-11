@@ -493,7 +493,7 @@ class user {
 		}
 
 		// sort no label tasks by task ord
-		usort( $this->no_label_tasks, $this->sortByLabel() );
+//		usort( $this->no_label_tasks, $this->sortByLabel() );
                 
 		// ********** DAILY TASKS ********** //
 		for ($dtno = 0; $dtno < count($this->daily_tasks); $dtno++) {
