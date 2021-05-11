@@ -52,6 +52,7 @@ function convertBool($val) {
 <h1>Confirmation Status</h1>
 <table>
     <tr>
+        <th>Chidon ID</th>
         <th>School</th>
         <th>Grade</th>
         <th>First Name</th>
@@ -89,7 +90,8 @@ function convertBool($val) {
                     $balance = 0;
                 }
                 $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-                echo "<tr><td>" . $school_name . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
+                echo "<tr><td>" $row['th_chidon_id'] . "</td><td>" . $school_name . "</td><td>" . $grade . "</td><td>" .
+                    $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
                 if (!$row2['confirmed_prizes']) echo "<span style='color: red'>";
                 echo convertBool($row2['confirmed_prizes']);
                 if (!$row2['confirmed_prizes']) echo "</span>";
