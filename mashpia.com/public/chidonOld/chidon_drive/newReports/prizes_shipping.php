@@ -73,7 +73,10 @@ $prizeInfo = [];
     <body>
         <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
         <h1>Prizes Shipping Report</h1>
-        <?php foreach ($schools as $id => $school) : ?>
+        <?php
+        foreach ($schools as $id => $school) {
+            if (!isset($children[$id])) continue;
+            ?>
             <h2><?= $school ?></h2>
             <table>
                 <tr>
@@ -84,71 +87,69 @@ $prizeInfo = [];
                 </tr>
                 <?php
                 $totals = [];
-                if (isset($children[$id])) {
-                    foreach ($children[$id] as $child) {
-                        $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-                        echo "<tr><td>" . $grade . "</td><td>" . $child['th_chidon_id'] . "</td><td>" .
-                            $child['first'] . ' ' . $child['last'] . "</td><td>";
-                        // get yarmulka / bracelet
-                        if (!intval($child['shabbaton_maven'])) {
-                            if ($shipment_number == 1) {
-                                if ($child['gender'] == 'M') {
-                                    $yarmulka = intval($child['yarmulka']);
-                                    if (!$yarmulka) {
-                                        $yarmulka = in_array($child['yarmulka'], [4, 5]) ? 4 : 5;
-                                    }
-                                    echo "Yarmulka Size: " . $yarmulka . "<br />";
-                                    // totals
-                                    if (!isset($totals['yarmulka'][$yarmulka])) $totals['yarmulka'][$yarmulka] = 0;
-                                    $totals['yarmulka'][$yarmulka]++;
-                                    if (!isset($grandTotals['yarmulka'][$yarmulka])) $grandTotals['yarmulka'][$yarmulka] = 0;
-                                    $grandTotals['yarmulka'][$yarmulka]++;
-                                } else {
-                                    echo "Chidon Bracelet<br />";
-                                    // totals
-                                    if (!isset($totals['bracelet'])) $totals['bracelet'] = 0;
-                                    $totals['bracelet']++;
-                                    if (!isset($grandTotals['bracelet'])) $grandTotals['bracelet'] = 0;
-                                    $grandTotals['bracelet']++;
+                foreach ($children[$id] as $child) {
+                    $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+                    echo "<tr><td>" . $grade . "</td><td>" . $child['th_chidon_id'] . "</td><td>" .
+                        $child['first'] . ' ' . $child['last'] . "</td><td>";
+                    // get yarmulka / bracelet
+                    if (!intval($child['shabbaton_maven'])) {
+                        if ($shipment_number == 1) {
+                            if ($child['gender'] == 'M') {
+                                $yarmulka = intval($child['yarmulka']);
+                                if (!$yarmulka) {
+                                    $yarmulka = in_array($child['yarmulka'], [4, 5]) ? 4 : 5;
                                 }
+                                echo "Yarmulka Size: " . $yarmulka . "<br />";
+                                // totals
+                                if (!isset($totals['yarmulka'][$yarmulka])) $totals['yarmulka'][$yarmulka] = 0;
+                                $totals['yarmulka'][$yarmulka]++;
+                                if (!isset($grandTotals['yarmulka'][$yarmulka])) $grandTotals['yarmulka'][$yarmulka] = 0;
+                                $grandTotals['yarmulka'][$yarmulka]++;
+                            } else {
+                                echo "Chidon Bracelet<br />";
+                                // totals
+                                if (!isset($totals['bracelet'])) $totals['bracelet'] = 0;
+                                $totals['bracelet']++;
+                                if (!isset($grandTotals['bracelet'])) $grandTotals['bracelet'] = 0;
+                                $grandTotals['bracelet']++;
                             }
-                            // get prizes
-                            if (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])) {
-                                $prizes = [];
-                                $sql = "select * from chidon_user_prizes cup 
-                                        join chidon_prizes cp using (prize_id) 
-                                        where cup.user_id = " . $child['user_id'];
-                                $result = mysql_query($sql);
-                                while ($row = mysql_fetch_assoc($result)) {
-                                    $prizes[] = $row;
-                                }
-                                foreach ($prizes as $prize) {
-                                    if (in_array($prize['prize_id'], $shipments[$shipment_number])) {
-                                        echo $prize['prize_name'];
-                                        if ($prize['color']) echo " - Color: " . $prize['color'];
-                                        if ($prize['size']) echo "; Size: " . $prize['size'];
-                                        echo "<br />";
+                        }
+                        // get prizes
+                        if (intval($child['shabbaton_expert']) || intval($child['shabbaton_trophy'])) {
+                            $prizes = [];
+                            $sql = "select * from chidon_user_prizes cup 
+                                    join chidon_prizes cp using (prize_id) 
+                                    where cup.user_id = " . $child['user_id'];
+                            $result = mysql_query($sql);
+                            while ($row = mysql_fetch_assoc($result)) {
+                                $prizes[] = $row;
+                            }
+                            foreach ($prizes as $prize) {
+                                if (in_array($prize['prize_id'], $shipments[$shipment_number])) {
+                                    echo $prize['prize_name'];
+                                    if ($prize['color']) echo " - Color: " . $prize['color'];
+                                    if ($prize['size']) echo "; Size: " . $prize['size'];
+                                    echo "<br />";
 
-                                        // totals
-                                        if (!isset($totals['prizes'][$prize['prize_id']])) $totals['prizes'][$prize['prize_id']] = 0;
-                                        $totals['prizes'][$prize['prize_id']]++;
-                                        if (!isset($grandTotals['prizes'][$prize['prize_id']])) $grandTotals['prizes'][$prize['prize_id']] = 0;
-                                        $grandTotals['prizes'][$prize['prize_id']]++;
+                                    // totals
+                                    if (!isset($totals['prizes'][$prize['prize_id']])) $totals['prizes'][$prize['prize_id']] = 0;
+                                    $totals['prizes'][$prize['prize_id']]++;
+                                    if (!isset($grandTotals['prizes'][$prize['prize_id']])) $grandTotals['prizes'][$prize['prize_id']] = 0;
+                                    $grandTotals['prizes'][$prize['prize_id']]++;
 
-                                        // set prize information
-                                        if (!isset($prizeInfo[$prize['prize_id']])) {
-                                            $prizeInfo[$prize['prize_id']] = [
-                                                'name' => $prize['prize_name'],
-                                                'color' => $prize['color'],
-                                                'size' => $prize['size']
-                                            ];
-                                        }
+                                    // set prize information
+                                    if (!isset($prizeInfo[$prize['prize_id']])) {
+                                        $prizeInfo[$prize['prize_id']] = [
+                                            'name' => $prize['prize_name'],
+                                            'color' => $prize['color'],
+                                            'size' => $prize['size']
+                                        ];
                                     }
                                 }
                             }
                         }
-                        echo "</td></tr>";
                     }
+                    echo "</td></tr>";
                 }
                 ?>
             </table>
@@ -179,8 +180,10 @@ $prizeInfo = [];
                 ?>
             </table>
             <div style="page-break-after: always"></div>
-        <?php endforeach; ?>
-        <?php if ($super) : ?>
+        <?php
+        }
+        if ($super) {
+            ?>
             <h2>Grand Totals</h2>
             <table>
                 <tr>
@@ -200,7 +203,7 @@ $prizeInfo = [];
                 }
                 ?>
             </table>
-        <?php endif; ?>
+        <?php } ?>
     </body>
 </html>
 
