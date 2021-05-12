@@ -163,15 +163,16 @@ $prizeInfo = [];
                     <th>Total</th>
                 </tr>
                 <?php
+                if (isset($totals['bracelet'])) {
+                    echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $totals['bracelet'] . "</td></tr>";
+                }
                 if (isset($totals['yarmulka'])) {
                     foreach ($totals['yarmulka'] as $size => $total) {
                         echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
                     }
                 }
-                if (isset($totals['bracelet'])) {
-                    echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $totals['bracelet'] . "</td></tr>";
-                }
                 if (isset($totals['prizes'])) {
+                    ksort($totals['prizes']);
                     foreach ($totals['prizes'] as $prize_id => $total) {
                         echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
                             . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
@@ -193,10 +194,11 @@ $prizeInfo = [];
                     <th>Total</th>
                 </tr>
                 <?php
+                echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $grandTotals['bracelet'] . "</td></tr>";
                 foreach ($grandTotals['yarmulka'] as $size => $total) {
                     echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
                 }
-                echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $grandTotals['bracelet'] . "</td></tr>";
+                ksort($grandTotals['prizes']);
                 foreach ($grandTotals['prizes'] as $prize_id => $total) {
                     echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
                         . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
