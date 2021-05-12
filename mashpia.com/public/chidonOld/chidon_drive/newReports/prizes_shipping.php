@@ -68,6 +68,9 @@ $prizeInfo = [];
                 padding: 10px;
                 border-bottom: 1px solid grey;
             }
+            .warning {
+                background-color: yellow;
+            }
         </style>
     </head>
     <body>
@@ -87,6 +90,7 @@ $prizeInfo = [];
                 </tr>
                 <?php
                 $totals = [];
+                $classTotals = [];
                 foreach ($children[$id] as $child) {
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                     echo "<tr><td>" . $grade . "</td><td>" . $child['th_chidon_id'] . "</td><td>" .
@@ -126,9 +130,15 @@ $prizeInfo = [];
                             }
                             foreach ($prizes as $prize) {
                                 if (in_array($prize['prize_id'], $shipments[$shipment_number])) {
+                                    $he_name = false;
+                                    if ($prize['prize_id'] == 36 || ($prize['prize_id'] >= 44 && $prize['prize_id'] <= 60)) {
+                                        $he_name = true;
+                                        echo "<span class='warning'>";
+                                    }
                                     echo $prize['prize_name'];
                                     if ($prize['color']) echo " - Color: " . $prize['color'];
                                     if ($prize['size']) echo "; Size: " . $prize['size'];
+                                    if ($he_name) echo "; He Name: " . $prize['he_name'] . "</span>";
                                     echo "<br />";
 
                                     // totals
