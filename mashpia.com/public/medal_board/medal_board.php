@@ -50,10 +50,10 @@ function getMedal( $subject_id, $medal ) {
         return 'images/backs/wwtc/'.$medal_name.'.gif';
     // 585 total missions
     else if ( in_array( $subject_id, [ 40, 94 ] ) )
-        return 'images/backs/yd/'.$medal_name.'.gif';
+        return 'images/backs/yd/'.$medal_name.'.png';
     // 375 missions
     else
-        return 'images/backs/weekly/'.$medal_name.'.gif';
+        return 'images/backs/weekly/'.$medal_name.'.png';
 }
 
 function getUserPhoto( $user_id ) {
