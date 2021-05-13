@@ -109,8 +109,8 @@ $prizeInfo = [];
                                 $totals['yarmulka'][$yarmulka]++;
                                 if (!isset($grandTotals['yarmulka'][$yarmulka])) $grandTotals['yarmulka'][$yarmulka] = 0;
                                 $grandTotals['yarmulka'][$yarmulka]++;
-                                if (!isset($classTotals[$child['class_grade']]['yarmulka'][$yarmulka])) $classTotals[$child['class_grade']]['yarmulka'][$yarmulka] = 0;
-                                $classTotals[$child['class_grade']]['yarmulka'][$yarmulka]++;
+                                if (!isset($classTotals[$grade]['yarmulka'][$yarmulka])) $classTotals[$grade]['yarmulka'][$yarmulka] = 0;
+                                $classTotals[$grade]['yarmulka'][$yarmulka]++;
                             } else {
                                 echo "Chidon Bracelet<br />";
                                 // totals
@@ -118,8 +118,8 @@ $prizeInfo = [];
                                 $totals['bracelet']++;
                                 if (!isset($grandTotals['bracelet'])) $grandTotals['bracelet'] = 0;
                                 $grandTotals['bracelet']++;
-                                if (!isset($classTotals[$child['class_grade']]['bracelet'])) $classTotals[$child['class_grade']]['bracelet'] = 0;
-                                $classTotals[$child['class_grade']]['bracelet']++;
+                                if (!isset($classTotals[$grade]['bracelet'])) $classTotals[$grade]['bracelet'] = 0;
+                                $classTotals[$grade]['bracelet']++;
                             }
                         }
                         // get prizes
@@ -150,8 +150,8 @@ $prizeInfo = [];
                                     $totals['prizes'][$prize['prize_id']]++;
                                     if (!isset($grandTotals['prizes'][$prize['prize_id']])) $grandTotals['prizes'][$prize['prize_id']] = 0;
                                     $grandTotals['prizes'][$prize['prize_id']]++;
-                                    if (!isset($classTotals[$child['class_grade']]['prizes'][$prize['prize_id']])) $classTotals[$child['class_grade']]['prizes'][$prize['prize_id']] = 0;
-                                    $classTotals[$child['class_grade']]['prizes'][$prize['prize_id']]++;
+                                    if (!isset($classTotals[$grade]['prizes'][$prize['prize_id']])) $classTotals[$grade]['prizes'][$prize['prize_id']] = 0;
+                                    $classTotals[$grade]['prizes'][$prize['prize_id']]++;
 
                                     // set prize information
                                     if (!isset($prizeInfo[$prize['prize_id']])) {
