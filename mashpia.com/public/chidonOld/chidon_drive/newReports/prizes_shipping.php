@@ -36,7 +36,7 @@ $limits = [
 ];
 
 // list of schools that need break down of totals by classes
-$schools_by_classes = [255, 9, 30, 54];
+$schools_by_classes = [9, 30, 54, 255];
 
 $children = [];
 $children_parents = [];
@@ -216,17 +216,17 @@ $prizeInfo = [];
                     <?php
                     foreach ($grades as $grade) {
                         if (isset($classTotals[$grade]['bracelet'])) {
-                            echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $classTotals[$grade]['bracelet'] . "</td></tr>";
+                            echo "<tr><td>" . $grade . "</td><td>Chidon Bracelet</td><td></td><td></td><td>" . $classTotals[$grade]['bracelet'] . "</td></tr>";
                         }
                         if (isset($classTotals[$grade]['yarmulka'])) {
                             foreach ($classTotals[$grade]['yarmulka'] as $size => $total) {
-                                echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                                echo "<tr><td>" . $grade . "</td><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
                             }
                         }
                         if (isset($classTotals[$grade]['prizes'])) {
                             ksort($classTotals[$grade]['prizes']);
                             foreach ($classTotals[$grade]['prizes'] as $prize_id => $total) {
-                                echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
+                                echo "<tr><td>" . $grade . "</td><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
                                     . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
                             }
                         }
