@@ -36,7 +36,7 @@ $limits = [
 ];
 
 // list of schools that need break down of totals by classes
-$totals_by_classes = [255, 9, 30, 54];
+$schools_by_classes = [255, 9, 30, 54];
 
 $children = [];
 $children_parents = [];
@@ -109,6 +109,8 @@ $prizeInfo = [];
                                 $totals['yarmulka'][$yarmulka]++;
                                 if (!isset($grandTotals['yarmulka'][$yarmulka])) $grandTotals['yarmulka'][$yarmulka] = 0;
                                 $grandTotals['yarmulka'][$yarmulka]++;
+                                if (!isset($classTotals[$child['class_grade']]['yarmulka'][$yarmulka])) $classTotals[$child['class_grade']]['yarmulka'][$yarmulka] = 0;
+                                $classTotals[$child['class_grade']]['yarmulka'][$yarmulka]++;
                             } else {
                                 echo "Chidon Bracelet<br />";
                                 // totals
@@ -116,6 +118,8 @@ $prizeInfo = [];
                                 $totals['bracelet']++;
                                 if (!isset($grandTotals['bracelet'])) $grandTotals['bracelet'] = 0;
                                 $grandTotals['bracelet']++;
+                                if (!isset($classTotals[$child['class_grade']]['bracelet'])) $classTotals[$child['class_grade']]['bracelet'] = 0;
+                                $classTotals[$child['class_grade']]['bracelet']++;
                             }
                         }
                         // get prizes
@@ -146,6 +150,8 @@ $prizeInfo = [];
                                     $totals['prizes'][$prize['prize_id']]++;
                                     if (!isset($grandTotals['prizes'][$prize['prize_id']])) $grandTotals['prizes'][$prize['prize_id']] = 0;
                                     $grandTotals['prizes'][$prize['prize_id']]++;
+                                    if (!isset($classTotals[$child['class_grade']]['prizes'][$prize['prize_id']])) $classTotals[$child['class_grade']]['prizes'][$prize['prize_id']] = 0;
+                                    $classTotals[$child['class_grade']]['prizes'][$prize['prize_id']]++;
 
                                     // set prize information
                                     if (!isset($prizeInfo[$prize['prize_id']])) {
@@ -165,33 +171,71 @@ $prizeInfo = [];
             </table>
             <div style="page-break-after: always"></div>
             <h2>Totals for <?= $school ?></h2>
-            <table>
-                <tr>
-                    <th>Item</th>
-                    <th>Color</th>
-                    <th>Size</th>
-                    <th>Total</th>
-                </tr>
-                <?php
-                if (isset($totals['bracelet'])) {
-                    echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $totals['bracelet'] . "</td></tr>";
-                }
-                if (isset($totals['yarmulka'])) {
-                    foreach ($totals['yarmulka'] as $size => $total) {
-                        echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
-                    }
-                }
-                if (isset($totals['prizes'])) {
-                    ksort($totals['prizes']);
-                    foreach ($totals['prizes'] as $prize_id => $total) {
-                        echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
-                            . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
-                    }
-                }
+            <?php
+            if (!in_array($id, $schools_by_classes)) {
                 ?>
-            </table>
-            <div style="page-break-after: always"></div>
-        <?php
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Total</th>
+                    </tr>
+                    <?php
+                    if (isset($totals['bracelet'])) {
+                        echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $totals['bracelet'] . "</td></tr>";
+                    }
+                    if (isset($totals['yarmulka'])) {
+                        foreach ($totals['yarmulka'] as $size => $total) {
+                            echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                        }
+                    }
+                    if (isset($totals['prizes'])) {
+                        ksort($totals['prizes']);
+                        foreach ($totals['prizes'] as $prize_id => $total) {
+                            echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
+                                . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                        }
+                    }
+                    ?>
+                </table>
+                <div style="page-break-after: always"></div>
+            <?php
+            } else {
+                $grades = array_keys($classTotals);
+                sort($grades);
+                ?>
+                <table>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Item</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Total</th>
+                    </tr>
+                    <?php
+                    foreach ($grades as $grade) {
+                        if (isset($classTotals[$grade]['bracelet'])) {
+                            echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $classTotals[$grade]['bracelet'] . "</td></tr>";
+                        }
+                        if (isset($classTotals[$grade]['yarmulka'])) {
+                            foreach ($classTotals[$grade]['yarmulka'] as $size => $total) {
+                                echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                            }
+                        }
+                        if (isset($classTotals[$grade]['prizes'])) {
+                            ksort($classTotals[$grade]['prizes']);
+                            foreach ($classTotals[$grade]['prizes'] as $prize_id => $total) {
+                                echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
+                                    . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                            }
+                        }
+                    }
+                    ?>
+                </table>
+                <div style="page-break-after: always"></div>
+                <?php
+            }
         }
         if ($super) {
             ?>
