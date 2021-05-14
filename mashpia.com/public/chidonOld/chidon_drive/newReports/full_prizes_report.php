@@ -14,6 +14,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = [];
+$prizes = [];
+
 $sql = "select * from th_chidon tc 
         join th_chidon_zelda tcz on tc.parent_id = tcz.admin_id 
         join users u using (user_id) 
@@ -29,7 +31,6 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[$school][$grade][] = $row;
 
     // get prizes
-    $prizes = [];
     $sqlPrize = "select * from chidon_user_prizes cup join chidon_prizes cp using (prize_id) where user_id = " . $row['user_id'];
     $resultPrize = mysql_query($sqlPrize);
     while ($rowPrize = mysql_fetch_assoc($resultPrize)) {
