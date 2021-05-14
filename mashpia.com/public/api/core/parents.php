@@ -25,6 +25,9 @@ class ParentsRouter {
 
         $parent_query = $MASHPIA_DB->prepare( $parent_sql );
         $parent_query->execute();
+        if ($parent_query->errorCode() !== "00000") {
+            json_error("SQL Error: ".implode(', ', $parent_query->errorInfo()), false, 500);
+        }
 
         $parents = []; $children = [];
         // fetch all results and parse them as models

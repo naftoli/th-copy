@@ -16,6 +16,9 @@ class UsersRouter {
 
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
+        if ($query->errorCode() !== "00000") {
+            json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
+        }
 
         $users = [];
         // fetch all results and parse them as models

@@ -19,6 +19,9 @@ class BaseRouter {
             ." WHERE $filters AND school_id != 612 GROUP BY school_id ORDER BY school_name;"
         );
         $query->execute();
+        if ($query->errorCode() !== "00000") {
+            json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
+        }
         $bases = $query->fetchAll();
         json_response( $bases );
     }

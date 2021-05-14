@@ -29,6 +29,9 @@ class PlatoonRouter {
             ." $filters GROUP BY class_id ORDER BY school_name, class_grade, class_sub;";
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
+        if ($query->errorCode() !== "00000") {
+            json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
+        }
 
         $platoons = [];
         // fetch all results and parse them as models
