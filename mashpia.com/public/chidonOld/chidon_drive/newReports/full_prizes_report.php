@@ -23,6 +23,7 @@ $sql = "select *, tcz.paid as paidUp from th_chidon tc
         join classes c on c.class_id = u.class_id 
         where tc.paid > 0  
         and tc.year = " . $year . " 
+        group by u.user_id 
         order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
