@@ -109,9 +109,10 @@ while ($row = mysql_fetch_assoc($result)) {
                                 $name = $prize['prize_name'];
                                 if ($prize['color']) $name .= " - Color: " . $prize['color'];
                                 if ($prize['size']) $name .= "; Size: " . $prize['size'];
-                                echo $name;
+                                echo "<td>" . $name . "</td>";
                             }
                         }
+                        echo "</tr>";
                     }
                 }
             }
