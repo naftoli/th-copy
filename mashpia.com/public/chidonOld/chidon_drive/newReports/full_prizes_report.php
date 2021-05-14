@@ -96,6 +96,8 @@ while ($row = mysql_fetch_assoc($result)) {
                         if ($row['gender'] == 'M') echo $row['yarmulka'] . "</td><td>No</td><td>";
                         else if ($row['gender'] == 'F' && !intval($row['shabbaton_maven'])) echo "</td><td>Yes</td><td>";
                         else echo "</td><td>No</td><td>";
+
+                        // prizes section
                         $total = 0;
                         $numPrizes = 0;
                         if (isset($prizes[$row['user_id']])) {
@@ -106,13 +108,14 @@ while ($row = mysql_fetch_assoc($result)) {
                         }
                         echo $total . "</td>";
                         for ($i = 1; $i < 9; $i++) {
-                            if ($i > $numPrizes || $numPrizes == 0) echo "<td></td>";
-                            else {
+                            if (isset($prizes[$row['user_id']][$i-1])) {
                                 $prize = $prizes[$row['user_id']][$i-1];
                                 $name = $prize['prize_name'];
                                 if ($prize['color']) $name .= " - Color: " . $prize['color'];
                                 if ($prize['size']) $name .= "; Size: " . $prize['size'];
                                 echo "<td>" . $name . "</td>";
+                            } else {
+                                echo "<td></td>";
                             }
                         }
                         echo "</tr>";
