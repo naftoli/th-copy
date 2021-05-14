@@ -97,13 +97,16 @@ while ($row = mysql_fetch_assoc($result)) {
                         else if ($row['gender'] == 'F' && !intval($row['shabbaton_maven'])) echo "</td><td>Yes</td><td>";
                         else echo "</td><td>No</td><td>";
                         $total = 0;
-                        foreach ($prizes[$row['user_id']] as $prize) {
-                            $total += intval($prize['price']);
+                        $numPrizes = 0;
+                        if (isset($prizes[$row['user_id']])) {
+                            $numPrizes = count($prizes[$row['user_id']]);
+                            foreach ($prizes[$row['user_id']] as $prize) {
+                                $total += intval($prize['price']);
+                            }
                         }
-                        $numPrizes = count($prizes[$row['user_id']]);
                         echo $total . "</td>";
                         for ($i = 1; $i < 9; $i++) {
-                            if ($i > $numPrizes) echo "<td></td>";
+                            if ($i > $numPrizes || $numPrizes == 0) echo "<td></td>";
                             else {
                                 $prize = $prizes[$row['user_id']][$i-1];
                                 $name = $prize['prize_name'];
