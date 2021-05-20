@@ -16,7 +16,7 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $prizes = [];
 
-$sql = "select *, tcz.paid as paidUp from th_chidon tc 
+$sql = "select *, tc.paid as userPaid, tcz.paid as paidUp from th_chidon tc 
         join th_chidon_zelda tcz using (th_chidon_id) 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
