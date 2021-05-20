@@ -412,7 +412,8 @@
                                                         {{/if}}
                                                         <button class="btn btn-primary confirmation">Confirm Chidon Registration</button>
                                                         <div style="margin: 10px 0px">
-                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>
+                                                            <button class="btn btn-success invitation" id="{{this.chidon_id}}">Chidon Invitation</button>
+<!--                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>-->
                                                         </div>
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
@@ -722,6 +723,11 @@
                 var id = $(this).parent().parent().parent().parent().attr('id');
                 location.href = "upload_photo.html?id=" + id;
             });
+
+            $(document).on('click', '.invitation', function () {
+                var chidon_id = $(this).attr('id')
+                location.href = '/chidonOld/Invitations/' + chidon_id + '.png'
+            })
 
             $(document).on('click', '.shabbaton', function() {
                 // var id = $(this).parent().parent().parent().attr('id');
