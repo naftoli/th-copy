@@ -35,7 +35,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $sqlPrize = "select * from chidon_user_prizes cup join chidon_prizes cp using (prize_id) where user_id = " . $row['user_id'];
     $resultPrize = mysql_query($sqlPrize);
     while ($rowPrize = mysql_fetch_assoc($resultPrize)) {
-        $prizes[$rowPrize['user_id']][] = $rowPrize;
+        $prizes[$row['user_id']][] = $rowPrize;
     }
 }
 ?>
