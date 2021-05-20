@@ -726,7 +726,7 @@
 
             $(document).on('click', '.invitation', function () {
                 var chidon_id = $(this).attr('id')
-                location.href = '/chidonOld/Invitations/' + chidon_id + '.png'
+                window.open('/chidonOld/Invitations/' + chidon_id + '.png', '_blank')
             })
 
             $(document).on('click', '.shabbaton', function() {
