@@ -38,6 +38,7 @@ while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['user_id']][] = $rowPrize;
     }
 }
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
