@@ -17,7 +17,7 @@ $info = [];
 $prizes = [];
 
 $sql = "select *, tcz.paid as paidUp from th_chidon tc 
-        join th_chidon_zelda tcz on tc.parent_id = tcz.admin_id 
+        join th_chidon_zelda tcz using (th_chidon_id) 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
@@ -38,7 +38,6 @@ while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['user_id']][] = $rowPrize;
     }
 }
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
