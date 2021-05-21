@@ -220,7 +220,7 @@ class UserRegistrationRouter {
                         }
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
-                        $year = GlobalSettings::getChidonYear();
+                        $year = GlobalSettings::getChidonRegYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
                         if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
@@ -281,7 +281,7 @@ class UserRegistrationRouter {
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
-                        $year = GlobalSettings::getChidonYear();
+                        $year = GlobalSettings::getChidonRegYear();
                         // add the registration charge
                         $user->registrationCharge(
                             $registration['registration_type'],

@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
@@ -95,7 +95,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
         $children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
         $children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
-        $children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) > 3) && (intval($row['class_grade']) <= 8) ? 1 : 0;
+        $children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) > 2) && (intval($row['class_grade']) <= 8) ? 1 : 0;
         $children[$row['user_id']]['chidonRegistered'] = 0;
         $children[$row['user_id']]['chayolei'] = 1;
         $children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -232,7 +232,7 @@ if ( !empty( $users ) ) {
         // chidon registration
          $exceptions = [482,544,583];
          if ( !$row['reg_chidon'] // if not in chidon
-         	&& intval( $row['class_grade'] ) > 3 // and in grade 4+
+         	&& intval( $row['class_grade'] ) > 2 // and in grade 3+
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8
          	&& $row['chidon'] // make sure the kid is in chidon
          	&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
@@ -241,29 +241,6 @@ if ( !empty( $users ) ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
          }
-
-        // turn off chidon
-//        $keepOn = [
-//            7746463, 7750077, 7750039, 7748535, 7762129, 7754560, 7769383, 7762129, 7759215, 7756202, 7760527, 7751368, 7747980, 7747390,
-//            7748551, 7773102, 7752969, 7748998, 7752490, 7753000, 7748547, 7775781, 7761287, 7747339, 7763109, 7753599, 7760704, 7758564,
-//            7751454, 7748673, 7747302, 7756085, 7759885, 7748725, 7753953, 7759944, 7752990, 7748247, 7748267, 7750109, 7750056, 7775943,
-//            7753984, 7760408, 7772386, 7775680, 7761845, 7758518, 7754957, 7756463, 7756464, 7771828, 7750056, 7752979, 7770141, 7770138,
-//            7758062, 7754553, 7763326, 7775941, 7760921, 7750103, 7773911, 7747801, 7753589, 7753585, 7759811, 7759332, 7749051, 7773272,
-//            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7759826, 7775977,
-//            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7775955, 7775735,
-//            7764289, 7759999, 7760667, 7764902, 7764894, 7757205, 7751184, 7755566, 7775958, 7749753, 7763309, 7759584, 7753664, 7770142,
-//            7759807, 7749753, 7759305, 7769272, 7769275, 7750115, 7748057, 7759972, 7751067, 7759461, 7769372, 7775788, 7772311, 7760230,
-//            7756480, 7748529, 7775776, 7772514, 7761216, 7756223, 7769465, 7769465, 7761227, 7759542, 7772492, 7775717, 7773901, 7748504,
-//            7748503, 7755811, 7750671, 7753600, 7772141, 7775916, 7775924, 7775925, 7775931, 7775932, 7764763, 7760724, 7763324, 7774904,
-//            7760669, 7761155, 7775736, 7763077, 7754283, 7763409, 7746832, 7759804, 7747520, 7769363, 7772932, 7752995, 7753919, 7759608,
-//            7753003, 7754075, 7773381, 7754400, 7750093, 7748053, 7770705, 7753540, 7754181, 7758576, 7756929, 7758271, 7770719, 7764373,
-//            7776079, 7765977, 7761591, 7760542, 7760410, 7754000, 7759769, 7762067, 7755821, 7755816, 7771168, 7764889, 7755655, 7753739,
-//            7753253, 7760541, 7772658, 7766077, 7748019
-//        ];
-//        if (!in_array($row['user_serial'], $keepOn)) {
-//            $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
-//        }
-//        if ($row['user_id'] == 13159) $children[$row['user_id']]['reg_types']['chidon'] = true;
 
         // if school hasn't registered, turn off chayolei, chidon registration
         if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {

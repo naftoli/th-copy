@@ -321,8 +321,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
-        // add chidon if user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade > 3 )
+        // add chidon if user is in grade 3+
+        if ( $this->platoon && $this->platoon->class_grade > 2 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
@@ -330,7 +330,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationCharge( $type, $amount, $trans_id = '', $year = false ) {
         global $MASHPIA_DB;
         // set default year.
-        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonYear() : GlobalSettings::getRegistrationYear( $this->school_id );
+        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
         // make sure we don't already have such a registration charge in system - avoid duplication
         $check_qry = $MASHPIA_DB->prepare("
             SELECT 
@@ -377,7 +377,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
 
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
+        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
@@ -396,13 +396,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
-
-        // turn off chayolei reg 
-        //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
-        // only add th_chidon_id if the user is in grade 4+ 
+        // only add th_chidon_id if the user is in grade 3+
         $exceptions = [482,544,583];
-        if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
+        if ( $this->platoon && $this->platoon->class_grade > 2 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
         // turn off chayolei and chidon reg if school has not registered yet
@@ -440,35 +437,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chayolei'] = false;
             }
         }
-
-        // find user id's of kids with exception
-        $serialNum = [
-            7746463, 7750077, 7750039, 7748535, 7762129, 7754560, 7769383, 7762129, 7759215, 7756202, 7760527, 7751368, 7747980, 7747390,
-            7748551, 7773102, 7752969, 7748998, 7752490, 7753000, 7748547, 7775781, 7761287, 7747339, 7763109, 7753599, 7760704, 7758564,
-            7751454, 7748673, 7747302, 7756085, 7759885, 7748725, 7753953, 7759944, 7752990, 7748247, 7748267, 7750109, 7750056, 7775943,
-            7753984, 7760408, 7772386, 7775680, 7761845, 7758518, 7754957, 7756463, 7756464, 7771828, 7750056, 7752979, 7770141, 7770138,
-            7758062, 7754553, 7763326, 7775941, 7760921, 7750103, 7773911, 7747801, 7753589, 7753585, 7759811, 7759332, 7749051, 7773272,
-            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7759826, 7775977,
-            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7775955, 7775735,
-            7764289, 7759999, 7760667, 7764902, 7764894, 7757205, 7751184, 7755566, 7775958, 7749753, 7763309, 7759584, 7753664, 7770142,
-            7759807, 7749753, 7759305, 7769272, 7769275, 7750115, 7748057, 7759972, 7751067, 7759461, 7769372, 7775788, 7772311, 7760230,
-            7756480, 7748529, 7775776, 7772514, 7761216, 7756223, 7769465, 7769465, 7761227, 7759542, 7772492, 7775717, 7773901, 7748504,
-            7748503, 7755811, 7750671, 7753600, 7772141, 7775916, 7775924, 7775925, 7775931, 7775932, 7764763, 7760724, 7763324, 7774904,
-            7760669, 7761155, 7775736, 7763077, 7754283, 7763409, 7746832, 7759804, 7747520, 7769363, 7772932, 7752995, 7753919, 7759608,
-            7753003, 7754075, 7773381, 7754400, 7750093, 7748053, 7770705, 7753540, 7754181, 7758576, 7756929, 7758271, 7770719, 7764373,
-            7776079, 7765977, 7761591, 7760542, 7760410, 7754000, 7759769, 7762067, 7755821, 7755816, 7771168, 7764889, 7755655, 7753739,
-            7753253, 7760541, 7772658, 7766077, 7748019
-        ];
-        $serialStr = implode(',', $serialNum);
-        $keepOn = [];
-        $stmt = $MASHPIA_DB->query("
-            SELECT user_id FROM users WHERE user_serial in ($serialStr)
-        ");
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) $keepOn[] = $row['user_id'];
-
-        // turn off chidon reg
-        if (!in_array($this->user_id, $keepOn)) $result['chidon'] = true;
 
         return $result;
     }
