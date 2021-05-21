@@ -106,11 +106,6 @@
             "label": "Confirmation Status",
             "legacy": true,
             "path": "/chidonOld/chidon_drive/newReports/confirmation_status.php"
-          },
-          {
-            "label": "Allow Prize Changes",
-            "legacy": true,
-            "path": "/chidonOld/chidon_drive/newReports/manage_prize_editing.php"
           }
         ]
       },
