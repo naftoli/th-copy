@@ -61,9 +61,11 @@ while ($row = mysql_fetch_assoc($result)) {
                     <th>Student</th>
                 </tr>
                 <?php
-                foreach ($info[$type] as $row) {
-                    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td></tr>";
+                if (isset($info[$type])) {
+                    foreach ($info[$type] as $row) {
+                        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                        echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td></tr>";
+                    }
                 }
                 echo "</table>";
             }
