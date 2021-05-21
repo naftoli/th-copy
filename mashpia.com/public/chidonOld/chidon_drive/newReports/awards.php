@@ -8,7 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
 $types = ['Certificate', 'Plaque', 'Stage Plaque', 'Medal'];
@@ -20,7 +20,7 @@ $sql = "select * from th_chidon tc
         join classes c on c.class_id = u.class_id 
         where year = " . $year . " 
         and (khk_plaque = 1 
-        or award_type in (" . implode(',', $types) . ") 
+        or award_type in ('" . implode("','", $types) . "')) 
         order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -65,7 +65,9 @@ while ($row = mysql_fetch_assoc($result)) {
                         echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td></tr>";
                     }
                 }
-            echo "</table>";
+                ?>
+            </table>
+            <?php
         }
     }
     ?>
