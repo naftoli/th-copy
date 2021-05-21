@@ -43,7 +43,6 @@ while ($row = mysql_fetch_assoc($result)) {
         }
     </style>
 </head>
-<>
     <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
     <h1>Chidon Awards</h1>
     <?php
