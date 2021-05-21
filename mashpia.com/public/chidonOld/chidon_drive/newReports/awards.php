@@ -49,25 +49,40 @@ while ($row = mysql_fetch_assoc($result)) {
     <?php
     foreach ($awards as $school_id => $more) {
         foreach ($more as $gender => $info) {
-            if ($gender == 'M') $gender = "Boys";
-            else if ($gender == 'F') $gender = 'Girls';
-            echo "<h2>" . $schools[$school_id] . ' - ' . $gender . "</h2>";
-            ?>
-            <table>
+            $g = $gender;
+            if ($g == 'M') $g = "Boys";
+            else if ($g == 'F') $g = 'Girls';
+            echo "<h2>" . $schools[$school_id] . ' - ' . $g . "</h2>";
+            foreach ($types as $type) {
+                echo "<h2>" . $type . "</h2>";
+                ?>
+                <table>
                 <tr>
                     <th>Grade</th>
                     <th>Student</th>
                 </tr>
                 <?php
-                foreach ($types as $type) {
-                    foreach ($info[$type] as $row) {
+                foreach ($info[$type] as $row) {
+                    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                    echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td></tr>";
+                }
+                echo "</table>";
+            }
+            if (isset($khk[$school_id][$gender])) {
+                echo "<h2>Kol Hatorah Kulah Plaque</h2>";
+                ?>
+                <table>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Student</th>
+                    </tr>
+                    <?php
+                    foreach ($khk[$school_id][$gender] as $row) {
                         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
                         echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td></tr>";
                     }
-                }
-                ?>
-            </table>
-            <?php
+                echo "</table>";
+            }
         }
     }
     ?>
