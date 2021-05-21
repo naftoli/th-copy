@@ -16,7 +16,7 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $prizes = [];
 
-$sql = "select *, tc.paid as userPaid, tcz.paid as paidUp from th_chidon tc 
+$sql = "select *, tcz.paid as paidUp, tcz.balance as userBalance from th_chidon tc 
         join th_chidon_zelda tcz using (th_chidon_id) 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
@@ -93,7 +93,7 @@ while ($row = mysql_fetch_assoc($result)) {
                         else if (intval($row['shabbaton_expert'])) echo "Prizes and Trips";
                         else if (intval($row['shabbaton_trophy'])) echo "Prizes and Trips";
                         echo "</td><td>" . $row['reg_fee'] . "</td><td>" . $row['paidUp'] . "</td><td>" . $row['chidon_drive'] .
-                            "</td><td>" . $row['coupon'] . "</td><td>" . $row['balance'] . "</td><td>";
+                            "</td><td>" . $row['coupon'] . "</td><td>" . $row['userBalance'] . "</td><td>";
                         if ($row['gender'] == 'M') echo $row['yarmulka'] . "</td><td>No</td><td>";
                         else if ($row['gender'] == 'F' && !intval($row['shabbaton_maven'])) echo "</td><td>Yes</td><td>";
                         else echo "</td><td>No</td><td>";
