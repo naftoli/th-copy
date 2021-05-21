@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
                     continue;
                 }
                 $chidon_id = $data[0];
-                $qrys[] = "update th_chidon set khk_trophy = 1 where th_chidon_id = " . $chidon_id;
+                $qrys[] = "update th_chidon set khk_plaque = 1 where th_chidon_id = " . $chidon_id;
             }
             fclose($handle);
             foreach ($qrys as $qry) mysql_query($qry) or die(mysql_error() . "<br />" . $qry);
