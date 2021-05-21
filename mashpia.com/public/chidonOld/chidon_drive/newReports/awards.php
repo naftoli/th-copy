@@ -3,8 +3,8 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-require_once __DIR__ . '/../../../header.php';
-require_once __DIR__ . '/../../../class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
@@ -40,9 +40,6 @@ while ($row = mysql_fetch_assoc($result)) {
             font-size: 14px;
             padding: 10px;
             border-bottom: 1px solid grey;
-        }
-        .warning {
-            background-color: yellow;
         }
     </style>
 </head>
