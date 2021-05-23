@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
