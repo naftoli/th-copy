@@ -21,6 +21,7 @@ $sql = "select * from th_chidon tc
         where year = " . $year . " 
         and (khk_plaque = 1 
         or award_type in ('" . implode("','", $types) . "')) 
+        and u.school_id in (" . implode(',', array_keys($schools)) . ")
         order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
