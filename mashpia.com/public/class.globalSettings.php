@@ -167,9 +167,9 @@ class GlobalSettings {
             if ( $school_id == 269 ) return 45;
             else return 14;
         }
-        $today = new DateTime();
-        $late = new DateTime('2020-10-21 04:00:00');
-        if ($today >= $late) return 35;
+//        $today = new DateTime();
+//        $late = new DateTime('2020-10-21 04:00:00');
+//        if ($today >= $late) return 35;
         else return 10;
     }
 

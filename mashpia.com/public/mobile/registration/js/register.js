@@ -840,6 +840,7 @@ var templates = function(){
             } else {
                 $( '#step-2 form #class_name' ).hide(); // hide it
                 $( '#step-2 form #non_th_school' ).hide();
+                $( '#step-2 form #non_th_school' ).parent().parent().find('label').hide()
             }
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );
@@ -871,7 +872,7 @@ var templates = function(){
                 $('#step-2 form #ckids-registration').show();
                 $("#step-2 form #broadcast").hide();
             } else {
-                $('#step-2 form #chayolei-registration').show();
+                // $('#step-2 form #chayolei-registration').show();
                 // $('#step-2 form #chayolei-lite-registration').show();
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
