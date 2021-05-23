@@ -7,6 +7,7 @@ if ( $_SERVER['REQUEST_METHOD'] != "POST" )
 $schools = [];
 $sql = "select school_id, school_name from schools 
         where chidon = 1 and test_school = 0 
+        and school_id not in (612)
         order by school_name";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc($result)) {
