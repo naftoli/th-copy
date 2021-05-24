@@ -10,6 +10,8 @@ import { Row, Col } from 'reactstrap';
 export default class LoginDashboard extends Component {
   // * render the page.
   render() {
+    const { pathname, search, hash } = this.props.location;
+    const redirectTo = pathname+search+hash;
     return (
       <div id='Login'>
         <div>
@@ -49,7 +51,7 @@ export default class LoginDashboard extends Component {
                 </Link>
               </Col>
               <Col xs="6">
-                <Link to={'/login'}>
+                <Link to={`/login?redirect_to=${encodeURIComponent(redirectTo)}`}>
                   <Button size="lg" color='primary' id='show_login'>
                     Log in to your account
                   </Button>
