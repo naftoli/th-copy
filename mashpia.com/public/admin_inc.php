@@ -68,9 +68,9 @@ if (!isset($menu_type))
             <li><a href="isserRanksSummary.php.php">Isser's Rank Summary Only Report</a></li>
             <li></li><br />
             <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
-                <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List') (Moved to promotions menu)?></A>
+                <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?> (Moved to promotions menu)</A>
             <? } ?>
-			<li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
+            <li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
             <li></li><br />      
             <li><a href="hachayol_report.php"><?=T_('Hachayol Report')?></A>
             <li><a href="hachayol_report_details.php">Hachayol Report Details</a></li>
@@ -91,7 +91,6 @@ if (!isset($menu_type))
             <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
                 <li><a href="ranks_shipping.php">Ranks Shipping Report (Moved to promotions menu)</a></li>
                 <li><a href="medals_shipping.php">Medals Shipping Report (Moved to promotions menu)</a></li>  
-                <li><a href="school_labels.php">School Shipping Labels</a></li>        
             <? } ?>
             <li><br />
             <li><a href="5774_orders_report.php">Poster and Registration Brochure Report 5774</a></li>
@@ -174,7 +173,7 @@ if (!isset($menu_type))
 			<LI><A HREF="admin_stats.php<?=$url_id?>"><?=T_("View Soldier's Stats")?></A>
 			<LI><A HREF="admin_mission_report.php<?=$url_id?>"><?=T_("View Mission Report/Stats")?></A>
 			<LI><A HREF="admin_rank_report.php<?=$url_id?>"><?=T_("View Rank Report")?></A>
-			<LI><A HREF="student_rank_report.php"><?=T_('Student Rank promotions - by date range')?></A> <span><font size='1' color='red'>*NEW*</font></span>
+			<LI><A HREF="reports/ranks/rank_report.php"><?=T_('Student Rank promotions - by date range')?></A> <span><font size='1' color='red'>*NEW*</font></span>
 			<LI><A HREF="admin_medal_report.php<?=$url_id?>"><?=T_("View Medal Report")?></A>
 			<LI><A HREF="admin_invite.php<?=$url_id?>"><?=T_('Invite Parents')?></A>
 			<LI><BR>

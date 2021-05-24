@@ -252,7 +252,8 @@
         { "label": "Rank Report", "legacy": true, "path": "/rank_report.php" },
         { "label": "Mark Ranks / Medals as Received", "legacy": true, "path": "/admin_received_stats.php" },
         { "label": "Missing Medals", "legacy": true, "path": "/missing_medals.php" }
-      ] }
+      ] },
+      { "label": "Misc", "legacy": true, "path": "/menu-pages/promotions/misc"}
     ]
   },
   {
