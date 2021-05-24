@@ -58,15 +58,19 @@ if (!isset($menu_type))
 			<li><a href="admin_print_pdf.php"><?=T_('Print Certificate')?></a></li>
             <li><a href="admin_shipping_report_new.php"><?=T_('Shipping Report')?></A>
             <li></li><br />
-            <LI><A HREF="medals_labels.php"><?=T_('Medals Shipping Labels')?></A> 
-            <li><a href="myShliachShipLabels.php">MyShliach Medals Shipping Labels</a></li> 
-            <li><a href="anashShipLabels.php">Anash Kinder Medals Shipping Labels</a></li>    
-            <li></li><br />   
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>   
+                <LI><A HREF="medals_labels.php"><?=T_('Medals Shipping Labels')?> (Moved to promotions menu)</A> 
+                <li><a href="myShliachShipLabels.php">MyShliach Medals Shipping Labels (Moved to promotions menu)</a></li> 
+                <li><a href="anashShipLabels.php">Anash Kinder Medals Shipping Labels (Moved to promotions menu)</a></li>    
+                <li></li><br /> 
+            <? } ?>
             <li><a href="isserRanks.php">Isser's Rank Summary Report</a></li>
             <li><a href="isserRanksSummary.php.php">Isser's Rank Summary Only Report</a></li>
             <li></li><br />
-            <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?></A>
-			<li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
+                <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?> (Moved to promotions menu)</A>
+            <? } ?>
+            <li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
             <li></li><br />      
             <li><a href="hachayol_report.php"><?=T_('Hachayol Report')?></A>
             <li><a href="hachayol_report_details.php">Hachayol Report Details</a></li>
@@ -84,16 +88,16 @@ if (!isset($menu_type))
             <li><a href="add_ons_report.php">Add-ons Report</a></li>
             <li><a href="new_th_users.php">Binders & Sticker Boards Report</a></li>
             <li><a href="newly_registered.php">Charge Cards & Sticker Books Report</a></li>  
-            <li><a href="ranks_shipping.php">Ranks Shipping Report</a></li> 
-            <li><a href="medals_shipping.php">Medals Shipping Report</a></li> 
-            <li><a href="school_labels.php">School Shipping Labels</a></li>        
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
+                <li><a href="ranks_shipping.php">Ranks Shipping Report (Moved to promotions menu)</a></li>
+                <li><a href="medals_shipping.php">Medals Shipping Report (Moved to promotions menu)</a></li>  
+            <? } ?>
             <li><br />
             <li><a href="5774_orders_report.php">Poster and Registration Brochure Report 5774</a></li>
             <!--<li><a href="registration_brochures.php">Registration Brochures Report 5774</a></li>-->
             <li><a href="siddurim_report.php">Siddurim Report</a></li>
             <li><a href="registered_report.php"><?=T_("Registered Report")?></a></li> 
-            <li><a href="barcodes_report.php"><?=T_("Barcodes Report")?></a></li>
-            <li><a href="promotions2.php">Rally promotion list for Choni</a></li>           
+            <li><a href="barcodes_report.php"><?=T_("Barcodes Report")?></a></li>      
             <li></li><br /> 
             <li><a href="ajax/delParentAccounts.php">Delete Parent accounts with no children associations</a></li>
             <li><a href='missionTaskReport.php'>Mission / Task Report</a></li>
@@ -136,7 +140,6 @@ if (!isset($menu_type))
 			<LI><A HREF="admin_subject_slide.php"><?=T_("Manage Subjects' Slides")?></A>
 			<LI><A HREF="admin_track.php"><?=T_('Manage Ladders')?></A>
 			<LI><A HREF="admin_label.php"><?=T_('Manage Labels')?></A>
-			<LI><A HREF="admin_medal.php"><?=T_('Manage Medals')?></A>
 			<LI><A HREF="school_possible_medals.php"><?=T_('Possible Medals')?></A>			
 			<LI><A HREF="admin_rank.php"><?=T_('Manage Ranks')?></A>
 			<LI><A HREF="admin_date_tasks.php" target="_blank"><?=T_('Manage Date Tasks')?></A>
@@ -170,7 +173,7 @@ if (!isset($menu_type))
 			<LI><A HREF="admin_stats.php<?=$url_id?>"><?=T_("View Soldier's Stats")?></A>
 			<LI><A HREF="admin_mission_report.php<?=$url_id?>"><?=T_("View Mission Report/Stats")?></A>
 			<LI><A HREF="admin_rank_report.php<?=$url_id?>"><?=T_("View Rank Report")?></A>
-			<LI><A HREF="student_rank_report.php"><?=T_('Student Rank promotions - by date range')?></A> <span><font size='1' color='red'>*NEW*</font></span>
+			<LI><A HREF="reports/ranks/rank_report.php"><?=T_('Student Rank promotions - by date range')?></A> <span><font size='1' color='red'>*NEW*</font></span>
 			<LI><A HREF="admin_medal_report.php<?=$url_id?>"><?=T_("View Medal Report")?></A>
 			<LI><A HREF="admin_invite.php<?=$url_id?>"><?=T_('Invite Parents')?></A>
 			<LI><BR>
