@@ -73,11 +73,11 @@ if ($admin_user['auth'] != 'super') {
             </a>
             
             <div class="button" style="display: inline-flex;">
-                <a href="/rank_ceremony?<?=$debug ? "debug=true&": "";?>" id="rank_celemony_base_link" style="color: black; padding-right: 4px;">
+                <a href="/rank_ceremony?<?=$debug ? "debug=true&": "";?>id=" id="rank_celemony_base_link" style="color: black; padding-right: 4px;">
                         <img src="/images/icon_report.png" height="32" alt="report"/>
                         <span class="link-text">Individual Rank Ceremony for Base ID</span>
                 </a>
-                <input id="rank_celemony_base_input" type="number" min="0" max="10000" onchange="
+                <input id="rank_celemony_base_input" type="number" min="0" max="10000" oninput="
                     document.getElementById('rank_celemony_base_link').href = `/rank_ceremony?<?=$debug ? "debug=true&": "";?>id=${document.getElementById('rank_celemony_base_input').value}`;
                 "/>
             </div>

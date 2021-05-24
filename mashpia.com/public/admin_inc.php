@@ -58,9 +58,18 @@ if (!isset($menu_type))
 			<li><a href="admin_print_pdf.php"><?=T_('Print Certificate')?></a></li>
             <li><a href="admin_shipping_report_new.php"><?=T_('Shipping Report')?></A>
             <li></li><br />
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>   
+                <LI><A HREF="medals_labels.php"><?=T_('Medals Shipping Labels')?> (Moved to promotions menu)</A> 
+                <li><a href="myShliachShipLabels.php">MyShliach Medals Shipping Labels (Moved to promotions menu)</a></li> 
+                <li><a href="anashShipLabels.php">Anash Kinder Medals Shipping Labels (Moved to promotions menu)</a></li>    
+                <li></li><br /> 
+            <? } ?>
             <li><a href="isserRanks.php">Isser's Rank Summary Report</a></li>
             <li><a href="isserRanksSummary.php.php">Isser's Rank Summary Only Report</a></li>
             <li></li><br />
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
+                <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List') (Moved to promotions menu)?></A>
+            <? } ?>
 			<li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
             <li></li><br />      
             <li><a href="hachayol_report.php"><?=T_('Hachayol Report')?></A>
@@ -79,7 +88,11 @@ if (!isset($menu_type))
             <li><a href="add_ons_report.php">Add-ons Report</a></li>
             <li><a href="new_th_users.php">Binders & Sticker Boards Report</a></li>
             <li><a href="newly_registered.php">Charge Cards & Sticker Books Report</a></li>  
-            <li><a href="school_labels.php">School Shipping Labels</a></li>        
+            <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
+                <li><a href="ranks_shipping.php">Ranks Shipping Report (Moved to promotions menu)</a></li>
+                <li><a href="medals_shipping.php">Medals Shipping Report (Moved to promotions menu)</a></li>  
+                <li><a href="school_labels.php">School Shipping Labels</a></li>        
+            <? } ?>
             <li><br />
             <li><a href="5774_orders_report.php">Poster and Registration Brochure Report 5774</a></li>
             <!--<li><a href="registration_brochures.php">Registration Brochures Report 5774</a></li>-->
