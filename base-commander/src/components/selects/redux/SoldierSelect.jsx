@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 // components
 import { Select } from '../static/Select';
 // functions
@@ -30,11 +31,12 @@ export class SoldierSelect extends Component {
     this.loadSoldiers();
   }
 
-  // update if the login changed or the schoolId/classId prop changed
-  componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId }) {
+  // update if the login changed or the schoolId/classId/classIds prop changed
+  componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId, classIds: prevClassIds }) {
+    console.log("SoldiersSelect componentDidUpdate", { prevSchoolId, prevClassId, prevClassIds })
     // if the school ID changed, get the new platoons into redux
-    const { schoolId, value, isClearable, isMulti, classId } = this.props;
-    if ((prevSchoolId !== schoolId) || (prevClassId !== classId)) {
+    const { schoolId, value, isClearable, isMulti, classId, classIds } = this.props;
+    if ((prevSchoolId !== schoolId) || (prevClassId !== classId || !_.isEqual(prevClassIds, classIds))) {
       this.loadSoldiers();
     }
 
