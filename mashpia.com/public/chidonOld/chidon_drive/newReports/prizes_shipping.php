@@ -29,10 +29,13 @@ $shipments = [
     ]
 ];
 
-// maps prize id's to school id's
+// limits prize id's to school id's for certain shipments
+// array of first prize id, then shipment number, then school id's
 $limits = [
     8   =>  [269],
-    29  =>  [61]
+    29  =>  [
+        3   =>  [7, 255]
+    ]
 ];
 
 // list of schools that need break down of totals by classes
@@ -134,6 +137,14 @@ $prizeInfo = [];
                             }
                             foreach ($prizes as $prize) {
                                 if (in_array($prize['prize_id'], $shipments[$shipment_number])) {
+                                    // for certain prizes make sure it only goes to children in certain schools
+                                    if (in_array($prize['prize_id'], array_keys($limits))) {
+                                        if (in_array($shipment_number, array_keys($limits[$prize['prize_id']]))) {
+                                            if (!in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
+                                        } else {
+                                            if (in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
+                                        }
+                                    }
                                     $he_name = false;
                                     if ($prize['prize_id'] == 36 || ($prize['prize_id'] >= 44 && $prize['prize_id'] <= 60)) {
                                         $he_name = true;
