@@ -17,6 +17,24 @@ function getRaffleInfo( $type ) {
         $info['end'] = $row['end_date'];
         $info['run_date'] = $row['run_date'];
         $info['name'] = $row['name'];
+    } else {
+        // get last raffle that is in system for this type
+        $sql = "SELECT * FROM raffles
+                WHERE type = '" . $type . "'
+                AND start_date <= " . $today . " 
+                order by start_date desc
+                limit 1";
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $info['raffle_id'] = $row['raffle_id'];
+            $info['daysLeft'] = $row['end_date'] - $today;
+            $info['name'] = $row['name'];
+            $info['year'] = $row['year'];
+            $info['start'] = $row['start_date'];
+            $info['end'] = $row['end_date'];
+            $info['run_date'] = $row['run_date'];
+            $info['name'] = $row['name'];
+        }
     }
     return $info;
 }
