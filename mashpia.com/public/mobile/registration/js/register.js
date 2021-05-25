@@ -589,6 +589,7 @@ var registrationApp = function() {
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
             var shipping_charge = 5;
+            var cost = 36
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
                 if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
@@ -601,12 +602,12 @@ var registrationApp = function() {
             // ) {
             state.cart.push({
                     description: Msg6 + selected_user.first + ( shipping_included ? Msg7 : '' ),
-                    price: shipping_included ? (40 + shipping_charge) : 40,
+                    price: shipping_included ? (cost + shipping_charge) : cost,
                     meta: {
                         type: 'registration',
                         user_id: selected_user.user_id,
                         registration_type: 'yahadus',
-                        paid: shipping_included ? (40 + shipping_charge) : 40
+                        paid: shipping_included ? (cost + shipping_charge) : cost
                     }
                 });
             //}
@@ -902,7 +903,7 @@ var templates = function(){
             $("#user").html("<option value='0'>Select Student</option>");
             // if ( user.school.shipping_method === 'pickup' ) {
             //     $( '#step-2 form #yahadus-cost' ).text( '$55' );
-            //     $( '#step-2 form #yahadus-real-cost' ).text( 40 )
+            //     $( '#step-2 form #yahadus-real-cost' ).text( 36 )
             //     $( '#step-2 form #yahadus-text').text( '' );
             // } else { 
             //     $( '#step-2 form #yahadus-cost' ).text( '$60' );
