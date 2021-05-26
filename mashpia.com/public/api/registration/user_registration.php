@@ -223,7 +223,7 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonRegYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
+                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         else {
                             // add book purchased info to db
@@ -285,11 +285,14 @@ class UserRegistrationRouter {
                         // add the registration charge
                         $user->registrationCharge(
                             $registration['registration_type'],
-                            floatval( $amount ),
+                            floatval($amount),
                             $trans_id, $year
                         );
                         // add book purchase to db
-                        $user->addBookPurchase( $year, $user->user_id, 'parent_account', $trans_id );
+                        $user->addBookPurchase($year, $user->user_id, 'parent_account', $trans_id);
+                    } else if ( $registration['registration_type'] == 'khk' ) {
+                        // update khk_reg in db
+                        $user->addKhkReg($year, $user->user_id);
                     // other registrations
                     } else {
                         // add the registration charge

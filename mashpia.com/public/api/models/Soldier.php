@@ -422,6 +422,28 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
+        // check if child is eligible for khk if needs to register for chidon
+        $result['khk'] = true; // means not eligible for khk
+        if (!$result['chidon']) {
+            $start = $chidon_year - 1;
+            $end = $chidon_year - 4;
+            // check that user was enrolled in chidon for past 4 yrs
+            $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user and year = :year");
+            $eligible = true;
+            for ($i = $start; $i >= $end; $i--) {
+                $stmt->execute([
+                    ':user' => $this->user_id,
+                    ':year' => $i
+                ]);
+                $rows = $stmt->fetchAll();
+                if (empty($rows)) {
+                    $eligible = false;
+                    break;
+                }
+            }
+            if ($eligible) $result['khk'] = false;
+        }
+
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
@@ -536,6 +558,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      *
      * @param int $year
      * @param string $size
+     * @param string $book
+     * @param int $yarmulka
      * @param integer $parent_id
      * @param float $amount
      * @param string $trans_id
@@ -543,7 +567,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $recruited_by
      * @return void
      */
-    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '' ){
+    public function registerChidon($year, $size, $book, $yarmulka = 5, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '' ){
         global $MASHPIA_DB;
 
         // save the charge
@@ -565,14 +589,14 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, parent_id, recruited_by, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $recruited_by, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $parent_id, $recruited_by, $poll ] );
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, poll) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, parent_id, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $parent_id, $poll ] );
         }
     }
 
@@ -606,6 +630,16 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':trans_id' =>  $trans_id, 
             ':store_name'   =>  $store_name, 
             ':store_city'   =>  $store_city
+        ]);
+    }
+
+    // set khk_reg flag in db to true
+    public function addKhkReg( $year, $user_id ) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("update th_chidon set khk_reg = 1 where user_id = :user and year = :year");
+        $stmt->execute([
+            ':user' => $user_id,
+            ':year' => $year
         ]);
     }
 

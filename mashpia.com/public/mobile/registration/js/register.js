@@ -448,7 +448,8 @@ var registrationApp = function() {
             // chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
             ckids: $('#ckids-registration input')[0].checked, 
             chidon: $('#chidon-registration input')[0].checked,
-            yahadus: $('#yahadus-registration input')[0].checked
+            yahadus: $('#yahadus-registration input')[0].checked,
+            khk: $("#khk input")[0].checked
         }
         if ( selected_charges.chayolei === false 
             // && selected_charges.chayolei_lite === false 
@@ -459,7 +460,7 @@ var registrationApp = function() {
             return showError(
                 Err1
             );
-        } 
+        }
 
         if ( selected_charges.chidon === true ) {
             // check that book was selected
@@ -572,8 +573,9 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
-                    size: $("select#chidon-sweater-size").val(), 
-                    book: $("select#chidon-book").val(), 
+                    size: $("select#chidon-sweater-size").val(),
+                    yarmulka: $("select#yarmulka-size").val(),
+                    book: $("select#chidon-book").val(),
                     purchased: $(".book-bought:checked").val(),
                     purchasedWhere: $(".book-purchase:checked").val(), 
                     store: {
@@ -611,6 +613,17 @@ var registrationApp = function() {
                     }
                 });
             //}
+        }
+        if ( selected_charges.khk ) {
+            state.cart.push({
+                description: "KHK Registration",
+                price: 18,
+                meta: {
+                    type: 'registration',
+                    registration_type: 'khk',
+                    paid: 18
+                }
+            })
         }
 
         current_index += 1;
@@ -829,6 +842,8 @@ var templates = function(){
             var class_select = $( '#step-2 form #class_name select' );
             class_select.html('');
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                $( '#step-2 form #non_th_school' ).show();
+                $( '#step-2 form #non_th_school' ).parent().parent().find('label').show()
                 // get the class list and update the dropdown
                 $.get( "api/classes.php", { 'school_id': user.school.school_id }, function( response ) {
                     class_select.html('');
@@ -877,6 +892,12 @@ var templates = function(){
                 // $('#step-2 form #chayolei-lite-registration').show();
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
+            }
+
+            // show khk if relevant
+            if ( !user['registrationStatus']['khk'] ) {
+                $("#khk").show()
+                $("#khk input")[0].checked = false
             }
             
             // reset the book field
