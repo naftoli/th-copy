@@ -32,7 +32,9 @@ $shipments = [
 // limits prize id's to school id's for certain shipments
 // array of first prize id, then shipment number, then school id's
 $limits = [
-    8   =>  [269],
+    8   =>  [
+
+    ],
     29  =>  [
         3   =>  [7, 255]
     ]
@@ -142,7 +144,11 @@ $prizeInfo = [];
                                         if (in_array($shipment_number, array_keys($limits[$prize['prize_id']]))) {
                                             if (!in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
                                         } else {
-                                            if (in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
+                                            if (
+                                                isset($limits[$prize['prize_id']][$shipment_number])
+                                                &&
+                                                in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])
+                                            ) continue;
                                         }
                                     }
                                     $he_name = false;
