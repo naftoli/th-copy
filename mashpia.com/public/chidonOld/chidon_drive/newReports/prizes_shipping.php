@@ -222,6 +222,7 @@ $prizeInfo = [];
                 <div style="page-break-after: always"></div>
             <?php
             } else {
+                $schoolTotals = [];
                 $grades = array_keys($classTotals);
                 sort($grades);
                 ?>
@@ -237,10 +238,14 @@ $prizeInfo = [];
                     foreach ($grades as $grade) {
                         if (isset($classTotals[$grade]['bracelet'])) {
                             echo "<tr><td>" . $grade . "</td><td>Chidon Bracelet</td><td></td><td></td><td>" . $classTotals[$grade]['bracelet'] . "</td></tr>";
+                            if (!isset($schoolTotals['bracelet'])) $schoolTotals['bracelet'] = 0;
+                            $schoolTotals['bracelet'] += $classTotals[$grade]['bracelet'];
                         }
                         if (isset($classTotals[$grade]['yarmulka'])) {
                             foreach ($classTotals[$grade]['yarmulka'] as $size => $total) {
                                 echo "<tr><td>" . $grade . "</td><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                                if (!isset($schoolTotals['yarmulka'][$size])) $schoolTotals['yarmulka'][$size] = 0;
+                                $schoolTotals['yarmulka'][$size] += $total;
                             }
                         }
                         if (isset($classTotals[$grade]['prizes'])) {
@@ -248,12 +253,40 @@ $prizeInfo = [];
                             foreach ($classTotals[$grade]['prizes'] as $prize_id => $total) {
                                 echo "<tr><td>" . $grade . "</td><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
                                     . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                                if (!isset($schoolTotals['prizes'][$prize_id])) $schoolTotals['prizes'][$prize_id] = 0;
+                                $schoolTotals['prizes'][$prize_id] += $total;
                             }
                         }
                     }
                     ?>
                 </table>
                 <div style="page-break-after: always"></div>
+                <h2>Grand Totals for <?= $school ?></h2>
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Total</th>
+                    </tr>
+                    <?php
+                    if (isset($schoolTotals['bracelet'])) {
+                        echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $schoolTotals['bracelet'] . "</td></tr>";
+                    }
+                    if (isset($schoolTotals['yarmulka'])) {
+                        foreach ($schoolTotals['yarmulka'] as $size => $total) {
+                            echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                        }
+                    }
+                    if (isset($schoolTotals['prizes'])) {
+                        ksort($schoolTotals['prizes']);
+                        foreach ($schoolTotals['prizes'] as $prize_id => $total) {
+                            echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
+                                . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                        }
+                    }
+                    ?>
+                </table>
                 <?php
             }
         }
