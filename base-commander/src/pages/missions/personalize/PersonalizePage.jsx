@@ -19,7 +19,7 @@ import { showError } from 'functions/notifications';
 class PersonalizePage extends Component {
 
   state = {
-    school_id: false, class_id: false, user_id: false,
+    school_id: false, class_ids: [], user_id: false,
     parsha_id: false, mission_type: false, lang: '1',
     // keep track of what is loading and what the selected options are
     loading: false, current_options: {},
@@ -31,7 +31,7 @@ class PersonalizePage extends Component {
     const { school_id, class_id } = this.props.login;
     this.setState({ school_id });
     if ( class_id )
-      this.setState({ class_id });
+      this.setState({ class_ids: [class_id] });
   }
 
   /**
@@ -39,6 +39,9 @@ class PersonalizePage extends Component {
    */
   onSelectChange = key => option =>
     this.setState({ [key]: option ? option.value : false });
+    
+  onMultiSelectChange = key => options =>
+    this.setState({ [key]: options && options.map ? options.map(o => o.value) : [] });
 
   onLangChange = ({ target }) =>
     this.setState({ lang: target.value || '1' });
@@ -78,7 +81,8 @@ class PersonalizePage extends Component {
           login={ login }
           { ...this.state }
           onLangChange={ this.onLangChange }
-          onSelectChange={ this.onSelectChange } />
+          onSelectChange={ this.onSelectChange }
+          onMultiSelectChange={ this.onMultiSelectChange } />
         
         <Row className='buttons'>
           <Col sm={{ size: 6, offset: 3 }}>

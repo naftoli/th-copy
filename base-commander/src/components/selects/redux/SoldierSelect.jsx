@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 // components
 import { Select } from '../static/Select';
 // functions
@@ -23,18 +24,24 @@ export class SoldierSelect extends Component {
 
   static defaultProps = {
     showAllOption: false,
-    registeredOnly: false
+    registeredOnly: false,
+
+    // I don't know why the soldiers are reloaded so often
+    // being that **all** soldiers are loaded and the filters are only applied at render
+    // the onlyReloadSoldiersIfNotLoaded prop stops soldiers from being reloaded unless they arn't loaded yet
+    // hopefully over time this can be added everywhere that the SoldierSelect is used and become the default
+    onlyReloadSoldiersIfNotLoaded: false
   }
 
   componentDidMount() {
     this.loadSoldiers();
   }
 
-  // update if the login changed or the schoolId/classId prop changed
-  componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId }) {
+  // update if the login changed or the schoolId/classId/classIds prop changed
+  componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId, classIds: prevClassIds }) {
     // if the school ID changed, get the new platoons into redux
-    const { schoolId, value, isClearable, isMulti, classId } = this.props;
-    if ((prevSchoolId !== schoolId) || (prevClassId !== classId)) {
+    const { schoolId, value, isClearable, isMulti, classId, classIds } = this.props;
+    if ((prevSchoolId !== schoolId) || (prevClassId !== classId || !_.isEqual(prevClassIds, classIds))) {
       this.loadSoldiers();
     }
 
@@ -51,8 +58,10 @@ export class SoldierSelect extends Component {
   }
 
   loadSoldiers = () => {
-    return this.props.getSoldiers()
-      .catch(e => toast.error(e.message));
+    if (!this.props.onlyReloadSoldiersIfNotLoaded || !(this.props.soldiers && this.props.soldiers.length > 0)) {
+      return this.props.getSoldiers()
+        .catch(e => toast.error(e.message));
+    }
   }
 
   getOptions = () => {

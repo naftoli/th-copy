@@ -9,9 +9,9 @@ import { availableMissionLanguages } from 'data/languages.json'
 
 const OptionsRow = props => {
   const { 
-    login,    school_id,  class_id,
+    login,    school_id,  class_ids,
     user_id,  parsha_id,  mission_type, lang,
-    onSelectChange,       onLangChange
+    onSelectChange, onMultiSelectChange,       onLangChange
   } = props;
 
   return (
@@ -28,13 +28,13 @@ const OptionsRow = props => {
       <Col sm={6}>
         <label>Platoon</label>
         <PlatoonSelect
-          isClearable
-          value={ class_id }
+          isClearable isMulti
+          values={ class_ids }
           schoolId={ school_id }
           openMenuOnFocus={ false }
           placeholder='All Platoons'
           isDisabled={ !isBC( login.code ) }
-          onChange={ onSelectChange('class_id') } />
+          onChange={ onMultiSelectChange('class_ids')} />
       </Col>
 
       <Col sm={6}>
@@ -42,8 +42,9 @@ const OptionsRow = props => {
         <SoldierSelect
           isClearable
           registeredOnly
+          onlyReloadSoldiersIfNotLoaded
           value={ user_id }
-          classId={ class_id }
+          classIds={ class_ids }
           schoolId={ school_id }
           openMenuOnFocus={ false } 
           placeholder='All Soldiers' 
