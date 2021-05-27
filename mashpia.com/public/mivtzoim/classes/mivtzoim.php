@@ -713,7 +713,7 @@ class MivtzoimReport {
 
         // output html
         $names = $this->m->getShortNames();
-        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead class=\"th-sticky-top\"><tr>";
         echo "<th>School</th>";
         echo "<th>Registered Chayolim</th>";
         foreach ( $names as $name ) {
@@ -729,7 +729,9 @@ class MivtzoimReport {
             }
             echo "</tr>";
         } 
-        echo "</tbody></table>";
+        echo "</tbody><tfoot><tr><th style='text-align: right'>Totals/Averages:</th><th></th>";
+        foreach ( $names as $name ) echo "<th></th><th></th>";
+        echo "</tr></tfoot></table>";
     }
 
     public function createIndividualBoard( $school ) {
@@ -757,7 +759,7 @@ class MivtzoimReport {
         //     } 
         //     echo "</tbody></table>";
         // } else {
-            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead class=\"th-sticky-top\"><tr>";
             echo "<th>School</th>";
             echo "<th>Grade</th>";
             echo "<th>Student</th>";

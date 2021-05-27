@@ -61,6 +61,19 @@ class PersonalizeRouter {
             exit;
         }
 
+        // used for resorting the grades when merging enrollments from multple grades on the frontend
+        $gradeLevels = array(
+            'Pre1A' => 6,
+            'Grade 1' => 7,
+            'Grade 2' => 8,
+            'Grade 3' => 9,
+            'Grade 4' => 10,
+            'Grade 5' => 11,
+            'Grade 6' => 12,
+            'Grade 7' => 13,
+            'Grade 8' => 14,
+        );
+
         // * Format the response to something sane and consistent
         $response = [];
         // go through each cat
@@ -78,7 +91,7 @@ class PersonalizeRouter {
                     $label_school_type = [ 'type' => $school_type ];
 
                     foreach( $grades as $grade => $quota ) {
-                        $label_school_type['grades'][] = [ 'grade' => $grade, 'quota' => $quota ];
+                        $label_school_type['grades'][] = [ 'grade' => $grade, 'quota' => $quota, 'level' => $gradeLevels[$grade], ];
                     } // end grade-quota level
 
                     $label_school_types[] = $label_school_type;

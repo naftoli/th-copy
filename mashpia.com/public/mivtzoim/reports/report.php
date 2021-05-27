@@ -19,6 +19,7 @@ while ( $row = $sth->fetch() ) {
 $m = new Mivtzoim( $_REQUEST['id'] );
 $r = new MivtzoimReport( $m );
 $r->setSchools( $schools );
+$num_names = count( $r->getShortNames() );
 ?>
 <!DOCTYPE html>
 <html>
@@ -56,7 +57,30 @@ $r->setSchools( $schools );
         $(document).ready(function () {
             $('#leaderboard').DataTable({
                 'pageLength': 100,
-                'order': [[3, 'desc']]
+                'order': [[3, 'desc']],
+                "footerCallback": function () {
+                    function sum (array){
+                        return  array.reduce(function (a, b) { return parseInt(a) + parseInt(b) }, 0)
+                    }
+                    const api = this.api()
+                    // 2 columns at the starts and 2 columns per name
+                    let numColumns = <?= 2 + $num_names * 2  ?>;
+                    let numUsers = sum(api.column( 1 ).data())
+                    let total = 0
+                    for ( let i = 1; i < numColumns; i++ ) {
+                        // if its a totals column
+                        if (i < 2 || (i+1) % 2) {
+                            total = sum(api.column( i ).data())
+                            $( api.column( i ).footer() ).html( total )
+
+                        // else its an averages column
+                        } else {
+                            // average the totals from the previous column instead of averaging averages
+                            average = total / numUsers
+                            $( api.column( i ).footer() ).html(  average.toFixed(2))
+                        }
+                    }
+                }
             });
         });
     </script>
