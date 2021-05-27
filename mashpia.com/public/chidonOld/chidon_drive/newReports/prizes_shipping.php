@@ -30,10 +30,13 @@ $shipments = [
 ];
 
 // limits prize id's to school id's for certain shipments
-// array of first prize id, then shipment number, then school id's
+// array of prize id, shipment number, school id's
 $limits = [
+    7   =>  [
+        1   =>  [81, 7, 54, 255, 13, 33, 63, 49, 192, 60, 613, 21, 37, 105, 577, 9, 471, 263, 84, 80, 50, 5, 45, 106, 58, 2, 176]
+    ],
     8   =>  [
-
+        1   =>  [517, 4, 162, 84, 470, 39, 80, 50, 5, 45, 106, 58, 2, 176, 615, 19, 42, 185, 472, 263, 483, 81]
     ],
     29  =>  [
         3   =>  [7, 255]
@@ -41,7 +44,7 @@ $limits = [
 ];
 
 // list of schools that need break down of totals by classes
-$schools_by_classes = [9, 30, 54, 255];
+$schools_by_classes = [7, 9, 30, 54, 255];
 
 $children = [];
 $children_parents = [];
