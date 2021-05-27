@@ -3,14 +3,14 @@ import * as actions from './actions';
 import _ from 'lodash'
 
 /**
- * function mergeEnrollmentResponses
+ * function mergeEnrollmentsResponses
  * 
- * adds the ability to select multiple classes by merging the responses together
+ * adds the ability to select multiple classes by merging the api responses for each class together
  * 
  * @param {object[][]} Responses an array of responses each containing an array of enrollmentItems
  * @param {string} uniqueKey the key used to match array items across responses
  */
- function mergeEnrollmentResponses (responses, uniqueKey) {
+ function mergeEnrollmentsResponses (responses, uniqueKey) {
   return responses.reduce(
     (responseA, responseB) => {
       // get all {{uniqueKey}} names from both responses so they can be merged correctly
@@ -33,17 +33,16 @@ function mergeEnrollment(enrollmentA, enrollmentB) {
   if (enrollmentA.enrolled || enrollmentB.enrolled) { mergedEnrollment.enrolled = true }
   if (enrollmentA.labels || enrollmentB.labels) {
     const labelKeys = _.uniq(enrollmentA.labels.map(r => r.label).concat(enrollmentB.labels.map(r => r.label)))
-    console.log(labelKeys)
     mergedEnrollment.labels = labelKeys.map(labelKey => {
       const labelA = _.find(enrollmentA.labels, {label: labelKey})
       const labelB = _.find(enrollmentB.labels, {label: labelKey})
-      return mergeLabels(labelA, labelB)
+      return mergeLabel(labelA, labelB)
     })
   }
   return mergedEnrollment
 }
 
-function mergeLabels(labelA, labelB) {
+function mergeLabel(labelA, labelB) {
   if (!labelA) { return labelB }
   if (!labelB) { return labelA }
   const mergedLabel = { ...labelA }
@@ -80,12 +79,13 @@ function mergeSchoolTypes(schoolTypeA, schoolTypeB) {
  * @param {{school_id, class_id, class_ids, soldier_id}} data 
  */
 export const getCampaigns = data => dispatch => {
-  if (data.class_ids && data.class_ids.length > 0) {
+  if (data.class_ids && data.class_ids.length > 0 && !data.user_id) {
     return Promise.all(data.class_ids.map(class_id => {
-      return API.post( '/missions/personalize?action=getCampaigns', {...data, class_id } )
+      const {class_ids, ...dataWithoutClass_ids } = data
+      return API.post( '/missions/personalize?action=getCampaigns', {...dataWithoutClass_ids, class_id } )
     }))
       .then(responses => {
-        const campaigns = mergeEnrollmentResponses(responses, 'subject_id')
+        const campaigns = mergeEnrollmentsResponses(responses, 'subject_id')
         dispatch( actions.setCampaigns( campaigns ) );
         return campaigns;
       })
@@ -108,12 +108,13 @@ export const getCampaigns = data => dispatch => {
 export const getTasks = ( subject_id, data ) => dispatch => {
   data = { ...data, subject_id };
 
-  if (data.class_ids && data.class_ids.length > 0) {
+  if (data.class_ids && data.class_ids.length > 0 && !data.user_id) {
     return Promise.all(data.class_ids.map(class_id => {
-      return API.post( '/missions/personalize?action=getTasks', {...data, class_id } )
+      const {class_ids, ...dataWithoutClass_ids } = data
+      return API.post( '/missions/personalize?action=getTasks', {...dataWithoutClass_ids, class_id } )
     }))
       .then(responses => {
-        const tasks = mergeEnrollmentResponses(responses, 'task')
+        const tasks = mergeEnrollmentsResponses(responses, 'task')
         dispatch( actions.setTasks( subject_id, tasks ) );
         return tasks;
       })
@@ -137,12 +138,13 @@ export const getTasks = ( subject_id, data ) => dispatch => {
 export const getMissions = ( subject_id, task, data ) => dispatch => {
   data = { ...data, subject_id, task };
 
-  if (data.class_ids && data.class_ids.length > 0) {
+  if (data.class_ids && data.class_ids.length > 0 && !data.user_id) {
     return Promise.all(data.class_ids.map(class_id => {
-      return API.post( '/missions/personalize?action=getMissions', {...data, class_id } )
+      const {class_ids, ...dataWithoutClass_ids } = data
+      return API.post( '/missions/personalize?action=getMissions', {...dataWithoutClass_ids, class_id } )
     }))
       .then(responses => {
-        const missions = mergeEnrollmentResponses(responses, 'name')
+        const missions = mergeEnrollmentsResponses(responses, 'name')
         dispatch( actions.setMissions( subject_id, task, missions ) );
         return missions;
       })
@@ -167,9 +169,10 @@ export const personalize = ( updates, data ) => dispatch => {
   // update the UI
   dispatch( actions.personalize( updates ) );
   // call the API
-  if (data.class_ids && data.class_ids.length > 0) {
+  if (data.class_ids && data.class_ids.length > 0 && !data.user_id) {
     return Promise.all(data.class_ids.map(class_id => {
-      return API.post( '/missions/personalize', {...data, class_id } );
+      const {class_ids, ...dataWithoutClass_ids } = data
+      return API.post( '/missions/personalize', {...dataWithoutClass_ids, class_id } );
     }))
   }
   return API.post( '/missions/personalize', data );

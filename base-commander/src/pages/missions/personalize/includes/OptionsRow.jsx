@@ -34,11 +34,7 @@ const OptionsRow = props => {
           openMenuOnFocus={ false }
           placeholder='All Platoons'
           isDisabled={ !isBC( login.code ) }
-          onChange={ selections => {
-            console.log("OptionsRow selections", selections)
-            selections && onSelectChange('class_id')(selections.length === 1 ? selections[0] : false);
-            selections && onMultiSelectChange('class_ids')(selections)
-          }} />
+          onChange={ onMultiSelectChange('class_ids')} />
       </Col>
 
       <Col sm={6}>
@@ -48,7 +44,6 @@ const OptionsRow = props => {
           registeredOnly
           value={ user_id }
           classIds={ class_ids}
-          // classId={ class_id }
           schoolId={ school_id }
           openMenuOnFocus={ false } 
           placeholder='All Soldiers' 
