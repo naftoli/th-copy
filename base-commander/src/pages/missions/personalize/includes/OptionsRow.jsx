@@ -42,8 +42,9 @@ const OptionsRow = props => {
         <SoldierSelect
           isClearable
           registeredOnly
+          onlyReloadSoldiersIfNotLoaded
           value={ user_id }
-          classIds={ class_ids}
+          classIds={ class_ids }
           schoolId={ school_id }
           openMenuOnFocus={ false } 
           placeholder='All Soldiers' 

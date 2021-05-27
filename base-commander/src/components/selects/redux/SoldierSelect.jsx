@@ -24,7 +24,13 @@ export class SoldierSelect extends Component {
 
   static defaultProps = {
     showAllOption: false,
-    registeredOnly: false
+    registeredOnly: false,
+
+    // I don't know why the soldiers are reloaded so often
+    // being that **all** soldiers are loaded and the filters are only applied at render
+    // the onlyReloadSoldiersIfNotLoaded prop stops soldiers from being reloaded unless they arn't loaded yet
+    // hopefully over time this can be added everywhere that the SoldierSelect is used and become the default
+    onlyReloadSoldiersIfNotLoaded: false
   }
 
   componentDidMount() {
@@ -52,8 +58,10 @@ export class SoldierSelect extends Component {
   }
 
   loadSoldiers = () => {
-    return this.props.getSoldiers()
-      .catch(e => toast.error(e.message));
+    if (!this.props.onlyReloadSoldiersIfNotLoaded || !(this.props.soldiers && this.props.soldiers.length > 0)) {
+      return this.props.getSoldiers()
+        .catch(e => toast.error(e.message));
+    }
   }
 
   getOptions = () => {
