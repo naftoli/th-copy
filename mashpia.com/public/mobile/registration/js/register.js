@@ -296,6 +296,8 @@ var registrationApp = function() {
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-4';
         showSection("step-4");
+
+        console.log(state.cart)
         
         var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
         if ( total === 0 ){
@@ -382,7 +384,7 @@ var registrationApp = function() {
         var Err10 = "You must enter the name of the school that you are attending.";
         var Err11 = "You must indicate your acceptance of participation in Tzivos Hashem Media.";
         var Err12 = "Could not update Profile Picture. We will try again when pressing 'Confirm'.";
-        //var Err13 = "";
+        var Err13 = "You must choose how you prefer your name to be displayed!";
         //var Err14 = "";
         //var Err15 = "";
         //var Err16 = "";
@@ -416,6 +418,7 @@ var registrationApp = function() {
              Err10 = "חובה להכניס את שם בית הספר או תלמוד תורה בו אתם לומדים";
              Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
              Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
+             Err13 = ""
         }
 
         event.preventDefault();
@@ -463,6 +466,15 @@ var registrationApp = function() {
         }
 
         if ( selected_charges.chidon === true ) {
+            // check that name preference is checked
+            if (
+                $("input.nameChoice")[0].checked == false
+                &&
+                $("input.nameChoice")[1].checked == false
+            ) {
+                return showError(Err13)
+            }
+
             // check that book was selected
             if ( $("select#chidon-book").val() == 0 ) {
                 return showError(Err2);
@@ -584,7 +596,8 @@ var registrationApp = function() {
                     }, 
                     recruited: $(".recruit:checked").val(), 
                     recruitedBy: $("#user").val(), 
-                    poll: poll 
+                    poll: poll,
+                    name_pref: $("input.nameChoice:checked").val()
                 }
             });
         }
@@ -898,6 +911,15 @@ var templates = function(){
             if ( !user['registrationStatus']['khk'] ) {
                 $("#khk").show()
                 $("#khk input")[0].checked = false
+                if (parseInt(user.khk_reg)) $("#khk input")[0].checked = true
+            }
+
+            // reset name preference
+            $("input.nameChoice")[0].checked = false
+            $("input.nameChoice")[1].checked = false
+            if (user.pref_name) {
+                if (user.pref_name == 'en') $("input.nameChoice")[0].checked = true
+                else if (user.pref_name == 'he') $("input.nameChoice")[1].checked = true
             }
             
             // reset the book field
