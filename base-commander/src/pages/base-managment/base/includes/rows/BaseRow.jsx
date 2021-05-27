@@ -21,9 +21,9 @@ export class BaseRow extends Component {
       <Row>
         <Col xs={12} sm={6}>
           <label>Base Name (Public)</label>
-          <Input { ...inputProps } name='school_name'
-            pattern='^[a-zA-Z ]{3,255}$'    value={ school_name || '' }
-            maxLength={ 255 }       title="3 to 255 English letters" />
+          <Input { ...inputProps }        name='school_name'
+            pattern='^[a-zA-Z ,]{3,255}$' value={ school_name || '' }
+            maxLength={ 255 }             title="3 to 255 English letters" />
 
           <div className='invalid-message'>Please enter 3 or more <em>English</em> letters</div>
         </Col>

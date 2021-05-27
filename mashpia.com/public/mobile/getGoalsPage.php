@@ -2,8 +2,8 @@
 //error_reporting(E_ALL);
 ini_set("display_errors", 1);
 require_once '../db.php';
-$user_id = mysql_real_escape_string( $_GET['id'] ); // get the user id
-$version = mysql_real_escape_string( $_GET['v'] ); // get the version of the API
+$user_id = mysql_real_escape_string( isset($_GET['id']) ? $_GET['id'] : 0 ); // get the user id
+$version = mysql_real_escape_string( isset($_GET['v']) ? $_GET['v'] : 0 ); // get the version of the API
 
 $sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level, u.allow_parent_tasks, u.parent_marking from users u "
 		."join user_tracks ut using (user_id) "
@@ -52,19 +52,19 @@ $campaigns = $both['campaigns'];
 //$enrolled = $both['enrolled'];
 
 $campaignLogos = array(
-	1	=>	'Tehillim.gif',
-	4	=>	'Tefilla.gif',
-	12	=>	'Mivtzoim.gif',
-	13	=>	'Niggunim.gif',
-	16	=>	'hiskashrus.gif',
-	21	=>	'sefer-hamitzvos.gif',
-	27	=>	'tanya.gif',
-	40	=>	'Yom-Dipagra.gif',
-	41	=>	'Father-Son.gif',
-	42	=>	'Footsteps.gif',
-	45	=>	'Cheshbon-Hanefesh.gif',
-	90	=>	'Chitas.gif',
-	100	=>	'Brias-Haguf.gif'
+	1	=>	'Tehillim.svg',
+	4	=>	'Tefilla.svg',
+	12	=>	'Mivtzoim.svg',
+	13	=>	'Niggunim.svg',
+	16	=>	'hiskashrus.svg',
+	21	=>	'sefer-hamitzvos.svg',
+	27	=>	'tanya.svg',
+	40	=>	'Yom-Dipagra.svg',
+	41	=>	'Father-son.svg',
+	42	=>	'Footsteps.svg',
+	45	=>	'Cheshbon-Hanefesh.svg',
+	90	=>	'Chitas.svg',
+	100	=>	'Brias-Haguf.svg'
 );
 
 if (isset($_GET['app'])) define('HOME', 'mission_report');
@@ -485,4 +485,3 @@ include 'inc/modals/enrollChild.php';
 	//});
 </script>
 <script src="js/bug_report.js"></script>
-
