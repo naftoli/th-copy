@@ -392,6 +392,7 @@ var registrationApp = function() {
         //var Err18 = "";
         //var Err19 = "";
         //var Err20 = "";
+        var picError = "You must upload a picture of your child!"
 
         if (localStorage.getItem("locallang") == "he") {
              Msg1 = "ההרשמה לצבאות ה' עבור ";
@@ -419,9 +420,15 @@ var registrationApp = function() {
              Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
              Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
              Err13 = ""
+             picError = ""
         }
 
         event.preventDefault();
+
+        // make sure picture is uploaded
+        if ($("#user-img").attr('src').includes('addphoto.png')) {
+            return showError(picError)
+        }
         
         // update the user's information
         var postData = {};  var user_changed = false;
