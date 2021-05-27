@@ -163,7 +163,7 @@ $positioning = [
                                 $medal = $medalInfo[0];
                                 $showLight = intval($medalInfo[1]);
                                 $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
-                                echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' ";
+                                echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' style=' padding: 3px; height: 94px; '";
                                 if ( $showLight == 1 ) echo "class='light'";
                                 echo "/></div>";
                             }
