@@ -33,7 +33,6 @@ export class SoldierSelect extends Component {
 
   // update if the login changed or the schoolId/classId/classIds prop changed
   componentDidUpdate({ schoolId: prevSchoolId, classId: prevClassId, classIds: prevClassIds }) {
-    console.log("SoldiersSelect componentDidUpdate", { prevSchoolId, prevClassId, prevClassIds })
     // if the school ID changed, get the new platoons into redux
     const { schoolId, value, isClearable, isMulti, classId, classIds } = this.props;
     if ((prevSchoolId !== schoolId) || (prevClassId !== classId || !_.isEqual(prevClassIds, classIds))) {

@@ -14,28 +14,62 @@ import _ from 'lodash'
   return responses.reduce(
     (responseA, responseB) => {
       // get all {{uniqueKey}} names from both responses so they can be merged correctly
-      // even when the classes have identicly sized and ordered responses
-      const keys = _.uniq(
-        responseA.map(r => r[uniqueKey]).concat(
-          responseB.map(r => r[uniqueKey])
-        )
-      )
-      const mergeResponse = keys.map(key => {
+      // even when the enrollments aren't identicly sized and ordered
+      const uniqueKeys = _.uniq(responseA.map(r => r[uniqueKey]).concat(responseB.map(r => r[uniqueKey])))
+      const mergedResponse = uniqueKeys.map(key => {
         const enrollmentA = _.find(responseA, {[uniqueKey]: key})
         const enrollmentB = _.find(responseB, {[uniqueKey]: key})
-        if (!enrollmentA) { return enrollmentB }
-        if (!enrollmentB) { return enrollmentA }
-        const mergedEnrollment = {...enrollmentA }
-        if (enrollmentA.enrolled || enrollmentB.enrolled) { mergedEnrollment.enrolled = true }
-        if (enrollmentA.labels || enrollmentB.labels) {
-          // todo: merge labels for tasks enrollments
-        }
-        return mergedEnrollment
+        return mergeEnrollment(enrollmentA, enrollmentB)
       })
-      console.log("merged responses a with b to c using key", responseA, responseB, mergeResponse, uniqueKey)
-      return mergeResponse
+      return mergedResponse
     }
   );
+}
+
+function mergeEnrollment(enrollmentA, enrollmentB) {
+  if (!enrollmentA) { return enrollmentB }
+  if (!enrollmentB) { return enrollmentA }
+  const mergedEnrollment = { ...enrollmentA }
+  if (enrollmentA.enrolled || enrollmentB.enrolled) { mergedEnrollment.enrolled = true }
+  if (enrollmentA.labels || enrollmentB.labels) {
+    const labelKeys = _.uniq(enrollmentA.labels.map(r => r.label).concat(enrollmentB.labels.map(r => r.label)))
+    console.log(labelKeys)
+    mergedEnrollment.labels = labelKeys.map(labelKey => {
+      const labelA = _.find(enrollmentA.labels, {label: labelKey})
+      const labelB = _.find(enrollmentB.labels, {label: labelKey})
+      return mergeLabels(labelA, labelB)
+    })
+  }
+  return mergedEnrollment
+}
+
+function mergeLabels(labelA, labelB) {
+  if (!labelA) { return labelB }
+  if (!labelB) { return labelA }
+  const mergedLabel = { ...labelA }
+  const schoolTypeKeys = _.uniq(labelA.school_types.map(st => st.type).concat(labelB.school_types.map(st => st.type)))
+  mergedLabel.school_types = schoolTypeKeys
+    .map(schoolTypeKey => {
+      const schoolTypeA = _.find(labelA.school_types, {type: schoolTypeKey})
+      const schoolTypeB = _.find(labelB.school_types, {type: schoolTypeKey})
+      return mergeSchoolTypes(schoolTypeA, schoolTypeB)
+    })
+  return mergedLabel
+}
+
+function mergeSchoolTypes(schoolTypeA, schoolTypeB) {
+  if (!schoolTypeA) { return schoolTypeB }
+  if (!schoolTypeB) { return schoolTypeA }
+  const mergedschoolType = { ...schoolTypeA }
+  const gradeKeys = _.uniq(schoolTypeA.grades.map(r => r.grade).concat(schoolTypeB.grades.map(r => r.grade)))
+  mergedschoolType.grades = gradeKeys
+    .map(gradeKey => {
+      const GradeA = _.find(schoolTypeA.grades, {grade: gradeKey})
+      const GradeB = _.find(schoolTypeB.grades, {grade: gradeKey})
+      return GradeA || GradeB
+    })
+    .sort((GradeA,GradeB) => GradeA.level > GradeB.level ? 1 : GradeB.level > GradeA.level ? -1 : 0)
+  return mergedschoolType
 }
 
 /**
