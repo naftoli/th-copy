@@ -15,7 +15,7 @@ $start_dates_to_hachayol_issues = [
     2459111 => 420,
     2459118 => 421,
     2459125 => 422,
-    // skips week
+    // skips week for succos
     2459139 => 423,
     2459146 => 424,
     2459153 => 425,
@@ -32,7 +32,7 @@ $start_dates_to_hachayol_issues = [
     2459230 => 436,
     2459237 => 437,
     2459244 => 438,
-    2459251 => 439,
+    // 2459251 => 439, used as demo with placeholder names
     2459258 => 440,
     2459265 => 441,
     2459272 => 442,
@@ -40,13 +40,14 @@ $start_dates_to_hachayol_issues = [
     2459286 => 444,
     2459293 => 445,
     2459300 => 446,
-    // skips week
+    // skips week for pesach
     2459314 => 447,
     2459321 => 448,
     2459328 => 449,
     2459335 => 450,
-    2459342 => 451,
-    2459349 => 452
+    // 2459342 => 451, missing file
+    2459349 => 452,
+    2459356 => 453
 ];
 
 // get logos for schools
@@ -122,9 +123,9 @@ foreach ($schools as $school_id => $school) {
                 font-size: 25px;
                 text-align: center;
             }
-            .school {
+            .off-page {
                 page-break-after: always;
-                margin-bottom: 52px;
+                margin: 30px;
             }
         </style>
     </head>
@@ -132,21 +133,25 @@ foreach ($schools as $school_id => $school) {
         <?php
         function renderPoster($school, $week, $winners) {
             global $start_dates_to_hachayol_issues;
+            $issue_number = array_key_exists($week['start_date'], $start_dates_to_hachayol_issues) ? $start_dates_to_hachayol_issues[$week['start_date']] : false;
+            if (!$issue_number) {
+                echo "<div class='off-page'>missing {$week['name']} posters</div>";
+                return;
+            }
             ?>
-                <div class='poster' style='background-image: url( "./templates/Mission Marathon Prizes 5781-<?=$start_dates_to_hachayol_issues[$week['start_date']]?>.jpg" ); '>
+                <div class='poster' style='background-image: url( "./templates/Mission Marathon Prizes 5781-<?=$issue_number?>.jpg" ); '>
                     <div class='names'>
-                        <!-- <div class='name'> <?=$week['name']?> - <?=$week['start_date']?> - <?=$start_dates_to_hachayol_issues[$week['start_date']]?> </div> -->
+                        <!-- <div class='name'> <?=$week['name']?> - <?=$week['start_date']?> - <?=$issue_number?> </div> -->
                         <? foreach ($winners as $winner) { ?>
                             <div class='name'> <?= $winner['first'] ?> <?= $winner['last'] ?> </div>
                         <? } ?>
                     </div>
-                    <!-- <div class='schoolInfo'> <?= $school ?></div> -->
                 </div>
             <?
         }
 
         foreach ($winners as $school => $info) {
-            if ( isset( $schools[$school] ) ) echo "<h2 class='school'>School: " . $schools[$school] . "</h2>";
+            if ( isset( $schools[$school] ) ) echo "<h2 class='off-page'>School: " . $schools[$school] . "</h2>";
             foreach ($info as $week_name => $all_winners) {
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
