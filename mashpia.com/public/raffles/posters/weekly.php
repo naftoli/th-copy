@@ -11,6 +11,44 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
+$start_dates_to_hachayol_issues = [
+    2459111 => 420,
+    2459118 => 421,
+    2459125 => 422,
+    // skips week
+    2459139 => 423,
+    2459146 => 424,
+    2459153 => 425,
+    2459160 => 426,
+    2459167 => 427,
+    2459174 => 428,
+    2459181 => 429,
+    2459188 => 430,
+    2459195 => 431,
+    2459202 => 432,
+    2459209 => 433,
+    2459216 => 434,
+    2459223 => 435,
+    2459230 => 436,
+    2459237 => 437,
+    2459244 => 438,
+    2459251 => 439,
+    2459258 => 440,
+    2459265 => 441,
+    2459272 => 442,
+    2459279 => 443,
+    2459286 => 444,
+    2459293 => 445,
+    2459300 => 446,
+    // skips week
+    2459314 => 447,
+    2459321 => 448,
+    2459328 => 449,
+    2459335 => 450,
+    2459342 => 451,
+    2459349 => 452
+];
+
 // get logos for schools
 $logos = array();
 foreach ($schools as $school_id => $school) {
@@ -24,12 +62,12 @@ foreach ($schools as $school_id => $school) {
 // get raffle id's
 $k = 1;
 $raffles = array();
-$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year;
+$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $raffles[$row['raffle_id']] = $row;
     // map raffle id's to week number
-    $weeks[$row['name']] = $k++;
+    $weeks[$row['name']] = $row;
 }
 
 // get winners
@@ -62,80 +100,58 @@ foreach ($schools as $school_id => $school) {
                 font-family: School;
                 src: url('Fonts/Heebo-Regular.ttf');
             }
-            .winner {
+            .poster {
                 width: 7.5in;
                 height: 10in;
                 page-break-after: always;
                 background-repeat: no-repeat;
                 margin-left: 30px;
+                position: relative;
             }
             .names {
-                top: 6in;
-                position: relative;
+                top: 7.6in;
+                position: absolute;
                 line-height: 1.6;
+                text-transform: uppercase;
+                width: 100%;
+                padding-left: 6px;
+                color: white;
             }
             .name {
                 font-family: Gotham;
-                font-size: 30px;
+                font-size: 25px;
                 text-align: center;
-                width: 6in;
-                margin-left: 90px;
             }
             .school {
                 page-break-after: always;
-            }
-            .schoolInfo {
-                font-family: School;
-                font-size: 20px;
-                position: relative;
-                bottom: 1.3in;
-                left: 5.5in;
-                width: 200px;
-                overflow-wrap: break-word;
-                text-align: center;
-            }
-            /* @media screen {
-                .winner {
-                    padding-top: 20px;
-                    padding-bottom: 20px;
-                }
-            } */
-            <?php
-            // generate 26 different ids with different background pics
-            for ( $i = 1; $i <= 43; $i++ ) {
-                $urls[$i] = "Weekly-Prize-Poster-Template_Part$i.jpg";
-            }
-            foreach ( $urls as $i => $url ) {
-                echo "#week$i {";
-                echo "background-image: url( $url );";
-                echo "}";
-            } 
-            ?>
-            #week1 {
-                margin-top: 52px;
+                margin-bottom: 52px;
             }
         </style>
     </head>
     <body>
         <?php
+        function renderPoster($school, $week, $winners) {
+            global $start_dates_to_hachayol_issues;
+            ?>
+                <div class='poster' style='background-image: url( "./templates/Mission Marathon Prizes 5781-<?=$start_dates_to_hachayol_issues[$week['start_date']]?>.jpg" ); '>
+                    <div class='names'>
+                        <!-- <div class='name'> <?=$week['name']?> - <?=$week['start_date']?> - <?=$start_dates_to_hachayol_issues[$week['start_date']]?> </div> -->
+                        <? foreach ($winners as $winner) { ?>
+                            <div class='name'> <?= $winner['first'] ?> <?= $winner['last'] ?> </div>
+                        <? } ?>
+                    </div>
+                    <!-- <div class='schoolInfo'> <?= $school ?></div> -->
+                </div>
+            <?
+        }
+
         foreach ($winners as $school => $info) {
             if ( isset( $schools[$school] ) ) echo "<h2 class='school'>School: " . $schools[$school] . "</h2>";
-            foreach ($info as $raffle => $names) {                
-                echo "<div class='winner' id='week" . $weeks[$raffle] . "'><div class='names'>";
-                $j = 0;
-                foreach ($names as $name) {                    
-                    // after 4 names create new page
-                    if (++$j > 4) {
-                        echo "</div></div>";
-                        echo "<div class='schoolInfo'>" . $schools[$school] . "</div>";
-                        echo "<div class='winner' id='week" . $weeks[$raffle] . "'><div class='names'>";
-                        $j = 0;
-                    }
-                    echo "<div class='name'>" . strtoupper($name['first'] . ' ' . $name['last']) . "</div>";
+            foreach ($info as $week_name => $all_winners) {
+                $winners_by_poster = array_chunk($all_winners, 4);
+                foreach($winners_by_poster as $winners) {
+                    renderPoster($schools[$school], $weeks[$week_name], $winners);
                 }
-                echo "</div></div>";
-                //echo "<div class='schoolInfo'><img src='" . $_SERVER['SERVER_NAME'] . "/mission_report/schoolLogos/" . $logos[$school] . "' width=80 /><br />" . $schools[$school] . "</div>";
-                echo "<div class='schoolInfo'>" . $schools[$school] . "</div>";
             }
         }
         ?>
