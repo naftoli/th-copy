@@ -915,7 +915,7 @@ var templates = function(){
             }
 
             // show khk if relevant
-            if ( !user['registrationStatus']['khk'] ) {
+            if ( user['registrationStatus']['khk'] ) {
                 $("#khk").show()
                 $("#khk input")[0].checked = false
                 if (parseInt(user.khk_reg)) $("#khk input")[0].checked = true
