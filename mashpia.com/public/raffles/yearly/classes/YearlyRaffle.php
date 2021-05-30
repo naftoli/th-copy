@@ -12,7 +12,7 @@ use \DBAdapter;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 class YearlyRaffle {
-    private $DAY_COUNT = 180;
+    private $days_of_tasks
     private $db_conn;
     private $year;
     private $deadline;
@@ -33,12 +33,13 @@ class YearlyRaffle {
     public function __construct($db_conn = false) {
         // create a new DB adapter if one is not provided
         $db_conn ? $this->db_conn = $db_conn : $this->db_conn = new DBAdapter();
-        $this->year  = GlobalSettings::getCurrentYear();
+        $this->year = GlobalSettings::getCurrentYear();
         // find raffle 180
         $result = $this->db_conn->query("select * from raffles where type = 'yearly' order by year desc limit 1");
         $row = $result->fetch_assoc();
         $this->deadline = $row['end_date'];
         $this->start = $row['start_date'];
+        $this->days_of_tasks = $row['days_of_tasks'] ?? Constants::get_yearly_task_requirment();
         $this->grid_id = 13012;
         $this->cutoff = 2459171;
     }
@@ -93,7 +94,7 @@ class YearlyRaffle {
         $users_sql = "SELECT user_id, user_serial, school_name, first, last, days, class_grade, class_sub"
             ." FROM user_yearly_raffle JOIN users USING (user_id) "
             ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-            ." WHERE days >= " . $this->DAY_COUNT . " "
+            ." WHERE days >= " . $this->days_of_tasks . " "
             ." AND year = " . $this->year . " "
             .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
             ." ORDER BY school_name, class_grade, class_sub, last, first, days ";
@@ -230,7 +231,7 @@ class YearlyRaffle {
      * @return int
      */
     public function getDayCount() {
-        return $this->DAY_COUNT;
+        return $this->days_of_tasks;
     }
 
     public function getYear() {
