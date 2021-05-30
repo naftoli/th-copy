@@ -73,7 +73,7 @@ foreach ( $schoolsUsers as $school => $users ) {
             }
             echo "</table></div><div style='page-break-after: always'></div>";
         } else if ( $raffle->type == 'monthly' ) {
-            $required = Constants::get_monthly_task_requirment();
+            $required = ($raffle->days_of_tasks ?? Constants::get_monthly_task_requirment());
             $daysLeft = $raffle->end_date - unixtojd();
             echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";

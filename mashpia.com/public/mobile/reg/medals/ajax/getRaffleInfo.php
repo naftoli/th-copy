@@ -51,7 +51,7 @@ function checkMonthly( $user_id ) {
     if ( $raffle === false ) return false;
 
 	$total = checkDaily( $user_id, $raffle );
-	$required = Constants::get_monthly_task_requirment();
+	$required = ($raffle['days_of_tasks'] ?? Constants::get_monthly_task_requirment());
 
 	if ($total < $required && checkOveride($user_id, $raffle['raffle_id'])) $total = $required;
 
@@ -99,7 +99,7 @@ function checkWeekly( $user_id ) {
     if ( $raffle === false ) return false;
 
 	$total = checkDaily( $user_id, $raffle );
-	$required = Constants::get_weekly_task_requirment();
+	$required = ($raffle['days_of_tasks'] ?? Constants::get_weekly_task_requirment());
 
 	if ($total < $required && checkOveride($user_id, $raffle['raffle_id'])) $total = $required;
 
@@ -205,7 +205,7 @@ function formatRaffleInfo( $total, $required, $raffle_name, $type ){
 
 function getRaffle( $type ) {
 	$today = unixtojd();
-	$sql = "SELECT raffle_id, start_date, end_date, name FROM raffles
+	$sql = "SELECT raffle_id, start_date, end_date, name, days_of_tasks FROM raffles
 			WHERE type = '" . $type . "'
 			AND start_date <= " . $today . "
             AND end_date >= " . $today;

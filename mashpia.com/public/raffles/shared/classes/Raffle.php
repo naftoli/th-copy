@@ -26,6 +26,7 @@ class Raffle
     public $date_ran; // the date it actually ran
     public $show_on_mobile; // if it should be shown on the mobile website
     public $year; // raffle year
+    public $days_of_tasks; // amount of days with completed tasks required to be in raffle
 
     // not in DBS
     public $prizes = []; // by default the prizes is an empty array
@@ -317,7 +318,7 @@ class Raffle
 //                }
                 // check if they are eligible
                 $total = $this->checkWeekly($user_id);
-                if ($total >= Constants::get_weekly_task_requirment())
+                if ($total >= ($this->days_of_tasks ?? Constants::get_weekly_task_requirment()))
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                 //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
 
@@ -327,11 +328,11 @@ class Raffle
 
             } else if ($this->type == 'monthly') { // if it is monthly, do the monthly checks.
                 $total = $this->checkMonthly($user_id);
-                if ($total >= Constants::get_monthly_task_requirment()) // we need 60 days
+                if ($total >= ($this->days_of_tasks ?? Constants::get_monthly_task_requirment())) // we need 60 days
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                 //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
 
-//                else if($total >= Constants::get_monthly_task_requirment() - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
+//                else if($total >= ($this->days_of_tasks ?? Constants::get_monthly_task_requirment()) - 12){ // if it is between 48 and 60 we can check each week to see if we get 60.
 //                    $start_date = $this->start_date; // default to this start date
 //                    $end_date = $this->start_date + 6; // get the end date for the first week
 //                    // TODO, iterate and check for additional marks...
@@ -348,7 +349,7 @@ class Raffle
 //                        $end_date = $start_date + 6; // get the end date for the first week
 //
 //                        if($update_total_row['total'] > 0) $total++; // if the total from the query is greater then 0, add one more "day"
-//                        if($total == Constants::get_monthly_task_requirment()) {
+//                        if($total == ($this->days_of_tasks ?? Constants::get_monthly_task_requirment())) {
 //                            // if it reaches 60, add it to the user_id
 //                            $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
 //                        }
@@ -568,7 +569,7 @@ class Raffle
 
     public function checkMonthly($user_id)
     {
-        $required = Constants::get_monthly_task_requirment();
+        $required = ($this->days_of_tasks ?? Constants::get_monthly_task_requirment());
         $rollover = 2459171;
         if ($this->start_date < $rollover) {
             $total = $this->checkDaily($user_id);
@@ -610,7 +611,7 @@ class Raffle
 
     public function checkWeekly($user_id)
     {
-        $required = Constants::get_weekly_task_requirment();
+        $required = ($this->days_of_tasks ?? Constants::get_weekly_task_requirment());
         $rollover = 2459167;
         if ($this->start_date < $rollover) {
             $total = $this->checkDaily($user_id);
@@ -656,12 +657,5 @@ class Raffle
         $daily_query = mysql_query($daily_sql); // run the query
         $total = mysql_num_rows($daily_query); // get the number of marks
         return $total;
-    }
-
-    function instantiated_start_date() {
-        return DateTime::createFromFormat("m/d/Y", jdtogregorian($this->start_date));
-    }
-    function instantiated_end_date() {
-        return DateTime::createFromFormat("m/d/Y", jdtogregorian($this->end_date));
     }
 }

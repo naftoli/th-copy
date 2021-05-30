@@ -21,13 +21,13 @@ class ConstantsTest extends TestCase {
         $this->assertEquals(100, array_sum($subject), "Assert that the sum of all the max amounts is 100");
         $this->assertEquals(0, $subject[82], "Assert that the test school (id 82) has 0 prizes");
     }
-    // tets the weekly task requirment total
+    // test the weekly task requirment total
     public function testGetWeeklyTaskRequirment() {
         $subject = Constants::get_weekly_task_requirment();
         
         $this->assertEquals(5, $subject, "Total Weekly Task Requirment is set to 5");
     }
-    // tets the monthly task requirment total
+    // test the monthly task requirment total
     public function testGetMonthlyTaskRequirment() {
         $subject = Constants::get_monthly_task_requirment();
         
