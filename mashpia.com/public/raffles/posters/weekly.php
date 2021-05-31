@@ -94,6 +94,11 @@ foreach ($schools as $school_id => $school) {
         <meta charset="utf8" />
         <style>
             @font-face {
+                font-family: Baloo;
+                src: url('Fonts/Baloo-Regular.ttf');
+            }
+
+            @font-face {
                 font-family: Gotham;
                 src: url('Fonts/GothamNarrow-Bold_1.otf');
             }
@@ -110,17 +115,14 @@ foreach ($schools as $school_id => $school) {
                 position: relative;
             }
             .names {
-                top: 7.6in;
+                top: 7.59in;
                 position: absolute;
-                line-height: 1.6;
-                text-transform: uppercase;
+                line-height: 1.7;
                 width: 100%;
-                padding-left: 6px;
+                padding-left: 6px; /* match template text centering */
                 color: white;
-            }
-            .name {
-                font-family: Gotham;
-                font-size: 25px;
+                font-family: Baloo, Gotham, serif;
+                font-size: 28px;
                 text-align: center;
             }
             .off-page {

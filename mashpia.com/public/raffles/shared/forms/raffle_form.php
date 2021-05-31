@@ -57,7 +57,6 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     /********************* VALIDATE DATES **********************/
     $raffle_props['type'] = $_POST['type']; // set the type
     $raffle_props['days_of_tasks'] = $_POST['days_of_tasks']; // set the required days of tasks
-    $logger->debug($raffle_props['days_of_tasks']);
     $raffle_props['start_date'] = parseDatetoJd($_POST['start_date']); // get the start date
     $raffle_props['end_date'] = parseDatetoJd($_POST['end_date']); // get the end date
     if (!in_array($_POST['type'], ["weekly", "monthly"])) {
@@ -122,7 +121,6 @@ if ($action == "update" && !$valid){
     $raffle->name = $raffle_props['name'];
     $raffle->type = $_POST['type'];
     $raffle->days_of_tasks = $raffle_props['days_of_tasks'];
-    $logger->debug($raffle_props['days_of_tasks']);
     $raffle->run_date = $raffle_props['run_date'];
     $raffle->start_date = $raffle_props['start_date'];
     $raffle->end_date = $raffle_props['end_date'];
