@@ -5,13 +5,14 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
 $super = $admin_user['auth'] == 'super';
 
 $year = GlobalSettings::getChidonYear();
-$s = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
-$schools = $s->getSchools();
+$schools = [
+    61  => 'MyShliach',
+    269 => 'Anash Kinder'
+];
 
 $shipment_number = 1;
 
@@ -30,7 +31,7 @@ $limits = [
 ];
 
 // list of schools that need break down of totals by classes
-$schools_by_classes = [7, 9, 30, 54, 255];
+$schools_by_classes = [];
 
 $children = [];
 $sql = "select * from th_chidon tc 

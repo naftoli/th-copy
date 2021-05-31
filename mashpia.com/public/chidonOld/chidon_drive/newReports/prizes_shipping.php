@@ -50,7 +50,6 @@ $limits = [
 $schools_by_classes = [7, 9, 30, 54, 255];
 
 $children = [];
-$children_parents = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         join classes c on c.class_id = u.class_id 
@@ -61,7 +60,6 @@ $sql = "select * from th_chidon tc
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $children[$row['school_id']][] = $row;
-    $children_parents[$row['parent_id']][] = $row;
 }
 $grandTotals = [];
 $prizeInfo = [];
