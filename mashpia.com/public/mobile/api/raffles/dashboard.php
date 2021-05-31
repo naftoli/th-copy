@@ -7,9 +7,9 @@ $monthly = getRaffleInfo('monthly');
 $yearly = getRaffleInfo('yearly');
 
 $user_id = mysql_real_escape_string($_GET['user_id']);
-$raffle5 = 5 - checkTasks( $user_id, $weekly['start'], $weekly['end'], 'weekly' );
-$raffle60 = 60 - checkTasks( $user_id, $monthly['start'], $monthly['end'], 'monthly' );
-$raffle180 = 180 - checkTasks( $user_id, $yearly['start'], $yearly['end'], 'yearly' );
+$raffle5 = ($weekly['days_of_tasks'] ?? 5) - checkTasks( $user_id, $weekly['start'], $weekly['end'], 'weekly' );
+$raffle60 = ($monthly['days_of_tasks'] ?? 60) - checkTasks( $user_id, $monthly['start'], $monthly['end'], 'monthly' );
+$raffle180 = ($yearly['days_of_tasks'] ?? 180) - checkTasks( $user_id, $yearly['start'], $yearly['end'], 'yearly' );
 
 echo json_encode([
     'raffle5'   => [

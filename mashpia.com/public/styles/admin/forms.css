@@ -2,6 +2,7 @@
 .input_group input[type="date"],
 .input_group input[type="file"],
 .input_group input[type="email"],
+.input_group input[type="number"],
 .input_group select,
 .input_group textarea{
     width: 94%;

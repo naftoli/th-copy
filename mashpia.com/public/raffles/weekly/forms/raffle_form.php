@@ -1,5 +1,6 @@
 <?
 /***************** DEBUGGING SETTINGS **********************/
+if (!isset($debug)) { $debug = false; }
 if ($_GET['debug']) {
     //error_reporting(E_ALL);
     ini_set("display_errors", 1);
@@ -8,6 +9,9 @@ if ($_GET['debug']) {
 
 require_once(dirname(__FILE__).'/../../shared/functions.php');
 require_once($_SERVER["DOCUMENT_ROOT"].'/db.php');
+
+require_once( __DIR__ . '/../../shared/classes/Constants.php' );
+use raffles\shared\Constants as Constants;
 
 $parshos = get_parshos( $raffle->year );
 
@@ -28,13 +32,17 @@ $parshos = get_parshos( $raffle->year );
 </div>
 
 <div class="input_group input_half">
-    Or From Date: <input id="start_date" type="date" name="start_date" value="<?=$raffle->start_date ? formatJdToDate($raffle->start_date) : ""; ?>">
+    or from date: <input id="start_date" type="date" name="start_date" value="<?=$raffle->start_date ? formatJdToDate($raffle->start_date) : ""; ?>">
 </div>
 <div class="input_group input_half">
-    To Date: <input id="end_date" type="date" name="end_date" value="<?=$raffle->end_date ? formatJdToDate($raffle->end_date) : ""; ?>">
+    to date: <input id="end_date" type="date" name="end_date" value="<?=$raffle->end_date ? formatJdToDate($raffle->end_date) : ""; ?>">
 </div>
 <div class="input_group input_half">
-    Run Date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
+    Run date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
+</div>
+
+<div class="input_group input_half">
+    Required days of tasks <input type="number" name="days_of_tasks" value="<?=$raffle->days_of_tasks ?? Constants::get_weekly_task_requirment(); ?>">
 </div>
 
 <div class="action-links">
