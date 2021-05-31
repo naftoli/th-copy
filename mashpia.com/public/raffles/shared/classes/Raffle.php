@@ -177,7 +177,7 @@ class Raffle
         // generate the mysql
         $sql = "UPDATE raffles SET name='" . $this->name . "', run_date='" . $this->run_date->format("Y-m-d H:i:s") .
             "', start_date='" . $this->start_date . "', end_date='" . $this->end_date . "', type='" . $this->type .
-            "', show_on_mobile='" . $this->show_on_mobile . "'";
+            "', show_on_mobile='" . $this->show_on_mobile . "', days_of_tasks='" . $this->days_of_tasks . "'";
         if ($this->date_ran instanceof DateTime) { // if there is a datetime add it to the array
             $sql .= ", date_ran='" . $this->date_ran->format("Y-m-d H:i:s") . "'";
         }
