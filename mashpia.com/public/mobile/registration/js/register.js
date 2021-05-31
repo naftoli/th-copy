@@ -613,7 +613,8 @@ var registrationApp = function() {
                     name_pref: $("input.nameChoice:checked").val(),
                     he_name_plaque: $("#he_name_plaque").val(),
                     en_name_custom: $("#en_name_custom").val(),
-                    he_name_custom: $("#he_name_custom").val()
+                    he_name_custom: $("#he_name_custom").val(),
+                    comments: $("#comments").val()
                 }
             });
         }
@@ -928,6 +929,8 @@ var templates = function(){
                 $("#khk").show()
                 $("#khk input")[0].checked = false
                 if (parseInt(user.khk_reg)) $("#khk input")[0].checked = true
+            } else {
+                $("#khk").hide()
             }
 
             // reset name preference
