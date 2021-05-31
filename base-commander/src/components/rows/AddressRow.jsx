@@ -31,7 +31,7 @@ export class AddressRow extends Component {
           </Col>
         }
 
-        { !this.props.removeShipping && 
+        { !this.props.hideShipping && 
         <Fragment>
           <Col xs={ 12 } xl={ 6 }>
             <label>Address 1</label>
