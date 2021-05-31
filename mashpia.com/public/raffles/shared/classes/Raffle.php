@@ -197,6 +197,16 @@ class Raffle
         // and return the result
         return ($query ? true : false);
     }
+    
+    /*
+     * required_days_of_tasks()
+     *
+     * checks how many days of tasks are required for this raffle
+     */
+    public function required_days_of_tasks()
+    {
+        return $this->days_of_tasks ?? Constants::get_task_requirment($this->type);
+    }
 
     /*
      * get_raffle_eligable_user_ids()
@@ -304,7 +314,7 @@ class Raffle
 
             if ($this->type == 'weekly') { // if this is a weekly raffle: do the weekly checks
                 // give the user a chance
-//                if($total == Constants::get_weekly_task_requirment() - 1){ // if it is only (4) we can check for some marks that are not tied to any specific dates
+//                if($total == $this->required_days_of_tasks() - 1){ // if it is only (4) we can check for some marks that are not tied to any specific dates
 //                    // get a total count of all the non daily missions marked between the start and end dates of this raffle
 //                    $update_total_sql = "SELECT COUNT(*) AS `total` FROM date_tasks dt JOIN date_tasks_marks dtmarks USING (date_task_id) WHERE dtmarks.user_id = $user_id".
 //                            " AND dtmarks.mark_date >= ". $this->start_date ." AND dtmarks.mark_date <= ". $this->end_date .
@@ -318,7 +328,7 @@ class Raffle
 //                }
                 // check if they are eligible
                 $total = $this->checkWeekly($user_id);
-                if ($total >= ($this->days_of_tasks ?? Constants::get_weekly_task_requirment()))
+                if ($total >= $this->required_days_of_tasks())
                     $this->append_to_user_ids($user_id, ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']], $group_by_school ? $row['school_id'] : false);
                 //$this->eligable_user_ids[$user_id] = ["user_id" => $user_id, "school_id" => $row['school_id'], "admin_id" => $row['admin_id']];
 
@@ -611,7 +621,7 @@ class Raffle
 
     public function checkWeekly($user_id)
     {
-        $required = ($this->days_of_tasks ?? Constants::get_weekly_task_requirment());
+        $required = $this->required_days_of_tasks();
         $rollover = 2459167;
         if ($this->start_date < $rollover) {
             $total = $this->checkDaily($user_id);

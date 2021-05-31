@@ -38,7 +38,7 @@ $parshos = get_parshos( $raffle->year );
     to date: <input id="end_date" type="date" name="end_date" value="<?=$raffle->end_date ? formatJdToDate($raffle->end_date) : ""; ?>">
 </div>
 <div class="input_group input_half">
-    Run Date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
+    Run date* <input type="date" name="run_date" value="<?=$raffle->run_date ? $raffle->run_date->format("Y-m-d") : ""; ?>">
 </div>
 
 <div class="input_group input_half">

@@ -39,11 +39,11 @@ class YearlyRaffle {
         $row = $result->fetch_assoc();
         $this->deadline = $row['end_date'];
         $this->start = $row['start_date'];
-        $this->days_of_tasks = $row['days_of_tasks'] ?? Constants::get_yearly_task_requirment();
+        $this->days_of_tasks = $row['days_of_tasks'];
         $this->grid_id = 13012;
         $this->cutoff = 2459171;
     }
-// WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
+    // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
         $this->eligibility = $this->getAndCacheEligibility($school_id);
         return $this->eligibility;
@@ -224,14 +224,14 @@ class YearlyRaffle {
     }
 
     /**
-     * getDayCount
+     * required_days_of_tasks
      * 
-     * return the minimum number of days needed
+     * return the minimum number of days needed to be in the raffle
      *
      * @return int
      */
-    public function getDayCount() {
-        return $this->days_of_tasks;
+    public function required_days_of_tasks() {
+        return $this->days_of_tasks ?? Constants::get_yearly_task_requirment();
     }
 
     public function getYear() {

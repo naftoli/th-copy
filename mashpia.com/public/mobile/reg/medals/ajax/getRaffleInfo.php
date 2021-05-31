@@ -17,7 +17,7 @@ use raffles\shared\Constants as Constants;
  */
 function checkYearly( $user_id ) {
     $yearly_raffle = new YearlyRaffle;
-    $quota = $yearly_raffle->getDayCount();
+    $quota = $yearly_raffle->required_days_of_tasks();
     $num_days = $yearly_raffle->set_user_eligibility( $user_id )[ $user_id ];
     
     $raffle_info = formatRaffleInfo( $num_days, $quota, 'end of year', 'yearly' );

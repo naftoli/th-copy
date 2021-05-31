@@ -73,7 +73,7 @@ foreach ( $schoolsUsers as $school => $users ) {
             }
             echo "</table></div><div style='page-break-after: always'></div>";
         } else if ( $raffle->type == 'monthly' ) {
-            $required = ($raffle->days_of_tasks ?? Constants::get_monthly_task_requirment());
+            $required = $raffle->required_days_of_tasks();
             $daysLeft = $raffle->end_date - unixtojd();
             echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
@@ -92,7 +92,7 @@ foreach ( $schoolsUsers as $school => $users ) {
             echo "</table></div><div style='page-break-after: always'></div>";
         } else if ( $raffle->type == 'yearly' ) {
             $yearly_raffle = new YearlyRaffle;
-            $required = $yearly_raffle->getDayCount();
+            $required = $yearly_raffle->required_days_of_tasks();
             $daysLeft = $yearly_raffle->getEnd() - unixtojd();
             echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
