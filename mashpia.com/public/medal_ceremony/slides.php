@@ -70,7 +70,7 @@ function getMedal( $subject_id, $medal ) {
     $medal_name = $medal_name == 'gray' ? 'grey' : $medal_name;
     // 95 total missions
     if ( in_array( $subject_id, [ 1, 12, 15, 93 ] ) )
-        return 'images/backs/wwtc/'.$medal_name.'.gif';
+        return 'images/backs/wwtc/'.$medal_name.'.png';
     // 585 total missions
     else if ( in_array( $subject_id, [ 40, 94 ] ) )
         return 'images/backs/yd/'.$medal_name.'.png';
