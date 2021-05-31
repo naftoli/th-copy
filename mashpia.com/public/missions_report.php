@@ -133,7 +133,7 @@ require_once('calendar.php');
                     $m->setDates( $start_date, $end_date );
                 if ( isset( $_POST['classes'] ) ) 
                     $m->setClasses( $_POST['classes'] );
-                $m->setMissionsDone( $missionsPosted );
+                $m->setMissionsDone( $missionsPosted, [], [], false, true );
                 $userMissions[$id] = $m->getMissionsDone();
             }
             
