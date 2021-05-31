@@ -16,7 +16,7 @@ function getRaffleInfo( $type ) {
         $info['start'] = $row['start_date'];
         $info['end'] = $row['end_date'];
         $info['run_date'] = $row['run_date'];
-        $info['name'] = $row['name'];
+        $info['days_of_tasks'] = $row['days_of_tasks'];
     } else {
         // get last raffle that is in system for this type
         $sql = "SELECT * FROM raffles
@@ -33,7 +33,7 @@ function getRaffleInfo( $type ) {
             $info['start'] = $row['start_date'];
             $info['end'] = $row['end_date'];
             $info['run_date'] = $row['run_date'];
-            $info['name'] = $row['name'];
+            $info['days_of_tasks'] = $row['days_of_tasks'];
         }
     }
     return $info;
