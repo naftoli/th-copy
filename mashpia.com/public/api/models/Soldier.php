@@ -569,7 +569,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @return void
      */
     public function registerChidon(
-        $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = ''
+        $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '',
+        $he_name_plaque = '', $en_name_custom = '', $he_name_custom = ''
     ){
         global $MASHPIA_DB;
 
@@ -592,16 +593,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, recruited_by, poll) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, recruited_by, poll, 
+                       he_name_plaque, en_name_custom, he_name_custom) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $recruited_by, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $recruited_by, $poll,
+                $he_name_plaque, $en_name_custom, $he_name_custom] );
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll, 
+                       he_name_plaque, en_name_custom, he_name_custom) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll,
+                $he_name_plaque, $en_name_custom, $he_name_custom] );
         }
     }
 

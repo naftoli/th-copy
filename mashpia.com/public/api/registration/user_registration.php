@@ -226,7 +226,7 @@ class UserRegistrationRouter {
                         if ( !$user->registerChidon(
                             $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), $registration['name_pref'],
                             $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']
-                            ) ) )
+                            ), $registration['he_name_plaque'], $registration['en_name_custom'], $registration['he_name_custom'] ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         else {
                             // add book purchased info to db

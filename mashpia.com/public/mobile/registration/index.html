@@ -261,7 +261,7 @@
                                 <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />
                                 <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />
                                 <span id="study-guides" style="display: none">
-                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />
+<!--                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />-->
                                 </span>
                                 <span id="late-reg" style="display: none">
                                     There is no longer an option to order a book while <strong>registering</strong>.
@@ -269,6 +269,43 @@
                                     The study guide can be downloaded at <a href="thechidon.com/study-guides" target="_blank">thechidon.com/study-guides</a>.<br />
                                 </span>
                                 <br />
+                                <div id="khk" >
+                                    <b>Kol Hatorah Kulah</b><hr />
+                                    <span class="i18n" data-key="khkMsg1"></span><br />
+                                    <label>
+                                        <input type="checkbox" />
+                                        <span class="checkbox" style="margin-right: 10px;"></span>
+                                    </label>
+                                    <span class="i18n" data-key="khkMsg2"></span><br />
+                                    <span class="i18n" data-key="khkMsg3"></span>
+                                </div>
+                                <br />
+
+                                <b>Chidon Recruitment</b><hr />
+                                <label>
+                                    <span class="i18n" data-key="JoinChidon5780">Was there anyone that recruited you to join Chidon 5782?</span>
+                                    <br />
+                                    <input type="radio" name="recruit" class="recruit i18n" data-key="Yes" value="1" /> Yes<br />
+                                    <input type="radio" name="recruit" class="recruit i18n" data-key="No" value="0" /> No<br />
+                                    <br />
+<!--                                                <select class="form-control" id="school">-->
+<!--                                                    <option value="0" class="i18n" data-key="SelectSchool">Select School</option>-->
+<!--                                                </select>-->
+<!--                                                <br />-->
+<!--                                                <select class="form-control" id="grade">-->
+<!--                                                    <option value="0" class="i18n" data-key="SelectGrade">Select Grade</option>-->
+<!--                                                </select>-->
+<!--                                                <br />-->
+<!--                                                <select class="form-control" id="user">-->
+<!--                                                    <option value="0" class="i18n" data-key="SelectStudent">Select Student</option>-->
+<!--                                                </select>-->
+                                    IF YES, Add the serial number of the soldiers that recruited you and they will get chidon credits to buy chidon prizes.<br />
+                                    <input type="text" name="user_serial" id="user_serial" class="form-control" style="width: 200px;" />
+                                </label>
+                                <br />
+                                <br />
+
+                                <b>Chidon Photo</b><hr />
                                 <span>
                                     <b>Please add a picture of yourself wearing your most recent Chidon sweater.</b> If you don't have one because this is your first year
                                     joining Chidon, or for any other reason, please wear your school uniform for the picture.
@@ -276,16 +313,52 @@
                                     <br />
                                 </span>
                                 <br />
-                                <label for="chidon-book">Choose the BOOK # your child will need to study for Chidon 5782:</label>
-                                <select class="form-control" id="chidon-book">
-                                    <option value="0" class="i18n" data-key="ChooseBookNumber">Choose Book Number</option>
-                                    <option value="1" class="i18n" data-key="GradeBook1">4th Grade: Book 1</option>
-                                    <option value="2" class="i18n" data-key="GradeBook2">5th Grade: Book 2</option>
-                                    <option value="3" class="i18n" data-key="GradeBook3">6th Grade: Book 3</option>
-                                    <option value="4" class="i18n" data-key="GradeBook4">7th Grade: Book 4</option>
-                                    <option value="5" class="i18n" data-key="GradeBook5">8th Grade: Book 5</option>
-                                </select>
+
+                                <b>Chidon Plaque Name</b><hr />
+                                <label for="he-name-plaque">
+                                    Please enter your Full Hebrew name as you would like it to be on any plaque or award you may receive.
+                                </label>
+                                <input type="text" name="he-name-plaque" id="he_name_plaque" class="form-control" style="width: 300px;" />
                                 <br />
+
+                                <b>Chidon Customized Items</b><hr />
+                                <label for="custom-name">
+                                    If we make a <b>custom item</b> how would you like your name to be written?
+                                </label><br />
+                                English Name: <input type="text" name="custom-name" id="en_name_custom" class="form-control" style="width: 300px;" /><br />
+                                Hebrew Name: <input type="text" name="custom-name-he" id="he_name_custom" class="form-control" style="width: 300px;" />
+                                <br />
+
+                                <div>
+                                    If we can only have one of your names on it, what name would you like it to have?
+                                    <br />
+                                    <label class="radio-label">
+                                        <input type="radio" class="nameChoice" name="nameChoice" value="en"/>
+                                        <span class="radio"></span>
+                                    </label>
+                                    <span class="i18n" data-key="EnName">English Name</span>
+                                    <br />
+                                    <label class="radio-label">
+                                        <input type="radio" class="nameChoice" name="nameChoice" value="he"/>
+                                        <span class="radio"></span>
+                                    </label>
+                                    <span class="i18n" data-key="HeName">Hebrew Name</span>
+                                </div>
+                                <br />
+
+                                <div id="yarmulka" style="display: none;">
+                                    <b>Chidon Yarmulka</b><hr />
+                                    <label for="yarmulka-size" class="i18n" data-key="yarmulkaSize">Yarmulka Size:</label>
+                                    <select class="form-control" id="yarmulka-size">
+                                        <option value="0">Choose Size</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <br />
+
+                                <b>Chidon Sweater</b><hr />
                                 <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:</label>
                                 <select class="form-control" id="chidon-sweater-size">
                                     <option value="children xs" class="i18n" data-key="ChildrenXS">Children XS</option>
@@ -300,38 +373,16 @@
                                 </select>
                                 <br />
 
-                                <label for="yarmulka-size" class="i18n" data-key="yarmulkaSize">Yarmulka Size:</label>
-                                <select class="form-control" id="yarmulka-size">
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
+                                <b>Chidon Books</b><hr />
+                                <label for="chidon-book">Choose the BOOK # your child will need to study for Chidon 5782:</label>
+                                <select class="form-control" id="chidon-book">
+                                    <option value="0" class="i18n" data-key="ChooseBookNumber">Choose Book Number</option>
+                                    <option value="1" class="i18n" data-key="GradeBook1">4th Grade: Book 1</option>
+                                    <option value="2" class="i18n" data-key="GradeBook2">5th Grade: Book 2</option>
+                                    <option value="3" class="i18n" data-key="GradeBook3">6th Grade: Book 3</option>
+                                    <option value="4" class="i18n" data-key="GradeBook4">7th Grade: Book 4</option>
+                                    <option value="5" class="i18n" data-key="GradeBook5">8th Grade: Book 5</option>
                                 </select>
-                                <br />
-
-                                <div id="khk" style="display: none;">
-                                    <label>
-                                        <input type="checkbox" />
-                                        <span class="checkbox" style="margin-right: 10px;"></span>
-                                    </label>
-                                    <span class="i18n" data-key="khkMsg"></span>
-                                </div>
-                                <br />
-
-                                <div>
-                                    If we make a custom item which can only have one of your names on it, what name would you like it to have?
-                                    <br />
-                                    <label class="radio-label">
-                                        <input type="radio" class="nameChoice" name="nameChoice" value="en"/>
-                                        <span class="radio"></span>
-                                    </label>
-                                    <span class="i18n" data-key="EnName">English Name</span>
-                                    <br />
-                                    <label class="radio-label">
-                                        <input type="radio" class="nameChoice" name="nameChoice" value="he"/>
-                                        <span class="radio"></span>
-                                    </label>
-                                    <span class="i18n" data-key="HeName">Hebrew Name</span>
-                                </div>
                                 <br />
 
                                 <div>
@@ -414,10 +465,8 @@
 
                     <label class="chidon-reg">
                         <div class="row">
-                            <div class="col-2 col-md-1">
-                                
-                            </div>
-                            <div class="col-10 col-md-11">
+                            <div class="col-12">
+                                <b>Chidon Learning</b><hr />
                                 <span class="i18n" data-key="LearningChidon">I will be Learning for Chidon:</span>
                                 <br />
                                 <select id="yahadus-poll" multiple>
@@ -434,47 +483,22 @@
                     
                     <label class="chidon-reg">
                         <div class="row">
+                            <div class="col-12">
+                                <b>Chidon Trips and Awards</b><hr />
+                            </div>
                             <div class="col-2 col-md-1">
                                 <input type="checkbox" id="shabbaton" />
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                <span class="i18n" data-key="IAmAware">I am aware that If my child qualifies, the cost for the Shabbaton is </span>
+                                <span class="i18n" data-key="IAmAware">I am aware that If my child qualifies, the cost for the Chidon Experience is </span>
                                 <span class="shabbaton-cost"><b>$195</b></span>.
-                                <span class="i18n" data-key="IAmAwaredes">This fee can be subsidized through the Chidon drive.Shabbaton enrollment opens Wednesday, 17 Shvat (February 12).</span>
+                                <span class="i18n" data-key="IAmAwaredes">This fee can be subsidized through the Chidon drive.</span>
                             </div>                            
                         </div>
                         <br />
                     </label>
-                    
-                    <label class="chidon-reg">
-                        <div class="row">
-                            <div class="col-2 col-md-1">
-                                
-                            </div>
-                            <div class="col-10 col-md-11">
-                                <span class="i18n" data-key="JoinChidon5780">Was there anyone that recruited you to join Chidon 5782?</span>
-                                <br />
-                                <input type="radio" name="recruit" class="recruit i18n" data-key="Yes" value="1" /> Yes<br />
-                                <input type="radio" name="recruit" class="recruit i18n" data-key="No" value="0" /> No<br />
-                                <br />
-                                <div id="recruited-by" style="display: none;">
-                                    <select class="form-control" id="school">
-                                        <option value="0" class="i18n" data-key="SelectSchool">Select School</option>
-                                    </select>
-                                    <br />
-                                    <select class="form-control" id="grade">
-                                        <option value="0" class="i18n" data-key="SelectGrade">Select Grade</option>
-                                    </select>
-                                    <br />
-                                    <select class="form-control" id="user">
-                                        <option value="0" class="i18n" data-key="SelectStudent">Select Student</option>
-                                    </select>
-                                </div>
-                            </div>                            
-                        </div>
-                        <br />
-                    </label>
+                    <br />
                     
                     <hr />
                     <div class="row" id="broadcast">
@@ -498,7 +522,10 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <strong class="i18n" data-key="ByPressing">By pressing the button below I affirm that I have reviewed the above information and found it to be correct.</strong>
+                            <strong class="i18n" data-key="ByPressing">By pressing the button below I confirm that all the information is correct.
+                                Since it's going to be used as the official information, Tzivos Hashem takes no responsibilities for mistakes that
+                                are made due to incorrect information.
+                            </strong>
                         </div>
                     </div>
                     <div class="row">

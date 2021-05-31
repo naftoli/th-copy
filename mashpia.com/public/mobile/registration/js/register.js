@@ -197,14 +197,6 @@ var registrationApp = function() {
             if ( $(this).is(":checked") && $("#yahadus").is(":checked") ) $("#yahadus").trigger('click');
         });
 
-        $("input.recruit").click( function() {
-            if ( $(this).val() == '1' ) {
-                $("#recruited-by").show();
-            } else {
-                $("#recruited-by").hide();
-            }
-        });
-
         $.post('api/tasks/getSchools.php', function( result ) {
             if ( result.success ) {
                 var schools = result.data;
@@ -380,13 +372,13 @@ var registrationApp = function() {
         var Err6 = "You must indicate whether you would like to purchase a book or not.";
         var Err7 = "You must indicate how you will be learning for chidon.";
         var Err8 = "You must indicate your acknowledgment of the Shabbaton fee.";
-        var Err9 = "You must choose who recruited you.";
+        var Err9 = "You must enter the serial number of the student who recruited you.";
         var Err10 = "You must enter the name of the school that you are attending.";
         var Err11 = "You must indicate your acceptance of participation in Tzivos Hashem Media.";
         var Err12 = "Could not update Profile Picture. We will try again when pressing 'Confirm'.";
         var Err13 = "You must choose how you prefer your name to be displayed!";
-        //var Err14 = "";
-        //var Err15 = "";
+        var Err14 = "You must choose a yarmulka size!";
+        var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
         //var Err16 = "";
         //var Err17 = "";
         //var Err18 = "";
@@ -420,6 +412,8 @@ var registrationApp = function() {
              Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
              Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
              Err13 = ""
+             Err14 = "";
+             Err15 = ""
              picError = ""
         }
 
@@ -482,6 +476,18 @@ var registrationApp = function() {
                 return showError(Err13)
             }
 
+            // check that he plaque name and en / he custom name are filled out
+            if ($("#he_name_plaque").val() == '' || $("#en_name_custom").val() == '' || $("#he_name_custom").val() == '') {
+                return showError(Err15)
+            }
+
+            // check yarmulka
+            if (selected_user.gender == 'M') {
+                if ($("#yarmulka-size").val() == 0) {
+                    return showError(Err14)
+                }
+            }
+
             // check that book was selected
             if ( $("select#chidon-book").val() == 0 ) {
                 return showError(Err2);
@@ -519,7 +525,7 @@ var registrationApp = function() {
 
             // make sure we have student id if recruited by is checked off
             if ( $(".recruit").eq(0).is(":checked") ) {
-                if ( parseInt( $("#user").val() ) == 0 ) {
+                if ( parseInt( $("#user_serial").val() ) == 0 ) {
                     return showError(Err9);
                 }
             }
@@ -602,9 +608,12 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     }, 
                     recruited: $(".recruit:checked").val(), 
-                    recruitedBy: $("#user").val(), 
+                    recruitedBy: parseInt($("#user_serial").val()),
                     poll: poll,
-                    name_pref: $("input.nameChoice:checked").val()
+                    name_pref: $("input.nameChoice:checked").val(),
+                    he_name_plaque: $("#he_name_plaque").val(),
+                    en_name_custom: $("#en_name_custom").val(),
+                    he_name_custom: $("#he_name_custom").val()
                 }
             });
         }
@@ -928,6 +937,17 @@ var templates = function(){
                 if (user.pref_name == 'en') $("input.nameChoice")[0].checked = true
                 else if (user.pref_name == 'he') $("input.nameChoice")[1].checked = true
             }
+
+            $("#he_name_plaque").val('')
+            $("#en_name_custom").val('')
+            $("#he_name_custom").val('')
+
+            // show/hide yarmulka
+            if (user.gender == 'M') {
+                $("#yarmulka").show()
+            } else {
+                $("#yarmulka").hide()
+            }
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
@@ -944,7 +964,6 @@ var templates = function(){
             $("#step-2 form input#shabbaton")[0].checked = false;
             $("#step-2 form input.recruit")[0].checked = false;
             $("#step-2 form input.recruit")[1].checked = false;
-            $("#step-2 form #recruited-by").hide();
             $("#school").empty();
             $("#school").html("<option value='0'>Select School</option>");
             $("#grade").empty();
