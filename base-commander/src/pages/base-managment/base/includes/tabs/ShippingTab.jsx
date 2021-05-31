@@ -13,17 +13,18 @@ import { NavigationRow } from '../rows/registration/NavigationRow';
 export class ShippingTab extends Component {
 
   state = {
-    removeShipping: false
+    hideShipping: false
   }
 
-  onChange = onInputChange( this.props.onUpdate );
-  
-  onBlur = e => {
-    // console.log("onBlur called");
-    if ( e.target.name === 'shipping_method' && e.target.value === 'pickup' ) {
-      this.setState({ removeShipping: true });
-    } else if ( this.state.removeShipping === true && e.target.name === 'shipping_method' && e.target.value === 'deliver' ) {
-      this.setState({ removeShipping: false });
+  componentDidMount() {
+    this.setState({ hideShipping: this.props.base.shipping_method === 'pickup' });
+  }
+
+  onChange = e => {
+    e.persist()
+    onInputChange( this.props.onUpdate )( e );
+    if ( e.target.name === 'shipping_method') {
+      this.setState({ hideShipping: e.target.value === 'pickup' });
     }
   }
 
@@ -55,21 +56,20 @@ export class ShippingTab extends Component {
           <ShippingRow
             required={ required }
             onChange={ this.onChange }
-            onBlur={ this.onBlur }
             shipping_last={ shipping_last }
             shipping_first={ shipping_first }
             shipping_method={ shipping_method } />
           
           <AddressRow
             showPhone
-            removeShipping={ this.state.removeShipping }
+            hideShipping={ this.state.hideShipping }
             { ...base }
             title={ false }
             prefix='shipping_'
             required={ required }
             onChange={ this.onChange } />
 
-          { this.state.showShipping &&
+          { !this.state.hideShipping &&
           <Fragment>
             <p className='title'>
               Special Shipping Requests
