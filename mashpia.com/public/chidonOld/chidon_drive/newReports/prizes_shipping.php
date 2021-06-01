@@ -148,11 +148,9 @@ $prizeInfo = [];
                                         if (in_array($shipment_number, array_keys($limits[$prize['prize_id']]))) {
                                             if (!in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
                                         } else {
-                                            if (
-                                                isset($limits[$prize['prize_id']][$shipment_number])
-                                                &&
-                                                in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])
-                                            ) continue;
+                                            foreach ($limits[$prize['prize_id']] as $shipment => $schools) {
+                                                if (in_array($child['school_id'], $schools)) continue;
+                                            }
                                         }
                                     }
                                     $he_name = false;
@@ -303,14 +301,20 @@ $prizeInfo = [];
                     <th>Total</th>
                 </tr>
                 <?php
-                echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $grandTotals['bracelet'] . "</td></tr>";
-                foreach ($grandTotals['yarmulka'] as $size => $total) {
-                    echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                if (isset($grandTotals['bracelet'])) {
+                    echo "<tr><td>Chidon Bracelet</td><td></td><td></td><td>" . $grandTotals['bracelet'] . "</td></tr>";
                 }
-                ksort($grandTotals['prizes']);
-                foreach ($grandTotals['prizes'] as $prize_id => $total) {
-                    echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
-                        . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                if (isset($grandTotals['yarmulka'])) {
+                    foreach ($grandTotals['yarmulka'] as $size => $total) {
+                        echo "<tr><td>Yarmulka</td><td></td><td>$size</td><td>$total</td></tr>";
+                    }
+                }
+                if (isset($grandTotals['prizes'])) {
+                    ksort($grandTotals['prizes']);
+                    foreach ($grandTotals['prizes'] as $prize_id => $total) {
+                        echo "<tr><td>" . $prizeInfo[$prize_id]['name'] . "</td><td>" . $prizeInfo[$prize_id]['color']
+                            . "</td><td>" . $prizeInfo[$prize_id]['size'] . "</td><td>" . $total . "</td></tr>";
+                    }
                 }
                 ?>
             </table>
