@@ -26,7 +26,9 @@ $shipments = [
 // limits prize id's to school id's for certain shipments
 // array of prize id, shipment number, school id's
 $limits = [
-
+    29  =>  [
+        4   =>  [7, 255]
+    ]
 ];
 
 // list of schools that need break down of totals by classes
@@ -131,11 +133,14 @@ foreach ($schools as $id => $school) {
                                 if (in_array($shipment_number, array_keys($limits[$prize['prize_id']]))) {
                                     if (!in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
                                 } else {
-                                    if (
-                                        isset($limits[$prize['prize_id']][$shipment_number])
-                                        &&
-                                        in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])
-                                    ) continue;
+                                    $found = false;
+                                    foreach ($limits[$prize['prize_id']] as $shipment => $schools) {
+                                        if (in_array($child['school_id'], $schools)) {
+                                            $found = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($found) continue;
                                 }
                             }
                             $he_name = false;
