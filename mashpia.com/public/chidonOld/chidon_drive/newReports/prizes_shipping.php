@@ -148,9 +148,14 @@ $prizeInfo = [];
                                         if (in_array($shipment_number, array_keys($limits[$prize['prize_id']]))) {
                                             if (!in_array($child['school_id'], $limits[$prize['prize_id']][$shipment_number])) continue;
                                         } else {
+                                            $found = false;
                                             foreach ($limits[$prize['prize_id']] as $shipment => $schools) {
-                                                if (in_array($child['school_id'], $schools)) continue;
+                                                if (in_array($child['school_id'], $schools)) {
+                                                    $found = true;
+                                                    break;
+                                                }
                                             }
+                                            if ($found) continue;
                                         }
                                     }
                                     $he_name = false;
