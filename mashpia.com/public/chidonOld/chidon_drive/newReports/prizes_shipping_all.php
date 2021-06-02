@@ -18,7 +18,7 @@ $shipment_number = 1;
 // maps shipment number to prize id's
 $shipments = [
     1   =>  [
-        7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 34, 35,
+        7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35,
         38, 39, 40, 44, 45, 48, 50, 53, 54, 59, 60, 62, 63
     ]
 ];
@@ -26,7 +26,9 @@ $shipments = [
 // limits prize id's to school id's for certain shipments
 // array of prize id, shipment number, school id's
 $limits = [
-
+    29  =>  [
+        4   =>  [7, 255]
+    ]
 ];
 
 // list of schools that need break down of totals by classes
