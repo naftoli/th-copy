@@ -182,7 +182,12 @@
                 totalMilesEraned = " סך הנקודות שנצברו:";
             }
 
-            $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getBalance.php', {
+                admin : Cookies.get('admin'),
+                user : user,
+                auction : auction_id,
+                points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
+            }, function( success ) {
                 var info = $.parseJSON(success);
                 if (localStorage.getItem("locallang") == "he") {
                     html = "<span style='direction:rtl;' > ";
