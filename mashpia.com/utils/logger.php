@@ -7,20 +7,43 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Monolog\ErrorHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Processor\IntrospectionProcessor;
+use Monolog\Processor\UidProcessor;
 
-// create a logger instance
-$logger = new Logger("general");
+if (!isset($logger)) {
+    // create a logger instance
+    $logger = new Logger("general");
 
-// Set the log output file to mashpia.com/tmp/.log
-// and set the minimum log level DEBUG to log all log levels.
-$logger->pushHandler(new StreamHandler(__DIR__ . '/../tmp/.log', Logger::DEBUG));
+    $logger->pushHandler(new StreamHandler(
+        // Set the log output file to mashpia.com/tmp/.log
+        __DIR__ . '/../tmp/.log',
+        // Set the minimum log level DEBUG in development or when debug is true.
+        (isset($development) && $development)
+        || (isset($_GET['debug']) && $_GET['debug'])
+        || (isset($_POST['debug']) && $_POST['debug'])
+            ? Logger::DEBUG
+            : Logger::INFO
+    ));
 
-// register to also log all errors, exceptions and fatal errors
-ErrorHandler::register($logger);
+    // add request method and url to all logs
+    $logger->pushProcessor(function ($record) {
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            $record['extra']['method'] = $_SERVER['REQUEST_METHOD'];
+        }
+        if (isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
+            $record['extra']['url'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        }
+        return $record;
+    });
 
-if (isset($_SERVER['REQUEST_METHOD']) && isset($_SERVER['HTTP_HOST']) && isset($_SERVER['REQUEST_URI'])) {
-    $logger->info('request started', [
-        "method" => $_SERVER['REQUEST_METHOD'],
-        "url" => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
-    ]);
+    // add file, line, class and function/method to all logs
+    $logger->pushProcessor(new IntrospectionProcessor());
+
+    // add a unique request id to all logs
+    $logger->pushProcessor(new UidProcessor());
+
+    // register to log all thrown errors, exceptions and fatal errors.
+    ErrorHandler::register($logger);
+
+    $logger->info('request started');
 }
