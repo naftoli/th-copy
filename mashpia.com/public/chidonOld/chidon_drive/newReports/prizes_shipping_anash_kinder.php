@@ -12,6 +12,8 @@ $year = GlobalSettings::getChidonYear();
 
 $shipment_number = isset($_GET['num']) ? intval($_GET['num']) : 1;
 
+$school_id = 269;
+
 // maps shipment number to prize id's
 $shipments = [
     1   =>  [
@@ -31,7 +33,7 @@ $sql = "select tc.*, u.first as uFirst, u.last as uLast, u.gender, a.*
         join admins a on a.admin_id = tc.parent_id 
         where tc.paid > 0 
         and tc.year = $year 
-        and u.school_id in (61,269) 
+        and u.school_id = $school_id 
         order by u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
