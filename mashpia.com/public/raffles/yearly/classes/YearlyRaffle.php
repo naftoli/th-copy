@@ -12,7 +12,7 @@ use \DBAdapter;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 class YearlyRaffle {
-    private $days_of_tasks
+    private $days_of_tasks;
     private $db_conn;
     private $year;
     private $deadline;
