@@ -55,7 +55,7 @@ export const updateBirthday = ( id ) => dispatch => {
 
 // load a single soldier - not added to state
 export const getSoldier = ( id ) => dispatch => {
-  return API.get( `/core/users?id=${id}` )
+  return API.get( `/core/users?id=${id}&points_beta=${new URLSearchParams(window.location.search).get('points_beta') || "0"}` )
 }
 
 // upload a profile picture. does not deal with store
