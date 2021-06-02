@@ -187,15 +187,14 @@ class Points
 
     // originally from mashpia.com/public/v2/application/models/Points.php user_total function
     private function getNonMarkPoints($start_date = false) {
-        if ($start_date) {
-            $formatted_date = date("Y-m-d", jdtounix($start_date));
-        }
+        $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         $sql = "SELECT SUM(points) AS total
             FROM pointsDB.user_points
             WHERE user_id = '$this->user_id'
             AND points > 0
-            AND resource_name NOT IN ('store' , 'transaction_manager_store') "
-            . ($start_date ? "AND created >= '$formatted_date' " : "");
+            AND resource_name NOT IN ('store' , 'transaction_manager_store') 
+            AND created >= '$formatted_date'";
+        $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row['total'];
@@ -203,13 +202,14 @@ class Points
 
     // originally from mashpia.com/public/v2/application/models/Points.php user_store function
     private function getNonMarksStorePoints($start_date = false) {
-        if ($start_date) {
-            $formatted_date = date("Y-m-d", jdtounix($start_date));
-        }
-        $sql = "SELECT SUM(points) AS total
-            FROM pointsDB.user_points
-            WHERE user_id = '$this->user_id' "
-            . ($start_date ? "AND created >= '$formatted_date' " : "");
+        $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
+        // ignore transaction_manager_store reversals where the origanal purchase is before the start date
+        $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
+            FROM pointsDB.user_points up
+            LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
+            WHERE up.user_id = '$this->user_id'
+            AND up.created >= '$formatted_date'";
+        $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row['total'];
