@@ -41,39 +41,34 @@ class Points
     
     public function getTotalPoints() {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id");
-        if (isset($_GET['points_beta']) && $_GET['points_beta'] || isset($_POST['points_beta']) && $_POST['points_beta']) {
-            $points += $this->getNonMarkPoints();
-        } else {
-            $arrParams['user_code'] = $this->usercode;
-            $arrPoints = header_total_points( $arrParams );
-            if ( $this->debug ) {
-                echo "<pre>";
-                print_r( $arrParams );
-                print_r( $arrPoints );
-                echo "</pre>";
-            }
-            $points += $arrPoints[$arrParams['user_code']];
-        }
+
+        $points += $this->getNonMarkPoints();
+        // $arrParams['user_code'] = $this->usercode;
+        // $arrPoints = header_total_points( $arrParams );
+        // if ( $this->debug ) {
+        //     echo "<pre>";
+        //     print_r( $arrParams );
+        //     print_r( $arrPoints );
+        //     echo "</pre>";
+        // }
+        // $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
     
     public function getTotalThisYear() {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart);
-        if (isset($_GET['points_beta']) && $_GET['points_beta'] || isset($_POST['points_beta']) && $_POST['points_beta']) {
-            $points += $this->getNonMarkPoints($this->yearStart);
-        } else {
-            $arrParams['user_code'] = $this->usercode;
-            $arrParams['start_date'] = $this->yearStart;
-            $arrPoints = header_total_points( $arrParams );
-            if ( $this->debug ) {
-                echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart) . "<br />";
-                echo "<pre>";
-                print_r( $arrParams );
-                print_r( $arrPoints );
-                echo "</pre>";
-            }
-            $points += $arrPoints[$arrParams['user_code']];
-        }
+
+        $points += $this->getNonMarkPoints($this->yearStart);
+        // $arrParams['user_code'] = $this->usercode;
+        // $arrParams['start_date'] = $this->yearStart;
+        // $arrPoints = header_total_points( $arrParams );
+        // if ( $this->debug ) {
+        //     echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart) . "<br />";
+        //     echo "<pre>";
+        //     print_r( $arrParams );
+        //     print_r( $arrPoints );
+        //     echo "</pre>";
+        // }
         return $points;
     }
     
@@ -94,21 +89,19 @@ class Points
     public function getStorePoints() {
         $reset_date = $this->getStoreResetDate();
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
-        if (isset($_GET['points_beta']) && $_GET['points_beta'] || isset($_POST['points_beta']) && $_POST['points_beta']) {
-            $points += $this->getNonMarksStorePoints($reset_date);
-        } else {
-            $arrParams['user_code'] = $this->usercode;
-            $arrParams['start_date'] = $reset_date;
-            $arrPoints = header_store_points( $arrParams );
-            if ( $this->debug ) {
-                echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date) . "<br />";
-                echo "<pre>";
-                print_r( $arrParams );
-                print_r( $arrPoints );
-                echo "</pre>";
-            }
-            $points += $arrPoints[$arrParams['user_code']];
-        }
+
+        $points += $this->getNonMarksStorePoints($reset_date);
+        // $arrParams['user_code'] = $this->usercode;
+        // $arrParams['start_date'] = $reset_date;
+        // $arrPoints = header_store_points( $arrParams );
+        // if ( $this->debug ) {
+        //     echo "Qry: " . totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date) . "<br />";
+        //     echo "<pre>";
+        //     print_r( $arrParams );
+        //     print_r( $arrPoints );
+        //     echo "</pre>";
+        // }
+        // $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
 
@@ -185,16 +178,23 @@ class Points
         return $details;
     }
 
+    private function useBetaPoints() {
+        return (isset($_GET['points_beta']) && $_GET['points_beta'])
+            || (isset($_POST['points_beta']) && $_POST['points_beta'])
+            || $this->school_id == 5;
+    }
+
     // originally from mashpia.com/public/v2/application/models/Points.php user_total function
     private function getNonMarkPoints($start_date = false) {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         $sql = "SELECT SUM(points) AS total
             FROM pointsDB.user_points
-            WHERE user_id = '$this->user_id'
+            WHERE user_id = {'$this->user_id}'
+            AND institution_id = '{$this->school_id}'
             AND points > 0
             AND resource_name NOT IN ('store' , 'transaction_manager_store') 
             AND created >= '$formatted_date'";
-        $GLOBALS['logger']->debug($sql);
+        // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row['total'];
@@ -203,13 +203,22 @@ class Points
     // originally from mashpia.com/public/v2/application/models/Points.php user_store function
     private function getNonMarksStorePoints($start_date = false) {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
-        // ignore transaction_manager_store reversals where the origanal purchase is before the start date
-        $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
-            FROM pointsDB.user_points up
-            LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
-            WHERE up.user_id = '$this->user_id'
-            AND up.created >= '$formatted_date'";
-        $GLOBALS['logger']->debug($sql);
+        if ($this->useBetaPoints()) {
+            // ignore transaction_manager_store reversals where the origanal purchase is before the start date
+            $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
+                FROM pointsDB.user_points up
+                LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
+                WHERE up.user_id = '{$this->user_id}'
+                AND up.institution_id = '{$this->school_id}'
+                AND up.created >= '$formatted_date'";
+        } else {
+            $sql = "SELECT SUM(points) AS total 
+                FROM pointsDB.user_points up
+                WHERE up.user_id = '{$this->user_id}'
+                AND up.institution_id = '{$this->school_id}'
+                AND up.created >= '$formatted_date'";
+        }
+        // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row['total'];
