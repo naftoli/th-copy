@@ -1086,7 +1086,7 @@ class ShabbosMevorchim {
 			// for each task     
 	        foreach ( $this->tasks as $key => $task ) {
 	        	// skip task #2
-	        	if ($key == 'Minutes') continue;
+	        	// if ($key == 'Minutes') continue;
 				
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
@@ -1566,7 +1566,7 @@ class ShabbosMevorchim {
 				echo "<div align='center'>";
 				echo $this->getHebrewMonth(array_search($date, $this->dates)) . "<br />";
 				echo "<table>";
-				echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th></tr>";
+				echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th><th>Minutes Goal</th><th>Minutes Accomplishment</th></tr>";
 				foreach ($users as $user => $info) {
 					echo "<tr><td>" . $this->users[$user] . "</td>";
 					foreach ($info as $task => $total) {
