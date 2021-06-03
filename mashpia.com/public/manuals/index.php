@@ -202,6 +202,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Teacher Resources</span>
                 </div>
             </a>
+            <a href="https://docs.google.com/document/d/1rzS4uiMNYIDcXg61JKbKnqEnkG_hkgPBobPbMuobUpw/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Communications</span>
+                </div>
+            </a>
         </div>
     </body>
 </html>

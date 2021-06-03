@@ -31,7 +31,7 @@ $seperate_genders = isset($_POST['single_list']) ? false : true;
 // if no single raffle was given, get all of them
 if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
     $raffle_query = mysql_query("SELECT r.* "
-                                ."FROM raffles r WHERE (show_on_mobile = 1 OR date_to_show < NOW()) "
+                                ."FROM raffles r"
                                 ." ORDER BY date_ran DESC, type "
                                 .( isset($_GET['latest']) ? "LIMIT 1 " : "LIMIT 10 ") );
     $raffles = [];
@@ -41,7 +41,7 @@ if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
         $raffles[] = $raffle;
     }
 } elseif(!$raffle_id) {
-    $raffles = Raffle::loadAll("WHERE (show_on_mobile = 1 OR date_to_show < NOW()) AND year = " . GlobalSettings::getCurrentYear() . " ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
+    $raffles = Raffle::loadAll("WHERE year = " . GlobalSettings::getCurrentYear() . " ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
 } else {
     $raffles = []; // create a raffles array
     $raffles[] = Raffle::load($raffle_id); // and add the raffle they asked for
