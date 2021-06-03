@@ -66,14 +66,14 @@
 					<div class="tname t2n">Team 2</div>
 					<div class="tpoints t2p">0</div>
 				</td>
-				<td>
-					<div class="tname t3n">Team 3</div>
-					<div class="tpoints t3p">0</div>
-        </td>
-        <td>
-					<div class="tname t4n">Team 4</div>
-					<div class="tpoints t4p">0</div>
-				</td>
+<!--				<td>-->
+<!--					<div class="tname t3n">Team 3</div>-->
+<!--					<div class="tpoints t3p">0</div>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--					<div class="tname t4n">Team 4</div>-->
+<!--					<div class="tpoints t4p">0</div>-->
+<!--				</td>-->
 			</tr>
 		</tbody></table>
 		<table class="table table-bordered" id="round2">
@@ -87,40 +87,40 @@
 					<div class="tname t2n">Team 2</div>
 					<div class="tpoints t2p">0</div>
 				</td>
-				<td>
-					<div class="tname t3n">Team 3</div>
-					<div class="tpoints t3p">0</div>
-        </td>
-        <td>
-					<div class="tname t4n">Team 4</div>
-					<div class="tpoints t4p">0</div>
-				</td>
+<!--				<td>-->
+<!--					<div class="tname t3n">Team 3</div>-->
+<!--					<div class="tpoints t3p">0</div>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--					<div class="tname t4n">Team 4</div>-->
+<!--					<div class="tpoints t4p">0</div>-->
+<!--				</td>-->
 			</tr>
 		</tbody></table>
-		<table class="table table-bordered" id="round3">
-			<tbody><tr>
-				<th><h2>Round 3</h2></th>
-				<td colspan="2">
-					<div class="tname t1n">Team 1</div>
-					<div class="tpoints t1p">0</div>
-				</td>
-				<td colspan="2">
-					<div class="tname t2n">Team 2</div>
-					<div class="tpoints t2p">0</div>
-				</td>
-			</tr>
-		</tbody></table>
+<!--		<table class="table table-bordered" id="round3">-->
+<!--			<tbody><tr>-->
+<!--				<th><h2>Round 3</h2></th>-->
+<!--				<td colspan="2">-->
+<!--					<div class="tname t1n">Team 1</div>-->
+<!--					<div class="tpoints t1p">0</div>-->
+<!--				</td>-->
+<!--				<td colspan="2">-->
+<!--					<div class="tname t2n">Team 2</div>-->
+<!--					<div class="tpoints t2p">0</div>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--		</tbody></table>-->
 	</div>
     	 	
  	<div id="teams">
 	 		<div id="saveTeams">
 	 		<button id="save1">Save as Round 1</button>
 	 		<button id="save2">Save as Round 2</button>
-			<button id="save3">Save as Round 3</button>
+<!--			<button id="save3">Save as Round 3</button>-->
 	 	</div>
  		<table id="teamNames">
  			<tbody><tr>
- 				<td class="teamName">משנה תורה</td>
+ 				<td class="teamName">Kosher</td>
  				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
@@ -128,29 +128,29 @@
  				<td><input type="radio" name="t1" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">אגרת הרמב"ם</td>
+ 				<td class="teamName">Shabbat</td>
  				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
         <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>
  				<td><input type="radio" name="t2" value="0" checked=""> None</td>
  			</tr>
- 			<tr>
- 				<td class="teamName">ספר המצוות</td>
- 				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t3" value="0" checked=""> None</td>
- 			</tr>
- 			<tr>
- 				<td class="teamName">פירוש המשניות</td>
- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>
- 			</tr>
+<!-- 			<tr>-->
+<!-- 				<td class="teamName">ספר המצוות</td>-->
+<!-- 				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>-->
+<!-- 				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>-->
+<!--        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>-->
+<!--        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>-->
+<!-- 				<td><input type="radio" name="t3" value="0" checked=""> None</td>-->
+<!-- 			</tr>-->
+<!-- 			<tr>-->
+<!-- 				<td class="teamName">פירוש המשניות</td>-->
+<!-- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>-->
+<!-- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>-->
+<!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
+<!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
+<!-- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>-->
+<!-- 			</tr>-->
  			<tr>
  				<td colspan="5">
 					<br />
@@ -173,8 +173,8 @@
                 <div class="pricing">
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
-                    		<button class="plus">+100</button> 
-                            <button class="minus">-100</button> 
+                    		<button class="plus">+50</button>
+                            <button class="minus">-50</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -186,8 +186,8 @@
                     
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="givePoints" id="2">
-                    		<button class="plus">+100</button> 
-                            <button class="minus">-100</button> 
+                    		<button class="plus">+50</button>
+                            <button class="minus">-50</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -197,31 +197,31 @@
                     	</div>
                     </div>
                     
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="givePoints" id="3">
-                    		<button class="plus">+100</button> 
-                            <button class="minus">-100</button> 
-                            <input type="text" size="3"> 
-                            <button>Go</button><br>
-                            <label for="points">Set Points</label>
-                            <input type="text" name="points" size="5">
-                            <button class="setPoints">Set</button>
-                            <button class="resetPoints">Reset</button>
-                    	</div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="givePoints" id="4">
-                    		<button class="plus">+100</button> 
-                            <button class="minus">-100</button> 
-                            <input type="text" size="3"> 
-                            <button>Go</button><br>
-                            <label for="points">Set Points</label>
-                            <input type="text" name="points" size="5">
-                            <button class="setPoints">Set</button>
-                            <button class="resetPoints">Reset</button>
-                    	</div>
-                    </div>
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="givePoints" id="3">-->
+<!--                    		<button class="plus">+100</button> -->
+<!--                            <button class="minus">-100</button> -->
+<!--                            <input type="text" size="3"> -->
+<!--                            <button>Go</button><br>-->
+<!--                            <label for="points">Set Points</label>-->
+<!--                            <input type="text" name="points" size="5">-->
+<!--                            <button class="setPoints">Set</button>-->
+<!--                            <button class="resetPoints">Reset</button>-->
+<!--                    	</div>-->
+<!--                    </div>-->
+<!---->
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="givePoints" id="4">-->
+<!--                    		<button class="plus">+100</button> -->
+<!--                            <button class="minus">-100</button> -->
+<!--                            <input type="text" size="3"> -->
+<!--                            <button>Go</button><br>-->
+<!--                            <label for="points">Set Points</label>-->
+<!--                            <input type="text" name="points" size="5">-->
+<!--                            <button class="setPoints">Set</button>-->
+<!--                            <button class="resetPoints">Reset</button>-->
+<!--                    	</div>-->
+<!--                    </div>-->
             	</div>
             </div>
         </div>
@@ -261,33 +261,33 @@
                         </div>
                     </div>
                     
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table3">
-                        	<div class="pricing-list t3">
-                                <ul>
-                                    <li><span>Team 3</span></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pricing-header">
-                                <p class="pricing-rate team3">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table4">
-                        	<div class="pricing-list t4">
-                                <ul>
-                                    <li><span>Team 4</span></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pricing-header">
-                                <p class="pricing-rate team4">0</p>
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="pricing-table table3">-->
+<!--                        	<div class="pricing-list t3">-->
+<!--                                <ul>-->
+<!--                                    <li><span>Team 3</span></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="pricing-header">-->
+<!--                                <p class="pricing-rate team3">0</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!---->
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="pricing-table table4">-->
+<!--                        	<div class="pricing-list t4">-->
+<!--                                <ul>-->
+<!--                                    <li><span>Team 4</span></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="pricing-header">-->
+<!--                                <p class="pricing-rate team4">0</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
             	</div>
             </div>
         </div>
@@ -516,8 +516,8 @@
               $("#" + n).show();
               $(".table" + n).show();
             }
-              $(".plus").text('100');
-              $(".minus").text('-100');
+              $(".plus").text('50');
+              $(".minus").text('-50');
           // } else {
           //   // figure out which table to hide
           //   if (t1 !== undefined && t2 !== undefined) {
