@@ -50,7 +50,7 @@ if (is_string($ccResult)) {
         ]);
     } else {
         // update tables
-        $sql = "update th_chidon_zelda set balance = 0 where admin_id = " . $admin_id;
+        $sql = "update th_chidon_zelda set balance = 0, paid = (paid + " . intval($amount) . ") where admin_id = " . $admin_id;
         mysql_query($sql);
         // make sure amount for extra purchases gets zeroed out
         $sql = "select * from th_chidon_zelda_extra where admin_id = " . $admin_id;
