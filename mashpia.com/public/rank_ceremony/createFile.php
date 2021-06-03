@@ -17,8 +17,8 @@ if (!$school) exit;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
-$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
-    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58,472];
+//$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
+//    3,39,480,19,9,471,614,61,577,255,542,48,180,84,643,427,87,663,33,11,58,472];
 $girlSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
 
 // separate myshliach / anashKinder into separate boys/girls files
@@ -77,6 +77,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $pics = $r->getUserPic();
     $picOnly = $r->getPicOnly();
     $logos = $r->getSchoolLogos();
+//    echo "<pre>"; print_r($ranks); echo "</pre>";
 
     if (count($ranks)) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
@@ -137,6 +138,8 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             $dates = $r->getHeReportDates();
             $str = "Regular Schools:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
             createFile("dates.txt", $str);
+
+
         }
     }
 }
