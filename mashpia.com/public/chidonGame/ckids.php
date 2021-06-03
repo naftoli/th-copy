@@ -174,7 +174,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
                     		<button class="plus">+50</button>
-                            <button class="minus">-50</button>
+                            <button class="minus">-10</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -187,7 +187,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="givePoints" id="2">
                     		<button class="plus">+50</button>
-                            <button class="minus">-50</button>
+                            <button class="minus">-10</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -517,7 +517,7 @@
               $(".table" + n).show();
             }
               $(".plus").text('50');
-              $(".minus").text('-50');
+              $(".minus").text('-10');
           // } else {
           //   // figure out which table to hide
           //   if (t1 !== undefined && t2 !== undefined) {
