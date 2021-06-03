@@ -8,6 +8,13 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+$months = array(
+    0	=>	'Tishrei',  1   =>  'Cheshvon', 2   =>  'Kisleiv',  3   =>  'Teves',
+    4   =>  'Shevat',   5   =>  'Adar',     6   =>  'Adar II',  7   =>  'Nissan',
+    8   =>  'Iyar',     9   =>  'Sivan',    10  =>  'Tamuz',    11  =>  'Av',
+    12  =>  'Elul'
+);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
@@ -130,7 +137,7 @@ $rDates = $r->getReportDates();
 $heDateArr = explode('/', jdtojewish($rDates['end']));
 $heMonth = $heDateArr[0];
 $heYear = $heDateArr[2];
-$dateStr = "Date\n" . $heMonth . ' ' . $heYear . "\n" . $dates['end_he'];
+$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $dates['end_he'];
 createFile("dateInfo.txt", $dateStr);
 
 echo json_encode([
