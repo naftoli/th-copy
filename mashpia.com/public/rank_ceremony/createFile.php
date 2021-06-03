@@ -15,6 +15,19 @@ $schools = $as->getSchools();
 $school = $_POST['school'];
 if (!$school) exit;
 
+$months = [
+    0	=>	'Tishrei',  1   =>  'Cheshvon', 2   =>  'Kisleiv',  3   =>  'Teves',
+    4   =>  'Shevat',   5   =>  'Adar',     6   =>  'Adar II',  7   =>  'Nissan',
+    8   =>  'Iyar',     9   =>  'Sivan',    10  =>  'Tamuz',    11  =>  'Av',
+    12  =>  'Elul'
+];
+$heMonths = [
+    0  =>  'תשרי',      1   =>  'חשון',     2   =>  'כסלו',     3   =>  'טבת',
+    4   =>  'שבט',      5   =>  'אדר',      6   =>  'אדר ב',    7   =>  'ניסן',
+    8   =>  'אייר',     9   =>  'סיון',     10  =>  'תמוז',     11  =>  'אב',
+    12  =>  'אלול'
+];
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
 //$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
@@ -139,7 +152,12 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             $str = "Regular Schools:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
             createFile("dates.txt", $str);
 
-
+            $rDates = $r->getReportDates();
+            $heDateArr = jdtojewish($rDates['end']);
+            $heMonth = $heDateArr[0];
+            $heYear = $heDateArr[2];
+            $dateStr = "Date\n" . $heMonth . ' ' . $heYear . "\n" . $dates['end_he'];
+            createFile("dateInfo.txt", $dateStr);
         }
     }
 }

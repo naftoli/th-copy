@@ -126,6 +126,13 @@ $dates = $r->getHeReportDates();
 $str = "Generals:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
 createFile("dates.txt", $str);
 
+$rDates = $r->getReportDates();
+$heDateArr = jdtojewish($rDates['end']);
+$heMonth = $heDateArr[0];
+$heYear = $heDateArr[2];
+$dateStr = "Date\n" . $heMonth . ' ' . $heYear . "\n" . $dates['end_he'];
+createFile("dateInfo.txt", $dateStr);
+
 echo json_encode([
     'success' => true
 ]);
