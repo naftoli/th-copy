@@ -15,6 +15,13 @@ $months = array(
     12  =>  'Elul'
 );
 
+$heMonths = array(
+    0  =>  'תשרי',      1   =>  'חשון',     2   =>  'כסלו',     3   =>  'טבת',
+    4   =>  'שבט',      5   =>  'אדר',      6   =>  'אדר ב',    7   =>  'ניסן',
+    8   =>  'אייר',     9   =>  'סיון',     10  =>  'תמוז',     11  =>  'אב',
+    12  =>  'אלול'
+);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
@@ -137,7 +144,7 @@ $rDates = $r->getReportDates();
 $heDateArr = explode('/', jdtojewish($rDates['end']));
 $heMonth = $heDateArr[0];
 $heYear = $heDateArr[2];
-$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $dates['end_he'];
+$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1];
 createFile("dateInfo.txt", $dateStr);
 
 echo json_encode([

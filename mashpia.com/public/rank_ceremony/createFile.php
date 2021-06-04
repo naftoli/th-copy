@@ -22,6 +22,13 @@ $months = array(
     12  =>  'Elul'
 );
 
+$heMonths = array(
+    0  =>  'תשרי',      1   =>  'חשון',     2   =>  'כסלו',     3   =>  'טבת',
+    4   =>  'שבט',      5   =>  'אדר',      6   =>  'אדר ב',    7   =>  'ניסן',
+    8   =>  'אייר',     9   =>  'סיון',     10  =>  'תמוז',     11  =>  'אב',
+    12  =>  'אלול'
+);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
 //$boySchools =[269,176,112,105,63,81,615,49,89,55,106,470,5,21,4,86,263,60,185,483,80,110,412,659,517,
@@ -53,7 +60,7 @@ function createFile($name, $info) {
 }
 
 function generateFile( $logoType = '', $limitTo = '' ) {
-    global $school, $schools, $months;
+    global $school, $schools, $months, $heMonths;
 
     $rankNames = [
         'Sergeant' => 'sergeant',
@@ -150,7 +157,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             $heDateArr = explode('/', jdtojewish($rDates['end']));
             $heMonth = $heDateArr[0];
             $heYear = $heDateArr[2];
-            $dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $dates['end_he'];
+            $dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1];
             createFile("dateInfo.txt", $dateStr);
         }
     }
