@@ -602,7 +602,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
                 "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll, 
-                       he_name_plaque, en_name_custom, he_name_custom) 
+                       he_name_plaque, en_name_custom, he_name_custom, comments) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll,

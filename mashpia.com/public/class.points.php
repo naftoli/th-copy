@@ -189,7 +189,7 @@ class Points
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         $sql = "SELECT SUM(points) AS total
             FROM pointsDB.user_points
-            WHERE user_id = {'$this->user_id}'
+            WHERE user_id = '{$this->user_id}'
             AND institution_id = '{$this->school_id}'
             AND points > 0
             AND resource_name NOT IN ('store' , 'transaction_manager_store') 
@@ -197,7 +197,7 @@ class Points
         // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
-        return $row['total'];
+        return $row ? $row['total'] : 0;
     }
 
     // originally from mashpia.com/public/v2/application/models/Points.php user_store function
@@ -221,6 +221,6 @@ class Points
         // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
-        return $row['total'];
+        return $row ? $row['total'] : 0;
     }
 }
