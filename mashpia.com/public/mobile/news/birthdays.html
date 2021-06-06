@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title class="i18n" data-key="Title">Tzivos Hashem Birthdays</title>
+	<link rel="icon" type="image/png" href="/mobile/img_new/TH logo favicon-03.png" />
 	<style type="text/css">
 		@charset "UTF-8";
 
@@ -109,12 +110,13 @@
 
 		.span12 {
 			width: 100%;
-			float: left
+			float: left;
 		}
 
 		.span3 {
 			width: 25%;
-			float: left
+			float: left;
+			font-family: Exo;
 		}
 
 		.footer {
@@ -168,7 +170,7 @@
 
 		.container .body {
 			float: left;
-			border: 5px solid #ccc;
+			border: none !important;
 			border-top: 0 solid transparent
 		}
 
@@ -189,7 +191,8 @@
 		.footer.media-group {
 			margin-top: 0;
 			border-top: 0 solid transparent;
-			border-bottom: 5px solid #ccc
+			border-bottom: none !important;
+			font-family: Exo !important;
 		}
 
 		.footer.media-group .menu-item {
@@ -324,13 +327,24 @@
 		}
 
 		.container .body {
-			background-image: url(images/news/star.png);
+			background-image: none !important;
 		}
 
 		span#main-title {
 			color: white !important;
 		}
+
+		.header-custom {
+			position: relative;
+			background-color: #1d2654;
+			color: #4160ac;
+			font-family: 'Exo', sans-serif;
+			background-image: url(/mobile/img_new/TH_pattern.png);
+			background-repeat: repeat;
+		}
 	</style>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;900&display=swap" rel="stylesheet">
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
 		<link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
@@ -479,7 +493,7 @@
 </head>
 
 <body class="news">
-	<div class="header-green" style="position: relative">
+	<div class="header-custom" style="position: relative">
 		<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
 			<table style="width: 100%;">
 				<tr>
