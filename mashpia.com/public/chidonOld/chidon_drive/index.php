@@ -1,6 +1,5 @@
 <?php
 // routing of family names
-/*
 $url = $_SERVER['REQUEST_URI'];
 $host = isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : 'tzivos.local';
 $pos = strrpos( $url, '/' );
@@ -24,13 +23,4 @@ if ( is_numeric( $url_end ) ) {
     }
 }
 exit;
-*/
-?>
-<html>
-    <head>
-        <meta name="google-site-verification" content="AuNytmimWZJQFnniNKzO9NIEJnWB1EzlAerMbdra578" />
-    </head>
-    <body>
 
-    </body>
-</html>
