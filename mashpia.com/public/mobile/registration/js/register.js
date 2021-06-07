@@ -951,6 +951,13 @@ var templates = function(){
             } else {
                 $("#yarmulka").hide()
             }
+
+            if (user.new_to_chidon) {
+                $("#chidonRecruitment").show()
+            } else {
+                $("#chidonRecruitment").hide()
+                $("#user_serial").val('')
+            }
             
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
