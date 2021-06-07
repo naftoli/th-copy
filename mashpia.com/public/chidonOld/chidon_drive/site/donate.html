@@ -525,7 +525,8 @@
 					});
 
 					// list of sponsors
-					$.post('../ajax/getSponsorInfo.php', function( info ) {
+					let key = 'chidondrive@5781'
+					$.post('../ajax/getSponsorInfo.php', { key: key }, function( info ) {
 						let result = JSON.parse( info );
 						console.log( result );
 						if ( result.success ) {

@@ -3,6 +3,10 @@ require __DIR__ . '/../../../api/header/db.php';
 require __DIR__. '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+if (!isset($_POST['key']) || $_POST['key'] != 'chidondrive@' . $year) {
+    exit;
+}
+
 $data = [];
 $success = true;
 $stmt = $MASHPIA_DB->prepare("
