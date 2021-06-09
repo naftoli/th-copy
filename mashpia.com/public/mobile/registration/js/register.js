@@ -930,6 +930,7 @@ var templates = function(){
                 $("#khk input")[0].checked = false
                 if (parseInt(user.khk_reg)) $("#khk input")[0].checked = true
             } else {
+                $("#khk input")[0].checked = false
                 $("#khk").hide()
             }
 
@@ -1010,6 +1011,7 @@ var templates = function(){
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
                     }
+                    $( '#step-2 form #chayolei-fee' ).empty();
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
             } else {

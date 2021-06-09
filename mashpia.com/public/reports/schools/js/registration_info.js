@@ -44,12 +44,12 @@ var registration_info = function() {
         }
         // update the base
         updateBase( school_id, updates )
-            .then( function( response ) {
+            .then( function( c ) {
                 if ( response.success ) {
                     event.target.disabled = true;
                     alert( 'Base Updated' );
                 } else {
-                    alert( resposne.message );
+                    alert( response.message );
                 }
             });
     }
