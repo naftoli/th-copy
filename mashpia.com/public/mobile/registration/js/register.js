@@ -451,10 +451,6 @@ var registrationApp = function() {
         // if the user changed update him in the background...
         if ( user_changed ) {
             state.selected_users[ current_index ] = selected_user;
-            // don't try updating the user_serial to 0
-            if (!postData.user_serial) {
-                delete postData.user_serial;
-            }
             updateUser( selected_user.user_id, postData ).then( function() {
                 return getUsers();
             });
@@ -539,7 +535,7 @@ var registrationApp = function() {
 
             // make sure we have student id if recruited by is checked off
             if ( $(".recruit").eq(0).is(":checked") ) {
-                if ( parseInt( $("#user_serial").val() ) == 0 ) {
+                if ( parseInt( $("#recruited_by_user_serial").val() ) == 0 ) {
                     return showError(Err9);
                 }
             }
@@ -622,7 +618,7 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     }, 
                     recruited: $(".recruit:checked").val(), 
-                    recruitedBy: parseInt($("#user_serial").val()),
+                    recruitedBy: parseInt($("#recruited_by_user_serial").val()),
                     poll: poll,
                     name_pref: $("input.nameChoice:checked").val(),
                     he_name_plaque: $("#he_name_plaque").val(),
@@ -971,7 +967,7 @@ var templates = function(){
                 $("#chidonRecruitment").show()
             } else {
                 $("#chidonRecruitment").hide()
-                $("#user_serial").val('')
+                $("#recruited_by_user_serial").val('')
             }
             
             // reset the book field
