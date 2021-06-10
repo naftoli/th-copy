@@ -7,6 +7,13 @@ $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
+// when clicking an element with a data-dismiss attribute
+// dismiss the element referenced in the data-target attribute
+// don't know why just these modals are not working without this
+$("[data-dismiss]").click( function( event ){
+    $(event.target.dataset.target).modal('hide')
+})
+
 var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
@@ -19,6 +26,72 @@ var registrationApp = function() {
         cart: [], // items that the user is paying for
         shipping_type: 1 // 1 or 2
     }
+
+    var Msg1 = "Tzivos Hashem Registration for ";
+        
+    var Msg3 = "CKids Registration for ";
+    var Msg4 = "Chidon Registration ";
+    var Msg5 = " (includes coordinator and study guide)";// 
+    var Msg6 = "Yahadus Book for ";
+    var Msg7 = " (Shipping Included)";
+    var Msg8 = "To Register for MyShliach's online weekly classes please click ";
+    var Msg9 = "here";
+    //var Msg10 = "";
+    //var Msg11 = "";
+
+    var Err1 = "You must select at least one type of registration.";
+    var Err2 = "You must choose which book is being studied.";
+    var Err3 = "You must indicate if you have already purchased a book or not.";
+    var Err4 = "You have not selected where you bought the book.";
+    var Err5 = "You must enter the store information for your book purchase.";
+    var Err6 = "You must indicate whether you would like to purchase a book or not.";
+    var Err7 = "You must indicate how you will be learning for chidon.";
+    var Err8 = "You must indicate your acknowledgment of the Shabbaton fee.";
+    var Err9 = "You must enter the serial number of the student who recruited you.";
+    var Err10 = "You must enter the name of the school that you are attending.";
+    var Err11 = "You must indicate your acceptance of participation in Tzivos Hashem Media.";
+    var Err12 = "Could not update Profile Picture. We will try again when pressing 'Confirm'.";
+    var Err13 = "You must choose how you prefer your name to be displayed!";
+    var Err14 = "You must choose a yarmulka size!";
+    var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
+    //var Err16 = "";
+    //var Err17 = "";
+    //var Err18 = "";
+    //var Err19 = "";
+    //var Err20 = "";
+    var picError = "You must upload a picture of your child!"
+
+    if (localStorage.getItem("locallang") == "he") {
+         Msg1 = "ההרשמה לצבאות ה' עבור ";
+        
+         Msg3 = "ההרשמה לסי קידס עבור ";
+         Msg4 = "הרשמה לחידון ";
+         Msg5 = "(כולל מתאם ומדריך לימודי";// 
+         Msg6 = "ספר יהדות עבור ";
+         Msg7 = "(דמי המשלוח כלולים)";
+         Msg8 = "להרשם לשיעורים השבועיים של מיי שליח נא להקליק  ";
+         Msg9 = "כאן";
+        // Msg10 = "";
+        // Msg11 = "";
+
+         Err1 = "חובה לבחור לפחות הרשמה אחת .";
+         Err2 = "חובה לבחור באיזה ספר למדתם.";
+         Err3 = "חובה לציין האם רכשתם את הספר או לא.";
+         Err4 = "לא בחרת היכן הספר נקנה";
+         Err5 = "חובה להקליד את הכתובת של החנות בה נקנה הספר";
+         Err6 = "חובה לציין האם אתם רוצים לקנות את הספר או לא .";
+         Err7 = "חובה לציין כיצד אתם מתכוונים ללמוד לחידון.";
+         Err8 = "חובה לציין שאתם מבינים את עלות השבתון";
+         Err9 = "חובה לבחור מי צירף אתכם";
+         Err10 = "חובה להכניס את שם בית הספר או תלמוד תורה בו אתם לומדים";
+         Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
+         Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
+         Err13 = ""
+         Err14 = "";
+         Err15 = ""
+         picError = ""
+    }
+
     // var registration_year = 5779;
     // navigation buttons
     $(".start-step-1").click( step1 );
@@ -352,70 +425,6 @@ var registrationApp = function() {
       
          */
 
-        var Msg1 = "Tzivos Hashem Registration for ";
-        
-        var Msg3 = "CKids Registration for ";
-        var Msg4 = "Chidon Registration ";
-        var Msg5 = " (includes coordinator and study guide)";// 
-        var Msg6 = "Yahadus Book for ";
-        var Msg7 = " (Shipping Included)";
-        var Msg8 = "To Register for MyShliach's online weekly classes please click ";
-        var Msg9 = "here";
-        //var Msg10 = "";
-        //var Msg11 = "";
-
-        var Err1 = "You must select at least one type of registration.";
-        var Err2 = "You must choose which book is being studied.";
-        var Err3 = "You must indicate if you have already purchased a book or not.";
-        var Err4 = "You have not selected where you bought the book.";
-        var Err5 = "You must enter the store information for your book purchase.";
-        var Err6 = "You must indicate whether you would like to purchase a book or not.";
-        var Err7 = "You must indicate how you will be learning for chidon.";
-        var Err8 = "You must indicate your acknowledgment of the Shabbaton fee.";
-        var Err9 = "You must enter the serial number of the student who recruited you.";
-        var Err10 = "You must enter the name of the school that you are attending.";
-        var Err11 = "You must indicate your acceptance of participation in Tzivos Hashem Media.";
-        var Err12 = "Could not update Profile Picture. We will try again when pressing 'Confirm'.";
-        var Err13 = "You must choose how you prefer your name to be displayed!";
-        var Err14 = "You must choose a yarmulka size!";
-        var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
-        //var Err16 = "";
-        //var Err17 = "";
-        //var Err18 = "";
-        //var Err19 = "";
-        //var Err20 = "";
-        var picError = "You must upload a picture of your child!"
-
-        if (localStorage.getItem("locallang") == "he") {
-             Msg1 = "ההרשמה לצבאות ה' עבור ";
-            
-             Msg3 = "ההרשמה לסי קידס עבור ";
-             Msg4 = "הרשמה לחידון ";
-             Msg5 = "(כולל מתאם ומדריך לימודי";// 
-             Msg6 = "ספר יהדות עבור ";
-             Msg7 = "(דמי המשלוח כלולים)";
-             Msg8 = "להרשם לשיעורים השבועיים של מיי שליח נא להקליק  ";
-             Msg9 = "כאן";
-            // Msg10 = "";
-            // Msg11 = "";
-
-             Err1 = "חובה לבחור לפחות הרשמה אחת .";
-             Err2 = "חובה לבחור באיזה ספר למדתם.";
-             Err3 = "חובה לציין האם רכשתם את הספר או לא.";
-             Err4 = "לא בחרת היכן הספר נקנה";
-             Err5 = "חובה להקליד את הכתובת של החנות בה נקנה הספר";
-             Err6 = "חובה לציין האם אתם רוצים לקנות את הספר או לא .";
-             Err7 = "חובה לציין כיצד אתם מתכוונים ללמוד לחידון.";
-             Err8 = "חובה לציין שאתם מבינים את עלות השבתון";
-             Err9 = "חובה לבחור מי צירף אתכם";
-             Err10 = "חובה להכניס את שם בית הספר או תלמוד תורה בו אתם לומדים";
-             Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
-             Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
-             Err13 = ""
-             Err14 = "";
-             Err15 = ""
-             picError = ""
-        }
 
         event.preventDefault();
 
