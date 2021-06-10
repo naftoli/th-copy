@@ -50,16 +50,8 @@ if (is_string($ccResult)) {
         ]);
     } else {
         // update tables
+        // TODO fix this bc its applying to family instead of to child
         $sql = "update th_chidon_zelda set balance = 0, paid = (paid + " . intval($amount) . ") where admin_id = " . $admin_id;
-        mysql_query($sql);
-        // make sure amount for extra purchases gets zeroed out
-        $sql = "select * from th_chidon_zelda_extra where admin_id = " . $admin_id;
-        $result = mysql_query($sql);
-        if (mysql_num_rows($result) > 0) {
-            $sql = "update th_chidon_zelda_extra set extra = " . mysql_real_escape_string($_POST['extra']) . " where admin_id = " . $admin_id;
-        } else {
-            $sql = "insert into th_chidon_zelda_extra set admin_id = $admin_id, extra = " . mysql_real_escape_string($_POST['extra']);
-        }
         mysql_query($sql);
         if ($trans_id) {
             $sql = "update admins set confirmed_chidon_trans_id = '" . $trans_id . "' where admin_id = " . $admin_id;
