@@ -11,7 +11,7 @@ hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right plac
 // dismiss the element referenced in the data-target attribute
 // don't know why just these modals are not working without this
 $("[data-dismiss]").click( function( event ){
-    $(event.target.dataset.target).modal('hide')
+    event.target.dataset.target && $(event.target.dataset.target).modal('hide')
 })
 
 var myshliach = 61;
@@ -54,7 +54,7 @@ var registrationApp = function() {
     var Err13 = "You must choose how you prefer your name to be displayed!";
     var Err14 = "You must choose a yarmulka size!";
     var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
-    //var Err16 = "";
+    var Err16 = "Could not confirm your registration. Ensure that the required fields are filled in or contact support";
     //var Err17 = "";
     //var Err18 = "";
     //var Err19 = "";
@@ -86,9 +86,10 @@ var registrationApp = function() {
          Err10 = "חובה להכניס את שם בית הספר או תלמוד תורה בו אתם לומדים";
          Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
          Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
-         Err13 = ""
+         Err13 = "";
          Err14 = "";
-         Err15 = ""
+         Err15 = "";
+         Err16 = "לא ניתן היה לאשר את הרישום שלך. ודא כי השדות הנדרשים מלאים או צור קשר עם התמיכה";
          picError = ""
     }
 
@@ -450,6 +451,10 @@ var registrationApp = function() {
         // if the user changed update him in the background...
         if ( user_changed ) {
             state.selected_users[ current_index ] = selected_user;
+            // don't try updating the user_serial to 0
+            if (!postData.user_serial) {
+                delete postData.user_serial;
+            }
             updateUser( selected_user.user_id, postData ).then( function() {
                 return getUsers();
             });
@@ -789,7 +794,7 @@ var registrationApp = function() {
         return new Promise( function( resolve, reject ){
             $.post("/api/core/users?id=" + user_id, postData, function( response ) {
                 if ( !response.success ) {
-                    showError(Err12 );
+                    showError(Err16 );
                 }
                 resolve( response );
             });
