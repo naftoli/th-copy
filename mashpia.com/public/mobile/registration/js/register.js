@@ -11,7 +11,7 @@ hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right plac
 // dismiss the element referenced in the data-target attribute
 // don't know why just these modals are not working without this
 $("[data-dismiss]").click( function( event ){
-    $(event.target.dataset.target).modal('hide')
+    event.target.dataset.target && $(event.target.dataset.target).modal('hide')
 })
 
 var myshliach = 61;
@@ -54,7 +54,7 @@ var registrationApp = function() {
     var Err13 = "You must choose how you prefer your name to be displayed!";
     var Err14 = "You must choose a yarmulka size!";
     var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
-    //var Err16 = "";
+    var Err16 = "Could not confirm your registration. Ensure that the required fields are filled in or contact support";
     //var Err17 = "";
     //var Err18 = "";
     //var Err19 = "";
@@ -86,9 +86,10 @@ var registrationApp = function() {
          Err10 = "חובה להכניס את שם בית הספר או תלמוד תורה בו אתם לומדים";
          Err11 = "חובה לציין את הסכמתכם להשתתפות במדיה של צבאות ה";
          Err12 = "לא ניתן לעדען את תמונת הפרופיל . נא לנסות שוב!";
-         Err13 = ""
+         Err13 = "";
          Err14 = "";
-         Err15 = ""
+         Err15 = "";
+         Err16 = "לא ניתן היה לאשר את הרישום שלך. ודא כי השדות הנדרשים מלאים או צור קשר עם התמיכה";
          picError = ""
     }
 
@@ -529,7 +530,7 @@ var registrationApp = function() {
 
             // make sure we have student id if recruited by is checked off
             if ( $(".recruit").eq(0).is(":checked") ) {
-                if ( parseInt( $("#user_serial").val() ) == 0 ) {
+                if ( parseInt( $("#recruited_by_user_serial").val() ) == 0 ) {
                     return showError(Err9);
                 }
             }
@@ -612,7 +613,7 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     }, 
                     recruited: $(".recruit:checked").val(), 
-                    recruitedBy: parseInt($("#user_serial").val()),
+                    recruitedBy: parseInt($("#recruited_by_user_serial").val()),
                     poll: poll,
                     name_pref: $("input.nameChoice:checked").val(),
                     comments: $("#comments").val()
@@ -781,7 +782,7 @@ var registrationApp = function() {
         return new Promise( function( resolve, reject ){
             $.post("/api/core/users?id=" + user_id, postData, function( response ) {
                 if ( !response.success ) {
-                    showError(Err12 );
+                    showError(Err16 );
                 }
                 resolve( response );
             });
@@ -966,7 +967,7 @@ var templates = function(){
                 $("#chidonRecruitment").show()
             } else {
                 $("#chidonRecruitment").hide()
-                $("#user_serial").val('')
+                $("#recruited_by_user_serial").val('')
             }
             
             // reset the book field
