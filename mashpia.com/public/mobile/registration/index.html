@@ -41,6 +41,9 @@
             input {
                 color: #1b2b51;
             }
+            .whatsapp, .khkWhatsapp {
+                display: none;
+            }
         </style>
 </head>
 <body>
@@ -155,6 +158,28 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-12">
+                            <label>English Name that you are known by (if different than above)</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="first_known_en" name="first_known_en" required/>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="last_known_en"  name="last_known_en" required/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Hebrew Name that you are known by (if different than above)</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="first_known_he" name="first_known_he" dir="rtl" required/>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="last_known_he"  name="last_known_he" dir="rtl" required/>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12 col-xl-6">
                             <label for="school_name" class="i18n" data-key="School">School</label>
                             <input type="text" disabled class="form-control" placeholder="N / A" id="school_name">
@@ -256,7 +281,7 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />
-                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />
+<!--                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />-->
                                 <span id="study-guides" style="display: none">
 <!--                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />-->
                                 </span>
@@ -312,35 +337,35 @@
 <!--                                </span>-->
 <!--                                <br />-->
 
-                                <b>Chidon Plaque Name</b><hr />
-                                <label for="he-name-plaque">
-                                    Please enter your Full Hebrew name as you would like it to be on any plaque or award you may receive.
-                                </label>
-                                <input type="text" name="he-name-plaque" id="he_name_plaque" class="form-control" style="width: 300px;" />
-                                <br />
-
-                                <b>Chidon Customized Items</b><hr />
-                                <label for="custom-name">
-                                    If we make a <b>custom item</b> how would you like your name to be written?
-                                </label><br />
-                                English Name: <input type="text" name="custom-name" id="en_name_custom" class="form-control" style="width: 300px;" /><br />
-                                Hebrew Name: <input type="text" name="custom-name-he" id="he_name_custom" class="form-control" style="width: 300px;" />
-                                <br />
-
                                 <div>
-                                    If we can only have one of your names on it, what name would you like it to have?
-                                    <br />
+                                    <b>Chidon Customized Items</b><hr />
+                                    <label>
+                                        If we make a <b>custom item</b> what name would you like to use?
+                                    </label><br />
                                     <label class="radio-label">
                                         <input type="radio" class="nameChoice" name="nameChoice" value="en"/>
                                         <span class="radio"></span>
                                     </label>
-                                    <span class="i18n" data-key="EnName">English Name</span>
+                                    <span class="i18n" data-key="EnName">Full English Name</span>
                                     <br />
                                     <label class="radio-label">
                                         <input type="radio" class="nameChoice" name="nameChoice" value="he"/>
                                         <span class="radio"></span>
                                     </label>
-                                    <span class="i18n" data-key="HeName">Hebrew Name</span>
+                                    <span class="i18n" data-key="HeName">Full Hebrew Name</span>
+                                    <br />
+                                    <label class="radio-label">
+                                        <input type="radio" class="nameChoice" name="nameChoice" value="nick_en"/>
+                                        <span class="radio"></span>
+                                    </label>
+                                    <span>English Name that I'm known by</span>
+                                    <br />
+                                    <label class="radio-label">
+                                        <input type="radio" class="nameChoice" name="nameChoice" value="nick_he"/>
+                                        <span class="radio"></span>
+                                    </label>
+                                    <span>Hebrew Name that I'm known as</span>
+                                    <br />
                                 </div>
                                 <br />
 
@@ -517,20 +542,29 @@
                         <div class="col-sm-12">
                             <b>Chidon WhatsApp</b><hr />
                             Please join your child's grades whatsapp group so you stay updated on all Chidon updates.
-                            Please make sure to join the group that your child will be in in 5782.<br /><br />
-                            <b>Boys</b><br />
-                            Grade 4 5782: <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS">chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS</a><br />
-                            Grade 5 5782: <a href="https://chat.whatsapp.com/DU8QLRe1nHI0INq0G2z0C7">chat.whatsapp.com/DU8QLRe1nHI0INq0G2z0C7</a><br />
-                            Grade 6 5782: <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x">chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x</a><br />
-                            Grade 7 5782: <a href="https://chat.whatsapp.com/KFT0YM0YD5LLvTe5GDBeeN">chat.whatsapp.com/KFT0YM0YD5LLvTe5GDBeeN</a><br />
-                            Grade 8 5782: <a href="https://chat.whatsapp.com/LnPm3Ad9ffkHMSNcOryI1g">chat.whatsapp.com/LnPm3Ad9ffkHMSNcOryI1g</a><br />
-                            <br />
-                            <b>Girls</b><br />
-                            Grade 4 5782: <a href="https://chat.whatsapp.com/Eaf9fEDYAgaLmANThdwBxo">chat.whatsapp.com/Eaf9fEDYAgaLmANThdwBxo</a><br />
-                            Grade 5 5782: <a href="https://chat.whatsapp.com/C1XeUnHV5vwIiqXCxsJ6hO">chat.whatsapp.com/C1XeUnHV5vwIiqXCxsJ6hO</a><br />
-                            Grade 6 5782: <a href="https://chat.whatsapp.com/HvXNFACJJHQ7v9TVq32VrI">chat.whatsapp.com/HvXNFACJJHQ7v9TVq32VrI</a><br />
-                            Grade 7 5782: <a href="https://chat.whatsapp.com/EUvgGp4g3rrIVTrQZPS64Q">chat.whatsapp.com/EUvgGp4g3rrIVTrQZPS64Q</a><br />
-                            Grade 8 5782: <a href="https://chat.whatsapp.com/JL5xeTIWqflLCBVxT7R1bZ">chat.whatsapp.com/JL5xeTIWqflLCBVxT7R1bZ</a><br />
+                            Please make sure to join the group that your child will be in in 5782.<br />
+                            <div id="boysWhatsapp" class="whatsapp">
+                                <b>Boys</b><br />
+                                <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS">Grade 4 5782</a><br />
+                                <a href="https://chat.whatsapp.com/DU8QLRe1nHI0INq0G2z0C7">Grade 5 5782</a><br />
+                                <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x">Grade 6 5782</a><br />
+                                <a href="https://chat.whatsapp.com/KFT0YM0YD5LLvTe5GDBeeN">Grade 7 5782</a><br />
+                                <a href="https://chat.whatsapp.com/LnPm3Ad9ffkHMSNcOryI1g">Grade 8 5782</a><br />
+                                <div id="khkWhatsappBoys" class="khkWhatsapp">
+                                    <a href="https://chat.whatsapp.com/I4IRgTxmVfO419sjJOz3Ii">Kol Hatorah Kula 5782</a>
+                                </div>
+                            </div>
+                            <div id="girlsWhatsapp" class="whatsapp">
+                                <b>Girls</b><br />
+                                <a href="https://chat.whatsapp.com/Eaf9fEDYAgaLmANThdwBxo">Grade 4 5782</a><br />
+                                <a href="https://chat.whatsapp.com/C1XeUnHV5vwIiqXCxsJ6hO">Grade 5 5782</a><br />
+                                <a href="https://chat.whatsapp.com/HvXNFACJJHQ7v9TVq32VrI">Grade 6 5782</a><br />
+                                <a href="https://chat.whatsapp.com/EUvgGp4g3rrIVTrQZPS64Q">Grade 7 5782</a><br />
+                                <a href="https://chat.whatsapp.com/JL5xeTIWqflLCBVxT7R1bZ">Grade 8 5782</a><br />
+                                <div id="khkWhatsappGirls" class="khkWhatsapp">
+                                    <a href="https://chat.whatsapp.com/KzvkigrhabAI4XdxqPIUyM">Kol Hatorah Kula 5782</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <br />

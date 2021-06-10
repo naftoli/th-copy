@@ -485,11 +485,6 @@ var registrationApp = function() {
                 return showError(Err13)
             }
 
-            // check that he plaque name and en / he custom name are filled out
-            if ($("#he_name_plaque").val() == '' || $("#en_name_custom").val() == '' || $("#he_name_custom").val() == '') {
-                return showError(Err15)
-            }
-
             // check yarmulka
             if (selected_user.gender == 'M') {
                 if ($("#yarmulka-size").val() == 0) {
@@ -620,9 +615,6 @@ var registrationApp = function() {
                     recruitedBy: parseInt($("#user_serial").val()),
                     poll: poll,
                     name_pref: $("input.nameChoice:checked").val(),
-                    he_name_plaque: $("#he_name_plaque").val(),
-                    en_name_custom: $("#en_name_custom").val(),
-                    he_name_custom: $("#he_name_custom").val(),
                     comments: $("#comments").val()
                 }
             });
@@ -938,9 +930,17 @@ var templates = function(){
                 $("#khk").show()
                 $("#khk input")[0].checked = false
                 if (parseInt(user.khk_reg)) $("#khk input")[0].checked = true
+                if (user.gender == 'M') {
+                    $("#khkWhatsappBoys").show()
+                    $("#khkWhatsappGirls").hide()
+                } else {
+                    $("#khkWhatsappBoys").hide()
+                    $("#khkWhatsappGirls").show()
+                }
             } else {
                 $("#khk input")[0].checked = false
                 $("#khk").hide()
+                $(".khkWhatsapp").hide()
             }
 
             // reset name preference
@@ -951,15 +951,15 @@ var templates = function(){
                 else if (user.pref_name == 'he') $("input.nameChoice")[1].checked = true
             }
 
-            $("#he_name_plaque").val('')
-            $("#en_name_custom").val('')
-            $("#he_name_custom").val('')
-
             // show/hide yarmulka
             if (user.gender == 'M') {
                 $("#yarmulka").show()
+                $("#boysWhatsapp").show()
+                $("#girlsWhatsapp").hide()
             } else {
                 $("#yarmulka").hide()
+                $("#girlsWhatsapp").show()
+                $("#boysWhatsapp").hide()
             }
 
             if (user.new_to_chidon) {
