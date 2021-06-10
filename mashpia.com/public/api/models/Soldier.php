@@ -583,7 +583,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // save the charge
         if ( !is_null( $amount ) ) {
-            $this->registrationCharge( 'chidon', $amount, $trans_id );
+            $this->registrationCharge( 'chidon', $amount, $trans_id, $year );
         }
         // make sure we have parent id
         if ( !$parent_id ) {
