@@ -217,9 +217,6 @@
                                 <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
                                 <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
                                 <span id="anash_kinder_text" style="display: none" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
-
-
-
                             </div>
                         </div>
                     </label>
@@ -362,6 +359,7 @@
                                 <b>Chidon Sweater</b><hr />
                                 <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:</label>
                                 <select class="form-control" id="chidon-sweater-size">
+                                    <option value="">Please choose</option>
                                     <option value="children xs" class="i18n" data-key="ChildrenXS">Youth XS</option>
                                     <option value="children s" class="i18n" data-key="ChildrenS">Youth S</option>
                                     <option value="children m" class="i18n" data-key="ChildrenM">Youth M</option>
@@ -515,13 +513,38 @@
                     </label>
                     <br />
 
-                    <hr />
-                    <div class="row" id="broadcast">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <b>Chidon WhatsApp</b><hr />
+                            Please join your child's grades whatsapp group so you stay updated on all Chidon updates.
+                            Please make sure to join the group that your child will be in in 5782.<br /><br />
+                            <b>Boys</b><br />
+                            Grade 4 5782: <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS">chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS</a><br />
+                            Grade 5 5782: <a href="https://chat.whatsapp.com/DU8QLRe1nHI0INq0G2z0C7">chat.whatsapp.com/DU8QLRe1nHI0INq0G2z0C7</a><br />
+                            Grade 6 5782: <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x">chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x</a><br />
+                            Grade 7 5782: <a href="https://chat.whatsapp.com/KFT0YM0YD5LLvTe5GDBeeN">chat.whatsapp.com/KFT0YM0YD5LLvTe5GDBeeN</a><br />
+                            Grade 8 5782: <a href="https://chat.whatsapp.com/LnPm3Ad9ffkHMSNcOryI1g">chat.whatsapp.com/LnPm3Ad9ffkHMSNcOryI1g</a><br />
+                            <br />
+                            <b>Girls</b><br />
+                            Grade 4 5782: <a href="https://chat.whatsapp.com/Eaf9fEDYAgaLmANThdwBxo">chat.whatsapp.com/Eaf9fEDYAgaLmANThdwBxo</a><br />
+                            Grade 5 5782: <a href="https://chat.whatsapp.com/C1XeUnHV5vwIiqXCxsJ6hO">chat.whatsapp.com/C1XeUnHV5vwIiqXCxsJ6hO</a><br />
+                            Grade 6 5782: <a href="https://chat.whatsapp.com/HvXNFACJJHQ7v9TVq32VrI">chat.whatsapp.com/HvXNFACJJHQ7v9TVq32VrI</a><br />
+                            Grade 7 5782: <a href="https://chat.whatsapp.com/EUvgGp4g3rrIVTrQZPS64Q">chat.whatsapp.com/EUvgGp4g3rrIVTrQZPS64Q</a><br />
+                            Grade 8 5782: <a href="https://chat.whatsapp.com/JL5xeTIWqflLCBVxT7R1bZ">chat.whatsapp.com/JL5xeTIWqflLCBVxT7R1bZ</a><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-12">
+                            <b>Chayolei WhatsApp</b><hr />
+                        </div>
                         <div class="col-sm-12 i18n" data-key="WantToReceive" style="padding-left: 2%; padding-right: 4%; text-align: center;">
                             Want to receive Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853 to join the broadcast for Tzivos Hashem updates.
                         </div>
-                        <hr />
                     </div>
+
+                    <hr />
                     <label>
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -820,6 +843,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <p class="i18n" data-key="ClickConfirm">
+                        To change it, just update the fields and click "Update", otherwise click on "Confirm".
+                    </p>
                     <p>
                         <span class="i18n" data-key="ShippingAddressFileClickConfirm">The shipping address we have on file is: </span><br />
                         <div id="shipping-address" class="container">
@@ -837,11 +863,8 @@
                             </div>
                         </div>
                     </p>
-                    <p class="i18n" data-key="ClickConfirm">
-                        To change it, just update the fields and click "Update", otherwise click on "Confirm".
-                    </p>
                     <p>
-                        <b class="i18n" data-key="PleaseNoteAddressChange">Please Note: If your are changing to a US address, you MUST enter USA in the country field.</b>
+                        <b class="i18n" data-key="PleaseNoteAddressChange">Please Note: We only ship within the USA.</b>
                     </p>
                 </div>
                 <div class="modal-footer">

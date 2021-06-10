@@ -105,7 +105,7 @@
     "ShippingRatesVary": "Shipping rates may vary by location.",
     "PrepaidShippingFor": "Prepaid shipping fee for",
     "PrepaidShippingFordes": "Hachayol magazines, medals and rank books",
-    "ConfirmChildren": "Confirm Children",
+    "ConfirmChildren": "ConShippingAddressFileClickConfirmfirm Children",
     "Checkout": "Checkout",
     "PaymentMethod": "Payment Method",
     "CardNumber": "Card number",
@@ -127,8 +127,9 @@
     "YourchildRegistered": "Your child(ren) has(have) been registered!",
     "ConfirmShippingAddress": "Please confirm your shipping address!",
     "ShippingAddressFile": "The shipping address we have on file is:",
+    "ShippingAddressFileClickConfirm": "The shipping address we have on file is: ",
     "ClickConfirm": "To change it, just update the fields and click \"Update\", otherwise click on \"Confirm\".",
-    "PleaseNoteAddressChange": "Please Note: If your are changing to a US address, you MUST enter USA in the country field.",
+    "PleaseNoteAddressChange": "Please Note: We only ship within the USA.",
     "Update": "Update",
     "Confirm": "Confirm"
 }
