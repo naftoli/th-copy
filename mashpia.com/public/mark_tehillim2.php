@@ -338,10 +338,15 @@ if (isset($_POST['submit'])) {
                 ?>
             </select>
             <input type="submit" name="submit" value="change" id="changeGrade" />
-            <!--<input type='submit' name='submit' value='save' />-->
             <br /><br />
             <table>
                 <caption><?=$schools[$school]?></caption>
+                <tr>
+                    <td colspan="4" align="center">
+                        <input type="submit" name="submit" value="Save" />
+                        <br /><br />
+                    </td>
+                </tr>
                 <tr>
                     <th>Grade</th>
                     <th>Student</th>
