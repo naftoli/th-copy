@@ -428,7 +428,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $start = $chidon_year - 1;
             $end = $chidon_year - 4;
             // check that user was enrolled in chidon for past 4 yrs
-            $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user and year = :year");
+            $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user and year = :year and date_paid > 0");
             $eligible = true;
             for ($i = $start; $i >= $end; $i--) {
                 $stmt->execute([
