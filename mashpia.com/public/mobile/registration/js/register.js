@@ -628,13 +628,25 @@ var registrationApp = function() {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
                 if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
                 else shipping_charge = 30;
+            } else {
+                // shipping to non USA schools is an additional $15
+                let usa = [
+                    'U.S.A',
+                    'United States',
+                    'US',
+                    'USA'
+                ]
+                let country = selected_user.school.school_country
+                if (! usa.includes(country)) {
+                    shipping_charge = 15
+                }
             }
             // // don't add to cart if anash kinder / myshliach and not in USA
-            // if ( 
-            //     ! [ 269, 61 ].includes( selected_user.school.school_id ) || 
-            //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) 
+            // if (
+            //     ! [ 269, 61 ].includes( selected_user.school.school_id ) ||
+            //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' )
             // ) {
-            state.cart.push({
+                state.cart.push({
                     description: Msg6 + selected_user.first + ( shipping_included ? Msg7 : '' ),
                     price: shipping_included ? (cost + shipping_charge) : cost,
                     meta: {
@@ -644,7 +656,7 @@ var registrationApp = function() {
                         paid: shipping_included ? (cost + shipping_charge) : cost
                     }
                 });
-            //}
+            // }
         }
         if ( selected_charges.khk ) {
             state.cart.push({
@@ -1000,6 +1012,30 @@ var templates = function(){
             //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
             //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             // }
+
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                $("#book_no_school").show()
+                $("#book_school_usa").hide()
+                $("#book_school_not_usa").hide()
+            } else {
+                $("#book_no_school").hide()
+                // shipping to non USA schools is an additional $15
+                let usa = [
+                    'U.S.A',
+                    'United States',
+                    'US',
+                    'USA'
+                ]
+                let country = user.school.school_country
+                if (usa.includes(country)) {
+                    $("#book_school_usa").show()
+                    $("#book_school_not_usa").hide()
+                } else {
+                    $("#book_school_usa").hide()
+                    $("#book_school_not_usa").show()
+                }
+            }
+
             console.log( user );
         },
         toggleRates: function( user, rateType ){

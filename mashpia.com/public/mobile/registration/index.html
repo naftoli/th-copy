@@ -386,8 +386,8 @@
 
                                 <b>Chidon Sweater</b><hr />
                                 <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:
-                                    (Please keep in mind that sweaters are for the end of Chidon so your child's size might grow.
-                                    This must be filled out correctly - as it CANNOT be changed after registration.)
+                                    (Please keep in mind that sweaters are distributed at the end of Chidon so your child's size might grow.
+                                    Please size up if you believe your child's size may change. Unfortunately, size changes after registration are NOT possible.)
                                 </label>
                                 <select class="form-control" id="chidon-sweater-size">
                                     <option value="">Please choose</option>
@@ -471,14 +471,14 @@
                                 <span id="yahadus-shipping">
 <!--                                    <span class="i18n" data-key="IWouldLike4">If you need it shipped to your school, there is an extra shipping charge of </span>-->
 <!--                                    <b>$5</b>.-->
-                                    <div id="school_usa">
+                                    <div id="book_school_usa" style="display: none;">
                                         Your book will be shipped to your school free of charge.
                                     </div>
-                                    <div id="school_not_usa">
-                                        Your book will be shipped to your school for a $10 fee.
+                                    <div id="book_school_not_usa" style="display: none;">
+                                        Your book will be shipped to your school for a $15 fee.
                                     </div>
-                                    <div id="school_no_school">
-                                        Please enter an address in the USA to ship to, if we get an order to outside the USA, it will be cancelled.
+                                    <div id="book_no_school" style="display: none;">
+                                        Shipping to USA addresses will cost an additional $15. Shipping to International addresses will cost an additional $30.
                                     </div>
                                 </span>
                                 <br />
@@ -510,8 +510,8 @@
                                 <br />
                                 <select id="yahadus-poll" multiple>
                                     <option class="i18n" data-key="OnMyOwn">On my own</option>
-                                    <option class="i18n" data-key="WithChavrusa">With a chavrusa</option>
-                                    <option class="i18n" data-key="WithParent">With a Parent</option>
+                                    <option class="i18n" data-key="WithChavrusa">With a chavrusa (study partner)</option>
+                                    <option class="i18n" data-key="WithParent">With a parent</option>
                                     <option class="i18n" data-key="WithBubbyZaidy">With a Bubby or Zaidy</option>
                                     <option class="i18n" data-key="OnOnlineClass">On the online class</option>
                                 </select>
@@ -911,9 +911,6 @@
                                 <input type="text" id="ship-country" class="form-control col-12" placeholder="country" />
                             </div>
                         </div>
-                    </p>
-                    <p>
-                        <b class="i18n" data-key="PleaseNoteAddressChange">Please Note: We only ship within the USA.</b>
                     </p>
                 </div>
                 <div class="modal-footer">
