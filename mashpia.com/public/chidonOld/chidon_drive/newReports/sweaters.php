@@ -4,8 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once __DIR__ . '/../../../header.php';
-require_once __DIR__ . '/../../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = 5781;
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";

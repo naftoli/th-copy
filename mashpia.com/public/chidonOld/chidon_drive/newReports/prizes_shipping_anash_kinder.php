@@ -4,11 +4,10 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $super = $admin_user['auth'] == 'super';
 
-$year = GlobalSettings::getChidonYear();
+$year = 5781;
 
 $shipment_number = isset($_GET['num']) ? intval($_GET['num']) : 1;
 

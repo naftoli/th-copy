@@ -4,12 +4,11 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
 $super = $admin_user['auth'] == 'super';
 
-$year = GlobalSettings::getChidonYear();
+$year = 5781;
 $s = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $s->getSchools();
 
