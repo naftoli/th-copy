@@ -282,14 +282,16 @@
                             <div class="col-10 col-md-11">
                                 <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />
 <!--                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />-->
-                                <span id="study-guides" style="display: none">
-<!--                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />-->
-                                </span>
-                                <span id="late-reg" style="display: none">
+                                    This fee helps cover the costs of the Study Guide which we send out, tests and many other parts of the Limmud program.<br />
+                                <div id="study-guides">
+                                    <b>Please note:</b> Books & Study Guides will be shipped to arrive the first day of school (not before).
+                                    <!--                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />-->
+                                </div>
+                                <div id="late-reg" style="display: none">
                                     There is no longer an option to order a book while <strong>registering</strong>.
                                     Please purchase the correct book at <a href="thechidon.com/textbooks" target="_blank">thechidon.com/textbooks</a>.
                                     The study guide can be downloaded at <a href="thechidon.com/study-guides" target="_blank">thechidon.com/study-guides</a>.<br />
-                                </span>
+                                </div>
                                 <br />
                                 <div id="khk" >
                                     <b>Kol Hatorah Kulah</b><hr />
@@ -322,7 +324,8 @@
     <!--                                                <select class="form-control" id="user">-->
     <!--                                                    <option value="0" class="i18n" data-key="SelectStudent">Select Student</option>-->
     <!--                                                </select>-->
-                                        IF YES, Add the serial number of the soldiers that recruited you and they will get chidon credits to buy chidon prizes.<br />
+                                        IF YES, Add the serial number of the soldiers that recuted you and they will get chidon credits to buy chidon prizes.
+                                        (Their serial number can be found in their parent account).<br />
                                         <input type="text" name="recruited_by_user_serial" id="recruited_by_user_serial" class="form-control" style="width: 200px;" />
                                     </label>
                                     <br />
@@ -382,7 +385,10 @@
                                 <br />
 
                                 <b>Chidon Sweater</b><hr />
-                                <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:</label>
+                                <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:
+                                    (Please keep in mind that sweaters are for the end of Chidon so your child's size might grow.
+                                    This must be filled out correctly - as it CANNOT be changed after registration.)
+                                </label>
                                 <select class="form-control" id="chidon-sweater-size">
                                     <option value="">Please choose</option>
                                     <option value="children xs" class="i18n" data-key="ChildrenXS">Youth XS</option>
@@ -459,16 +465,25 @@
                                 <b class="i18n" data-key="IWouldLike0">Yes! I would like to purchase a book on sale now.</b>
                                 <br />
                                 <span class="i18n" data-key="IWouldLike1">Book price is normally $55, but for Chidon Members it is </span>
-                                <b class="i18n" data-key="IWouldLike2">ON SALE for $36</b>
+                                <b class="i18n" data-key="IWouldLike2">ON SALE for $40</b>
                                 <span class="i18n" data-key="IWouldLike3"> (limited time only!).</span>
                                 <br/>
                                 <span id="yahadus-shipping">
-                                    <span class="i18n" data-key="IWouldLike4">If you need it shipped to your school, there is an extra shipping charge of </span>
-                                    <b>$5</b>.
+<!--                                    <span class="i18n" data-key="IWouldLike4">If you need it shipped to your school, there is an extra shipping charge of </span>-->
+<!--                                    <b>$5</b>.-->
+                                    <div id="school_usa">
+                                        Your book will be shipped to your school free of charge.
+                                    </div>
+                                    <div id="school_not_usa">
+                                        Your book will be shipped to your school for a $10 fee.
+                                    </div>
+                                    <div id="school_no_school">
+                                        Please enter an address in the USA to ship to, if we get an order to outside the USA, it will be cancelled.
+                                    </div>
                                 </span>
                                 <br />
-                                <i class="i18n" data-key="IWouldLike5">Purchase the book by Tuesday, 17 Elul (Sep 17) and you will receive it by Yom Kippur. (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</i>
-                                <br />
+<!--                                <i class="i18n" data-key="IWouldLike5">Purchase the book by Tuesday, 17 Elul (Sep 17) and you will receive it by Yom Kippur. (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</i>-->
+<!--                                <br />-->
                             </div>
                         </div>
                         <br />

@@ -622,8 +622,8 @@ var registrationApp = function() {
         }
         if ( selected_charges.yahadus ) {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
-            var shipping_charge = 5;
-            var cost = 36
+            var shipping_charge = 0;
+            var cost = 40
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
                 if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
