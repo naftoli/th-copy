@@ -19,7 +19,8 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 } else {
 	$vars = array(
 	  'posts_per_page' => $postsPerPage,
-	  'paged'          => $paged
+	  'paged'          => $paged,
+//      'category_name'  => 'chitas'
 	);
 }
 
