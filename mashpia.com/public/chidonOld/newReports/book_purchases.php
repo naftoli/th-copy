@@ -51,8 +51,8 @@ while ($row = mysql_fetch_assoc($result)) {
         <tr>
             <th>School</th>
             <th>Student</th>
-            <td>Amount Paid</td>
-            <td>Date Purchased</td>
+            <th>Amount Paid</th>
+            <th>Date Purchased</th>
         </tr>
         <?php
         foreach ($info as $row) {
