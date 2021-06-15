@@ -16,6 +16,7 @@ $sql = "
     SELECT 
         reg_date,
         u.user_id, 
+        user_serial, 
         gender,
         first,
         last,
@@ -87,6 +88,7 @@ $customNames = [
             <tr>
                 <th>Registration Date</th>
                 <th>User ID</th>
+                <th>Serial Number</th>
                 <th>School</th>
                 <th>Full English Name</th>
                 <th>Full Hebrew Name</th>
@@ -106,11 +108,11 @@ $customNames = [
             </tr>
             <?php
             foreach ($info as $row) {
-                echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['school_name'] .
-                    "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['first_he'] . ' ' . $row['last_he'] .
-                    "</td><td>" . $row['first_known_en'] . ' ' . $row['last_known_en'] .
-                    "</td><td>" . $row['first_known_he'] . ' ' . $row['last_known_he'] . "</td><td>" . $row['dob'] .
-                    "</td><td>" . $row['gender'] . "</td><td>";
+                echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
+                    "</td><td>" . $row['school_name'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" .
+                    $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['first_known_en'] . ' ' .
+                    $row['last_known_en'] . "</td><td>" . $row['first_known_he'] . ' ' . $row['last_known_he'] . "</td><td>" .
+                    $row['dob'] . "</td><td>" . $row['gender'] . "</td><td>";
                 if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
                 else echo "<span>";
                 echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .

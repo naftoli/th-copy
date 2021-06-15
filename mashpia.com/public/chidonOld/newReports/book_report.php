@@ -18,6 +18,7 @@ $sql = "
         school_name,
         first,
         last,
+        user_serial, 
         location,
         store_name,
         store_city,
@@ -55,6 +56,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <h1>Yahadus Book Questionnaire <?= $year ?></h1>
 <table>
     <tr>
+        <th>Serial Number</th>
         <th>School</th>
         <th>Student</th>
         <th>Location</th>
@@ -62,7 +64,8 @@ while ($row = mysql_fetch_assoc($result)) {
     </tr>
     <?php
     foreach ($info as $row) {
-        echo "<tr><td>" . $row['school_name'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" .
+        echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $row['school_name'] . "</td><td>" .
+            $row['first'] . ' ' . $row['last'] . "</td><td>" .
             ucwords(str_replace('_', ' ', $row['location'])) .
             "</td><td>" . $row['store_name'] . "<br />" . $row['store_city'] . "</td></tr>";
     }

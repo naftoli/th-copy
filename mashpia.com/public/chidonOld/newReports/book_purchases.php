@@ -14,7 +14,7 @@ $year = GlobalSettings::getChidonRegYear();
 $info = [];
 $sql = "
     SELECT 
-        u.school_id, school_name, first, last, amount, date
+        u.school_id, school_name, first, last, user_serial, amount, date
     FROM
         registration_charges rc
             JOIN
@@ -49,6 +49,7 @@ while ($row = mysql_fetch_assoc($result)) {
     <h1>Yahadus Book Purchases <?= $year ?></h1>
     <table>
         <tr>
+            <th>Serial Number</th>
             <th>School</th>
             <th>Student</th>
             <th>Amount Paid</th>
@@ -56,8 +57,8 @@ while ($row = mysql_fetch_assoc($result)) {
         </tr>
         <?php
         foreach ($info as $row) {
-            echo "<tr><td>" . $row['school_name'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" .
-                $row['amount'] . "</td><td>" . $row['date'] . "</td></tr>";
+            echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $row['school_name'] . "</td><td>" .
+                $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['amount'] . "</td><td>" . $row['date'] . "</td></tr>";
         }
         ?>
     </table>
