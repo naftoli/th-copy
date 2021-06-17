@@ -482,6 +482,10 @@ var registrationApp = function() {
                 $("input.nameChoice")[0].checked == false
                 &&
                 $("input.nameChoice")[1].checked == false
+                &&
+                $("input.nameChoice")[2].checked == false
+                &&
+                $("input.nameChoice")[3].checked == false
             ) {
                 return showError(Err13)
             }
@@ -959,9 +963,14 @@ var templates = function(){
             // reset name preference
             $("input.nameChoice")[0].checked = false
             $("input.nameChoice")[1].checked = false
+            $("input.nameChoice")[2].checked = false
+            $("input.nameChoice")[3].checked = false
+
             if (user.pref_name) {
                 if (user.pref_name == 'en') $("input.nameChoice")[0].checked = true
                 else if (user.pref_name == 'he') $("input.nameChoice")[1].checked = true
+                else if (user.pref_name == 'nick_en') $("input.nameChoice")[2].checked = true
+                else if (user.pref_name == 'nick_he') $("input.nameChoice")[3].checked = true
             }
 
             // show/hide yarmulka
