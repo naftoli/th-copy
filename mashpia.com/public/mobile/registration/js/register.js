@@ -31,7 +31,7 @@ var registrationApp = function() {
         
     var Msg3 = "CKids Registration for ";
     var Msg4 = "Chidon Registration ";
-    var Msg5 = " (includes coordinator and study guide)";// 
+    var Msg5 = " (includes coordinator and study guide)";//
     var Msg6 = "Yahadus Book for ";
     var Msg7 = " (Shipping Included)";
     var Msg8 = "To Register for MyShliach's online weekly classes please click ";
@@ -598,9 +598,10 @@ var registrationApp = function() {
         } 
         if ( selected_charges.chidon ) {
             var anash = selected_user.school.school_id === anash_kinder;
+            var myshliach = selected_user.school.school_id === myshliach;
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
-                description: Msg4 + selected_user.first + ( anash ? Msg5 : ''),
+                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : ''),
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',
