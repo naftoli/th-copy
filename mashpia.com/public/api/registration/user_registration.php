@@ -234,7 +234,7 @@ class UserRegistrationRouter {
                                 $location = $registration['purchasedWhere'];
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
-                                $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                                $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city );
                             }
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';
@@ -255,7 +255,7 @@ class UserRegistrationRouter {
                                         To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.";
                             if ( $user->school_id == 61 ) {
                                 $message = "
-                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for $year.
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Limmud program for $year.
                                 <br /><br />
                                 We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                 <br /><br />
