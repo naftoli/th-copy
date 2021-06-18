@@ -242,7 +242,7 @@ class UserRegistrationRouter {
                             $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
                             if ($user->school_id == '269') $headers[] = 'CC: chidonanash@gmail.com';
 
-                            $subject = "Chidon Registration Confirmation";
+                            $subject = "Chidon Limmud Registration Confirmation";
                             $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
                                         <br /><br/>
                                         We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
@@ -295,6 +295,7 @@ class UserRegistrationRouter {
                         $user->addBookPurchase($year, $user->user_id, 'parent_account', $trans_id);
                     } else if ( $registration['registration_type'] == 'khk' ) {
                         // update khk_reg in db
+                        $year = GlobalSettings::getChidonRegYear();
                         $user->addKhkReg($year, $user->user_id);
                     // other registrations
                     } else {
