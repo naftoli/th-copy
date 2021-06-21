@@ -14,7 +14,7 @@ $year = GlobalSettings::getChidonRegYear();
 $info = [];
 $sql = "
     SELECT 
-        u.school_id, school_name, first, last, user_serial, amount, date, tc.book 
+        u.school_id, s.school_name, first, last, user_serial, amount, date, tc.book 
     FROM
         registration_charges rc
             JOIN
@@ -24,7 +24,7 @@ $sql = "
             JOIN 
         th_chidon tc USING (user_id) 
     WHERE
-        year = 5782 AND type = 'yahadus'
+        rc.year = 5782 AND type = 'yahadus'
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ")
     ORDER BY school_name , last , first
     ";
