@@ -22,10 +22,11 @@ $sql = "
             JOIN
         schools s ON s.school_id = u.school_id 
             JOIN 
-        th_chidon tc USING (user_id) 
+        th_chidon tc using (user_id)
     WHERE
         rc.year = 5782 AND type = 'yahadus'
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ")
+    GROUP BY user_id 
     ORDER BY school_name , last , first
     ";
 $result = mysql_query($sql);
