@@ -55,8 +55,8 @@ var registrationApp = function() {
     var Err14 = "You must choose a yarmulka size!";
     var Err15 = "You must enter the hebrew plaque name as well as english and hebrew name for custom items.";
     var Err16 = "Could not confirm your registration. Ensure that the required fields are filled in or contact support";
-    //var Err17 = "";
-    //var Err18 = "";
+    var Err17 = "You need to enter your English Name that you are known by";
+    var Err18 = "You need to enter your Hebrew Name that you are known by";;
     //var Err19 = "";
     //var Err20 = "";
     var picError = "You must upload a picture of your child!"
@@ -90,6 +90,8 @@ var registrationApp = function() {
          Err14 = "";
          Err15 = "";
          Err16 = "לא ניתן היה לאשר את הרישום שלך. ודא כי השדות הנדרשים מלאים או צור קשר עם התמיכה";
+         Err17 = "";
+         Err18 = "";
          picError = ""
     }
 
@@ -488,6 +490,20 @@ var registrationApp = function() {
                 $("input.nameChoice")[3].checked == false
             ) {
                 return showError(Err13)
+            }
+
+            if ($("input.nameChoice")[2].checked) {
+                // make sure name known by is not empty
+                if ($("#first_known_en").val().trim() == '' && $("#last_known_en").val().trim() == '') {
+                    return showError(Err17)
+                }
+            }
+
+            if ($("input.nameChoice")[3].checked) {
+                // make sure name known by is not empty
+                if ($("#first_known_he").val().trim() == '' && $("#last_known_he").val().trim() == '') {
+                    return showError(Err18)
+                }
             }
 
             // check yarmulka
