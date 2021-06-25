@@ -253,7 +253,41 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         // check that the balance is paid
         $this->balance = 0;
 
-        return $registration->save() && $this->save();
+        $saved = $registration->save() && $this->save();
+
+        // add cart details to school_registration_details table - Naftoli 06/25/21
+        if ($saved) {
+            $stmt = $MASHPIA_DB->prepare("SELECT school_registration_id FROM school_registrations WHERE year = :year AND school_id = :school");
+            $stmt->execute([
+                ':year' => $year,
+                ':school'   => $this->school_id
+            ]);
+            $row = $stmt->fetch();
+            if ($row) {
+                $school_reg_id = $row['school_registration_id'];
+                $stmt = $MASHPIA_DB->prepare("
+                    INSERT INTO school_registration_details 
+                    SET school_registration_id = :id, 
+                    type = :type, 
+                    amount = :amount");
+                foreach ($cart as $item => $value) {
+                    $stmt->execute([
+                        ':id'       => $school_reg_id,
+                        ':type'     => $item,
+                        ':amount'   => $value
+                    ]);
+                }
+                if ($this->balance) {
+                    $stmt->execute([
+                        ':id'       => $school_reg_id,
+                        ':type'     => 'past_due',
+                        ':amount'   => $this->balance
+                    ]);
+                }
+            }
+        }
+
+        return $saved;
     }
 
     // get the early bird, or the default
