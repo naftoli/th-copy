@@ -18,7 +18,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Base Reports Home Page</title>
+        <title>Tzivos Hashem | Accounting Reports Home Page</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="/raffles/shared/styles/action-links.css" rel="stylesheet" type="text/css">
     </head>
@@ -26,7 +26,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <? // load the admin UI and JQuery 1.4
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
-        <h1>Registration Reports</h1>
+        <h1>Accounting Reports</h1>
         
         <?if ($admin_user['auth'] == 'super') {?>
         <div id="action-links">

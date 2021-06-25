@@ -110,6 +110,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                 <th>Balance</th>
                 <th>Soldier Chayolei Fee</th>
                 <th>Early Bird</th>
+                <th>Notes</th>
                 <th>Status</th>
                 <th>Save</th>
             <thead>
@@ -155,6 +156,9 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                     <td>
                         <input type='date' name='early_bird'
                             value='<?= $base->earlyBird()->format('Y-m-d') ?>' />
+                    </td>
+                    <td>
+                        <textarea rows="4" cols="15" name="registration_notes" id="notes"><?= $base->registration_notes ?></textarea>
                     </td>
                     <td>
                     <?php

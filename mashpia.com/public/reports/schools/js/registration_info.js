@@ -7,7 +7,7 @@ var registration_info = function() {
     $("#report").show();
 
     // setup event listeners
-    $('.base input, .base select').change( onChange );
+    $('.base input, .base select, .base textarea').change( onChange );
     $('.base button.deactivate').click( deactivate );
     $('.base button.save').click( save );
     
@@ -42,6 +42,10 @@ var registration_info = function() {
         if ( updates.child_fee == '' ) {
             updates.child_fee = null;
         }
+
+        // add registration notes
+        updates.registration_notes = $("#notes").val()
+
         // update the base
         updateBase( school_id, updates )
             .then( function( c ) {
