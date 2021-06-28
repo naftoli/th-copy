@@ -269,13 +269,17 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                     INSERT INTO school_registration_details 
                     SET school_registration_id = :id, 
                     type = :type, 
-                    amount = :amount");
+                    amount = :amount, 
+                    school_id = :school, 
+                    year = :year");
                 foreach ($cart as $item => $value) {
                     if ($value) {
                         $stmt->execute([
                             ':id' => $school_reg_id,
                             ':type' => $item,
-                            ':amount' => $value
+                            ':amount' => $value,
+                            ':school' => $this->school_id,
+                            ':year' => $year
                         ]);
                     }
                 }
@@ -283,7 +287,9 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                     $stmt->execute([
                         ':id'       => $school_reg_id,
                         ':type'     => 'past_due',
-                        ':amount'   => $this->balance
+                        ':amount'   => $this->balance,
+                        ':school'   => $this->school_id,
+                        ':year'     => $year
                     ]);
                 }
             }

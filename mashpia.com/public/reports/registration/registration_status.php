@@ -1,6 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once ( __DIR__ . '/../../header.php' );
+
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
     exit;
@@ -9,22 +13,99 @@ if ($admin_user['auth'] != 'super') {
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
 
+require_once __DIR__ . '/../../class.adminSchools.php';
+$s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true);
+$all_schools = $s->getSchools();
+
 $types = [
     1 => 'Tuition',
     2 => 'Guaranteed',
     3 => 'Regular'
 ];
 
-$main_query = "SELECT s.reg_type, s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
-    ."total_registered, not_chayolei "
-    ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
-    ."LEFT JOIN ( "
-        ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
-    .") u USING (school_id) LEFT JOIN ( "
-        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
-    .") nc USING (school_id) LEFT JOIN ("
-        ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
-    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND s.test_school=0 AND s.chayolei = 1 GROUP BY s.school_id ORDER BY s.school_name";
+//$main_query = "SELECT s.reg_type, s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
+//    ."total_registered, not_chayolei "
+//    ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
+//    ."LEFT JOIN ( "
+//        ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
+//    .") u USING (school_id) LEFT JOIN ( "
+//        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
+//    .") nc USING (school_id) LEFT JOIN ("
+//        ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
+//    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND s.test_school=0 AND s.chayolei = 1 GROUP BY s.school_id ORDER BY s.school_name";
+$main_query = "
+    SELECT 
+        school_id,
+        school_name,
+        school_number,
+        s.balance, 
+        reg_type,
+        chayolei_fee,
+        chidon_fee,
+        school_registration_id,
+        date_paid,
+        amount_paid, 
+        total_chayolei,
+        total_chidon,
+        total_balance_paid,
+        total_registered,
+        total_chayolei_eligible, 
+        total_chidon_eligible
+    FROM
+        school_registrations sr
+            JOIN
+        schools s USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, IFNULL(SUM(amount), 0) AS total_chayolei
+        FROM
+            school_registration_details
+        WHERE
+            type = 'chayolei' AND year = $year
+        GROUP BY school_id) chayolei USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, IFNULL(SUM(amount), 0) AS total_chidon
+        FROM
+            school_registration_details
+        WHERE
+            type = 'chidon' AND year = $year
+        GROUP BY school_id) chidon USING (school_id)
+             LEFT JOIN
+        (SELECT 
+            school_id, IFNULL(SUM(amount), 0) AS total_balance_paid 
+        FROM
+            school_registration_details
+        WHERE
+            type = 'past_due' AND year = $year
+        GROUP BY school_id) balance USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, COUNT(*) AS total_registered
+        FROM
+            users
+        WHERE
+            user_registered > 0
+        GROUP BY school_id) users USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, COUNT(*) AS total_chayolei_eligible
+        FROM
+            users
+        WHERE
+            chayolei_eligible = 1
+        GROUP BY school_id) chayolei_el USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, COUNT(*) AS total_chidon_eligible
+        FROM
+            users
+        WHERE
+            chidon_eligible = 1
+        GROUP BY school_id) chidon_el USING (school_id)
+    WHERE
+        year = $year
+";
 $main_query = mysql_query( $main_query );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['reg_type']][$row['school_name']] = $row;
@@ -33,6 +114,7 @@ ksort($data);
 foreach ($data as $type => $schools) {
     ksort($data[$type]);
 }
+//echo "<pre>"; print_r($data); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,23 +132,64 @@ foreach ($data as $type => $schools) {
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Base Registration Status</h1>
+    <form id="add_payment_form">
+        Add Payment for:
+        <select name="school_payment" id="school_payment">
+            <option value="0">Choose School</option>
+            <?php
+            foreach ($all_schools as $id => $school) {
+                echo "<option value='$id'>$school</option>";
+            }
+            ?>
+        </select>
+        <br />
+        Payment type:
+        <select name="payment" id="payment">
+            <option value="chayolei">Chayolei</option>
+            <option value="chidon">Chidon</option>
+            <option value="tanya">Tanya</option>
+            <option value="rewards">Rewards Program</option>
+            <option value="past_due">Past Dues</option>
+        </select>
+        <br />
+        Payment Method:
+        <select name="payment_method" id="payment_method">
+            <option value="cash">Cash</option>
+            <option value="check">Check</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="wire">Wire Transfer</option>
+        </select>
+        <br />
+        Amount: $<input type="text" name="payment_amount" id="payment_amount" />
+        <br />
+        <button id="add_payment">Add Payment</button>
+    </form>
     <?php
     foreach ($data as $type => $schools) {
         echo "<h2>" . $types[$type] . " Schools</h2>";
         ?>
         <table>
             <thead>
-            <th colspan='2'>Base</th>
-            <th>Registered</th>
-            <th>Amount Paid</th>
-            <th>Soldiers Registered</th>
-            <th>Chidon Only Soldiers</th>
+                <th>Base Number</th>
+                <th>Base Name</th>
+                <th>Date Registered</th>
+                <th>Chayolei Fee</th>
+                <th>Chayolei Paid</th>
+                <th>Chidon Fee</th>
+                <th>Chidon Paid</th>
+                <th>Prior Balance</th>
+                <th>Prior Balance Paid</th>
+                <th>Total Fee</th>
+                <th>Total Paid</th>
+                <th>Current Balance</th>
+                <th>Eligible Chayolei Soldiers</th>
+                <th>Chayolei Soldiers Registered</th>
             </thead>
             <tbody>
             <?php
             foreach( $schools as $base ) {
                 if ( !$base['total_registered'] ) $base['total_registered'] = 0;
-                if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
+//                if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
                 <tr>
                     <td><?= $base['school_number'] ?></td>
                     <td><?= $base['school_name'] ?></td>
@@ -74,13 +197,59 @@ foreach ($data as $type => $schools) {
                             ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) :
                             'Not Registered';
                         ?></td>
-                    <td>$<?= number_format($base['amount_paid'], 0) ?></td>
-                    <td><?= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?></td>
-                    <td><?= $base['not_chayolei'] ?></td>
+                    <td><?= $base['chayolei_fee'] ?></td>
+                    <td><?= $base['total_chayolei'] ?></td>
+                    <td><?= $base['chidon_fee'] ?></td>
+                    <td><?= $base['total_chidon'] ?></td>
+                    <td><?= $base['balance'] ?></td>
+                    <td><?= $base['total_balance_paid'] ?></td>
+                    <td>
+                        <?php
+                        $total_owing = floatval($base['chayolei_fee']) + floatval($base['chidon_fee']) + floatval($base['balance']);
+                        echo $total_owing;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                        $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) + floatval($base['total_balance_paid']);
+                        $total_paid = $total_paid ?? floatval($base['amount_paid']);
+                        echo $total_paid;
+                        ?>
+                    </td>
+                    <td><?= $total_owing - $total_paid ?></td>
+                    <td><?= $base['total_chayolei_eligible'] ?></td>
+                    <td><?= $base['total_registered'] ?></td>
+<!--                    <td>$--><?//= number_format($base['amount_paid'], 0) ?><!--</td>-->
+<!--                    <td>--><?//= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?><!--</td>-->
+<!--                    <td>--><?//= $base['not_chayolei'] ?><!--</td>-->
                 </tr>
             <?php } ?>
             </tbody>
         </table>
     <?php } ?>
 </body>
+<script>
+    $(function() {
+        $("#add_payment").click( function (e) {
+            e.preventDefault()
+            const school = $("#school_payment").val()
+            const method = $("#payment_method").val()
+            const type = $("#payment").val()
+            const amount = parseFloat($("#payment_amount").val())
+            if (school == '0') {
+                alert('You must choose a school')
+                return
+            }
+            if (! amount) {
+                alert('You must enter an amount!')
+                return
+            }
+            $.post('addPayment.php', { school: school, method: method, type: type, amount: amount }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Successfully added.')
+                else alert(res.error)
+            })
+        })
+    })
+</script>
 </html>
