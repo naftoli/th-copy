@@ -67,7 +67,6 @@ class CouponCode
             ':code' => $code,
             ':type' => $this->type
         ]);
-        $stmt->debugDumpParams();
         $row = $stmt->fetch();
         if ( !empty( $row ) ) {
             return $row;
