@@ -44,9 +44,10 @@ export class ModulesTab extends React.Component {
         school_id: this.props.base.school_id
     })
       .then(result => {
-          console.log(result)
-          if (result.success) this.props.onCoupon(result.discount)
-          else alert(result.error)
+        console.log(result)
+        const data = result.data
+        if (data.success) this.props.onCoupon(data.discount)
+        else alert(data.error)
       })
       .catch(error => console.log(error))
   }
