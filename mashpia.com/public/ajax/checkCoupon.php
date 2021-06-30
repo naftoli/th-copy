@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $year = GlobalSettings::getRegistrationYear();
 $couponCode = new CouponCode($MASHPIA_DB, $year, 'chayolei_base_reg');
-$discount = $couponCode->isValidCode($_POST['coupon']);
+$discount = $couponCode->isValidCode($_REQUEST['coupon']);
 
 if ($discount) {
     echo json_encode([
