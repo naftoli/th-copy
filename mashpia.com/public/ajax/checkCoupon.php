@@ -1,8 +1,8 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-$coupon = mysql_real_escape_string(urldecode($_POST['coupon']));
-$school_id = mysql_real_escape_string(urldecode($_POST['school_id']));
+$coupon = mysql_real_escape_string($_POST['coupon']);
+$school_id = mysql_real_escape_string($_POST['school_id']);
 
 if (! $coupon && $school_id) {
     echo json_encode([
