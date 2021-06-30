@@ -46,7 +46,7 @@ $main_query = "
         date_paid,
         amount_paid, 
         coupon, 
-        IFNULL(cc.value, 0),
+        IFNULL(cc.value, 0) as couponAmount,
         total_chayolei,
         total_chidon,
         total_balance_paid,
@@ -223,8 +223,8 @@ foreach ($data as $type => $schools) {
                         ?>
                     </td>
                     <td><?= $base['coupon'] ?></td>
-                    <td><?= $base['value'] ?></td>
-                    <td><?= $total_owing - $total_paid - $base['value'] ?></td>
+                    <td><?= $base['couponAmount'] ?></td>
+                    <td><?= $total_owing - $total_paid - $base['couponAmount'] ?></td>
                     <td><?= $base['total_chayolei_eligible'] ?></td>
                     <td><?= $base['total_registered'] ?></td>
 <!--                    <td>$--><?//= number_format($base['amount_paid'], 0) ?><!--</td>-->
