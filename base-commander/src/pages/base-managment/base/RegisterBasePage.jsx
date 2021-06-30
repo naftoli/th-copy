@@ -30,7 +30,8 @@ class RegistrationPage extends Component {
   state = {
     cc: {},       base: {},
     valid: {},    terms: false,
-    activeTab: 1, currentTab: 1 
+    activeTab: 1, currentTab: 1,
+    couponValue: 0
   }
   // props
   static propTypes = {
@@ -156,6 +157,10 @@ class RegistrationPage extends Component {
       });
   }
 
+  onCouponChange = (amount) => {
+    this.setState({ couponValue: amount })
+  }
+
   // render the page
   render() {
     const { code } = this.props.login;
@@ -213,6 +218,8 @@ class RegistrationPage extends Component {
             back={ this.back }
             onChange={ this.onCheckboxChange }
             onSubmit={ this.submitTab( 3 ) }
+            coupon={ this.state.couponValue }
+            onCoupon={ this.onCouponChange }
             onValidChange={ this.updateValid('modules') } />
 
           <SettingsTab
@@ -228,6 +235,7 @@ class RegistrationPage extends Component {
             base={ base }
             back={ this.back }
             terms={ terms }
+            coupon={ this.state.couponValue }
             register={ this.register }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>

@@ -212,7 +212,7 @@ foreach ($data as $type => $schools) {
                     <td>
                         <?php
                         $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) + floatval($base['total_balance_paid']);
-                        $total_paid = $total_paid ?? floatval($base['amount_paid']);
+                        $total_paid = $total_paid == 0 ? floatval($base['amount_paid']) : $total_paid;
                         echo $total_paid;
                         ?>
                     </td>

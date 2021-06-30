@@ -34,8 +34,9 @@ export const availableModules = ( registration, asObject = false ) => {
  * 
  * @param {object} base the base that we are currently using
  * @param {boolean} addBalance optional, add the balance that the base owes
+ * @param {int} coupon optional, deduct the value of any coupon that was applied
  */
-export const getTotal = ( base, addBalance = false ) => {
+export const getTotal = ( base, addBalance = false, coupon = 0 ) => {
   // get the modules
   let modules = availableModules( base.registration );
 
@@ -48,6 +49,8 @@ export const getTotal = ( base, addBalance = false ) => {
   if ( addBalance && base.balance ) {
     total += base.balance;
   }
+
+  total -= coupon
 
   return total;
 }

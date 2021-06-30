@@ -7,6 +7,7 @@ import { CurrencyDisplay } from 'components/ui/Formats';
 import { NavigationRow } from '../../rows/registration/NavigationRow';
 // functions
 import { getTotal, moduleSelected, availableModules } from './functions';
+import axios from 'axios';
 
 export class ModulesTab extends React.Component {
   
@@ -34,8 +35,25 @@ export class ModulesTab extends React.Component {
     }
   }
 
+  checkCoupon = e => {
+    e.preventDefault()
+    const coupon = document.getElementById('coupon').value
+    const url = "https://mashpia.com/ajax/checkCoupon.php"
+    axios.post(url, {
+        coupon: coupon,
+        school_id: this.props.base.school_id
+    })
+      .then(response => response.json())
+      .then(result => {
+          console.log(result)
+          if (result.success) this.props.onCoupon(result.discount)
+          else alert(result.error)
+      })
+      .catch(error => console.log(error))
+  }
+
   render(){
-    let { tabId, base, back, onChange } = this.props;
+    let { tabId, base, back, onChange, coupon } = this.props;
 
     let {
       chayolei, chayolei_fee, tanya,  tanya_fee,
@@ -46,7 +64,7 @@ export class ModulesTab extends React.Component {
     //   rewards_fee,  chidon_fee,
     // } = base;
     // check if we have one item checked
-    const total = getTotal( base );
+    const total = getTotal( base, false, coupon );
     const valid = this.isValid( base );
     // get the modules we can register
     const modules = availableModules( base.registration, true );
@@ -192,7 +210,7 @@ export class ModulesTab extends React.Component {
               <ul className='checkboxes'>
                 <li>Prize inventory, price and order managment.</li>
                 <li>Achievment cards to give Miles to your soldiers.</li>
-                <li>Online store with shopping cart for soldiers to spend their miles from the Tzivos Hashem Parent Protal</li>
+                <li>Online store with shopping cart for soldiers to spend their miles from the Tzivos Hashem Parent Portal</li>
               </ul>
             </div>
 
@@ -205,6 +223,15 @@ export class ModulesTab extends React.Component {
               </span>
             </div>
           </div>
+        </div>
+
+        <div style={{float: "left", marginTop: "0.5rem", marginBottom: "0.5rem"}}>
+          Coupon Code: &nbsp;
+          {
+            coupon
+                ? <input type='text' name='coupon' id='coupon' value={ coupon } disabled />
+                : <span><input type='text' name='coupon' id='coupon' />&nbsp;<button onClick={ this.checkCoupon }>Apply</button></span>
+          }
         </div>
 
         <div className='total'>
