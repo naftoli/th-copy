@@ -40,8 +40,7 @@ export class ModulesTab extends React.Component {
     const coupon = document.getElementById('coupon').value
     const url = "https://mashpia.com/ajax/checkCoupon.php"
     axios.post(url, {
-        coupon: coupon,
-        school_id: this.props.base.school_id
+        coupon: coupon
     })
       .then(result => {
         console.log(result)
