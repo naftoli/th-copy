@@ -45,6 +45,8 @@ $main_query = "
         school_registration_id,
         date_paid,
         amount_paid, 
+        coupon, 
+        IFNULL(cc.value, 0),
         total_chayolei,
         total_chidon,
         total_balance_paid,
@@ -55,6 +57,8 @@ $main_query = "
         school_registrations sr
             JOIN
         schools s USING (school_id)
+            LEFT JOIN 
+        coupon_codes cc on cc.code = sr.coupon 
             LEFT JOIN
         (SELECT 
             school_id, IFNULL(SUM(amount), 0) AS total_chayolei
@@ -181,6 +185,8 @@ foreach ($data as $type => $schools) {
                 <th>Prior Balance Paid</th>
                 <th>Total Fee</th>
                 <th>Total Paid</th>
+                <th>Coupon Code</th>
+                <th>Coupon Discount Amount</th>
                 <th>Current Balance</th>
                 <th>Eligible Chayolei Soldiers</th>
                 <th>Chayolei Soldiers Registered</th>
@@ -216,7 +222,9 @@ foreach ($data as $type => $schools) {
                         echo $total_paid;
                         ?>
                     </td>
-                    <td><?= $total_owing - $total_paid ?></td>
+                    <td><?= $base['coupon'] ?></td>
+                    <td><?= $base['value'] ?></td>
+                    <td><?= $total_owing - $total_paid - $base['value'] ?></td>
                     <td><?= $base['total_chayolei_eligible'] ?></td>
                     <td><?= $base['total_registered'] ?></td>
 <!--                    <td>$--><?//= number_format($base['amount_paid'], 0) ?><!--</td>-->

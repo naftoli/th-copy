@@ -68,6 +68,8 @@ class BaseRouter {
         $cart = isset( $_POST['cart'] ) ? $_POST['cart'] : false;
         $total = isset( $_POST['total'] ) ? $_POST['total'] : false;
         $base = isset( $_POST['base'] ) ? $_POST['base'] : false;
+        $coupon = isset( $_POST['coupon'] ) ? $_POST['coupon'] : false;
+        $couponAmount = isset( $_POST['couponValue'] ) ? $_POST['couponValue'] : false;
         
         if ( !$base )
             return json_error('CORE-BASE-63: No Base Information Provided');
@@ -85,7 +87,7 @@ class BaseRouter {
             ]);
         }
 
-        $base->register( $current_user->admin_id, $cart, $total, $cc );
+        $base->register( $current_user->admin_id, $cart, $total, $cc, $coupon, $couponAmount );
 
         json_response( $base );
     }

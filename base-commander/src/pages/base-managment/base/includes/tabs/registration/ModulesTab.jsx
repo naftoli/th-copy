@@ -46,14 +46,14 @@ export class ModulesTab extends React.Component {
       .then(result => {
         console.log(result)
         const data = result.data
-        if (data.success) this.props.onCoupon(data.discount)
+        if (data.success) this.props.onCoupon(coupon, data.discount)
         else alert(data.error)
       })
       .catch(error => console.log(error))
   }
 
   render(){
-    let { tabId, base, back, onChange, coupon } = this.props;
+    let { tabId, base, back, onChange, coupon, couponAmount } = this.props;
 
     let {
       chayolei, chayolei_fee, tanya,  tanya_fee,
@@ -64,7 +64,7 @@ export class ModulesTab extends React.Component {
     //   rewards_fee,  chidon_fee,
     // } = base;
     // check if we have one item checked
-    const total = getTotal( base, false, coupon );
+    const total = getTotal( base, false, couponAmount );
     const valid = this.isValid( base );
     // get the modules we can register
     const modules = availableModules( base.registration, true );

@@ -31,7 +31,7 @@ class RegistrationPage extends Component {
     cc: {},       base: {},
     valid: {},    terms: false,
     activeTab: 1, currentTab: 1,
-    couponValue: 0
+    coupon: '',   couponValue: 0
   }
   // props
   static propTypes = {
@@ -117,7 +117,7 @@ class RegistrationPage extends Component {
   });
 
   register = () => {
-    const { base, cc, terms, valid } = this.state;
+    const { base, cc, terms, valid, coupon, couponValue } = this.state;
     // calculate the total registration cost
     let promise;
     // get the cart and total
@@ -138,7 +138,7 @@ class RegistrationPage extends Component {
     // if the total is greater then 0
     if ( total > 0 ) {
       promise = validateCC( cc )
-        .then( cc => this.props.registerBase({ base, cc, cart, total }) );
+        .then( cc => this.props.registerBase({ base, cc, cart, total, coupon, couponValue }) );
     // otherwise just register the base
     } else {
       promise = this.props.registerBase({ base, total });
@@ -157,8 +157,8 @@ class RegistrationPage extends Component {
       });
   }
 
-  onCouponChange = (amount) => {
-    this.setState({ couponValue: amount })
+  onCouponChange = (coupon, amount) => {
+    this.setState({ coupon: coupon, couponValue: amount })
   }
 
   // render the page
@@ -218,7 +218,8 @@ class RegistrationPage extends Component {
             back={ this.back }
             onChange={ this.onCheckboxChange }
             onSubmit={ this.submitTab( 3 ) }
-            coupon={ this.state.couponValue }
+            coupon={ this.state.coupon }
+            couponAmount={ this.state.couponValue }
             onCoupon={ this.onCouponChange }
             onValidChange={ this.updateValid('modules') } />
 
@@ -235,7 +236,8 @@ class RegistrationPage extends Component {
             base={ base }
             back={ this.back }
             terms={ terms }
-            coupon={ this.state.couponValue }
+            coupon={ this.state.coupon }
+            couponAmount={ this.state.couponValue }
             register={ this.register }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>

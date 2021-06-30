@@ -176,7 +176,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
     // register the school
-    public function register( $admin_id, $cart, $total, $cc, $year = false ) {
+    public function register( $admin_id, $cart, $total, $cc, $year = false, $coupon = '', $couponAmount = 0 ) {
         // set the default year
         if ( !$year ) {
             $year = GlobalSettings::getRegistrationYear( $this->school_id );
@@ -203,9 +203,9 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 }
             }
 
-            if ( $total != $cart_total + $this->balance ) {
+            if ( $total != $cart_total + $this->balance - $couponAmount ) {
                 throw new Exception(
-                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance ).")"
+                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance - $couponAmount ).")"
                 );
             }
         }
@@ -246,7 +246,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             'modules' => json_encode([
                 'chayolei'  =>  !!$this->chayolei,  'chidon'    =>  !!$this->chidon,
                 'tanya'     =>  !!$this->tanya,     'rewards'   =>  !!$this->rewards
-            ])
+            ]),
+            'coupon' => $coupon
         ]);
         // update the school_era
         $this->school_era = null;
