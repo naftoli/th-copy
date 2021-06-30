@@ -38,8 +38,7 @@ class CouponCode
             SELECT * FROM coupon_codes WHERE code = :code
         ");
         $stmt->execute([':code' => $code]);
-        $rows = $stmt->fetchAll();
-        if ( !empty( $rows ) ) {
+        if ( !empty( $stmt->fetch() ) ) {
             return true;
         } 
         return false;
@@ -47,10 +46,14 @@ class CouponCode
 
     public function isValidCode( $code ) {
         $stmt = $this->db->prepare("
-            SELECT * FROM coupon_codes WHERE code = :code AND used = 0
+            SELECT * FROM coupon_codes WHERE code = :code AND type = :type AND used = 0
         ");
-        $stmt->execute([':code' => $code]);
-        if ( $row = $stmt->fetch() ) {
+        $stmt->execute([
+            ':code' => $code,
+            ':type' => $this->type
+        ]);
+        $row = $stmt->fetch();
+        if ( !empty( $row ) ) {
             return $row['value'];
         }
         return false;
@@ -58,10 +61,14 @@ class CouponCode
 
     public function findCode( $code ) {
         $stmt = $this->db->prepare("
-            SELECT * FROM coupon_codes WHERE code = :code AND used = 0
+            SELECT * FROM coupon_codes WHERE code = :code AND type = :type AND used = 0
         ");
-        $stmt->execute([':code' => $code]);
-        if ( $row = $stmt->fetch() ) {
+        $stmt->execute([
+            ':code' => $code,
+            ':type' => $this->type
+        ]);
+        $row = $stmt->fetch();
+        if ( !empty( $row ) ) {
             return $row;
         }
         return false;
