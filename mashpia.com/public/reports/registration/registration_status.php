@@ -108,7 +108,7 @@ $main_query = "
             chidon_eligible = 1
         GROUP BY school_id) chidon_el USING (school_id)
     WHERE
-        year = $year
+        sr.year = $year
 ";
 $main_query = mysql_query( $main_query );
 $data = [];
