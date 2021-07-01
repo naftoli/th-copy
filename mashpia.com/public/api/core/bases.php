@@ -87,7 +87,7 @@ class BaseRouter {
             ]);
         }
 
-        $base->register( $current_user->admin_id, $cart, $total, $cc, $coupon, $couponAmount );
+        $base->register( $current_user->admin_id, $cart, $total, $cc, false, $coupon, $couponAmount );
 
         json_response( $base );
     }

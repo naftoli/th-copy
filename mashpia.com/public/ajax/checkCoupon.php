@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin: *');  // CORS
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -13,8 +14,15 @@ if ($discount) {
         'discount'  => $discount
     ]);
 } else {
-    echo json_encode([
-        'success'   => false,
-        'error'     => 'No such coupon found in the system.'
-    ]);
+    if ($couponCode->codeExists($_REQUEST['coupon'])) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Coupon has already been used.'
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'error' => 'No such coupon found in the system.'
+        ]);
+    }
 }
