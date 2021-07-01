@@ -17,7 +17,7 @@ if ($discount) {
     if ($couponCode->codeExists($_REQUEST['coupon'])) {
         echo json_encode([
             'success' => false,
-            'error' => 'Coupon has already been used.'
+            'error' => 'This coupon has already been used.'
         ]);
     } else {
         echo json_encode([
