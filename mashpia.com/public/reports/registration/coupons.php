@@ -94,7 +94,7 @@ if ( empty( $codes ) ) {
 }
 ?>
 <table>
-    <caption>Current Chidon Codes in System</caption>
+    <caption>Current Chayolei Registration Codes in System</caption>
     <tr>
         <th>Code</th>
         <th>Dollar Value</th>
