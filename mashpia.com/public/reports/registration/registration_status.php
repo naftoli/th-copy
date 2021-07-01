@@ -127,14 +127,18 @@ foreach ($data as $type => $schools) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?=$year?> Registration Charges</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/admin_styles.css" rel="stylesheet" type="text/css" />
+<!--    <link href="/admin_styles.css" rel="stylesheet" type="text/css" />-->
     <style>
         table { width: 100%; }
         th, td { border: 1px solid #888; padding: 4px 8px; }
+        tr, th, td {
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <?php include( __DIR__ . '/../../admin_header.php'); ?>
+<!--    --><?php //include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Base Registration Status</h1>
     <form id="add_payment_form">
         Add Payment for:
@@ -236,6 +240,7 @@ foreach ($data as $type => $schools) {
         </table>
     <?php } ?>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     $(function() {
         $("#add_payment").click( function (e) {
