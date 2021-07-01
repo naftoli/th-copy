@@ -126,7 +126,7 @@ export class PaymentTab extends React.Component {
 
                 { !!couponAmount &&
                     <li>
-                      Coupon Deduction: -<CurrencyDisplay value={ couponAmount } />
+                      Coupon Deduction: <CurrencyDisplay value={ -couponAmount } />
                     </li>
                 }
 
