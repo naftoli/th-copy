@@ -43,7 +43,10 @@ export class ModulesTab extends React.Component {
       .then(result => {
         console.log(result)
         const data = result.data
-        if (data.success) this.props.onCoupon(coupon, data.discount)
+        if (data.success) {
+          this.props.onCoupon(coupon, data.discount)
+          alert('We have applied a $' + data.discount + ' discount to your total.')
+        }
         else alert(data.error)
       })
       .catch(error => console.log(error))
