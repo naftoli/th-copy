@@ -122,7 +122,7 @@ class RegistrationPage extends Component {
     let promise;
     // get the cart and total
     const cart = getCart( base );
-    const total = getTotal( base, true );
+    const total = getTotal( base, true, couponValue );
     
     // check if all valid props are set to true.
     const allValid = Object.keys( valid ).every( k =>  valid[k] );
