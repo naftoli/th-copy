@@ -38,10 +38,8 @@ export class ModulesTab extends React.Component {
   checkCoupon = e => {
     e.preventDefault()
     const coupon = document.getElementById('coupon').value
-    const url = "https://mashpia.com/ajax/checkCoupon.php"
-    axios.post(url, {
-        coupon: coupon
-    })
+    const url = "https://mashpia.com/ajax/checkCoupon.php?coupon=" + coupon
+    axios.get(url)
       .then(result => {
         console.log(result)
         const data = result.data
