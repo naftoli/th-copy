@@ -45,7 +45,6 @@ class CouponCode
     }
 
     public function isValidCode( $code ) {
-        echo "Code: " . $code;
         $stmt = $this->db->prepare("
             SELECT * FROM coupon_codes WHERE code = :code AND type = :type AND used = 0
         ");

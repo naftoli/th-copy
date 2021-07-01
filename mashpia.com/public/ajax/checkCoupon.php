@@ -3,6 +3,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
+echo "<pre>"; print_r($_POST); echo "</pre>";
+
 $year = GlobalSettings::getRegistrationYear();
 $couponCode = new CouponCode($MASHPIA_DB, $year, 'chayolei_base_reg');
 $discount = $couponCode->isValidCode($_REQUEST['coupon']);
