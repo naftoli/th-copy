@@ -33,13 +33,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="registration_status.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Base Registration Status</span>
+                    <span class="link-text">Base Registration</span>
                 </div>
             </a>
             <a href="registration_charges.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Soldier Registration Charges</span>
+                    <span class="link-text">Soldier Registration</span>
                 </div>
             </a>
         </div>
@@ -65,7 +65,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Registration Report</span>
+                    <span class="link-text">Old Registration Report</span>
                 </div>
             </a>
         </div>
