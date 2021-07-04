@@ -131,8 +131,10 @@ foreach ($data as $type => $schools) {
     <style>
         table { width: 100%; }
         th, td { border: 1px solid #888; padding: 4px 8px; }
-        tr, th, td {
+        body, tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+        tr, th, td {
             font-size: 14px;
         }
     </style>

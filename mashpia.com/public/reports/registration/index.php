@@ -36,10 +36,16 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Base Registration</span>
                 </div>
             </a>
-            <a href="registration_charges.php<?=$debug ? "?debug=true": "";?>">
+            <a href="registration.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
                     <span class="link-text">Soldier Registration</span>
+                </div>
+            </a>
+            <a href="registration_charges.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="reports"/>
+                    <span class="link-text">Soldier Charges</span>
                 </div>
             </a>
         </div>
