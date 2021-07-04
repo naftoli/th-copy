@@ -112,6 +112,13 @@ class GlobalSettings {
     }
 
     /**
+     * have one source of truth for the date of expiry for early bird
+     */
+    public static function earlyBird() {
+        return new DateTime('2020-09-24 11:59:59');
+    }
+
+    /**
      * calculateChildFee
      * 
      * calculates the child registration fee with all discounts applied

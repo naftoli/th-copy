@@ -81,7 +81,7 @@ foreach ($temp as $row) {
     <?php
     foreach ($totals as $school_id => $total) {
         $stmt = $MASHPIA_DB->prepare("
-            SELECT count(u.user_id) as total_users, school_type, child_fee  
+            SELECT count(u.user_id) as total_users, school_type, child_fee   
             FROM schools s 
             JOIN users u using (school_id) 
             WHERE u.school_id = :id 
@@ -91,6 +91,7 @@ foreach ($temp as $row) {
         $stmt->execute([':id' => $school_id]);
         $row = $stmt->fetch();
         // figure out soldier fee
+//        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
         $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true);
         echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $row['total_users'] . "</td><td>" . $fee .
             "</td><td>" . ($fee * intval($row['total_users'])) . "</td><td>" . $total . "</td><td>" . $coupons[$school_id] .
