@@ -87,7 +87,6 @@ while ($row = mysql_fetch_assoc($result)) {
 					<th>Base Number</th>
 	    			<th>School</th>
 	    			<th>Chayolei</th>
-					<th>Tuition</th>
 	    			<th>Tanya/Mishna</th>
 					<th>Tehillim</th>
 					<th>Chidon</th>
