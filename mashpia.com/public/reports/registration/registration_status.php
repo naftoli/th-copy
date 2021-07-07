@@ -173,7 +173,7 @@ ksort($data);
         <button id="add_payment">Add Payment</button>
     </form>
     <br />
-    <table  id="table" class="table table-striped table-condensed">
+    <table id="table" class="table table-striped table-condensed">
         <thead>
             <th>Base Type</th>
             <th>Base Number</th>
