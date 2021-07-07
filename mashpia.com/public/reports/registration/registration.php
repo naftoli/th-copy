@@ -165,6 +165,7 @@ foreach ($temp as $row) {
             u.user_id = :id
     ");
     foreach ($details as $school_id => $students) {
+        if ($school_id != 180) continue;
         foreach ($students as $idx => $student) {
             $stmt->execute([':id' => $student['user_id']]);
             $row = $stmt->fetch();
