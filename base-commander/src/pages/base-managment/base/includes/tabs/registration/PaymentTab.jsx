@@ -46,10 +46,10 @@ export class PaymentTab extends React.Component {
   //* render the page
   render(){
     const { terms } = this.state;
-    const { cc, tabId, base, back, couponAmount } = this.props;
+    const { cc, tabId, base, back, discount } = this.props;
     const { customerProfile, balance } = base;
 
-    const total = getTotal( base, true, couponAmount );
+    const total = getTotal( base, true, discount );
     const cart = getCart( base );
 
     const checkboxProps = { onChange: this.onTermsChange }
@@ -124,9 +124,9 @@ export class PaymentTab extends React.Component {
                   </li>
                 }
 
-                { !!couponAmount &&
+                { discount > 0 &&
                     <li>
-                      Coupon Deduction: <CurrencyDisplay value={ -couponAmount } />
+                      Discount: <CurrencyDisplay value={ -discount } />
                     </li>
                 }
 

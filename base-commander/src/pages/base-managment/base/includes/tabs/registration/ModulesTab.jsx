@@ -35,25 +35,8 @@ export class ModulesTab extends React.Component {
     }
   }
 
-  checkCoupon = e => {
-    e.preventDefault()
-    const coupon = document.getElementById('coupon').value
-    const url = "https://mashpia.com/ajax/checkCoupon.php?coupon=" + coupon
-    axios.get(url)
-      .then(result => {
-        console.log(result)
-        const data = result.data
-        if (data.success) {
-          this.props.onCoupon(coupon, data.discount)
-          alert('We have applied a $' + data.discount + ' discount to your total.')
-        }
-        else alert(data.error)
-      })
-      .catch(error => console.log(error))
-  }
-
   render(){
-    let { tabId, base, back, onChange, coupon, couponAmount } = this.props;
+    let { tabId, base, back, onChange } = this.props;
 
     let {
       chayolei, chayolei_fee, tanya,  tanya_fee,
@@ -64,7 +47,7 @@ export class ModulesTab extends React.Component {
     //   rewards_fee,  chidon_fee,
     // } = base;
     // check if we have one item checked
-    const total = getTotal( base, false, couponAmount );
+    const total = getTotal( base, false );
     const valid = this.isValid( base );
     // get the modules we can register
     const modules = availableModules( base.registration, true );
@@ -223,15 +206,6 @@ export class ModulesTab extends React.Component {
               </span>
             </div>
           </div>
-        </div>
-
-        <div style={{float: "left", marginTop: "0.5rem", marginBottom: "0.5rem"}}>
-          Coupon Code: &nbsp;
-          {
-            coupon
-                ? <input type='text' name='coupon' id='coupon' value={ coupon } disabled />
-                : <span><input type='text' name='coupon' id='coupon' />&nbsp;<button onClick={ this.checkCoupon }>Apply</button></span>
-          }
         </div>
 
         <div className='total'>

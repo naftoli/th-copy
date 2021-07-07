@@ -189,7 +189,7 @@ foreach ($data as $type => $schools) {
                 <th>Chidon Paid</th>
                 <th>Prior Balance</th>
                 <th>Prior Balance Paid</th>
-                <th>Total Fee</th>
+                <th>Total Owing</th>
                 <th>Total Paid</th>
                 <th>Coupon Code</th>
                 <th>Coupon Discount Amount</th>

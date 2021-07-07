@@ -24,6 +24,7 @@ import { getCurrentUser } from 'store/login/operations';
 import { onInputChange, onCheckboxChange } from 'functions/events';
 import { getTotal, getCart } from './includes/tabs/registration/functions';
 import { getBase, getDefaults, registerBase, updateBase } from 'store/base/bases/operations';
+import axios from "axios";
 
 class RegistrationPage extends Component {
   // initial state
@@ -31,7 +32,7 @@ class RegistrationPage extends Component {
     cc: {},       base: {},
     valid: {},    terms: false,
     activeTab: 1, currentTab: 1,
-    coupon: '',   couponValue: 0
+    discount: 0
   }
   // props
   static propTypes = {
@@ -55,7 +56,21 @@ class RegistrationPage extends Component {
     showError( // show error messages
       promise( login.id ) // load the base and update the state
       .then( base => this.onUpdate( base ) )
+          .then(this.checkDiscount())
     );
+  }
+
+  checkDiscount() {
+    const url = "https://mashpia.com/ajax/checkForDiscount.php?school_id=" + this.props.login.school_id
+    axios.get(url)
+      .then(result => {
+        console.log(result)
+        const data = result.data
+        if (data.discount) {
+          this.setState({ discount: data.discount })
+        }
+      })
+      .catch(error => console.log(error))
   }
 
   // prevent memory leaks?
@@ -117,12 +132,12 @@ class RegistrationPage extends Component {
   });
 
   register = () => {
-    const { base, cc, terms, valid, coupon, couponValue } = this.state;
+    const { base, cc, terms, valid, discount } = this.state;
     // calculate the total registration cost
     let promise;
     // get the cart and total
     const cart = getCart( base );
-    const total = getTotal( base, true, couponValue );
+    const total = getTotal( base, true );
     
     // check if all valid props are set to true.
     const allValid = Object.keys( valid ).every( k =>  valid[k] );
@@ -138,7 +153,7 @@ class RegistrationPage extends Component {
     // if the total is greater then 0
     if ( total > 0 ) {
       promise = validateCC( cc )
-        .then( cc => this.props.registerBase({ base, cc, cart, total, coupon, couponValue }) );
+        .then( cc => this.props.registerBase({ base, cc, cart, total, discount }) );
     // otherwise just register the base
     } else {
       promise = this.props.registerBase({ base, total });
@@ -157,14 +172,10 @@ class RegistrationPage extends Component {
       });
   }
 
-  onCouponChange = (coupon, amount) => {
-    this.setState({ coupon: coupon, couponValue: amount })
-  }
-
   // render the page
   render() {
     const { code } = this.props.login;
-    const { cc, base, activeTab, valid, terms, registering } = this.state;
+    const { cc, base, activeTab, valid, terms, registering, discount } = this.state;
     // everyone but a base commander and a blank account get the locked error screen
     if ( !isBC( code, true ) && !isBlank( code ) ) {
       return <LockedError />;
@@ -218,9 +229,6 @@ class RegistrationPage extends Component {
             back={ this.back }
             onChange={ this.onCheckboxChange }
             onSubmit={ this.submitTab( 3 ) }
-            coupon={ this.state.coupon }
-            couponAmount={ this.state.couponValue }
-            onCoupon={ this.onCouponChange }
             onValidChange={ this.updateValid('modules') } />
 
           <SettingsTab
@@ -236,8 +244,7 @@ class RegistrationPage extends Component {
             base={ base }
             back={ this.back }
             terms={ terms }
-            coupon={ this.state.coupon }
-            couponAmount={ this.state.couponValue }
+            discount={ discount }
             register={ this.register }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>
