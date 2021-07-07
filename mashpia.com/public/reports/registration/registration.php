@@ -167,9 +167,9 @@ foreach ($temp as $row) {
             $row = $stmt->fetch();
             if (! $row['school_name']) continue;
             $fee = GlobalSettings::calculateChildFee($student['school_type'], $student['child_fee'], true, true);
-            echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td><td";
-            if ($idx == 0) echo "id='$school_id'>";
-            else echo ">";
+            echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td>";
+            if ($idx == 0) echo "<td id='$school_id'>";
+            else echo "<td>";
             echo $row['school_name'] . "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) .
                 "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" .
                 $fee . "</td><td>" . $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" .
