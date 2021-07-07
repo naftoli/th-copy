@@ -129,14 +129,11 @@ ksort($data);
     <title><?=$year?> Registration Charges</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--    <link href="/admin_styles.css" rel="stylesheet" type="text/css" />-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/>
     <style>
-        table { width: 100%; }
-        th, td { border: 1px solid #888; padding: 4px 8px; }
-        body, tr, th, td {
-            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-        }
-        tr, th, td {
-            font-size: 14px;
+        body {
+            padding-left: 20px;
+            padding-right: 20px;
         }
     </style>
 </head>
@@ -176,7 +173,7 @@ ksort($data);
         <button id="add_payment">Add Payment</button>
     </form>
     <br />
-    <table>
+    <table  id="table" class="table table-striped table-condensed">
         <thead>
             <th>Base Type</th>
             <th>Base Number</th>
@@ -197,6 +194,16 @@ ksort($data);
         </thead>
         <tbody>
         <?php
+        $totals['chayolei_fee'] = 0;
+        $totals['chayolei_paid'] = 0;
+        $totals['chidon_fee'] = 0;
+        $totals['chidon_paid'] = 0;
+        $totals['prior_balance'] = 0;
+        $totals['prior_balance_paid'] = 0;
+        $totals['owing'] = 0;
+        $totals['discount'] = 0;
+        $totals['total_paid'] = 0;
+        $totals['current_balance'] = 0;
         foreach( $data as $base ) {
             if ( !$base['total_registered'] ) $base['total_registered'] = 0;
 //                if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
@@ -245,11 +252,32 @@ ksort($data);
 <!--                    <td>--><?//= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?><!--</td>-->
 <!--                    <td>--><?//= $base['not_chayolei'] ?><!--</td>-->
             </tr>
-        <?php } ?>
+            <?php
+            $totals['chayolei_fee'] += $base['chayolei_fee'];
+            $totals['chayolei_paid'] += $base['total_chayolei'];
+            $totals['chidon_fee'] += $base['chidon_fee'];
+            $totals['chidon_paid'] += $base['total_chidon'];
+            $totals['prior_balance'] += $base['balance'];
+            $totals['prior_balance_paid'] += $base['total_balance_paid'];
+            $totals['owing'] += $total_owing;
+            $totals['discount'] += $base['discount'];
+            $totals['total_paid'] += $total_paid;
+            $totals['current_balance'] += $balance;
+        }
+        ?>
         </tbody>
+        <tfoot>
+        <?php
+        echo "<tr><th></th><th></th><th></th><th>Totals:</th><th>" . $totals['chayolei_fee'] . "</th><th>" . $totals['chayolei_paid'] .
+            "</th><th>" . $totals['chidon_fee'] . "</th><th>" . $totals['chidon_paid'] . "</th><th>" . $totals['prior_balance'] .
+            "</th><th>" . $totals['prior_balance_paid'] . "</th><th>" . $totals['owing'] . "</th><th>" . $totals['discount'] .
+            "</th><th>" . $totals['total_paid'] . "</th><th>" . $totals['current_balance'] . "</th><th></th><th></th></tr>";
+        ?>
+        </tfoot>
     </table>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.js"></script>
 <script>
     $(function() {
         $("#add_payment").click( function (e) {
@@ -273,5 +301,8 @@ ksort($data);
             })
         })
     })
+    $('#table').DataTable({
+        paging : false
+    });
 </script>
 </html>
