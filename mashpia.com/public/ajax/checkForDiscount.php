@@ -2,10 +2,11 @@
 header('Access-Control-Allow-Origin: *');  // CORS
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
 
-$school_id = mysql_real_escape_string($_REQUEST['school_id']);
+$year = GlobalSettings::getRegistrationYear();
+$school_id = $_REQUEST['school_id'];
 $discount = 0;
+
 $stmt = $MASHPIA_DB->prepare("
     SELECT * FROM discounts WHERE year = :year AND school_id = :school
 ");
@@ -14,7 +15,7 @@ $stmt->execute([
     ':school'   => $school_id
 ]);
 $row = $stmt->fetch();
-if ($row['discount']) $discount = $row['discount'];
+if ($row['amount']) $discount = $row['amount'];
 echo json_encode([
     'success'   => true,
     'discount'  => $discount
