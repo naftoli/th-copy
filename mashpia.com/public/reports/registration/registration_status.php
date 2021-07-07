@@ -296,7 +296,10 @@ ksort($data);
             }
             $.post('addPayment.php', { school: school, method: method, type: type, amount: amount }, function(result) {
                 const res = JSON.parse(result)
-                if (res.success) alert('Successfully added.')
+                if (res.success) {
+                    alert('Successfully added.')
+                    location.reload()
+                }
                 else alert(res.error)
             })
         })
