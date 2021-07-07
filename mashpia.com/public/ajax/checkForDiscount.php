@@ -8,7 +8,7 @@ $school_id = $_REQUEST['school_id'];
 $discount = 0;
 
 $stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM discounts WHERE year = :year AND school_id = :school
+    SELECT * FROM discounts WHERE year = :year AND school_id = :school AND used is null
 ");
 $stmt->execute([
     ':year'     => $year,
