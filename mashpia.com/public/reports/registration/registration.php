@@ -103,7 +103,7 @@ foreach ($temp as $row) {
         // figure out soldier fee
 //        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
         $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
-        echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $row['total_users'] . "</td><td>" . $fee .
+        echo "<tr><td><a href='#$school_id'>" . $schools[$school_id] . "</a></td><td>" . $row['total_users'] . "</td><td>" . $fee .
             "</td><td>" . ($fee * intval($row['total_users'])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .
             ($fee * intval($row['total_users']) - floatval($discounts[$school_id])) . "</td><td>" . $total . "</td>";
         $style = '';
@@ -162,16 +162,18 @@ foreach ($temp as $row) {
             u.user_id = :id
     ");
     foreach ($details as $school_id => $students) {
-        foreach ($students as $student) {
+        foreach ($students as $idx => $student) {
             $stmt->execute([':id' => $student['user_id']]);
             $row = $stmt->fetch();
             if (! $row['school_name']) continue;
             $fee = GlobalSettings::calculateChildFee($student['school_type'], $student['child_fee'], true, true);
-            echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td><td>" . $row['school_name'] .
-                "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) . "</td><td>" .
-                $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" . $fee . "</td><td>" .
-                $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" . $student['amount'] . "</td><td>" .
-                (($fee - $student['discount']) - $student['amount']) . "</td></tr>";
+            echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td><td";
+            if ($idx == 0) echo "id='$school_id'>";
+            else echo ">";
+            echo $row['school_name'] . "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) .
+                "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" .
+                $fee . "</td><td>" . $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" .
+                $student['amount'] . "</td><td>" . (($fee - $student['discount']) - $student['amount']) . "</td></tr>";
         }
     }
     ?>
