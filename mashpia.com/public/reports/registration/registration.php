@@ -52,7 +52,7 @@ foreach ($temp as $row) {
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?=$year?> Soldier Registration</title>
+    <title>Soldier Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/>
     <style>
@@ -63,7 +63,7 @@ foreach ($temp as $row) {
     </style>
 </head>
 <body>
-<h1><?=$year?> Soldier Registration</h1>
+<h1>Soldier Registration <?=$year?></h1>
 <h2>Base Totals</h2>
 <table id="table" class="table table-striped table-condensed">
     <thead>
