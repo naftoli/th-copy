@@ -45,8 +45,7 @@ $main_query = "
         school_registration_id,
         date_paid,
         amount_paid, 
-        coupon, 
-        IFNULL(cc.value, 0) as couponAmount,
+        discount, 
         total_chayolei,
         total_chidon,
         total_balance_paid,
@@ -189,10 +188,9 @@ foreach ($data as $type => $schools) {
                 <th>Chidon Paid</th>
                 <th>Prior Balance</th>
                 <th>Prior Balance Paid</th>
+                <th>Discount</th>
                 <th>Total Owing</th>
                 <th>Total Paid</th>
-                <th>Coupon Code</th>
-                <th>Coupon Discount Amount</th>
                 <th>Current Balance</th>
                 <th>Eligible Chayolei Soldiers</th>
                 <th>Chayolei Soldiers Registered</th>
@@ -221,16 +219,16 @@ foreach ($data as $type => $schools) {
                         echo $total_owing;
                         ?>
                     </td>
+                    <td><?= ($base['discount'] ? $base['discount'] : 0) ?></td>
                     <td>
                         <?php
-                        $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) + floatval($base['total_balance_paid']);
+                        $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) +
+                            floatval($base['total_balance_paid']) - ($base['discount'] ? floatval($base['discount']) : 0);
                         $total_paid = $total_paid == 0 ? floatval($base['amount_paid']) : $total_paid;
                         echo $total_paid;
                         ?>
                     </td>
-                    <td><?= $base['coupon'] ?></td>
-                    <td><?= $base['couponAmount'] ?></td>
-                    <td><?= $total_owing - $total_paid - $base['couponAmount'] ?></td>
+                    <td><?= $total_owing - $total_paid; ?></td>
                     <td><?= $base['total_chayolei_eligible'] ?></td>
                     <td><?= $base['total_registered'] ?></td>
 <!--                    <td>$--><?//= number_format($base['amount_paid'], 0) ?><!--</td>-->

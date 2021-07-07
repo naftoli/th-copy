@@ -248,8 +248,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             'modules' => json_encode([
                 'chayolei'  =>  !!$this->chayolei,  'chidon'    =>  !!$this->chidon,
                 'tanya'     =>  !!$this->tanya,     'rewards'   =>  !!$this->rewards
-            ]),
-            'discount' => $discount
+            ])
         ]);
         // update the school_era
         $this->school_era = null;
@@ -258,7 +257,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
         $saved = $registration->save() && $this->save();
 
-        // add cart details to school_registration_details table; set discount to used (when applicable) - Naftoli 06/25/21
+        // add details to school_registration_details table; set discount to used (when applicable) - Naftoli 06/25/21
         if ($saved) {
             $stmt = $MASHPIA_DB->prepare("SELECT school_registration_id FROM school_registrations WHERE year = :year AND school_id = :school");
             $stmt->execute([
@@ -295,15 +294,21 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                         ':year'     => $year
                     ]);
                 }
-            }
-
-            if ($discount) {
-                $stmt = $MASHPIA_DB->prepare("UPDATE discounts SET used = now() WHERE year = :year AND school_id = :school AND amount = :amount");
-                $stmt->execute([
-                    ':year'     => $year,
-                    ':school'   => $this->school_id,
-                    ':amount'   => $discount
-                ]);
+                if ($discount) {
+                    $stmt->execute([
+                        ':id' => $school_reg_id,
+                        ':type' => 'discount',
+                        ':amount' => -$discount,
+                        ':school' => $this->school_id,
+                        ':year' => $year
+                    ]);
+                    $stmt = $MASHPIA_DB->prepare("UPDATE discounts SET used = now() WHERE year = :year AND school_id = :school AND amount = :amount");
+                    $stmt->execute([
+                        ':year'     => $year,
+                        ':school'   => $this->school_id,
+                        ':amount'   => $discount
+                    ]);
+                }
             }
         }
 
