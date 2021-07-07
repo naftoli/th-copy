@@ -176,6 +176,9 @@ foreach ($temp as $row) {
                 $student['amount'] . "</td><td>";
             $style = '';
             $balance = (($fee - $student['discount']) - $student['amount']);
+            if ($balance > 0) {
+                $style = "background-color: red";
+            }
             echo "<td style='$style'>";
             echo $balance . "</td></tr>";
         }
