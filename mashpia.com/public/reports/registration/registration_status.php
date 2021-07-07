@@ -302,7 +302,8 @@ ksort($data);
         })
     })
     $('#table').DataTable({
-        paging : false
+        paging : false,
+        "order": [[ 2, 'asc' ]]
     });
 </script>
 </html>
