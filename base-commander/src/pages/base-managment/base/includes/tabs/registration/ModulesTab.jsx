@@ -7,7 +7,6 @@ import { CurrencyDisplay } from 'components/ui/Formats';
 import { NavigationRow } from '../../rows/registration/NavigationRow';
 // functions
 import { getTotal, moduleSelected, availableModules } from './functions';
-import axios from 'axios';
 
 export class ModulesTab extends React.Component {
   
