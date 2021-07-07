@@ -274,16 +274,14 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                     amount = :amount, 
                     school_id = :school, 
                     year = :year");
-                foreach ($cart as $item => $value) {
-                    if ($value) {
-                        $stmt->execute([
-                            ':id' => $school_reg_id,
-                            ':type' => $item,
-                            ':amount' => $value,
-                            ':school' => $this->school_id,
-                            ':year' => $year
-                        ]);
-                    }
+                foreach ($cart as $item) {
+                    $stmt->execute([
+                        ':id' => $school_reg_id,
+                        ':type' => $item['name'],
+                        ':amount' => $item['price'],
+                        ':school' => $this->school_id,
+                        ':year' => $year
+                    ]);
                 }
                 if ($this->balance) {
                     $stmt->execute([
