@@ -178,7 +178,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
     // register the school
-    public function register( $admin_id, $cart, $total, $cc, $year = false, $coupon = '', $couponAmount = 0 ) {
+    public function register( $admin_id, $cart, $total, $cc, $year = false, $discount = 0 ) {
         // set the default year
         if ( !$year ) {
             $year = GlobalSettings::getRegistrationYear( $this->school_id );
@@ -205,9 +205,9 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 }
             }
 
-            if ( $total != $cart_total + $this->balance - $couponAmount ) {
+            if ( $total != $cart_total + $this->balance - $discount ) {
                 throw new Exception(
-                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance - $couponAmount ).")"
+                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance - $discount ).")"
                 );
             }
         }
@@ -249,7 +249,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'chayolei'  =>  !!$this->chayolei,  'chidon'    =>  !!$this->chidon,
                 'tanya'     =>  !!$this->tanya,     'rewards'   =>  !!$this->rewards
             ]),
-            'coupon' => $coupon
+            'discount' => $discount
         ]);
         // update the school_era
         $this->school_era = null;
@@ -258,7 +258,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
         $saved = $registration->save() && $this->save();
 
-        // add cart details to school_registration_details table; set coupon to used (when applicable) - Naftoli 06/25/21
+        // add cart details to school_registration_details table; set discount to used (when applicable) - Naftoli 06/25/21
         if ($saved) {
             $stmt = $MASHPIA_DB->prepare("SELECT school_registration_id FROM school_registrations WHERE year = :year AND school_id = :school");
             $stmt->execute([
@@ -297,9 +297,13 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 }
             }
 
-            if ($coupon) {
-                $stmt = $MASHPIA_DB->prepare("UPDATE coupon_codes SET used = 1, date_redeemed = now() WHERE code = :code");
-                $stmt->execute([':code' => $coupon]);
+            if ($discount) {
+                $stmt = $MASHPIA_DB->prepare("UPDATE discounts SET used = now() WHERE year = :year AND school_id = :school AND amount = :amount");
+                $stmt->execute([
+                    ':year'     => $year,
+                    ':school'   => $this->school_id,
+                    ':amount'   => $discount
+                ]);
             }
         }
 
