@@ -1,6 +1,4 @@
 <?php
-ini_set('max_execution_time', 600);
-
 $admin_auth = array();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
