@@ -45,7 +45,7 @@ $main_query = "
         school_registration_id,
         date_paid,
         amount_paid, 
-        discount, 
+        discount,
         total_chayolei,
         total_chidon,
         total_balance_paid,
@@ -56,8 +56,6 @@ $main_query = "
         school_registrations sr
             JOIN
         schools s USING (school_id)
-            LEFT JOIN 
-        coupon_codes cc on cc.code = sr.coupon 
             LEFT JOIN
         (SELECT 
             school_id, IFNULL(SUM(amount), 0) AS total_chayolei
@@ -82,6 +80,14 @@ $main_query = "
         WHERE
             type = 'past_due' AND year = $year
         GROUP BY school_id) balance USING (school_id)
+            LEFT JOIN
+        (SELECT 
+            school_id, IFNULL(SUM(amount), 0) AS discount 
+        FROM
+            school_registration_details
+        WHERE
+            type = 'discount' AND year = $year
+        GROUP BY school_id) discount USING (school_id)
             LEFT JOIN
         (SELECT 
             school_id, COUNT(*) AS total_registered
@@ -111,12 +117,8 @@ $main_query = "
 ";
 $main_query = mysql_query( $main_query );
 $data = [];
-while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['reg_type']][$row['school_name']] = $row;
+while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['school_name']] = $row;
 ksort($data);
-// sort by name
-foreach ($data as $type => $schools) {
-    ksort($data[$type]);
-}
 //echo "<pre>"; print_r($data); echo "</pre>";
 ?>
 <!DOCTYPE html>
@@ -173,72 +175,79 @@ foreach ($data as $type => $schools) {
         <br />
         <button id="add_payment">Add Payment</button>
     </form>
-    <?php
-    foreach ($data as $type => $schools) {
-        echo "<h2>" . $types[$type] . " Schools</h2>";
-        ?>
-        <table>
-            <thead>
-                <th>Base Number</th>
-                <th>Base Name</th>
-                <th>Date Registered</th>
-                <th>Chayolei Fee</th>
-                <th>Chayolei Paid</th>
-                <th>Chidon Fee</th>
-                <th>Chidon Paid</th>
-                <th>Prior Balance</th>
-                <th>Prior Balance Paid</th>
-                <th>Discount</th>
-                <th>Total Owing</th>
-                <th>Total Paid</th>
-                <th>Current Balance</th>
-                <th>Eligible Chayolei Soldiers</th>
-                <th>Chayolei Soldiers Registered</th>
-            </thead>
-            <tbody>
-            <?php
-            foreach( $schools as $base ) {
-                if ( !$base['total_registered'] ) $base['total_registered'] = 0;
+    <br />
+    <table>
+        <thead>
+            <th>Base Type</th>
+            <th>Base Number</th>
+            <th>Base Name</th>
+            <th>Date Registered</th>
+            <th>Chayolei Fee</th>
+            <th>Chayolei Paid</th>
+            <th>Chidon Fee</th>
+            <th>Chidon Paid</th>
+            <th>Prior Balance</th>
+            <th>Prior Balance Paid</th>
+            <th>Total Owing</th>
+            <th>Discount</th>
+            <th>Total Paid</th>
+            <th>Current Balance</th>
+            <th>Eligible Chayolei Soldiers</th>
+            <th>Chayolei Soldiers Registered</th>
+        </thead>
+        <tbody>
+        <?php
+        foreach( $data as $base ) {
+            if ( !$base['total_registered'] ) $base['total_registered'] = 0;
 //                if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
-                <tr>
-                    <td><?= $base['school_number'] ?></td>
-                    <td><?= $base['school_name'] ?></td>
-                    <td><?= $base[ 'date_paid' ] ?
-                            ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) :
-                            'Not Registered';
-                        ?></td>
-                    <td><?= $base['chayolei_fee'] ?></td>
-                    <td><?= $base['total_chayolei'] ?></td>
-                    <td><?= $base['chidon_fee'] ?></td>
-                    <td><?= $base['total_chidon'] ?></td>
-                    <td><?= $base['balance'] ?></td>
-                    <td><?= $base['total_balance_paid'] ?></td>
-                    <td>
-                        <?php
-                        $total_owing = floatval($base['chayolei_fee']) + floatval($base['chidon_fee']) + floatval($base['balance']);
-                        echo $total_owing;
-                        ?>
-                    </td>
-                    <td><?= ($base['discount'] ? $base['discount'] : 0) ?></td>
-                    <td>
-                        <?php
-                        $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) +
-                            floatval($base['total_balance_paid']) - ($base['discount'] ? floatval($base['discount']) : 0);
-                        $total_paid = $total_paid == 0 ? floatval($base['amount_paid']) : $total_paid;
-                        echo $total_paid;
-                        ?>
-                    </td>
-                    <td><?= $total_owing - $total_paid; ?></td>
-                    <td><?= $base['total_chayolei_eligible'] ?></td>
-                    <td><?= $base['total_registered'] ?></td>
+            <tr>
+                <td><?= $types[$base['reg_type']] ?></td>
+                <td><?= $base['school_number'] ?></td>
+                <td><?= $base['school_name'] ?></td>
+                <td><?= $base[ 'date_paid' ] ?
+                        ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) :
+                        'Not Registered';
+                    ?></td>
+                <td><?= $base['chayolei_fee'] ?></td>
+                <td><?= $base['total_chayolei'] ?></td>
+                <td><?= $base['chidon_fee'] ?></td>
+                <td><?= $base['total_chidon'] ?></td>
+                <td><?= $base['balance'] ?></td>
+                <td><?= $base['total_balance_paid'] ?></td>
+                <td>
+                    <?php
+                    $total_owing = floatval($base['chayolei_fee']) + floatval($base['chidon_fee']) + floatval($base['balance']);
+                    echo $total_owing;
+                    ?>
+                </td>
+                <td><?= ($base['discount'] ? $base['discount'] : 0) ?></td>
+                <td>
+                    <?php
+                    $total_paid = floatval($base['total_chayolei']) + floatval($base['total_chidon']) +
+                        floatval($base['total_balance_paid']) + ($base['discount'] ? floatval($base['discount']) : 0);
+                    $total_paid = $total_paid == 0 ? floatval($base['amount_paid']) : $total_paid;
+                    echo $total_paid;
+                    ?>
+                </td>
+                <?php
+                $style = '';
+                $balance = ($total_owing + $base['discount']) - $total_paid;
+                if ($balance > 0) {
+                    $style = "background-color: red";
+                }
+                ?>
+                <td style="<?= $style ?>">
+                    <?= $balance ?>
+                </td>
+                <td><?= $base['total_chayolei_eligible'] ?></td>
+                <td><?= $base['total_registered'] ?></td>
 <!--                    <td>$--><?//= number_format($base['amount_paid'], 0) ?><!--</td>-->
 <!--                    <td>--><?//= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?><!--</td>-->
 <!--                    <td>--><?//= $base['not_chayolei'] ?><!--</td>-->
-                </tr>
-            <?php } ?>
-            </tbody>
-        </table>
-    <?php } ?>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
