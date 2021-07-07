@@ -122,7 +122,7 @@ foreach ($temp as $row) {
     </tbody>
     <tfoot>
     <?php
-    echo "<tr><th></th><th>" . $totals['soldiers'] . "</th><th>" . $totals['fee'] . "</th><th>" . $totals['total_fee'] .
+    echo "<tr><th>Totals:</th><th>" . $totals['soldiers'] . "</th><th>" . $totals['fee'] . "</th><th>" . $totals['total_fee'] .
         "</th><th>" . $totals['discounts'] . "</th><th>" . $totals['owing'] . "</th><th>" . $totals['paid'] . "</th><th>" .
         $totals['balance'] . "</th></tr>";
     ?>
