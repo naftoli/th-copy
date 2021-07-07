@@ -15,6 +15,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
+$details = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT * FROM registration_charges 
     WHERE year = :year 
@@ -27,6 +28,7 @@ $totals = [];
 foreach ($rows as $row) {
     if (isset($totals[$row['school_id']])) $totals[$row['school_id']] += floatval($row['amount']);
     else $totals[$row['school_id']] = floatval($row['amount']);
+    $details[$row['school_id']][] = $row;
 }
 
 // find out total for any discounts that were used
@@ -129,7 +131,7 @@ foreach ($temp as $row) {
     </tfoot>
 </table>
 <h2>Details</h2>
-<table>
+<table id="details" class="table table-striped table-condensed">
     <thead>
         <tr>
             <th>User ID</th>
@@ -139,11 +141,41 @@ foreach ($temp as $row) {
             <th>Soldier</th>
             <th>Registered</th>
             <th>Fee</th>
+            <th>Discount</th>
+            <th>Owes</th>
             <th>Paid</th>
-            <th>Coupon Amount</th>
             <th>Balance</th>
         </tr>
     </thead>
+    <tbody>
+    <?php
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT 
+            *
+        FROM
+            users u
+                JOIN
+            schools s USING (school_id)
+                JOIN
+            classes c ON c.class_id = u.class_id
+        WHERE
+            u.user_id = :id
+    ");
+    foreach ($details as $school_id => $students) {
+        foreach ($students as $student) {
+            $stmt->execute([':id' => $student['user_id']]);
+            $row = $stmt->fetch();
+            if (! $row['school_name']) continue;
+            $fee = GlobalSettings::calculateChildFee($student['school_type'], $student['child_fee'], true, true);
+            echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td><td>" . $row['school_name'] .
+                "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) . "</td><td>" .
+                $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" . $fee . "</td><td>" .
+                $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" . $student['amount'] . "</td><td>" .
+                (($fee - $student['discount']) - $student['amount']) . "</td></tr>";
+        }
+    }
+    ?>
+    </tbody>
 </table>
 </body>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.js"></script>
@@ -151,6 +183,10 @@ foreach ($temp as $row) {
     $('#table').DataTable({
         paging : false,
         "order": [[ 0, 'asc' ]]
+    });
+    $('#details').DataTable({
+        paging : false,
+        "order": [[ 2, 'asc' ]]
     });
 </script>
 </html>
