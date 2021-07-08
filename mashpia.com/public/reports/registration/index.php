@@ -56,10 +56,10 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Registration Settings</span>
                 </div>
             </a>
-            <a href="coupons.php">
+            <a href="discounts.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Coupon Codes</span>
+                    <span class="link-text">Discounts</span>
                 </div>
             </a>
             <a href="/admin_yearly.php">
