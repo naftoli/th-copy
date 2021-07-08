@@ -531,6 +531,10 @@ var registrationApp = function() {
                 if ( $(".book-purchase:checked").val() == 'store' && ($("#store-name").val().trim() == '' || $("#store-city").val().trim() == '' ) ) {
                     return showError(Err5);
                 }
+                // check that they filled in the book version as well
+                if ($("#bookVersion").val() == 0 || $("#bookVersion").val() == '0') {
+                    return showError('Please select which version book you have.')
+                }
             } else {
                 // make sure they checked either that they want to purchase a book or that they already have a book
                 if ( !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
@@ -632,7 +636,8 @@ var registrationApp = function() {
                     store: {
                         store_name: $("#store-name").val(), 
                         store_city: $("#store-city").val()
-                    }, 
+                    },
+                    bookVersion: $("#bookVersion").val(),
                     recruited: $(".recruit:checked").val(), 
                     recruitedBy: parseInt($("#recruited_by_user_serial").val()),
                     poll: poll,
@@ -1020,6 +1025,14 @@ var templates = function(){
             // $( '#step-2 form #yahadus-cost' ).text(  ? 45 : 50 );
             $( '#step-2 form #yahadus-registration').hide();
             $( '#step-2 form #yahadus-registration-no').hide();
+
+            let bookHtml = "<option value='0'>Please choose</option>"
+            for (let i = 2011; i <= 2021; i++) {
+                bookHtml += `<option value='${i}'>${i}</option>`
+            }
+            $("#step-2 form #bookVersion").empty()
+            $("#step-2 form #bookVersion").append(bookHtml)
+
             $("#step-2 form input#shabbaton")[0].checked = false;
             $("#step-2 form input.recruit")[0].checked = false;
             $("#step-2 form input.recruit")[1].checked = false;

@@ -17,8 +17,10 @@
     "SoldierInformation": "Soldier Information",
     "Boys": "Boy",
     "Girls": "Girl",
-    "Name": "Full English Name",
-    "HebrewName": "Full Hebrew name",
+    "Name": "English First (and Middle) Name",
+    "LastName": "English Last Name",
+    "HebrewName": "Hebrew Last Name",
+    "HebrewFirst": "Hebrew First (and Middle) Name",
     "School": "School",
     "ClassGrade": "Class / Grade",
     "EnglishDateBirth": "English Date of Birth",
@@ -132,5 +134,6 @@
     "ClickConfirm": "To change it, just update the fields and click \"Update\", otherwise click on \"Confirm\".",
     "PleaseNoteAddressChange": "Please Note: We only ship within the USA.",
     "Update": "Update",
-    "Confirm": "Confirm"
+    "Confirm": "Confirm",
+    "online": "theChidon.com"
 }

@@ -629,7 +629,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param string $store_name
      * @param string $store_city
      */
-    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '' ) {
+    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '', $version = 0 ) {
         global $MASHPIA_DB;
         $qry = $MASHPIA_DB->prepare(
             "insert into yahadus_book_purchases 
@@ -638,7 +638,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             location = :location, 
             trans_id = :trans_id, 
             store_name = :store_name, 
-            store_city = :store_city"
+            store_city = :store_city, 
+            version = :version"
         );
         $qry->execute([
             ':year' =>  $year, 
@@ -646,7 +647,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':location' =>  $location, 
             ':trans_id' =>  $trans_id, 
             ':store_name'   =>  $store_name, 
-            ':store_city'   =>  $store_city
+            ':store_city'   =>  $store_city,
+            ':version'      => intval($version)
         ]);
     }
 

@@ -234,7 +234,8 @@ class UserRegistrationRouter {
                                 $location = $registration['purchasedWhere'];
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
-                                $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city );
+                                $version = $registration['bookVersion'];
+                                $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city, $version );
                             }
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';

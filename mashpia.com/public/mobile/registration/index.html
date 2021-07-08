@@ -136,8 +136,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
-                            <label for="first" class="i18n" data-key="Name">Full English Name</label>
+                        <div class="col-6">
+                            <label for="first" class="i18n" data-key="Name">English First Name</label>
+                        </div>
+                        <div class="col-6">
+                            <label for="last" class="i18n" data-key="LastName">English Last Name</label>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required>
@@ -147,8 +150,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
-                            <label for="first_he" class="i18n" data-key="HebrewName">Full Hebrew Name</label>
+                        <div class="col-6">
+                            <label for="first_he" class="i18n" data-key="HebrewName">Hebrew Last Name</label>
+                        </div>
+                        <div class="col-6">
+                            <label for="first_he" class="i18n" data-key="HebrewFirst">Hebrew First Name</label>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required/>
@@ -282,9 +288,10 @@
                             <div class="col-10 col-md-11">
                                 <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />
 <!--                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />-->
-                                    This fee helps cover the costs of the Study Guide which we send out, tests and many other parts of the Limmud program.<br />
+                                    This fee helps cover the costs of the study guide, tests and many other parts of the Limmud program.<br /><br />
                                 <div id="study-guides">
-                                    <b>Please note:</b> Books & Study Guides will be shipped to arrive the first day of school (not before).
+                                    <b>Please note:</b> Books & study guides will be shipped to locations in the USA to arrive in time for when the
+                                    Chidon Limmud schedule starts at the beginning of the school year (not before).
                                     <!--                                    <span class="i18n" data-key="Registrationby">Registration by Wednesday, 25 Elul (Sep 25) 4 pm EST will ensure you get your study guide and Yehadus Book by Thursday, 11 Tishrei (Oct 10). (DOES NOT INCLUDE AUSTRALIAN OR SOUTH AFRICAN SCHOOLS)</span></span><br />-->
                                 </div>
                                 <div id="late-reg" style="display: none">
@@ -445,6 +452,14 @@
                                     <input type="radio" name="book-purchase" class="book-purchase" value="school" /> 
                                     <span class="i18n" data-key="ThroughSchool">Through my school</span>
                                     <br />
+                                    <input type="radio" name="book-purchase" class="book-purchase" value="online" />
+                                    <span class="i18n" data-key="online">theChidon.com</span>
+                                    <br />
+                                    <br />
+                                    <div>
+                                        Please confirm which version book you will be using. (This can be found on the inside of page 3 of your book).<br />
+                                        <select class="form-control" name="bookVersion" id="bookVersion"></select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
