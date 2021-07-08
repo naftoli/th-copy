@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 $admin_auth = array();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -165,19 +162,18 @@ foreach ($temp as $row) {
             u.user_id = :id
     ");
     foreach ($details as $school_id => $students) {
-        if ($school_id != 180) continue;
         foreach ($students as $idx => $student) {
             $stmt->execute([':id' => $student['user_id']]);
             $row = $stmt->fetch();
             if (! $row['school_name']) continue;
-            $fee = GlobalSettings::calculateChildFee($student['school_type'], $student['child_fee'], true, true);
+            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
             echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['school_number'] . "</td>";
             if ($idx == 0) echo "<td id='$school_id'>";
             else echo "<td>";
             echo $row['school_name'] . "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) .
                 "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" .
                 $fee . "</td><td>" . $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" .
-                $student['amount'] . "</td><td>";
+                $student['amount'] . "</td>";
             $style = '';
             $balance = (($fee - $student['discount']) - $student['amount']);
             if ($balance > 0) {
