@@ -46,6 +46,28 @@ $temp = $stmt->fetchAll();
 foreach ($temp as $row) {
     $discounts[$row['school_id']] = $row['discount'];
 }
+
+$types = [
+    1 => 'Tuition',
+    2 => 'Guaranteed',
+    3 => 'Regular'
+];
+
+$school_info = [];
+$stmt = $MASHPIA_DB->query("
+    SELECT school_id, reg_type, COUNT(*) as eligible 
+    FROM schools s 
+    LEFT JOIN users u using (school_id) 
+    WHERE u.chayolei_eligible = 1 
+    GROUP BY s.school_id
+");
+$temp = $stmt->fetchAll();
+foreach ($temp as $row) {
+    $school_info[$row['school_id']] = [
+        'type'      => $types[$row['reg_type']],
+        'eligible'  => $row['eligible']
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,7 +90,9 @@ foreach ($temp as $row) {
 <table id="table" class="table table-striped table-condensed">
     <thead>
         <tr>
+           <th>Base Type</th>
            <th>Base Name</th>
+           <th>Eligible Soldiers</th>
            <th>Soldiers Registered</th>
            <th>Fee per Soldier</th>
            <th>Total Fee</th>
@@ -103,7 +127,8 @@ foreach ($temp as $row) {
         // figure out soldier fee
 //        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
         $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
-        echo "<tr><td><a href='#$school_id'>" . $schools[$school_id] . "</a></td><td>" . $row['total_users'] . "</td><td>" . $fee .
+        echo "<tr><td>" . $school_info[$school_id]['type'] . "</td><td><a href='#$school_id'>" . $schools[$school_id] .
+            "</a></td><td>" . $school_info[$school_id]['eligible'] . "</td><td>" . $row['total_users'] . "</td><td>" . $fee .
             "</td><td>" . ($fee * intval($row['total_users'])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .
             ($fee * intval($row['total_users']) - floatval($discounts[$school_id])) . "</td><td>" . $total . "</td>";
         $style = '';
@@ -130,7 +155,7 @@ foreach ($temp as $row) {
     ?>
     </tfoot>
 </table>
-<h2>Details</h2>
+<h2>Soldier Details</h2>
 <table id="details" class="table table-striped table-condensed">
     <thead>
         <tr>
@@ -192,7 +217,7 @@ foreach ($temp as $row) {
     $(function() {
         $('#table').DataTable({
             paging : false,
-            "order": [[ 0, 'asc' ]]
+            "order": [[ 1, 'asc' ]]
         });
         $('#details').DataTable({
             paging : false,
