@@ -195,16 +195,29 @@ var registrationApp = function() {
             if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
             if ( $(this).val() == 0 ) {
                 if ( !australian.includes( school_id ) ) {
-                    $( '#step-2 form #yahadus-registration').show();
-                    $( '#step-2 form #yahadus-registration-no').show();
+                    if ( selected_user.school.school_id == 61 ) {
+                        $(".yahadus-myshliach").show()
+                        $('#step-2 form #yahadus-registration').hide();
+                        $('#step-2 form #yahadus-registration-no').hide();
+                    } else {
+                        $(".yahadus-myshliach").hide()
+                        $('#step-2 form #yahadus-registration').show();
+                        $('#step-2 form #yahadus-registration-no').show();
+                    }
                 }
                 $('#step-2 form #book-purchase').hide();
+                $(".book-purchase-myshliach").hide()
             } else {
                 $( '#step-2 form #yahadus-registration input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration').hide();
                 $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration-no').hide();
                 $('#step-2 form #book-purchase').show();
+                if ( selected_user.school.school_id == 61 ) {
+                    $(".book-purchase-myshliach").show()
+                } else {
+                    $(".book-purchase-myshliach").hide()
+                }
             } 
         });
 
@@ -224,8 +237,6 @@ var registrationApp = function() {
             shippingChargeMsg15 = "ישנו חיוב נוסף של דמי משלוח על סך  " + "<b>$15.</b><br />";
 
         }
-         
-
         
         // make sure only one of the book purchase inputs are checked
         $("#yahadus").click( function() {
@@ -536,8 +547,8 @@ var registrationApp = function() {
                     return showError('Please select which version book you have.')
                 }
             } else {
-                // make sure they checked either that they want to purchase a book or that they already have a book
-                if ( !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
+                // make sure they checked either that they want to purchase a book or that they already have a book if not myshliach
+                if ( selected_user.school.school_id != 61 && !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
                     return showError(Err6);
                 }
             }
@@ -650,10 +661,10 @@ var registrationApp = function() {
             var shipping_included = selected_user.school.shipping_method !== 'pickup';
             var shipping_charge = 0;
             var cost = 40
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+            if ( selected_user.school.school_id == 269 ) {
                 shipping_included = true; // override for anash kinder to make sure shipping is being charged
                 if ( selected_user.parentAccount.admin_country.toUpperCase() == 'USA' ) shipping_charge = 15;
-                else shipping_charge = 30;
+                else return false;
             } else {
                 // shipping to non USA schools is an additional $15
                 let usa = [
@@ -1025,6 +1036,8 @@ var templates = function(){
             // $( '#step-2 form #yahadus-cost' ).text(  ? 45 : 50 );
             $( '#step-2 form #yahadus-registration').hide();
             $( '#step-2 form #yahadus-registration-no').hide();
+            $(".yahadus-myshliach").hide()
+            $(".book-purchase-myshliach").hide()
 
             let bookHtml = "<option value='0'>Please choose</option>"
             for (let i = 2011; i <= 2021; i++) {
@@ -1052,7 +1065,7 @@ var templates = function(){
             //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
             // }
 
-            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+            if ( user.school.school_id == 269 ) {
                 $("#book_no_school").show()
                 $("#book_school_usa").hide()
                 $("#book_school_not_usa").hide()
