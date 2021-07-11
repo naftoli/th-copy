@@ -116,6 +116,11 @@ class UsersRouter {
             if ( $platoon_school_id !== $user->school_id )
                 json_error( 'Platoon is not in Base' );
         }
+
+        // set chayolei / chidon eligibility for new soldier
+        $user->chayolei_eligible = 1;
+        if ($user->platoon->class_grade > 3 && $user->platoon->class_grade != 8) $user->chidon_eligible = 1;
+
         // save and create the soldier
         if ( !$user->is_valid() || !$user->save() )
             json_error( 'Could not create Soldier. (CODE: CORE-USERS-98)' );

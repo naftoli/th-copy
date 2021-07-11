@@ -503,7 +503,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if (!$reg_query->execute([
                 'year' => $year, 'admin_id' => $admin_id,
                 'user_id' => $this->user_id, 'school_id' => $this->school_id,
-                'paid' => isset($amount) ? $amount : null,
+                'paid' => $amount
             ])) {
                 $errors[] = "Could not insert into user_registration. (Not Registered).";
                 return $errors;

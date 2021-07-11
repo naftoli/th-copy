@@ -25,13 +25,15 @@ function updateChayolei() {
             set chayolei_eligible = 1 
             where u.gender = 'M' 
             and u.dob > '" . $barMitzva . "'
-            and u.user_registered > 0";
+            and u.user_registered > 0 
+            and u.school_id != 612";
     $sql4 = "update users u 
             join classes c using (class_id) 
             set chayolei_eligible = 1 
             where u.gender = 'F' 
             and u.dob > '" . $basMitzva . "'
-            and u.user_registered > 0";
+            and u.user_registered > 0 
+            and u.school_id != 612";
     return mysql_query($sql1) && mysql_query($sql2) && mysql_query($sql3) && mysql_query($sql4);
 }
 
@@ -45,14 +47,17 @@ function updateChidon() {
             join classes c using (class_id) 
             set chidon_eligible = 1 
             where c.class_grade >= 3 
-            and c.class_grade < 8";
+            and c.class_grade < 8 
+            and u.school_id != 612";
     return mysql_query($sql1) && mysql_query($sql2);
 }
 
-if (! updateChayolei()) {
-    echo "Error updating chayolei eligibility";
+if (! isset($_GET['yearly'])) {
+    if (!updateChayolei()) {
+        echo "Error updating chayolei eligibility";
+    }
+    if (!updateChidon()) {
+        echo "Error updating chidon eligibility";
+    }
+    echo "<br />Done.";
 }
-if (! updateChidon()) {
-    echo "Error updating chidon eligibility";
-}
-echo "<br />Done.";

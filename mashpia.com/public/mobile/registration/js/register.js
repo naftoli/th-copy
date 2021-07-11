@@ -17,6 +17,9 @@ $("[data-dismiss]").click( function( event ){
 var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
+var selected_index;
+var current_user;
+var school_id;
 
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
@@ -175,10 +178,10 @@ var registrationApp = function() {
         templates.showUser( state.selected_users[0], 0 );
         showSection('step-2');
 
-        var current_index = parseInt( $("#current_index").val() );
-        var selected_user = state.selected_users[ current_index ];
-        var school_id = selected_user.school.school_id;
-        var australian = [ 55, 66, 110, 112, 180, 256 ]; 
+        current_index = parseInt( $("#current_index").val() );
+        selected_user = state.selected_users[ current_index ];
+        school_id = selected_user.school.school_id;
+        var australian = [ 55, 66, 110, 112, 180, 256 ];
 
         // show study guides info for all non Australian schools
         if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
@@ -194,31 +197,32 @@ var registrationApp = function() {
             $("#step-2 form .chidon-reg").show();
             if ( !$("#chidon").is(":checked") ) $("#chidon").trigger('click');
             if ( $(this).val() == 0 ) {
+                console.log(school_id)
                 if ( !australian.includes( school_id ) ) {
-                    if ( selected_user.school.school_id == 61 ) {
-                        $(".yahadus-myshliach").show()
+                    if ( school_id == 61 ) {
+                        $("#step-2 form .yahadus-myshliach").show()
                         $('#step-2 form #yahadus-registration').hide();
                         $('#step-2 form #yahadus-registration-no').hide();
                     } else {
-                        $(".yahadus-myshliach").hide()
+                        $("#step-2 form .yahadus-myshliach").hide()
                         $('#step-2 form #yahadus-registration').show();
                         $('#step-2 form #yahadus-registration-no').show();
                     }
                 }
                 $('#step-2 form #book-purchase').hide();
-                $(".book-purchase-myshliach").hide()
+                $("#step-2 form .book-purchase-myshliach").hide()
             } else {
                 $( '#step-2 form #yahadus-registration input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration').hide();
                 $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration-no').hide();
                 $('#step-2 form #book-purchase').show();
-                if ( selected_user.school.school_id == 61 ) {
-                    $(".book-purchase-myshliach").show()
+                if ( school_id == 61 ) {
+                    $("#step-2 form .book-purchase-myshliach").show()
                 } else {
-                    $(".book-purchase-myshliach").hide()
+                    $("#step-2 form .book-purchase-myshliach").hide()
                 }
-            } 
+            }
         });
 
         $('#step-2 form .book-purchase').change( function() {
@@ -449,8 +453,8 @@ var registrationApp = function() {
         
         // update the user's information
         var postData = {};  var user_changed = false;
-        var current_index = parseInt( $("#current_index").val() );
-        var selected_user = state.selected_users[ current_index ];
+        current_index = parseInt( $("#current_index").val() );
+        selected_user = state.selected_users[ current_index ];
         console.log( selected_user );
         // find all changed feilds
         $( event.target ).serializeArray().forEach( function( item ) {
@@ -711,7 +715,9 @@ var registrationApp = function() {
         if ( state.selected_users.length <= current_index ){
             step3();
         } else {
-            templates.showUser( state.selected_users[ current_index ], current_index );
+            selected_user = state.selected_users[ current_index ]
+            school_id = selected_user.school.school_id
+            templates.showUser( selected_user, current_index );
             $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to the top of the page
         }
     }
@@ -1023,7 +1029,10 @@ var templates = function(){
                 $("#chidonRecruitment").hide()
                 $("#recruited_by_user_serial").val('')
             }
-            
+
+            $("#step-2 form #yarmulka-size").val(0)
+            $("#step-2 form #chidon-sweater-size").val(0)
+
             // reset the book field
             $("#step-2 form #chidon-book").val(0);
             // reset book bought info
@@ -1117,6 +1126,7 @@ var templates = function(){
             }
         },
         renderCheckout: function( cart ){
+            console.log(cart)
             var total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
             $("#charges").html('');
             // add each item
