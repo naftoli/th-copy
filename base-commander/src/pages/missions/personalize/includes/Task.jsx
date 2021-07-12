@@ -10,7 +10,10 @@ import { Spinner, FontAwesome } from 'components/ui';
 
 class Task extends Component {
 
-  state = { isOpen: false };
+  state = {
+    isOpen: false,
+    isUpdating: false,
+  };
 
   componentDidMount() {
     this.setState({ enrolled: this.props.enrolled });
@@ -23,12 +26,22 @@ class Task extends Component {
     this.setState({ isOpen: !this.state.isOpen })
   };
 
-  personalize = () => this.props.personalize({
-    level: 'task',
-    task: this.props.task,
-    enrolled: !this.props.enrolled,
-    subject_id: this.props.subject_id,
-  });
+  personalize = () => {
+    this.setState({ isUpdating: true })
+    this.props.personalize({
+      level: 'task',
+      task: this.props.task,
+      enrolled: !this.props.enrolled,
+      subject_id: this.props.subject_id,
+    })
+      .then(() => {
+        this.setState({ isUpdating: false });
+      })
+      .catch(error => {
+        this.setState({ isUpdating: false });
+        throw error;
+      });
+  }
 
   render() {
     let {
@@ -49,9 +62,11 @@ class Task extends Component {
 
         <Toggle
           className='small'
-          disabled={ disabled }
+          disabled={ disabled || this.state.isUpdating }
           onChange={ this.personalize }
           checked={ disabled ? false : enrolled } />
+          
+        { this.state.isUpdating && <span style={{float: "right"}}>Saving...</span> }
         
         <p className='task' onClick={ this.toggle }>
           <FontAwesome icon='caret-right'/> { task }
