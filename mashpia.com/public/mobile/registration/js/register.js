@@ -592,6 +592,7 @@ var registrationApp = function() {
         // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             selected_user.registrationRates.chayolei = parseInt( $("select#chayolei-fee").val() );
+            var discount = selected_user.getDiscount.length ? selected_user.getDiscount[0].amount : 0
             state.cart.push({
                 description: Msg1 + selected_user.first,
                 price: selected_user.registrationRates.chayolei,
@@ -599,10 +600,11 @@ var registrationApp = function() {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'chayolei',
-                    paid: selected_user.registrationRates.chayolei
+                    paid: selected_user.registrationRates.chayolei - discount,
+                    discount: discount
                 }
             });
-        } 
+        }
         if ( selected_charges.chayolei_lite ) {
             selected_user.registrationRates.chayolei = 0;
             state.cart.push({
@@ -1128,6 +1130,9 @@ var templates = function(){
         renderCheckout: function( cart ){
             console.log(cart)
             var total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
+            for (i = 0; i < cart.length; i++) {
+                if (cart[i].meta.discount) total -= parseInt(cart[i].meta.discount)
+            }
             $("#charges").html('');
             // add each item
             cart.forEach( function( item ){
@@ -1135,6 +1140,12 @@ var templates = function(){
                     '<div class="col-10">' + item.description + '</div>' +
                     '<div class="col-2 reg_cost">$' + item.price + '</div>'
                 + "</div>" );
+                if (item.meta.discount) {
+                    $("#charges").append('<div class="row">' +
+                        '<div class="col-10">Discount</div>' +
+                        '<div class="col-2 reg_cost">-$' + item.meta.discount + '</div>'
+                        + "</div>");
+                }
             });
             // add the total row
             var text = "Total Balance";

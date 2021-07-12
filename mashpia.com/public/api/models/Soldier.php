@@ -281,6 +281,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $parent;
     }
 
+    // get regestration discount for soldier
+    public function getDiscount() {
+        global $MASHPIA_DB;
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/reports/registration/Discount.php';
+        $year = GlobalSettings::getRegistrationYear();
+        $d = new DiscountManager($MASHPIA_DB);
+        $discount = $d->getDiscountForUserYear($year, $this->user_id);
+        if ($discount[0]['used'] > 0) return [];
+        return $discount;
+    }
+
     // ******************************* IMAGES ******************************* //
     // takes an uploaded file and sets it as the profile picture
     public function setProfilePicture( $file ){
@@ -327,7 +339,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $result;
     }
 
-    public function registrationCharge( $type, $amount, $trans_id = '', $year = false ) {
+    public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
         global $MASHPIA_DB;
         // set default year.
         $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
@@ -350,14 +362,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( count( $rows ) > 0 ) return true;
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
-            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
+            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
+            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
         );
         // * execte the query
         return $registration_info_query->execute([
             'type' => $type,        'trans_id' => $trans_id,
             'year' => $year,        'user_id' => $this->user_id,
             'amount' => $amount,    'school_id' => $this->school_id,
+            'discount'  => $discount
         ]);
     }
     //get all of the soldiers registration charges
@@ -425,23 +438,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk
         if (!$result['chidon']) {
-            $start = $chidon_year - 1;
-            $end = $chidon_year - 4;
-            // check that user was enrolled in shabbaton/chidon experience for past 4 yrs
-            $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user and year = :year and date_paid > 0");
-            $eligible = true;
-            for ($i = $start; $i >= $end; $i--) {
-                $stmt->execute([
-                    ':user' => $this->user_id,
-                    ':year' => $i
-                ]);
-                $rows = $stmt->fetchAll();
-                if (empty($rows)) {
-                    $eligible = false;
-                    break;
-                }
-            }
-            if ($eligible) $result['khk'] = false;
+            $stmt = $MASHPIA_DB->prepare("
+                SELECT khk_eligible FROM users WHERE user_id = :user
+            ");
+            $stmt->execute([':user' => $this->user_id]);
+            $row = $stmt->fetch();
+            if (intval($row['khk_eligible'])) $result['khk'] = false;
         }
 
         // check if child is new to chidon
@@ -479,7 +481,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $amount
      * @return array
      */
-    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
+    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0, $discount = 0 ){
         global $MASHPIA_DB;
         $errors = [];
         if ( !$admin_id ) {
@@ -512,7 +514,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $type = 'chayolei';
             if ($lite) $type = 'chayolei-lite';
             if ($ckids) $type = 'ckids';
-            if (!$this->registrationCharge($type, $amount, $trans_id)) {
+            if (!$this->registrationCharge($type, $amount, $trans_id, false, $discount)) {
                 $errors[] = "Could not insert into registration_charges. (Not Registered)";
                 // remove from user_registration
                 $unreg_qry = $MASHPIA_DB->prepare("DELETE FROM user_registration WHERE user_id = :user, AND year = :year");
@@ -521,6 +523,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     ':year' => $year
                 ]);
                 return $errors;
+            }
+            // set discount to used
+            if ($discount) {
+                $stmt = $MASHPIA_DB->prepare("
+                    update discounts set used = now() where amount = :amount and user_id = :user and year = :year
+                ");
+                $stmt->execute([
+                    ':amount'   => $discount,
+                    ':user'     => $this->user_id,
+                    ':year'     => $year
+                ]);
             }
             // update fields to mark registered
             if (!$this->user_registered) $this->user_registered = new \Datetime();

@@ -113,7 +113,7 @@ class DiscountManager
             ':year'     => $year,
             ':school'   => $school_id
         ]);
-        return $stmt->fetchAll();
+        return $stmt->fetch();
     }
 
     public function getDiscountForUserYear($year, $user_id) {

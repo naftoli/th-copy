@@ -107,7 +107,7 @@ class UserRegistrationRouter {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
             }
-            $totals[$info['registration_type']] += intval($info['paid']);
+            $totals[$info['registration_type']] += intval($info['paid']) - intval($info['discount']);
         }
         
         // * get all the user models
@@ -195,6 +195,7 @@ class UserRegistrationRouter {
                         GlobalSettings::getRegistrationYear();
                     // if they do not pay, the value is null
                     $amount = $registration['paid'];
+                    $discount = $registration['discount'];
                     if ( $user->school->reg_type == 1 )
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
@@ -202,7 +203,7 @@ class UserRegistrationRouter {
                         $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
                         $chayolei_errors = $user->registerChayolei(
-                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids
+                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids, $discount
                         );
                         if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
@@ -347,7 +348,7 @@ class UserRegistrationRouter {
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount' ],
                 'include' => [
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id', 'school_country' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
