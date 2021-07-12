@@ -58,7 +58,9 @@ foreach ($rows as $row) {
                 <th>Student</th>
                 <th>Number of times Registered for Shabbaton</th>
                 <th>Eligible</th>
-                <th>Eligibility Copy</th>
+                <?php if ($super) : ?>
+                    <th>Eligibility Copy</th>
+                <?php endif; ?>
             </tr>
             <?php
             foreach ($schools as $id => $school) {
@@ -70,10 +72,14 @@ foreach ($rows as $row) {
                             $child['total'] . "</td><td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
                         if ($child['khk_eligible']) echo "checked ";
                         if (! $super) echo " disabled ";
-                        echo "/></td><td>";
-                        if ($child['khk_eligible']) echo "&#10003;";
-                        else echo "&#10007;";
-                        echo "</td></tr>";
+                        echo "/></td>";
+                        if ($super) {
+                            echo "<td>";
+                            if ($child['khk_eligible']) echo "&#10003;";
+                            else echo "&#10007;";
+                            echo "</td>";
+                        }
+                        echo "</tr>";
                     }
                 }
             }
