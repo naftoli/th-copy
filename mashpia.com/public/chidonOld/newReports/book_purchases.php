@@ -63,124 +63,126 @@ foreach ($info as $gender => $other) {
     <h1>Study Guide / Yahadus Book Shipping Report <?= $year ?></h1>
     <?php
     foreach ($info as $gender => $other) :
-    echo "<h2>" . ($gender == 'M' ? 'Boys' : 'Girls') . "</h2>";
-    ?>
-    <table>
-        <tr>
-            <th>Serial Number</th>
-            <th>School</th>
-            <th>Grade / Class</th>
-            <th>Student</th>
-            <th>Study Guide Number</th>
-            <th>Book Number</th>
-            <th>Registered</th>
-        </tr>
-        <?php
-        for ($i = 1; $i <= 5; $i++) {
-            $totals[$i] = 0;
-            $bookTotals[$i] = 0;
-        }
-        foreach ($other as $school => $more) {
-            foreach ($more as $row) {
-                // check if child bought book
-                $sql = "select * from registration_charges where type = 'yahadus' and year = " . $year . " and user_id = " . $row['user_id'];
-                $result = mysql_query($sql);
-                $bookPurchased = false;
-                if (mysql_num_rows($result) > 0) $bookPurchased = true;
+        if ($gender == 'M') $gender = 'Boys';
+        else if ($gender == 'F') $gender = 'Girls';
+        echo "<h2>" . $gender . "</h2>";
+        ?>
+        <table>
+            <tr>
+                <th>Serial Number</th>
+                <th>School</th>
+                <th>Grade / Class</th>
+                <th>Student</th>
+                <th>Study Guide Number</th>
+                <th>Book Number</th>
+                <th>Registered</th>
+            </tr>
+            <?php
+            for ($i = 1; $i <= 5; $i++) {
+                $totals[$i] = 0;
+                $bookTotals[$i] = 0;
+            }
+            foreach ($other as $school => $more) {
+                foreach ($more as $row) {
+                    // check if child bought book
+                    $sql = "select * from registration_charges where type = 'yahadus' and year = " . $year . " and user_id = " . $row['user_id'];
+                    $result = mysql_query($sql);
+                    $bookPurchased = false;
+                    if (mysql_num_rows($result) > 0) $bookPurchased = true;
 
-                $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $school .
-                    "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['book'] . "</td><td>";
-                if ($bookPurchased) echo $row['book'];
-                echo "</td><td>" . $row['reg_date'] . "</td></tr>";
+                    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                    echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $school . "</td><td>" . $grade . "</td><td>" .
+                        $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['book'] . "</td><td>";
+                    if ($bookPurchased) echo $row['book'];
+                    echo "</td><td>" . $row['reg_date'] . "</td></tr>";
 
-                $totals[$row['book']]++;
-                if (isset($schoolTotals[$school][$row['book']])) $schoolTotals[$school][$row['book']]++;
-                else $schoolTotals[$school][$row['book']] = 1;
+                    $totals[$row['book']]++;
+                    if (isset($schoolTotals[$school][$row['book']])) $schoolTotals[$school][$row['book']]++;
+                    else $schoolTotals[$school][$row['book']] = 1;
 
-                if ($bookPurchased) {
-                    $bookTotals[$row['book']]++;
-                    if (isset($schoolBookTotals[$school][$row['book']])) $schoolBookTotals[$school][$row['book']]++;
-                    else $schoolBookTotals[$school][$row['book']] = 1;
+                    if ($bookPurchased) {
+                        $bookTotals[$row['book']]++;
+                        if (isset($schoolBookTotals[$school][$row['book']])) $schoolBookTotals[$school][$row['book']]++;
+                        else $schoolBookTotals[$school][$row['book']] = 1;
+                    }
                 }
             }
-        }
-        ?>
-    </table>
-    <h2>Study Guide Totals</h2>
-    <table>
-        <tr>
-            <?php
-            for ($i = 1; $i < 6; $i++) {
-                echo "<th>Study Guide " . $i . "</th>";
-            }
             ?>
-        </tr>
-        <?php
-        echo "<tr>";
-        for ($i = 1; $i < 6; $i++) {
-            echo "<td>" . $totals[$i] . "</td>";
-        }
-        echo "</tr>";
-        ?>
-    </table>
-    <h2>Study Guide School Totals</h2>
-    <table>
-        <tr>
-            <th>School</th>
+        </table>
+        <h2><?= $gender ?> Study Guide Totals</h2>
+        <table>
+            <tr>
+                <?php
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<th>Study Guide " . $i . "</th>";
+                }
+                ?>
+            </tr>
             <?php
+            echo "<tr>";
             for ($i = 1; $i < 6; $i++) {
-                echo "<th>Study Guide $i</th>";
-            }
-            ?>
-        </tr>
-        <?php
-        foreach ($schoolTotals as $school => $other) {
-            echo "<tr><td>" . $schools[$school] . "</td>";
-            for ($i = 1; $i < 6; $i++) {
-                echo "<td>" . $schoolTotals[$school][$i] . "</td>";
+                echo "<td>" . $totals[$i] . "</td>";
             }
             echo "</tr>";
-        }
-        ?>
-    </table>
-    <h2>Book Totals</h2>
-    <table>
-        <tr>
+            ?>
+        </table>
+        <h2><?= $gender ?> Study Guide School Totals</h2>
+        <table>
+            <tr>
+                <th>School</th>
+                <?php
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<th>Study Guide $i</th>";
+                }
+                ?>
+            </tr>
             <?php
-            for ($i = 1; $i < 6; $i++) {
-                echo "<th>Book " . $i . "</th>";
+            foreach ($schoolTotals as $school => $other) {
+                echo "<tr><td>" . $school . "</td>";
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<td>" . $schoolTotals[$school][$i] . "</td>";
+                }
+                echo "</tr>";
             }
             ?>
-        </tr>
-        <?php
-        echo "<tr>";
-        for ($i = 1; $i < 6; $i++) {
-            echo "<td>" . $bookTotals[$i] . "</td>";
-        }
-        echo "</tr>";
-        ?>
-    </table>
-    <h2>Book School Totals</h2>
-    <table>
-        <tr>
-            <th>School</th>
+        </table>
+        <h2><?= $gender ?> Book Totals</h2>
+        <table>
+            <tr>
+                <?php
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<th>Book " . $i . "</th>";
+                }
+                ?>
+            </tr>
             <?php
+            echo "<tr>";
             for ($i = 1; $i < 6; $i++) {
-                echo "<th>Book $i</th>";
-            }
-            ?>
-        </tr>
-        <?php
-        foreach ($schoolBookTotals as $school => $other) {
-            echo "<tr><td>" . $schools[$school] . "</td>";
-            for ($i = 1; $i < 6; $i++) {
-                echo "<td>" . $schoolBookTotals[$school][$i] . "</td>";
+                echo "<td>" . $bookTotals[$i] . "</td>";
             }
             echo "</tr>";
-        }
-        ?>
-    </table>
+            ?>
+        </table>
+        <h2><?= $gender ?> Book School Totals</h2>
+        <table>
+            <tr>
+                <th>School</th>
+                <?php
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<th>Book $i</th>";
+                }
+                ?>
+            </tr>
+            <?php
+            foreach ($schoolBookTotals as $school => $other) {
+                echo "<tr><td>" . $school . "</td>";
+                for ($i = 1; $i < 6; $i++) {
+                    echo "<td>" . $schoolBookTotals[$school][$i] . "</td>";
+                }
+                echo "</tr>";
+            }
+            ?>
+        </table>
     <?php endforeach; ?>
     </body>
 </html>
