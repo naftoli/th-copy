@@ -10,35 +10,41 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 
 $year = GlobalSettings::getChidonRegYear();
+$year = 5782;
 
 $info = [];
 $sql = "
     SELECT 
-        u.school_id, s.school_name, first, last, user_serial, amount, date, tc.book 
+        u.user_id, 
+        u.school_id,
+        first,
+        last,
+        user_serial,
+        reg_date,
+        tc.book,
+        c.class_grade,
+        c.class_sub
     FROM
-        registration_charges rc
+        th_chidon tc  
             JOIN
         users u USING (user_id)
             JOIN
-        schools s ON s.school_id = u.school_id 
-            JOIN 
-        th_chidon tc using (user_id)
+        classes c ON c.class_id = u.class_id
     WHERE
-        rc.year = 5782 AND type = 'yahadus'
+        tc.year = $year 
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ")
-    GROUP BY user_id 
-    ORDER BY school_name , last , first
+    ORDER BY school_name , class_grade , class_sub , last , first
     ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $info[] = $row;
+    $info[$row['school_id']][] = $row;
 }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf8" />
-        <title>Yahadus Book Purchases</title>
+        <title>Study Guide / Yahadus Book Shipping Report</title>
         <style>
             tr, th, td {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -49,21 +55,121 @@ while ($row = mysql_fetch_assoc($result)) {
         </style>
     </head>
     <body>
-    <h1>Yahadus Book Purchases <?= $year ?></h1>
+    <h1>Study Guide / Yahadus Book Shipping Report <?= $year ?></h1>
     <table>
         <tr>
+            <th>User ID</th>
             <th>Serial Number</th>
             <th>School</th>
+            <th>Grade / Class</th>
             <th>Student</th>
+            <th>Study Guide Number</th>
             <th>Book Number</th>
-            <th>Amount Paid</th>
-            <th>Date Purchased</th>
+            <th>Registered</th>
         </tr>
         <?php
-        foreach ($info as $row) {
-            echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $row['school_name'] . "</td><td>" .
-                $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['book'] . "</td><td>" . $row['amount'] .
-                "</td><td>" . $row['date'] . "</td></tr>";
+        for ($i = 1; $i <= 5; $i++) {
+            $totals[$i] = 0;
+            $bookTotals[$i] = 0;
+        }
+        foreach ($info as $school_id => $more) {
+            foreach ($more as $row) {
+                // check if child bought book
+                $sql = "select * from registration_charges where type = 'yahadus' and year = " . $year . " and user_id = " . $row['user_id'];
+                $result = mysql_query($sql);
+                $bookPurchased = false;
+                if (mysql_num_rows($result) > 0) $bookPurchased = true;
+
+                $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                echo "<tr><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $schools[$school_id] .
+                    "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['book'] . "</td><td>";
+                if ($bookPurchased) echo $row['book'];
+                echo "</td><td>" . $row['reg_date'] . "</td></tr>";
+
+                $totals[$row['book']]++;
+                if (isset($schoolTotals[$row['school_id']][$row['book']])) $schoolTotals[$row['school_id']][$row['book']]++;
+                else $schoolTotals[$row['school_id']][$row['book']] = 1;
+
+                if ($bookPurchased) {
+                    $bookTotals[$row['book']]++;
+                    if (isset($schoolBookTotals[$row['school_id']][$row['book']])) $schoolBookTotals[$row['school_id']][$row['book']]++;
+                    else $schoolBookTotals[$row['school_id']][$row['book']] = 1;
+                }
+            }
+        }
+        ?>
+    </table>
+    <h2>Study Guide Totals</h2>
+    <table>
+        <tr>
+            <?php
+            for ($i = 1; $i < 6; $i++) {
+                echo "<th>Study Guide " . $i . "</th>";
+            }
+            ?>
+        </tr>
+        <?php
+        echo "<tr>";
+        for ($i = 1; $i < 6; $i++) {
+            echo "<td>" . $totals[$i] . "</td>";
+        }
+        echo "</tr>";
+        ?>
+    </table>
+    <h2>Study Guide School Totals</h2>
+    <table>
+        <tr>
+            <th>School</th>
+            <?php
+            for ($i = 1; $i < 6; $i++) {
+                echo "<th>Study Guide $i</th>";
+            }
+            ?>
+        </tr>
+        <?php
+        foreach ($schoolTotals as $school => $other) {
+            echo "<tr><td>" . $schools[$school] . "</td>";
+            for ($i = 1; $i < 6; $i++) {
+                echo "<td>" . $schoolTotals[$school][$i] . "</td>";
+            }
+            echo "</tr>";
+        }
+        ?>
+    </table>
+    <h2>Book Totals</h2>
+    <table>
+        <tr>
+            <?php
+            for ($i = 1; $i < 6; $i++) {
+                echo "<th>Book " . $i . "</th>";
+            }
+            ?>
+        </tr>
+        <?php
+        echo "<tr>";
+        for ($i = 1; $i < 6; $i++) {
+            echo "<td>" . $bookTotals[$i] . "</td>";
+        }
+        echo "</tr>";
+        ?>
+    </table>
+    <h2>Book School Totals</h2>
+    <table>
+        <tr>
+            <th>School</th>
+            <?php
+            for ($i = 1; $i < 6; $i++) {
+                echo "<th>Book $i</th>";
+            }
+            ?>
+        </tr>
+        <?php
+        foreach ($schoolBookTotals as $school => $other) {
+            echo "<tr><td>" . $schools[$school] . "</td>";
+            for ($i = 1; $i < 6; $i++) {
+                echo "<td>" . $schoolBookTotals[$school][$i] . "</td>";
+            }
+            echo "</tr>";
         }
         ?>
     </table>
