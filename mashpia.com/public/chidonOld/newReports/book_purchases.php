@@ -19,6 +19,7 @@ $sql = "
         u.school_id,
         first,
         last,
+        gender,
         user_serial,
         reg_date,
         tc.book,
@@ -37,7 +38,11 @@ $sql = "
     ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $info[$row['school_id']][] = $row;
+    $info[$row['gender']][$schools[$row['school_id']]][] = $row;
+}
+// sort schools alphabetically
+foreach ($info as $gender => $other) {
+    ksort($info[$gender]);
 }
 ?>
 <!DOCTYPE html>
@@ -56,9 +61,12 @@ while ($row = mysql_fetch_assoc($result)) {
     </head>
     <body>
     <h1>Study Guide / Yahadus Book Shipping Report <?= $year ?></h1>
+    <?php
+    foreach ($info as $gender => $other) :
+    echo "<h2>" . ($gender == 'M' ? 'Boys' : 'Girls') . "</h2>";
+    ?>
     <table>
         <tr>
-            <th>User ID</th>
             <th>Serial Number</th>
             <th>School</th>
             <th>Grade / Class</th>
@@ -72,7 +80,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $totals[$i] = 0;
             $bookTotals[$i] = 0;
         }
-        foreach ($info as $school_id => $more) {
+        foreach ($other as $school => $more) {
             foreach ($more as $row) {
                 // check if child bought book
                 $sql = "select * from registration_charges where type = 'yahadus' and year = " . $year . " and user_id = " . $row['user_id'];
@@ -81,19 +89,19 @@ while ($row = mysql_fetch_assoc($result)) {
                 if (mysql_num_rows($result) > 0) $bookPurchased = true;
 
                 $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                echo "<tr><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $schools[$school_id] .
+                echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $school .
                     "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['book'] . "</td><td>";
                 if ($bookPurchased) echo $row['book'];
                 echo "</td><td>" . $row['reg_date'] . "</td></tr>";
 
                 $totals[$row['book']]++;
-                if (isset($schoolTotals[$row['school_id']][$row['book']])) $schoolTotals[$row['school_id']][$row['book']]++;
-                else $schoolTotals[$row['school_id']][$row['book']] = 1;
+                if (isset($schoolTotals[$school][$row['book']])) $schoolTotals[$school][$row['book']]++;
+                else $schoolTotals[$school][$row['book']] = 1;
 
                 if ($bookPurchased) {
                     $bookTotals[$row['book']]++;
-                    if (isset($schoolBookTotals[$row['school_id']][$row['book']])) $schoolBookTotals[$row['school_id']][$row['book']]++;
-                    else $schoolBookTotals[$row['school_id']][$row['book']] = 1;
+                    if (isset($schoolBookTotals[$school][$row['book']])) $schoolBookTotals[$school][$row['book']]++;
+                    else $schoolBookTotals[$school][$row['book']] = 1;
                 }
             }
         }
@@ -173,6 +181,7 @@ while ($row = mysql_fetch_assoc($result)) {
         }
         ?>
     </table>
+    <?php endforeach; ?>
     </body>
 </html>
 
