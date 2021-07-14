@@ -78,6 +78,8 @@ foreach ($info as $gender => $other) {
                 <th>Registered</th>
             </tr>
             <?php
+            $schoolTotals = [];
+            $schoolBookTotals = [];
             for ($i = 1; $i <= 5; $i++) {
                 $totals[$i] = 0;
                 $bookTotals[$i] = 0;
