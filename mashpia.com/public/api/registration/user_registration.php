@@ -254,7 +254,11 @@ class UserRegistrationRouter {
                                         <br /><br />
                                         Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
                                         <br /><br />
-                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.";
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.
+                                        <br /><br />
+                                        If you have any questions regarding the Limmud, please contact your school's Base Commander.
+                                        <br /><br /> 
+                                        If you have any questions regarding your credit card charges please contact <a href='mailto:accounting@tzivoshashem.org'>Accounting@TzivosHashem.org</a>";
                             if ( $user->school_id == 61 ) {
                                 $message = "
                                 Mazal Tov! Your child(ren) are enrolled in the Chidon Limmud program for $year.
