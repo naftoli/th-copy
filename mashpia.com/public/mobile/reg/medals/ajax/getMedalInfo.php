@@ -48,7 +48,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 		    $total += $newTotal[$barcode];		
 	}
 	*/
-    $sql2 = "SELECT medal_name, medal_name_he, missions_required, profile_photo_id FROM medals_subjects 
+    $sql2 = "SELECT medal_ord, medal_name, medal_name_he, missions_required, profile_photo_id FROM medals_subjects 
              JOIN medals USING (medal_ord)    
              WHERE subject_id = " . $subject . " 
              ORDER BY medal_ord"; 
@@ -69,6 +69,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         if ( $needed > $total ) {
         	if ($ctr == 0) {
         		$missions[$subject] = array(
+        		    'ord'   =>  $row2['medal_ord'],
 	            	'medal'	=>	"None", 
 	            	'photo'	=>	"", 
                     'left'	=>	$needed - $total,
@@ -78,6 +79,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 				);
         	} else {
 	            $missions[$subject] = array(
+	                'ord'   =>  $row2['medal_ord'],
 	            	'medal'	=>	$tempMedals[$ctr-1], 
 	            	'photo'	=>	$tempMedalPics[$ctr-1], 
                     'left'	=>	$needed - $total,
@@ -104,24 +106,41 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 //echo "<pre>"; print_r( $missions ); echo "</pre>";
 
 //array to hold required missions to reach first medal for each subject if no missions where done
-$medal_subjects = array();
-$sql = "SELECT subject_id, missions_required, profile_photo_id 
-        FROM medals_subjects
-        WHERE medal_ord = 1 
-        ORDER BY subject_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $medal_subjects[$row['subject_id']] = array(
-    	'photo'	=>	$row['profile_photo_id'],
-		'left'	=>	$row['missions_required']
-	);
-}
+//$medal_subjects = array();
+//$sql = "SELECT subject_id, missions_required, profile_photo_id
+//        FROM medals_subjects
+//        WHERE medal_ord = 1
+//        ORDER BY subject_id";
+//$result = mysql_query($sql);
+//while ($row = mysql_fetch_assoc($result)) {
+//    $medal_subjects[$row['subject_id']] = array(
+//    	'photo'	=>	$row['profile_photo_id'],
+//		'left'	=>	$row['missions_required']
+//	);
+//}
 
 $medals = array();
 $sql = "select medal_ord, medal_name, medal_name_he from medals";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
 	$medals[$row['medal_ord']] = (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['medal_name_he'] : $row['medal_name']);
+}
+
+// keep info on all medals within all subjects
+$subject_medals = [];
+foreach ($subjects as $subject) {
+    $sql = "SELECT medal_ord, missions_required, profile_photo_id FROM medals_subjects 
+             WHERE subject_id = " . $subject . " 
+             ORDER BY medal_ord";
+    $result = mysql_query($sql);
+    $needed = 0;
+    while ($row = mysql_fetch_assoc($result)) {
+        $needed += $row['missions_required'];
+        $subject_medals[$subject][$row['medal_ord']] = [
+            'img' => $row['profile_photo_id'],
+            'missions_needed' => $needed
+        ];
+    }
 }
 
 foreach ( $subjects as $subject ) {
@@ -131,6 +150,18 @@ foreach ( $subjects as $subject ) {
     	$photo = $mission['photo'];
 		$left = $mission['left'];
 		$key = array_search($medal, $medals);
+
+		// create array of medals done
+        $medals_arr = [];
+        foreach ($subject_medals[$subject] as $ord => $details) {
+            $medals_arr[] = [
+                'number'    => $details['missions_needed'],
+                'img'       => $details['img'],
+                'completed' => intval($mission['total']) >= $details['missions_needed']
+            ];
+//            if ($details['missions_needed'] > intval( $mission['total'] )) break;
+        }
+
 		$info[] = array( 
 			'id'	=>	$subject, 
 			'name'	=>	$subjectNames[$subject], 
@@ -140,7 +171,12 @@ foreach ( $subjects as $subject ) {
             'total'	=>	intval( $mission['total'] ), 
             'needed'=>	$mission['needed'], 
             'base_amount'=>	$mission['base_amount'], 
-			'next'	=>	($key === false ? 1 : ++$key)
+			'next'	=>	($key === false ? 1 : ++$key),
+            'nextMedalDate' => '',
+            'nextMedalImg'  => $subject_medals[$subject][$mission['ord']]['img'],
+            'monthly'   => true,
+            'weekly'    => false,
+            'medals'    => $medals_arr
 		);
     } else {
     	$info[] = array( 
@@ -148,10 +184,21 @@ foreach ( $subjects as $subject ) {
 			'name'	=>	$subjectNames[$subject], 
 			'medal'	=>	"None", 
 			'photo'	=>	"", 
-            'left'	=>	(int)$medal_subjects[$subject]['left'],
+            'left'	=>	(int)$subject_medals[$subject][1]['missions_needed'],
             'total'	=>	0, 
-            'needed'=>	(int)$medal_subjects[$subject]['left'],
-			'next'	=>	1
+            'needed'=>	(int)$subject_medals[$subject][1]['missions_needed'],
+			'next'	=>	1,
+            'nextMedalDate' => '',
+            'nextMedalImg'  => $subject_medals[$subject][1]['img'],
+            'monthly'   => true,
+            'weekly'    => false,
+            'medals'    => [
+                [
+                    'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
+                    'img'       => $subject_medals[$subject][1]['img'],
+                    'completed' => false
+                ]
+            ]
 		);
     }
 }
