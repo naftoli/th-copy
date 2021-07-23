@@ -4,10 +4,13 @@ if (isset($_POST['submit'])) {
     if (($handle = fopen($_FILES['schoolList']['tmp_name'], "r")) !== FALSE) {
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $school = $data[0];
-            $qrys[] = "insert into non_th_schools set school_name = '$school'";
+            $qrys[] = "insert into non_th_schools set school_name = '" . addslashes($school) . "'";
         }
     }
-    echo "<pre>"; print_r($qrys); echo "</pre>";
+    foreach ($qrys as $qry) {
+        mysql_query($qry);
+    }
+    echo "done.";
 }
 ?>
 <!DOCTYPE html>
