@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+
 if (isset($_POST['submit'])) {
     $qrys = [];
     if (($handle = fopen($_FILES['schoolList']['tmp_name'], "r")) !== FALSE) {
