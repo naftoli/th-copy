@@ -3,6 +3,25 @@
 require_once( dirname(__FILE__) . '/../../../../db.php' );
 $user = mysql_real_escape_string( $_POST['user_id'] );
 
+$monthly_subjects = [1, 12, 15, 93, 106];
+
+function calculateNextDate($subject, $needed) {
+    // find date of task for this subject in $needed times
+    $jd = unixtojd();
+    $sql = "select end_date from date_tasks_missions where subject_id = $subject and end_date > $jd group by end_date limit $needed";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) == $needed) {
+        // we have the correct result
+        while ($row = mysql_fetch_assoc($result)) {}
+        $date = $row['end_date'];
+        $jewish = jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM);
+        $str = iconv ('WINDOWS-1255', 'UTF-8', $jewish);
+        return $str;
+    } else {
+        return '';
+    }
+}
+
 // figure out which subjects we are showing
 require '../../../../class.campaignEnrollment.php';
 $c = new CampaignEnrollment($user);
@@ -131,6 +150,7 @@ $subject_medals = [];
 foreach ($subjects as $subject) {
     $sql = "SELECT medal_ord, missions_required, profile_photo_id FROM medals_subjects 
              WHERE subject_id = " . $subject . " 
+             AND medal_ord <= 10 
              ORDER BY medal_ord";
     $result = mysql_query($sql);
     $needed = 0;
@@ -144,6 +164,7 @@ foreach ($subjects as $subject) {
 }
 
 foreach ( $subjects as $subject ) {
+    $monthly = in_array($subject, $monthly_subjects);
     if ( array_key_exists($subject, $missions) ) {
     	$mission = $missions[$subject];
     	$medal = $mission['medal'];
@@ -172,10 +193,10 @@ foreach ( $subjects as $subject ) {
             'needed'=>	$mission['needed'], 
             'base_amount'=>	$mission['base_amount'], 
 			'next'	=>	($key === false ? 1 : ++$key),
-            'nextMedalDate' => '',
+            'nextMedalDate' => calculateNextDate($subject, $mission['needed']),
             'nextMedalImg'  => $subject_medals[$subject][$mission['ord']]['img'],
-            'monthly'   => true,
-            'weekly'    => false,
+            'monthly'   => $monthly,
+            'weekly'    => !$monthly,
             'medals'    => $medals_arr
 		);
     } else {
@@ -188,10 +209,10 @@ foreach ( $subjects as $subject ) {
             'total'	=>	0, 
             'needed'=>	(int)$subject_medals[$subject][1]['missions_needed'],
 			'next'	=>	1,
-            'nextMedalDate' => '',
+            'nextMedalDate' => calculateNextDate($subject, $subject_medals[$subject][1]['missions_needed']),
             'nextMedalImg'  => $subject_medals[$subject][1]['img'],
-            'monthly'   => true,
-            'weekly'    => false,
+            'monthly'   => $monthly,
+            'weekly'    => !$monthly,
             'medals'    => [
                 [
                     'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
