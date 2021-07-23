@@ -1,0 +1,8 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+$sql = "select * from non_th_schools";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $schools[$row['non_th_school_id']] = $row['school_name'];
+}
+echo json_encode($schools);
