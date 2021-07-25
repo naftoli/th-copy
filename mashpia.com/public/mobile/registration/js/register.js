@@ -1129,9 +1129,12 @@ var templates = function(){
                         htmlFee += "<option value='0'>0</option>";
                     } else {
                         var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
-                        if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
+                        var rate = user.registrationRates[ rateType ]
+                        htmlFee += "<option value=" + rate + ">$" + rate + "</option>"
+                        // if ( user.registrationRates[ rateType ] < rates[ rates.length - 1 ] ) rates.push( user.registrationRates[ rateType ] );
                         for ( var n of rates ) {
                             if ( n < user.registrationRates[ rateType ] ) break;
+                            if (n == user.registrationRates[rateType]) continue;
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
                     }
