@@ -144,8 +144,8 @@ var registrationApp = function() {
                 for (s in res) {
                     html += '<option value=' + s + '>' + res[s] + "</option>";
                 }
-                $("#non_th_school").empty()
-                $("#non_th_school").append(html)
+                $("#non_th_school_id").empty()
+                $("#non_th_school_id").append(html)
             })
         });
     }
@@ -587,8 +587,8 @@ var registrationApp = function() {
         } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
             // make sure non th school field is not empty
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                var non_th_school = $("#non_th_school").val().trim();
-                if (non_th_school == 0) non_th_school = $("#non_th_school_other").val().trim()
+                var non_th_school = $("#non_th_school_id").val().trim();
+                if (non_th_school == 0) non_th_school = $("#non_th_school").val().trim()
                 if (non_th_school.length < 3) return showError(Err10);
             }
         }  
@@ -938,15 +938,15 @@ var templates = function(){
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form .gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
-            if (parseInt(user.non_th_school)) $( '#step-2 form #non_th_school' ).val( user.non_th_school );
-            else $( '#step-2 form #non_th_school_other' ).val( user.non_th_school );
+            $( '#step-2 form #non_th_school_id' ).val( user.non_th_school_id );
+            $( '#step-2 form #non_th_school' ).val( user.non_th_school );
             // add the dropdown for naftali
             var class_select = $( '#step-2 form #class_name select' );
             class_select.html('');
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                $( '#step-2 form #non_th_school_id' ).show();
+                $( '#step-2 form #non_th_school_id' ).parent().parent().find('label').show()
                 $( '#step-2 form #non_th_school' ).show();
-                $( '#step-2 form #non_th_school' ).parent().parent().find('label').show()
-                $( '#step-2 form #non_th_school_other' ).show();
                 // get the class list and update the dropdown
                 $.get( "api/classes.php", { 'school_id': user.school.school_id }, function( response ) {
                     class_select.html('');
@@ -958,9 +958,9 @@ var templates = function(){
                 });
             } else {
                 $( '#step-2 form #class_name' ).hide(); // hide it
+                $( '#step-2 form #non_th_school_id' ).hide();
+                $( '#step-2 form #non_th_school_id' ).parent().parent().find('label').hide()
                 $( '#step-2 form #non_th_school' ).hide();
-                $( '#step-2 form #non_th_school' ).parent().parent().find('label').hide()
-                $( '#step-2 form #non_th_school_other' ).hide();
             }
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );
