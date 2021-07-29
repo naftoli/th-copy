@@ -195,6 +195,7 @@ function getDailyTaskInfo( $user_id, $type ) {
         $target = new DateTime($run_date);
         $interval = $origin->diff($target);
         $days = $interval->days;
+        if ($origin > $target) $days = 0; // if we are past the run date set days to 0
         $total = checkTasks($user_id, $start, $end, $type);
 
         // for yearly date return hebrew date
