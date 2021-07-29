@@ -156,8 +156,8 @@ function getRaffleHistory( $type, $user_id ) {
 
 function getDailyTaskInfo( $user_id, $type ) {
     $result = [];
-    $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
-    $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
+    $heMonths = ['','תשרי','חשון','כסלו','טבת','שבט','אדר ב','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
+    $months = ['', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar II', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
 
     // get raffles
     $raffles = [];
@@ -215,11 +215,11 @@ function getDailyTaskInfo( $user_id, $type ) {
         $order = [];
         while ($start <= $end) {
             $heDate = explode('/', jdtojewish($start));
-            $heMonth = $months[$heDate[0]];
-            if ($meuberet && $heMonth == 7) $heMonth = 'Adar 2';
-            if (!in_array($heMonth, $order)) $order[] = $heMonth;
+            $month = $months[$heDate[0]];
+            //if ($meuberet && $heMonth == 7) $month = 'Adar II';
+            if (!in_array($month, $order)) $order[] = $month;
 
-            $info[$heMonth][] = [
+            $info[$month][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $start <= unixtojd() ? true : false
             ];
