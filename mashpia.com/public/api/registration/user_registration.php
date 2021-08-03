@@ -238,6 +238,10 @@ class UserRegistrationRouter {
                                 $version = $registration['bookVersion'];
                                 $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city, $version );
                             }
+
+                            // add chidon prizes
+                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
+
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';
                             $headers[] = 'Content-type: text/html; charset=iso-8859-1';

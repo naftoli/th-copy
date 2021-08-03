@@ -675,6 +675,28 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ]);
     }
 
+    /**
+     * @param $prizes
+     * @param $year
+     *
+     * add chidon prizes that user has selected during registration
+     */
+    public function addChidonPrizes($prizes, $year) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+                insert into chidon_user_prizes 
+                set user_id = :user, 
+                prize_id = :prize, 
+                year = :year");
+        foreach ($prizes as $prize) {
+            $stmt->execute([
+                ':user'     => $this->user_id,
+                ':prize'    => $prize['id'],
+                ':year'     => $year
+            ]);
+        }
+    }
+
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
     public function enrollInCampaigns() {
         try {

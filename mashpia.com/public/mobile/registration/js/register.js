@@ -20,6 +20,7 @@ var showClasses = 0; // global var to determine if we need to show link to myshl
 var selected_index;
 var current_user;
 var school_id;
+var user_prizes = {}
 
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
@@ -140,10 +141,11 @@ var registrationApp = function() {
             // setup non th school list
             $.post('api/getNonThSchools.php', function(result) {
                 var res = JSON.parse(result)
-                var html = '<option value=0>Other</option>'
-                for (s in res) {
+                var html = '<option value="" selected>Please Choose</option>'
+                for (let s in res) {
                     html += '<option value=' + s + '>' + res[s] + "</option>";
                 }
+                html += '<option value="0">My school is not listed</option>'
                 $("#non_th_school_id").empty()
                 $("#non_th_school_id").append(html)
             })
@@ -279,12 +281,12 @@ var registrationApp = function() {
                             alert(addressErr);
                             return false;
                         }
-                        var current_user = selected_user; // needed for scope
+                        var thisUser = selected_user; // needed for scope
                         $.post("updateAddress.php", { info: info }, function( res ) {
                             if ( res.success ) {
                                 alert( res.data );
-                                current_user.parentAccount.admin_country = info.country;
-                                if (current_user.parentAccount.admin_country.toUpperCase() == 'USA') $("#yahadus-shipping").html(shippingChargeMsg15);
+                                thisUser.parentAccount.admin_country = info.country;
+                                if (thisUser.parentAccount.admin_country.toUpperCase() == 'USA') $("#yahadus-shipping").html(shippingChargeMsg15);
                                 else $("#yahadus-shipping").html(shippingChargeMsg30);
                                 $("#shipping-modal").modal('hide');
                             } else {
@@ -353,6 +355,7 @@ var registrationApp = function() {
                 }
             });
         });
+        current_user = selected_user.user_id // for using current_user in chidon prizes cart
     }
 
     // select shipping option
@@ -584,14 +587,16 @@ var registrationApp = function() {
                     return showError(Err9);
                 }
             }
-        } else if ( selected_charges.chayolei === true || selected_charges.chayolei_lite === true ) {
-            // make sure non th school field is not empty
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-                var non_th_school = $("#non_th_school_id").val().trim();
-                if (non_th_school == 0) non_th_school = $("#non_th_school").val().trim()
+        }
+
+        // make sure non th school field is not empty
+        if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+            var non_th_school = $("#non_th_school_id").val().trim();
+            if (non_th_school == 0 || non_th_school == '0' || non_th_school == '') {
+                non_th_school = $("#non_th_school").val().trim()
                 if (non_th_school.length < 3) return showError(Err10);
             }
-        }  
+        }
 
         // validate that they have accepted to be used in media campaigns
         if ( $(event.target).find( "#media" )[0].checked ){
@@ -671,7 +676,8 @@ var registrationApp = function() {
                     recruitedBy: parseInt($("#recruited_by_user_serial").val()),
                     poll: poll,
                     name_pref: $("input.nameChoice:checked").val(),
-                    comments: $("#comments").val()
+                    comments: $("#comments").val(),
+                    chidon_prizes: user_prizes[current_user]
                 }
             });
         }
@@ -725,11 +731,116 @@ var registrationApp = function() {
             })
         }
 
+        // show modal for chidon prizes
+        if (selected_charges.chidon) {
+            setupChidonPrizes()
+        }
+
+        else nextStep()
+    }
+
+    function setupChidonPrizes() {
+        // initialize user prize cart
+        user_prizes[current_user] = []
+        // get prizes
+        $.post('api/getPrizes.php', function(results) {
+            let res = JSON.parse(results)
+            console.log(res)
+            let html = ''
+            for (prize of res) {
+                let id = prize.prize_id
+                html += `<div style="height: 75px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
+                        <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
+                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}" />
+                        ${prize.prize_name}<br />
+                        Price: $${prize.price}</div>`
+            }
+            $("#listOfPrizes").empty()
+            $("#listOfPrizes").append(html)
+
+            $("#prizes").modal('show')
+            $("#prizes").on('hidden.bs.modal', function (e) {
+                if (validatePrizes()) {
+                    addToCart() // add prize cart to state.cart
+                    nextStep()
+                }
+                else {
+                    alert('You must choose which prizes you would like to receive if you are eligible!')
+                    $("#prizes").modal('show')
+                }
+            })
+
+            $(".prize").click( function(e) {
+                let info = $(this).data('info')
+                let infoArr = info.split(':')
+                let prize = infoArr[0]
+                let price = infoArr[1]
+                if ($(this).is(":checked")) {
+                    if (!addToPrizes(prize, price)) {
+                        e.target.checked = false
+                    }
+                } else {
+                    if (!removeFromPrizes(prize)) {
+                        e.target.checked = true
+                    }
+                }
+            })
+        })
+    }
+
+    function validatePrizes() {
+        if (!user_prizes[current_user] || !user_prizes[current_user].length) return false
+        return true
+    }
+
+    function addToPrizes(prize, price) {
+        const MAX = 75
+        let total = 0
+        let found = false
+        for (let p of user_prizes[current_user]) {
+            total += parseInt(p.price)
+            if (p.id == prize) {
+                found = true
+            }
+        }
+        if (! found) {
+            if (total + parseInt(price) > MAX) {
+                alert('You cannot choose more than $75 worth of prizes.')
+                return false
+            } else {
+                let prizeToAdd = {id: prize, price: price}
+                user_prizes[current_user].push(prizeToAdd)
+                return true
+            }
+        }
+    }
+
+    function removeFromPrizes(prize) {
+        for (let i in user_prizes[current_user]) {
+            let p = user_prizes[current_user][i]
+            if (p.id == prize) {
+                user_prizes[current_user].splice(i, 1)
+                return true
+            }
+        }
+        return false
+    }
+
+    function addToCart() {
+        for (let item of state.cart) {
+            if (item.meta.registration_type == 'chidon' && item.meta.user_id == current_user) {
+                item.meta.chidon_prizes = user_prizes[current_user]
+            }
+        }
+    }
+
+    function nextStep() {
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
             step3();
         } else {
             selected_user = state.selected_users[ current_index ]
+            current_user = selected_user.user_id // for using current_user in chidon prizes cart
             school_id = selected_user.school.school_id
             templates.showUser( selected_user, current_index );
             $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to the top of the page
@@ -933,6 +1044,19 @@ var templates = function(){
         },
         showUser: function( user, index ){
             if( index > 0 ) window.location.hash = 'step-2-' + index;
+
+            $("#non_th_school").hide()
+            $("#non_th_school").parent().parent().find('label').hide()
+            $("#non_th_school_id").change( function () {
+                if ($(this).val() === '0') {
+                    $("#non_th_school").show()
+                    $("#non_th_school").parent().parent().find('label').show()
+                } else {
+                    $("#non_th_school").hide()
+                    $("#non_th_school").parent().parent().find('label').hide()
+                }
+            })
+
             $( '#step-2 form #user_id' ).val( user.user_id );
             $( '#step-2 form #mobile_pic' ).val( user.mobile_pic );
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
@@ -946,7 +1070,10 @@ var templates = function(){
             if ( [ 269, 61 ].includes( user.school.school_id ) ) {
                 $( '#step-2 form #non_th_school_id' ).show();
                 $( '#step-2 form #non_th_school_id' ).parent().parent().find('label').show()
-                $( '#step-2 form #non_th_school' ).show();
+                if (user.non_th_school) {
+                    $( '#step-2 form #non_th_school' ).show();
+                    $("#non_th_school").parent().parent().find('label').show()
+                }
                 // get the class list and update the dropdown
                 $.get( "api/classes.php", { 'school_id': user.school.school_id }, function( response ) {
                     class_select.html('');
@@ -961,6 +1088,7 @@ var templates = function(){
                 $( '#step-2 form #non_th_school_id' ).hide();
                 $( '#step-2 form #non_th_school_id' ).parent().parent().find('label').hide()
                 $( '#step-2 form #non_th_school' ).hide();
+                $("#non_th_school").parent().parent().find('label').hide()
             }
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );

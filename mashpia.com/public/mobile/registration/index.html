@@ -44,6 +44,9 @@
             .whatsapp, .khkWhatsapp {
                 display: none;
             }
+            #prizes input {
+                display: inline-block;
+            }
         </style>
 </head>
 <body>
@@ -236,6 +239,9 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
+                            <label for="non_th_school">
+                                Please type in the name of the school that you attend during the year (Actual school name, not MyShliach/Anash Kinder)
+                            </label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="non_th_school" name="non_th_school">
                             </div>
@@ -669,6 +675,30 @@
                 </div>
             </div>
         </section>
+
+        <modal class="modal" id="prizes" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chidon Prizes</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            If you pass the Chidon on the Pro, Expert or Genius track based on your 4 tests this year,
+                            you will be eligible to get a $75 prize. Please select which prize/s below you would like.
+                            You can choose more than one as long as it stays within the $75.
+                        </p>
+                        <div id="listOfPrizes"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </modal>
 
         <section id="step-3" class="animated fadeIn">
             <div class="spinner">

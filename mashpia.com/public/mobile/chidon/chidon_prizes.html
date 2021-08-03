@@ -212,6 +212,7 @@
 
     const setupPrizes = () => {
         $("#prizes").empty()
+        console.log(currentUser)
         const total = children[currentUser].option == 'C' ? 200 : 100
         let html = `<div style='font-size: 18px; margin-bottom: 20px;'>You can choose up to $${total} worth of prizes.<br/>
                     You have currently selected $<span id="currentTotal"></span> worth of prizes.</div>`
