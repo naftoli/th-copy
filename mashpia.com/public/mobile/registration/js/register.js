@@ -757,18 +757,7 @@ var registrationApp = function() {
             }
             $("#listOfPrizes").empty()
             $("#listOfPrizes").append(html)
-
             $("#prizes").modal('show')
-            $("#prizes").on('hidden.bs.modal', function (e) {
-                if (validatePrizes()) {
-                    addToCart() // add prize cart to state.cart
-                    nextStep()
-                }
-                else {
-                    alert('You must choose which prizes you would like to receive if you are eligible!')
-                    $("#prizes").modal('show')
-                }
-            })
 
             $(".prize").click( function(e) {
                 let info = $(this).data('info')
@@ -788,7 +777,20 @@ var registrationApp = function() {
         })
     }
 
+    $("#prizes").on('hidden.bs.modal', function (e) {
+        console.log('close event triggered')
+        if (validatePrizes()) {
+            addToCart() // add prize cart to state.cart
+            nextStep()
+        }
+        else {
+            alert('You must choose which prizes you would like to receive if you are eligible!')
+            $("#prizes").modal('show')
+        }
+    })
+
     function validatePrizes() {
+        console.log(current_user)
         if (!user_prizes[current_user] || !user_prizes[current_user].length) return false
         return true
     }
