@@ -60,7 +60,7 @@ if( isset($_GET['debug'])){
             <td><?= $row['credits'] ?></td>
             <td><?= $row['year'] ?></td>
             <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$row['chidon_credit_prize_id']?>"> EDIT</a> </td>
-            <td> <form action="./delete.php?id=<?=$row['prize_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
+            <td> <form action="./delete.php?id=<?=$row['chidon_credit_prize_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
         </tr>
     <? }
     ?>
