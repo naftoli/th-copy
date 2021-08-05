@@ -44,7 +44,7 @@ $sql = "UPDATE chidon_credit_prizes
             " . ($prize_picture ? "img = '$prize_picture', " : " ") . "
             quantity = '$quantity',
             credits = '$credits_needed'
-        WHERE prize_id = '{$prize['chidon_credit_prize_id']}'
+        WHERE chidon_credit_prize_id = '{$prize['chidon_credit_prize_id']}'
     ";
 mysql_query($sql);
 
