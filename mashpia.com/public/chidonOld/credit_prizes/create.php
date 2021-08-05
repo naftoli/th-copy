@@ -1,4 +1,5 @@
-<?
+<?php
+ini_set('display_errors', 1);
 $admin_auth = array('school');
 require('../../header.php');
 require_once('../../class.globalSettings.php');
