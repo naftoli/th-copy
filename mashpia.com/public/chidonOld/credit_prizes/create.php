@@ -7,7 +7,7 @@ require('./shared.php');
 
 $prize_name = isset($_POST['prize_name']) ? mysql_real_escape_string($_POST['prize_name']) : "";
 $quantity = isset($_POST['quantity']) ? mysql_real_escape_string($_POST['quantity']) : "0";
-$credits_needed = isset($_POST['credits_needed']) ? mysql_real_escape_string($_POST['credits_needed']) : "null";
+$credits_needed = isset($_POST['credits_needed']) ? mysql_real_escape_string($_POST['credits_needed']) : "0";
 $year = GlobalSettings::getChidonYear();
 
 $prize_picture = "";
