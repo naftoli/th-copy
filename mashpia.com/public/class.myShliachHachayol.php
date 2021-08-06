@@ -4,7 +4,7 @@ class MyShliachHachayol {
 	private $children;
 	private $sortedAdmins;
 	
-	public function __construct( $id = 61, $noShip = false ) {
+	public function __construct( $noShip = false, $id = 61 ) {
 		$this->setInfo( $noShip, $id );
 	}	
 	

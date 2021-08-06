@@ -4,7 +4,7 @@ require('header.php');
 
 require 'class.myShliachHachayol.php';
 
-$hachayol = new MyShliachHachayol(269);
+$hachayol = new MyShliachHachayol(false, 269);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
 
