@@ -14,7 +14,7 @@ export class PaymentTab extends React.Component {
   //* initial state
   state = {
     terms: {
-      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, data: 0, reg: 0, bc: 0,
+      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, whatsapp: 0, data: 0, reg: 0, bc: 0,
     }
   }
 
@@ -22,7 +22,7 @@ export class PaymentTab extends React.Component {
     if ( this.props.terms ) {
       this.setState({
         terms: {
-          meet: 1, tools: 1, wwtc: 1, yan: 1, mivtzoim: 1, data: 1, reg: 1, bc: 1,
+          meet: 1, tools: 1, wwtc: 1, yan: 1, mivtzoim: 1, whatsapp: 0, data: 1, reg: 1, bc: 1,
         }
       })
     }
@@ -84,6 +84,10 @@ export class PaymentTab extends React.Component {
 
           <Checkbox required checked={ terms.mivtzoim } name='mivtzoim' { ...checkboxProps }>
             I am fully committed to try my best to reach my school’s Mivtzoim quotas
+          </Checkbox>
+
+          <Checkbox required checked={ terms.whatsapp } name='whatsapp' { ...checkboxProps }>
+            I understand that it is my responsibility to check the messages posted by Headquarters on the BC Info Whatsapp group. This is a group that only HQ posts on.
           </Checkbox>
 
           <Checkbox required checked={ terms.tools } name='tools' { ...checkboxProps }>
