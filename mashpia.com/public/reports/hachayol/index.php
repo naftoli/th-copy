@@ -67,7 +67,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/anashHachayolReport.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/myshliach.png" height="32" alt="tickets"/>
-                    <span class="link-text">MyShliach Hachayol Report</span>
+                    <span class="link-text">Anash Kinder Hachayol Report</span>
                 </div>
             </a>
             <a href="/anashHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
