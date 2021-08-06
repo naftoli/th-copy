@@ -133,7 +133,7 @@ export class SettingsRow extends Component {
             { ...storeResetProps }
             onChange={ this.enableSchoolReset }
             checked={ store_reset_jd === 2459454 }>
-            The beginning of the school year (Friday,19 Elul / Aug 27)
+            The beginning of the school year (Friday, 19 Elul / Aug 27)
           </Radio>
 
           <br />
