@@ -123,7 +123,7 @@ $heDates = $myshliach->getHeReportDates();
 				
 				echo "<div class='label'>";
 				echo "<span class='name'>";
-				echo "<b>" . $name . "</b><br />" . $address . "</span></div>";
+				echo "<b>" . $name . " (AK)</b><br />" . $address . "</span></div>";
 				checkForBreak();
 				
 				foreach ($children as $child) {
@@ -155,7 +155,7 @@ $heDates = $myshliach->getHeReportDates();
 							foreach ($ranks[$child] as $rank) {
 								echo "<div class='label'>";
 								echo "<span class='name'>";
-								echo "Name : " . $userInfo[$child] . " <strong>(AK)</strong><br />";
+								echo "Name : " . $userInfo[$child] . "<br />";
 								echo "Rank : " . $rank['rank_name'] . "<br />" . 
 									"Serial #: " . $rank['user_serial'];
 								echo "</span></div>";

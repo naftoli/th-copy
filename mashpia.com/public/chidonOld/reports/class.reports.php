@@ -27,7 +27,8 @@ class Reports
             'th_chidon_bunks'       =>  'tcb',
             'th_chidon_walking_bunks'  =>  'tcwb',
             'th_chidon_walking_chaperones' => 'tcwc', 
-            'classes'               =>  'cl'
+            'classes'               =>  'cl',
+            'chidon_user_subsidies' =>  'cus'
         );
         $this->fields = array(
             'chidon_id'     =>  array(
@@ -45,6 +46,10 @@ class Reports
             'last_name'   =>  array(
                 'table'     =>  'users',
                 'column'    =>  'last as last_name',
+            ),
+            'school_id' =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_id'
             ),
             'school'    =>  array(
                 'table'     =>  'schools',
@@ -142,13 +147,33 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'walking_group'
             ),
-            'winner_type'   =>  array(
+            'test_type' =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('khk', 'trophy_contestant', 'contestant', 'school_rep')
+                'column'    =>  'test_type'
+            ),
+            'eligibility'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy')
+            ),
+            'chidon_final_mark' =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'chidon_final_mark'
+            ),
+            'shabbaton_trophy'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'shabbaton_trophy'
+            ),
+            'khk_rep'       =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'khk_rep'
+            ),
+            'school_rep'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'school_rep'
             ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
-                'column'    =>  'year'
+    'column'    =>  'year'
             ),
             'poll'      =>  array(
                 'table'     =>  'th_chidon', 
@@ -295,6 +320,10 @@ class Reports
             'morning_pickup'    =>  array(
                 'table'     =>  'th_chidon', 
                 'column'    =>  'morning_pickup'
+            ),
+            'trip_option'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'trip_option'
             ),
             // 'bus'       =>  array(
             //     'table'     =>  'th_chidon',
@@ -556,8 +585,12 @@ class Reports
                 'column'    =>  'phone as walking_chaperone_number'
             ),
             'walking_chaperone_zone' => array (
-                'table'     => 'th_chidon_walking_chaperones',
+                'table'     =>  'th_chidon_walking_chaperones',
                 'column'    =>  'walking_zone as walking_chaperone_zone'
+            ),
+            'raised'        =>  array(
+                'table'     =>  'chidon_user_subsidies',
+                'column'    =>  'SUM(cus.subsidy_amount) as raised'
             )
         );
     }
@@ -588,7 +621,9 @@ class Reports
                             $sql .= $this->aliases[$table] . "." . $column . ", ";
                         }
                     } else {
-                        $sql .= $this->aliases[$table] . "." . $columns . ", ";
+                        // do NOT USE ALIAS WHEN USING SUM, COUNT, etc
+                        if ($table == 'chidon_user_subsidies') $sql .= $columns . ", ";
+                        else $sql .= $this->aliases[$table] . "." . $columns . ", ";
                     }
                 }
             }
@@ -628,6 +663,9 @@ class Reports
                                 break;
                             case 'th_chidon_walking_chaperones':
                                 $sql .= " left join th_chidon_chaps tcwc on tcwc.walking_zone = tc.walking_zone COLLATE utf8_unicode_ci";
+                                break;
+                            case 'chidon_user_subsidies':
+                                $sql .= " left join chidon_user_subsidies cus on cus.user_id = tc.user_id and cus.chidon_year = " . $this->year;
                                 break;
                         }
                         break;

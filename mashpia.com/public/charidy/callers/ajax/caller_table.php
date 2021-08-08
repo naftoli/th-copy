@@ -103,7 +103,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 <td>
                 <?php
                     $yearly_raffle = new YearlyRaffle;
-                    $quota = $yearly_raffle->getDayCount();
+                    $quota = $yearly_raffle->required_days_of_tasks();
                     foreach ( $children as $child ) {
                         $num_days = $yearly_raffle->set_user_eligibility( $child['user_id'] )[ $child['user_id'] ];
                         if ( $num_days >= $quota ) echo $child['first'] . " - yes<br />";

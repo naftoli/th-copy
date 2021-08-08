@@ -11,6 +11,8 @@ import {
   NameRow, DobCol, ProfileRow, BasePlatoonRow 
 } from '../components';
 import { toast } from 'react-toastify';
+// data
+import { allMissionLanguages } from 'data/languages.json'
 
 const initialSoldier = {
   first: '', last: '', first_he: '',
@@ -80,11 +82,6 @@ class NewSoldierModal extends Component {
     const { saving, soldier } = this.state;
     const { login, isOpen, image, editPicture } = this.props;
 
-    const language_options = [
-      { value: 1, label: 'English' },
-      { value: 2, label: 'Yiddish' },
-      { value: 3, label: 'French' }
-    ];
 
     return (
       <Modal centered 
@@ -130,7 +127,7 @@ class NewSoldierModal extends Component {
                 <label htmlFor='mission_lang'>Mission Language</label>
                 <Select
                   required id='mission_lang'
-                  options={ language_options }
+                  options={ allMissionLanguages }
                   selected={ soldier.lang_id }
                   onChange={ this.onSelectChange('lang_id') } />
               </Col>

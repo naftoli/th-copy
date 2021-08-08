@@ -56,7 +56,13 @@ elseif (gr('user_registered')) {
 	}
 							
 	$message = sprintf(T_('%d users de-registered. %d users re-registered from pre-registration.'), $num, $added);
-} 
+}
+else if (gr('eligibility')) {
+    require $_SERVER['DOCUMENT_ROOT'] . '/tasks/setChayoleiChidonEligibility.php';
+    if (updateChayolei() && updateChidon()) {
+        $message = "Chayolei and Chidon eligibility was set.";
+    }
+}
 elseif(gr('user_tracks')) {
 	// mq("UPDATE user_tracks JOIN users USING (user_id) SET enrolled = 0 WHERE school_id IN ($schools)");
 	// $message = sprintf(T_('%d user-subjects un-enrolled'), mysql_affected_rows());
@@ -101,6 +107,10 @@ elseif(gr('tanya_year')) {
 					<INPUT type="submit" name="school_era" value="Mark the school as last year">
 					<BR> - <?=T_('Or')?> - <BR>
 					<INPUT type="submit" name="user_registered" value="Un-register students">
+                    <br />
+                    <?= T_("Or") ?>
+                    <br />
+                    <input type="submit" name="eligibility" value="Set student Eligibility" />
 					<!--
 					<BR> - <?=T_('Or')?> - <BR>
 					<INPUT type="submit" name="user_tracks" value="Un-enroll students from subjects">

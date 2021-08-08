@@ -37,7 +37,7 @@ if($query){ // operation was a success
 $r = Raffle::load( $raffle_id );
 if ( $r->type == 'yearly' ) {
     $yr = new YearlyRaffle;
-    $days = $yr->getDayCount();
+    $days = $yr->required_days_of_tasks();
     $year = $yr->getYear();
     if ( $eligible ) {
         mysql_query("INSERT IGNORE INTO user_yearly_raffle (user_id, days, year) VALUES($user_id, $days, $year)");

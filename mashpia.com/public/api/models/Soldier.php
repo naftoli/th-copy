@@ -281,6 +281,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $parent;
     }
 
+    // get regestration discount for soldier
+    public function getDiscount() {
+        global $MASHPIA_DB;
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/reports/registration/Discount.php';
+        $year = GlobalSettings::getRegistrationYear();
+        $d = new DiscountManager($MASHPIA_DB);
+        $discount = $d->getDiscountForUserYear($year, $this->user_id);
+        if ($discount[0]['used'] > 0) return [];
+        return $discount;
+    }
+
     // ******************************* IMAGES ******************************* //
     // takes an uploaded file and sets it as the profile picture
     public function setProfilePicture( $file ){
@@ -321,16 +333,16 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
-        // add chidon if user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade > 3 )
+        // add chidon if user is in grade 3+
+        if ( $this->platoon && $this->platoon->class_grade > 2 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
 
-    public function registrationCharge( $type, $amount, $trans_id = '', $year = false ) {
+    public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
         global $MASHPIA_DB;
         // set default year.
-        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonYear() : GlobalSettings::getRegistrationYear( $this->school_id );
+        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
         // make sure we don't already have such a registration charge in system - avoid duplication
         $check_qry = $MASHPIA_DB->prepare("
             SELECT 
@@ -350,14 +362,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( count( $rows ) > 0 ) return true;
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
-            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
+            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
+            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
         );
         // * execte the query
         return $registration_info_query->execute([
             'type' => $type,        'trans_id' => $trans_id,
             'year' => $year,        'user_id' => $this->user_id,
             'amount' => $amount,    'school_id' => $this->school_id,
+            'discount'  => $discount
         ]);
     }
     //get all of the soldiers registration charges
@@ -377,7 +390,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
 
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonYear();
+        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
@@ -396,13 +409,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
-
-        // turn off chayolei reg 
-        //if ( !in_array( $this->user_id, [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) $result[ 'chayolei' ] = true;
         
-        // only add th_chidon_id if the user is in grade 4+ 
+        // only add th_chidon_id if the user is in grade 3+
         $exceptions = [482,544,583];
-        if ( $this->platoon && $this->platoon->class_grade > 3 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
+        if ( $this->platoon && $this->platoon->class_grade > 2 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
 
         // turn off chayolei and chidon reg if school has not registered yet
@@ -425,6 +435,24 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
+        // check if child is eligible for khk if needs to register for chidon
+        $result['khk'] = true; // means not eligible for khk
+        if (!$result['chidon']) {
+            $stmt = $MASHPIA_DB->prepare("
+                SELECT khk_eligible FROM users WHERE user_id = :user
+            ");
+            $stmt->execute([':user' => $this->user_id]);
+            $row = $stmt->fetch();
+            if (intval($row['khk_eligible'])) $result['khk'] = false;
+        }
+
+        // check if child is new to chidon
+        $result['new_to_chidon'] = true;
+        $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user");
+        $stmt->execute([':user' => $this->user_id]);
+        $rows = $stmt->fetchAll();
+        if ( !empty($rows) ) $result['new_to_chidon'] = false;
+
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
@@ -441,35 +469,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
-        // find user id's of kids with exception
-        $serialNum = [
-            7746463, 7750077, 7750039, 7748535, 7762129, 7754560, 7769383, 7762129, 7759215, 7756202, 7760527, 7751368, 7747980, 7747390,
-            7748551, 7773102, 7752969, 7748998, 7752490, 7753000, 7748547, 7775781, 7761287, 7747339, 7763109, 7753599, 7760704, 7758564,
-            7751454, 7748673, 7747302, 7756085, 7759885, 7748725, 7753953, 7759944, 7752990, 7748247, 7748267, 7750109, 7750056, 7775943,
-            7753984, 7760408, 7772386, 7775680, 7761845, 7758518, 7754957, 7756463, 7756464, 7771828, 7750056, 7752979, 7770141, 7770138,
-            7758062, 7754553, 7763326, 7775941, 7760921, 7750103, 7773911, 7747801, 7753589, 7753585, 7759811, 7759332, 7749051, 7773272,
-            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7759826, 7775977,
-            7758214, 7775704, 7747594, 7775949, 7775950, 7775946, 7754494, 7751311, 7749659, 7760728, 7751326, 7775955, 7775955, 7775735,
-            7764289, 7759999, 7760667, 7764902, 7764894, 7757205, 7751184, 7755566, 7775958, 7749753, 7763309, 7759584, 7753664, 7770142,
-            7759807, 7749753, 7759305, 7769272, 7769275, 7750115, 7748057, 7759972, 7751067, 7759461, 7769372, 7775788, 7772311, 7760230,
-            7756480, 7748529, 7775776, 7772514, 7761216, 7756223, 7769465, 7769465, 7761227, 7759542, 7772492, 7775717, 7773901, 7748504,
-            7748503, 7755811, 7750671, 7753600, 7772141, 7775916, 7775924, 7775925, 7775931, 7775932, 7764763, 7760724, 7763324, 7774904,
-            7760669, 7761155, 7775736, 7763077, 7754283, 7763409, 7746832, 7759804, 7747520, 7769363, 7772932, 7752995, 7753919, 7759608,
-            7753003, 7754075, 7773381, 7754400, 7750093, 7748053, 7770705, 7753540, 7754181, 7758576, 7756929, 7758271, 7770719, 7764373,
-            7776079, 7765977, 7761591, 7760542, 7760410, 7754000, 7759769, 7762067, 7755821, 7755816, 7771168, 7764889, 7755655, 7753739,
-            7753253, 7760541, 7772658, 7766077, 7748019
-        ];
-        $serialStr = implode(',', $serialNum);
-        $keepOn = [];
-        $stmt = $MASHPIA_DB->query("
-            SELECT user_id FROM users WHERE user_serial in ($serialStr)
-        ");
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) $keepOn[] = $row['user_id'];
-
-        // turn off chidon reg
-        if (!in_array($this->user_id, $keepOn)) $result['chidon'] = true;
-
         return $result;
     }
     /**
@@ -482,7 +481,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $amount
      * @return array
      */
-    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0 ){
+    public function registerChayolei( $admin_id, $year, $amount, $trans_id = 0, $lite = 0, $ckids = 0, $discount = 0 ){
         global $MASHPIA_DB;
         $errors = [];
         if ( !$admin_id ) {
@@ -506,7 +505,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if (!$reg_query->execute([
                 'year' => $year, 'admin_id' => $admin_id,
                 'user_id' => $this->user_id, 'school_id' => $this->school_id,
-                'paid' => isset($amount) ? $amount : null,
+                'paid' => $amount
             ])) {
                 $errors[] = "Could not insert into user_registration. (Not Registered).";
                 return $errors;
@@ -515,7 +514,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $type = 'chayolei';
             if ($lite) $type = 'chayolei-lite';
             if ($ckids) $type = 'ckids';
-            if (!$this->registrationCharge($type, $amount, $trans_id)) {
+            if (!$this->registrationCharge($type, $amount, $trans_id, false, $discount)) {
                 $errors[] = "Could not insert into registration_charges. (Not Registered)";
                 // remove from user_registration
                 $unreg_qry = $MASHPIA_DB->prepare("DELETE FROM user_registration WHERE user_id = :user, AND year = :year");
@@ -524,6 +523,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     ':year' => $year
                 ]);
                 return $errors;
+            }
+            // set discount to used
+            if ($discount) {
+                $stmt = $MASHPIA_DB->prepare("
+                    update discounts set used = now() where amount = :amount and user_id = :user and year = :year
+                ");
+                $stmt->execute([
+                    ':amount'   => $discount,
+                    ':user'     => $this->user_id,
+                    ':year'     => $year
+                ]);
             }
             // update fields to mark registered
             if (!$this->user_registered) $this->user_registered = new \Datetime();
@@ -568,6 +578,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      *
      * @param int $year
      * @param string $size
+     * @param string $book
+     * @param int $yarmulka
+     * @param string $name_pref
      * @param integer $parent_id
      * @param float $amount
      * @param string $trans_id
@@ -575,12 +588,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param int $recruited_by
      * @return void
      */
-    public function registerChidon( $year, $size, $book, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '' ){
+    public function registerChidon(
+        $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '',
+        $comments = ''
+    ){
         global $MASHPIA_DB;
 
         // save the charge
         if ( !is_null( $amount ) ) {
-            $this->registrationCharge( 'chidon', $amount, $trans_id );
+            $this->registrationCharge( 'chidon', $amount, $trans_id, $year );
         }
         // make sure we have parent id
         if ( !$parent_id ) {
@@ -597,14 +613,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, recruited_by, poll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, recruited_by, poll, 
+                       comments) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $recruited_by, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $recruited_by, $poll,
+                $comments ] );
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, parent_id, poll) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll, 
+                       comments) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $parent_id, $poll ] );
+            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll,
+                $comments ] );
         }
     }
 
@@ -620,7 +642,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      * @param string $store_name
      * @param string $store_city
      */
-    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '' ) {
+    public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '', $version = 0 ) {
         global $MASHPIA_DB;
         $qry = $MASHPIA_DB->prepare(
             "insert into yahadus_book_purchases 
@@ -629,7 +651,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             location = :location, 
             trans_id = :trans_id, 
             store_name = :store_name, 
-            store_city = :store_city"
+            store_city = :store_city, 
+            version = :version"
         );
         $qry->execute([
             ':year' =>  $year, 
@@ -637,8 +660,41 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':location' =>  $location, 
             ':trans_id' =>  $trans_id, 
             ':store_name'   =>  $store_name, 
-            ':store_city'   =>  $store_city
+            ':store_city'   =>  $store_city,
+            ':version'      => intval($version)
         ]);
+    }
+
+    // set khk_reg flag in db to true
+    public function addKhkReg( $year, $user_id ) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("update th_chidon set khk_reg = 1 where user_id = :user and year = :year");
+        $stmt->execute([
+            ':user' => $user_id,
+            ':year' => $year
+        ]);
+    }
+
+    /**
+     * @param $prizes
+     * @param $year
+     *
+     * add chidon prizes that user has selected during registration
+     */
+    public function addChidonPrizes($prizes, $year) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+                insert into chidon_user_prizes 
+                set user_id = :user, 
+                prize_id = :prize, 
+                year = :year");
+        foreach ($prizes as $prize) {
+            $stmt->execute([
+                ':user'     => $this->user_id,
+                ':prize'    => $prize['id'],
+                ':year'     => $year
+            ]);
+        }
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
@@ -813,7 +869,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'methods' => [ 
                 'profilePicture', 'barcode', 'miles', 'rank',
                 'rankBoard', 'medalBoard', 
-                'parentAccount', 'registrationCharges',
+                'parentAccount', 'registrationCharges'
             ],
             'include' => [ 
                 'school' => [ 

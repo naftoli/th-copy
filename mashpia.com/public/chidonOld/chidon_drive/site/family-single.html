@@ -42,7 +42,7 @@
 					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
 					<div class="bio-wrapper">
 						<p>Over the past six months, our <span id="childrenNames"></span> been working to master the 613 mitzvos. As part of a beautiful movement of 5000 children around the world, <span class="grammar"></span> chose to dedicate <span class="grammar3"></span> spare time to this incredible goal.</p>
-						<p>To recognize <span class="grammar2"></span> for <span class="grammar3"></span> great work, and the tremendous knowledge <span class="grammar4"></span>  gained, we are so proud to send <span class="grammar2"></span> to the upcoming Chidon Shabbaton—an extraordinary four-day experience of fun, friendship and inspiration.</p>
+						<p>To recognize <span class="grammar2"></span> for <span class="grammar3"></span> great work, and the tremendous knowledge <span class="grammar4"></span>  gained, we are so proud to send <span class="grammar2"></span> to the upcoming Chidon Experience of fun, friendship and inspiration.</p>
 						<p>Please be a sponsor, and help us reach our family goal to support this incredible cause. Together we will show <span class="grammar2"></span> just how important <span class="grammar3"></span> accomplishment is.</p>
 					</div>
 					<a href="#" class="button edit-settings" style="display:none;">Manage Page</a>
@@ -376,21 +376,54 @@
 								label: 'paypal',
 								
 							},
-							createOrder: function(data, actions) {
+							onInit: function(data, actions) {
+								actions.disable()
+								document.getElementById('donationAmount').addEventListener('blur', function(event) {
+									const amount = $(this).val();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('name').addEventListener('blur', function(event) {
+									const amount = $("#donationAmount").val();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('display_name').addEventListener('blur', function(event) {
+									const amount = $("#donationAmount").val();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+								document.getElementById('email').addEventListener('blur', function(event) {
+									const amount = $("#donationAmount").val();
+									const name = $("#name").val().trim();
+									const display_name = $("#display_name").val().trim();
+									const email = $("#email").val().trim();
+									if (amount && name && display_name && email) actions.enable()
+								})
+							},
+							onClick: function() {
 								const amount = $("#donationAmount").val();
 								if ( !amount ) {
 									alert("You have not entered any amount!");
-									return false;
+									return false
 								}
 
 								const name = $("#name").val().trim();
 								const display_name = $("#display_name").val().trim();
 								const email = $("#email").val().trim();
-								if ( !name || !display_name || !email ) {
+								if (! (name && display_name && email) ) {
 									alert("Name, Display Name, and Email are mandatory fields!");
-									return false;
+									return false
 								}
-
+							},
+							createOrder: function(data, actions) {
+								const amount = $("#donationAmount").val();
 								return actions.order.create({
 									purchase_units: [{
 										amount: {
@@ -671,11 +704,11 @@
 									let sponsor = info.data.sponsors[i];
 									let dedication = sponsor.notes ? sponsor.notes : '';
 									let name = sponsor.display_name ? sponsor.display_name : sponsor.name;
-									if ( sponsor.anonymous ) name = "Anonymous";
+									if ( parseInt(sponsor.anonymous) == 1 ) name = "Anonymous";
 									sponsorList += `
 										<div class="recent-sponsor">
 											<div class="sponsor-name">
-												<p class="sponsor-name">${sponsor.display_name}</p>
+												<p class="sponsor-name">${name}</p>
 												<p class="sponsor-credit">${dedication}</p>
 											</div>
 											<div class="sponsor-amount">

@@ -16,7 +16,25 @@ function getRaffleInfo( $type ) {
         $info['start'] = $row['start_date'];
         $info['end'] = $row['end_date'];
         $info['run_date'] = $row['run_date'];
-        $info['name'] = $row['name'];
+        $info['days_of_tasks'] = $row['days_of_tasks'];
+    } else {
+        // get last raffle that is in system for this type
+        $sql = "SELECT * FROM raffles
+                WHERE type = '" . $type . "'
+                AND start_date <= " . $today . " 
+                order by start_date desc
+                limit 1";
+        $result = mysql_query($sql);
+        if ($row = mysql_fetch_assoc($result)) {
+            $info['raffle_id'] = $row['raffle_id'];
+            $info['daysLeft'] = $row['end_date'] - $today;
+            $info['name'] = $row['name'];
+            $info['year'] = $row['year'];
+            $info['start'] = $row['start_date'];
+            $info['end'] = $row['end_date'];
+            $info['run_date'] = $row['run_date'];
+            $info['days_of_tasks'] = $row['days_of_tasks'];
+        }
     }
     return $info;
 }
@@ -177,6 +195,7 @@ function getDailyTaskInfo( $user_id, $type ) {
         $target = new DateTime($run_date);
         $interval = $origin->diff($target);
         $days = $interval->days;
+        if ($origin > $target) $days = 0; // if we are past the run date set days to 0
         $total = checkTasks($user_id, $start, $end, $type);
 
         // for yearly date return hebrew date
@@ -196,11 +215,11 @@ function getDailyTaskInfo( $user_id, $type ) {
         $order = [];
         while ($start <= $end) {
             $heDate = explode('/', jdtojewish($start));
-            $heMonth = $months[$heDate[0]];
-            if ($meuberet && $heMonth == 7) $heMonth = 'Adar 2';
-            if (!in_array($heMonth, $order)) $order[] = $heMonth;
+            $month = $months[$heDate[0]];
+            if ($meuberet && $month == 7) $month = 'Adar II';
+            if (!in_array($month, $order)) $order[] = $month;
 
-            $info[$heMonth][] = [
+            $info[$month][] = [
                 'completed' => checkTasks($user_id, $start, $start, $type) > 0 ? true : false,
                 'past'      => $start <= unixtojd() ? true : false
             ];

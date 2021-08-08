@@ -79,13 +79,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="https://docs.google.com/document/d/1cANJHApSTrtNkYG3i2BAt896Y-ccqs9thjrpgawVE74/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/th.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Lulov Manual</span>
+                    <span class="link-text">Mivtza Lulov</span>
                 </div>
             </a>
             <a href="https://docs.google.com/document/d/1Cl2nPANWmSSXYQpz4yhOgL643Bm_BHe5RvXJgoEq7YM/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/th.png" height="32" alt="tickets"/>
-                    <span class="link-text">Mivtza Chanukah Manual</span>
+                    <span class="link-text">Mivtza Chanukah</span>
                 </div>
             </a>
         </div>
@@ -199,7 +199,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="https://docs.google.com/document/d/1duiGG4O5cSJNEhTaMz89Mlcef-IcvU-_PLsZ7n38s5Y/edit?usp=sharing">
                 <div class="button">
                     <img src="/images/th.png" height="32" alt="tickets"/>
-                    <span class="link-text">Teacher Resources Manual</span>
+                    <span class="link-text">Teacher Resources</span>
+                </div>
+            </a>
+            <a href="https://docs.google.com/document/d/1rzS4uiMNYIDcXg61JKbKnqEnkG_hkgPBobPbMuobUpw/edit?usp=sharing">
+                <div class="button">
+                    <img src="/images/th.png" height="32" alt="tickets"/>
+                    <span class="link-text">Communications</span>
                 </div>
             </a>
         </div>

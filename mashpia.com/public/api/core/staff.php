@@ -37,6 +37,9 @@ class StaffRouter {
         // echo $sql; die();
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
+        if ($query->errorCode() !== "00000") {
+            json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
+        }
 
         $staff = [];
         while( $admin = $query->fetch() ){

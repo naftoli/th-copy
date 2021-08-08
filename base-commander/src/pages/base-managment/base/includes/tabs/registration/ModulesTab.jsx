@@ -46,7 +46,7 @@ export class ModulesTab extends React.Component {
     //   rewards_fee,  chidon_fee,
     // } = base;
     // check if we have one item checked
-    const total = getTotal( base );
+    const total = getTotal( base, false );
     const valid = this.isValid( base );
     // get the modules we can register
     const modules = availableModules( base.registration, true );
@@ -192,7 +192,7 @@ export class ModulesTab extends React.Component {
               <ul className='checkboxes'>
                 <li>Prize inventory, price and order managment.</li>
                 <li>Achievment cards to give Miles to your soldiers.</li>
-                <li>Online store with shopping cart for soldiers to spend their miles from the Tzivos Hashem Parent Protal</li>
+                <li>Online store with shopping cart for soldiers to spend their miles from the Tzivos Hashem Parent Portal</li>
               </ul>
             </div>
 

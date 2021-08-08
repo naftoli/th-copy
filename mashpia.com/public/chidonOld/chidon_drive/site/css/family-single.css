@@ -610,9 +610,9 @@ input {
 
 .marquee {
 	padding-top: 100%;
-	-moz-animation: marquee 15s linear infinite;
-	-webkit-animation: marquee 15s linear infinite;
-	animation: marquee 15s linear infinite;
+	-moz-animation: marquee 25s linear infinite;
+	-webkit-animation: marquee 25s linear infinite;
+	animation: marquee 25s linear infinite;
 }
 @-moz-keyframes marquee {
 	0%   { transform: translate(0, 0); }

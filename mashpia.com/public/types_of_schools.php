@@ -2,7 +2,7 @@
 $admin_auth = array('school'); 
 require('header.php');
 
-$types = array('chayolei', 'tuition', 'tanya', 'tehillim', 'chidon');
+$types = array('chayolei', 'tanya', 'tehillim', 'chidon');
 
 if (isset($_POST['submit'])) {
 	
@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
 	//echo "<pre>"; print_r( $sqls ); echo "</pre>"; exit;
 	
 	//first delete all previously saved info
-	$sql = "update schools set chayolei = 0, tuition = 0, tanya = 0, tehillim = 0, chidon = 0";
+	$sql = "update schools set chayolei = 0, tanya = 0, tehillim = 0, chidon = 0";
 	mysql_query( $sql );
 	
 	//then update based on form submission
@@ -87,13 +87,12 @@ while ($row = mysql_fetch_assoc($result)) {
 					<th>Base Number</th>
 	    			<th>School</th>
 	    			<th>Chayolei</th>
-					<th>Tuition</th>
 	    			<th>Tanya/Mishna</th>
 					<th>Tehillim</th>
 					<th>Chidon</th>
 	    		</tr>
 	    		<?
-				$types = array('chayolei', 'tuition', 'tanya', 'tehillim', 'chidon');
+				$types = array('chayolei', 'tanya', 'tehillim', 'chidon');
 	    		foreach ($schools as $school) {
 	    			echo "<tr><td>" . $school['school_id'] . "</td><td>" . $school['school_number'] . "</td><td>" .	$school['school_name'] . "</td>";
 					foreach ($types as $type) {

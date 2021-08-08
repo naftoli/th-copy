@@ -4,12 +4,14 @@ import { Row, Col } from 'reactstrap';
 import { Radio } from 'components/inputs';
 import { isAdmin, isBC } from 'functions/login';
 import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect, MissionTypeUngenderedSelect } from 'components/selects';
+// data
+import { availableMissionLanguages } from 'data/languages.json'
 
 const OptionsRow = props => {
   const { 
-    login,    school_id,  class_id,
+    login,    school_id,  class_ids,
     user_id,  parsha_id,  mission_type, lang,
-    onSelectChange,       onLangChange
+    onSelectChange, onMultiSelectChange,       onLangChange
   } = props;
 
   return (
@@ -26,13 +28,13 @@ const OptionsRow = props => {
       <Col sm={6}>
         <label>Platoon</label>
         <PlatoonSelect
-          isClearable
-          value={ class_id }
+          isClearable isMulti
+          values={ class_ids }
           schoolId={ school_id }
           openMenuOnFocus={ false }
           placeholder='All Platoons'
           isDisabled={ !isBC( login.code ) }
-          onChange={ onSelectChange('class_id') } />
+          onChange={ onMultiSelectChange('class_ids')} />
       </Col>
 
       <Col sm={6}>
@@ -40,8 +42,9 @@ const OptionsRow = props => {
         <SoldierSelect
           isClearable
           registeredOnly
+          onlyReloadSoldiersIfNotLoaded
           value={ user_id }
-          classId={ class_id }
+          classIds={ class_ids }
           schoolId={ school_id }
           openMenuOnFocus={ false } 
           placeholder='All Soldiers' 
@@ -67,22 +70,18 @@ const OptionsRow = props => {
           onChange={ onSelectChange('mission_type') } />
       </Col>
 
-      <Col sm={{ size: 6, offset: 3 }} className='lang-options'>
+      <Col className='lang-options'>
         <strong>Language</strong>
-        <Radio
-            value='1'
-            name='lang'
-            checked={ lang === '1' }
-            onChange={ onLangChange }>
-          English
-        </Radio>
-        <Radio
-            value='2'
-            name='lang'
-            checked={ lang === '2' }
-            onChange={ onLangChange }>
-          Yiddish
-        </Radio>
+        {availableMissionLanguages.map(language =>
+          <Radio
+              key={language.value}
+              value={language.value}
+              name='lang'
+              checked={ Number(lang) === language.value }
+              onChange={ onLangChange }>
+            {language.label}
+          </Radio>
+        )}
       </Col>
     </Row>
   )

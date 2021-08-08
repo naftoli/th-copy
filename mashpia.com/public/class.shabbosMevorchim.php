@@ -51,6 +51,7 @@ class ShabbosMevorchim {
 	private $accomplishedOnly;
     private $debug;
     private $backup;
+    private $backup_ran_by_date = [];
         
     public function __construct($year = 0) {
         if ( $year == 0 ) {
@@ -115,12 +116,17 @@ class ShabbosMevorchim {
     }
 
     public function getBackupRan( $date ){
-//        $backupDateIndex = array_search( $date, array_values( $this->dates ) );
+        //        $backupDateIndex = array_search( $date, array_values( $this->dates ) );
         // if there is an index, check if it is set. Otherwise just return false
 //        if ( $backupDateIndex === false ) return false;
         // if we have a date at this index, make sure it is before today
 //        if ( isset( $this->backup->dates[$backupDateIndex] ) )
 //            return $this->backup->dates[$backupDateIndex] <= unixtojd();
+
+        // cache results so they aren't reran for every user
+        if (array_key_exists($date, $this->backup_ran_by_date)) {
+            return $this->backup_ran_by_date[$date];
+        }
         // check if backup actually ran
         $stmt = $this->db->prepare("
             SELECT * FROM tehillim_backups WHERE sm_date = :date
@@ -129,7 +135,9 @@ class ShabbosMevorchim {
            ':date'  => $date
         ]);
         $rows = $stmt->fetch();
-        return !empty($rows);
+        $result = !empty($rows);
+        $this->backup_ran_by_date[$date] = $result;
+        return $result;
         // by default we did not run the backup
 //        return false;
     }
@@ -1078,7 +1086,7 @@ class ShabbosMevorchim {
 			// for each task     
 	        foreach ( $this->tasks as $key => $task ) {
 	        	// skip task #2
-	        	if ($key == 'Minutes') continue;
+	        	// if ($key == 'Minutes') continue;
 				
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
@@ -1558,7 +1566,7 @@ class ShabbosMevorchim {
 				echo "<div align='center'>";
 				echo $this->getHebrewMonth(array_search($date, $this->dates)) . "<br />";
 				echo "<table>";
-				echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th></tr>";
+				echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th><th>Minutes Goal</th><th>Minutes Accomplishment</th></tr>";
 				foreach ($users as $user => $info) {
 					echo "<tr><td>" . $this->users[$user] . "</td>";
 					foreach ($info as $task => $total) {

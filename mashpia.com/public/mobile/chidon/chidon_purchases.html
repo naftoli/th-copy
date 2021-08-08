@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Site</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css" />
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <link href="css/responsive.css" type="text/css" rel="stylesheet" />
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <link href="/mobile/reg/plugins/iCheck/all.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="css/keyboard.css">
+    <link rel="stylesheet" href="cropper/dist/cropper.css">
+    <link rel="stylesheet" href="cropper/avatar/css/main.css">
+    <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: #1b2b51;
+        }
+
+        .btn-primary {
+            background-color: #2b529e;
+            border-color: #2b529e;
+        }
+
+        .control-label {
+            padding-top: 3%;
+        }
+
+        label {
+            vertical-align: middle;
+        }
+
+        .xtra {
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .form-control {
+            border-radius: 5px !important;
+            border: 1px solid #b1b1b1 !important;
+            margin: 3px;
+        }
+
+        hr {
+            margin-bottom: 0;
+        }
+
+        .btn-primary.active,
+        .btn-primary.focus,
+        .btn-primary:active,
+        .btn-primary:focus,
+        .btn-primary:hover,
+        .open>.dropdown-toggle.btn-primary {
+            background-color: #2b529e !important;
+        }
+
+        .check-accept span {
+            font-size: 14px;
+            font-family: font3;
+            line-height: 1.2;
+        }
+
+        #instructions {
+            font-size: 18px;
+            line-height: 1.5;
+            background-color: lightgrey;
+            padding: 10px;
+            border: 1px solid darkgrey;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container login-page" id="crop-avatar">
+    <div class="login-header">
+        <span class="span12">Prize Confirmation</span>
+    </div>
+    <div class="span12 body">
+        <div class="login-box">
+            <div class="login-box-body">
+                <div id="regInfo">
+                    <div class="row">
+                        <div class="col-sm-12" id="instructions">
+                            Your family's Chidon prize selections and sizes are listed below.
+                            Please review for accuracy.
+                            (Please note that sweater sizes cannot be changed at this time.)
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="purchaseInfo">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="instructions">
+                            Please note: Prizes have already been finalized.
+<!--                            If your prize selection is not reflecting the order you made or there was a problem while registering,-->
+<!--                            please contact your Base Commander.-->
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="editPrizes" style="display: none;">
+                                <a href="chidon_prizes.html">
+                                    <button id="edit" class="btn btn-primary btn-block">Edit Prizes</button>
+                                </a>
+                                <br />
+                            </div>
+                            <a href="chidon_reg.html">
+                                <button id="back" class="btn btn-primary btn-block">Back</button>
+                            </a>
+                            <br />
+                            <button id="confirmation" class="btn btn-primary btn-block">Confirm & Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+<script src="js/js.cookie.js" type="text/javascript"></script>
+<script>
+    let confirmed = false
+    let allowEdit = false
+
+    $(function () {
+        $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function(result) {
+            const res = JSON.parse(result)
+            const transactions = res.transactions
+            const purchases = res.purchases
+            const children = res.children
+            const prizes = res.prizes
+
+            let html = '<br />'
+
+            let celeb_boxes = purchases.celeb_box ? purchases.celeb_box : 0
+            for (id in children) {
+                let status
+                const child = children[id]
+
+                // skip child if not registered
+                if (!child.date_paid) continue;
+                // if (!transactions[child.parent_id]) continue;
+
+                if (parseInt(child.edit_prizes) == 1) allowEdit = true
+
+                if (parseInt(child.shabbaton_maven)) status = "Mivtzah Maven - Eligible for Chidon Sweater"
+                else if (parseInt(child.shabbaton_pro)) status = "Maven / Pro - Eligible for Chidon Sweater & Gifts"
+                else if (parseInt(child.shabbaton_expert)) status = "Expert - Eligible for Full Chidon Experience"
+                else if (parseInt(child.shabbaton_trophy)) status = "Trophy - Eligible for Full Chidon Experience + Trophy Finalist"
+                html += "<div style='font-size: 18px; line-height: 1.5;'>"
+                html += `<b>${child.first} : ${status}</b><br />`
+                html += `Sweater size: ${child.size}<br />`
+
+                if (parseInt(child.shabbaton_pro) || parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
+                    const gender = child.gender
+                    if (gender == 'M') {
+                        const size = parseInt(children[id].yarmulka)
+                        html += `Yarmulka: <select class='yarmulka' name='yarmulka' id="${id}"><option value="0">Select Size</option>`
+                        for (let i = 3; i <= 6; i++) {
+                            html += `<option value=${i}`
+                            if (i == size) html += ' selected'
+                            html += `>${i}</option>`
+                        }
+                        html += '</select><br />'
+                    } else {
+                        html += 'Chidon Bracelet Gift<br />'
+                    }
+                    if (prizes[id]) {
+                        for (p of prizes[id]) {
+                            html += `Prize: ${p.prize_name} ($${p.price})`
+                            if (p.color) html += ` - ${p.color}`
+                            html += '<br />'
+                            if (p.prize_id == 36 || (p.prize_id >= 44 && p.prize_id <= 60)) {
+                                html += `Hebrew Name:
+                                    <input type="text" class="he_name" data-id="${id}:${p.prize_id}" value="${p.he_name ? p.he_name : ''}" />
+                                     <input type="button" class="save" value="Save" /><br />`
+                            }
+                        }
+                    }
+                    if (celeb_boxes) {
+                        if (parseInt(child.shabbaton_expert) || parseInt(child.shabbaton_trophy)) {
+                            html += "Celebration Box<br />"
+                            celeb_boxes--
+                        }
+                    }
+                    html += "<br /></div>"
+                }
+            }
+
+            $("#purchaseInfo").append(html)
+
+            // if already confirmed disable all selects / inputs
+            $.post('ajax/checkConfirmation.php', { field: 'confirmed_prizes', admin: Cookies.get('admin') }, function(result) {
+                if (parseInt(result) == 1) {
+                    confirmed = true
+                    $("input").attr('disabled', true)
+                    $("button.save").attr('disabled', true)
+                    $("#confirmation").text('(Already Confirmed) Continue')
+                    // location.href = 'confirmation.html'
+                }
+            })
+            
+            if (allowEdit) {
+                $("#editPrizes").show()
+            }
+        })
+
+        $("#update").click( function( e ) {
+            e.preventDefault()
+            // alert("Please note: Even if you are just making edits WHEN YOU GET TO THE PAYMENT SECTION, YOU MUST PUT IN YOUR CREDIT CARD. " +
+            //     "Your card will only be charged if you add a  purchase that you have not yet paid for. " +
+            //     "If you are just making edits your card will not be charged.")
+            // Cookies.set('chidon_admin', Cookies.get('admin'))
+            // location.href = 'http://chidondrive.com/site/enrollNew.html'
+            location.href = 'chidon_prizes.html'
+        })
+
+        $(document).on('change', '.yarmulka', function() {
+            const id = $(this).attr('id')
+            const size = $(this).val()
+            if (size == 0) {
+                alert('You must select a yarmulka size!')
+                return false
+            } else {
+                $.post('ajax/updateYarmulka.php', {user: id, size: size}, function (result) {
+                    const res = JSON.parse(result)
+                    if (res.success) alert('Updated.')
+                    else alert('Error updating.')
+                })
+            }
+        })
+
+        $(document).on('blur', '.he_name', function() {
+            const info = $(this).data('id').split(':')
+            const user_id = info[0]
+            const prize_id = info[1]
+            const name = $(this).val()
+            $.post('ajax/updateHeName.php', { user: user_id, prize: prize_id, he_name: name }, function(result) {
+                const res = JSON.parse(result)
+                if (res.success) alert('Updated.')
+                else alert('Error updating.')
+            })
+        })
+
+        $("#confirmation").click( function() {
+            if (!confirmed) {
+                $.post('ajax/confirmation.php', {
+                    field: 'confirmed_prizes',
+                    admin: Cookies.get('admin')
+                }, function (result) {
+                    const res = JSON.parse(result)
+                    if (res.success) {
+                        alert('Confirmed.')
+                        location.href = 'chidon_sweater_summary.html'
+                    } else {
+                        alert(res.error)
+                        console.log(res.sql)
+                    }
+                })
+            } else {
+                location.href = 'chidon_sweater_summary.html'
+            }
+        })
+    });
+</script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-71974937-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+
+</html>

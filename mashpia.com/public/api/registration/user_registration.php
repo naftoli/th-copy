@@ -107,7 +107,7 @@ class UserRegistrationRouter {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
             }
-            $totals[$info['registration_type']] += intval($info['paid']);
+            $totals[$info['registration_type']] += intval($info['paid']) - intval($info['discount']);
         }
         
         // * get all the user models
@@ -195,6 +195,7 @@ class UserRegistrationRouter {
                         GlobalSettings::getRegistrationYear();
                     // if they do not pay, the value is null
                     $amount = $registration['paid'];
+                    $discount = $registration['discount'];
                     if ( $user->school->reg_type == 1 )
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
@@ -202,7 +203,7 @@ class UserRegistrationRouter {
                         $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
                         $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
                         $chayolei_errors = $user->registerChayolei(
-                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids
+                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids, $discount
                         );
                         if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
@@ -220,10 +221,13 @@ class UserRegistrationRouter {
                         }
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
-                        $year = GlobalSettings::getChidonYear();
+                        $year = GlobalSettings::getChidonRegYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
-                        if ( !$user->registerChidon( $year, $registration['size'], $registration['book'], $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']) ) )
+                        if ( !$user->registerChidon(
+                            $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), $registration['name_pref'],
+                            $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']
+                            ), $registration['comments'] ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         else {
                             // add book purchased info to db
@@ -231,15 +235,20 @@ class UserRegistrationRouter {
                                 $location = $registration['purchasedWhere'];
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
-                                $user->addBookPurchase( --$year, $user->user_id, $location, '', $store_name, $store_city );
+                                $version = $registration['bookVersion'];
+                                $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city, $version );
                             }
+
+                            // add chidon prizes
+                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
+
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';
                             $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                             $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
                             if ($user->school_id == '269') $headers[] = 'CC: chidonanash@gmail.com';
 
-                            $subject = "Chidon Registration Confirmation";
+                            $subject = "Chidon Limmud Registration Confirmation";
                             $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
                                         <br /><br/>
                                         We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
@@ -249,10 +258,14 @@ class UserRegistrationRouter {
                                         <br /><br />
                                         Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
                                         <br /><br />
-                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.";
+                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.
+                                        <br /><br />
+                                        If you have any questions regarding the Limmud, please contact your school's Base Commander.
+                                        <br /><br /> 
+                                        If you have any questions regarding your credit card charges please contact <a href='mailto:accounting@tzivoshashem.org'>Accounting@TzivosHashem.org</a>";
                             if ( $user->school_id == 61 ) {
                                 $message = "
-                                Mazal Tov! Your child(ren) are enrolled in the Chidon Hamitzvos International Competition for $year.
+                                Mazal Tov! Your child(ren) are enrolled in the Chidon Limmud program for $year.
                                 <br /><br />
                                 We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
                                 <br /><br />
@@ -281,15 +294,19 @@ class UserRegistrationRouter {
                         }
                     // Yahadus purchase
                     } else if ( $registration['registration_type'] == 'yahadus' ) {
-                        $year = GlobalSettings::getChidonYear();
+                        $year = GlobalSettings::getChidonRegYear();
                         // add the registration charge
                         $user->registrationCharge(
                             $registration['registration_type'],
-                            floatval( $amount ),
+                            floatval($amount),
                             $trans_id, $year
                         );
                         // add book purchase to db
-                        $user->addBookPurchase( $year, $user->user_id, 'parent_account', $trans_id );
+                        $user->addBookPurchase($year, $user->user_id, 'parent_account', $trans_id);
+                    } else if ( $registration['registration_type'] == 'khk' ) {
+                        // update khk_reg in db
+                        $year = GlobalSettings::getChidonRegYear();
+                        $user->addKhkReg($year, $user->user_id);
                     // other registrations
                     } else {
                         // add the registration charge
@@ -337,11 +354,11 @@ class UserRegistrationRouter {
             return $user->to_array([
                 'only'  => [
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
-                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school'
+                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id'
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount' ],
                 'include' => [
-                    'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id' ] ],
+                    'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id', 'school_country' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]
             ]);

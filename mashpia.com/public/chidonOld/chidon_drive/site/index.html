@@ -3,7 +3,7 @@
 
 	<head>
 		<meta name="viewport" content="width=device-width">
-	  <meta charset="UTF-8">
+	 	<meta charset="UTF-8">
 		<meta name="google" content="notranslate">
 		<title>Chidon Drive</title>
 	    <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
@@ -439,7 +439,7 @@
 					$.post('../ajax/getTotalDonation.php', function( result ) {
 						let res = JSON.parse( result );
 						if ( res.success ) {
-							let amount = res.total;
+							let amount = res.total + 510000;
 							let budget = 1332000;
 							$('#section0 .leader').each(function(){
 								$(this).data('amount', Math.round(amount));

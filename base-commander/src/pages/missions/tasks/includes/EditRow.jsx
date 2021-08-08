@@ -3,6 +3,8 @@ import React, { Fragment } from 'react';
 import { Row, Col, Input } from 'reactstrap';
 import { Label, Checkbox, Radio } from 'components/inputs';
 import { LabelSelect } from 'components/selects';
+// data
+import { availableMissionLanguages } from 'data/languages.json'
 
 const EditRow = props => {
   const {
@@ -12,8 +14,6 @@ const EditRow = props => {
     onSelectChange, onCheckboxChange,
     lang_id, min_level, max_level
   } = props;
-
-  const languages = ['English', 'Yiddish']
 
   let grades = [];
   for (let g = min_level; g <= max_level; g++) {
@@ -76,8 +76,8 @@ const EditRow = props => {
 
         <Col sm={ 6 }>
           <Label>Language</Label>
-          { languages.map((lang, idx) => {
-              return <Radio checked={ lang_id === (idx + 1) } readOnly={ true } key={ idx }>{ lang }</Radio>
+          { availableMissionLanguages.map(language => {
+              return <Radio checked={ Number(lang_id) === language.value } readOnly={ true } key={ language.value }>{ language.label }</Radio>
           })}
         </Col>
 

@@ -1,30 +1,42 @@
 <?php
 class GlobalSettings {
-    public static function getCurrentYear() {
-        $sql = "select `val` from global_settings where `key` = 'current_year'";
+
+    private static function getHelper($key) {
+        $sql = "select `val` from global_settings where `key` = '$key'";
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         return $row['val'];
     }
+
+    public static function getCurrentYear() {
+//        $sql = "select `val` from global_settings where `key` = 'current_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        return $row['val'];
+        return self::getHelper('current_year');
+    }
     
     public static function getCurYearDates() {
-        $dates = array();
-        $sql = "select `val` from global_settings where `key` = 'cur_year_start'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $dates['start'] = $row['val'];
-        $sql = "select `val` from global_settings where `key` = 'cur_year_end'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $dates['end'] = $row['val'];
+//        $dates = array();
+//        $sql = "select `val` from global_settings where `key` = 'cur_year_start'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        $dates['start'] = $row['val'];
+//        $sql = "select `val` from global_settings where `key` = 'cur_year_end'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        $dates['end'] = $row['val'];
+        $dates['start'] = self::getHelper('cur_year_start');
+        $dates['end'] = self::getHelper('cur_year_end');
         return $dates;
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        $sql = "select `val` from global_settings where `key` = 'registration_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $year =  $row['val'];
+//        $sql = "select `val` from global_settings where `key` = 'registration_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        $year =  $row['val'];
+        $year = self::getHelper('registration_year');
 
         if ( self::isAustralian( $school_id ) ) {
             // find out current month
@@ -35,24 +47,35 @@ class GlobalSettings {
     }
     
     public static function getChidonYear() {
-        $sql = "select `val` from global_settings where `key` = 'chidon_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['val'];
+//        $sql = "select `val` from global_settings where `key` = 'chidon_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        return $row['val'];
+        return self::getHelper('chidon_year');
+    }
+
+    public static function getChidonRegYear() {
+//        $sql = "select `val` from global_settings where `key` = 'chidon_reg_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        return $row['val'];
+        return self::getHelper('chidon_reg_year');
     }
     
     public static function getBirthdayYear() {
-        $sql = "select `val` from global_settings where `key` = 'birthday_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['val'];
+//        $sql = "select `val` from global_settings where `key` = 'birthday_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        return $row['val'];
+        return self::getHelper('birthday_year');
     }
 
     public static function getCharidyYear() {
-        $sql = "select `val` from global_settings where `key` = 'charidy_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['val'];
+//        $sql = "select `val` from global_settings where `key` = 'charidy_year'";
+//        $result = mysql_query($sql);
+//        $row = mysql_fetch_assoc($result);
+//        return $row['val'];
+        return self::getHelper('charidy_year');
     }
 
     public static function getPointsDates() {
@@ -86,6 +109,13 @@ class GlobalSettings {
         // }
         // everyone else / default return
         return 60;
+    }
+
+    /**
+     * have one source of truth for the date of expiry for early bird
+     */
+    public static function earlyBird() {
+        return new DateTime('2020-09-24 11:59:59');
     }
 
     /**
@@ -144,9 +174,9 @@ class GlobalSettings {
             if ( $school_id == 269 ) return 45;
             else return 14;
         }
-        $today = new DateTime();
-        $late = new DateTime('2020-10-21 04:00:00');
-        if ($today >= $late) return 35;
+//        $today = new DateTime();
+//        $late = new DateTime('2020-10-21 04:00:00');
+//        if ($today >= $late) return 35;
         else return 10;
     }
 

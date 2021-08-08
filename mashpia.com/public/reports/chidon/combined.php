@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' ); 
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getChidonRegYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
@@ -88,25 +88,25 @@ $booklet_grand_totals = [
         <p>
             To have report based on dates, choose starting and ending dates and then click "Refresh Report"
         </p>  
-        <p>
-            <select name="date">
-                <option value="0">Choose Batch Number</option>
-                <option value="1"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                >1st Batch (until Sept 16)</option>
-                <option value="2"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                >2nd Batch (from Sep 16 until Sep 22)</option>
-                <option value="3"
-                    <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                >3rd Batch (from Sep 22 to Oct 15)</option>
-                <!--                <option value="4"-->
-                <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
-            </select>
-        </p>
+<!--        <p>-->
+<!--            <select name="date">-->
+<!--                <option value="0">Choose Batch Number</option>-->
+<!--                <option value="1"-->
+<!--                    --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+<!--                >1st Batch (until Sept 16)</option>-->
+<!--                <option value="2"-->
+<!--                    --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+<!--                >2nd Batch (from Sep 16 until Sep 22)</option>-->
+<!--                <option value="3"-->
+<!--                    --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+<!--                >3rd Batch (from Sep 22 to Oct 15)</option>-->
+<!--                                <option value="4"-->
+<!--                                <?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>-->
+<!--                                >4th Batch (from Sept 26 to Oct 25)</option>-->
+<!--            </select>-->
+<!--        </p>-->
         <p>  
-            OR 
+<!--            OR -->
             From Date: <input type="date" name="fromDate" /> 
             To Date: <input type="date" name="toDate" />
         </p>

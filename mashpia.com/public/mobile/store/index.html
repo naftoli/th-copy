@@ -431,6 +431,7 @@
 
 		.description {
 			/* overflow: hidden; */
+			color: #1b2b51;
 			word-wrap: break-word;
 			text-overflow: ellipsis;
 		}
@@ -799,7 +800,10 @@
 			var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
 			var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
 		}
-		$.post('ajax/getBalance.php', { user: user }, function (success) {
+		$.post('ajax/getBalance.php', {
+			user: user,
+			points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
+		}, function (success) {
 			var info = $.parseJSON(success);
 			var html = '<div id="balance-box" ' + float_element + '>';
 			html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";

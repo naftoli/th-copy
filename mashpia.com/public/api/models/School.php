@@ -125,13 +125,15 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         $early_bird = new DateTime() <  $this->earlyBird();
 
         // check if hq set the chayolei fee
-        $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");
-        $result = $stmt->execute([':id' => $this->school_id]);
-        if ( $result ) {
-            $row = $stmt->fetch();
-            $child_fee = $row['child_fee'];
-            if ( $child_fee > 0 ) return $child_fee;
-        }
+//        $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");
+//        $result = $stmt->execute([':id' => $this->school_id]);
+//        if ( $result ) {
+//            $row = $stmt->fetch();
+//            $child_fee = $row['child_fee'];
+//            if ( $child_fee > 0 ) return $child_fee;
+//        }
+
+        if ( $this->child_fee > 0 ) return $this->child_fee;
         
         // pass in whether its a ckids school or not; added by Naftoli 5/8/2020
         $fee = GlobalSettings::calculateChildFee(
@@ -176,7 +178,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
     // register the school
-    public function register( $admin_id, $cart, $total, $cc, $year = false ) {
+    public function register( $admin_id, $cart, $total, $cc, $year = false, $discount = 0 ) {
         // set the default year
         if ( !$year ) {
             $year = GlobalSettings::getRegistrationYear( $this->school_id );
@@ -203,9 +205,9 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 }
             }
 
-            if ( $total != $cart_total + $this->balance ) {
+            if ( $total != $cart_total + $this->balance - $discount ) {
                 throw new Exception(
-                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance ).")"
+                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance - $discount ).")"
                 );
             }
         }
@@ -253,14 +255,69 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         // check that the balance is paid
         $this->balance = 0;
 
-        return $registration->save() && $this->save();
+        $saved = $registration->save() && $this->save();
+
+        // add details to school_registration_details table; set discount to used (when applicable) - Naftoli 06/25/21
+        if ($saved) {
+            $stmt = $MASHPIA_DB->prepare("SELECT school_registration_id FROM school_registrations WHERE year = :year AND school_id = :school");
+            $stmt->execute([
+                ':year' => $year,
+                ':school'   => $this->school_id
+            ]);
+            $row = $stmt->fetch();
+            if ($row) {
+                $school_reg_id = $row['school_registration_id'];
+                $stmt = $MASHPIA_DB->prepare("
+                    INSERT INTO school_registration_details 
+                    SET school_registration_id = :id, 
+                    type = :type, 
+                    amount = :amount, 
+                    school_id = :school, 
+                    year = :year");
+                foreach ($cart as $item) {
+                    $stmt->execute([
+                        ':id' => $school_reg_id,
+                        ':type' => $item['name'],
+                        ':amount' => $item['price'],
+                        ':school' => $this->school_id,
+                        ':year' => $year
+                    ]);
+                }
+                if ($this->balance) {
+                    $stmt->execute([
+                        ':id'       => $school_reg_id,
+                        ':type'     => 'past_due',
+                        ':amount'   => $this->balance,
+                        ':school'   => $this->school_id,
+                        ':year'     => $year
+                    ]);
+                }
+                if ($discount) {
+                    $stmt->execute([
+                        ':id' => $school_reg_id,
+                        ':type' => 'discount',
+                        ':amount' => -$discount,
+                        ':school' => $this->school_id,
+                        ':year' => $year
+                    ]);
+                    $stmt = $MASHPIA_DB->prepare("UPDATE discounts SET used = now() WHERE year = :year AND school_id = :school AND amount = :amount");
+                    $stmt->execute([
+                        ':year'     => $year,
+                        ':school'   => $this->school_id,
+                        ':amount'   => $discount
+                    ]);
+                }
+            }
+        }
+
+        return $saved;
     }
 
     // get the early bird, or the default
     public function earlyBird() {
         if ( $this->early_bird )
             return $this->early_bird;
-        return new DateTime( '2020-09-24 11:59:59' );
+        return GlobalSettings::earlyBird();
     }
 
     // get the current registration prices, subject to change at any time
@@ -441,17 +498,31 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             INSERT INTO school_subjects VALUES( :school, :subject )
         ");
 
+        $subjects = [];
         if ($this->inst_id === 10) {
             // ckids
-            $subjects = [];
+//            $subjects = [];
             $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10");
-            $rows = $stmtSubjects->fetchAll();
-            foreach ( $rows as $row ) {
-                $subjects[] = $row['subject_id'];
-            }
+//            $rows = $stmtSubjects->fetchAll();
+//            foreach ( $rows as $row ) {
+//                $subjects[] = $row['subject_id'];
+//            }
         } else {
             // chayolei
-            $subjects = [1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 92, 93, 94, 100];
+//            $subjects = [1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 92, 93, 94, 100];
+            // all subjects
+//            $subjects = [];
+            $stmtSubjects = $MASHPIA_DB->query("
+                select subject_id from subjects s 
+                join school_type_subjects sts using (subject_id) 
+                where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
+                and sts.school_type_id in (2,3,4,5,12,13) 
+                group by s.subject_id
+            ");
+        }
+        $rows = $stmtSubjects->fetchAll();
+        foreach ($rows as $row) {
+            $subjects[] = $row['subject_id'];
         }
         foreach ( $subjects as $subject ) {
             $stmt->execute([

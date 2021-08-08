@@ -122,18 +122,17 @@ var childApp = function(){
              return showError(ErrorTextDOB );
         }
 
-
-        $.post( "api/tasks/addChild.php", postData, function( response ){
+        $.post("api/tasks/addChild.php", postData, function (response) {
             // show any API errors...
-            if( !response.success )
-                return showError( response.message );
+            if (!response.success)
+                return showError(response.message);
             // show the user if the fee is paid for
-            if ( response.data.tuition ){
-                $( "#tuition-paid" ).show();
-                $( "#fee-not-paid" ).hide();
+            if (response.data.tuition) {
+                $("#tuition-paid").show();
+                $("#fee-not-paid").hide();
             } else {
-                $( "#tuition-paid" ).hide();
-                $( "#fee-not-paid" ).show();
+                $("#tuition-paid").hide();
+                $("#fee-not-paid").show();
             }
 
             $('#successModal').modal('show');
@@ -165,20 +164,25 @@ var childApp = function(){
         const responseMsgText = "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
         const responseMsgText_he = " נא לדבר עם מטה צבאות ה בטלפון (718-907-8884) או לשלוח מייל בכתובת 'cth@tzivosHashem.org'  "
 
-        $.post("/api/core/users.php", postData, function (response) {
-            console.log( response );
-            if( response.success ){ 
-                $( "#tuition-paid" ).hide();
-                $( "#fee-not-paid" ).show();         
-                $( '#successModal' ).modal('show');
-            } else {
-                if (localStorage.getItem("locallang") == "he")
-                    response.message += responseMsgText_he;
-                else
-                    response.message += responseMsgText;
+        var confirmation = confirm("IMPORTANT NOTE: If your child already had an account previously with a different school, " +
+            "please email anash@tzivoshashem.org to transfer them to their new base. Do not create a new one or they will lose all the medals, " +
+            "miles or rank promotions that they have earned. \nAre you sure you want to continue creating a new account?")
+        if (confirmation) {
+            $.post("/api/core/users.php", postData, function (response) {
+                console.log(response);
+                if (response.success) {
+                    $("#tuition-paid").hide();
+                    $("#fee-not-paid").show();
+                    $('#successModal').modal('show');
+                } else {
+                    if (localStorage.getItem("locallang") == "he")
+                        response.message += responseMsgText_he;
+                    else
+                        response.message += responseMsgText;
 
-                showError( response.message || response );
-            }
-        });
+                    showError(response.message || response);
+                }
+            });
+        }
     }
 }();

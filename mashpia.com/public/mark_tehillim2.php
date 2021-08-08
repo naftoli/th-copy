@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     else
         $sql .= "AND classes.school_id = '$school' ";
     
-    $sql .=	"ORDER BY class_grade, last, first";
+    $sql .=	"ORDER BY class_grade, class_sub, last, first";
 
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -338,10 +338,15 @@ if (isset($_POST['submit'])) {
                 ?>
             </select>
             <input type="submit" name="submit" value="change" id="changeGrade" />
-            <!--<input type='submit' name='submit' value='save' />-->
             <br /><br />
             <table>
                 <caption><?=$schools[$school]?></caption>
+                <tr>
+                    <td colspan="4" align="center">
+                        <input type="submit" name="submit" value="Save" />
+                        <br /><br />
+                    </td>
+                </tr>
                 <tr>
                     <th>Grade</th>
                     <th>Student</th>

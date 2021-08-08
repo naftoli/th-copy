@@ -6,6 +6,8 @@ class Slides extends MedalReport {
     protected $showPrevMedalsLight;
     protected $nameLang;
     protected $showPrevForCurrent;
+    protected $medalDetails;
+    protected $userInfo;
 
     public function __construct( $showPrevMedals = false, $showLight = false, $previousStart = false ) {
         parent::__construct( $previousStart );

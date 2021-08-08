@@ -62,9 +62,41 @@ class MissionsDone {
         $this->classes = $classes;
     }
     
-    public function setMissionsDone( $missions = array(), $children = array(), $all = false ) {
+    public function setMissionsDone( $missions = array(), $children = array(), $all = false, $missions_report_fix_duplicates = false) {
     	if ( empty( $children ) ) { 
-	        $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count(*) as total  
+            if ($missions_report_fix_duplicates) {
+                $sql = "SELECT *, count(*) as total from (";
+                    $sql .= "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count(*) as total, m.start_date 
+                            from date_tasks_mission_marks mm 
+                            join users u using (user_id) 
+                            join schools s using (school_id) 
+                            join subjects su using (subject_id) 
+                            join classes c on (c.class_id = u.class_id) 
+                            join date_tasks_missions m using (date_tasks_mission_id)
+                            where s.school_id = " . $this->school;
+                    if ( !empty( $missions ) ) {
+                        $sql .= " and m.subject_id in (";
+                        $sql .= implode(',', $missions);
+                        $sql .= ") ";
+                    }
+                    if ( !empty( $this->dates ) ) {
+                        $sql .= " and mark_date >= " . $this->dates['start'];
+                        $sql .= " and mark_date <= " . $this->dates['end'];
+                    }
+                    if ( !empty( $this->classes ) ) {
+                        $sql .= " and c.class_id in (" . implode( ',', $this->classes ) . ")";
+                    }
+                    $sql .= " and u.user_registered > 0 
+                            group by m.start_date, u.user_id, su.subject_id ";
+                $sql .= ") as duplicate_filtered_marks
+                    group by user_id, subject_id ";
+                if ($all) {
+                    $sql .= "order by last, first";
+                } else {
+                    $sql .= "order by class_grade, class_sub, last, first";
+                }
+            } else {
+                $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count(*) as total  
 	                from date_tasks_mission_marks mm 
 	                join users u using (user_id) 
 	                join schools s using (school_id) 
@@ -90,6 +122,7 @@ class MissionsDone {
 	            } else {
 	            	$sql .= "order by c.class_grade, c.class_sub, u.last, u.first";
 	            }
+            }
 	        echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 	        $result = mysql_query( $sql );
 	        while ( $row = mysql_fetch_assoc( $result ) ) {

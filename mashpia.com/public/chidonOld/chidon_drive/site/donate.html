@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 	<head>
@@ -148,7 +148,7 @@
 							</div>
 							<h5>Pay with Paypal or Continue below</h5>
 							<br />
-							<div id="paypal-button-container"></div>
+<!--							<div id="paypal-button-container"></div>-->
 							<h5>Payment Information</h5>
 							<div class="field">
 								<label>Card Number:</label>
@@ -283,6 +283,8 @@
 		<script type="text/javascript">
 
 			$(function() {
+				alert('We are closed now until after Pesach. Have a kosher and freilechen Pesach!')
+				$("input.donate").attr('disabled', true)
 		    var header = $("header");
 		    $(window).scroll(function() {    
 		        var scroll = $(window).scrollTop();
@@ -373,23 +375,55 @@
 						color: 'gold',
 						layout: 'vertical',
 						label: 'paypal',
-						
 					},
-					createOrder: function(data, actions) {
+					onInit: function(data, actions) {
+						actions.disable()
+						document.getElementById('donation_amount').addEventListener('blur', function(event) {
+							const amount = calcAmount();
+							const name = $("#name").val().trim();
+							const display_name = $("#display_name").val().trim();
+							const email = $("#email").val().trim();
+							if (amount && name && display_name && email) actions.enable()
+						})
+						document.getElementById('name').addEventListener('blur', function(event) {
+							const amount = calcAmount();
+							const name = $("#name").val().trim();
+							const display_name = $("#display_name").val().trim();
+							const email = $("#email").val().trim();
+							if (amount && name && display_name && email) actions.enable()
+						})
+						document.getElementById('display_name').addEventListener('blur', function(event) {
+							const amount = calcAmount();
+							const name = $("#name").val().trim();
+							const display_name = $("#display_name").val().trim();
+							const email = $("#email").val().trim();
+							if (amount && name && display_name && email) actions.enable()
+						})
+						document.getElementById('email').addEventListener('blur', function(event) {
+							const amount = calcAmount();
+							const name = $("#name").val().trim();
+							const display_name = $("#display_name").val().trim();
+							const email = $("#email").val().trim();
+							if (amount && name && display_name && email) actions.enable()
+						})
+					},
+					onClick: function() {
 						const amount = calcAmount();
 						if ( !amount ) {
-							confirm("You have not entered any amount!");
-							return false;
+							alert("You have not entered any amount!");
+							return false
 						}
 
 						const name = $("#name").val().trim();
 						const display_name = $("#display_name").val().trim();
 						const email = $("#email").val().trim();
-						if ( !name || !display_name || !email ) {
+						if (! (name && display_name && email) ) {
 							alert("Name, Display Name, and Email are mandatory fields!");
-							return false;
+							return false
 						}
-
+					},
+					createOrder: function(data, actions) {
+						const amount = calcAmount();
 						return actions.order.create({
 							purchase_units: [{
 								amount: {
@@ -397,6 +431,9 @@
 								}
 							}]
 						});
+					},
+					onError: function(error) {
+						console.log(error)
 					},
 					onApprove: function(data, actions) {
 						// get all info together
@@ -442,7 +479,7 @@
 							let cost = 370;
 							let totalChildren = 3600;
 							let totalGoal = totalChildren * cost;
-							let totalAmount = Math.round(res.total);
+							let totalAmount = Math.round(res.total) + 510000;
 							let percent = Math.round((totalAmount / totalGoal) * 100);
 							let numChildrenSponsored = Math.round(totalAmount / cost);
 							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
@@ -488,7 +525,8 @@
 					});
 
 					// list of sponsors
-					$.post('../ajax/getSponsorInfo.php', function( info ) {
+					let key = 'chidondrive@5781'
+					$.post('../ajax/getSponsorInfo.php', { key: key }, function( info ) {
 						let result = JSON.parse( info );
 						console.log( result );
 						if ( result.success ) {

@@ -20,9 +20,10 @@ $info = array(
 		'dob'			=>	'Date of Birth',
 		'book'			=>	'Book',
 		'grade'			=>	'Grade',
+		'school_id'     =>  'School ID',
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
-		'host_number'		=>	'Host Number',
+		'host_number'	=>	'Host Number',
 		'host_address_num'	=>	'Accomodation Address Number',
 		'host_address'	=>	'Accomodation Address',
 		'between_streets'	=>	'Cross Streets',
@@ -33,8 +34,13 @@ $info = array(
 		'sandwich'		=>	'Sandwich',
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
-		'winner_type'	=>	'Eligibility Status',
-		'walking'			=>	'Walk Alone',
+		'test_type' 	=>	'Track',
+		'eligibility'   =>  'Eligibility Status',
+        'chidon_final_mark' =>  'Chidon Final Mark',
+        'shabbaton_trophy'   =>  'Trohpy Contestant',
+		'khk_rep'       =>  'KHK Rep',
+		'school_rep'    =>  'School Rep',
+		'walking'		=>	'Walk Alone',
 		'walking_group'	=>	'Walking Group',
 		'bunk_number'	=>	'Bunk',
 		'test1'         =>  'Test 1 Mark',
@@ -90,7 +96,12 @@ $info = array(
 		'anash_airport'	=>	'Airport (AK)', 
 		'anash_arrival'	=>	'Arrival (AK)',
 		'known_family'	=>	'Known Family', 
-		'morning_pickup'=>	'Morning Pickup'
+		'morning_pickup'=>	'Morning Pickup',
+        'trip_option'   =>  'Trip Option',
+        'raised'        =>  'Chidon Drive Raised',
+        'cd_rohr'       =>  'Rohr',
+        'cd_total'      =>  'Total Chidon Drive',
+        'cd_balance'    =>  'Registration Balance'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
@@ -156,12 +167,21 @@ if (isset($_POST['submit'])) {
 	$limit = false;
 	$chidonType = '';
 	$byAvg = array();
+	$rohr = false;
+	$cd_total = false;
+	$cd_balance = false;
 	foreach ($_POST as $k => $v) {
 		if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
 		else if ($k == 'genderLimit') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
 		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
+		else if (strpos($k, 'cd_') !== false) {
+            if ($k == 'cd_rohr') $rohr = true;
+            else if ($k == 'cd_total') $cd_total = true;
+            else if ($k == 'cd_balance') $cd_balance = true;
+		    continue; // don't add chidon drive extras to data
+        }
 		else if ( !in_array( $k, $data ) ) $data[] = mysql_real_escape_string($k);
 		if ( $k == 'accomodations' ) $data[] = 'between_streets'; // add between streets to accomodation info
 	}
@@ -211,6 +231,7 @@ if (isset($_POST['submit'])) {
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
 		$result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
 		while ($row = mysql_fetch_assoc($result)) {
+
 			$report[] = $row;
 		}
 	} else {
@@ -222,14 +243,14 @@ if (isset($_POST['submit'])) {
 		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
 		'host_address'	=>	array('host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
-		'winner_type'	=>	array('contestant', 'school_rep', 'khk', 'trophy_contestant'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
         'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
-        'grade'         =>  array('class_grade', 'class_sub')
+        'grade'         =>  array('class_grade', 'class_sub'),
+        'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy')
 //		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
@@ -289,6 +310,12 @@ if (isset($_POST['submit'])) {
 							foreach ($info as $legend => $other) {
 								if (array_key_exists($column, $info[$legend])) {
 									echo "<th>" . $info[$legend][$column] . "</th>";
+                                    if ($column == 'raised') {
+                                        // check if we need to add any chidon drive stuff
+                                        if ($rohr) echo "<th>Rohr</th>";
+                                        if ($cd_total) echo "<th>Total Chidon Drive</th>";
+                                        if ($cd_balance) echo "<th>Registration Balance</th>";
+                                    }
 								}
 							}
 						}
@@ -331,8 +358,46 @@ if (isset($_POST['submit'])) {
 											echo "<td>Private Ride</td>";
 											break;
 									}
+                                } else if ($column == 'trip_option') {
+                                    switch ( intval($row[$column]) ) {
+                                        case 1:
+                                            echo "<td>New York Trip</td>";
+                                            break;
+                                        case 2:
+                                            echo "<td>California Trip</td>";
+                                            break;
+                                        case 3:
+                                            echo "<td>Family Trip</td>";
+                                            break;
+                                        default:
+                                            echo "<td></td>";
+                                            break;
+                                    }
+                                } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
+                                    if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
+                                    else echo "<td>No</td>";
+                                } else if ($column == 'chidon_final_mark') {
+								    echo "<td>" . intval($row[$column]) * 2 . "%</td>";
                                 } else {
 									echo "<td>" . $row[$column] . "</td>";
+                                    if ($column == 'raised') {
+                                        // check if we need to add any chidon drive stuff
+                                        if ($rohr) {
+                                            if (intval($row[$column]) >= 270) echo "<td>100</td>";
+                                            else echo "<td>0</td>";
+                                        }
+                                        if ($cd_total) {
+                                            $total = intval($row[$column]);
+                                            if ($total >= 270) $total += 100;
+                                            echo "<td>" . $total . "</td>";
+                                        }
+                                        if ($cd_balance) {
+                                            $half = intval($row[$column]) / 2;
+                                            $balance = 185 - $half;
+                                            if ($balance < 0) $balance = 0;
+                                            echo "<td>" . $balance . "</td>";
+                                        }
+                                    }
 								}
 							} else {
 								// build html output
@@ -356,16 +421,14 @@ if (isset($_POST['submit'])) {
 									}
 								} else if ( $column == 'between_streets' ) {
 									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
-								} else if ($column == 'winner_type') {
-									if (intval($row[$lookup[$column][1]])) {
-										$html .= 'school rep';
-									} else if (intval($row[$lookup[$column][0]])) {
-										$html .= 'contestant';
-									} else if (intval($row[$lookup[$column][2]])) {
-										$html .= 'khk';
-									} else if (intval($row[$lookup[$column][3]])) {
-										$html .= 'trophy contestant';
-									}
+                                } else if ( $column == 'eligibility' ) {
+								    if ( intval($row[$lookup[$column][0]]) ) {
+								        $html .= 'Sweater';
+                                    } else if ( intval($row[$lookup[$column][1]]) ) {
+								        $html .= "Sweater and Gifts";
+                                    } else if ( intval($row[$lookup[$column][2]]) || intval($row[$lookup[$column][3]]) ) {
+								        $html .= "Prizes and Trips";
+                                    }
 								} else {
 								    $sep = ', ';
 								    if ($column == 'grade') $sep = '-';

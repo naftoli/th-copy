@@ -132,20 +132,26 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         $medal_name = $medal_name == 'gray' ? 'grey' : $medal_name;
         // 95 total missions
         if ( in_array( $subject_id, [ 1, 12, 15, 93 ] ) )
-            $row['photo'] = 'images/backs/wwtc/'.$medal_name.'.gif';
+            $row['photo'] = 'images/backs/wwtc/'.$medal_name.'.png';
         // 585 total missions
         else if ( in_array( $subject_id, [ 40, 94 ] ) )
-            $row['photo'] = 'images/backs/yd/'.$medal_name.'.gif';
+            $row['photo'] = 'images/backs/yd/'.$medal_name.'.png';
         // day schools subjects
-        else if ( $subject_id > 120 && subject_id <= 135 ) {
+        else if ( $subject_id > 120 && $subject_id <= 135 ) {
             if ( !in_array( $subject_id, [ 126, 127, 135 ] ) ) {
                 // daily subjects / tasks
                 $row['photo'] = 'images/backs/daySchools/daily/' . $medal_name . '.png';
+            } else if ($subject_id == 127){
+                // yd subjects / tasks
+                $row['photo'] = 'images/backs/daySchools/yd/' . $medal_name . '.png';
+            } else {
+                // weekly subjects / tasks
+                $row['photo'] = 'images/backs/daySchools/weekly/' . $medal_name . '.png';
             }
         }
         // 375 missions
         else
-            $row['photo'] = 'images/backs/weekly/'.$medal_name.'.gif';
+            $row['photo'] = 'images/backs/weekly/'.$medal_name.'.png';
         
         // update the user_missions object
         $user_missions[$subject_id ]['medal_info'][] = $row;
@@ -177,4 +183,3 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
 }
 
 ?>
-

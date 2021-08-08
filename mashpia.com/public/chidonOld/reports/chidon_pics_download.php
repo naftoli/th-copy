@@ -11,15 +11,43 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 function createZip($files, $filename) {
+    $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
     $zip = new ZipArchive;
     $success = $zip->open($filename, ZipArchive::CREATE);
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
-    foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
+    foreach($files as $file_with_fallbacks) {
+        $filename = $file_with_fallbacks['filename'];
+        $fallbacks = $file_with_fallbacks['fallbacks'];
+        foreach($fallbacks as $file) {
+            if ($file['from_db']) {
+                $sql = "SELECT file_name, file_data FROM files WHERE file_id = '{$file['val']}'";
+                $query = mysql_query($sql);
+                if (!$query) break;
+                $row = mysql_fetch_assoc($query);
+                $file_contents = $row['file_data'];
+                $file_name_split = explode('.', $row['file_name']);
+                $origanal_extension = end($file_name_split);
+            } else {
+                $file_contents = @file_get_contents($file['url']);
+                $url_split = explode('.', $file['url']);
+                $origanal_extension = end($url_split);
+            }
+            if ($file_contents) {
+                $extension = in_array($origanal_extension, $image_extensions) ? $origanal_extension : "jpg";
+                // for debugging without zip extension
+                // echo '<img width="100px" src="data:image/png;base64, ' . base64_encode($file_contents) . '">';
+                $zip->addFromString("$filename.$extension", $file_contents);
+                break;
+            }
+        }
     }
     $zip->close();
+}
+
+function custom_urlencode($url) {
+    return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
 $info = [];
@@ -35,22 +63,18 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
-        $img = 'http://mashpia.com/mobile/reg/img/addphoto.png';
-        if (!empty($child['chidon_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['chidon_pic'];
-        } else if (!empty($child['mobile_pic'])) {
-            $img = 'http://mashpia.com/mobile/reg/' . $child['mobile_pic'];
-        } else if (
-            !empty($child['thumb'])
-            && file_exists('http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'])
-        ) {
-            $img = 'http://mashpia.com/mobile/reg/thumbs/' . $child['thumb'];
-        } else if (!empty($child['user_photo_id'])) {
-            $img = 'http://mashpia.com/file_view.php?id=' . $child['user_photo_id'];
-        }
-        if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
-            $imgs[] = $img;
-        }
+        $img_fallbacks = [
+            ['from_db' => false, 'val' => $child['chidon_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic'])],
+            ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+            ['from_db' => false, 'val' => $child['thumb'],         'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+            ['from_db' => true,  'val' => $child['user_photo_id']]
+        ];
+        // filter blank/invalid values
+        $img_fallbacks = array_filter($img_fallbacks, function($img){
+            return !empty($img['val']) && $img['val'] !== 'img/addphoto.png';
+        });
+        // map to urls,
+        $imgs[] = ['filename' => $child['th_chidon_id'], 'fallbacks' => $img_fallbacks];
     }
 }
 

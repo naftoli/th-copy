@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
+import { Redirect } from 'react-router-dom';
 // import { GoogleButton, ChabadOrgButton } from 'components/buttons';
 import { InputGroup, InputGroupAddon, Button, UncontrolledAlert } from 'reactstrap';
 // state
@@ -67,7 +68,11 @@ export class Login extends Component {
 
   // * render the page.
   render(){
-    let { errors, loading } = this.props;
+    let { errors, loading, logged_in } = this.props;
+    if (logged_in) {
+      const redirectTo = new URLSearchParams(this.props.location.search).get("redirect_to");
+      return <Redirect to={redirectTo || "/"}/>
+    }
 
     errors = errors.map( (error, index) => 
       <UncontrolledAlert color='danger' key={index}>{ error }</UncontrolledAlert> 
@@ -158,10 +163,13 @@ export class Login extends Component {
   }
 }
 
-const mapStateToProps = ( state ) => ({
-  loading: state.login.loading,
-  errors: state.login.errors
-});
+const mapStateToProps = ( state ) => {
+  const { current_login, current_user, loading, errors } = state.login;
+  return {
+    loading, errors,
+    logged_in: Object.keys(current_login).length > 0 && !!current_user,
+  }
+};
 
 const mapDispatchToProps = {
   login, setErrors, getCurrentUser

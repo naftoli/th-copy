@@ -118,7 +118,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="registration">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Registration Reports</span>
+                    <span class="link-text">Accounting Reports</span>
                 </div>
             </a>
             <a href="/raffles/posters/weekly.php">

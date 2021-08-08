@@ -76,7 +76,7 @@
         
                 <div class="personalImg"></div>
 				
-				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red">
+				<div class="alert" role="alert" dir="ltr" style="color: red">
                     <b class="i18n" data-key="message1">After ADDING a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart.</b><br />
                     <b class="i18n" data-key="message2">After UPDATING the quantities, be sure to click "UPDATE" & then "SAVE".</b>
 				</div>
@@ -87,7 +87,7 @@
                             (<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-white.svg" style="height: 52px;" />
                         </div>
                         <div class="media-body">
-                            <span class="balance"></span>
+                            <span class="balance" style="color: white"></span>
                         </div>
                     </div>
                 </div>
@@ -175,16 +175,19 @@
             var bal = 0;
             var cart = [];
             var originalBal = 0;
-    		var auction_id = 81;
-
+    		var auction_id = 82;
 
             var totalMilesEraned = "Total Miles Earned: "
             if (localStorage.getItem("locallang") == "he") {
                 totalMilesEraned = " סך הנקודות שנצברו:";
-
             }
 
-            $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getBalance.php', {
+                admin : Cookies.get('admin'),
+                user : user,
+                auction : auction_id,
+                points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
+            }, function( success ) {
                 var info = $.parseJSON(success);
                 if (localStorage.getItem("locallang") == "he") {
                     html = "<span style='direction:rtl;' > ";

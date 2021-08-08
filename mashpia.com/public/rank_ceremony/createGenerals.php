@@ -8,6 +8,20 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+$months = array(
+    0	=>	'Tishrei',  1   =>  'Cheshvon', 2   =>  'Kisleiv',  3   =>  'Teves',
+    4   =>  'Shevat',   5   =>  'Adar',     6   =>  'Adar II',  7   =>  'Nissan',
+    8   =>  'Iyar',     9   =>  'Sivan',    10  =>  'Tamuz',    11  =>  'Av',
+    12  =>  'Elul'
+);
+
+$heMonths = array(
+    0  =>  'תשרי',      1   =>  'חשון',     2   =>  'כסלו',     3   =>  'טבת',
+    4   =>  'שבט',      5   =>  'אדר',      6   =>  'אדר ב',    7   =>  'ניסן',
+    8   =>  'אייר',     9   =>  'סיון',     10  =>  'תמוז',     11  =>  'אב',
+    12  =>  'אלול'
+);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
@@ -125,6 +139,13 @@ createFile($file_name, $info);
 $dates = $r->getHeReportDates();
 $str = "Generals:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
 createFile("dates.txt", $str);
+
+$rDates = $r->getReportDates();
+$heDateArr = explode('/', jdtojewish($rDates['end']));
+$heMonth = $heDateArr[0];
+$heYear = $heDateArr[2];
+$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1];
+createFile("dateInfo.txt", $dateStr);
 
 echo json_encode([
     'success' => true

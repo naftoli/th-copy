@@ -1,0 +1,126 @@
+<?php
+ini_set('display_errors', 1);
+
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+$schools = $as->getSchools();
+
+$year = GlobalSettings::getChidonRegYear();
+
+$info = [];
+$sql = "
+    SELECT 
+        reg_date,
+        u.user_id, 
+        user_serial, 
+        gender,
+        first,
+        last,
+        first_he,
+        last_he,
+        first_known_en,
+        last_known_en,
+        first_known_he,
+        last_known_he,
+        s.school_id, 
+        s.school_name,
+        dob,
+        u.lang_id,
+        th_chidon_id,
+        khk_reg,
+        name_pref,
+        size,
+        book,
+        yarmulka,
+        recruited_by,
+        poll,
+        comments
+    FROM
+        users u
+            JOIN
+        th_chidon tc USING (user_id)
+            JOIN
+        schools s ON u.school_id = s.school_id
+    WHERE
+        tc.year = $year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+    ORDER BY
+        s.school_id, u.last, u.first";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $info[] = $row;
+}
+
+$langs = [
+    1   =>  'English',
+    2   =>  'Yiddish',
+    3   =>  'French',
+    4   =>  'Hebrew'
+];
+
+$customNames = [
+    'en'    =>  'Full English Name',
+    'he'    =>  'Full Hebrew Name',
+    'nick_en'   =>  'English Name Known by',
+    'nick_he'   =>  'Hebrew Name Known by'
+];
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <title>Chidon Registration Report</title>
+        <style>
+            tr, th, td {
+                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                font-size: 14px;
+                padding: 10px;
+                border-bottom: 1px solid grey;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Chidon Registration Report</h1>
+        <table>
+            <tr>
+                <th>Registration Date</th>
+                <th>User ID</th>
+                <th>Serial Number</th>
+                <th>School</th>
+                <th>Full English Name</th>
+                <th>Full Hebrew Name</th>
+                <th>English Name Known by</th>
+                <th>Hebrew Name Known by</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Yarmulka</th>
+                <th>Sweater Size</th>
+                <th>Language</th>
+                <th>Custom Item Name</th>
+                <th>Book Number</th>
+                <th>Registered for KHK</th>
+                <th>Chidon Learning Method</th>
+                <th>Invited by (Serial Number)</th>
+                <th>Comments</th>
+            </tr>
+            <?php
+            foreach ($info as $row) {
+                echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
+                    "</td><td>" . $row['school_name'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" .
+                    $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['first_known_en'] . ' ' .
+                    $row['last_known_en'] . "</td><td>" . $row['first_known_he'] . ' ' . $row['last_known_he'] . "</td><td>" .
+                    $row['dob'] . "</td><td>" . $row['gender'] . "</td><td>";
+                if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
+                else echo "<span>";
+                echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
+                    $langs[$row['lang_id']] . "</td><td>" . $customNames[$row['name_pref']] . "</td><td>" . $row['book'] . "</td><td>" .
+                    ($row['khk_reg'] ? 'yes' : 'no') .
+                    "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td></tr>";
+            }
+            ?>
+        </table>
+    </body>
+</html>

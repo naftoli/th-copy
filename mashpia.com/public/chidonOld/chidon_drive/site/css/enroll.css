@@ -37,6 +37,63 @@
   text-align: center;
 }
 
+.flex {
+	display: flex;
+	align-items: center;
+}
+
+.flex > * {
+	margin: 0 5px;
+}
+
+input.inputCheckbox {
+	width: auto !important;
+}
+
+form h5.formDetails {
+	text-transform: none;
+}
+
+form h5.formTitle {
+	text-transform: none;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.form .flex.small-select > .nice-select {
+	max-width: 120px;
+}
+
+.form .flex.medium-select > .nice-select {
+	width: 70%;
+}
+
+input.numberInput {
+	max-width: 50px;
+}
+
+a.linkButton {
+	font-size: 16px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 400;
+	color: black;
+	background: #e3b949;
+    text-transform: uppercase;
+}
+
+.flexCenter {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.form .flex > label {
+	font-weight: 100;
+    font-size: 16px;
+}
+
 input {
 	background: #181c68;
 	border-radius: 2px;
@@ -87,6 +144,52 @@ input {
 	margin-top: 2rem;
 	font-family: 'Gotham Narrow', sans-serif;
 }
+
+.form h5 b {
+	color: #85abda;
+	font-size: 1.4rem;
+	margin-top: 2rem;
+	font-family: 'Gotham Narrow', sans-serif;
+	font-weight: bold;
+}
+
+form ul li b {
+	color: #85abda;
+	font-size: 1.4rem;
+	margin-top: 2rem;
+	font-family: 'Gotham Narrow', sans-serif;
+	font-weight: bold;
+}
+
+form .listSection {
+	background: #ffffff12;
+	padding: 10px 15px 15px 35px;
+	margin-top: 5px;
+}
+
+.form ul li {
+	color: #85abda;
+	font-size: 1.4rem;
+	margin-top: 1rem;
+	font-family: 'Gotham Narrow', sans-serif;
+	text-align: left;
+}
+
+.bold {
+	font-weight: bold !important;
+}
+
+form .checkboxLabel {
+	font-weight: 100;
+	font-family: 'Gotham Narrow', sans-serif;
+}
+
+form .checkboxDetails {
+	font-weight: 100;
+	font-family: 'Gotham Narrow', sans-serif;
+	font-size: 16px;
+}
+
 .form h5.lower {
 	text-transform: none;
 	padding-bottom: 1.5rem;
@@ -117,6 +220,10 @@ input {
 }
 .form .nice-select .option {
   color: #85abda;
+  white-space: break-spaces;
+  line-height: 1.5;
+  margin-top: 10px;
+
 }
 .form .nice-select.open .list {
 	width: 100%;

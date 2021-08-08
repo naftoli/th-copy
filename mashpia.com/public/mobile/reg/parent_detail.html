@@ -17,9 +17,7 @@
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
 
-
     <script src="js/all.js" defer></script>
-
 
     <style>
         html,
@@ -274,6 +272,7 @@
                     <div class="chilrens" id="children">
                         <script id="childrenTpl" type="text/x-handlebars-template">
                             {{#each children}}
+                            {{log this}}
                             <div class="row" id="r{{@key}}">
                                 <div class="col-xs-12">
                                     <table width="100%" style="margin-left:-10px">
@@ -363,25 +362,25 @@
                                                         {{#if this.schoolRegistered}}
                                                         {{#if this.schoolTypeRegistered}}
                                                         {{#if this.reg_types.chayolei }}
-                                                        <button class="btn btn-primary re_register">
+<!--                                                        <button class="btn btn-primary re_register">-->
                                                             {{#if this.confirmationOnly}}
-                                                            <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>
+<!--                                                            <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>-->
                                                             {{else}}
-                                                            <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
+<!--                                                            <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}-->
 <!--                                                            <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}-->
                                                             {{/if}}
                                                             {{#if this.reg_types.chidon }}
-                                                            / Chidon {{ this.chidon_year }}
+<!--                                                            / Chidon {{ this.chidon_year }}-->
                                                             {{/if}}
-                                                        </button>
+<!--                                                        </button>-->
                                                         {{else}}
                                                         {{#if this.reg_types.chidon }}
-                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
+<!--                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>-->
                                                         {{/if}}
                                                         {{/if}}
                                                         {{else}}
                                                         {{#if this.reg_types.chidon }}
-                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
+<!--                                                        <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>-->
                                                         {{/if}}
                                                         {{/if}}
                                                         {{/if}}
@@ -394,14 +393,28 @@
                                                     </div>
                                                     {{/if}}
 
+
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
-                                                        {{#if this.showChidonPic}}
-                                                        <!-- <div style="margin: 10px 0px">
-                                                            <button class="btn btn-info chidonPhoto">Upload Chidon Photo</button>
-                                                        </div> -->
+                                                        {{#if this.enrollShabbaton}}
+                                                            {{#if this.shabbatonPaid}}
+<!--                                                            <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
+<!--                                                            <button class="btn btn-primary shabbaton">Edit Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button>-->
+                                                            {{else}}
+<!--                                                            <button class="btn btn-primary shabbaton">Pay for Chidon {{this.chidon_year}} (ID: {{this.th_chidon_id}})</button>-->
+                                                            {{/if}}
+                                                            <!-- <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button> -->
+<!--                                                            <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Personalizations {{this.chidon_year}} (ID: {{this.user_id}})</button>-->
+<!--                                                            {{#if this.confirmed_chidon_5781}}-->
+<!--                                                                <div class="chidonRegInfo"><span>Personalizations Confirmed {{this.chidon_year}} (ID: {{this.user_id}})</span></div>-->
+<!--                                                            {{/if}}-->
                                                         {{/if}}
+<!--                                                        <button class="btn btn-primary confirmation">Confirm Chidon Registration</button>-->
+<!--                                                        <div style="margin: 10px 0px">-->
+<!--                                                            <button class="btn btn-success invitation" id="{{this.chidon_id}}">Chidon Invitation</button>-->
+<!--&lt;!&ndash;                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>&ndash;&gt;-->
+<!--                                                        </div>-->
                                                         {{#if this.shabbatonRegistered}}
                                                         {{#if this.shabbatonConfirmed}}
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="EnrolledChidon_msg1" class="i18n"> Chidon Shabbaton Enrolled - Chidon ID: </span>{{this.th_chidon_id}}</div>
@@ -640,6 +653,7 @@
                     Cookies.set('toRegister', childrenToRegister);
 
                     // Grab the template script
+                    console.log(parent)
                     var tplScript = $("#childrenTpl").html();
 
                     // Compile the template
@@ -710,10 +724,33 @@
                 location.href = "upload_photo.html?id=" + id;
             });
 
-            // $(document).on('click', '.shabbaton', function() {
-            //     var id = $(this).parent().parent().parent().attr('id');
-            //     location.href = "/mobile/chidon/index2.html?id=" + id;
-            // });
+            $(document).on('click', '.invitation', function () {
+                var chidon_id = $(this).attr('id')
+                window.open('/chidonOld/invitations/' + chidon_id + '.jpg', '_blank')
+                // var image = new Image()
+                // image.src = '/chidonOld/invitations/' + chidon_id + '.jpg'
+                // image.style.maxWidth = '100%'
+                // image.style.height = 'auto'
+                // var w = window.open("",'_blank')
+                // w.document.write(image.outerHTML)
+                // w.document.close()
+            })
+
+            $(document).on('click', '.shabbaton', function() {
+                // var id = $(this).parent().parent().parent().attr('id');
+                // location.href = "/mobile/chidon/index2.html?id=" + id;
+                let url = "https://chidondrive.com/site/enrollNew.html?a=" + Cookies.get('admin');
+                location.href = url;
+            });
+
+            $(document).on('click', '.shabbatonConfirm', function() {
+                let url = "/mobile/chidon/chidon_purchases.html";
+                location.href = url;
+            });
+
+            $(document).on('click', '.confirmation', function () {
+                location.href = '/mobile/chidon/confirmation_intro.html'
+            })
 
             //$(document).on('click', '.shabbatonEdit', function() {
             //	var id = $(this).parent().parent().parent().attr('id');

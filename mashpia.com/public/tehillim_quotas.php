@@ -116,7 +116,7 @@ if(!$tehillim_school_id && count($schools) == 1){
             foreach ( $schoolsUsers as $school => $users ) { ?>
                 <h2><?= $schools[$tehillim_school_id] ?></h2>
                 <table>
-                    <tr><th>Grade</th><th>First Name</th><th>Last Name</th><th>Quota</th></tr>
+                    <tr><th>Grade</th><th>First Name</th><th>Last Name</th><th>Kapitelach Quota</th><th>Minutes Quota</th></tr>
                 <?php
                     foreach ( $users as $user ) {
                     // get level, track_id
@@ -124,8 +124,8 @@ if(!$tehillim_school_id && count($schools) == 1){
                     $result = mysql_query( $sql );
                     $row = mysql_fetch_assoc( $result );
                     
-                    // get quota
-                    $sql2 = "SELECT dt.quantity FROM date_tasks dt "
+                    // get kapitelach quota
+                    $sqlKapitelach = "SELECT dt.quantity FROM date_tasks dt "
                         ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
                         ." WHERE dt.grid_id = 8001 "
                         ." AND dtm.start_date = " . $date
@@ -135,14 +135,30 @@ if(!$tehillim_school_id && count($schools) == 1){
                         ." AND dtm.level = " . $row['level']
                         ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
-                    $result2 = mysql_query( $sql2 );
-                    $row2 = mysql_fetch_assoc( $result2 );
+                    $resultKapitelach = mysql_query( $sqlKapitelach );
+                    $rowKapitelach = mysql_fetch_assoc( $resultKapitelach );
+
+                    // get minutes quota
+                    $sqlMinutes = "SELECT dt.quantity FROM date_tasks dt "
+                        ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
+                        ." WHERE dt.grid_id = 8002 "
+                        ." AND dtm.start_date = " . $date
+                        ." AND dtm.end_date = " . $date 
+                        ." AND dtm.school_type_id = " . $user['school_type_id']
+                        ." AND dtm.track_id = " . $row['track_id']
+                        ." AND dtm.level = " . $row['level']
+                        ." AND dtm.lang_id = " . $user['lang_id'];
+                    //echo $sql . "<br /><br />";
+                    $resultMinutes = mysql_query( $sqlMinutes );
+                    $rowMinutes = mysql_fetch_assoc( $resultMinutes );
+
                     ?>
                     <tr>
                         <td><?= $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) ?></td>
                         <td><?= $user['first'] ?></td>
                         <td><?= $user['last'] ?></td>
-                        <td><?= $row2['quantity'] ?></td>
+                        <td><?= $rowKapitelach['quantity'] ?></td>
+                        <td><?= $rowMinutes['quantity'] ?></td>
                     </tr>
                 <?php } // end for loop for soldiers in table ?>
                 </table>

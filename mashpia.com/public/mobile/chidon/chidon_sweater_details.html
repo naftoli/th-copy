@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Site</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <link href="css/responsive.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <link href="/mobile/reg/plugins/iCheck/all.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="css/keyboard.css">
+    <link rel="stylesheet" href="cropper/dist/cropper.css">
+    <link rel="stylesheet" href="cropper/avatar/css/main.css">
+    <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: #1b2b51;
+        }
+
+        .btn-primary {
+            background-color: #2b529e;
+            border-color: #2b529e;
+        }
+
+        .control-label {
+            padding-top: 3%;
+        }
+
+        label {
+            vertical-align: middle;
+        }
+
+        .xtra {
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .form-control {
+            border-radius: 5px !important;
+            border: 1px solid #b1b1b1 !important;
+            margin: 3px;
+        }
+
+        hr {
+            margin-bottom: 0;
+        }
+
+        .btn-primary.active,
+        .btn-primary.focus,
+        .btn-primary:active,
+        .btn-primary:focus,
+        .btn-primary:hover,
+        .open > .dropdown-toggle.btn-primary {
+            background-color: #2b529e !important;
+        }
+
+        .check-accept span {
+            font-size: 14px;
+            font-family: font3;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container login-page" id="crop-avatar">
+    <div class="login-header">
+        <span class="span12">Chidon Sweaters</span>
+    </div>
+    <div class="span12 body">
+        <div class="login-box">
+            <div class="login-box-body">
+                <div id="regInfo">
+                    <div class="row">
+                        <div class="col-sm-12" style="font-size: 18px; margin-bottom: 15px;">
+                            <a href="chidon_sweater_summary.html">Back to Sweater Summary</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="children">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="sweaters">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="confirmation" class="btn btn-primary btn-block">Update Selection</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+<script src="js/js.cookie.js" type="text/javascript"></script>
+<script>
+    let cart = []
+
+    const addToCart = item => {
+        if (!cart.includes(item)) {
+            cart.push(item)
+            return true
+        }
+        return false
+    }
+
+    const removeFromCart = item => {
+        for (let idx in cart) {
+            if (cart[idx].id == item.id) {
+                cart.splice(idx, 1)
+                return true
+            }
+        }
+        return false
+    }
+
+    const purchaseSweaters = cart => {
+
+    }
+
+    $("#confirmation").click(function () {
+
+    })
+
+    function capitalize(s)
+    {
+        return s && s[0].toUpperCase() + s.slice(1);
+    }
+
+    $(function () {
+        // get sweaters / extra celeb box
+        $.post('ajax/getPurchases.php', { admin: Cookies.get('admin') }, function (result) {
+            const info = JSON.parse(result)
+
+            $.post('/chidonOld/chidon_drive/ajax/sweaterInfo.php', function (result) {
+                const sweaters = JSON.parse(result)
+                const types = ['mother', 'father', 'bubby', 'zaidy']
+                const sizes = {
+                    'Adult XS': 'xs',
+                    'Adult Small': 'small',
+                    'Adult Medium': 'medium',
+                    'Adult Large': 'large',
+                    'Adult XL': 'xl'
+                }
+                let html = '<div style="font-size: 18px; line-height: 1.8;">'
+                for (let type of types) {
+                    html += `<input type='checkbox' name='sweater_${type}' class='sweater' value='sweater_${type}'`
+                    // check if user has already purchased this sweater
+                    const purchases = info.purchases
+                    let purchased = 'sweater_' + type
+                    let purchased_size = ''
+                    if (purchases[purchased]) {
+                        purchased_size = purchases[purchased]
+                        console.log(type + ':' + purchased_size)
+                        html += ' checked '
+                    }
+                    html += `/> ${capitalize(type)} Sweater <select name="sweater-size" class="sweater-size">`
+                    for (let size in sizes) {
+                        if (sweaters[type][size].qty < 1) {
+                            html += `<option value="${type}:${sizes[size]}:0"`
+                            if (purchased_size == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - SOLD OUT</option>`
+                        } else {
+                            html += `<option value="${type}:${sizes[size]}:${sweaters[type][size].qty}"`
+                            if (purchased_size == sizes[size]) html += ' selected '
+                            html += `>${capitalize(size)} - only ${sweaters[type][size].qty} left</option>`
+                        }
+                    }
+                    html += '</select> (+$25)<br />'
+                    html += `<div style="margin-left: 30px;"><input type="checkbox" name="sweater_${type}_shipping" class="sweater_${type}_shipping" value="sweater_${type}_shipping"`
+                    if (parseInt(purchases[`sweater_${type}_ship`])) html += ' checked '
+                    html += `/> Ship to: <input type='text' size='30' name="sweater_${type}_ship_addr" class="sweater_${type}_ship_addr"`
+                    if (purchases[`sweater_${type}_ship_addr`]) {
+                        let val = purchases[`sweater_${type}_ship_addr`]
+                        html += `value="${val}"`
+                    }
+                    html += ` /> (+$10)</div><hr style="border-top: 1px solid #2c539e; width: 75%; padding-bottom: 10px;" />`
+                }
+                html += '<br /></div>'
+                $("#sweaters").empty()
+                $("#sweaters").append(html)
+            })
+        })
+    })
+</script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-71974937-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+
+</html>

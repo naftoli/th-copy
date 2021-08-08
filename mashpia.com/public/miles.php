@@ -53,6 +53,7 @@ if ($admin_auth[0] == 'school') {
     		$schools[] = $row;
     	}
     	echo "<form action='miles.php' method='post'>";
+        echo "<input type='hidden' name='points_beta' value='" . (isset($_GET['points_beta']) && $_GET['points_beta'] ? "1" : "0") . "' />";
     	echo "<select name='school'>";
         foreach ( $schools as $school ) {
         	echo "<option value='$school[school_id]'>$school[school_name]</option>";
@@ -87,6 +88,7 @@ if ($admin_auth[0] == 'school') {
             }
             echo "Please choose a class:";
             echo "<form action='miles.php' method='post'>";
+            echo "<input type='hidden' name='points_beta' value='" . (isset($_GET['points_beta']) && $_GET['points_beta'] ? "1" : "0") . "' />";
             echo "<select name='class'>";
             foreach ( $classes as $class ) {
                 echo "<option value='" . $class['class_id'] . "'>" . $class['class_grade'] . 

@@ -63,6 +63,7 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>From Store</th>
             <th>From School</th>
             <th>From Parent Acct</th>
+            <th>theChidon.com</th>
             <th>Other</th>
             <th>Year</th>
         </tr>
@@ -73,19 +74,22 @@ while ($row = mysql_fetch_assoc($result)) {
                 $row['first'] . "</td><td>" . $row['last'] . "</td>";
             switch ($row['location']) {
                 case 'event':
-                    echo "<td>Yes</td><td></td><td></td><td></td><td></td>";
+                    echo "<td>Yes</td><td></td><td></td><td></td><td></td><td></td>";
                     break;
                 case 'store':
-                    echo "<td></td><td>" . $row['store_name'] . ", " . $row['store_city'] . "</td><td></td><td></td><td></td>";
+                    echo "<td></td><td>" . $row['store_name'] . ", " . $row['store_city'] . "</td><td></td><td></td><td></td><td></td>";
                     break;
                 case 'parent_account':
-                    echo "<td></td><td></td><td></td><td>Yes</td><td></td>";
+                    echo "<td></td><td></td><td></td><td>Yes</td><td></td><td></td>";
                     break;
                 case 'school':
-                    echo "<td></td><td></td><td>Yes</td><td></td><td></td>";
+                    echo "<td></td><td></td><td>Yes</td><td></td><td></td><td></td>";
+                    break;
+                case 'online':
+                    echo "<td></td><td></td><td></td><td></td><td>Yes</td><td></td>";
                     break;
                 default:
-                    echo "<td></td><td></td><td></td><td></td><td>Yes</td>";
+                    echo "<td></td><td></td><td></td><td></td><td></td><td>Yes</td>";
                     break;
             }
             echo "<td>" . $row['YEAR'] . "</td></tr>";

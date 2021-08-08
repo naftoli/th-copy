@@ -137,7 +137,7 @@ if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5780 ) {
         for ( d in user_donations ) {
           let amount = parseInt( user_donations[d].value );
           if ( amount > cost ) {
-            alert("Maximum subsidy allowed per child is $" + cost = ".");
+            alert("Maximum subsidy allowed per child is $" + cost + ".");
             $(user_donations[d]).focus();
             return false;
           }

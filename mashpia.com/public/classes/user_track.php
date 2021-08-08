@@ -502,20 +502,23 @@ class user_track
 					echo "Mission is not marked<br />";
 				//if completed add to table
 				if ($done) {
-					$ins = "insert into date_tasks_mission_marks 
-                            values(" . $this->user_id . ", " .
-                            $row['date_tasks_mission_id'] . ", " .
-                            $this->subject_id . ", " .
-                            $row['mission_value'] . ",'', " .
-                            $row['end_date'] . ",0,0)";
-					//if ($output) 
+					$ins = "insert into date_tasks_mission_marks ".
+							" set user_id = " . $this->user_id . 
+							", date_tasks_mission_id = " . $row['date_tasks_mission_id'] .
+							", subject_id = " . $this->subject_id .
+							", mission_value = " . $row['mission_value'] .
+							", mission_name = ''" .
+							", mark_date = " . $row['end_date'] .
+							", mark_override = 0" .
+							", missions_updated = 0";
+					if ($output) 
 						echo $ins . "<br />";
 					if (mysql_query($ins)) {
-						//if ($output) 
+						if ($output) 
 							echo "inserted<br />";
 						$inserted++;
-					} //else
-						//echo mysql_error() . "<br />";
+					} else
+						echo mysql_error() . "<br />";
 				}
 			}
 			//if ($output)

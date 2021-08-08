@@ -1,208 +1,211 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-	<head>
-		<meta name="viewport" content="width=device-width">
-	  <meta charset="UTF-8">
-		<meta name="google" content="notranslate">
-		<title>Shabbaton Enrollment | Chidon Drive</title>
-	    <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
-		<link rel="icon" type="image/png" href="img/favicon.png" />
-		<link rel="stylesheet" href="css/font.css" type="text/css" />
-		<link rel="stylesheet" href="css/style.css" type="text/css" />
-		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
-		<link rel="stylesheet" href="css/enroll.css" type="text/css" />
-	</head>
+<head>
+	<meta name="viewport" content="width=device-width">
+	<meta charset="UTF-8">
+	<meta name="google" content="notranslate">
+	<title>Shabbaton Enrollment | Chidon Drive</title>
+	<meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
+	<link rel="icon" type="image/png" href="img/favicon.png" />
+	<link rel="stylesheet" href="css/font.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+	<link rel="stylesheet" href="css/enroll.css" type="text/css" />
+</head>
 
-	<body>
+<body>
 
-		<header>
-			<div class="wrapper">
-				<div class="left">
-					<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
-					<a href="index.html" class="logo"><h1>Chidon</h1><img src="img/chidon.png?v=1" alt="Chidon" /></a>
-					<nav>
-						<a href="index.html">Home</a>
-						<a href="donate.html">Donate</a>
-						<a href="leaderboard.html">Leaderboard</a>
-						<a href="story.html">Our Story</a>
-					</nav>
-				</div>
-				<div class="icons">
-					<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
-					<a href="#"><img src="img/army.png" alt="Tzivos Hashem" /></a>
-				</div>
+	<header>
+		<div class="wrapper">
+			<div class="left">
+				<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+				<a href="index.html" class="logo">
+					<h1>Chidon</h1><img src="img/chidon.png?v=1" alt="Chidon" />
+				</a>
+				<nav>
+					<a href="index.html">Home</a>
+					<a href="donate.html">Donate</a>
+					<a href="leaderboard.html">Leaderboard</a>
+					<a href="story.html">Our Story</a>
+				</nav>
 			</div>
-		</header>
-		<div class="main">
-			<div class="wrapper">
-				<h2 class="title">Shabbaton Enrollment</h2>
-				<div class="form login" style="display: none;">
-					<form id="loginForm">
-						<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
-						<div class="field">
-							<label>Username: <input type="text" id="username" name="username" required /></label>
-						</div>
-						<div class="field">
-							<label>Password: <input type="password" id="password" name="password" required /></label>
-						</div>
-						<input type="submit" class="button" value="LOGIN" />
-					</form>
-				</div>
-				<div class="form kids-wrapper blue-circle" style="display: none;">
+			<div class="icons">
+				<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+				<a href="#"><img src="img/army.png" alt="Tzivos Hashem" /></a>
+			</div>
+		</div>
+	</header>
+	<div class="main">
+		<div class="wrapper">
+			<h2 class="title">Shabbaton Enrollment</h2>
+			<div class="form login" style="display: none;">
+				<form id="loginForm">
+					<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
+					<div class="field">
+						<label>Username: <input type="text" id="username" name="username" required /></label>
+					</div>
+					<div class="field">
+						<label>Password: <input type="password" id="password" name="password" required /></label>
+					</div>
+					<input type="submit" class="button" value="LOGIN" />
+				</form>
+			</div>
+			<div class="form kids-wrapper blue-circle" style="display: none;">
 
-				</div>
-				<!-- <div class="next-btn" style="display: none;">
+			</div>
+			<!-- <div class="next-btn" style="display: none;">
 					<a href="#" class="button">next child</a>
 				</div> -->
-				<div class="form personal-information" style="display: none;">
-					<form id="personalInfo">
-						<input type="hidden" name="user_id" id="user_id" />
-						<input type="hidden" name="school_id" id="school_id" />
-						<h5>Personal Information</h5>
+			<div class="form personal-information" style="display: none;">
+				<form id="personalInfo">
+					<input type="hidden" name="user_id" id="user_id" />
+					<input type="hidden" name="school_id" id="school_id" />
+					<h5>Personal Information</h5>
+					<div class="field">
+						<label>First Name:</label>
+						<input type="text" name="first" placeholder="First Name" id="first" required />
+					</div>
+					<div class="field">
+						<label>Last Name:</label>
+						<input type="text" placeholder="Last Name" id="last" required name="last" />
+					</div>
+					<div class="field">
+						<label>Hebrew First Name (as you would like it on your certificate or plaque):
+							<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+						</label>
+						<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
+					</div>
+					<div class="field">
+						<label>Hebrew Last Name (as you would like it on your certificate or plaque):
+							<span style="font-weight: 800;">Please type it in Hebrew letters</span>
+						</label>
+						<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
+					</div>
+					<div class="group">
 						<div class="field">
-							<label>First Name:</label>
-							<input type="text" name="first" placeholder="First Name" id="first" required />
+							<label>Grade:</label>
+							<select id="grade" name="grade" required disabled>
+								<option value='4'>4th Grade</option>
+								<option value='5'>5th Grade</option>
+								<option value='6'>6th Grade</option>
+								<option value='7'>7th Grade</option>
+								<option value='8'>8th Grade</option>
+							</select>
 						</div>
 						<div class="field">
-							<label>Last Name:</label>
-							<input type="text" placeholder="Last Name" id="last" required name="last" />
+							<label>Book:</label>
+							<select id="book" name="book" required disabled>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="anash_kinder">
+						<div class="field">
+							<label>School Name:</label>
+							<input type="text" placeholder="School Name" id="school_name" name="school_name" />
 						</div>
 						<div class="field">
-							<label>Hebrew First Name (as you would like it on your certificate or plaque): 
-								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
-							</label>
-							<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
+							<label>Affiliation (Chabad, Chassidish, Litvish, Yeshivish, Modern Orthodox, Other)?</label>
+							<input type="text" name="affiliation" id="affiliation" />
 						</div>
 						<div class="field">
-							<label>Hebrew Last Name (as you would like it on your certificate or plaque):
-								<span style="font-weight: 800;">Please type it in Hebrew letters</span>
-							</label>
-							<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
+							<p>
+								Do You have a friend coming to the Shabbaton? If yes, please enter their name:<br />
+								<input type="text" name="friend_name" id="friend_name" />
+							</p>
+						</div>
+						<h5>Home Address</h5>
+						<div class="field">
+							<label>Street Address:</label>
+							<input type="text" name="anash_address" id="anash_address" />
 						</div>
 						<div class="group">
 							<div class="field">
-								<label>Grade:</label>
-								<select id="grade" name="grade" required disabled>
-									<option value='4'>4th Grade</option>
-									<option value='5'>5th Grade</option>
-									<option value='6'>6th Grade</option>
-									<option value='7'>7th Grade</option>
-									<option value='8'>8th Grade</option>
-								</select>
+								<label>City:</label>
+								<input type="text" name="anash_city" id="anash_city" />
 							</div>
 							<div class="field">
-								<label>Book:</label>
-								<select id="book" name="book" required disabled>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-								</select>
+								<label>State:</label>
+								<input type="text" name="anash_state" id="anash_state" />
+							</div>
+							<div class="field">
+								<label>Zip:</label>
+								<input type="text" name="anash_zip" id="anash_zip" />
 							</div>
 						</div>
+						<div class="field">
+							<label>Medications: (if you need us to be responsible for it)</label>
+							<textarea name="meds" id="meds"></textarea>
+						</div>
+						<h5>Bunk Request</h5>
+						<div class="field">
+							<p>
+								Is there another Chidon contestant in your grade you would like to be placed together
+								with? We cannot commit but will try to honor requests as much as possible.
+								<input type="text" name="bunk_req" id="bunk_req" />
+							</p>
+						</div>
+					</div>
 
-						<div class="anash_kinder">
-							<div class="field">
-								<label>School Name:</label>
-								<input type="text" placeholder="School Name" id="school_name" name="school_name" />
-							</div>
-							<div class="field">
-								<label>Affiliation (Chabad, Chassidish, Litvish, Yeshivish, Modern Orthodox, Other)?</label>
-								<input type="text" name="affiliation" id="affiliation" />
-							</div>	
-							<div class="field">
-								<p>
-									Do You have a friend coming to the Shabbaton? If yes, please enter their name:<br />
-									<input type="text" name="friend_name" id="friend_name" />
-								</p>
-							</div>
-							<h5>Home Address</h5>
-							<div class="field">
-								<label>Street Address:</label>
-								<input type="text" name="anash_address" id="anash_address" />
-							</div>
-							<div class="group">
-								<div class="field">
-									<label>City:</label>
-									<input type="text" name="anash_city" id="anash_city" />
-								</div>
-								<div class="field">
-									<label>State:</label>
-									<input type="text" name="anash_state" id="anash_state" />
-								</div>
-								<div class="field">
-									<label>Zip:</label>
-									<input type="text" name="anash_zip" id="anash_zip" />
-								</div>
-							</div>
-							<div class="field">
-								<label>Medications: (if you need us to be responsible for it)</label>
-								<textarea name="meds" id="meds"></textarea>
-							</div>	
-							<h5>Bunk Request</h5>
-							<div class="field">
-								<p>
-									Is there another Chidon contestant in your grade you would like to be placed together with? We cannot commit but will try to honor requests as much as possible.
-									<input type="text" name="bunk_req" id="bunk_req" />
-								</p>
-							</div>
+					<h5>Trip Information</h5>
+					<div class="group shoesize">
+						<div class="field">
+							<label>Sweater Size:</label>
+							<select id="sweater" name="sweater">
+								<option value="0">Please Select</option>
+								<option value="children xs">Children XS (4 - 6)</option>
+								<option value="children s">Children S (6 - 8)</option>
+								<option value="children m">Children M (8 - 10)</option>
+								<option value="children l">Children L (10 - 12)</option>
+								<option value="children xl">Children XL (12 - 14)</option>
+								<option value="adult s">Adult S</option>
+								<option value="adult m">Adult M</option>
+								<option value="adult l">Adult L</option>
+								<option value="adult xl">Adult XL</option>
+							</select>
+						</div>
+						<div class="field">
+							<label>Shoe Size:</label>
+							<select id="shoe" name="shoe">
+								<option value="0">Please Select</option>
+								<option value='children 11'>Children 11</option>
+								<option value='children 12'>Children 12</option>
+								<option value='children 13'>Children 13</option>
+								<option value='adult 1'>Adult 1</option>
+								<option value='adult 2'>Adult 2</option>
+								<option value='adult 3'>Adult 3</option>
+								<option value='adult 4 '>Adult 4 </option>
+								<option value='adult 5 '>Adult 5 </option>
+								<option value='adult 6'>Adult 6</option>
+								<option value='adult 7'>Adult 7</option>
+								<option value='adult 8'>Adult 8</option>
+								<option value='adult 9'>Adult 9</option>
+								<option value='adult 10'>Adult 10</option>
+								<option value='adult 11'>Adult 11</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="group">
+						<div class="field">
+							<label>Sandwich Preference:</label>
+							<select id="sandwich" name="sandwich">
+								<option value="0">Please Select</option>
+								<option value="tuna">Tuna</option>
+								<option value="egg">Egg</option>
+								<option value="cc">Cream Cheese</option>
+								<option value="plain">Plain</option>
+								<option value="cheese">Hard Cheese</option>
+							</select>
 						</div>
 
-						<h5>Trip Information</h5>
-						<div class="group shoesize">
-							<div class="field">
-								<label>Sweater Size:</label>
-								<select id="sweater" name="sweater">
-										<option value="0">Please Select</option>
-										<option value="children xs">Children XS (4 - 6)</option>
-										<option value="children s">Children S (6 - 8)</option>
-										<option value="children m">Children M (8 - 10)</option>
-										<option value="children l">Children L (10 - 12)</option>
-										<option value="children xl">Children XL (12 - 14)</option>
-										<option value="adult s">Adult S</option>
-										<option value="adult m">Adult M</option>
-										<option value="adult l">Adult L</option>
-										<option value="adult xl">Adult XL</option>
-								</select>
-							</div>
-							<div class="field">
-								<label>Shoe Size:</label>
-								<select id="shoe" name="shoe">
-										<option value="0">Please Select</option>
-										<option value='children 11'>Children 11</option>
-										<option value='children 12'>Children 12</option>
-										<option value='children 13'>Children 13</option>
-										<option value='adult 1'>Adult 1</option>
-										<option value='adult 2'>Adult 2</option>
-										<option value='adult 3'>Adult 3</option>
-										<option value='adult 4 '>Adult 4 </option>
-										<option value='adult 5 '>Adult 5 </option>
-										<option value='adult 6'>Adult 6</option>
-										<option value='adult 7'>Adult 7</option>
-										<option value='adult 8'>Adult 8</option>
-										<option value='adult 9'>Adult 9</option>
-										<option value='adult 10'>Adult 10</option>
-										<option value='adult 11'>Adult 11</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="group">
-							<div class="field">
-								<label>Sandwich Preference:</label>
-								<select id="sandwich" name="sandwich">
-										<option value="0">Please Select</option>
-										<option value="tuna">Tuna</option>
-										<option value="egg">Egg</option>
-										<option value="cc">Cream Cheese</option>
-										<option value="plain">Plain</option>
-										<option value="cheese">Hard Cheese</option>
-								</select>
-							</div>
-
-							<!-- <div class="field" id="yarmulka_size" style="display: none;">
+						<!-- <div class="field" id="yarmulka_size" style="display: none;">
 								<input type="hidden" name="gender" id="gender" />
 								<label>Yarmulka Size:</label>
 								<select id="yarmulka" name="yarmulka" required>
@@ -213,418 +216,487 @@
 										<option value="7">7</option>
 								</select>
 							</div> -->
-						</div>
+					</div>
 
-						<h5>Allergies</h5>
-						<p>Does your child have any allergies?</p>
+					<h5>Allergies</h5>
+					<p>Does your child have any allergies?</p>
+					<div class="field">
+						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
+									value="0" /><span></span></label>My child has NO KNOWN allergies.</p>
+					</div>
+					<div class="field">
+						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
+									value="1" /><span></span></label>My child DOES HAVE allergies.</p>
 						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="allergy" class="allergy" value="0" /><span></span></label>My child has NO KNOWN allergies.</p>
+							<textarea id="allergies"></textarea>
 						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="allergy" class="allergy" value="1" /><span></span></label>My child DOES HAVE allergies.</p>
-							<div class="field">
-									<textarea id="allergies"></textarea>
-							</div>
-						</div>
+					</div>
 
-						<h5>Accommodation Information</h5>
-						<p>
-							Chidon staff will supervise a safe drop-off FROM all Chidon programs on Thursday night, Friday afternoon, and Motzei Shabbos if they are within our walking group zones. 
-							See <a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0" target="_blank">here</a> for a map.<br />
-							It will be your responsibility to get your child TO Chidon programs each morning. 
-						</p>
-						<h5>Where will your child be staying?</h5>
-						<p>
-							Please note: If you live in Crown Heights, please provide your home address. <br />
-							We will need an address on record even if it is outside of the walking zones.<br />
-						</p>
-						<div class="group">
-							<div class="field">
-								<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone" value="1" /><span></span></label>My child will be staying WITHIN the Crown Heights walking zone</p>
-								<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone" value="0" /><span></span></label>My child will be staying OUTSIDE of the walking zone. 
-									I understand I will need to make arrangements to get them home after Chidon programs. Click 
-									<a href="https://chat.whatsapp.com/ENXQ6jOOnxr0RSW8K9Hs4H" target="_blank">here to join a whatsapp group</a> 
-									with other parents from outside the walking zone to coordinate transportation arrangements.
-								</p>
-							</div>
+					<h5>Accommodation Information</h5>
+					<p>
+						Chidon staff will supervise a safe drop-off FROM all Chidon programs on Thursday night, Friday
+						afternoon, and Motzei Shabbos if they are within our walking group zones.
+						See <a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0"
+							target="_blank">here</a> for a map.<br />
+						It will be your responsibility to get your child TO Chidon programs each morning.
+					</p>
+					<h5>Where will your child be staying?</h5>
+					<p>
+						Please note: If you live in Crown Heights, please provide your home address. <br />
+						We will need an address on record even if it is outside of the walking zones.<br />
+					</p>
+					<div class="group">
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
+										value="1" /><span></span></label>My child will be staying WITHIN the Crown
+								Heights walking zone</p>
+							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
+										value="0" /><span></span></label>My child will be staying OUTSIDE of the walking
+								zone.
+								I understand I will need to make arrangements to get them home after Chidon programs.
+								Click
+								<a href="https://chat.whatsapp.com/ENXQ6jOOnxr0RSW8K9Hs4H" target="_blank">here to join
+									a whatsapp group</a>
+								with other parents from outside the walking zone to coordinate transportation
+								arrangements.
+							</p>
+						</div>
+					</div>
+					<div class="field">
+						<label>Crown Heights Family Name:</label>
+						<input type="text" id="acc_family" name="acc_family" required />
+					</div>
+					<div class="group">
+						<div class="field">
+							<label>House Number ONLY:</label>
+							<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
 						</div>
 						<div class="field">
-							<label>Crown Heights Family Name:</label>
-							<input type="text" id="acc_family" name="acc_family" required />
+							<label>House Number Suffix:</label>
+							<select id="acc_street_num_suffix">
+								<option></option>
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+							</select>
 						</div>
-						<div class="group">
-							<div class="field">
-								<label>House Number ONLY:</label>
-								<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
-							</div>
-							<div class="field">
-								<label>House Number Suffix:</label>
-								<select id="acc_street_num_suffix">
-									<option></option>
-									<option>A</option>
-									<option>B</option>
-									<option>C</option>
-								</select>
-							</div>
-							<div class="field">
-								<label>Apt/Suite #</label>
-								<input type="text" id="acc_street_apt" maxlength="5" />
-							</div>
-						</div>
-						<div class="inside_zone">
-							<div class="group">
-								<div class="field">
-									<label>Street Name:</label>
-									<select id="acc_street" name="acc_street"></select>
-								</div>
-							</div>
-							<div class="group">
-								<div class="field">
-									<label>Between:</label>
-									<input type="text" id="acc_cross1" name="acc_cross1" disabled />
-								</div>
-								<div class="field">
-									<label>And:</label>
-									<input type="text" id="acc_cross2" name="acc_cross2" disabled />
-								</div>
-							</div>
-						</div>
-						<div class="outside_zone" style="display: none;">
-							<div class="group">
-								<div class="field">
-									<label>Street Name:</label>
-									<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
-								</div>
-							</div>
-							<div class="group">
-								<div class="field">
-									<label>Between:</label>
-									<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
-								</div>
-								<div class="field">
-									<label>And:</label>
-									<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
-								</div>
-							</div>
-						</div>
-						<div class="group">
-							<div class="field">
-								<p><i style="font-size: 16px;">Address not showing up? Please email chidon@tzivoshashem.org with the exact address and cross streets to have it updated.</i></p>
-							</div>
-						</div>
-						<input type="hidden" name="walking_zone" id="walking_zone" />
 						<div class="field">
-							<label>Crown Heights Phone Number:</label>
-							<input type="text" id="acc_phone" name="acc_phone" required />
+							<label>Apt/Suite #</label>
+							<input type="text" id="acc_street_apt" maxlength="5" />
+						</div>
+					</div>
+					<div class="inside_zone">
+						<div class="group">
+							<div class="field">
+								<label>Street Name:</label>
+								<select id="acc_street" name="acc_street"></select>
+							</div>
+						</div>
+						<div class="group">
+							<div class="field">
+								<label>Between:</label>
+								<input type="text" id="acc_cross1" name="acc_cross1" disabled />
+							</div>
+							<div class="field">
+								<label>And:</label>
+								<input type="text" id="acc_cross2" name="acc_cross2" disabled />
+							</div>
+						</div>
+					</div>
+					<div class="outside_zone" style="display: none;">
+						<div class="group">
+							<div class="field">
+								<label>Street Name:</label>
+								<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
+							</div>
+						</div>
+						<div class="group">
+							<div class="field">
+								<label>Between:</label>
+								<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
+							</div>
+							<div class="field">
+								<label>And:</label>
+								<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
+							</div>
+						</div>
+					</div>
+					<div class="group">
+						<div class="field">
+							<p><i style="font-size: 16px;">Address not showing up? Please email chidon@tzivoshashem.org
+									with the exact address and cross streets to have it updated.</i></p>
+						</div>
+					</div>
+					<input type="hidden" name="walking_zone" id="walking_zone" />
+					<div class="field">
+						<label>Crown Heights Phone Number:</label>
+						<input type="text" id="acc_phone" name="acc_phone" required />
+					</div>
+					<div class="field">
+						<p>
+							<i><span style="font-size: 16px !important;">ONLY FOR 6-8 GRADE</span></i><br />
+							<label class="checkbox"><input type="checkbox" name="walking"
+									id="walking" /><span></span></label>
+							I allow my child to walk home alone at any time of the day and night, from ALL chidon
+							programs.
+							Please Note: Even if your child has permission to walk home alone at the time of dismissal
+							they will need to get into a
+							walking group and only after their walking group has left the building will they be able to
+							walk home alone.
+						</p>
+					</div>
+					<div class="anash_kinder">
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"
+										value="1" /><span></span></label>
+								My child will be staying with a family we know.</p>
+							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"
+										value="0" /><span></span></label>
+								My child will be staying with a family that was arranged for us, but we don't know
+								personally.</p>
+						</div>
+						<h5>Travel Plans</h5>
+						<div class="field">
+							<p>
+								How will you be getting to Shabbaton?
+							</p>
+						</div>
+						<div class="group">
+							<div class="field">
+								<label>Airport / Station:</label>
+								<input type="text" name="anash_airport" id="anash_airport" />
+							</div>
+							<div class="field">
+								<label>Date and Time of Arrival:</label>
+								<input type="text" name="anash_arrival" id="anash_arrival" />
+							</div>
 						</div>
 						<div class="field">
 							<p>
-								<i><span style="font-size: 16px !important;">ONLY FOR 6-8 GRADE</span></i><br />
-								<label class="checkbox"><input type="checkbox" name="walking" id="walking" /><span></span></label>
-								I allow my child to walk home alone at any time of the day and night, from ALL chidon programs. 
-								Please Note: Even if your child has permission to walk home alone at the time of dismissal they will need to get into a 
-								walking group and only after their walking group has left the building will they be able to walk home alone.
+								How will you get to Chidon programs in the mornings?
 							</p>
 						</div>
-						<div class="anash_kinder">
-							<div class="field">
-								<p><label class="checkbox"><input type="radio" name="known_family" class="known_family" value="1" /><span></span></label>
-									 My child will be staying with a family we know.</p>
-								<p><label class="checkbox"><input type="radio" name="known_family" class="known_family" value="0" /><span></span></label>
-									My child will be staying with a family that was arranged for us, but we don't know personally.</p>
-							</div>
-							<h5>Travel Plans</h5>
-							<div class="field">
-								<p>
-									How will you be getting to Shabbaton?
-								</p>
-							</div>
-							<div class="group">
-								<div class="field">
-									<label>Airport / Station:</label>
-									<input type="text" name="anash_airport" id="anash_airport" />
-								</div>
-								<div class="field">
-									<label>Date and Time of Arrival:</label>
-									<input type="text" name="anash_arrival" id="anash_arrival" />
-								</div>
-							</div>
-							<div class="field">
-								<p>
-									How will you get to Chidon programs in the mornings? 
-								</p>
-							</div>
-							<div class="field">
-								<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup" value="0" /><span></span></label>
-									My host will drop me off.</p>
-								<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup" value="1" /><span></span></label>
-									Please arrange a pick up for my child for an additional cost of $25.</p>
-							</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
+										value="0" /><span></span></label>
+								My host will drop me off.</p>
+							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
+										value="1" /><span></span></label>
+								Please arrange a pick up for my child for an additional cost of $25.</p>
 						</div>
+					</div>
 
-						<div id="testInfo">
-							<h5>Test Information</h5>
-							<div class="field">
-								<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="en" /><span></span></label>I would like to take the test in English.</p>
-							</div>
-							<div class="field">
-								<p><label class="checkbox"><input type="radio" name="testLang" class="testLang" value="yi" /><span></span></label>I would like to take the test in Yiddish.</p>
-							</div>
-							<div class="field">
-								<p>Disclaimer: The Yiddish translation is a private project not under the direction of Chidon HQ. We do not take responsibility in case of any error on the translated tests.								</p>
-							</div>
+					<div id="testInfo">
+						<h5>Test Information</h5>
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="testLang" class="testLang"
+										value="en" /><span></span></label>I would like to take the test in English.</p>
 						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="testLang" class="testLang"
+										value="yi" /><span></span></label>I would like to take the test in Yiddish.</p>
+						</div>
+						<div class="field">
+							<p>Disclaimer: The Yiddish translation is a private project not under the direction of
+								Chidon HQ. We do not take responsibility in case of any error on the translated tests.
+							</p>
+						</div>
+					</div>
 
-						<h5>Additional Information</h5>
-						<p>My child has attended Shabbaton in the year:</p>
-						<div class="group">
-							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" value="5776" class="history" /><span></span></label>5776</p>
-							</div>
-							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" value="5777" class="history" /><span></span></label>5777</p>
-							</div>
-							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" value="5778" class="history" /><span></span></label>5778</p>
-							</div>
-							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" value="5779" class="history" /><span></span></label>5779</p>
-							</div>
+					<h5>Additional Information</h5>
+					<p>My child has attended Shabbaton in the year:</p>
+					<div class="group">
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" value="5776"
+										class="history" /><span></span></label>5776</p>
 						</div>
-						<!-- <p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" value="5777"
+										class="history" /><span></span></label>5777</p>
+						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" value="5778"
+										class="history" /><span></span></label>5778</p>
+						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" value="5779"
+										class="history" /><span></span></label>5779</p>
+						</div>
+					</div>
+					<!-- <p>Comments: Please share with us in a few words what Chidon means to you. Your feedback is extremely important to us.</p>
 						<div class="field">
 							<textarea id="chidonNotes"></textarea>
 						</div> -->
-						<p>What makes Chidon special to you? Please share.</p>
-						<div class="field">
-							<textarea id="chidonAnswer"></textarea>
-						</div>
+					<p>What makes Chidon special to you? Please share.</p>
+					<div class="field">
+						<textarea id="chidonAnswer"></textarea>
+					</div>
 
-						<h5>Transportation after Chidon Event</h5>
-						<div class="group">
-							<div class="field">
-								<p>
-									The Chidon Shabbaton officially ends on Sunday afternoon after the event in Newark Symphony Hall in Newark, NJ. 
-									Dismissal will be from 4:30pm to 5:30pm. <br />
-									<span class="anash_hide">
-									Your child's school has indicated that it will be traveling after the event by Bus to <span id="schoolBusOption"></span>.<br />
+					<h5>Transportation after Chidon Event</h5>
+					<div class="group">
+						<div class="field">
+							<p>
+								The Chidon Shabbaton officially ends on Sunday afternoon after the event in Newark
+								Symphony Hall in Newark, NJ.
+								Dismissal will be from 4:30pm to 5:30pm. <br />
+								<span class="anash_hide">
+									Your child's school has indicated that it will be traveling after the event by Bus
+									to <span id="schoolBusOption"></span>.<br />
 									Please indicate how you would like YOUR child to travel from the Event: </span>
+							</p>
+						</div>
+					</div>
+
+					<div class="group">
+						<div class="field">
+							<p class="anash_hide">
+								<label class="checkbox"><input type="radio" name="transportation" class="transportation"
+										value="0"><span></span></label>
+								My child will go with their School Bus.
+							</p>
+							<p>
+								<label class="checkbox"><input type="radio" name="transportation" class="transportation"
+										value="1"><span></span></label>
+								My child will go on a Chidon Bus to the airport <span
+									class="anash_hide">instead</span>:<br />
+								Please choose which airport:
+								<select name="airport" class="airport" style="width: 80px;">
+									<option value="0">Please Select</option>
+									<option value="JFK">JFK</option>
+									<option value="LGA">LGA</option>
+									<option value="EWR">EWR</option>
+								</select>
+								<br />
+								What time is your flight? <input type="text" name="flight" class="flight"
+									style="width: 65px;" />
+							</p>
+							<p>
+								<label class="checkbox"><input type="radio" name="transportation" class="transportation"
+										value="2"><span></span></label>
+								My child will go on a Chidon Bus to Crown Heights <span
+									class="anash_hide">instead</span>.
+							</p>
+							<div class="anash_kinder">
+								<p>
+									<label class="checkbox"><input type="radio" name="transportation"
+											class="transportation" value="3"><span></span></label>
+									My child will go home with a private ride (such as with parents) from the Chidon
+									event between 4:30-5:00pm.
 								</p>
 							</div>
-						</div>
-
-						<div class="group">
-							<div class="field">
-								<p class="anash_hide">
-									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="0"><span></span></label> 
-									My child will go with their School Bus.
-								</p>
-								<p>
-									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="1"><span></span></label> 
-									My child will go on a Chidon Bus to the airport <span class="anash_hide">instead</span>:<br />
-									Please choose which airport: 
-									<select name="airport" class="airport" style="width: 80px;">
-										<option value="0">Please Select</option>
-										<option value="JFK">JFK</option>
-										<option value="LGA">LGA</option>
-										<option value="EWR">EWR</option>
-									</select>
-									<br />
-									What time is your flight? <input type="text" name="flight" class="flight" style="width: 65px;" />
-								</p>
-								<p>
-									<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="2"><span></span></label> 
-									My child will go on a Chidon Bus to Crown Heights <span class="anash_hide">instead</span>.
-								</p>
-								<div class="anash_kinder">
-									<p>
-										<label class="checkbox"><input type="radio" name="transportation" class="transportation" value="3"><span></span></label> 
-										My child will go home with a private ride (such as with parents) from the Chidon event between 4:30-5:00pm.
-									</p>
-								</div>
 							</p>
 						</div>
-						</div>
+					</div>
 
-						<div class="group">
-							<div class="field">
-								<p>
-									<label class="checkbox"><input type="checkbox" name="snack_way_back" class="snack_way_back"><span></span></label> 
-									Yes! I would like to receive a sandwich and snack for the trip back home from the event.
-								</p>
-							</div>
-						</div>
-
-						<h5>Waivers</h5>
-						<div class="field">
-							<p>For your registration to be considered complete, you must fill out an online waiver for each child attending Chidon.</p>
-						</div>
-						<div class="field waivers">
-							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers" target="_blank">Grade 4 online waiver</a> (Launch Trampoline Park)</p>
-							<p><a style="font-size: 16px;" href="https://launchlinden.pfestore.com/waiver/" target="_blank">Grade 5 online waiver</a> (Launch Trampoline Park)</p>
-							<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers" target="_blank">Grade 6 online waiver</a> (Launch Trampoline Park)</p>
-							<p><a style="font-size: 16px;" href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42" target="_blank">Grade 7 online waiver</a> (Boundless Adventures)</p>
-							<p><a style="font-size: 16px;" href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42" target="_blank">Grade 8 online waiver</a> (Boundless Adventures)</p>
-						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="waiver" /><span></span></label>  I have filled out the waiver for <span class="first_name"></span></p>
-						</div>
-
-						<h5>Terms</h5>
-						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms2" class="terms" /><span></span></label>I authorize my child's chaperone to sign the trip waivers on my behalf if needed. I understand that Chidon will not be responsible for any injury that may occur.</p>
-						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms3" class="terms" /><span></span></label>I am aware that by participating in the Chidon I consent to my child's name and picture being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
-						</div>
+					<div class="group">
 						<div class="field">
 							<p>
-								<label class="checkbox"><input type="checkbox" id="terms4" class="terms" /><span></span></label>	
-								Please read with your child and initial: I will abide by all rules established by Chidon headquarters. 
-								Any behavior deemed inappropriate by staff or a departure from an activity without the consent of your counselor and safety officer 
-								is terms for dismissal from the Shabbaton. The Shabbaton fee will not be refunded. <input type="text" id="initials" style="width: 40px;" />
+								<label class="checkbox"><input type="checkbox" name="snack_way_back"
+										class="snack_way_back"><span></span></label>
+								Yes! I would like to receive a sandwich and snack for the trip back home from the event.
 							</p>
 						</div>
-						<div class="field">
-							<p>
-								<label class="checkbox"><input type="checkbox" id="terms5" class="terms" /><span></span></label>	
-								The Chidon Shabbaton is a major undertaking, and requires extensive coordination to ensure everyone's safety at all times. 
-								For this reason, changes to information submitted after enrollment will incur additional charges:
-								<blockquote>
-									<p>From Feb 23, changes can be made through your account at an additional charge of $50.</p>
-									<p>On Wednesday the day before the Shabbaton begins, changes can be made between 12:00 and 5:00pm in the lobby of the Jewish children's Museum at a cost of $100.</p>
-									<p>Any changes we are informed about during the actual Shabbaton will incur a $150 charge and must be submitted at the information desk.</p>
-								</blockquote>
-							</p>
-						</div>
-						<!-- <div class="field" id="walkingException" style="display: none;">
+					</div>
+
+					<h5>Waivers</h5>
+					<div class="field">
+						<p>For your registration to be considered complete, you must fill out an online waiver for each
+							child attending Chidon.</p>
+					</div>
+					<div class="field waivers">
+						<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers"
+								target="_blank">Grade 4 online waiver</a> (Launch Trampoline Park)</p>
+						<p><a style="font-size: 16px;" href="https://launchlinden.pfestore.com/waiver/"
+								target="_blank">Grade 5 online waiver</a> (Launch Trampoline Park)</p>
+						<p><a style="font-size: 16px;" href="https://launchqueens.centeredgeonline.com/waivers"
+								target="_blank">Grade 6 online waiver</a> (Launch Trampoline Park)</p>
+						<p><a style="font-size: 16px;"
+								href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42"
+								target="_blank">Grade 7 online waiver</a> (Boundless Adventures)</p>
+						<p><a style="font-size: 16px;"
+								href="https://www.alphagoat.com/boundlessadventuresny/event/join/8300-5A42"
+								target="_blank">Grade 8 online waiver</a> (Boundless Adventures)</p>
+					</div>
+					<div class="field">
+						<p><label class="checkbox"><input type="checkbox" id="waiver" /><span></span></label> I have
+							filled out the waiver for <span class="first_name"></span></p>
+					</div>
+
+					<h5>Terms</h5>
+					<div class="field">
+						<p><label class="checkbox"><input type="checkbox" id="terms2"
+									class="terms" /><span></span></label>I authorize my child's chaperone to sign the
+							trip waivers on my behalf if needed. I understand that Chidon will not be responsible for
+							any injury that may occur.</p>
+					</div>
+					<div class="field">
+						<p><label class="checkbox"><input type="checkbox" id="terms3"
+									class="terms" /><span></span></label>I am aware that by participating in the Chidon
+							I consent to my child's name and picture being used in any media produced by Tzivos Hashem,
+							for publicity purposes or otherwise.</p>
+					</div>
+					<div class="field">
+						<p>
+							<label class="checkbox"><input type="checkbox" id="terms4"
+									class="terms" /><span></span></label>
+							Please read with your child and initial: I will abide by all rules established by Chidon
+							headquarters.
+							Any behavior deemed inappropriate by staff or a departure from an activity without the
+							consent of your counselor and safety officer
+							is terms for dismissal from the Shabbaton. The Shabbaton fee will not be refunded. <input
+								type="text" id="initials" style="width: 40px;" />
+						</p>
+					</div>
+					<div class="field">
+						<p>
+							<label class="checkbox"><input type="checkbox" id="terms5"
+									class="terms" /><span></span></label>
+							The Chidon Shabbaton is a major undertaking, and requires extensive coordination to ensure
+							everyone's safety at all times.
+							For this reason, changes to information submitted after enrollment will incur additional
+							charges:
+							<blockquote>
+								<p>From Feb 23, changes can be made through your account at an additional charge of $50.
+								</p>
+								<p>On Wednesday the day before the Shabbaton begins, changes can be made between 12:00
+									and 5:00pm in the lobby of the Jewish children's Museum at a cost of $100.</p>
+								<p>Any changes we are informed about during the actual Shabbaton will incur a $150
+									charge and must be submitted at the information desk.</p>
+							</blockquote>
+						</p>
+					</div>
+					<!-- <div class="field" id="walkingException" style="display: none;">
 							<p><label class="checkbox"><input type="checkbox" id="terms6" class="terms" /><span></span></label>	
 								I will arrange pickup and drop off for my child for all Chidon programs.
 							</p>
 						</div> -->
 
-						<div class="group save-detail">
-							
-						</div>
-					</form>
-				</div>
+					<div class="group save-detail">
 
-				<div align="center" style="padding-top: 20px;" id="logoffDiv" style="display: none;">
-						<a href="#" style="color: red; font-size: 18px;" id="logoff">Logoff</a>
-				</div>
+					</div>
+				</form>
+			</div>
+
+			<div align="center" style="padding-top: 20px;" id="logoffDiv" style="display: none;">
+				<a href="#" style="color: red; font-size: 18px;" id="logoff">Logoff</a>
 			</div>
 		</div>
+	</div>
 
-		<footer>
-			<div class="wrapper">
-				<a href="#" id="top">Back to top</a>
+	<footer>
+		<div class="wrapper">
+			<a href="#" id="top">Back to top</a>
 
-				<div class="credits">
-					<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
-					<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
-	לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
-				</div>
-
-				<div class="footer-main">
-					<div class="footer-about">
-						<div class="icon-wrapper">
-							<a href="https://thechidon.com" target="blank">
-								<img src="img/chidon-logo.png" alt="Chidon" />
-							</a>
-						</div>
-						<div class="icon-wrapper">
-							<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
-						</div>
-						<div class="icon-wrapper">
-							<img src="img/army-color.png" alt="Tzivos Hashem" />
-						</div>
-						<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
-					</div>
-					<nav>
-						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="donate.html">Donate</a></li>
-							<li><a href="leaderboard.html">Leaderboard</a></li>
-							<li><a href="story.html">Our Story</a></li>
-						</ul>
-							<ul>
-								<li><h5>Quick Links</h5></li>
-								<li><a href="family.html">Find a Family</a></li>
-								<li><a href="sponsor.html">Sponsors</a></li>
-								<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
-							</ul>
-						<ul>
-							<li><h5>Contact Us</h5></li>
-							<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
-							<li><a href="tel:7189078884">718.907.8884</a></li>
-						</ul>
-					</nav>
-				</div>
-
-				<div class="footer-bottom">
-					<div class="social">
-						<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
-						<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
-					</div>
-					<p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
-				</div>
+			<div class="credits">
+				<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+				<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+					לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
 			</div>
-		</footer>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="js/circletype.min.js"></script>
-		<script src="js/jquery.nice-select.min.js"></script>
-		<script src='js/circles.min.js'></script>
-		<script src="js/js.cookie.js"></script>
-		<script type="text/javascript">
+			<div class="footer-main">
+				<div class="footer-about">
+					<div class="icon-wrapper">
+						<a href="https://thechidon.com" target="blank">
+							<img src="img/chidon-logo.png" alt="Chidon" />
+						</a>
+					</div>
+					<div class="icon-wrapper">
+						<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+					</div>
+					<div class="icon-wrapper">
+						<img src="img/army-color.png" alt="Tzivos Hashem" />
+					</div>
+					<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+				</div>
+				<nav>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="donate.html">Donate</a></li>
+						<li><a href="leaderboard.html">Leaderboard</a></li>
+						<li><a href="story.html">Our Story</a></li>
+					</ul>
+					<ul>
+						<li>
+							<h5>Quick Links</h5>
+						</li>
+						<li><a href="family.html">Find a Family</a></li>
+						<li><a href="sponsor.html">Sponsors</a></li>
+						<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
+					</ul>
+					<ul>
+						<li>
+							<h5>Contact Us</h5>
+						</li>
+						<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+						<li><a href="tel:7189078884">718.907.8884</a></li>
+					</ul>
+				</nav>
+			</div>
+
+			<div class="footer-bottom">
+				<div class="social">
+					<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+					<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
+				</div>
+				<p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/circletype.min.js"></script>
+	<script src="js/jquery.nice-select.min.js"></script>
+	<script src='js/circles.min.js'></script>
+	<script src="js/js.cookie.js"></script>
+	<script type="text/javascript">
 		// alert("Enrollment is now closed.");
 		// location.href = "/";
-				if ( location.protocol != 'https:' ) {
-					let url = window.location.href;
-					let pos = url.indexOf(':');
-					let newUrl = 'https' + url.substring( pos );
-					location.href = newUrl;
-				}
+		if (location.protocol != 'https:') {
+			let url = window.location.href;
+			let pos = url.indexOf(':');
+			let newUrl = 'https' + url.substring(pos);
+			location.href = newUrl;
+		}
 
-				let url = window.location.href;
-				let pos = url.indexOf('?a=');
-				if ( pos > 0 ) {
-					let admin = url.substring(pos + 3);
-					Cookies.set('chidon_admin', admin);
-				}
+		let url = window.location.href;
+		let pos = url.indexOf('?a=');
+		if (pos > 0) {
+			let admin = url.substring(pos + 3);
+			Cookies.set('chidon_admin', admin);
+		}
 
-				if ( Cookies.get('chidon_admin') ) {
-					getChildren( Cookies.get('chidon_admin') );
-					$("#logoffDiv").show();
-				}
-				else {
-					$(".login").show();
-					$("#logoffDiv").hide();
-				}
+		if (Cookies.get('chidon_admin')) {
+			getChildren(Cookies.get('chidon_admin'));
+			$("#logoffDiv").show();
+		}
+		else {
+			$(".login").show();
+			$("#logoffDiv").hide();
+		}
 
-		    $('#menu-opener').click(function(e){
-		    	$('header nav').toggleClass('open');
-				});
-				
-				var children = []; // global variable for children info
-				var children_ids = []; // global variable to keep track of order of children and ids
-				var completed = [] // global variable for making sure all children's forms have been completed
-				var numChildren; // global variable to track number of children
+		$('#menu-opener').click(function (e) {
+			$('header nav').toggleClass('open');
+		});
 
-				function getChildren( admin ) {
-					$.post('../ajax/getChildren.php', { admin : admin }, function( result ) {
-						let info = JSON.parse( result );
-						if ( info.success ) {
-							if ( info.error ) alert( info.error );
-							let html = '';
-							numChildren = info.children.length;
-							for ( c in info.children ) {
-								let child = info.children[c];
-								if ( parseInt( child.date_paid ) > 0 ) continue;
-								children[child.user_id] = child;
-								children_ids.push( child.user_id );
-								let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
-								html += `
+		var children = []; // global variable for children info
+		var children_ids = []; // global variable to keep track of order of children and ids
+		var completed = [] // global variable for making sure all children's forms have been completed
+		var numChildren; // global variable to track number of children
+
+		function getChildren(admin) {
+			$.post('../ajax/getChildren.php', { admin: admin }, function (result) {
+				let info = JSON.parse(result);
+				if (info.success) {
+					if (info.error) alert(info.error);
+					let html = '';
+					numChildren = info.children.length;
+					for (c in info.children) {
+						let child = info.children[c];
+						if (parseInt(child.date_paid) > 0) continue;
+						children[child.user_id] = child;
+						children_ids.push(child.user_id);
+						let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+						html += `
 									<div class="kid">
 										<div class="image-wrapper">
 												<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
@@ -633,527 +705,530 @@
 										<a href="#" class="button enroll" id="${child.user_id}">enroll now</a>
 									</div>
 								`;
-							}
-							if ( !children.length ) {
-								alert("All children have been enrolled.");
-								location.href = "edit.html";
-								return false;
-							}
-							$(".login").hide();
-							$("#logoffDiv").show();
-							$(".kids-wrapper").empty();
-							$(".kids-wrapper").append( html );
-							$(".kids-wrapper").show();							
-						} else {
-							alert( info.error );
-						}
-					});
+					}
+					if (!children.length) {
+						alert("All children have been enrolled.");
+						location.href = "edit.html";
+						return false;
+					}
+					$(".login").hide();
+					$("#logoffDiv").show();
+					$(".kids-wrapper").empty();
+					$(".kids-wrapper").append(html);
+					$(".kids-wrapper").show();
+				} else {
+					alert(info.error);
+				}
+			});
+		}
+
+		function fillEnrollmentForm(id) {
+			let child = children[id];
+			$("#school_id").val(child.school_id);
+			if (parseInt(child.school_id) == 269) {
+				$(".anash_kinder").show();
+				$(".anash_hide").hide();
+				// add anash kinder field values
+				$("#school_name").val(child.school_name);
+				$("#affiliation").val(child.affiliation);
+				$("#friend_name").val(child.friend_name);
+				$("#anash_address").val(child.home_address);
+				$("#anash_city").val(child.home_city);
+				$("#anash_state").val(child.home_state);
+				$("#anash_zip").val(child.home_zip);
+				$("#meds").val(child.medications);
+				if (parseInt(child.known_family) == 1) $(".know_family").eq(0).trigger('click');
+				else $(".known_family").eq(1).trigger('click');
+				$("#anash_airport").val(child.anash_airport);
+				$("#anash_arrival").val(child.anash_arrival);
+				if (parseInt(child.morning_pickup) == 1) $(".morning_pickup").eq(1).trigger('click');
+				else $(".morning_pickup").eq(0).trigger('click');
+			}
+			else {
+				$(".anash_kinder").hide();
+				$(".anash_hide").show();
+				// make sure all values are set to nothing
+				$("#school_name").val('');
+				$("#affiliation").val('Please Select');
+				$("#friend_name").val('');
+				$("#anash_address").val('');
+				$("#anash_city").val('');
+				$("#anash_state").val('');
+				$("#anash_zip").val('');
+				$("#meds").val('');
+				$("#anash_airport").val('');
+				$("#anash_arrival").val('');
+				// uncheck inputs
+				$(".known_family").each(function () {
+					if ($(this).is(":checked")) $(this).attr('checked', false);
+				});
+				$(".morning_pickup").each(function () {
+					if ($(this).is(":checked")) $(this).attr('checked', false);
+				});
+			}
+			$("#user_id").val(child.user_id);
+			$("#first").val(child.first);
+			$(".first_name").text(child.first);
+			$("#last").val(child.last);
+			$("#heFirst").val(child.first_he);
+			$("#heLast").val(child.last_he);
+
+			let grade = parseInt(child.book) + 3;
+			$("#grade").val(grade.toString());
+			$("#grade").niceSelect('update');
+			if (grade == 8) $("#testInfo").hide();
+			$(".waivers p").not(":eq(" + (parseInt(child.book) - 1) + ")").hide();
+
+			$("#book").val(child.book);
+			$("#book").niceSelect('update');
+
+			$("#sweater").val(child.size);
+			$("#sweater").niceSelect('update');
+
+			$("#shoe").val(child.shoe_size);
+			$("#shoe").niceSelect('update');
+
+			$("#sandwich").val(child.sandwich);
+			$("#sandwich").niceSelect('update');
+
+			$("#gender").val(child.gender);
+			// $("#yarmulka").val( child.yarmulka );
+			// $("#yarmulka").niceSelect('update');
+			// if ( child.gender == 'M' ) $("#yarmulka_size").show();
+			// else $("#yarmulka_size").hide();
+
+			if (child.allergies) {
+				$(".allergy").eq(1).trigger('click');
+				$("#allergies").val(child.allergies);
+			} else {
+				$(".allergy").eq(0).trigger('click');
+			}
+
+			let in_zone = child.in_zone;
+			if (parseInt(in_zone) == 1) {
+				$(".in_zone").eq(0).trigger('click');
+				$("#acc_street").val(child.host_street);
+				$("#acc_cross1").val(child.between_streets1);
+				$("#acc_cross2").val(child.between_streets2);
+			} else {
+				$(".in_zone").eq(1).trigger('click');
+				$(".inside_zone").hide();
+				$(".outside_zone").show();
+				$("#acc_street_outside_zone").val(child.host_street);
+				$("#acc_cross1_outside_zone").val(child.between_streets1);
+				$("#acc_cross2_outside_zone").val(child.between_streets2);
+			}
+			$("#acc_family").val(child.host);
+			$("#acc_street_num").val(child.host_street_num);
+			$("#acc_street_num_suffix").val(child.host_street_num_suffix);
+			$("#acc_street_apt").val(child.host_street_apt);
+			$("#walking_zone").val(child.walking_zone);
+			$("#acc_phone").val(child.host_number);
+			if (parseInt(child.walking)) $("#walking").trigger('click');
+			else if ($("#walking:checked").length) $("#walking").trigger('click');
+			// if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
+
+			switch (child.test_lang) {
+				case 'en':
+					$(".testLang").eq(0).trigger('click');
+					break;
+				case 'yi':
+					$(".testLang").eq(1).trigger('click');
+					break;
+				default:
+					$(".testLang").eq(0).trigger('click');
+					break;
+			}
+
+			let history = [];
+			if (child.history) {
+				if (child.history.indexOf(',') != -1) {
+					history = child.history.split(',');
+				} else {
+					history = [child.history];
+				}
+			}
+			console.log(history);
+
+			// reset all to unchecked
+			$(".history").each(function () {
+				if ($(this).is(":checked")) $(this).trigger('click');
+				if (history.includes($(this).val())) $(this).trigger('click');
+			});
+
+			// $("#chidonNotes").val( child.notes );
+			$("#chidonAnswer").val(child.answers);
+
+			// reset terms checkboxes
+			$(".terms").each(function () {
+				if ($(this).is(":checked")) $(this).trigger('click');
+			});
+
+			switch (parseInt(child.school_bus)) {
+				case 0:
+					$("#schoolBusOption").text("your home town");
+					break;
+				case 1:
+					$("#schoolBusOption").text(child.school_airport + " airport");
+					break;
+				case 2:
+					$("#schoolBusOption").text("Crown Heights");
+					break;
+			}
+
+			// if they chose what transportation they want
+			switch (parseInt(child.transportation)) {
+				case 0:
+					$(".transportation").eq(0).trigger('click');
+					break;
+				case 1:
+					$(".transportation").eq(1).trigger('click');
+					$(".airport").val(child.airport);
+					$(".flight").val(child.flight);
+					break;
+				case 2:
+					$(".transportation").eq(2).trigger('click');
+					break;
+				case 3:
+					$(".transportation").eq(3).trigger('click');
+					break;
+			}
+			if ($(".snack_way_back").is(":checked")) $(".snack_way_back").trigger('click'); // first reset
+			if (parseInt(child.snack_way_back) == 1) $(".snack_way_back").trigger('click'); // then set to checked if needed
+
+			$('select').niceSelect('update');
+			$("#first").focus();
+		}
+
+		function nextChild() {
+			// figure out which form to show
+			let next_user = 0;
+			let current_user = $("#user_id").val();
+			let next = false;
+			while (!next_user) {
+				for (c in children_ids) {
+					let id = children_ids[c];
+					if (next) {
+						next_user = id;
+						break;
+					}
+					if (id == current_user) {
+						next = true;
+					}
+				}
+			}
+			fillEnrollmentForm(next_user);
+		}
+
+		function checkForms() {
+			// for ( id in children ) {
+			// 	if ( !completed.includes( id ) ) {
+			// 		return false;
+			// 	}
+			// }
+			return true;
+		}
+
+		function getCrossStreets(number, street) {
+			if (street && street != 'Choose One' && parseInt($(".in_zone:checked").val()) == 1) {
+				if (!number) {
+					alert('You must enter a Street Number.');
+					return false;
+				} else if (isNaN(number)) {
+					alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
+					return false;
 				}
 
-				function fillEnrollmentForm( id ) {
-					let child = children[id];
-					$("#school_id").val( child.school_id );
-					if ( parseInt( child.school_id ) == 269 ) {
-						$(".anash_kinder").show();
-						$(".anash_hide").hide();
-						// add anash kinder field values
-						$("#school_name").val( child.school_name );
-						$("#affiliation").val( child.affiliation );
-						$("#friend_name").val( child.friend_name );
-						$("#anash_address").val( child.home_address );
-						$("#anash_city").val( child.home_city );
-						$("#anash_state").val( child.home_state );
-						$("#anash_zip").val( child.home_zip );
-						$("#meds").val( child.medications );
-						if ( parseInt( child.known_family ) == 1 ) $(".know_family").eq(0).trigger('click');
-						else $(".known_family").eq(1).trigger('click');
-						$("#anash_airport").val( child.anash_airport );
-						$("#anash_arrival").val( child.anash_arrival );
-						if ( parseInt( child.morning_pickup ) == 1 ) $(".morning_pickup").eq(1).trigger('click');
-						else $(".morning_pickup").eq(0).trigger('click');
-					}
-					else {
-						$(".anash_kinder").hide();
-						$(".anash_hide").show();
-						// make sure all values are set to nothing
-						$("#school_name").val('');
-						$("#affiliation").val('Please Select');
-						$("#friend_name").val('');
-						$("#anash_address").val('');
-						$("#anash_city").val('');
-						$("#anash_state").val('');
-						$("#anash_zip").val('');
-						$("#meds").val('');
-						$("#anash_airport").val('');
-						$("#anash_arrival").val('');
-						// uncheck inputs
-						$(".known_family").each( function() {
-							if ( $(this).is(":checked") ) $(this).attr('checked', false);
-						});
-						$(".morning_pickup").each( function() {
-							if ( $(this).is(":checked") ) $(this).attr('checked', false);
-						});
-					}
-					$("#user_id").val( child.user_id );
-					$("#first").val( child.first );
-					$(".first_name").text( child.first );
-					$("#last").val( child.last );
-					$("#heFirst").val( child.first_he );
-					$("#heLast").val( child.last_he );
-
-					let grade = parseInt( child.book ) + 3;
-					$("#grade").val( grade.toString() );
-					$("#grade").niceSelect('update');
-					if ( grade == 8 ) $("#testInfo").hide();
-					$(".waivers p").not(":eq(" + (parseInt( child.book ) - 1) + ")").hide();
-
-					$("#book").val( child.book );
-					$("#book").niceSelect('update');
-
-					$("#sweater").val( child.size );
-					$("#sweater").niceSelect('update');
-
-					$("#shoe").val( child.shoe_size );
-					$("#shoe").niceSelect('update');
-
-					$("#sandwich").val( child.sandwich );
-					$("#sandwich").niceSelect('update');
-
-					$("#gender").val( child.gender );
-					// $("#yarmulka").val( child.yarmulka );
-					// $("#yarmulka").niceSelect('update');
-					// if ( child.gender == 'M' ) $("#yarmulka_size").show();
-					// else $("#yarmulka_size").hide();
-					
-					if ( child.allergies ) {
-						$(".allergy").eq(1).trigger('click');
-						$("#allergies").val( child.allergies );
+				// $("#walkingException").hide();
+				$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function (result) {
+					let info = JSON.parse(result);
+					if (info.success) {
+						let cross = info.data;
+						$("#acc_cross1").val(cross.cross1);
+						$("#acc_cross2").val(cross.cross2);
+						$("#walking_zone").val(cross.zone_5780);
 					} else {
-						$(".allergy").eq(0).trigger('click');
-					}
-
-					let in_zone = child.in_zone;
-					if ( parseInt( in_zone ) == 1 ) {
-						$(".in_zone").eq(0).trigger('click');
-						$("#acc_street").val( child.host_street );
-						$("#acc_cross1").val( child.between_streets1 );
-						$("#acc_cross2").val( child.between_streets2 );
-					} else {
-						$(".in_zone").eq(1).trigger('click');
-						$(".inside_zone").hide();
-						$(".outside_zone").show();
-						$("#acc_street_outside_zone").val( child.host_street );
-						$("#acc_cross1_outside_zone").val( child.between_streets1 );
-						$("#acc_cross2_outside_zone").val( child.between_streets2 );
-					}
-					$("#acc_family").val( child.host );
-					$("#acc_street_num").val( child.host_street_num );
-					$("#acc_street_num_suffix").val( child.host_street_num_suffix );
-					$("#acc_street_apt").val( child.host_street_apt );
-					$("#walking_zone").val( child.walking_zone );
-					$("#acc_phone").val( child.host_number );
-					if ( parseInt(child.walking) ) $("#walking").trigger('click');
-					else if ($("#walking:checked").length) $("#walking").trigger('click');
-					// if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
-					
-					switch ( child.test_lang ) {
-						case 'en':
-							$(".testLang").eq(0).trigger('click');
-							break;
-						case 'yi':
-							$(".testLang").eq(1).trigger('click');
-							break;
-						default:
-							$(".testLang").eq(0).trigger('click');
-							break;
-					}
-
-					let history = [];
-					if ( child.history ) {
-						if ( child.history.indexOf(',') != -1 ) {
-							history = child.history.split(',');
-						} else {
-							history = [ child.history ];
-						}
-					}
-					console.log( history );
-
-					// reset all to unchecked
-					$(".history").each( function() {
-						if ( $(this).is(":checked") ) $(this).trigger('click');
-						if ( history.includes($(this).val()) ) $(this).trigger('click');
-					}); 
-					
-					// $("#chidonNotes").val( child.notes );
-					$("#chidonAnswer").val( child.answers );
-
-					// reset terms checkboxes
-					$(".terms").each( function() {
-						if ( $(this).is(":checked") ) $(this).trigger('click');
-					});
-
-					switch (parseInt( child.school_bus) ) {
-						case 0:
-							$("#schoolBusOption").text("your home town");
-							break;
-						case 1:
-							$("#schoolBusOption").text(child.school_airport + " airport");
-							break;
-						case 2:
-							$("#schoolBusOption").text("Crown Heights");
-							break;
-					}
-
-					// if they chose what transportation they want
-					switch (parseInt( child.transportation )) {
-						case 0:
-							$(".transportation").eq(0).trigger('click');
-							break;
-						case 1:
-							$(".transportation").eq(1).trigger('click');
-							$(".airport").val( child.airport );
-							$(".flight").val( child.flight );
-							break;
-						case 2:
-							$(".transportation").eq(2).trigger('click');
-							break;
-						case 3:
-							$(".transportation").eq(3).trigger('click');
-							break;
-					}
-					if ( $(".snack_way_back").is(":checked") ) $(".snack_way_back").trigger('click'); // first reset
-					if ( parseInt(child.snack_way_back) == 1 ) $(".snack_way_back").trigger('click'); // then set to checked if needed
-
-					$('select').niceSelect('update');
-					$("#first").focus();
-				}
-
-				function nextChild() {
-					// figure out which form to show
-					let next_user = 0;
-					let current_user = $("#user_id").val();
-					let next = false;
-					while ( !next_user ) {
-						for ( c in children_ids ) {
-							let id = children_ids[c];
-							if ( next ) {
-								next_user = id;
-								break;
-							}
-							if ( id == current_user ) {
-								next = true;
-							}
-						}
-					}
-					fillEnrollmentForm( next_user );
-				}
-
-				function checkForms() {
-					// for ( id in children ) {
-					// 	if ( !completed.includes( id ) ) {
-					// 		return false;
-					// 	}
-					// }
-					return true;
-				}
-
-				function getCrossStreets( number, street ) {
-					if ( street && street != 'Choose One' && parseInt($(".in_zone:checked").val()) == 1 ) {
-						if ( !number ) {
-							alert('You must enter a Street Number.');
-							return false;
-						} else if ( isNaN( number ) ) {
-							alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
-							return false;
-						} 
-
-						// $("#walkingException").hide();
-						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
-							let info = JSON.parse( result );
-							if ( info.success ) {
-								let cross = info.data;
-								$("#acc_cross1").val( cross.cross1 );
-								$("#acc_cross2").val( cross.cross2 );
-								$("#walking_zone").val( cross.zone_5780 );
-							} else {	
-								alert( info.error );
-								$("#walking_zone").val(0);
-							}
-						});
-					} else {
+						alert(info.error);
 						$("#walking_zone").val(0);
 					}
-					// } else if ( street == 'East Flatbush (out of the walking zone)' ) {
-					// 	$("#walkingException").show();
-					// }
-				}
-
-		    $(document).ready(function(e){
-				$(".in_zone").click( function() {
-					if ( $(this).is(":checked") ) {
-						let val = parseInt( $(this).val() );
-						if ( val ) {
-							$(".inside_zone").show();
-							$(".outside_zone").hide();
-						} else {
-							$(".inside_zone").hide();
-							$(".outside_zone").show();
-						}
-					}
 				});
-					// get streets for dropdown
-					$.post('../ajax/getStreets.php', function( result ) {
-						let data = JSON.parse( result );
-						let html = '<option>Choose One</option>';
-						for ( s in data.streets ) {
-							html += "<option>" + data.streets[s].street + "</option>";
-						}
-						// html += "<option>East Flatbush (out of the walking zone)</option>";
-						$("#acc_street").append( html );
-						$('select#acc_street').niceSelect('update');
-					});
+			} else {
+				$("#walking_zone").val(0);
+			}
+			// } else if ( street == 'East Flatbush (out of the walking zone)' ) {
+			// 	$("#walkingException").show();
+			// }
+		}
 
-					$("#acc_street_num").blur( function() {
-						if ( parseInt($(".in_zone:checked").val()) == 1 ) {
-							let number = $(this).val();
-							let street = $("#acc_street").val();
-							getCrossStreets( number, street );
-						}
-					});
+		$(document).ready(function (e) {
+			$(".in_zone").click(function () {
+				if ($(this).is(":checked")) {
+					let val = parseInt($(this).val());
+					if (val) {
+						$(".inside_zone").show();
+						$(".outside_zone").hide();
+					} else {
+						$(".inside_zone").hide();
+						$(".outside_zone").show();
+					}
+				}
+			});
+			// get streets for dropdown
+			$.post('../ajax/getStreets.php', function (result) {
+				let data = JSON.parse(result);
+				let html = '<option>Choose One</option>';
+				for (s in data.streets) {
+					html += "<option>" + data.streets[s].street + "</option>";
+				}
+				// html += "<option>East Flatbush (out of the walking zone)</option>";
+				$("#acc_street").append(html);
+				$('select#acc_street').niceSelect('update');
+			});
 
-					$("#acc_street").change( function() {
-						let street = $(this).val();
-						let number = $("#acc_street_num").val();
-						getCrossStreets( number, street );
-					});
+			$("#acc_street_num").blur(function () {
+				if (parseInt($(".in_zone:checked").val()) == 1) {
+					let number = $(this).val();
+					let street = $("#acc_street").val();
+					getCrossStreets(number, street);
+				}
+			});
 
-		    	// Select 
-				  $('select').niceSelect();
-				  $('select.children').change(function(e){
-				  	var val = $(this).find('option:selected').text();
-				  	$('.children-change').val('$' + val + '.00');
-					});
+			$("#acc_street").change(function () {
+				let street = $(this).val();
+				let number = $("#acc_street_num").val();
+				getCrossStreets(number, street);
+			});
 
-					$("#loginForm").submit( function( evt ) {
-						evt.preventDefault();
-						let user = $("#username").val();
-						let pass = $("#password").val();
-						$.post('../ajax/login.php', { username: user, password: pass }, function( result ) {
-							let info = JSON.parse( result );
-							if ( info.success ) {
-								Cookies.set('chidon_admin', info.admin);
-								Cookies.set('from_enrollment', 1);
-								$.post('../ajax/checkForSetup.php', { admin : info.admin }, function( result ) {
-									const res = JSON.parse( result );
-									if ( res.success ) {
-										const admin_info = res.info;
-										// console.log( admin_info );
-										if ( parseInt( admin_info.setup ) > 0 ) {
-											getChildren( info.admin );
-										} else {
-											location.href = "intro.html";
-										}
-									} else {
-										location.href = "intro.html";
-									}
-								});
+			// Select 
+			$('select').niceSelect();
+			$('select.children').change(function (e) {
+				var val = $(this).find('option:selected').text();
+				$('.children-change').val('$' + val + '.00');
+			});
+
+			$("#loginForm").submit(function (evt) {
+				evt.preventDefault();
+				let user = $("#username").val();
+				let pass = $("#password").val();
+				$.post('../ajax/login.php', { username: user, password: pass }, function (result) {
+					let info = JSON.parse(result);
+					if (info.success) {
+						Cookies.set('chidon_admin', info.admin);
+						Cookies.set('from_enrollment', 1);
+						$.post('../ajax/checkForSetup.php', { admin: info.admin }, function (result) {
+							const res = JSON.parse(result);
+							if (res.success) {
+								const admin_info = res.info;
+								// console.log( admin_info );
+								if (parseInt(admin_info.setup) > 0) {
+									getChildren(info.admin);
+								} else {
+									location.href = "intro.html";
+								}
 							} else {
-								alert( info.error );
+								location.href = "intro.html";
 							}
 						});
-					});	
-
-					$(document).on('click', '.enroll', function( evt ) {
-						evt.preventDefault();
-						let id = $(this).attr('id');
-						fillEnrollmentForm( id );
-
-						let html = '';
-						if ( numChildren > 1 ) {
-							html += `<input type="submit" class="button submit next" value="save & next child" />
-													<input type="submit" class="button submit pay" value="save & go to payment" />`;
-						} else {
-							html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
-						}
-						$(".save-detail").empty();
-						$(".save-detail").append( html );
-
-						$(".personal-information").show();
-					});
-
-					$("#personalInfo").submit( function( evt ) {
-						evt.preventDefault();
-
-						// find out if we are going to next child or going to payment
-						let btn = $(this).find("input[type=submit]:focus").attr('class');
-						let next = false;
-						let pay = false;
-						if ( btn.indexOf('next') != -1 ) next = true;
-						else if ( btn.indexOf('pay') != -1 ) pay = true;			
-
-						let info = {};
-						info.user_id = $("#user_id").val();
-						info.first = $("#first").val();
-						info.last = $("#last").val();
-						info.heFirst = $("#heFirst").val();
-						info.heLast = $("#heLast").val();
-						info.grade = $("#grade").val();
-						info.book = $("#book").val();
-						info.sweater = $("#sweater").val();
-						info.shoe = $("#shoe").val();
-						info.sandwich = $("#sandwich").val();
-						// info.yarmulka = $("#yarmulka").val();
-						info.allergy = parseInt( $(".allergy:checked").val() );
-						info.allergies = '';
-						if ( info.allergy ) info.allergies = $("#allergies").val();
-						let in_zone = parseInt( $(".in_zone:checked").val() );
-						info.in_zone = in_zone;
-						if ( in_zone == 1 ) {
-							info.acc_street = $("#acc_street").val();
-							info.acc_cross1 = $("#acc_cross1").val();
-							info.acc_cross2 = $("#acc_cross2").val();
-						} else {
-							info.acc_street = $("#acc_street_outside_zone").val();
-							info.acc_cross1 = $("#acc_street_outside_zone").val();
-							info.acc_cross2 = $("#acc_street_outside_zone").val();
-						}
-						info.acc_family = $("#acc_family").val();
-						info.acc_street_num = $("#acc_street_num").val();
-						info.acc_street_num_suffix = $("#acc_street_num_suffix").val();
-						info.acc_street_apt = $("#acc_street_apt").val();
-						info.acc_phone = $("#acc_phone").val();
-						info.walking_zone = $("#walking_zone").val();
-						info.walking = $("#walking").is(":checked") ? 1 : 0;
-						info.test_lang = $(".testLang:checked").val();
-						info.history = '';
-						$(".history").each( function() {
-							if ( $(this).is(":checked") ) info.history += $(this).val() + ',';
-						});
-						// info.notes = $("#chidonNotes").val();
-						info.notes = '';
-						info.answer = $("#chidonAnswer").val();
-						info.transportation = parseInt( $(".transportation:checked").val() );
-						if ( parseInt( info.transportation ) == 1 ) {
-							info.airport = $(".airport").val();
-							info.flight = $(".flight").val().trim();
-						} else {
-							info.airport = '';
-							info.flight = '';
-						}
-						info.snack_way_back = $(".snack_way_back").is(':checked') ? 1 : 0;
-
-						const school_id = $("#school_id").val();
-						info.school_id = school_id;
-						if ( parseInt( school_id ) == 269 ) {
-							info.school_name = $("#school_name").val();
-							info.affiliation = $("#affiliation").val();
-							info.friend_name = $("#friend_name").val();
-							info.anash_address = $("#anash_address").val();
-							info.anash_city = $("#anash_city").val();
-							info.anash_state = $("#anash_state").val();
-							info.anash_zip = $("#anash_zip").val();
-							info.medications = $("#meds").val();
-							info.known_family = $(".known_family:checked").val();
-							info.anash_airport = $("#anash_airport").val();
-							info.anash_arrival = $("#anash_arrival").val( );
-							info.morning_pickup = $(".morning_pickup:checked").val();
-						}
-
-						let errors = '';
-						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
-						// 		info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
-							//console.log( info );
-						if ( !info.first ) errors += "You must enter a first name.\n";
-						if ( !info.last ) errors += "You must enter a last name.\n";
-						if ( !info.heFirst ) errors += "You must enter a first hebrew name.\n";
-						if ( !info.heLast ) errors += "You must enter a hebrew last name.\n";
-						if ( !info.sweater || info.sweater == '0' ) errors += "You must choose a sweater size.\n";
-						if ( !info.shoe || info.shoe == '0' ) errors += "You must choose a shoe size.\n";
-						if ( !info.sandwich || info.sandwich == '0' ) errors += "You must choose a sandwich.\n";
-						// if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
-						if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
-						if ( !info.acc_street || info.acc_street == 'Choose One' ) errors += "You must enter which street you are staying on.\n";
-						if ( !info.acc_street_num || !info.acc_cross1 || !info.acc_cross2 ) errors += "You have not entered all required address info.\n";
-						if ( info.in_zone && ( !info.walking_zone || info.walking_zone == '0' ) ) errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
-						if ( !info.acc_phone ) errors += "You have not entered a phone number to where you are staying.\n";
-						if ( !info.test_lang ) errors += "You have not indicated which language the test should be in.\n";
-						if ( info.allergy && !info.allergies ) {
-							errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
-						}
-						if ( !$(".transportation:checked").length ) errors += "You must choose how your child will be coming back from the event.\n";
-						if ( info.transportation == 1 ) {
-							if ( !info.airport || info.airport == '0' || info.flight == '' ) errors += "You must choose an airport and time of flight.\n";
-						}
-
-						if ( parseInt( info.school_id ) == 269 ) {
-							if ( !info.school_name ) errors += "You must enter your child's school name.\n";
-							if ( info.affiliation == 'Please Select' ) errors += "You must enter your affiliation.\n";
-							if ( !(info.anash_address && info.anash_city && info.anash_state && info.anash_zip) ) errors += "You must enter your home address info.\n";
-							if ( !$(".known_family:checked").length ) errors += "You must indicate whether your child is staying at a family that you personally know or not.\n";
-							if ( !$(".morning_pickup:checked").length ) errors += "You must indicate whether you need to have your child picked up in the morning.\n";
-						}
-
-						if (!$("#waiver:checked").length) {
-							errors += "You must fill out the waiver!\n";
-						}
-						if ( $("#initials").val().trim() == '' ) errors += "You must enter your initials by the third item under terms.\n";
-						if (! ($("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
-							errors += "You must indicate your agreement to all terms.\n";
-						}
-						// if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
-						// 	errors += "You must indicate your agreement to all terms.\n";
-						// }
-						console.log( errors );
-						//}
-
-						if ( errors != '' ) {
-							alert( errors );
-							return false;
-						} else {
-							$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
-								//if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
-								let res = JSON.parse( result );
-								if ( res.success ) {
-									alert( res.message );
-									if ( next ) {					
-										// refresh children
-										getChildren( Cookies.get('chidon_admin') );					
-										alert('Showing form for next child.');
-										nextChild();
-									} else if ( pay ) {
-										location.href = "payment-information.html";
-										// if ( checkForms() )	location.href = "enroll-2.html";
-										// else alert("You cannot go to payment until you have completed the form for all of your children.");
-									}
-								} else {
-									alert( res.error );
-								}
-							});
-						}
-					});
-
-					$("#logoff").click( function() {
-						Cookies.remove('chidon_admin');
-						location.href = "enroll.html";
-					});
-		    });
-		</script>
-
-<script>
-$(function() {
-			var header = $("header");
-			$(window).scroll(function() {    
-					var scroll = $(window).scrollTop();
-			
-					if (scroll >= 100) {
-							header.addClass("header-alt");
-				console.log ('called');
 					} else {
-							header.removeClass('header-alt');
+						alert(info.error);
 					}
+				});
 			});
-	});
-</script>
 
-	</body>
+			$(document).on('click', '.enroll', function (evt) {
+				evt.preventDefault();
+				let id = $(this).attr('id');
+				fillEnrollmentForm(id);
+
+				let html = '';
+				if (numChildren > 1) {
+					html += `<input type="submit" class="button submit next" value="save & next child" />
+													<input type="submit" class="button submit pay" value="save & go to payment" />`;
+				} else {
+					html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
+				}
+				$(".save-detail").empty();
+				$(".save-detail").append(html);
+
+				// TODO: Display correct form based on child.
+				// $(".formA").show();
+				$(".personal-information").show();
+			});
+
+			$("#personalInfo").submit(function (evt) {
+				evt.preventDefault();
+
+				// find out if we are going to next child or going to payment
+				let btn = $(this).find("input[type=submit]:focus").attr('class');
+				let next = false;
+				let pay = false;
+				if (btn.indexOf('next') != -1) next = true;
+				else if (btn.indexOf('pay') != -1) pay = true;
+
+				let info = {};
+				info.user_id = $("#user_id").val();
+				info.first = $("#first").val();
+				info.last = $("#last").val();
+				info.heFirst = $("#heFirst").val();
+				info.heLast = $("#heLast").val();
+				info.grade = $("#grade").val();
+				info.book = $("#book").val();
+				info.sweater = $("#sweater").val();
+				info.shoe = $("#shoe").val();
+				info.sandwich = $("#sandwich").val();
+				// info.yarmulka = $("#yarmulka").val();
+				info.allergy = parseInt($(".allergy:checked").val());
+				info.allergies = '';
+				if (info.allergy) info.allergies = $("#allergies").val();
+				let in_zone = parseInt($(".in_zone:checked").val());
+				info.in_zone = in_zone;
+				if (in_zone == 1) {
+					info.acc_street = $("#acc_street").val();
+					info.acc_cross1 = $("#acc_cross1").val();
+					info.acc_cross2 = $("#acc_cross2").val();
+				} else {
+					info.acc_street = $("#acc_street_outside_zone").val();
+					info.acc_cross1 = $("#acc_street_outside_zone").val();
+					info.acc_cross2 = $("#acc_street_outside_zone").val();
+				}
+				info.acc_family = $("#acc_family").val();
+				info.acc_street_num = $("#acc_street_num").val();
+				info.acc_street_num_suffix = $("#acc_street_num_suffix").val();
+				info.acc_street_apt = $("#acc_street_apt").val();
+				info.acc_phone = $("#acc_phone").val();
+				info.walking_zone = $("#walking_zone").val();
+				info.walking = $("#walking").is(":checked") ? 1 : 0;
+				info.test_lang = $(".testLang:checked").val();
+				info.history = '';
+				$(".history").each(function () {
+					if ($(this).is(":checked")) info.history += $(this).val() + ',';
+				});
+				// info.notes = $("#chidonNotes").val();
+				info.notes = '';
+				info.answer = $("#chidonAnswer").val();
+				info.transportation = parseInt($(".transportation:checked").val());
+				if (parseInt(info.transportation) == 1) {
+					info.airport = $(".airport").val();
+					info.flight = $(".flight").val().trim();
+				} else {
+					info.airport = '';
+					info.flight = '';
+				}
+				info.snack_way_back = $(".snack_way_back").is(':checked') ? 1 : 0;
+
+				const school_id = $("#school_id").val();
+				info.school_id = school_id;
+				if (parseInt(school_id) == 269) {
+					info.school_name = $("#school_name").val();
+					info.affiliation = $("#affiliation").val();
+					info.friend_name = $("#friend_name").val();
+					info.anash_address = $("#anash_address").val();
+					info.anash_city = $("#anash_city").val();
+					info.anash_state = $("#anash_state").val();
+					info.anash_zip = $("#anash_zip").val();
+					info.medications = $("#meds").val();
+					info.known_family = $(".known_family:checked").val();
+					info.anash_airport = $("#anash_airport").val();
+					info.anash_arrival = $("#anash_arrival").val();
+					info.morning_pickup = $(".morning_pickup:checked").val();
+				}
+
+				let errors = '';
+				// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
+				// 		info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
+				//console.log( info );
+				if (!info.first) errors += "You must enter a first name.\n";
+				if (!info.last) errors += "You must enter a last name.\n";
+				if (!info.heFirst) errors += "You must enter a first hebrew name.\n";
+				if (!info.heLast) errors += "You must enter a hebrew last name.\n";
+				if (!info.sweater || info.sweater == '0') errors += "You must choose a sweater size.\n";
+				if (!info.shoe || info.shoe == '0') errors += "You must choose a shoe size.\n";
+				if (!info.sandwich || info.sandwich == '0') errors += "You must choose a sandwich.\n";
+				// if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
+				if (!info.acc_family) errors += "You must enter the family name of where you are staying.\n";
+				if (!info.acc_street || info.acc_street == 'Choose One') errors += "You must enter which street you are staying on.\n";
+				if (!info.acc_street_num || !info.acc_cross1 || !info.acc_cross2) errors += "You have not entered all required address info.\n";
+				if (info.in_zone && (!info.walking_zone || info.walking_zone == '0')) errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
+				if (!info.acc_phone) errors += "You have not entered a phone number to where you are staying.\n";
+				if (!info.test_lang) errors += "You have not indicated which language the test should be in.\n";
+				if (info.allergy && !info.allergies) {
+					errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
+				}
+				if (!$(".transportation:checked").length) errors += "You must choose how your child will be coming back from the event.\n";
+				if (info.transportation == 1) {
+					if (!info.airport || info.airport == '0' || info.flight == '') errors += "You must choose an airport and time of flight.\n";
+				}
+
+				if (parseInt(info.school_id) == 269) {
+					if (!info.school_name) errors += "You must enter your child's school name.\n";
+					if (info.affiliation == 'Please Select') errors += "You must enter your affiliation.\n";
+					if (!(info.anash_address && info.anash_city && info.anash_state && info.anash_zip)) errors += "You must enter your home address info.\n";
+					if (!$(".known_family:checked").length) errors += "You must indicate whether your child is staying at a family that you personally know or not.\n";
+					if (!$(".morning_pickup:checked").length) errors += "You must indicate whether you need to have your child picked up in the morning.\n";
+				}
+
+				if (!$("#waiver:checked").length) {
+					errors += "You must fill out the waiver!\n";
+				}
+				if ($("#initials").val().trim() == '') errors += "You must enter your initials by the third item under terms.\n";
+				if (!($("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length)) {
+					errors += "You must indicate your agreement to all terms.\n";
+				}
+				// if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
+				// 	errors += "You must indicate your agreement to all terms.\n";
+				// }
+				console.log(errors);
+				//}
+
+				if (errors != '') {
+					alert(errors);
+					return false;
+				} else {
+					$.post('../ajax/enrollChild.php', { child: info }, function (result) {
+						//if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
+						let res = JSON.parse(result);
+						if (res.success) {
+							alert(res.message);
+							if (next) {
+								// refresh children
+								getChildren(Cookies.get('chidon_admin'));
+								alert('Showing form for next child.');
+								nextChild();
+							} else if (pay) {
+								location.href = "payment-information.html";
+								// if ( checkForms() )	location.href = "enroll-2.html";
+								// else alert("You cannot go to payment until you have completed the form for all of your children.");
+							}
+						} else {
+							alert(res.error);
+						}
+					});
+				}
+			});
+
+			$("#logoff").click(function () {
+				Cookies.remove('chidon_admin');
+				location.href = "enroll.html";
+			});
+		});
+	</script>
+
+	<script>
+		$(function () {
+			var header = $("header");
+			$(window).scroll(function () {
+				var scroll = $(window).scrollTop();
+
+				if (scroll >= 100) {
+					header.addClass("header-alt");
+					console.log('called');
+				} else {
+					header.removeClass('header-alt');
+				}
+			});
+		});
+	</script>
+
+</body>
+
 </html>

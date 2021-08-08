@@ -1,5 +1,4 @@
 import * as types from './types';
-// import _ from 'lodash';
 
 export const initialState = {};
 

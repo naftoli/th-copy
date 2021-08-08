@@ -157,7 +157,7 @@
             var bal = 0;
             var cart = [];
             var originalBal = 0;
-    		var auction_id = 81;
+    		var auction_id = 82;
             var float_element = "";
             var availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
             var totalmilesText = "Total Miles Earned: ";
@@ -174,7 +174,8 @@
             $.post('ajax/getBalance.php', {
                 admin : Cookies.get('admin'),
                 user : user,
-                auction : auction_id
+                auction : auction_id,
+                points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
             }, function( success ) {
                 var info = $.parseJSON(success);
                 var html = '<div id="balance-box" ' + float_element+'>';

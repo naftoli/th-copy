@@ -49,6 +49,10 @@ class Report {
     public function getHeReportDates() {
         return $this->heReportDates;
     }
+
+    public function getDates() {
+        return $this->dates;
+    }
     
     public function setPreviousDates() {
         $start = $this->reportDates['start']-1;

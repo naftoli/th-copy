@@ -493,7 +493,7 @@ class user {
 		}
 
 		// sort no label tasks by task ord
-		usort( $this->no_label_tasks, $this->sortByLabel() );
+//		usort( $this->no_label_tasks, $this->sortByLabel() );
                 
 		// ********** DAILY TASKS ********** //
 		for ($dtno = 0; $dtno < count($this->daily_tasks); $dtno++) {
@@ -548,7 +548,7 @@ class user {
 					$missing_label = $this->sorted_weekly_labels[$frequency_id];
 					$logger->warning(
 						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
-						[user_id => $this->user_id]
+						['user_id' => $this->user_id]
 					);
 				}
 				array_push($this->weekly_labels, $label_name);

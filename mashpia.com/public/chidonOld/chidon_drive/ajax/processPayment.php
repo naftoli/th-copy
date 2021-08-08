@@ -1,5 +1,4 @@
 <?php
-//ini_set('display_errors',1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 require __DIR__ . '/../encrypt.php';

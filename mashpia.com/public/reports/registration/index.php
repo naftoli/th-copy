@@ -18,7 +18,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Base Reports Home Page</title>
+        <title>Tzivos Hashem | Accounting Reports Home Page</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="/raffles/shared/styles/action-links.css" rel="stylesheet" type="text/css">
     </head>
@@ -26,20 +26,26 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <? // load the admin UI and JQuery 1.4
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
-        <h1>Registration Reports</h1>
+        <h1>Accounting Reports</h1>
         
         <?if ($admin_user['auth'] == 'super') {?>
         <div id="action-links">
             <a href="registration_status.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Base Registration Status</span>
+                    <span class="link-text">Base Registration</span>
+                </div>
+            </a>
+            <a href="registration.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="reports"/>
+                    <span class="link-text">Soldier Registration</span>
                 </div>
             </a>
             <a href="registration_charges.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Soldier Registration Charges</span>
+                    <span class="link-text">Soldier Charges</span>
                 </div>
             </a>
         </div>
@@ -50,20 +56,24 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Registration Settings</span>
                 </div>
             </a>
+            <a href="discounts.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Discounts</span>
+                </div>
+            </a>
             <a href="/admin_yearly.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Unregister Schools and Students</span>
                 </div>
             </a>
-            <!--
             <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Registration Report</span>
+                    <span class="link-text">Old Registration Report</span>
                 </div>
             </a>
-            -->
         </div>
         <div id="action-links">
             <a href="/types_of_schools.php<?=$debug ? "?debug=true": "";?>">

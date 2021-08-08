@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Site</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <link href="css/responsive.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <link href="/mobile/reg/plugins/iCheck/all.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="css/keyboard.css">
+    <link rel="stylesheet" href="cropper/dist/cropper.css">
+    <link rel="stylesheet" href="cropper/avatar/css/main.css">
+    <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: #1b2b51;
+        }
+
+        .btn-primary {
+            background-color: #2b529e;
+            border-color: #2b529e;
+        }
+
+        .control-label {
+            padding-top: 3%;
+        }
+
+        label {
+            vertical-align: middle;
+        }
+
+        .xtra {
+            font-size: 14px;
+            padding: 6px;
+        }
+
+        .form-control {
+            border-radius: 5px !important;
+            border: 1px solid #b1b1b1 !important;
+            margin: 3px;
+        }
+
+        hr {
+            margin-bottom: 0;
+        }
+
+        .btn-primary.active,
+        .btn-primary.focus,
+        .btn-primary:active,
+        .btn-primary:focus,
+        .btn-primary:hover,
+        .open > .dropdown-toggle.btn-primary {
+            background-color: #2b529e !important;
+        }
+
+        .check-accept span {
+            font-size: 14px;
+            font-family: font3;
+            line-height: 1.2;
+        }
+
+        #instructions {
+            font-size: 18px;
+            line-height: 1.5;
+            background-color: lightgrey;
+            padding: 10px;
+            border: 1px solid darkgrey;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container login-page" id="crop-avatar">
+    <div class="login-header">
+        <span class="span12">Chidon Confirmation</span>
+    </div>
+    <div class="span12 body">
+        <div class="login-box">
+            <div class="login-box-body">
+                <div id="regInfo">
+                    <div class="row">
+                        <div class="col-sm-12" id="instructions">
+                            Please review the details of your registration carefully.
+                            For any questions, please email <a href="mailto:zelda@tzivoshashem.org">zelda@tzivoshashem.org</a>
+                            with a screenshot of this page. You may still continue to confirm your prize selection and sweater orders, if relevant.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" id="purchaseInfo">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="chidon_purchases.html">
+                                <button id="continue" class="btn btn-primary btn-block">Continue</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+<script src="js/js.cookie.js" type="text/javascript"></script>
+<script>
+    // wrap ajax calls in promise
+    function getAjax(url, data) {
+        return new Promise((resolve, reject) => {
+            $.post(url, data, function (result) {
+                resolve(JSON.parse(result))
+            })
+        })
+    }
+
+    $(function () {
+        getAjax('ajax/getPurchases.php', { admin: Cookies.get('admin') })
+            .then(res => {
+                const children = res.children
+                const transactions = res.transactions
+
+                getAjax('ajax/getRegInfo.php', { admin: Cookies.get('admin') })
+                    .then(res => {
+                        const info = res.info
+                        let total = 0
+
+                        let html = '<br /><div style="font-size: 18px; line-height: 1.5;">'
+
+                        html += '<b>Registration Info</b><br /><br />'
+                        let family_id
+                        for (let id in children) {
+                            if (info[children[id].th_chidon_id]) family_id = info[children[id].th_chidon_id].admin_id
+                            else family_id = children[id].parent_id
+                            break
+                        }
+                        html += `Family ID: ${family_id}<br /><br />`
+
+                        for (let id in children) {
+                            const child = children[id]
+                            html += `Chidon ID: ${child.th_chidon_id} <br />Name: ${child.first} `
+                            html += "<br />Registration Status: "
+                            if (!child.date_paid) {
+                                html += '<span style="color: red">NOT REGISTERED</span>'
+                                // $("#update").show()
+                            } else {
+                                // check if there's actual payment
+                                const admin_id = child.parent_id
+                                if (!transactions[admin_id]) {
+                                    html += '<span style="color: red">REGISTERED BUT NO PAYMENT FOUND (' + children[id].date_paid + ')</span>'
+                                } else {
+                                    html += 'REGISTERED (' + children[id].date_paid + ')'
+                                }
+                            }
+                            // more info
+                            if (info[child.th_chidon_id]) {
+                                const child_info = info[child.th_chidon_id]
+                                html += `<br />Registration Fee: $${child_info.reg_fee}`
+                                if (parseInt(child_info.chidon_drive) > 0) {
+                                    html += `<br />Chidon Drive Total Raised: $${child_info.chidon_drive}`
+                                    html += `<br />Chidon Drive Subsidy: $${child_info.subsidy}`
+                                }
+                                if (parseInt(child_info.coupon) > 0) html += `<br />Coupon: $${child_info.coupon} - ${child_info.coupon_reason}`
+                                html += `<br />Paid: $${child_info.paid}`
+                                html += `<br />Registration Balance: $${child_info.balance}`
+                                html += '<br /><br />'
+                                total += parseFloat(child_info.balance)
+                            } else {
+                                html += '<br /><br />'
+                            }
+                        }
+                        if (total) html += '<span style="color: red">'
+                        html += '<b>Total Registration Balance: $' + total + '</b>'
+                        if (total) html += '</span>'
+                        html += '<br /><br />'
+
+                        $("#purchaseInfo").append(html)
+
+                        // update cookies / cart regarding total balance
+                        Cookies.set('reg_balance', total)
+                        if (localStorage) localStorage.setItem('reg_balance', total)
+
+                        // if already confirmed disable all selects / inputs
+                        // $.post('ajax/checkConfirmation.php', { field: 'confirmed_chidon_5781', admin: Cookies.get('admin') }, function(result) {
+                        //     if (parseInt(result) == 1) {
+                        //         $("button").attr('disabled', true)
+                        //         // $("#confirmation").text('Already Confirmed')
+                        //         location.href = 'confirmation.html'
+                        //     }
+                        // })
+                    })
+                    .catch(error => {
+                        alert('There was an error.')
+                        console.log(error)
+                    })
+            })
+            .catch(error => {
+                alert('There was an error.')
+                console.log(error)
+            })
+
+        // $("#confirmation").click( function() {
+        //     $.post('ajax/confirmation.php', { field: 'confirmed_reg', admin: Cookies.get('admin') }, function(result) {
+        //         const res = JSON.parse(result)
+        //         if (res.success) {
+        //             alert('Confirmed.')
+        //             location.reload()
+        //         } else {
+        //             alert(res.error)
+        //             console.log(res.sql)
+        //         }
+        //     })
+        // })
+    });
+</script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-71974937-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+
+</html>

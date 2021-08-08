@@ -12,7 +12,7 @@ use \DBAdapter;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 class YearlyRaffle {
-    private $DAY_COUNT = 180;
+    private $days_of_tasks;
     private $db_conn;
     private $year;
     private $deadline;
@@ -33,16 +33,17 @@ class YearlyRaffle {
     public function __construct($db_conn = false) {
         // create a new DB adapter if one is not provided
         $db_conn ? $this->db_conn = $db_conn : $this->db_conn = new DBAdapter();
-        $this->year  = GlobalSettings::getCurrentYear();
+        $this->year = GlobalSettings::getCurrentYear();
         // find raffle 180
         $result = $this->db_conn->query("select * from raffles where type = 'yearly' order by year desc limit 1");
         $row = $result->fetch_assoc();
         $this->deadline = $row['end_date'];
         $this->start = $row['start_date'];
+        $this->days_of_tasks = $row['days_of_tasks'];
         $this->grid_id = 13012;
         $this->cutoff = 2459171;
     }
-// WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
+    // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
         $this->eligibility = $this->getAndCacheEligibility($school_id);
         return $this->eligibility;
@@ -93,7 +94,7 @@ class YearlyRaffle {
         $users_sql = "SELECT user_id, user_serial, school_name, first, last, days, class_grade, class_sub"
             ." FROM user_yearly_raffle JOIN users USING (user_id) "
             ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-            ." WHERE days >= " . $this->DAY_COUNT . " "
+            ." WHERE days >= " . $this->days_of_tasks . " "
             ." AND year = " . $this->year . " "
             .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
             ." ORDER BY school_name, class_grade, class_sub, last, first, days ";
@@ -119,7 +120,6 @@ class YearlyRaffle {
      * 
      */
     private function getEligibility( $school_id = false, $user_id = false ){
-        global $logger;
         if ($user_id) {
             $users_filter = "dtm.user_id = ". $user_id;
         } else if ($school_id) {
@@ -147,12 +147,16 @@ class YearlyRaffle {
                 group by user_id";
         $result1 = mysql_query($sql1);
         $result2 = mysql_query($sql2);
+
+        $totals = [];
+        // if $user_id is provided default to zero instead of the key not existing
+        if ($user_id) {
+            $totals[$user_id] = 0;
+        }
         while($row = mysql_fetch_array($result1)) {
-            if ($row['user_id'] == 18453) $logger->debug("sql1 result {$row['total']}", [$sql1]);
             $totals[$row['user_id']] = $row['total'];
         }
         while($row = mysql_fetch_array($result2)) {
-            if ($row['user_id'] == 18453) $logger->debug("sql2 result {$row['total']}", [$sql2]);
             if (array_key_exists($row['user_id'], $totals)) {
                 $totals[$row['user_id']] += $row['total'];
             } else {
@@ -220,14 +224,14 @@ class YearlyRaffle {
     }
 
     /**
-     * getDayCount
+     * required_days_of_tasks
      * 
-     * return the minimum number of days needed
+     * return the minimum number of days needed to be in the raffle
      *
      * @return int
      */
-    public function getDayCount() {
-        return $this->DAY_COUNT;
+    public function required_days_of_tasks() {
+        return $this->days_of_tasks ?? Constants::get_yearly_task_requirment();
     }
 
     public function getYear() {
