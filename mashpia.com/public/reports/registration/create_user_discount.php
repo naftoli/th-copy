@@ -160,12 +160,11 @@ if ( empty( $discounts ) ) {
     $(function () {
         $("#school").change( function () {
             let id = $(this).val()
-            $.get('../../ajax/getClasses.php?id=' + id, function( result ) {
-                let grades = JSON.parse(result)
+            $.post('../../api/core/platoons?action=small', { school_id: id }, function( grades ) {
+                console.log(grades)
                 let html = '<option value="0">Choose Grade</option>'
-                for (let class_id in grades) {
-                    console.log(class_id + ':' + grades[class_id])
-                    html += `<option value="${class_id}">${grades[class_id]}</option>`
+                for (let grade of grades.data) {
+                    html += `<option value="${grade.class_id}">${grade.name}</option>`
                 }
                 $("#grade").empty()
                 $("#grade").append(html)
