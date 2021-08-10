@@ -1,6 +1,7 @@
 <?php
+ini_set('display_errors', 1);
 $admin_auth = ['school'];
-require '/header.php';
+require '../../header.php';
 
 if ($admin_auth['auth'] != 'super') {
     echo "No Permission.";
