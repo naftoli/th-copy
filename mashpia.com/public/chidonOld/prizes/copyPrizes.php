@@ -20,7 +20,7 @@ foreach ($prizes as $row) {
     $qrys[] = "insert into chidon_prizes
                 set year = 5782, 
                 prize_picture = '" . $row['prize_picture'] . "', 
-                prize_name = '" . $row['prize_name'] . "'. 
+                prize_name = '" . $row['prize_name'] . "', 
                 quantity = 100, 
                 size = '" . $row['size'] . "', 
                 color = '" . $row['color'] . "', 
@@ -31,7 +31,7 @@ foreach ($prizes as $row) {
 }
 
 foreach ($qrys as $sql) {
-    echo $sql . "<br />";
+//    echo $sql . "<br />";
     mysql_query($sql);
 }
 
