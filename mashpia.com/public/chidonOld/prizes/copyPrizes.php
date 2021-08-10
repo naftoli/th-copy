@@ -31,6 +31,7 @@ foreach ($prizes as $row) {
 }
 
 foreach ($qrys as $sql) {
+    echo $sql . "<br />";
     mysql_query($sql);
 }
 
