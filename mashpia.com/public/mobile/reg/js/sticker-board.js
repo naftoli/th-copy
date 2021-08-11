@@ -72,7 +72,6 @@ var sticker_board = function () {
     }
     // render the response
     function renderPage(campaigns) {
-        console.log(campaigns)
         var selected_subject = findGetParameter('subject');
         var sliderHtml = '';
         var boardHtml = '';

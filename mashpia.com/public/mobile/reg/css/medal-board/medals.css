@@ -4,20 +4,109 @@
 }
 
 .medal-board {
-    max-width: 994px;
+    max-width: 1028px;
     margin: 10px auto 10px;
     text-align: center;
+    width: 100%;
 }
 
 .medal-board .medal {
-    width: 33%;
     text-align: center;
-    display: inline-block;
-    padding: 0px 2%;
+    padding: 0 15px 15px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #ffd942;
+    margin: 20px 0;
 }
 
+.medal-board .medal .medal-header {
+    display: flex;
+}
+
+.medal-board .medal .medal-header2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.medal-board .medal .medal-header2 .medal-header2-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.medal-board .medal .medal-header2 .medal-header2-flex .cornerLabel {
+    background: #eeeeee;
+    color: #1b2b51;
+    max-width: 300px;
+    padding: 10px 15px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.medal-board .medal .medal-header2 .medal-header2-flex h2 {
+    color: #ffd942;
+    text-align: left;
+    margin-top: 15px;
+    font-size: 35px;
+    font-family: Tkuma;
+}
+
+.medal-board .medal .medal-header2 .medal-header2-flex p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.medal-board .medal .medal-header2 .medal-header2-flex p span {
+    color: #ffd942;
+}
+
+.medal-board .medal a {
+    max-width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+
 img.medal-img {
-    width: 70%;
+    width: 80%;
+}
+
+.medal-board .medals-list {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.medal-board .medals-list .medals-list-img {
+    height: 50px;
+    width: 50px;
+}
+
+.medal-board .medals-list .medals-list-incomplete {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+}
+
+.medal-board .medals-list .medals-list-incomplete img {
+    opacity: 0.6;
+}
+
+.medal-board .medals-list .medals-list-incomplete span {
+    position: absolute;
+    font-weight: 900;
+}
+
+p.cornerLabel img.medal-img {
+    max-width: 25px;
 }
 
 .medal-board .medal-subject {
@@ -134,13 +223,11 @@ img.medal-img {
 
 @media ( min-width: 400px ) {
     .medal-board .medal {
-        padding: 1% 2%;
     }
 }
 
 @media ( max-width: 420px ) and ( min-height: 800px ){
     .medal-board .medal {
-        padding: 3% 2%;
     }
 }
 
@@ -167,7 +254,7 @@ img.medal-img {
         font-size: 1.25em;
     }
     img.medal-img {
-        width: 55%;
+        width: 75%;
     }
 }
 
@@ -182,11 +269,8 @@ img.medal-img {
 
 @media ( min-width: 1024px ) {
     .medal-board .medal {
-        width: 25%;
-        padding: 1% 2% 0px;
     }
     img.medal-img {
-        width: 70%;
     }
 }
 
