@@ -10,6 +10,20 @@ class PersonalizeRouter {
     }
 
     /**
+     * @param $id
+     *
+     * utility function to extract start and end dates from a parsha id
+     */
+    private function getDatesFromParsha($id) {
+        $sql = "select start, end from parshos where parsha_id = " . mysql_real_escape_string($id);
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $dates[0] = $row['start'];
+        $dates[1] = $row['end'];
+        return $dates;
+    }
+
+    /**
      * ?action=getCampaigns
      * Returns a list of campaigns
      * 
@@ -48,6 +62,12 @@ class PersonalizeRouter {
     public function getTasks() {
         // see below for variables available in each call
         extract( $this->getParams() );
+
+        if (!isset($start)) {
+            $dates = $this->getDatesFromParsha($parsha_id);
+            $start = $dates[0];
+            $end = $dates[1];
+        }
 
         $this->tc->setEnd( $end );
         $this->tc->setLang( $lang );
