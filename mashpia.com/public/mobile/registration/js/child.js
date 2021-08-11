@@ -138,6 +138,7 @@ var childApp = function(){
             $('#successModal').modal('show');
         });
     }
+
     // create a new child
     function createChild( event ) {
         event.preventDefault();

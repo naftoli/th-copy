@@ -426,14 +426,15 @@ class TasksCustomizationNew {
 				." and dtm.lang_id = " . $this->lang. " ";
 			//if ($this->id == 5548)echo $sql;
         } else if ($this->type == 'class') {
-            $users = $this->getUsersInGrade($this->id);
-            if ( empty($users) ) return false;
+//            $users = $this->getUsersInGrade($this->id);
+//            if ( empty($users) ) return false;
+//            where ut.user_id in (" . implode(',', $users) . ")
             $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
                     join users u using (user_id) 
-                    where ut.user_id in (" . implode(',', $users) . ") 
+                    where u.class_id = " . $this->id . "
                     and dtm.subject_id = " . $subject_id . " 
                     and dtm.school_type_id = u.school_type_id 
                     and dtm.start_date >= $this->start 
@@ -442,7 +443,8 @@ class TasksCustomizationNew {
                     and u.user_registered > 0 
                     and dtm.personal = 0 
                     and dtm.lang_id = " . $this->lang;
-			 //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
+//			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
+//            echo $sql;
         } else {
             $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
                     from date_tasks dt 

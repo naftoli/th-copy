@@ -77,7 +77,7 @@ class DiscountManager
     }
 
     public function getAllStudentDiscounts() {
-        $stmt = $this->db->query("SELECT * FROM discounts where user_id > 0");
+        $stmt = $this->db->query("SELECT d.*, u.first, u.last FROM discounts d JOIN users u USING(user_id) where d.user_id > 0");
         return $stmt->fetchAll();
     }
 

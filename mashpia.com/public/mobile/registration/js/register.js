@@ -127,7 +127,11 @@ var registrationApp = function() {
 
         getUsers().then( function( users ) { 
             console.log( users );
+
             if( users.length === 0 ) return noChildren();
+
+            setupNonThSchoolList()
+
             if( users.length === 1 ) return step2();
 
             var html = '';
@@ -137,19 +141,21 @@ var registrationApp = function() {
             $("#children").html( html );
 
             toggleLoading( "step-1", false );
-
-            // setup non th school list
-            $.post('api/getNonThSchools.php', function(result) {
-                var res = JSON.parse(result)
-                var html = '<option value="" selected>Please Choose</option>'
-                for (let s in res) {
-                    html += '<option value=' + s + '>' + res[s] + "</option>";
-                }
-                html += '<option value="0">My school is not listed</option>'
-                $("#non_th_school_id").empty()
-                $("#non_th_school_id").append(html)
-            })
         });
+    }
+
+    function setupNonThSchoolList() {
+        // setup non th school list
+        $.post('api/getNonThSchools.php', function(result) {
+            var res = JSON.parse(result)
+            var html = '<option value="" selected>Please Choose</option>'
+            for (let s in res) {
+                html += '<option value=' + s + '>' + res[s] + "</option>";
+            }
+            html += '<option value="0">My school is not listed</option>'
+            $("#non_th_school_id").empty()
+            $("#non_th_school_id").append(html)
+        })
     }
 
     const pleaseSelectErr = "Please select at least one child";
@@ -591,7 +597,7 @@ var registrationApp = function() {
 
         // make sure non th school field is not empty
         if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-            var non_th_school = $("#non_th_school_id").val().trim();
+            var non_th_school = $("#non_th_school_id").val();
             if (non_th_school == 0 || non_th_school == '0' || non_th_school == '') {
                 non_th_school = $("#non_th_school").val().trim()
                 if (non_th_school.length < 3) return showError(Err10);

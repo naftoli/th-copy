@@ -59,7 +59,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="discounts.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Discounts</span>
+                    <span class="link-text">School Discounts</span>
+                </div>
+            </a>
+            <a href="create_user_discount.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Student Discounts</span>
                 </div>
             </a>
             <a href="/admin_yearly.php">

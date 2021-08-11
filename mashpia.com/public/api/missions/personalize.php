@@ -2,11 +2,26 @@
 ini_set('max_execution_time', 600);
 include_once( __DIR__ . "/../header/header.php" );
 require_once( __DIR__ . "/../../class.tasksCustomizationNew.php" );
+require_once( __DIR__ . "/../../class.globalSettings.php" );
 
 class PersonalizeRouter {
 
     public function __construct(){
         $this->tc = new TasksCustomizationNew;
+    }
+
+    /**
+     * @param $id
+     *
+     * utility function to extract start and end dates from a parsha id
+     */
+    private function getDatesFromParsha($id) {
+        $sql = "select start, end from parshos where parsha_id = " . mysql_real_escape_string($id);
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $dates[0] = $row['start'];
+        $dates[1] = $row['end'];
+        return $dates;
     }
 
     /**
@@ -48,6 +63,18 @@ class PersonalizeRouter {
     public function getTasks() {
         // see below for variables available in each call
         extract( $this->getParams() );
+
+        if (!isset($start)) {
+            if ($parsha_id) {
+                $dates = $this->getDatesFromParsha($parsha_id);
+                $start = $dates[0];
+                $end = $dates[1];
+            } else {
+                $dates = GlobalSettings::getCurYearDates();
+                $start = $dates['start'];
+                $end = $dates['end'];
+            }
+        }
 
         $this->tc->setEnd( $end );
         $this->tc->setLang( $lang );
