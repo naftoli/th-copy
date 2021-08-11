@@ -42,7 +42,8 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     margin-bottom: 10px;
-    display: flex;
+    display: block;
+    text-align: center;
     align-items: center;
     font-size: 16px;
 }
@@ -74,6 +75,38 @@
 
 img.medal-img {
     width: 80%;
+}
+
+.medal-board .medals-list {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.medal-board .medals-list .medals-list-img {
+    height: 50px;
+    width: 50px;
+}
+
+.medal-board .medals-list .medals-list-incomplete {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+}
+
+.medal-board .medals-list .medals-list-incomplete img {
+    opacity: 0.6;
+}
+
+.medal-board .medals-list .medals-list-incomplete span {
+    position: absolute;
+    font-weight: 900;
+}
+
+p.cornerLabel img.medal-img {
+    max-width: 25px;
 }
 
 .medal-board .medal-subject {

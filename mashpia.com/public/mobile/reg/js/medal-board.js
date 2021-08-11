@@ -26,12 +26,14 @@ function medal_board(target, user_id, url) {
             var html = '<div class="medal-board">';
             for (var index = 0; index < response.length; index++) {
                 var medal = response[index];
+                console.log('medal is', medal)
                 // create a new medal and render it on the page
                 html += new Medal({
                     subject: medal.name, url: url ? (url + "?id=" + user_id + '&subject=' + medal.id) : "#",
                     picture: medal.photo ? ("/file_view.php?id=" + medal.photo) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
                     animate: medal.photo ? true : false, base_amount: medal.base_amount,
-                    needed: medal.needed, total: medal.total, next: medal.next
+                    needed: medal.needed, total: medal.total, next: medal.next,
+                    nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, medals: medal.medals
                 }).render();
             }
             html += "</div>";
@@ -79,6 +81,9 @@ function Medal(config) {
         ]
 
     }
+    this.nextMedalDate = config.nextMedalDate;
+    this.nextMedalImg = config.nextMedalImg;
+    this.medals = config.medals;
 }
 
 Medal.prototype.getColor = function (current) {
@@ -163,8 +168,20 @@ Medal.prototype.render = function () {
     html += '<h2>' + this.subject + '</h2>';
     html += '<p><span>' + this.total + ' of ' + this.needed + '</span> monthly missions earned</p>';
     html += '</div>';
-    html += "<div class='cornerLabel'>Don't miss a month to earn your medal by ב״א שבט</div>";
+    html += "<p class='cornerLabel'>Don't miss a month to earn your "
+    html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
+    html += "medal by " + this.nextMedalDate + "</p>";
     html += '</div>';
+    html += '<div class="medals-list">';
+    this.medals.forEach(medal => {
+        let medalImg = '<img class="medals-list-img" src="http://mashpia.com/file_view.php?id=' + medal.img + '"/>';
+        if (medal.completed) {
+            html += medalImg;
+        } else {
+            html += '<div class="medals-list-incomplete">' + medalImg + '<span>' + medal.number + '</span></div>';
+        }
+    });
+    html += '</div>'
     html += '<div class="medal-status progress">';
     html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '">'
 
