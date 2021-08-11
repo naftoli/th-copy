@@ -2,6 +2,7 @@
 ini_set('max_execution_time', 600);
 include_once( __DIR__ . "/../header/header.php" );
 require_once( __DIR__ . "/../../class.tasksCustomizationNew.php" );
+require_once( __DIR__ . "/../../class.globalSettings.php" );
 
 class PersonalizeRouter {
 
@@ -64,9 +65,15 @@ class PersonalizeRouter {
         extract( $this->getParams() );
 
         if (!isset($start)) {
-            $dates = $this->getDatesFromParsha($parsha_id);
-            $start = $dates[0];
-            $end = $dates[1];
+            if ($parsha_id) {
+                $dates = $this->getDatesFromParsha($parsha_id);
+                $start = $dates[0];
+                $end = $dates[1];
+            } else {
+                $dates = GlobalSettings::getCurYearDates();
+                $start = $dates['start'];
+                $end = $dates['end'];
+            }
         }
 
         $this->tc->setEnd( $end );
