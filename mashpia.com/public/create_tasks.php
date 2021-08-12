@@ -148,8 +148,6 @@ if (isset($_POST['submit'])) {
     // $defaultDates = GlobalSettings::getCurYearDates();
 	// $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
-    // $defaultStart = 2458754; 
-    // $defaultEnd = 2459103;
 
     $defaultStart = 2459468;
     $defaultEnd = 2459852;
