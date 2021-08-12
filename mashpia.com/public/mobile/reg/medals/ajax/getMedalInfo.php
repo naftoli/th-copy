@@ -28,8 +28,9 @@ $c = new CampaignEnrollment($user);
 $c->setType();
 $subjects = $c->getCampaigns();
 
+$subjectIcons = [];
 $subjectNames = array();
-$sql = "SELECT subject_id, subject_name FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
+$sql = "SELECT subject_id, subject_name, subject_gold_image_id FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$name = $row['subject_name'];
@@ -40,6 +41,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 		$name = "תניא";
 	}
 	$subjectNames[$row['subject_id']] = $name;
+	$subjectIcons[$row['subject_id']] = $row['subject_gold_medal_id'];
 }
 // get the missions
 $missions = array();
@@ -185,7 +187,8 @@ foreach ( $subjects as $subject ) {
 
 		$info[] = array( 
 			'id'	=>	$subject, 
-			'name'	=>	$subjectNames[$subject], 
+			'name'	=>	$subjectNames[$subject],
+			'icon'  =>  $subjectIcons[$subject],
 			'medal'	=>	$medal, 
 			'photo'	=>	$photo, 
             'left'	=>	$left,
@@ -202,7 +205,8 @@ foreach ( $subjects as $subject ) {
     } else {
     	$info[] = array( 
 			'id'	=>	$subject, 
-			'name'	=>	$subjectNames[$subject], 
+			'name'	=>	$subjectNames[$subject],
+            'icon'  =>  $subjectIcons[$subject],
 			'medal'	=>	"None", 
 			'photo'	=>	"", 
             'left'	=>	(int)$subject_medals[$subject][1]['missions_needed'],
