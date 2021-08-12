@@ -109,7 +109,7 @@ tr, th, td {
         // }
         $sm = new ShabbosMevorchim();
         $sm->setSchool($id);
-        foreach ([2459021,2459049] as $date) {
+        foreach ([2459399,2459434] as $date) {
             $sm->setReportDates($date);
             $sm->setStudentResults();
             $quotas = $sm->getStudentResults();
