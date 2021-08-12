@@ -30,8 +30,8 @@ function medal_board(target, user_id, url) {
                 // create a new medal and render it on the page
                 html += new Medal({
                     subject: medal.name, url: url ? (url + "?id=" + user_id + '&subject=' + medal.id) : "#",
-                    picture: medal.photo ? ("/file_view.php?id=" + medal.photo) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
-                    animate: medal.photo ? true : false, base_amount: medal.base_amount,
+                    picture: medal.icon ? ("/file_view.php?id=" + medal.icon) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
+                    animate: medal.icon ? true : false, base_amount: medal.base_amount,
                     needed: medal.needed, total: medal.total, next: medal.next,
                     nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, medals: medal.medals
                 }).render();
@@ -174,7 +174,7 @@ Medal.prototype.render = function () {
     html += '</div>';
     html += '<div class="medals-list">';
     this.medals.forEach(medal => {
-        let medalImg = '<img class="medals-list-img" src="http://mashpia.com/file_view.php?id=' + medal.img + '"/>';
+        let medalImg = '<img class="medals-list-img" src="' + medal.img + '"/>';
         if (medal.completed) {
             html += medalImg;
         } else {
