@@ -249,7 +249,7 @@ foreach ( $subjects as $subject ) {
             'medals'    => [
                 [
                     'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
-                    'img'       => $subject_medals[$subject][1]['img'],
+                    'img'       => getImgBack($subject, $medal),
                     'completed' => false
                 ]
             ]
