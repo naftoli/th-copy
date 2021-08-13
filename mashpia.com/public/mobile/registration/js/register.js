@@ -1176,7 +1176,7 @@ var templates = function(){
                 $("#boysWhatsapp").hide()
             }
 
-            if (user.new_to_chidon) {
+            if (parseInt(user.new_to_chidon) == 1) {
                 $("#chidonRecruitment").show()
             } else {
                 $("#chidonRecruitment").hide()
