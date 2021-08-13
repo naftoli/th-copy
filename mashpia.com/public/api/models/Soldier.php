@@ -447,11 +447,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // check if child is new to chidon
-        $result['new_to_chidon'] = true;
+        $result['new_to_chidon'] = 1;
         $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user");
         $stmt->execute([':user' => $this->user_id]);
         $rows = $stmt->fetchAll();
-        if ( !empty($rows) ) $result['new_to_chidon'] = false;
+        if ( !empty($rows) ) $result['new_to_chidon'] = 0;
 
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
