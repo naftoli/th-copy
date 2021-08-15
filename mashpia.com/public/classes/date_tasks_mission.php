@@ -99,7 +99,8 @@ class date_tasks_mission {
 			$daily_task->set_subject_image_id($subject_image_id);
 			$daily_task->set_dates($start_date, $end_date);
 			$daily_task->set_date_tasks_marks($user_id, $start_date, $end_date);
-			array_push($daily_tasks, $daily_task);
+			if ($daily_task->short_name == 'Report Missions') array_unshift($daily_tasks, $daily_task);
+			else array_push($daily_tasks, $daily_task);
 		}
 		// echo "<pre>" . print_r($daily_tasks) . "</pre>";
 		return $daily_tasks;
