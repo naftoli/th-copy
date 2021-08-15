@@ -540,10 +540,12 @@ class user {
         $last = array_pop($this->sorted_daily_labels);
 		$idx = key(end($this->sorted_daily_labels));
 		$temp[$idx] = $last;
-		$new_arr = $temp + $this->sorted_daily_labels;
-		$this->sorted_daily_labels = $new_arr;
+		if ($idx == 21) {
+            $new_arr = $temp + $this->sorted_daily_labels;
+            $this->sorted_daily_labels = $new_arr;
+        }
 //		echo "<pre>"; print_r($this->sorted_daily_labels); echo "</pre>";
-		
+//		exit;
 		// ********** DAILY TASKS ********** //
 		
 		// ********** WEEKLY TASKS ********** //
