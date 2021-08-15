@@ -3,6 +3,7 @@ require_once 'db.php';
 require_once 'class.campaignEnrollment.php';
 require 'class.birthdayEn.php';
 require 'class.birthdayYi.php';
+require 'class.birthdayHe.php';
 require 'class.heDob.php';
 
 /*
@@ -62,5 +63,7 @@ foreach ($users as $user_id) {
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();
+    $bh = new BirthdayHe( $user_id );
+    $bh->setBirthday();
 }
 echo "Done.";

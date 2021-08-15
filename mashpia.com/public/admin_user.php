@@ -221,6 +221,9 @@ if(!empty($action)) {
 			require_once 'class.birthdayYi.php';
 			$by = new BirthdayYi( $new_user_id );
 			$by->setBirthday();
+            require_once 'class.birthdayHe.php';
+            $bh = new BirthdayHe( $new_user_id );
+            $bh->setBirthday();
 
 			//set dob for syncing with wp
 			require_once 'class.heDob.php';

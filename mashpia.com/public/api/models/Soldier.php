@@ -707,6 +707,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function setupBirthdayMissions(){
         require_once( __DIR__ . '/../../class.birthdayEn.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
+        require_once( __DIR__ . '/../../class.birthdayHe.php' );
         require_once( __DIR__ . '/../../class.heDob.php' );
         require_once( __DIR__ . '/../../class.wpBirthday.php' );
 
@@ -717,6 +718,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $bi = new BirthdayYi( $this->user_id );   
         @$bi->enablePrevious();
         @$bi->setBirthday();
+        $bh = new BirthdayHe( $this->user_id );
+        @$bh->enablePrevious();
+        @$bh->setBirthday();
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
         $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();
     }

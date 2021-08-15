@@ -2,6 +2,7 @@
 require '../db.php';
 require '../class.birthdayEn.php';
 require '../class.birthdayYi.php';
+require '../class.birthdayHe.php';
 require '../class.heDob.php';
 
 $myDomain       = $_SERVER['SCRIPT_URI'];
@@ -18,6 +19,8 @@ foreach ($users as $user) {
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();
+    $bh = new BirthdayHe( $user_id );
+    $bh->setBirthday();
     
     //set dob for syncing with wp
     $hdob = new HeDob( $user_id );

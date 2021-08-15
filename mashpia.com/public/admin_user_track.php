@@ -78,10 +78,13 @@ if (!empty($action)) {
 				if ($subject_id == 40) {
 					require_once 'class.birthdayEn.php';
 					require_once 'class.birthdayYi.php';
+                    require_once 'class.birthdayHe.php';
 					$b = new BirthdayEn($user_id);
 					$b->setBirthday();
 					$b = new BirthdayYi($user_id);
 					$b->setBirthday();
+                    $b = new BirthdayHe($user_id);
+                    $b->setBirthday();
 				}
 				mq("DELETE FROM user_tracks USING user_tracks LEFT JOIN school_type_subjects ON (user_tracks.subject_id = school_type_subjects.subject_id AND school_type_subjects.school_type_id = {$user_row['school_type_id']}) WHERE user_id = $user_id AND school_type_subjects.subject_id IS NULL");
 			}

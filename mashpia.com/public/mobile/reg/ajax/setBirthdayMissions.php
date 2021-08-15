@@ -13,6 +13,9 @@ $b->setBirthday();
 require_once 'class.birthdayYi.php';
 $bi = new BirthdayYi( $user_id );
 $bi->setBirthday();
+require_once 'class.birthdayHe.php';
+$bh = new BirthdayHe( $user_id );
+$bh->setBirthday();
 
 //set dob for syncing with wp
 require_once 'class.heDob.php';

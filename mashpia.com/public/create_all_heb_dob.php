@@ -8,11 +8,14 @@ die();
 require_once 'db.php';
 require_once 'class.birthdayEn.php';
 require_once 'class.birthdayYi.php';
+require_once 'class.birthdayHe.php';
 
 $b = new BirthdayEn;
 $b->setBirthday();
 $by = new BirthdayYi;
 $by->setBirthday();
+$bh = new BirthdayHe;
+$bh->setBirthday();
 
 $errors = $b->getErrors();
 if ($errors) {
