@@ -13,7 +13,7 @@ $prizes = [];
 $sql = "select * from chidon_credit_prizes where year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $prizes[] = $row;
+    $prizes[$row['credits']] = $row;
 }
 
 $recruits = [];
@@ -72,7 +72,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 echo $user_id . ', ';
             }
             echo "</td><td>" . $numRecruited . "</td><td>";
-            for ($i = 0; $i < $numRecruited; $i++) {
+            for ($i = 1; $i <= $numRecruited; $i++) {
                 echo $prizes[$i]['prize'] . ', ';
             }
             echo "</td></tr>";
