@@ -536,9 +536,9 @@ class user {
 			//echo "<input type='hidden' name='SORTED DAILY LABEL INFO' value='" . $daily_label . "'>\n";
 		}
 
-		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 21
+		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 21; 132
         $idx = key(end($this->sorted_daily_labels));
-		if ($idx == 21) {
+		if (in_array($idx, [21, 132])) {
             $last = array_pop($this->sorted_daily_labels);
             $temp[$idx] = $last;
             $new_arr = $temp + $this->sorted_daily_labels;
