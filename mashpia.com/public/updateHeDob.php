@@ -4,6 +4,7 @@ require_once 'db.php';
 require_once 'class.heDob.php';
 require_once 'class.birthdayEn.php';
 require_once 'class.birthdayYi.php';
+require_once 'class.birthdayHe.php';
 /*
 $users = array();
 $sql = "select user_id from users where user_registered > 0 and school_id = 110";
@@ -21,6 +22,8 @@ foreach ($users as $user_id) {
     $b->setBirthday();
     $bi = new BirthdayYi( $user_id );
     $bi->setBirthday();
+    $bh = new BirthdayHe( $user_id );
+    $bh->setBirthday();
 }
 echo "Done";
 ?>

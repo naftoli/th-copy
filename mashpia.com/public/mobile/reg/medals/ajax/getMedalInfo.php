@@ -22,14 +22,44 @@ function calculateNextDate($subject, $needed) {
     }
 }
 
+function getImgBack($subject_id, $medal) {
+    $medal_name = strtolower($medal);
+    if ($medal_name == 'none') $medal_name = 'white';
+    $img = "http://mashpia.com/mobile/reg/";
+    if ( in_array( $subject_id, [ 1, 12, 15, 93 ] ) )
+        $img .= 'images/backs/wwtc/'.$medal_name.'.png';
+    // 585 total missions
+    else if ( in_array( $subject_id, [ 40, 94 ] ) )
+        $img .= 'images/backs/yd/'.$medal_name.'.png';
+    // day schools subjects
+    else if ( $subject_id > 120 && $subject_id <= 135 ) {
+        if ( !in_array( $subject_id, [ 126, 127, 135 ] ) ) {
+            // daily subjects / tasks
+            $img .= 'images/backs/daySchools/daily/' . $medal_name . '.png';
+        } else if ($subject_id == 127) {
+            // yd subjects / tasks
+            $img .= 'images/backs/daySchools/yd/' . $medal_name . '.png';
+        } else {
+            // weekly subjects / tasks
+            $img .= 'images/backs/daySchools/weekly/' . $medal_name . '.png';
+        }
+    }
+    // 375 missions
+    else
+        $img .= 'images/backs/weekly/'.$medal_name.'.png';
+
+    return $img;
+}
+
 // figure out which subjects we are showing
 require '../../../../class.campaignEnrollment.php';
 $c = new CampaignEnrollment($user);
 $c->setType();
 $subjects = $c->getCampaigns();
 
+$subjectIcons = [];
 $subjectNames = array();
-$sql = "SELECT subject_id, subject_name FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
+$sql = "SELECT subject_id, subject_name, subject_gold_image_id FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$name = $row['subject_name'];
@@ -40,6 +70,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 		$name = "תניא";
 	}
 	$subjectNames[$row['subject_id']] = $name;
+	$subjectIcons[$row['subject_id']] = $row['subject_gold_image_id'];
 }
 // get the missions
 $missions = array();
@@ -177,7 +208,7 @@ foreach ( $subjects as $subject ) {
         foreach ($subject_medals[$subject] as $ord => $details) {
             $medals_arr[] = [
                 'number'    => $details['missions_needed'],
-                'img'       => $details['img'],
+                'img'       => getImgBack($subject, $medal),
                 'completed' => intval($mission['total']) >= $details['missions_needed']
             ];
 //            if ($details['missions_needed'] > intval( $mission['total'] )) break;
@@ -185,9 +216,10 @@ foreach ( $subjects as $subject ) {
 
 		$info[] = array( 
 			'id'	=>	$subject, 
-			'name'	=>	$subjectNames[$subject], 
+			'name'	=>	$subjectNames[$subject],
+			'icon'  =>  $subjectIcons[$subject],
 			'medal'	=>	$medal, 
-			'photo'	=>	$photo, 
+			'photo'	=>	$photo,
             'left'	=>	$left,
             'total'	=>	intval( $mission['total'] ), 
             'needed'=>	$mission['needed'], 
@@ -202,7 +234,8 @@ foreach ( $subjects as $subject ) {
     } else {
     	$info[] = array( 
 			'id'	=>	$subject, 
-			'name'	=>	$subjectNames[$subject], 
+			'name'	=>	$subjectNames[$subject],
+            'icon'  =>  $subjectIcons[$subject],
 			'medal'	=>	"None", 
 			'photo'	=>	"", 
             'left'	=>	(int)$subject_medals[$subject][1]['missions_needed'],
@@ -216,7 +249,7 @@ foreach ( $subjects as $subject ) {
             'medals'    => [
                 [
                     'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
-                    'img'       => $subject_medals[$subject][1]['img'],
+                    'img'       => getImgBack($subject, $medal),
                     'completed' => false
                 ]
             ]

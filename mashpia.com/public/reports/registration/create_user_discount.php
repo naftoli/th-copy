@@ -20,13 +20,13 @@ $msg = '';
 require_once 'Discount.php';
 
 if ( isset( $_POST['submit'] ) ) {
-    $school_id = $_POST['school'];
+    $user_id = $_POST['user'];
     $amount = $_POST['amount'];
     $created_by = $_POST['created_by'];
     $reason = $_POST['reason'];
     $year = $_POST['year'];
 
-    if ( !($school_id && $amount && $created_by && $reason && $year) ) {
+    if ( !($user_id && $amount && $created_by && $reason && $year) ) {
         $msg .= "You must fill out all the fields in order to create a discount.<br />";
     }
     if ( !is_numeric( $amount ) ) {
@@ -34,9 +34,9 @@ if ( isset( $_POST['submit'] ) ) {
     }
 
     if ( empty( $msg ) ) {
-        $discount = new Discount($year, $school_id, $amount, $reason, $created_by);
+        $discount = new StudentDiscount($year, $user_id, $amount, $reason, $created_by);
         $d = new DiscountManager($MASHPIA_DB);
-        if ($d->createDiscount($discount)) {
+        if ($d->createStudentDiscount($discount)) {
             $msg = "Your discount has been created.";
         } else {
             $msg = "There was an error creating your discount.";
@@ -46,7 +46,7 @@ if ( isset( $_POST['submit'] ) ) {
     }
 }
 $d = new DiscountManager($MASHPIA_DB);
-$discounts = $d->getAllDiscounts();
+$discounts = $d->getAllStudentDiscounts();
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,13 +72,13 @@ $discounts = $d->getAllDiscounts();
     <?= empty($msg) ? '' : $msg; ?>
 </div>
 
-<form action="discounts.php" method="post">
+<form action="create_user_discount.php" method="post">
     <p> Please fill in the following fields to generate a discount:</p>
     <table>
         <tr>
             <td>School:</td>
             <td>
-                <select name="school">
+                <select name="school" id="school">
                     <option value="0">Choose School</option>
                     <?php
                     foreach ($schools as $id => $school) {
@@ -86,6 +86,18 @@ $discounts = $d->getAllDiscounts();
                     }
                     ?>
                 </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Grade:</td>
+            <td>
+                <select name="grade" id="grade"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Student:</td>
+            <td>
+                <select name="user" id="user"></select>
             </td>
         </tr>
         <tr>
@@ -104,11 +116,11 @@ $discounts = $d->getAllDiscounts();
             <td>For Registration Year:</td>
             <td>
                 <select name="year">
-                <?php
-                for ($y = $regYear; $y < ($regYear + 5); $y++) {
-                    echo "<option value='$y'>$y</option>";
-                }
-                ?>
+                    <?php
+                    for ($y = $regYear; $y < ($regYear + 5); $y++) {
+                        echo "<option value='$y'>$y</option>";
+                    }
+                    ?>
                 </select>
             </td>
         </tr>
@@ -128,7 +140,7 @@ if ( empty( $discounts ) ) {
     <caption>Chayolei Registration Discounts</caption>
     <tr>
         <th>Year</th>
-        <th>School</th>
+        <th>Soldier</th>
         <th>Discount</th>
         <th>Created By</th>
         <th>Reason</th>
@@ -137,11 +149,39 @@ if ( empty( $discounts ) ) {
     </tr>
     <?php
     foreach ( $discounts as $discount ) {
-        echo "<tr><td>" . $discount['year'] . "</td><td>" . $schools[$discount['school_id']] . "</td><td>" . $discount['amount'] .
+        echo "<tr><td>" . $discount['year'] . "</td><td>" . ($discount['first'] . ' ' . $discount['last']) . "</td><td>" . $discount['amount'] .
             "</td><td>" . $discount['created_by'] . "</td><td>" . $discount['reason'] . "</td><td>" . $discount['created'] .
             "</td><td>" . $discount['used'] . "</td></tr>";
     }
     ?>
 </table>
 </body>
+<script>
+    $(function () {
+        $("#school").change( function () {
+            let id = $(this).val()
+            $.post('../../api/core/platoons?action=small', { school_id: id }, function( grades ) {
+                console.log(grades)
+                let html = '<option value="0">Choose Grade</option>'
+                for (let grade of grades.data) {
+                    html += `<option value="${grade.class_id}">${grade.name}</option>`
+                }
+                $("#grade").empty()
+                $("#grade").append(html)
+            })
+        })
+        $("#grade").change( function () {
+            let id = $(this).val()
+            $.get('../../ajax/getUsers.php?id=' + id, function( result ) {
+                let users = JSON.parse(result)
+                let html = '<option value="0">Choose Student</option>'
+                for (let user_id in users) {
+                    html += `<option value="${user_id}">${users[user_id]}</option>`
+                }
+                $("#user").empty()
+                $("#user").append(html)
+            })
+        })
+    })
+</script>
 </html>

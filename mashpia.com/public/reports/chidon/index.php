@@ -35,6 +35,27 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         
         <!--<h2>Forms and Reports</h2>-->
         <?if ($admin_user['auth'] == 'super') {?>
+        <h2>Prizes</h2>
+        <div id="action-links">
+            <a href="/chidonOld/prizes/">
+                <div class="button">
+                    <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                    <span class="link-text">Manage Chidon Prizes</span>
+                </div>
+            </a>
+            <a href="/chidonOld/credit_prizes/">
+                <div class="button">
+                    <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                    <span class="link-text">Manage Chidon Credit Prizes</span>
+                </div>
+            </a>
+            <a href="/chidonOld/credit_prizes/report.php">
+                <div class="button">
+                    <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                    <span class="link-text">Chidon Credit Report</span>
+                </div>
+            </a>
+        </div>
         <h2>Reporting Tools</h2>
         <div id="action-links">
             <a href="/chidonOld/reports/<?=$debug ? "?debug=true": "";?>">
