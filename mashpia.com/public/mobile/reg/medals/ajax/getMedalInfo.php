@@ -260,6 +260,19 @@ foreach ( $subjects as $subject ) {
             'medals'    => $medals_arr
 		);
     } else {
+        // create array of medals done
+        $medals_arr = [];
+        foreach ($subject_medals[$subject] as $ord => $details) {
+            $i = 0;
+            $medals_arr[] = [
+                'number'    => $details['missions_needed'],
+                'img'       => getImgBack($subject, $medals[$ord]),
+                'completed' => false,
+                'color'     => $imgColors[$i++]
+            ];
+//            if ($details['missions_needed'] > intval( $mission['total'] )) break;
+        }
+
     	$info[] = array( 
 			'id'	=>	$subject, 
 			'name'	=>	$subjectNames[$subject],
@@ -275,14 +288,7 @@ foreach ( $subjects as $subject ) {
             'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
-            'medals'    => [
-                [
-                    'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
-                    'img'       => getImgBack($subject, $medals[1]),
-                    'completed' => false,
-                    'color'     => $imgColors[0]
-                ]
-            ]
+            'medals'    => $medals_arr
 		);
     }
 }
