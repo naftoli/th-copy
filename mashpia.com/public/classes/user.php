@@ -545,7 +545,7 @@ class user {
             $new_arr = $temp + $this->sorted_daily_labels;
             $this->sorted_daily_labels = $new_arr;
         }
-		echo "<input type='hidden' name='report missions' value='" . print_r($this->sorted_daily_labels) . "' />";
+//		echo "<input type='hidden' name='report missions' value='" . print_r($this->sorted_daily_labels) . "' />";
 //		echo "<pre>"; print_r($this->sorted_daily_labels); echo "</pre>";
 //		exit;
 		// ********** DAILY TASKS ********** //
