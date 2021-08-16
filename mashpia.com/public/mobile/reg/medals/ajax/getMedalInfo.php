@@ -194,6 +194,9 @@ foreach ($subjects as $subject) {
     }
 }
 
+$imgColors = ['#d8dbde', '#aa2834', '#d55027', '#d29020', '#23914b', '#2b3078', '#4d297b', '#6d4c38', '#71707b', '#0a0515',
+    '#8e909d', '#ad6b44', '#b78f4b'];
+
 foreach ( $subjects as $subject ) {
     $monthly = in_array($subject, $monthly_subjects);
     if ( array_key_exists($subject, $missions) ) {
@@ -206,10 +209,12 @@ foreach ( $subjects as $subject ) {
 		// create array of medals done
         $medals_arr = [];
         foreach ($subject_medals[$subject] as $ord => $details) {
+            $i = 0;
             $medals_arr[] = [
                 'number'    => $details['missions_needed'],
                 'img'       => getImgBack($subject, $medal),
-                'completed' => intval($mission['total']) >= $details['missions_needed']
+                'completed' => intval($mission['total']) >= $details['missions_needed'],
+                'color'     => $imgColors[$i++]
             ];
 //            if ($details['missions_needed'] > intval( $mission['total'] )) break;
         }
@@ -227,6 +232,7 @@ foreach ( $subjects as $subject ) {
 			'next'	=>	($key === false ? 1 : ++$key),
             'nextMedalDate' => calculateNextDate($subject, $mission['needed']),
             'nextMedalImg'  => $subject_medals[$subject][$mission['ord']]['img'],
+            'nextMedalColor'    => $imgColors[$mission['ord']],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
             'medals'    => $medals_arr
@@ -244,13 +250,15 @@ foreach ( $subjects as $subject ) {
 			'next'	=>	1,
             'nextMedalDate' => calculateNextDate($subject, $subject_medals[$subject][1]['missions_needed']),
             'nextMedalImg'  => $subject_medals[$subject][1]['img'],
+            'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
             'medals'    => [
                 [
                     'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
                     'img'       => getImgBack($subject, $medal),
-                    'completed' => false
+                    'completed' => false,
+                    'color'     => $imgColors[0]
                 ]
             ]
 		);
