@@ -7,13 +7,35 @@ $monthly_subjects = [1, 12, 15, 93, 106];
 
 function calculateNextDate($subject, $needed) {
     // find date of task for this subject in $needed times
+    global $user;
     $jd = unixtojd();
-    $sql = "select end_date from date_tasks_missions where subject_id = $subject and end_date > $jd group by end_date limit $needed";
+    $sql = "
+        SELECT 
+            end_date
+        FROM
+            date_tasks_missions dtm
+                JOIN
+            user_tracks ut USING (subject_id)
+                JOIN
+            users u USING (user_id)
+        WHERE
+            dtm.subject_id = $subject
+                AND dtm.end_date > $jd
+                AND u.school_type_id = dtm.school_type_id
+                AND ut.track_id = dtm.track_id
+                AND ut.level = dtm.level
+                AND u.user_id = $user
+        GROUP BY dtm.end_date 
+        LIMIT $needed";
+//    if ($subject == 1) echo $sql;
     $result = mysql_query($sql);
     if (mysql_num_rows($result) == $needed) {
         // we have the correct result
-        while ($row = mysql_fetch_assoc($result)) {}
-        $date = $row['end_date'];
+        $res = [];
+        while ($row = mysql_fetch_assoc($result)) {
+            $res[] = $row;
+        }
+        $date = $res[$needed - 1]['end_date'];
         $jewish = jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM);
         $str = iconv ('WINDOWS-1255', 'UTF-8', $jewish);
         return $str;
@@ -227,10 +249,10 @@ foreach ( $subjects as $subject ) {
 			'photo'	=>	$photo,
             'left'	=>	$left,
             'total'	=>	intval( $mission['total'] ), 
-            'needed'=>	$mission['needed'], 
+            'needed'=>	$mission['needed'],
             'base_amount'=>	$mission['base_amount'], 
 			'next'	=>	($key === false ? 1 : ++$key),
-            'nextMedalDate' => calculateNextDate($subject, $mission['needed']),
+            'nextMedalDate' => calculateNextDate($subject, $mission['left']),
             'nextMedalImg'  => $subject_medals[$subject][$mission['ord']]['img'],
             'nextMedalColor'    => $imgColors[$mission['ord']],
             'monthly'   => $monthly,
