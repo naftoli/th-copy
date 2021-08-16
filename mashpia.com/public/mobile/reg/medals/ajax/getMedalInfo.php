@@ -46,7 +46,7 @@ function calculateNextDate($subject, $needed) {
 
 function getImgBack($subject_id, $medal) {
     $medal_name = strtolower($medal);
-    if ($medal_name == 'none') $medal_name = 'white';
+    if ($medal_name == 'gray') $medal_name = 'grey';
     $img = "http://mashpia.com/mobile/reg/";
     if ( in_array( $subject_id, [ 1, 12, 15, 93 ] ) )
         $img .= 'images/backs/wwtc/'.$medal_name.'.png';
@@ -234,7 +234,7 @@ foreach ( $subjects as $subject ) {
             $i = 0;
             $medals_arr[] = [
                 'number'    => $details['missions_needed'],
-                'img'       => getImgBack($subject, $medal),
+                'img'       => getImgBack($subject, $medals[$ord]),
                 'completed' => intval($mission['total']) >= $details['missions_needed'],
                 'color'     => $imgColors[$i++]
             ];
@@ -278,7 +278,7 @@ foreach ( $subjects as $subject ) {
             'medals'    => [
                 [
                     'number'    => (int)$subject_medals[$subject][1]['missions_needed'],
-                    'img'       => getImgBack($subject, $medal),
+                    'img'       => getImgBack($subject, $medals[1]),
                     'completed' => false,
                     'color'     => $imgColors[0]
                 ]
