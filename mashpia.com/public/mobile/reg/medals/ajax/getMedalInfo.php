@@ -228,7 +228,7 @@ foreach ( $subjects as $subject ) {
 		$left = $mission['left'];
 		$key = array_search($medal, $medals);
 
-		// create array of medals done
+		// create array of medals
         $medals_arr = [];
         foreach ($subject_medals[$subject] as $ord => $details) {
             $i = 0;
@@ -260,7 +260,7 @@ foreach ( $subjects as $subject ) {
             'medals'    => $medals_arr
 		);
     } else {
-        // create array of medals done
+        // create array of medals
         $medals_arr = [];
         foreach ($subject_medals[$subject] as $ord => $details) {
             $i = 0;
