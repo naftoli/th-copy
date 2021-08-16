@@ -537,10 +537,10 @@ class user {
 		}
 
 		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 21
-        $last = array_pop($this->sorted_daily_labels);
-		$idx = key(end($this->sorted_daily_labels));
-		$temp[$idx] = $last;
+        $idx = key(end($this->sorted_daily_labels));
 		if ($idx == 21) {
+            $last = array_pop($this->sorted_daily_labels);
+            $temp[$idx] = $last;
             $new_arr = $temp + $this->sorted_daily_labels;
             $this->sorted_daily_labels = $new_arr;
         }
