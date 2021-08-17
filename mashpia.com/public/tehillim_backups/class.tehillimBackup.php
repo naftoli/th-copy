@@ -54,16 +54,16 @@ class TehillimBackup {
     
     private function getLastSM() {
         $sm = calculateSM( $this->year );
-        foreach ($sm as $month => $date) {
-            if ($date > unixtojd()) {
-                // we found next sm
-                // we need previous sm
-                $month--;
-                $month--; // get date from 2 sm ago
-                break;
-            }
-        }
-        $this->date = $sm[$month];
+//        foreach ($sm as $month => $date) {
+//            if ($date > unixtojd()) {
+//                // we found next sm
+//                // we need previous sm
+//                $month--;
+//                break;
+//            }
+//        }
+//        $this->date = $sm[$month];
+        $this->date = 2459399;
     }
     
     private function getMarks() {
