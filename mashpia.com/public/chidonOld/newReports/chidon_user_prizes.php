@@ -116,14 +116,16 @@ foreach ($schools as $id => $school) {
                             else $eligible = 'no';
                             break;
                     }
+                    echo "<td>";
                     if ($eligible == 'yes') {
                         foreach ($user_prizes[$child['user_id']] as $prize_id) {
                             $prize = $prizes[$prize_id];
                             echo $prize['prize_name'] . ($prize['color'] ? ' - Color: ' . $prize['color'] : '') . ($prize['size'] ? ' - Size: ' . $prize['size'] : '') . ', ';
                         }
                     } else {
-                        echo "<td>Not Eligible for Prizes</td>";
+                        echo "Not Eligible for Prizes";
                     }
+                    echo "</td>";
                 }
                 echo "</tr>";
             }
