@@ -21,7 +21,7 @@ class TehillimBackup {
             2459296,
             2459321,
             2459362,
-            2459444
+            2459442
         );
         $this->errors = array();
     }
@@ -54,16 +54,15 @@ class TehillimBackup {
     
     private function getLastSM() {
         $sm = calculateSM( $this->year );
-//        foreach ($sm as $month => $date) {
-//            if ($date > unixtojd()) {
-//                // we found next sm
-//                // we need previous sm
-//                $month--;
-//                break;
-//            }
-//        }
-//        $this->date = $sm[$month];
-        $this->date = 2459399;
+        foreach ($sm as $month => $date) {
+            if ($date > unixtojd()) {
+                // we found next sm
+                // we need previous sm
+                $month--;
+                break;
+            }
+        }
+        $this->date = $sm[$month];
     }
     
     private function getMarks() {
