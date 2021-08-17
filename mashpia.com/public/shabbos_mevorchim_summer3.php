@@ -150,12 +150,12 @@ foreach ( $ids as $id => $name ) {
     <?php
     foreach ($info as $school_id => $more) {
         foreach ($more as $user_id => $dates) {
-                if (count($dates) > 1) {
-            $user = $userInfo[$user_id];
-            $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-            $name = $user['first'] . ' ' . $user['last'];
-            echo "<tr><td>" . $ids[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
-                }
+            if (count($dates) > 1) {
+                $user = $userInfo[$user_id];
+                $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
+                $name = $user['first'] . ' ' . $user['last'];
+                echo "<tr><td>" . $ids[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
+            }
         }
     }
     ?>
