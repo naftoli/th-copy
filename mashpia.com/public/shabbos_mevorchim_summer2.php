@@ -109,7 +109,7 @@ foreach ( $ids as $id => $name ) {
     // }
     $sm = new ShabbosMevorchim();
     $sm->setSchool($id);
-    foreach ([2459434] as $date) {
+    foreach ([2459399] as $date) {
         $sm->setReportDates($date);
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
