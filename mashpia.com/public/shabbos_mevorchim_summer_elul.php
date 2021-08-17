@@ -141,7 +141,7 @@ foreach ( $ids as $id => $name ) {
 }
 ?>
 <table>
-    <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Menachem Av</caption>
+    <caption>Children that completed their quotas for Shabbos Mevorchim Elul</caption>
     <tr>
         <th>School</th>
         <th>Grade</th>
