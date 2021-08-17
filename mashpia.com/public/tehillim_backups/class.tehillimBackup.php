@@ -21,8 +21,7 @@ class TehillimBackup {
             2459296,
             2459321,
             2459362,
-            2459443,
-            2459442
+            2459443
         );
         $this->errors = array();
     }
@@ -60,6 +59,7 @@ class TehillimBackup {
                 // we found next sm
                 // we need previous sm
                 $month--;
+                $month--; // get date from 2 sm ago
                 break;
             }
         }
