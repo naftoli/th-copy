@@ -99,6 +99,7 @@ foreach ($schools as $id => $school) {
                 $expert_elig = '';
                 foreach ($child_marks as $type => $final) {
                     if ($type == 'trophy_extra') continue;
+                    if ($type != $child['test_type']) continue;
                     switch ($type) {
                         case 'maven':
                         case 'pro':
@@ -118,12 +119,12 @@ foreach ($schools as $id => $school) {
                     }
                     echo "<td>";
                     if ($eligible == 'no') {
-                        echo "Not Eligible for Prizes";
-                    } else {
                         foreach ($user_prizes[$child['user_id']] as $prize_id) {
                             $prize = $prizes[$prize_id];
                             echo $prize['prize_name'] . ($prize['color'] ? ' - Color: ' . $prize['color'] : '') . ($prize['size'] ? ' - Size: ' . $prize['size'] : '') . ', ';
                         }
+                    } else {
+                        echo "Not Eligible for Prizes";
                     }
                     echo "</td>";
                 }
