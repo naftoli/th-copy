@@ -21,7 +21,8 @@ class TehillimBackup {
             2459296,
             2459321,
             2459362,
-            2459442
+            2459445,
+            2459445
         );
         $this->errors = array();
     }
