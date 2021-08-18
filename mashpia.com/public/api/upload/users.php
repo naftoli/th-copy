@@ -19,7 +19,6 @@ class UsersUploadRouter {
         if ( !isset( $_FILES['users'] ) )
             json_error("No File Sent", 'UPLOAD-USERS-17');
 
-        echo 'hi'; return;
         $daySchool = false;
         if ( $current_user->login->inst_id == 4 ) {
             // columns to create users
@@ -58,6 +57,8 @@ class UsersUploadRouter {
         $users = []; $errors = [];
         $firstRow = true;
         $errorLine = 2;
+
+        echo 'hi'; return;
 
         foreach( $objWorksheet->getRowIterator() as $row ) {
             $cellIterator = $row->getCellIterator();
