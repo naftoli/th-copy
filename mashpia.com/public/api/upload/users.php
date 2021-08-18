@@ -222,6 +222,10 @@ class UsersUploadRouter {
             }
             $user['school_type_id'] = $type;
 
+            if (isset($_COOKIE['naftoli'])) {
+                echo "<pre>"; print_r($user); echo "</pre>"; continue;
+            }
+
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
             $user->school_id = $school->school_id;
