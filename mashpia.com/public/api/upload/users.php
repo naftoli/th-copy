@@ -58,8 +58,6 @@ class UsersUploadRouter {
         $firstRow = true;
         $errorLine = 2;
 
-        echo 'hi'; return;
-
         foreach( $objWorksheet->getRowIterator() as $row ) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -185,6 +183,8 @@ class UsersUploadRouter {
             } // end firstRow check
         } // end row iteration
 
+        echo 'hi'; return;
+
         // return an error if there where no users provided
         if ( count( $users ) == 0 ) {
             return json_error( "No soldiers found on spreadsheet. Please check your file before uploading.", 'UPLOAD-USERS-157' );
@@ -226,10 +226,6 @@ class UsersUploadRouter {
                     break;
             }
             $user['school_type_id'] = $type;
-
-            if (isset($_COOKIE['naftoli'])) {
-                echo "<pre>"; print_r($user); echo "</pre>"; continue;
-            }
 
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
