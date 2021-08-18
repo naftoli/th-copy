@@ -237,10 +237,10 @@ class UsersUploadRouter {
                 $user->hachayols = 0;
                 $user->medals_ranks = 0;
             }
-            
-            $user->save();
 
             echo 'hi'; return;
+            
+            $user->save();
         }
 
         json_response('success');
