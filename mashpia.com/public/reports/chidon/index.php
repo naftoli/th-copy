@@ -43,6 +43,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Manage Chidon Prizes</span>
                 </div>
             </a>
+            <a href="/chidonOld/newReports/chidon_user_prizes.php">
+                <div class="button">
+                    <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                    <span class="link-text">Chidon Prizes Report</span>
+                </div>
+            </a>
             <a href="/chidonOld/credit_prizes/">
                 <div class="button">
                     <img src="/images/icon_auction.png" height="32" alt="tickets"/>
