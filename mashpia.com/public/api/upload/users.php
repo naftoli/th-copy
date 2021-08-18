@@ -225,8 +225,6 @@ class UsersUploadRouter {
             }
             $user['school_type_id'] = $type;
 
-            echo 'hi'; return;
-
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
             $user->school_id = $school->school_id;
@@ -241,6 +239,8 @@ class UsersUploadRouter {
             }
             
             $user->save();
+
+            echo 'hi'; return;
         }
 
         json_response('success');
