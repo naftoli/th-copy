@@ -183,8 +183,6 @@ class UsersUploadRouter {
             } // end firstRow check
         } // end row iteration
 
-        echo 'hi'; return;
-
         // return an error if there where no users provided
         if ( count( $users ) == 0 ) {
             return json_error( "No soldiers found on spreadsheet. Please check your file before uploading.", 'UPLOAD-USERS-157' );
@@ -205,6 +203,8 @@ class UsersUploadRouter {
         } else if ( $current_user->login->code == 'BC' ) {
             $school = \School::find([ $current_user->login->id ]);
         }
+
+        echo 'hi'; return;
 
         // create all the users...
         foreach( $users as $user ){
