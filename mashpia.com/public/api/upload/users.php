@@ -239,8 +239,6 @@ class UsersUploadRouter {
             }
             
             $user->save();
-
-            echo 'hi'; return;
         }
 
         json_response('success');
