@@ -94,7 +94,7 @@ require('header.php');
 <br />
 <?php
 require_once 'class.adminSchools.php';
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], false );
 $ids = $as->getSchools();
 // $ids = [54 => 'Beis Rivka'];
 
