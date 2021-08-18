@@ -1,8 +1,8 @@
 <?
 require_once __DIR__ . '/class.birthday.php';
 
-class BirthdayYi extends Birthday {
-    protected $lang_id = 2;
+class BirthdayHe extends Birthday {
+    protected $lang_id = 4;
     protected $description = 'יום הולדת';
     protected $category = 'יום הולדת';
     protected $mandTasks = array(
