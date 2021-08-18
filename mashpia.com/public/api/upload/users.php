@@ -204,8 +204,6 @@ class UsersUploadRouter {
             $school = \School::find([ $current_user->login->id ]);
         }
 
-        echo 'hi'; return;
-
         // create all the users...
         foreach( $users as $user ){
             switch ( $user['school_type_id'] ) {
@@ -226,6 +224,8 @@ class UsersUploadRouter {
                     break;
             }
             $user['school_type_id'] = $type;
+
+            echo 'hi'; return;
 
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
