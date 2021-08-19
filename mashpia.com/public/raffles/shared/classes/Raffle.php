@@ -283,7 +283,7 @@ class Raffle
         if ($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
         $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
-        echo $sql; exit;
+//        echo $sql; exit;
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
         if ($log) echo "Checking " . mysql_num_rows($query) . " remaining users";
