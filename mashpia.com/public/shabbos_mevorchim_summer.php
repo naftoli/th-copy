@@ -122,7 +122,7 @@ foreach ( $ids as $id => $name ) {
                     $result = mysql_query($sql);
                     $userInfo[$user_id] = mysql_fetch_assoc($result);
                     foreach ($values as $task => $quota) {
-                        $result = intval($done[$date][$grade][$user_id][$task]);
+                        $result = intval($done[$date][$user_id][$task]);
                         // echo "User: " . $user_id . "<br />";
                         // echo "Date: " . $date . "<br />";
                         // echo "Quota: " . $quota . "<br />";
