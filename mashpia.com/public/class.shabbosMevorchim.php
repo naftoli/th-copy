@@ -717,7 +717,7 @@ class ShabbosMevorchim {
 			$sql .= " and s.school_id = " . $this->school_id;
 		}
 		$sql .= " ORDER BY c.class_grade, c.class_sub";
-		//echo $sql . "<br />";
+
         foreach ( $this->db->query( $sql ) as $row ) {
             $this->classes[$row['class_id']]['grade'] = 
                 $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
@@ -1060,26 +1060,34 @@ class ShabbosMevorchim {
             AND user_id = ?";
         $stmtBackup = $this->db->prepare( $sqlBackup );
         
-		if ( $sid ) {
-			$this->classes = array();
-			$this->setClasses( $sid );
-		} else if ( empty( $this->classes ) ) {
-        	$this->setClasses( $sid );
-        }
-		
+//		if ( $sid ) {
+//			$this->classes = array();
+//			$this->setClasses( $sid );
+//		} else if ( empty( $this->classes ) ) {
+//        	$this->setClasses( $sid );
+//        }
+
 		if ( !$sid ) $sid = $this->school_id;
         
-        $users = array();
-		foreach ($this->classes as $id => $info) {			
-			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
-			$users[$id] = $stmt->fetchAll();
-		}
-		
-		foreach ($users as $class => $info) {
-			foreach ($info as $user) {
-				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
-			}
-		}
+//        $users = array();
+//		foreach ($this->classes as $id => $info) {
+//			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
+//			$users[$id] = $stmt->fetchAll();
+//		}
+//
+//		foreach ($users as $class => $info) {
+//			foreach ($info as $user) {
+//				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+//			}
+//		}
+
+        $users = [];
+        $stmt = $this->db->query("SELECT * FROM users WHERE school_id = $sid AND user_registered > 0 ORDER BY last, first");
+        $users = $stmt->fetchAll();
+
+        foreach ($users as $user) {
+            $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+        }
 		
 		// for each report date
 		foreach ( $this->rDates as $month => $date ) {
@@ -1091,10 +1099,11 @@ class ShabbosMevorchim {
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
 	            // for each class
-	            foreach ( $users as $class => $info ) {
+//	            foreach ( $users as $class => $info ) {
 					//if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
 					// for each user in the class.
-	            	foreach ($info as $user) {
+//	            	foreach ($info as $user) {
+                foreach ($users as $user) {
 	            		
 						// figure out if we are getting results from backup table or not
 						//$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
@@ -1140,7 +1149,7 @@ class ShabbosMevorchim {
 						
 						//if (!$sid) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />"; 
 						
-	                }
+//	                }
 	                
 				}
 								
