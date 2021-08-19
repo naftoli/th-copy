@@ -604,6 +604,7 @@ class Raffle
                 }
             }
         } else {
+            // mission report task is grid id 13012
             $grid_id = 13012;
             // find out how many different days were marked
             $sql = "select count(distinct mark_date) as total from date_tasks_marks dtm
