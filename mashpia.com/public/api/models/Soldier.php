@@ -292,7 +292,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $year = GlobalSettings::getRegistrationYear();
         $d = new DiscountManager($MASHPIA_DB);
         $discount = $d->getDiscountForUserYear($year, $this->user_id);
-        if ($discount[0]['used'] > 0) return [];
+        if (!empty($discount) && $discount[0]['used'] > 0) return [];
         return $discount;
     }
 
