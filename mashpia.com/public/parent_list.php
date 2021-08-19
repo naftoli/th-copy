@@ -45,7 +45,7 @@ foreach ($schools as $id => $school) {
 //get list of parents
 include_once('db.php');
 $sql = "
-SELECT DISTINCT a.admin_id, a.username, a.password, a.first, a.last, a.admin_address1, a.admin_city, a.admin_country, a.admin_email, a.admin_phone_mobile,
+SELECT DISTINCT a.admin_id, a.username, a.password, a.first, a.last, a.admin_address1, a.admin_city, a.admin_state, a.admin_country, a.admin_email, a.admin_phone_mobile,
 a.admin_phone_mobile2 FROM admins AS a 
 join admin_auths aa using (admin_id)  
 WHERE aa.auth =  'user' 
