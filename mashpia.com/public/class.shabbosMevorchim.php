@@ -717,7 +717,6 @@ class ShabbosMevorchim {
 			$sql .= " and s.school_id = " . $this->school_id;
 		}
 		$sql .= " ORDER BY c.class_grade, c.class_sub";
-
         foreach ( $this->db->query( $sql ) as $row ) {
             $this->classes[$row['class_id']]['grade'] = 
                 $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
@@ -1060,34 +1059,26 @@ class ShabbosMevorchim {
             AND user_id = ?";
         $stmtBackup = $this->db->prepare( $sqlBackup );
         
-//		if ( $sid ) {
-//			$this->classes = array();
-//			$this->setClasses( $sid );
-//		} else if ( empty( $this->classes ) ) {
-//        	$this->setClasses( $sid );
-//        }
+		if ( $sid ) {
+			$this->classes = array();
+			$this->setClasses( $sid );
+		} else if ( empty( $this->classes ) ) {
+        	$this->setClasses( $sid );
+        }
 
 		if ( !$sid ) $sid = $this->school_id;
         
-//        $users = array();
-//		foreach ($this->classes as $id => $info) {
-//			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
-//			$users[$id] = $stmt->fetchAll();
-//		}
-//
-//		foreach ($users as $class => $info) {
-//			foreach ($info as $user) {
-//				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
-//			}
-//		}
+        $users = array();
+		foreach ($this->classes as $id => $info) {
+			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
+			$users[$id] = $stmt->fetchAll();
+		}
 
-        $users = [];
-        $stmt = $this->db->query("SELECT * FROM users WHERE school_id = $sid AND user_registered > 0 ORDER BY last, first");
-        $users = $stmt->fetchAll();
-
-        foreach ($users as $user) {
-            $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
-        }
+		foreach ($users as $class => $info) {
+			foreach ($info as $user) {
+				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+			}
+		}
 		
 		// for each report date
 		foreach ( $this->rDates as $month => $date ) {
@@ -1099,11 +1090,10 @@ class ShabbosMevorchim {
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
 	            // for each class
-//	            foreach ( $users as $class => $info ) {
+	            foreach ( $users as $class => $info ) {
 					//if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
 					// for each user in the class.
-//	            	foreach ($info as $user) {
-                foreach ($users as $user) {
+	            	foreach ($info as $user) {
 	            		
 						// figure out if we are getting results from backup table or not
 						//$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
@@ -1114,7 +1104,7 @@ class ShabbosMevorchim {
 						//} else {                                 
 							$stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id'] ) );
 							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-							$this->studentResults[$date][$user['user_id']][$key] = $row1['total'];
+							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
 						//}
 	                                       
 	                    //$stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
@@ -1126,7 +1116,7 @@ class ShabbosMevorchim {
 
                         if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
                             $total = $rowBackup['total'];
-                            $this->studentDoneResults[$date][$user['user_id']][$key] = $rowBackup['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
                             $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
                             // if ($sid == 176 && $user['user_id'] == 17267) {
@@ -1134,7 +1124,7 @@ class ShabbosMevorchim {
                             // }
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
-                            $this->studentDoneResults[$date][$user['user_id']][$key] = $row2['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
                         }
 						
 						if ($sid) {
@@ -1149,7 +1139,7 @@ class ShabbosMevorchim {
 						
 						//if (!$sid) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />"; 
 						
-//	                }
+	                }
 	                
 				}
 								
