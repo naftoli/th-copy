@@ -1114,7 +1114,7 @@ class ShabbosMevorchim {
 						//} else {                                 
 							$stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id'] ) );
 							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
+							$this->studentResults[$date][$user['user_id']][$key] = $row1['total'];
 						//}
 	                                       
 	                    //$stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
@@ -1126,7 +1126,7 @@ class ShabbosMevorchim {
 
                         if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
                             $total = $rowBackup['total'];
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
+                            $this->studentDoneResults[$date][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
                             $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
                             // if ($sid == 176 && $user['user_id'] == 17267) {
@@ -1134,7 +1134,7 @@ class ShabbosMevorchim {
                             // }
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                            $this->studentDoneResults[$date][$user['user_id']][$key] = $row2['total'];
                         }
 						
 						if ($sid) {

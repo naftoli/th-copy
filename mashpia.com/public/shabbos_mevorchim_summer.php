@@ -116,8 +116,8 @@ foreach ( $ids as $id => $name ) {
         $done = $sm->getStudentDoneResults();
         // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
         foreach ($quotas as $date => $other) {
-            foreach ($other as $grade => $more) {
-                foreach ($more as $user_id => $values) {
+//            foreach ($other as $grade => $more) {
+                foreach ($other as $user_id => $values) {
                     $sql = "select first, last, class_grade, class_sub from users u join classes c using (class_id) where user_id = " . $user_id;
                     $result = mysql_query($sql);
                     $userInfo[$user_id] = mysql_fetch_assoc($result);
@@ -134,7 +134,7 @@ foreach ( $ids as $id => $name ) {
                             ];
                         }
                     }
-                }
+//                }
             }
         }
     }
