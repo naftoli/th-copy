@@ -117,8 +117,6 @@ class user_track
 	
 	function get_date_tasks_missions($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true, $print_parent_tasks = true) 
 	{
-		if($this->subject_id == 40 && $end_date == 2458095) $end_date = 2458096; // add a day for chof kislev 5778
-		
 		//echo "<input type='hidden' name='3) END DATE' value='" . $end_date . "'>\n";
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
@@ -138,9 +136,6 @@ class user_track
                 
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) {
-			
-			//there's a birthday issue skip any mission name of 'yom holedes mission'
-			//if ($row['mission_name'] == 'Yom Holedes Mission') continue;
 		    
             //find out if mission is new birthday mission and then see if it's for this child
             if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_name'], 'יום הולדת' ) !== false ) {
@@ -155,10 +150,6 @@ class user_track
             }
 			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
 			
-			//if ($this->user_id == 51655){
-			//	echo "<input type='hidden' name='date_task_mission_id' value='".$date_tasks_mission->date_tasks_mission_id."'/>";
-			//}
-			
 			if ($date_tasks_mission->date_tasks_mission_id > 0) {
                             
                 //find out if default is off
@@ -171,12 +162,6 @@ class user_track
         				array_push($this->daily_tasks, $daily_tasks[$dtno]);
         			}
                     
-					if ($this->user_id == 21844) {
-						//echo "<pre>";
-						//echo "<input type='hidden' name='Daily Tasks' value='" . print_r( $this->daily_tasks ) . "'>";								
-						//echo "</pre>";
-					}
-                    
         			// ***** Weekly Tasks *****//
         			$weekly_tasks = $date_tasks_mission->get_weekly_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
 					for ($wtno = 0; $wtno < count($weekly_tasks); $wtno++) {
@@ -185,15 +170,12 @@ class user_track
         			
         			// ***** Shabbos Tasks *****//
         			$shabbos_tasks = $date_tasks_mission->get_shabbos_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-        			//$str = "<pre>" . print_r($shabbos_tasks) . "</pre>";
-        			//echo "<input type='hidden' name='shabbos tasks' value='$str'>";
         			for ($stno = 0; $stno < count($shabbos_tasks); $stno++) {
         				array_push($this->shabbos_tasks, $shabbos_tasks[$stno]);
         			}				
         			
         			// ***** No Label Tasks *****//
         			$no_label_tasks = $date_tasks_mission->get_no_label_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $date_tasks_mission->mission_name, $date_tasks_mission->mission_number, $this->user_id, $this->subject_name, $this->subject_image_id, $this->subject_id);
-					//echo "<input type='hidden' name='no label tasks' value='" . print_r($no_label_tasks) . "'";
         			for ($nltno = 0; $nltno < count($no_label_tasks); $nltno++) {
         				array_push($this->no_label_tasks, $no_label_tasks[$nltno]);
         			}
