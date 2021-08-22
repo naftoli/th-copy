@@ -535,7 +535,19 @@ class user {
 		{
 			//echo "<input type='hidden' name='SORTED DAILY LABEL INFO' value='" . $daily_label . "'>\n";
 		}
-		
+
+		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 21
+        $frequency = 21;
+        $keys = array_keys($this->sorted_daily_labels);
+		if (in_array($frequency, $keys)) {
+            $task[$frequency] = $this->sorted_daily_labels[$frequency];
+            unset($this->sorted_daily_labels[$frequency]);
+            $new_arr = $task + $this->sorted_daily_labels;
+            $this->sorted_daily_labels = $new_arr;
+        }
+//		echo "<input type='hidden' name='report missions' value='" . print_r($this->sorted_daily_labels) . "' />";
+//		echo "<pre>"; print_r($this->sorted_daily_labels); echo "</pre>";
+//		exit;
 		// ********** DAILY TASKS ********** //
 		
 		// ********** WEEKLY TASKS ********** //

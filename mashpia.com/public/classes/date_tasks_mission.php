@@ -51,11 +51,6 @@ class date_tasks_mission {
 	}
 		
 	function get_daily_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id) {
-		
-		//if ($user_id == 52048 && $this->date_tasks_mission_id == 1500663){
-		//	echo "<input type='hidden' name='get_daily_tasks - input' value='".$start_date.",".$end_date.",".$subject_id.",".$subject_name.",".$track_id.",".$level.","."'/>";
-		//}
-		
 		$daily_tasks = array();
 
 		$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
@@ -65,32 +60,19 @@ class date_tasks_mission {
 		$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
 		$sql .= "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		$sql .= " AND f.frequency_name = \"Daily\" ";
-		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
-		//$sql .= "ORDER BY f.frequency_id, fp.frequency_period_id, dt.sequence_number";
-		//$sql .= "ORDER BY dt.ord, dt.label_ord";
+		$sql .= "and dt.mission_marking = 1 ";
 		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
-		//echo "<input type='hidden' name='SQL TWO' value='" . $sql . "'>\n";
-		//if ($subject_id == 100 && $user_id == 55248) echo $sql . "<br />";
-		// echo $sql . "<br />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);
 		while ($row = mysql_fetch_assoc($query)) {
-			
-			//if (($user_id == 51364 ) && $row['name'] == "Test"){
-			//	echo "<input type='hidden' name='get_daily_tasks - input' value=\"";
-			//	print_r($row);
-			//	echo "\"/>";
-			//}
-			
 			if ($this->allowPersonalization) {
 				if ( $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
 			} else {
 				if ( $row['default_on'] == 0 ) continue;
 			}
-            // if ( $row['name'] == 'I said קריאת שמע before the זמן.' ) continue;
-            
+
 			if ( !empty($this->tasks )) {
 				if (!in_array($row['name'], $this->tasks)) continue;
 			}
@@ -115,7 +97,7 @@ class date_tasks_mission {
 		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
 		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
 		$sql = $sql . "AND f.frequency_name = \"Weekly\" ";
-		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
+		$sql .= "and dt.mission_marking = 1 ";
 		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
 		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
         //echo "<input type='hidden' name='weekly tasks' value='$sql' />";
@@ -154,8 +136,7 @@ class date_tasks_mission {
 		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
 		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
 		$sql = $sql . "AND f.frequency_name = \"Shabbos\" ";
-		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
-		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
+		$sql .= "and dt.mission_marking = 1 ";
 		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
 		//echo "<input type='hidden' name='shabbos tasks' value='$sql'>";
 			
@@ -191,11 +172,8 @@ class date_tasks_mission {
 		$sql = $sql . "FROM date_tasks AS dt ";
 		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
 		$sql = $sql . "AND (dt.label_id IS NULL or dt.label_id = 0) ";
-		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
+		$sql .= "and dt.mission_marking = 1 ";
 		$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
-		//$sql = $sql . "ORDER BY dt.date_task_id";
-		// if ($subject_id == 12) echo "<input type='hidden' name='No Label Sql' value='" . $sql . "' />";
-		// if ( $subject_id == 12 ) echo $sql . "<br />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);		

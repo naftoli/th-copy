@@ -9,11 +9,14 @@
 		require_once 'db.php';
 		require_once 'class.birthdayEn.php';
 		require_once 'class.birthdayYi.php';
+        require_once 'class.birthdayHe.php';
 		
 		$b = new BirthdayEn($id);
 		$b->setBirthday();
 		$by = new BirthdayYi($id);
 		$by->setBirthday();
+        $bh = new BirthdayHe($id);
+        $bh->setBirthday();
 		
 		$errors = $b->getErrors();
 		if ($errors) {

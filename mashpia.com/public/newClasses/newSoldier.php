@@ -135,6 +135,9 @@ class NewSoldier {
 			require_once( dirname(__FILE__) . '/../class.birthdayYi.php' );
 			$bi = new BirthdayYi( $this->user_id );
             $bi->setBirthday();
+            require_once( dirname(__FILE__) . '/../class.birthdayHe.php' );
+            $bh = new BirthdayHe( $this->user_id );
+            $bh->setBirthday();
 			
 			//set dob for syncing with wp
 			require_once( dirname(__FILE__) . '/../class.heDob.php' );

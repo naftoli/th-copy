@@ -27,7 +27,7 @@ class no_label_task {
 	public $grid_id;
 	
 	function __construct($row){
-		$this->subject_id = 40;
+		$this->subject_id = $row["subject_id"];
 		$this->date_task_id = $row["date_task_id"];
 		$this->short_name = $row["short_name"];
 		$this->task_name = $row["name"];

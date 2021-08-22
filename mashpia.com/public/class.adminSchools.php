@@ -40,7 +40,7 @@ class AdminSchools {
                     and a.admin_id = " . $this->admin_id . "
                     order by s.school_name";
         }
-		//echo "<input type='hidden' name='schoolSql' value='" . $sql . "' />";
+//		echo "<input type='hidden' name='schoolSql' value='" . $sql . "' />";
         $result = mysql_query( $sql );
         while ( $row = mysql_fetch_assoc( $result ) ) {
             $this->schools[$row['school_id']] = $row['school_name'];

@@ -55,7 +55,7 @@ function createStartArray( $val, $subject_id ) {
         //$year = $missionYear;
         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
         $arrStart[] = $jd;
-        if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
+        if ( in_array( $subject_id, [12,27,41] ) ) { // end date is 6 days later (Mivtzoim / Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
         } else { // end date is same as start date
             $arrEnd[] = $jd;
@@ -148,11 +148,9 @@ if (isset($_POST['submit'])) {
     // $defaultDates = GlobalSettings::getCurYearDates();
 	// $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
-    // $defaultStart = 2458754; 
-    // $defaultEnd = 2459103;
 
-    $defaultStart = 2459104;
-    $defaultEnd = 2459467;
+    $defaultStart = 2459468;
+    $defaultEnd = 2459852;
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';

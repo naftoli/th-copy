@@ -30,10 +30,11 @@ function medal_board(target, user_id, url) {
                 // create a new medal and render it on the page
                 html += new Medal({
                     subject: medal.name, url: url ? (url + "?id=" + user_id + '&subject=' + medal.id) : "#",
-                    picture: medal.photo ? ("/file_view.php?id=" + medal.photo) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
-                    animate: medal.photo ? true : false, base_amount: medal.base_amount,
+                    picture: medal.icon ? ("/file_view.php?id=" + medal.icon) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
+                    animate: medal.icon ? true : false, base_amount: medal.base_amount,
                     needed: medal.needed, total: medal.total, next: medal.next,
-                    nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, nextMedalColor: medal.nextMedalColor, medals: medal.medals
+                    nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, nextMedalColor: medal.nextMedalColor, medals: medal.medals,
+                    weekly: medal.weekly
                 }).render();
             }
             html += "</div>";
@@ -85,6 +86,7 @@ function Medal(config) {
     this.nextMedalImg = config.nextMedalImg;
     this.nextMedalColor = config.nextMedalColor;
     this.medals = config.medals;
+    this.weekly = config.weekly;
 }
 
 Medal.prototype.getColor = function (current) {
@@ -171,15 +173,16 @@ Medal.prototype.render = function () {
     html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
     html += '</a>';
     html += '<h2>' + this.subject + '</h2></div>';
-    html += '<p><span style="color:' + this.nextMedalColor + ';">' + this.total + '</span> monthly missions earned</p>';
+    html += '<p><span style="color:' + this.nextMedalColor + ';">' + this.total + '</span> ' +
+        (this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
-    html += "<p class='cornerLabel'>Don't miss a month <br/> to earn your "
+    html += "<p class='cornerLabel'>Don't miss a " + (this.weekly ? "week" : "month") + "<br/> to earn your "
     html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
     html += " medal by <br/>" + this.nextMedalDate + "</p>";
     html += '</div>';
     html += '<div class="medals-list">';
     this.medals.forEach(medal => {
-        let medalImg = '<img class="medals-list-img" src="http://mashpia.com/file_view.php?id=' + medal.img + '"/>';
+        let medalImg = '<img class="medals-list-img" src="' + medal.img + '"/>';
         if (medal.completed) {
             html += medalImg;
         } else {

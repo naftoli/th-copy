@@ -94,7 +94,7 @@ require('header.php');
 <br />
 <?php
 require_once 'class.adminSchools.php';
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], false );
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $ids = $as->getSchools();
 // $ids = [54 => 'Beis Rivka'];
 
@@ -109,7 +109,7 @@ foreach ( $ids as $id => $name ) {
     // }
     $sm = new ShabbosMevorchim();
     $sm->setSchool($id);
-    foreach ([2459399, 2459434] as $date) {
+    foreach ([2459399] as $date) {
         $sm->setReportDates($date);
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
@@ -141,7 +141,7 @@ foreach ( $ids as $id => $name ) {
 }
 ?>
 <table>
-    <caption>Children that completed their quotas on both Shabbos Mevorchim Menachem Av and Elul</caption>
+    <caption>Children that completed their quotas for Shabbos Mevorchim Menachem Av</caption>
     <tr>
         <th>School</th>
         <th>Grade</th>
@@ -150,12 +150,12 @@ foreach ( $ids as $id => $name ) {
     <?php
     foreach ($info as $school_id => $more) {
         foreach ($more as $user_id => $dates) {
-            if (count($dates) > 1) {
-                $user = $userInfo[$user_id];
-                $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-                $name = $user['first'] . ' ' . $user['last'];
-                echo "<tr><td>" . $ids[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
-            }
+//                if (count($dates) > 1) {
+            $user = $userInfo[$user_id];
+            $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
+            $name = $user['first'] . ' ' . $user['last'];
+            echo "<tr><td>" . $ids[$school_id] . "</td><td>" . $grade . "</td><td>" . $name . "</td></tr>";
+//                }
         }
     }
     ?>

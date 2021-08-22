@@ -1,4 +1,7 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
@@ -15,7 +18,7 @@ class UsersUploadRouter {
 
         if ( !isset( $_FILES['users'] ) )
             json_error("No File Sent", 'UPLOAD-USERS-17');
-        
+
         $daySchool = false;
         if ( $current_user->login->inst_id == 4 ) {
             // columns to create users

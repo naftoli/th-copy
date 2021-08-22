@@ -21,9 +21,8 @@ class TehillimBackup {
             2459296,
             2459321,
             2459362,
-            2459381,
-            2459446,
-            2459446
+            2459444,
+            2459444
         );
         $this->errors = array();
     }
@@ -35,11 +34,14 @@ class TehillimBackup {
         $this->backup();
     }
     
-    public function runBackup() {
+    public function runBackup($overrideDate = 0) {
         $today = unixtojd();
         if (in_array($today, $this->dates)) {
-            // find out last shabbos mevorchim date
-            $this->getLastSM();
+            if ($overrideDate) $this->date = $overrideDate;
+            else {
+                // find out last shabbos mevorchim date
+                $this->getLastSM();
+            }
             
             // make sure there's no duplicates
             $this->fixDuplicates();
@@ -54,7 +56,7 @@ class TehillimBackup {
         }
     }
     
-    private function getLastSM() {
+    private function getLastSM($date) {
         $sm = calculateSM( $this->year );
         foreach ($sm as $month => $date) {
             if ($date > unixtojd()) {

@@ -98,6 +98,9 @@ if ( $success ) {
 		require 'class.birthdayYi.php';
 		$b = new BirthdayYi( $user_id );
 		$b->setBirthday();
+        require 'class.birthdayHe.php';
+        $b = new BirthdayHe( $user_id );
+        $b->setBirthday();
 		
 		//set dob for syncing with wp
 		require 'class.heDob.php';

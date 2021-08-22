@@ -717,7 +717,6 @@ class ShabbosMevorchim {
 			$sql .= " and s.school_id = " . $this->school_id;
 		}
 		$sql .= " ORDER BY c.class_grade, c.class_sub";
-		//echo $sql . "<br />";
         foreach ( $this->db->query( $sql ) as $row ) {
             $this->classes[$row['class_id']]['grade'] = 
                 $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
@@ -1066,15 +1065,15 @@ class ShabbosMevorchim {
 		} else if ( empty( $this->classes ) ) {
         	$this->setClasses( $sid );
         }
-		
+
 		if ( !$sid ) $sid = $this->school_id;
         
         $users = array();
-		foreach ($this->classes as $id => $info) {			
+		foreach ($this->classes as $id => $info) {
 			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
 			$users[$id] = $stmt->fetchAll();
 		}
-		
+
 		foreach ($users as $class => $info) {
 			foreach ($info as $user) {
 				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];

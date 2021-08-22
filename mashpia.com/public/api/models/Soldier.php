@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 include_once( __DIR__ . "/../tools/functions/format/parents.php" );
 include_once( __DIR__ . '/../tools/functions/files/images.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
@@ -289,7 +292,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $year = GlobalSettings::getRegistrationYear();
         $d = new DiscountManager($MASHPIA_DB);
         $discount = $d->getDiscountForUserYear($year, $this->user_id);
-        if ($discount[0]['used'] > 0) return [];
+        if (!empty($discount) && $discount[0]['used'] > 0) return [];
         return $discount;
     }
 
@@ -409,11 +412,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
+
+
         
         // only add th_chidon_id if the user is in grade 3+
         $exceptions = [482,544,583];
         if ( $this->platoon && $this->platoon->class_grade > 2 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
+        else
+            $result['chidon'] = true;
 
         // turn off chayolei and chidon reg if school has not registered yet
         if ( 
@@ -447,11 +454,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // check if child is new to chidon
-        $result['new_to_chidon'] = true;
+        $result['new_to_chidon'] = 1;
         $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user");
         $stmt->execute([':user' => $this->user_id]);
         $rows = $stmt->fetchAll();
-        if ( !empty($rows) ) $result['new_to_chidon'] = false;
+        if ( !empty($rows) ) $result['new_to_chidon'] = 0;
 
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
@@ -707,6 +714,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function setupBirthdayMissions(){
         require_once( __DIR__ . '/../../class.birthdayEn.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
+        require_once( __DIR__ . '/../../class.birthdayHe.php' );
         require_once( __DIR__ . '/../../class.heDob.php' );
         require_once( __DIR__ . '/../../class.wpBirthday.php' );
 
@@ -717,6 +725,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $bi = new BirthdayYi( $this->user_id );   
         @$bi->enablePrevious();
         @$bi->setBirthday();
+        $bh = new BirthdayHe( $this->user_id );
+        @$bh->enablePrevious();
+        @$bh->setBirthday();
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
         $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();
     }

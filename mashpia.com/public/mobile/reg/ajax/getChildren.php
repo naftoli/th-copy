@@ -45,29 +45,29 @@ while ( $row = mysql_fetch_assoc($result) ) {
 }
 
 // find parents that have no payments even though kids are showing paid - chidon 5781
-$purchases = [];
-$sql = "select * from th_chidon_parent_purchases";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $purchases[$row['admin_id']][] = $row;
-}
-
-// take out parents that have a charge
-$remove = [];
-foreach ($purchases as $admin_id => $details) {
-    foreach ($details as $row) {
-        if ($row['authorize_id'] > 1 || $row['authorize_desc'] == '0 balance.') {
-            if (!in_array($admin_id, $remove)) {
-                $remove[] = $admin_id;
-                continue 2;
-            }
-        }
-    }
-}
-
-foreach ($remove as $admin_id) {
-    unset($purchases[$admin_id]);
-}
+//$purchases = [];
+//$sql = "select * from th_chidon_parent_purchases";
+//$result = mysql_query($sql);
+//while ($row = mysql_fetch_assoc($result)) {
+//    $purchases[$row['admin_id']][] = $row;
+//}
+//
+//// take out parents that have a charge
+//$remove = [];
+//foreach ($purchases as $admin_id => $details) {
+//    foreach ($details as $row) {
+//        if ($row['authorize_id'] > 1 || $row['authorize_desc'] == '0 balance.') {
+//            if (!in_array($admin_id, $remove)) {
+//                $remove[] = $admin_id;
+//                continue 2;
+//            }
+//        }
+//    }
+//}
+//
+//foreach ($remove as $admin_id) {
+//    unset($purchases[$admin_id]);
+//}
 
 if ( !empty( $users ) ) {
     $children = [];
@@ -265,10 +265,10 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['shabbatonPaid'] = 0;
             $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
             // check if child is registered for chidon shabbaton
-            if ($cRow['paid'] > 0) {
-                $admins = array_keys($purchases);
-                if (!in_array($admin, $admins)) $children[$row['user_id']]['shabbatonPaid'] = 1;
-            }
+//            if ($cRow['paid'] > 0) {
+//                $admins = array_keys($purchases);
+//                if (!in_array($admin, $admins)) $children[$row['user_id']]['shabbatonPaid'] = 1;
+//            }
 //            $children[$row['user_id']]['enrollShabbaton'] = 1;
             // $children[$row['user_id']]['allowRemove'] = 0;
 

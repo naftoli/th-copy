@@ -179,6 +179,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     }
     // register the school
     public function register( $admin_id, $cart, $total, $cc, $year = false, $discount = 0 ) {
+        global $MASHPIA_DB;
+
         // set the default year
         if ( !$year ) {
             $year = GlobalSettings::getRegistrationYear( $this->school_id );
@@ -213,7 +215,6 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         }
 
         if ( $total > 0 ) {
-            global $MASHPIA_DB;
             // create Transaction
             $create_transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (school_id, trans_date, description, amount, admin_id, zip, response) "
@@ -268,20 +269,22 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             if ($row) {
                 $school_reg_id = $row['school_registration_id'];
                 $stmt = $MASHPIA_DB->prepare("
-                    INSERT INTO school_registration_details 
-                    SET school_registration_id = :id, 
-                    type = :type, 
-                    amount = :amount, 
-                    school_id = :school, 
+                    INSERT INTO school_registration_details
+                    SET school_registration_id = :id,
+                    type = :type,
+                    amount = :amount,
+                    school_id = :school,
                     year = :year");
-                foreach ($cart as $item) {
-                    $stmt->execute([
-                        ':id' => $school_reg_id,
-                        ':type' => $item['name'],
-                        ':amount' => $item['price'],
-                        ':school' => $this->school_id,
-                        ':year' => $year
-                    ]);
+                if ($cart) {
+                    foreach ($cart as $item) {
+                        $stmt->execute([
+                            ':id' => $school_reg_id,
+                            ':type' => $item['name'],
+                            ':amount' => $item['price'],
+                            ':school' => $this->school_id,
+                            ':year' => $year
+                        ]);
+                    }
                 }
                 if ($this->balance) {
                     $stmt->execute([
