@@ -77,7 +77,7 @@
 }
 
 .onlyMobile {
-    display: none;
+    display: none !important;
 }
 
 .onlyComputer {
