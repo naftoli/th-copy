@@ -162,13 +162,17 @@ Medal.prototype.render = function () {
 
     var html = "<div class='medal'>";
     html += '<div class="medal-header">';
-    html += '<a href="' + this.url + '">';
+    html += '<a href="' + this.url + '" class="onlyComputer">';
     html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
     html += '</a>';
     html += '<div class="medal-header2">';
     html += '<div class="medal-header2-flex">';
     html += '<div class="medal-header2-details">';
-    html += '<h2>' + this.subject + '</h2>';
+    html += '<div style="display:flex;padding-right: 15px;">'
+    html += '<a href="' + this.url + '" class="onlyMobile">';
+    html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
+    html += '</a>';
+    html += '<h2>' + this.subject + '</h2></div>';
     html += '<p><span style="color:' + this.nextMedalColor + ';">' + this.total + '</span> ' +
         (this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
@@ -183,7 +187,7 @@ Medal.prototype.render = function () {
             html += medalImg;
         } else {
             html += '<div class="medals-list-incomplete"'
-            html += 'style="background-color:' + (medal.color || '#efefef') + ';"'
+            html += 'style="background-color:' + (medal.color || '#a9a9a9') + ';"'
             html += '>' + medalImg + '<span>' + medal.number + '</span></div>';
         }
     });
