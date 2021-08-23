@@ -111,16 +111,14 @@ var childApp = function(){
         event.preventDefault();
 
         var postData = formToJSON(event.target);
-        // make sure we create first and last hebrew name
-        if (postData['first_he'] === '') postData['first_he'] = postData['first'];
-        if (postData['last_he'] === '') postData['last_he'] = postData['last'];
-
         // validate the DOB is valid input
         if (!postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/)) {
             if (localStorage.getItem("locallang") == "he") 
                 return showError(ErrorTextDOB_he);      
              return showError(ErrorTextDOB );
         }
+
+        postData.last = $("#th-last").val()
 
         $.post("api/tasks/addChild.php", postData, function (response) {
             // show any API errors...
