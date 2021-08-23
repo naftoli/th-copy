@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
     // $r = new RankReport(true); // true param gets previous report
     $r = new RankReport();
     $r->overrideDates($start, $end);
-    $r->setRanks('byGenerals', 13);
+    $r->setRanks('byGenerals', 14);
     $ranks = $r->getRanks();
     $logos = $r->getSchoolLogos();
     $userInfo = $r->getUserInfo();
