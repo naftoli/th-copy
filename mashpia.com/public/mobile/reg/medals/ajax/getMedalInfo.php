@@ -229,9 +229,9 @@ foreach ( $subjects as $subject ) {
 		$key = array_search($medal, $medals);
 
 		// create array of medals
+        $i = 0;
         $medals_arr = [];
         foreach ($subject_medals[$subject] as $ord => $details) {
-            $i = 0;
             $medals_arr[] = [
                 'number'    => $details['missions_needed'],
                 'img'       => getImgBack($subject, $medals[$ord]),
@@ -261,9 +261,9 @@ foreach ( $subjects as $subject ) {
 		);
     } else {
         // create array of medals
+        $i = 0;
         $medals_arr = [];
         foreach ($subject_medals[$subject] as $ord => $details) {
-            $i = 0;
             $medals_arr[] = [
                 'number'    => $details['missions_needed'],
                 'img'       => getImgBack($subject, $medals[$ord]),
