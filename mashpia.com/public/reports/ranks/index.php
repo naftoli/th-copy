@@ -84,7 +84,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="medals_summary_report.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Medal Summary Report</span>
+                    <span class="link-text">Medals Summary Report</span>
                 </div>
             </a>
         </div>
