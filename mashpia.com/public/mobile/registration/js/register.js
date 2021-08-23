@@ -149,7 +149,7 @@ var registrationApp = function() {
         $.post('api/getNonThSchools.php', function(result) {
             var res = JSON.parse(result)
             var html = '<option value="" selected>Please Choose</option>'
-            for (let s in res) {
+            for (var s in res) {
                 html += '<option value=' + s + '>' + res[s] + "</option>";
             }
             html += '<option value="0">My school is not listed</option>'
@@ -158,8 +158,8 @@ var registrationApp = function() {
         })
     }
 
-    const pleaseSelectErr = "Please select at least one child";
-    const pleaseSelectErr_he = "נא לבחור לפחות ילד אחד";
+    var pleaseSelectErr = "Please select at least one child";
+    var pleaseSelectErr_he = "נא לבחור לפחות ילד אחד";
 
     // show selected users
     function step2() {
@@ -697,13 +697,13 @@ var registrationApp = function() {
                 else return false;
             } else {
                 // shipping to non USA schools is an additional $15
-                let usa = [
+                var usa = [
                     'U.S.A',
                     'United States',
                     'US',
                     'USA'
                 ]
-                let country = selected_user.school.school_country
+                var country = selected_user.school.school_country
                 if (! usa.includes(country)) {
                     shipping_charge = 15
                 }
@@ -750,11 +750,11 @@ var registrationApp = function() {
         user_prizes[current_user] = []
         // get prizes
         $.post('api/getPrizes.php', function(results) {
-            let res = JSON.parse(results)
+            var res = JSON.parse(results)
             console.log(res)
-            let html = ''
+            var html = ''
             for (prize of res) {
-                let id = prize.prize_id
+                var id = prize.prize_id
                 html += `<div style="height: 75px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}" />
@@ -766,10 +766,10 @@ var registrationApp = function() {
             $("#prizes").modal('show')
 
             $(".prize").click( function(e) {
-                let info = $(this).data('info')
-                let infoArr = info.split(':')
-                let prize = infoArr[0]
-                let price = infoArr[1]
+                var info = $(this).data('info')
+                var infoArr = info.split(':')
+                var prize = infoArr[0]
+                var price = infoArr[1]
                 if ($(this).is(":checked")) {
                     if (!addToPrizes(prize, price)) {
                         e.target.checked = false
@@ -802,10 +802,10 @@ var registrationApp = function() {
     }
 
     function addToPrizes(prize, price) {
-        const MAX = 75
-        let total = 0
-        let found = false
-        for (let p of user_prizes[current_user]) {
+        var MAX = 75
+        var total = 0
+        var found = false
+        for (var p of user_prizes[current_user]) {
             total += parseInt(p.price)
             if (p.id == prize) {
                 found = true
@@ -816,7 +816,7 @@ var registrationApp = function() {
                 alert('You cannot choose more than $75 worth of prizes.')
                 return false
             } else {
-                let prizeToAdd = {id: prize, price: price}
+                var prizeToAdd = {id: prize, price: price}
                 user_prizes[current_user].push(prizeToAdd)
                 return true
             }
@@ -824,8 +824,8 @@ var registrationApp = function() {
     }
 
     function removeFromPrizes(prize) {
-        for (let i in user_prizes[current_user]) {
-            let p = user_prizes[current_user][i]
+        for (var i in user_prizes[current_user]) {
+            var p = user_prizes[current_user][i]
             if (p.id == prize) {
                 user_prizes[current_user].splice(i, 1)
                 return true
@@ -835,7 +835,7 @@ var registrationApp = function() {
     }
 
     function addToCart() {
-        for (let item of state.cart) {
+        for (var item of state.cart) {
             if (item.meta.registration_type == 'chidon' && item.meta.user_id == current_user) {
                 item.meta.chidon_prizes = user_prizes[current_user]
             }
@@ -1207,8 +1207,8 @@ var templates = function(){
             $(".yahadus-myshliach").hide()
             $(".book-purchase-myshliach").hide()
 
-            let bookHtml = "<option value='0'>Please choose</option>"
-            for (let i = 2011; i <= 2021; i++) {
+            var bookHtml = "<option value='0'>Please choose</option>"
+            for (var i = 2011; i <= 2021; i++) {
                 bookHtml += `<option value='${i}'>${i}</option>`
             }
             $("#step-2 form #bookVersion").empty()
@@ -1240,13 +1240,13 @@ var templates = function(){
             } else {
                 $("#book_no_school").hide()
                 // shipping to non USA schools is an additional $15
-                let usa = [
+                var usa = [
                     'U.S.A',
                     'United States',
                     'US',
                     'USA'
                 ]
-                let country = user.school.school_country
+                var country = user.school.school_country
                 if (usa.includes(country)) {
                     $("#book_school_usa").show()
                     $("#book_school_not_usa").hide()
