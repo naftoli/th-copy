@@ -412,8 +412,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         }
-
-
         
         // only add th_chidon_id if the user is in grade 3+
         $exceptions = [482,544,583];
@@ -441,6 +439,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
+        // disable chidon for now
+        $result['chidon'] = true;
 
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk

@@ -1134,6 +1134,12 @@ var templates = function(){
                 $("#step-2 form #broadcast").show();
             }
 
+            if (!user['registrationStatus']['khk']) {
+                $("#chidonWhatsapp").show()
+            } else {
+                $("#chidonWhatsapp").hide()
+            }
+
             // show khk if relevant
             if ( !user['registrationStatus']['khk'] ) {
                 $("#khk").show()
