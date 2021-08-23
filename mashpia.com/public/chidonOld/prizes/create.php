@@ -1,4 +1,7 @@
-<?
+<?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require('../../header.php');
 require('./shared.php');
@@ -37,7 +40,7 @@ $sql = "INSERT INTO chidon_prizes (
 mysql_query($sql);
 
 if (mysql_affected_rows() > 0) {
-    http_response_code(302);
+    http_response_code(200);
     header('Location: ./index.php');
 } else {
     http_response_code(302);
