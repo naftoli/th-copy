@@ -4,6 +4,8 @@ if ($_GET['debug']) {
     //error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
+} else {
+    $debug = false;
 }
 
 /***************** AUTHENTICATION **********************/
@@ -75,8 +77,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             </a>
             <a href="missing_medals.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
-                    <img src="/file_view.php?id=1054359804" height="32" alt="tickets"/>
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">Missing Medals Printout Report</span>
+                </div>
+            </a>
+            <a href="medals_summary_report.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Medal Summary Report</span>
                 </div>
             </a>
         </div>
