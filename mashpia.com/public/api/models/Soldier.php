@@ -411,6 +411,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chayolei' ] = !!$row['user_reg_id'];
         } else if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
+        } else {
+            $result['chayolei'] = true;
         }
         
         // only add th_chidon_id if the user is in grade 3+
