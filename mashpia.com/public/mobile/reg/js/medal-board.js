@@ -173,12 +173,12 @@ Medal.prototype.render = function () {
     html += '<img class="medal-img ' + (this.animate ? "bounceIn animated" : "") + '" src="' + this.picture + '" />';
     html += '</a>';
     html += '<h2>' + this.subject + '</h2></div>';
-    html += '<p><span style="color:' + this.nextMedalColor + ';">' + this.total + '</span> ' +
+    html += '<p><span class="' + this.getColor(true).toLowerCase() + '">' + this.total + '</span> ' +
         (this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
     html += "<p class='cornerLabel'>Don't miss a " + (this.weekly ? "week" : "month") + "<br/> to earn your "
     html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
-    html += " medal by <br/>" + this.nextMedalDate + "</p>";
+    html += " medal by " + this.nextMedalDate + "</p>";
     html += '</div>';
     html += '<div class="medals-list">';
     this.medals.forEach(medal => {
