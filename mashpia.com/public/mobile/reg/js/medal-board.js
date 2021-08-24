@@ -193,7 +193,7 @@ Medal.prototype.render = function () {
     });
     html += '</div>'
     html += '<div class="medal-status progress">';
-    html += '<div class="progress-bar ' + this.getColor(true).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '">'
+    html += '<div class="progress-bar ' + this.getColor(false).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;' + progressbarFloat + '">'
 
     if (this.next - 1 < this.colors.length) {
         html += '<span ' + progressTextAlignment + '>' + (this.needed - this.total) + ToText + this.getColor(false) + '!</span>';
