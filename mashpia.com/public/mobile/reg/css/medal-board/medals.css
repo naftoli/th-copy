@@ -46,6 +46,7 @@
     align-items: center;
     font-size: 16px;
     margin-top: 0;
+    height: fit-content;
 }
 
 .medal-board .medal .medal-header2 .medal-header2-flex h2 {
@@ -96,8 +97,8 @@
     }
 
     .medal-board .medals-list .medals-list-img {
-        height: 37px !important;
-        width: 37px !important;
+        height: 32px !important;
+        width: 32px !important;
     }
 
     img.medal-img {
@@ -108,6 +109,16 @@
     .medal-board .medal .medal-header2 .medal-header2-flex h2 {
         text-align: center !important;
         flex: 1;
+        font-size: 28px;
+    }
+
+    .medal-board .medal .medal-header2 .medal-header2-flex p {
+        font-size: 12px !important;
+    }
+
+    .medal-board .medal .medal-header2 .medal-header2-flex .cornerLabel {
+        font-size: 12px;
+        max-width: 170px;
     }
 }
 
@@ -145,8 +156,8 @@ img.medal-img {
 
 .medal-board .medals-list .medals-list-incomplete span {
     position: absolute;
-    font-weight: 900;
-    font-size: 16px;
+    font-weight: bold;
+    font-size: 14px;
     color: white;
 }
 
@@ -250,12 +261,6 @@ p.cornerLabel img.medal-img {
 @keyframes progress-bar-slide {
     from {max-width: 0%;}
     to {max-width: 100%;}
-}
-
-@media (max-width: 640px) {
-    .medal-board .medals-list {
-        justify-content: flex-start;
-    }
 }
 
 @media ( max-width: 322px ) {

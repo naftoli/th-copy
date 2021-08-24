@@ -178,7 +178,7 @@ Medal.prototype.render = function () {
     html += '</div>';
     html += "<p class='cornerLabel'>Don't miss a " + (this.weekly ? "week" : "month") + "<br/> to earn your "
     html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
-    html += " medal by <br/>" + this.nextMedalDate + "</p>";
+    html += " medal by " + this.nextMedalDate + "</p>";
     html += '</div>';
     html += '<div class="medals-list">';
     this.medals.forEach(medal => {
