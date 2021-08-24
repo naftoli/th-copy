@@ -659,6 +659,9 @@ var registrationApp = function() {
         if ( selected_charges.chidon ) {
             var anash = selected_user.school.school_id === anash_kinder;
             var myshliach = selected_user.school.school_id === myshliach;
+            var recruited = $(".recruit:checked").length ? $(".recruit:checked").val() : 0
+            var recruited_by = $("#recruited_by_user_serial").val()
+            if (recruited_by == '') recruited_by = 0
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
                 description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : ''),
@@ -678,8 +681,8 @@ var registrationApp = function() {
                         store_city: $("#store-city").val()
                     },
                     bookVersion: $("#bookVersion").val(),
-                    recruited: $(".recruit:checked").val(), 
-                    recruitedBy: parseInt($("#recruited_by_user_serial").val()),
+                    recruited: recruited,
+                    recruitedBy: recruited_by,
                     poll: poll,
                     name_pref: $("input.nameChoice:checked").val(),
                     comments: $("#comments").val(),
@@ -755,11 +758,19 @@ var registrationApp = function() {
             var html = ''
             for (prize of res) {
                 var id = prize.prize_id
-                html += `<div style="height: 75px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
+                var height = 'height: 75px;'
+                if (prize.personalization) height = 'height: 110px;'
+                var personalization = prize.personalization ? 1 : 0
+                html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
-                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}" />
+                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" />
                         ${prize.prize_name}<br />
-                        Price: $${prize.price}</div>`
+                        Price: $${prize.price}`
+                if (prize.personalization) {
+                    html += `<br /><span style="font-size: 12px">${prize.personalization} 
+                            <input type="text" name="he_name_${id}" class="he_name" data-info="${id}" /></span>`
+                }
+                html += `</div>`
             }
             $("#listOfPrizes").empty()
             $("#listOfPrizes").append(html)
@@ -770,8 +781,9 @@ var registrationApp = function() {
                 var infoArr = info.split(':')
                 var prize = infoArr[0]
                 var price = infoArr[1]
+                var personalization = infoArr[2]
                 if ($(this).is(":checked")) {
-                    if (!addToPrizes(prize, price)) {
+                    if (!addToPrizes(prize, price, personalization)) {
                         e.target.checked = false
                     }
                 } else {
@@ -780,28 +792,43 @@ var registrationApp = function() {
                     }
                 }
             })
+
+            $(".he_name").blur( function (e) {
+                var he_name = e.target.value
+                var id = $(this).data('info')
+                if (!addHeName(id, he_name)) {
+                    alert('Error adding hebrew name')
+                }
+            })
         })
     }
 
     $("#prizes").on('hidden.bs.modal', function (e) {
-        console.log('close event triggered')
         if (validatePrizes()) {
             addToCart() // add prize cart to state.cart
             nextStep()
         }
         else {
-            alert('You must choose which prizes you would like to receive if you are eligible!')
             $("#prizes").modal('show')
         }
     })
 
     function validatePrizes() {
-        console.log(current_user)
-        if (!user_prizes[current_user] || !user_prizes[current_user].length) return false
+        if (!user_prizes[current_user] || !user_prizes[current_user].length) {
+            alert('You must choose which prizes you would like to receive if you are eligible!')
+            return false
+        }
+        // make sure that he name was filled out if its needed
+        for (var p of user_prizes[current_user]) {
+            if (p.personalization && (!p.he_name || p.he_name == '')) {
+                alert('You must enter a hebrew name for the prizes that need it')
+                return false
+            }
+        }
         return true
     }
 
-    function addToPrizes(prize, price) {
+    function addToPrizes(prize, price, personalization) {
         var MAX = 75
         var total = 0
         var found = false
@@ -816,7 +843,7 @@ var registrationApp = function() {
                 alert('You cannot choose more than $75 worth of prizes.')
                 return false
             } else {
-                var prizeToAdd = {id: prize, price: price}
+                var prizeToAdd = { id: prize, price: price, personalization: personalization }
                 user_prizes[current_user].push(prizeToAdd)
                 return true
             }
@@ -828,6 +855,17 @@ var registrationApp = function() {
             var p = user_prizes[current_user][i]
             if (p.id == prize) {
                 user_prizes[current_user].splice(i, 1)
+                return true
+            }
+        }
+        return false
+    }
+
+    function addHeName(prize_id, he_name) {
+        for (var p in user_prizes[current_user]) {
+            if (user_prizes[current_user][p].id == prize_id) {
+                var prize = user_prizes[current_user][p]
+                prize.he_name = he_name
                 return true
             }
         }
@@ -1134,7 +1172,7 @@ var templates = function(){
                 $("#step-2 form #broadcast").show();
             }
 
-            if (!user['registrationStatus']['khk']) {
+            if (!user['registrationStatus']['chidon']) {
                 $("#chidonWhatsapp").show()
             } else {
                 $("#chidonWhatsapp").hide()

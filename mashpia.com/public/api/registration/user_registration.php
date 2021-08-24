@@ -195,7 +195,7 @@ class UserRegistrationRouter {
                         GlobalSettings::getRegistrationYear();
                     // if they do not pay, the value is null
                     $amount = $registration['paid'];
-                    $discount = $registration['discount'];
+                    $discount = $registration['discount'] ?? 0;
                     if ( $user->school->reg_type == 1 )
                         $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration

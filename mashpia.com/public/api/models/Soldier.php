@@ -442,7 +442,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
         // disable chidon for now
-        $result['chidon'] = true;
+//        $result['chidon'] = true;
 
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk
@@ -696,12 +696,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 insert into chidon_user_prizes 
                 set user_id = :user, 
                 prize_id = :prize, 
-                year = :year");
+                year = :year, 
+                he_name = :he_name");
         foreach ($prizes as $prize) {
+            $he = $prize['personalization'] ? $prize['he_name'] : '';
             $stmt->execute([
                 ':user'     => $this->user_id,
                 ':prize'    => $prize['id'],
-                ':year'     => $year
+                ':year'     => $year,
+                ':he_name'  => $he
             ]);
         }
     }
