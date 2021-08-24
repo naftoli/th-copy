@@ -541,6 +541,11 @@ var registrationApp = function() {
                 }
             }
 
+            // make sure limmud track is selected
+            if (! $(".limmud:checked").length) {
+                return showError('You must choose a limmud track.')
+            }
+
             // check yarmulka
             if (selected_user.gender == 'M') {
                 if ($("#yarmulka-size").val() == 0) {
@@ -671,6 +676,7 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
+                    track: $(".limmud:checked").val(),
                     size: $("select#chidon-sweater-size").val(),
                     yarmulka: $("select#yarmulka-size").val(),
                     book: $("select#chidon-book").val(),
@@ -820,7 +826,7 @@ var registrationApp = function() {
         }
         // make sure that he name was filled out if its needed
         for (var p of user_prizes[current_user]) {
-            if (p.personalization && (!p.he_name || p.he_name == '')) {
+            if (parseInt(p.personalization) && (!p.he_name || p.he_name == '')) {
                 alert('You must enter a hebrew name for the prizes that need it')
                 return false
             }
@@ -1170,6 +1176,12 @@ var templates = function(){
                 // $('#step-2 form #chayolei-lite-registration').show();
                 $('#step-2 form #ckids-registration').hide();
                 $("#step-2 form #broadcast").show();
+            }
+
+            // reset chidon limmud tracks
+            var limmud = $(".limmud")
+            for (var l of limmud) {
+                l.checked = false
             }
 
             if (!user['registrationStatus']['chidon']) {

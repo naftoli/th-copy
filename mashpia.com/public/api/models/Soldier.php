@@ -442,7 +442,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
         // disable chidon for now
-//        $result['chidon'] = true;
+        $result['chidon'] = true;
 
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk
@@ -599,7 +599,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      */
     public function registerChidon(
         $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '',
-        $comments = ''
+        $comments = '', $track = ''
     ){
         global $MASHPIA_DB;
 
@@ -623,19 +623,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( $recruited && $recruited_by > 0 ) {
             $chidon_query = $MASHPIA_DB->prepare(
                 "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, recruited_by, poll, 
-                       comments) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                       comments, test_type) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $recruited_by, $poll,
-                $comments ] );
+                $comments, $track ] );
         } else {
             $chidon_query = $MASHPIA_DB->prepare(
                 "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll, 
-                       comments) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                       comments, test_type) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll,
-                $comments ] );
+                $comments, $track ] );
         }
     }
 
