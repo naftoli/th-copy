@@ -505,7 +505,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $stmt->execute([':admin' => $admin_id]);
         $row = $stmt->fetch();
         if ($row['auth'] == 'school') $parent = false;
-        if (!$parent || ($parent && floatval($amount) > 0) && !$discount) {
+        if (!$parent || ($parent && (floatval($amount) > 0 || $discount))) {
             $reg_query = $MASHPIA_DB->prepare(
                 "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
                 . "VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
