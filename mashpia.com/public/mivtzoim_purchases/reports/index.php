@@ -11,7 +11,7 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
 if ( isset( $_POST['submit'] ) ) {
-    $item = $_POST['type'];
+    $items = $_POST['type'];
     $purchases = [];
     $user_ids = [];
     $stmt = $MASHPIA_DB->prepare("
@@ -22,11 +22,10 @@ if ( isset( $_POST['submit'] ) ) {
                 JOIN
             mivtzoim_purchases.purchases USING (purchase_id)
         WHERE
-            year = :year AND item_id = :item
+            year = :year AND item_id IN ($items)
     ");
     $stmt->execute([
-        ':year' => $year,
-        ':item' => $item
+        ':year' => $year
     ]);
     $rows = $stmt->fetchAll();
 
@@ -59,7 +58,7 @@ if ( isset( $_POST['submit'] ) ) {
 }
 $types = [];
 $stmt = $MASHPIA_DB->query("
-    SELECT * FROM mashpia_purchases.mivtzoim_items 
+    SELECT * FROM mivtzoim_purchases.mivtzoim_items 
 ");
 $rows = $stmt->fetchAll();
 foreach ( $rows as $row ) {
@@ -131,7 +130,7 @@ foreach ( $rows as $row ) {
                             foreach ( $details as $item => $item_id ) {
                                 $chosen_items = explode(',', $items);
                                 if ( in_array( $item_id, $chosen_items ) ) {
-                                    $totals[$item] = 0;
+                                    $totals[$item_id] = 0;
                                     echo "<th>" . $item . "</th>";
                                 }
                             }
@@ -150,7 +149,7 @@ foreach ( $rows as $row ) {
                                         $chosen_items = explode(',', $items);
                                         if ( in_array( $item_id, $chosen_items ) ) {
                                             if ( isset( $purchase[$item_id]) ) {
-                                                $totals[$item] += $purchase[$item_id];
+                                                $totals[$item_id] += $purchase[$item_id];
                                                 echo "<td>" . $purchase[$item_id] . "</td>";
                                             }
                                             else echo "<td></td>";
@@ -162,8 +161,8 @@ foreach ( $rows as $row ) {
                         <?php endforeach; ?>
                         <tr><th colspan="2" align="right">Totals:</th>
                         <?php
-                        foreach ( $types['Chanuka'] as $item => $item_id ) {
-                            echo "<th>" . $totals[$item] . "</th>";
+                        foreach ( explode(",", $items) as $item_id ) {
+                            echo "<th>" . $totals[$item_id] . "</th>";
                         }
                         ?>
                         </tr>

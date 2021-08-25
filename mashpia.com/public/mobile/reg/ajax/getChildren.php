@@ -156,7 +156,9 @@ if ( !empty( $users ) ) {
 
          // find out if user already purchases a set
          if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
-         	$sqlPurchased = "select * from lulav_purchases where users like '%" . $row['user_id'] . "%' and year = " . $reg_year;
+         	$sqlPurchased = "select * from mivtzoim_purchases.purchase_details 
+                            join mivtzoim_purchases.purchases using (purchase_id) 
+                            where item_id = 1 and user_id = " . $row['user_id'] . " and year = " . $reg_year;
          	$resPurchased = mysql_query( $sqlPurchased );
          	if ( mysql_num_rows( $resPurchased ) ) {
          		$children[$row['user_id']]['lulavPurchased'] = 1;
