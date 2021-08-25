@@ -14,15 +14,18 @@ $super = $admin_user['auth'] == 'super';
 $children = [];
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        tc.user_id, COUNT(*) AS total, u.*, c.*
+        tc.user_id,
+        IFNULL(COUNT(tc.date_paid > 0), 0) AS total,
+        u.*,
+        c.*
     FROM
-        th_chidon tc
-            JOIN
-        users u USING (user_id)
+        users u
             JOIN
         classes c ON c.class_id = u.class_id
+            LEFT JOIN
+        th_chidon tc USING (user_id)
     WHERE
-        date_paid > 0 AND c.class_grade IN ('7','8')
+        c.class_grade IN ('7' , '8')
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ")
     GROUP BY u.user_id
     ORDER BY u.school_id , c.class_grade , c.class_sub , u.last , u.first
