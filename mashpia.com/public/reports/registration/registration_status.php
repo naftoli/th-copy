@@ -92,10 +92,10 @@ $main_query = "
         (SELECT 
             school_id, COUNT(*) AS total_registered
         FROM
-            users
+            registration_charges 
         WHERE
-            user_registered > 0
-        GROUP BY school_id) users USING (school_id)
+            type = 'chayolei' AND year = $year 
+        GROUP BY school_id) registration_charges USING (school_id)
             LEFT JOIN
         (SELECT 
             school_id, COUNT(*) AS total_chayolei_eligible
@@ -113,7 +113,7 @@ $main_query = "
             chidon_eligible = 1
         GROUP BY school_id) chidon_el USING (school_id)
     WHERE
-        sr.year = $year
+        sr.year = $year 
 ";
 $main_query = mysql_query( $main_query );
 $data = [];
