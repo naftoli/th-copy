@@ -208,68 +208,68 @@ p.cornerLabel img.medal-img {
 
 /* colors for all the coming ranks */
 .medal-board .progress-bar.white {
-    background-color: #bbbbbb;
+    background-color: #d8dbde;
 }
 .medal-board .progress-bar.red {
-    background-color: #c52d3a;
+    background-color: #aa2834;
 }
 .medal-board .progress-bar.orange {
     background-color: #d55027;
 }
 .medal-board .progress-bar.yellow {
-    background-color: #f0a62f;
+    background-color: #d29020;
 }
 .medal-board .progress-bar.green {
-    background-color: #54ab5b;
+    background-color: #23914b;
 }
 .medal-board .progress-bar.blue {
-    background-color: #334287;
+    background-color: #2b3078;
 }
 .medal-board .progress-bar.purple {
-    background-color: #654894;
+    background-color: #4d297b;
 }
 .medal-board .progress-bar.brown {
-    background-color: #915e4a;
+    background-color: #6d4c38;
 }
 .medal-board .progress-bar.gray {
-    background-color: #b0bec5;
+    background-color: #71707b;
 }
 .medal-board .progress-bar.black {
-    background-color: #616161;
+    background-color: #0a0515;
 }
 .medal-board .progress-bar.bronze {
     background-color: #bcaaa4;
 }
 
 span.white {
-    color: #bbbbbb !important;
+    color: #d8dbde !important;
 }
 span.red {
-    color: #c52d3a !important;
+    color: #aa2834 !important;
 }
 span.orange {
     color: #d55027 !important;
 }
 span.yellow {
-    color: #f0a62f !important;
+    color: #d29020 !important;
 }
 span.green {
-    color: #54ab5b !important;
+    color: #23914b !important;
 }
 span.blue {
-    color: #334287 !important;
+    color: #2b3078 !important;
 }
 span.purple {
-    color: #654894 !important;
+    color: #4d297b !important;
 }
 span.brown {
-    color: #915e4a !important;
+    color: #6d4c38 !important;
 }
 span.gray {
-    color: #b0bec5 !important;
+    color: #71707b !important;
 }
 span.black {
-    color: #616161 !important;
+    color: #0a0515 !important;
 }
 span.bronze {
     color: #bcaaa4 !important;
