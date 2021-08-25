@@ -42,10 +42,25 @@ if ( $amount > 0 ) {
         $qry->execute([
             ':admin'    => $admin_id, 
             ':amount'   => $amount, 
-            ':auth'     => $strResponse, 
-            ':users'    => implode(',', $info['users']), 
+            ':auth'     => $strResponse,
             ':year'     => $year
         ]);
+        $purchase_id = $MASHPIA_DB->lastInsertId();
+
+        $qry = $MASHPIA_DB->prepare(
+            "INSERT INTO mivtzoim_purchases.purchase_details 
+                SET purchase_id = :id, 
+                user_id = :user, 
+                item_id = 1, 
+                qty = 1"
+        );
+        $users = implode(",", $info['users']);
+        foreach ($users as $user_id) {
+            $qry->execute([
+                ':id'       => $purchase_id,
+                ':user'     => $user_id,
+            ]);
+        }
         
         $qry = $MASHPIA_DB->prepare(
             "INSERT INTO transactions 

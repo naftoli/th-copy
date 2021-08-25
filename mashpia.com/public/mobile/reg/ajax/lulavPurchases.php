@@ -1,19 +1,21 @@
 <?php
-require '../../../db.php'; 
+require '../../../db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
-$children = [];
-$query = mysql_query("SELECT users FROM mivtzoim_purchases.purchases WHERE item_id = 1 AND year = " . $year);
-while ( $row = mysql_fetch_assoc( $query ) ) {
-    if ( strpos($row['users'], ',') !== false ) {
-        $users = explode(',', $row['users']);
-        foreach ( $users as $id ) {
-            $children[] = intval( $id );
-        }
-    } else {
-        $children[] = intval( $row['users'] );
-    }
-}
-
-echo count( $children );
+$query ="
+    SELECT 
+        COUNT(*) as total
+    FROM
+        purchase_details
+    WHERE
+        item_id = 1
+            AND purchase_id IN (SELECT 
+                purchase_id
+            FROM
+                purchases
+            WHERE
+                year = $year)";
+$result = mysql_query($query);
+$row = mysql_fetch_assoc($result);
+echo intval($row['total']);
