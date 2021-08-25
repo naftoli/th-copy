@@ -499,7 +499,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         // Insert into user_registration
         // make sure to only register child if there's an amount, otherwise it's only a parent confirming information for a tuition school
-        if (floatval($amount) > 0) {
+        // only applies for parents registering, not schools
+        $parent = true;
+        $stmt = $MASHPIA_DB->prepare("select * from admin_auths where admin_id = :admin");
+        $stmt->execute([':admin' => $admin_id]);
+        $row = $stmt->fetch();
+        if ($row['auth'] == 'school') $parent = false;
+        if (!$parent || ($parent && floatval($amount) > 0)) {
             $reg_query = $MASHPIA_DB->prepare(
                 "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
                 . "VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
