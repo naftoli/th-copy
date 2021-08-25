@@ -104,18 +104,18 @@ foreach ($temp as $row) {
     </thead>
     <tbody>
     <?php
-    $totals['soldiers'] = 0;
-    $totals['fee'] = 0;
-    $totals['total_fee'] = 0;
-    $totals['discounts'] = 0;
-    $totals['owing'] = 0;
-    $totals['paid'] = 0;
-    $totals['balance'] = 0;
+    $t['soldiers'] = 0;
+    $t['fee'] = 0;
+    $t['total_fee'] = 0;
+    $t['discounts'] = 0;
+    $t['owing'] = 0;
+    $t['paid'] = 0;
+    $t['balance'] = 0;
     foreach ($totals as $school_id => $total) {
         // if there's no name for the base just skip
         if (! isset($schools[$school_id])) continue;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT count(u.user_id) as total_users, school_type, child_fee   
+            SELECT school_type, child_fee   
             FROM schools s 
             JOIN users u using (school_id) 
             WHERE u.school_id = :id 
@@ -128,30 +128,30 @@ foreach ($temp as $row) {
 //        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
         $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
         echo "<tr><td>" . $school_info[$school_id]['type'] . "</td><td><a href='#$school_id'>" . $schools[$school_id] .
-            "</a></td><td>" . $school_info[$school_id]['eligible'] . "</td><td>" . $row['total_users'] . "</td><td>" . $fee .
-            "</td><td>" . ($fee * intval($row['total_users'])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .
-            ($fee * intval($row['total_users']) - floatval($discounts[$school_id])) . "</td><td>" . $total . "</td>";
+            "</a></td><td>" . $school_info[$school_id]['eligible'] . "</td><td>" . count($details[$school_id]) . "</td><td>" . $fee .
+            "</td><td>" . ($fee * count($details[$school_id])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .
+            ($fee * count($details[$school_id]) - floatval($discounts[$school_id])) . "</td><td>" . $total . "</td>";
         $style = '';
-        $balance = (($fee * intval($row['total_users']) - floatval($discounts[$school_id])) - floatval($total));
+        $balance = (($fee * count($details[$school_id]) - floatval($discounts[$school_id])) - floatval($total));
         if ($balance > 0) {
             $style = "background-color: red";
         }
         echo "<td style='$style'>" . $balance . "</td></tr>";
-        $totals['soldiers'] += $row['total_users'];
-        $totals['fee'] += $fee;
-        $totals['total_fee'] += ($fee * intval($row['total_users']));
-        $totals['discounts'] += $discounts[$school_id];
-        $totals['owing'] += ($fee * intval($row['total_users']) - floatval($discounts[$school_id]));
-        $totals['paid'] += $total;
-        $totals['balance'] += $balance;
+        $t['soldiers'] += count($details[$school_id]);
+        $t['fee'] += $fee;
+        $t['total_fee'] += ($fee * intval($row['total_users']));
+        $t['discounts'] += $discounts[$school_id];
+        $t['owing'] += ($fee * intval($row['total_users']) - floatval($discounts[$school_id]));
+        $t['paid'] += $total;
+        $t['balance'] += $balance;
     }
     ?>
     </tbody>
     <tfoot>
     <?php
-    echo "<tr><th>Totals:</th><th>" . $totals['soldiers'] . "</th><th>" . $totals['fee'] . "</th><th>" . $totals['total_fee'] .
-        "</th><th>" . $totals['discounts'] . "</th><th>" . $totals['owing'] . "</th><th>" . $totals['paid'] . "</th><th>" .
-        $totals['balance'] . "</th></tr>";
+    echo "<tr><th>Totals:</th><th></th><th><th></th>" . $t['soldiers'] . "</th><th>" . $t['fee'] . "</th><th>" . $t['total_fee'] .
+        "</th><th>" . $t['discounts'] . "</th><th>" . $t['owing'] . "</th><th>" . $t['paid'] . "</th><th>" .
+        $t['balance'] . "</th></tr>";
     ?>
     </tfoot>
 </table>
