@@ -742,7 +742,7 @@ var registrationApp = function() {
                 meta: {
                     type: 'registration',
                     registration_type: 'khk',
-                    paid: 18
+                    paid: 30
                 }
             })
         }
