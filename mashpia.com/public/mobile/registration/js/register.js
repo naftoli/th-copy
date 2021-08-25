@@ -772,7 +772,7 @@ var registrationApp = function() {
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" />
                         ${prize.prize_name}<br />
-                        ${prize.price} Credits`
+                        ${parseInt(prize.price)} Credits`
                 if (prize.personalization) {
                     html += `<br /><span style="font-size: 12px">${prize.personalization} 
                             <input type="text" name="he_name_${id}" class="he_name" data-info="${id}" /></span>`
