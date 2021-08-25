@@ -521,7 +521,7 @@ class user {
 					$missing_label = explode(":", $this->sorted_daily_labels[$frequency_id])[0];
 					$logger->warning(
 						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
-						[user_id => $this->user_id]
+						['user_id' => $this->user_id]
 					);
 				}
 				//echo "<input type='hidden' name='DAILY LABEL PUSH' value='" . $this->daily_tasks[$dtno]->task_name . "-" . $key . "-" . $in_array . "'>\n";
