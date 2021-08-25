@@ -803,7 +803,12 @@ var registrationApp = function() {
                 var he_name = e.target.value
                 var id = $(this).data('info')
                 if (!addHeName(id, he_name)) {
-                    alert('Error adding hebrew name')
+                    // alert('Error adding hebrew name')
+                    // add prize to list
+                    $(this).parent().parent().find('.prize').trigger('click')
+                    if (!addHeName(id, he_name)) {
+                        alert('Error adding hebrew name')
+                    }
                 }
             })
         })
