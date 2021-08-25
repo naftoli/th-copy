@@ -189,6 +189,7 @@ class date_tasks_mission {
 				if (!in_array($row['name'], $this->tasks)) continue;
 			}
 
+//			echo "<pre>"; print_r($row); echo "</pre>";
 			$no_label_task = new no_label_task($row);
 			$no_label_task->set_dates($start_date, $end_date);
 			$no_label_task->set_mark_date($end_date);
