@@ -170,14 +170,13 @@ class GlobalSettings {
      */
     public static function getChidonCost( $school_id = false ) {
         // Anash kinder and MyShliach has different fee
-        if ( in_array( $school_id, [ 61, 269 ] ) ) {
-            if ( $school_id == 269 ) return 45;
-            else return 14;
+        if ( in_array( $school_id, [ 269 ] ) ) {
+            return 50;
         }
 //        $today = new DateTime();
 //        $late = new DateTime('2020-10-21 04:00:00');
 //        if ($today >= $late) return 35;
-        else return 10;
+        else return 18;
     }
 
     /**

@@ -236,6 +236,7 @@ var registrationApp = function() {
                 $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
                 $( '#step-2 form #yahadus-registration-no').hide();
                 $('#step-2 form #book-purchase').show();
+                $("#step-2 form .yahadus-myshliach").hide()
                 if ( school_id == 61 ) {
                     $("#step-2 form .book-purchase-myshliach").show()
                 } else {
@@ -771,7 +772,7 @@ var registrationApp = function() {
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" />
                         ${prize.prize_name}<br />
-                        Price: $${prize.price}`
+                        ${prize.price} Credits`
                 if (prize.personalization) {
                     html += `<br /><span style="font-size: 12px">${prize.personalization} 
                             <input type="text" name="he_name_${id}" class="he_name" data-info="${id}" /></span>`
@@ -851,7 +852,7 @@ var registrationApp = function() {
         }
         if (! found) {
             if (total + parseInt(price) > MAX) {
-                alert('You cannot choose more than $75 worth of prizes.')
+                alert('You cannot choose more than 75 credits worth of prizes.')
                 return false
             } else {
                 var prizeToAdd = { id: prize, price: price, personalization: personalization }

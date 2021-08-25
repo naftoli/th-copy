@@ -330,10 +330,26 @@
                                     <b>Chidon Limmud Track</b><hr />
                                     <label>
                                         Please choose which track you would like to be on: <br />
-                                        <input type="radio" name="limmud" class="limmud" value="maven" /> Maven<br />
-                                        <input type="radio" name="limmud" class="limmud" value="pro" /> Pro<br />
-                                        <input type="radio" name="limmud" class="limmud" value="expert" /> Expert<br />
-                                        <input type="radio" name="limmud" class="limmud" value="genius" /> Genius
+                                        <label class="radio-label">
+                                            <input type="radio" name="limmud" class="limmud" value="maven" />
+                                            <span class="radio"></span>
+                                        </label>
+                                        Maven<br />
+                                        <label class="radio-label">
+                                            <input type="radio" name="limmud" class="limmud" value="pro" />
+                                            <span class="radio"></span>
+                                        </label>
+                                        Pro<br />
+                                        <label class="radio-label">
+                                            <input type="radio" name="limmud" class="limmud" value="expert" />
+                                            <span class="radio"></span>
+                                        </label>
+                                        Expert<br />
+                                        <label class="radio-label">
+                                            <input type="radio" name="limmud" class="limmud" value="genius" />
+                                            <span class="radio"></span>
+                                        </label>
+                                        Genius
                                     </label>
                                     <br />
                                 </div>
@@ -357,7 +373,7 @@
     <!--                                                <select class="form-control" id="user">-->
     <!--                                                    <option value="0" class="i18n" data-key="SelectStudent">Select Student</option>-->
     <!--                                                </select>-->
-                                        IF YES, Add the serial number of the soldier that recruited you and they will get chidon credits to buy chidon prizes.
+                                        IF YES, Add the serial number of the soldier that recruited you so that they can get chidon prizes.
                                         (Their serial number can be found in their parent account).<br />
                                         <input type="text" name="recruited_by_user_serial" id="recruited_by_user_serial" class="form-control" style="width: 200px;" />
                                     </label>
@@ -586,8 +602,8 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                <span class="i18n" data-key="IAmAware">I am aware that If my child qualifies, the cost for the Chidon Experience is </span>
-                                <span class="shabbaton-cost"><b>$195</b></span>.
+                                <span class="i18n" data-key="IAmAware">I am aware that if my child qualifies for the chidon experience, there will be a fee
+                                    depending on the track that the child is on.</span>
                                 <span class="i18n" data-key="IAmAwaredes">This fee can be subsidized through the Chidon drive.</span>
                             </div>                            
                         </div>
@@ -700,8 +716,8 @@
                     <div class="modal-body">
                         <p>
                             If you pass the Chidon on the Pro, Expert or Genius track based on your 4 tests this year,
-                            you will be eligible to get a $75 prize. Please select which prize/s below you would like.
-                            You can choose more than one as long as it stays within the $75.
+                            you will be eligible to up to 75 credits worth of prize(s). Please select which prize(s) below you would like.
+                            You can choose more than one as long as it stays within the 75 credits.
                         </p>
                         <div id="listOfPrizes"></div>
                     </div>
