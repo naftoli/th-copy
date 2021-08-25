@@ -38,7 +38,8 @@ $sql = "
         yarmulka,
         recruited_by,
         poll,
-        comments
+        comments, 
+        test_type
     FROM
         users u
             JOIN
@@ -99,6 +100,7 @@ $customNames = [
                 <th>Yarmulka</th>
                 <th>Sweater Size</th>
                 <th>Language</th>
+                <th>Track</th>
                 <th>Custom Item Name</th>
                 <th>Book Number</th>
                 <th>Registered for KHK</th>
@@ -116,7 +118,8 @@ $customNames = [
                 if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
                 else echo "<span>";
                 echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
-                    $langs[$row['lang_id']] . "</td><td>" . $customNames[$row['name_pref']] . "</td><td>" . $row['book'] . "</td><td>" .
+                    $langs[$row['lang_id']] . "</td><td>" . $row['test_type'] . "</td><td>" . $customNames[$row['name_pref']] .
+                    "</td><td>" . $row['book'] . "</td><td>" .
                     ($row['khk_reg'] ? 'yes' : 'no') .
                     "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td></tr>";
             }
