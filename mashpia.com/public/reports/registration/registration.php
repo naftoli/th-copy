@@ -105,7 +105,6 @@ foreach ($temp as $row) {
     <tbody>
     <?php
     $t['soldiers'] = 0;
-    $t['fee'] = 0;
     $t['total_fee'] = 0;
     $t['discounts'] = 0;
     $t['owing'] = 0;
@@ -138,10 +137,9 @@ foreach ($temp as $row) {
         }
         echo "<td style='$style'>" . $balance . "</td></tr>";
         $t['soldiers'] += count($details[$school_id]);
-        $t['fee'] += $fee;
-        $t['total_fee'] += ($fee * intval($row['total_users']));
+        $t['total_fee'] += ($fee * count($details[$school_id]));
         $t['discounts'] += $discounts[$school_id];
-        $t['owing'] += ($fee * intval($row['total_users']) - floatval($discounts[$school_id]));
+        $t['owing'] += ($fee * count($details[$school_id]) - floatval($discounts[$school_id]));
         $t['paid'] += $total;
         $t['balance'] += $balance;
     }
@@ -149,7 +147,7 @@ foreach ($temp as $row) {
     </tbody>
     <tfoot>
     <?php
-    echo "<tr><th>Totals:</th><th></th><th><th></th>" . $t['soldiers'] . "</th><th>" . $t['fee'] . "</th><th>" . $t['total_fee'] .
+    echo "<tr><th>Totals:</th><th></th><th></th><th>" . $t['soldiers'] . "</th><th></th><th>" . $t['total_fee'] .
         "</th><th>" . $t['discounts'] . "</th><th>" . $t['owing'] . "</th><th>" . $t['paid'] . "</th><th>" .
         $t['balance'] . "</th></tr>";
     ?>
