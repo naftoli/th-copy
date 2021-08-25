@@ -54,6 +54,9 @@
             }
 
             .form-control { border: 1px solid lightgrey !important; }
+            .navbar {
+                min-height: auto !important;
+            }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -328,7 +331,7 @@
                         var result = JSON.parse( info );
                         if ( result.success ) {
                             alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
-                            location.reload();
+                            // location.reload();
                         } else {
                             alert( result.error );
                         }

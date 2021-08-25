@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', 1);
+
 require '../../../db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
@@ -7,13 +10,13 @@ $query ="
     SELECT 
         COUNT(*) as total
     FROM
-        purchase_details
+        mivtzoim_purchases.purchase_details
     WHERE
         item_id = 1
             AND purchase_id IN (SELECT 
                 purchase_id
             FROM
-                purchases
+                mivtzoim_purchases.purchases
             WHERE
                 year = $year)";
 $result = mysql_query($query);

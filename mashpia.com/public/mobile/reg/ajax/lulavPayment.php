@@ -1,4 +1,7 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', 1);
+
 require_once '../../../api/header/header.php';
 require_once '../../../api/header/db.php';
 
@@ -35,9 +38,7 @@ if ( $amount > 0 ) {
             SET admin_id = :admin, 
             amount_paid = :amount, 
             authorization = :auth, 
-            users = :users, 
-            year = :year, 
-            item_id = 1"
+            year = :year"
         );
         $qry->execute([
             ':admin'    => $admin_id, 
@@ -54,8 +55,8 @@ if ( $amount > 0 ) {
                 item_id = 1, 
                 qty = 1"
         );
-        $users = implode(",", $info['users']);
-        foreach ($users as $user_id) {
+
+        foreach ($info['users'] as $user_id) {
             $qry->execute([
                 ':id'       => $purchase_id,
                 ':user'     => $user_id,

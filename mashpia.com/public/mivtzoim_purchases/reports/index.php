@@ -8,24 +8,25 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 
 if ( isset( $_POST['submit'] ) ) {
-    $items = $_POST['type'];
+    $item = $_POST['type'];
     $purchases = [];
     $user_ids = [];
     $stmt = $MASHPIA_DB->prepare("
         SELECT 
             *
         FROM
-            mashpia_purchases.purchase_details
+            mivtzoim_purchases.purchase_details
                 JOIN
-            mashpia_purchases.purchases USING (purchase_id)
+            mivtzoim_purchases.purchases USING (purchase_id)
         WHERE
-            year = :year AND item_id IN ($items)
+            year = :year AND item_id = :item
     ");
     $stmt->execute([
-        ':year' => $year
+        ':year' => $year,
+        ':item' => $item
     ]);
     $rows = $stmt->fetchAll();
 
