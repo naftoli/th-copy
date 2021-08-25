@@ -1186,8 +1186,10 @@ var templates = function(){
 
             if (!user['registrationStatus']['chidon']) {
                 $("#chidonWhatsapp").show()
+                $("#chidonLimmud").show()
             } else {
                 $("#chidonWhatsapp").hide()
+                $("#chidonLimmud").hide()
             }
 
             // show khk if relevant
