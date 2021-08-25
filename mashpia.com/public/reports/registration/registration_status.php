@@ -95,7 +95,7 @@ $main_query = "
             registration_charges 
         WHERE
             type = 'chayolei' AND year = $year 
-        GROUP BY school_id) registration_charges USING (school_id)
+        GROUP BY school_id) reg USING (school_id)
             LEFT JOIN
         (SELECT 
             school_id, COUNT(*) AS total_chayolei_eligible
