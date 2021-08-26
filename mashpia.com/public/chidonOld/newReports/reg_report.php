@@ -55,6 +55,17 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
 
+$prizes = [];
+$sql = "select u.user_id, p.prize_name, p.size, p.color, u.he_name 
+        from chidon_prizes p 
+        join chidon_user_prizes u using (prize_id) 
+        where u.year = $year  
+        order by u.user_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $prizes[$row['user_id']][] = $row;
+}
+
 $langs = [
     1   =>  'English',
     2   =>  'Yiddish',
@@ -77,8 +88,8 @@ $customNames = [
         <style>
             tr, th, td {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                font-size: 14px;
-                padding: 10px;
+                font-size: 12px;
+                padding: 5px;
                 border-bottom: 1px solid grey;
             }
         </style>
@@ -107,6 +118,8 @@ $customNames = [
                 <th>Chidon Learning Method</th>
                 <th>Invited by (Serial Number)</th>
                 <th>Comments</th>
+                <th>Prizes</th>
+                <th>Personalized Prize Name</th>
             </tr>
             <?php
             foreach ($info as $row) {
@@ -121,7 +134,23 @@ $customNames = [
                     $langs[$row['lang_id']] . "</td><td>" . $row['test_type'] . "</td><td>" . $customNames[$row['name_pref']] .
                     "</td><td>" . $row['book'] . "</td><td>" .
                     ($row['khk_reg'] ? 'yes' : 'no') .
-                    "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td></tr>";
+                    "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
+                if (isset($prizes[$row['user_id']])) {
+                    foreach ($prizes[$row['user_id']] as $i => $prize) {
+                        echo $prize['prize_name'];
+                        if ($prize['size']) echo " Size: " . $prize['size'];
+                        if ($prize['color']) echo " Color: " . $prize['color'];
+                        if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
+                    }
+                }
+                echo "</td><td>";
+                if (isset($prizes[$row['user_id']])) {
+                    foreach ($prizes[$row['user_id']] as $i => $prize) {
+                        echo $prize['he_name'];
+                        if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
+                    }
+                }
+                echo "</td></tr>";
             }
             ?>
         </table>

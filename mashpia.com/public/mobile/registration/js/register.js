@@ -738,11 +738,11 @@ var registrationApp = function() {
         if ( selected_charges.khk ) {
             state.cart.push({
                 description: "KHK Registration",
-                price: 18,
+                price: 12,
                 meta: {
                     type: 'registration',
                     registration_type: 'khk',
-                    paid: 30
+                    paid: 12
                 }
             })
         }
