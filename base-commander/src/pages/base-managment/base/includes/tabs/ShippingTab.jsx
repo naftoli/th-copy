@@ -12,20 +12,20 @@ import { NavigationRow } from '../rows/registration/NavigationRow';
 
 export class ShippingTab extends Component {
 
-  // state = {
-  //   hideShipping: false
-  // }
+  state = {
+    hideShipping: false
+  }
 
   componentDidMount() {
-    // this.setState({ hideShipping: this.props.base.shipping_method === 'pickup' });
+    this.setState({ hideShipping: this.props.base.shipping_method === 'pickup' });
   }
 
   onChange = e => {
     e.persist()
     onInputChange( this.props.onUpdate )( e );
-    // if ( e.target.name === 'shipping_method') {
-    //   this.setState({ hideShipping: e.target.value === 'pickup' });
-    // }
+    if ( e.target.name === 'shipping_method') {
+      this.setState({ hideShipping: e.target.value === 'pickup' });
+    }
   }
 
   render(){
@@ -62,23 +62,23 @@ export class ShippingTab extends Component {
           
           <AddressRow
             showPhone
-            // hideShipping={ this.state.hideShipping }
+            hideShipping={ this.state.hideShipping }
             { ...base }
             title={ false }
             prefix='shipping_'
             required={ required }
             onChange={ this.onChange } />
 
-          {/*{ !this.state.hideShipping &&*/}
+          { !this.state.hideShipping &&
           <Fragment>
             <p className='title'>
               Special Shipping Requests
             </p>
-
-            <Input type="textarea" name='shipping_requests' rows='8'
-              value={ shipping_requests || '' } onChange={ this.onChange } />
           </Fragment>
-          {/*}*/}
+          }
+
+          <Input type="textarea" name='shipping_requests' rows='8'
+                 value={ shipping_requests || '' } onChange={ this.onChange } />
 
           { !back &&
             <SaveButton show={ updated } />
