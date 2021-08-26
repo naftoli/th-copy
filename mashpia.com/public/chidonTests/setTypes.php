@@ -5,11 +5,11 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2020-12-18 05:00:00');
-    if ($today >= $shutdown) {
-        echo "This page is now closed.";
-        exit;
-    }
+//    $shutdown = new DateTime('2020-12-18 05:00:00');
+//    if ($today >= $shutdown) {
+//        echo "This page is now closed.";
+//        exit;
+//    }
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
@@ -61,12 +61,11 @@ foreach ($schools as $id => $school) {
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th></tr>";
+            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th></tr>";
             foreach ($children as $child) {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
-                $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
+                echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
                 $default = 'expert';
                 foreach ($types as $type => $value) {
                     echo "<input type='radio' name='type[" . $child['th_chidon_id'] . "]' value='" . $type . "'";

@@ -26,17 +26,22 @@ class ChidonTests
         $this->marks = [];
         $this->types = [
             'maven' => 'Maven',
-            'pro'   => 'Maven / Pro',
-            'expert'=> 'Pro / Expert'
+            'pro'   => 'Pro',
+            'expert'=> 'Expert',
+            'genius'=> 'Genius'
         ];
         // hardcode number of questions per test type
         $this->testQuestions = [
             'maven' => 10,
             'pro'   => 10,
-            'expert'=> 15,
-            'trophy'=> 10
+            'expert'=> 20,
+            'genius'=> 10
         ];
         $this->genderOnly = false;
+    }
+
+    public function getTypes() {
+        return $this->types;
     }
 
     public function setGender($gender) {
@@ -49,7 +54,7 @@ class ChidonTests
                 tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_rep, tc.school_rep, tc.school_rep_old, 
                 tc.khk_test_1, tc.khk_test_2, tc.khk_test_3, tc.khk_test_4, tc.chidon_final_mark, tc.trophy_final_mark,
                 tc.khk_final_mark, 
-                u.first, u.last, u.gender, 
+                u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub,
                 s.school_id, s.school_name, a.admin_email
             FROM
@@ -139,18 +144,22 @@ class ChidonTests
             FROM
                 th_chidon_marks
             WHERE
-                th_chidon_id = :id
+                th_chidon_id = :id AND test_type = :type
         ");
         foreach ($this->children as $child) {
             $id = $child['th_chidon_id'];
-            $res = $stmt->execute([':id' => $id]);
-            if ($res) {
-                $rows = $stmt->fetchAll();
-                foreach ($rows as $row) {
-                    $this->scores[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
+            foreach ($this->types as $type => $desc) {
+                $res = $stmt->execute([
+                    ':id'   => $id,
+                    ':type' => $type
+                ]);
+                if ($res) {
+                    $row = $stmt->fetch();
+                    $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
                 }
             }
         }
+//        echo "<pre>"; print_r($this->scores); echo "</pre>";
     }
 
     public function getScores() {
@@ -186,10 +195,6 @@ class ChidonTests
         }
     }
 
-    public function getTypes() {
-        return $this->types;
-    }
-
     public function setTestTypes($types) {
         $stmt = $this->db->prepare("
             UPDATE th_chidon 
@@ -212,23 +217,26 @@ class ChidonTests
                 foreach ($this->testQuestions as $type => $questions) {
                     switch ($type) {
                         case 'maven':
-                        case 'trophy':
                             $mark = floatval($details[$type] / $questions);
                             break;
                         case 'pro':
                             $mark = floatval(($details['maven'] + $details[$type]) / ($this->testQuestions['maven'] + $questions));
                             break;
                         case 'expert':
-                            $mark = floatval(($details['pro'] + $details[$type]) / ($this->testQuestions['pro'] + $questions));
+                            $mark = floatval(($details['maven'] + $details['pro'] + $details[$type]) / ($this->testQuestions['maven'] + $this->testQuestions['pro'] + $questions));
+                            break;
+                        case 'genius':
+                            $mark = floatval(($details['maven'] + $details['pro'] + $details['expert'] + $details[$type]) /
+                                ($this->testQuestions['maven'] + $this->testQuestions['pro'] + $this->testQuestions['expert'] + $questions));
                             break;
                     }
                     $this->marks[$id][$testNum][$type] = $mark * 100;
                 }
-                // eligibility for trophy can come in this way as well
-                $this->marks[$id][$testNum]['trophy_extra'] = floatval(
-                    ($details['pro'] + $details['expert'] + $details['trophy']) /
-                    ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $this->testQuestions['trophy'])
-                ) * 100;
+//                // eligibility for trophy can come in this way as well
+//                $this->marks[$id][$testNum]['trophy_extra'] = floatval(
+//                    ($details['pro'] + $details['expert'] + $details['trophy']) /
+//                    ($this->testQuestions['pro'] + $this->testQuestions['expert'] + $this->testQuestions['trophy'])
+//                ) * 100;
             }
         }
     }

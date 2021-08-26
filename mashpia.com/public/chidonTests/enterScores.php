@@ -39,11 +39,11 @@ if ($admin_user['auth'] != 'super') {
     $shutdown[3] = new DateTime('2021-01-23 05:00:00');
     $shutdown[4] = new DateTime('2021-02-24 05:00:00');
 
-    for ($i = 1; $i <= 4; $i++) {
-        if ($testNumber == $i && $today >= $shutdown[$i]) {
-            $disabled = true;
-        }
-    }
+//    for ($i = 1; $i <= 4; $i++) {
+//        if ($testNumber == $i && $today >= $shutdown[$i]) {
+//            $disabled = true;
+//        }
+//    }
 }
 ?>
 <!DOCTYPE html>
@@ -72,14 +72,13 @@ if ($admin_user['auth'] != 'super') {
         <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
         <?php
         $types = $ct->getTypes();
-        $types['trophy'] = 'Trophy';
         echo "<form action='' method='post'>";
         echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
         echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th>";
+            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th>";
             foreach ($types as $type => $value) {
                 echo "<th>" . ucwords($type) . " Score</th>";
             }
@@ -88,7 +87,7 @@ if ($admin_user['auth'] != 'super') {
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+                echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 if (empty($child['test_type'])) $default = true;
                 else $default = false;
                 foreach ($types as $type => $value) {
