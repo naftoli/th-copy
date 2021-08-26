@@ -77,6 +77,7 @@ export class ShippingTab extends Component {
           </Fragment>
           }
 
+          <label>Shipping Notes</label>
           <Input type="textarea" name='shipping_requests' rows='8'
                  value={ shipping_requests || '' } onChange={ this.onChange } />
 
