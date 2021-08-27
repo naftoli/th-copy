@@ -9,7 +9,14 @@ if ($admin_user['auth'] != 'super') {
 
 function getMissionNumber() {
     global $subject_id;
-    $sql = "select mission_number as number from date_tasks_missions where subject_id = " . $subject_id;
+    $sql = "SELECT 
+                mission_number
+            FROM
+                date_tasks_missions
+            WHERE
+                subject_id = $subject_id
+            ORDER BY mission_number DESC
+            LIMIT 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     return intval($row['mission_number']);
@@ -24,21 +31,18 @@ function getJulianDate($heDate) {
 $grid_id = 20010;
 $subject_id = 21;
 $types = [2, 3];
-$levels = [4,5,6,7,8];
-
-$tasks = [
-    1   =>  [
-        'task'      => 'I learned my quota for the chidon limmud program',
-        'short'     => 'chidon limmud',
-        'mission'   => 'chidon limmud',
-        'desc'      => 'chidon limmud',
-    ],
-    2   =>  [
-        'task'      => '',
-        'short'     => '',
-        'mission'   => '',
-        'desc'      => '',
-    ]
+$levels = [4,5,6,7,8]; // grades
+$tracks = [
+    1 => 'maven',
+    2 => 'pro',
+    3 => 'expert',
+    4 => 'genius'
+];
+$minutes = [
+    1 => 15,
+    2 => 30,
+    3 => 45,
+    4 => 60
 ];
 
 $info = [];
@@ -60,20 +64,49 @@ if (($handle = fopen('limmudTasks.csv', "r")) !== false) {
     echo "Error opening file.";
 }
 
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
 $missionNumber = getMissionNumber() + 1;
 
-$qrys = [];
+mysql_query('set autocommit=0');
+mysql_query('begin');
+
+$success = true;
 foreach ($info as $details) {
     $start = getJulianDate($details['start']);
     $end = $start;
     foreach ($types as $type) {
         foreach ($levels as $level) {
-            $sql = "insert into date_tasks_missions 
+            if (! $details['level_' . $level]) continue;
+            foreach ($tracks as $track => $desc) {
+                $tasks = [
+                    [
+                        'name'  => 'You are on the ' . ucwords($desc) . ' Chidon track, you need to learn ' . $minutes[$track] . ' minutes per day.',
+                        'qty'   => 0
+                    ],
+                    [
+                        'name'  => "Today's unit(s) are: " . $details['level_' . $level],
+                        'qty'   => 0
+                    ],
+                    [
+                        'name'  => 'I learned todays units.',
+                        'qty'   => 0
+                    ],
+                    [
+                        'name'  => 'I learned ___ minutes today.',
+                        'qty'   => 300
+                    ],
+                    [
+                        'name'  => "Was " . $minutes[$track] . " minutes enough time to learn today's unit(s)?",
+                        'qty'   => 0
+                    ]
+                ];
+                $sql = "insert into date_tasks_missions 
                     set school_type_id = $type, 
                     subject_id = $subject_id, 
                     level = $level, 
-                    track_id = 1, 
-                    mission_name = '',   
+                    track_id = $track, 
+                    mission_name = 'Chidon Limmud Track',   
                     mission_value = 1.0, 
                     mission_number = " . $missionNumber++ . ", 
                     mission_description = '', 
@@ -81,34 +114,51 @@ foreach ($info as $details) {
                     end_date = $end, 
                     default_on = 1, 
                     lang_id = 1";
-            $qrys[] = $sql;
+                if (! mysql_query($sql)) {
+                    $success = false;
+                    break 4;
+                } else {
+                    $id = mysql_insert_id();
+                    foreach ($tasks as $idx => $task) {
+                        $grid = $grid_id + $idx;
+                        $sql = "insert into date_tasks 
+                            set date_tasks_mission_id = $id, 
+                            name = \"" . addslashes($task['name']) . "\", 
+                            cat = 'chidon limmud', 
+                            cat_ord_new = $grid, 
+                            points = 0.5, 
+                            short_name = 'Limmud Track', 
+                            mandatory_qty = 0, 
+                            optional_qty = 1, 
+                            daily_task = 0, 
+                            label_id = 0, 
+                            ord = " . ($idx + 1) . ", 
+                            needed = 1, 
+                            focus_task = 0, 
+                            default_on = 1, 
+                            label_ord = " . ($idx + 1) . ", 
+                            description = '', 
+                            grid_id = $grid, 
+                            mission_marking = 1, 
+                            grid_marking = 0, 
+                            quantity = " . $task['qty'];
+                        if (! mysql_query($sql)) {
+                            $success = false;
+                            break 5;
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-
-/*
-$sql = "insert into date_tasks
-        set date_tasks_mission_id = $id, 
-        name = '" . $taskInfo['name'] . "', 
-        cat = '" . $taskInfo['cat'] . "',
-        cat_ord_new = " . $taskInfo['cat_ord'] . ", 
-        points = 0.5, 
-        short_name = '" . $taskInfo['short'] . "', 
-        mandatory_qty = $mand, 
-        optional_qty = $opt, 
-        daily_task = 0, 
-        label_id = 37, 
-        ord = " . $taskInfo['ord'] . ", 
-        needed = 1,
-        focus_task = 0,
-        default_on = 1, 
-        label_ord = 2,  
-        description = '" . $desc . "',
-        grid_id = " . $taskInfo['grid_id'] . ",
-        mission_marking = " . $taskInfo['mission_marking'] . ",
-        grid_marking = " . $taskInfo['grid_marking'];
-if ($qty) {
-    $sql .= ", quantity = $qty";
+if ($success) {
+    echo "done.";
+    mysql_query('commit');
+    mysql_query('set autocommit=1');
+} else {
+    echo "there were errors.";
+    mysql_query('rollback');
+    mysql_query('set autocommit=1');
 }
-*/
