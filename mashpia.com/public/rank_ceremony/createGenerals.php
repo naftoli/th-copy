@@ -25,7 +25,7 @@ $heMonths = array(
 );
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], false );
 $schools = $as->getSchools();
 
 function createFile($name, $info) {
