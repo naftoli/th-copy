@@ -90,11 +90,11 @@ foreach ($ords as $ord) {
                     if (in_array($school_id, [61, 269])) {
                         if ($first_time) {
                             $first_time = false;
-                            $school_name = $school_name . "_Boys";
                             $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_boys']));
+                            $school_name = $school_name . "_Boys";
                         } else {
-                            $school_name = $school_name . "_Girls";
                             $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_girls']));
+                            $school_name = $school_name . "_Girls";
                         }
                     } else {
                         if (in_array($school_id, $boySchools)) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_boys']));

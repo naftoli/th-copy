@@ -66,6 +66,7 @@ class RankReport extends Report {
         } else {
             $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
         }
+//        echo $sql; exit;
 //        echo "<input type='hidden' name='SQL' value='" . $sql . "' />";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
