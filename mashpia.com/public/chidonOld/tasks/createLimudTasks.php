@@ -62,6 +62,7 @@ if (($handle = fopen('limmudTasks.csv', "r")) !== false) {
     }
 } else {
     echo "Error opening file.";
+    exit;
 }
 
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
