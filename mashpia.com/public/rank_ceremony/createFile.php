@@ -150,7 +150,9 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             createFile($file_name, $info);
 
             $dates = $r->getHeReportDates();
-            $str = "Regular Schools:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+            $startArr = explode(" ", $dates['start_he']);
+            $endArr = explode(" ", $dates['end_he']);
+            $str = "Regular Schools:\nStart Date: " . $startArr[1] . ' ' . $startArr[2] . "\nEnd Date: " . $endArr[1] . ' ' . $endArr[2];
             createFile("dates.txt", $str);
 
             $rDates = $r->getReportDates();

@@ -141,7 +141,7 @@ createFile($file_name, $info);
 $dates = $r->getHeReportDates();
 $startArr = explode(" ", $dates['start_he']);
 $endArr = explode(" ", $dates['end_he']);
-$str = "Generals:\nStart Date: " . $startArr[1] . "\nEnd Date: " . $endArr[1];
+$str = "Generals:\nStart Date: " . $startArr[1] . ' ' . $startArr[2] . "\nEnd Date: " . $endArr[1] . ' ' . $endArr[2];
 createFile("dates.txt", $str);
 
 $rDates = $r->getReportDates();
