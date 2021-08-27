@@ -134,13 +134,14 @@ foreach ($ords as $ord) {
         }
     }
 }
-exit;
 $info[$i] = ['outro', 'outro']; // outro
 $file_name = "generals.csv";
 createFile($file_name, $info);
 
 $dates = $r->getHeReportDates();
-$str = "Generals:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+$startArr = explode(" ", $dates['start_he']);
+$endArr = explode(" ", $dates['end_he']);
+$str = "Generals:\nStart Date: " . $startArr[1] . "\nEnd Date: " . $endArr[1];
 createFile("dates.txt", $str);
 
 $rDates = $r->getReportDates();
