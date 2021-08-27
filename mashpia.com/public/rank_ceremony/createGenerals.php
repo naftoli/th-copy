@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -100,9 +102,9 @@ foreach ($ords as $ord) {
                         if (in_array($school_id, $boySchools)) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_boys']));
                         else if (in_array($school_id, $girlsSchools)) $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$school_name]['logo_girls']));
                     }
-                    $logo_img = @imagecreatefromstring($logoContent);
+                    $logo_img = imagecreatefromstring($logoContent);
                     $logo_url = 'images/' . $school_id . '.png';
-                    $logo_image = @imagepng($logo_img, $logo_url);
+                    $logo_image = imagepng($logo_img, $logo_url);
 //                    $images[] = $logo_image;
 
                     foreach ($more as $user_id) {
@@ -112,9 +114,9 @@ foreach ($ords as $ord) {
                         else $url = "http://mashpia.com" . $pics[$user_id];
                         $contents = file_get_contents($url);
                         if ($contents) {
-                            $new_img = @imagecreatefromstring($contents);
+                            $new_img = imagecreatefromstring($contents);
                             $img_url = 'images/' . $user_id . '.png';
-                            $new_image = @imagepng($new_img, $img_url);
+                            $new_image = imagepng($new_img, $img_url);
 //                            if ($new_image && !in_array($img_url, $images)) $images[] = $img_url;
                         }
 
@@ -132,6 +134,7 @@ foreach ($ords as $ord) {
         }
     }
 }
+exit;
 $info[$i] = ['outro', 'outro']; // outro
 $file_name = "generals.csv";
 createFile($file_name, $info);
