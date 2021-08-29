@@ -86,7 +86,7 @@ foreach ($info as $details) {
                         'qty'   => 0
                     ],
                     [
-                        'name'  => '<i>You are on the ' . ucwords($desc) . ' Chidon track, you need to learn ' . $minutes[$track] . ' minutes per day.</i><br />I learned ___ minutes today.',
+                        'name'  => "<i>You are on the " . ucwords($desc) . " Chidon track, you need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
                         'qty'   => 300
                     ],
                     [
