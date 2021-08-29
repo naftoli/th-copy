@@ -82,19 +82,11 @@ foreach ($info as $details) {
             foreach ($tracks as $track => $desc) {
                 $tasks = [
                     [
-                        'name'  => 'You are on the ' . ucwords($desc) . ' Chidon track, you need to learn ' . $minutes[$track] . ' minutes per day.',
+                        'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".</i><br />I learned todays units.",
                         'qty'   => 0
                     ],
                     [
-                        'name'  => "Today's unit(s) are: " . $details['level_' . $level],
-                        'qty'   => 0
-                    ],
-                    [
-                        'name'  => 'I learned todays units.',
-                        'qty'   => 0
-                    ],
-                    [
-                        'name'  => 'I learned ___ minutes today.',
+                        'name'  => '<i>You are on the ' . ucwords($desc) . ' Chidon track, you need to learn ' . $minutes[$track] . ' minutes per day.</i><br />I learned ___ minutes today.',
                         'qty'   => 300
                     ],
                     [
