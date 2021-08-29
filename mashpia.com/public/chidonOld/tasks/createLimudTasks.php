@@ -155,6 +155,7 @@ if ($success) {
     mysql_query('set autocommit=1');
 } else {
     echo "there were errors.";
+    echo mysql_error();
     mysql_query('rollback');
     mysql_query('set autocommit=1');
 }
