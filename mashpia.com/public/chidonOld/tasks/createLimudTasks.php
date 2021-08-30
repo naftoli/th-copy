@@ -82,22 +82,14 @@ foreach ($info as $details) {
             foreach ($tracks as $track => $desc) {
                 $tasks = [
                     [
-                        'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".</i><br />I learned todays units.",
-                        'qty'   => 0
-                    ],
-                    [
-                        'name'  => "<i>You are on the " . ucwords($desc) . " Chidon track, you need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
+                        'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".</i><br />You need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
                         'qty'   => 300
-                    ],
-                    [
-                        'name'  => "Was " . $minutes[$track] . " minutes enough time to learn today's unit(s)?",
-                        'qty'   => 0
                     ]
                 ];
                 // find out hebrew date of mission
                 $heDate = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
                 $heDateInsertable = iconv ('WINDOWS-1255', 'UTF-8', $heDate);
-                $mission_name = addslashes("Chidon Limmud Track - " . $heDateInsertable);
+                $mission_name = addslashes(" - " . $heDateInsertable);
                 $sql = "insert into date_tasks_missions 
                     set school_type_id = $type, 
                     subject_id = $subject_id, 
@@ -124,7 +116,7 @@ foreach ($info as $details) {
                             cat = 'chidon limmud', 
                             cat_ord_new = $grid, 
                             points = 0.5, 
-                            short_name = 'Limmud Track', 
+                            short_name = '" . ucwords($desc) . " Track',
                             mandatory_qty = 0, 
                             optional_qty = 1, 
                             daily_task = 0, 
