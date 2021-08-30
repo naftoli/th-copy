@@ -804,7 +804,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                             // if daily marking, hide yoma depagra not relevant to today 
                                             $today = unixtojd($timestamp);
                                             if (
-                                                ($_COOKIE['marking'] == 'daily' ||
+                                                ((isset($_COOKIE['marking']) && $_COOKIE['marking'] == 'daily') ||
                                                 ($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
                                                 &&
                                                 ($today < $no_label_task->start_date || $today > $no_label_task->end_date)
