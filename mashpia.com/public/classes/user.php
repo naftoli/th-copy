@@ -469,20 +469,24 @@ class user {
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
 				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
 
-				// for sefer hamitzvos, get chidon limmud track misssions
+                // for sefer hamitzvos, get chidon limmud track misssions
                 // find out level / track for chidon limmud track
-                $sqlLimmud = "select test_type, class_grade from th_chidon tc join users u using (user_id) join classes c using (class_id) where user_id = " . $this->user_id . " and year = " . GlobalSettings::getChidonYear();
-                $resultLimmud = mysql_query($sqlLimmud);
-                $rowLimmud = mysql_fetch_assoc($resultLimmud);
-                $tracks = [
-                    'maven' => 1,
-                    'pro'   => 2,
-                    'expert'=> 3,
-                    'genius'=> 4
-                ];
-                $row['track_id'] = $tracks[$rowLimmud['test_type']];
-                $row['level'] = intval($rowLimmud['class_grade']);
-                $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                if ($row['subject_id'] == 21) {
+                    $sqlLimmud = "select test_type, class_grade from th_chidon tc join users u using (user_id) join classes c using (class_id) where user_id = " . $this->user_id . " and year = " . GlobalSettings::getChidonYear();
+                    $resultLimmud = mysql_query($sqlLimmud);
+                    $rowLimmud = mysql_fetch_assoc($resultLimmud);
+                    $tracks = [
+                        'maven' => 1,
+                        'pro' => 2,
+                        'expert' => 3,
+                        'genius' => 4
+                    ];
+                    $row['track_id'] = $tracks[$rowLimmud['test_type']];
+                    $row['level'] = intval($rowLimmud['class_grade']);
+                    $user_track = new user_track($row);
+                    $user_track->get_subject_info();
+                    $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                }
 
 				array_push($this->user_tracks, $user_track);
 				
