@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 class user {
 	public $user_id;
 	public $user_code;
@@ -463,6 +468,21 @@ class user {
 				$user_track->get_subject_info();
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
 				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+
+				// for sefer hamitzvos, get chidon limmud track misssions
+                // find out level / track for chidon limmud track
+                $sqlLimmud = "select test_type, class_grade from th_chidon tc join users u using (user_id) join classes c using (class_id) where user_id = " . $this->user_id . " and year = " . GlobalSettings::getChidonYear();
+                $resultLimmud = mysql_query($sqlLimmud);
+                $rowLimmud = mysql_fetch_assoc($resultLimmud);
+                $tracks = [
+                    'maven' => 1,
+                    'pro'   => 2,
+                    'expert'=> 3,
+                    'genius'=> 4
+                ];
+                $row['track_id'] = $tracks[$rowLimmud['test_type']];
+                $row['level'] = intval($rowLimmud['class_grade']);
+                $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
 
 				array_push($this->user_tracks, $user_track);
 				

@@ -115,7 +115,8 @@ class user_track
 		$this->subject_image_id = $row["subject_image_id"];
 	}
 	
-	function get_date_tasks_missions($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true, $print_parent_tasks = true) 
+	function get_date_tasks_missions($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true,
+                                     $print_parent_tasks = true, $chidonLimmud = false)
 	{
 		//echo "<input type='hidden' name='3) END DATE' value='" . $end_date . "'>\n";
 		$this->start_date = $start_date;
@@ -125,11 +126,13 @@ class user_track
 			. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
 			. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
 		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
+        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud Track%' ";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
+//        if ($this->subject_id == 21 && $chidonLimmud) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
 		// echo $sql . "<br />";
-		//echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
-		//if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
-		//if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
+		// echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
+		// if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
+		// if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
                 
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
@@ -148,6 +151,7 @@ class user_track
                     continue;
                 } 
             }
+
 			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
 			
 			if ($date_tasks_mission->date_tasks_mission_id > 0) {
