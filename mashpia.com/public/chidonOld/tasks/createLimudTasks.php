@@ -96,13 +96,14 @@ foreach ($info as $details) {
                 ];
                 // find out hebrew date of mission
                 $heDate = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
-                $mission_name = addslashes("Chidon Limmud Track - " . $heDate);
+                $heDateInsertable = iconv ('WINDOWS-1255', 'UTF-8', $heDate);
+                $mission_name = addslashes("Chidon Limmud Track - " . $heDateInsertable);
                 $sql = "insert into date_tasks_missions 
                     set school_type_id = $type, 
                     subject_id = $subject_id, 
                     level = $level, 
                     track_id = $track, 
-                    mission_name = $mission_name,   
+                    mission_name = \"" . $mission_name . "\",   
                     mission_value = 1.0, 
                     mission_number = " . $missionNumber++ . ", 
                     mission_description = '', 
