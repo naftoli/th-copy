@@ -96,7 +96,6 @@ foreach ($sm as $val) {
 		break;
 	}
 }
-
 ?>
 <!DOCTYPE html>
 <html DIR="<?=$dir?>">
