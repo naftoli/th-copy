@@ -80,6 +80,9 @@ $jdNow = unixtojd();
 $showTehillimQuota = 0;
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
+$heNow = jdtojewish($jdNow);
+$heNowArr = explode("/", $heNow);
+if ($heNowArr[0] == 13) $year++;
 $sm = calculateSM( $year );
 
 // structure, val => schools pre-closed
