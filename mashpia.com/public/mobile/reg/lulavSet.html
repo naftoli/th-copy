@@ -191,7 +191,7 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             console.log(admin)
-            if (!admin) { alert('no admin.') }
+            if (!admin) { window.close() }
 
             // find out how many sets have been sold
             var soldOut = false;
