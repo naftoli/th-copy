@@ -180,6 +180,7 @@
     </body>
     
     <script src="js/all.js" defer></script>
+    <script src="js/js.cookie.js"></script>
     <script>
         if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
             $(".bug-report").hide()
@@ -190,8 +191,8 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             console.log(admin)
-            if (!admin) { window.close(); }
-            
+            if (!admin) { alert('no admin.') }
+
             // find out how many sets have been sold
             var soldOut = false;
             var now = Math.floor( new Date().getTime() / 1000);
@@ -213,13 +214,13 @@
                     $("#purchases").hide();
                 }
             });
-            
+
             // get the current year
             var year;
-            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
+            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false,
                 success: function( info ) { year = info; }
             });
-            
+
             // load children
             $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
                 if ( success == -1 ) {
@@ -227,11 +228,11 @@
                 } else {
                     var data = $.parseJSON( success );
                     var children = data.children;
-                    
+
                     // sepearate registered and un-registered
                     var registred_children = {};
                     var unregistered_children = {};
-                    
+
                     for (var c in children) {
                         var child = children[c];
                         if (child.mivtzaLulav) {
@@ -240,29 +241,29 @@
                             unregistered_children[c] = child;
                         }
                     }
-                                        
+
                     // Grab the template script
                     var tplScript = $("#childrenTpl").html();
-                
+
                     // Compile the template
                     var tpl = Handlebars.compile( tplScript );
 
                     // Pass our data to the template
                     var html = tpl( { children : registred_children } );
-                    
+
                     $("#purchase_info").show();
-                    if ( $.trim( html ) === '' ) { 
-                        $("#no-children").show(); 
+                    if ( $.trim( html ) === '' ) {
+                        $("#no-children").show();
                     } else {
                         // Add the compiled html to the page
                         $(".chilrens").append( html );
                         $(".year").text(year);
                         if ( soldOut ) $("#sold-out").show();
                         else $("#purchases").show();
-                    } 
+                    }
                 }
             });
-            
+
             $(document).on('click', '.lulav', calcAmount);
             $(document).on("click", "#purchase", purchaseSets);
 
@@ -282,8 +283,8 @@
                         }
                     });
                 }
-                
-                var amount = parseFloat(total).toFixed(2); 
+
+                var amount = parseFloat(total).toFixed(2);
                 $("#amount").text( amount );
                 $("#total").val( amount );
             }
@@ -292,7 +293,7 @@
                 e.preventDefault();
                 var total = $("#total").val();
                 if ( total > 0 ) {
-                    
+
                     var first = $("#cc-first").val().trim();
                     var last = $("#cc-last").val().trim();
                     var num = $("#cc-number").val().trim();
@@ -326,7 +327,7 @@
                         var id = $(this).attr('id');
                         info.users.push( id );
                     });
-                    
+
                     var num_sets = info.users.length;
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
