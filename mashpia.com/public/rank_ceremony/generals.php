@@ -1,4 +1,6 @@
 <?php
+ini_set('max_execution_time', 300);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
