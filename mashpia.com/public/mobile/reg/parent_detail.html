@@ -881,7 +881,11 @@
 
             $(document).on('click', '.lulav', function() {
                 //alert("Sorry, we are SOLD OUT!");
-                window.open("https://mashpia.com/mobile/reg/lulavSet.html");
+                if (window.location.protocol == 'http:') {
+                    window.open("https://mashpia.com/mobile/reg/lulavSet.html");
+                } else {
+                    window.open("/mobile/reg/lulavSet.html");
+                }
             });
         });
     </script>
