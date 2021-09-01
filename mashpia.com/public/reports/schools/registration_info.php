@@ -25,7 +25,6 @@ $schools = \School::find_all_by_chayolei_and_test_school(
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>School Registration Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/admin_styles.css" rel="stylesheet" type="text/css">
     <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
     <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -45,12 +44,17 @@ $schools = \School::find_all_by_chayolei_and_test_school(
         .info ul { list-style: disc }
         button { transition: .25s; }
         button:focus, button:hover, select:focus { transform: scale( 1.1 ) }
+        body {
+            font-size: 14px;
+        }
+        tr, th, td {
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
-    <?php // load the admin UI and JQuery 1.4
-        include( __DIR__ .'/../../admin_header.php');
-    ?>
     <h1>School Registration Settings</h1>
 
     <div class="info">
