@@ -148,8 +148,8 @@ createFile("dates.txt", $str);
 $rDates = $r->getReportDates();
 $heDateArr = explode('/', jdtojewish($rDates['end']));
 $heMonth = $heDateArr[0];
-$heYear = substr($heDateArr[2], 1);
-$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1] . ' ' . $endArr[2];
+$heYear = $heDateArr[2];
+$dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1] . ' ' . substr($endArr[2], 1);
 createFile("dateInfo.txt", $dateStr);
 
 echo json_encode([
