@@ -107,13 +107,12 @@ $fields = [
             <thead>
                 <tr>
                     <?php
-                    for ( $i = 0; $i < 1; $i++ ) { // all rows have same keys / fields so only need to get it from the first one
-                        echo "<tr>";	
-                        foreach ( $result[$i] as $field => $value ) {
-                            echo "<th>" . $fields[$field] . "</th>";
-                        }
-                        echo "</tr>";
+                    // all rows have same keys / fields so only need to get it from the first one
+                    echo "<tr>";
+                    foreach ( $result[0] as $field => $value ) {
+                        echo "<th>" . $fields[$field] . "</th>";
                     }
+                    echo "</tr>";
                     ?>
                 </tr>
             </thead>
@@ -122,6 +121,7 @@ $fields = [
                     foreach ( $result as $info ) {
                         echo "<tr>";	
                         foreach ( $info as $value ) {
+                            if (is_numeric($value) && strlen($value) == 19) $value = '3' . $value;
                             echo "<td>" . $value . "</td>";
                         }
                         echo "</tr>";
