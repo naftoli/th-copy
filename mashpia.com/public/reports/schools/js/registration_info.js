@@ -48,7 +48,7 @@ var registration_info = function() {
 
         // update the base
         updateBase( school_id, updates )
-            .then( function( c ) {
+            .then( function( response ) {
                 if ( response.success ) {
                     event.target.disabled = true;
                     alert( 'Base Updated' );
@@ -66,9 +66,7 @@ var registration_info = function() {
                 data: JSON.stringify( updates ),
                 error: reject,
                 dataType:"json",
-                success: resolve({
-                    'success': true
-                }),
+                success: resolve,
                 contentType:"application/json; charset=utf-8",
             });
         });
