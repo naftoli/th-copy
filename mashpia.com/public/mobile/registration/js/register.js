@@ -773,6 +773,12 @@ var registrationApp = function() {
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" />
                         ${prize.prize_name}<br />
                         ${parseInt(prize.price)} Credits`
+                if (prize.color) {
+                    html += `<br />Color: ${prize.color}`
+                }
+                if (prize.size) {
+                    html += `<br />Size: ${prize.size}`
+                }
                 if (prize.personalization) {
                     html += `<br /><span style="font-size: 12px">${prize.personalization} 
                             <input type="text" name="he_name_${id}" class="he_name" data-info="${id}" /></span>`
