@@ -162,7 +162,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
             $heDateArr = explode('/', jdtojewish($rDates['end']));
             $heMonth = $heDateArr[0];
             $heYear = $heDateArr[2];
-            $dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1] . ' ' . substr($endArr[2], 1);
+            $dateStr = "Date\n" . $months[$heMonth-1] . ' ' . $heYear . "\n" . $heMonths[$heMonth-1] . ' ' . mb_substr($endArr[2], 1);
             createFile("dateInfo.txt", $dateStr);
         }
     }
