@@ -171,6 +171,7 @@ $fields = [
             for (i of info) {
                 let row = []
                 for (h of headers) {
+                    if (h == 'u_user_code') i[h] = '3' + i[h]
                     row.push(i[h])
                 }
                 rows.push(row)
