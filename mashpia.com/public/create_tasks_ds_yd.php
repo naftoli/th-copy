@@ -78,25 +78,6 @@ function getStartEnd($arr) {
         require_once 'PHPExcel/IOFactory.php';
 
         $subject_id = $_POST['subject'];
-        $subjects = array(
-            4   =>  "Tefillah",
-            12  =>  "Mivtzoim",
-            13  =>  "Niggunim",
-            15  =>  "Hakhel",
-            16  =>  "Hiskashrus",
-            21  =>  "SeferHamitzvos",
-            27	=> 	"TanyaBalPeh",
-            40  =>  "YomaDepagra",
-            41  =>  "AvosUbanim",
-            42  =>  "Viholachto",
-            45  =>  "Cheshbon",
-            90  =>  "Chitas",
-            92  =>  "JewishSongs",
-            93  =>  "AssistingOtherJews",
-            94  =>  "YomTov",
-            100 => 	"BriasHaguf",
-            101 =>  "MishnaBalPeh"
-        );
 
         $sql = "select mission_number from date_tasks_missions where subject_id = $subject_id order by mission_number desc limit 1";
         //echo $sql;
@@ -123,9 +104,7 @@ function getStartEnd($arr) {
 
         $lang = $_POST['lang'];
         if ($lang == 1) {
-            $file = "SystemTasks/" . $subjects[$subject_id] . $missionYear . ".xlsx";
-        } else if ($lang == 2) {
-            $file = "SystemTasks/Yi" . $subjects[$subject_id] . $missionYear . ".xlsx";
+            $file = "SystemTasks/DC_YD" . $missionYear . ".xlsx";
         }
 
         // load the file and save it to the database
