@@ -46,6 +46,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
         button:focus, button:hover, select:focus { transform: scale( 1.1 ) }
         body {
             font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
         }
         tr, th, td {
             font-size: 12px;

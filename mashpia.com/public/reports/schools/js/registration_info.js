@@ -66,7 +66,9 @@ var registration_info = function() {
                 data: JSON.stringify( updates ),
                 error: reject,
                 dataType:"json",
-                success: resolve,
+                success: resolve({
+                    'success': true
+                }),
                 contentType:"application/json; charset=utf-8",
             });
         });
