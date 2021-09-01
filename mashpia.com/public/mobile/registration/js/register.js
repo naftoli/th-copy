@@ -765,8 +765,8 @@ var registrationApp = function() {
             var html = ''
             for (prize of res) {
                 var id = prize.prize_id
-                var height = 'height: 75px;'
-                if (prize.personalization) height = 'height: 110px;'
+                var height = 'height: 100px;'
+                if (prize.personalization) height = 'height: 135px;'
                 var personalization = prize.personalization ? 1 : 0
                 html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
