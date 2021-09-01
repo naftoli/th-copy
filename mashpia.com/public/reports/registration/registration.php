@@ -114,18 +114,16 @@ foreach ($temp as $row) {
         // if there's no name for the base just skip
         if (! isset($schools[$school_id])) continue;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT school_type, child_fee   
-            FROM schools s 
-            JOIN users u using (school_id) 
-            WHERE u.school_id = :id 
-            AND u.user_registered > 0 
-            GROUP BY u.school_id
+            SELECT reg_type, child_fee     
+            FROM schools  
+            WHERE school_id = :id 
         ");
         $stmt->execute([':id' => $school_id]);
         $row = $stmt->fetch();
         // figure out soldier fee
 //        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
-        $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
+//        echo "School ID: " . $school_id . " Reg Type: " . $row['school_type'] . "<br />";
+        $fee = GlobalSettings::calculateChildFee($row['reg_type'], $row['child_fee'], false, true);
         echo "<tr><td>" . $school_info[$school_id]['type'] . "</td><td><a href='#$school_id'>" . $schools[$school_id] .
             "</a></td><td>" . $school_info[$school_id]['eligible'] . "</td><td>" . count($details[$school_id]) . "</td><td>" . $fee .
             "</td><td>" . ($fee * count($details[$school_id])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .

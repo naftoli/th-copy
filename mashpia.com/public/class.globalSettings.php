@@ -103,10 +103,7 @@ class GlobalSettings {
     public static function getRegCost( $type ) {
         if ( $type == 1 ) { // In Tuition
             return 50;
-        } 
-        // else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount 
-        //     return 50;
-        // }
+        }
         // everyone else / default return
         return 60;
     }
@@ -115,7 +112,7 @@ class GlobalSettings {
      * have one source of truth for the date of expiry for early bird
      */
     public static function earlyBird() {
-        return new DateTime('2020-09-24 11:59:59');
+        return new DateTime('2021-09-13 00:00:00');
     }
 
     /**
@@ -140,13 +137,15 @@ class GlobalSettings {
 
         // type 1 soldiers pay nothing
         if ( $type == 1 && $is_soldier ) {
-            $fee = 0;
-        // if the fee is null, get the default fee
-        } else if ( is_null( $fee ) ) {
+            return 0;
+        } else if ($fee > 0) {
+            return intval($fee);
+        } else {
             $fee = self::getRegCost( $type );
         }
+
         // cast it to a float value
-        $fee = floatval( $fee );
+        $fee = intval( $fee );
         // return the final rate if requested
         if ( $no_discount )
             return $fee >= 0 ? $fee : 0;
