@@ -183,6 +183,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
             </tbody>
         </table>
     </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="js/registration_info.js"></script>
 </body>
