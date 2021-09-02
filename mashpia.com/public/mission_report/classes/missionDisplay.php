@@ -707,7 +707,7 @@ abstract class MissionDisplay {
 				        $mission_name = $info[1];
 						$labelAdded++;
                         ?>
-                        <div class="label"><?//=$subject_name;?> - <?=$mission_name;?></div>
+                        <div class="label"><?//=$subject_name;?><?=$mission_name;?></div>
                         <?
 						$numTasks = count($user->no_label_tasks);
 						for ($nltno = 0; $nltno < $numTasks; $nltno++) {
@@ -1351,7 +1351,7 @@ abstract class MissionDisplay {
 				        $mission_name = $info[1];
 						$labelAdded++;
                         ?>
-                        <div class="label"><?//=$subject_name;?> - <?=$mission_name;?></div>
+                        <div class="label"><?//=$subject_name;?><?=$mission_name;?></div>
                         <?
 						$numTasks = count($user->no_label_tasks);
 						for ($nltno = 0; $nltno < $numTasks; $nltno++) {
