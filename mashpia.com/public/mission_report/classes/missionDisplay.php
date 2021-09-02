@@ -643,6 +643,9 @@ abstract class MissionDisplay {
 				                                    echo "<i>מיינע קוואטע: $shabbos_task->desc קאפיטלעך.</i><br />";
 				                                if ($label_name == 'שבת מברכים' && $shabbos_task->mandatory_qty == 0 && $shabbos_task->quantity > 0)
 				                                    echo "<i>מיינע קוואטע: $shabbos_task->desc מינוטן.</i><br/>";
+//				                                if ($shabbos_task->short_name == 'Tehillim Minutes') {
+//				                                    echo $shabbos_task->date_task_id;
+//                                                }
 												?>
 												</div>
 											</div>
@@ -720,7 +723,10 @@ abstract class MissionDisplay {
 									<div class='mandatoryImg'>&nbsp;
 									<?
 								    if ($no_label_task->mandatory_qty) {
-								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
+								        if (isset($this->stickerOutlines[$no_label_task->subject_id]))
+								    	    echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
+								        else
+								            echo "<img src='' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
 								    }
