@@ -706,15 +706,15 @@ abstract class MissionDisplay {
 				        $subject_name = $info[0]; 
 				        $mission_name = $info[1];
 						$labelAdded++;
-						if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120])) {
-                            ?>
-                            <div class="label"><?=$mission_name;?></div>
-                            <?
-                        } else {
+//						if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120])) {
+//                            ?>
+<!--                            <div class="label">--><?//=$mission_name;?><!--</div>-->
+<!--                            --><?//
+//                        } else {
                             ?>
                             <div class="label"><?=$subject_name;?> - <?=$mission_name;?></div>
                             <?
-                        }
+//                        }
 						$numTasks = count($user->no_label_tasks);
 						for ($nltno = 0; $nltno < $numTasks; $nltno++) {
 							$no_label_task = $user->no_label_tasks[$nltno];         
