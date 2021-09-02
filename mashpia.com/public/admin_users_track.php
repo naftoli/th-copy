@@ -82,7 +82,7 @@ require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 $heNow = jdtojewish($jdNow);
 $heNowArr = explode("/", $heNow);
-if ($heNowArr[0] == 13) $year++;
+//if ($heNowArr[0] == 13) $year++;
 $sm = calculateSM( $year );
 
 // structure, val => schools pre-closed
@@ -91,6 +91,7 @@ $closed_schools = [
 ];
 
 foreach ($sm as $val) {
+    echo "Now - " . $jdNow . " SM: " . $val . "<br />";
 	if ($jdNow >= ($val - 6) && $jdNow <= $val && !in_array($school_id, $closed_schools[$val])) {
 		$showTehillimQuota = 1;
 		break;
