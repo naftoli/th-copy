@@ -396,7 +396,9 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
+                                            if (in_array($this->lang_id, [2, 4])) $style = "margin-right: -20px;"; // yiddish / hebrew
+                                            else $style = "margin-left: -20px;";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" style='" . $style  ."' /></div>";
                                         }
 									    ?>
 										
@@ -1035,7 +1037,9 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
+                                            if (in_array($this->lang_id, [2, 4])) $style = "margin-right: -20px;"; // yiddish / hebrew
+                                            else $style = "margin-left: -20px;";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" style='" . $style . "' /></div>";
                                         }
 									    ?>
 										<?php
@@ -1659,7 +1663,9 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
+                                            if (in_array($this->lang_id, [2, 4])) $style = "margin-right: -20px;"; // yiddish / hebrew
+                                            else $style = "margin-left: -20px;";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\"style='" . $style . "' /></div>";
                                         }
 									    ?>
 											
