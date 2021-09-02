@@ -457,7 +457,8 @@ class TasksCustomizationNew {
 					and dtm.personal = 0                        
                     and dtm.lang_id = " . $this->lang;
         }
-        $sql .= ' GROUP BY name, level '.$orderBy;
+        $sql .= ' GROUP BY cat, name, level '.$orderBy;
+//        echo $sql; exit;
 
         $result = mysql_query( $sql );
         if (!$result) {
@@ -969,7 +970,6 @@ class TasksCustomizationNew {
                     and (dtm.created_by_school is null or dtm.created_by_school = " .$this->school_id . ") 
                     and dtm.lang_id = " . $this->lang . " 
                     and dt.cat = \"" . mysql_real_escape_string($task) . "\"";
-            //echo $sql . "<br />";
             /*
             $sql = "select distinct dt.date_task_id from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
@@ -1043,6 +1043,7 @@ class TasksCustomizationNew {
 				}
             }
         }
+        //echo $sql; exit;
         //echo $sql;
 		//if ($this->debug) {
 		//	echo $sql . "<br />";

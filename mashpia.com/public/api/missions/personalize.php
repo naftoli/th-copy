@@ -65,7 +65,7 @@ class PersonalizeRouter {
         extract( $this->getParams() );
 
         if (!isset($start)) {
-            if ($parsha_id) {
+            if (isset($parsha_id)) {
                 $dates = $this->getDatesFromParsha($parsha_id);
                 $start = $dates[0];
                 $end = $dates[1];
