@@ -409,7 +409,7 @@ abstract class MissionDisplay {
 											$dates[] = $mark->mark_date;									     
 										}
 										?>
-									    <div class="dailyBoxes" style="padding-top: 1px;">
+									    <div class="dailyBoxes" style="padding-top: 2px;">
 											<table>
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) { ?>
