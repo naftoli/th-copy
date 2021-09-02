@@ -396,7 +396,7 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
                                         }
 									    ?>
 										
@@ -738,7 +738,9 @@ abstract class MissionDisplay {
 										</div>
 									<? } ?>
 									</div>
-									<div class="<?=$taskClass?>"><?=$no_label_task->task_name?></div>
+									<div class="<?=$taskClass?>">
+                                        <?=$no_label_task->task_name?>
+                                    </div>
 								</div>
 								</div>
 								<div style="clear: both"></div>
@@ -1033,7 +1035,7 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
                                         }
 									    ?>
 										<?php
@@ -1657,7 +1659,7 @@ abstract class MissionDisplay {
                                                 echo " firstColumn";
                                             else
                                                 echo " secondColumn";
-                                            echo "'><img src=\"/mission_marathon/tiny.png\" /></div>";
+                                            echo "'><img src=\"/mission_report/mission_marathon/tiny.png\" /></div>";
                                         }
 									    ?>
 											

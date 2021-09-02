@@ -556,7 +556,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                                 echo "<div class='mandatoryImg'><img src=\"" . HOME . "/5of7stickers/" . $dailyStickers[$daily_task->subject_id] . "\" /></div>";
                                                             }
                                                             if ($daily_task->grid_id == 13012) {
-                                                                echo "<div class='mandatoryImg'><img src=\"" . HOME . "/mission_marathon/tiny.png\" /></div>";
+                                                                echo "<div class='mandatoryImg'><img src=\"" . HOME . "/mission_report/mission_marathon/tiny.png\" /></div>";
                                                             }
                                                             ?>
                                                         </div>
@@ -845,12 +845,18 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                             </div>
                                                             <div class="long">
                                                                 <?=$no_label_task->task_name?>
+                                                                <?php if ($no_label_task->short_name == 'Limmud Track' && $no_label_task->quantity) : ?>
+                                                                    <br />Click <a href="stopwatch.html" target="_blank">here</a> for timer / stopwatch.
+                                                                <?php endif; ?>
                                                             </div>
                                                         </label>
                                                     </div>
                                                 </li>
                                             <?
                                         }
+                                    }
+                                    if (isset($_COOKIE['naftoli'])) {
+                                        echo "Click <a href='stopwatch.html' target='_blank'>here</a> for timer / stopwatch.";
                                     }
                                     ?>
                                 </ul>
