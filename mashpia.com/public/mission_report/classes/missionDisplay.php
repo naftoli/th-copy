@@ -706,7 +706,7 @@ abstract class MissionDisplay {
 				        $subject_name = $info[0]; 
 				        $mission_name = $info[1];
 						$labelAdded++;
-						if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120])) {
+						if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120, 127])) {
                             ?>
                             <div class="label"><?=$mission_name;?></div>
                             <?
@@ -1356,7 +1356,7 @@ abstract class MissionDisplay {
 				        $subject_name = $info[0]; 
 				        $mission_name = $info[1];
 						$labelAdded++;
-                        if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120])) {
+                        if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120, 127])) {
                             ?>
                             <div class="label"><?=$mission_name;?></div>
                             <?
@@ -2016,7 +2016,7 @@ abstract class MissionDisplay {
 				        $subject_name = $info[0]; 
 				        $mission_name = $info[1];
 						$labelAdded++;
-                        if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120])) {
+                        if (in_array($user->no_label_tasks[0]['subject_id'], [40, 94, 120, 127])) {
                             ?>
                             <div class="label"><?=$mission_name;?></div>
                             <?
