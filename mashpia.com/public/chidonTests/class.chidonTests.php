@@ -25,10 +25,10 @@ class ChidonTests
         $this->scores = [];
         $this->marks = [];
         $this->types = [
-            'maven' => 'Maven',
-            'pro'   => 'Pro',
-            'expert'=> 'Expert',
-            'genius'=> 'Genius'
+            'maven' => 'Yesod',
+            'pro'   => 'Yediah',
+            'expert'=> 'Havonah',
+            'genius'=> 'Iyun'
         ];
         // hardcode number of questions per test type
         $this->testQuestions = [
