@@ -138,7 +138,7 @@ class GlobalSettings {
         // type 1 soldiers pay nothing
         if ( $type == 1 && $is_soldier ) {
             return 0;
-        } else if ($fee > 0) {
+        } else if (!is_null($fee)) {
             return intval($fee);
         } else {
             $fee = self::getRegCost( $type );
