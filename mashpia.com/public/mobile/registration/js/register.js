@@ -1330,10 +1330,10 @@ var templates = function(){
                 if ( rateType === 'chayolei') {
                     // setup chayolei fee dropdown
                     var htmlFee = '';
-                    if ( user.registrationRates[ rateType ] == 0 || user.registrationStatus['confirmation'] ) {
-                        // just make dropdown show 0
-                        htmlFee += "<option value='0'>0</option>";
-                    } else {
+                    // if ( user.registrationRates[ rateType ] == 0 || user.registrationStatus['confirmation'] ) {
+                    //     // just make dropdown show 0
+                    //     htmlFee += "<option value='0'>0</option>";
+                    // } else {
                         var rates = [ 100, 75, 60, 55, 50, 45, 40 ];
                         var rate = user.registrationRates[ rateType ]
                         htmlFee += "<option value=" + rate + ">$" + rate + "</option>"
@@ -1343,7 +1343,7 @@ var templates = function(){
                             if (n == user.registrationRates[rateType]) continue;
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
-                    }
+                    // }
                     $( '#step-2 form #chayolei-fee' ).empty();
                     $( '#step-2 form #chayolei-fee' ).append( htmlFee );
                 }
