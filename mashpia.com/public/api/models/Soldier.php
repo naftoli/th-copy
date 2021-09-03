@@ -464,6 +464,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
+        $result['confirmation'] = false;
         if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
             $confStmt = $MASHPIA_DB->prepare("
                 SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
@@ -475,6 +476,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $rows = $confStmt->fetchAll();
             if ( empty( $rows ) ) {
                 $result['chayolei'] = false;
+                $result['confirmation'] = true;
             }
         }
 

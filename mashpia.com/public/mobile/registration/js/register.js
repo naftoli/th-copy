@@ -1094,8 +1094,8 @@ var templates = function(){
                     '</div><div class="col-6">' +
                         '<p class="name">' + child.first + " " + child.last + '</p>' +
                         ( child.registrationStatus.chayolei === false ? 
-                            child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) : 
-                            ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei ) : '' ) +
+                            child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) :
+                            ( '<p class="reg_cost">Tzivos Hashem: $' + (!child.registrationStatus.confirmation ? child.registrationRates.chayolei : 0) ) : '' ) +
                             // ( '<p class="reg_cost">Tzivos Hashem: $' + child.registrationRates.chayolei + '<br />($0 Free Lite Edition)</p>' ) : '' ) +
                         ( child.registrationStatus.chidon === false ? 
                             ( '<p class="reg_cost">Chidon: $' + child.registrationRates.chidon + '</p>' ) : '' ) +
@@ -1330,7 +1330,7 @@ var templates = function(){
                 if ( rateType === 'chayolei') {
                     // setup chayolei fee dropdown
                     var htmlFee = '';
-                    if ( user.registrationRates[ rateType ] == 0 ) {
+                    if ( user.registrationRates[ rateType ] == 0 || user.registrationStatus['confirmation'] ) {
                         // just make dropdown show 0
                         htmlFee += "<option value='0'>0</option>";
                     } else {
