@@ -558,7 +558,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                             if ($daily_task->grid_id == 13012) {
                                                                 if (isset($_COOKIE['lang']) && ($_COOKIE['lang'] == 'he' || $_COOKIE['lang'] == 'yi')) $style = "margin-right: -20px;"; // yiddish / hebrew
                                                                 else $style = "margin-left: -20px;";
-                                                                echo "<div class='mandatoryImg'><img src=\"" . HOME . "/mission_report/mission_marathon/tiny.png\" style='" . $style . "' /></div>";
+                                                                echo "<div class='mandatoryImg'><img src=\"/mission_report/mission_marathon/tiny.png\" style='" . $style . "' /></div>";
                                                             }
                                                             ?>
                                                         </div>
