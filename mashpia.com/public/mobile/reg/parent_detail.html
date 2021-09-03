@@ -697,7 +697,8 @@
                 //	return false;
                 //}
                 var id = $(this).parent().parent().parent().attr('id');
-                location.href = "/mobile/registration/?user_id=" + id;
+                if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
+                else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
             });
 
             $(document).on('click', '.del', function () {
