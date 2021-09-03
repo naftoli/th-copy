@@ -515,11 +515,12 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 //            $subjects = [1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 92, 93, 94, 100];
             // all subjects
 //            $subjects = [];
+            // all other schools
             $stmtSubjects = $MASHPIA_DB->query("
                 select subject_id from subjects s 
                 join school_type_subjects sts using (subject_id) 
                 where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-                and sts.school_type_id in (2,3,4,5,12,13) 
+                and sts.school_type_id in (2,3,12,13) 
                 group by s.subject_id
             ");
         }
