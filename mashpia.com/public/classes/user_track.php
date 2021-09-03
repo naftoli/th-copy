@@ -132,8 +132,11 @@ class user_track
 		// echo $sql . "<br />";
 		// echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
 		// if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
-		// if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
-                
+//		 if ($this->subject_id == 21) {
+//		     echo $sql;
+//		     exit;
+//         }
+
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
                 
@@ -186,6 +189,7 @@ class user_track
                 } 
 			}		
 		}
+//		echo "<pre>"; print_r($this->daily_tasks); echo "</pre>"; exit;
 	}
 	
 	function get_september_date_tasks_missions($school_type_id, $start_date, $end_date) 
