@@ -164,9 +164,9 @@ class UsersUploadRouter {
                         $value = strtolower( $value );
                     }
                     // validate mission type
-                    if ( $headers[$cellIndex] == "*Mission Type" && !in_array( $value, [ 'chabad', 'frum' ] )
+                    if ( $headers[$cellIndex] == "*Mission Type" && !in_array( $value, [ 'chabad', 'frum', 'day school' ] )
                     ) {
-                        $errors[] = "$errorString Mission type must be 'chabad' or 'frum'.";
+                        $errors[] = "$errorString Mission type must be 'chabad', 'frum' or 'day school'.";
                     }
                     if ( $headers[$cellIndex] == "Type of Tasks" && 
                         !in_array( $value, [ 'day school', 'hebrew school', 'no school' ] )
