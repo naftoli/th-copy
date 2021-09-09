@@ -53,15 +53,28 @@ $schools = $as->getSchools();
         echo "Address: " . $schoolInfo['school_address1'] . " " . $schoolInfo['school_address2'] . "<br />";
         echo $schoolInfo['school_city'] . ", " . $schoolInfo['school_state'] . " " . $schoolInfo['school_postal'] . "<br />";
         echo $schoolInfo['school_country'] . "<br />";
+        $totals = 0;
         for ($i = 4; $i <= 8; $i++) {
-            echo "Total for Grade $i: " . (isset($children[$i]) ? count($children[$i]) : 0) . "<br />";
+            $total = (isset($children[$i]) ? count($children[$i]) : 0);
+            echo "Total for Grade $i: " . $total . "<br />";
+            $totals += $total;
         }
+        echo "Grand Total: " . $totals . "<br />";
         ?>
 <!--        <table>-->
 <!--            <tr>-->
+<!--                <th>Grade</th>-->
 <!--                <th>Class</th>-->
 <!--                <th>Student</th>-->
 <!--            </tr>-->
+<!--            --><?php
+//            for ($i = 4; $i <= 8; $i++) {
+//                foreach ($children[$i] as $child) {
+//                    $class = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+//                    echo "<tr><td>" . $i . "</td><td>" . $class . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td></tr>";
+//                }
+//            }
+//            ?>
 <!--        </table>-->
         <hr />
         <div style="page-break-after: always"></div>
