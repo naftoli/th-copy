@@ -50,7 +50,7 @@ $schools = $as->getSchools();
         }
 
         $schoolInfo = $schoolsInfo[$id];
-        if ($schoolInfo['shipping_method'] == 'pickup') continue;
+        if ($schoolInfo['shipping_method'] != 'deliver') continue;
         if ($schoolInfo['test_school'] == 1) continue;
         echo "School: " . $name . "<br />";
         echo "Shipping: " . $schoolInfo['shipping_method'] . "<br />";
