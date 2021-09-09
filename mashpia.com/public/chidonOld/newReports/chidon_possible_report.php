@@ -50,6 +50,7 @@ $schools = $as->getSchools();
         $schoolInfo = $schoolsInfo[$id];
         if ($schoolInfo['test_school'] == 1) continue;
         echo "School: " . $name . "<br />";
+        echo "Shipping: " . $schoolInfo['shipping_method'] . "<br />";
         echo "Address: " . $schoolInfo['school_address1'] . " " . $schoolInfo['school_address2'] . "<br />";
         echo $schoolInfo['school_city'] . ", " . $schoolInfo['school_state'] . " " . $schoolInfo['school_postal'] . "<br />";
         echo $schoolInfo['school_country'] . "<br />";
