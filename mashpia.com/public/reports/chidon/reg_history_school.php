@@ -29,14 +29,16 @@ $stmt = $MASHPIA_DB->prepare("
     WHERE u.school_id = :school 
     ORDER BY class_grade, class_sub 
 ");
-$stmt->execute([':school' => $school_id]);
-$rows = $stmt->fetchAll();
-foreach ($rows as $row) {
-    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-    $year = $row['year'];
-    if (isset($info[$grade][$year])) $info[$grade][$year]++;
-    else $info[$grade][$year] = 1;
-    $grades[$row['class_id']] = $grade;
+foreach ($schools as $school_id => $name) {
+    $stmt->execute([':school' => $school_id]);
+    $rows = $stmt->fetchAll();
+    foreach ($rows as $row) {
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        $year = $row['year'];
+        if (isset($info[$school_id][$grade][$year])) $info[$school_id][$grade][$year]++;
+        else $info[$school_id][$grade][$year] = 1;
+        $grades[$school_id][$row['class_id']] = $grade;
+    }
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
@@ -56,35 +58,37 @@ foreach ($rows as $row) {
     </head>
     <body>
         <h1>Chidon History Report</h1>
-        <h2><?= $schools[$school_id] ?></h2>
-        <table>
-            <tr>
-                <th>Grade</th>
-                <?php
-                $totals = []; // initialize totals per year
-                for ($i = 5777; $i <= $cur_year; $i++) {
-                    echo "<th>" . $i . "</th>";
-                    $totals[$i] = 0;
-                }
-                ?>
-            </tr>
-            <?php
-            foreach ($info as $grade => $values) {
-                echo "<tr><td><a href='reg_history_details.php?id=" . array_search($grade, $grades) . "'>" . $grade . "</a></td>";
-                for ($i = 5777; $i <= $cur_year; $i++) {
-                    echo "<td>";
-                    if (isset($info[$grade][$i])) {
-                        echo $info[$grade][$i];
-                        $totals[$i] += $info[$grade][$i];
+        <?php foreach ($schools as $school_id => $name) : ?>
+            <h2><?= $name ?></h2>
+            <table>
+                <tr>
+                    <th>Grade</th>
+                    <?php
+                    $totals = []; // initialize totals per year
+                    for ($i = 5777; $i <= $cur_year; $i++) {
+                        echo "<th>" . $i . "</th>";
+                        $totals[$i] = 0;
                     }
-                    echo "</td>";
+                    ?>
+                </tr>
+                <?php
+                foreach ($info[$school_id] as $grade => $values) {
+                    echo "<tr><td><a href='reg_history_details.php?id=" . array_search($grade, $grades[$school_id]) . "'>" . $grade . "</a></td>";
+                    for ($i = 5777; $i <= $cur_year; $i++) {
+                        echo "<td>";
+                        if (isset($info[$grade][$i])) {
+                            echo $info[$grade][$i];
+                            $totals[$i] += $info[$grade][$i];
+                        }
+                        echo "</td>";
+                    }
+                    echo "</tr>";
                 }
+                echo "<tr><th align='right'>Totals:</th>";
+                for ($i = 5777; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
                 echo "</tr>";
-            }
-            echo "<tr><th align='right'>Totals:</th>";
-            for ($i = 5777; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
-            echo "</tr>";
-            ?>
-        </table>
+                ?>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>
