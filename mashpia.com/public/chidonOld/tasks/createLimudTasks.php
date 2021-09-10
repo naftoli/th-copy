@@ -33,10 +33,10 @@ $subject_id = 21;
 $types = [2, 3];
 $levels = [4,5,6,7,8]; // grades
 $tracks = [
-    1 => 'maven',
-    2 => 'pro',
-    3 => 'expert',
-    4 => 'genius'
+    1 => 'yesod',
+    2 => 'yediah',
+    3 => 'havonah',
+    4 => 'iyun'
 ];
 $minutes = [
     1 => 15,
