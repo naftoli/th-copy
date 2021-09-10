@@ -392,9 +392,9 @@ if (isset($_POST['submit'])) {
 //                }
 //                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
-                echo "Start Level: " . $firstLevel . "<br />";
-                echo "End Level: " . $lastLevel . "<br />";
-                exit;
+//                echo "Start Level: " . $firstLevel . "<br />";
+//                echo "End Level: " . $lastLevel . "<br />";
+//                exit;
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
