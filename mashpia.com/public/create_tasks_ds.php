@@ -128,8 +128,8 @@ if (isset($_POST['submit'])) {
     // $defaultStart = 2458754;
     // $defaultEnd = 2459103;
 
-    $defaultStart = 2459181; // Nov 27, 2020
-    $defaultEnd = 2459467;
+    $defaultStart = 2459468;
+    $defaultEnd = 2459852;
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
