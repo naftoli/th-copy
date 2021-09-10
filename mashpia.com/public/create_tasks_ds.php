@@ -392,6 +392,10 @@ if (isset($_POST['submit'])) {
 //                }
 //                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
+                echo "Start Level: " . $firstLevel . "<br />";
+                echo "End Level: " . $lastLevel . "<br />";
+                exit;
+
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
                 for ($k = 0; $k < $num; $k++) { //index into $arrStart array
@@ -401,7 +405,7 @@ if (isset($_POST['submit'])) {
                     $end = $endDate;
 //					echo $start . '-' . $end . "<br /><br />"; continue;
 //                    echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
-                    if ($start < unixtojd()) continue;
+//                    if ($start < unixtojd()) continue;
 
                     //while ($start <= $end) {
                     foreach ($types as $type) {
@@ -463,10 +467,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 //            exit;
-            echo "<pre>";
-            print_r($missions);
-            echo "</pre>";
-            exit;
+//            echo "<pre>";
+//            print_r($missions);
+//            echo "</pre>";
+//            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
