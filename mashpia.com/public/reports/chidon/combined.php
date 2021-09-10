@@ -176,9 +176,11 @@ $booklet_grand_totals = [
                                 </td>
                                 <td><?= $user['total'] > 1 ? $user['book'] : '' ?></td>
                                 <td>
-                                    <input type="checkbox" name="book_shipped[]" class="book_shipped"
-                                        <?php if ($user['book_shipped']) echo "checked"; ?>
-                                    />
+                                    <?php if ($user['total'] > 1) : ?>
+                                        <input type="checkbox" name="book_shipped[]" class="book_shipped"
+                                            <?php if ($user['book_shipped']) echo "checked"; ?>
+                                        />
+                                    <?php endif; ?>
                                 </td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
@@ -293,9 +295,9 @@ $booklet_grand_totals = [
     })
     function update(name, elem) {
         const id = $(elem).parent().parent().attr('id')
-        const checked = elem.target.checked ? 1 : 0
-        $.post('ajax/updateShipping.php', { field: name, chidon_id: id, value: checked }, function(success) {
-            if (!success) alert('Error updating.')
+        const checked = $(elem).is(":checked") ? 1 : 0
+        $.post('ajax/updateShipping.php', { field: name, user_id: id, value: checked }, function(success) {
+            if (! intval(success)) alert('Error updating.')
         })
     }
 </script>
