@@ -23,7 +23,7 @@ $year = GlobalSettings::getChidonYear();
 $school_id = mysql_real_escape_string($_POST['school_id']);
 
 /***************** LOAD DATA **********************/
-$qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id, u.non_th_school, u.user_registered, "
+$qry = "SELECT u.user_serial, u.first, u.last, u.first_he, u.last_he, u.user_id, u.non_th_school, th.reg_date, "
         ." c.class_grade, c.class_sub, s.school_name, "
         ." a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_email "
         ." FROM th_chidon th "
@@ -75,7 +75,7 @@ if (count($users) > 0) {
                 }
                 ?>
                 <td><?=$grade?></td>
-                <td><?=$user['user_registered']?></td>
+                <td><?=$user['reg_date']?></td>
                 <td><?=$user['first']?></td>
                 <td><?=$user['last']?></td>
                 <td><?=$user['first_he']?></td>
