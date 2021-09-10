@@ -9,27 +9,28 @@ require_once ( __DIR__ . '/../../class.adminSchools.php' );
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
-if ( isset( $_POST['date'] ) && $_POST['date'] ) {
-    if ( $_POST['date'] == 1 ) {
-        $from = '2020-06-01';
-        $to = '2020-09-16';
-    } else if ( $_POST['date'] == 2 ) {
-        $from = '2020-09-16';
-        $to = '2020-09-22';
-    } else if ( $_POST['date'] == 3 ) {
-        $from = '2020-09-22';
-        $to = '2020-10-15';
-    }
-    $from .= " 14:00:00";
-    $to .= " 21:59:59";
+//if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+//    if ( $_POST['date'] == 1 ) {
+//        $from = '2020-06-01';
+//        $to = '2020-09-16';
+//    } else if ( $_POST['date'] == 2 ) {
+//        $from = '2020-09-16';
+//        $to = '2020-09-22';
+//    } else if ( $_POST['date'] == 3 ) {
+//        $from = '2020-09-22';
+//        $to = '2020-10-15';
+//    }
+//    $from .= " 14:00:00";
+//    $to .= " 21:59:59";
 //    } else if ( $_POST['date'] == 4 ) {
 //        $from = '2019-09-26';
 //        $to = '2019-10-25';
 //    }
-}
+//}
 
 $combined_users = [];
-$qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book "
+$qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
+        rc.study_guide_shipped, rc.book_shipped "
     ."FROM registration_charges rc JOIN schools s USING (school_id) "
     ."JOIN users USING (user_id) " 
     ."JOIN classes c ON c.class_id = users.class_id " 
@@ -41,9 +42,9 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $from = mysql_real_escape_string( $_POST['fromDate'] );
     $to = mysql_real_escape_string( $_POST['toDate'] );
 }
-if ( isset( $from ) && isset( $to ) ) {
-    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
-}
+//if ( isset( $from ) && isset( $to ) ) {
+//    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
+//}
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
@@ -150,7 +151,9 @@ $booklet_grand_totals = [
                         <th>Last</th>
                         <th>Grade</th>
                         <th>Study Guide #</th>
+                        <th>Shipped</th>
                         <th>Book #</th>
+                        <th>Shipped</th>
                         <th>Date Purchased</th>
                     </tr>
                 </thead>
@@ -158,14 +161,25 @@ $booklet_grand_totals = [
                     <?php
                         foreach( $users as $user ) { 
                             $grade = $user['class_grade'];
+                            $id = $user['user_id'];
                             //if ( !$schoolTransitioned ) $grade++;
                             ?>
-                            <tr>
+                            <tr id="<?=$id?>">
                                 <td><?= $user[ 'first' ]; ?></td>
                                 <td><?= $user[ 'last' ]; ?></td>
                                 <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
                                 <td><?= $user['book']; ?></td>
+                                <td>
+                                    <input type="checkbox" name="sg_shipped[]" class="sg_shipped"
+                                    <?php if ($user['study_guide_shipped']) echo "checked"; ?>
+                                    />
+                                </td>
                                 <td><?= $user['total'] > 1 ? $user['book'] : '' ?></td>
+                                <td>
+                                    <input type="checkbox" name="book_shipped[]" class="book_shipped"
+                                        <?php if ($user['book_shipped']) echo "checked"; ?>
+                                    />
+                                </td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                             <?php 
@@ -268,4 +282,21 @@ $booklet_grand_totals = [
     </table>
     <?php endif; ?>
 </body>
+<script>
+    $( function () {
+        $(".sg_shipped").click( function () {
+            update('study_guide_shipped', this)
+        })
+        $(".book_shipped").click( function () {
+            update('book_shipped', this)
+        })
+    })
+    function update(name, elem) {
+        const id = $(elem).parent().parent().attr('id')
+        const checked = elem.target.checked ? 1 : 0
+        $.post('ajax/updateShipping.php', { field: name, chidon_id: id, value: checked }, function(success) {
+            if (!success) alert('Error updating.')
+        })
+    }
+</script>
 </html>
