@@ -80,7 +80,7 @@ if ($admin_user['auth'] != 'super') {
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th>";
             foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($type) . " Score</th>";
+                echo "<th>" . ucwords($value) . " Score</th>";
             }
             echo "</tr>";
             foreach ($children as $child) {
