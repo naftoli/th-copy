@@ -409,10 +409,8 @@ if (isset($_POST['submit'])) {
                             $pic = $pic_girls;
                         }
 
-                        echo "First level: " . $firstLevel . "<br />";
-                        echo "Last level: " . $lastLevel . "<br />";
                         for ($level = $firstLevel; $level <= $lastLevel; $level++) {
-                            //echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
+                            echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br /><br />";
                             $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
                                 'task'          =>  $task,
                                 'catOrd'        =>	$catOrd,
