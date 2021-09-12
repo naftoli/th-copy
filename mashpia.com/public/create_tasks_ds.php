@@ -1,16 +1,8 @@
-<?
-/*
- *      create_tasks.php
- *
- *  Excepts Excel sheet and inserts it into the `date_task_missions` and `date_task` tables
- *
- *  For details on data input please see excel sheet at ./SystemTasks/TasksTemplate.xlsx
- *
- */
-
-ini_set('memory_limit', '2048M');
+<?php
+//ini_set('memory_limit', '2048M');
 ini_set('max_execution_time', 300);
-ini_set('display_errors', TRUE);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = array('school');
 require_once 'header.php';
