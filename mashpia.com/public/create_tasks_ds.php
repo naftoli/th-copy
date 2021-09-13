@@ -402,7 +402,7 @@ if (isset($_POST['submit'])) {
                     foreach ($types as $type) {
                         $mission = $missionName;
                         $focus = 0;
-                        if (is_numeric($type) && $type % 2 == 0) { // even numbers
+                        if (is_numeric($type) && intval($type) % 2 == 0) { // even numbers
                             $pic = $pic_boys;
                         } else { // odd numbers
                             $pic = $pic_girls;
