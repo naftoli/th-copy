@@ -41,6 +41,7 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         $i++;
     }
     //echo "<br />";
+    echo "Auction: " . $auction . ", User: " . $user . ", Prize: " . $prize . "<br />";
     // get user id
     $sql = "select user_id from users where user_serial = " . $user;
     $result = mysql_query($sql);
@@ -53,7 +54,7 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
                 prize_id = $prize, 
                 display_order = " . $j++ . ", 
                 quantity = 1";
-        @mysql_query($sql);
+        @mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
     }
-    echo "done.";
 }
+echo "done.";
