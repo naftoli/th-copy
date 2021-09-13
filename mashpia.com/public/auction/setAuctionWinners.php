@@ -41,20 +41,12 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         $i++;
     }
     //echo "<br />";
-    // get user id
-    $sql = "select user_id from users where user_serial = " . $user;
-    echo $sql . "<br />";
-    $result = mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
-    if (mysql_num_rows($result) > 0) {
-        $row = mysql_fetch_assoc($result);
-        $user_id = $row['user_id'];
-        $sql = "insert into auction_winners 
-                set auction_id = $auction, 
-                user_id = $user_id, 
-                prize_id = $prize, 
-                display_order = " . $j++ . ", 
-                quantity = 1";
-        @mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
-    }
+    $sql = "insert into auction_winners 
+            set auction_id = $auction, 
+            user_id = $user, 
+            prize_id = $prize, 
+            display_order = " . $j++ . ", 
+            quantity = 1";
+    @mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
 }
 echo "done.";
