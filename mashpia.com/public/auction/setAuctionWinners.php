@@ -43,6 +43,7 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
     //echo "<br />";
     // get user id
     $sql = "select user_id from users where user_serial = " . $user;
+    echo $sql . "<br />";
     $result = mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
     if (mysql_num_rows($result) > 0) {
         $row = mysql_fetch_assoc($result);
