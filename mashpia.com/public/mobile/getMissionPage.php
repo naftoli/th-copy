@@ -807,7 +807,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                             $today = unixtojd($timestamp);
                                             if (
                                                 ((isset($_COOKIE['marking']) && $_COOKIE['marking'] == 'daily') ||
-                                                ($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
+                                                ($detect->isMobile() && (isset($_COOKIE['marking']) ? $_COOKIE['marking'] !== 'weekly' : 1)))
                                                 &&
                                                 ($today < $no_label_task->start_date || $today > $no_label_task->end_date)
                                             ) continue;
