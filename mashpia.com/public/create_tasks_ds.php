@@ -381,7 +381,7 @@ if (isset($_POST['submit'])) {
 //                    $arrEnd[] = $startTemp;
 //                    $startTemp++;
 //                }
-                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
 //                echo "Start Level: " . $firstLevel . "<br />";
 //                echo "End Level: " . $lastLevel . "<br />";
@@ -409,7 +409,7 @@ if (isset($_POST['submit'])) {
                         }
 
                         for ($level = $firstLevel; $level <= $lastLevel; $level++) {
-                            echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br /><br />";
+                            echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br /><br />"; continue;
                             $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
                                 'task'          =>  $task,
                                 'catOrd'        =>	$catOrd,
