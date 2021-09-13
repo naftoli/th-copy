@@ -41,10 +41,9 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         $i++;
     }
     //echo "<br />";
-    echo "Auction: " . $auction . ", User: " . $user . ", Prize: " . $prize . "<br />";
     // get user id
     $sql = "select user_id from users where user_serial = " . $user;
-    $result = mysql_query($sql);
+    $result = mysql_query($sql) or die(mysql_error() . "<br />" . $sql);
     if (mysql_num_rows($result) > 0) {
         $row = mysql_fetch_assoc($result);
         $user_id = $row['user_id'];
