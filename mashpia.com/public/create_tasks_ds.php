@@ -409,7 +409,7 @@ if (isset($_POST['submit'])) {
                         }
 
                         for ($level = $firstLevel; $level <= $lastLevel; $level++) {
-                            echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br /><br />"; continue;
+//                            echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br /><br />"; continue;
                             $missions[$action][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
                                 'task'          =>  $task,
                                 'catOrd'        =>	$catOrd,
