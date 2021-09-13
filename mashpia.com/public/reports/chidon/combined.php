@@ -42,9 +42,9 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $from = mysql_real_escape_string( $_POST['fromDate'] );
     $to = mysql_real_escape_string( $_POST['toDate'] );
 }
-//if ( isset( $from ) && isset( $to ) ) {
-//    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
-//}
+if ( isset( $from ) && isset( $to ) ) {
+    $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
+}
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
