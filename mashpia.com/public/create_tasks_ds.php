@@ -1,5 +1,4 @@
 <?php
-ini_set('memory_limit', '4096M');
 ini_set('max_execution_time', 300);
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
@@ -382,7 +381,7 @@ if (isset($_POST['submit'])) {
 //                    $arrEnd[] = $startTemp;
 //                    $startTemp++;
 //                }
-//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
 
 //                echo "Start Level: " . $firstLevel . "<br />";
 //                echo "End Level: " . $lastLevel . "<br />";
