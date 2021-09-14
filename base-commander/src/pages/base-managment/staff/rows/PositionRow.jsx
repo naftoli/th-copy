@@ -75,7 +75,7 @@ class PositionRow extends Component {
                 <FontAwesome icon='save'/> Update
               </Button>
               <Button color='danger' onClick={this.remove}>
-                <FontAwesome icon='trash'/> Remove
+                <FontAwesome icon='trash'/> Remove/Delete
               </Button>
               {/* <Button color='primary' id='login' onClick={ this.onLoginChange }>
                 <FontAwesome icon='sign-in-alt' /> Login to staff member
