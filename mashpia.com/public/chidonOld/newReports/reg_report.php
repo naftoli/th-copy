@@ -15,18 +15,18 @@ $info = [];
 $sql = "
     SELECT 
         reg_date,
-        u.user_id, 
-        user_serial, 
+        u.user_id,
+        user_serial,
         gender,
-        first,
-        last,
+        u.first AS first_name,
+        u.last AS last_name,
         first_he,
         last_he,
         first_known_en,
         last_known_en,
         first_known_he,
         last_known_he,
-        s.school_id, 
+        s.school_id,
         s.school_name,
         dob,
         u.lang_id,
@@ -38,18 +38,23 @@ $sql = "
         yarmulka,
         recruited_by,
         poll,
-        comments, 
-        test_type
+        comments,
+        test_type,
+        non_th_school,
+        a.*
     FROM
         users u
             JOIN
         th_chidon tc USING (user_id)
             JOIN
         schools s ON u.school_id = s.school_id
+            JOIN
+        admin_auths aa ON aa.id = tc.user_id
+            JOIN
+        admins a USING (admin_id)
     WHERE
         tc.year = $year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-    ORDER BY
-        s.school_id, u.last, u.first";
+    ORDER BY s.school_id , u.last , u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
@@ -79,6 +84,13 @@ $customNames = [
     'nick_en'   =>  'English Name Known by',
     'nick_he'   =>  'Hebrew Name Known by'
 ];
+
+$types = [
+    'maven' => 'Yesod',
+    'pro'   => 'Yediah',
+    'expert'=> 'Havonah',
+    'genius'=> 'Iyun'
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -102,7 +114,8 @@ $customNames = [
                 <th>User ID</th>
                 <th>Serial Number</th>
                 <th>School</th>
-                <th>Full English Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Full Hebrew Name</th>
                 <th>English Name Known by</th>
                 <th>Hebrew Name Known by</th>
@@ -120,18 +133,21 @@ $customNames = [
                 <th>Comments</th>
                 <th>Prizes</th>
                 <th>Personalized Prize Name</th>
+                <th>Non TH School</th>
+                <th>Parent Name</th>
+                <th>Parent Email</th>
             </tr>
             <?php
             foreach ($info as $row) {
                 echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
-                    "</td><td>" . $row['school_name'] . "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" .
+                    "</td><td>" . $row['school_name'] . "</td><td>" . $row['first_name'] . "</td><td>" . $row['last_name'] . "</td><td>" .
                     $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['first_known_en'] . ' ' .
                     $row['last_known_en'] . "</td><td>" . $row['first_known_he'] . ' ' . $row['last_known_he'] . "</td><td>" .
                     $row['dob'] . "</td><td>" . $row['gender'] . "</td><td>";
                 if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
                 else echo "<span>";
                 echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
-                    $langs[$row['lang_id']] . "</td><td>" . $row['test_type'] . "</td><td>" . $customNames[$row['name_pref']] .
+                    $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>" . $customNames[$row['name_pref']] .
                     "</td><td>" . $row['book'] . "</td><td>" .
                     ($row['khk_reg'] ? 'yes' : 'no') .
                     "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
@@ -150,6 +166,7 @@ $customNames = [
                         if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
                     }
                 }
+                echo "</td><td>" . $row['non_th_school'] . "</td><td>" . $row['first'] . " " . $row['last'] . "</td><td>" . $row['admin_email'];
                 echo "</td></tr>";
             }
             ?>
