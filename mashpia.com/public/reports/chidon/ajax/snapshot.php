@@ -45,19 +45,27 @@ if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true'
             from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
-            where c.class_grade in ('4','5','6','7','8') 
-            and u.school_id = " . $school_id . " 
-            and u.user_id not in (
-                select user_id from th_chidon 
-                where year = " . $year . " 
-                and school_id = " . $school_id . " 
-            ) ";
+            where c.class_grade in ('4','5','6','7','8') ";
+    if ($school_id > 0) {
+        $sql .= "and u.school_id = " . $school_id . " 
+                and u.user_id not in (
+                    select user_id from th_chidon 
+                    where year = " . $year . " 
+                    and school_id = " . $school_id . " 
+                )";
+    } else if ($school_id == -1) {
+        $sql .= "and u.user_id not in (
+                    select user_id from th_chidon 
+                    where year = " . $year . " 
+                )";
+    }
     
     if ($options[0] && !$options[1]) { // show children enrolled into cth but not in chidon
         $sql .= "and u.user_registered > 0";
     } else if ($options[1] && !$options[0]) { // show children not enrolled into cth or chidon
         $sql .= "and (u.user_registered = 0 or u.user_registered is null)"; 
     }
+
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $row['chidonReg'] = 0;
@@ -68,9 +76,10 @@ if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true'
 /***************** LOAD DATA **********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . "/chidonOld/reports/class.reports.php";
 foreach( $years as $y ) {
-    $r = new Reports( $y, $school_id );
+    if ($school_id > 0) $r = new Reports( $y, $school_id );
+    else $r = new Reports( $y );
     $qry = $r->createSql( $fields );
-    //echo $qry; exit;
+//    echo $qry; exit;
     $users_query = mysql_query( $qry ) or die( mysql_error() );
 
     while( $row = mysql_fetch_assoc($users_query) ) {
@@ -176,8 +185,11 @@ if (count($users) > 0) {
                             <?php endif; ?>
                             <?php 
                                 foreach ( $columns as $column ) {
-                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) {
-                                        if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_sub', 'class_teacher'] )) {
+                                        if (in_array($column, ['class','first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                            if ($column == 'class') {
+                                                echo "<td>" . $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) . "</td>";
+                                            }
                                             // deal with parent info
                                             if ($column == 'first') {
                                                 // show parent first and last name
@@ -223,11 +235,9 @@ if (count($users) > 0) {
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_sub', 'class_teacher'] )) {
+                        if (!in_array( $column, ['chidonReg', 'user_registered'] )) {
                             if (isset($niceFields[$column])) echo "<th>" . $niceFields[$column] . "</th>";
-                            else if ($column == 'class_grade') {
-                                echo "<th>Grade</th>";
-                            } else {
+                            else {
                                 if (in_array($column, ['first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
                                     // deal with parent info
                                     if ($column == 'first') {
@@ -254,9 +264,9 @@ if (count($users) > 0) {
                     <?php endif; ?>
                     <?php
                     foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_sub', 'class_teacher'] )) {
-                            if (in_array($column, ['class_grade','first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
-                                if ($column == 'class_grade') {
+                        if (!in_array( $column, ['chidonReg', 'user_registered'] )) {
+                            if (in_array($column, ['class','first','last','admin_email','admin_phone_mobile','admin_phone_mobile2'])) {
+                                if ($column == 'class') {
                                     echo "<td>" . $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) . "</td>";
                                 }
                                 // deal with parent info

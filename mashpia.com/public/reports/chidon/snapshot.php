@@ -166,7 +166,6 @@ $required = ['first_name', 'last_name', 'class', 'school'];
         var ajaxData; // need to store data sent in ajax request for printed pages
 
         $( function () {
-            alert()
             $("#generate_csv").click(generate_csv);
             $("#generate_report").click(generate_report);
             $("#generate_print").click(generate_print);
