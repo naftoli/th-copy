@@ -160,113 +160,112 @@ $required = ['first_name', 'last_name', 'class', 'school'];
         </div>
         
         <div id="report"></div>
-        
-        <script>
-            var years = [<?=$chidonYear?>];
-            var ajaxData; // need to store data sent in ajax request for printed pages
+    </body>
+    <script>
+        var years = [<?=$chidonYear?>];
+        var ajaxData; // need to store data sent in ajax request for printed pages
 
-            $(document).ready(function(){
-                $("#generate_csv").click(generate_csv);
-                $("#generate_report").click(generate_report);
-                $("#generate_print").click(generate_print);
+        $( function () {
+            alert()
+            $("#generate_csv").click(generate_csv);
+            $("#generate_report").click(generate_report);
+            $("#generate_print").click(generate_print);
+        })
 
-                // if the school is already selected...
-                if ($("select#school_id").val()) {
-                    generate_report();
-                }
 
-                function generate_report() {
-                    var school_id = $("select#school_id").val();
-                    
-                    if (school_id === ""){
-                        alert("Please select a school"); return false;
-                    }
+        // if the school is already selected...
+        if ($("select#school_id").val()) {
+           generate_report();
+        }
 
-                    var data = [];
+        function generate_report() {
+            var school_id = $("select#school_id").val();
 
-                    // make sure at least one year was selected
-                    // if ( !$("input.year:checked").length ) {
-                    //     alert("You must choose at least one year.");
-                    //     return false;
-                    // } else {
-                    //     var years = [];
-                    //     $(".year").each( function() {
-                    //         if ($(this).is(":checked")) {
-                    //             years.push( $(this).val() );
-                    //         }
-                    //     });
-                    // }
+            if (school_id === ""){
+                alert("Please select a school"); return false;
+            }
 
-                    // make sure we have checked options
-                    if ( !$("fieldset input:checked").length ) {
-                        alert('You must choose what to show on the report.');
-                        return false;
-                    } else {
-                        // get all fields to show
-                        let info_arr = []
-                        info_arr.push(<?=json_encode($info)?>);
-                        info_arr.push(<?=json_encode($info2)?>);
-                        //info_arr.push(<?//=json_encode($info3)?>//);
+            var data = [];
 
-                        for (let arr of info_arr) {
-                            for (let val in arr) {
-                                let id = "#" + val;
-                                if ($(id).is(":checked")) {
-                                    data.push(val)
-                                }
-                            }
+            // make sure at least one year was selected
+            // if ( !$("input.year:checked").length ) {
+            //     alert("You must choose at least one year.");
+            //     return false;
+            // } else {
+            //     var years = [];
+            //     $(".year").each( function() {
+            //         if ($(this).is(":checked")) {
+            //             years.push( $(this).val() );
+            //         }
+            //     });
+            // }
+
+            // make sure we have checked options
+            if ( !$("fieldset input:checked").length ) {
+                alert('You must choose what to show on the report.');
+                return false;
+            } else {
+                // get all fields to show
+                let info_arr = []
+                info_arr.push(<?=json_encode($info)?>);
+                info_arr.push(<?=json_encode($info2)?>);
+
+                for (let arr of info_arr) {
+                    for (let val in arr) {
+                        let id = "#" + val;
+                        if ($(id).is(":checked")) {
+                            data.push(val)
                         }
                     }
-                    data.push('teacher'); // show teacher name
-                    console.log(data)
-
-                    const showCTH = $("#onlyCTH").is(":checked");
-                    const showUnreg = $("#unregistered").is(":checked");
-                    
-                    //$("#qryBuilder").hide();
-                    $("#report").html("<div class='loader'></div>");
-                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: <?= json_encode($info + $info2 + $info3) ?> };
-                    $.post("ajax/snapshot.php", ajaxData, function( data ) {
-                        $("#report").html(data);
-                        //$("#generate_report").hide();
-                        $("#generate_print").show();
-                    });
                 }
-                
-                function generate_csv() {
-                    const universalBOM = "\uFEFF";
-                    let csvContent = '';
-                    
-                    // add headers
-                    let row = [];
-                    $.each($("tr").eq(0).find("th"), function(index, td) {
-                        row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaining stuff...
-                    });
-                    row = row.join(",");
-                    csvContent += row + "\n";
+            }
+            data.push('teacher'); // show teacher name
+            console.log(data)
 
-                    // add body
-                    $.each($("tr"), function(index, tr) {
-                        tr = $(tr); // cast to jquery;
-                        let row = [];
-                        $.each(tr.find("td"), function(index, td) {
-                            row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
-                        });
-                        row = row.join(",");
-                        csvContent += row + "\n";
-                    });
-                    
-                    const hiddenElement = document.createElement('a');
-                    hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
-                    hiddenElement.target = '_blank'; // in a new tab
-                    hiddenElement.download = 'chidon-report.csv'; // with this file_name
-                    hiddenElement.click(); // and click it
-                }
+            const showCTH = $("#onlyCTH").is(":checked");
+            const showUnreg = $("#unregistered").is(":checked");
 
-                function generate_print() {
-                    window.open('snapshot_print.php?data=' + JSON.stringify(ajaxData));
-                }
+            //$("#qryBuilder").hide();
+            $("#report").html("<div class='loader'></div>");
+            ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: <?= json_encode($info + $info2) ?> };
+            $.post("ajax/snapshot.php", ajaxData, function( data ) {
+                $("#report").html(data);
+                $("#generate_print").show();
             });
-        </script>
-    </body>
+        }
+
+        function generate_csv() {
+           const universalBOM = "\uFEFF";
+           let csvContent = '';
+
+           // add headers
+           let row = [];
+           $.each($("tr").eq(0).find("th"), function(index, td) {
+               row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaining stuff...
+           });
+           row = row.join(",");
+           csvContent += row + "\n";
+
+           // add body
+           $.each($("tr"), function(index, tr) {
+               tr = $(tr); // cast to jquery;
+               let row = [];
+               $.each(tr.find("td"), function(index, td) {
+                   row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+               });
+               row = row.join(",");
+               csvContent += row + "\n";
+           });
+
+           const hiddenElement = document.createElement('a');
+           hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
+           hiddenElement.target = '_blank'; // in a new tab
+           hiddenElement.download = 'chidon-report.csv'; // with this file_name
+           hiddenElement.click(); // and click it
+        }
+
+        function generate_print() {
+           window.open('snapshot_print.php?data=' + JSON.stringify(ajaxData));
+        }
+    </script>
 </html>
