@@ -108,8 +108,8 @@ $booklet_grand_totals = [
 <!--        </p>-->
         <p>  
 <!--            OR -->
-            From Date: <input type="date" name="fromDate" /> 
-            To Date: <input type="date" name="toDate" />
+            From Date: <input type="datetime-local" name="fromDate" />
+            To Date: <input type="datetime-local" name="toDate" />
         </p>
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
