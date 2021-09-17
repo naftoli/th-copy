@@ -118,6 +118,9 @@ $booklet_grand_totals = [
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
     <div style="page-break-after: always;"></div>
+    <br />
+    <input type="checkbox" class="checkGuides" /> Mark all study guides as shipped<br />
+    <input type="checkbox" class="checkBooks" /> Mark all books as shipped<br />
     <?php
         $totals = [];
         foreach( $combined_users as $school_id => $users ) {
@@ -296,12 +299,31 @@ $booklet_grand_totals = [
         $(".book_shipped").click( function () {
             update('book_shipped', this)
         })
+        $(".checkGuides").click( function () {
+            if ($(this).is(":checked")) {
+                checkAll('sg_shipped')
+            }
+        })
+        $(".checkBooks").click( function () {
+            if ($(this).is(":checked")) {
+                checkAll('book_shipped')
+            }
+        })
     })
     function update(name, elem) {
         const id = $(elem).parent().parent().attr('id')
         const checked = $(elem).is(":checked") ? 1 : 0
         $.post('ajax/updateShipping.php', { field: name, user_id: id, value: checked }, function(success) {
-            if (! intval(success)) alert('Error updating.')
+            if (! intval(success)) {
+                alert('Error updating.')
+            }
+        })
+    }
+    function checkAll(elem) {
+        $("." + elem).each( function () {
+            if (!$(this).is(":checked")) {
+                $(this).trigger('click')
+            }
         })
     }
 </script>
