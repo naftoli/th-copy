@@ -45,6 +45,9 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
 if ( isset( $from ) && isset( $to ) ) {
     $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
 }
+if (isset($_POST['not_shipped'])){
+    $qry .= " and book_shipped = 0";
+}
 $qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
@@ -111,6 +114,7 @@ $booklet_grand_totals = [
             From Date: <input type="datetime-local" name="fromDate" />
             To Date: <input type="datetime-local" name="toDate" />
         </p>
+        <input type="checkbox" name="not_shipped" value="not_shipped" /> Only show not yet shipped books<br />
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
     <div style="page-break-after: always;"></div>
