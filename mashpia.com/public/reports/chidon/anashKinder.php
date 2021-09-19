@@ -94,7 +94,7 @@ while ( $row = mysql_fetch_assoc( $users_query ) ) {
 // compute totals
 $book_totals = [];
 $booklet_totals = [];
-$schools = ['Anash Kinder', 'MyShliach'];
+$schools = ['Anash Kinder'];
 foreach ( $schools as $school ) {
     $book_totals[$school] = [
         1   =>  0,

@@ -156,7 +156,7 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
 //chdir('reports/chidon/');
 ?>
 <div class="no-print">
-    <h1>Hachayol Report</h1>
+    <h1>Labels</h1>
     <?php if ( !isset( $_POST['date'] ) ) : ?>
         <form action="combinedLabels.php" method="post">
             <p>
