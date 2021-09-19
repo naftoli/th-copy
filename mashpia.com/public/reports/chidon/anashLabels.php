@@ -1,0 +1,217 @@
+<?php
+ini_set('max_execution_time', 300);
+set_time_limit( 300 );
+ini_set('display_errors',1);
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+
+if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+    if ( $_POST['date'] == 1 ) {
+        $from = '2020-06-01';
+        $to = '2020-09-16';
+    } else if ( $_POST['date'] == 2 ) {
+        $from = '2020-09-16';
+        $to = '2020-09-21';
+    } else if ( $_POST['date'] == 3 ) {
+        $from = '2020-09-21';
+        $to = '2020-10-15';
+    }
+    $from .= " 14:00:00";
+    $to .= " 13:59:59";
+}
+
+if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
+    $from = mysql_real_escape_string( $_POST['fromDate'] );
+    $to = mysql_real_escape_string( $_POST['toDate'] );
+}
+
+$info = [];
+$sql = "
+    SELECT 
+        u.first,
+        u.last,
+        a.admin_address1,
+        a.admin_address2,
+        a.admin_city,
+        a.admin_state,
+        a.admin_postal,
+        a.admin_country,
+        a.admin_email
+    FROM
+        registration_charges rc
+            JOIN
+        users u USING (user_id)
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
+            JOIN
+        admins a ON a.admin_id = aa.admin_id
+    WHERE
+        type IN ('yahadus' , 'chidon')
+            AND rc.year = $year
+            AND rc.school_id = 269 
+";
+if ( isset( $from ) && isset( $to ) ) {
+    $sql .= "
+        AND rc.date >= '" . $from . "'
+        AND rc.date <= '" . $to . "'
+    ";
+}
+$sql .= "
+    GROUP BY rc.user_id
+    ORDER BY first , last , date
+";
+//echo $sql; exit;
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info[] = $row;
+}
+
+//echo "<pre>"; print_r( $info ); echo "</pre>";
+$cols = 1; //counter for columns
+$rows = 1; //counter for rows
+function checkForBreak() {
+    global $cols, $rows;
+    if (($cols % 3) != 0) {
+        echo "<div class='space'></div>";
+    } else {
+        $cols = 0; //reset cols so that it will show new row
+        $rows++; //add row
+        if ( ($rows % 11) == 0 ) {
+            $rows = 1; //reset rows counter and add space to top of new page
+            echo "<div class='page-break'></div><div class='topSpace'></div>";
+        }
+    }
+    $cols++;
+}
+//chdir( $_SERVER['DOCUMENT_ROOT'] );
+?>
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <link href="/admin_styles.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        .label {
+            width: 2.15in;
+            height: 1in;
+            font-size: 12px;
+            padding: 5px;
+            float: left;
+        }
+        .space {
+            width: .35in;
+            height: 1in;
+            float: left;
+            padding: 5px 20px;
+        }
+        .page-break {
+            clear: both;
+            page-break-after: always;
+        }
+        .medal {
+            width: 1in;
+            float: left;
+        }
+        .name {
+            width: 2.15in;
+            font-size: 14px;
+        }
+        .topSpace {
+            height: 0.2in;
+            width: 7in;
+        }
+        .instructions {
+            width: 50%;
+        }
+        @media screen {
+            #report_div {
+                display: none;
+            }
+            .no-print {
+                display: block;
+            }
+        }
+        @media print {
+            #report_div {
+                display: block;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function check() {
+            if ( confirm( "Have you made sure to set your printer margins properly?\nIf not, please click 'cancel', set your margins, and then click 'print' again." ) )
+                window.print();
+        }
+    </script>
+</head>
+
+<body>
+<?php
+include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
+//chdir('reports/chidon/');
+?>
+<div class="no-print">
+    <h1>Hachayol Report</h1>
+    <?php if ( !isset( $_POST['date'] ) ) : ?>
+        <form action="combinedLabels.php" method="post">
+            <p>
+                <select name="date">
+                    <option value="0">Choose Batch Number</option>
+                    <option value="1"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+                    >1st Batch (until Sept 16)</option>
+                    <option value="2"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+                    >2nd Batch (from Sep 16 until Sep 21)</option>
+                    <option value="3"
+                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+                    >3rd Batch (from Sep 21 to Oct 15)</option>
+                    <!--                <option value="4"-->
+                    <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+                    <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
+                </select>
+            </p>
+            <p>
+                OR
+                From Date: <input type="date" name="fromDate" />
+                To Date: <input type="date" name="toDate" />
+            </p>
+            <input type="submit" name="submit" value="submit" />
+        </form>
+    <?php else : ?>
+    <div class='instructions'>
+        <b>Printing Instructions</b><br />
+        Set Scale to 90%<br />
+        Set your printer margins to the following:<br />
+        0.5 Top<br />
+        0.3 Left<br />
+        0.0 Right and Bottom<br /><br />
+        <div align='center'>
+            <input type='button' name='print' value='Print' onclick="check()" />
+        </div>
+    </div>
+</div>
+
+    <div id="report_div" name="report_div">
+        <div class='topSpace'></div>
+        <?php
+        foreach ($info as $parent) {
+            $name = $parent['first'] . ' ' . $parent['last'];
+            $address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] .
+                " " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
+
+            echo "<div class='label'>";
+            echo "<span class='name'>";
+            echo "<b>" . $name . "</b><br />" . $address . "</span></div>";
+            checkForBreak();
+        }
+        ?>
+    </div>
+<?php endif; ?>
+</body>
+</html>
