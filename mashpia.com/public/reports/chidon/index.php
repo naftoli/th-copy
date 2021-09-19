@@ -153,16 +153,17 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Combined Report for MyShliach & Anash Kinder</span>
                 </div>
             </a>
-            <a href="anashKinder.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
-                    <span class="link-text">Anash Kinder Report</span>
-                </div>
-            </a>
             <a href="combinedLabels.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
                     <span class="link-text">Labels for MyShliach & Anash Kinder</span>
+                </div>
+            </a>
+            <br />
+            <a href="anashKinder.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
+                    <span class="link-text">Anash Kinder Report</span>
                 </div>
             </a>
             <a href="anashLabels.php<?=$debug ? "?debug=true": "";?>">
