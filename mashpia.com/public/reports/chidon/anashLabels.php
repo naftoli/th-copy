@@ -171,9 +171,9 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
 <!--                    <option value="3"-->
 <!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
 <!--                    >3rd Batch (from Sep 21 to Oct 15)</option>-->
-<!--                    <!--                <option value="4"-->-->
-<!--                    <!--                -->--><?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-<!--                    <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->-->
+<!--                                    <option value="4"-->
+<!--                                    --><?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+<!--                                    >4th Batch (from Sept 26 to Oct 25)</option>-->
 <!--                </select>-->
 <!--            </p>-->
             <p>
