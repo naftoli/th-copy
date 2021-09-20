@@ -61,29 +61,29 @@ while ( $row = mysql_fetch_assoc( $users_query ) ) {
 <body>
 <?php include( __DIR__ . '/../../admin_header.php'); ?>
 <h1>Study Guides / Book Purchases</h1>
-<form action="myshliach.php" method="post">
+<form action="anashKinder.php" method="post">
     <p>
         To have report based on dates, choose starting and ending dates and then click "Refresh Report"
     </p>
+<!--    <p>-->
+<!--        <select name="date">-->
+<!--            <option value="0">Choose Batch Number</option>-->
+<!--            <option value="1"-->
+<!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+<!--            >1st Batch (until Sept 16)</option>-->
+<!--            <option value="2"-->
+<!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+<!--            >2nd Batch (from Sep 16 until Sep 21)</option>-->
+<!--            <option value="3"-->
+<!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+<!--            >3rd Batch (from Sep 21 to Oct 15)</option>-->
+<!--            <!--                <option value="4"-->-->
+<!--            <!--                -->--><?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+<!--            <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->-->
+<!--        </select>-->
+<!--    </p>-->
     <p>
-        <select name="date">
-            <option value="0">Choose Batch Number</option>
-            <option value="1"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-            >1st Batch (until Sept 16)</option>
-            <option value="2"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-            >2nd Batch (from Sep 16 until Sep 21)</option>
-            <option value="3"
-                <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-            >3rd Batch (from Sep 21 to Oct 15)</option>
-            <!--                <option value="4"-->
-            <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-            <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
-        </select>
-    </p>
-    <p>
-        OR
+<!--        OR-->
         From Date: <input type="date" name="fromDate" />
         To Date: <input type="date" name="toDate" />
     </p>
