@@ -5,18 +5,18 @@ require_once ( __DIR__ . '/../../header.php' );
 require_once ( __DIR__ . '/../../class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
 
-if ( isset( $_POST['date'] ) && $_POST['date'] ) {
-    if ( $_POST['date'] == 1 ) {
-        $from = '2020-06-01';
-        $to = '2020-09-16';
-    } else if ( $_POST['date'] == 2 ) {
-        $from = '2020-09-16';
-        $to = '2020-09-21';
-    } else if ( $_POST['date'] == 3 ) {
-        $from = '2020-09-21';
-        $to = '2020-10-15';
-    }
-}
+//if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+//    if ( $_POST['date'] == 1 ) {
+//        $from = '2020-06-01';
+//        $to = '2020-09-16';
+//    } else if ( $_POST['date'] == 2 ) {
+//        $from = '2020-09-16';
+//        $to = '2020-09-21';
+//    } else if ( $_POST['date'] == 3 ) {
+//        $from = '2020-09-21';
+//        $to = '2020-10-15';
+//    }
+//}
 
 $users = [];
 $qry = "SELECT count(*) as total, amount, date, school_name, u.first, u.last, c.class_grade, c.class_sub, tc.book, a.admin_address1, a.admin_address2, 

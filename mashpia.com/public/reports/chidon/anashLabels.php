@@ -7,20 +7,20 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
-if ( isset( $_POST['date'] ) && $_POST['date'] ) {
-    if ( $_POST['date'] == 1 ) {
-        $from = '2020-06-01';
-        $to = '2020-09-16';
-    } else if ( $_POST['date'] == 2 ) {
-        $from = '2020-09-16';
-        $to = '2020-09-21';
-    } else if ( $_POST['date'] == 3 ) {
-        $from = '2020-09-21';
-        $to = '2020-10-15';
-    }
-    $from .= " 14:00:00";
-    $to .= " 13:59:59";
-}
+//if ( isset( $_POST['date'] ) && $_POST['date'] ) {
+//    if ( $_POST['date'] == 1 ) {
+//        $from = '2020-06-01';
+//        $to = '2020-09-16';
+//    } else if ( $_POST['date'] == 2 ) {
+//        $from = '2020-09-16';
+//        $to = '2020-09-21';
+//    } else if ( $_POST['date'] == 3 ) {
+//        $from = '2020-09-21';
+//        $to = '2020-10-15';
+//    }
+//    $from .= " 14:00:00";
+//    $to .= " 13:59:59";
+//}
 
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
     $from = mysql_real_escape_string( $_POST['fromDate'] );
@@ -158,26 +158,26 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
 <div class="no-print">
     <h1>Labels</h1>
     <?php if ( !isset( $_POST['date'] ) ) : ?>
-        <form action="combinedLabels.php" method="post">
+        <form action="anashLabels.php" method="post">
+<!--            <p>-->
+<!--                <select name="date">-->
+<!--                    <option value="0">Choose Batch Number</option>-->
+<!--                    <option value="1"-->
+<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
+<!--                    >1st Batch (until Sept 16)</option>-->
+<!--                    <option value="2"-->
+<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
+<!--                    >2nd Batch (from Sep 16 until Sep 21)</option>-->
+<!--                    <option value="3"-->
+<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
+<!--                    >3rd Batch (from Sep 21 to Oct 15)</option>-->
+<!--                    <!--                <option value="4"-->-->
+<!--                    <!--                -->--><?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
+<!--                    <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->-->
+<!--                </select>-->
+<!--            </p>-->
             <p>
-                <select name="date">
-                    <option value="0">Choose Batch Number</option>
-                    <option value="1"
-                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-                    >1st Batch (until Sept 16)</option>
-                    <option value="2"
-                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-                    >2nd Batch (from Sep 16 until Sep 21)</option>
-                    <option value="3"
-                        <?php if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-                    >3rd Batch (from Sep 21 to Oct 15)</option>
-                    <!--                <option value="4"-->
-                    <!--                --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-                    <!--                >4th Batch (from Sept 26 to Oct 25)</option>-->
-                </select>
-            </p>
-            <p>
-                OR
+<!--                OR-->
                 From Date: <input type="date" name="fromDate" />
                 To Date: <input type="date" name="toDate" />
             </p>
