@@ -38,9 +38,8 @@ if ( isset( $from ) && isset( $to ) ) {
     $qry .= " AND rc.date >= '" . $from . " 14:00:00' AND rc.date <= '" . $to . " 13:59:59' ";
 }
 $qry .= " AND rc.school_id = 269 ";
-$qry .= "GROUP BY rc.user_id ORDER BY school_name, first, last, date";
-$qry .= " ORDER BY u.last, u.first";
-//echo $qry;
+$qry .= "GROUP BY rc.user_id ORDER BY last, first, date";
+//echo $qry; exit;
 
 $users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $users_query ) ) {
