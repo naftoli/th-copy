@@ -39,6 +39,7 @@ if ( isset( $from ) && isset( $to ) ) {
 }
 $qry .= " AND rc.school_id = 269 ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, first, last, date";
+$qry .= " ORDER BY u.last, u.first";
 //echo $qry;
 
 $users_query = mysql_query( $qry );

@@ -32,7 +32,7 @@ $sql = "
             AND rc.date >= '2019-06-01 00:00:00' 
             AND rc.date <= '2019-08-12 23:59:59'
     GROUP BY rc.user_id
-    ORDER BY first , last , date
+    ORDER BY last, first, date
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
