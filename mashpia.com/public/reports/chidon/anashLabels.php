@@ -50,7 +50,7 @@ $sql = "
     WHERE
         type IN ('yahadus' , 'chidon')
             AND rc.year = $year
-            AND rc.school_id = 269 
+            AND u.school_id = 269 
 ";
 if ( isset( $from ) && isset( $to ) ) {
     $sql .= "
@@ -60,7 +60,7 @@ if ( isset( $from ) && isset( $to ) ) {
 }
 $sql .= "
     GROUP BY rc.user_id
-    ORDER BY first , last , date
+    ORDER BY last , first , date
 ";
 //echo $sql; exit;
 $result = mysql_query( $sql );
