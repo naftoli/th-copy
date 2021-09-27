@@ -195,12 +195,12 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
                 echo "</div>";
                 checkForBreak();
                 echo "<div class='label'>";
-                echo "GUIDES:<br />";
+                echo "<b>GUIDES:</b><br />";
                 foreach ($details[$parent['admin_id']]['chidon'] as $row) {
                     echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
                 }
                 if (isset($details[$parent['admin_id']]['yahadus'])) {
-                    echo "BOOKS:<br />";
+                    echo "<b>BOOKS:</b><br />";
                     foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
                         echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
                     }
