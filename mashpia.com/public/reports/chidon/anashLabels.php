@@ -199,9 +199,11 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
                 foreach ($details[$parent['admin_id']]['chidon'] as $row) {
                     echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
                 }
-                echo "BOOKS:<br />";
-                foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
-                    echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+                if (isset($details[$parent['admin_id']]['yahadus'])) {
+                    echo "BOOKS:<br />";
+                    foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
+                        echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+                    }
                 }
                 echo "</div>";
                 checkForBreak();
