@@ -38,6 +38,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
 
+$i = 0;
 $details = [];
 foreach ($info as $row) {
     $admin_id = $row['admin_id'];
@@ -51,7 +52,8 @@ foreach ($info as $row) {
                 classes c USING (class_id)
             WHERE
                 year = $year
-                    AND type IN ('chidon' , 'yahadus')
+                    AND type IN ('chidon' , 'yahadus') 
+                    AND rc.school_id = 269 
                     AND user_id IN (SELECT 
                         id
                     FROM
@@ -61,6 +63,7 @@ foreach ($info as $row) {
     if (isset($from) && isset($to)) {
         $sql .= " AND date >= '" . $from ."' AND date <= '" . $to . "'";
     }
+//    echo $i++ . ": " . $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $details[$admin_id][$row['type']][] = $row;
@@ -85,6 +88,7 @@ function checkForBreak() {
     $cols++;
 }
 //chdir( $_SERVER['DOCUMENT_ROOT'] );
+echo "<pre>"; print_r($details); echo "</pre>"; exit;
 ?>
 <!doctype html>
 <html>
@@ -181,25 +185,28 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
         <div class='topSpace'></div>
         <?php
         foreach ($info as $parent) {
-            $name = $parent['first'] . ' ' . $parent['last'];
-            $address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] .
-                " " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
+            if (isset($details[$parent['admin_id']])) {
+                $name = $parent['first'] . ' ' . $parent['last'];
+                $address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] .
+                    " " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
 
-            echo "<div class='label'>";
-            echo "<span class='name'>";
-            echo "<b>" . $name . "</b><br />" . $address . "</span>";
-            echo "</div>";
-            checkForBreak();
-            echo "<div class='label'>";
-            echo "GUIDES:<br />";
-            foreach ($details[$parent['admin_id']]['chidon'] as $row) {
-                echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+                echo "<div class='label'>";
+                echo "<span class='name'>";
+                echo "<b>" . $name . "</b><br />" . $address . "</span>";
+                echo "</div>";
+                checkForBreak();
+                echo "<div class='label'>";
+                echo "GUIDES:<br />";
+                foreach ($details[$parent['admin_id']]['chidon'] as $row) {
+                    echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+                }
+                echo "BOOKS:<br />";
+                foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
+                    echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+                }
+                echo "</div>";
+                checkForBreak();
             }
-            echo "BOOKS:<br />";
-            foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
-                echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
-            }
-            checkForBreak();
         }
         ?>
     </div>
