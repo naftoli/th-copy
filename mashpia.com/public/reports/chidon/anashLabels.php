@@ -88,7 +88,6 @@ function checkForBreak() {
     $cols++;
 }
 //chdir( $_SERVER['DOCUMENT_ROOT'] );
-echo "<pre>"; print_r($details); echo "</pre>"; exit;
 ?>
 <!doctype html>
 <html>
