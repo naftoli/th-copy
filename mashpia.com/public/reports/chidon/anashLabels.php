@@ -31,7 +31,7 @@ $sql = "SELECT
 if (isset($from) && isset($to)) {
     $sql .= " AND date >= '" . $from ."' AND date <= '" . $to . "'";
 }
-$sql .= " GROUP BY admin_id ORDER BY last";
+$sql .= " GROUP BY admin_id ORDER BY last, first";
 
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
