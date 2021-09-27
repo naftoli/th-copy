@@ -7,65 +7,64 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
-//if ( isset( $_POST['date'] ) && $_POST['date'] ) {
-//    if ( $_POST['date'] == 1 ) {
-//        $from = '2020-06-01';
-//        $to = '2020-09-16';
-//    } else if ( $_POST['date'] == 2 ) {
-//        $from = '2020-09-16';
-//        $to = '2020-09-21';
-//    } else if ( $_POST['date'] == 3 ) {
-//        $from = '2020-09-21';
-//        $to = '2020-10-15';
-//    }
-//    $from .= " 14:00:00";
-//    $to .= " 13:59:59";
-//}
-
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
     $from = mysql_real_escape_string( $_POST['fromDate'] );
     $to = mysql_real_escape_string( $_POST['toDate'] );
 }
 
 $info = [];
-$sql = "
-    SELECT 
-        u.first,
-        u.last,
-        a.admin_address1,
-        a.admin_address2,
-        a.admin_city,
-        a.admin_state,
-        a.admin_postal,
-        a.admin_country,
-        a.admin_email
-    FROM
-        registration_charges rc
-            JOIN
-        users u USING (user_id)
-            JOIN
-        admin_auths aa ON aa.id = u.user_id
-            JOIN
-        admins a ON a.admin_id = aa.admin_id
-    WHERE
-        type IN ('yahadus' , 'chidon')
-            AND rc.year = $year
-            AND u.school_id = 269 
-";
-if ( isset( $from ) && isset( $to ) ) {
-    $sql .= "
-        AND rc.date >= '" . $from . "'
-        AND rc.date <= '" . $to . "'
-    ";
+$sql = "SELECT 
+            a.*
+        FROM
+            admins a
+                JOIN
+            admin_auths aa USING (admin_id)
+        WHERE
+            id IN (SELECT 
+                    user_id
+                FROM
+                    registration_charges
+                WHERE
+                    year = $year
+                        AND type IN ('chidon' , 'yahadus'))";
+
+if (isset($from) && isset($to)) {
+    $sql .= " AND date >= '" . $from ."' AND date <= '" . $to . "'";
 }
-$sql .= "
-    GROUP BY rc.user_id
-    ORDER BY last , first , date
-";
-//echo $sql; exit;
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
+$sql .= " GROUP BY admin_id";
+
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
+}
+
+$details = [];
+foreach ($info as $row) {
+    $admin_id = $row['admin_id'];
+    $sql = "SELECT 
+                rc.user_id, rc.type, u.first, c.class_grade
+            FROM
+                registration_charges rc
+                    JOIN
+                users u USING (user_id)
+                    JOIN
+                classes c USING (class_id)
+            WHERE
+                year = $year
+                    AND type IN ('chidon' , 'yahadus')
+                    AND user_id IN (SELECT 
+                        id
+                    FROM
+                        admin_auths
+                    WHERE
+                        admin_id = $admin_id)";
+    if (isset($from) && isset($to)) {
+        $sql .= " AND date >= '" . $from ."' AND date <= '" . $to . "'";
+    }
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $details[$admin_id][$row['type']][] = $row;
+    }
 }
 
 //echo "<pre>"; print_r( $info ); echo "</pre>";
@@ -157,33 +156,14 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
 ?>
 <div class="no-print">
     <h1>Labels</h1>
-    <?php if ( !isset( $_POST['date'] ) ) : ?>
-        <form action="anashLabels.php" method="post">
-<!--            <p>-->
-<!--                <select name="date">-->
-<!--                    <option value="0">Choose Batch Number</option>-->
-<!--                    <option value="1"-->
-<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 1 ) echo "selected" ?>
-<!--                    >1st Batch (until Sept 16)</option>-->
-<!--                    <option value="2"-->
-<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) echo "selected" ?>
-<!--                    >2nd Batch (from Sep 16 until Sep 21)</option>-->
-<!--                    <option value="3"-->
-<!--                        --><?php //if ( isset( $_POST['date'] ) && $_POST['date'] == 3 ) echo "selected" ?>
-<!--                    >3rd Batch (from Sep 21 to Oct 15)</option>-->
-<!--                                    <option value="4"-->
-<!--                                    --><?php ////if ( isset( $_POST['date'] ) && $_POST['date'] == 4 ) echo "selected" ?>
-<!--                                    >4th Batch (from Sept 26 to Oct 25)</option>-->
-<!--                </select>-->
-<!--            </p>-->
-            <p>
-<!--                OR-->
-                From Date: <input type="date" name="fromDate" />
-                To Date: <input type="date" name="toDate" />
-            </p>
+    <form action="anashLabels.php" method="post">
+        <p>
+            From Date: <input type="date" name="fromDate" />
+            To Date: <input type="date" name="toDate" />
             <input type="submit" name="submit" value="submit" />
-        </form>
-    <?php else : ?>
+        </p>
+    </form>
+
     <div class='instructions'>
         <b>Printing Instructions</b><br />
         Set Scale to 90%<br />
@@ -207,11 +187,21 @@ include($_SERVER['DOCUMENT_ROOT'].'/admin_header.php');
 
             echo "<div class='label'>";
             echo "<span class='name'>";
-            echo "<b>" . $name . "</b><br />" . $address . "</span></div>";
+            echo "<b>" . $name . "</b><br />" . $address . "</span>";
+            echo "</div>";
+            checkForBreak();
+            echo "<div class='label'>";
+            echo "GUIDES:<br />";
+            foreach ($details[$parent['admin_id']]['chidon'] as $row) {
+                echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+            }
+            echo "BOOKS:<br />";
+            foreach ($details[$parent['admin_id']]['yahadus'] as $row) {
+                echo "<span class='name'>" . $row['first'] . " - " . (intval($row['class_grade']) - 3) . "</span><br />";
+            }
             checkForBreak();
         }
         ?>
     </div>
-<?php endif; ?>
 </body>
 </html>
