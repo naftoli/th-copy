@@ -480,6 +480,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
+        // turn off chidon reg
+        $result['chidon'] = true;
+
         return $result;
     }
     /**

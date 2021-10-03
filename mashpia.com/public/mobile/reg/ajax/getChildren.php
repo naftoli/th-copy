@@ -316,6 +316,9 @@ if ( !empty( $users ) ) {
         }
         //}
 
+        // close chidon reg
+        $children[$row['user_id']]['reg_types']['chidon'] = false;
+
         // don't open up enrollment yet
         // if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
         // else $children[$row['user_id']]['enrollShabbaton'] = 0;
