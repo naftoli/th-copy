@@ -64,6 +64,7 @@ foreach ($rows as $row) {
                 <?php if ($super) : ?>
                     <th>Eligibility Copy</th>
                 <?php endif; ?>
+                <th>Registered for KHK</th>
             </tr>
             <?php
             foreach ($schools as $id => $school) {
@@ -82,7 +83,10 @@ foreach ($rows as $row) {
                             else echo "&#10007;";
                             echo "</td>";
                         }
-                        echo "</tr>";
+                        echo "<td>";
+                        if ($child['khk_reg']) echo "&#10003;";
+                        else echo "&#10007;";
+                        echo "</td></tr>";
                     }
                 }
             }
