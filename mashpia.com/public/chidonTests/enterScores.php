@@ -84,7 +84,7 @@ if ($admin_user['auth'] != 'super') {
             }
             echo "</tr>";
             foreach ($children as $child) {
-                $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+                $grade = $child['class_grade'] . (isset($child['class_sub']) ? '-' . $child['class_sub'] : '');
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
