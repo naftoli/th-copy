@@ -14,7 +14,8 @@ $super = $admin_user['auth'] == 'super';
 $children = [];
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        tc.user_id,
+        tc.user_id, 
+        tc.khk_reg, 
         IFNULL(COUNT(tc.date_paid > 0), 0) AS total,
         u.*,
         c.*
