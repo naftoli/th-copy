@@ -49,7 +49,7 @@ $year = GlobalSettings::getChidonYear();
         $ids = [];
         $users = array();
         foreach ($schools as $id => $school) {
-            $sql = "select tc.*, u.first, u.last, u.first_he, u.last_he, u.school_type_id, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home
+            $sql = "select tc.*, u.first, u.last, u.first_he, u.last_he, u.gender, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home
                     from th_chidon tc 
                     join users u using (user_id)
                     left join classes c on u.class_id = c.class_id
@@ -97,7 +97,7 @@ $year = GlobalSettings::getChidonYear();
                 if ( !array_search( $id, $ids ) ) $ids[] = $id;
             }
         }
-        //echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
+//        echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
         //echo implode(',', $ids); exit;
         echo "<input type='hidden' name='numSchools' value='" . count($ids) . "'>";
         $total = 0;
@@ -179,15 +179,11 @@ $year = GlobalSettings::getChidonYear();
                                                             }
                                                             echo "<a class='remove' href='#'>delete</a></td><td></td></tr>";
                                                             $total++;
-                                                            switch( $other['info']['school_type_id']) {
-                                                                case 2:
-                                                                case 12:
-                                                                    $gender = 'Boys';
-                                                                    break;
-                                                                case 3:
-                                                                case 13:
-                                                                    $gender = 'Girls';
-                                                            }
+
+                                                            $gender = '';
+                                                            if ($other['info']['gender'] == 'M') $gender = 'Boys';
+                                                            else if ($other['info']['gender'] == 'F') $gender = 'Girls';
+
                                                             if (isset($totals[$gender][$school_id][$grade])) $totals[$gender][$school_id][$grade]++;
                                                             else $totals[$gender][$school_id][$grade] = 1;
 
@@ -237,6 +233,8 @@ $year = GlobalSettings::getChidonYear();
 
         // only show for th hq
         if ($admin_user['auth'] == 'super') {
+            ksort( $totalsByGrade );
+//            var_dump( $totalsByGrade );
             // get total number of children registered in CTH but not signed up to chidon per grade
             $notSignedUp = [];
             $grades = ['3','4','5','6','7','8'];
@@ -247,7 +245,7 @@ $year = GlobalSettings::getChidonYear();
                 $sql = "SELECT count(*) as total FROM users u 
                         join classes c on c.class_id = u.class_id 
                         where c.class_grade = '" . $grade . "'  
-                        and u.school_type_id in ('2','12') 
+                        and u.gender = 'M' 
                         and u.user_id not in (
                         select user_id from th_chidon where year = $year) 
                         and u.user_registered > 0";
@@ -259,7 +257,7 @@ $year = GlobalSettings::getChidonYear();
                 $sql = "SELECT count(*) as total FROM users u 
                         join classes c on c.class_id = u.class_id 
                         where c.class_grade = '" . $grade . "'  
-                        and u.school_type_id in ('2','12') 
+                        and u.gender = 'M' 
                         and u.user_id not in (
                         select user_id from th_chidon where year = $year) 
                         and (u.user_registered is null or u.user_registered = 0)";
@@ -273,7 +271,7 @@ $year = GlobalSettings::getChidonYear();
                 $sql = "SELECT count(*) as total FROM users u 
                         join classes c on c.class_id = u.class_id 
                         where c.class_grade = '" . $grade . "'  
-                        and u.school_type_id in ('3','13') 
+                        and u.gender = 'F' 
                         and u.user_id not in (
                         select user_id from th_chidon where year = $year) 
                         and u.user_registered > 0";
@@ -285,7 +283,7 @@ $year = GlobalSettings::getChidonYear();
                 $sql = "SELECT count(*) as total FROM users u 
                         join classes c on c.class_id = u.class_id 
                         where c.class_grade = '" . $grade . "'  
-                        and u.school_type_id in ('3','13') 
+                        and u.gender = 'F'  
                         and u.user_id not in (
                         select user_id from th_chidon where year = $year) 
                         and (u.user_registered is null or u.user_registered = 0)";
@@ -293,7 +291,6 @@ $year = GlobalSettings::getChidonYear();
                 $row = mysql_fetch_assoc( $result );
                 $notSignedUp[$grade]['Girls']['notReg'] = $row['total'];
             }
-            
 
             $totals['Boys']['signedUp'] = 0;
             $totals['Girls']['signedUp'] = 0;
@@ -316,10 +313,11 @@ $year = GlobalSettings::getChidonYear();
                     $totals['Boys']['notReg'] += $notSignedUp[$grade]['Boys']['notReg'];
                     $totals['Girls']['notReg'] += $notSignedUp[$grade]['Girls']['notReg'];
                 } else {
-                    echo "<tr><td>" . $grade . "</td><td>" . $amount['Boys'] . "</td><td></td><td></td><td>" . $amount['Girls'] . "</td><td></td><td></td></tr>";
+                    echo "<tr><td>" . $grade . "</td><td>" . (isset($amount['Boys']) ? $amount['Boys'] : 0) . "</td><td></td><td></td><td>" .
+                        (isset($amount['Girls']) ? $amount['Girls'] : 0) . "</td><td></td><td></td></tr>";
                 }
-                $totals['Boys']['signedUp'] += $amount['Boys'];
-                $totals['Girls']['signedUp'] += $amount['Girls'];
+                if (isset($amount['Boys'])) $totals['Boys']['signedUp'] += $amount['Boys'];
+                if (isset($amount['Girls'])) $totals['Girls']['signedUp'] += $amount['Girls'];
             }
             echo "<tr><th>Totals:</th><th>" . $totals['Boys']['signedUp'] . "</th><th>" . $totals['Boys']['notSignedUp'] . "</th><th>" . $totals['Boys']['notReg'] . "</th><th>";
             echo $totals['Girls']['signedUp'] . "</th><th>" . $totals['Girls']['notSignedUp'] . "</th><th>" . $totals['Girls']['notReg'] . "</th></tr></table>";
