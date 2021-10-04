@@ -65,8 +65,8 @@ while ($row = mysql_fetch_assoc($result)) {
         foreach ($recruits as $serialNum => $recruited) {
             $info = $userInfo[$serialNum];
             $numRecruited = count($recruited);
-            echo "<tr><td>" . ($info['first'] . ' ' . $info['last']) . "</td><td>" . ($info['class_grade'] .
-                    empty($info['class_sub']) ? '' : '-' . $info['class_sub']) . "</td><td>" . $info['school_name'] .
+            $grade = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
+            echo "<tr><td>" . ($info['first'] . ' ' . $info['last']) . "</td><td>" . $grade . "</td><td>" . $info['school_name'] .
                 "</td><td>" . $info['gender'] . "</td><td>" . $serialNum . "</td><td>" . $numRecruited . "</td><td>";
             foreach ($recruited as $user_id) {
                 echo $user_id . ', ';
