@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -27,7 +29,7 @@ foreach ($schools as $school_id => $school) {
     $sql = "select * from users u 
             join classes c on c.class_id = u.class_id 
             join th_chidon tc using (user_id) 
-            where tc.khk = 1 
+            where tc.khk_reg = 1 
             and u.school_id = " . $school_id . "            
             and tc.year = " . $year;
     $result = mysql_query($sql);
