@@ -20,8 +20,8 @@ foreach ($schools as $sid => $schoolName) {
             join admin_auths aa on aa.id = u.user_id 
             join admins a using (admin_id) 
             where tc.year = " . $year . "
-            and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) 
-            and tc.date_paid > 0 
+#            and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) 
+#            and tc.date_paid > 0 
             and aa.auth = 'user'
             and u.school_id = " . $sid;
     $sql .= " order by class_grade, class_sub, tc.school_rep desc, u.last, u.first";
@@ -125,7 +125,7 @@ foreach ($schools as $sid => $schoolName) {
     <script>
         $(".print").click( function() {
             var id = $(this).parent().parent().attr('id');
-            location.href = 'chidon_review.php?id=' + id;
+            window.open('chidon_review.php?id=' + id, )
         });
         
         $(".confirmEnrollment").click( function() {

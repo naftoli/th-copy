@@ -22,12 +22,12 @@ foreach ($schools as $id => $school) {
         ."join admins a using (admin_id) "
         ."where tc.year = " . $year . " "
         ."and aa.auth = 'user' "
-        ."and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) "
-        ."and tc.date_paid > 0 "
+//        ."and (tc.khk = 1 or tc.trophy_contestant = 1 or tc.contestant = 1 or tc.school_rep = 1) "
+//        ."and tc.date_paid > 0 "
         ."and u.school_id = " . $id;
     if (isset($_GET['id'])) $sql .= " and tc.th_chidon_id = " . $_GET['id'];
     $sql .= " order by class_grade, class_sub, u.last, u.first";
-    //echo $sql; exit;
+//    echo $sql; exit;
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
         $users[$id][] = $row;
