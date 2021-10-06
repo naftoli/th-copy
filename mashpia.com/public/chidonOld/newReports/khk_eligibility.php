@@ -67,9 +67,11 @@ foreach ($rows as $row) {
                 <th>Registered for KHK</th>
             </tr>
             <?php
+            $khkTotal = 0;
             foreach ($schools as $id => $school) {
                 if (isset($children[$id])) {
                     foreach ($children[$id] as $child) {
+                        if ($child['total'] > 3) $khkTotal++;
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
                             "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>" .
@@ -95,6 +97,7 @@ foreach ($rows as $row) {
             }
             ?>
         </table>
+        <?= $khkTotal ?>
     </body>
     <script>
         <?php if ($super) : ?>
