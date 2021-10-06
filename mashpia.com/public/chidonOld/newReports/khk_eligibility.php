@@ -26,7 +26,8 @@ $stmt = $MASHPIA_DB->query("
         th_chidon tc USING (user_id)
     WHERE
         c.class_grade IN ('7' , '8')
-            AND u.school_id IN (" . implode(',', array_keys($schools)) . ")
+            AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
+            AND u.user_registered > 0 
     GROUP BY u.user_id
     ORDER BY u.school_id , c.class_grade , c.class_sub , u.last , u.first
 ");
@@ -59,8 +60,12 @@ foreach ($rows as $row) {
                 <th>School</th>
                 <th>Grade</th>
                 <th>Student</th>
-                <th>Number of times Registered for Shabbaton</th>
-                <th>Years that child was Registered</th>
+<!--                <th>Number of times Registered for Shabbaton</th>-->
+                <th>5777</th>
+                <th>5778</th>
+                <th>5779</th>
+                <th>5780</th>
+                <th>5781</th>
                 <th>Eligible</th>
                 <?php if ($super) : ?>
                     <th>Eligibility Copy</th>
@@ -81,9 +86,11 @@ foreach ($rows as $row) {
                         if ($child['total'] > 3) $khkTotal++;
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
-                            "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>" .
-                            $child['total'] . "</td><td>" . implode(',', $years) .
-                            "</td><td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
+                            "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td>";
+                        for ($y = 5777; $y <= 5781; $y++) {
+                            echo "<td>" . (in_array($y, $years) ? "&#10003;" : "&#10007;") . "</td>";
+                        }
+                        echo "<td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
                         if ($child['khk_eligible']) echo "checked ";
                         if (! $super) echo " disabled ";
                         echo "/></td>";
