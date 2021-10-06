@@ -27,7 +27,6 @@ $stmt = $MASHPIA_DB->query("
     WHERE
         c.class_grade IN ('7' , '8')
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
-            AND u.user_registered > 0 
     GROUP BY u.user_id
     ORDER BY u.school_id , c.class_grade , c.class_sub , u.last , u.first
 ");
