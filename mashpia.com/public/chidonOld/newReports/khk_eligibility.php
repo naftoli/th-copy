@@ -60,6 +60,7 @@ foreach ($rows as $row) {
                 <th>Grade</th>
                 <th>Student</th>
                 <th>Number of times Registered for Shabbaton</th>
+                <th>Years that child was Registered</th>
                 <th>Eligible</th>
                 <?php if ($super) : ?>
                     <th>Eligibility Copy</th>
@@ -71,11 +72,18 @@ foreach ($rows as $row) {
             foreach ($schools as $id => $school) {
                 if (isset($children[$id])) {
                     foreach ($children[$id] as $child) {
+                        $years = [];
+                        $sqlYears = "select year from th_chidon where date_paid > 0 and user_id = " . $child['user_id'];
+                        $resYears = mysql_query($sqlYears);
+                        while ($rowYears = mysql_fetch_assoc($resYears)) {
+                            $years[] = $rowYears['year'];
+                        }
                         if ($child['total'] > 3) $khkTotal++;
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                         echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
                             "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>" .
-                            $child['total'] . "</td><td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
+                            $child['total'] . "</td><td>" . implode(',', $years) .
+                            "</td><td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
                         if ($child['khk_eligible']) echo "checked ";
                         if (! $super) echo " disabled ";
                         echo "/></td>";
