@@ -8,7 +8,7 @@ class Constants{
         return 175;
     }
     
-    public static function get_raffle_school_max_winners() { // array of id => max. Sum of all maxes must equal 150
+    public static function get_raffle_school_max_winners() { // array of id => max. Sum of all maxes must equal 175
         return [
             427	=> 1,
             613	=> 1,
