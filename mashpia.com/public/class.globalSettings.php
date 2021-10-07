@@ -172,10 +172,10 @@ class GlobalSettings {
         if ( in_array( $school_id, [ 269 ] ) ) {
             return 50;
         }
-//        $today = new DateTime();
-//        $late = new DateTime('2020-10-21 04:00:00');
-//        if ($today >= $late) return 35;
-        else return 18;
+        $today = new DateTime();
+        $late = new DateTime('2021-10-1 04:00:00');
+        if ($today >= $late) return 36;
+        return 18;
     }
 
     /**

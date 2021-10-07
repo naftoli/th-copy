@@ -13,7 +13,7 @@ if (mysql_query($sql)) {
 } else {
     echo json_encode([
         'success'   => false,
-        'error'     => 'There was an error saving your confirmation.',
+        'error'     => 'There was an error saving your confirmation. Please notify HQ so that they can rectify this.',
         'sql'       => $sql
     ]);
 }

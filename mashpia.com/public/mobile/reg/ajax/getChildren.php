@@ -22,7 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSe
 $info = array();
 
 $parent = array();
-$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded, confirmed_chidon_5781 FROM admins WHERE admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded, chidon_confirmed_5782 FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -33,7 +33,7 @@ $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
 $parent['showRefund'] = intval($row['show_chidon_refund']);
 $parent['alreadyRefunded'] = intval($row['already_refunded']);
-$parent['confirmed_chidon_5781'] = boolval($row['confirmed_chidon_5781']);
+$parent['chidon_confirmed_5782'] = boolval($row['chidon_confirmed_5782']);
 
 $info['parent'] = $parent;
 
@@ -318,6 +318,7 @@ if ( !empty( $users ) ) {
 
         // close chidon reg
         $children[$row['user_id']]['reg_types']['chidon'] = false;
+        if (isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = true;
 
         // don't open up enrollment yet
         // if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;

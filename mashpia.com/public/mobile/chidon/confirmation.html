@@ -109,12 +109,13 @@
           <div class="row">
             <div class="col-sm-12" id="confirmInfo" style="font-size: 18px; line-height: 1.5; display: none;">
               Thank you for confirming your Chidon Registration details.<br /> Your registration is now complete.<br />
-              All orders and prizes will be sent out as soon as possible! Mechayil el chayil!
+              Mechayil el chayil!
             </div>
           </div>
           <div class="row">
             <div class="col-sm-12" id="payment" style="font-size: 18px; line-height: 1.5;">
               <div id="paymentForm" style="display:none;">
+                Please Note: You will only be confirmed once you pay for KHK.<br /><br />
                 Total Payment: $<span id="total"></span><br /><br />
                 <input type="radio" name="cc_on_file" class="cc_on_file" value="1" /> Use Credit Card on File<br />
                 <input type="radio" name="cc_on_file" class="cc_on_file" value="0" /> Use other Credit Card<br /><br />
@@ -191,7 +192,7 @@
             <div class="col-sm-12">
               <button id="pay" class="btn btn-primary btn-block" style="display: none;">Pay</button>
               <br />
-              <a href="chidon_sweater_summary.html">
+              <a href="chidon_reg.html">
                 <button id="back" class="btn btn-primary btn-block">Back</button>
               </a>
               <br />
@@ -209,22 +210,22 @@
 <script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 <script src="js/js.cookie.js" type="text/javascript"></script>
 <script>
-  let reg_balance = 0
-  let extra_balance = 0
-  let total_balance = 0
-
   $(function () {
-    reg_balance = localStorage.getItem('reg_balance') || Cookies.get('reg_balance')
-    extra_balance = localStorage.getItem('extra_balance') || Cookies.get('extra_balance')
-    if (!reg_balance) reg_balance = 0 // make sure we don't end up with NaN
-    if (!extra_balance) extra_balance = 0 // make sure we don't end up with NaN
-    total_balance = parseFloat(reg_balance) + parseFloat(extra_balance)
-    $("#total").text(total_balance)
-    if (total_balance) {
+    var balance = localStorage.getItem('balance') || Cookies.get('balance')
+    if (! balance) balance = 0
+    $("#total").text(balance)
+    if (balance) {
       $("#paymentForm").show()
       $("#pay").show()
     } else {
       $("#confirmInfo").show()
+      $.post('ajax/confirmation.php', { field: 'chidon_confirmed_5782', admin: Cookies.get('admin') }, function(result) {
+        var res = JSON.parse(result)
+        if (! res.success) {
+          alert(res.error)
+          console.log(res.sql)
+        }
+      })
     }
 
     $(".cc_on_file").click( function () {
@@ -277,16 +278,25 @@
         cc.country = country
       }
       $("#pay").attr('disabled', true)
-      $.post('ajax/processExtraPayment.php', { admin_id: Cookies.get('admin'), extra: extra_balance, amount: total_balance, cc: cc }, function (result) {
-        const res = JSON.parse(result)
+      var khk_users = localStorage.getItem('khk') || Cookies.get('khk')
+      $.post('ajax/processExtraPayment.php', { admin_id: Cookies.get('admin'), amount: balance, cc: cc, khk_users: khk_users }, function (result) {
+        var res = JSON.parse(result)
         if (res.success) {
           alert('Your payment has been received. Your registration is now complete. Thank you!')
-          console.log(res.msg)
-          Cookies.remove('reg_balance')
-          Cookies.remove('extra_balance')
-          localStorage.removeItem('reg_balance')
-          localStorage.removeItem(('extra_balance'))
-          location.href = '/mobile/reg/parent_detail.html'
+          $.post('ajax/confirmation.php', { field: 'chidon_confirmed_5782', admin: Cookies.get('admin') }, function(result) {
+            var res = JSON.parse(result)
+            if (!res.success) {
+              alert(res.error)
+              console.log(res.sql)
+            } else {
+              console.log(res.msg)
+              Cookies.remove('khk')
+              Cookies.remove('balance')
+              localStorage.removeItem('khk')
+              localStorage.removeItem('balance')
+            }
+          })
+          // location.href = '/mobile/reg/parent_detail.html'
         } else {
           alert(res.msg)
           $("#pay").attr('disabled', false)

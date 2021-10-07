@@ -4,5 +4,5 @@ if (setcookie("naftoli", 1)) {
 } else {
     echo "error setting cookie";
 }
-phpinfo() 
+phpinfo();
 ?> 

@@ -369,18 +369,16 @@
                                                                     <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
         <!--                                                            <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}-->
                                                                     {{/if}}
-                                                                    {{#if this.reg_types.chidon }}
+                                                                    {{#if this.chidonRegistered }}
+                                                                    {{else}}
                                                                     / Chidon {{ this.chidon_year }}
                                                                     {{/if}}
                                                                 </button>
                                                                 {{else}}
-                                                                    {{#if this.reg_types.chidon }}
+                                                                    {{#if this.chidonRegistered }}
+                                                                    {{else}}
                                                                     <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
                                                                     {{/if}}
-                                                                {{/if}}
-                                                            {{else}}
-                                                                {{#if this.reg_types.chidon }}
-<!--                                                                <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>-->
                                                                 {{/if}}
                                                             {{/if}}
                                                         {{/if}}
@@ -397,6 +395,11 @@
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
+                                                        {{#if this.chidon_confirmed_5782}}
+                                                        {{else}}
+                                                            <button class="btn btn-primary confirm_chidon">Confirm Chidon Registration</button>
+                                                            <div style="font-style: italic; font-size: large; color: darkslateblue">Chidon registration & confirmation closes this Monday 11:59PM</div>
+                                                        {{/if}}
                                                         {{#if this.enrollShabbaton}}
                                                             {{#if this.shabbatonPaid}}
 <!--                                                            <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
@@ -635,8 +638,13 @@
 
                     for (var c in children) {
                         var child = children[c];
-                        if (child.schoolRegistered && child.schoolTypeRegistered && !child
-                            .user_registered) {
+
+                        child.chidon_confirmed_5782 = true
+                        if (Cookies.get('naftoli')) {
+                            child.chidon_confirmed_5782 = parent.chidon_confirmed_5782
+                        }
+
+                        if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
                             unregistered_children[c] = child;
                             childrenToRegister.push({
                                 id: c,
@@ -749,7 +757,7 @@
                 location.href = url;
             });
 
-            $(document).on('click', '.confirmation', function () {
+            $(document).on('click', '.confirm_chidon', function () {
                 location.href = '/mobile/chidon/confirmation_intro.html'
             })
 
