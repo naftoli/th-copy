@@ -10,18 +10,18 @@ require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
 
 //echo "<pre>"; print_r($_POST['cart']); echo "</pre>";
+$user_id = $_POST['user_id'];
 $cart = $_POST['cart'];
 
 $qrys = [];
-foreach ($cart as $user_id => $items) {
-    $qrys[] = "delete from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
-    foreach ($items as $item) {
-        $qrys[] = "insert into chidon_user_prizes set 
-                    user_id = " . $user_id . ", 
-                    prize_id = " . $item['prize_id'] . ", 
-                    he_name = '" . $item['he_name'] . "', 
-                    year = " . $year;
-    }
+$qrys[] = "delete from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
+foreach ($cart as $item) {
+    $heName = isset($item['he_name']) ? $item['he_name'] : '';
+    $qrys[] = "insert into chidon_user_prizes set 
+                user_id = " . $user_id . ", 
+                prize_id = " . $item['id'] . ", 
+                he_name = '" . $heName . "', 
+                year = " . $year;
 }
 
 mysql_query('set autocommit=0');

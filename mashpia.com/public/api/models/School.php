@@ -535,4 +535,24 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             ]);
         }
     }
+
+    public function addDaySchoolCampaigns() {
+        global $MASHPIA_DB;
+
+        $subjects = [];
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO school_subjects VALUES( :school, :subject )
+        ");
+        $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10");
+        $rows = $stmtSubjects->fetchAll();
+        foreach ($rows as $row) {
+            $subjects[] = $row['subject_id'];
+        }
+        foreach ( $subjects as $subject ) {
+            $stmt->execute([
+                ':school'   =>  $this->school_id,
+                ':subject'  =>  $subject
+            ]);
+        }
+    }
 }

@@ -168,7 +168,7 @@ class GlobalSettings {
      * @return int
      */
     public static function getChidonCost( $school_id = false ) {
-        // Anash kinder and MyShliach has different fee
+        // Anash kinder has a different fee
         if ( in_array( $school_id, [ 269 ] ) ) {
             return 50;
         }

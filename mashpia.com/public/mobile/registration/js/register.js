@@ -220,12 +220,16 @@ var registrationApp = function() {
                 if ( !australian.includes( school_id ) ) {
                     if ( school_id == 61 ) {
                         $("#step-2 form .yahadus-myshliach").show()
+                        $("#step-2 form .yahadus-late").hide()
                         $('#step-2 form #yahadus-registration').hide();
                         $('#step-2 form #yahadus-registration-no').hide();
                     } else {
+                        $("#step-2 form .yahadus-late").show()
                         $("#step-2 form .yahadus-myshliach").hide()
-                        $('#step-2 form #yahadus-registration').show();
-                        $('#step-2 form #yahadus-registration-no').show();
+                        $('#step-2 form #yahadus-registration').hide();
+                        $('#step-2 form #yahadus-registration-no').hide();
+                        // $('#step-2 form #yahadus-registration').show();
+                        // $('#step-2 form #yahadus-registration-no').show();
                     }
                 }
                 $('#step-2 form #book-purchase').hide();
@@ -578,9 +582,9 @@ var registrationApp = function() {
                 }
             } else {
                 // make sure they checked either that they want to purchase a book or that they already have a book if not myshliach
-                if ( selected_user.school.school_id != 61 && !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
-                    return showError(Err6);
-                }
+                // if ( selected_user.school.school_id != 61 && !$("#yahadus").is(":checked") && !$("#no_yahadus").is(":checked") ) {
+                //     return showError(Err6);
+                // }
             }
 
             var poll = $("#yahadus-poll").val();
@@ -670,7 +674,7 @@ var registrationApp = function() {
             if (recruited_by == '') recruited_by = 0
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
-                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : ''),
+                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : '') + ( !anash ? ' ($18 Late Fee)' : ''),
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',
@@ -1269,6 +1273,7 @@ var templates = function(){
             $( '#step-2 form #yahadus-registration').hide();
             $( '#step-2 form #yahadus-registration-no').hide();
             $(".yahadus-myshliach").hide()
+            $(".yahadus-late").hide()
             $(".book-purchase-myshliach").hide()
 
             var bookHtml = "<option value='0'>Please choose</option>"

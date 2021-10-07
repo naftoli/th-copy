@@ -481,7 +481,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chidon reg
-        $result['chidon'] = true;
+        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
 
         return $result;
     }
