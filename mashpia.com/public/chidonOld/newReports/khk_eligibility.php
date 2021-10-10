@@ -14,7 +14,7 @@ $super = $admin_user['auth'] == 'super';
 $children = [];
 $stmt = $MASHPIA_DB->query("
     SELECT 
-        tc.user_id, tc.khk_reg,
+        tc.user_id, 
         IFNULL(COUNT(tc.date_paid > 0), 0) AS total,
         u.*,
         c.*
@@ -100,10 +100,10 @@ foreach ($rows as $row) {
                             echo "</td>";
                         }
                         echo "<td>";
-//                        $sqlKhk = "select khk_reg from th_chidon where year = 5782 and user_id = " . $child['user_id'];
-//                        $resKhk = mysql_query($sqlKhk);
-//                        $rowKhk = mysql_fetch_assoc($resKhk);
-                        if (intval($row['khk_reg'])) echo "&#10003;";
+                        $sqlKhk = "select khk_reg from th_chidon where year = 5782 and user_id = " . $child['user_id'];
+                        $resKhk = mysql_query($sqlKhk);
+                        $rowKhk = mysql_fetch_assoc($resKhk);
+                        if ($rowKhk['khk_reg']) echo "&#10003;";
                         else echo "&#10007;";
                         echo "</td></tr>";
                     }
