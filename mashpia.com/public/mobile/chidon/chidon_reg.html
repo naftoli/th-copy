@@ -201,7 +201,7 @@
                                 <select name="yarmulka" class="yarmulka">`
                         for (size of yarmulkaSizes) {
                             html += `<option value=${size}`
-                            if (size == child.yarmulka) html += ' selected'
+                            if (size == parseInt(child.yarmulka)) html += ' selected'
                             html += `>${size}</option>`
                         }
                         html += '</select>'
@@ -227,7 +227,7 @@
                     // show khk status if eligible
                     if (khkEligible.includes(parseInt(child.user_id))) {
                         html += `<br />KHK Track: <input type="checkbox" class="khk"`
-                        if (child.khk_reg) html += ' checked'
+                        if (parseInt(child.khk_reg)) html += ' checked'
                         html += ` /><br /><span style="font-style: italic; font-size: smaller;">If this isn't checked,
                                 you can check it to enroll your child into the khk track for a charge of $12</span>`
                     }
