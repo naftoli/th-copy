@@ -61,7 +61,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $prizes = [];
-$sql = "select u.user_id, p.prize_name, p.size, p.color, u.he_name 
+$sql = "select u.user_id, p.prize_name, p.size, p.color, p.price, u.he_name 
         from chidon_prizes p 
         join chidon_user_prizes u using (prize_id) 
         where u.year = $year  
@@ -133,6 +133,7 @@ $types = [
                 <th>Comments</th>
                 <th>Prizes</th>
                 <th>Personalized Prize Name</th>
+                <th>Total Credits Used</th>
                 <th>Non TH School</th>
                 <th>Parent Name</th>
                 <th>Parent Email</th>
@@ -160,12 +161,15 @@ $types = [
                     }
                 }
                 echo "</td><td>";
+                $totalCredits = 0;
                 if (isset($prizes[$row['user_id']])) {
                     foreach ($prizes[$row['user_id']] as $i => $prize) {
+                        $totalCredits += floatval($prize['price']);
                         echo $prize['he_name'];
                         if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
                     }
                 }
+                echo "</td><td>" . $totalCredits;
                 echo "</td><td>" . $row['non_th_school'] . "</td><td>" . $row['first'] . " " . $row['last'] . "</td><td>" . $row['admin_email'];
                 echo "</td></tr>";
             }
