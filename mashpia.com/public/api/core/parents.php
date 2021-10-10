@@ -130,7 +130,8 @@ class ParentsRouter {
         if ( !isset($_POST['admin_id']) ) json_error('Need a parent to remove from');
 
         $query = $MASHPIA_DB->prepare(
-            'DELETE aa FROM admin_auths aa JOIN users u ON auth="user" AND id = user_id WHERE admin_id = ? AND user_serial = ?'
+//            'DELETE aa FROM admin_auths aa JOIN users u ON auth="user" AND id = user_id WHERE admin_id = ? AND user_serial = ?'
+            "delete from admin_auths where auth = 'user' and admin_id = ? and id = (select user_id from users where user_serial = ?)"
         );
         
         $success = $query->execute([$_POST['admin_id'], $_POST['user_serial']]);
