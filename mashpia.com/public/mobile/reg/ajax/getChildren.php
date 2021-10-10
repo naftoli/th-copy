@@ -234,7 +234,7 @@ if ( !empty( $users ) ) {
         // chidon registration
          $exceptions = [482,544,583];
          if ( !$row['reg_chidon'] // if not in chidon
-         	&& intval( $row['class_grade'] ) > 2 // and in grade 3+
+         	&& intval( $row['class_grade'] ) >= 4 // and in grade 4+
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8
          	&& $row['chidon'] // make sure the kid is in chidon
          	&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
