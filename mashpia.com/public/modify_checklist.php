@@ -11,11 +11,14 @@ $startEnd = GlobalSettings::getCurYearDates();
 $dates = array();
 $sql = "SELECT * FROM parshos 
         WHERE start >= " . $startEnd['start'] . " 
-        and end <= " . $startEnd['end'];        
+        and end <= " . $startEnd['end'] . "
+        order by start";
+//echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;
 }
+//echo "<pre>"; print_r($dates); echo "</pre>";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
