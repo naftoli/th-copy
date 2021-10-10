@@ -34,7 +34,7 @@ var registrationApp = function() {
     var Msg1 = "Tzivos Hashem Registration for ";
         
     var Msg3 = "CKids Registration for ";
-    var Msg4 = "Chidon Registration ";
+    var Msg4 = "Chidon Registration for ";
     var Msg5 = " (includes coordinator and study guide)";//
     var Msg6 = "Yahadus Book for ";
     var Msg7 = " (Shipping Included)";
@@ -69,7 +69,7 @@ var registrationApp = function() {
          Msg1 = "ההרשמה לצבאות ה' עבור ";
         
          Msg3 = "ההרשמה לסי קידס עבור ";
-         Msg4 = "הרשמה לחידון ";
+         Msg4 = "הרשמה לחידון עבור ";
          Msg5 = "(כולל מתאם ומדריך לימודי";// 
          Msg6 = "ספר יהדות עבור ";
          Msg7 = "(דמי המשלוח כלולים)";

@@ -134,7 +134,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    If you pass the Yesod, Yediah, Havonah, or Iyun track based on your 4 tests this year,
+                    If you pass the Yediah, Havonah, or Iyun track based on your 4 tests this year,
                     you will be eligible to up to 75 credits worth of prize(s). Please select which prize(s) below you would like.
                     You can choose more than one as long as it stays within the 75 credits.
                 </p>
@@ -193,7 +193,7 @@
                 for (var id in children) {
                     var child = children[id]
                     html += `<div class="child" id=${child.user_id}>`
-                    html += `Chidon ID: ${child.th_chidon_id} <br />Name: ${child.first} `
+                    html += `Serial Number: ${child.user_serial} <br />Name: ${child.first} `
 
                     // if male show yarmulka size
                     if (child.gender == 'M') {
@@ -232,7 +232,7 @@
                                 you can check it to enroll your child into the khk track for a charge of $12</span>`
                     }
 
-                    // show button for prizes modal
+                    // show prizes and button for prizes modal
                     html += '<br /><button class="prizes">View/Edit Prizes</button>'
 
                     html += "<hr /><br /></div>";
@@ -328,8 +328,8 @@
             // var html = ''
             for (prize of res) {
                 var id = prize.prize_id
-                var height = 'height: 100px;'
-                if (prize.personalization) height = 'height: 135px;'
+                var height = 'height: 85px;'
+                if (prize.personalization) height = 'height: 105px;'
                 var personalization = prize.personalization ? 1 : 0
                 html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                     <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
@@ -379,12 +379,15 @@
                 if ($(this).is(":checked")) {
                     if (!addToPrizes(user_id, prize, price, personalization)) {
                         e.target.checked = false
+                        return false
                     }
                 } else {
                     if (!removeFromPrizes(user_id, prize)) {
                         e.target.checked = true
+                        return false
                     }
                 }
+                return true
             })
 
             $(".he_name").blur( function (e) {
@@ -394,8 +397,11 @@
                     // alert('Error adding hebrew name')
                     // add prize to list
                     $(this).parent().parent().find('.prize').trigger('click')
-                    if (!addHeName(user_id, id, he_name)) {
-                        alert('Error adding hebrew name')
+                    if ($(this).parent().parent().find('.prize').is(":checked")) {
+                        if (!addHeName(user_id, id, he_name)) {
+                            alert('Error adding hebrew name')
+                            $(this).focus()
+                        }
                     }
                 }
             })
@@ -403,7 +409,7 @@
     }
 
     $("#prizes").on('hidden.bs.modal', function (e) {
-        var user_id = $(".user_id").attr('id')
+        var user_id = $("#listOfPrizes").find('.user').attr('id')
         if (validatePrizes(user_id)) {
             // save prizes
             $.post('ajax/savePrizes.php', { admin: Cookies.get('admin'), user_id: user_id, cart: user_prizes[user_id] })

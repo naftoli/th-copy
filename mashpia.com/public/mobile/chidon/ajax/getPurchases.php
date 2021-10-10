@@ -10,7 +10,7 @@ require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
 
 $children = [];
-$sql = "select th_chidon_id, s.school_name, user_id, first, yarmulka, gender, parent_id, size, recruited_by, khk_reg 
+$sql = "select th_chidon_id, s.school_name, user_id, first, yarmulka, gender, parent_id, size, recruited_by, khk_reg, user_serial 
         from th_chidon tc 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
