@@ -674,7 +674,7 @@ var registrationApp = function() {
             if (recruited_by == '') recruited_by = 0
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1; 
             state.cart.push({
-                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : '') + ( !anash ? ' ($18 Late Fee)' : ''),
+                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : '') + ( !anash ? ' ($10 Late Fee)' : ''),
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',

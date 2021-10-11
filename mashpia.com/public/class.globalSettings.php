@@ -174,7 +174,7 @@ class GlobalSettings {
         }
         $today = new DateTime();
         $late = new DateTime('2021-10-1 04:00:00');
-        if ($today >= $late) return 36;
+        if ($today >= $late) return 28;
         return 18;
     }
 
