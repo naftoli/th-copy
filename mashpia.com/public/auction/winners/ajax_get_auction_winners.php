@@ -21,7 +21,7 @@ if ( isset( $_COOKIE['admin_id'] ) ){
 
 
 $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
-$auction_id = 81; // isset($_POST['auction_id']) ? $_POST['auction_id'] : false;
+$auction_id = isset($_POST['auction_id']) ? $_POST['auction_id'] : false;
 $sorting = isset($_POST['sorting']) ? $_POST['sorting'] : "name";
 
 if ($sorting == "school") {$order_sql = "s.school_name, c.class_grade, u.last, u.first";}
