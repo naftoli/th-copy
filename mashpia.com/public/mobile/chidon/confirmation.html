@@ -192,9 +192,9 @@
             <div class="col-sm-12">
               <button id="pay" class="btn btn-primary btn-block" style="display: none;">Pay</button>
               <br />
-              <a href="chidon_reg.html">
-                <button id="back" class="btn btn-primary btn-block">Back</button>
-              </a>
+<!--              <a href="chidon_reg.html">-->
+<!--                <button id="back" class="btn btn-primary btn-block">Back</button>-->
+<!--              </a>-->
               <br />
               <a href="/mobile/reg/parent_detail.html">
                 <button id="home" class="btn btn-primary btn-block">Home Page</button>
@@ -289,14 +289,13 @@
               alert(res.error)
               console.log(res.sql)
             } else {
-              console.log(res.msg)
               Cookies.remove('khk')
               Cookies.remove('balance')
               localStorage.removeItem('khk')
               localStorage.removeItem('balance')
+              location.href = '/mobile/reg/parent_detail.html'
             }
           })
-          // location.href = '/mobile/reg/parent_detail.html'
         } else {
           alert(res.msg)
           $("#pay").attr('disabled', false)

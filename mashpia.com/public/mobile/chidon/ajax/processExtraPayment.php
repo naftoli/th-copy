@@ -13,6 +13,8 @@ $year = GlobalSettings::getChidonYear();
 require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
 require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
 
+require_once __DIR__ . '/../../../chidonOld/chidon_drive/ajax/authorize.php';
+
 use classes\authorize\CustomerProfile;
 
 require __DIR__ . '/encrypt.php';
@@ -52,7 +54,7 @@ if (is_string($ccResult)) {
     } else {
         // update tables
         $sql = "update th_chidon set khk_reg = 1 where user_id in (" . implode(',', $khkUsers) . ") and year = " . $year;
-        if (mysql_quey($sql)) {
+        if (mysql_query($sql)) {
             echo json_encode([
                 'success' => true,
                 'msg' => $response['success']
@@ -123,9 +125,7 @@ function processCC( $customer_id )
         $cc_info['zip'] = $cc['zip'];
         $cc_info['country'] = $cc['country'];
 
-        require __DIR__ . '/../../../chidonOld/chidon_drive/ajax/authorize.php';
         $response = chargeCreditCard($amount, $cc_info);
     }
-
     return $response;
 }
