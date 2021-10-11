@@ -49,6 +49,7 @@ function generateTable($school_id, $name, $info) {
         <table>
             <caption><?= $caption ?></caption>
             <tr>
+                <th>Serial Number</th>
                 <th>Grade</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -66,7 +67,8 @@ function generateTable($school_id, $name, $info) {
                 else $prizes = 'no';
                 $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
 
-                echo "<tr><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $prizes . "</td><td>";
+                echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" .
+                    $row['last'] . "</td><td>" . $prizes . "</td><td>";
                 if ($row['chidon_confirmed_5782']) echo 'yes';
                 else echo 'no';
                 echo "</td><td><a href='mailto:" . $row['admin_email'] . "'>" . $row['admin_email'] . "</a></td></tr>";
