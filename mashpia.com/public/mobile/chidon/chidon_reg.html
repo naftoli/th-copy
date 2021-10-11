@@ -154,6 +154,7 @@
     var user_prizes = []
     var children = []
     var prizes_chosen = []
+    var prizes = []
 
     // wrap ajax calls in promise
     function getAjax(url, data) {
@@ -190,7 +191,7 @@
                     'adult xl': 'Adult XL'
                 }
 
-                for (var id in children) {
+                for (id in children) {
                     var child = children[id]
                     html += `<div class="child" id=${child.user_id}>`
                     html += `Serial Number: ${child.user_serial} <br />Name: ${child.first} `
@@ -220,8 +221,7 @@
                     // show text box for referral
                     if (newToChidon.includes(parseInt(child.user_id))) {
                         html += `<br />If you were recruited by another chayol, please enter the Serial Number of that chayol.
-                                <input type="text" name="recruited_by" class="recruited_by" value="
-                                ${child.recruited_by ? child.recruited_by : ''}" />`
+                                <input type="text" name="recruited_by" class="recruited_by" value="${child.recruited_by ? child.recruited_by : ''}" />`
                     }
 
                     // show khk status if eligible
@@ -231,6 +231,19 @@
                         html += ` /><br /><span style="font-style: italic; font-size: smaller;">If this isn't checked,
                                 you can check it to enroll your child into the khk track for a charge of $12</span>`
                     }
+
+                    // show tracks
+                    var tracks = {
+                        maven: 'Yesod',
+                        pro: 'Yediah',
+                        expert: 'Havonah',
+                        genius: 'Iyun'
+                    }
+                    html += `<br />Track: <select name="track" class="track">`
+                    for (t in tracks) {
+                        html += `<option value="${t}" ${child.test_type == t ? 'selected' : '' }>${tracks[t]}</option>`
+                    }
+                    html += `</select>`
 
                     // show prizes and button for prizes modal
                     html += '<br /><button class="prizes">View/Edit Prizes</button>'
@@ -253,6 +266,13 @@
                         if (localStorage) {
                             localStorage.setItem('khk', JSON.stringify(khk_users))
                             localStorage.setItem('balance', total)
+                        }
+                    } else {
+                        Cookies.remove('khk')
+                        Cookies.remove('balance')
+                        if (localStorage) {
+                            localStorage.removeItem('khk')
+                            localStorage.removeItem('balance')
                         }
                     }
                 })
@@ -289,12 +309,14 @@
                     var yarmulka = $(this).find('.yarmulka').val()
                     var size = $(this).find('.sweater_size').val()
                     var recruited = $(this).find('.recruited_by').val()
+                    if (recruited) recruited = recruited.trim()
+                    var track = $(this).find('.track').val()
                     if (!yarmulka) yarmulka = 0
                     if (!recruited) recruited = 0
                     if (success) {
                         $.post('ajax/saveDetails.php', {
                                 admin: Cookies.get('admin'),
-                                data: {user_id, yarmulka, size, recruited}
+                                data: {user_id, yarmulka, size, recruited, track}
                             },
                             function (result) {
                                 var res = JSON.parse(result)
@@ -312,18 +334,22 @@
         })
     });
 
-    function setupChidonPrizes(user_id) {
+    function setupChidonPrizes(user_id, show = true) {
         // initialize user prize cart
-        user_prizes[user_id] = []
-        if (prizes_chosen[user_id]) {
-            for (pc of prizes_chosen[user_id]) {
-                addToPrizes(user_id, pc.prize_id, pc.price, (pc.personalization ? 1 : 0))
-                if (pc.he_name) addHeName(user_id, pc.prize_id, pc.he_name)
+        if (! user_prizes[user_id]) {
+            user_prizes[user_id] = []
+            if (prizes_chosen[user_id]) {
+                for (pc of prizes_chosen[user_id]) {
+                    addToPrizes(user_id, pc.prize_id, pc.price, (pc.personalization ? 1 : 0))
+                    if (pc.he_name) addHeName(user_id, pc.prize_id, pc.he_name)
+                }
             }
         }
+        console.log(prizes_chosen[user_id])
         // get prizes
         $.post('../registration/api/getPrizes.php', function(results) {
             var res = JSON.parse(results)
+            prizes = res
             var html = `<div class="user" id="${user_id}">`
             // var html = ''
             for (prize of res) {
@@ -425,7 +451,7 @@
             return false
         }
         // make sure that he name was filled out if its needed
-        for (var p of user_prizes[user_id]) {
+        for (p of user_prizes[user_id]) {
             if (parseInt(p.personalization) && (!p.he_name || p.he_name == '')) {
                 alert('You must enter a hebrew name for the prizes that need it.')
                 return false
@@ -438,7 +464,7 @@
         var MAX = 75
         var total = 0
         var found = false
-        for (var p of user_prizes[user_id]) {
+        for (p of user_prizes[user_id]) {
             total += parseInt(p.price)
             if (p.id == prize) {
                 found = true
@@ -451,16 +477,34 @@
             } else {
                 var prizeToAdd = { id: prize, price: price, personalization: personalization }
                 user_prizes[user_id].push(prizeToAdd)
+                // find prize info and add to prizes_chosen
+                for (p of prizes) {
+                    console.log(p)
+                    console.log(prize)
+                    if (parseInt(p.prize_id) == parseInt(prize)) {
+                        prizes_chosen[user_id].push(p)
+                        break
+                    }
+                }
                 return true
             }
         }
     }
 
     function removeFromPrizes(user_id, prize) {
-        for (var i in user_prizes[user_id]) {
+        for (i in user_prizes[user_id]) {
             var p = user_prizes[user_id][i]
             if (p.id == prize) {
                 user_prizes[user_id].splice(i, 1)
+                // remove from prizes_chosen
+                for (j in prizes_chosen[user_id]) {
+                    var pc = prizes_chosen[user_id][j]
+                    console.log(pc)
+                    if (parseInt(pc.prize_id) == parseInt(prize)) {
+                        prizes_chosen[user_id].splice(j, 1)
+                        break
+                    }
+                }
                 return true
             }
         }
@@ -468,7 +512,7 @@
     }
 
     function addHeName(user_id, prize_id, he_name) {
-        for (var p in user_prizes[user_id]) {
+        for (p in user_prizes[user_id]) {
             if (user_prizes[user_id][p].id == prize_id) {
                 var prize = user_prizes[user_id][p]
                 prize.he_name = he_name

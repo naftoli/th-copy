@@ -161,8 +161,8 @@ function parseResponse( $response ) {
                 $msg .= " Auth Code: " . $tresponse->getAuthCode() . "\n";
                 $msg .= " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
 
-                $trans_id = $tresponse->getTransId();
-                $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();
+//                $trans_id = $tresponse->getTransId();
+//                $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();
             } else {
                 $error_msg .= "Transaction Failed \n";
                 if ($tresponse->getErrors() != null) {

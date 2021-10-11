@@ -14,8 +14,9 @@ $user_id = $data['user_id'];
 $yarmulka = $data['yarmulka'];
 $sweater_size = $data['size'];
 $recruited_by = $data['recruited'];
+$track = $data['track'];
 
-$sql = "update th_chidon set size = '" . $sweater_size . "'";
+$sql = "update th_chidon set size = '" . $sweater_size . "', test_type = '" . $track . "'";
 if ($yarmulka > 0) {
     $sql .= ", yarmulka = " . $yarmulka;
 }
