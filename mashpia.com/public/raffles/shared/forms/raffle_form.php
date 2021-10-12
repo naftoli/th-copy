@@ -245,7 +245,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 </select>
                 <select class="grey" id="year" name="year">
                     <?php
-                        $year = intval( globalSettings::getCurrentYear() );
+                        $year = intval( GlobalSettings::getCurrentYear() );
                         $year++;
                         $countDown = ( $year - 5778 );
                         for( $i = 0; $i <= $countDown; $i++) { ?>

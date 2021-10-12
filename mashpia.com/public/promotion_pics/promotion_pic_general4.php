@@ -11,41 +11,38 @@ if (isset($_POST['submit'])) {
     // $r = new RankReport(true); // true param gets previous report
     $r = new RankReport();
     $r->overrideDates($start, $end);
-    $r->setRanks('byGenerals', 13);
+    $r->setRanks('byRankFirst', 13);
     $ranks = $r->getRanks();
     $logos = $r->getSchoolLogos();
-    $userInfo = $r->getUserInfo();
-    $userSchool = $r->getUserSchool();
 }
 //echo "<pre>"; print_r( $ranks ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf8" />
-        <link rel="stylesheet" type="text/css" href="promotion_general.css" />
-        <style>
-            html {
-                background-color: #d6dbde;
-            }
-            .name {
-                color: #000;
-            }
-        </style>
-    </head>
-    <body>
-        <?php
-        if (isset($_POST['submit'])) {
-            require "promotion_general.php";
-        } else {
-            ?>
-            <form action="" method="post">
-                From date: <input type="date" name="fromDate" /><br />
-                To date: <input type="date" name="toDate" />
-                <input type="submit" name="submit" value="submit" />
-            </form>
-            <?php
+<head>
+    <meta charset="utf8" />
+    <link rel="stylesheet" type="text/css" href="promotion_pics.css" />
+    <style>
+        <?php if (isset($_POST['submit'])) : ?>
+        html {
+            background-color: #0054a6;
         }
-        ?>
-    </body>
+        <?php endif; ?>
+    </style>
+</head>
+<body>
+<?php
+if (isset($_POST['submit'])) {
+    require "promotion_pic.php";
+} else {
+    ?>
+    <form action="" method="post">
+        From date: <input type="date" name="fromDate" /><br />
+        To date: <input type="date" name="toDate" />
+        <input type="submit" name="submit" value="submit" />
+    </form>
+    <?php
+}
+?>
+</body>
 </html>
