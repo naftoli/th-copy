@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
     <style>
         <?php if (isset($_POST['submit'])) : ?>
         html {
-            background-color: #0054a6;
+            background-color: #000000;
         }
         <?php endif; ?>
     </style>
