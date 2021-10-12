@@ -56,6 +56,9 @@ function generateTable($school_id, $name, $info) {
                 <th>Chose Prizes</th>
                 <th>Confirmed</th>
                 <th>Parent Email</th>
+                <?php if ($row['chidon_confirmed_5782']) : ?>
+                    <th></th>
+                <?php endif; ?>
             </tr>
             <?php
             foreach ($info[$school_id] as $row) {
@@ -67,11 +70,14 @@ function generateTable($school_id, $name, $info) {
                 else $prizes = 'no';
                 $grade = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
 
-                echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" .
-                    $row['last'] . "</td><td>" . $prizes . "</td><td>";
+                echo "<tr id=" . $row['user_id'] . "><td>" . $row['user_serial'] . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" .
+                    $row['last'] . "</td><td>" . $prizes . "</td><td class='confirm'>";
                 if ($row['chidon_confirmed_5782']) echo 'yes';
                 else echo 'no';
-                echo "</td><td><a href='mailto:" . $row['admin_email'] . "'>" . $row['admin_email'] . "</a></td></tr>";
+                echo "</td><td><a href='mailto:" . $row['admin_email'] . "'>" . $row['admin_email'] . "</a></td>";
+                if ($row['chidon_confirmed_5782']) echo "<td><button class='unconfirm'>Unconfirm Child</button></td>";
+//                echo "<td><button class='unconfirm'>Unconfirm Child</button></td>";
+                echo "</tr>";
             }
             ?>
         </table>
@@ -103,4 +109,19 @@ foreach ($schools as $school_id => $school_name) {
 }
 ?>
 </body>
+<script>
+    $(function () {
+        $(".unconfirm").click( function () {
+            let user = $(this).parent().parent().attr('id')
+            let that = this
+            $.post('unconfirm.php', { user }, function(success) {
+                if (!success) {
+                    alert("error unconfirming.")
+                } else {
+                    $(that).parent().parent().find('.confirm').text('no')
+                }
+            })
+        })
+    })
+</script>
 </html>
