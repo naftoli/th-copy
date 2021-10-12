@@ -146,7 +146,7 @@ if ($admin_user['auth'] != 'super') {
             }
         })
         $(".expert").keyup( function() {
-            const max = 15;
+            const max = 20;
             let val = $(this).val();
             if (parseInt(val) > max) {
                 alert('Please be sure that you are entering the number of questions scored correctly, and NOT the test mark. It should not be higher than ' + max);
