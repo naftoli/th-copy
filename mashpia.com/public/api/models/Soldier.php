@@ -442,7 +442,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
         // disable chidon for now
-//        if (!isset($_COOKIE['naftoli'])) $result['chidon'] = true;
+//      $result['chidon'] = true;
 
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk
@@ -479,9 +479,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['confirmation'] = true;
             }
         }
-
-        // turn off chidon reg
-        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
 
         return $result;
     }

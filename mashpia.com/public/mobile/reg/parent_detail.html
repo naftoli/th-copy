@@ -394,7 +394,7 @@
                                                     <div class="button-spacing">
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>
                                                         {{#if this.chidon_confirmed_5782}}
-<!--                                                            <div class="chidonRegInfo" style="color: #1b2b51; margin-top: 10px;">Chidon {{ this.chidon_year }} Registration Confirmed</div>-->
+                                                            <div class="chidonRegInfo" style="color: #1b2b51; margin-top: 10px;">Chidon {{ this.chidon_year }} Registration Confirmed</div>
                                                         {{else}}
                                                             <button class="btn btn-primary confirm_chidon">Confirm Chidon Registration</button>
                                                             <div style="font-style: italic; font-size: large; color: darkslateblue">Chidon registration & confirmation closes this Monday 11:59PM</div>
@@ -638,10 +638,7 @@
                     for (var c in children) {
                         var child = children[c];
 
-                        child.chidon_confirmed_5782 = true
-                        if (Cookies.get('naftoli')) {
-                            child.chidon_confirmed_5782 = parent.chidon_confirmed_5782
-                        }
+                        child.chidon_confirmed_5782 = parent.chidon_confirmed_5782
                         console.log('confirmed: ' + child.chidon_confirmed_5782)
 
                         if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
