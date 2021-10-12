@@ -119,6 +119,7 @@ foreach ($schools as $school_id => $school_name) {
                     alert("error unconfirming.")
                 } else {
                     $(that).parent().parent().find('.confirm').text('no')
+                    alert('child has been unconfirmed')
                 }
             })
         })
