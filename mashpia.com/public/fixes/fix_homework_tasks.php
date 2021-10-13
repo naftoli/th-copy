@@ -22,5 +22,4 @@ do {
     $end = $start + 6;
     $i++;
 } while (mysql_num_rows($result) > 0);
-
 echo "updated $i weeks.";
