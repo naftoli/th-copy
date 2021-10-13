@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['school'];
-require 'db.php';
+require 'header.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No Permission.";
