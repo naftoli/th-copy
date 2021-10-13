@@ -21,10 +21,9 @@ do {
             and dt.short_name = 'Homework'";
     echo $sql;
     $result = mysql_query($sql);
-    $num = mysql_num_rows($result);
     $start = $end + 1;
     $end = $start + 6;
     $i++;
-} while ($num > 0);
+} while ($end <= 2459852);
 
 echo "updated $i weeks.";
