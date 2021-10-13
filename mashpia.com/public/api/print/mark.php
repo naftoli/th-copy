@@ -9,7 +9,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.ph
 $objMissions = [];
 
 // * Get the list of parshos for the dropdown
-$year = GlobalSettings::getCurrentYear();
+$dates = GlobalSettings::getCurYearDates();
 // $today = unixtojd();
 // $parshos = Parsha::all([
 //     'conditions' => "year = $year or year = " . --$year . " AND end < $today",
@@ -19,11 +19,14 @@ $year = GlobalSettings::getCurrentYear();
 // get lowest parsha id
 $stmt = $MASHPIA_DB->prepare("
     SELECT id FROM parshos 
-    WHERE year = :year 
+    WHERE start >= :start 
+    AND end <= :end 
     ORDER BY id DESC 
-    LIMIT 12
 ");
-$res = $stmt->execute([':year' => $year - 1]);
+$res = $stmt->execute([
+    ':start' => $dates['start'],
+    ':end'  => $dates['end']
+]);
 if ( $res ) {
     $rows = $stmt->fetchAll();
     // get last row info
