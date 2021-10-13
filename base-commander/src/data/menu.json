@@ -92,11 +92,6 @@
               }
             ]
           },
-          { "label": "Confirmation",
-            "items": [
-              { "label":  "Confirmation Status", "legacy": true, "path": "/chidonOld/newReports/confirmation.php" }
-            ]
-          },
           { "label": "KHK Tests", "legacy": true, "path": "/chidonTests/khk_tests.php" },
           { "label": "Finals", "legacy": true, "path": "/chidonTests/finals.php" },
           { "label": "Custom Test Report", "legacy": true, "path": "/chidonTests/report.php" },
@@ -110,7 +105,7 @@
           {
             "label": "Confirmation Status",
             "legacy": true,
-            "path": "/chidonOld/chidon_drive/newReports/confirmation_status.php"
+            "path": "/chidonOld/chidon_drive/newReports/confirmation.php"
           }
         ]
       },
