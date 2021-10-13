@@ -1,6 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+
 $admin_auth = ['school'];
-require 'header.php';
+require '../header.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No Permission.";
@@ -17,9 +19,12 @@ do {
             where dtm.start_date = $start 
             and dtm.end_date = $start
             and dt.short_name = 'Homework'";
+    echo $sql;
     $result = mysql_query($sql);
+    $num = mysql_num_rows($result);
     $start = $end + 1;
     $end = $start + 6;
     $i++;
-} while (mysql_num_rows($result) > 0);
+} while ($num > 0);
+
 echo "updated $i weeks.";
