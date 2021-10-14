@@ -115,7 +115,7 @@ foreach ($schools as $school_id => $school_name) {
             let user = $(this).parent().parent().attr('id')
             let that = this
             $.post('unconfirm.php', { user }, function(success) {
-                if (!success) {
+                if (! parseInt(success)) {
                     alert("error unconfirming.")
                 } else {
                     $(that).parent().parent().find('.confirm').text('no')
