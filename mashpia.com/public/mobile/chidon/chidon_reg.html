@@ -303,7 +303,7 @@
             $('div.child').each(function () {
                 var user_id = $(this).attr('id')
                 var child = children[user_id]
-                if (!user_prizes[user_id] || !user_prizes[user_id].length) {
+                if ((!user_prizes[user_id] || !user_prizes[user_id].length) && (!prizes_chosen[user_id] || !prizes_chosen[user_id].length)) {
                     alert('You have not chosen any prizes for your child with serial number ' + child.user_serial + '. You must choose prizes!')
                     hasPrizes = false
                 }
