@@ -304,8 +304,17 @@
             if (conf) {
                 var details = []
                 var success = true
+                var hasPrizes = true
                 $('div.child').each(function () {
                     var user_id = $(this).attr('id')
+                    var child = children[user_id]
+                    if (!user_prizes[user_id] || !user_prizes[user_id].length) {
+                        alert('You have not chosen any prizes for your child with serial number ' + child.user_serial + '. You must choose prizes!')
+                        success = false
+                        hasPrizes = false
+                        return false
+                    }
+
                     var yarmulka = $(this).find('.yarmulka').val()
                     var size = $(this).find('.sweater_size').val()
                     var recruited = $(this).find('.recruited_by').val()
@@ -326,7 +335,9 @@
                             })
                     }
                 })
-                if (!success) alert('Error saving information.')
+                if (!success) {
+                    if (hasPrizes) alert('Error saving information.')
+                }
                 else {
                     location.href = 'confirmation.html'
                 }
