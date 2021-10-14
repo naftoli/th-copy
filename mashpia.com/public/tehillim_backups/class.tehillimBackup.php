@@ -35,7 +35,7 @@ class TehillimBackup {
                 // find out last shabbos mevorchim date
                 $this->getLastSM();
             }
-            
+
             // make sure there's no duplicates
             $this->fixDuplicates();
             
@@ -49,7 +49,7 @@ class TehillimBackup {
         }
     }
     
-    private function getLastSM($date) {
+    private function getLastSM() {
         $sm = calculateSM( $this->year );
         foreach ($sm as $month => $date) {
             if ($date > unixtojd()) {
