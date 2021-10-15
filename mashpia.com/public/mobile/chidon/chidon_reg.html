@@ -346,8 +346,9 @@
         })
     });
 
-    function setupChidonPrizes(user_id, show = true) {
+    function setupChidonPrizes(user_id) {
         // initialize user prize cart
+        console.log(user_prizes[user_id])
         if (! user_prizes[user_id]) {
             user_prizes[user_id] = []
             if (prizes_chosen[user_id]) {
@@ -374,7 +375,7 @@
                     <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
                 if (prizes_chosen[user_id]) {
                     for (pc of prizes_chosen[user_id]) {
-                        if (pc.prize_id == id) {
+                        if (parseInt(pc.prize_id) == parseInt(id)) {
                             html += 'checked '
                         }
                     }
