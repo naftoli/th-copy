@@ -45,7 +45,7 @@ $year = GlobalSettings::getChidonYear();
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
         $schools = $as->getSchools();
         //echo implode( ',', array_keys( $schools ) ); exit;
-        echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
+//        echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
         //if ($admin_user['auth'] == 'super') $schools[82] = "Avrohom Academy";
         
         $ids = [];
