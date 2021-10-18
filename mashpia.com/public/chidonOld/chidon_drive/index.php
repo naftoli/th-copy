@@ -17,9 +17,6 @@ if ( is_numeric( $url_end ) ) {
         case '/site/setup.html':
             header("Location: https://" . $host . $url);
             break;
-        case '/chidonOld/chidon_drive/newReports/confirmation.php':
-            header("Location: https://" . $host . $url);
-            break;
         default:
             header("Location: https://" . $host . "/site");
             break;
