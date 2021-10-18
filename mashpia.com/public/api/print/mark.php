@@ -21,7 +21,7 @@ $stmt = $MASHPIA_DB->prepare("
     SELECT id FROM parshos 
     WHERE start >= :start 
     AND end <= :end 
-    ORDER BY id DESC 
+    ORDER BY end DESC 
 ");
 $res = $stmt->execute([
     ':start' => $dates['start'],
