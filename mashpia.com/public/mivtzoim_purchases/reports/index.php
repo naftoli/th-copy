@@ -30,12 +30,15 @@ if ( isset( $_POST['submit'] ) ) {
     $rows = $stmt->fetchAll();
 
     $total = 0;
+    $totals = [];
     if (!empty($rows)) {
         foreach ($rows as $row) {
             if (isset($purchases[$row['user_id']][$row['item_id']])) $purchases[$row['user_id']][$row['item_id']] += $row['qty'];
             else $purchases[$row['user_id']][$row['item_id']] = $row['qty'];
             $user_ids[] = $row['user_id'];
             $total += $row['qty'];
+            if (isset($totals[$row['item_id']])) $totals[$row['item_id']] += $row['qty'];
+            else $totals[$row['item_id']] = $row['qty'];
         }
 
         $info = [];
@@ -112,6 +115,13 @@ foreach ( $rows as $row ) {
 
         <?php if ( $admin_user['auth'] == 'super' ) : ?>
         <p class="no-print">Grand Total: <?= $total ?> purchases</p>
+        <?php
+        foreach ($types as $type => $details) {
+            foreach ($details as $item => $item_id) {
+                if (isset($totals[$item_id])) echo "<p class='no-print'>Total " . $item . " purchases: " . $totals[$item_id] . "</p>";
+            }
+        }
+        ?>
         <?php endif; ?>
 
         <?php if (empty($info)) : ?>
