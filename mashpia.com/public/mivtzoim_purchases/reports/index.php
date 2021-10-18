@@ -8,7 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getChidonYear();
 
 if ( isset( $_POST['submit'] ) ) {
     $items = $_POST['type'];
@@ -18,9 +18,9 @@ if ( isset( $_POST['submit'] ) ) {
         SELECT 
             *
         FROM
-            mivtzoim_purchases.purchase_details
+            mashpia_purchases.purchase_details
                 JOIN
-            mivtzoim_purchases.purchases USING (purchase_id)
+            mashpia_purchases.purchases USING (purchase_id)
         WHERE
             year = :year AND item_id IN ($items)
     ");
@@ -58,7 +58,7 @@ if ( isset( $_POST['submit'] ) ) {
 }
 $types = [];
 $stmt = $MASHPIA_DB->query("
-    SELECT * FROM mivtzoim_purchases.mivtzoim_items 
+    SELECT * FROM mashpia_purchases.mivtzoim_items 
 ");
 $rows = $stmt->fetchAll();
 foreach ( $rows as $row ) {
