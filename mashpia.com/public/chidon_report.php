@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school'); 
 require('header.php');
 
@@ -37,13 +39,13 @@ $year = GlobalSettings::getChidonYear();
         <? include('admin_header.php'); ?>
         <h1>Chidon Registered Report</h1>
         <?php if ($admin_user['auth'] != 'super' || ($admin_user['auth'] == 'super' && isset($_POST['submit']))) : ?>
-        
-        <?php 
-        require_once 'class.adminSchools.php';       
+
+        <?php
+        require_once 'class.adminSchools.php';
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
         $schools = $as->getSchools();
         //echo implode( ',', array_keys( $schools ) ); exit;
-        //echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
+        echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
         //if ($admin_user['auth'] == 'super') $schools[82] = "Avrohom Academy";
         
         $ids = [];
@@ -67,12 +69,13 @@ $year = GlobalSettings::getChidonYear();
                 }
                 else if (isset($_POST['blank'])) {
                     $sql .= " and test1a > 0";
-                } 
+                }
                 if (isset($_POST['deleted'])) {
                     $sql .= " and deleted = 0";
                 }
             }
             $sql .= " order by class_grade, class_sub, u.last, u.first";
+            if ($id == 3) echo $sql; exit;
             $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
             while ($row = mysql_fetch_assoc($result)) {
                 $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
@@ -146,7 +149,7 @@ $year = GlobalSettings::getChidonYear();
                                                 foreach ($more as $he => $other) {
                                                     foreach ($other as $date => $more) {
                                                         foreach ($more as $chidonType => $other) {
-                                                            echo "<tr><td>" . $id . "</td><td>" . $date . "</td><td>" . 
+                                                            echo "<tr><td>" . $id . "</td><td>" . $date . "</td><td>" .
                                                                 $phone3 . "</td><td>" . $phone1 . "</td><td>" .
                                                                 $phone2 . "</td><td>" . $email . "</td><td>" . $grade . "</td><td>" .
                                                                 $name . "</td><td>" . $he . "</td><td>";
@@ -252,7 +255,7 @@ $year = GlobalSettings::getChidonYear();
                 $result = mysql_query( $sql );
                 $row = mysql_fetch_assoc( $result );
                 $notSignedUp[$grade]['Boys']['reg'] = $row['total'];
-                            
+
                 // not yet registered
                 $sql = "SELECT count(*) as total FROM users u 
                         join classes c on c.class_id = u.class_id 
