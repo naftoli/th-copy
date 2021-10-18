@@ -75,7 +75,6 @@ $year = GlobalSettings::getChidonYear();
                 }
             }
             $sql .= " order by class_grade, class_sub, u.last, u.first";
-            if ($id == 3) echo $sql; exit;
             $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
             while ($row = mysql_fetch_assoc($result)) {
                 $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
