@@ -165,7 +165,7 @@ if ( !empty( $users ) ) {
          	}
          }
 
-        // mivtza chanuka 5781
+        // mivtza chanuka
          $children[$row['user_id']]['menorah'] = 0;
          $children[$row['user_id']]['brochure'] = 0;
          $chanukaSchools = MivtzoimSetting::getEnabledSchools( $chidon_year, [2, 3] );
