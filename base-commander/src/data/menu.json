@@ -105,7 +105,7 @@
           {
             "label": "Confirmation Status",
             "legacy": true,
-            "path": "/chidonOld/chidon_drive/newReports/confirmation.php"
+            "path": "/chidonOld/newReports/confirmation.php"
           }
         ]
       },
