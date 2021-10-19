@@ -131,7 +131,7 @@ function checkWeekly( $user_id ) {
             $total = mysql_fetch_assoc($result)['total'];
         }
     }
-	
+
 	return formatRaffleInfo( $total, $required, $raffle['name'], 'weekly' );
 }
 
