@@ -126,16 +126,9 @@ class user_track
 			. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
 			. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
 		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
-        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud Track%' ";
+        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-//        if ($this->subject_id == 21 && $chidonLimmud) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
-		// echo $sql . "<br />";
-		// echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
-		// if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
-//		 if ($this->subject_id == 21) {
-//		     echo $sql;
-//		     exit;
-//         }
+//        if ($this->subject_id == 21 && !$chidonLimmud) echo $sql;
 
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);

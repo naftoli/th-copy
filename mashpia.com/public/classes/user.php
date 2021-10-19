@@ -468,7 +468,7 @@ class user {
 				$user_track->get_subject_info();
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
 				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
-                array_push($this->user_tracks, $user_track);
+				array_push($this->user_tracks, $user_track);
 
                 // for sefer hamitzvos, get chidon limmud track misssions
                 // find out level / track for chidon limmud track
@@ -484,7 +484,8 @@ class user {
                             'genius' => 4
                         ];
                         $row['track_id'] = $tracks[$rowLimmud['test_type']];
-                        $row['level'] = intval($rowLimmud['class_grade']);
+                        $row['level'] = intval($rowLimmud['class_grade']) + 6;
+                        echo "Track: " . $row['track_id'] . ", Level: " . $row['level'];
                         $user_track = new user_track($row);
                         $user_track->get_subject_info();
                         $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
