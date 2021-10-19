@@ -17,24 +17,27 @@ $dates = GlobalSettings::getCurYearDates();
 // ]);
 // set parshos to pull from before summer
 // get lowest parsha id
-$stmt = $MASHPIA_DB->prepare("
-    SELECT id FROM parshos 
-    WHERE start >= :start 
-    AND end <= :end 
-    ORDER BY end DESC 
-");
-$res = $stmt->execute([
-    ':start' => $dates['start'],
-    ':end'  => $dates['end']
-]);
-if ( $res ) {
-    $rows = $stmt->fetchAll();
-    // get last row info
-    $id = $rows[count($rows) - 1]['id'];
-}
+//$stmt = $MASHPIA_DB->prepare("
+//    SELECT id FROM parshos
+//    WHERE start >= :start
+//    AND end <= :end
+//    ORDER BY end DESC
+//");
+//$res = $stmt->execute([
+//    ':start' => $dates['start'],
+//    ':end'  => $dates['end']
+//]);
+//if ( $res ) {
+//    $rows = $stmt->fetchAll();
+//    // get last row info
+//    $id = $rows[count($rows) - 1]['id'];
+//}
 
 $parshos = Parsha::all([
-    'conditions' => 'id >= ' . $id,
+    'conditions' => [
+        'start >= ' . $dates['start'],
+        'end <= ' . $dates['end']
+    ]
 ]);
 
 if ( !isset( $_POST['user_id'] ) )
