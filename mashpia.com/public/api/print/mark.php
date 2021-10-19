@@ -33,12 +33,21 @@ $dates = GlobalSettings::getCurYearDates();
 //    $id = $rows[count($rows) - 1]['id'];
 //}
 
-$parshos = Parsha::all([
-    'conditions' => [
-        'start >= ' . $dates['start'],
-        'end <= ' . $dates['end']
-    ]
-]);
+//$parshos = Parsha::all([
+//    'order' => $dates['start'],
+//    'conditions' => [
+//        'start >= ' . $dates['start'],
+//        'end <= ' . $dates['end'],
+//    ]
+//]);
+//echo "<pre>"; print_r($parshos); echo "</pre>"; exit;
+
+$parshos = [];
+$sql = "select * from parshos where start >= " . $dates['start'] . " and end <= " . $dates['end'] . " order by start";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_object($result)) {
+    $parshos[] = $row;
+}
 
 if ( !isset( $_POST['user_id'] ) )
     $_POST['user_id'] = 0;
