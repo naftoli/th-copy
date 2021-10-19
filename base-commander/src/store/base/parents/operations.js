@@ -22,7 +22,8 @@ export const createParent = ( data ) => dispatch => {
 export const removeChild = ( admin_id, user_serial ) => dispatch => {
   return API.post(`/core/parents?action=removeChild`, { admin_id, user_serial } )
     .then( () => {
-      dispatch( actions.removeChild( admin_id, user_serial ) )
+        window.location.reload()
+      // dispatch( actions.removeChild( admin_id, user_serial ) )
     });
 }
 
