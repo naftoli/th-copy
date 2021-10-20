@@ -384,8 +384,8 @@ if (isset($_POST['submit'])) {
 //                    $arrEnd[] = $startTemp;
 //                    $startTemp++;
 //                }
-                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
-                echo "<pre>"; print_r( $arrEnd ); echo "</pre>";
+//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+//                echo "<pre>"; print_r( $arrEnd ); echo "</pre>";
 
 //                echo "Start Level: " . $firstLevel . "<br />";
 //                echo "End Level: " . $lastLevel . "<br />";
@@ -462,10 +462,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 //            exit;
-            echo "<pre>";
-            print_r($missions);
-            echo "</pre>";
-            exit;
+//            echo "<pre>";
+//            print_r($missions);
+//            echo "</pre>";
+//            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
