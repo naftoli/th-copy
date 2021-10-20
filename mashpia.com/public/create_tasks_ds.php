@@ -381,7 +381,8 @@ if (isset($_POST['submit'])) {
 //                    $arrEnd[] = $startTemp;
 //                    $startTemp++;
 //                }
-                echo "<pre>"; print_r( $arrStart ); echo "</pre>"; exit;
+                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+                echo "<pre>"; print_r( $arrEnd ); echo "</pre>";
 
 //                echo "Start Level: " . $firstLevel . "<br />";
 //                echo "End Level: " . $lastLevel . "<br />";
