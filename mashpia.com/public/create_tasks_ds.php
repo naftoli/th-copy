@@ -192,7 +192,6 @@ if (isset($_POST['submit'])) {
                     $firstRow = false;
                     continue;
                 }
-                echo "$i<br />";
 
                 foreach( $cellIterator as $cell ) {
                     $val = trim($cell->getValue());
@@ -205,7 +204,7 @@ if (isset($_POST['submit'])) {
                         case 1:
                             // skip row if it's empty
                             if (empty($val)) {
-                                continue 2;
+                                break 2;
                             }
                             ${$fieldNames[$i]} = $val;
                             break;
