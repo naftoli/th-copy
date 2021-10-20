@@ -143,6 +143,8 @@ if (isset($_POST['submit'])) {
     $arrEnd = array();
     $missionName = "";
 
+    $empty = 0; // flag to know when to stop reading spreadsheet
+
     // load the file and save it to the database
     if (file_exists($_FILES['tasks']['tmp_name'])) {
         if (move_uploaded_file($_FILES['tasks']['tmp_name'], $file)) {
@@ -183,8 +185,6 @@ if (isset($_POST['submit'])) {
                 'labelID'
             );
 
-            $j = 1;
-
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
@@ -194,8 +194,6 @@ if (isset($_POST['submit'])) {
                     $firstRow = false;
                     continue;
                 }
-
-                echo $j++ . "<br />";
 
                 foreach( $cellIterator as $cell ) {
                     $val = trim($cell->getValue());
@@ -208,7 +206,8 @@ if (isset($_POST['submit'])) {
                         case 1:
                             // skip row if it's empty
                             if (empty($val)) {
-                                break 3;
+                                if (++$empty > 1) break 3; // break out of reading spreadsheet
+                                continue 2;
                             }
                             ${$fieldNames[$i]} = $val;
                             break;
