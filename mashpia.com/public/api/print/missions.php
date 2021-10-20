@@ -117,12 +117,15 @@ if ( $dates == 'english' ) $dates_id = 2;
             if ( $_POST['pages'] )
                 $obj->setMinPages( $_POST['pages'] );
 
+            $class = 'userMission';
+            if ($obj->lang_id == 2) $class .= ' he';
+            if (in_array($obj->school_type_id , [4,5])) $class .= ' ds';
+
             $id = $obj->user_id;
-            if ($obj->lang_id == 1) {
-                echo "<div class='userMission' id='user-" . $id . "' >";
-            } else if ($obj->lang_id == 2) {
-                echo "<div class='userMission he' id='user-" . $id . "' dir='rtl' >";
-            }
+            echo "<div class='$class' id='user-$id'";
+            if ($obj->lang_id == 2) echo " dir='rtl' ";
+            echo ">";
+
             $debug = false;
             if (isset($_GET['debug'])) $debug = true;
             $pages += $obj->printMission( $debug );

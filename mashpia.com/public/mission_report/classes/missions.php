@@ -5,6 +5,7 @@ class Missions {
 	protected $user;
 	protected $start;
 	protected $end;
+	protected $school_type_id;
 	protected $missions;
 	
 	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false ) {
@@ -46,6 +47,7 @@ class Missions {
 		
 		$query = mysql_query( $sql );
 		while ( $row = mysql_fetch_assoc($query) ) {
+		    if (! $this->school_type_id) $this->school_type_id = $row['school_type_id'];
 		    $user = new user( $row );
 		    $user->get_rank();
 			$user->get_school_class();

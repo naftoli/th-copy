@@ -17,9 +17,12 @@ abstract class MissionDisplay {
 	protected $parsha;
 	protected $start;
 	protected $end;
-	public $user_id;
-	public $lang_id;
+
 	private $daySchoolSubjects;
+
+    public $user_id;
+    public $lang_id;
+	public $school_type_id;
 	
 	public function __construct( $mission ) {
 		global $MASHPIA_DB;
@@ -33,6 +36,7 @@ abstract class MissionDisplay {
 		
 		$this->start = $mission->user_tracks[0]->start_date;
 		$this->end = $mission->user_tracks[0]->end_date;
+		$this->school_type_id = $mission->school_type_id;
 		
 		$this->heDates = array();
 		$this->heDatesDisp = array();

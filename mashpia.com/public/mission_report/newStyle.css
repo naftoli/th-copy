@@ -82,7 +82,7 @@
 .task, .mediumPicTask {
 	font-family: "Myriad Pro";
 	font-size: 9px;
-    line-height: 1;
+    line-height: 1.1;
 }
 .he .short, .he .task, .he .mediumPicTask {
 	font-family: "Verdana";
@@ -450,6 +450,10 @@ body {
     page-break-before: avoid;
     padding-top: 0;
     position: relative;
+}
+
+.ds .bottomFooter {
+	bottom: 0px;
 }
 
 .footerInfo { 
