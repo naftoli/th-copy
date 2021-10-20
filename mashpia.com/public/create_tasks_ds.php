@@ -183,6 +183,8 @@ if (isset($_POST['submit'])) {
                 'labelID'
             );
 
+            $j = 1;
+
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
@@ -192,6 +194,8 @@ if (isset($_POST['submit'])) {
                     $firstRow = false;
                     continue;
                 }
+
+                echo $j++ . "<br />";
 
                 foreach( $cellIterator as $cell ) {
                     $val = trim($cell->getValue());
