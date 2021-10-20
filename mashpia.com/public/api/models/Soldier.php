@@ -441,19 +441,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
-        // disable chidon for now
-//      $result['chidon'] = true;
+        // disable chidon
+        $result['chidon'] = true;
 
         // check if child is eligible for khk if needs to register for chidon
         $result['khk'] = true; // means not eligible for khk
-        if (!$result['chidon']) {
-            $stmt = $MASHPIA_DB->prepare("
-                SELECT khk_eligible FROM users WHERE user_id = :user
-            ");
-            $stmt->execute([':user' => $this->user_id]);
-            $row = $stmt->fetch();
-            if (intval($row['khk_eligible'])) $result['khk'] = false;
-        }
+//        if (!$result['chidon']) {
+//            $stmt = $MASHPIA_DB->prepare("
+//                SELECT khk_eligible FROM users WHERE user_id = :user
+//            ");
+//            $stmt->execute([':user' => $this->user_id]);
+//            $row = $stmt->fetch();
+//            if (intval($row['khk_eligible'])) $result['khk'] = false;
+//        }
 
         // check if child is new to chidon
         $result['new_to_chidon'] = 1;
