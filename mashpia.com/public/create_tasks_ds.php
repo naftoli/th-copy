@@ -42,11 +42,11 @@ function createStartArray( $val, $subject_id ) {
         //$year = $missionYear;
         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
         $arrStart[] = $jd;
-        if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
+//        if ( in_array( $subject_id, [27,41] ) ) { // end date is 6 days later (Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
-        } else { // end date is same as start date
-            $arrEnd[] = $jd;
-        }
+//        } else { // end date is same as start date
+//            $arrEnd[] = $jd;
+//        }
     }
 }
 ?>
@@ -192,6 +192,7 @@ if (isset($_POST['submit'])) {
                     $firstRow = false;
                     continue;
                 }
+                echo "$i<br />";
 
                 foreach( $cellIterator as $cell ) {
                     $val = trim($cell->getValue());
