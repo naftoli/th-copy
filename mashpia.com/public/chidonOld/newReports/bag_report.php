@@ -59,6 +59,9 @@ foreach ($schools as $id => $school_name) {
     $grandTotals['blue'] = 0;
     $grandTotals['pink'] = 0;
     foreach ($info as $school_id => $grades) {
+        $schoolTotal['blue'] = 0;
+        $schoolTotal['pink'] = 0;
+        echo "<h3>" . $schools[$school_id] . "</h3>";
         foreach ($grades as $grade => $rows) {
             $totals['blue'] = 0;
             $totals['pink'] = 0;
@@ -78,11 +81,13 @@ foreach ($schools as $id => $school_name) {
                     if ($row['gender'] == 'M') {
                         echo "Blue";
                         $totals['blue']++;
+                        $schoolTotal['blue']++;
                         $grandTotals['blue']++;
                     }
                     else if ($row['gender'] == 'F') {
                         echo "Pink";
                         $totals['pink']++;
+                        $schoolTotal['pink']++;
                         $grandTotals['pink']++;
                     }
                     echo "</td></tr>";
@@ -90,8 +95,12 @@ foreach ($schools as $id => $school_name) {
             echo "</table><br />";
             echo "Total Blue Bags: " . $totals['blue'];
             echo "<br />Total Pink Bags: " . $totals['pink'];
-            echo "<p></p><div style='page-break-after: always'></div>";
+            echo "<br /><br />";
         }
+        echo "<br /><hr /><br />";
+        echo "Total Blue Bags for school: " . $schoolTotal['blue'];
+        echo "<br />Total Pink Bags for school: " . $schoolTotal['pink'];
+        echo "<p></p><div style='page-break-after: always'></div>";
     }
     if ($admin_user['auth'] == 'super') {
         echo "Grand Total Blue Bags: " . $grandTotals['blue'];
