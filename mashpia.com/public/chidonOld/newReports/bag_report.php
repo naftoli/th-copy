@@ -34,7 +34,7 @@ foreach ($schools as $id => $school_name) {
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Study Guide / Yahadus Book Shipping Report</title>
+    <title>Drawstring Bag Shipping Report</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
