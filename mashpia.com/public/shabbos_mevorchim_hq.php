@@ -121,7 +121,7 @@ if (isset($_POST['submit']) || isset($_GET['date'])) {
         <?
         $sm->setASR( $date );
 		$schools = $sm->getSchools();
-		foreach ($schools as $sid => $school) $sm->setStudentResults($sid);
+		foreach ($schools as $sid => $school) $sm->setStudentResults($sid, $date);
         $sm->generateHQReport();
         ?>
         </div>
