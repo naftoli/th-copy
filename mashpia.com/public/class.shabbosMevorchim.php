@@ -545,10 +545,10 @@ class ShabbosMevorchim {
 			//} else {
 				$stmt1->execute( array( $id, $date, $date, $task ) );
 				$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-				$this->armySchoolsResults[$key][$id] = $row1['total'];
+				$this->armySchoolsResults[$key][$id] = $row1['total'] > 0 ? $row1['total'] : 0;
 			//}
         }
-		
+
 		$sql2 = "select count(*) as total from users u 
 				join user_tracks ut using (user_id) 
 				where school_id = " . $id . "  
@@ -629,9 +629,13 @@ class ShabbosMevorchim {
             if ($rowBackup['total'] > 0) {
                 $this->armySchoolsDoneResults[$key][$id] = $rowBackup['total'];
             } else {
-                $stmt2->execute( array( $id, $date, $date, $task ) );
-                $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
-                $this->armySchoolsDoneResults[$key][$id] = $row2['total'];
+                if ( isset($this->armySchoolsResults[$key][$id]) && $this->armySchoolsResults[$key][$id] > 0 ) {
+                    $stmt2->execute(array($id, $date, $date, $task));
+                    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                    $this->armySchoolsDoneResults[$key][$id] = $row2['total'];
+                } else {
+                    $this->armySchoolsDoneResults[$key][$id] = 0;
+                }
             }
         }
     }
@@ -1118,13 +1122,18 @@ class ShabbosMevorchim {
                             $total = $rowBackup['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
-                            $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
-                            // if ($sid == 176 && $user['user_id'] == 17267) {
-                            //     echo "<pre>"; print_r($stmt2); echo "</pre>";
-                            // }
-                            $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
-                            $total = $row2['total'];
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                            if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
+                                    $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
+                                $stmt2->execute(array($user['user_id'], $date, $date, $task));
+                                // if ($sid == 176 && $user['user_id'] == 17267) {
+                                //     echo "<pre>"; print_r($stmt2); echo "</pre>";
+                                // }
+                                $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                $total = $row2['total'];
+                                $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                            } else {
+                                $this->studentDoneResults[$date][$class][$user['user_id']][$key] = 0;
+                            }
                         }
 						
 						if ($sid) {
