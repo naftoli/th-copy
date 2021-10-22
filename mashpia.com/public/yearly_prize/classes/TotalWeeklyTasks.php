@@ -4,6 +4,7 @@
 
 // are all these needed?
 // use dirname(__FILE__) so that the import is relative to this file and not the one that is importing it
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 class TotalWeeklyTasks {
     // public variables
@@ -26,7 +27,7 @@ class TotalWeeklyTasks {
     public function __construct($user_id, $end_date) {
         // store this to get the user info later
         $this->user_id = $user_id;
-        $this->start_date = 2459097; // September 4, 2020
+        $this->start_date = GlobalSettings::getCurYearDates()['start'];
         $this->end_date = $end_date;
     }
     
