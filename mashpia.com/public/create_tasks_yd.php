@@ -302,7 +302,7 @@ if (isset($_POST['submit'])) {
                         $pic = $pic_girls;
                     }
                     for ($level = $firstLevel; $level <= $lastLevel; $level++) {
-                        echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
+//                        echo $task . "<br />" . $start . ' - ' . $end . ' T: ' . $type . ' L: ' . $level . "<br />";
                         $missions[$action][$mission_number][$type][$level][$missionName][$missionValue][$start][$end][$lang][] = array(
                             'task'          =>  $task, 
                             'catOrd'        =>	$catOrd, 
@@ -322,20 +322,20 @@ if (isset($_POST['submit'])) {
                             'mission_marking' => $mission_marking,
                             'grid_marking'  =>  $grid_marking
                         );
-                        /*
+
                         echo "Mission - " . $missionName . "<br />";
                         echo "Start - " . $start . "<br />";
                         echo "End - " . $end . "<br />";
                         echo "Type - " . $type . "<br />";
                         echo "Level - " . $level . "<br /><br />";
-                        */                      
+
                     }
                 }
                 $missionName = "";
                 $rows++;
                 if ($rows > 1000) break;
             }
-            echo "<pre>"; print_r($missions); echo "</pre>"; exit;
+//            echo "<pre>"; print_r($missions); echo "</pre>"; exit;
             exit;
 
             mysql_query("SET AUTOCOMMIT=0");
