@@ -1,7 +1,9 @@
 <?
 require 'db.php';
+require 'class.globalSettings.php';
+$jYear = GlobalSettings::getCurrentYear();
 
-//print_r( $_GET );
+//echo "<pre>"; print_r( $_POST ); echo "</pre>";
 $parshaDates = array();
 if ( isset( $_GET['school'] ) ) {
     $school_id = $_GET['school'];
@@ -20,22 +22,17 @@ if ( isset( $_GET['school'] ) ) {
     //get dates
     $dates = array();
     $numDates = 0;
-    $sqlReport = "select start_date, end_date from reports where end_date in (" . implode( ',', $parshas ) . ")";
+    $sqlReport = "select start, end, name from parshos where end in (" . implode( ',', $parshas ) . ")";
     $resultReport = mysql_query( $sqlReport );
     while ( $rowReport = mysql_fetch_assoc( $resultReport ) ) {
-        $dates['start'][] = $rowReport['start_date'];
-        $dates['end'][] = $rowReport['end_date'];
-		$sql2 = "select name from parshos where start = " . $rowReport['start_date'];
-		$result2 = mysql_query( $sql2 );
-		$row2 = mysql_fetch_assoc( $result2 );
-		$parshaDates[$rowReport['start_date']] = $row2['name'];
+        $dates['start'][] = $rowReport['start'];
+        $dates['end'][] = $rowReport['end'];
+        $parshaDates[$rowReport['start']] = $rowReport['name'];
         $numDates++;
     }
 }
 
-$jYear = 5776;
-$names = array();
-
+$names = [];
 if ( isset( $school_id ) ) {
     $sql = "select u.user_id, u.first, u.last, u.first_he, u.last_he, u.he_name, c.class_grade, c.class_sub, s.school_name, u.dob  
             from users u 
@@ -74,7 +71,7 @@ if ( isset( $school_id ) ) {
 	 $sql .= "order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
      //echo $sql;
 }
-//echo $sql; 
+//echo $sql; exit;
 
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
