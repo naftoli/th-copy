@@ -224,6 +224,8 @@ if (isset($_POST['submit'])) {
                         // levels
                         case 5:
                         case 6:
+                            ${$fieldNames[$i]} = $val;
+                            echo $val . "<br />";
                             if ($val == '') {
                                 echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
                             }
