@@ -331,6 +331,7 @@ if (isset($_POST['submit'])) {
                 }
                 $missionName = "";
             }
+            echo "<pre>"; print_r($missions); echo "</pre>"; exit;
             //exit;
 
             mysql_query("SET AUTOCOMMIT=0");
