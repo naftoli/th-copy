@@ -131,6 +131,8 @@ if (isset($_POST['submit'])) {
 	} else if ($lang == 2) {
 		$file = "SystemTasks/Yi" . $subjects[$subject_id] . $missionYear . ".xlsx";
 	}
+
+	$emptyRows = 0; // flag to determine when to break out of loops
     
     // load the file and save it to the database
     if (file_exists($_FILES['tasks']['tmp_name'])) {
@@ -198,7 +200,10 @@ if (isset($_POST['submit'])) {
                         case 1:
                             // skip row if it's empty
                             if (empty($val)) {
-                                continue 2;
+                                if (++$emptyRows > 1) break 2;
+                                else continue 2;
+                            } else {
+                                $emptyRows = 0;
                             }
                             ${$fieldNames[$i]} = $val;
                             break;
