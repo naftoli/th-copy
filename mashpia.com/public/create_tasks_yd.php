@@ -133,6 +133,7 @@ if (isset($_POST['submit'])) {
 	}
 
 	$emptyRows = 0; // flag to determine when to break out of loops
+    $rows = 0;
     
     // load the file and save it to the database
     if (file_exists($_FILES['tasks']['tmp_name'])) {
@@ -225,7 +226,6 @@ if (isset($_POST['submit'])) {
                         case 5:
                         case 6:
                             ${$fieldNames[$i]} = $val;
-                            echo $val . "<br />";
                             if ($val == '') {
                                 echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
                             }
@@ -293,8 +293,6 @@ if (isset($_POST['submit'])) {
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
 
-                echo "Start Level: " . $firstLevel . ", Last Level: " . $lastLevel . "<br />";
-                
                 $start = $startDate;
                 $end = $endDate;
                 foreach ($types as $type) {
@@ -334,6 +332,8 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 $missionName = "";
+                $rows++;
+                if ($rows > 1000) break;
             }
             echo "<pre>"; print_r($missions); echo "</pre>"; exit;
             exit;
