@@ -221,6 +221,13 @@ if (isset($_POST['submit'])) {
                         case 4:
                             $arrEnd = explode(',', $val);
                             break;
+                        // levels
+                        case 5:
+                        case 6:
+                            if (empty($val)) {
+                                echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
+                                break;
+                            }
                         // school types
                         case 7:
                             $types = explode(',', $val);
