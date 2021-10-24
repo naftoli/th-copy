@@ -226,8 +226,8 @@ if (isset($_POST['submit'])) {
                         case 6:
                             if ($val == '') {
                                 echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
-                                break;
                             }
+                            break;
                         // school types
                         case 7:
                             $types = explode(',', $val);
@@ -332,7 +332,7 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             echo "<pre>"; print_r($missions); echo "</pre>"; exit;
-            //exit;
+            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
