@@ -290,6 +290,8 @@ if (isset($_POST['submit'])) {
                     $year = in_array($arrEnd[0], array(12,13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
+
+                echo "Start Level: " . $firstLevel . ", Last Level: " . $lastLevel . "<br />";
                 
                 $start = $startDate;
                 $end = $endDate;
