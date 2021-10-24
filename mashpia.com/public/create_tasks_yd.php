@@ -224,7 +224,7 @@ if (isset($_POST['submit'])) {
                         // levels
                         case 5:
                         case 6:
-                            if (empty($val)) {
+                            if ($val == '') {
                                 echo "Error in spreadsheet on line " . $r . " (" . $val . ")<br />";
                                 break;
                             }
