@@ -6,14 +6,14 @@ require_once 'class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+require_once 'class.globalSettings.php';
+$startEnd = GlobalSettings::getCurYearDates();
+
 //get dates
-$dates = array();
-$sql = "SELECT * FROM reports r 
-		join parshos p on (r.start_date = p.start) 
-        WHERE r.report_type='mission_cover_sheet' 
-        AND r.visibility != 'none' 
-        and p.year = 5776      
-        ORDER BY p.start";   
+$dates = [];
+$sql = "SELECT * FROM parshos 
+        WHERE start >= " . $startEnd['start'] . "
+        AND end <= " . $startEnd['end'];
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;
@@ -42,7 +42,7 @@ $today = unixtojd();
                 width: 200px;
             }
         </style>
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script type="text/javascript">
             $( function() {
                 $("#checkSchools").click( function() {
@@ -133,8 +133,8 @@ $today = unixtojd();
                                     <? 
                                     foreach ( $dates as $date ) { 
                                         echo "<input type='checkbox' name='parshas[]' value='" . 
-                                            $date['end_date'] . "' class='parsha'>" . 
-                                            $date['report_name'] . "<br />";
+                                            $date['end'] . "' class='parsha'>" .
+                                            $date['name'] . "<br />";
                                     }
                                     ?>
                                 </div>
