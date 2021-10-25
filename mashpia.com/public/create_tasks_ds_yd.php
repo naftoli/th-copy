@@ -176,7 +176,7 @@ function getStartEnd($arr) {
                                 // skip row if it's empty
                                 if (empty($val)) {
                                     if (++$empty > 1) break 3; // break out of reading spreadsheet
-                                    continue 2;
+                                    continue 3;
                                 }
                                 ${$fieldNames[$i]} = $val;
                                 break;
