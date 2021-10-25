@@ -118,7 +118,7 @@ function delete_daily_task_mark($parameters) {
 	
 	$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id . " AND mark_date=" . $mark_date;	
 	$query = mysql_query($sql);
-	
+
 	// check if mission needs to be deleted
 	$sql = "select count(*) as total from date_tasks_marks where date_task_id = " . $date_task_id . " and user_id = " . $user_id;
 	$result = mysql_query($sql);
@@ -138,13 +138,13 @@ function delete_daily_task_mark($parameters) {
         $daySchool = true;
     }
 
-    if ($daySchool) {
+    if ($daySchool && $mandatory) {
         $totalMissions = $row['total']; // total times the task is marked is the total amount of mission the child should have
-        if ($totalMissions == 0) {
-            $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+        if ($totalMissions > 0) {
+            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
             $query = mysql_query($sql);
         } else {
-            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+            $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
             $query = mysql_query($sql);
         }
     }
@@ -168,16 +168,45 @@ function delete_daily_task_mark2($parameters) {
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
 
-	$sql = "SELECT date_tasks_mission_id, mandatory_qty FROM date_tasks WHERE date_task_id=" . $date_task_id;
+	$sql = "SELECT date_tasks_mission_id, mandatory_qty, needed FROM date_tasks WHERE date_task_id=" . $date_task_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
 	$date_tasks_mission_id = $row["date_tasks_mission_id"];
+	$mandatory = $row['mandatory_qty'];
+	$needed = $row['needed'];
 	
 	$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id . " AND mark_date=" . $mark_date;	
 	$query = mysql_query($sql);
-	
-	$sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
-	$query = mysql_query($sql);
+
+    // check if mission needs to be deleted
+    $sql = "select count(*) as total from date_tasks_marks where date_task_id = " . $date_task_id . " and user_id = " . $user_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+
+    if ($mandatory && $row['total'] < $needed) {
+        $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+        $query = mysql_query($sql);
+    }
+
+    // day schools work differently
+    $daySchool = false;
+    $sql_type = "select school_type_id from users where user_id = " . $user_id;
+    $result_type = mysql_query($sql_type);
+    $row_type = mysql_fetch_assoc($result_type);
+    if (in_array($row_type['school_type_id'], [4, 5])) {
+        $daySchool = true;
+    }
+
+    if ($daySchool && $mandatory) {
+        $totalMissions = $row['total']; // total times the task is marked is the total amount of mission the child should have
+        if ($totalMissions > 0) {
+            $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+            $query = mysql_query($sql);
+        } else {
+            $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
+            $query = mysql_query($sql);
+        }
+    }
 	
 	if ($query) {
         // update the users information in the user_yearly_gift table

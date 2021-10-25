@@ -497,7 +497,7 @@ function add_daily_task_mark2($parameters, $update = true)
 					$row = mysql_fetch_assoc($query);
 
 					$insert_sql = "INSERT INTO date_tasks_mission_marks SET user_id=" . $user_id . ", date_tasks_mission_id=" . $date_tasks_mission_id . ", subject_id=" . $row['subject_id'] . ", mission_value=" . $row['mission_value'] . ", mission_name='" . mysql_real_escape_string($row['mission_name']) . "', mark_date=" . $mark_date . ", mark_override=0";
-					$insert_query = mysql_query($insert_sql);
+					$insert_query = mysql_query($insert_sql); // if it's duplicate it just fails silently
 
                     // day schools work differently
                     $daySchool = false;
