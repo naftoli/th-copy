@@ -279,11 +279,10 @@ if (isset($_POST['submit'])) {
                 $r++;
                 echo "Before:<br />";
                 echo "Mission - " . $missionName . "<br />";
-                echo "Start - " . $start . "<br />";
-                echo "End - " . $end . "<br />";
-                echo "Type - " . $type . "<br />";
-                echo "Level - " . $level . "<br /><br />";
-                
+                echo "Start - " . $firstLevel . "<br />";
+                echo "End - " . $lastLevel . "<br />";
+                echo "Types - " . $types . "<br /><br />";
+
                 // make sure we don't have incorrect yiddish label for english task or vice versa
                 if ($lang == 1) {
                     if ($labelID > 49) $labelID -= 20;
