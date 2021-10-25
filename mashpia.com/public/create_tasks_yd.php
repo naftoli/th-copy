@@ -201,8 +201,8 @@ if (isset($_POST['submit'])) {
                         case 1:
                             // skip row if it's empty
                             if (empty($val)) {
-                                if (++$emptyRows > 1) break 2;
-                                else continue 2;
+                                if (++$emptyRows > 1) break 3;
+                                else continue 3;
                             } else {
                                 $emptyRows = 0;
                             }
