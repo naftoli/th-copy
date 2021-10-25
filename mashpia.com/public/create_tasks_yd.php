@@ -277,12 +277,12 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 $r++;
-                echo "Before:<br />";
-                echo "Mission - " . $missionName . "<br />";
-                echo "Task - " . $task . "<br />";
-                echo "Start Level - " . $firstLevel . "<br />";
-                echo "End Level - " . $lastLevel . "<br />";
-                echo "Types - " . implode(',', $types) . "<br /><br />";
+//                echo "Before:<br />";
+//                echo "Mission - " . $missionName . "<br />";
+//                echo "Task - " . $task . "<br />";
+//                echo "Start Level - " . $firstLevel . "<br />";
+//                echo "End Level - " . $lastLevel . "<br />";
+//                echo "Types - " . implode(',', $types) . "<br /><br />";
 
                 // make sure we don't have incorrect yiddish label for english task or vice versa
                 if ($lang == 1) {
@@ -329,22 +329,21 @@ if (isset($_POST['submit'])) {
                             'grid_marking'  =>  $grid_marking
                         );
 
-                        echo "After:<br />";
-                        echo "Mission - " . $missionName . "<br />";
-                        echo "Task - " . $task . "<br />";
-                        echo "Start - " . $start . "<br />";
-                        echo "End - " . $end . "<br />";
-                        echo "Type - " . $type . "<br />";
-                        echo "Level - " . $level . "<br /><br />";
-
+//                        echo "After:<br />";
+//                        echo "Mission - " . $missionName . "<br />";
+//                        echo "Task - " . $task . "<br />";
+//                        echo "Start - " . $start . "<br />";
+//                        echo "End - " . $end . "<br />";
+//                        echo "Type - " . $type . "<br />";
+//                        echo "Level - " . $level . "<br /><br />";
                     }
                 }
                 $missionName = "";
-                $rows++;
-                if ($rows > 1000) break;
+//                $rows++;
+//                if ($rows > 1000) break;
             }
 //            echo "<pre>"; print_r($missions); echo "</pre>"; exit;
-            exit;
+//            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
