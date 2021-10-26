@@ -21,6 +21,7 @@ $ct = new ChidonTests();
 
 if (isset($_POST['submit'])) {
     $ct->setTestTypes($_POST['type']);
+    $ct->setRewardTypes($_POST['reward_type']);
     header("Location: enterScores.php");
     exit;
 }
@@ -138,10 +139,12 @@ foreach ($schools as $id => $school) {
 //                    if ($type == $default && empty($child['test_type'])) echo " checked";
 //                    echo " />" . ucwords($value) . ' ';
                 }
-                echo "</select></td><td>" . $markInfo['avg'] . "</td><td>" . $markInfo['highest_track'] . "</td><td><select name='reward_type'>";
+                echo "</select></td><td>" . $markInfo['avg'] . "</td><td>" . $markInfo['highest_track'] . "</td><td>";
+                echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'>";
                 foreach ($types as $type => $value) {
                     echo "<option value='" . $type . "'";
-                    if (
+                    if ($type == $child['reward_type']) echo " selected ";
+                    else if (
                         ($markInfo['highest_track'] != '' && $child['test_type'] == $markInfo['highest_track']) ||
                         ($markInfo['highest_track'] == '' && $type == $child['test_type'])
                     )
@@ -151,6 +154,7 @@ foreach ($schools as $id => $school) {
                 echo "</select></td></tr>";
             }
             echo "</table>";
+            break;
         }
         echo "<div style='float: right'><input type='submit' name='submit' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
         echo "</form>";
