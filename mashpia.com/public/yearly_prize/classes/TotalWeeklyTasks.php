@@ -67,7 +67,9 @@ class TotalWeeklyTasks {
      * @return bool
      */
     public function week_has_task($start, $end, $update = false){
-        $row = $this->cached_weeks_with_task($start, $end)[0];
+        $rows = $this->cached_weeks_with_task($start, $end);
+        if (empty($rows)) return false;
+        else $row = $rows[0];
         // if they are marked or realtime is false return the result of the above query
         if ( !$update || !($row && $row['is_override']) )
             return ($row && $row['marked']);
