@@ -154,7 +154,6 @@ foreach ($schools as $id => $school) {
                 echo "</select></td></tr>";
             }
             echo "</table>";
-            break;
         }
         echo "<div style='float: right'><input type='submit' name='submit' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
         echo "</form>";
