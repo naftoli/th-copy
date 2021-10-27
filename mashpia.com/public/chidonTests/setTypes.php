@@ -135,6 +135,7 @@ foreach ($schools as $id => $school) {
                 echo "</select></td><td>" . $markInfo['avg'] . "</td><td>" . $types[$markInfo['highest_track']] . "</td><td>";
                 echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'>";
                 foreach ($types as $type => $value) {
+                    if ($type == 'genius') break;
                     echo "<option value='" . $type . "'";
                     if ($type == $child['reward_type']) echo " selected ";
                     else if (
