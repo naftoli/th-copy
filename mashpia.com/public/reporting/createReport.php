@@ -12,7 +12,7 @@ foreach ( $_POST as $k => $v ) {
         if ( $pos !== false ) {
             $table = substr($k, 0, $pos++);
             $field = substr($k, $pos);
-            if ( $table != 'calc' ) {
+            if ( $table != 'calc' && $table != 'sm' ) {
                 $info[$table][] = $field;
             } else { // it's not info from a table but it's a calculated value
                 switch ( $field ) {
@@ -20,6 +20,10 @@ foreach ( $_POST as $k => $v ) {
                     case 'total_points':
                     case 'total_this_yr':
                         $info['calc'][] = $field;
+                        break;
+                    case 'kapitlach':
+                    case 'minutes':
+                        $info['sm'][] = $field;
                         break;
                 }
             }
@@ -35,7 +39,7 @@ $engine->setGrade( mysql_real_escape_string( $_POST['gradeOnly'] ) );
 $engine->createQry();
 if ( $engine->runQry() ) {
     $result = $engine->getResult();
-    //echo "<pre>"; print_r( $result ); echo "</pre>";
+//    echo "<pre>"; print_r( $result ); echo "</pre>";
 } else {
     echo $engine->getError();
     exit;
@@ -71,7 +75,9 @@ $fields = [
     'store_points'      => 'Store Miles',
     'total_points'      => 'Total Miles Earned', 
     'total_this_yr'     => 'Total Miles Earned this Year', 
-    'user_id'           => 'User ID'
+    'user_id'           => 'User ID',
+    'kapitlach'         => 'Shabbos Mevorchim Kapitlach',
+    'minutes'           => 'Shabbo Mevorchim Minutes'
 ];
 ?>
 <!DOCTYPE html>

@@ -12,6 +12,7 @@ class ReportingEngine {
     private $grade;
     private $checkRank;
     private $checkPoints;
+    private $checkSM;
     
     public function __construct( $info ) {
         $this->createAliases();
@@ -24,6 +25,7 @@ class ReportingEngine {
         $this->grade = 0;
         $this->checkRank = false;
         $this->checkPoints = false;
+        $this->checkSM = false;
     }
     
     private function createAliases() {
@@ -57,8 +59,8 @@ class ReportingEngine {
     private function generateSelect() {
         $sql = "SELECT ";
         foreach ($this->data as $table => $columns) {
-            // skip rank and calc info - we will get that later
-            if ( in_array( $table, ['calc','ranks'] ) ) continue;
+            // skip rank, calc, and sm info - we will get that later
+            if ( in_array( $table, ['calc','ranks', 'sm'] ) ) continue;
 
             // make sure to always have user_id when pulling from users table
             if ( $table == 'users' ) {
@@ -107,6 +109,9 @@ class ReportingEngine {
                         break;
                     case 'calc':
                         $this->checkPoints = true;
+                        break;
+                    case 'sm':
+                        $this->checkSM = true;
                         break;
                 }
             }
@@ -170,6 +175,20 @@ class ReportingEngine {
                         }
                     }
                 }
+                // check if we need to find tehillim quotas
+                if ( $this->checkSM ) {
+                    $sm = $this->data['sm'];
+                    foreach ($sm as $type ) {
+                        switch ($type) {
+                            case 'kapitlach':
+                                $row['kapitlach'] = $this->getSMInfo($row['user_id'], 1);
+                                break;
+                            case 'minutes':
+                                $row['minutes'] = $this->getSMInfo($row['user_id'], 2);
+                                break;
+                        }
+                    }
+                }
                 // make sure there's at least one field that has info that's not blank
                 $addToResult = false;
                 foreach ( $row as $key => $value ) {
@@ -205,5 +224,46 @@ class ReportingEngine {
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row['rank_name'];
+    }
+
+    public function getSMInfo( $user_id, $ord ) {
+        $sql = "SELECT 
+                    school_type_id, lang_id, track_id, level
+                FROM
+                    users u
+                        JOIN
+                    user_tracks ut using (user_id)
+                WHERE
+                    subject_id = 1 AND u.user_id = $user_id";
+//        echo $sql . "<br /><br />";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $school_type_id = $row['school_type_id'];
+        $track_id = $row['track_id'];
+        $level = $row['level'];
+        $lang_id = $row['lang_id'];
+
+        $jd = unixtojd();
+        $sql = "SELECT 
+                    quantity
+                FROM
+                    date_tasks
+                WHERE
+                    date_tasks_mission_id IN (SELECT 
+                            date_tasks_mission_id
+                        FROM
+                            date_tasks_missions
+                        WHERE
+                            subject_id = 1 AND track_id = $track_id
+                                AND level = $level
+                                AND lang_id = $lang_id
+                                AND school_type_id = $school_type_id
+                                AND start_date >= $jd
+                                AND end_date <= ($jd + 6))
+                        AND ord = $ord";
+//        echo $sql . "<br />"; exit;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return $row['quantity'];
     }
 }

@@ -26,7 +26,9 @@ $userInfo = [
     'ranks|rank_name'       => 'Current Rank',
     'calc|store_points'     => 'Store Miles', 
     'calc|total_points'     => 'Total Miles', 
-    'calc|total_this_yr'    => 'Total Miles from Beginning of Year' 
+    'calc|total_this_yr'    => 'Total Miles from Beginning of Year',
+    'sm|kapitlach'          => 'Shabbos Mevorchim Kapitlach (only works during the week of shabbos mevorchim)',
+    'sm|minutes'            => 'Shabbos Mevorchim Minutes (only works during the week of shabbos mevorchim)'
 ];
 
 $adminInfo = [
