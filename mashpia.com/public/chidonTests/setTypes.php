@@ -83,7 +83,6 @@ foreach ($schools as $id => $school) {
     $ct->setScores();
     $ct->calculateMarks();
     $marks[$id] = $ct->getMarks();
-    break;
 }
 ?>
 <!DOCTYPE html>
