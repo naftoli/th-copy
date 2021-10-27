@@ -1006,7 +1006,6 @@ class ShabbosMevorchim {
     }
 	
 	public function setStudentResults($sid = 0, $date = 0) {
-
 	    $dates = [];
 	    if ($date) $dates[] = $date;
 	    else {
@@ -1046,7 +1045,7 @@ class ShabbosMevorchim {
 //            AND ut.enrolled =1";
 
         $sql1 = "select * from date_tasks 
-                where grid_id = 8001
+                where grid_id = ?
                 and date_tasks_mission_id = (
                     select date_tasks_mission_id from date_tasks_missions dtm 
                     where dtm.subject_id = 1 
@@ -1128,14 +1127,13 @@ class ShabbosMevorchim {
 
 		// for each report date
 //		foreach ( $this->rDates as $month => $date ) {
-        foreach ($dates as$date) {
+        foreach ($dates as $date) {
 
 			// for each task     
 	        foreach ( $this->tasks as $key => $task ) {
 	        	// skip task #2
 	        	// if ($key == 'Minutes') continue;
 
-				
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
 	            // for each class
@@ -1155,7 +1153,7 @@ class ShabbosMevorchim {
 //							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
 //							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
 						//}
-                        $stmt1->execute([ $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id'] ]);
+                        $stmt1->execute([ $task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id'] ]);
                         $row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
 						$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
 
@@ -1193,8 +1191,6 @@ class ShabbosMevorchim {
 								}
 							}
 						}
-						
-						//if (!$sid) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />"; 
 
 	                }
 	                
@@ -1204,7 +1200,7 @@ class ShabbosMevorchim {
 
 		}
 
-//        echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>";
+        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
 	}
 
 	public function getStudentResults() {
