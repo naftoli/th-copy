@@ -181,10 +181,10 @@ class ReportingEngine {
                     foreach ($sm as $type ) {
                         switch ($type) {
                             case 'kapitlach':
-                                $row['kapitlach'] = $this->getSMInfo($row['user_id'], 1);
+                                $row['kapitlach'] = $this->getKapitlach($row['user_id']);
                                 break;
                             case 'minutes':
-                                $row['minutes'] = $this->getSMInfo($row['user_id'], 2);
+                                $row['minutes'] = $this->getMinutes($row['user_id']);
                                 break;
                         }
                     }
@@ -226,7 +226,48 @@ class ReportingEngine {
         return $row['rank_name'];
     }
 
-    public function getSMInfo( $user_id, $ord ) {
+    public function getKapitlach( $user_id ) {
+        $sql = "SELECT 
+                    school_type_id, lang_id, track_id, level
+                FROM
+                    users u
+                        JOIN
+                    user_tracks ut using (user_id)
+                WHERE
+                    subject_id = 1 AND u.user_id = $user_id";
+//        echo $sql . "<br /><br />";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $school_type_id = $row['school_type_id'];
+        $track_id = $row['track_id'];
+        $level = $row['level'];
+        $lang_id = $row['lang_id'];
+
+        $jd = unixtojd();
+        $sql = "SELECT 
+                    description
+                FROM
+                    date_tasks
+                WHERE
+                    date_tasks_mission_id IN (SELECT 
+                            date_tasks_mission_id
+                        FROM
+                            date_tasks_missions
+                        WHERE
+                            subject_id = 1 AND track_id = $track_id
+                                AND level = $level
+                                AND lang_id = $lang_id
+                                AND school_type_id = $school_type_id
+                                AND start_date >= $jd
+                                AND end_date <= ($jd + 6))
+                        AND ord = 1";
+//        echo $sql . "<br />"; exit;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return $row['description'];
+    }
+
+    public function getMinutes( $user_id ) {
         $sql = "SELECT 
                     school_type_id, lang_id, track_id, level
                 FROM
@@ -260,7 +301,7 @@ class ReportingEngine {
                                 AND school_type_id = $school_type_id
                                 AND start_date >= $jd
                                 AND end_date <= ($jd + 6))
-                        AND ord = $ord";
+                        AND ord = 2";
 //        echo $sql . "<br />"; exit;
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);

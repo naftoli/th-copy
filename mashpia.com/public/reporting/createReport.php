@@ -77,7 +77,7 @@ $fields = [
     'total_this_yr'     => 'Total Miles Earned this Year', 
     'user_id'           => 'User ID',
     'kapitlach'         => 'Shabbos Mevorchim Kapitlach',
-    'minutes'           => 'Shabbo Mevorchim Minutes'
+    'minutes'           => 'Shabbos Mevorchim Minutes'
 ];
 ?>
 <!DOCTYPE html>
