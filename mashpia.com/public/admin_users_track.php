@@ -91,7 +91,7 @@ $closed_schools = [
 ];
 
 foreach ($sm as $val) {
-    echo "Now - " . $jdNow . " SM: " . $val . "<br />";
+//    echo "Now - " . $jdNow . " SM: " . $val . "<br />";
 	if ($jdNow >= ($val - 6) && $jdNow <= $val && !in_array($school_id, $closed_schools[$val])) {
 		$showTehillimQuota = 1;
 		break;
