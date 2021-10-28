@@ -20,6 +20,7 @@ if ($school_id > 0) {
 }
 
 $ct = new ChidonTests();
+$types = $ct->getTypes();
 
 $info = [];
 $marks = [];
@@ -43,20 +44,34 @@ foreach ($info as $school => $users) {
         $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
             $totalMarks += intval($marks[$id][$i][$test_type]);
-            $test['mivtzahMaven'] = $marks[$id][$i]['maven'];
-            $test['shabbatonMark'] = $marks[$id][$i][$test_type];
-            $tests[] = $test;
+            $tests[] = [
+                'yesod'     => $marks[$id][$i]['maven'],
+                'yediah'    => $marks[$id][$i]['pro'],
+                'havonah'   => $marks[$id][$i]['expert'],
+                'iyun'      => $marks[$id][$i]['genius']
+            ];
         }
         $testsLeft = 4 - $test_num;
         $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0;
 
+        $highestTrack = '';
+        $trackMarks = [];
+        foreach ($types as $type => $value) {
+            $trackMarks[$type] = 0;
+            for ($i = 1; $i <= $test_num; $i++) {
+                $trackMarks[$type] += $marks[$id][$i][$type];
+            }
+            $trackMarks[$type] /= $test_num;
+            if ($trackMarks[$type] >= 70) $highestTrack = $value;
+        }
+
         $result[] = [
-            'id' => $id,
-            'name' => $name,
-            'grade' => $grade,
-            'avgRequired' => $avgRequired,
-            'tests' => $tests,
-            'hideShabbatonTests' => $test_type == 'maven' ? 1 : 0
+            'id'                    => $id,
+            'name'                  => $name,
+            'grade'                 => $grade,
+            'avgRequired'           => $avgRequired,
+            'highestTrackPassed'    => $highestTrack,
+            'tests'                 => $tests
         ];
     }
 }
