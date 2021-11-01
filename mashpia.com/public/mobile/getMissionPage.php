@@ -1009,6 +1009,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	}
 </style>
 
+<script src="/mobile/js/js.cookie.js"></script>
 <script src="/js/utils/browser_detect.js"></script>
 <script>
 	/******************* DATE SLIDER *******************/
@@ -1033,6 +1034,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		}
 		
 		var lang = <?=$lang?>;
+		Cookies.set('lang', lang)
 		
 		$(".panel:not(.mishnaPanel)").addClass('open');
 		$(".panel:not(.mishnaPanel) .collapse").addClass('in');
