@@ -2,6 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
+$total = 0;
 $sql = "SELECT 
             SUM(done_qty) as total
         FROM
@@ -14,7 +15,5 @@ $sql = "SELECT
 $result = mysql_query($sql);
 if (mysql_num_rows($result) > 0) {
     $total = mysql_fetch_assoc($result)['total'];
-} else {
-    $total = 0;
 }
 echo $total;
