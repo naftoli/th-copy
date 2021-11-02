@@ -1,0 +1,7 @@
+.card, table {
+    font-size: 12px;
+    text-align: center;
+}
+tr, th, td {
+    border: 1px solid black;
+}

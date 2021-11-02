@@ -44,6 +44,10 @@ class ChidonTests
         return $this->types;
     }
 
+    public function getTestQuestions() {
+        return $this->testQuestions;
+    }
+
     public function setGender($gender) {
         $this->genderOnly = $gender;
     }

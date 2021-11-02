@@ -13,7 +13,10 @@ $class_id = intval($_GET['class_id']);
 $user_id = intval($_GET['user_id']);
 
 if ($school_id > 0) {
-    $schools = [$school_id => 'school'];
+    $sql = "select school_name from schools where school_id = " . $school_id;
+    $result = mysql_query($sql);
+    $school_name = mysql_fetch_assoc($result)['school_name'];
+    $schools = [$school_id => $school_name];
 } else {
     $as = new AdminSchools(175069, 'super', true, true); // add chidon schools
     $schools = $as->getSchools();
@@ -21,15 +24,19 @@ if ($school_id > 0) {
 
 $ct = new ChidonTests();
 $types = $ct->getTypes();
+$testQuestions = $ct->getTestQuestions();
 
 $info = [];
 $marks = [];
+$scores = [];
+
 foreach ($schools as $id => $school) {
     $ct->setStudents($id, $class_id, $user_id);
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
-    $marks = $ct->getMarks();
+    $marks[$id] = $ct->getMarks();
+    $scores[$id] = $ct->getScores();
 }
 
 $result = [];
@@ -41,28 +48,34 @@ foreach ($info as $school => $users) {
 
         $tests = [];
         $totalMarks = 0;
+        $avgRequired = 0;
         $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
-            $totalMarks += intval($marks[$id][$i][$test_type]);
-            $tests[] = [
-                'yesod'     => $marks[$id][$i]['maven'],
-                'yediah'    => $marks[$id][$i]['pro'],
-                'havonah'   => $marks[$id][$i]['expert'],
-                'iyun'      => $marks[$id][$i]['genius']
+            $totalMarks += intval($marks[$school][$id][$i][$test_type]);
+            $tests[$i] = [
+                'maven'     => $marks[$school][$id][$i]['maven'],
+                'pro'       => $marks[$school][$id][$i]['pro'],
+                'expert'    => $marks[$school][$id][$i]['expert'],
+                'genius'    => $marks[$school][$id][$i]['genius']
             ];
         }
         $testsLeft = 4 - $test_num;
-        $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0;
+        if ($test_type != 'genius') $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0; // need a 70 avg for all tests
+        else $avgRequired = $test_num < 4 ? ceil((360 - $totalMarks) / $testsLeft) : 0; // need a 90 avg for all tests
 
         $highestTrack = '';
         $trackMarks = [];
         foreach ($types as $type => $value) {
             $trackMarks[$type] = 0;
             for ($i = 1; $i <= $test_num; $i++) {
-                $trackMarks[$type] += $marks[$id][$i][$type];
+                $trackMarks[$type] += $marks[$school][$id][$i][$type];
             }
             $trackMarks[$type] /= $test_num;
-            if ($trackMarks[$type] >= 70) $highestTrack = $value;
+            if ($type != 'genius') {
+                if ($trackMarks[$type] >= 70) $highestTrack = $value;
+            } else {
+                if ($trackMarks[$type] >= 90) $highestTrack = $value;
+            }
         }
 
         $result[] = [
@@ -71,8 +84,13 @@ foreach ($info as $school => $users) {
             'grade'                 => $grade,
             'avgRequired'           => $avgRequired,
             'highestTrackPassed'    => $highestTrack,
-            'tests'                 => $tests
+            'tests'                 => $tests,
+            'scores'                => $scores[$school][$id],
+            'questions'             => $testQuestions,
+            'school'                => $schools[$school],
+            'currentTrack'          => $types[$test_type],
         ];
     }
 }
+
 echo json_encode($result);

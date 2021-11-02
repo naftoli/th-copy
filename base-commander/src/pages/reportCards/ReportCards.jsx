@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
 import axios from 'axios';
 import colors from './colors';
-import ReportCard from './ReportCard';
+import ReportCard from './ReportCard2';
 import { Row, Col } from 'reactstrap';
 import { LoadingScreen } from 'components/ui';
 import { isAdmin, isBC } from 'functions/login';
@@ -17,9 +17,9 @@ import {
 
 const useStyles = createUseStyles(theme => ({
     reports: {
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexWrap: 'wrap'
+        // boxSizing: 'border-box',
+        // display: 'flex',
+        // flexWrap: 'wrap'
     },
     toggle: {
         display: 'inline-flex',
@@ -129,7 +129,7 @@ const ReportCards = (props) => {
     const generateReports = useCallback(() => {
         const fetchReportCards = async () => {
             setLoading(true);
-            const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId || '-1'}&class_id=${classId || '-1'}&user_id=${userId || '-1'}`);
+            const { data, status } = await axios.get(`http://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId || '-1'}&class_id=${classId || '-1'}&user_id=${userId || '-1'}`);
             if (status === 200) {
                 setReports(data);
             }
@@ -174,8 +174,8 @@ const ReportCards = (props) => {
                     <li>Set the layout to Landscape</li>
                     <li>Open More Settings and set your Margins to "None"</li>
                     <li>Ensure that the paper size is Letter and the scale is set to 100%</li>
-                    <li>If you are printing the colored version, turn on the "background graphics" checkbox</li>
-                    <span>It should show up nicely with two on each page. Print and cut in half and return to your Chayolim :)</span>
+                    {/*<li>If you are printing the colored version, turn on the "background graphics" checkbox</li>*/}
+                    <span>It should show up nicely with one per page. Print and fold over in half and return to your Chayolim :)</span>
                 </ol>
                 <Col sm={6}>
                     <label>Base</label>
@@ -244,28 +244,23 @@ const ReportCards = (props) => {
                     <LoadingScreen hideLogo />
                 ) : (
                     <React.Fragment>
-                        {reportsGenerated && (
-                            <div className={classes.toggle} onClick={toggleBW}>
-                                <div className={clsx(!bw ? classes.toggledOn : classes.toggledOff, classes.leftToggle)}>
-                                    Colored
-                            </div>
-                                <div className={clsx(bw ? classes.toggledOn : classes.toggledOff, classes.rightToggle)}>
-                                    Black and White
-                            </div>
-                            </div>
-                        )}
+                        {/*{reportsGenerated && (*/}
+                        {/*    <div className={classes.toggle} onClick={toggleBW}>*/}
+                        {/*        <div className={clsx(!bw ? classes.toggledOn : classes.toggledOff, classes.leftToggle)}>*/}
+                        {/*            Colored*/}
+                        {/*    </div>*/}
+                        {/*        <div className={clsx(bw ? classes.toggledOn : classes.toggledOff, classes.rightToggle)}>*/}
+                        {/*            Black and White*/}
+                        {/*    </div>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
 
                         <div className={classes.reports}>
 
-                            {reports.map(({ id, name, grade, avgRequired, tests, hideShabbatonTests }) => (
+                            {reports.map(report => (
                                 <ReportCard
-                                    bw={bw}
-                                    key={id}
-                                    name={name}
-                                    tests={tests}
-                                    grade={grade}
-                                    avgRequired={avgRequired}
-                                    hideShabbatonTests={hideShabbatonTests}
+                                    key={report.id}
+                                    info={report}
                                 />
                             ))}
                         </div>
