@@ -2,7 +2,7 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 // import clsx from 'clsx';
 import colors from './colors';
-// import header from 'img/reportCards/reportCardHeader.png';
+import header from 'img/reportCards/reportCardHeaderBW.png';
 import footer from 'img/reportCards/reportCardFooter.png';
 // import bwheader from 'img/reportCards/bwReportCardHeader.png';
 import './ReportCard.css';
@@ -132,7 +132,8 @@ const useStyles = createUseStyles(theme => ({
     },
     h5: {
         fontWeight: 'bold',
-        marginTop: 30
+        marginTop: 30,
+        marginBottom: 20
     },
     lastRow: {
         backgroundColor: '#D3D3D3'
@@ -145,6 +146,9 @@ const useStyles = createUseStyles(theme => ({
         width: '5in',
         pageBreakAfter: 'always'
     },
+    unbold: {
+        fontWeight: 'normal'
+    }
 }), { name: 'ReportCard' });
 
 
@@ -165,12 +169,15 @@ function ReportCard(info) {
     //     setTests(newTests);
     // }, [report.tests]);
 
+    const showIyun = report.tests[1]['genius'] >= 90 ? true : false
+
     return (
         <div className={classes.card}>
             <br /><br/><br />
-            {/*<img src={header} alt="Header" />*/}
-            <h2>Tests Report Card</h2>
-            <h3>Chidon 5782</h3>
+            <img src={header} alt="Header" />
+            {/*<h2>Tests Report Card</h2>*/}
+            {/*<h3>Chidon 5782</h3>*/}
+            <p></p><br />
             <p><b>Name:</b> {report.name}</p>
             <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
             <p>
@@ -185,10 +192,12 @@ function ReportCard(info) {
                     <tr>
                         <th>Test #</th>
                         <th>Questions / Mark</th>
-                        <th>Yesod<br />Part 1</th>
-                        <th>Yediah<br />Parts 1 and 2</th>
-                        <th>Havonah<br />Parts 1, 2 and 3</th>
-                        <th>Iyun<br />Parts 1 - 4</th>
+                        <th>Yesod<br /><span className={classes.unbold}>Part 1</span></th>
+                        <th>Yediah<br /><span className={classes.unbold}>Parts 1 and 2</span></th>
+                        <th>Havonah<br /><span className={classes.unbold}>Parts 1, 2 and 3</span></th>
+                        {showIyun &&
+                            <th>Iyun<br/><span className={classes.unbold}>Parts 1 - 4</span></th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -196,23 +205,31 @@ function ReportCard(info) {
                         <td rowSpan={2}>1</td>
                         <td>Correct Questions</td>
                         <td>{report.scores[1]['maven']} / {report.questions['maven']}</td>
-                        <td>{report.scores[1]['pro']} / {report.questions['pro']}</td>
-                        <td>{report.scores[1]['expert']} / {report.questions['expert']}</td>
-                        <td>{report.scores[1]['genius']} / {report.questions['genius']}</td>
+                        <td>{parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} / {report.questions['pro'] + report.questions['maven']}</td>
+                        <td>{parseInt(report.scores[1]['expert']) + parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} /
+                            {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
+                        {showIyun &&
+                            <td>{parseInt(report.scores[1]['genius']) + parseInt(report.scores[1]['expert']) + parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} /
+                                {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
+                        }
                     </tr>
                     <tr>
                         <td>Mark</td>
-                        <td>{report.tests[1]['maven']}%</td>
-                        <td>{report.tests[1]['pro']}%</td>
-                        <td>{report.tests[1]['expert']}%</td>
-                        <td>{report.tests[1]['genius']}%</td>
+                        <td>{report.tests[1]['maven'].toFixed(2)}%</td>
+                        <td>{report.tests[1]['pro'].toFixed(2)}%</td>
+                        <td>{report.tests[1]['expert'].toFixed(2)}%</td>
+                        {showIyun &&
+                            <td>{report.tests[1]['genius'].toFixed(2)}%</td>
+                        }
                     </tr>
                     <tr className={classes.lastRow}>
                         <td colSpan={2}>Passing Mark for Reward</td>
                         <td>70%<br />Sweater & gift</td>
                         <td>70%<br />Sweater, Gift & Prizes</td>
                         <td>70%<br />Sweater, Gift, Prizes & Trip</td>
-                        <td>90%<br />Sweater, Gift, Prizes, Trip & Trophy Contestant</td>
+                        {showIyun &&
+                            <td>90%<br/>Sweater, Gift, Prizes, Trip & Trophy Contestant</td>
+                        }
                     </tr>
                 </tbody>
             </table>
