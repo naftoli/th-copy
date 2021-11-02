@@ -115,7 +115,7 @@ const ReportCards = (props) => {
     const { login: { school_id, class_id, code } } = props;
 
     const classes = useStyles();
-    const [bw, setBw] = useState(false);
+    // const [bw, setBw] = useState(false);
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
     // const [reportsGenerated, setReportsGenerated] = useState(false);
