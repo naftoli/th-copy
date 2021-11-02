@@ -211,8 +211,8 @@ function ReportCard(info) {
                         <td colSpan={2}>Passing Mark for Reward</td>
                         <td>70%<br />Sweater & gift</td>
                         <td>70%<br />Sweater, Gift & Prizes</td>
-                        <td>70%<br />Sweater, Gift, Prizes & Trip></td>
-                        <td>90%<br />Sweater, Gift, Prizes , Trip & Trophy Contestant</td>
+                        <td>70%<br />Sweater, Gift, Prizes & Trip</td>
+                        <td>90%<br />Sweater, Gift, Prizes, Trip & Trophy Contestant</td>
                     </tr>
                 </tbody>
             </table>
