@@ -89,9 +89,9 @@ foreach ($info as $school => $users) {
             'questions'             => $testQuestions,
             'school'                => $schools[$school],
             'currentTrack'          => $types[$test_type],
-            'currentTrackKey'       => $test_type,
             'types'                 => $types,
-            'user_id'               => $user['user_id']
+            'user_id'               => $user['user_id'],
+            'track'                 => $test_type
         ];
     }
 }

@@ -207,8 +207,8 @@ function ReportCard(info) {
             <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
             <p>
                 <b>Track you are on:</b> {report.currentTrack}<br />
-                <b>Learning commitment per day:</b> {learningTime[report.currentTrackKey]} minutes<br />
-                <b>Total test 1 learning time:</b> {totalTime[report.currentTrackKey]} minutes<br />
+                <b>Learning commitment per day:</b> {learningTime[report.track]} minutes<br />
+                <b>Total test 1 learning time:</b> {totalTime[report.track]} minutes<br />
                 <b>Amount of time you logged:</b> <span id={totalSpan}></span>
             </p>
             <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
