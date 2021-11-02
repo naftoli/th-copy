@@ -195,7 +195,7 @@ function ReportCard(info) {
         document.getElementById('total').innerText = data + ' minutes'
     }
 
-    if (state.total == '') getTotal()
+    if (state.total === '') getTotal()
 
     const totalSpan = 'total'
 
