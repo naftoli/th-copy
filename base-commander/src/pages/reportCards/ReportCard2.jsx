@@ -170,7 +170,7 @@ function ReportCard(info) {
     //     setTests(newTests);
     // }, [report.tests]);
 
-    const showIyun = report.tests[1]['genius'] >= 90 ? true : false
+    const showIyun = report.tests[1]['genius'] >= 90
     const learningTime = {
         'maven': 15,
         'pro': 30,
