@@ -1,11 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-header("Access-Control-Allow-Origin: *");
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
-$total = 0;
 $sql = "SELECT 
-            SUM(done_qty) as total
+            IFNULL(SUM(done_qty), 0) as total
         FROM
             date_tasks_marks dtm
                 JOIN
@@ -14,7 +11,5 @@ $sql = "SELECT
             dt.cat = 'chidon limmud'
                 AND dtm.user_id = " . $_GET['id'];
 $result = mysql_query($sql);
-if (mysql_num_rows($result) > 0) {
-    $total = mysql_fetch_assoc($result)['total'];
-}
+$total = mysql_fetch_assoc($result)['total'];
 echo $total;
