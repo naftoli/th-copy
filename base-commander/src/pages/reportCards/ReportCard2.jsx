@@ -191,12 +191,12 @@ function ReportCard(info) {
     const getTotal = async () => {
         const { data } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}`);
         state.total = data
-        document.getElementById('total').innerText = data + ' minutes'
+        document.getElementById(report.user_id).innerText = data + ' minutes'
     }
 
     if (state.total === '') getTotal()
 
-    const totalSpan = 'total'
+    const totalSpan = report.user_id
 
     return (
         <div className={classes.card}>
