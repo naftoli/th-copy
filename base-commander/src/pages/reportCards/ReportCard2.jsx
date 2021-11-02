@@ -201,7 +201,7 @@ function ReportCard(info) {
 
     return (
         <div className={classes.card}>
-            <br />
+            <br /><br />
             <img src={header} alt="Header" />
             <p></p><br />
             <p><b>Name:</b> {report.name}</p>
