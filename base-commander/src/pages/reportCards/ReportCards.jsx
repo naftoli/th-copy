@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { createUseStyles } from 'react-jss';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import axios from 'axios';
 import colors from './colors';
 import ReportCard from './ReportCard2';
@@ -118,13 +118,13 @@ const ReportCards = (props) => {
     const [bw, setBw] = useState(false);
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [reportsGenerated, setReportsGenerated] = useState(false);
+    // const [reportsGenerated, setReportsGenerated] = useState(false);
     const [test, setTest] = useState();
     const [userId, setUserId] = useState('-1');
     const [classId, setClassId] = useState(class_id || '-1');
     const [schoolId, setSchoolId] = useState(school_id || '-1');
 
-    const toggleBW = useCallback(() => setBw(!bw), [bw]);
+    // const toggleBW = useCallback(() => setBw(!bw), [bw]);
 
     const generateReports = useCallback(() => {
         const fetchReportCards = async () => {

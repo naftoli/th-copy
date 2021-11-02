@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import colors from './colors';
-import header from 'img/reportCards/reportCardHeader.png';
+// import header from 'img/reportCards/reportCardHeader.png';
 import footer from 'img/reportCards/reportCardFooter.png';
-import bwheader from 'img/reportCards/bwReportCardHeader.png';
+// import bwheader from 'img/reportCards/bwReportCardHeader.png';
 import './ReportCard.css';
 
 const useStyles = createUseStyles(theme => ({
@@ -154,16 +154,16 @@ function ReportCard(info) {
 
     const classes = useStyles();
 
-    const [tests, setTests] = useState([]);
+    // const [tests, setTests] = useState([]);
 
-    useEffect(() => {
-        let newTests = [report.tests]
-        //     .filter(test => (
-        //     typeof test.mivtzahMaven === "number" ||
-        //     typeof test.shabbatonMark === "number"
-        // ));
-        setTests(newTests);
-    }, [report.tests]);
+    // useEffect(() => {
+    //     let newTests = [report.tests]
+    //     //     .filter(test => (
+    //     //     typeof test.mivtzahMaven === "number" ||
+    //     //     typeof test.shabbatonMark === "number"
+    //     // ));
+    //     setTests(newTests);
+    // }, [report.tests]);
 
     return (
         <div className={classes.card}>
