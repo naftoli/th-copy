@@ -129,7 +129,7 @@ const ReportCards = (props) => {
     const generateReports = useCallback(() => {
         const fetchReportCards = async () => {
             setLoading(true);
-            const { data, status } = await axios.get(`http://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId || '-1'}&class_id=${classId || '-1'}&user_id=${userId || '-1'}`);
+            const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/?test=${test}&school_id=${schoolId || '-1'}&class_id=${classId || '-1'}&user_id=${userId || '-1'}`);
             if (status === 200) {
                 setReports(data);
             }
