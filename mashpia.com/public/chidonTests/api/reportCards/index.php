@@ -95,5 +95,4 @@ foreach ($info as $school => $users) {
         ];
     }
 }
-
 echo json_encode($result);

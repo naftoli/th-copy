@@ -190,7 +190,6 @@ function ReportCard(info) {
 
     const getTotal = async () => {
         const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}`);
-        console.log(data, status)
         state.total = data
         document.getElementById('total').innerText = data + ' minutes'
     }
