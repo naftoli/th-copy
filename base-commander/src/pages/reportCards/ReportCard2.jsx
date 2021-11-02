@@ -3,9 +3,10 @@ import { createUseStyles } from 'react-jss';
 // import clsx from 'clsx';
 import colors from './colors';
 import header from 'img/reportCards/reportCardHeaderBW.png';
-import footer from 'img/reportCards/reportCardFooter.png';
+import footer from 'img/reportCards/footer.JPG';
 // import bwheader from 'img/reportCards/bwReportCardHeader.png';
 import './ReportCard.css';
+import axios from "axios";
 
 const useStyles = createUseStyles(theme => ({
     root: {
@@ -170,21 +171,46 @@ function ReportCard(info) {
     // }, [report.tests]);
 
     const showIyun = report.tests[1]['genius'] >= 90 ? true : false
+    const learningTime = {
+        'maven': 15,
+        'pro': 30,
+        'expert': 45,
+        'genius': 60
+    }
+    const totalTime = {
+        'maven': 480,
+        'pro': 960,
+        'expert': 1440,
+        'genius': 1920
+    }
+
+    const state = {
+        total: ''
+    }
+
+    const getTotal = async () => {
+        const { data, status } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}`);
+        console.log(data, status)
+        state.total = data
+        document.getElementById('total').innerText = data + ' minutes'
+    }
+
+    if (state.total == '') getTotal()
+
+    const totalSpan = 'total'
 
     return (
         <div className={classes.card}>
-            <br /><br/><br />
+            <br />
             <img src={header} alt="Header" />
-            {/*<h2>Tests Report Card</h2>*/}
-            {/*<h3>Chidon 5782</h3>*/}
             <p></p><br />
             <p><b>Name:</b> {report.name}</p>
             <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
             <p>
                 <b>Track you are on:</b> {report.currentTrack}<br />
-                {/*<b>Learning commitment per day:</b> <br />*/}
-                {/*<b>Total test 1 learning time:</b> <br />*/}
-                {/*<b>Amount of time you logged:</b>*/}
+                <b>Learning commitment per day:</b> {learningTime[report.currentTrackKey]} minutes<br />
+                <b>Total test 1 learning time:</b> {totalTime[report.currentTrackKey]} minutes<br />
+                <b>Amount of time you logged:</b> <span id={totalSpan}></span>
             </p>
             <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
             <table className={classes.table}>
@@ -217,11 +243,11 @@ function ReportCard(info) {
                     </tr>
                     <tr>
                         <td>Mark</td>
-                        <td>{report.tests[1]['maven'].toFixed(2)}%</td>
-                        <td>{report.tests[1]['pro'].toFixed(2)}%</td>
-                        <td>{report.tests[1]['expert'].toFixed(2)}%</td>
+                        <td>{report.tests[1]['maven'] % 1 ? report.tests[1]['maven'].toFixed(2) : report.tests[1]['maven']}%</td>
+                        <td>{report.tests[1]['pro'] % 1 ? report.tests[1]['pro'].toFixed(2) : report.tests[1]['pro']}%</td>
+                        <td>{report.tests[1]['expert'] % 1 ? report.tests[1]['expert'].toFixed(2) : report.tests[1]['expert']}%</td>
                         {showIyun &&
-                            <td>{report.tests[1]['genius'].toFixed(2)}%</td>
+                            <td>{report.tests[1]['genius'] % 1 ? report.tests[1]['genius'].toFixed(2) : report.tests[1]['genius']}%</td>
                         }
                     </tr>
                     <tr className={classes.lastRow}>
