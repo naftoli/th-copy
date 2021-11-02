@@ -205,11 +205,13 @@ function ReportCard(info) {
                         <td rowSpan={2}>1</td>
                         <td>Correct Questions</td>
                         <td>{report.scores[1]['maven']} / {report.questions['maven']}</td>
-                        <td>{parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} / {report.questions['pro'] + report.questions['maven']}</td>
-                        <td>{parseInt(report.scores[1]['expert']) + parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} /
+                        <td>{parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
+                            {report.questions['pro'] + report.questions['maven']}</td>
+                        <td>{parseInt(report.scores[1]['expert'], 10) + parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
                             {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
                         {showIyun &&
-                            <td>{parseInt(report.scores[1]['genius']) + parseInt(report.scores[1]['expert']) + parseInt(report.scores[1]['pro']) + parseInt(report.scores[1]['maven'])} /
+                            <td>{parseInt(report.scores[1]['genius'], 10) + parseInt(report.scores[1]['expert'], 10) +
+                                    parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
                                 {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
                         }
                     </tr>
