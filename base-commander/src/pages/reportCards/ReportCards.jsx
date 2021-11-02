@@ -134,7 +134,7 @@ const ReportCards = (props) => {
                 setReports(data);
             }
             setLoading(false);
-            setReportsGenerated(true);
+            // setReportsGenerated(true);
         };
 
         if (test) fetchReportCards();
