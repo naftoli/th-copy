@@ -63,12 +63,11 @@ $sm->setArmyResults();
                 if ( isset( $_GET['school'] ) && $_GET['school'] != $id ) continue;
                 // generate the report for just this school
                 $sm->setSchool( $id );
-//                $sm->setSchoolResults( $id );
-//                $sm->setClassResults();
+                $sm->setSchoolResults( $id );
+                $sm->setClassResults();
 
                 // changes from shabbos_mevorchim.php
                 $sm->setStudentResults();
-                exit;
                 $sm->generateStudentReport();
                 if (isset($_GET['school'])) break;
             }
