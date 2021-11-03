@@ -1,4 +1,7 @@
 <?php // Authentication....
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 ini_set( 'max_execution_time', 600 );
 $admin_auth = array( 'school', 'user' ); 
 require( 'header.php' );
@@ -60,11 +63,12 @@ $sm->setArmyResults();
                 if ( isset( $_GET['school'] ) && $_GET['school'] != $id ) continue;
                 // generate the report for just this school
                 $sm->setSchool( $id );
-                $sm->setSchoolResults( $id );
-                $sm->setClassResults();
+//                $sm->setSchoolResults( $id );
+//                $sm->setClassResults();
 
                 // changes from shabbos_mevorchim.php
                 $sm->setStudentResults();
+                exit;
                 $sm->generateStudentReport();
                 if (isset($_GET['school'])) break;
             }
