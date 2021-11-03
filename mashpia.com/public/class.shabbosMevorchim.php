@@ -1067,10 +1067,6 @@ class ShabbosMevorchim {
 				AND dtmm.start_date = ? 
 				AND dtmm.end_date = ? 
 				AND dt.grid_id = ? 
-                AND dtm.lang_id = ? 
-                AND dtm.school_type_id = ?
-                AND dtm.track_id = ? 
-                AND dtm.level = ?
 				AND dtmm.subject_id = 1";
 		/*		
 		$sql2 = "SELECT sum( dtm.done_qty ) AS total
@@ -1174,12 +1170,12 @@ class ShabbosMevorchim {
                         } else {
                             if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
                                     $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
-                                $stmt2->execute(array($user['user_id'], $date, $date, $task, $user['lang_id'], $user['school_type_id'], $user['track_id'], $user['level']));
-                                if ($user['user_id'] == 60421) {
-                                    $stmt2->debugDumpParams(); exit;
-                                } else {
-                                    continue;
-                                }
+                                $stmt2->execute(array($user['user_id'], $date, $date, $task));
+//                                if ($user['user_id'] == 60421) {
+//                                    $stmt2->debugDumpParams(); exit;
+//                                } else {
+//                                    continue;
+//                                }
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
                                 $total = $row2['total'];
                                 $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
