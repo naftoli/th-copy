@@ -7,13 +7,28 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+function getMark($num, $id) {
+    $sql = "select mark from th_khk_marks where th_chidon_id = " . $id . " and test_number = " . $num;
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) > 0) {
+        $row = mysql_fetch_assoc($result);
+        return $row['mark'];
+    }
+    return '';
+}
+
 $msg = '';
 if (isset($_POST['submit'])) {
     $qrys = [];
     foreach ($_POST['marks'] as $id => $marks) {
         foreach ($marks as $num => $mark) {
-            if (is_numeric($mark))
-                $qrys[] = "update th_chidon set khk_test_$num = " . floatval($mark) . " where th_chidon_id = " . $id;
+            if (is_numeric($mark)){
+                $qrys[] = "insert into th_khk_marks 
+                            set th_chidon_id = " . $id . ", 
+                            test_number = " . $num . ", 
+                            mark = " . floatval($mark) . " 
+                            on duplicate key update mark = " . floatval($mark);
+            }
         }
     }
     foreach ($qrys as $qry) mysql_query($qry);
@@ -53,18 +68,18 @@ if ($admin_user['auth'] != 'super') {
     $shutdown3 = new DateTime('2021-02-02 05:00:00');
     $shutdown4 = new DateTime('2021-02-24 05:00:00');
 
-    if ($today >= $shutdown1) {
-        $disable[1] = true;
-    }
-    if ($today >= $shutdown2) {
-        $disable[2] = true;
-    }
-    if ($today >= $shutdown3) {
-        $disable[3] = true;
-    }
-    if ($today >= $shutdown4) {
-        $disable[4] = true;
-    }
+//    if ($today >= $shutdown1) {
+//        $disable[1] = true;
+//    }
+//    if ($today >= $shutdown2) {
+//        $disable[2] = true;
+//    }
+//    if ($today >= $shutdown3) {
+//        $disable[3] = true;
+//    }
+//    if ($today >= $shutdown4) {
+//        $disable[4] = true;
+//    }
 }
 ?>
 <!DOCTYPE html>
@@ -107,7 +122,7 @@ if ($admin_user['auth'] != 'super') {
             echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             $divideBy = 0;
             for ($i = 1; $i <= 4; $i++) {
-                $mark = $child["khk_test_$i"];
+                $mark = getMark($i, $id);
                 if ($mark > 0) {
                     $avg += floatval($mark);
                     $divideBy++;
