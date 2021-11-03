@@ -1203,7 +1203,7 @@ class ShabbosMevorchim {
 			}
 
 		}
-//        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
+        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
 	}
 
 	public function getStudentResults() {
