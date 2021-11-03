@@ -69,10 +69,9 @@ class ChidonTests
                 schools s on s.school_id = u.school_id
                     JOIN
                 classes c ON c.class_id = u.class_id 
-                    admin_auths aa ON aa.id = tc.user_id
                     JOIN
-                admins a ON aa.admin_id = a.admin_id
-                        WHERE
+                admins a on a.admin_id = tc.parent_id 
+            WHERE
                 tc.year = :year 
         ";
         if ($school_id > 0) $qry .= " AND u.school_id = :school";
