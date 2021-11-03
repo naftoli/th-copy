@@ -1175,9 +1175,11 @@ class ShabbosMevorchim {
                             if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
                                     $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
                                 $stmt2->execute(array($user['user_id'], $date, $date, $task, $user['lang_id'], $user['school_type_id'], $user['track_id'], $user['level']));
-                                // if ($sid == 176 && $user['user_id'] == 17267) {
-                                //     echo "<pre>"; print_r($stmt2); echo "</pre>";
-                                // }
+                                if ($user['user_id'] == 60421) {
+                                    $stmt2->debugDumpParams(); exit;
+                                } else {
+                                    continue;
+                                }
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
                                 $total = $row2['total'];
                                 $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
@@ -1203,7 +1205,7 @@ class ShabbosMevorchim {
 			}
 
 		}
-        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
+//        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
 	}
 
 	public function getStudentResults() {
