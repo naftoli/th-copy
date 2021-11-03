@@ -1046,7 +1046,7 @@ class ShabbosMevorchim {
 
         $sql1 = "select * from date_tasks 
                 where grid_id = ?
-                and date_tasks_mission_id = (
+                and date_tasks_mission_id in (
                     select date_tasks_mission_id from date_tasks_missions dtm 
                     where dtm.subject_id = 1 
                     and dtm.start_date = ?
