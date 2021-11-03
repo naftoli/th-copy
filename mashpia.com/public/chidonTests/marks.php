@@ -72,7 +72,8 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                     $color = 'grey';
                     if ($child['test_type'] == $type) {
                         $color = 'black';
-                        if ($mark < 70) $color = 'red';
+                        if ($type != 'genius' && $mark < 70) $color = 'red';
+                        else if ($type == 'genius' && $mark < 90) $color = 'red';
                     }
                     echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
