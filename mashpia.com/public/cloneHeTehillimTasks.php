@@ -3728,7 +3728,7 @@ foreach ($missionTypes as $missionType) {
 					        start_date = $date, 
 					        end_date = $date, 
 					        default_on = 1, 
-					        lang_id = 2, 
+					        lang_id = 4, 
 					        speed = $speed";
 
                     if (mysql_query($sql)) {
