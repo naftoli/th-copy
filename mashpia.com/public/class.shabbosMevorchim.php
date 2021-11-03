@@ -1067,6 +1067,10 @@ class ShabbosMevorchim {
 				AND dtmm.start_date = ? 
 				AND dtmm.end_date = ? 
 				AND dt.grid_id = ? 
+                AND dtm.lang_id = ? 
+                AND dtm.school_type_id = ?
+                AND dtm.track_id = ? 
+                AND dtm.level = ?
 				AND dtmm.subject_id = 1";
 		/*		
 		$sql2 = "SELECT sum( dtm.done_qty ) AS total
@@ -1170,7 +1174,7 @@ class ShabbosMevorchim {
                         } else {
                             if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
                                     $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
-                                $stmt2->execute(array($user['user_id'], $date, $date, $task));
+                                $stmt2->execute(array($user['user_id'], $date, $date, $task, $user['lang_id'], $user['school_type_id'], $user['track_id'], $user['level']));
                                 // if ($sid == 176 && $user['user_id'] == 17267) {
                                 //     echo "<pre>"; print_r($stmt2); echo "</pre>";
                                 // }
