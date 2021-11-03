@@ -60,7 +60,7 @@ class ChidonTests
                 tc.khk_final_mark, tc.reward_type, 
                 u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub,
-                s.school_id, s.school_name, a.admin_email
+                s.school_id, s.school_name 
             FROM
                 th_chidon tc
                     JOIN
@@ -69,8 +69,6 @@ class ChidonTests
                 schools s on s.school_id = u.school_id
                     JOIN
                 classes c ON c.class_id = u.class_id 
-                    JOIN
-                admins a on a.admin_id = tc.parent_id 
             WHERE
                 tc.year = :year 
         ";
