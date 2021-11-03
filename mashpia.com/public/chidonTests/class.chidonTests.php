@@ -55,45 +55,25 @@ class ChidonTests
     public function setStudents($school_id = 0, $class_id = 0, $user_id = 0) {
         $qry = "
             SELECT 
-                tc.th_chidon_id,
-                tc.user_id,
-                tc.test_type,
-                tc.parent_id,
-                tc.khk_rep,
-                tc.school_rep,
-                tc.school_rep_old,
-                tc.khk_test_1,
-                tc.khk_test_2,
-                tc.khk_test_3,
-                tc.khk_test_4,
-                tc.chidon_final_mark,
-                tc.trophy_final_mark,
-                tc.khk_final_mark,
-                tc.reward_type,
-                u.first,
-                u.last,
-                u.gender,
-                u.user_serial,
-                c.class_id,
-                c.class_grade,
-                c.class_sub,
-                s.school_id,
-                s.school_name,
-                a.admin_email
+                tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_rep, tc.school_rep, tc.school_rep_old, 
+                tc.khk_test_1, tc.khk_test_2, tc.khk_test_3, tc.khk_test_4, tc.chidon_final_mark, tc.trophy_final_mark,
+                tc.khk_final_mark, tc.reward_type, 
+                u.first, u.last, u.gender, u.user_serial, 
+                c.class_id, c.class_grade, c.class_sub,
+                s.school_id, s.school_name, a.admin_email
             FROM
                 th_chidon tc
                     JOIN
                 users u USING (user_id)
                     JOIN
-                schools s ON s.school_id = u.school_id
+                schools s on s.school_id = u.school_id
                     JOIN
-                classes c ON c.class_id = u.class_id
-                    JOIN
-                admin_auths aa ON aa.id = tc.user_id
+                classes c ON c.class_id = u.class_id 
+                    admin_auths aa ON aa.id = tc.user_id
                     JOIN
                 admins a ON aa.admin_id = a.admin_id
-            WHERE
-                tc.year = :year AND u.school_id = :school
+                        WHERE
+                tc.year = :year 
         ";
         if ($school_id > 0) $qry .= " AND u.school_id = :school";
         if ($class_id > 0) $qry .= " AND u.class_id = :grade";
@@ -101,6 +81,7 @@ class ChidonTests
         if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
         $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
+        echo $qry; exit;
         $stmt = $this->db->prepare($qry);
         if ($this->genderOnly) {
             if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
