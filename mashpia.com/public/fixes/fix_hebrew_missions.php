@@ -19,7 +19,7 @@ $names = ['נטילת ידיים', 'להתלבש בצניעות', 'צניעות'
 
 $duplicateTasks = [];
 //foreach ($grids as $id) {
-    foreach ($types as $type) {
+//    foreach ($types as $type) {
         foreach ($names as $name) {
             $sql = "SELECT 
                         date_task_id 
@@ -33,14 +33,13 @@ $duplicateTasks = [];
                             AND dtm.subject_id = 45
                             AND dtm.lang_id = 4
                             AND updated_at < '2021-09-01'
-                            AND dt.short_name = '$name'
-                            AND dtm.school_type_id = $type";
+                            AND dt.short_name = '$name'";
             $result = mysql_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 $duplicateTasks[] = $row['date_task_id'];
             }
         }
-    }
+//    }
 //}
 
 $deletedTasks = 0;
