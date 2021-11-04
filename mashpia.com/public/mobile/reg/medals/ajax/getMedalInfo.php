@@ -4,6 +4,8 @@ require_once( dirname(__FILE__) . '/../../../../db.php' );
 $user = mysql_real_escape_string( $_POST['user_id'] );
 
 $monthly_subjects = [1, 12, 15, 93, 106];
+//$ds_weekly = [126];
+$ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
 
 function calculateNextDate($subject, $needed) {
     // find date of task for this subject in $needed times
@@ -257,7 +259,8 @@ foreach ( $subjects as $subject ) {
             'nextMedalColor'    => $imgColors[$mission['ord']],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
-            'medals'    => $medals_arr
+            'medals'    => $medals_arr,
+            'daily'     => in_array($subject, $ds_daily)
 		);
     } else {
         // create array of medals
@@ -288,7 +291,8 @@ foreach ( $subjects as $subject ) {
             'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
-            'medals'    => $medals_arr
+            'medals'    => $medals_arr,
+            'daily'     => in_array($subject, $ds_daily)
 		);
     }
 }

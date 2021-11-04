@@ -34,7 +34,7 @@ function medal_board(target, user_id, url) {
                     animate: medal.icon ? true : false, base_amount: medal.base_amount,
                     needed: medal.needed, total: medal.total, next: medal.next,
                     nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, nextMedalColor: medal.nextMedalColor, medals: medal.medals,
-                    weekly: medal.weekly
+                    weekly: medal.weekly, daily: medal.daily
                 }).render();
             }
             html += "</div>";
@@ -87,6 +87,7 @@ function Medal(config) {
     this.nextMedalColor = config.nextMedalColor;
     this.medals = config.medals;
     this.weekly = config.weekly;
+    this.daily = config.daily;
 }
 
 Medal.prototype.getColor = function (current) {
@@ -174,9 +175,9 @@ Medal.prototype.render = function () {
     html += '</a>';
     html += '<h2>' + this.subject + '</h2></div>';
     html += '<p><span class="' + this.getColor(true).toLowerCase() + '">' + this.total + '</span> ' +
-        (this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
+        (this.daily ? "daily" : this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
-    html += "<p class='cornerLabel'>Don't miss a " + (this.weekly ? "week" : "month") + "<br/> to earn your "
+    html += "<p class='cornerLabel'>Don't miss a " + (this.daily ? "day" : this.weekly ? "week" : "month") + "<br/> to earn your "
     html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
     html += " medal by " + this.nextMedalDate + "</p>";
     html += '</div>';
