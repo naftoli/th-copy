@@ -18,7 +18,7 @@ for ($i = 13001; $i <= 13012; $i++) $grids[] = $i;
 $duplicateMissions = [];
 $duplicateTasks = [];
 
-foreach ($grids as $id) {
+//foreach ($grids as $id) {
     foreach ($types as $type) {
         foreach ($levels as $level) {
             $sql = "SELECT 
@@ -32,7 +32,7 @@ foreach ($grids as $id) {
                             AND dtm.created_by_parent IS NULL
                             AND dtm.lang_id = 4
                             AND created_at < '2021-09-01'
-                            AND dt.grid_id = $id
+                            AND dt.grid_id = 13001
                             AND school_type_id = $type
                             AND level = $level";
             $result = mysql_query($sql);
@@ -42,7 +42,7 @@ foreach ($grids as $id) {
             }
         }
     }
-}
+//}
 
 $deletedTasks = 0;
 $deletedMissions = 0;
