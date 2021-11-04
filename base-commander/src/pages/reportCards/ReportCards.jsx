@@ -209,7 +209,6 @@ const ReportCards = (props) => {
                     <label>Soldier</label>
                     <SoldierSelect
                         isClearable
-                        registeredOnly
                         value={userId}
                         classId={classId}
                         schoolId={schoolId}
