@@ -65,11 +65,13 @@ class PersonalizeRouter {
         $name = $_POST['name'];
         $label_id = $_POST['label_id'];
         $short_name = $_POST['short_name'];
+        $mission_marking = $_POST['mission_marking'];
+        $grid_marking = $_POST['grid_marking'];
         // * update the task and protect agains SQL injection (yes this is a thing that we are open to)
         $update_query = $MASHPIA_DB->prepare(
             'UPDATE date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
             .'SET dt.short_name = :short_name, '
-            .'name = :name, label_id = :label_id '
+            .'name = :name, label_id = :label_id, mission_marking = :marking, grid_marking = :g_marking '
             .'WHERE dt.grid_id = :grid_id AND dtm.lang_id = :lang_id '
         );
         // * update the task
@@ -77,6 +79,7 @@ class PersonalizeRouter {
             ':short_name' => $short_name,
             ':label_id' => $label_id,   ':name' => $name,
             ':grid_id' => $grid_id,     ':lang_id' => $lang_id,
+            ':marking' => $mission_marking, ':g_marking' => $grid_marking
         ]);
         // * send errors to user
         if ( !$status )
