@@ -9,9 +9,7 @@ class SubjectsRouter {
 
         $subjects = Subject::all([
             'conditions' => [
-                'subject_type IN ( "" , "WWTC", "Tanya" )', 
-                // .'AND inst_id IN ( 0, ? ) '
-                // $current_user->login->inst_id
+                'subject_type IN ( "" , "WWTC", "Tanya" ) AND inst_id = ? ', $current_user->login->inst_id
             ],
             'order' => 'subject_name'
         ]);
