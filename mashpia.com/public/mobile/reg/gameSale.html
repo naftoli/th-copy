@@ -258,17 +258,20 @@
 
                 // sepearate registered and un-registered
                 var registred_children = {};
-                // var unregistered_children = {};
+                var unregistered_children = {};
 
                 for (var c in children) {
                     var child = children[c];
-                    registred_children[c] = child;
-                    // if (child.mivtzaLulav) {
-                    //     registred_children[c] = child;
-                    // } else {
-                    //     unregistered_children[c] = child;
-                    // }
+                    var countries = ['United States','US','USA','U.S.A.','Canada','canada']
+                    var schoolExceptions = [61, 269]
+                    if (countries.includes(child.school_country) && !schoolExceptions.includes(parseInt(child.school_id, 10))) {
+                        registred_children[c] = child;
+                    } else {
+                        unregistered_children[c] = child;
+                    }
                 }
+                console.log(registred_children)
+                console.log(unregistered_children)
 
                 // Grab the template script
                 var tplScript = $("#childrenTpl").html();
