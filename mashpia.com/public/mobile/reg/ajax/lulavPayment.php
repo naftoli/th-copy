@@ -34,7 +34,7 @@ if ( $amount > 0 ) {
                         $response_array[9];	
 
         $qry = $MASHPIA_DB->prepare(
-            "INSERT into mivtzoim_purchases.purchases 
+            "INSERT into mashpia_purchases.purchases 
             SET admin_id = :admin, 
             amount_paid = :amount, 
             authorization = :auth, 
@@ -49,7 +49,7 @@ if ( $amount > 0 ) {
         $purchase_id = $MASHPIA_DB->lastInsertId();
 
         $qry = $MASHPIA_DB->prepare(
-            "INSERT INTO mivtzoim_purchases.purchase_details 
+            "INSERT INTO mashpia_purchases.purchase_details 
                 SET purchase_id = :id, 
                 user_id = :user, 
                 item_id = 1, 
