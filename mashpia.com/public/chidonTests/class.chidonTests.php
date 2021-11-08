@@ -16,6 +16,8 @@ class ChidonTests
     private $testQuestions;
     private $marks;
     private $genderOnly;
+    private $start;
+    private $end;
 
     public function __construct() {
         global $MASHPIA_DB;
@@ -38,6 +40,11 @@ class ChidonTests
             'genius'=> 10
         ];
         $this->genderOnly = false;
+    }
+
+    public function setLimmudDates( $start, $end ) {
+        $this->start = $start;
+        $this->end = $end;
     }
 
     public function getTypes() {
@@ -260,5 +267,55 @@ class ChidonTests
 
     public function getMarks() {
         return $this->marks;
+    }
+
+    public function getHighestTrackEligible( $chidon_id, $marks ) {
+        foreach ($this->types as $type => $value) {
+            $avgs[$type] = 0;
+        }
+
+        if (count($marks) > 0) {
+            foreach ($marks as $num => $more) {
+                foreach ($more as $type => $mark) {
+                    $avgs[$type] += $mark;
+                }
+            }
+
+            $highest = 'maven';
+            foreach ($avgs as $type => $avg) {
+                $avgs[$type] /= $num;
+                $avg = $avgs[$type];
+                if ($type != 'genius') {
+                    if ($avg >= 70) $highest = $type;
+                } else {
+                    if ($avg >= 90) $highest = $type;
+                }
+            }
+            return $highest;
+        }
+        return '';
+    }
+
+    public function getTotalMinutesLearned( $user_id ) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                IFNULL(SUM(done_qty), 0) AS total
+            FROM
+                date_tasks_marks dtm
+                    JOIN
+                date_tasks dt USING (date_task_id)
+                    JOIN
+                date_tasks_missions dtmm USING (date_tasks_mission_id)
+            WHERE
+                dt.cat = 'chidon limmud'
+                    AND dtmm.start_date >= :start
+                    AND dtmm.end_date <= :end
+                    AND user_id = :user");
+        $stmt->execute([
+            ':start'    => $this->start,
+            ':end'      => $this->end,
+            ':user'     => $user_id
+        ]);
+        return $stmt->fetch()['total'];
     }
 }
