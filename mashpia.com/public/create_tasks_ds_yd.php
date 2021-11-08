@@ -178,7 +178,7 @@ function getStartEnd($arr) {
                                     else {
                                         echo "skipping row";
                                         $empty = 1;
-                                        continue 2;
+                                        continue;
                                     }
                                 }
                                 ${$fieldNames[$i]} = $val;
