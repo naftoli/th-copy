@@ -119,15 +119,13 @@ $types = $t->getTypes();
                     echo "</td><td>";
 
                     $mark = parseInt($user['marks'][$user['th_chidon_id']][1]['maven'], 10);
-                    if ($mark > 0) echo "YES";
-                    else {
+                    if ($mark > 0) {
+                        echo "YES";
+                        // keep track of how many kids failed first test
+                        if ($mark < 70) $totals['failedTest']++;
+                    } else {
                         echo "NO";
                         $totals['missedTest']++;
-                    }
-
-                    // keep track of how many kids failed first test
-                    if ($mark > 0 && $mark < 70) {
-                        $totals['failedTest']++;
                     }
 
                     echo "</td><td>" . $user['marks'][$user['th_chidon_id']][1]['maven'] . "</td><td>" .
