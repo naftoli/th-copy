@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -104,7 +104,10 @@ $types = $t->getTypes();
                         $user['marks'][$user['th_chidon_id']][1]['pro'] . "</td><td>" .
                         $user['marks'][$user['th_chidon_id']][1]['expert'] . "</td><td>" .
                         $user['marks'][$user['th_chidon_id']][1]['genius'] . "</td><td>";
-                    echo $types[$user['test_type']] . "</td><td>" . $types[$user['reward_type']] . "</td><td>";
+                    echo $types[$user['test_type']] . "</td><td>";
+                    if ($types[$user['reward_type']]) echo $types[$user['reward_type']];
+                    else echo $types[$user['test_type']];
+                    echo "</td><td>";
                     echo $t->getHighestTrackEligible($user['th_chidon_id'], $user['marks'][$user['th_chidon_id']]) . "</td><td>";
                     $t->setLimmudDates(2459469, 2459514);
                     echo $t->getTotalMinutesLearned( $user['user_id'] ) . "</td></tr>";
