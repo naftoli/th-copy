@@ -105,7 +105,7 @@ $types = $t->getTypes();
                         $user['marks'][$user['th_chidon_id']][1]['expert'] . "</td><td>" .
                         $user['marks'][$user['th_chidon_id']][1]['genius'] . "</td><td>";
                     echo $types[$user['test_type']] . "</td><td>";
-                    if ($types[$user['reward_type']]) echo $types[$user['reward_type']];
+                    if (in_array($user['reward_type'], array_keys($types))) echo $types[$user['reward_type']];
                     else echo $types[$user['test_type']];
                     echo "</td><td>";
                     echo $t->getHighestTrackEligible($user['th_chidon_id'], $user['marks'][$user['th_chidon_id']]) . "</td><td>";
