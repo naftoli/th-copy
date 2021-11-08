@@ -152,7 +152,7 @@ function getStartEnd($arr) {
                 );
 
                 $r = 1;
-                $empty = 0; // flag to know when to stop reading spreadsheet
+                $empty = false; // flag to know when to stop reading spreadsheet
                 foreach ( $objWorksheet->getRowIterator() as $row ) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false);
@@ -174,13 +174,14 @@ function getStartEnd($arr) {
                             case 1:
                                 // skip row if it's empty
                                 if (empty($val)) {
-                                    if (++$empty > 1) break 3; // break out of reading spreadsheet
+                                    if ($empty) break 3; // break out of reading spreadsheet
                                     else {
-                                        echo "skipping row";
-                                        $empty = 0;
+                                        echo "skipping row<br />";
+                                        $empty = true;
                                         continue 2;
                                     }
                                 }
+                                else $empty = false;
                                 ${$fieldNames[$i]} = $val;
                                 break;
                             // Start Date
