@@ -250,7 +250,7 @@
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 5000;
                 var menorahSold = parseInt( sold );
-                // menorahSold = 5000;
+                menorahSold += 220;
                 var menorahLeft = menorahStart - menorahSold;
                 $(".menorahSold").text( menorahSold );
                 $(".menorahLeft").text( menorahLeft );
@@ -267,7 +267,7 @@
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
                 var brochureStart = 2000;
                 var brochureSold = parseInt( sold );
-                // brochureSold = 5000;
+                brochureSold += 5;
                 var brochureLeft = brochureStart - brochureSold;
                 $(".brochureSold").text( brochureSold );
                 $(".brochureLeft").text( brochureLeft );
