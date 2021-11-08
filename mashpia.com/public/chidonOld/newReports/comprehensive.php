@@ -31,7 +31,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
 
-require $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/class.chidonTests.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 foreach ($info as $idx => $user) {
     $id = $user['user_id'];
     $t = new ChidonTests();
