@@ -60,6 +60,7 @@ $types = $t->getTypes();
             tr, th, td {
                 padding: 5px;
                 text-size: 12px;
+                border: 1px solid grey;
             }
         </style>
     </head>
