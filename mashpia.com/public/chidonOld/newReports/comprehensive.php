@@ -14,7 +14,7 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $sql = "SELECT 
-            u.user_id, u.first, u.last, u.user_serial, s.school_id, s.school_name, c.class_grade, c.class_sub, tc.th_chidon_id, tc.khk_reg
+            u.user_id, u.first, u.last, u.user_serial, s.school_id, s.school_name, c.class_id, c.class_grade, c.class_sub, tc.th_chidon_id, tc.khk_reg
         FROM
             th_chidon tc
                 JOIN
@@ -33,9 +33,8 @@ while ($row = mysql_fetch_assoc($result)) {
 
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 foreach ($info as $idx => $user) {
-    $id = $user['user_id'];
     $t = new ChidonTests();
-    $t->setStudents(0, 0, $id);
+    $t->setStudents($user['school_id'], $user['class_id'], $user['user_id']);
     $t->setScores();
     $t->calculateMarks();
     $marks = $t->getMarks();
