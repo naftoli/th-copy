@@ -88,21 +88,32 @@ $types = $t->getTypes();
                 <th>Total Minutes Studied</th>
             </tr>
             <?php
-            $totals = [];
+            $totals['reg'] = 0;
+            $totals['unreg'] = 0;
+            $totals['khk'] = 0;
+            $totals['missedTest'] = 0;
+            $totals['failedTest'] = 0;
+            $totals['track']['failed'] = 0;
+            $totals['track']['passed'] = 0;
+            $totals['betterThanTrack'] = 0;
+            $totals['time']['failed'] = 0;
+            $totals['time']['passed'] = 0;
+            foreach ($types as $type => $value) {
+                $totals[$type] = 0;
+            }
+
             foreach ($info as $user) {
                 $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
                 echo "<tr><td>" . $user['th_chidon_id'] . "</td><td>" . $user['user_serial'] . "</td><td>";
                 if ($admin_user['auth'] == 'super') echo $user['school_name'] . "</td><td>";
                 echo $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td><td>";
                 if ($user['th_chidon_id']) {
-                    if ($totals['reg']) $totals['reg']++;
-                    else $totals['reg'] = 1;
+                    $totals['reg']++;
                     echo $user['reg_date'] . "</td><td>";
 
                     if ($user['khk_reg']) {
                         echo "YES";
-                        if ($totals['khk']) $totals['khk']++;
-                        else $totals['khk'] = 1;
+                        $totals['khk']++;
                     }
                     else echo "NO";
                     echo "</td><td>";
@@ -111,14 +122,12 @@ $types = $t->getTypes();
                     if ($mark > 0) echo "YES";
                     else {
                         echo "NO";
-                        if ($totals['missedTest']) $totals['missedTest']++;
-                        else $totals['missedTest'] = 1;
+                        $totals['missedTest']++;
                     }
 
                     // keep track of how many kids failed first test
                     if ($mark > 0 && $mark < 70) {
-                        if ($totals['failedTest']) $totals['failedTest']++;
-                        else $totals['failedTest'] = 1;
+                        $totals['failedTest']++;
                     }
 
                     echo "</td><td>" . $user['marks'][$user['th_chidon_id']][1]['maven'] . "</td><td>" .
@@ -132,11 +141,9 @@ $types = $t->getTypes();
                     if ($user['test_type'] != 'genius') $needed = 90;
                     else $needed = 70;
                     if (parseInt($user['marks'][$user['th_chidon_id']][1][$user['test_type']], 10) < $needed) {
-                        if ($totals['track']['failed']) $totals['track']['failed']++;
-                        else $totals['track']['failed'] = 1;
+                        $totals['track']['failed']++;
                     } else {
-                        if ($totals['track']['passed']) $totals['track']['passed']++;
-                        else $totals['track']['passed'] = 1;
+                        $totals['track']['passed']++;
                     }
 
                     // keep track of how many children passed each type
@@ -144,8 +151,7 @@ $types = $t->getTypes();
                         if ($type == 'genius') $needed = 90;
                         else $needed = 70;
                         if (parseInt($user['marks'][$user['th_chidon_id']][1][$type], 10) >= $needed) {
-                            if ($totals[$type]) $totals[$type]++;
-                            else $totals[$type] = 1;
+                            $totals[$type]++;
                         }
                     }
 
@@ -157,8 +163,7 @@ $types = $t->getTypes();
                         if ($next == 'genius') $needed = 90;
                         else $needed = 70;
                         if (parseInt($user['marks'][$user['th_chidon_id']][1][$next]) >= $needed) {
-                            if ($totals['betterThanTrack']) $totals['betterThanTrack']++;
-                            else $totals['betterThanTrack'] = 1;
+                            $totals['betterThanTrack']++;
                         }
                     }
 
@@ -179,16 +184,13 @@ $types = $t->getTypes();
                         'genius' => 1920
                     ];
                     if ($timeLearned >= $timeNeeded[$user['test_type']]) {
-                        if ($totals['time']['passed']) $totals['time']['passed']++;
-                        else $totals['time']['passed'] = 1;
+                        $totals['time']['passed']++;
                     } else {
-                        if ($totals['time']['failed']) $totals['time']['failed']++;
-                        else $totals['time']['failed'] = 1;
+                        $totals['time']['failed']++;
                     }
                 }
                 else {
-                    if ($totals['unreg']) $totals['unreg']++;
-                    else $totals['unreg'] = 1;
+                    $totals['unreg']++;
                     echo "NOT REGISTERED" . "</td><td colspan='10'></td></tr>";
                 }
             }
