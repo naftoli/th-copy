@@ -107,8 +107,6 @@ function getStartEnd($arr) {
             $file = "SystemTasks/DC_YD" . $missionYear . ".xlsx";
         }
 
-        $empty = 0; // flag to know when to stop reading spreadsheet
-
         // load the file and save it to the database
         if (file_exists($_FILES['tasks']['tmp_name'])) {
             if (move_uploaded_file($_FILES['tasks']['tmp_name'], $file)) {
@@ -154,6 +152,7 @@ function getStartEnd($arr) {
                 );
 
                 $r = 1;
+                $empty = 0; // flag to know when to stop reading spreadsheet
                 foreach ( $objWorksheet->getRowIterator() as $row ) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false);
@@ -175,8 +174,12 @@ function getStartEnd($arr) {
                             case 1:
                                 // skip row if it's empty
                                 if (empty($val)) {
-                                    if (++$empty > 1) break 3; // break out of reading spreadsheet
-                                    continue 2;
+                                    if (++$empty > 1) {
+                                        break 3; // break out of reading spreadsheet
+                                    } else {
+                                        $empty = 1;
+                                        continue 2;
+                                    }
                                 }
                                 ${$fieldNames[$i]} = $val;
                                 break;

@@ -207,7 +207,10 @@ if (isset($_POST['submit'])) {
                             // skip row if it's empty
                             if (empty($val)) {
                                 if (++$empty > 1) break 3; // break out of reading spreadsheet
-                                continue 2;
+                                else {
+                                    $empty = 1;
+                                    continue 2;
+                                }
                             }
                             ${$fieldNames[$i]} = $val;
                             break;
