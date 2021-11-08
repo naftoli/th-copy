@@ -174,9 +174,9 @@ function getStartEnd($arr) {
                             case 1:
                                 // skip row if it's empty
                                 if (empty($val)) {
-                                    if (++$empty > 1) {
-                                        break 3; // break out of reading spreadsheet
-                                    } else {
+                                    if (++$empty > 1) break 3; // break out of reading spreadsheet
+                                    else {
+                                        echo "skipping row";
                                         $empty = 1;
                                         continue 2;
                                     }
@@ -309,6 +309,7 @@ function getStartEnd($arr) {
                     $missionName = "";
                 }
                 //exit;
+                echo "<pre>"; print_r($missions['add']); echo "</pre>"; exit;
 
                 mysql_query("SET AUTOCOMMIT=0");
                 mysql_query("BEGIN");
