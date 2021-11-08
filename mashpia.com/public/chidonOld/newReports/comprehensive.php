@@ -31,18 +31,14 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
 
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/class.chidonTests.php';
 foreach ($info as $idx => $user) {
-    $marks = [];
-    $sql = "SELECT 
-                *
-            FROM
-                th_chidon_marks
-            WHERE
-                th_chidon_id = " . $user['th_chidon_id'];
-    $result = mysql_query($sql);
-    while ($row = mysql_query($sql)) {
-        $marks[] = $row;
-    }
+    $id = $user['user_id'];
+    $t = new ChidonTests();
+    $t->setStudents(0, 0, $id);
+    $t->setScores();
+    $t->calculateMarks();
+    $marks = $t->getMarks();
     $info[$idx]['marks'] = $marks;
 }
 
