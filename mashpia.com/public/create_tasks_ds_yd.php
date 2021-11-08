@@ -178,7 +178,7 @@ function getStartEnd($arr) {
                                     else {
                                         echo "skipping row<br />";
                                         $empty = true;
-                                        continue 2;
+                                        continue 3;
                                     }
                                 }
                                 else $empty = false;
