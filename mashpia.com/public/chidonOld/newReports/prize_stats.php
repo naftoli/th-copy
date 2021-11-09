@@ -70,7 +70,6 @@ for ($num = 1; $num <= 4; $num++) {
         }
     }
 }
-echo "<pre>"; print_r($passed); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -103,7 +102,7 @@ echo "<pre>"; print_r($passed); echo "</pre>";
                 echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
                     echo "<td>";
-                    if (isset($passed[$num][$id])) echo $passed[$num][$id];
+                    if (isset($passed[$i][$id])) echo $passed[$num][$id];
                     echo "</td>";
                 }
                 echo "</tr>";
