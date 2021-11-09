@@ -14,19 +14,35 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $sql = "SELECT 
-            u.user_id, u.first, u.last, u.user_serial, s.school_id, s.school_name, c.class_id, c.class_grade, c.class_sub, 
-            tc.th_chidon_id, tc.reg_date, tc.khk_reg, tc.reward_type, tc.test_type
+            u.user_id,
+            u.first,
+            u.last,
+            u.user_serial,
+            s.school_id,
+            s.school_name,
+            c.class_id,
+            c.class_grade,
+            c.class_sub,
+            tc.th_chidon_id,
+            tc.reg_date,
+            tc.khk_reg,
+            tc.reward_type,
+            tc.test_type
         FROM
-            users u 
-                LEFT JOIN 
+            users u
+                LEFT JOIN
             th_chidon tc USING (user_id)
                 JOIN
             schools s ON s.school_id = u.school_id
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            year = $year AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
-        ORDER BY s.school_id, c.class_grade, c.class_sub, u.last, u.first";
+            s.school_era IS NULL AND c.class_era = 0
+                AND (tc.year IS NULL OR tc.year = $year)
+                AND c.class_grade >= 4
+                AND c.class_grade <= 8
+                AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
+        ORDER BY s.school_id , c.class_grade , c.class_sub , u.last , u.first";
 //echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
