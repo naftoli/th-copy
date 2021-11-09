@@ -234,7 +234,8 @@
                 <div class="col-xs-6" id="chidonDriveButton">
                     <div class="button-spacing childrens-content" style="float:right;">
 <!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
-                         <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
+                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
+                            <button class="btn btn-info gameSet">Game Set(s)</button>
                         <!-- <button class="btn btn-info chidondrive">ChidonDrive</button> -->
                     </div>
                 </div>
@@ -821,6 +822,10 @@
                 if (!shliach) location.href = "/mobile/chidon/?id=" + id;
             });
 
+
+            $(document).on('click', '.gameSet', function () {
+                location.href = '/mobile/reg/gameSale.html'
+            })
             /*
             $(document).on('click', '.chidonEdit', function() {
                 var id = $(this).parent().parent().parent().attr('id');
