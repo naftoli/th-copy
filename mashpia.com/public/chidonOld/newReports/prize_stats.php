@@ -46,13 +46,19 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $passed = [];
+$needed = [
+    1 => 50,
+    2 => 60,
+    3 => 65,
+    4 => 70
+];
 for ($num = 1; $num <= 4; $num++) {
     foreach ($prizes as $id => $more) {
         $passed[$num][$id] = 0;
         foreach ($more as $prize) {
-            if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'])) {
+            if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num])) {
                 $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'];
-                if ($mark >= 50) $passed[$num][$id]++;
+                if ($mark >= $needed[$num]) $passed[$num][$id]++;
             } else {
                 break 3;
             }
