@@ -34,7 +34,7 @@ $sql = "SELECT
         GROUP BY cp.prize_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $prizes[$row['prize_id']][] = $row;
+    $prizes[$row['prize_id']] = $row;
 }
 
 $user_prizes = [];
@@ -99,12 +99,13 @@ for ($num = 1; $num <= 4; $num++) {
             </tr>
             <?php
             foreach ($prizes as $id => $prize) {
-                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td><td>";
+                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
+                    echo "<td>";
                     if (isset($passed[$num][$id])) echo $passed[$num][$id];
-                    echo "</td><td>";
+                    echo "</td>";
                 }
-                echo "</td></tr>";
+                echo "</tr>";
             }
             ?>
         </table>
