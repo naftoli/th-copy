@@ -18,6 +18,7 @@ $marks = [];
 foreach ($schools as $id => $name) {
     $t->setStudents($id);
     $t->setScores();
+    $t->calculateMarks();
     $marks[$id] = $t->getMarks();
 }
 echo "<pre>"; print_r($marks); echo "</pre>"; exit;
