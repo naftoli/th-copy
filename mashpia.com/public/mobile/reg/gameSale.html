@@ -262,7 +262,7 @@
                 for (var c in children) {
                     var child = children[c];
                     var countries = ['United States','US','USA','U.S.A.','Canada','canada']
-                    var schoolExceptions = [61, 269]
+                    var schoolExceptions = [61, 269, 612]
                     if (countries.includes(child.school_country) && !schoolExceptions.includes(parseInt(child.school_id, 10))) {
                         registred_children[c] = child;
                     } else {
