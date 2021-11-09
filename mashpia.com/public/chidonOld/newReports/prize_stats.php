@@ -23,44 +23,49 @@ foreach ($schools as $id => $name) {
 }
 
 $prizes = [];
-$prizeInfo = [];
 $sql = "SELECT 
-            cp.prize_id,
-            cp.prize_name,
-            cup.user_id,
-            tc.th_chidon_id, 
-            tc.school_id
+            cp.prize_id, cp.prize_name, COUNT(*) as total
         FROM
             chidon_prizes cp
                 JOIN
             chidon_user_prizes cup USING (prize_id)
-                JOIN
-            th_chidon tc USING (user_id)
         WHERE
             cp.year = $year
-        ORDER BY cp.prize_id";
+        GROUP BY cp.prize_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $prizes[$row['prize_id']][] = $row;
-    $prizeInfo[$row['prize_id']] = $row['prize_name'];
 }
 
-$passed = [];
+$user_prizes = [];
+$sql = "SELECT 
+            cup.user_id, cup.prize_id, tc.th_chidon_id, tc.school_id
+        FROM
+            chidon_user_prizes cup
+                JOIN
+            th_chidon tc USING (user_id, year)
+        WHERE
+            cup.year = $year
+        ORDER BY prize_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $user_prizes[$row['prize_id']][] = $row;
+}
+
 $needed = [
     1 => 50,
     2 => 60,
     3 => 65,
     4 => 70
 ];
+$passed = [];
 for ($num = 1; $num <= 4; $num++) {
-    foreach ($prizes as $id => $more) {
+    foreach ($user_prizes as $id => $more) {
         $passed[$num][$id] = 0;
         foreach ($more as $prize) {
             if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num])) {
                 $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'];
                 if ($mark >= $needed[$num]) $passed[$num][$id]++;
-            } else {
-                break 3;
             }
         }
     }
@@ -93,8 +98,8 @@ for ($num = 1; $num <= 4; $num++) {
                 <th>70%+ after Test #4</th>
             </tr>
             <?php
-            foreach ($prizeInfo as $id => $prize) {
-                echo "<tr><td>" . $id . "</td><td>" . $prize . "</td><td>" . count($prizes[$id]) . "</td><td>";
+            foreach ($prizes as $id => $prize) {
+                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td><td>";
                 for ($i = 1; $i <= 4; $i++) {
                     if (isset($passed[$num][$id])) echo $passed[$num][$id];
                     echo "</td><td>";
