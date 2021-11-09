@@ -21,7 +21,6 @@ foreach ($schools as $id => $name) {
     $t->calculateMarks();
     $marks[$id] = $t->getMarks();
 }
-echo "<pre>"; print_r($marks); echo "</pre>"; exit;
 
 $prizes = [];
 $prizeInfo = [];
@@ -29,7 +28,6 @@ $sql = "SELECT
             cp.prize_id,
             cp.prize_name,
             cup.user_id,
-            cup.he_name,
             tc.th_chidon_id, 
             tc.school_id
         FROM
@@ -47,10 +45,18 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizeInfo[$row['prize_id']] = $row['prize_name'];
 }
 
-$info = [];
-foreach ($prizes as $id => $more) {
-    foreach ($more as $prize) {
-        $mark = $marks[$prize['school_id']][$prize['th_chidon_id']];
+$passed = [];
+for ($num = 1; $num <= 4; $num++) {
+    foreach ($prizes as $id => $more) {
+        $passed[$num][$id] = 0;
+        foreach ($more as $prize) {
+            if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'])) {
+                $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'];
+                if ($mark >= 50) $passed[$num][$id]++;
+            } else {
+                break 3;
+            }
+        }
     }
 }
 ?>
@@ -81,7 +87,14 @@ foreach ($prizes as $id => $more) {
                 <th>70%+ after Test #4</th>
             </tr>
             <?php
-
+            foreach ($prizeInfo as $id => $prize) {
+                echo "<tr><td>" . $id . "</td><td>" . $prize . "</td><td>" . count($prizes[$id]) . "</td><td>";
+                for ($i = 1; $i <= 4; $i++) {
+                    if (isset($passed[$num][$id])) echo $passed[$num][$id];
+                    echo "</td><td>";
+                }
+                echo "</td></tr>";
+            }
             ?>
         </table>
     </body>
