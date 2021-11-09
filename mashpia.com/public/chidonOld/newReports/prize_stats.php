@@ -70,6 +70,7 @@ for ($num = 1; $num <= 4; $num++) {
         }
     }
 }
+echo "<pre>"; print_r($passed); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
