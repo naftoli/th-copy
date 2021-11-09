@@ -145,7 +145,7 @@ $types = $t->getTypes();
                     }
 
                     // keep track of how many children passed each type
-                    foreach ($types as $type) {
+                    foreach ($types as $type => $value) {
                         if ($type == 'genius') $needed = 90;
                         else $needed = 70;
                         if (floatval($user['marks'][$user['th_chidon_id']][1][$type]) >= $needed) {
