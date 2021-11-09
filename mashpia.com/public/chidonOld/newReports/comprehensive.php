@@ -45,7 +45,7 @@ foreach ($info as $idx => $user) {
 
 $t = new ChidonTests();
 $types = $t->getTypes();
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -118,7 +118,7 @@ echo "<pre>"; print_r($info); echo "</pre>"; exit;
                     else echo "NO";
                     echo "</td><td>";
 
-                    $mark = parseInt($user['marks'][$user['th_chidon_id']][1]['maven'], 10);
+                    $mark = floatval($user['marks'][$user['th_chidon_id']][1]['maven']);
                     if ($mark > 0) {
                         echo "YES";
                         // keep track of how many kids failed first test
@@ -138,7 +138,7 @@ echo "<pre>"; print_r($info); echo "</pre>"; exit;
                     // keep track of how many kids passed/failed their track
                     if ($user['test_type'] != 'genius') $needed = 90;
                     else $needed = 70;
-                    if (parseInt($user['marks'][$user['th_chidon_id']][1][$user['test_type']], 10) < $needed) {
+                    if (floatval($user['marks'][$user['th_chidon_id']][1][$user['test_type']]) < $needed) {
                         $totals['track']['failed']++;
                     } else {
                         $totals['track']['passed']++;
@@ -148,7 +148,7 @@ echo "<pre>"; print_r($info); echo "</pre>"; exit;
                     foreach ($types as $type) {
                         if ($type == 'genius') $needed = 90;
                         else $needed = 70;
-                        if (parseInt($user['marks'][$user['th_chidon_id']][1][$type], 10) >= $needed) {
+                        if (floatval($user['marks'][$user['th_chidon_id']][1][$type]) >= $needed) {
                             $totals[$type]++;
                         }
                     }
@@ -160,7 +160,7 @@ echo "<pre>"; print_r($info); echo "</pre>"; exit;
                         $next = $tracks[$index];
                         if ($next == 'genius') $needed = 90;
                         else $needed = 70;
-                        if (parseInt($user['marks'][$user['th_chidon_id']][1][$next]) >= $needed) {
+                        if (floatval($user['marks'][$user['th_chidon_id']][1][$next]) >= $needed) {
                             $totals['betterThanTrack']++;
                         }
                     }
