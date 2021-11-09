@@ -14,35 +14,19 @@ $year = GlobalSettings::getChidonYear();
 
 $info = [];
 $sql = "SELECT 
-            u.user_id,
-            u.first,
-            u.last,
-            u.user_serial,
-            s.school_id,
-            s.school_name,
-            c.class_id,
-            c.class_grade,
-            c.class_sub,
-            tc.th_chidon_id,
-            tc.reg_date,
-            tc.khk_reg,
-            tc.reward_type,
-            tc.test_type
+            u.user_id, u.first, u.last, u.user_serial, s.school_id, s.school_name, c.class_id, c.class_grade, c.class_sub, 
+            tc.th_chidon_id, tc.reg_date, tc.khk_reg, tc.reward_type, tc.test_type
         FROM
-            users u
-                LEFT JOIN
+            users u 
+                JOIN 
             th_chidon tc USING (user_id)
                 JOIN
             schools s ON s.school_id = u.school_id
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            s.school_era IS NULL AND c.class_era = 0
-                AND (tc.year IS NULL OR tc.year = $year)
-                AND c.class_grade >= 4
-                AND c.class_grade <= 8
-                AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
-        ORDER BY s.school_id , c.class_grade , c.class_sub , u.last , u.first";
+            year = $year AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
+        ORDER BY s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 //echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -105,7 +89,6 @@ $types = $t->getTypes();
             </tr>
             <?php
             $totals['reg'] = 0;
-            $totals['unreg'] = 0;
             $totals['khk'] = 0;
             $totals['missedTest'] = 0;
             $totals['failedTest'] = 0;
@@ -203,10 +186,6 @@ $types = $t->getTypes();
                         $totals['time']['failed']++;
                     }
                 }
-                else {
-                    $totals['unreg']++;
-                    echo "NOT REGISTERED" . "</td><td colspan='10'></td></tr>";
-                }
             }
             ?>
         </table>
@@ -215,7 +194,6 @@ $types = $t->getTypes();
             <caption>Totals</caption>
             <tr>
                 <th>Registered</th>
-                <th>Not Registered</th>
                 <th>Registered for KHK</th>
                 <th>Missed first Test</th>
                 <th>Failed first Test</th>
@@ -230,7 +208,7 @@ $types = $t->getTypes();
                 <th>Children that didn't complete their minutes</th>
             </tr>
             <?php
-            echo "<tr><td>" . $totals['reg'] . "</td><td>" . $totals['unreg'] . "</td><td>" . $totals['khk'] . "</td><td>" .
+            echo "<tr><td>" . $totals['reg'] . "</td><td>" . $totals['khk'] . "</td><td>" .
                 $totals['missedTest'] . "</td><td>" . $totals['failedTest'] . "</td><td>" . $totals['track']['failed'] .
                 "</td><td>" . $totals['track']['passed'] . "</td><td>" . $totals['betterThanTrack'] . "</td><td>";
             foreach ($types as $type => $value) {
