@@ -45,7 +45,7 @@ foreach ($info as $idx => $user) {
 
 $t = new ChidonTests();
 $types = $t->getTypes();
-//echo "<pre>"; print_r($info); echo "</pre>";
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
