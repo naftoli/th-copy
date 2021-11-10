@@ -146,7 +146,6 @@ class NewParentModal extends Component {
                 <Col xs={12}>
                   <Label>Children: Serial numbers comma seperated.</Label>
                   <Input required name='children'
-                    value={ children.toString() }
                     pattern='^(7[0-9]{6},[ ]?)*(7[0-9]{6})$'/>
                   <div className='invalid-message'>
                     1 or more valid serial numbers
