@@ -64,7 +64,7 @@ for ($num = 1; $num <= 4; $num++) {
         $passed[$num][$id] = 0;
         foreach ($more as $prize) {
             if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num])) {
-                $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['maven'];
+                $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['pro'];
                 if ($mark >= $needed[$num]) $passed[$num][$id]++;
             }
         }
