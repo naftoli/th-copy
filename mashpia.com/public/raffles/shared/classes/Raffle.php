@@ -614,10 +614,6 @@ class Raffle
                     and dtm.mark_date >= " . $this->start_date . " 
                     and dtm.mark_date <= " . $this->end_date;
 //            echo $sql;
-            if ($user_id == 63919) {
-                echo $sql;
-                exit;
-            }
             $result = mysql_query($sql);
             $total = mysql_fetch_assoc($result)['total'];
         }
