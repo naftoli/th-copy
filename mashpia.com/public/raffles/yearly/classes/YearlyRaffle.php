@@ -41,7 +41,6 @@ class YearlyRaffle {
         $this->start = $row['start_date'];
         $this->days_of_tasks = $row['days_of_tasks'];
         $this->grid_id = 13012;
-        $this->cutoff = 2459171;
     }
     // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
     public function set_school_eligibility( $school_id ) {
@@ -128,41 +127,26 @@ class YearlyRaffle {
             $users_filter = "true";
         }
 
-        // find all tasks marked in date_tasks_marks up to rollover date
-        // then find all tasks marked using grid id for after rollover date
-        // then add the two numbers together
-        $sql1 = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
-                JOIN date_tasks dt USING (date_task_id) 
-                WHERE (daily_task = 1 OR (daily_task = 0 AND (dt.quantity IS NULL OR (dt.quantity IS NOT NULL AND dtm.done_qty >= dt.quantity))))
-                AND $users_filter 
-                AND dtm.mark_date >= " . $this->start . "
-                AND dtm.mark_date < " . $this->cutoff ."
-                group by user_id";
-        $sql2 = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+        $sql = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
                 JOIN date_tasks dt USING (date_task_id) 
                 WHERE $users_filter
                 AND dt.grid_id = " . $this->grid_id . " 
-                AND dtm.mark_date >= " . $this->cutoff . " 
+                AND dtm.mark_date >= " . $this->start . " 
                 AND dtm.mark_date <= " . $this->deadline ."
                 group by user_id";
-        $result1 = mysql_query($sql1);
-        $result2 = mysql_query($sql2);
+        $result = mysql_query($sql);
 
         $totals = [];
         // if $user_id is provided default to zero instead of the key not existing
         if ($user_id) {
             $totals[$user_id] = 0;
         }
-        while($row = mysql_fetch_array($result1)) {
+
+        if (mysql_num_rows($result) > 0) {
+            $row = mysql_fetch_array($result);
             $totals[$row['user_id']] = $row['total'];
         }
-        while($row = mysql_fetch_array($result2)) {
-            if (array_key_exists($row['user_id'], $totals)) {
-                $totals[$row['user_id']] += $row['total'];
-            } else {
-                $totals[$row['user_id']] = $row['total'];
-            }
-        }
+
         return $totals;
     }
 
