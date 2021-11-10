@@ -101,8 +101,8 @@ for ($num = 1; $num <= 4; $num++) {
             </tr>
             <?php
             foreach ($prizes as $id => $prize) {
-                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td><td>" .
-                    $prize['color'] . "</td><td>" . $prize['size'] . "</td>";
+                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['color'] . "</td><td>" .
+                    $prize['size'] . "</td><td>" . $prize['total'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
                     echo "<td>";
                     if (isset($passed[$i][$id])) echo $passed[$i][$id];
