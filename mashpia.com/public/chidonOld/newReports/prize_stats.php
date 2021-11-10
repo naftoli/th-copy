@@ -24,7 +24,7 @@ foreach ($schools as $id => $name) {
 
 $prizes = [];
 $sql = "SELECT 
-            cp.prize_id, cp.prize_name, COUNT(*) as total
+            cp.prize_id, cp.prize_name, cp.size, cp.color, COUNT(*) as total
         FROM
             chidon_prizes cp
                 JOIN
@@ -91,6 +91,8 @@ for ($num = 1; $num <= 4; $num++) {
             <tr>
                 <th>Prize ID</th>
                 <th>Prize</th>
+                <th>Color</th>
+                <th>Size</th>
                 <th>Number of prizes chosen at Registration</th>
                 <th>50%+ after Test #1</th>
                 <th>60%+ after Test #2</th>
@@ -99,7 +101,8 @@ for ($num = 1; $num <= 4; $num++) {
             </tr>
             <?php
             foreach ($prizes as $id => $prize) {
-                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td>";
+                echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['total'] . "</td><td>" .
+                    $prize['color'] . "</td><td>" . $prize['size'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
                     echo "<td>";
                     if (isset($passed[$i][$id])) echo $passed[$i][$id];
