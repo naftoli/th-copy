@@ -90,10 +90,10 @@
                         We will only ship the sets to your child's school. Shipping charges vary by School 
                         depending on how many sets are being purchased (by school).
                         <hr />
-                        <h2>Number of Menorah Boxes: 5000</h2>
+                        <h2>Number of Menorah Boxes: 5600</h2>
                         <h2>Already Sold: <span class="menorahSold"></span></h2>
                         <h2>Currently Available: <span class="menorahLeft"></span></h2>
-                        <h2>Number of Brochures: 2000</h2>
+                        <h2>Number of Brochures: 2500</h2>
                         <h2>Already Sold: <span class="brochureSold"></span></h2>
                         <h2>Currently Available: <span class="brochureLeft"></span></h2>
 <!--                        <h2><strong>PLEASE NOTE: YOU MUST MAKE A PURCHASE OF AT LEAST $5 FOR ANY CHARGE TO GO THROUGH</strong></h2>-->
@@ -248,7 +248,7 @@
             // $("#purchases").hide();
 
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
-                var menorahStart = 5000;
+                var menorahStart = 5600;
                 var menorahSold = parseInt( sold );
                 menorahSold += 1911;
                 var menorahLeft = menorahStart - menorahSold;
@@ -265,7 +265,7 @@
             });
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
-                var brochureStart = 2000;
+                var brochureStart = 2500;
                 var brochureSold = parseInt( sold );
                 brochureSold += 5;
                 var brochureLeft = brochureStart - brochureSold;
