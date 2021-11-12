@@ -229,7 +229,7 @@
 
         $.post('ajax/gamePurchases.php', function( sold ) {
             var startWith = 500;
-            var alreadySold = 282; // sets set aside for hq/staff/schools
+            var alreadySold = 302; // sets set aside for hq/staff/schools
             if (sold) alreadySold += parseInt( sold );
             var leftToSell = startWith - alreadySold;
             $(".sold").text( alreadySold );
