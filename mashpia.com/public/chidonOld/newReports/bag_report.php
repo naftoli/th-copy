@@ -34,7 +34,7 @@ foreach ($schools as $id => $school_name) {
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Drawstring Bag Shipping Report</title>
+    <title>Shipping Report for Test Prizes</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -54,57 +54,120 @@ foreach ($schools as $id => $school_name) {
     </style>
 </head>
 <body>
-    <h1 class="no-print">Drawstring Bag Shipping Report <?= $year ?></h1>
+    <h1 class="no-print">Shipping Report for Test Prizes <?= $year ?></h1>
     <?php
-    $grandTotals['blue'] = 0;
-    $grandTotals['pink'] = 0;
-    foreach ($info as $school_id => $grades) {
-        $schoolTotal['blue'] = 0;
-        $schoolTotal['pink'] = 0;
-        echo "<h3>" . $schools[$school_id] . "</h3>";
-        foreach ($grades as $grade => $rows) {
-            $totals['blue'] = 0;
-            $totals['pink'] = 0;
-            ?>
-            <table>
-                <caption><?= $schools[$school_id] . ' Grade: ' . $grade ?></caption>
-                <tr>
-                    <th>Serial Number</th>
-                    <th>Student</th>
-                    <th>Gender</th>
-                    <th>Bag Color</th>
-                </tr>
-                <?php
-                foreach ($rows as $row) {
-                    echo "<tr><td>" . $row['user_serial'] . "</td><td>" . ($row['first'] . ' ' . $row['last']) .
-                        "</td><td>" . $row['gender'] . "</td><td>";
-                    if ($row['gender'] == 'M') {
-                        echo "Blue";
-                        $totals['blue']++;
-                        $schoolTotal['blue']++;
-                        $grandTotals['blue']++;
-                    }
-                    else if ($row['gender'] == 'F') {
-                        echo "Pink";
-                        $totals['pink']++;
-                        $schoolTotal['pink']++;
-                        $grandTotals['pink']++;
-                    }
-                    echo "</td></tr>";
+    $prizes = [
+        1 => 'Drawstring Bag',
+        2 => 'Infinity Cube',
+        3 => 'Tzedakah Pouch',
+        4 => 'Water Bottle'
+    ];
+    // colors for the first and last prize; first the boys color then the girls color
+    $colors = [
+        1 => ['blue', 'pink'],
+        4 => ['navy', 'burgandy']
+    ];
+    if (isset($_POST['submit'])) {
+        $index = $_POST['num'];
+        echo "<h2>Prize: " . $prizes[$index] . "</h2>";
+
+        if (in_array($index, [1, 4])) {
+            $grandTotals['blue'] = 0;
+            $grandTotals['pink'] = 0;
+            foreach ($info as $school_id => $grades) {
+                $schoolTotal['blue'] = 0;
+                $schoolTotal['pink'] = 0;
+                echo "<h3>" . $schools[$school_id] . "</h3>";
+                foreach ($grades as $grade => $rows) {
+                    $totals['blue'] = 0;
+                    $totals['pink'] = 0;
+                    ?>
+                    <table>
+                        <caption><?= $schools[$school_id] . ' Grade: ' . $grade ?></caption>
+                        <tr>
+                            <th>Serial Number</th>
+                            <th>Student</th>
+                            <th>Gender</th>
+                            <th>Prize Color</th>
+                        </tr>
+                        <?php
+                        foreach ($rows as $row) {
+                            echo "<tr><td>" . $row['user_serial'] . "</td><td>" . ($row['first'] . ' ' . $row['last']) .
+                                "</td><td>" . $row['gender'] . "</td><td>";
+                            if ($row['gender'] == 'M') {
+                                echo ucwords($colors[$index][0]);
+                                $totals['blue']++;
+                                $schoolTotal['blue']++;
+                                $grandTotals['blue']++;
+                            }
+                            else if ($row['gender'] == 'F') {
+                                echo ucwords($colors[$index][1]);
+                                $totals['pink']++;
+                                $schoolTotal['pink']++;
+                                $grandTotals['pink']++;
+                            }
+                            echo "</td></tr>";
+                        }
+                    echo "</table><br />";
+                    echo "Total " . ucwords($colors[$index][1]) . " " . ucwords($prizes[$index]) . ": " . $totals['blue'];
+                    echo "<br />Total " . ucwords($colors[$index][0]) . " " . ucwords($prizes[$index]) . ": " . $totals['pink'];
+                    echo "<br /><br />";
                 }
-            echo "</table><br />";
-            echo "Total Blue Bags: " . $totals['blue'];
-            echo "<br />Total Pink Bags: " . $totals['pink'];
-            echo "<br /><br />";
+                echo "<br /><hr /><br />";
+                echo "Total " . ucwords($colors[$index][0]) . " " . ucwords($prizes[$index]) . " for school: " . $schoolTotal['blue'];
+                echo "<br />Total " . ucwords($colors[$index][1]) . " " . ucwords($prizes[$index]) . " for school: " . $schoolTotal['pink'];
+                echo "<p></p><div style='page-break-after: always'></div>";
+            }
+            if ($admin_user['auth'] == 'super') {
+                echo "Grand Total " . ucwords($colors[$index][0]) . " " . ucwords($prizes[$index]) . ": " . $grandTotals['blue'];
+                echo "<br />Grand Total " . ucwords($colors[$index][1]) . " " . ucwords($prizes[$index]) . ": " . $grandTotals['pink'];
+            }
+        } else {
+            $grandTotals = 0;
+            foreach ($info as $school_id => $grades) {
+                $schoolTotal = 0;
+                echo "<h3>" . $schools[$school_id] . "</h3>";
+                foreach ($grades as $grade => $rows) {
+                    $totals = 0;
+                    ?>
+                    <table>
+                        <caption><?= $schools[$school_id] . ' Grade: ' . $grade ?></caption>
+                        <tr>
+                            <th>Serial Number</th>
+                            <th>Student</th>
+                        </tr>
+                        <?php
+                        foreach ($rows as $row) {
+                            echo "<tr><td>" . $row['user_serial'] . "</td><td>" . ($row['first'] . ' ' . $row['last']) . "</td></tr>";
+                            $totals++;
+                            $schoolTotal++;
+                            $grandTotals++;
+                        }
+                    echo "</table><br />";
+                    echo "Total " . ucwords($prizes[$index]) . ": " . $totals;
+                    echo "<br /><br />";
+                }
+                echo "Total " . ucwords($prizes[$index]) . " for school: " . $schoolTotal;
+                echo "<hr /><div style='page-break-after: always'></div>";
+            }
+            if ($admin_user['auth'] == 'super') {
+                echo "Grand Total " . ucwords($prizes[$index]) . ": " . $grandTotals;
+            }
         }
-        echo "<br /><hr /><br />";
-        echo "Total Blue Bags for school: " . $schoolTotal['blue'];
-        echo "<br />Total Pink Bags for school: " . $schoolTotal['pink'];
-        echo "<p></p><div style='page-break-after: always'></div>";
-    }
-    if ($admin_user['auth'] == 'super') {
-        echo "Grand Total Blue Bags: " . $grandTotals['blue'];
-        echo "<br />Grand Total Pink Bags: " . $grandTotals['pink'];
+    } else {
+        ?>
+        <form action="" method="post">
+            Please choose which test you would like to have the report for:<br /><br />
+            <select name="num">
+                <?php
+                for ($i = 1; $i <= 4; $i++) {
+                    echo "<option value='$i'>Test #$i</option>";
+                }
+                ?>
+            </select><br /><br />
+            <input type="submit" name="submit" value="Generate Report" />
+        </form>
+        <?php
     }
     ?>
 </body>
