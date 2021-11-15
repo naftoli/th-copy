@@ -381,7 +381,10 @@ abstract class MissionDisplay {
 													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
-											<div class="short"><?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?></div>
+											<div class="short">
+                                                <?php if ($daily_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                <?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?>
+                                            </div>
 											<div class="<?=$taskClass?>"><?=$daily_task->task_name?></div>
 									    </div>
 									    
@@ -522,12 +525,14 @@ abstract class MissionDisplay {
 											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
-											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
-											<? if ($weekly_task->focus_task) { ?>
-												<div class="focus">
-													<img src="/mission_report/image/31204.png" alt="" />
-												</div>
-											<? } ?>
+											<div class="short">
+                                                <?php if ($weekly_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                <?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
+                                                <? if ($weekly_task->focus_task) { ?>
+                                                    <div class="focus">
+                                                        <img src="/mission_report/image/31204.png" alt="" />
+                                                    </div>
+                                                <? } ?>
 											</div>
 											<?
 											$add = '';
@@ -628,12 +633,14 @@ abstract class MissionDisplay {
 											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
-											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
-											<? if ($shabbos_task->focus_task) { ?>
-												<div class="focus">
-													<img src="/mission_report/image/31204.png" alt="" />
-												</div>
-											<? } ?>
+											<div class="short">
+                                                <?php if ($shabbos_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                <?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
+                                                <? if ($shabbos_task->focus_task) { ?>
+                                                    <div class="focus">
+                                                        <img src="/mission_report/image/31204.png" alt="" />
+                                                    </div>
+                                                <? } ?>
 											</div>
 											<div class="<?=$taskClass?>">
 												<?=$shabbos_task->task_name?><br />
@@ -743,12 +750,14 @@ abstract class MissionDisplay {
 									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
-									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
-									<? if ($no_label_task->focus_task) { ?>
-										<div class="focus">
-											<img src="/mission_report/image/31204.png" alt="" />
-										</div>
-									<? } ?>
+									<div class="short">
+                                        <?php if ($no_label_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                        <?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
+                                        <? if ($no_label_task->focus_task) { ?>
+                                            <div class="focus">
+                                                <img src="/mission_report/image/31204.png" alt="" />
+                                            </div>
+                                        <? } ?>
 									</div>
 									<div class="<?=$taskClass?>">
                                         <?=$no_label_task->task_name?>

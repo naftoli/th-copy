@@ -96,6 +96,23 @@ if ( $dates == 'english' ) $dates_id = 2;
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Print Missions</title>
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
+    <style>
+        /* Mandatory star marks*/
+        .mandStar {
+            color: red;
+            right: auto !important;
+            padding-right: 5px;
+            float: left !important;
+            position: relative !important;
+        }
+
+        .he .mandStar {
+            color: red;
+            padding-left: 5px;
+            float: right !important;
+            right: 0px !important;
+        }
+    </style>
 </head>
 
 <body>
