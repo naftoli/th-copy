@@ -123,6 +123,16 @@ class BaseRouter {
         json_response( $profile );
     }
 
+    public function addCampaigns() {
+        $school = $this->getBase();
+        switch ($_POST['type']) {
+            case 'day school':
+                $school->addDaySchoolCampaigns();
+                break;
+        }
+        json_response($school);
+    }
+
     private function getBase( $id = false ) {
         global $current_user;
 

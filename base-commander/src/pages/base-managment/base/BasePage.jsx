@@ -12,7 +12,7 @@ import {
   SettingsTab, StaffTab
 } from './includes/tabs';
 // state
-import { getBase, updateBase } from 'store/base/bases/operations';
+import { getBase, updateBase, addCampaigns } from 'store/base/bases/operations';
 import { removeAuth, createAuth } from 'store/base/staff/operations';
 // functions
 import { toast } from 'react-toastify';
@@ -92,7 +92,6 @@ class BasesPage extends Component {
       .then( base => this.setState({ base }) )
     );
   }
-  
 
   render() {
     const { login } = this.props;
@@ -130,6 +129,7 @@ class BasesPage extends Component {
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
             updateBase={ this.updateBase }
+            addCampaigns={ this.props.addCampaigns }
             onValidChange={ this.updateValid('base') } />
 
           <SettingsTab 
@@ -180,7 +180,7 @@ const mapStateToProps = ({ login }) => ({
 });
 
 const mapDispatchToProps = {
-  getBase, updateBase, removeAuth, createAuth
+  getBase, updateBase, removeAuth, createAuth, addCampaigns
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( BasesPage );

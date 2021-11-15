@@ -46,3 +46,7 @@ export const addPayment = ( school_id, cc ) => {
 export const deletePayment = ( school_id, payment_profile_id ) => {
   return API.post( `/core/bases?action=deletePayment`, { school_id, payment_profile_id } )
 }
+
+export const addCampaigns = ( school_id, type ) => dispatch => {
+  return API.post(`/core/bases?action=addCampaigns`, { school_id, type })
+}

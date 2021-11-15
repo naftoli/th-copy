@@ -43,6 +43,18 @@ export class BaseTab extends Component {
     this.props.updateBase( formData );
   }
 
+  addDaySchoolCampaigns = (e) => {
+    e.preventDefault()
+    const school_id = this.props.base.school_id
+    this.props.addCampaigns(school_id, 'day school')
+        .then( info => {
+          alert('Day School Campaigns Added!')
+        })
+        .catch( info => {
+          alert(info.error)
+        })
+  }
+
   render(){
     const { base, onUpdate, tabId, updated, onSubmit, onValidChange } = this.props;
     const  { logoGender } = this.state
@@ -59,6 +71,12 @@ export class BaseTab extends Component {
               <BaseRow
                 { ...base }
                 onUpdate={ onUpdate } />
+
+              <Row>
+                <Col>
+                  <button onClick={ this.addDaySchoolCampaigns }>Add Day School Campaigns</button>
+                </Col>
+              </Row>
 
             </Col>
             <Col id='logo' xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
