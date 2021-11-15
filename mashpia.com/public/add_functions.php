@@ -379,7 +379,7 @@ function add_daily_task_mark($parameters, $update = true)
 
                     if ($daySchool) {
                         $totalMissions = $num_rows; // total times the task is marked is the total amount of mission the child should have
-                        if ($totalMissions > 1) {
+                        if ($totalMissions > 1 && $totalMissions < 8) {
                             $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
                             $query = mysql_query($sql);
                         }
@@ -510,7 +510,7 @@ function add_daily_task_mark2($parameters, $update = true)
 
                     if ($daySchool) {
                         $totalMissions = $num_rows; // total times the task is marked is the total amount of mission the child should have
-                        if ($totalMissions > 1) {
+                        if ($totalMissions > 1 && $totalMissions < 8) {
                             $sql = "UPDATE date_tasks_mission_marks SET mission_count = $totalMissions WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
                             $query = mysql_query($sql);
                         }
