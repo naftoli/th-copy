@@ -7,12 +7,20 @@ if (isset($_GET['debug'])) {
 }
 
 $id = $_GET['subject'];
-$school = isset( $_GET['school'] ) ? $_GET['school'] : 0;
-$class = isset( $_GET['grade'] ) ? $_GET['grade'] : 0;
-$user = $_GET['user'];
 $start = $_GET['start'];
 $end = $_GET['end'];
+$school = isset( $_GET['school'] ) ? $_GET['school'] : 0;
+$class = isset( $_GET['grade'] ) ? $_GET['grade'] : 0;
+$user = isset( $_GET['user'] ) ? $_GET['user'] : 0;
 $lang = isset($_GET['lang']) ? $_GET['lang'] : 1;
+
+// convert dates to julian if needed
+if (strpos($start, '-') !== false) {
+    $dateInfo = explode('-', $start);
+    $start = gregoriantojd($dateInfo[1], $dateInfo[2], $dateInfo[0]);
+    $dateInfo = explode('-', $end);
+    $end = gregoriantojd($dateInfo[1], $dateInfo[2], $dateInfo[0]);
+}
 
 $version = isset($_GET['v']) ? $_GET['v'] : "1";
 
