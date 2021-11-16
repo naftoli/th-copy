@@ -45,6 +45,8 @@ $school_id = $admin_user['auths']['school'][0];
             $users = [];
             $sql = "select * from users where user_registered > 0 and school_id = $school_id";
             if ($_POST['grade']) $sql .= " and class_id = " . mysql_real_escape_string($_POST['grade']);
+            $sql .= " order by last, first";
+
             $result = mysql_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 $users[$row['user_id']] = $row['first'] . ' ' . $row['last'];
