@@ -171,11 +171,10 @@ const ReportCards = (props) => {
                     <span>Printing Instructions:</span>
                     <li>Choose Colored or Black and White</li>
                     <li>Press CTRL+P to open the Print dialog and wait for the preview to load</li>
-                    <li>Set the layout to Landscape</li>
-                    <li>Open More Settings and set your Margins to "None"</li>
+                    <li>Set the layout to Portrait</li>
                     <li>Ensure that the paper size is Letter and the scale is set to 100%</li>
                     {/*<li>If you are printing the colored version, turn on the "background graphics" checkbox</li>*/}
-                    <span>It should show up nicely with one per page. Print and fold over in half and return to your Chayolim :)</span>
+                    <span>It should show up nicely with one per page. Print and return to your Chayolim :)</span>
                 </ol>
                 <Col sm={6}>
                     <label>Base</label>
@@ -260,6 +259,7 @@ const ReportCards = (props) => {
                                 <ReportCard
                                     key={report.id}
                                     info={report}
+                                    testNum={test}
                                 />
                             ))}
                         </div>

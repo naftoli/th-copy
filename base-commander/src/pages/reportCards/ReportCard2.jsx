@@ -11,13 +11,13 @@ import axios from "axios";
 const useStyles = createUseStyles(theme => ({
     root: {
         boxSizing: 'border-box',
-        size: '5.5in 8.5in',
+        size: '11in 8.5in',
         height: '8.5in',
-        width: '5.5in',
-        background: colors.blue,
-        padding: '60px 40px',
-        display: 'flex',
-        flexDirection: 'column',
+        width: '11in',
+        // background: colors.blue,
+        // padding: '60px 40px',
+        // display: 'flex',
+        // flexDirection: 'column',
     },
     bwRoot: {
         background: `${colors.white} !important`
@@ -134,21 +134,29 @@ const useStyles = createUseStyles(theme => ({
     h5: {
         fontWeight: 'bold',
         marginTop: 30,
-        marginBottom: 20
+        fontSize: '1.5rem',
+        textAlign: 'center'
     },
     lastRow: {
         backgroundColor: '#D3D3D3'
     },
+    finalRow: {
+        backgroundColor: '#D3D3D3',
+        textAlign: 'left',
+    },
     card: {
         textAlign: 'center',
         fontSize: '12px',
-        boxSizing: 'border-box',
-        size: '5in 8.5in',
-        width: '5in',
-        pageBreakAfter: 'always'
+        flex: '1'
     },
     unbold: {
         fontWeight: 'normal'
+    },
+    header: {
+        margin: 'auto',
+        textAlign: 'center',
+        width: '500px',
+        paddingBottom: '20px'
     }
 }), { name: 'ReportCard' });
 
@@ -156,171 +164,205 @@ const useStyles = createUseStyles(theme => ({
 function ReportCard(info) {
     // console.log(info)
     const report = info.info
+    const elem = report.user_id + '_rows'
+    const numTests = info.testNum
+    let mainStyle
+    switch (numTests) {
+        case 1:
+            mainStyle = {'marginTop': '20%'}
+            break
+        case 2:
+            mainStyle = {'marginTop': '16%'}
+            break
+        case 3:
+            mainStyle = {'marginTop': '12%'}
+            break
+        case 4:
+            mainStyle = {'marginTop': '8%'}
+            break
+    }
 
     const classes = useStyles();
 
-    // const [tests, setTests] = useState([]);
-
-    // useEffect(() => {
-    //     let newTests = [report.tests]
-    //     //     .filter(test => (
-    //     //     typeof test.mivtzahMaven === "number" ||
-    //     //     typeof test.shabbatonMark === "number"
-    //     // ));
-    //     setTests(newTests);
-    // }, [report.tests]);
-
     const showIyun = report.tests[1]['genius'] >= 90
+
     const learningTime = {
         'maven': 15,
         'pro': 30,
         'expert': 45,
         'genius': 60
     }
-    const totalTime = {
-        'maven': 480,
-        'pro': 960,
-        'expert': 1440,
-        'genius': 1920
+
+    const totals = {}
+    for (let k of Object.keys(learningTime)) {
+        totals[k] = 0
+        for (let i = 1; i <= numTests; i++) {
+            if (report.scores[i])
+                totals[k] += parseInt(report.scores[i][k], 10)
+        }
     }
+    console.log(totals)
+
+    const totalDays = [32, 28, 30, 31]
 
     const state = {
-        total: ''
+        totals: []
     }
 
-    const getTotal = async () => {
-        const { data } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}`);
-        state.total = data
-        document.getElementById(report.user_id).innerText = data + ' minutes'
+    const getTotals = async (perDay) => {
+        const { data } = await axios.get(`http://tzivos.local/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}&test=${numTests}`);
+        state.totals = data
+        fillTable(perDay)
     }
 
-    if (state.total === '') getTotal()
+    const fillTable = perDay => {
+        if (! state.totals.length) {
+            getTotals(perDay)
+        } else {
+            let html = ''
+            state.totals.map((total, i) => {
+                let totalMinutes = totalDays[i] * perDay
+                let totalHours = totalMinutes / 60
+                if (! Number.isInteger(totalHours)) totalHours = totalHours.toFixed(2)
+                let loggedHours = total / 60
+                if (! Number.isInteger(loggedHours)) loggedHours = loggedHours.toFixed(2)
+                html += `<tr><td>${i + 1}</td><td>${totalMinutes} Minutes = ${totalHours} Hours</td><td>${total} Minutes = ${loggedHours} Hours</td></tr>`
+            })
+            let e = document.getElementById(elem)
+            if (e) e.innerHTML = html
+        }
+    }
 
-    const totalSpan = report.user_id
+    let rows = []
+    for (let i = 1; i <= numTests; i++) {
+        rows.push(i)
+    }
 
     return (
-        <div className={classes.card}>
-            <br /><br />
-            <img src={header} alt="Header" />
-            <p></p><br />
-            <p><b>Name:</b> {report.name}</p>
-            <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
-            <p>
-                <b>Track you are on:</b> {report.currentTrack}<br />
-                <b>Learning commitment per day:</b> {learningTime[report.track]} minutes<br />
-                <b>Total test 1 learning time:</b> {totalTime[report.track]} minutes<br />
-                <b>Amount of time you logged:</b> <span id={totalSpan}></span>
-            </p>
-            <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
-            <table className={classes.table}>
-                <thead>
-                    <tr>
-                        <th>Test #</th>
-                        <th>Questions / Mark</th>
-                        <th>Yesod<br /><span className={classes.unbold}>Part 1</span></th>
-                        <th>Yediah<br /><span className={classes.unbold}>Parts 1 and 2</span></th>
-                        <th>Havonah<br /><span className={classes.unbold}>Parts 1, 2 and 3</span></th>
-                        {showIyun &&
-                            <th>Iyun<br/><span className={classes.unbold}>Parts 1 - 4</span></th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td rowSpan={2}>1</td>
-                        <td>Correct Questions</td>
-                        <td>{report.scores[1]['maven']} / {report.questions['maven']}</td>
-                        <td>{parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
-                            {report.questions['pro'] + report.questions['maven']}</td>
-                        <td>{parseInt(report.scores[1]['expert'], 10) + parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
-                            {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                        {showIyun &&
-                            <td>{parseInt(report.scores[1]['genius'], 10) + parseInt(report.scores[1]['expert'], 10) +
-                                    parseInt(report.scores[1]['pro'], 10) + parseInt(report.scores[1]['maven'], 10)} /
-                                {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>Mark</td>
-                        <td>{report.tests[1]['maven'] % 1 ? report.tests[1]['maven'].toFixed(2) : report.tests[1]['maven']}%</td>
-                        <td>{report.tests[1]['pro'] % 1 ? report.tests[1]['pro'].toFixed(2) : report.tests[1]['pro']}%</td>
-                        <td>{report.tests[1]['expert'] % 1 ? report.tests[1]['expert'].toFixed(2) : report.tests[1]['expert']}%</td>
-                        {showIyun &&
-                            <td>{report.tests[1]['genius'] % 1 ? report.tests[1]['genius'].toFixed(2) : report.tests[1]['genius']}%</td>
-                        }
-                    </tr>
-                    <tr className={classes.lastRow}>
-                        <td colSpan={2}>Passing Mark for Reward</td>
-                        <td>70%<br />Sweater & gift</td>
-                        <td>70%<br />Sweater, Gift & Prizes</td>
-                        <td>70%<br />Sweater, Gift, Prizes & Trip</td>
-                        {showIyun &&
-                            <td>90%<br/>Sweater, Gift, Prizes, Trip & Trophy Contestant</td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
+        <div className="main" style={mainStyle}>
+            <div className="container">
+                <div className={classes.card} style={{paddingRight: '20px'}}>
+                    <img src={header} alt="Header" className={classes.header} />
+                    <br /><br />
+                    <p><b>Name:</b> {report.name}</p>
+                    <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
+                    <br />
+                    <p><b>Track you are on:</b> {report.currentTrack}</p>
+                    <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
+                    <br />
+                    <p><b>Learning commitment per day:</b> {learningTime[report.track]} minutes</p>
+                    <br /><br />
+                    <table className={classes.table}>
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Total commited Learning Time</th>
+                                <th>Amount of time you Logged</th>
+                            </tr>
+                        </thead>
+                        <tbody id={elem}>
+                            {fillTable(learningTime[report.track])}
+                        </tbody>
+                    </table>
+                </div>
+                <table className="mainTable">
+                    <thead>
+                        <tr>
+                            <th>Test #</th>
+                            <th>Questions / Mark</th>
+                            <th>Yesod<br /><span className={classes.unbold}>Part 1</span></th>
+                            <th>Yediah<br /><span className={classes.unbold}>Parts 1 and 2</span></th>
+                            <th>Havonah<br /><span className={classes.unbold}>Parts 1, 2 and 3</span></th>
+                            {showIyun &&
+                                <th>Iyun<br/><span className={classes.unbold}>Parts 1 - 4</span></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map(index => (
+                            <React.Fragment>
+                                <tr>
+                                    <td rowSpan={2}>{index}</td>
+                                    <td>Correct Questions</td>
+                                    <td>{report.scores[index] ? report.scores[index]['maven'] : 0} / {report.questions['maven']}</td>
+                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
+                                        {report.questions['pro'] + report.questions['maven']}</td>
+                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['expert'], 10) + parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
+                                        {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
+                                    {showIyun &&
+                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['genius'], 10) + parseInt(report.scores[index]['expert'], 10) +
+                                    parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
+                                        {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Mark</td>
+                                    <td>{report.scores[index] ? (report.tests[index]['maven'] % 1 ? report.tests[index]['maven'].toFixed(2) : report.tests[index]['maven']) : 0}%</td>
+                                    <td>{report.scores[index] ? (report.tests[index]['pro'] % 1 ? report.tests[index]['pro'].toFixed(2) : report.tests[index]['pro']) : 0}%</td>
+                                    <td>{report.scores[index] ? (report.tests[index]['expert'] % 1 ? report.tests[index]['expert'].toFixed(2) : report.tests[index]['expert']) : 0}%</td>
+                                    {showIyun &&
+                                    <td>{report.scores[index] ? (report.tests[index]['genius'] % 1 ? report.tests[index]['genius'].toFixed(2) : report.tests[index]['genius']) : 0}%</td>
+                                    }
+                                </tr>
+                            </React.Fragment>
+                        ))}
+                        <tr>
+                            <td rowSpan={2}>Total</td>
+                            <td>Correct Questions</td>
+                            <td>{totals['maven']} / {report.questions['maven'] * numTests}</td>
+                            <td>{totals['maven'] + totals['pro']} / {
+                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests}
+                            </td>
+                            <td>{totals['maven'] + totals['pro'] + totals['expert']} / {
+                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'])) * numTests}</td>
+                            {showIyun &&
+                                <td>{totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']} / {
+                                    (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']) + parseInt(report.questions['genius'])) * numTests}</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Mark</td>
+                            <td>{totals['maven'] ? (totals['maven'] / (report.questions['maven'] * numTests) * 100).toFixed(2) : 0}%</td>
+                            <td>{totals['pro'] ? ((totals['maven'] + totals['pro']) /
+                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests) * 100).toFixed(2) : 0}%
+                            </td>
+                            <td>{totals['expert'] ? ((totals['maven'] + totals['pro'] + totals['expert']) /
+                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'])) * numTests) * 100).toFixed(2) : 0}%
+                            </td>
+                            {showIyun &&
+                                <td>
+                                    {totals['genius'] ? ((totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']) /
+                                    ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']) + parseInt(report.questions['genius'])) * numTests) * 100).toFixed(2) : 0}%</td>
+                            }
+                        </tr>
+                        <tr className={classes.lastRow}>
+                            <td colSpan={2}>Passing Mark for Reward</td>
+                            <td>70%<br />Sweater & gift</td>
+                            <td>70%<br />Sweater, Gift & Prizes</td>
+                            <td>70%<br />Sweater, Gift, Prizes & Regional Trip</td>
+                            {showIyun &&
+                                <td>90%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
+                            }
+                        </tr>
+                        <tr className={classes.finalRow}>
+                            <td colSpan={6} style={{padding: '10px'}}>
+                                Please Note: The track that you are on is just to give you an idea of:<br />
+                                <ul>
+                                    <li>How much time you have committed to learn.</li>
+                                    <li>How well you are going to know the information.</li>
+                                    <li>What prizes you are going for.</li>
+                                </ul>
+                                But it does not impact the prize you will earn. No matter the track you chose,
+                                you will receive the rewards for the levels you pass.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <h5 className={classes.h5}>!מחיל אל חיל</h5>
             <img src={footer} alt="Footer" />
         </div>
-        // <div className={clsx(classes.root, bw && classes.bwRoot)}>
-        //     <img src={bw ? bwheader : header} alt="Header" />
-        //     <div className={classes.content}>
-        //         <p className={classes.name}>{name}</p>
-        //         <p className={classes.grade}>{grade}</p>
-        //         <div className={clsx(classes.tableContainer, bw && classes.bwBorder)}>
-        //             <table>
-        //                 <thead className={clsx(classes.tableHead, bw && classes.bwBorderBottom)}>
-        //                 <tr className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
-        //                     <th className={clsx(classes.tableHeader, bw && classes.bwBorderRight)}>
-        //                         Test #
-        //                     </th>
-        //                     <th className={clsx(classes.tableHeader, bw && classes.bwBorderRight)}>
-        //                         Mitzvah Maven <br /> Test Mark
-        //                     </th>
-        //                 </tr>
-        //                 </thead>
-        //                 <tbody>
-        //                 {tests.map((test, index) => (
-        //                     <tr key={index} className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
-        //                         <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-        //                             {index + 1}
-        //                         </td>
-        //                         <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-        //                             {Math.round(test.mivtzahMaven)}
-        //                         </td>
-        //                     </tr>
-        //                 ))}
-        //                 {tests.length > 1 && (
-        //                     <tr className={clsx(classes.tableRow, bw && classes.bwBorderBottom)}>
-        //                         <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-        //                             Avg.
-        //                         </td>
-        //                         <td className={clsx(classes.tableData, bw && classes.bwBorderRight)}>
-        //                             {Math.round(tests.reduce((a, b) => a + b.mivtzahMaven, 0) / tests.length)}
-        //                         </td>
-        //                     </tr>
-        //                 )}
-        //                 </tbody>
-        //             </table>
-        //         </div>
-        //         {tests.length < 4 ? (
-        //             <div className={classes.avgRequiredContainer}>
-        //                 <div className={classes.placeholder} />
-        //                 <p className={clsx(classes.description, bw && classes.bwText)}>
-        //                     Average required on the next tests
-        //                     <br /> to earn a place on the Chidon Shabbaton
-        //                     (In whichever format it will be taking place this year):
-        //                 </p>
-        //                 <div className={clsx(classes.averageDuration, bw && classes.bwBorder)}>
-        //                     {avgRequired}
-        //                 </div>
-        //             </div>
-        //         ) : <h5 className={classes.h5}>!מחיל אל חיל</h5>
-        //         }
-        //     </div>
-        //     <img src={footer} alt="Footer" />
-        // </div>
     );
 }
 
