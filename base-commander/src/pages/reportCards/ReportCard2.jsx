@@ -318,7 +318,7 @@ function ReportCard(info) {
                                 (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests}
                             </td>
                             <td>{totals['maven'] + totals['pro'] + totals['expert']} / {
-                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']), 10) * numTests}</td>
+                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests}</td>
                             {showIyun &&
                                 <td>{totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']} / {
                                     (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests}</td>
