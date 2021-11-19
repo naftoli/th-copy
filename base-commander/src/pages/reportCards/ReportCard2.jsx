@@ -138,7 +138,8 @@ const useStyles = createUseStyles(theme => ({
         textAlign: 'center'
     },
     lastRow: {
-        backgroundColor: '#D3D3D3'
+        backgroundColor: '#D3D3D3',
+        verticalAlign: 'baseline'
     },
     finalRow: {
         backgroundColor: '#D3D3D3',
