@@ -242,6 +242,18 @@ function ReportCard(info) {
         rows.push(i)
     }
 
+    let totalMarks = {}
+    totalMarks['maven'] = totals['maven'] ? (totals['maven'] / (report.questions['maven'] * numTests) * 100) : 0
+    totalMarks['pro'] = totals['pro'] ? ((totals['maven'] + totals['pro']) /
+        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests) * 100) : 0
+    totalMarks['expert'] = totals['expert'] ? ((totals['maven'] + totals['pro'] + totals['expert']) /
+        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests) * 100) : 0
+    totalMarks['genius'] = totals['genius'] ? ((totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']) /
+        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests) * 100) : 0
+    for (let k of Object.keys(learningTime)) {
+        if (totalMarks[k] % 1) totalMarks[k] = totalMarks[k].toFixed(2)
+    }
+
     return (
         <div className="main" style={mainStyle}>
             <div className="container">
@@ -326,17 +338,11 @@ function ReportCard(info) {
                         </tr>
                         <tr>
                             <td>Mark</td>
-                            <td>{totals['maven'] ? (totals['maven'] / (report.questions['maven'] * numTests) * 100).toFixed(2) : 0}%</td>
-                            <td>{totals['pro'] ? ((totals['maven'] + totals['pro']) /
-                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests) * 100).toFixed(2) : 0}%
-                            </td>
-                            <td>{totals['expert'] ? ((totals['maven'] + totals['pro'] + totals['expert']) /
-                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests) * 100).toFixed(2) : 0}%
-                            </td>
+                            <td>{totalMarks['maven']}%</td>
+                            <td>{totalMarks['pro']}%</td>
+                            <td>{totalMarks['expert']}%</td>
                             {showIyun &&
-                                <td>
-                                    {totals['genius'] ? ((totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']) /
-                                    ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests) * 100).toFixed(2) : 0}%</td>
+                                <td>{totalMarks['genius']}%</td>
                             }
                         </tr>
                         <tr className={classes.lastRow}>
