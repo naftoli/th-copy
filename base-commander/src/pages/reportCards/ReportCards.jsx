@@ -130,6 +130,7 @@ const ReportCards = (props) => {
     const [userId, setUserId] = useState('-1');
     const [classId, setClassId] = useState(class_id || '-1');
     const [schoolId, setSchoolId] = useState(school_id || '-1');
+    const [iyun, setIyun] = useState(false)
 
     // const toggleBW = useCallback(() => setBw(!bw), [bw]);
 
@@ -163,6 +164,10 @@ const ReportCards = (props) => {
     const handleUpdateTest = (selected) => {
         setTest((selected && selected.value) ? selected.value : null);
     };
+
+    const handleUpdateIyun = event => {
+        setIyun(event.target.checked)
+    }
 
     const testOptions = useMemo(() => [
         { label: '1', value: 1 },
@@ -236,7 +241,7 @@ const ReportCards = (props) => {
                 </Col>
 
                 <Col sm={6} className={classes.iyun}>
-                    <input type="checkbox" name="iyun" id="iyun" className={classes.checkbox} />
+                    <input type="checkbox" name="iyun" id="iyun" className={classes.checkbox} onClick={handleUpdateIyun} />
                     <label>Only show Iyun marks if child passed</label>
                 </Col>
 
@@ -272,6 +277,7 @@ const ReportCards = (props) => {
                                     key={report.id}
                                     info={report}
                                     testNum={test}
+                                    showIyun={iyun}
                                 />
                             ))}
                         </div>

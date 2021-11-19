@@ -187,7 +187,7 @@ function ReportCard(info) {
 
     const classes = useStyles();
 
-    const showIyun = report.tests[1]['genius'] >= 90
+    const showIyun = !info.showIyun || (info.showIyun && report.tests[1]['genius'] >= 90)
 
     const learningTime = {
         'maven': 15,
@@ -204,7 +204,7 @@ function ReportCard(info) {
                 totals[k] += parseInt(report.scores[i][k], 10)
         }
     }
-    console.log(totals)
+    // console.log(totals)
 
     const totalDays = [32, 28, 30, 31]
 
