@@ -213,7 +213,7 @@ function ReportCard(info) {
     }
 
     const getTotals = async (perDay) => {
-        const { data } = await axios.get(`http://tzivos.local/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}&test=${numTests}`);
+        const { data } = await axios.get(`https://mashpia.com/chidonTests/api/reportCards/getTotalLimmud.php?id=${report.user_id}&test=${numTests}`);
         state.totals = data
         fillTable(perDay)
     }
