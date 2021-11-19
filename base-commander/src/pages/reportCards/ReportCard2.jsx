@@ -180,6 +180,9 @@ function ReportCard(info) {
         case 4:
             mainStyle = {'marginTop': '8%'}
             break
+        default:
+            mainStyle = {'marginTop': '15%'}
+            break
     }
 
     const classes = useStyles();

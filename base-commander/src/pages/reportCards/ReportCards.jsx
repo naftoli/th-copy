@@ -108,6 +108,13 @@ const useStyles = createUseStyles(theme => ({
                 color: '#909090',
             }
         }
+    },
+    iyun: {
+        marginTop: 15,
+        textAlign: 'center'
+    },
+    checkbox: {
+        marginRight: 5
     }
 }), { name: 'ReportCards' });
 
@@ -226,6 +233,11 @@ const ReportCards = (props) => {
                         options={testOptions}
                         placeholder='Select Test...'
                     />
+                </Col>
+
+                <Col sm={6} className={classes.iyun}>
+                    <input type="checkbox" name="iyun" id="iyun" className={classes.checkbox} />
+                    <label>Only show Iyun marks if child passed</label>
                 </Col>
 
                 <button
