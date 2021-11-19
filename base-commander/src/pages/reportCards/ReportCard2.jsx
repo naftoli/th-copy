@@ -230,6 +230,7 @@ function ReportCard(info) {
                 let loggedHours = total / 60
                 if (! Number.isInteger(loggedHours)) loggedHours = loggedHours.toFixed(2)
                 html += `<tr><td>${i + 1}</td><td>${totalMinutes} Minutes = ${totalHours} Hours</td><td>${total} Minutes = ${loggedHours} Hours</td></tr>`
+                return ''
             })
             let e = document.getElementById(elem)
             if (e) e.innerHTML = html
@@ -317,10 +318,10 @@ function ReportCard(info) {
                                 (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests}
                             </td>
                             <td>{totals['maven'] + totals['pro'] + totals['expert']} / {
-                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'])) * numTests}</td>
+                                (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']), 10) * numTests}</td>
                             {showIyun &&
                                 <td>{totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']} / {
-                                    (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']) + parseInt(report.questions['genius'])) * numTests}</td>
+                                    (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests}</td>
                             }
                         </tr>
                         <tr>
@@ -330,12 +331,12 @@ function ReportCard(info) {
                                 ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests) * 100).toFixed(2) : 0}%
                             </td>
                             <td>{totals['expert'] ? ((totals['maven'] + totals['pro'] + totals['expert']) /
-                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'])) * numTests) * 100).toFixed(2) : 0}%
+                                ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests) * 100).toFixed(2) : 0}%
                             </td>
                             {showIyun &&
                                 <td>
                                     {totals['genius'] ? ((totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']) /
-                                    ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert']) + parseInt(report.questions['genius'])) * numTests) * 100).toFixed(2) : 0}%</td>
+                                    ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests) * 100).toFixed(2) : 0}%</td>
                             }
                         </tr>
                         <tr className={classes.lastRow}>
