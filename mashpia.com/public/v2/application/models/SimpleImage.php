@@ -71,7 +71,7 @@ class SimpleImage {
 	  } elseif( $image_type == IMAGETYPE_PNG ) {
 		imagesavealpha($this->image, true);
 		 imagepng($this->image);
-		 imagedestroy($png);
+		 imagedestroy($this->image);
 	  }
 	}
 	function getWidth() {
