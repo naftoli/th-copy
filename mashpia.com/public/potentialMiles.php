@@ -41,11 +41,24 @@ if (isset($_POST['submit'])) {
 
     foreach ($users as $user) {
         $user = new user($user); // create a new user
+        $user->get_school_class(); // and get his class
         $user->get_user_tracks( -1, $start, $end, [], $user->lang_id ); // get the users tracks
         $info[] = $user;
     }
-
     echo "<pre>"; print_r($info); echo "</pre>";
+
+    $types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
+    $totals = [];
+    foreach ($info as $user) {
+        $totals[$user->user_id] = 0;
+        foreach ($user->user_tracks as $track) {
+            foreach ($types as $type) {
+                foreach ($track->$type as $task) {
+                    $totals[$user->user_id] += 0.5;
+                }
+            }
+        }
+    }
 }
 ?>
 <!doctype html>
@@ -60,7 +73,15 @@ if (isset($_POST['submit'])) {
         <h1>Potential Miles</h1>
         <?php if (isset($_POST['submit'])) : ?>
             <table>
-
+                <tr>
+                    <th>Grade</th>
+                    <th>Total Points Possible to Earn</th>
+                </tr>
+                <?php
+                foreach ($users as $user) {
+                    echo "<tr><td>$grade</td>";
+                }
+                ?>
             </table>
         <?php else : ?>
             <form action="" method="post">
