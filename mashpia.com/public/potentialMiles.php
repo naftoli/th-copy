@@ -50,11 +50,11 @@ if (isset($_POST['submit'])) {
     $types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
     $totals = [];
     foreach ($info as $user) {
-        $totals[$user->user_id] = 0;
+        $totals[$user['user_id']] = 0;
         foreach ($user->user_tracks as $track) {
             foreach ($types as $type) {
                 foreach ($track->$type as $task) {
-                    $totals[$user->user_id] += 0.5;
+                    $totals[$user['user_id']] += 0.5;
                 }
             }
         }
@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
                 <?php
                 foreach ($users as $user) {
                     echo "<tr><td>" . ($user->school_class->class_grade . (empty($user->school_class->class_sub) ? '' : '-' .
-                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user->user_id] . "</td></tr>";
+                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user['user_id']] . "</td></tr>";
                 }
                 ?>
             </table>
