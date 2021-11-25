@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 $admin_auth = ['school'];
 require 'header.php';
 
@@ -48,16 +45,16 @@ if (isset($_POST['submit'])) {
         $user->get_user_tracks( -1, $start, $end, [], $user->lang_id ); // get the users tracks
         $info[] = $user;
     }
-    echo "<pre>"; print_r($info); echo "</pre>";
+//    echo "<pre>"; print_r($info); echo "</pre>";
 
     $types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
     $totals = [];
     foreach ($info as $user) {
-        $totals[$user['user_id']] = 0;
+        $totals[$user->user_id] = 0;
         foreach ($user->user_tracks as $track) {
             foreach ($types as $type) {
                 foreach ($track->$type as $task) {
-                    $totals[$user['user_id']] += 0.5;
+                    $totals[$user->user_id] += 0.5;
                 }
             }
         }
@@ -81,9 +78,9 @@ if (isset($_POST['submit'])) {
                     <th>Total Points Possible to Earn</th>
                 </tr>
                 <?php
-                foreach ($users as $user) {
+                foreach ($info as $user) {
                     echo "<tr><td>" . ($user->school_class->class_grade . (empty($user->school_class->class_sub) ? '' : '-' .
-                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user['user_id']] . "</td></tr>";
+                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user->user_id] . "</td></tr>";
                 }
                 ?>
             </table>
