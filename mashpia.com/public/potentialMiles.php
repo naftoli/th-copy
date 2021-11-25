@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         $user->get_user_tracks( -1, $start, $end, [], $user->lang_id ); // get the users tracks
         $info[] = $user;
     }
-    echo "<pre>"; print_r($info); echo "</pre>";
+//    echo "<pre>"; print_r($info); echo "</pre>";
 
     $types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
     $totals = [];
@@ -79,7 +79,8 @@ if (isset($_POST['submit'])) {
                 </tr>
                 <?php
                 foreach ($users as $user) {
-                    echo "<tr><td>$grade</td>";
+                    echo "<tr><td>" . ($user->school_class->class_grade . (empty($user->school_class->class_sub) ? '' : '-' .
+                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user->user_id] . "</td></tr>";
                 }
                 ?>
             </table>
