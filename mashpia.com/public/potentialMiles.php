@@ -67,6 +67,13 @@ if (isset($_POST['submit'])) {
         <title>Potential Miles</title>
         <link href="admin_styles.css" rel="stylesheet" type="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style>
+            tr, th, td {
+                padding: 5px;
+                font-size: 12px;
+                border: 1px solid grey;
+            }
+        </style>
     </head>
     <body>
         <?php include('admin_header.php'); ?>
@@ -75,12 +82,14 @@ if (isset($_POST['submit'])) {
             <table>
                 <tr>
                     <th>Grade</th>
+                    <th>Student</th>
                     <th>Total Points Possible to Earn</th>
                 </tr>
                 <?php
                 foreach ($info as $user) {
                     echo "<tr><td>" . ($user->school_class->class_grade . (empty($user->school_class->class_sub) ? '' : '-' .
-                        $user->school_class->class_sub)) . "</td><td>" . $totals[$user->user_id] . "</td></tr>";
+                        $user->school_class->class_sub)) . "</td><td>" . $user->first . ' ' . $user->last . "</td><td>" .
+                        $totals[$user->user_id] . "</td></tr>";
                 }
                 ?>
             </table>
