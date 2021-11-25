@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
         $user->get_user_tracks( -1, $start, $end, [], $user->lang_id ); // get the users tracks
         $info[] = $user;
     }
-//    echo "<pre>"; print_r($info); echo "</pre>";
+    echo "<pre>"; print_r($info); echo "</pre>";
 
     $types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
     $totals = [];
