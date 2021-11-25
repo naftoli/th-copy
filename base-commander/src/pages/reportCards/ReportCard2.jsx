@@ -372,7 +372,9 @@ function ReportCard(info) {
             </div>
 
             <h5 className={classes.h5}>!מחיל אל חיל</h5>
-            <img src={footer} alt="Footer" />
+            <div align="center">
+                <img src={footer} alt="Footer" style={{'maxWidth': '6in'}} />
+            </div>
         </div>
     );
 }
