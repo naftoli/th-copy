@@ -162,8 +162,9 @@ class ChidonTests
                     ':type' => $type
                 ]);
                 if ($res) {
-                    $row = $stmt->fetch();
-                    $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
+                    $rows = $stmt->fetchAll();
+                    foreach ($rows as $row)
+                        $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
                 }
             }
         }
