@@ -16,3 +16,6 @@ tr, th, td {
 .main {
     page-break-after: always;
 }
+.bold {
+    font-weight: bold;
+}
