@@ -22,12 +22,9 @@ $stmt = $MASHPIA_DB->prepare("
           JOIN
       classes c ON u.class_id = c.class_id
           JOIN
-      th_chidon tc USING (user_id)
-          JOIN
-      chidon_user_goals cug using (user_id) 
+      th_chidon tc USING (user_id) 
   WHERE
       tc.year = :year AND u.school_id IN ($school_ids)
-          AND cug.year = :year
   ORDER BY u.school_id, c.class_grade , c.class_sub , u.last , u.first
 ");
 $res = $stmt->execute([
@@ -41,10 +38,10 @@ if ( $res ) {
   }
 }
 //echo "<pre>"; print_r( $users ); echo "</pre>";
-$skipAuth = 0;
-if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5780 ) {
-  $skipAuth = 1;
-}
+//$skipAuth = 0;
+//if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5780 ) {
+//  $skipAuth = 1;
+//}
 ?>
 <!DOCTYPE html>
 <html>
