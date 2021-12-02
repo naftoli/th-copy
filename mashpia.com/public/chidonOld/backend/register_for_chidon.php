@@ -45,7 +45,7 @@ if ( isset( $_FILES['file'] ) ) {
         $info[] = $values;
     }
 
-    //echo "<pre>"; print_r( $info ); echo "</pre>";
+//    echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
     $MASHPIA_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $MASHPIA_DB->beginTransaction();
@@ -66,136 +66,113 @@ if ( isset( $_FILES['file'] ) ) {
         $learning_method = $values[$i++];
         $school_name = $values[$i++];
         $prizes = $values[$i++];
+        $arrPrizes = explode(',', $prizes);
         $prize_name = $values[$i++];
 
         // find out what the user id is
-        if ( $handle = $MASHPIA_DB->prepare("select user_id, school_id from users where user_serial = :serial") ) {
-            if ( $handle->execute([':serial' => $user_serial]) ) {
-                $result = $handle->fetch();
-                $user_id = $result['user_id'];
-                $school_id = $result['school_id'];
+        $handle = $MASHPIA_DB->prepare("select user_id, school_id from users where user_serial = :serial");
+        if ( $handle->execute([':serial' => $user_serial]) ) {
+            $result = $handle->fetch();
+            $user_id = $result['user_id'];
+            $school_id = $result['school_id'];
 
-                if ( $user_id > 0 ) {
-//                    // first find out if user already is registered in chidon db
-//                    if ( $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and user_id = :user") ) {
-//                        if ( $handle->execute([
-//                            ':year'     =>  $year,
-//                            ':user'     =>  $user_id
-//                        ]) ) {
-//
-//                            $found = $handle->fetch();
-//                            if ( empty( $found ) ) {
-                                if ( $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id") ) {
-                                    if ( $handle->execute([':user_id' => $user_id]) ) {
-                                        $result = $handle->fetch();
-                                        if ( empty( $result ) ) {
-                                            $missingParentAccounts[] = $user_id;
-                                            continue;
-                                        }
-                                        $admin_id = $result['admin_id'];
+            if ( $user_id > 0 ) {
+                $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
+                if ( $handle->execute([':user_id' => $user_id]) ) {
+                    $result = $handle->fetch();
+                    if ( empty( $result ) ) {
+                        $missingParentAccounts[] = $user_id;
+                        continue;
+                    }
+                    $admin_id = $result['admin_id'];
 
-                                        if ( $handle = $MASHPIA_DB->prepare("insert into th_chidon 
-                                                                        set year = :year, 
-                                                                        school_id = :school_id, 
-                                                                        user_id = :user_id, 
-                                                                        yarmulka = :yarmulka,
-                                                                        size = :size, 
-                                                                        parent_id = :parent_id,
-                                                                        test_type = :type, 
-                                                                        reward_type = :type, 
-                                                                        book = :book,
-                                                                        poll = :learning_method 
-                                                                        on duplicate key update 
-                                                                        school_id = :school_id, 
-                                                                        yarmulka = :yarmulka,
-                                                                        size = :size, 
-                                                                        parent_id = :parent_id,
-                                                                        test_type = :type, 
-                                                                        reward_type = :type, 
-                                                                        book = :book,
-                                                                        poll = :learning_method 
-                                                                        ") ) {
-                                            if ( 
-                                                !$handle->execute([
-                                                    ':year'         =>  $year, 
-                                                    ':school_id'    =>  $school_id, 
-                                                    ':user_id'      =>  $user_id,
-                                                    ':yarmulka'     =>  $yarmulka,
-                                                    ':size'         =>  strtolower($sweater),
-                                                    ':parent_id'    =>  $admin_id,
-                                                    ':type'         =>  $tracks[strtolower($track)],
-                                                    ':book'         =>  $book,
-                                                    ':poll'         =>  $learning_method
-                                                ]) 
-                                            ) {
-                                                $error = true;
-                                                $success = false;
-                                                echo "$user_id - $yarmulka - $sweater - $book<br />";
-                                                $handle->debugDumpParams();
-                                                break;
-                                            } else {
-                                                $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
-                                                            set user_id = :user, prize_id = :prize, year = :year
-                                                        ");
-                                                $stmt2 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
-                                                            set user_id = :user, prize_id = :prize, year = :year, he_name = :name
-                                                        ");
-                                                foreach (explode(',', $prizes) as $prize) {
-                                                    // if we need to add the he name
-                                                    if ($chidon_prizes[$prize]) {
-                                                        if (
-                                                            $stmt2->execute([
-                                                                ':user'     => $user_id,
-                                                                ':prize'    => $prize,
-                                                                ':year'     => $year,
-                                                                ':name'     => $prize_name
-                                                            ])
-                                                        )
-                                                            $updated++;
-                                                        else {
-                                                            $stmt2->debugDumpParams();
-                                                            $error = true;
-                                                            break 2;
-                                                        }
-                                                    } else {
-                                                        if (
-                                                            $stmt1->execute([
-                                                                ':user'     => $user_id,
-                                                                ':prize'    => $prize,
-                                                                ':year'     => $year
-                                                            ])
-                                                        )
-                                                            $updated++;
-                                                        else {
-                                                            $stmt1->debugDumpParams();
-                                                            $error = true;
-                                                            break 2;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            $error = true;
-                                        }
-                                    } else {
-                                        $error = true;
-                                    }
-                                } else {
+                    $handle = $MASHPIA_DB->prepare("insert into th_chidon 
+                                                set year = :year, 
+                                                school_id = :school_id, 
+                                                user_id = :user_id, 
+                                                yarmulka = :yarmulka,
+                                                size = :size, 
+                                                parent_id = :parent_id,
+                                                test_type = :type, 
+                                                reward_type = :type, 
+                                                book = :book,
+                                                poll = :learning_method 
+                                                on duplicate key update 
+                                                school_id = :school_id, 
+                                                yarmulka = :yarmulka,
+                                                size = :size, 
+                                                parent_id = :parent_id,
+                                                test_type = :type, 
+                                                reward_type = :type, 
+                                                book = :book,
+                                                poll = :learning_method");
+
+                    $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
+                                    set user_id = :user, prize_id = :prize, year = :year
+                                ");
+                    $stmt2 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
+                                    set user_id = :user, prize_id = :prize, year = :year, he_name = :name
+                                ");
+
+                    if (
+                        $handle->execute([
+                            ':year'         =>  $year,
+                            ':school_id'    =>  $school_id,
+                            ':user_id'      =>  $user_id,
+                            ':yarmulka'     =>  $yarmulka,
+                            ':size'         =>  strtolower($sweater),
+                            ':parent_id'    =>  $admin_id,
+                            ':type'         =>  $tracks[strtolower($track)],
+                            ':book'         =>  $book,
+                            ':poll'         =>  $learning_method
+                        ])
+                    ) {
+                        foreach ($arrPrizes as $prize) {
+                            // if we need to add the he name
+                            if ($chidon_prizes[$prize]) {
+                                if (
+                                    $stmt2->execute([
+                                        ':user' => $user_id,
+                                        ':prize' => $prize,
+                                        ':year' => $year,
+                                        ':name' => $prize_name
+                                    ])
+                                )
+                                    $updated++;
+                                else {
+                                    echo "Can't insert into prizes.";
+                                    $stmt2->debugDumpParams();
                                     $error = true;
+                                    break 2;
                                 }
-//                            }
-//                        } else {
-//                            $error = true;
-//                        }
-//                    } else {
-//                        $error = true;
-//                    }
+                            } else {
+                                if (
+                                    $stmt1->execute([
+                                        ':user' => $user_id,
+                                        ':prize' => $prize,
+                                        ':year' => $year
+                                    ])
+                                )
+                                    $updated++;
+                                else {
+                                    echo "Can't insert into prizes.";
+                                    $stmt1->debugDumpParams();
+                                    $error = true;
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    echo "Can't get Admin ID";
+                    $error = true;
+                    break;
                 }
-            } else {
-                $error = true;
             }
         } else {
+            echo "Can't get User ID";
             $error = true;
+            break;
         }
     }
 
