@@ -129,37 +129,32 @@ if ( isset( $_FILES['file'] ) ) {
                         foreach ($arrPrizes as $prize) {
                             // if we need to add the he name
                             if ($chidon_prizes[$prize]) {
-                                if (
-                                    $stmt2->execute([
-                                        ':user' => $user_id,
-                                        ':prize' => $prize,
-                                        ':year' => $year,
-                                        ':name' => $prize_name
-                                    ])
-                                ) {}
-                                else {
-                                    echo "Can't insert into prizes.";
-                                    $stmt2->debugDumpParams();
-                                    $error = true;
-                                    break 2;
-                                }
+                                $res = $stmt2->execute([
+                                            ':user' => $user_id,
+                                            ':prize' => $prize,
+                                            ':year' => $year,
+                                            ':name' => $prize_name
+                                        ]);
                             } else {
-                                if (
-                                    $stmt1->execute([
-                                        ':user' => $user_id,
-                                        ':prize' => $prize,
-                                        ':year' => $year
-                                    ])
-                                ) {}
-                                else {
-                                    echo "Can't insert into prizes.";
-                                    $stmt1->debugDumpParams();
-                                    $error = true;
-                                    break 2;
-                                }
+                                $res = $stmt1->execute([
+                                    ':user' => $user_id,
+                                    ':prize' => $prize,
+                                    ':year' => $year
+                                ]);
+                            }
+                            if (!$res) {
+                                echo "Can't insert into prizes.";
+                                $stmt1->debugDumpParams();
+                                $error = true;
+                                break 2;
                             }
                         }
                         $updated++;
+                    } else {
+                        echo "Can't insert/update th_chidon.";
+                        $handle->debugDumpParams();
+                        $error = true;
+                        break;
                     }
                 } else {
                     echo "Can't get Admin ID";
