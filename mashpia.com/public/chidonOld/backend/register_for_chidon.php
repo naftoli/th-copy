@@ -45,7 +45,7 @@ if ( isset( $_FILES['file'] ) ) {
         $info[] = $values;
     }
 
-    echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+//    echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
     $MASHPIA_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $MASHPIA_DB->beginTransaction();
@@ -55,7 +55,6 @@ if ( isset( $_FILES['file'] ) ) {
     $missingParentAccounts = [];
     
     // loop through info array and register kids
-    // index 0 is the user serial and index 1 is the school id
     $i = 0;
     foreach ( $info as $values ) {
         $user_serial = $values[$i++];
@@ -173,6 +172,8 @@ if ( isset( $_FILES['file'] ) ) {
             $error = true;
             break;
         }
+        // set i back to 0
+        $i = 0;
     }
 
     $success = !$error;
