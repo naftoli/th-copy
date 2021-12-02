@@ -118,7 +118,7 @@ if ( isset( $_FILES['file'] ) ) {
                                                     ':school_id'    =>  $school_id, 
                                                     ':user_id'      =>  $user_id,
                                                     ':yarmulka'     =>  $yarmulka,
-                                                    ':size'         =>  $sweater,
+                                                    ':size'         =>  strtolower($sweater),
                                                     ':parent_id'    =>  $admin_id,
                                                     ':type'         =>  $tracks[strtolower($track)],
                                                     ':book'         =>  $book,
