@@ -127,6 +127,7 @@ if ( isset( $_FILES['file'] ) ) {
                                             ) {
                                                 $error = true;
                                                 $success = false;
+                                                echo "$user_id - $yarmulka - $sweater - $book<br />";
                                                 $handle->debugDumpParams();
                                                 break;
                                             } else {
