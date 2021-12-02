@@ -73,15 +73,15 @@ if ( isset( $_FILES['file'] ) ) {
                 $school_id = $result['school_id'];
 
                 if ( $user_id > 0 ) {
-                    // first find out if user already is registered in chidon db
-                    if ( $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and user_id = :user") ) {
-                        if ( $handle->execute([
-                            ':year'     =>  $year, 
-                            ':user'     =>  $user_id
-                        ]) ) {
-
-                            $found = $handle->fetch();
-                            if ( empty( $found ) ) {
+//                    // first find out if user already is registered in chidon db
+//                    if ( $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and user_id = :user") ) {
+//                        if ( $handle->execute([
+//                            ':year'     =>  $year,
+//                            ':user'     =>  $user_id
+//                        ]) ) {
+//
+//                            $found = $handle->fetch();
+//                            if ( empty( $found ) ) {
                                 if ( $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id") ) {
                                     if ( $handle->execute([':user_id' => $user_id]) ) {
                                         $result = $handle->fetch();
@@ -101,7 +101,16 @@ if ( isset( $_FILES['file'] ) ) {
                                                                         test_type = :type, 
                                                                         reward_type = :type, 
                                                                         book = :book,
-                                                                        poll = :learning_method
+                                                                        poll = :learning_method 
+                                                                        on duplicate key update 
+                                                                        school_id = :school_id, 
+                                                                        yarmulka = :yarmulka,
+                                                                        size = :size, 
+                                                                        parent_id = :parent_id,
+                                                                        test_type = :type, 
+                                                                        reward_type = :type, 
+                                                                        book = :book,
+                                                                        poll = :learning_method 
                                                                         ") ) {
                                             if ( 
                                                 !$handle->execute([
@@ -120,10 +129,10 @@ if ( isset( $_FILES['file'] ) ) {
                                                 $success = false;
                                                 break;
                                             } else {
-                                                $stmt1 = $MASHPIA_DB->prepare("insert into chidon_user_prizes 
+                                                $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
                                                             set user_id = :user, prize_id = :prize, year = :year
                                                         ");
-                                                $stmt2 = $MASHPIA_DB->prepare("insert into chidon_user_prizes 
+                                                $stmt2 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
                                                             set user_id = :user, prize_id = :prize, year = :year, he_name = :name
                                                         ");
                                                 foreach (explode(',', $prizes) as $prize) {
@@ -167,13 +176,13 @@ if ( isset( $_FILES['file'] ) ) {
                                 } else {
                                     $error = true;
                                 }
-                            }
-                        } else {
-                            $error = true;
-                        }                        
-                    } else {
-                        $error = true;
-                    }
+//                            }
+//                        } else {
+//                            $error = true;
+//                        }
+//                    } else {
+//                        $error = true;
+//                    }
                 }
             } else {
                 $error = true;
