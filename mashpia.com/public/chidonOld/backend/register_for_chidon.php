@@ -137,8 +137,7 @@ if ( isset( $_FILES['file'] ) ) {
                                         ':year' => $year,
                                         ':name' => $prize_name
                                     ])
-                                )
-                                    $updated++;
+                                ) {}
                                 else {
                                     echo "Can't insert into prizes.";
                                     $stmt2->debugDumpParams();
@@ -152,8 +151,7 @@ if ( isset( $_FILES['file'] ) ) {
                                         ':prize' => $prize,
                                         ':year' => $year
                                     ])
-                                )
-                                    $updated++;
+                                ) {}
                                 else {
                                     echo "Can't insert into prizes.";
                                     $stmt1->debugDumpParams();
@@ -161,6 +159,7 @@ if ( isset( $_FILES['file'] ) ) {
                                     break 2;
                                 }
                             }
+                            $updated++;
                         }
                     }
                 } else {
@@ -176,10 +175,7 @@ if ( isset( $_FILES['file'] ) ) {
         }
     }
 
-    if ( $error ) {
-        $success = false;
-        echo "<pre>"; print_r( $MASHPIA_DB->errorInfo() ); echo "</pre>";
-    }
+    $success = !$error;
 
     if ( $success ) {
         $MASHPIA_DB->commit();
