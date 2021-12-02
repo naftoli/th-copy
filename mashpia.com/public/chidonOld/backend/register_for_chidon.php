@@ -159,8 +159,8 @@ if ( isset( $_FILES['file'] ) ) {
                                     break 2;
                                 }
                             }
-                            $updated++;
                         }
+                        $updated++;
                     }
                 } else {
                     echo "Can't get Admin ID";
