@@ -62,7 +62,7 @@ if ( isset( $_FILES['file'] ) ) {
         $book = $values[$i++];
         $learning_method = $values[$i++];
         $school_name = $values[$i++];
-        $prizes = $values[$i+];
+        $prizes = $values[$i++];
         $prize_name = $values[$i++];
 
         // find out what the user id is
