@@ -104,7 +104,7 @@ if ( isset( $_FILES['file'] ) ) {
                                                 test_type = :type, 
                                                 reward_type = :type, 
                                                 book = :book,
-                                                poll = :learning_method");
+                                                poll = :poll");
 
                     $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
                                     set user_id = :user, prize_id = :prize, year = :year
