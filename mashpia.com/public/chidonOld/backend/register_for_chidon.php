@@ -45,7 +45,7 @@ if ( isset( $_FILES['file'] ) ) {
         $info[] = $values;
     }
 
-//    echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+    echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
     $MASHPIA_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $MASHPIA_DB->beginTransaction();
