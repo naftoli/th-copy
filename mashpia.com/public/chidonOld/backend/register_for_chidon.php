@@ -127,6 +127,7 @@ if ( isset( $_FILES['file'] ) ) {
                                             ) {
                                                 $error = true;
                                                 $success = false;
+                                                $handle->debugDumpParams();
                                                 break;
                                             } else {
                                                 $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
@@ -148,6 +149,7 @@ if ( isset( $_FILES['file'] ) ) {
                                                         )
                                                             $updated++;
                                                         else {
+                                                            $stmt2->debugDumpParams();
                                                             $error = true;
                                                             break 2;
                                                         }
@@ -161,6 +163,7 @@ if ( isset( $_FILES['file'] ) ) {
                                                         )
                                                             $updated++;
                                                         else {
+                                                            $stmt1->debugDumpParams();
                                                             $error = true;
                                                             break 2;
                                                         }
