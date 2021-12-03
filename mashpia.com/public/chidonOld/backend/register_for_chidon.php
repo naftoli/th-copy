@@ -96,7 +96,7 @@ if ( isset( $_FILES['file'] ) ) {
                                                 test_type = :type, 
                                                 reward_type = :type, 
                                                 book = :book,
-                                                poll = :learning_method 
+                                                poll = :poll 
                                                 on duplicate key update 
                                                 school_id = :school_id, 
                                                 yarmulka = :yarmulka,
