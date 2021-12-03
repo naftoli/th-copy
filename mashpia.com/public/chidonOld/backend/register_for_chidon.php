@@ -45,7 +45,7 @@ if ( isset( $_FILES['file'] ) ) {
         $info[] = $values;
     }
 
-    echo "<pre>"; print_r( $info ); echo "</pre>";
+//    echo "<pre>"; print_r( $info ); echo "</pre>";
 
     $MASHPIA_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $MASHPIA_DB->beginTransaction();
@@ -57,6 +57,7 @@ if ( isset( $_FILES['file'] ) ) {
     // loop through info array and register kids
     $i = 0;
     foreach ( $info as $values ) {
+        echo "<pre>" . "$i: "; print_r($values); echo "</pre>";
         $user_serial = $values[$i++];
         $yarmulka = empty($values[$i++]) ? $values[1] : 0;
         $sweater = $values[$i++];
@@ -143,7 +144,7 @@ if ( isset( $_FILES['file'] ) ) {
                                 ]);
                             }
                             if (!$res) {
-                                echo "Can't insert into prizes.";
+                                echo "Can't insert into prizes.<br />";
                                 $stmt1->debugDumpParams();
                                 $error = true;
                                 break 2;
@@ -151,19 +152,19 @@ if ( isset( $_FILES['file'] ) ) {
                         }
                         $updated++;
                     } else {
-                        echo "Can't insert/update th_chidon.";
+                        echo "Can't insert/update th_chidon.<br />";
                         $handle->debugDumpParams();
                         $error = true;
                         break;
                     }
                 } else {
-                    echo "Can't get Admin ID";
+                    echo "Can't get Admin ID.<br />";
                     $error = true;
                     break;
                 }
             }
         } else {
-            echo "Can't get User ID";
+            echo "Can't get User ID.<br />";
             $error = true;
             break;
         }
