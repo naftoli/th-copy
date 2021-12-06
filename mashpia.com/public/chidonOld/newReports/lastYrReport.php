@@ -16,7 +16,7 @@ $ct = new ChidonTests();
 
 $types = $ct->getTypes();
 $info = [];
-$sql = "select th.*, u.first, u.last, u,user_serial s.school_name, c.class_grade, c.class_sub from th_chidon th 
+$sql = "select th.*, u.first, u.last, u,user_serial, s.school_name, c.class_grade, c.class_sub from th_chidon th 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
