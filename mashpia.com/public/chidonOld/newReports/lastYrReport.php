@@ -16,11 +16,12 @@ $ct = new ChidonTests();
 
 $types = $ct->getTypes();
 $info = [];
-$sql = "select th.*, u.first, u.last, s.school_name, c.class_grade, c.class_sub from th_chidon th 
+$sql = "select th.*, u.first, u.last, u,user_serial s.school_name, c.class_grade, c.class_sub from th_chidon th 
         join users u using (user_id) 
         join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
-        where th.year = " . $year . "
+        where th.year = " . $year . " 
+        and th.date_paid > 0 
         order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -53,6 +54,7 @@ while ($row = mysql_fetch_assoc($result)) {
         <tr>
             <th>School</th>
             <th>Class</th>
+            <th>Serial Number</th>
             <th>Student</th>
             <th>Test Type</th>
         </tr>
@@ -62,8 +64,8 @@ while ($row = mysql_fetch_assoc($result)) {
         }
         foreach ($info as $row) {
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-            echo "<tr><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['first'] . ' ' . $row['last'] .
-                "</td><td>" . $row['test_type'] . "</td></tr>";
+            echo "<tr><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['user_serial'] .
+                "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['test_type'] . "</td></tr>";
             $totals[$row['test_type']]++;
         }
         ?>
