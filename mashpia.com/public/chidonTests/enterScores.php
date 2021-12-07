@@ -10,21 +10,24 @@ $schools = $as->getSchools();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
+$testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['scores'])) {
     $ct->insertScores($_POST['scores']);
     header("Location: marks.php?test_num=" . $testNumber);
     exit;
 }
 
-$info = [];
-$scores = [];
-foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
-    $info[$id] = $ct->getStudents();
-    $ct->setScores();
-    $scores[$id] = $ct->getScores();
+if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
+    $class_id = $_POST['grade'] ?? 0;
+    $info = [];
+    $scores = [];
+    foreach ($schools as $id => $school) {
+        $ct->setStudents($id, $class_id);
+        $info[$id] = $ct->getStudents();
+        $ct->setScores();
+        $scores[$id] = $ct->getScores();
+    }
 }
 
 // initialize all tests to not be disabled
@@ -68,48 +71,70 @@ if ($admin_user['auth'] != 'super') {
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Enter Test Score</h1>
-        <h2>Test #<?= $testNumber ?></h2>
-        <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
-        <?php
-        $types = $ct->getTypes();
-        echo "<form action='' method='post'>";
-        echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
-        echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
-        foreach ($info as $school => $children) {
-            if (empty($children)) continue;
-            echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th>";
-            foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($value) . " Score</th>";
-            }
-            echo "</tr>";
-            foreach ($children as $child) {
-                $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-                $name = $child['first'] . ' ' . $child['last'];
-                $id = $child['th_chidon_id'];
-                echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
-                if (empty($child['test_type'])) $default = true;
-                else $default = false;
-                if (! in_array($child['test_type'], array_keys($types))) echo "<td></td>";
-                else {
-                    foreach ($types as $type => $value) {
-                        if ($child['test_type'] == $type) echo "<td class='type'>" . ucwords($value) . "</td>";
-                    }
-                }
+        <?php if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) { ?>
+            <h2>Test #<?= $testNumber ?></h2>
+            <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
+            <?php
+            $types = $ct->getTypes();
+            echo "<form action='' method='post'>";
+            echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
+            echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
+            foreach ($info as $school => $children) {
+                if (empty($children)) continue;
+                echo "<h2>" . $schools[$school] . "</h2>";
+                echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th>";
                 foreach ($types as $type => $value) {
-                    $class = 'score';
-                    if ($type == 'expert') $class = 'expert';
-                    $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                    echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
-                    if ($disabled) echo "readonly ";
-                    echo "/></td>";
+                    echo "<th>" . ucwords($value) . " Score</th>";
                 }
                 echo "</tr>";
+                foreach ($children as $child) {
+                    $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+                    $name = $child['first'] . ' ' . $child['last'];
+                    $id = $child['th_chidon_id'];
+                    echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+                    if (empty($child['test_type'])) $default = true;
+                    else $default = false;
+                    if (! in_array($child['test_type'], array_keys($types))) echo "<td></td>";
+                    else {
+                        foreach ($types as $type => $value) {
+                            if ($child['test_type'] == $type) echo "<td class='type'>" . ucwords($value) . "</td>";
+                        }
+                    }
+                    foreach ($types as $type => $value) {
+                        $class = 'score';
+                        if ($type == 'expert') $class = 'expert';
+                        $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
+                        echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
+                        if ($disabled) echo "readonly ";
+                        echo "/></td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>";
             }
-            echo "</table>";
+            echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
+            echo "</form>";
+        } else {
+            ?>
+            <form action="enterScores.php" method="post">
+                Choose Class: <select name="grade">
+                    <option value="0">All Classes</option>
+                    <?php
+                    $sql = "select class_id, class_grade, class_sub from classes where school_id = " . $admin_user['auths']['school'][0];
+                    $result = mysql_query($sql);
+                    while ($row = mysql_fetch_assoc($result)) {
+                        if (intval($row['class_grade']) >= 4) {
+                            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                            echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                        }
+                    }
+                    ?>
+                </select><br /><br />
+                <input type="hidden" name="test_num" value="<?=$testNumber?>">
+                <input type="submit" name="submit" value="Submit" />
+            </form>
+            <?php
         }
-        echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
-        echo "</form>";
         ?>
     </body>
     <script>
@@ -125,7 +150,8 @@ if ($admin_user['auth'] != 'super') {
                 }
             }
             $('body').show();
-            alert('Please make sure to SAVE after entering scores.');
+            const showAlert = <?= isset($_POST['submit']) ? 1 : 0?>;
+            if (showAlert) alert('Please make sure to SAVE after entering scores.');
         })
         $(".score").focus( function() {
             let val = $(this).val()
