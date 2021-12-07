@@ -90,8 +90,11 @@ if ($admin_user['auth'] != 'super') {
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 if (empty($child['test_type'])) $default = true;
                 else $default = false;
-                foreach ($types as $type => $value) {
-                    if ($child['test_type'] == $type) echo "<td class='type'>" . ucwords($value) . "</td>";
+                if (! in_array($child['test_type'], array_keys($types))) echo "<td></td>";
+                else {
+                    foreach ($types as $type => $value) {
+                        if ($child['test_type'] == $type) echo "<td class='type'>" . ucwords($value) . "</td>";
+                    }
                 }
                 foreach ($types as $type => $value) {
                     $class = 'score';
