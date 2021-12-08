@@ -90,7 +90,7 @@ class Report {
         if (is_null( $this->school_id )) {
             $sql .= "
                 AND s.school_era IS NULL 
-                AND s.school_id not in (61, 82, 66, 112, 110, 180)
+                AND s.school_id not in (61, 82, 66, 112, 180)
                 order by s.school_name, c.class_grade, c.class_sub, u.last, u.first 
             ";
         } else {
