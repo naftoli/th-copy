@@ -18,9 +18,6 @@
     "require-dev": {
         "phpunit/phpunit": "^7"
     },
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/arye-dov-eidelman/php-activerecord.git", "no-api": true }
-    ],
     "scripts": {
         "tail-logs": [
             "Composer\\Config::disableProcessTimeout",
