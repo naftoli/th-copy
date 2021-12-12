@@ -115,7 +115,8 @@ foreach ($schools as $id => $school) {
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Avg Mark</th><th>Highest Track Passed</th><th>Reward Type for Child</th></tr>";
+            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Avg Mark</th>
+                <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
             foreach ($children as $child) {
                 $markInfo = markInfo($child, $school);
                 $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
@@ -133,6 +134,7 @@ foreach ($schools as $id => $school) {
 //                    echo " />" . ucwords($value) . ' ';
                 }
                 echo "</select></td><td>" . $markInfo['avg'] . "</td><td>" . $types[$markInfo['highest_track']] . "</td><td>";
+                echo $markInfo['highest_track_avg'] . "</td><td>";
                 echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'>";
                 foreach ($types as $type => $value) {
                     if ($type == 'genius') break;
@@ -145,6 +147,7 @@ foreach ($schools as $id => $school) {
                         echo " selected ";
                     echo ">" . $value . "</option>";
                 }
+                echo "<option value='highest track passed'>Highest Track Passed</option>";
                 echo "</select></td></tr>";
             }
             echo "</table>";
