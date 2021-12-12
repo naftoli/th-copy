@@ -148,7 +148,7 @@ function markInfo( $child, $school_id ) {
 //                        ($markInfo['highest_track'] == '' && $type == $child['test_type'])
 //                    )
 //                        echo " selected ";
-//                    echo ">" . $value . "</option>";
+                    echo ">" . $value . "</option>";
                 }
                 echo "</select></td></tr>";
             }
