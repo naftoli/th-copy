@@ -1,5 +1,7 @@
 <?php
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -24,6 +26,16 @@ if (isset($_POST['submit'])) {
     $ct->setRewardTypes($_POST['reward_type']);
     header("Location: enterScores.php");
     exit;
+}
+
+$info = [];
+$marks = [];
+foreach ($schools as $id => $school) {
+    $ct->setStudents($id);
+    $info[$id] = $ct->getStudents();
+    $ct->setScores();
+    $ct->calculateMarks();
+    $marks[$id] = $ct->getMarks();
 }
 
 function markInfo( $child, $school_id ) {
@@ -73,16 +85,6 @@ function markInfo( $child, $school_id ) {
     $markInfo['highest_track_avg'] = $highest_mark;
 
     return $markInfo;
-}
-
-$info = [];
-$marks = [];
-foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
-    $info[$id] = $ct->getStudents();
-    $ct->setScores();
-    $ct->calculateMarks();
-    $marks[$id] = $ct->getMarks();
 }
 ?>
 <!DOCTYPE html>
@@ -148,9 +150,6 @@ foreach ($schools as $id => $school) {
 //                        echo " selected ";
 //                    echo ">" . $value . "</option>";
                 }
-//                echo "<option value='highest track passed'";
-//                if ($child['reward_type'] == 'highest track passed') echo " selected";
-//                echo ">Highest Track Passed</option>";
                 echo "</select></td></tr>";
             }
             echo "</table>";
