@@ -70,7 +70,7 @@ function markInfo( $child, $school_id ) {
     $highest_type = '';
     $highest_mark = 0;
     foreach ($types as $type => $val) {
-        if (isset($marksPerType[$type])) {
+        if ($numTests && ($marksPerType[$type])) {
             $avg = $marksPerType[$type] / $numTests;
             $avgs[$type] = $avg;
             if (($type != 'genius' && $avg >= 70) || ($type == 'genius' && $avg >= 90)) {
