@@ -136,18 +136,21 @@ foreach ($schools as $id => $school) {
                 echo "</select></td><td>" . $markInfo['avg'] . "</td><td>" . $types[$markInfo['highest_track']] . "</td><td>";
                 echo $markInfo['highest_track_avg'] . "</td><td>";
                 echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'>";
+                $types[] = ['highest track passed' => 'Highest Track Passed'];
                 foreach ($types as $type => $value) {
-                    if ($type == 'genius') break;
+                    if ($type == 'genius') continue;
                     echo "<option value='" . $type . "'";
                     if ($type == $child['reward_type']) echo " selected ";
-                    else if (
-                        ($markInfo['highest_track'] != '' && $type == $markInfo['highest_track']) ||
-                        ($markInfo['highest_track'] == '' && $type == $child['test_type'])
-                    )
-                        echo " selected ";
-                    echo ">" . $value . "</option>";
+//                    else if (
+//                        ($markInfo['highest_track'] != '' && $type == $markInfo['highest_track']) ||
+//                        ($markInfo['highest_track'] == '' && $type == $child['test_type'])
+//                    )
+//                        echo " selected ";
+//                    echo ">" . $value . "</option>";
                 }
-                echo "<option value='highest track passed'>Highest Track Passed</option>";
+//                echo "<option value='highest track passed'";
+//                if ($child['reward_type'] == 'highest track passed') echo " selected";
+//                echo ">Highest Track Passed</option>";
                 echo "</select></td></tr>";
             }
             echo "</table>";
