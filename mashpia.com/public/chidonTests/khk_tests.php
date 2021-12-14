@@ -113,13 +113,13 @@ if ($admin_user['auth'] != 'super') {
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
         echo "<h2>" . $schools[$school] . "</h2>";
-        echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
+        echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
             $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
             $avg = 0;
-            echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+            echo "<tr><td>" . $child['serial_number'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             $divideBy = 0;
             for ($i = 1; $i <= 4; $i++) {
                 $mark = getMark($i, $id);
