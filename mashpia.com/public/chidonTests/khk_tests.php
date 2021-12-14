@@ -119,7 +119,7 @@ if ($admin_user['auth'] != 'super') {
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
             $avg = 0;
-            echo "<tr><td>" . $child['serial_number'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+            echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             $divideBy = 0;
             for ($i = 1; $i <= 4; $i++) {
                 $mark = getMark($i, $id);
