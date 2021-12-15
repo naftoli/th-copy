@@ -438,7 +438,7 @@ class TasksCustomizationNew {
 				." AND (dtm.created_by_parent IS NULL OR dtm.created_by_parent = '$this->parent_id') "
 				." AND u.user_registered > 0 "
 				." and dtm.lang_id = " . $this->lang. " ";
-			if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
+			if ($mission_type) $sql .= " and dtm.school_type_id in (" . $mission_type . ")";
 			//if ($this->id == 5548)echo $sql;
         } else if ($this->type == 'class') {
 //            $users = $this->getUsersInGrade($this->id);
@@ -458,7 +458,7 @@ class TasksCustomizationNew {
                     and u.user_registered > 0 
                     and dtm.personal = 0 
                     and dtm.lang_id = " . $this->lang;
-            if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
+            if ($mission_type) $sql .= " and dtm.school_type_id in (" . $mission_type . ")";
 //			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //            echo $sql;
         } else {
@@ -472,7 +472,7 @@ class TasksCustomizationNew {
                     and (dtm.created_by_school is null or dtm.created_by_school = $this->school_id)  
 					and dtm.personal = 0                        
                     and dtm.lang_id = " . $this->lang;
-            if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
+            if ($mission_type) $sql .= " and dtm.school_type_id in (" . $mission_type . ")";
         }
         $sql .= ' GROUP BY cat, name, level '.$orderBy;
 //        echo $sql; exit;
