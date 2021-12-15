@@ -59,6 +59,7 @@ function markInfo( $child, $school_id ) {
     }
 
     for ($i = 1; $i <= 4; $i++) {
+        if ($i > $numTests) break;
         if (isset($childMarkInfo[$i])) {
             foreach ($childMarkInfo[$i] as $type => $mark) {
                 if ($mark > 0) {
