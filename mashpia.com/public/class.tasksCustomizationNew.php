@@ -399,11 +399,25 @@ class TasksCustomizationNew {
         return false;
     }
 
-    public function getTasks( $subject_id, $debug = false, $forPersonalization = false ) {
+    public function getTasks( $subject_id, $debug = false, $forPersonalization = false, $missionType = false ) {
     	$this->debug = $debug;
         $tasks = array();
         $info = array();
         $mandatory = array();
+        switch ($missionType) {
+            case 'chabad':
+                $mission_type = 2,3;
+                break;
+            case 'frum':
+                $mission_type = 12,13;
+                break;
+            case 'day_school':
+                $mission_type = 4,5;
+                break;
+            default:
+                $mission_type = false;
+                break;
+        }
         
         $orderBy = " order by dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
@@ -424,6 +438,7 @@ class TasksCustomizationNew {
 				." AND (dtm.created_by_parent IS NULL OR dtm.created_by_parent = '$this->parent_id') "
 				." AND u.user_registered > 0 "
 				." and dtm.lang_id = " . $this->lang. " ";
+			if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
 			//if ($this->id == 5548)echo $sql;
         } else if ($this->type == 'class') {
 //            $users = $this->getUsersInGrade($this->id);
@@ -443,6 +458,7 @@ class TasksCustomizationNew {
                     and u.user_registered > 0 
                     and dtm.personal = 0 
                     and dtm.lang_id = " . $this->lang;
+            if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
 //			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //            echo $sql;
         } else {
@@ -456,6 +472,7 @@ class TasksCustomizationNew {
                     and (dtm.created_by_school is null or dtm.created_by_school = $this->school_id)  
 					and dtm.personal = 0                        
                     and dtm.lang_id = " . $this->lang;
+            if ($mission_type) $sql .= " and dtm.mission_type in (" . $mission_type . ")";
         }
         $sql .= ' GROUP BY cat, name, level '.$orderBy;
 //        echo $sql; exit;
