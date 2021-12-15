@@ -406,13 +406,13 @@ class TasksCustomizationNew {
         $mandatory = array();
         switch ($missionType) {
             case 'chabad':
-                $mission_type = 2,3;
+                $mission_type = '2,3';
                 break;
             case 'frum':
-                $mission_type = 12,13;
+                $mission_type = '12,13';
                 break;
             case 'day_school':
-                $mission_type = 4,5;
+                $mission_type = '4,5';
                 break;
             default:
                 $mission_type = false;
