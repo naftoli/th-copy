@@ -9,6 +9,32 @@ function checkChidon($id) {
     return mysql_num_rows($result);
 }
 
+function createCsv(array $info) {
+    $addresses = [];
+    $addresses[] = ['Name', 'Address', 'Number of Hachayols'];
+    foreach ($info as $details) {
+        foreach ($details as $parent) {
+            $name = $parent['last'];
+            $address = $parent['admin_address1'] . " " . $parent['admin_city'] . ', ' . $parent['admin_state'] .
+                " " . $parent['admin_postal'] . " " . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
+            $num = $parent['num_hachayols'];
+            $addresses[] = [$name, $address, $num];
+        }
+    }
+
+    $file_url = "myshliach.csv";
+    $fp = fopen($file_url, 'w');
+    foreach ($addresses as $address) {
+        fputcsv($fp, $address);
+    }
+    fclose($fp);
+
+    header('Content-Type: application/octet-stream');
+    header("Content-Transfer-Encoding: Binary");
+    header("Content-disposition: attachment; filename=\"$file_url\"");
+    readfile($file_url);
+}
+
 require 'class.myShliachHachayol.php';
 $m = new MyShliachHachayol( true );
 
@@ -158,7 +184,6 @@ $parents = $m->getSortedAdmins();
             
 			foreach ($parents as $ord => $info) {
 				foreach ($info as $admin_id => $parent) {
-					
 					$name = $parent['last'];
 					$address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] . 
 						" " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
@@ -199,4 +224,36 @@ $parents = $m->getSortedAdmins();
 			?>
         </div>
 	</body>
+    <script>
+        function generateCsv( headers, rows, filename ) {
+            // generate the csv content
+            const universalBOM = "\uFEFF";
+            let csvContent = `${ headers.join(',') }\n`;
+            // Add each row to the CSV content and encode it for unicode in excel
+            rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
+            csvContent = encodeURIComponent( universalBOM + csvContent );
+            // create and click the download link
+            let link = document.createElement('a');
+            link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+            // link.target = '_blank';
+            link.download = `${filename}.csv`;
+            link.click();
+        }
+
+        let headers = []
+        headers.push(['Name', 'Address', 'Number of Hachayols'])
+        const info = <?= json_encode($parents) ?>;
+        let rows = []
+        for (let p in info) {
+            for (let id in info[p]) {
+                const parent = info[p][id]
+                const name = parent['last']
+                const address = parent['admin_address1'] + ' ' + parent['admin_city'] + ', ' + parent['admin_state'] +
+                    ' ' + parent['admin_postal'] + ' ' + (parent['admin_country'].length ? parent['admin_country'] : 'USA');
+                const hachayols = parent['num_hachayols']
+                rows.push([name, address, hachayols])
+            }
+        }
+        generateCsv(headers, rows, 'myshliach')
+    </script>
 </html>
