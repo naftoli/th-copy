@@ -16,21 +16,22 @@
         <script src="js/all.js" defer></script>
         <style>
             html,
-    body,
-    span,
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    div,
-    button,
-    i,
-    input {
-        color: #1b2b51;
-    }
+            body,
+            span,
+            p,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            div,
+            button,
+            i,
+            input {
+                color: #1b2b51;
+            }
+            #balance-box, #data-box, #balance-display, #img-cart, #cartQty { color: white !important }
             body { position: relative; padding-bottom: 0px; }
             img#cart-img{height: 52px;}
             #page-title{
@@ -76,7 +77,7 @@
         </style>
         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-        <script src="../js/translation/auction/cart/auction_cart.js"></script>
+<!--        <script src="../js/translation/auction/cart/auction_cart.js"></script>-->
 	</head>
     <body class="page-goals">
         <header class="navbar" id="top" role="banner">
@@ -95,7 +96,7 @@
                         <div id="img-cart" class="pull-right">
                             (<span id="cartQty">0</span>)<!--<i class="fa fa-shopping-cart fa-4x"></i>--> <img id="cart-img" src="../img_new/cart-color-white.svg"/>
                         </div>
-                        <div class="media-body">
+                        <div class="media-body" style="color: white">
                             <div class="balance">
                                 <p>Loading Balance...</p>
                             </div>
@@ -227,6 +228,7 @@
             var availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
             var totalmilesText = "Total Miles Earned: ";
             var totalmilesYearText = "Total Miles Earned this Year: ";
+            var data_box_css = ''
 
             if (localStorage.getItem("locallang") == "he") {
                 $("#img-cart").removeClass('pull-right').addClass('pull-left');
@@ -234,7 +236,7 @@
                 availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
                 totalmilesText = "סך הנקודות שנצברו  : ";
                 var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
-                var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
+                data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
             }
             $.post('ajax/getBalance.php', {
                 user : user,
