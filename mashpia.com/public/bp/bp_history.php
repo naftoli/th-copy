@@ -70,11 +70,11 @@ $sql = "SELECT
             line_campaigns l ON l.id = bus.campaign_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $learned = $row['num_lines'];
+    $learned = $row['num_lines'];004
     if ($learned == '') $learned = 0;
     $results[$row['school_id']][$row['user_id']][$row['year']][$row['type']] = $learned;
 }
-echo "<pre>"; print_r($results); echo "</pre>"; exit;
+//echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
 $totals = [];
 foreach ($results as $school => $more) {
