@@ -3,9 +3,9 @@ ini_set('display_errors', 1);
 ini_set('max_execution_time', 600);
 
 $admin_auth = array('school');
-require('header.php');
+require('../header.php');
 
-require_once 'class.globalSettings.php';
+require_once '../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $sql = "select * from line_campaigns order by year";
@@ -34,7 +34,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 <h1 class="no-print">Last Year's birthday present to the Rebbe</h1>
 
 <?php
-require_once 'class.adminSchools.php';
+require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
