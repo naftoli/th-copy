@@ -20,7 +20,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 <HEAD>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Last Year's birthday present to the Rebbe</title>
-    <link href="admin_styles.css" rel="stylesheet" type="text/css">
+    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
         tr, th, td {
             font-size: 14px;
@@ -30,7 +30,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 </head>
 
 <body>
-<? include('admin_header.php'); ?>
+<? include('../admin_header.php'); ?>
 <h1 class="no-print">Last Year's birthday present to the Rebbe</h1>
 
 <?php
@@ -55,7 +55,7 @@ foreach ($schools as $id => $school) {
 }
 
 $results = [];
-require_once 'class.bpSummary.php';
+require_once '../class.bpSummary.php';
 foreach ($campaigns as $year => $more) {
     foreach ($more as $id => $campaign) {
         $bps = new BpSummary( $id, 'user' );
