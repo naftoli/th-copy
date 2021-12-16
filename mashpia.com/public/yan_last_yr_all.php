@@ -93,8 +93,8 @@ while ($row = mysql_fetch_assoc( $result )) {
             <div class="page-break"></div>
             <?php
         }
-        echo "<p></p>";
-        echo "<table><caption>Totals</caption><tr><th>School</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr>";
+        echo "<p></p><h2>Totals</h2>";
+        echo "<table><tr><th>School</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr>";
         foreach ($totals as $school => $types) {
             echo "<tr><td>" . $schools[$school] . "</td>";
             echo "<td>" . $types['tanya'] . "</td>";
