@@ -66,6 +66,7 @@ foreach ($campaigns as $year => $more) {
         }
     }
 }
+echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
 $totals = [];
 foreach ($results as $school => $more) {
