@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('max_execution_time', 600);
+
 $admin_auth = array('school'); 
 require('header.php');
 
@@ -91,7 +92,14 @@ while ($row = mysql_fetch_assoc( $result )) {
             </table>
             <div class="page-break"></div>
             <?php
-        } 
+        }
+        echo "<table><tr><th>School</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr>";
+        foreach ($totals as $school => $types) {
+            echo "<tr><td>" . $school . "</td>";
+            echo "<td>" . $types['tanya'] . "</td>";
+            echo "<td>" . $types['mishna'] . "</td></tr>";
+        }
+        echo "</table>";
         ?>
     </body>
 </html>
