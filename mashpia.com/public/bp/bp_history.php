@@ -84,14 +84,16 @@ foreach ($results as $school => $more) {
         <tr>
             <th>Grade</th>
             <th>Chayol</th>
-            <th colspan="7">תניא בעל פה <br />Lines Learned</th>
-            <th colspan="7">משניות בעל פה <br />Lines Learned</th>
+            <th colspan="8">תניא בעל פה <br />Lines Learned</th>
+            <th colspan="8">משניות בעל פה <br />Lines Learned</th>
         </tr>
         <tr>
             <th colspan="2"></th>
             <?php
-            for ($i = $start; $i <= $year; $i++) {
-                echo "<th>$i</th>";
+            foreach ($types as $type) {
+                for ($i = $start; $i <= $year; $i++) {
+                    echo "<th>$i</th>";
+                }
             }
             ?>
         </tr>
