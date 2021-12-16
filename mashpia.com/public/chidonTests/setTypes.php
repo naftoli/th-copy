@@ -115,6 +115,22 @@ function markInfo( $child, $school_id ) {
         <h1>Chidon Test Types</h1>
         <?php
         if (isset($_POST['submit'])) {
+            switch ($numTests) {
+                case 1:
+                    $message = "Averages and highest passing track is based off <b>Test 1</b>.";
+                    break;
+                case 2:
+                    $message = "Averages and highest passing track is based off of a combined mark on <b>Tests 1 & 2</b>.";
+                    break;
+                case 3:
+                    $message = "Averages and highest passing track is based off of a combined mark on <b>Tests 1 - 3</b>.";
+                    break;
+                case 4:
+                    $message = "Averages and highest passing track is based off of a combined mark on <b>all 4 tests</b>.";
+                    break;
+            }
+            $message .= "<br />To see for other tests, go back to the previous screen.";
+            echo "<p>$message</p>";
             echo "<form action='' method='post'>";
             echo "<div style='float: right'><input type='submit' name='save' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
             echo "<div style='clear: both'></div>";
