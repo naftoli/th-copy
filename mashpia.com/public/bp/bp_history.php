@@ -74,6 +74,7 @@ while ($row = mysql_fetch_assoc($result)) {
     if ($learned == '') $learned = 0;
     $results[$row['school_id']][$row['user_id']][$row['year']][$row['type']] = $learned;
 }
+echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
 $totals = [];
 foreach ($results as $school => $more) {
