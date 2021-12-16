@@ -26,8 +26,11 @@ while ($row = mysql_fetch_assoc( $result )) {
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
         tr, th, td {
-            font-size: 14px;
+            font-size: 12px;
             padding: 5px;
+        }
+        tr {
+            border-bottom: 1px solid grey;
         }
     </style>
 </head>
