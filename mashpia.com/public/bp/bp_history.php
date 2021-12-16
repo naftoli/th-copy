@@ -72,7 +72,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $learned = $row['num_lines'];
     if ($learned == '') $learned = 0;
-    $results[$row['school_id']][$row['user_id']][$row['year']][$row['type']] = $learned;
+    $results[$row['school_id']][$row['user_id']][$row['year']][strtolower($row['type'])] = $learned;
 }
 //echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
