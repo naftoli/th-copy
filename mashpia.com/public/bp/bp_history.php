@@ -78,6 +78,14 @@ foreach ($results as $school => $more) {
             <th colspan="7">תניא בעל פה <br />Lines Learned</th>
             <th colspan="7">משניות בעל פה <br />Lines Learned</th>
         </tr>
+        <tr>
+            <th colspan="2"></th>
+            <?php
+            for ($i = 5754; $i <= $year; $i++) {
+                echo "<th>$i</th>";
+            }
+            ?>
+        </tr>
         <?php
         foreach ($more as $user_id => $info) {
             $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
@@ -85,25 +93,24 @@ foreach ($results as $school => $more) {
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
             for ($i = 5754; $i <= $year; $i++) {
                 echo "<td>" . (isset($info[$i]['tanya']) ? $info[$i]['tanya'] : '') . "</td>";
+                // update totals
+                if (isset($totals[$school][$i]['tanya'])) $totals[$school][$i]['tanya'] += $info[$i]['tanya'];
+                else $totals[$school][$i]['tanya'] = $info[$i]['tanya'];
             }
             for ($i = 5754; $i <= $year; $i++) {
                 echo "<td>" . (isset($info[$i]['mishna']) ? $info[$i]['tanya'] : '') . "</td>";
+                // update totals
+                if (isset($totals[$school][$i]['mishna'])) $totals[$school][$i]['mishna'] += $info[$i]['mishna'];
+                else $totals[$school][$i]['mishna'] = $info[$i]['mishna'];
             }
             echo "</tr>";
-
-            for ($i = 5754; $i <= $year; $i++) {
-                if (isset($totals[$school][$i]['tanya'])) $totals[$school][$i]['tanya'] += $info['tanya'];
-                else $totals[$school][$i]['tanya'] = $info['tanya'];
-                if (isset($totals[$school][$i]['mishna'])) $totals[$school][$i]['mishna'] += $info['mishna'];
-                else $totals[$school][$i]['mishna'] = $info['mishna'];
-            }
         }
         echo "<tr><th colspan='2'>Total:</th>";
         for ($i = 5754; $i <= $year; $i++) {
-            echo "<th>" . $totals[$school][$year]['tanya'] . "</th>";
+            echo "<th>" . $totals[$school][$i]['tanya'] . "</th>";
         }
         for ($i = 5754; $i <= $year; $i++) {
-            echo "<th>" . $totals[$school][$year]['mishna'] . "</th>";
+            echo "<th>" . $totals[$school][$i]['mishna'] . "</th>";
         }
         echo "</tr>";
         ?>
@@ -113,7 +120,7 @@ foreach ($results as $school => $more) {
 }
 echo "<p></p><h2>Totals</h2>";
 echo "<table><tr><th>School</th>";
-c
+for ($i = 5754; $i <= $year; $i++) {
     echo "<th>Total Tanya $i</th>";
 }
 for ($i = 5754; $i <= $year; $i++) {
