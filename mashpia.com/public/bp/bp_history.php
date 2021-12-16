@@ -81,24 +81,28 @@ foreach ($results as $school => $more) {
     echo "<h2>" . $schools[$school] . "</h2>";
     ?>
     <table width="75%">
-        <tr>
-            <th>Grade</th>
-            <th>Chayol</th>
-            <th colspan="8">תניא בעל פה <br />Lines Learned</th>
-            <th colspan="8">משניות בעל פה <br />Lines Learned</th>
-        </tr>
-        <tr>
-            <th colspan="2"></th>
-            <?php
-            foreach ($types as $type) {
-                for ($i = $start; $i <= $year; $i++) {
-                    echo "<th>$i</th>";
+        <thead>
+            <tr>
+                <th>Grade</th>
+                <th>Chayol</th>
+                <th colspan="8">תניא בעל פה <br />Lines Learned</th>
+                <th colspan="8">משניות בעל פה <br />Lines Learned</th>
+            </tr>
+            <tr>
+                <th colspan="2"></th>
+                <?php
+                foreach ($types as $type) {
+                    for ($i = $start; $i <= $year; $i++) {
+                        echo "<th>$i</th>";
+                    }
                 }
-            }
-            ?>
-        </tr>
+                ?>
+            </tr>
+        </thead>
+        <tbody>
         <?php
         foreach ($more as $user_id => $info) {
+            if (! isset($users['user_id'])) continue;
             $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
             $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
@@ -120,6 +124,7 @@ foreach ($results as $school => $more) {
         }
         echo "</tr>";
         ?>
+        </tbody>
     </table>
     <div class="page-break"></div>
     <?php
