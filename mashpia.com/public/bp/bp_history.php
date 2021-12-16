@@ -7,6 +7,9 @@ require('../header.php');
 
 require_once '../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+$start = 5775;
+
+$types = ['tanya', 'mishna'];
 
 $sql = "select * from line_campaigns order by year";
 $result = mysql_query( $sql );
@@ -55,18 +58,22 @@ foreach ($schools as $id => $school) {
 }
 
 $results = [];
-require_once '../class.bpSummary.php';
-foreach ($campaigns as $year => $more) {
-    foreach ($more as $id => $campaign) {
-        $bps = new BpSummary( $id, 'user' );
-        foreach ($users as $user_id => $info) {
-            $learned = $bps->getSummary($user_id);
-            if ($learned == '') $learned = 0;
-            $results[$info['school_id']][$user_id][$year][$campaign] = $learned;
-        }
-    }
+$sql = "SELECT 
+            bus.*, s.school_id, l.type, l.year
+        FROM
+            bp_user_summary bus
+                JOIN
+            users u USING (user_id)
+                JOIN
+            schools s USING (school_id)
+                JOIN
+            line_campaigns l ON l.id = bus.campaign_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $learned = $row['num_lines'];
+    if ($learned == '') $learned = 0;
+    $results[$row['school_id']][$row['user_id']][$row['year']][$row['type']] = $learned;
 }
-echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
 $totals = [];
 foreach ($results as $school => $more) {
@@ -82,7 +89,7 @@ foreach ($results as $school => $more) {
         <tr>
             <th colspan="2"></th>
             <?php
-            for ($i = 5754; $i <= $year; $i++) {
+            for ($i = $start; $i <= $year; $i++) {
                 echo "<th>$i</th>";
             }
             ?>
@@ -92,26 +99,21 @@ foreach ($results as $school => $more) {
             $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
             $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
-            for ($i = 5754; $i <= $year; $i++) {
-                echo "<td>" . (isset($info[$i]['tanya']) ? $info[$i]['tanya'] : '') . "</td>";
-                // update totals
-                if (isset($totals[$school][$i]['tanya'])) $totals[$school][$i]['tanya'] += $info[$i]['tanya'];
-                else $totals[$school][$i]['tanya'] = $info[$i]['tanya'];
-            }
-            for ($i = 5754; $i <= $year; $i++) {
-                echo "<td>" . (isset($info[$i]['mishna']) ? $info[$i]['tanya'] : '') . "</td>";
-                // update totals
-                if (isset($totals[$school][$i]['mishna'])) $totals[$school][$i]['mishna'] += $info[$i]['mishna'];
-                else $totals[$school][$i]['mishna'] = $info[$i]['mishna'];
+            foreach ($types as $type) {
+                for ($i = $start; $i <= $year; $i++) {
+                    echo "<td>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                    // update totals
+                    if (isset($totals[$school][$i][$type])) $totals[$school][$i][$type] += $info[$i][$type];
+                    else $totals[$school][$i][$type] = $info[$i][$type];
+                }
             }
             echo "</tr>";
         }
         echo "<tr><th colspan='2'>Total:</th>";
-        for ($i = 5754; $i <= $year; $i++) {
-            echo "<th>" . $totals[$school][$i]['tanya'] . "</th>";
-        }
-        for ($i = 5754; $i <= $year; $i++) {
-            echo "<th>" . $totals[$school][$i]['mishna'] . "</th>";
+        foreach ($types as $type) {
+            for ($i = $start; $i <= $year; $i++) {
+                echo "<th>" . $totals[$school][$i][$type] . "</th>";
+            }
         }
         echo "</tr>";
         ?>
@@ -121,21 +123,19 @@ foreach ($results as $school => $more) {
 }
 echo "<p></p><h2>Totals</h2>";
 echo "<table><tr><th>School</th>";
-for ($i = 5754; $i <= $year; $i++) {
-    echo "<th>Total Tanya $i</th>";
-}
-for ($i = 5754; $i <= $year; $i++) {
-    echo "<th>Total Mishna $i</th>";
+foreach ($types as $type) {
+    for ($i = $start; $i <= $year; $i++) {
+        echo "<th>Total " . strtoupper($type) . " $i</th>";
+    }
 }
 echo "</tr>";
 
 foreach ($totals as $school => $more) {
     echo "<tr><td>" . $schools[$school] . "</td>";
-    for ($i = 5754; $i <= $year; $i++) {
-        echo "<td>" . $more[$i]['tanya'] . "</td>";
-    }
-    for ($i = 5754; $i <= $year; $i++) {
-        echo "<td>" . $more[$i]['mishna'] . "</td>";
+    foreach ($types as $type) {
+        for ($i = $start; $i <= $year; $i++) {
+            echo "<td>" . $more[$i][$type] . "</td>";
+        }
     }
 }
 echo "</table>";
