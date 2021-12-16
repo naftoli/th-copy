@@ -85,8 +85,8 @@ foreach ($results as $school => $more) {
             <tr>
                 <th>Grade</th>
                 <th>Chayol</th>
-                <th colspan="8">תניא בעל פה <br />Lines Learned</th>
-                <th colspan="8">משניות בעל פה <br />Lines Learned</th>
+                <th colspan="8" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
+                <th colspan="8" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
             </tr>
             <tr>
                 <th colspan="2"></th>
@@ -102,7 +102,7 @@ foreach ($results as $school => $more) {
         <tbody>
         <?php
         foreach ($more as $user_id => $info) {
-            if (! isset($users['user_id'])) continue;
+            if (! isset($users[$user_id])) continue;
             $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
             $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
