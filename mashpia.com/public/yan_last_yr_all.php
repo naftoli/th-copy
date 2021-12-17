@@ -107,9 +107,9 @@ while ($row = mysql_fetch_assoc( $result )) {
             $totals['tanya'] += $types['tanya'];
             $totals['mishna'] += $types['mishna'];
         }
-        echo "<tr><th>Total</th>";
-        echo "<th>" . $totals['tanya'] . "</th>";
-        echo "<th>" . $totals['mishna'] . "</th></tr>";
+        echo "<tr><th>Grand Total</th>";
+        echo "<th>" . number_format($totals['tanya'], 0) . "</th>";
+        echo "<th>" . number_format($totals['mishna'], 0) . "</th></tr>";
         echo "</table>";
         ?>
     </body>
