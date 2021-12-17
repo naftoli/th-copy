@@ -28,8 +28,6 @@ while ($row = mysql_fetch_assoc( $result )) {
         tr, th, td {
             font-size: 12px;
             padding: 5px;
-        }
-        tr {
             border-bottom: 1px solid grey;
         }
     </style>
