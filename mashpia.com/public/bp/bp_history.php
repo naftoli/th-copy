@@ -70,7 +70,11 @@ $sql = "SELECT
                 JOIN
             schools s USING (school_id)
                 JOIN
-            line_campaigns l ON l.id = bus.campaign_id";
+            line_campaigns l ON l.id = bus.campaign_id 
+                JOIN 
+            classes c on c.class_id = u.class_id 
+        ORDER BY 
+            s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $learned = $row['num_lines'];
@@ -81,6 +85,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $totals = [];
 foreach ($results as $school => $more) {
+    if (! isset($schools[$school])) continue;
     echo "<h2>" . $schools[$school] . "</h2>";
     ?>
     <table width="75%">
