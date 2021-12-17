@@ -22,7 +22,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 
 <HEAD>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Last Year's birthday present to the Rebbe</title>
+    <title>History of Bal Peh for Rebbe</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
         tr, th, td {
@@ -37,7 +37,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 
 <body>
 <? include('../admin_header.php'); ?>
-<h1 class="no-print">Last Year's birthday present to the Rebbe</h1>
+<h1 class="no-print">History of Bal Peh for Rebbe</h1>
 
 <?php
 require_once '../class.adminSchools.php';
