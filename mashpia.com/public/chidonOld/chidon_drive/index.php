@@ -1,7 +1,8 @@
 <?php
 // routing of family names
 $url = $_SERVER['REQUEST_URI'];
-$host = isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : 'tzivos.local';
+if ($_SERVER['HTTP_HOST'] == 'localhost') $host = "localhost";
+else $host = isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : 'tzivos.local';
 $pos = strrpos( $url, '/' );
 $url_end = substr( $url, $pos + 1 );
 if ( is_numeric( $url_end ) ) {
