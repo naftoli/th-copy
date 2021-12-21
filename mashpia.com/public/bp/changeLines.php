@@ -88,22 +88,22 @@ foreach ($results as $school => $more) {
     ?>
     <table width="75%">
         <thead>
-            <tr>
-                <th>Grade</th>
-                <th>Chayol</th>
-                <th colspan="8" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
-                <th colspan="8" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
-            </tr>
-            <tr>
-                <th colspan="2"></th>
-                <?php
-                foreach ($types as $type) {
-                    for ($i = $start; $i <= $year; $i++) {
-                        echo "<th>$i</th>";
-                    }
+        <tr>
+            <th>Grade</th>
+            <th>Chayol</th>
+            <th colspan="8" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
+            <th colspan="8" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <?php
+            foreach ($types as $type) {
+                for ($i = $start; $i <= $year; $i++) {
+                    echo "<th>$i</th>";
                 }
-                ?>
-            </tr>
+            }
+            ?>
+        </tr>
         </thead>
         <tbody>
         <?php
@@ -114,7 +114,7 @@ foreach ($results as $school => $more) {
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
             foreach ($types as $type) {
                 for ($i = $start; $i <= $year; $i++) {
-                    echo "<td>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                    echo "<td contenteditable='true'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
                     // update totals
                     if (isset($info[$i][$type])) {
                         if (isset($totals[$school][$i][$type])) $totals[$school][$i][$type] += $info[$i][$type];
@@ -137,24 +137,6 @@ foreach ($results as $school => $more) {
     <div class="page-break"></div>
     <?php
 }
-echo "<p></p><h2>Totals</h2>";
-echo "<table><tr><th>School</th>";
-foreach ($types as $type) {
-    for ($i = $start; $i <= $year; $i++) {
-        echo "<th>Total " . strtoupper($type) . " $i</th>";
-    }
-}
-echo "</tr>";
-
-foreach ($totals as $school => $more) {
-    echo "<tr><td>" . $schools[$school] . "</td>";
-    foreach ($types as $type) {
-        for ($i = $start; $i <= $year; $i++) {
-            echo "<td>" . $more[$i][$type] . "</td>";
-        }
-    }
-}
-echo "</table>";
 ?>
 </body>
 </html>
