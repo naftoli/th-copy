@@ -51,9 +51,9 @@ if ( $admin_id ) {
       $row = $stmt2->fetch();
       $children[$idx]['raised'] = $row['raised'];
       $children[$idx]['track'] = [
-          'id'      => $row['fundraising_type'],
-          'hours'   => $row['fundraising_minutes'],
-          'goal'    => $row['fundraising_goal']
+          'id'      => $child['fundraising_type'],
+          'hours'   => $child['fundraising_minutes'],
+          'goal'    => $child['fundraising_goal']
       ];
     }
 
