@@ -64,11 +64,21 @@ foreach ($schools as $school_id => $school_name) {
             border: 1px solid grey;
         }
         .card {
+            width: 8in;
             line-height: 1.3;
+            text-align: center;
+        }
+        .card table {
+            margin-left: auto;
+            margin-right: auto;
+            width: 75%;
         }
         @media print {
             .no-print {
                 display: none;
+            }
+            .card {
+                margin-top: 10%;
             }
         }
     </style>
@@ -104,9 +114,7 @@ foreach ($lines_learned as $school_id => $details) {
         echo "<br />";
         echo "Highest amount of lines of Tanya: " . $highestTanya . "<br />";
         echo "Highest amount of lines of Mishna: " . $highestMishna . "<br /><br />";
-        echo "Pledge for the Rebbe's 120 Birthday: Tanya _______ Mishna _______<br /><br />";
-
-        echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
+        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
 
         if (strpos($grade, '-') !== false) {
             $gradeInfo = explode('-', $grade);
@@ -120,6 +128,7 @@ foreach ($lines_learned as $school_id => $details) {
         $key = array_search($gradeOnly, $grades);
         $start = $key - $totalYears;
 
+        echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
         foreach ($more as $year => $lines) {
             $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
             $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
@@ -134,6 +143,6 @@ foreach ($lines_learned as $school_id => $details) {
         echo "</tbody></table>";
         echo "<p></p></div>";
         echo "<div style='page-break-after: always'></div>";
-    }
+    }break;
 }
 ?>
