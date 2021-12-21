@@ -143,6 +143,6 @@ foreach ($lines_learned as $school_id => $details) {
         echo "</tbody></table>";
         echo "<p></p></div>";
         echo "<div style='page-break-after: always'></div>";
-    }break;
+    }
 }
 ?>
