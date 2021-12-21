@@ -2,8 +2,12 @@
 $admin_auth = array('school'); 
 require('header.php');
 
+require 'class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 function checkChidon($id) {
-    $sql = "select * from th_chidon where year = 5781 and user_id in (
+    global $year;
+    $sql = "select * from th_chidon where year = $year and user_id in (
             select id from admin_auths where admin_id = $id and auth = 'user')";
     $result = mysql_query($sql);
     return mysql_num_rows($result);
