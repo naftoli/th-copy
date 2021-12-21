@@ -30,6 +30,10 @@ while ($row = mysql_fetch_assoc( $result )) {
             padding: 5px;
             border: 1px solid grey;
         }
+        button {
+            padding: 6px;
+            font-size: 16px;
+        }
     </style>
 </head>
 
@@ -37,6 +41,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 <? include('../admin_header.php'); ?>
 <h1 class="no-print">History of Bal Peh for Rebbe</h1>
 
+<button id="save">Save</button>
 <?php
 require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
@@ -114,7 +119,7 @@ foreach ($results as $school => $more) {
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
             foreach ($types as $type) {
                 for ($i = $start; $i <= $year; $i++) {
-                    echo "<td contenteditable='true'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                    echo "<td class='cell' id='$i:$user_id:$type' contenteditable='true'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
                     // update totals
                     if (isset($info[$i][$type])) {
                         if (isset($totals[$school][$i][$type])) $totals[$school][$i][$type] += $info[$i][$type];
@@ -136,7 +141,34 @@ foreach ($results as $school => $more) {
     </table>
     <div class="page-break"></div>
     <?php
+    break;
 }
 ?>
 </body>
+<script>
+    let updates = []
+    $(".cell").blur( function () {
+        let value = $(this).text()
+        let info = $(this).attr('id').split(':')
+        let toUpdate = {
+            year: info[0],
+            user: info[1],
+            type: info[2],
+            lines: value
+        }
+        updates.push(toUpdate)
+    })
+
+    $("#save").click( function () {
+        if (!updates.length) {
+            alert("Nothing to save.");
+            return;
+        }
+        $.post('saveLines.php', { info: updates }, function( result ) {
+            const res = JSON.parse(result)
+            if (res.success) alert("Saved.")
+            else alert('Not Saved.')
+        })
+    })
+</script>
 </html>
