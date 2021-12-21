@@ -15,7 +15,10 @@ if ( $admin_id ) {
         u.first,
         u.last,
         tc.fundraising_goal AS goal,
-        tc.show_pic AS pic
+        tc.show_pic AS pic, 
+        tc.fundraising_type,
+        tc.fundraising_goal,
+        tc.fundraising_minutes
     FROM
         users u
             JOIN
@@ -47,6 +50,11 @@ if ( $admin_id ) {
       ]);
       $row = $stmt2->fetch();
       $children[$idx]['raised'] = $row['raised'];
+      $children[$idx]['track'] = [
+          'id'      => $row['fundraising_type'],
+          'hours'   => $row['fundraising_minutes'],
+          'goal'    => $row['fundraising_goal']
+      ];
     }
 
     echo json_encode([
