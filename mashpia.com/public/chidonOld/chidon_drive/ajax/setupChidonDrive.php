@@ -13,6 +13,8 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon 
     SET fundraising_goal = :goal, 
+        fundraising_minutes = :minutes, 
+        fundraising_type = :type,
         show_pic = :pic 
     WHERE user_id = :user AND year = :year
 ");
@@ -20,12 +22,14 @@ $stmt = $MASHPIA_DB->prepare("
 $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ( $info as $child ) {
-    if ( $child->add ) {
+//    if ( $child->add ) {
         $res = $stmt->execute([
-            ':goal'     =>  intval( $child->goal ),
-            ':pic'      =>  $child->pic ? 0 : 1, 
-            ':year'     =>  $year, 
-            ':user'     =>  $child->id
+            ':pic'                  =>  $child->show_pic ? 1 : 0,
+            ':year'                 =>  $year,
+            ':user'                 =>  $child->user_id,
+            'fundraising_goal'      =>  $child->amount,
+            'fundraising_minutes'   =>  $child->hours,
+            'fundraising_type'      =>  $child->track
         ]);
         if ( !$res ) {
             // echo $stmt1->debugDumpParams();
@@ -33,18 +37,18 @@ foreach ( $info as $child ) {
             $success = false;
             break;
         }
-    } else {
-        $res = $stmt->execute([
-            ':goal'     =>  null,
-            ':pic'      =>  1, 
-            ':year'     =>  $year, 
-            ':user'     =>  $child->id
-        ]);
-        if ( !$res ) {
-            $success = false;
-            break;
-        }
-    }
+//    } else {
+//        $res = $stmt->execute([
+//            ':goal'     =>  null,
+//            ':pic'      =>  1,
+//            ':year'     =>  $year,
+//            ':user'     =>  $child->id
+//        ]);
+//        if ( !$res ) {
+//            $success = false;
+//            break;
+//        }
+//    }
 }
 if ( $success ) {
     $MASHPIA_DB->commit();
