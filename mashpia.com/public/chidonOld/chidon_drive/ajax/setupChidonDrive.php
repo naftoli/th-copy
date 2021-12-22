@@ -32,7 +32,7 @@ foreach ( $info as $child ) {
     ]);
     if ( !$res ) {
 //        $stmt->debugDumpParams();
-//        $success = false;
+        $success = false;
         break;
     }
 }
