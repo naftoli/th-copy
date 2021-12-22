@@ -14,6 +14,45 @@
  h2.title {
  	text-align: center;
  }
+ h2.formTitle {
+	color: #85abda;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    font-family: 'Gotham Narrow', sans-serif;
+	font-weight: bold;
+ }
+.subtitle {
+	color: #85abda;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+ }
+ .tdColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+ }
+ .inputContainer {
+	display: flex;
+	flex: 1;
+	width: 100%;
+ }
+ .text {
+	font-weight: 600;
+    display: block;
+    color: #85abda;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    line-height: 1.4;
+ }
+
+ .yellow {
+	color: #e3b949 !important;
+ }
  .main .wrapper {
  	padding-top: 5rem;
  }
@@ -58,6 +97,7 @@ form h5.formTitle {
 	text-transform: none;
 	font-weight: bold;
 	text-decoration: underline;
+	font-family: 'Russo One', sans-serif;
 }
 
 .form .flex.small-select > .nice-select {
@@ -72,6 +112,19 @@ input.numberInput {
 	max-width: 50px;
 }
 
+tbody {
+	flex: 1;
+}
+
+tr.child {
+	display: flex;
+    width: 100%;
+}
+
+.child > td {
+	display: flex;
+    align-items: center;
+}
 a.linkButton {
 	font-size: 16px;
     margin-top: 20px;
@@ -118,18 +171,32 @@ input {
 	height: 5rem;
 	margin-bottom: 1rem;
 } 
+.field {
+	margin-top: 4rem;
+}
 .form label, .form p {
-	font-weight: 600;
-	display: block;
 	color: #85abda;
 	margin-bottom: .5rem;
 	font-size: 1.4rem;
 	margin-top: 1rem;
 	line-height: 1.4;
+	display: flex;
+    flex-direction: column;
 }
-.form p {
-	font-weight: 600;
+
+.flexRow {
+	display: flex;
+	flex-direction: row !important;
+	justify-content: center;
 }
+
+.form a {
+	color: #85abda;
+	text-decoration: underline;
+	font-size: 1.4rem;
+	line-height: 1.4;
+}
+
 .form label span {
 	font-weight: 200;
 	font-style: italic;
@@ -202,6 +269,21 @@ form .checkboxDetails {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+.field > p > .listItem {
+	text-align: left;
+    padding-left: 20px;
+    position: relative;
+}
+span.listItem:before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #85abda;
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    border-radius: 10px;
 }
 .form .group .field {
 	flex-grow: 1;
@@ -383,12 +465,57 @@ form .checkboxDetails {
 	margin: 25px auto 0;
 }
 
+.button:disabled {
+	cursor: no-drop !important;
+}
+
+.rafflesTable {
+	background: #181c68;
+    border-radius: 10px;
+}
+
+.rafflesTable .rafflesTableHeader td {
+    border-bottom: 1px solid #070b34;
+    padding: 15px 0px;
+    color: #85abda;
+    font-size: 1.25rem;
+}
+
+.rafflesTable .rafflesTableHeader td {
+    border-bottom: 1px solid #070b34;
+    padding: 15px 0px;
+    color: #85abda;
+    font-size: 1.25rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	border-right: 1px solid #070b34;
+}
+
+.rafflesTable .rafflesTableHeader td:last-child, .rafflesTable .rafflesTableDetails td:last-child {
+	border-right: none;
+}
+
+.rafflesTable .rafflesTableDetails td {
+	border-right: 1px solid #070b34;
+	padding: 0px 15px;
+}
+
+.rafflesTable .rafflesTableDetails td > p {
+	font-size: 1rem;
+}
+
+.footnote {
+	font-size: 1rem !important;
+    font-style: italic;
+}
+
 /* Setup */
 form#personalInfo {
     text-align: center;
 }
 #children table {
-    margin: 2rem auto 5rem;
+    margin: 2rem 0 5rem;
+	display: flex;
 }
 #children .child td:nth-child(2) label {
     font-size: 1.8rem;
@@ -398,6 +525,7 @@ form#personalInfo {
     margin-top: .9rem;
     width: 1.5rem;
     height: 1.5rem;
+	min-width: 15px;
 }
 #children form input {
     font-size: 1.2rem;
@@ -443,6 +571,9 @@ div#children .field {
 	padding: 6px;
 	top: 0;
 	z-index: 5;
+}
+p.simple-arc > div > span {
+	font-size: 10px;
 }
 .bar-circle__inner {
  	background: #8fa3ad;
