@@ -35,6 +35,29 @@
 	padding: 15px;
  }
 
+ @media(max-width: 660px) {
+	#chidonDriveContainer {
+		top: 120px;
+		left: calc(50% - 125px);
+		height: 175px;
+		width: 250px;
+	}
+
+	#chidonDriveContainer p {
+		font-size: 1.25rem;
+	}
+
+	#chidonDriveContainer img {
+		width: 25px;
+	}  
+
+	#chidonDriveContainer .button {
+		font-size: 1.25rem;
+		padding: 1rem;
+		width: auto;
+	}  
+ }
+
  .button {
 	 text-align: center;
  }
