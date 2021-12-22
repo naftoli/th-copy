@@ -327,7 +327,7 @@
 					admin_id = res.info.admin;
 					if (!res.info.children.length) {
 						alert("You do not have any eligible children in the chidon.");
-						location.href = "intro.html";
+						location.href = "login.html";
 					}
 					const pic = parseInt(res.info.children[0].pic);
 
@@ -392,7 +392,7 @@
 													type="text" 
 													size="5" 
 													class="goal" 
-													value="${track.goal ? '$' + track.goal : tracks.yesod.goal}"
+													value="${parseInt(track.goal, 10) > 0 ? '$' + track.goal : tracks.yesod.goal}"
 												/>
 											</div>
 											<div>

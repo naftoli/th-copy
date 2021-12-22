@@ -123,7 +123,7 @@ $(function() {
 			});
 
 			// if already logged in forward to intro page
-			if ( Cookies.get('chidon_admin') ) location.href = "intro.html";
+			if ( Cookies.get('chidon_admin') ) location.href = "setup.html";
 
 			$("#login").submit( function( evt ) {
 				evt.preventDefault();
@@ -134,7 +134,7 @@ $(function() {
 					if ( result.success ) {
 						const admin = result.admin;
 						Cookies.set('chidon_admin', admin);
-						location.href = "intro.html";
+						location.href = "setup.html";
 					} else {
 						alert( result.error );
 					}
