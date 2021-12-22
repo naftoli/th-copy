@@ -138,32 +138,27 @@
 					</div>
 
 					<div class="field">
-						<p class="flexRow">
+						<p class="flexRow flexStart">
 							<label class="checkbox">
 								<input type="checkbox" id="agree" checked="checked" />
 								<span></span>
 							</label>
 							I acknowledge that my page will be accessible to the public
 						</p>
-					</div>
-					<div class="field">
-						<p class="flexRow">
-							<label class="checkbox">
-								<input type="checkbox" id="nonRefundable" checked="checked" />
-								<span></span>
-							</label>
-							I acknowledge that the money raised for Chidon Tzivos Hashem is non-refundable. In the event
-							that your child does not qualify or take part in the Chidon Experience, the money will be
-							used as Tzedakah for the organisation.
-						</p>
-					</div>
-					<div class="field">
-						<p class="flexRow">
+						<p class="flexRow flexStart">
 							<label class="checkbox">
 								<input type="checkbox" id="picCheckbox" />
 								<span></span>
 							</label>
 							I would like my children's picture NOT to be shown on our Chidon Drive Family Team Page
+						</p>
+						<p class="flexRow flexStart">
+							<label class="checkbox">
+								<input type="checkbox" id="nonRefundable" checked="checked" />
+								<span></span>
+							</label>
+							Money raised is non-refundable. In the event that your child does not qualify or take part
+							in the Chidon Experience, the money will be used as Tzedakah for the organisation.
 						</p>
 					</div>
 
@@ -187,9 +182,6 @@
 								for you to promote your family’s team page!
 							</span>
 						</p>
-					</div>
-
-					<div class="field">
 						<p>
 							Please note: Your Family Team Page will only be activated once you set it up.
 						</p>
@@ -287,7 +279,7 @@
 				}
 			});
 			$(document).on('blur', '.hours', function () {
-				if (!$(this).val().includes('hour') || !$(this).val().includes('hr')) {
+				if (!$(this).val().includes('hour') && !$(this).val().includes('hr')) {
 					$(this).val($(this).val() + ' hours');
 				}
 			});
@@ -305,19 +297,19 @@
 				havonah: {
 					id: 'havonah',
 					name: 'Havonah',
-					goal: '$90',
+					goal: '$180',
 					hours: '72 hours'
 				},
 				yediah: {
 					id: 'yediah',
 					name: 'Yediah',
-					goal: '$185',
+					goal: '$370',
 					hours: '108 hours'
 				},
 				iyun: {
 					id: 'iyun',
 					name: 'Iyun',
-					goal: '$185',
+					goal: '$370',
 					hours: '144 hours'
 				},
 				ultimate: {
@@ -351,7 +343,6 @@
 
 					$("#copyShareLinkButton").on("click", copyShareLink);
 
-
 					function handleChangeTrack(event) {
 						event.preventDefault();
 						let val = event.target.value;
@@ -360,9 +351,18 @@
 						let user_id = event.data;
 						let goalInput = $("#" + user_id + "_goal")[0];
 						let hoursInput = $("#" + user_id + "_hours")[0];
+						let checkboxInput = $("#" + user_id)[0];
 						goalInput.value = goal;
 						hoursInput.value = hours;
+						checkboxInput.checked = true;
 					};
+
+					function handleUpdateChildInfo(event) {
+						event.preventDefault();
+						let user_id = event.data;
+						let checkboxInput = $("#" + user_id)[0];
+						checkboxInput.checked = true;
+					}
 
 					let html = '<table>';
 					let children = { ...res.info.children };
@@ -375,9 +375,9 @@
 										<label class="checkbox child-check"><input type="checkbox" class="id" id="${child.user_id}" ${child.goal ? checked = 'checked' : ''} /><span></span></label>
 									</td>
 									<td class="tdColumn">
-										<p>Select ${child.first}'s track: </p>
+										<p>${child.first}: </p>
 										<div class="inputContainer">
-											<div style="flex: 1;">
+											<div>
 												<select id="${child.user_id}_select" name="track" required">
 													<option value="${tracks.yesod.id}">${tracks.yesod.name}</option>
 													<option value="${tracks.havonah.id}">${tracks.havonah.name}</option>
@@ -386,11 +386,23 @@
 													<option value="${tracks.ultimate.id}">${tracks.ultimate.name}</option>
 												</select>
 											</div>
-											<div style="padding-left: 20px;flex: 1;">
-												<input id="${child.user_id}_goal" type="text" size="5" class="goal" value="${track.goal ? '$' + track.goal : tracks.yesod.goal}"/>
+											<div>
+												<input 
+													id="${child.user_id}_goal" 
+													type="text" 
+													size="5" 
+													class="goal" 
+													value="${track.goal ? '$' + track.goal : tracks.yesod.goal}"
+												/>
 											</div>
-											<div style="padding-left: 20px;flex: 1;">
-												<input id="${child.user_id}_hours" type="text" size="5" class="hours" value="${track.hours ? track.hours + ' hours' : tracks.yesod.hours}"/>
+											<div>
+												<input 
+													id="${child.user_id}_hours" 
+													type="text" 
+													size="5" 
+													class="hours" 
+													value="${track.hours ? track.hours + ' hours' : tracks.yesod.hours}"
+												/>
 											</div>
 										</div>
 									</td>
@@ -401,7 +413,11 @@
 					$("#children").append(html);
 					for (child of res.info.children) {
 						let childSelect = $("#" + child.user_id + "_select");
+						let goalInput = $("#" + child.user_id + "_goal");
+						let hoursInput = $("#" + child.user_id + "_hours");
 						childSelect.on("change", null, child.user_id, handleChangeTrack);
+						goalInput.on("change", null, child.user_id, handleUpdateChildInfo);
+						hoursInput.on("change", null, child.user_id, handleUpdateChildInfo);
 					}
 					if (!pic) $("#picCheckbox").attr("checked", "checked");
 					if (!activate) {
