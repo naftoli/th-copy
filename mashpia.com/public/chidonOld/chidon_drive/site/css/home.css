@@ -5,6 +5,40 @@
  * Author: Esty
  */
 
+ #fullpage {
+	 position: relative;
+ }
+
+ #chidonDriveContainer {
+	background-color: rgba(6, 9, 47, .8);
+    height: 200px;
+    width: 300px;
+    border-radius: 15px;
+    position: absolute;
+    z-index: 2;
+    top: calc(50% - 125px);
+    left: calc(50% - 150px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+ }
+
+ #chidonDriveContainer img {
+	 width: 35px;
+ }
+
+ #chidonDriveContainer p {
+	font-family: 'Russo One', sans-serif;
+	font-size: 2rem;
+	color: #85abda;
+	padding: 15px;
+ }
+
+ .button {
+	 text-align: center;
+ }
+
 .section {
 	background-size: cover;
 	background-position: center center;
