@@ -26,12 +26,13 @@ foreach ( $info as $child ) {
         ':pic'                  =>  $child->show_pic ? 1 : 0,
         ':year'                 =>  $year,
         ':user'                 =>  $child->user_id,
-        'fundraising_goal'      =>  $child->amount,
-        'fundraising_minutes'   =>  $child->hours,
-        'fundraising_type'      =>  $child->track
+        ':goal'                 =>  $child->amount,
+        ':minutes'              =>  $child->hours,
+        ':type'                 =>  $child->track
     ]);
     if ( !$res ) {
-        $success = false;
+//        $stmt->debugDumpParams();
+//        $success = false;
         break;
     }
 }
