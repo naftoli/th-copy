@@ -13,6 +13,9 @@ if ( $url_end && is_numeric( $url_end ) ) {
         if ($host == 'tzivos.local') {
             header("Location: http://" . $host . "/chidonOld/chidon_drive/site/login.html");
             exit;
+        } else if ($host == 'mashpia.com') {
+            header("Location: https://" . $host . "/chidonOld/chidon_drive/site/login.html");
+            exit;
         }
         header("Location: https://" . $host . "/site/login.html");
         exit;
