@@ -40,6 +40,27 @@
 	flex: 1;
 	width: 100%;
  }
+
+ .inputContainer > div {
+	padding-left: 20px;
+	flex: 1;
+ }
+
+ .inputContainer > div:first-child {
+	padding-left: 0px;
+	flex: 1;
+ }
+
+ @media(max-width: 600px) {
+	.inputContainer {
+		flex-direction: column;
+	}
+	.inputContainer > div {
+		padding-left: 0px;
+		padding-bottom: 15px;
+		flex: 1;
+	}
+ }
  .text {
 	font-weight: 600;
     display: block;
@@ -188,6 +209,12 @@ input {
 	display: flex;
 	flex-direction: row !important;
 	justify-content: center;
+}
+
+.flexStart {
+	display: flex;
+	justify-content: flex-start;
+	text-align: left;
 }
 
 .form a {
