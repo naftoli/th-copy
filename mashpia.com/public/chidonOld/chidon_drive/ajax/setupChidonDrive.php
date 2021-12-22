@@ -22,33 +22,18 @@ $stmt = $MASHPIA_DB->prepare("
 $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ( $info as $child ) {
-//    if ( $child->add ) {
-        $res = $stmt->execute([
-            ':pic'                  =>  $child->show_pic ? 1 : 0,
-            ':year'                 =>  $year,
-            ':user'                 =>  $child->user_id,
-            'fundraising_goal'      =>  $child->amount,
-            'fundraising_minutes'   =>  $child->hours,
-            'fundraising_type'      =>  $child->track
-        ]);
-        if ( !$res ) {
-            // echo $stmt1->debugDumpParams();
-            // echo $stmt2->debugDumpParams();
-            $success = false;
-            break;
-        }
-//    } else {
-//        $res = $stmt->execute([
-//            ':goal'     =>  null,
-//            ':pic'      =>  1,
-//            ':year'     =>  $year,
-//            ':user'     =>  $child->id
-//        ]);
-//        if ( !$res ) {
-//            $success = false;
-//            break;
-//        }
-//    }
+    $res = $stmt->execute([
+        ':pic'                  =>  $child->show_pic ? 1 : 0,
+        ':year'                 =>  $year,
+        ':user'                 =>  $child->user_id,
+        'fundraising_goal'      =>  $child->amount,
+        'fundraising_minutes'   =>  $child->hours,
+        'fundraising_type'      =>  $child->track
+    ]);
+    if ( !$res ) {
+        $success = false;
+        break;
+    }
 }
 if ( $success ) {
     $MASHPIA_DB->commit();
