@@ -124,13 +124,14 @@ foreach ($schools as $school_id => $school) {
     </head>
     <body>
         <?php
-        function renderPoster($school, $week, $winners) {
-            global $start_dates_to_hachayol_issues;
-            $issue_number = array_key_exists($week['start_date'], $start_dates_to_hachayol_issues) ? $start_dates_to_hachayol_issues[$week['start_date']] : false;
-            if (!$issue_number) {
-                echo "<div class='off-page'>missing {$week['name']} posters</div>";
-                return;
-            }
+        function renderPoster($week, $issue_number, $winners) {
+//            global $start_dates_to_hachayol_issues;
+//            $issue_number = array_key_exists($week['start_date'], $start_dates_to_hachayol_issues) ? $start_dates_to_hachayol_issues[$week['start_date']] : false;
+//            $issue_number = $start_dates_to_hachayol_issues[$week['start_date']];
+//            if (!$issue_number) {
+//                echo "<div class='off-page'>missing {$week['name']} posters</div>";
+//                return;
+//            }
             ?>
                 <div class='poster' style='background-image: url( "./templates/<?= $issue_number ?>. Mission Marathon Weekly.jpg" ); '>
                     <div class='names'>
@@ -149,7 +150,10 @@ foreach ($schools as $school_id => $school) {
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
 //                    echo "<pre>"; print_r($weeks[$week_name]) . "<br />"; echo "</pre>";
-                    renderPoster($schools[$school], $weeks[$week_name], $winners);
+                    if (array_key_exists($weeks[$week_name]['start_date'], $start_dates_to_hachayol_issues)) {
+                        $issue_number = $start_dates_to_hachayol_issues[$weeks[$week_name]['start_date']];
+                        renderPoster($weeks[$week_name], $issue_number, $winners);
+                    }
                 }
             }
         }
