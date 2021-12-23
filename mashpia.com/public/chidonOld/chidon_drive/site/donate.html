@@ -50,7 +50,7 @@
 									<div class="bar-percent"><span class="bar-percent__number"></span></div>
 									<div class="bar-line">
 										<div class="bar-line__bar"><div class="bar-line__circle"></div>
-											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number"></span> <span class="bar-line__other-number">$1,332,000</span></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number"></span> <span class="bar-line__other-number">$2,248,120</span></div>
 										</div>
 									</div>
 								</div>
@@ -364,7 +364,7 @@
 
 				// fill in exp dropdown
 				let html = "";
-				for ( let yy = 2020; yy <= 2030; yy++ ) {
+				for ( let yy = 2021; yy <= 2030; yy++ ) {
 					html += "<option>" + yy + "</option>";
 				}
 				$("#exp_yy").html( html );
@@ -477,9 +477,9 @@
 						let res = JSON.parse( result );
 						if ( res.success ) {
 							let cost = 370;
-							let totalChildren = 3600;
+							let totalChildren = 6076;
 							let totalGoal = totalChildren * cost;
-							let totalAmount = Math.round(res.total) + 510000;
+							let totalAmount = Math.round(res.total);
 							let percent = Math.round((totalAmount / totalGoal) * 100);
 							let numChildrenSponsored = Math.round(totalAmount / cost);
 							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
@@ -507,7 +507,7 @@
 
 
 							let amount = res.total;
-							let budget = 1332000;
+							let budget = 2248120;
 							$('.thermometer-wrapper .leader').each(function(){
 								$(this).data('amount', Math.round(amount));
 								$(this).data('percent', Math.round((amount / budget) * 100));
