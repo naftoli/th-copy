@@ -12,42 +12,33 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
 $start_dates_to_hachayol_issues = [
-    2459111 => 420,
-    2459118 => 421,
-    2459125 => 422,
-    // skips week for succos
-    2459139 => 423,
-    2459146 => 424,
-    2459153 => 425,
-    2459160 => 426,
-    2459167 => 427,
-    2459174 => 428,
-    2459181 => 429,
-    2459188 => 430,
-    2459195 => 431,
-    2459202 => 432,
-    2459209 => 433,
-    2459216 => 434,
-    2459223 => 435,
-    2459230 => 436,
-    2459237 => 437,
-    2459244 => 438,
-    // 2459251 => 439, used as demo with placeholder names
-    2459258 => 440,
-    2459265 => 441,
-    2459272 => 442,
-    2459279 => 443,
-    2459286 => 444,
-    2459293 => 445,
-    2459300 => 446,
-    // skips week for pesach
-    2459314 => 447,
-    2459321 => 448,
-    2459328 => 449,
-    2459335 => 450,
-    // 2459342 => 451, missing file
-    2459349 => 452,
-    2459356 => 453
+    2459559 => 1,
+    2459566 => 2,
+    2459573 => 3,
+    2459580 => 4,
+    2459587 => 5,
+    2459594 => 6,
+    2459601 => 7,
+    2459608 => 8,
+    2459615 => 9,
+    2459622 => 10,
+    2459629 => 11,
+    2459636 => 12,
+    2459643 => 13,
+    2459650 => 14,
+    2459657 => 15,
+    2459674 => 16,
+    2459681 => 17,
+    2459688 => 18,
+    2459695 => 19,
+    2459702 => 20,
+    2459709 => 21,
+    2459716 => 22,
+    2459723 => 23,
+    2459730 => 24,
+    2459737 => 25,
+    2459744 => 26,
+    2459751 => 27
 ];
 
 // get logos for schools
@@ -61,7 +52,6 @@ foreach ($schools as $school_id => $school) {
 }
 
 // get raffle id's
-$k = 1;
 $raffles = array();
 $sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date";
 $result = mysql_query( $sql );
@@ -141,7 +131,7 @@ foreach ($schools as $school_id => $school) {
                 return;
             }
             ?>
-                <div class='poster' style='background-image: url( "./templates/Mission Marathon Prizes 5781-<?=$issue_number?>.jpg" ); '>
+                <div class='poster' style='background-image: url( "./templates/<?= $issue_number ?>. Mission Marathon Weekly.jpg" ); '>
                     <div class='names'>
                         <!-- <div class='name'> <?=$week['name']?> - <?=$week['start_date']?> - <?=$issue_number?> </div> -->
                         <? foreach ($winners as $winner) { ?>
