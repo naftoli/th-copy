@@ -12,7 +12,8 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
 $start_dates_to_hachayol_issues = [
-    2459559 => 1,
+//    2459559 => 1,
+    2459552 => 1,
     2459566 => 2,
     2459573 => 3,
     2459580 => 4,
@@ -147,6 +148,7 @@ foreach ($schools as $school_id => $school) {
             foreach ($info as $week_name => $all_winners) {
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
+//                    print_r($weeks[$week_name]) . "<br />";
                     renderPoster($schools[$school], $weeks[$week_name], $winners);
                 }
             }
