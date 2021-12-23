@@ -12,7 +12,6 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
 $start_dates_to_hachayol_issues = [
-//    2459559 => 1,
     2459559 => 1,
     2459566 => 2,
     2459573 => 3,
@@ -153,7 +152,6 @@ foreach ($schools as $school_id => $school) {
                     renderPoster($schools[$school], $weeks[$week_name], $winners);
                 }
             }
-            if ($school_id == 269) break;
         }
         ?>
     </body>
