@@ -142,7 +142,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 src: url('fonts/DIRTYEGO.TTF');
             }
             .page {
-                height: 7cm;
+                height: 7.5cm;
             }
             .name {
                 margin-left: 2.6cm;
