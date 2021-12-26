@@ -110,8 +110,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         if ( $jdNow >= $start && $jdNow <= $end ) {
             $grade = empty( $row['class_sub'] ) ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
 			$heName = empty( $row['he_name'] ) ? 
-				(( empty( $row['first_he'] ) && empty( $row['last_he'] )) ? $row['first'] . '<br />' . $row['last'] : 
-				$row['first_he'] . '<br />' . $row['last_he']) : $row['he_name'];
+				(( empty( $row['first_he'] ) && empty( $row['last_he'] )) ? $row['first'] . ' ' . $row['last'] :
+				$row['first_he'] . '  ' . $row['last_he']) : $row['he_name'];
 			$names[$row['school_name']][$grade][$jNow][$parsha][] = array( 'age' => $age, 'name' => $heName );
         }
     } else {
@@ -126,8 +126,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         if ( $found ) {
             $grade = empty( $row['class_sub'] ) ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
 			$heName = empty( $row['he_name'] ) ? 
-				(( empty( $row['first_he'] ) && empty( $row['last_he'] )) ? $row['first'] . '<br />' . $row['last'] : 
-				$row['first_he'] . '<br />' . $row['last_he']) : $row['he_name'];
+				(( empty( $row['first_he'] ) && empty( $row['last_he'] )) ? $row['first'] . ' ' . $row['last'] :
+				$row['first_he'] . ' ' . $row['last_he']) : $row['he_name'];
 			$names[$row['school_name']][$grade][$jNow][$parshaDates[$dates['start'][$i]]][] = array( 'age' => $age, 'name' => $heName );
         }
     }
@@ -145,9 +145,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 height: 10cm;
             }
             .name {
-                margin-left: 3.3cm;
-                width: 5.5cm;
-                font-size: 36px;
+                margin-left: 2.6cm;
+                width: 6cm;
+                font-size: 30px;
                 font-weight: bold;
                 text-align: center;
                 font-family: DirtyEgo;
@@ -208,10 +208,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	                        <div class="name">
 	                            <?=$child['name']?><br />
 	                            <span class="grade">
-	                                <?=$school?> Platoon: <?=$grade?>
-	                                <br /><?=$date?>
-	                                <br /><?=$parsha?>
-	                                <br /><?=$child['age']?> yrs. old
+	                                <?=$school?> Platoon: <?=$grade?> - <?=$child['age']?> yrs. old
+	                                <br /><?=$date?> - <?=$parsha?>
 	                            </span>
 	                        </div>
 	                        <div class="page-break"></div>
