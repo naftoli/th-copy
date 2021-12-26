@@ -37,16 +37,16 @@ $disabled = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = [];
-    $shutdown[1] = new DateTime('2020-11-20 05:00:00');
-    $shutdown[2] = new DateTime('2020-12-19 05:00:00');
-    $shutdown[3] = new DateTime('2021-01-23 05:00:00');
-    $shutdown[4] = new DateTime('2021-02-24 05:00:00');
+    $shutdown[1] = new DateTime('2021-11-20 05:00:00');
+    $shutdown[2] = new DateTime('2021-12-26 05:00:00');
+//    $shutdown[3] = new DateTime('2021-01-23 05:00:00');
+//    $shutdown[4] = new DateTime('2021-02-24 05:00:00');
 
-//    for ($i = 1; $i <= 4; $i++) {
-//        if ($testNumber == $i && $today >= $shutdown[$i]) {
-//            $disabled = true;
-//        }
-//    }
+    for ($i = 1; $i <= 4; $i++) {
+        if ($testNumber == $i && $today >= $shutdown[$i]) {
+            $disabled = true;
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
