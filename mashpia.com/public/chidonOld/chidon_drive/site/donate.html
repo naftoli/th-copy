@@ -364,7 +364,7 @@
 
 				// fill in exp dropdown
 				let html = "";
-				for ( let yy = 2021; yy <= 2030; yy++ ) {
+				for ( let yy = 2022; yy <= 2030; yy++ ) {
 					html += "<option>" + yy + "</option>";
 				}
 				$("#exp_yy").html( html );
@@ -525,7 +525,7 @@
 					});
 
 					// list of sponsors
-					let key = 'chidondrive@5781'
+					let key = 'chidondrive@5782'
 					$.post('../ajax/getSponsorInfo.php', { key: key }, function( info ) {
 						let result = JSON.parse( info );
 						console.log( result );
