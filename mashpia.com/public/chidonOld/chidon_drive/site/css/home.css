@@ -319,15 +319,17 @@
   margin-left: 50px;
 }
 #section3 .trophy .image-wrapper {
-  width: auto;
-  height: 220%;
-  position: absolute;
-  bottom: -30px;
-  left: -50px;
+	width: auto;
+	height: 220%;
+	position: absolute;
+	bottom: -30px;
+	left: -50px;
+	display: flex;
+	align-items: center;
 }
 #section3 .trophy .image-wrapper img {
-  width: auto;
-  height: 100%;
+	width: auto;
+	height: 100%;
 }
 #section3 .trophy .text-wrapper {
 	width: 60%;
@@ -581,7 +583,7 @@
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
-		left: 0;
+		left: 8px;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper img {
 		width: 100%;
