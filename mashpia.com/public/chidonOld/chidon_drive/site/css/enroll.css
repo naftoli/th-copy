@@ -26,8 +26,15 @@
 	color: #85abda;
     font-size: 1.5rem;
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 1rem;
+ }
+ div.inputContainer > div > p.inputTitle {
+	font-size: 1rem;
+    margin-top: 0;
+	text-transform: uppercase;
+	text-align: left;
+	color: #297cc0;
  }
  .tdColumn {
     flex: 1;
@@ -57,14 +64,13 @@
 	}
 	.inputContainer > div {
 		padding-left: 0px;
-		padding-bottom: 15px;
 		flex: 1;
 	}
 	.inputContainer.flexRow > div:last-child {
 		padding-left: 10px;
 	}
 	.desktopOnly {
-		display: none;
+		display: none !important;
 	}
 	div.flexRow.mobileFlexColumn {
 		flex-direction: column !important;
@@ -81,6 +87,9 @@
 	td.mobileOnly {
 		display: block !important;
 	}
+	div.mobileOnly {
+		display: flex !important;
+	}
 	table.rafflesTable, table.rafflesTable > tbody, .rafflesTableHeader, .rafflesTableHeader > td {
 		display: block;
 	}
@@ -90,6 +99,9 @@
 	table.rafflesTable td > div > p {
 		font-size: 1rem !important;
 		text-transform: none !important;
+	}
+	.form .nice-select {
+		margin-bottom: 10px;
 	}
  }
  .text {
@@ -175,7 +187,6 @@ tr.child {
 
 .child > td {
 	display: flex;
-    align-items: center;
 }
 a.linkButton {
 	font-size: 16px;
@@ -226,7 +237,7 @@ input {
 .field {
 	margin-top: 4rem;
 }
-.form label, .form p {
+.form label, .form p, .form li {
 	color: #85abda;
 	margin-bottom: .5rem;
 	font-size: 1.4rem;
@@ -234,6 +245,12 @@ input {
 	line-height: 1.4;
 	display: flex;
     flex-direction: column;
+}
+
+.form li {
+	text-align: left;
+	display: list-item;
+	list-style-position: inside;
 }
 
 .flexRow {
@@ -566,7 +583,7 @@ span.listItem:before {
 .rafflesTable .rafflesTableDetails td {
 	border-right: 1px solid #070b34;
 	padding: 0px 15px;
-	height: 180px;
+	height: 200px;
 }
 
 .mobileOnly {
@@ -575,6 +592,7 @@ span.listItem:before {
 
 .rafflesTable .rafflesTableDetails td p {
 	font-size: 1rem;
+	margin-top: 0;
 }
 
 .rafflesTableDetails img {
@@ -608,7 +626,7 @@ form#personalInfo {
     font-weight: bold;
 }
 #children .child .checkbox {
-    margin-top: .9rem;
+    margin-top: 1.3rem;
     width: 1.5rem;
     height: 1.5rem;
 	min-width: 15px;

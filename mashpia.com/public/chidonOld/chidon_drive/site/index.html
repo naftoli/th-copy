@@ -122,7 +122,7 @@
 
 		<div class="section asyncImage" id="section3" data-src="img/home/trophies.jpg">
 			<div class="wrapper">
-				<h2 class="title">Trophy Partners</h2>
+				<h2 class="title">Partners</h2>
 				<div class="trophy-wrapper">
 					<div class="trophies-wrapper girls">
 						<h4>Girls</h4>
@@ -189,7 +189,7 @@
 				<div class="medals-wrapper">
 					<div class="medal-partner">
 						<div class="image-wrapper">
-							<img src="img/medal.png" alt="medal" />
+							<img src="img/medal.png" style="width: 137px;" alt="medal" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -198,7 +198,7 @@
 					</div>
 					<div class="medal-partner">
 						<div class="image-wrapper">
-							<img src="img/medal.png" alt="medal" />
+							<img src="img/medal.png" style="width: 137px;" alt="medal" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -207,7 +207,7 @@
 					</div>
 					<div class="medal-partner">
 						<div class="image-wrapper">
-							<img src="img/medal.png" alt="medal" />
+							<img src="img/medal.png" style="width: 137px;" alt="medal" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -216,7 +216,7 @@
 					</div>
 					<div class="medal-partner">
 						<div class="image-wrapper">
-							<img src="img/medal.png" alt="medal" />
+							<img src="img/medal.png" style="width: 137px;" alt="medal" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -233,7 +233,7 @@
 				<div class="plaques-wrapper">
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -242,7 +242,7 @@
 					</div>
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -251,7 +251,7 @@
 					</div>
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -260,7 +260,7 @@
 					</div>
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -269,7 +269,7 @@
 					</div>
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -278,7 +278,7 @@
 					</div>
 					<div class="plaque-partner">
 						<div class="image-wrapper">
-							<img src="img/plaque.jpg" alt="Plaque" />
+							<img src="img/plaque.png" alt="Plaque" />
 						</div>
 						<div class="text-wrapper">
 							<h6>Your Name Here</h6>
@@ -403,12 +403,12 @@
 	<script src="js/fullpage.js"></script>
 	<script src="js/fullpage.continuousHorizontal.min.js"></script>
 	<script type="text/javascript">
-		if (location.protocol != 'https:') {
-			var url = window.location.href;
-			let pos = url.indexOf(':');
-			let newUrl = 'https' + url.substring(pos);
-			location.href = newUrl;
-		}
+		// if (location.protocol != 'https:') {
+		// 	var url = window.location.href;
+		// 	let pos = url.indexOf(':');
+		// 	let newUrl = 'https' + url.substring(pos);
+		// 	location.href = newUrl;
+		// }
 
 		$('#fullpage').fullpage({
 			licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
@@ -417,7 +417,7 @@
 			controlArrows: false,
 			responsiveWidth: 860,
 			recordHistory: true,
-			anchors: ['home', 'support', 'leading-communities', 'trophy-partners', 'medal-partners', 'plaque-partners', 'corporate-sponsors', ''],
+			anchors: ['home', 'support', 'leading-communities', 'partners', 'medal-partners', 'plaque-partners', 'corporate-sponsors', ''],
 			afterRender: function () {
 				setInterval(function () {
 					$.fn.fullpage.moveSlideRight();
