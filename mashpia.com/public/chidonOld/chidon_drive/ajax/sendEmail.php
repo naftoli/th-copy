@@ -1,5 +1,5 @@
 <?php
-function sendEmail( $amount, $trans_id, $email ) {
+function sendEmail( $amount, $trans_id, $email, $name ) {
     // send email confirmation
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
