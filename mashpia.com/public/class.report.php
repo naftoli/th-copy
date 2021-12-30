@@ -29,5 +29,9 @@ class Report extends ReportBasic {
         $date = $mm . ' ' . $arrDate[1] . ', ' . $arrDate[2];
         return $date;
     }
+
+    public function getDates() {
+        return $this->dates;
+    }
 }
 ?>
