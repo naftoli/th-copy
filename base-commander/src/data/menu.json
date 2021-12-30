@@ -181,7 +181,8 @@
       { "label": "Birthdays",
         "items": [
           { "label": "Birthday Report", "legacy": true, "path": "/names_report.php"  },
-          { "label": "Birthdays By Date Range", "legacy": true, "path": "/find_birthdays_report.php"  }
+          { "label": "Birthdays By Date Range", "legacy": true, "path": "/find_birthdays_report.php"  },
+          { "label":  "Bday Certificate Printing", "legacy": true, "path": "/school_birthdays.php" }
         ]
       }
     ]

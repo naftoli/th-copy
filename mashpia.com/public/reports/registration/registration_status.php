@@ -135,6 +135,13 @@ ksort($data);
             padding-left: 20px;
             padding-right: 20px;
         }
+        .note {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid black;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +180,13 @@ ksort($data);
         <button id="add_payment">Add Payment</button>
     </form>
     <br />
+    <p class="note">
+        Please Note: This report is a <b>financial</b> report, and as such, it shows how many children are in each school based
+        on the <b>charges</b>. Therefore, when there are multiple charges for one child (whether they paid twice, or three times, etc),
+        it is counted as 2 or 3 kids. As a result, this number may be completely different than the number of registered children
+        that is being shown on the home page of the base commander's site, or any other reports. (This can also include
+        situations where the child paid, and then "unenrolled" but was never removed from payment database).
+    </p>
     <table id="table" class="table table-striped table-condensed">
         <thead>
             <th>Base Type</th>
