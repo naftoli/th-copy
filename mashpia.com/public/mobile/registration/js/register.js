@@ -148,7 +148,7 @@ var registrationApp = function() {
         // setup non th school list
         $.post('api/getNonThSchools.php', function(result) {
             var res = JSON.parse(result)
-            var html = '<option value="" selected>Please Choose</option>'
+            var html = '<option value="-1" selected>Please Choose</option>'
             for (var s in res) {
                 html += '<option value=' + s + '>' + res[s] + "</option>";
             }
@@ -608,7 +608,7 @@ var registrationApp = function() {
         // make sure non th school field is not empty
         if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
             var non_th_school = $("#non_th_school_id").val();
-            if (non_th_school == 0 || non_th_school == '0' || non_th_school == '') {
+            if (non_th_school == 0 || non_th_school == '0' || non_th_school == '-1') {
                 non_th_school = $("#non_th_school").val().trim()
                 if (non_th_school.length < 3) return showError(Err10);
             }
@@ -1132,6 +1132,10 @@ var templates = function(){
             $( '#step-2 form #school_name' ).val( user.school.school_name );
             $( '#step-2 form #non_th_school_id' ).val( user.non_th_school_id );
             $( '#step-2 form #non_th_school' ).val( user.non_th_school );
+            // make sure non th school input shows if its defaulted to 0
+            if (user.non_th_school_id == 0) {
+                $("#non_th_school_id").trigger('change')
+            }
             // add the dropdown for naftali
             var class_select = $( '#step-2 form #class_name select' );
             class_select.html('');
