@@ -184,8 +184,10 @@
 	<script type="text/javascript">
 		$(function () {
 
-			if (!Cookies.get('chidon_admin')) {
+			if (!Cookies.get('chidon_admin') && !Cookies.get('admin_auth')) {
 				location.href = "login.html";
+			} else {
+				let admin = Cookies.get('chidon_admin') || Cookies.get('admin_auth')
 			}
 
 			$.fn.inputFilter = function (inputFilter) {
@@ -255,7 +257,8 @@
 					hours: '154 hours'
 				}
 			};
-			$.post("../ajax/getChildrenForSetup.php", { admin: Cookies.get('chidon_admin') }, function (result) {
+
+			$.post("../ajax/getChildrenForSetup.php", { admin: admin }, function (result) {
 				const res = JSON.parse(result);
 
 				console.log(res);
