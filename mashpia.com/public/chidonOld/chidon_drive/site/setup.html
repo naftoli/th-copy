@@ -184,10 +184,11 @@
 	<script type="text/javascript">
 		$(function () {
 
+			let admin
 			if (!Cookies.get('chidon_admin') && !Cookies.get('admin_auth')) {
 				location.href = "login.html";
 			} else {
-				let admin = Cookies.get('chidon_admin') || Cookies.get('admin_auth')
+				admin = Cookies.get('chidon_admin') || Cookies.get('admin_auth')
 			}
 
 			$.fn.inputFilter = function (inputFilter) {
