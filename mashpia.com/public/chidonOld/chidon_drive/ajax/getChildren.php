@@ -29,11 +29,11 @@ if ( $admin_id ) {
             AND tcs.year = tc.year)
     WHERE
         tc.year = :year AND tc.parent_id = :admin
-            AND tc.can_enroll = 1
-            AND (tc.shabbaton_maven = 1
-            OR tc.shabbaton_pro = 1
-            OR tc.shabbaton_expert = 1
-            OR tc.shabbaton_trophy = 1)
+            #AND tc.can_enroll = 1
+            #AND (tc.shabbaton_maven = 1
+            #OR tc.shabbaton_pro = 1
+            #OR tc.shabbaton_expert = 1
+            #OR tc.shabbaton_trophy = 1)
     GROUP BY u.user_id
   ");
   $res = $stmt->execute([
