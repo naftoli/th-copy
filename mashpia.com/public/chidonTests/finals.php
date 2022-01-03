@@ -88,13 +88,13 @@ echo "<div style='float: right'><input type='submit' name='submit' value='Save' 
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
     echo "<h2>" . $schools[$school] . "</h2>";
-    echo "<table><tr><th>Chidon ID</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Chidon Final</th>
+    echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Registered For</th><th>Chidon Final</th>
         <th>Trophy Final</th><th>KHK Final</th></tr>";
     foreach ($children as $child) {
         $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
         $name = $child['first'] . ' ' . $child['last'];
         $id = $child['th_chidon_id'];
-        echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
+        echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
         if (empty($child['test_type'])) $default = true;
         else $default = false;
         foreach ($types as $type => $value) {
