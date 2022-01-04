@@ -146,7 +146,10 @@ foreach ($schools as $school_id => $school) {
 
         foreach ($winners as $school => $info) {
             if ( isset( $schools[$school] ) ) echo "<h2 class='off-page'>School: " . $schools[$school] . "</h2>";
+            // only show current week
+            $current_week = array_keys($info)[count($info)-1];
             foreach ($info as $week_name => $all_winners) {
+                if ($week_name !== $current_week) continue;
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
 //                    echo "<pre>"; print_r($weeks[$week_name]) . "<br />"; echo "</pre>";
