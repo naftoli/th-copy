@@ -63,12 +63,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Winners</span>
                 </div>
             </a> -->
-<!--            <a href="/raffles/posters/weekly.php">-->
-                <div class="button" onclick="javascript:alert('Coming Soon.');">
+            <a href="/raffles/posters/weekly.php">
+                <div class="button">
                     <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
                     <span class="link-text">Weekly Raffle Winners Posters</span>
                 </div>
-<!--            </a>-->
+            </a>
         </div>
         <!-- <h2>Grand Raffles</h2>
         <div id="action-links">
