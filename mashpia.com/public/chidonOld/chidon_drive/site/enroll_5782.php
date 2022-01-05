@@ -1322,13 +1322,43 @@
         calculateTotal()
     })
 
+    function checkKhkEligibility(child) {
+        if (child.grade === 8 && (child.track === 'havanah' || child.track === 'iyun')) return true
+        else return false
+    }
+
+    function checkForRohrGrant(amount) {
+        if (amount >= 270 && amount <= 370) return true
+        else return false
+    }
+
+    function getLowest(amounts, coupon, raised, khk) {
+        let lowest = amounts[amounts.length-1]
+        if (coupon > 0) lowest -= coupon
+        if (raised > 0) lowest -= raised / 2
+        if (raised > 170 && raised < 270 && !khk) {
+            const diff = 270 - raised
+            if (diff < lowest) lowest = diff
+        }
+        if (lowest < 0) lowest = 0
+        return lowest
+    }
+
     function getChildren(admin) {
         // getPreviousPurchaseInfo()
+        const trackText = {
+            yesod: "a sweater and gifts",
+            yediah: "a sweater, gifts and prizes",
+            havanah: "a sweater, gifts, prizes and the regional trip",
+            iyun: "a sweater, gifts, prizes and the regional trip",
+            khk: "a sweater, gifts, prizes and the kol hatorah kulah experience"
+        }
         const trackInfo = {
             yesod: [70, 50, 35],
             yediah: [180, 125, 100, 90],
             havanah: [370, 250, 200, 185],
-            iyun: [370, 250, 200, 185]
+            iyun: [370, 250, 200, 185],
+            khk: [500, 400, 325, 250]
         }
         $.post('../ajax/getChildren.php', { admin: admin }, function (result) {
             let info = JSON.parse(result);
@@ -1349,72 +1379,106 @@
                         child.track = 'yediah'
                         child.raised = 50
                         child.coupon = 10
+                        child.grade = 7
                     } else {
                         child.track = 'havanah'
                         child.raised = 180
                         child.coupon = 0
+                        child.grade = 8
                     }
+
+                    // add rohr grant where applicable
+                    const rohrGrant = checkForRohrGrant(child.raised)
+                    if (rohrGrant) child.raised = 370
+
+                    // figure out if child is in eligible for khk
+                    const khk = checkKhkEligibility(child)
+                    if (khk) child.track = "khk"
+
                     // if (parseInt(child.date_paid) > 0) continue;
                     children[child.user_id] = child;
                     children_ids.push(child.user_id);
-                    let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+                    const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
                     html += `
                             <div class="kid flex-kids">
                                 <div>
                                     <img src="//mashpia.com/${childPic}"
-                                        style="border-radius: 50%; width: 100%; max-height: 100%; max-width: 180px; padding: 15px 20px 0 0;" />
+                                        style="border-radius: 50%; width: 100%; max-height: 100%; max-width: 130px; margin-top: 15px;" />
                                 </div>
-                                 <div>
+                                 <div style="margin-left: 20px;">
                                     <h5 class="formDetails">Dear ${child.first},</h5>
-                                    <h5 class="formDetails">Mazal Tov! You have passed the "${child.track.toUpperCase()}" Track.<h5>`
-                        if (child.raised > 0) { html += `<h5 class="formDetails">You raised $${child.raised} from the ChidonDrive. That means that you get
-                                        $${child.raised / 2} off your registration!</h5>` }
-                        if (child.coupon > 0) {
-                            html += `<h5 class="formDetails">You also have a $${child.coupon} off coupon which will be deducted from your registration!</h5>`
-                        }
-                        html += `<h5 class="formDetails">Please choose which package you would like to register for:</h5><br />`
-                    for (let t in trackInfo) {
-                        const amounts = trackInfo[t]
-                        html += `
-                            <div class="flex">
-                                <input class="inputCheckbox" type="radio" name="package_${c}" value="${t}" />
-                                    <label class="checkboxLabel">${t.toUpperCase()} Package</label>
-                                <select name="regAmount">
-                                    `
-                        for (let a of amounts) {
-                            html += `<option value='${a}'>${a}</option>`
-                        }
-                        let discount
-                        if (child.raised > 0) {
-                            const lowest = amounts[amounts.length - 1]
-                            discount = lowest - (child.raised / 2)
-                            if (child.raised > 170) {
-                                let diff = 270 - child.raised
-                                if (diff < discount) discount = diff
-                            }
-                            if (discount < 0) discount = 0
-                            html += `<option value='${discount}'>${discount}</option>`
-                        }
-                        if (child.coupon > 0 && discount != 0) {
-                            if (child.raised > 0) {
-                                discount -= child.coupon
-                                if (discount < 0) discount = 0
-                            } else {
-                                discount = child.coupon
-                            }
-                            html += `<option value='${discount}'>${discount}</option>`
-                        }
-                            html += `
-                                </select>
-                            </div>
-                        `
-                        if (t === child.track) break;
+                                    <h5 class="formDetails">Mazal Tov! You have passed the "${child.track.toUpperCase()}" Track. You are eligible for ${trackText[child.track]}.<h5>`
+                    if (child.coupon > 0) {
+                        html += `<h5 class="formDetails"><b>Coupon Code</b><br />
+                                You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
                     }
-                    html += `</div>
+                    if (child.raised > 0) {
+                        html += `<h5 class="formDetails"><b>Chidon Drive</b><br />
+                                You raised $${child.raised} which gives you $${child.raised / 2} off your registration cost.</h5>`
+                    }
+
+                    let amounts, lowest, free
+                    if (khk) {
+                        let options = ['khk', 'havanah']
+                        html += `<h5 class="formDetails"><b>Registration Options</b><br />`
+                        for (let option of options) {
+                            amounts = trackInfo[option]
+                            khkOption = option === 'khk' ? true : false
+                            lowest = getLowest(amounts, child.coupon, child.raised, khkOption)
+                            if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
+                            if (lowest === 0) free = true
+                            else free = false
+                            html += `<h5 class="formDetails"><b>
+                                    ${option === 'khk' ? 'KHK Trip Option' : 'Regional Trip Option (NOT KHK)'}
+                                </b><br />`
+                            html += `Full cost: $${amounts[0]}<br />`
+                            html += `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br />`
+                            html += `Please pay as much as you can.</h5>`
+                        }
+
+                        html += `<br />
+                            <div class="flex">
+                                <input class="inputCheckbox" type="radio" name="khk" class="khk_choice" value="1" onclick="togglePayment(1)" />
+                                    <label class="checkboxLabel">YES, I would like to pay for the KHK Trip Option</label>
                             </div>
-                            <div style="clear: both"></div>
-                            <br />
-                        `;
+                            <div class="flex">
+                                <input class="inputCheckbox" type="radio" name="khk" class="khk_choice" value="0" onclick="togglePayment(0)" />
+                                    <label class="checkboxLabel">NO, I would only like to pay for the Regional Trip Option</label>
+                            </div>`
+
+                        for (let option of options) {
+                            amounts = trackInfo[option]
+                            html += `<h5 class="formDetails" id="${option + '_payment'}" style="display: none; margin-top: 10px;">I will pay:
+                                   <select name="regAmount_${child.user_id}" class="regAmount" id="regAmount_${child.user_id}">`
+                            let last = amounts.length - 1
+                            for (; last > 0; last--) {
+                                html += `<option value='${amounts[last]}'>$${amounts[last]}</option>`
+                            }
+                            html += `</select></h5>`
+                        }
+                    } else {
+                        amounts = trackInfo[child.track]
+                        lowest = getLowest(amounts, child.coupon, child.raised, false)
+                        if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
+                        if (lowest === 0) free = true
+                        else free = false
+                        html += `<h5 class="formDetails"><b>Registration</b><br />`
+                        html += `Full cost: $${amounts[0]}<br />`
+                        html += `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br />`
+                        html += `Please pay as much as you can.<br />`
+                        html += `I would like to pay: <select name="regAmount_${child.user_id}" class="regAmount" id="regAmount_${child.user_id}">`
+                        let last = amounts.length - 1
+                        for (; last > 0; last--) {
+                            html += `<option value='${amounts[last]}'>$${amounts[last]}</option>`
+                        }
+                        html += `</select></h5>`
+                    }
+
+                    html += `</div>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                    <br />`
                 }
                 $(".login").hide();
                 $("#regForm").show();
@@ -1423,10 +1487,21 @@
                 $(".children").empty();
                 $(".children").append(html);
                 $(".children").show();
+                $("select").niceSelect()
             } else {
                 alert(info.error);
             }
         });
+    }
+
+    function togglePayment(val) {
+        if (val) {
+            $("#khk_payment").show()
+            $("#havanah_payment").hide()
+        } else {
+            $("#khk_payment").hide()
+            $("#havanah_payment").show()
+        }
     }
 
     function getSweaterInfo() {
