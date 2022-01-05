@@ -59,6 +59,12 @@
         /*.form input[type='checkbox'], .form input[type='radio'] {*/
         /*	margin-top: -15px;*/
         /*}*/
+        .bar {
+            position: relative;
+            padding-top: 1.1rem;
+            margin-top: 2rem;
+            height: 3rem;
+        }
     </style>
 </head>
 
@@ -1415,6 +1421,44 @@
                     if (child.raised > 0) {
                         html += `<h5 class="formDetails"><b>Chidon Drive</b><br />
                                 You raised $${child.raised} which gives you $${child.raised / 2} off your registration cost.</h5>`
+
+                        child.goal = 370
+                        const donation = child.raised
+                        const donationPercent = (donation / child.goal) * 100
+                        const subsidy = donation >= 270 ? 100 : 0
+                        const subsidyPercent = (subsidy / child.goal) * 100
+                        const balance = child.goal - (donation + subsidy)
+                        html += `
+                            <div class="bar">
+                                <div class="bar-circle">
+                                    <div class="bar-circle__inner">
+                                        <span>$${child.goal}</span>
+                                    </div>
+                                </div>
+                                <div class="bar-bar">
+                                    <div class="bar-bar__wrapper">
+                                        <div class="bar-bar__line donation" data-percent="${donationPercent}">
+                                            <div class="bar-bar__circle"></div>
+                                            <div class="bar-bar__marker">
+                                                <img src="img/marker-blue.png" />
+                                                <p>$${donation}</p>
+                                            </div>
+                                        </div>
+                                        <div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
+                                            <div class="bar-bar__circle"></div>
+                                            <div class="bar-bar__marker">
+                                                <img src="img/marker.png" />
+                                                <p>${subsidy}</p>
+                                            </div>
+                                        </div>
+                                        <div class="remaining">
+                                            <div class="bar-bar__marker">
+                                                <p>$${balance}<br>Remaining</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
                     }
 
                     let amounts, lowest, free
