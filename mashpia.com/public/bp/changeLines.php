@@ -141,7 +141,6 @@ foreach ($results as $school => $more) {
     </table>
     <div class="page-break"></div>
     <?php
-    break;
 }
 ?>
 </body>
