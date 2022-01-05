@@ -139,7 +139,7 @@ foreach ($results as $school => $more) {
         ?>
         </tbody>
     </table>
-    <div class="page-break"></div>
+    <div style="page-break-after: always"></div>
     <?php
 }
 ?>
