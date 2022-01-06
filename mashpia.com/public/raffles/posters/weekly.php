@@ -66,9 +66,9 @@ $winners = array();
 $winners[0] = array(); // we only start counting from 1 so first index (0) needs to be initialized to empty array
 foreach ($schools as $school_id => $school) {
     foreach ($raffles as $id => $raffle) {
-        $sql = "select u.first, u.last, u.school_id 
+        $sql = "select u.first, u.last, u.school_id
                 from users u
-                join raffle_winners rw using (user_id) 
+                join raffle_winners rw using (user_id)
                 where rw.raffle_id = " . $id . "
                 and u.school_id = " . $school_id;
         $result = mysql_query( $sql ) or die( mysql_error() );
@@ -123,16 +123,9 @@ foreach ($schools as $school_id => $school) {
         </style>
     </head>
     <body>
-        <button onclick="window.print()">Print</button>
+        <button style="padding: 10px 20px; font-size: large;" onclick="window.print()">Print</button>
         <?php
         function renderPoster($week, $issue_number, $winners) {
-//            global $start_dates_to_hachayol_issues;
-//            $issue_number = array_key_exists($week['start_date'], $start_dates_to_hachayol_issues) ? $start_dates_to_hachayol_issues[$week['start_date']] : false;
-//            $issue_number = $start_dates_to_hachayol_issues[$week['start_date']];
-//            if (!$issue_number) {
-//                echo "<div class='off-page'>missing {$week['name']} posters</div>";
-//                return;
-//            }
             ?>
                 <div class='poster' style='background-image: url( "./templates/<?= $issue_number ?>. Mission Marathon Weekly.jpg" ); '>
                     <div class='names'>
@@ -150,7 +143,6 @@ foreach ($schools as $school_id => $school) {
             foreach ($info as $week_name => $all_winners) {
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
-//                    echo "<pre>"; print_r($weeks[$week_name]) . "<br />"; echo "</pre>";
                     if (array_key_exists($weeks[$week_name]['start_date'], $start_dates_to_hachayol_issues)) {
                         $issue_number = $start_dates_to_hachayol_issues[$weeks[$week_name]['start_date']];
                         renderPoster($weeks[$week_name], $issue_number, $winners);
