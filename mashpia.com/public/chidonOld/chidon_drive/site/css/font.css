@@ -156,6 +156,13 @@
   font-style: normal;
 }
 
+@font-face {
+    font-family: 'Tahu';
+    src: url('../assets/Tahu.ttf') format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 [class^="socicon-"], [class*=" socicon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'Socicon' !important;

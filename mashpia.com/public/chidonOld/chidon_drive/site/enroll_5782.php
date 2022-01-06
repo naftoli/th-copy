@@ -65,6 +65,78 @@
             margin-top: 2rem;
             height: 3rem;
         }
+
+        .wrapper {
+            font-family: 'Gotham Narrow', sans-serif;
+        }
+
+        .wrapper .form {
+            box-sizing: initial !important;
+        }
+
+        .form h5 {
+            font-family: 'bould', sans-serif;
+            font-weight: normal;
+        }
+
+        .form .nice-select .option, .form .nice-select .option .selected, .form .nice-select .option .selected .focus {
+            padding-top: 10px !important;
+            text-align: center !important;
+        }
+
+        .form .nice-select .option, .form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
+            padding: 0;
+        }
+
+        .childImg {
+            border-radius: 15px;
+            width: 90px;
+            margin-top: 15px;
+        }
+
+        h5 .title {
+            font-family: 'Russo One', sans-serif;
+        }
+
+        .form h5 span.track {
+            font-family: 'Tahu', sans-serif;
+            font-weight: normal;
+            color: #e3b949;
+        }
+
+        form h5.formDetails {
+            font-size: 1.3rem;
+            line-height: 1.5;
+        }
+
+        .form form .checkboxLabel .xtra {
+            font-family: 'bould', sans-serif !important;
+            font-weight: normal !important;
+        }
+
+        .form form .flex > label {
+            font-size: 1.3rem;
+            font-weight: normal;
+        }
+
+        .field {
+            margin-top: 0 !important;
+        }
+
+        #paymentDiv {
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        #payment {
+            color: #000;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .addressInfo {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -126,27 +198,26 @@
         <!-- FORM PART 2 -->
         <div class="form form2" id="purchasesForm" style="display: none">
             <form id="formPart2">
-                <h5 class="formDetails"><b>Celebration Box:</b></h5>
+                <h5 class="formDetails formTitle" style="text-decoration: none">Extra Purchases</h5>
                 <h5 class="formDetails">
-                    <!-- TODO: update span.amountOfBoxes to say 'a' or a number for the amount of boxes -->
-                    Since <b class="first_name"></b> is/are eligible for the Chidon Experience, you
-                    can receive <span class="amountOfBoxes"></span> <b>Chidon Celebration Box</b> as part of your
-                    registration so your family can
-                    celebrate when we watch the Chidon on Sunday, Yud Beis Sivan 5781/May 23, 2021 with great
-                    fanfare.
+                    You can use this form to purchase Celebration Boxes as well as Sweaters (for Tatty / Mommy / Bubby / Zaidy).
+                    Please Note: This year, there are no celebration boxes being AUTOMATICALLY SENT. You need to EXPLICITLY
+                    purchase them.
                 </h5>
                 <div class="flex small-select">
-                    <input class="inputCheckbox" type="checkbox" id="celebrationBox" name="celebrationBox">
-                    <label class="checkboxLabel" for="celebrationBox">
-                        <!-- TODO: add max attr to input field - max should be the max number of boxes allowed -->
-                        Yes! I would like to receive
-                        Chidon Celebration Box(es) with the following items:
+                    <label class="checkboxLabel xtra">
+                        Please select how many Celebration Box(es) you would like to purchase.
                     </label>
-                    <select id="numberOfCelebrationBoxes">
-
+                    <select class="numCelebBoxes">
+                        <?php
+                        for ($i = 0; $i <= 10; $i++) {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                        ?>
                     </select>
                 </div>
-                <div class="listSection">
+                <div class="listSection" style="background-color: #394190">
+                    <img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
                     <ul>
                         <li>10 Chidon Plates</li>
                         <li>10 Chidon Cups</li>
@@ -157,196 +228,218 @@
                         <li>2 Laminated Benching Cards</li>
                     </ul>
                 </div>
-                <h5 class="formDetails"><b>Additional Chidon Celebration Boxes: $20</b></h5>
-                <div class="flex">
-                    <input class="inputCheckbox" type="checkbox" id="additionalCelebrationBox"
-                           name="additionalCelebrationBox">
-                    <label class="checkboxLabel" for="additionalCelebrationBox">
-                        I would like to order an additional Chidon Celebration Box.
-                    </label>
-                </div>
-                <div class="listSection" id="additionalCelebrationBoxDetails" style="display: none;">
-                    <div class="flex">
-                        <input class="inputCheckbox" type="radio" id="shippedToSchool" name="shippingLocation">
-                        <label class="checkboxLabel" for="shippedToSchool">
-                            to be shipped to my school.
-                        </label>
-                    </div>
-                    <div class="flex">
-                        <input class="inputCheckbox" type="radio" id="shippedToAddress" name="shippingLocation">
-                        <label class="checkboxLabel" for="shippedToAddress">
-                            +$10 to be shipped to an address in the USA
-                        </label>
-                    </div>
-                    <input id="shippedToAddressInput" type="text" placeholder="Address">
-                </div>
 
-                <h5 class="formDetails"><b>Parents and Grandparents Sweaters:</b></h5>
+                <h5 class="formDetails formTitle" style="text-decoration: none">Parents and Grandparents Sweaters</h5>
                 <div class="flex">
-                    <input class="inputCheckbox" type="checkbox" id="sweaterForMother" name="sweaterForFamily">
-                    <label class="checkboxLabel" for="sweaterForMother">
-                        $25 Mother
-                    </label>
-                </div>
-                <div id="sweaterForMotherDetails" style="display: none;">
-                    <div class="field flex medium-select">
-                        <label>Select Size</label>
-                        <!-- TODO: Update amount of sweaters left for each size -->
-                        <select id="sweaterForMotherSize" name="pay">
-                            <!--							<option value='xs'>Adult XS (50 left)</option>-->
-                            <!--							<option value='small'>Adult Small (50 left)</option>-->
-                            <!--							<option value='medium'>Adult Medium (100 left)</option>-->
-                            <!--							<option value='large'>Adult Large (50 Left)</option>-->
-                            <!--							<option value='xl'>Adult XL large (50 Left)</option>-->
+                    <h5 class="formDetails">Mother Sweater - $25/ea</h5>
+                    <div>
+                        <select name="motherSweater" class="sweater">
+                            <?php
+                            for ($i = 0; $i <= 10; $i++) {
+                                echo "<option value='$i'>$i</option>";
+                            }
+                            ?>
                         </select>
                     </div>
-                    <div class="listSection">
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="motherSweaterShippedToSchool"
-                                   name="motherSweaterShippingLocation">
-                            <label class="checkboxLabel" for="motherSweaterShippedToSchool">
-                                to be shipped to my school.
-                            </label>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="motherSweaterShippedToAddress"
-                                   name="motherSweaterShippingLocation">
-                            <label class="checkboxLabel" for="motherSweaterShippedToAddress">
-                                +$10 to be shipped to an address in the USA
-                            </label>
-                        </div>
-                        <input id="motherSweaterShippedToAddressInput" type="text" placeholder="Address">
-                    </div>
                 </div>
+                <div class="addressInfo"></div>
 
                 <div class="flex">
-                    <input class="inputCheckbox" type="checkbox" id="sweaterForFather" name="sweaterForFamily">
-                    <label class="checkboxLabel" for="sweaterForFather">
-                        $25 Father
-                    </label>
-                </div>
-                <div id="sweaterForFatherDetails" style="display: none;">
-                    <div class="field flex medium-select">
-                        <label>Select Size</label>
-                        <!-- TODO: Update amount of sweaters left for each size -->
-                        <select id="sweaterForFatherSize" name="pay">
-                            <!--							<option value='xs'>Adult XS (50 left)</option>-->
-                            <!--							<option value='small'>Adult Small (50 left)</option>-->
-                            <!--							<option value='medium'>Adult Medium (100 left)</option>-->
-                            <!--							<option value='large'>Adult Large (50 Left)</option>-->
-                            <!--							<option value='xl'>Adult XL large (50 Left)</option>-->
+                    <h5 class="formDetails">Father Sweater - $25/ea</h5>
+                    <div>
+                        <select name="fatherSweater" class="sweater">
+                            <?php
+                            for ($i = 0; $i <= 10; $i++) {
+                                echo "<option value='$i'>$i</option>";
+                            }
+                            ?>
                         </select>
                     </div>
-                    <div class="listSection">
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="fatherSweaterShippedToSchool"
-                                   name="fatherSweaterShippingLocation">
-                            <label class="checkboxLabel" for="fatherSweaterShippedToSchool">
-                                to be shipped to my school.
-                            </label>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="fatherSweaterShippedToAddress"
-                                   name="fatherSweaterShippingLocation">
-                            <label class="checkboxLabel" for="fatherSweaterShippedToAddress">
-                                +$10 to be shipped to an address in the USA
-                            </label>
-                        </div>
-                        <input id="fatherSweaterShippedToAddressInput" type="text" placeholder="Address">
+                </div>
+                <div class="addressInfo"></div>
+                <div class="flex">
+                    <h5 class="formDetails">Bubby Sweater - $25/ea</h5>
+                    <div>
+                        <select name="bubbySweater" class="sweater">
+                            <?php
+                            for ($i = 0; $i <= 10; $i++) {
+                                echo "<option value='$i'>$i</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
+                <div class="addressInfo"></div>
 
                 <div class="flex">
-                    <input class="inputCheckbox" type="checkbox" id="sweaterForBubby" name="sweaterForFamily">
-                    <label class="checkboxLabel" for="sweaterForBubby">
-                        $25 Bubby
-                    </label>
-                </div>
-                <div id="sweaterForBubbyDetails" style="display: none;">
-                    <div class="field flex medium-select">
-                        <label>Select Size</label>
-                        <!-- TODO: Update amount of sweaters left for each size -->
-                        <select id="sweaterForBubbySize" name="pay">
-                            <!--							<option value='xs'>Adult XS (50 left)</option>-->
-                            <!--							<option value='small'>Adult Small (50 left)</option>-->
-                            <!--							<option value='medium'>Adult Medium (100 left)</option>-->
-                            <!--							<option value='large'>Adult Large (50 Left)</option>-->
-                            <!--							<option value='xl'>Adult XL large (50 Left)</option>-->
+                    <h5 class="formDetails">Zaidy Sweater - $25/ea</h5>
+                    <div>
+                        <select name="zaidySweater" class="sweater">
+                            <?php
+                            for ($i = 0; $i <= 10; $i++) {
+                                echo "<option value='$i'>$i</option>";
+                            }
+                            ?>
                         </select>
                     </div>
-                    <div class="listSection">
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="bubbySweaterShippedToSchool"
-                                   name="bubbySweaterShippingLocation">
-                            <label class="checkboxLabel" for="bubbySweaterShippedToSchool">
-                                to be shipped to my school.
-                            </label>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="bubbySweaterShippedToAddress"
-                                   name="bubbySweaterShippingLocation">
-                            <label class="checkboxLabel" for="bubbySweaterShippedToAddress">
-                                +$10 to be shipped to an address in the USA
-                            </label>
-                        </div>
-                        <input id="bubbySweaterShippedToAddressInput" type="text" placeholder="Address">
-                    </div>
                 </div>
+                <div class="addressInfo"></div>
 
-                <div class="flex">
-                    <input class="inputCheckbox" type="checkbox" id="sweaterForZaidy" name="sweaterForFamily">
-                    <label class="checkboxLabel" for="sweaterForZaidy">
-                        $25 Zaidy
-                    </label>
-                </div>
-                <div id="sweaterForZaidyDetails" style="display: none;">
-                    <div class="field flex medium-select">
-                        <label>Select Size</label>
-                        <!-- TODO: Update amount of sweaters left for each size -->
-                        <select id="sweaterForZaidySize" name="pay">
-                            <!--							<option value='xs'>Adult XS (50 left)</option>-->
-                            <!--							<option value='small'>Adult Small (50 left)</option>-->
-                            <!--							<option value='medium'>Adult Medium (100 left)</option>-->
-                            <!--							<option value='large'>Adult Large (50 Left)</option>-->
-                            <!--							<option value='xl'>Adult XL large (50 Left)</option>-->
-                        </select>
-                    </div>
-                    <div class="listSection">
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="zaidySweaterShippedToSchool"
-                                   name="zaidySweaterShippingLocation">
-                            <label class="checkboxLabel" for="zaidySweaterShippedToSchool">
-                                to be shipped to my school.
-                            </label>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox" type="radio" id="zaidySweaterShippedToAddress"
-                                   name="zaidySweaterShippingLocation">
-                            <label class="checkboxLabel" for="zaidySweaterShippedToAddress">
-                                +$10 to be shipped to an address in the USA
-                            </label>
-                        </div>
-                        <input id="zaidySweaterShippedToAddressInput" type="text" placeholder="Address">
-                    </div>
-                </div>
-
-                <div id="form2Receipt">
-                    <h5 class="formDetails"><b>Receipt:</b></h5>
-                    <!-- TODO: load receipt info -->
-                    <div id="receiptDetails"></div>
-                </div>
+<!--                <div class="flex">-->
+<!--                    <input class="inputCheckbox" type="checkbox" id="sweaterForMother" name="sweaterForFamily">-->
+<!--                    <label class="checkboxLabel" for="sweaterForMother">-->
+<!--                        $25 Mother-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div id="sweaterForMotherDetails" style="display: none;">-->
+<!--                    <div class="field flex medium-select">-->
+<!--                        <label>Select Size</label>-->
+<!--                        <select id="sweaterForMotherSize" name="pay">-->
+<!--                            							<option value='xs'>Adult XS (50 left)</option>-->
+<!--                            							<option value='small'>Adult Small (50 left)</option>-->
+<!--                            							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--                            							<option value='large'>Adult Large (50 Left)</option>-->
+<!--                            							<option value='xl'>Adult XL large (50 Left)</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="listSection">-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="motherSweaterShippedToSchool"-->
+<!--                                   name="motherSweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="motherSweaterShippedToSchool">-->
+<!--                                to be shipped to my school.-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="motherSweaterShippedToAddress"-->
+<!--                                   name="motherSweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="motherSweaterShippedToAddress">-->
+<!--                                +$10 to be shipped to an address in the USA-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <input id="motherSweaterShippedToAddressInput" type="text" placeholder="Address">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!---->
+<!--                <div class="flex">-->
+<!--                    <input class="inputCheckbox" type="checkbox" id="sweaterForFather" name="sweaterForFamily">-->
+<!--                    <label class="checkboxLabel" for="sweaterForFather">-->
+<!--                        $25 Father-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div id="sweaterForFatherDetails" style="display: none;">-->
+<!--                    <div class="field flex medium-select">-->
+<!--                        <label>Select Size</label>-->
+<!--                        <select id="sweaterForFatherSize" name="pay">-->
+<!--                            							<option value='xs'>Adult XS (50 left)</option>-->
+<!--                            							<option value='small'>Adult Small (50 left)</option>-->
+<!--                            							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--                            							<option value='large'>Adult Large (50 Left)</option>-->
+<!--                            							<option value='xl'>Adult XL large (50 Left)</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="listSection">-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="fatherSweaterShippedToSchool"-->
+<!--                                   name="fatherSweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="fatherSweaterShippedToSchool">-->
+<!--                                to be shipped to my school.-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="fatherSweaterShippedToAddress"-->
+<!--                                   name="fatherSweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="fatherSweaterShippedToAddress">-->
+<!--                                +$10 to be shipped to an address in the USA-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <input id="fatherSweaterShippedToAddressInput" type="text" placeholder="Address">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!---->
+<!--                <div class="flex">-->
+<!--                    <input class="inputCheckbox" type="checkbox" id="sweaterForBubby" name="sweaterForFamily">-->
+<!--                    <label class="checkboxLabel" for="sweaterForBubby">-->
+<!--                        $25 Bubby-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div id="sweaterForBubbyDetails" style="display: none;">-->
+<!--                    <div class="field flex medium-select">-->
+<!--                        <label>Select Size</label>-->
+<!--                        <select id="sweaterForBubbySize" name="pay">-->
+<!--                            							<option value='xs'>Adult XS (50 left)</option>-->
+<!--                            							<option value='small'>Adult Small (50 left)</option>-->
+<!--                            							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--                            							<option value='large'>Adult Large (50 Left)</option>-->
+<!--                            							<option value='xl'>Adult XL large (50 Left)</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="listSection">-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="bubbySweaterShippedToSchool"-->
+<!--                                   name="bubbySweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="bubbySweaterShippedToSchool">-->
+<!--                                to be shipped to my school.-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="bubbySweaterShippedToAddress"-->
+<!--                                   name="bubbySweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="bubbySweaterShippedToAddress">-->
+<!--                                +$10 to be shipped to an address in the USA-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <input id="bubbySweaterShippedToAddressInput" type="text" placeholder="Address">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!---->
+<!--                <div class="flex">-->
+<!--                    <input class="inputCheckbox" type="checkbox" id="sweaterForZaidy" name="sweaterForFamily">-->
+<!--                    <label class="checkboxLabel" for="sweaterForZaidy">-->
+<!--                        $25 Zaidy-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div id="sweaterForZaidyDetails" style="display: none;">-->
+<!--                    <div class="field flex medium-select">-->
+<!--                        <label>Select Size</label>-->
+<!--                        <select id="sweaterForZaidySize" name="pay">-->
+<!--                            							<option value='xs'>Adult XS (50 left)</option>-->
+<!--                            							<option value='small'>Adult Small (50 left)</option>-->
+<!--                            							<option value='medium'>Adult Medium (100 left)</option>-->
+<!--                            							<option value='large'>Adult Large (50 Left)</option>-->
+<!--                            							<option value='xl'>Adult XL large (50 Left)</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="listSection">-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="zaidySweaterShippedToSchool"-->
+<!--                                   name="zaidySweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="zaidySweaterShippedToSchool">-->
+<!--                                to be shipped to my school.-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input class="inputCheckbox" type="radio" id="zaidySweaterShippedToAddress"-->
+<!--                                   name="zaidySweaterShippingLocation">-->
+<!--                            <label class="checkboxLabel" for="zaidySweaterShippedToAddress">-->
+<!--                                +$10 to be shipped to an address in the USA-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <input id="zaidySweaterShippedToAddressInput" type="text" placeholder="Address">-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <h5 class="formDetails">
                     <b>Please note:</b> We are doing our best to ensure all items will be received at your school or at
-                    the US addresses specified before the Chidon Event & Awards Ceremony on Sunday, 12 Sivan 5781, May 23rd 2021.
-                    We do not take responsibility in case of unforeseen circumstances.
+                    the US addresses specified before the Chidon Event & Awards Ceremony. We do not take responsibility
+                    in case of unforeseen circumstances.
                 </h5>
 <!--                <h5 class="formDetails"><b>Chidon Registration Payment:</b></h5>-->
-<!--                <!--				<h5 class="formDetails">-->-->
-<!--                <!--					<b>Please note:</b>-->-->
-<!--                <!--					In order to complete registration you need to choose one of the following 2 option.<br />-->-->
-<!--                <!--					IF YOU HAVE PREVIOUSLY PAID OR PUT A CARD ON HOLD, AFTER PRESSING PAY YOU WILL SEE A POPUP NOTIFYING YOU THAT YOUR PREVIOUS PAYMENT HAS BEEN APPLIED TO YOUR BALANCE.-->-->
-<!--                <!--				</h5>-->-->
+<!--                				<h5 class="formDetails">-->-->
+<!--                					<b>Please note:</b>-->-->
+<!--                					In order to complete registration you need to choose one of the following 2 option.<br />-->-->
+<!--                					IF YOU HAVE PREVIOUSLY PAID OR PUT A CARD ON HOLD, AFTER PRESSING PAY YOU WILL SEE A POPUP NOTIFYING YOU THAT YOUR PREVIOUS PAYMENT HAS BEEN APPLIED TO YOUR BALANCE.-->-->
+<!--                				</h5>-->-->
 <!--                <div class="listSection">-->
 <!--                    <div class="flex">-->
 <!--                        <input class="inputCheckbox" type="radio" id="chargeCard" name="chidonRegistrationPayment" checked>-->
@@ -354,17 +447,20 @@
 <!--                            Please charge my card now.-->
 <!--                        </label>-->
 <!--                    </div>-->
-<!--                    <!--					<div class="flex">-->-->
-<!--                    <!--						<input class="inputCheckbox" type="radio" id="holdMoney" name="chidonRegistrationPayment">-->-->
-<!--                    <!--						<label class="checkboxLabel" for="holdMoney">-->-->
-<!--                    <!--							Please hold the money on my card until the Chidon Drive ends on Tuesday, 3 Nissan, March-->-->
-<!--                    <!--							16, 2021. If there is still any money that needs to be charged, please charge it then.-->-->
-<!--                    <!--						</label>-->-->
-<!--                    <!--					</div>-->-->
+<!--                    					<div class="flex">-->
+<!--                    						<input class="inputCheckbox" type="radio" id="holdMoney" name="chidonRegistrationPayment">-->
+<!--                    						<label class="checkboxLabel" for="holdMoney">-->-->
+<!--                    							Please hold the money on my card until the Chidon Drive ends on Tuesday, 3 Nissan, March-->
+<!--                    							16, 2021. If there is still any money that needs to be charged, please charge it then.-->
+<!--                    						</label>-->
+<!--                    					</div>-->
 <!--                </div>-->
 <!--                <div class="flexCenter">-->
 <!--                    <a href="" class="button pay" style="text-align: center; margin-top: 20px;">Continue to Payment</a>-->
 <!--                </div>-->
+                <div id="paymentDiv">
+                    <a href="#" class="button" id="payment">Continue to Payment</a>
+                </div>
             </form>
         </div>
 
@@ -1329,7 +1425,7 @@
     })
 
     function checkKhkEligibility(child) {
-        if (child.grade === 8 && (child.track === 'havanah' || child.track === 'iyun')) return true
+        if (child.grade === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
         else return false
     }
 
@@ -1355,14 +1451,14 @@
         const trackText = {
             yesod: "a sweater and gifts",
             yediah: "a sweater, gifts and prizes",
-            havanah: "a sweater, gifts, prizes and the regional trip",
+            havonah: "a sweater, gifts, prizes and the regional trip",
             iyun: "a sweater, gifts, prizes and the regional trip",
             khk: "a sweater, gifts, prizes and the kol hatorah kulah experience or the regional trip"
         }
         const trackInfo = {
             yesod: [70, 50, 35],
             yediah: [180, 125, 100, 90],
-            havanah: [370, 250, 200, 185],
+            havonah: [370, 250, 200, 185],
             iyun: [370, 250, 200, 185],
             khk: [500, 400, 325, 250]
         }
@@ -1379,15 +1475,20 @@
                 }
                 let html = '';
                 numChildren = info.children.length;
-                for (c in info.children) {
+                for (let c in info.children) {
                     let child = info.children[c];
                     if (c == 0) {
                         child.track = 'yediah'
                         child.raised = 50
-                        child.coupon = 10
+                        child.coupon = 0
                         child.grade = 7
-                    } else {
-                        child.track = 'havanah'
+                    } else if (c == 1) {
+                        child.track = 'havonah'
+                        child.raised = 304
+                        child.coupon = 0
+                        child.grade = 5
+                    } else if (c == 2) {
+                        child.track = 'havonah'
                         child.raised = 180
                         child.coupon = 0
                         child.grade = 8
@@ -1400,6 +1501,8 @@
                     // figure out if child is in eligible for khk
                     const khk = checkKhkEligibility(child)
 
+                    const trackWon = child.track[0].toUpperCase() + child.track.substr(1)
+
                     // if (parseInt(child.date_paid) > 0) continue;
                     children[child.user_id] = child;
                     children_ids.push(child.user_id);
@@ -1407,19 +1510,18 @@
                     html += `
                             <div class="kid flex-kids">
                                 <div>
-                                    <img src="//mashpia.com/${childPic}"
-                                        style="border-radius: 50%; width: 100%; max-height: 100%; max-width: 130px; margin-top: 15px;" />
+                                    <img class="childImg" src="//mashpia.com/${childPic}" />
                                 </div>
                                  <div style="margin-left: 20px;">
                                     <h5 class="formDetails">Dear ${child.first},</h5>
-                                    <h5 class="formDetails">Mazal Tov! You have passed the "${child.track.toUpperCase()}"
+                                    <h5 class="formDetails">Mazal Tov! You have passed the <span class="track">${trackWon}</span>
                                     Track. You are eligible for ${khk ? trackText['khk']  : trackText[child.track]}.<h5>`
                     if (child.coupon > 0) {
-                        html += `<h5 class="formDetails"><b>Coupon Code</b><br />
+                        html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
                                 You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
                     }
                     if (child.raised > 0) {
-                        html += `<h5 class="formDetails"><b>Chidon Drive</b><br />
+                        html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
                                 You raised $${child.raised} which gives you $${child.raised / 2} off your registration cost.</h5>`
 
                         // child.goal = 370
@@ -1463,8 +1565,8 @@
 
                     let amounts, lowest, free
                     if (khk) {
-                        let options = ['khk', 'havanah']
-                        html += `<h5 class="formDetails"><b>Registration Options</b><br />`
+                        let options = ['khk', 'havonah']
+                        html += `<h5 class="formDetails"><span class="title">Registration Options</span><br />`
                         for (let option of options) {
                             amounts = trackInfo[option]
                             const khkOption = option === 'khk' ? true : false
@@ -1495,7 +1597,7 @@
                             html += `<h5 class="formDetails" id="${option + '_payment'}" style="display: none; margin-top: 10px;">I will pay:
                                    <select name="regAmount_${child.user_id}" class="regAmount" id="regAmount_${child.user_id}">`
                             let last = amounts.length - 1
-                            for (; last > 0; last--) {
+                            for (; last >= 0; last--) {
                                 html += `<option value='${amounts[last]}'>$${amounts[last]}</option>`
                             }
                             html += `</select></h5>`
@@ -1506,13 +1608,13 @@
                         if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
                         if (lowest === 0) free = true
                         else free = false
-                        html += `<h5 class="formDetails"><b>Registration</b><br />`
+                        html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
                         html += `Full cost: $${amounts[0]}<br />`
                         html += `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br />`
                         html += `Please pay as much as you can.<br />`
                         html += `I would like to pay: <select name="regAmount_${child.user_id}" class="regAmount" id="regAmount_${child.user_id}">`
                         let last = amounts.length - 1
-                        for (; last > 0; last--) {
+                        for (; last >= 0; last--) {
                             html += `<option value='${amounts[last]}'>$${amounts[last]}</option>`
                         }
                         html += `</select></h5>`
@@ -2077,6 +2179,52 @@
             Cookies.remove('chidon_admin');
             location.reload()
         });
+
+        $(".sweater").change( function() {
+            let num = parseInt($(this).val(), 10)
+            if (num) {
+                let template = `
+                    <div class="field flex medium-select">
+                        <label>Select Size</label>
+                        <select>
+                            <option value='xs'>Adult XS (50 left)</option>-->
+                            <option value='small'>Adult Small (50 left)</option>-->
+                            <option value='medium'>Adult Medium (100 left)</option>-->
+                            <option value='large'>Adult Large (50 Left)</option>-->
+                            <option value='xl'>Adult XL large (50 Left)</option>-->
+                        </select>
+                    </div>
+                    <div class="listSection" style="background-color: #394190; margin-bottom: 1rem;">
+                        <div class="flex">
+                            <input class="inputCheckbox" type="radio">
+                            <label class="checkboxLabel">
+                                to be shipped to my school.
+                            </label>
+                        </div>
+                        <div class="flex">
+                            <input class="inputCheckbox" type="radio">
+                            <label class="checkboxLabel">
+                                +$10 to be shipped to an address in the USA
+                            </label>
+                        </div>
+                        <div class="flex">
+                            <input type="text" placeholder="address" />
+                            <input type="text" placeholder="city" />
+                            <input type="text" placeholder="state" />
+                            <input type="text" placeholder="zip" />
+                        </div>
+                    </div>
+                `
+                let html
+                for (let i = 0; i < num; i++) {
+                    html += template
+                }
+                $(this).parent().parent().next('.addressInfo').append(html)
+                $(".addressInfo select").niceSelect()
+            } else {
+                $(this).parent().parent().next('.addressInfo').empty()
+            }
+        })
     });
 </script>
 
