@@ -2181,6 +2181,7 @@
         });
 
         $(".sweater").change( function() {
+            $(this).parent().parent().next('.addressInfo').empty()
             let num = parseInt($(this).val(), 10)
             if (num) {
                 let template = `
@@ -2221,8 +2222,6 @@
                 }
                 $(this).parent().parent().next('.addressInfo').append(html)
                 $(".addressInfo select").niceSelect()
-            } else {
-                $(this).parent().parent().next('.addressInfo').empty()
             }
         })
     });
