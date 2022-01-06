@@ -53,7 +53,7 @@ foreach ($schools as $school_id => $school) {
 
 // get raffle id's
 $raffles = array();
-$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date desc limit 1";
+$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $raffles[$row['raffle_id']] = $row;
@@ -123,6 +123,7 @@ foreach ($schools as $school_id => $school) {
         </style>
     </head>
     <body>
+        <button onclick="window.print()">Print</button>
         <?php
         function renderPoster($week, $issue_number, $winners) {
 //            global $start_dates_to_hachayol_issues;
@@ -146,7 +147,6 @@ foreach ($schools as $school_id => $school) {
 
         foreach ($winners as $school => $info) {
             if ( isset( $schools[$school] ) ) echo "<h2 class='off-page'>School: " . $schools[$school] . "</h2>";
-            // only show current week
             foreach ($info as $week_name => $all_winners) {
                 $winners_by_poster = array_chunk($all_winners, 4);
                 foreach($winners_by_poster as $winners) {
