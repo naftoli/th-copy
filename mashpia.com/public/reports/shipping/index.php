@@ -62,7 +62,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Regular Shipping Medals Labels</span>
                 </div>
             </a>
-            <a href="/myshliachShipLabels.php<?=$debug ? "?debug=true": "";?>">
+            <a href="/myShliachShipLabels.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">MyShliach Shipping Medals Labels</span>
