@@ -341,30 +341,30 @@
                     the US addresses specified before the Chidon Event & Awards Ceremony on Sunday, 12 Sivan 5781, May 23rd 2021.
                     We do not take responsibility in case of unforeseen circumstances.
                 </h5>
-                <h5 class="formDetails"><b>Chidon Registration Payment:</b></h5>
-                <!--				<h5 class="formDetails">-->
-                <!--					<b>Please note:</b>-->
-                <!--					In order to complete registration you need to choose one of the following 2 option.<br />-->
-                <!--					IF YOU HAVE PREVIOUSLY PAID OR PUT A CARD ON HOLD, AFTER PRESSING PAY YOU WILL SEE A POPUP NOTIFYING YOU THAT YOUR PREVIOUS PAYMENT HAS BEEN APPLIED TO YOUR BALANCE.-->
-                <!--				</h5>-->
-                <div class="listSection">
-                    <div class="flex">
-                        <input class="inputCheckbox" type="radio" id="chargeCard" name="chidonRegistrationPayment" checked>
-                        <label class="checkboxLabel" for="chargeCard">
-                            Please charge my card now.
-                        </label>
-                    </div>
-                    <!--					<div class="flex">-->
-                    <!--						<input class="inputCheckbox" type="radio" id="holdMoney" name="chidonRegistrationPayment">-->
-                    <!--						<label class="checkboxLabel" for="holdMoney">-->
-                    <!--							Please hold the money on my card until the Chidon Drive ends on Tuesday, 3 Nissan, March-->
-                    <!--							16, 2021. If there is still any money that needs to be charged, please charge it then.-->
-                    <!--						</label>-->
-                    <!--					</div>-->
-                </div>
-                <div class="flexCenter">
-                    <a href="" class="button pay" style="text-align: center; margin-top: 20px;">Continue to Payment</a>
-                </div>
+<!--                <h5 class="formDetails"><b>Chidon Registration Payment:</b></h5>-->
+<!--                <!--				<h5 class="formDetails">-->-->
+<!--                <!--					<b>Please note:</b>-->-->
+<!--                <!--					In order to complete registration you need to choose one of the following 2 option.<br />-->-->
+<!--                <!--					IF YOU HAVE PREVIOUSLY PAID OR PUT A CARD ON HOLD, AFTER PRESSING PAY YOU WILL SEE A POPUP NOTIFYING YOU THAT YOUR PREVIOUS PAYMENT HAS BEEN APPLIED TO YOUR BALANCE.-->-->
+<!--                <!--				</h5>-->-->
+<!--                <div class="listSection">-->
+<!--                    <div class="flex">-->
+<!--                        <input class="inputCheckbox" type="radio" id="chargeCard" name="chidonRegistrationPayment" checked>-->
+<!--                        <label class="checkboxLabel" for="chargeCard">-->
+<!--                            Please charge my card now.-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <!--					<div class="flex">-->-->
+<!--                    <!--						<input class="inputCheckbox" type="radio" id="holdMoney" name="chidonRegistrationPayment">-->-->
+<!--                    <!--						<label class="checkboxLabel" for="holdMoney">-->-->
+<!--                    <!--							Please hold the money on my card until the Chidon Drive ends on Tuesday, 3 Nissan, March-->-->
+<!--                    <!--							16, 2021. If there is still any money that needs to be charged, please charge it then.-->-->
+<!--                    <!--						</label>-->-->
+<!--                    <!--					</div>-->-->
+<!--                </div>-->
+<!--                <div class="flexCenter">-->
+<!--                    <a href="" class="button pay" style="text-align: center; margin-top: 20px;">Continue to Payment</a>-->
+<!--                </div>-->
             </form>
         </div>
 
@@ -1357,7 +1357,7 @@
             yediah: "a sweater, gifts and prizes",
             havanah: "a sweater, gifts, prizes and the regional trip",
             iyun: "a sweater, gifts, prizes and the regional trip",
-            khk: "a sweater, gifts, prizes and the kol hatorah kulah experience"
+            khk: "a sweater, gifts, prizes and the kol hatorah kulah experience or the regional trip"
         }
         const trackInfo = {
             yesod: [70, 50, 35],
@@ -1399,7 +1399,6 @@
 
                     // figure out if child is in eligible for khk
                     const khk = checkKhkEligibility(child)
-                    if (khk) child.track = "khk"
 
                     // if (parseInt(child.date_paid) > 0) continue;
                     children[child.user_id] = child;
@@ -1413,7 +1412,8 @@
                                 </div>
                                  <div style="margin-left: 20px;">
                                     <h5 class="formDetails">Dear ${child.first},</h5>
-                                    <h5 class="formDetails">Mazal Tov! You have passed the "${child.track.toUpperCase()}" Track. You are eligible for ${trackText[child.track]}.<h5>`
+                                    <h5 class="formDetails">Mazal Tov! You have passed the "${child.track.toUpperCase()}"
+                                    Track. You are eligible for ${khk ? trackText['khk']  : trackText[child.track]}.<h5>`
                     if (child.coupon > 0) {
                         html += `<h5 class="formDetails"><b>Coupon Code</b><br />
                                 You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
@@ -1422,43 +1422,43 @@
                         html += `<h5 class="formDetails"><b>Chidon Drive</b><br />
                                 You raised $${child.raised} which gives you $${child.raised / 2} off your registration cost.</h5>`
 
-                        child.goal = 370
-                        const donation = child.raised
-                        const donationPercent = (donation / child.goal) * 100
-                        const subsidy = donation >= 270 ? 100 : 0
-                        const subsidyPercent = (subsidy / child.goal) * 100
-                        const balance = child.goal - (donation + subsidy)
-                        html += `
-                            <div class="bar">
-                                <div class="bar-circle">
-                                    <div class="bar-circle__inner">
-                                        <span>$${child.goal}</span>
-                                    </div>
-                                </div>
-                                <div class="bar-bar">
-                                    <div class="bar-bar__wrapper">
-                                        <div class="bar-bar__line donation" data-percent="${donationPercent}">
-                                            <div class="bar-bar__circle"></div>
-                                            <div class="bar-bar__marker">
-                                                <img src="img/marker-blue.png" />
-                                                <p>$${donation}</p>
-                                            </div>
-                                        </div>
-                                        <div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
-                                            <div class="bar-bar__circle"></div>
-                                            <div class="bar-bar__marker">
-                                                <img src="img/marker.png" />
-                                                <p>${subsidy}</p>
-                                            </div>
-                                        </div>
-                                        <div class="remaining">
-                                            <div class="bar-bar__marker">
-                                                <p>$${balance}<br>Remaining</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`
+                        // child.goal = 370
+                        // const donation = child.raised
+                        // const donationPercent = (donation / child.goal) * 100
+                        // const subsidy = donation >= 270 ? 100 : 0
+                        // const subsidyPercent = (subsidy / child.goal) * 100
+                        // const balance = child.goal - (donation + subsidy)
+                        // html += `
+                        //     <div class="bar">
+                        //         <div class="bar-circle">
+                        //             <div class="bar-circle__inner">
+                        //                 <span>$${child.goal}</span>
+                        //             </div>
+                        //         </div>
+                        //         <div class="bar-bar">
+                        //             <div class="bar-bar__wrapper">
+                        //                 <div class="bar-bar__line donation" data-percent="${donationPercent}">
+                        //                     <div class="bar-bar__circle"></div>
+                        //                     <div class="bar-bar__marker">
+                        //                         <img src="img/marker-blue.png" />
+                        //                         <p>$${donation}</p>
+                        //                     </div>
+                        //                 </div>
+                        //                 <div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
+                        //                     <div class="bar-bar__circle"></div>
+                        //                     <div class="bar-bar__marker">
+                        //                         <img src="img/marker.png" />
+                        //                         <p>${subsidy}</p>
+                        //                     </div>
+                        //                 </div>
+                        //                 <div class="remaining">
+                        //                     <div class="bar-bar__marker">
+                        //                         <p>$${balance}<br>Remaining</p>
+                        //                     </div>
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //     </div>`
                     }
 
                     let amounts, lowest, free
@@ -1467,7 +1467,7 @@
                         html += `<h5 class="formDetails"><b>Registration Options</b><br />`
                         for (let option of options) {
                             amounts = trackInfo[option]
-                            khkOption = option === 'khk' ? true : false
+                            const khkOption = option === 'khk' ? true : false
                             lowest = getLowest(amounts, child.coupon, child.raised, khkOption)
                             if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
                             if (lowest === 0) free = true
