@@ -95,7 +95,11 @@
         }
 
         h5 .title {
-            font-family: 'Russo One', sans-serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            font-family: 'Gotham Narrow', sans-serif;
+            font-weight: bold;
         }
 
         .form h5 span.track {
@@ -198,7 +202,7 @@
         <!-- FORM PART 2 -->
         <div class="form form2" id="purchasesForm" style="display: none">
             <form id="formPart2">
-                <h5 class="formDetails formTitle" style="text-decoration: none">Extra Purchases</h5>
+                <h5 class="title" style="font-weight: bold">Extra Purchases</h5>
                 <h5 class="formDetails">
                     You can use this form to purchase Celebration Boxes as well as Sweaters (for Tatty / Mommy / Bubby / Zaidy).
                     Please Note: This year, there are no celebration boxes being AUTOMATICALLY SENT. You need to EXPLICITLY
@@ -229,7 +233,7 @@
                     </ul>
                 </div>
 
-                <h5 class="formDetails formTitle" style="text-decoration: none">Parents and Grandparents Sweaters</h5>
+                <h5 class="title" style="font-weight: bold; margin-bottom: 1rem;">Parents and Grandparents Sweaters</h5>
                 <div class="flex">
                     <h5 class="formDetails">Mother Sweater - $25/ea</h5>
                     <div>
