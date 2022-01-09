@@ -86,7 +86,7 @@ foreach ($schools as $school_id => $school_name) {
         }
         img.imgHeader {
             margin-bottom: 30px;
-            margin-top: 20px;
+            margin-top: 8%;
         }
         img.imgFooter {
             margin-top: 20px;
