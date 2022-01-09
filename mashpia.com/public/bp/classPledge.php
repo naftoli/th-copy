@@ -75,7 +75,7 @@ foreach ($schools as $id => $school) {
 
 $results = [];
 $sql = "SELECT 
-            bus.*, s.school_id, l.type, l.year
+            bus.*, s.school_id, l.type, l.year, c.class_grade, c.class_sub 
         FROM
             bp_user_summary bus
                 JOIN
