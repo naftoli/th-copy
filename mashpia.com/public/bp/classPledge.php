@@ -115,7 +115,7 @@ foreach ($results as $school => $more) {
                 <th colspan="2"></th>
                 <?php
                 foreach ($types as $type) {
-                    for ($i = $start; $i <= $year; $i++) {
+                    for ($i = $start; $i < $year; $i++) {
                         echo "<th>$i</th>";
                     }
                 }
@@ -129,7 +129,7 @@ foreach ($results as $school => $more) {
                 $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
                 echo "<tr><td>" . $name . '</td>';
                 foreach ($types as $type) {
-                    for ($i = $start; $i <= $year; $i++) {
+                    for ($i = $start; $i < $year; $i++) {
                         echo "<td class='cell'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
                         // update totals
                         if (isset($info[$i][$type])) {
