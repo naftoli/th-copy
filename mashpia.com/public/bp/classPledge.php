@@ -108,8 +108,8 @@ foreach ($results as $school => $more) {
             <thead>
             <tr>
                 <th>Chayol</th>
-                <th colspan="8" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
-                <th colspan="8" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
+                <th colspan="7" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
+                <th colspan="7" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
             </tr>
             <tr>
                 <th colspan="2"></th>
