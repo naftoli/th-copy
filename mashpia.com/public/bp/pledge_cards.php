@@ -30,6 +30,7 @@ while ($row = mysql_fetch_assoc($result)) {
     if ($learned == '') $learned = 0;
     $lines_learned[$row['school_id']][$row['user_id']][$row['year']][strtolower($row['type'])] = $learned;
 }
+//echo "<pre>"; print_r($lines_learned); echo "</pre>";
 
 $users = [];
 foreach ($schools as $school_id => $school_name) {
@@ -72,14 +73,23 @@ foreach ($schools as $school_id => $school_name) {
             margin-left: auto;
             margin-right: auto;
             width: 75%;
+            margin-top: 10px;
         }
         @media print {
             .no-print {
                 display: none;
             }
-            .card {
-                margin-top: 10%;
-            }
+        }
+
+        img {
+            width: 750px;
+        }
+        img.imgHeader {
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+        img.imgFooter {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -93,6 +103,7 @@ $grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
 
 foreach ($lines_learned as $school_id => $details) {
     foreach ($details as $user_id => $more) {
+        if (! isset($users[$school_id][$user_id])) continue;
         $grade = $users[$school_id][$user_id]['grade'];
         $name = $users[$school_id][$user_id]['name'];
 
@@ -107,14 +118,14 @@ foreach ($lines_learned as $school_id => $details) {
         }
 
         echo "<div class='card'>";
-        echo "<p style='font-size: 22px;'>My Rebbe's Birthday Gift Pledge Card</p>";
+        echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
         echo "School: " . $schools[$school_id] . "<br />";
         echo "Grade: " . $grade . "<br />";
         echo "Student: " . $name . "<br />";
         echo "<br />";
         echo "Highest amount of lines of Tanya: " . $highestTanya . "<br />";
         echo "Highest amount of lines of Mishna: " . $highestMishna . "<br /><br />";
-        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
+//        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
 
         if (strpos($grade, '-') !== false) {
             $gradeInfo = explode('-', $grade);
@@ -141,7 +152,8 @@ foreach ($lines_learned as $school_id => $details) {
             echo "<tr><td>Grade " . $grades[$start] . " (" . 5782 . ")</td><td></td><td></td></tr>";
         }
         echo "</tbody></table>";
-        echo "<p></p></div>";
+        echo "<p></p>";
+        echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
         echo "<div style='page-break-after: always'></div>";
     }
 }
