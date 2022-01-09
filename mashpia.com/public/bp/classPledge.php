@@ -37,10 +37,6 @@ while ($row = mysql_fetch_assoc( $result )) {
         img {
             width: 750px;
         }
-        img.imgHeader {
-            margin-bottom: 30px;
-            margin-top: 8%;
-        }
         img.imgFooter {
             margin-top: 20px;
         }
@@ -140,7 +136,7 @@ foreach ($results as $school => $more) {
                 }
                 echo "</tr>";
             }
-            echo "<tr><th colspan='2'>Total:</th>";
+            echo "<tr><th>Total:</th>";
             foreach ($types as $type) {
                 for ($i = $start; $i < $year; $i++) {
                     echo "<th>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
