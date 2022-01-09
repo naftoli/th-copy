@@ -112,7 +112,7 @@ foreach ($results as $school => $more) {
                 <th colspan="7" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
             </tr>
             <tr>
-                <th colspan="2"></th>
+                <th></th>
                 <?php
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
@@ -142,7 +142,7 @@ foreach ($results as $school => $more) {
             }
             echo "<tr><th colspan='2'>Total:</th>";
             foreach ($types as $type) {
-                for ($i = $start; $i <= $year; $i++) {
+                for ($i = $start; $i < $year; $i++) {
                     echo "<th>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
                 }
             }
