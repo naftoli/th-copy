@@ -11,7 +11,7 @@ $start = 5775;
 
 $types = ['tanya', 'mishna'];
 
-$sql = "select * from line_campaigns order by year";
+$sql = "select * from line_campaigns where year != 5782 order by year";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $campaigns[$row['year']][$row['id']] = strtolower( $row['type'] );
