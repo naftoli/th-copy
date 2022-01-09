@@ -103,7 +103,7 @@ foreach ($results as $school => $more) {
             <th colspan="2"></th>
             <?php
             foreach ($types as $type) {
-                for ($i = $start; $i <= $year; $i++) {
+                for ($i = $start; $i < $year; $i++) {
                     echo "<th>$i</th>";
                 }
             }
