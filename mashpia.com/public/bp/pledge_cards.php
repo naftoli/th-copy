@@ -62,7 +62,7 @@ foreach ($schools as $school_id => $school_name) {
         tr, th, td {
             font-size: 12px;
             padding: 10px;
-            border: 1px solid grey;
+            border: 2px solid black;
         }
         .card {
             width: 8in;
@@ -119,12 +119,12 @@ foreach ($lines_learned as $school_id => $details) {
 
         echo "<div class='card'>";
         echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
-        echo "School: " . $schools[$school_id] . "<br />";
-        echo "Grade: " . $grade . "<br />";
-        echo "Student: " . $name . "<br />";
+        echo "<b>School:</b> " . $schools[$school_id] . "<br />";
+        echo "<b>Grade:</b> " . $grade . "<br />";
+        echo "<b>Student:</b> " . $name . "<br />";
         echo "<br />";
-        echo "Highest amount of lines of Tanya: " . $highestTanya . "<br />";
-        echo "Highest amount of lines of Mishna: " . $highestMishna . "<br /><br />";
+        echo "<b>Highest amount of lines of Tanya:</b> " . $highestTanya . "<br />";
+        echo "<b>Highest amount of lines of Mishna:</b> " . $highestMishna . "<br /><br />";
 //        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
 
         if (strpos($grade, '-') !== false) {
