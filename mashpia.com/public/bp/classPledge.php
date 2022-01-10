@@ -123,8 +123,8 @@ foreach ($results as $school => $more) {
                 <th style="border-left: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black;"></th>
                 <?php
                 foreach ($types as $type) {
-                    for ($i = $start; $i < $year; $i++) {
-                        if ($i == 5781) {
+                    for ($i = $start; $i <= $year; $i++) {
+                        if ($i == 5782) {
                             echo "<th style='border-right: 2px solid black; border-bottom: 2px solid black;'>$i</th>";
                         } else {
                             echo "<th style='border-bottom: 2px solid black;'>$i</th>";
@@ -141,8 +141,8 @@ foreach ($results as $school => $more) {
                 $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
                 echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
-                    for ($i = $start; $i < $year; $i++) {
-                        if ($i == 5781) {
+                    for ($i = $start; $i <= $year; $i++) {
+                        if ($i == 5782) {
                             echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
                         } else {
                             echo "<td class='cell'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
@@ -158,11 +158,11 @@ foreach ($results as $school => $more) {
             }
             echo "<tr><th style='border: 2px solid black;'>Total:</th>";
             foreach ($types as $type) {
-                for ($i = $start; $i < $year; $i++) {
-                    if ($i == 5781) {
-                        echo "<th style='border-bottom: 2px solid black; border-right: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
+                for ($i = $start; $i <= $year; $i++) {
+                    if ($i == 5782) {
+                        echo "<th style='border-bottom: 2px solid black; border-right: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$grade][$i][$type] ?? 0) . "</th>";
                     } else {
-                        echo "<th style='border-bottom: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
+                        echo "<th style='border-bottom: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$grade][$i][$type] ?? 0) . "</th>";
                     }
                 }
             }
