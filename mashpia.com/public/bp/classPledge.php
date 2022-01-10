@@ -65,6 +65,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 <? include('../admin_header.php'); ?>
 <h1 class="no-print">Bal Peh Class Pledge for Rebbe</h1>
 <button class="no-print" onclick="window.print()">Print</button>
+<br />
 <?php
 require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);

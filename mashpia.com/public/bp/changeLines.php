@@ -40,8 +40,8 @@ while ($row = mysql_fetch_assoc( $result )) {
 <body>
 <? include('../admin_header.php'); ?>
 <h1 class="no-print">History of Bal Peh for Rebbe</h1>
-
 <button id="save">Save</button>
+<br />
 <?php
 require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
