@@ -118,7 +118,7 @@ foreach ($results as $school => $more) {
             $grade = $users[$user_id]['class_grade'] . (empty($users[$user_id]['class_sub']) ? '' : '-' . $users[$user_id]['class_sub']);
             echo "<tr><td>" . $grade . "</td><td>" . $name . '</td>';
             foreach ($types as $type) {
-                for ($i = $start; $i <= $year; $i++) {
+                for ($i = $start; $i < $year; $i++) {
                     echo "<td class='cell' id='$i:$user_id:$type' contenteditable='true'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
                     // update totals
                     if (isset($info[$i][$type])) {
@@ -131,7 +131,7 @@ foreach ($results as $school => $more) {
         }
         echo "<tr><th colspan='2'>Total:</th>";
         foreach ($types as $type) {
-            for ($i = $start; $i <= $year; $i++) {
+            for ($i = $start; $i < $year; $i++) {
                 echo "<th>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
             }
         }
