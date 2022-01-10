@@ -34,10 +34,6 @@ while ($row = mysql_fetch_assoc( $result )) {
             padding: 5px;
             border: 1px solid grey;
         }
-        button {
-            padding: 6px;
-            font-size: 16px;
-        }
         img {
             width: 750px;
         }

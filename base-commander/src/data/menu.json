@@ -241,7 +241,7 @@
       { "label": "Class Pledge Card", "legacy": true, "path": "/bp/classPledge.php" },
       { "label": "Change History", "legacy": true, "path": "/bp/changeLines.php" },
       { "label": "Mark Tanya/Mishnayos Lines", "legacy": true, "path": "/editSoldierLines2.php" },
-      { "label": "Our Birthday Gift", "path": "/world" }
+      { "label": "Our Birthday Gift", "legacy": true, "path": "/world" }
     ]
   },
   {
