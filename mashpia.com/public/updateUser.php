@@ -24,7 +24,7 @@ $rupdater = new rank_updater();
 //    $users[] = $row['user_id'];
 //}
 
-$users = array(56622);
+$users = array(65184);
 foreach ($users as $user) {
     $mupdater->update_medal_two($user);
     $rupdater->update_rank_two($user);
