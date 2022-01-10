@@ -22,7 +22,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 
 <HEAD>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>History of Bal Peh for Rebbe</title>
+    <title>Bal Peh Class Pledge for Rebbe</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
         table {
@@ -49,6 +49,10 @@ while ($row = mysql_fetch_assoc( $result )) {
             border-right: 2px solid black;
             border-left: 2px solid black;
         }
+        button {
+            padding: 8px;
+            font-size: 16px;
+        }
         @media print {
             .no-print {
                 display: none;
@@ -59,7 +63,8 @@ while ($row = mysql_fetch_assoc( $result )) {
 
 <body>
 <? include('../admin_header.php'); ?>
-<h1 class="no-print">History of Bal Peh for Rebbe</h1>
+<h1 class="no-print">Bal Peh Class Pledge for Rebbe</h1>
+<button class="no-print" onclick="window.print()">Print</button>
 <?php
 require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);

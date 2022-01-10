@@ -31,7 +31,7 @@ while ($row = mysql_fetch_assoc( $result )) {
             border: 1px solid grey;
         }
         button {
-            padding: 6px;
+            padding: 8px;
             font-size: 16px;
         }
     </style>
