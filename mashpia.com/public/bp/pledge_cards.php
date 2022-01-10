@@ -97,7 +97,7 @@ foreach ($schools as $school_id => $school_name) {
 <body>
 <? include('../admin_header.php'); ?>
 <h1 class="no-print">Bal Peh Pledge Cards</h1>
-
+<button class="no-print" onclick="window.print()">Print</button>
 <?php
 $grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
 

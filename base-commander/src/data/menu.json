@@ -234,6 +234,17 @@
     ]
   },
   {
+    "label": "Rebbe's Gift", "legacy": true,
+    "icon": "/images/parentIcons/Campaigns.gif",
+    "items": [
+      { "label": "Chayol Pledge Card", "legacy": true, "path": "/bp/pledge_cards.php" },
+      { "label": "Class Pledge Card", "legacy": true, "path": "/bp/classPledge.php" },
+      { "label": "Change History", "legacy": true, "path": "/bp/changeLines.php" },
+      { "label": "Mark Tanya/Mishnayos Lines", "legacy": true, "path": "/editSoldierLines2.php" },
+      { "label": "Our Birthday Gift", "path": "/world" }
+    ]
+  },
+  {
     "label": "Promotions", "legacy": true, "module": "chayolei", "user_types": [ "HQ" ],
     "icon": "/images/parentIcons/Rally.gif",
     "items": [
