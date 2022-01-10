@@ -25,6 +25,10 @@ while ($row = mysql_fetch_assoc( $result )) {
     <title>History of Bal Peh for Rebbe</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
         tr, th, td {
             font-size: 12px;
             padding: 5px;
@@ -40,14 +44,22 @@ while ($row = mysql_fetch_assoc( $result )) {
         img.imgFooter {
             margin-top: 20px;
         }
+        .ches {
+            border-top: 2px solid black;
+            border-right: 2px solid black;
+            border-left: 2px solid black;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
 <? include('../admin_header.php'); ?>
 <h1 class="no-print">History of Bal Peh for Rebbe</h1>
-
-<button id="save">Save</button>
 <?php
 require_once '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
@@ -103,16 +115,20 @@ foreach ($results as $school => $more) {
         <table width="75%">
             <thead>
             <tr>
-                <th>Chayol</th>
-                <th colspan="7" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
-                <th colspan="7" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
+                <th class="ches">Chayol</th>
+                <th class="ches" colspan="7" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
+                <th class="ches" colspan="7" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
             </tr>
             <tr>
-                <th></th>
+                <th style="border-left: 2px solid black; border-right: 2px solid black;"></th>
                 <?php
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
-                        echo "<th>$i</th>";
+                        if ($i == 5781) {
+                            echo "<th style='border-right: 2px solid black;'>$i</th>";
+                        } else {
+                            echo "<th>$i</th>";
+                        }
                     }
                 }
                 ?>
@@ -123,10 +139,14 @@ foreach ($results as $school => $more) {
             foreach ($other as $user_id => $info) {
                 if (! isset($users[$user_id])) continue;
                 $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
-                echo "<tr><td>" . $name . '</td>';
+                echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
-                        echo "<td class='cell'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                        if ($i == 5781) {
+                            echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                        } else {
+                            echo "<td class='cell'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                        }
                         // update totals
                         if (isset($info[$i][$type])) {
                             if (isset($totals[$school][$grade][$i][$type])) $totals[$school][$grade][$i][$type] += $info[$i][$type];
@@ -136,10 +156,14 @@ foreach ($results as $school => $more) {
                 }
                 echo "</tr>";
             }
-            echo "<tr><th>Total:</th>";
+            echo "<tr><th style='border-left: 2px solid black; border-bottom: 2px solid black; border-right: 2px solid black;'>Total:</th>";
             foreach ($types as $type) {
                 for ($i = $start; $i < $year; $i++) {
-                    echo "<th>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
+                    if ($i == 5781) {
+                        echo "<th style='border-bottom: 2px solid black; border-right: 2px solid black;'>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
+                    } else {
+                        echo "<th style='border-bottom: 2px solid black;'>" . ($totals[$school][$i][$type] ?? 0) . "</th>";
+                    }
                 }
             }
             echo "</tr>";
