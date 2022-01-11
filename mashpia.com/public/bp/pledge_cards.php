@@ -11,19 +11,19 @@ $schools = $as->getSchools();
 
 $lines_learned = [];
 $sql = "SELECT 
-                bus.*, s.school_id, l.type, l.year
-            FROM
-                bp_user_summary bus
-                    JOIN
-                users u USING (user_id)
-                    JOIN
-                schools s USING (school_id)
-                    JOIN
-                line_campaigns l ON l.id = bus.campaign_id 
-                    JOIN 
-                classes c on c.class_id = u.class_id 
-            ORDER BY 
-                s.school_id, c.class_grade, c.class_sub, u.last, u.first ";
+            bus.*, s.school_id, l.type, l.year
+        FROM
+            bp_user_summary bus
+                JOIN
+            users u USING (user_id)
+                JOIN
+            schools s USING (school_id)
+                JOIN
+            line_campaigns l ON l.id = bus.campaign_id 
+                JOIN 
+            classes c on c.class_id = u.class_id 
+        ORDER BY 
+            s.school_id, c.class_grade, c.class_sub, u.last, u.first ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $learned = $row['num_lines'];
@@ -44,10 +44,7 @@ foreach ($schools as $school_id => $school_name) {
     while ($row = mysql_fetch_assoc($result)) {
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $name = $row['first'] . ' ' . $row['last'];
-        $users[$school_id][$row['user_id']] = [
-            'grade' => $grade,
-            'name'  => $name
-        ];
+        $users[$school_id][$grade][$row['user_id']] = $name;
     }
 }
 ?>
@@ -105,60 +102,64 @@ foreach ($schools as $school_id => $school_name) {
 <?php
 $grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
 
-foreach ($lines_learned as $school_id => $details) {
-    foreach ($details as $user_id => $more) {
-        if (! isset($users[$school_id][$user_id])) continue;
-        $grade = $users[$school_id][$user_id]['grade'];
-        $name = $users[$school_id][$user_id]['name'];
+foreach ($users as $school_id => $grades) {
+    foreach ($grades as $grade => $more) {
+        foreach ($more as $user_id => $name) {
+//        if (! isset($users[$school_id][$user_id])) continue;
+//        $grade = $users[$school_id][$user_id]['grade'];
+//        $name = $users[$school_id][$user_id]['name'];
 
-        $highestTanya = 0;
-        $highestMishna = 0;
-        foreach ($more as $year => $lines) {
-            $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
-            if ($tanya > $highestTanya) $highestTanya = $tanya;
+            $bpInfo = isset($lines_learned[$school_id][$user_id]) ? $lines_learned[$school_id][$user_id] : [];
 
-            $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
-            if ($mishna > $highestMishna) $highestMishna = $mishna;
-        }
+            $highestTanya = 0;
+            $highestMishna = 0;
+            foreach ($bpInfo as $year => $lines) {
+                $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
+                if ($tanya > $highestTanya) $highestTanya = $tanya;
 
-        echo "<div class='card'>";
-        echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
-        echo "<b>School:</b> " . $schools[$school_id] . "<br />";
-        echo "<b>Grade:</b> " . $grade . "<br />";
-        echo "<b>Student:</b> " . $name . "<br />";
-        echo "<br />";
-        echo "<b>Highest amount of lines of Tanya:</b> " . $highestTanya . "<br />";
-        echo "<b>Highest amount of lines of Mishna:</b> " . $highestMishna . "<br /><br />";
+                $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
+                if ($mishna > $highestMishna) $highestMishna = $mishna;
+            }
+
+            echo "<div class='card'>";
+            echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
+            echo "<b>School:</b> " . $schools[$school_id] . "<br />";
+            echo "<b>Grade:</b> " . $grade . "<br />";
+            echo "<b>Student:</b> " . $name . "<br />";
+            echo "<br />";
+            echo "<b>Highest amount of lines of Tanya:</b> " . $highestTanya . "<br />";
+            echo "<b>Highest amount of lines of Mishna:</b> " . $highestMishna . "<br /><br />";
 //        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
 
-        if (strpos($grade, '-') !== false) {
-            $gradeInfo = explode('-', $grade);
-            $gradeOnly = $gradeInfo[0];
-        } else {
-            $gradeOnly = $grade;
-        }
+            if (strpos($grade, '-') !== false) {
+                $gradeInfo = explode('-', $grade);
+                $gradeOnly = $gradeInfo[0];
+            } else {
+                $gradeOnly = $grade;
+            }
 
-        // figure out which grade child started at
-        $totalYears = count($more);
-        $key = array_search($gradeOnly, $grades);
-        $start = $key - $totalYears;
+            // figure out which grade child started at
+            $totalYears = count($bpInfo);
+            $key = array_search($gradeOnly, $grades);
+            $start = $key - $totalYears;
 
-        echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
-        foreach ($more as $year => $lines) {
-            $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
-            $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
+            echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
+            foreach ($bpInfo as $year => $lines) {
+                $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
+                $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
 
-            $history = $start < 0 ? '' : $grades[$start];
-            $start++;
-            echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
+                $history = $start < 0 ? '' : $grades[$start];
+                $start++;
+                echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
+            }
+            if (! isset($year) || $year != 5782) {
+                echo "<tr><td>Grade " . $grade . " (" . 5782 . ")</td><td></td><td></td></tr>";
+            }
+            echo "</tbody></table>";
+            echo "<p></p>";
+            echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
+            echo "<div style='page-break-after: always'></div>";
         }
-        if ($year != 5782) {
-            echo "<tr><td>Grade " . $grades[$start] . " (" . 5782 . ")</td><td></td><td></td></tr>";
-        }
-        echo "</tbody></table>";
-        echo "<p></p>";
-        echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
-        echo "<div style='page-break-after: always'></div>";
     }
 }
 ?>
