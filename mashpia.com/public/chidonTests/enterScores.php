@@ -110,6 +110,7 @@ if ($admin_user['auth'] != 'super') {
                 }
                 echo "</table>";
             }
+            echo '<input type="hidden" name="test_num" value="<?=$testNumber?>">';
             echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
             echo "</form>";
         } else {
