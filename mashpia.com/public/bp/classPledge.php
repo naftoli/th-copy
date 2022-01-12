@@ -79,7 +79,8 @@ foreach ($schools as $id => $school) {
     $result = mysql_query( $sql );
     if (mysql_num_rows( $result ) > 0) {
         while ($row = mysql_fetch_assoc( $result )) {
-            $users[$row['user_id']] = $row;
+            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+            $users[$id][$grade][$row['user_id']] = $row;
         }
     }
 }
@@ -109,9 +110,8 @@ while ($row = mysql_fetch_assoc($result)) {
 //echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
 $totals = [];
-foreach ($results as $school => $more) {
-    if (! isset($schools[$school])) continue;
-    foreach ($more as $grade => $other) {
+foreach ($users as $school => $grades) {
+    foreach ($grades as $grade => $other) {
         echo "<img src='classPledgeHeader.jpg' class='imgHeader' />";
         echo "<h2>" . $schools[$school] . ' - ' . $grade . "</h2>";
         ?>
@@ -140,20 +140,21 @@ foreach ($results as $school => $more) {
             <tbody>
             <?php
             foreach ($other as $user_id => $info) {
-                if (! isset($users[$user_id])) continue;
-                $name = $users[$user_id]['first'] . ' ' . $users[$user_id]['last'];
+                if (! isset($results[$school][$grade][$user_id])) continue;
+                else $bpInfo = $results[$school][$grade][$user_id];
+                $name = $info['first'] . ' ' . $info['last'];
                 echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
                     for ($i = $start; $i <= $year; $i++) {
                         if ($i == 5782) {
-                            echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                            echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
                         } else {
-                            echo "<td class='cell'>" . (isset($info[$i][$type]) ? $info[$i][$type] : '') . "</td>";
+                            echo "<td class='cell'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
                         }
                         // update totals
-                        if (isset($info[$i][$type])) {
-                            if (isset($totals[$school][$grade][$i][$type])) $totals[$school][$grade][$i][$type] += $info[$i][$type];
-                            else $totals[$school][$grade][$i][$type] = $info[$i][$type];
+                        if (isset($bpInfo[$i][$type])) {
+                            if (isset($totals[$school][$grade][$i][$type])) $totals[$school][$grade][$i][$type] += $bpInfo[$i][$type];
+                            else $totals[$school][$grade][$i][$type] = $bpInfo[$i][$type];
                         }
                     }
                 }
