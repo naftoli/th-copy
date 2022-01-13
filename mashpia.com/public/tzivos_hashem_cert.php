@@ -23,8 +23,8 @@ $sql = "select first, last, first_he, last_he, he_name, class_grade, class_sub, 
         from users u 
         join schools s using (school_id) 
         join classes c on u.class_id = c.class_id  
-        where u.school_id = $school_id 
-        and u.user_registered > 0";
+        # where u.school_id = $school_id 
+        where u.user_registered > 0";
 if (!empty($types)) {
 	$sql .= " and school_type_id in (" . $types . ")";
 }
@@ -35,6 +35,7 @@ if ( $user_id > 0 ) {
     $sql .= " and user_id = " . $user_id;
 }
 $sql .= " order by c.class_grade, c.class_sub, last, first";
+//echo $sql;
 
 $temp = '';
 $result = mysql_query( $sql );
@@ -52,6 +53,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	$heName = empty( $row['he_name'] ) ? $row['first_he'] . '<br />' . $row['last_he'] : $row['he_name'];
 	$names[] = empty( $heName ) ? $row['first'] . '<br />' . $row['last'] : $heName;
 }
+//echo "<pre>"; print_r($names); echo "</pre>"; exit;
 ?>
 <html>
     <head>
