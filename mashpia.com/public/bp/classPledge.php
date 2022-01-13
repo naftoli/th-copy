@@ -71,10 +71,8 @@ $schools = $as->getSchools();
 $users = [];
 foreach ($schools as $id => $school) {
     $sql = "select * from users u 
-            join classes c using (class_id) 
+            join classes c on u.class_id = c.class_id
             where u.school_id = $id 
-            and u.user_registered > 0 
-            and c.class_era = 0 
             order by class_grade, class_sub, last, first";
     $result = mysql_query( $sql );
     if (mysql_num_rows( $result ) > 0) {
