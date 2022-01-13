@@ -138,8 +138,7 @@ foreach ($users as $school => $grades) {
             <tbody>
             <?php
             foreach ($other as $user_id => $info) {
-                if (! isset($results[$school][$grade][$user_id])) continue;
-                else $bpInfo = $results[$school][$grade][$user_id];
+                $bpInfo = isset($results[$school][$grade][$user_id]) ? $results[$school][$grade][$user_id] : [];
                 $name = $info['first'] . ' ' . $info['last'];
                 echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
