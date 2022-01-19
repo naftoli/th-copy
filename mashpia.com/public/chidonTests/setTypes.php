@@ -5,12 +5,12 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+$disabled = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = new DateTime('2022-01-20 05:00:00');
     if ($today >= $shutdown) {
-        echo "This page is now closed.";
-        exit;
+        $disabled = true;
     }
 }
 
@@ -144,16 +144,20 @@ function markInfo( $child, $school_id ) {
                     $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
-                    echo "<select name='type[" . $child['th_chidon_id'] . "]'>";
+                    echo "<select name='type[" . $child['th_chidon_id'] . "]'";
+                    if ($disabled) echo " disabled='disabled' ";
+                    echo ">";
                     foreach ($types as $type => $value) {
                         echo "<option value='" . $type . "'";
                         if ($child['test_type'] == $type) echo " selected ";
                         echo ">" . $value . "</option>";
                     }
-                    echo "</select></td><td>" . $markInfo['avg'] . "</td><td>";
+                    echo "</select></td><td>" . number_format($markInfo['avg'], 2) . "</td><td>";
                     if (!empty($markInfo['highest_track'])) echo $types[$markInfo['highest_track']];
-                    echo "</td><td>" . $markInfo['highest_track_avg'] . "</td><td>";
-                    echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'>";
+                    echo "</td><td>" . number_format($markInfo['highest_track_avg'],2) . "</td><td>";
+                    echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'";
+                    if ($disabled) echo " disabled='disabled' ";
+                    echo ">";
                     foreach ($types as $type => $value) {
                         if ($type == 'genius') continue;
                         echo "<option value='" . $type . "'";
