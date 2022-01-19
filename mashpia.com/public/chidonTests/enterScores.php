@@ -39,7 +39,7 @@ if ($admin_user['auth'] != 'super') {
     $shutdown = [];
     $shutdown[1] = new DateTime('2021-11-20 05:00:00');
     $shutdown[2] = new DateTime('2021-12-26 05:00:00');
-    $shutdown[3] = new DateTime('2022-01-19 05:00:00');
+    $shutdown[3] = new DateTime('2022-01-20 05:00:00');
     // make different shutdown for 180
 //    foreach ($schools as $id => $school) {
 //        if ($id == 180) $shutdown[3] = new DateTime('2022-01-16 05:00:00');

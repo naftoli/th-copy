@@ -7,7 +7,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2022-01-19 05:00:00');
+    $shutdown = new DateTime('2022-01-20 05:00:00');
     if ($today >= $shutdown) {
         echo "This page is now closed.";
         exit;
