@@ -8,7 +8,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 $disabled = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2022-01-20 05:00:00');
+    $shutdown = new DateTime('2022-01-21 05:00:00');
     if ($today >= $shutdown) {
         $disabled = true;
     }
