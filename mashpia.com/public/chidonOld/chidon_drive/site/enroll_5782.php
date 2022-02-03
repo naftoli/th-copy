@@ -506,6 +506,22 @@
         $(".login").show();
     }
 
+    $("#loginForm").submit(function (evt) {
+        evt.preventDefault();
+        let user = $("#username").val();
+        let pass = $("#password").val();
+        $.post('../ajax/login.php', { username: user, password: pass }, function (result) {
+            let info = JSON.parse(result);
+            if (info.success) {
+                Cookies.set('chidon_admin', info.admin);
+                Cookies.set('from_enrollment', 1);
+                getChildren(info.admin);
+            } else {
+                alert(info.error);
+            }
+        });
+    });
+
     $('#menu-opener').click(function (e) {
         $('header nav').toggleClass('open');
     });
@@ -1247,95 +1263,6 @@
             }
         })
     }
-
-    $(document).ready(function (e) {
-        // Select
-        // $('select').niceSelect();
-
-        $("#loginForm").submit(function (evt) {
-            evt.preventDefault();
-            let user = $("#username").val();
-            let pass = $("#password").val();
-            $.post('../ajax/login.php', { username: user, password: pass }, function (result) {
-                let info = JSON.parse(result);
-                if (info.success) {
-                    Cookies.set('chidon_admin', info.admin);
-                    Cookies.set('from_enrollment', 1);
-                    getChildren(info.admin);
-                } else {
-                    alert(info.error);
-                }
-            });
-        });
-
-        $(document).on('click', '.processPayment', function( evt ) {
-            evt.preventDefault()
-
-            if (!cart_total && !cart) {
-                alert('You have not checked off any registration!')
-                return false
-            }
-
-            const name = $("#name").val()
-            const email = $("#email").val()
-
-            let cc = {}
-            // if ($("#cc_on_file_yes").is(":checked")) {
-            // 	cc.on_file = 1
-            // } else {
-            cc.on_file = 0
-            cc.num = $("#cc_num").val();
-            cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
-            cc.cvv = $("#cc_cvv").val();
-
-            let billing = {}
-            billing.apt = $("#bill_apt").val();
-            billing.address = $("#bill_address").val();
-            billing.city = $("#bill_city").val();
-            billing.state = $("#bill_state").val();
-            billing.zip = $("#bill_zip").val();
-            billing.country = $("#bill_country").val();
-            cc.billing = billing;
-
-            if (cart_total && !(name && email && cc.num && cc.exp && cc.cvv && billing.address && billing.city && billing.state && billing.country)) {
-                alert('You must fill in Name, Email, All Credit Card and Billing Info!');
-                return false;
-            }
-            // }
-            cc.skip = 0
-            // cc.skip = 1
-
-            let method = ''
-            if ($("#chargeCard").is(":checked")) method = 'charge'
-            else if ($("#holdMoney").is(":checked")) method = 'hold'
-
-            if (method != '') {
-                $(this).attr('disabled', true)
-                $.post('../ajax/processPaymentNew.php', {
-                    amount: cart_total,
-                    details: JSON.stringify(cart),
-                    method: method,
-                    cc: cc,
-                    name: name,
-                    email: email,
-                    prizes: JSON.stringify(prizes)
-                }, function(result) {
-                    const res = JSON.parse(result)
-                    console.log(res)
-                    alert(res.msg)
-                    if (!res.success) {
-                        $(".processPayment").attr('disabled', false)
-                    } else {
-                        alert('You will now be routed to the chidondrive setup page.')
-                        location.href = 'intro.html'
-                    }
-                })
-            } else {
-                alert('You must indicate whether you want to be charged now or later!')
-                return false
-            }
-        })
-    });
 </script>
 
 <script>
