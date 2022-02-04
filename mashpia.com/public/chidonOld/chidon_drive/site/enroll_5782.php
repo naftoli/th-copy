@@ -793,7 +793,6 @@
 
     $(".numCelebBoxes").change( function() {
         let number = $(this).val()
-        // alert(number)
         if (parseInt(number)) {
             $("#celeb_box_shipping").show()
         } else {
@@ -1204,6 +1203,7 @@
                     Cookies.set('addresses', json_addresses)
                 }
                 // go to checkout page
+                location.href = 'checkout.php'
             }
         }
     })
