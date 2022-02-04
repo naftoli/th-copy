@@ -422,16 +422,20 @@
         }
     }
     let html = ''
+    let reg_fee = 0
     if (reg.length) {
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
         for (let info of reg) {
             html += `<h5 class="formDetails">Registering for ${info.id} : $${info.fee}</h5>`
-            cart_total += info.fee
+            reg_fee += info.fee
         }
     }
     if (shipping) {
         html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
-        cart_total += shipping
+    }
+    if (reg.length) {
+        html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
+        cart_total += reg_fee + shipping
     }
     if (celeb_boxes) {
         html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
@@ -442,7 +446,9 @@
         cart_total += celeb_boxes * celeb_box_price + celeb_box_shipping
     }
     if (sweaters.length) {
+        let sweater_cost = 0
         html += `<h5 class="formDetails"><span class="title">Sweaters</span></h5>`
+        html += `<h5 class="formDetails">Cost per Sweater: $${sweater_price}</h5>`
         for (let sweater of sweaters) {
             let type = sweater.type
             let typeInfo = type.split('_')
@@ -451,11 +457,12 @@
             }
             let typeName = typeInfo.join(' ')
             html += `<h5 class="formDetails">Number of ${typeName}s: ${sweater.amount}</h5>`
-            html += `<h5 class="formDetails">Cost per Sweater: $${sweater_price}</h5>`
-            cart_total += sweater.amount * sweater_price
+            sweater_cost += sweater.amount * sweater_price
         }
         html += `<h5 class="formDetails">Additional Sweater Shipping: $${sweater_shipping}</h5>`
-        cart_total += sweater_shipping
+        sweater_cost += sweater_shipping
+        html += `<h5 class="formDetails">Total Sweater Cost: $${sweater_cost}</h5>`
+        cart_total += sweater_cost
     }
     html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
     html += `<h5 class="formDetails">Total Charge Today: $${cart_total}</h5>`
