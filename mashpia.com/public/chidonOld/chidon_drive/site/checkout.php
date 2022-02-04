@@ -385,15 +385,12 @@
                 fee: parseInt(item.value)
             }
             reg.push(reg_item)
-            cart_total += reg_item.fee
         } else if (item.desc === 'ship_usa' || item.desc === 'ship_intl') {
             shipping = parseInt(item.value)
         } else if (item.desc === 'num_celeb_boxes') {
             celeb_boxes = parseInt(item.value)
-            cart_total += celeb_box_price * celeb_boxes
         } else if (item.desc === 'celeb_box_ship') {
             celeb_box_shipping = parseInt(item.value)
-            cart_total += celeb_box_shipping
         } else {
             const fields = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater']
             for (let field of fields) {
@@ -405,7 +402,6 @@
                             amount: parseInt(item.value)
                         }
                         sweaters.push(sweater)
-                        cart_total += sweater_price * sweater.amount
                     }
                 }
                 // check shipping for this sweater
@@ -418,7 +414,6 @@
                             let cost = parseInt(item.value)
                             if (cost > 0) {
                                 sweater_shipping += cost
-                                cart_total += cost
                             }
                         }
                     }
@@ -431,16 +426,20 @@
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
         for (let info of reg) {
             html += `<h5 class="formDetails">Registering for ${info.id} : $${info.fee}</h5>`
+            cart_total += info.fee
         }
     }
     if (shipping) {
         html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
+        cart_total += shipping
     }
     if (celeb_boxes) {
         html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
         html += `<h5 class="formDetails">Number of Celebration Boxes: ${celeb_boxes}</h5>`
-        html += `<h5 class="formDetails">Shipping Fee: $${celeb_box_shipping}</h5>`
+        html += `<h5 class="formDetails">Cost per Celebration Box: $${celeb_box_price}</h5>`
+        html += `<h5 class="formDetails">Additional Shipping Fee: $${celeb_box_shipping}</h5>`
         html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
+        cart_total += celeb_boxes * celeb_box_price + celeb_box_shipping
     }
     if (sweaters.length) {
         html += `<h5 class="formDetails"><span class="title">Sweaters</span></h5>`
@@ -452,8 +451,11 @@
             }
             let typeName = typeInfo.join(' ')
             html += `<h5 class="formDetails">Number of ${typeName}s: ${sweater.amount}</h5>`
+            html += `<h5 class="formDetails">Cost per Sweater: $${sweater_price}</h5>`
+            cart_total += sweater.amount * sweater_price
         }
-        html += `<h5 class="formDetails">Total Sweater Shipping: $${sweater_shipping}</h5>`
+        html += `<h5 class="formDetails">Additional Sweater Shipping: $${sweater_shipping}</h5>`
+        cart_total += sweater_shipping
     }
     html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
     html += `<h5 class="formDetails">Total Charge Today: $${cart_total}</h5>`
