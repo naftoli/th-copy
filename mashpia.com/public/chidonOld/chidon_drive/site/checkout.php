@@ -376,11 +376,23 @@
         if (admin['cards']) {
             for (let i in admin['cards']) {
                 let cardInfo = admin['cards'][i]
-                let card = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
+                let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
+                let card = {
+                    type: info,
+                    number: cardInfo.payment.creditCard.cardNumber
+                }
                 cards.push(card)
             }
         }
-        console.log(cards)
+        // console.log(cards)
+        let html = ''
+        html += `<select name="payment-card" class="payment-card">`
+        for (let card of cards) {
+            html += `<option value=${card.number}>${card.type}</option>`
+        }
+        html += '</select>'
+        $("#creditCards").html(html)
+        $("select.payment-card").niceSelect()
     })
 
     if (window.localStorage) {
@@ -501,7 +513,8 @@
     html += `
         <div class="flex">
             <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
-            <label for="payment" style="display: inline">Please use my credit card on file ending in <span id="lastFour"></span></label>
+            <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
+            <span id="creditCards"></span>
         </div>
         <div class="flex">
             <input type="radio" name="payment" class="inputCheckbox payment" value="1" />
@@ -510,9 +523,9 @@
     `
     $(".personalInfo").append(html)
 
-    if (reg.length && cart_total === 0) $(".payment").val('Register')
-    else if (reg.length && cart_total > 0) $(".payment").val('Pay & Register')
-    else if (cart_total > 0) $(".payment").val('Pay')
+    if (reg.length && cart_total === 0) $(".processPayment").val('Register')
+    else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
+    else if (cart_total > 0) $(".payment").val('processPayment')
 
     $(".payment").click( function() {
         if (parseInt($(this).val())) {
