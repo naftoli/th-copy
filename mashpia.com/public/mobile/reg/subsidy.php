@@ -81,7 +81,7 @@
             <br /><br />
             <select name="subsidy" id="subsidy">
                 <?php
-                for ($i = 60; $i <= 100; $i+= 5) {
+                for ($i = 55; $i <= 100; $i+= 5) {
                     echo "<option value='$i'>$i%</option>";
                 }
                 ?>
