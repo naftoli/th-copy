@@ -1246,23 +1246,6 @@
         elem = "#sweaterFor" + elem;
         $(elem).parent().find('label').after("<img src='http://mashpia.com" + img + "' style='max-height: 100px; margin: 10px;' />")
     }
-
-    function checkForPayment() {
-        // check if admin already payed for registration
-        $.post('../ajax/checkPayment.php', { admin: Cookies.get('chidon_admin') }, function(result) {
-            const res = JSON.parse(result)
-            if (res.success && res.payment.amount) {
-                const item = {
-                    id: 0,
-                    desc: 'past_payment',
-                    amount: parseFloat(res.payment.amount) * -1
-                }
-                addToCart(0, item)
-                alert("We will now apply your previous payment to your cart!")
-                calculateTotal()
-            }
-        })
-    }
 </script>
 
 <script>

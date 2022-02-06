@@ -182,14 +182,6 @@
                     <div id="paymentFormDetails">
                         <h5 class="formDetails"><span class="title">New Credit Card</span></h5>
                         <div class="field">
-                            <label>Name on Credit Card:</label>
-                            <input type="text" id="name" placeholder="Full Name" required />
-                        </div>
-                        <div class="field">
-                            <label>Email (for receipt):</label>
-                            <input type="text" id="email" placeholder="Email" required />
-                        </div>
-                        <div class="field">
                             <label>Card Number:</label>
                             <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
                         </div>
@@ -208,42 +200,6 @@
                             <div class="field">
                                 <label>CVV:</label>
                                 <input type="text" id="cc_cvv" placeholder="CVV" required />
-                            </div>
-                        </div>
-                        <h5>Billing Address</h5>
-                        <div class="field">
-                            <label>Country:</label>
-                            <select id="bill_country">
-                                <option>United States</option>
-                                <option>Canada</option>
-                                <option>England</option>
-                                <option>Australia</option>
-                                <option>S Africa</option>
-                                <option>France</option>
-                                <option>Europe</option>
-                                <option>S America</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Address:</label>
-                            <input type="text" id="bill_address" placeholder="Address" required />
-                        </div>
-                        <div class="field">
-                            <label>Apt./Suite:</label>
-                            <input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
-                        </div>
-                        <div class="group">
-                            <div class="field">
-                                <label>Zip/Postcode:</label>
-                                <input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
-                            </div>
-                            <div class="field">
-                                <label>City:</label>
-                                <input type="text" id="bill_city" placeholder="City" required />
-                            </div>
-                            <div class="field">
-                                <label>State/Prov/Region:</label>
-                                <input type="text" id="bill_state" placeholder="State/Prov/Region" required />
                             </div>
                         </div>
                     </div>
@@ -266,7 +222,7 @@
                 </div>
                 <div align="center">
                     <br />
-                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" />
+                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" disabled />
                 </div>
             </form>
         </div>
@@ -378,6 +334,7 @@
                 let cardInfo = admin['cards'][i]
                 let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
                 let card = {
+                    profile: cardInfo.payment.creditCard.customerPaymentProfileId,
                     type: info,
                     number: cardInfo.payment.creditCard.cardNumber
                 }
@@ -388,7 +345,7 @@
         let html = ''
         html += `<select name="payment-card" class="payment-card">`
         for (let card of cards) {
-            html += `<option value=${card.number}>${card.type}</option>`
+            html += `<option value=${card.profile}>${card.type}</option>`
         }
         html += '</select>'
         $("#creditCards").html(html)
@@ -525,7 +482,7 @@
 
     if (reg.length && cart_total === 0) $(".processPayment").val('Register')
     else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
-    else if (cart_total > 0) $(".payment").val('processPayment')
+    else if (cart_total > 0) $(".processPayment").val('Pay')
 
     $(".payment").click( function() {
         if (parseInt($(this).val())) {
@@ -535,68 +492,128 @@
         }
     })
 
-    $(document).on('click', '.processPayment', function( evt ) {
+    async function createNewCard() {
+        let cc = {}
+        cc.num = parseInt($("#cc_num").val());
+        cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+        cc.cvv = parseInt($("#cc_cvv").val());
+
+        if (! (cc.num && cc.exp && cc.cvv)) processError('You are missing credit card info or it is inaccurate.')
+
+        try {
+            const result = await $.post('../ajax/createCard.php', {
+                ccInfo: cc,
+                admin_id: admin.admin_id
+            })
+            return result
+        } catch (error) {
+            console.log(error)
+            processError("There was an error creating a new card.")
+        }
+    }
+
+    async function chargeCard(card_id) {
+        try {
+            const result = await $.post('../ajax/processPayment.php', {
+                payment_id: card_id,
+                admin_id: admin.admin_id,
+                amount: cart_total
+            })
+            return result
+        } catch (error) {
+            console.log(error)
+            processError('Error processing payment.')
+        }
+    }
+
+    async function processPayment() {
+        // find out if we are using existing card or creating a new card
+        let card_id = 0
+        if (parseInt($(".payment:selected").val() == 0)) {
+            card_id = parseInt($(".payment-card").val())
+        } else {
+            try {
+                let created = await createNewCard()
+                if (created.success) card_id = created.card_id
+                else processError(created.error)
+            } catch (error) {
+                console.log(error)
+                processError('Error creating new card.')
+            }
+        }
+
+        if (card_id) {
+            $(this).attr('disabled', true)
+            try {
+                let charged = await chargeCard(card_id)
+                return charged
+            } catch (error) {
+                console.log(error)
+                $(this).attr('disabled', false)
+                processError('Error charging card.')
+            }
+        } else processError("No card has been selected.")
+    }
+
+    async function processReg() {
+        try {
+            const registered = await $.post('../ajax/registerChildren.php', { info: reg })
+            return registered
+        } catch (error) {
+            console.log(error)
+            processError('There was an error registering your child(ren).')
+        }
+    }
+
+    async function processExtraPurchases() {
+        try {
+            // pass cart and addresses
+            const extra = await $.post('../ajax/extraPurchases.php', { cart: cart, addressInfo: addresses })
+            return extra
+        } catch (error) {
+            console.log(error)
+            processError('Error processing extra purchases.')
+        }
+    }
+
+    $(document).on('click', '.processPayment', async function( evt ) {
         evt.preventDefault()
 
-        const name = $("#name").val()
-        const email = $("#email").val()
+        let paid, registered, extra
 
-        let cc = {}
-        // if ($("#cc_on_file_yes").is(":checked")) {
-        // 	cc.on_file = 1
-        // } else {
-        cc.on_file = 0
-        cc.num = $("#cc_num").val();
-        cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
-        cc.cvv = $("#cc_cvv").val();
+        if (cart_total > 0) paid = await processPayment()
 
-        let billing = {}
-        billing.apt = $("#bill_apt").val();
-        billing.address = $("#bill_address").val();
-        billing.city = $("#bill_city").val();
-        billing.state = $("#bill_state").val();
-        billing.zip = $("#bill_zip").val();
-        billing.country = $("#bill_country").val();
-        cc.billing = billing;
+        // process registration(s)
+        if (reg.length) registered = await processReg()
 
-        if (cart_total && !(name && email && cc.num && cc.exp && cc.cvv && billing.address && billing.city && billing.state && billing.country)) {
-            alert('You must fill in Name, Email, All Credit Card and Billing Info!');
-            return false;
+        // process extra purchase(s)
+        if (celeb_boxes || sweaters.length) extra = await processExtraPurchases()
+
+        const toCheck = [paid, registered, extra]
+        for (let item of toCheck) {
+            if (! item.success) {
+                alert(item.error)
+                return false
+            }
         }
-        // }
-        cc.skip = 0
-        // cc.skip = 1
 
-        let method = ''
-        if ($("#chargeCard").is(":checked")) method = 'charge'
-        else if ($("#holdMoney").is(":checked")) method = 'hold'
-
-        if (method != '') {
-            $(this).attr('disabled', true)
-            $.post('../ajax/processPaymentNew.php', {
-                amount: cart_total,
-                details: JSON.stringify(cart),
-                method: method,
-                cc: cc,
-                name: name,
-                email: email,
-                prizes: JSON.stringify(prizes)
-            }, function(result) {
-                const res = JSON.parse(result)
-                console.log(res)
-                alert(res.msg)
-                if (!res.success) {
-                    $(".processPayment").attr('disabled', false)
-                } else {
-                    alert('You will now be routed to the chidondrive setup page.')
-                    location.href = 'intro.html'
-                }
-            })
-        } else {
-            alert('You must indicate whether you want to be charged now or later!')
-            return false
+        if (paid.success) {
+            if (registered.success && purchased.success) {
+                alert("Your child(ren) have been successfully registered and your purchases have been made. You should be receiving a confirmation email shortly. Thank you!")
+            } else if (registered.success) {
+                alert("Your child(ren) have been successfully registered. You should be receiving a confirmation email shortly.")
+            } else if (purchased.success) {
+                alert("Your celeb boxe(s) and / or sweaters have been successfully purchased. You should receive an email confirmation shortly. Thank You!")
+            }
         }
     })
+
+    function processError(msg) {
+        return JSON.stringify({
+            success: false,
+            error: msg
+        })
+    }
 </script>
 
 <script>
