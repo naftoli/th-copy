@@ -87,7 +87,7 @@ class AuthorizeAPIRequest implements HttpRequest{
         //if the request failed
         if($response === FALSE) {
             // return the error that caused the failure
-            return curl_error($ch);
+            return curl_error($this->handle);
         } else {// the response was sucessfull
             $response = str_replace("\xEF\xBB\xBF",'',$response); // remove BOM from the begining of the json
         

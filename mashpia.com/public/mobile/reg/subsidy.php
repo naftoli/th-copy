@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Registrationn Subsidy</title>
+    <style type="text/css">
+        @charset "UTF-8";.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transform:translate(0,0)}.fa-4x{font-size:4em}.pull-right{float:right}.fa-shopping-cart:before{content:"\f07a"}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}header{display:block}a{background-color:transparent}h1{margin:.67em 0;font-size:2em}img{border:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#428bca;text-decoration:none}img{vertical-align:middle}h1{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h1{margin-top:20px;margin-bottom:10px}h1{font-size:36px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.container>.navbar-header{margin-right:-15px;margin-left:-15px}.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}.media{margin-top:15px}.media:first-child{margin-top:0}.media>.pull-right{padding-left:10px}.media-body{display:table-cell;vertical-align:top}.container:after,.container:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before{display:table;content:" "}.container:after,.navbar-header:after,.navbar:after{clear:both}.pull-right{float:right!important}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}h1{font-weight:300}h1{font-size:24px}header.navbar{background:#0881eb;}.page-goals header.navbar h1{font-size:40px;font-weight:700;color:#fff;text-align:center;width:auto;display:block;margin:15px auto}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{max-width: 1024px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 margin: auto;text-align:center;display:table;margin-left:auto;margin-right:auto;float:none}.footer .span3{background-color:#4258a2}.footer .span3 span{padding:5px;color:white;font-size:18px;font-family:font1}.footer .menu-item{width:120px;height:80px;margin:0 auto}.footer .span3 img{width:60px;vertical-align:text-bottom}.footer .span3.active{background-color:#343862;}@media screen and (max-width:1024px){.footer{border-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:18px}}@media screen and (max-width:639px){.footer .menu-item{width:110px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:16px}}@media screen and (max-width:479px){.footer .menu-item{width:70px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}}.personalImg{width:50px;height:50px;left:1%;top:1%;border-radius:50%;position:absolute}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media .fa{margin-top:-10px;margin-right:10px}
+    </style>
+    <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+    <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+    <script src="js/all.js" defer></script>
+    <!--    Bug Report code -->
+    <link rel="stylesheet" href="/mobile/css/bug_report.css" />
+    <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+    <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: #1b2b51;
+        }
+        body {
+            position: relative;
+        }
+        #page-title{
+            font-size: 25px;font-weight: 700;color: #fff;text-align: center;
+            width: auto;display: block;padding: 5px 0px;transition: .25s;
+        }
+        @media (min-width: 525px){
+            #page-title{font-size: 40px;padding: 10px 0px;}
+        }
+        .input-group .input-group-addon, .form-control{border-radius: 5px;}
+        .input-group .form-control{width: 99%;} /* border radius not working. so just keep it 1% from the edge....*/
+
+        .page5 .chilrens{margin-bottom: 10px;}
+        .page5 .chilrens .row{
+            margin-bottom: 10px;
+        }
+
+        .form-control { border: 1px solid lightgrey !important; }
+        .navbar {
+            min-height: auto !important;
+        }
+    </style>
+</head>
+<body class="page-goals">
+<header class="navbar" id="top" role="banner">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <span id="page-title">Registration Subsidy</span>
+    </div>
+</header>
+
+<div class="personalImg"></div>
+<div class="bug-report">
+    <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Store" alt="bug-report" />
+</div>
+
+<section style="width: 300px; margin: 10px auto;">
+    <div class="container page5">
+        <div class="col-12" style="font-size: 18px; font-weight: 400;">
+            We are currently offering a 50% subsidy on all registration costs, in ADDITION to applying 50% of
+            any money raised through the chidon drive.
+            <br /><br />
+            If you feel that you need a greater subsidy, please enter how much of a subsidy you would like to request.
+            <br /><br />
+            <select name="subsidy" id="subsidy">
+                <?php
+                for ($i = 60; $i <= 100; $i+= 5) {
+                    echo "<option value='$i'>$i%</option>";
+                }
+                ?>
+            </select><br /><br />
+            <button>Request Subsidy</button>
+        </div>
+    </div>
+</section>
+</body>
+
+<script src="js/all.js" defer></script>
+<script src="js/js.cookie.js"></script>
+<script>
+    if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+        $(".bug-report").hide()
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        // make sure we have a cookie
+        var admin = Cookies.get('admin');
+        console.log(admin)
+        if (!admin) {
+            window.close()
+        }
+    })
+</script>
+</html>

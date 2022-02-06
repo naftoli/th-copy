@@ -176,24 +176,17 @@
             </form>
         </div>
 
-        <div class="payment-box" id="paymentInfo" style="display: none">
+        <div class="payment-box" id="newCreditCard" style="display: none">
             <div class="form">
                 <form id="paymentForm">
                     <div id="paymentFormDetails">
-                        <div class="flex">
-                            <input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />
-                            <label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>
-                        </div>
-                        <div class="flex">
-                            <input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />
-                            <label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>
-                        </div>
+                        <h5 class="formDetails"><span class="title">New Credit Card</span></h5>
                         <div class="field">
                             <label>Name on Credit Card:</label>
                             <input type="text" id="name" placeholder="Full Name" required />
                         </div>
                         <div class="field">
-                            <label>Email <span>(for receipt)</span>:</label>
+                            <label>Email (for receipt):</label>
                             <input type="text" id="email" placeholder="Email" required />
                         </div>
                         <div class="field">
@@ -208,7 +201,7 @@
                             <div class="field">
                                 <label>Exp. Year:</label>
                                 <select id="exp_yy">
-                                    <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+                                    <option>2022</option><option>2023</option><option>2024</option>
                                     <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
                                 </select>
                             </div>
@@ -254,9 +247,28 @@
                             </div>
                         </div>
                     </div>
-                    <!--					<input type="submit" class="button processPayment" value="Pay" style="cursor: pointer" />-->
                 </form>
             </div>
+        </div>
+
+        <div class="form">
+            <form id="terms">
+                <h5 class="formDetails"><span class="title">Terms & Conditions</span></h5>
+                <div class="flex">
+                    <input type="checkbox" name="terms1" class="inputCheckbox" id="terms1" />
+                    <label for="terms1">We are doing our best to ensure all items will be received at your school
+                        or at the US addresses specified before the Chidon Event on Sunday, 2 Nissan 5782, April 3rd 2022.
+                        We do not take responsibility in case of unforeseen circumstances.</label>
+                </div>
+                <div class="flex">
+                    <input type="checkbox" name="terms2" class="inputCheckbox" id="terms2" />
+                    <label for="terms2">All payments are final. There are no refunds.</label>
+                </div>
+                <div align="center">
+                    <br />
+                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" />
+                </div>
+            </form>
         </div>
 
         <!-- END OF FORMS -->
@@ -347,6 +359,8 @@
         $('header nav').toggleClass('open');
     });
 
+    $("select").niceSelect()
+
     /**** GLOBAL VARS ****/
     var children = []; // global variable for children info
     var children_ids = []; // global variable to keep track of order of children and ids
@@ -354,6 +368,20 @@
     var cart = []
     var cart_total = 0
     var addresses = {} // all addresses entered
+    var admin
+
+    $.post('../ajax/getAdminInfo.php', function(result) {
+        admin = JSON.parse(result)
+        let cards = []
+        if (admin['cards']) {
+            for (let i in admin['cards']) {
+                let cardInfo = admin['cards'][i]
+                let card = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
+                cards.push(card)
+            }
+        }
+        console.log(cards)
+    })
 
     if (window.localStorage) {
         cart = JSON.parse(window.localStorage.getItem('cart'))
@@ -421,6 +449,7 @@
             }
         }
     }
+
     let html = ''
     let reg_fee = 0
     if (reg.length) {
@@ -466,15 +495,35 @@
     }
     html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
     html += `<h5 class="formDetails">Total Charge Today: $${cart_total}</h5>`
+
+    // payment
+    html += `<h5 class="formDetails"><span class="title">Payment</span></h5>`
+    html += `
+        <div class="flex">
+            <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
+            <label for="payment" style="display: inline">Please use my credit card on file ending in <span id="lastFour"></span></label>
+        </div>
+        <div class="flex">
+            <input type="radio" name="payment" class="inputCheckbox payment" value="1" />
+            <label for="payment" style="display: inline">I will enter a new card</label>
+        </div>
+    `
     $(".personalInfo").append(html)
+
+    if (reg.length && cart_total === 0) $(".payment").val('Register')
+    else if (reg.length && cart_total > 0) $(".payment").val('Pay & Register')
+    else if (cart_total > 0) $(".payment").val('Pay')
+
+    $(".payment").click( function() {
+        if (parseInt($(this).val())) {
+            $("#newCreditCard").show()
+        } else {
+            $("#newCreditCard").hide()
+        }
+    })
 
     $(document).on('click', '.processPayment', function( evt ) {
         evt.preventDefault()
-
-        if (!cart_total && !cart) {
-            alert('You have not checked off any registration!')
-            return false
-        }
 
         const name = $("#name").val()
         const email = $("#email").val()
