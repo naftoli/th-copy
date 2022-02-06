@@ -100,13 +100,6 @@
     }
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-        // make sure we have a cookie
-        var admin = Cookies.get('admin');
-        console.log(admin)
-        if (!admin) {
-            window.close()
-        }
-    })
+
 </script>
 </html>
