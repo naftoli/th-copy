@@ -374,6 +374,8 @@
     const celeb_box_price = 20
     const sweater_price = 25
 
+    const fields = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater']
+
     for (let item of cart) {
         if (item.desc.includes('reg')) {
             const reg_info = item.desc.split('_')
@@ -389,9 +391,8 @@
         } else if (item.desc === 'celeb_box_ship') {
             celeb_box_shipping = parseInt(item.value)
         } else {
-            const fields = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater']
+            if (!item.desc.includes('sweater')) continue
             for (let field of fields) {
-                let num = 0
                 if (item.desc === field) {
                     if (parseInt(item.value) > 0) {
                         let sweater = {
@@ -401,19 +402,20 @@
                         sweaters.push(sweater)
                     }
                 }
-                // check shipping for this sweater
-                let sweater = sweaters.filter(sweater => sweater.type === field)
-                if (sweater.length) {
-                    let num = sweater.amount
-                    for (let i = 1; i <= num; i++) {
-                        let newField = field + '_' + i + '_ship'
-                        if (item.desc === newField) {
-                            let cost = parseInt(item.value)
-                            if (cost > 0) {
-                                sweater_shipping += cost
-                            }
-                        }
-                    }
+            }
+        }
+    }
+
+    // check shipping for this sweater
+    console.log(sweaters)
+    for (let sweater of sweaters) {
+        let num = sweater.amount
+        let desc = sweater.type
+        for (let i = 1; i <= num; i++) {
+            let newField = desc + '_' + i + '_ship'
+            for (let item of cart) {
+                if (item.desc === newField) {
+                    sweater_shipping += parseInt(item.value)
                 }
             }
         }
@@ -527,7 +529,7 @@
             return false
         }
 
-        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, cart_total, card_id, cc, cart, addresses }, function(result) {
+        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, cart_total, shipping, card_id, cc, cart, addresses }, function(result) {
             const res = JSON.parse(result)
             if (res.success) alert(res.msg)
             else {

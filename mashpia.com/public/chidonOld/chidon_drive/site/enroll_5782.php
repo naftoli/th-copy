@@ -596,17 +596,14 @@
                     if (c == 0) {
                         child.track = 'iyun'
                         child.raised = 50
-                        child.coupon = 0
                         child.grade = 7
                     } else if (c == 1) {
                         child.track = 'havonah'
                         child.raised = 304
-                        child.coupon = 0
                         child.grade = 5
                     } else if (c == 2) {
                         child.track = 'iyun'
                         child.raised = 180
-                        child.coupon = 0
                         child.grade = 8
                     }
 
@@ -660,10 +657,10 @@
                             We offer subsidies of up to 50% off (as you can see below).</h5>`
 
                     // coupons
-                    if (child.coupon > 0) {
-                        html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-                                You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
-                    }
+                    // if (child.coupon > 0) {
+                    //     html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
+                    //             You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
+                    // }
 
                     // chidon drive
                     if (child.raised > 0) {
@@ -1191,7 +1188,6 @@
             checkAddresses()
         ) {
             if (checkItemsInCart()) {
-                alert('all good.')
                 json_cart = JSON.stringify(cart)
                 json_addresses = JSON.stringify(addresses)
                 if (window.localStorage) {

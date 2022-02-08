@@ -21,6 +21,7 @@ $admin_id = $_POST['admin_id'];
 $payment_id = $_POST['card_id'];
 $to_charge = $_POST['cart_total'];
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
+$shipping = $_POST['shipping'];
 $cart = $_POST['cart'];
 $addresses = $_POST['addresses'];
 
@@ -101,7 +102,6 @@ function processFee() {
 
     $cp = new Customer( $customer_id );
     $response = $cp->chargeCard( $to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id );
-    echo "<pre>"; print_r($response); echo "</pre>";
     return $response;
 }
 
@@ -112,7 +112,7 @@ function processReg() {
     $users = [];
     foreach ($cart as $item) {
         if (strpos($item['desc'], 'reg') !== false) {
-            $regInfo = implode('_', $item['desc']);
+            $regInfo = explode('_', $item['desc']);
             $user_id = $regInfo[1];
             $users[$user_id] = floatval($item['value']);
         }
@@ -138,7 +138,7 @@ function processReg() {
 function updateShipping() {
     global $admin_id, $shipping, $sqlShipping;
     $updated = true;
-    if ($shipping) {
+    if (intval($shipping)) {
         $updated = $sqlShipping->execute([
             ':amount'   => $shipping,
             ':admin'    => $admin_id
@@ -284,8 +284,9 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             // payment went through so commit to db
             $MASHPIA_DB->commit();
             $info['success'] = true;
-            $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).\n 
-                Your card has been charged $' . $to_charge . '.\nYou should receive an email confirmation shortly with all the details.\n Thank You!';
+            $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s). 
+                    Your card has been charged $' . $to_charge . '. You should receive an email confirmation shortly 
+                    with all the details. Thank You!';
             $info['msg'] = $msg;
         } else {
             $MASHPIA_DB->rollBack();
