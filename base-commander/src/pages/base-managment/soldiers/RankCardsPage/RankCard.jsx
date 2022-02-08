@@ -59,7 +59,7 @@ class RankCard extends Component {
         }
         <div className={`rank-card rank-${rank_ord}`}>
           <div className='top'>
-            <p>This card entitles the cardholder to TH privileges with the { rank } rank</p>
+            {/*<p>This card entitles the cardholder to TH privileges with the { rank } rank</p>*/}
           </div>
           <div className='sig'>
             <p>Authorized Signature</p>
