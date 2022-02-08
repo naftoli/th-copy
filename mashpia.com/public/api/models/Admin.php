@@ -5,6 +5,12 @@ include_once( __DIR__ . '/traits/BuildModel.php' );
 include_once( __DIR__ . '/../tools/emails/index.php' );
 // * This class uses the Authorize.net gateway
 
+//*************** LOAD AUTHORIZE FUNCTIONS *********************/
+require_once __DIR__ . '/../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../classes/authorize/PaymentProfile.php';
+use classes\authorize\CustomerProfile;
+use classes\authorize\PaymentProfile;
+
 use mashpia\api\auth\Login as Login;
 
 class Admin extends ActiveRecord\Model implements JsonSerializable {

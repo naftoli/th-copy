@@ -222,7 +222,7 @@
                 </div>
                 <div align="center">
                     <br />
-                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" disabled />
+                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" />
                 </div>
             </form>
         </div>
@@ -334,7 +334,7 @@
                 let cardInfo = admin['cards'][i]
                 let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
                 let card = {
-                    profile: cardInfo.payment.creditCard.customerPaymentProfileId,
+                    profile: cardInfo.customerPaymentProfileId,
                     type: info,
                     number: cardInfo.payment.creditCard.cardNumber
                 }
@@ -492,128 +492,51 @@
         }
     })
 
-    async function createNewCard() {
-        let cc = {}
-        cc.num = parseInt($("#cc_num").val());
-        cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
-        cc.cvv = parseInt($("#cc_cvv").val());
-
-        if (! (cc.num && cc.exp && cc.cvv)) processError('You are missing credit card info or it is inaccurate.')
-
-        try {
-            const result = await $.post('../ajax/createCard.php', {
-                ccInfo: cc,
-                admin_id: admin.admin_id
-            })
-            return result
-        } catch (error) {
-            console.log(error)
-            processError("There was an error creating a new card.")
-        }
-    }
-
-    async function chargeCard(card_id) {
-        try {
-            const result = await $.post('../ajax/processPayment.php', {
-                payment_id: card_id,
-                admin_id: admin.admin_id,
-                amount: cart_total
-            })
-            return result
-        } catch (error) {
-            console.log(error)
-            processError('Error processing payment.')
-        }
-    }
-
-    async function processPayment() {
-        // find out if we are using existing card or creating a new card
-        let card_id = 0
-        if (parseInt($(".payment:selected").val() == 0)) {
-            card_id = parseInt($(".payment-card").val())
-        } else {
-            try {
-                let created = await createNewCard()
-                if (created.success) card_id = created.card_id
-                else processError(created.error)
-            } catch (error) {
-                console.log(error)
-                processError('Error creating new card.')
-            }
-        }
-
-        if (card_id) {
-            $(this).attr('disabled', true)
-            try {
-                let charged = await chargeCard(card_id)
-                return charged
-            } catch (error) {
-                console.log(error)
-                $(this).attr('disabled', false)
-                processError('Error charging card.')
-            }
-        } else processError("No card has been selected.")
-    }
-
-    async function processReg() {
-        try {
-            const registered = await $.post('../ajax/registerChildren.php', { info: reg })
-            return registered
-        } catch (error) {
-            console.log(error)
-            processError('There was an error registering your child(ren).')
-        }
-    }
-
-    async function processExtraPurchases() {
-        try {
-            // pass cart and addresses
-            const extra = await $.post('../ajax/extraPurchases.php', { cart: cart, addressInfo: addresses })
-            return extra
-        } catch (error) {
-            console.log(error)
-            processError('Error processing extra purchases.')
-        }
-    }
-
-    $(document).on('click', '.processPayment', async function( evt ) {
+    $(document).on('click', '.processPayment', function( evt ) {
         evt.preventDefault()
+        $(".processPayment").attr('disabled', true)
 
-        let paid, registered, extra
+        if (cart_total && ! $(".payment:checked").length) {
+            alert('You must indicate how your are going to pay!')
+            $(".processPayment").attr('disabled', false)
+            return false
+        }
 
-        if (cart_total > 0) paid = await processPayment()
-
-        // process registration(s)
-        if (reg.length) registered = await processReg()
-
-        // process extra purchase(s)
-        if (celeb_boxes || sweaters.length) extra = await processExtraPurchases()
-
-        const toCheck = [paid, registered, extra]
-        for (let item of toCheck) {
-            if (! item.success) {
-                alert(item.error)
-                return false
+        let cc = {}
+        let card_id = 0
+        if (cart_total) {
+            if (parseInt($(".payment:checked").val()) === 0) {
+                card_id = parseInt($(".payment-card").val())
+            } else {
+                let num = $("#cc_num").val()
+                cc.num = num.replaceAll(' ', '')
+                cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val()
+                cc.cvv = $("#cc_cvv").val()
+                if (!(cc.num && cc.exp && cc.cvv)) {
+                    alert('You are missing credit card info or it is inaccurate.')
+                    $(".processPayment").attr('disabled', false)
+                    return false
+                }
             }
         }
 
-        if (paid.success) {
-            if (registered.success && purchased.success) {
-                alert("Your child(ren) have been successfully registered and your purchases have been made. You should be receiving a confirmation email shortly. Thank you!")
-            } else if (registered.success) {
-                alert("Your child(ren) have been successfully registered. You should be receiving a confirmation email shortly.")
-            } else if (purchased.success) {
-                alert("Your celeb boxe(s) and / or sweaters have been successfully purchased. You should receive an email confirmation shortly. Thank You!")
-            }
+        // check terms
+        if (! ($("#terms1").is(":checked") && $("#terms2").is(":checked"))) {
+            $(".processPayment").attr('disabled', false)
+            alert("You must indicate your acceptance of our terms.")
+            return false
         }
-    })
 
-    function processError(msg) {
-        return JSON.stringify({
-            success: false,
-            error: msg
+        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, cart_total, card_id, cc, cart, addresses }, function(result) {
+            const res = JSON.parse(result)
+            if (res.success) alert(res.msg)
+            else {
+                alert(res.error)
+                $(".processPayment").attr('disabled', false)
+            }
+            console.log(res)
         })
-    }
+    })
 </script>
 
 <script>
