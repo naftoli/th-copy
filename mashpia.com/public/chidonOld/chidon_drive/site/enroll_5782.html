@@ -607,8 +607,14 @@
             child.track = tracks[child.user_id]
         }
 
+        let registered = children.filter(child => child.date_paid)
+        let notRegistered = children.filter(child => !child.paid)
+        let notEligible = children.filter(child => !child.track)
         let eligible = children.filter(child => child.track && !child.date_paid)
-        if (! eligible) {
+
+
+
+        if (!eligible && registered) {
             alert("All children have been enrolled. However, you can still purchase extra things.")
         }
 
