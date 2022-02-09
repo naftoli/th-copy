@@ -2,17 +2,17 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/models/Admin.php';
+require_once __DIR__ . '/../../../db.php';
+require_once __DIR__ . '/../../../api/header/db.php';
+require_once __DIR__ . '/../../../api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
 use classes\authorize\PaymentProfile as Payment;
 
