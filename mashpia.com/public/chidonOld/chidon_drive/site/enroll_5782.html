@@ -501,7 +501,7 @@
     }
 
     if (Cookies.get('chidon_admin')) {
-        getChildren(Cookies.get('chidon_admin'));
+        processChildren(Cookies.get('chidon_admin'));
     }  else {
         $(".login").show();
     }
@@ -515,7 +515,7 @@
             if (info.success) {
                 Cookies.set('chidon_admin', info.admin);
                 Cookies.set('from_enrollment', 1);
-                getChildren(info.admin);
+                processChildren(info.admin);
             } else {
                 alert(info.error);
             }
@@ -534,8 +534,20 @@
     var cart_total = 0
     var addresses = {} // all addresses entered
 
+    async function getChildren(admin) {
+        let result = await $.post('../ajax/getChildren.php', { admin })
+        let info = JSON.parse(result);
+        return info
+    }
+
+    async function getTracks(children) {
+        let result = await $.post('../ajax/getTracks.php', { children })
+        let tracks = JSON.parse(result)
+        return tracks
+    }
+
     function checkKhkEligibility(child) {
-        if (child.grade === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
+        if (parseInt(child.grade) === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
         else return false
     }
 
@@ -544,9 +556,8 @@
         else return false
     }
 
-    function getLowest(amounts, coupon, raised, khk) {
+    function getLowest(amounts, raised, khk) {
         let lowest = amounts[amounts.length-1]
-        if (coupon > 0) lowest -= coupon
         if (raised > 0) lowest -= raised / 2
         if (raised > 170 && raised < 270 && !khk) {
             const diff = 270 - raised
@@ -564,8 +575,7 @@
         khk: [500, 400, 325, 250]
     } // need it for a few functions so it needs to be global
 
-    function getChildren(admin) {
-        // getPreviousPurchaseInfo()
+    async function processChildren(admin) {
         let trackWon
         const trackText = {
             yesod: "the Chidon Sweater, Gifts & to take the Yesod final",
@@ -574,218 +584,213 @@
             iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun final",
             khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " final"
         }
-        $.post('../ajax/getChildren.php', { admin: admin }, function (result) {
-            let info = JSON.parse(result);
-            if (info.error) {
-                alert(info.error);
-                return false
-            }
 
-            let myshliach = false // flag for determining if need to show shipping section
-            let html = ''
-            if (! info.children.length) {
-                alert("All children have been enrolled. However, you can still purchase extra things.")
-                $(".login").hide();
-                $("#purchasesForm").show();
-                // return false
-            } else {
-                numChildren = info.children.length
-                for (let c in info.children) {
-                    let child = info.children[c];
-                    if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
-                    if (c == 0) {
-                        child.track = 'iyun'
-                        child.raised = 50
-                        child.grade = 7
-                    } else if (c == 1) {
-                        child.track = 'havonah'
-                        child.raised = 304
-                        child.grade = 5
-                    } else if (c == 2) {
-                        child.track = 'iyun'
-                        child.raised = 180
-                        child.grade = 8
-                    }
+        let result = await getChildren(admin)
+        if (! result.success) {
+            alert(result.error)
+            return false
+        }
+        children = result.children
 
-                    // add rohr grant where applicable
-                    const rohrGrant = checkForRohrGrant(child.raised)
-                    if (rohrGrant) child.raised = 370
+        result = await getTracks(children)
+        if (! result.success) {
+            alert(result.error)
+            return false
+        }
+        let tracks = result.tracks
 
-                    // figure out if child is in eligible for khk
-                    const khk = checkKhkEligibility(child)
-                    trackWon = child.track[0].toUpperCase() + child.track.substr(1)
+        children_ids = Object.keys(children)
+        numChildren = children_ids.length
 
-                    // if (parseInt(child.date_paid) > 0) continue;
-                    children[child.user_id] = child;
-                    children_ids.push(child.user_id);
-                    const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
-                    html += `
-                            <div class="kid flex-kids">
-                                <div>
-                                    <img class="childImg" src="//mashpia.com/${childPic}" />
-                                </div>
-                                 <div style="margin-left: 20px;">
-                                    <h5 class="formDetails">Dear ${child.first},</h5>
-                                    <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${trackWon}</b></span>
-                                    Track. You are eligible for ${khk ? trackText['khk'] : trackText[child.track]}.<h5>`
+        // update children with track info
+        for (let child of children) {
+            child.track = tracks[child.user_id]
+        }
 
-                    // registration heading
-                    let amounts, lowest, free
-                    if (khk) {
-                        html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
-                        html += `<div class="flex">
-                                    <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='0:${child.user_id}' checked />
-                                    <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($500)<br />
-                                        I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday 27-29 Adar 1/February 28-March 2.
-                                    </h5>
-                                </div>
-                                <div class="flex">
-                                    <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='1:${child.user_id}' />
-                                    <h5 class="formDetails"><b>Regional Trip</b> ($360)<br />
-                                    I cannot join the 3 day Ultimate Chidon Experience, however I would like to join
-                                        the Regional Trip that is available in my area (including NY)
-                                    </h5>
-                                </div>
-                                <h5 class="formDetails"><span class="title khk_title" style="color:red">Kol Hatorah Kula Payments</span></h5>`
-                    }
+        let eligible = children.filter(child => child.track && !child.date_paid)
+        if (! eligible) {
+            alert("All children have been enrolled. However, you can still purchase extra things.")
+        }
 
-                    // registration
-                    amounts = [...trackInfo[child.track]]
-                    if (khk) amounts = [...trackInfo['khk']]
-                    html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
-                    html += `Full cost: $<span class="full_cost">${amounts[0]}</span><br />
-                            We offer subsidies of up to 50% off (as you can see below).</h5>`
+        let html = ''
+        let myshliach = false // flag for determining if need to show shipping section
+        for (let child of eligible) {
+            if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
 
-                    // coupons
-                    // if (child.coupon > 0) {
-                    //     html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-                    //             You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
-                    // }
+            // add rohr grant where applicable
+            const rohrGrant = checkForRohrGrant(parseInt(child.raised))
+            if (rohrGrant) child.raised = 370
 
-                    // chidon drive
-                    if (child.raised > 0) {
-                        html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
-                                For every dollar you raised, 50% goes towards your registration cost and the other 50% goes towards your subsidy.
-                                You raised $${child.raised} which gives you $${child.raised / 2} off your registration cost.</h5>`
-                    }
+            // figure out if child is in eligible for khk
+            const khk = checkKhkEligibility(child)
+            trackWon = child.track[0].toUpperCase() + child.track.substr(1)
 
-                    lowest = getLowest(amounts, child.coupon, child.raised, khk)
-                    if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
-                    if (lowest === 0) free = true
-                    else free = false
-                    html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
-                    html += `Please pay as much as you can.<br />`
-                    html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-                    html += `<option value="">Please Choose</option>`
-                    let last = amounts.length - 1
-                    for (let i = 0; i <= last; i++) {
-                        html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
-                    }
-                    html += `</select></h5>`
-
-                    if (child.track === 'havonah' || child.track === 'iyun') {
-                        let trip = 'NY'
-                        html += `<h5 class="formDetails"><span class="title">Regional Trip</span><br />
-                                You will be joining the ${trip} regional trip.</h5>`
-                        html += `<div class="flex">
-                                <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
-                                    <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
-                                        I must email <a mailto:'chidon@tzivoshashem.org'>Chidon@TzivosHashem.org</a> BEFORE registration ends.</label>
-                            </div>`
-                    }
-
-                    html += `</div>
+            const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+            html += `
+                    <div class="kid flex-kids">
+                        <div>
+                            <img class="childImg" src="//mashpia.com/${childPic}" />
                         </div>
-                    </div>
-                    <div style="clear: both"></div>
-                    <br />`
-                }
+                         <div style="margin-left: 20px;">
+                            <h5 class="formDetails">Dear ${child.first},</h5>
+                            <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${trackWon}</b></span>
+                            Track. You are eligible for ${khk ? trackText['khk'] : trackText[child.track]}.<h5>`
 
-                // add shipping where relevant
-                // get shipping info from spreadsheet
-                let shippingInfo = {
-                    parent_id: 1246,
-                    cost: 55,
-                    address: '215 Lisa Cres Thornhill ON, L4J 2N2',
-                    usa: false,
-                    paid: false
-                }
-                myshliach = true
-                if (! shippingInfo['paid']) {
-                    if (shippingInfo['usa'] && myshliach) {
-                        html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-                        html += `<div class="flex">
-                                    <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
-                                    <label>I would like to pick up my package in CH during the east coast trip.</label>
-                                </div>
-                                <div class="flex">
-                                    <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="25" />
-                                    <label>I would like my package to be shipped to my house
-                                    ${shippingInfo['address']} for $25 per family. If your address is incorrect
-                                    please update it in your parent account (profile page)</</label>
-                                </div>`
-                    } else if (!shippingInfo['usa']) {
-                        html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-                        html += `<div class="flex">
-                                    <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
-                                    <label for="ship_intl">My package will be shipped to `
-                        if (myshliach) html += `${shippingInfo['address']}`
-                        else html += 'my school'
-                        html += ` for $${shippingInfo['cost']}.</label></div>`
-                    }
-                }
-
-                $(".login").hide();
-                $("#regForm").show();
-                $("#purchasesForm").show();
-                $(".children").empty();
-                $(".children").append(html);
-                $(".children").show();
-                $("select.reg").niceSelect()
-
-                $(".khk_trip").click( function() {
-                    const titles = [
-                        'Kol Hatorah Kula Payments',
-                        'Regional Trip Payments'
-                    ]
-                    const costs = [
-                        500,
-                        360
-                    ]
-                    const val = $(this).val()
-                    const info = val.split(':')
-                    const idx = parseInt(info[0], 10)
-                    const user_id = info[1]
-                    $(".khk_title").text(titles[idx])
-                    $(".full_cost").text(costs[idx])
-                    calculateReg(idx, user_id)
-                })
-
-                const calculateReg = (idx, user_id) => {
-                    // change to regional trip options
-                    let child = children[user_id]
-                    // console.log(trackInfo[child.track])
-                    let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
-                    // console.log(amounts)
-                    lowest = getLowest(amounts, child.coupon, child.raised, !idx)
-                    if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
-                    if (lowest === 0) free = true
-                    else free = false
-                    let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
-                    html += `Please pay as much as you can.<br />`
-                    html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-                    html += `<option value="">Please Choose</option>`
-                    let last = amounts.length - 1
-                    for (let i = 0; i <= last; i++) {
-                        html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
-                    }
-                    html += `</select>`
-                    $(".reg_select").empty()
-                    $(".reg_select").append(html)
-                    $("select.reg").niceSelect()
-                }
+            // registration heading
+            let amounts, lowest, free
+            if (khk) {
+                html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
+                html += `<div class="flex">
+                            <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='0:${child.user_id}' checked />
+                            <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($500)<br />
+                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday 27-29 Adar 1/February 28-March 2.
+                            </h5>
+                        </div>
+                        <div class="flex">
+                            <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='1:${child.user_id}' />
+                            <h5 class="formDetails"><b>Regional Trip</b> ($360)<br />
+                            I cannot join the 3 day Ultimate Chidon Experience, however I would like to join
+                                the Regional Trip that is available in my area (including NY)
+                            </h5>
+                        </div>
+                        <h5 class="formDetails"><span class="title khk_title" style="color:red">Kol Hatorah Kula Payments</span></h5>`
             }
-        });
+
+            // registration
+            amounts = [...trackInfo[child.track]]
+            if (khk) amounts = [...trackInfo['khk']]
+            html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
+            html += `Full cost: $<span class="full_cost">${amounts[0]}</span><br />
+                    We offer subsidies of up to 50% off (as you can see below).</h5>`
+
+            // coupons
+            // if (child.coupon > 0) {
+            //     html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
+            //             You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
+            // }
+
+            // chidon drive
+            if (parseFloat(child.raised > 0)) {
+                html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
+                        For every dollar you raised, 50% goes towards your registration cost and the other 50% goes towards your subsidy.
+                        You raised $${child.raised} which gives you $${parseFloat(child.raised) / 2} off your registration cost.</h5>`
+            }
+
+            lowest = getLowest(amounts, parseFloat(child.raised), khk)
+            if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
+            if (lowest === 0) free = true
+            else free = false
+            html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
+            html += `Please pay as much as you can.<br />`
+            html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
+            html += `<option value="">Please Choose</option>`
+            let last = amounts.length - 1
+            for (let i = 0; i <= last; i++) {
+                html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
+            }
+            html += `</select></h5>`
+
+            if (child.track === 'havonah' || child.track === 'iyun') {
+                child.trip = 'NY'
+                html += `<h5 class="formDetails"><span class="title">Regional Trip</span><br />
+                        You will be joining the ${child.trip} regional trip.</h5>`
+                html += `<div class="flex">
+                        <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
+                            <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
+                                I must email <a mailto:'chidon@tzivoshashem.org'>Chidon@TzivosHashem.org</a> BEFORE registration ends.</label>
+                    </div>`
+            }
+
+            html += `</div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+            <br />`
+        }
+
+        // add shipping where relevant
+        // get shipping info from spreadsheet
+        // let shippingInfo = await $.post('../ajax/getShippingInfo.php', { admin })
+        let shippingInfo = {
+            parent_id: 1246,
+            cost: 55,
+            address: '215 Lisa Cres Thornhill ON, L4J 2N2',
+            usa: false,
+            paid: false
+        }
+        if (! shippingInfo['paid']) {
+            if (shippingInfo['usa'] && myshliach) {
+                html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
+                html += `<div class="flex">
+                            <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
+                            <label>I would like to pick up my package in CH during the east coast trip.</label>
+                        </div>
+                        <div class="flex">
+                            <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="25" />
+                            <label>I would like my package to be shipped to my house
+                            ${shippingInfo['address']} for $25 per family. If your address is incorrect
+                            please update it in your parent account (profile page)</</label>
+                        </div>`
+            } else if (!shippingInfo['usa']) {
+                html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
+                html += `<div class="flex">
+                            <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
+                            <label for="ship_intl">My package will be shipped to `
+                if (myshliach) html += `${shippingInfo['address']}`
+                else html += 'my school'
+                html += ` for $${shippingInfo['cost']}.</label></div>`
+            }
+        }
+
+        $(".login").hide();
+        $("#regForm").show();
+        $("#purchasesForm").show();
+        $(".children").empty();
+        $(".children").append(html);
+        $(".children").show();
+        $("select.reg").niceSelect()
+
+        $(".khk_trip").click( function() {
+            const titles = [
+                'Kol Hatorah Kula Payments',
+                'Regional Trip Payments'
+            ]
+            const costs = [
+                500,
+                360
+            ]
+            const val = $(this).val()
+            const info = val.split(':')
+            const idx = parseInt(info[0], 10)
+            const user_id = info[1]
+            $(".khk_title").text(titles[idx])
+            $(".full_cost").text(costs[idx])
+            calculateReg(idx, user_id)
+        })
+
+        const calculateReg = (idx, user_id) => {
+            // change to regional trip options
+            let child = children[user_id]
+            // console.log(trackInfo[child.track])
+            let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
+            // console.log(amounts)
+            lowest = getLowest(amounts, parseFloat(child.raised), !idx)
+            if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
+            if (lowest === 0) free = true
+            else free = false
+            let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
+            html += `Please pay as much as you can.<br />`
+            html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
+            html += `<option value="">Please Choose</option>`
+            let last = amounts.length - 1
+            for (let i = 0; i <= last; i++) {
+                html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
+            }
+            html += `</select>`
+            $(".reg_select").empty()
+            $(".reg_select").append(html)
+            $("select.reg").niceSelect()
+        }
     }
 
     $(".numCelebBoxes").change( function() {

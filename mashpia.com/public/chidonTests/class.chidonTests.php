@@ -319,4 +319,50 @@ class ChidonTests
         ]);
         return $stmt->fetch()['total'];
     }
+
+    public function getHighestTrackPassed( $child, $numTests = 4 ) {
+        $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+        $this->setScores();
+        $this->calculateMarks();
+        // get child mark info
+        $childMarkInfo = $this->marks[$child['th_chidon_id']];
+
+        $marksPerType = [];
+        $avgs = [];
+        foreach ($this->types as $type => $val) {
+            $marksPerType[$type] = 0;
+            $avgs[$type] = 0;
+        }
+
+        for ($i = 1; $i <= $numTests; $i++) {
+            if (isset($childMarkInfo[$i])) {
+                foreach ($childMarkInfo[$i] as $type => $mark) {
+                    if ($mark > 0) {
+                        $marksPerType[$type] += $mark;
+                    }
+                }
+            }
+        }
+
+        // calculate avgs and highest type currently eligible for
+        $highest_type = '';
+        $highest_mark = 0;
+        foreach ($this->types as $type => $val) {
+            if ($numTests && ($marksPerType[$type])) {
+                $avg = $marksPerType[$type] / $numTests;
+                $avgs[$type] = $avg;
+                if (($type != 'genius' && $avg >= 70) || ($type == 'genius' && $avg >= 90)) {
+                    $highest_type = $type;
+                    $highest_mark = $avg;
+                }
+            }
+        }
+
+        $markInfo = [];
+        $markInfo['avg'] = $avgs[$child['test_type']] ?? 0;
+        $markInfo['highest_track'] = $highest_type;
+        $markInfo['highest_track_avg'] = round($highest_mark, 2);
+
+        return $markInfo;
+    }
 }
