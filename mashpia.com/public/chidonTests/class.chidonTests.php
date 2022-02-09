@@ -1,7 +1,7 @@
 <?php
 //ini_set('display_errors', 1);
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once __DIR__ . '/../api/header/db.php';
+require_once __DIR__ . '/../class.globalSettings.php';
 /**
  * Class ChidonTests
  * various functions for working with chidon tests
