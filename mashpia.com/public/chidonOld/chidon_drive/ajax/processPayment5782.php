@@ -284,9 +284,9 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             // payment went through so commit to db
             $MASHPIA_DB->commit();
             $info['success'] = true;
-            $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s). 
-                    Your card has been charged $' . $to_charge . '. You should receive an email confirmation shortly 
-                    with all the details. Thank You!';
+            $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
+                    'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" . 'You should receive an email confirmation shortly 
+                    with all the details.' . "\r\n" . 'Thank You!';
             $info['msg'] = $msg;
         } else {
             $MASHPIA_DB->rollBack();
