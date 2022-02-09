@@ -1,10 +1,10 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require __DIR__ . '/../encrypt.php';
+require_ONCE __DIR__ . '/../../../db.php';
+require_ONCE __DIR__ . '/../encrypt.php';
 $admin = $_COOKIE['chidon_admin'];
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require __DIR__ . '/../classes/authorize/CustomerProfile.php';
 use \classes\authorize\CustomerProfile as Customer;
 
 $sql = "select * from admins where admin_id = " . $admin_id;
