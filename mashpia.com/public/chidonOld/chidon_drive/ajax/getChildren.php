@@ -15,7 +15,7 @@ function getChildren() {
 
     $children = [];
     // track, raised, grade, trip location
-    $sql = "select u.*, c.class_grade as grade, tc.th_chidon_id, tc.reward_type, IFNULL(cus.subsidy_amount, 0) as raised
+    $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, c.class_grade as grade, tc.th_chidon_id, tc.reward_type, IFNULL(cus.subsidy_amount, 0) as raised
             from users u 
             join th_chidon tc using (user_id)  
             join admin_auths aa on aa.id = u.user_id 

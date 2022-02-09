@@ -132,7 +132,7 @@
             text-align: center;
         }
 
-        #payment
+        #payment {
             color: #000;
             text-decoration: none;
             text-align: center;
@@ -227,11 +227,11 @@
                         Select how many Celebration Box(es) you would like to purchase.
                     </h5>
                     <select class="numCelebBoxes" id="num_celeb_boxes">
-                        <?php
-                        for ($i = 0; $i <= 10; $i++) {
-                            echo "<option value='$i'>$i</option>";
-                        }
-                        ?>
+                        <script>
+                            for (let i = 0; i < 10; i++) {
+                                document.write("<option value=" + i + ">" + i + "</option>")
+                            }
+                        </script>
                     </select>
                 </div>
                 <div id="celeb_box_shipping" style="display: none;">
@@ -267,11 +267,11 @@
                     <h5 class="formDetails">Mother Sweater - $25/ea</h5>
                     <div>
                         <select name="motherSweater" class="sweater" id="mother_sweater">
-                            <?php
-                            for ($i = 0; $i <= 10; $i++) {
-                                echo "<option value='$i'>$i</option>";
-                            }
-                            ?>
+                            <script>
+                                for (let i = 0; i < 10; i++) {
+                                    document.write("<option value=" + i + ">" + i + "</option>")
+                                }
+                            </script>
                         </select>
                     </div>
                 </div>
@@ -281,11 +281,11 @@
                     <h5 class="formDetails">Father Sweater - $25/ea</h5>
                     <div>
                         <select name="fatherSweater" class="sweater" id="father_sweater">
-                            <?php
-                            for ($i = 0; $i <= 10; $i++) {
-                                echo "<option value='$i'>$i</option>";
-                            }
-                            ?>
+                            <script>
+                                for (let i = 0; i < 10; i++) {
+                                    document.write("<option value=" + i + ">" + i + "</option>")
+                                }
+                            </script>
                         </select>
                     </div>
                 </div>
@@ -294,11 +294,11 @@
                     <h5 class="formDetails">Bubby Sweater - $25/ea</h5>
                     <div>
                         <select name="bubbySweater" class="sweater" id="bubby_sweater">
-                            <?php
-                            for ($i = 0; $i <= 10; $i++) {
-                                echo "<option value='$i'>$i</option>";
-                            }
-                            ?>
+                            <script>
+                                for (let i = 0; i < 10; i++) {
+                                    document.write("<option value=" + i + ">" + i + "</option>")
+                                }
+                            </script>
                         </select>
                     </div>
                 </div>
@@ -308,11 +308,11 @@
                     <h5 class="formDetails">Zaidy Sweater - $25/ea</h5>
                     <div>
                         <select name="zaidySweater" class="sweater" id="zaidy_sweater">
-                            <?php
-                            for ($i = 0; $i <= 10; $i++) {
-                                echo "<option value='$i'>$i</option>";
-                            }
-                            ?>
+                            <script>
+                                for (let i = 0; i < 10; i++) {
+                                    document.write("<option value=" + i + ">" + i + "</option>")
+                                }
+                            </script>
                         </select>
                     </div>
                 </div>
@@ -326,89 +326,6 @@
                     <a href="#" class="button" id="payment" style="color: #000; text-decoration: none;">Continue to Payment</a>
                 </div>
             </form>
-        </div>
-
-        <div class="payment-box" id="paymentInfo" style="display: none">
-            <div class="form">
-                <form id="paymentForm">
-                    <div id="paymentFormDetails">
-                        <div class="flex">
-                            <input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_yes" value="1" />
-                            <label class="checkboxLabel" for="cc_on_file">Use Credit Card on file</label>
-                        </div>
-                        <div class="flex">
-                            <input type="radio" class="inputCheckbox cc_on_file" name="cc_on_file" id="cc_on_file_no" value="0" />
-                            <label class="checkboxLabel" for="cc_on_file">Don't use Credit Card on file</label>
-                        </div>
-                        <div class="field">
-                            <label>Name on Credit Card:</label>
-                            <input type="text" id="name" placeholder="Full Name" required />
-                        </div>
-                        <div class="field">
-                            <label>Email <span>(for receipt)</span>:</label>
-                            <input type="text" id="email" placeholder="Email" required />
-                        </div>
-                        <div class="field">
-                            <label>Card Number:</label>
-                            <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
-                        </div>
-                        <div class="group">
-                            <div class="field">
-                                <label>Exp. Month:</label>
-                                <select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
-                            </div>
-                            <div class="field">
-                                <label>Exp. Year:</label>
-                                <select id="exp_yy">
-                                    <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
-                                    <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>CVV:</label>
-                                <input type="text" id="cc_cvv" placeholder="CVV" required />
-                            </div>
-                        </div>
-                        <h5>Billing Address</h5>
-                        <div class="field">
-                            <label>Country:</label>
-                            <select id="bill_country">
-                                <option>United States</option>
-                                <option>Canada</option>
-                                <option>England</option>
-                                <option>Australia</option>
-                                <option>S Africa</option>
-                                <option>France</option>
-                                <option>Europe</option>
-                                <option>S America</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Address:</label>
-                            <input type="text" id="bill_address" placeholder="Address" required />
-                        </div>
-                        <div class="field">
-                            <label>Apt./Suite:</label>
-                            <input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
-                        </div>
-                        <div class="group">
-                            <div class="field">
-                                <label>Zip/Postcode:</label>
-                                <input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
-                            </div>
-                            <div class="field">
-                                <label>City:</label>
-                                <input type="text" id="bill_city" placeholder="City" required />
-                            </div>
-                            <div class="field">
-                                <label>State/Prov/Region:</label>
-                                <input type="text" id="bill_state" placeholder="State/Prov/Region" required />
-                            </div>
-                        </div>
-                    </div>
-                    <!--					<input type="submit" class="button processPayment" value="Pay" style="cursor: pointer" />-->
-                </form>
-            </div>
         </div>
 
         <!-- END OF FORMS -->
@@ -599,23 +516,21 @@
         }
         let tracks = result.tracks
 
-        children_ids = Object.keys(children)
-        numChildren = children_ids.length
-
         // update children with track info
         for (let child of children) {
             child.track = tracks[child.user_id]
         }
 
+        children_ids = Object.keys(children)
+        numChildren = children_ids.length
+
         let registered = children.filter(child => child.date_paid)
-        let notRegistered = children.filter(child => !child.paid)
-        let notEligible = children.filter(child => !child.track)
         let eligible = children.filter(child => child.track && !child.date_paid)
-
-
 
         if (!eligible && registered) {
             alert("All children have been enrolled. However, you can still purchase extra things.")
+        } else if (!eligible && !registered) {
+            alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
         }
 
         let html = ''
@@ -697,9 +612,8 @@
             html += `</select></h5>`
 
             if (child.track === 'havonah' || child.track === 'iyun') {
-                child.trip = 'NY'
                 html += `<h5 class="formDetails"><span class="title">Regional Trip</span><br />
-                        You will be joining the ${child.trip} regional trip.</h5>`
+                        You will be joining your regional trip.</h5>`
                 html += `<div class="flex">
                         <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
                             <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
@@ -735,7 +649,7 @@
                             <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="25" />
                             <label>I would like my package to be shipped to my house
                             ${shippingInfo['address']} for $25 per family. If your address is incorrect
-                            please update it in your parent account (profile page)</</label>
+                            please update it in your parent account (profile page)</label>
                         </div>`
             } else if (!shippingInfo['usa']) {
                 html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
@@ -1210,7 +1124,7 @@
                     Cookies.set('addresses', json_addresses)
                 }
                 // go to checkout page
-                location.href = 'checkout.php'
+                location.href = 'checkout.html'
             }
         }
     })

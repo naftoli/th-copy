@@ -19,11 +19,11 @@ use classes\authorize\PaymentProfile as Payment;
 //******************* GLOBAL VARIABLES ***********************/
 $admin_id = $_POST['admin_id'];
 $payment_id = $_POST['card_id'];
-$to_charge = $_POST['cart_total'];
+$to_charge = isset($_POST['cart_total']) ? $_POST['cart_total'] : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
-$shipping = $_POST['shipping'];
+$shipping = isset($_POST['shipping']) ? $_POST['shipping'] : 0;
 $cart = $_POST['cart'];
-$addresses = $_POST['addresses'];
+$addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
 
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
@@ -301,7 +301,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
 } else {
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
-    $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please contact us @ 718-907-8884';
+    $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please email us - chidon@tzivoshashem.org';
 }
 // send email confirmation
 if ($info['success']) sendEmail($trans_id);
