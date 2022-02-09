@@ -2,8 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once __DIR__ . '../../api/header/db.php';
+require_once __DIR__ . '../../class.globalSettings.php';
 require __DIR__ . '../encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
