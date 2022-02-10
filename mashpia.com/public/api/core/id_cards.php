@@ -29,6 +29,7 @@ class IdCardsRouter {
         // combine the filters
         $filters[] = 'u.user_registered IS NOT NULL';
         $filters[] = 'u.chayolei = 1 AND s.chayolei = 1';
+        $filters[] = 'and s.medals_ranks = 1';
         // add schools exceptions
         $filters[] = 'u.school_id not in (180,588,612)';
         $filters = implode( ' AND ', $filters );

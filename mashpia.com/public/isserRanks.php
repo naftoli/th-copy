@@ -106,6 +106,7 @@ function getRank($user) {
             <?
             $ranktotals = array();
             foreach ( $schools as $school_id => $school_name ) {
+                if (in_array($school_id, [180, 585])) continue;
                 $rr->setSchoolId( $school_id );                
                 $rr->setRanks('byRank');
                 $ranks = $rr->getRanks();
