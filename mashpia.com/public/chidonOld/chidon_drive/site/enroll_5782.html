@@ -888,7 +888,7 @@
     function utilityFn(event, elem) {
         const id = $(elem).attr('id')
         const value = $(elem).val()
-        if (value != '') addToCart(id, value)
+        if (value !== '') addToCart(id, value)
 
         // keep dropdown open
         if (event.type === 'change') {
@@ -1067,7 +1067,7 @@
         return true
     }
 
-    function checkItemsInCart() {
+    function checkForItemsToProcess() {
         // check if we have anything in the cart
         if (! cart.length) {
             alert("You have not chosen anything to register for or pay for!")
@@ -1101,7 +1101,31 @@
             if (reg || extra) return true
             else return false
         }
-        return true
+    }
+
+    function addUserInfo() {
+        let iyun = 0
+        let reg = []
+        let names = {}
+        for (let item of cart) {
+            // check if there's any children being registered
+            if (item.desc.includes('reg')) {
+                // get user id
+                const regInfo = item.desc.split('_')
+                reg.push(regInfo[1])
+            }
+        }
+
+        for (let child of children) {
+            if (reg.includes(child.user_id)) {
+                names[child.user_id] = child.first
+                if (child.track == 'iyun') iyun = 1
+            }
+        }
+        if (reg.length) {
+            addToCart('names', names)
+            addToCart('iyun', iyun)
+        }
     }
 
     $("#payment").click( function(e) {
@@ -1110,22 +1134,22 @@
             checkTripTerms() &&
             checkShipping() &&
             checkChoicesAreComplete() &&
-            checkAddresses()
+            checkAddresses() &&
+            checkForItemsToProcess()
         ) {
-            if (checkItemsInCart()) {
-                json_cart = JSON.stringify(cart)
-                json_addresses = JSON.stringify(addresses)
-                if (window.localStorage) {
-                    window.localStorage.setItem('cart', json_cart)
-                    window.localStorage.setItem('addresses', json_addresses)
-                } else {
-                    // put in cookie
-                    Cookies.set('cart', json_cart)
-                    Cookies.set('addresses', json_addresses)
-                }
-                // go to checkout page
-                location.href = 'checkout.html'
+            addUserInfo()
+            json_cart = JSON.stringify(cart)
+            json_addresses = JSON.stringify(addresses)
+            if (window.localStorage) {
+                window.localStorage.setItem('cart', json_cart)
+                window.localStorage.setItem('addresses', json_addresses)
+            } else {
+                // put in cookie
+                Cookies.set('cart', json_cart)
+                Cookies.set('addresses', json_addresses)
             }
+            // go to checkout page
+            location.href = 'checkout.html'
         }
     })
 

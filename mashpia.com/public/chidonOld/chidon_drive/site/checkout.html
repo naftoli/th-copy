@@ -132,10 +132,10 @@
             text-align: center;
         }
 
-        #payment
-        color: #000;
-        text-decoration: none;
-        text-align: center;
+        #payment {
+            color: #000;
+            text-decoration: none;
+            text-align: center;
         }
 
         .addressInfo {
@@ -325,9 +325,11 @@
     var cart_total = 0
     var addresses = {} // all addresses entered
     var admin
+    var admin_email
 
     $.post('../ajax/getAdminInfo.php', function(result) {
         admin = JSON.parse(result)
+        admin_email = admin.admin_email
         let cards = []
         if (admin['cards']) {
             for (let i in admin['cards']) {
@@ -362,6 +364,9 @@
 
     console.log(cart)
     console.log(addresses)
+
+    let names = cart.filter(item => item.desc === 'names')
+    children = names[0].value
 
     // parse cart info
     let reg = []
@@ -426,7 +431,8 @@
     if (reg.length) {
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
         for (let info of reg) {
-            html += `<h5 class="formDetails">Registering for ${info.id} : $${info.fee}</h5>`
+            let child = children[info.id]
+            html += `<h5 class="formDetails">Registering for ${child} : $${info.fee}</h5>`
             reg_fee += info.fee
         }
     }
@@ -529,7 +535,7 @@
             return false
         }
 
-        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, cart_total, shipping, card_id, cc, cart, addresses }, function(result) {
+        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, admin_email, cart_total, shipping, card_id, cc, cart, sweaters, addresses}, function(result) {
             const res = JSON.parse(result)
             if (res.success) alert(res.msg)
             else {
