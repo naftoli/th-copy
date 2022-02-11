@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 require_once __DIR__ . '/../../../db.php';
 require_once __DIR__ . '/../../../api/header/db.php';
@@ -323,7 +323,7 @@ function getEmailMsg($trans_id) {
         If you have any questions, please email Chidon@TzivosHashem.org.<br /><br />Much Hatzlocha!<br />Chidon HQ";
 
     $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: 792 Eastern Parkway Brooklyn, NY 11213<br /><br />
-            To Unsubscribe please click <a href='/unsubscribe.php'>here</a></footer>";
+            To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a></footer>";
 
     return $msg;
 }
@@ -358,23 +358,21 @@ $info = [];
 $trans_id = 0;
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
     if (intval($to_charge) > 0) {
-//        $payment = processFee();
-//        if (is_array($payment)) {
-//            $trans_id = $payment['transactionResponse']['transId'];
+        $payment = processFee();
+        if (is_array($payment)) {
+            $trans_id = $payment['transactionResponse']['transId'];
             // payment went through so commit to db
-//            $MASHPIA_DB->commit();
-            $trans_id = 1111;
-            $MASHPIA_DB->rollBack();
+            $MASHPIA_DB->commit();
             $info['success'] = true;
             $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                     'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
                     'You should receive an email confirmation shortly with all the details.' . "\r\n" . 'Thank You!';
             $info['msg'] = $msg;
-//        } else {
-//            $MASHPIA_DB->rollBack();
-//            $info['success'] = false;
-//            $info['error'] = $payment;
-//        }
+        } else {
+            $MASHPIA_DB->rollBack();
+            $info['success'] = false;
+            $info['error'] = $payment;
+        }
     } else {
         $MASHPIA_DB->commit();
         $info['success'] = true;
