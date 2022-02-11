@@ -322,6 +322,9 @@ function getEmailMsg($trans_id) {
     $msg .= "Please continue to review for the Chidon Final on Wednesday, 6 Adar 2 (March 9).<br /><br />
         If you have any questions, please email Chidon@TzivosHashem.org.<br /><br />Much Hatzlocha!<br />Chidon HQ";
 
+    $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>HQ Address: 792 Eastern Parkway<br />
+            Brooklyn, NY 11213<br /><br />To Unsubscribe please click <a href='/unsubscribe.php'>here</a></footer>";
+
     return $msg;
 }
 
