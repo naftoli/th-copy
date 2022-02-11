@@ -525,10 +525,15 @@
         numChildren = children_ids.length
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid)
+        let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+        let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
+
+        if (schoolNotConfirmed) {
+            alert("You have some child(ren) that may not show up because the school has not yet confirmed the needed information.")
+        }
 
         if (!eligible && registered) {
-            alert("All children have been enrolled. However, you can still purchase extra things.")
+            alert("All eligible children have been enrolled. However, you can still purchase extra things.")
         } else if (!eligible && !registered) {
             alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
         }
