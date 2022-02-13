@@ -141,6 +141,11 @@
         .addressInfo {
             margin-bottom: 1rem;
         }
+
+        .list {
+            max-height: 350px;
+            overflow-y: scroll !important;
+        }
     </style>
 </head>
 
@@ -522,7 +527,7 @@
         // update children with track info
         for (let child of children) {
             child.track = tracks[child.user_id]
-            // child.schoolConfirmed = "1"
+            child.schoolConfirmed = "1"
         }
 
         children_ids = Object.keys(children)
