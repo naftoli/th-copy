@@ -525,8 +525,8 @@
         numChildren = children_ids.length
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-        let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
+        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
+        let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
         if (schoolNotConfirmed) {
             alert("You have some child(ren) that may not show up because the school has not yet confirmed the needed information.")
