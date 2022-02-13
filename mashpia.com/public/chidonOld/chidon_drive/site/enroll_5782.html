@@ -485,6 +485,17 @@
         return lowest
     }
 
+    function getTrackText(track, trackWon) {
+        let trackText = {
+            yesod: "the Chidon Sweater, Gifts & to take the Yesod final",
+            yediah: "the Chidon Sweater, Gifts, Prizes and to take the Yediah final",
+            havonah: "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah final",
+            iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun final",
+            khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " final"
+        }
+        return trackText[track]
+    }
+
     const trackInfo = {
         yesod: [70, 50, 35],
         yediah: [180, 125, 100, 90],
@@ -494,15 +505,6 @@
     } // need it for a few functions so it needs to be global
 
     async function processChildren(admin) {
-        let trackWon
-        const trackText = {
-            yesod: "the Chidon Sweater, Gifts & to take the Yesod final",
-            yediah: "the Chidon Sweater, Gifts, Prizes and to take the Yediah final",
-            havonah: "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah final",
-            iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun final",
-            khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " final"
-        }
-
         let result = await getChildren(admin)
         if (! result.success) {
             alert(result.error)
@@ -530,12 +532,12 @@
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
         if (schoolNotConfirmed) {
-            alert("You have some child(ren) that may not show up because the school has not yet confirmed the needed information.")
+            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
         }
 
         if (!eligible.length && registered.length) {
             alert("All eligible children have been enrolled. However, you can still purchase extra things.")
-        } else if (!eligible.length && !registered.length) {
+        } else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
             alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
         }
 
@@ -550,7 +552,8 @@
 
             // figure out if child is in eligible for khk
             const khk = checkKhkEligibility(child)
-            trackWon = child.track[0].toUpperCase() + child.track.substr(1)
+            let trackWon = child.track[0].toUpperCase() + child.track.substr(1)
+            let trackText = getTrackText(child.track, trackWon)
 
             const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
             html += `
@@ -570,7 +573,7 @@
                 html += `<div class="flex">
                             <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='0:${child.user_id}' checked />
                             <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($500)<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday 27-29 Adar 1/February 28-March 2.
+                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday, 25-27 Adar 2/March 28-30.
                             </h5>
                         </div>
                         <div class="flex">
@@ -580,7 +583,7 @@
                                 the Regional Trip that is available in my area (including NY)
                             </h5>
                         </div>
-                        <h5 class="formDetails"><span class="title khk_title" style="color:red">Kol Hatorah Kula Payments</span></h5>`
+                        <h5 class="formDetails"><span class="title khk_title">Kol Hatorah Kula Payments</span></h5>`
             }
 
             // registration
@@ -588,7 +591,7 @@
             if (khk) amounts = [...trackInfo['khk']]
             html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
             html += `Full cost: $<span class="full_cost">${amounts[0]}</span><br />
-                    We offer subsidies of up to 50% off (as you can see below).</h5>`
+                    We offer subsidies (as you can see below).</h5>`
 
             // coupons
             // if (child.coupon > 0) {
@@ -619,7 +622,8 @@
 
             if (child.track === 'havonah' || child.track === 'iyun') {
                 html += `<h5 class="formDetails"><span class="title">Regional Trip</span><br />
-                        You will be joining your regional trip.</h5>`
+                        You will be joining your school's Regional Trip. Speak to your schools coordinator
+                        with regards to any questions you have about your region's trip.</h5>`
                 html += `<div class="flex">
                         <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
                             <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
@@ -942,6 +946,10 @@
             return false
         }
         utilityFn(e, this)
+        // add to addresses object
+        let field = $(this).attr('id')
+        let key = field.substr(0, field.lastIndexOf('_'))
+        addresses[key] = {}
     })
 
     $(document).on('blur change', '.address', function() {
@@ -1041,11 +1049,15 @@
         const keys = Object.keys(addresses)
         for (let i = 0; i < keys.length; i++) {
             let address = addresses[keys[i]]
-            for (let j = 0; j < fields.length; j++) {
-                let field = fields[j]
-                if (address[field] === undefined || address[field] === '') {
-                    alert('Not all addresses have been fully entered. Please review and fix.')
-                    return false
+            // make sure the ship to address is checked off
+            let ship = '#' + keys[i] + '_ship:checked'
+            if (parseInt($(ship).val())) {
+                for (let j = 0; j < fields.length; j++) {
+                    let field = fields[j]
+                    if (address[field] === undefined || address[field] === '') {
+                        alert('Not all addresses have been fully entered. Please review and fix.')
+                        return false
+                    }
                 }
             }
         }
