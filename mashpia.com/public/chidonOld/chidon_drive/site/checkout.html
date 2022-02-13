@@ -366,7 +366,7 @@
     console.log(addresses)
 
     let names = cart.filter(item => item.desc === 'names')
-    children = names[0].value
+    if (names.length) children = names[0].value
 
     // parse cart info
     let reg = []
