@@ -473,13 +473,14 @@
         else return false
     }
 
-    function getLowest(amounts, raised, khk) {
+    function getLowest(amounts, raised, khk, subsidy) {
         let lowest = amounts[amounts.length-1]
         if (raised > 0) lowest -= raised / 2
         if (raised > 170 && raised < 270 && !khk) {
             const diff = 270 - raised
             if (diff < lowest) lowest = diff
         }
+        if (subsidy < lowest) lowest = subsidy
         if (lowest < 0) lowest = 0
         return lowest
     }
@@ -602,7 +603,7 @@
                         You raised $${child.raised} which gives you $${parseFloat(child.raised) / 2} off your registration cost.</h5>`
             }
 
-            lowest = getLowest(amounts, parseFloat(child.raised), khk)
+            lowest = getLowest(amounts, parseFloat(child.raised), khk, parseInt(child.payment_request))
             if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
             if (lowest === 0) free = true
             else free = false
@@ -699,7 +700,7 @@
             // console.log(trackInfo[child.track])
             let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
             // console.log(amounts)
-            lowest = getLowest(amounts, parseFloat(child.raised), !idx)
+            lowest = getLowest(amounts, parseFloat(child.raised), !idx, parseInt(child.payment_request))
             if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
             if (lowest === 0) free = true
             else free = false
