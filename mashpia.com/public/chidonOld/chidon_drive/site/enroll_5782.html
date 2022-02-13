@@ -522,6 +522,7 @@
         // update children with track info
         for (let child of children) {
             child.track = tracks[child.user_id]
+            // child.schoolConfirmed = "1"
         }
 
         children_ids = Object.keys(children)
@@ -568,7 +569,6 @@
                             Track. You are eligible for ${trackText}.<h5>`
 
             // registration heading
-            khk = true
             let amounts, lowest, free
             if (khk) {
                 html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
