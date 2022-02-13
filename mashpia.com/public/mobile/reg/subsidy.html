@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Registrationn Subsidy</title>
+    <title>Registration Subsidy</title>
     <style type="text/css">
         @charset "UTF-8";.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transform:translate(0,0)}.fa-4x{font-size:4em}.pull-right{float:right}.fa-shopping-cart:before{content:"\f07a"}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}header{display:block}a{background-color:transparent}h1{margin:.67em 0;font-size:2em}img{border:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#428bca;text-decoration:none}img{vertical-align:middle}h1{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h1{margin-top:20px;margin-bottom:10px}h1{font-size:36px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.container>.navbar-header{margin-right:-15px;margin-left:-15px}.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}.media{margin-top:15px}.media:first-child{margin-top:0}.media>.pull-right{padding-left:10px}.media-body{display:table-cell;vertical-align:top}.container:after,.container:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before{display:table;content:" "}.container:after,.navbar-header:after,.navbar:after{clear:both}.pull-right{float:right!important}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}h1{font-weight:300}h1{font-size:24px}header.navbar{background:#0881eb;}.page-goals header.navbar h1{font-size:40px;font-weight:700;color:#fff;text-align:center;width:auto;display:block;margin:15px auto}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{max-width: 1024px;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  margin: auto;text-align:center;display:table;margin-left:auto;margin-right:auto;float:none}.footer .span3{background-color:#4258a2}.footer .span3 span{padding:5px;color:white;font-size:18px;font-family:font1}.footer .menu-item{width:120px;height:80px;margin:0 auto}.footer .span3 img{width:60px;vertical-align:text-bottom}.footer .span3.active{background-color:#343862;}@media screen and (max-width:1024px){.footer{border-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:18px}}@media screen and (max-width:639px){.footer .menu-item{width:110px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:16px}}@media screen and (max-width:479px){.footer .menu-item{width:70px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}}.personalImg{width:50px;height:50px;left:1%;top:1%;border-radius:50%;position:absolute}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media .fa{margin-top:-10px;margin-right:10px}
@@ -73,31 +73,151 @@
 
 <section style="width: 300px; margin: 10px auto;">
     <div class="container page5">
-        <div class="col-12" style="font-size: 18px; font-weight: 400;">
-            We are currently offering a 50% subsidy on all registration costs, in ADDITION to applying 50% of
-            any money raised through the chidon drive.
-            <br /><br />
-            If you feel that you need a greater subsidy, please enter how much of a subsidy you would like to request.
-            <br /><br />
-            <select name="subsidy" id="subsidy">
-                <?php
-                for ($i = 55; $i <= 100; $i+= 5) {
-                    echo "<option value='$i'>$i%</option>";
-                }
-                ?>
-            </select><br /><br />
-            <button>Request Subsidy</button>
+        <div class="col-12" style="font-size: 16px; font-weight: 400;" id="children">
+
         </div>
     </div>
 </section>
 </body>
 
-<script src="js/all.js" defer></script>
+<script src="js/all.js"></script>
 <script src="js/js.cookie.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
-        $(".bug-report").hide()
+    async function getChildren(admin) {
+        let result = await $.post('../../chidonOld/chidon_drive/ajax/getChildren.php', { admin })
+        let info = JSON.parse(result);
+        return info
     }
+
+    async function getTracks(children) {
+        let result = await $.post('../../chidonOld/chidon_drive/ajax/getTracks.php', { children })
+        let tracks = JSON.parse(result)
+        return tracks
+    }
+
+    function checkKhkEligibility(child) {
+        if (parseInt(child.grade) === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
+        else return false
+    }
+
+    function checkFields() {
+        let allChecked = true
+        $(".child").each( function() {
+            if (! $(this).find('.agree').is(":checked")) {
+                alert('You have not indicated your acceptance of all fundraising goals.')
+                allChecked = false
+                return false
+            }
+        })
+        return allChecked
+    }
+
+    function getTotalGoal() {
+        let total = 0
+        $(".child").each( function() {
+            let amount = $(this).find('.difference').text()
+            total += parseInt(amount)
+        })
+        return total
+    }
+
+    $( async function() {
+        if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+            $(".bug-report").hide()
+        }
+
+        let fees = {
+            yesod: 70,
+            yediah: 180,
+            havonah: 370,
+            iyun: 370,
+            khk: 500
+        }
+
+        let result = await getChildren(Cookies.get('admin'))
+        if (! result.success) {
+            alert(result.error)
+            return false
+        }
+        children = result.children
+
+        result = await getTracks(children)
+        if (! result.success) {
+            alert(result.error)
+            return false
+        }
+        let tracks = result.tracks
+
+        // update children with track info
+        for (let child of children) {
+            let khk = checkKhkEligibility(child)
+            if (khk) child.track = 'khk'
+            else child.track = tracks[child.user_id]
+        }
+
+        let html = ''
+        for (let child of children) {
+            if (child.track) {
+                let half = fees[child.track] / 2
+                html += `<div class="child" id="${child.user_id}"><b>Mazel Tov! ${child.first} has passed the ${child.track} track!</b><br /><br />`
+                html += `The full cost is $${fees[child.track]}.<br />`
+                html += `We generally charge the parents a minimum of 50% which is $${half}.<br /><br />`
+                html += `I need a greater subsidy and would like to pay:
+                        $<input type='number' name='payment' class='payment' style="width: 60px;" />.<br /><br />`
+                html += `<input type='checkbox' name='agree' class='agree' /> I will do my best to fundraise a minimum of
+                        $<span class='difference'>${half}</span>
+                        during the fundraiser on Sunday, 24 Adar 2 / March 27 to help tzivos hashem cover my costs.<br /><hr /></div>`
+            }
+        }
+        html += `<b>The total amount that we ask of you to fundraise is: <b>$<span id="goal"></span></b>.<br /><br />`
+        html += `<button style="padding: 10px; font-size: 18px;" id="subsidy">Apply for Subsidy</button>`
+        $("#children").append(html)
+
+        let totalGoal = getTotalGoal()
+        $("#goal").text(totalGoal)
+
+        $(document).on('blur', '.payment', function () {
+            let amount = $(this).val()
+            let user = $(this).parent().attr('id')
+            let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user))
+            let child = filtered[0]
+            let fullAmount
+            switch (child.track) {
+                case 'yesod':
+                case 'yediah':
+                    fullAmount = fees[child.track]
+                    break
+                case 'havonah':
+                case 'iyun':
+                    fullAmount = 270
+                    break
+                case 'khk':
+                    fullAmount = 400
+                    break
+            }
+            let total = fullAmount - parseInt(amount)
+            $(this).parent().find('.difference').text(total)
+            $("#goal").text(getTotalGoal())
+        })
+
+        $("#subsidy").click( function () {
+            // check fields
+            if (checkFields()) {
+                let info = []
+                $(".child").each( function () {
+                    let user_id = $(this).attr('id')
+                    let payment = $(this).find('.payment').val()
+                    info.push({user_id, payment})
+                })
+                $.post('ajax/updateSubsidy.php', { info }, function (result) {
+                    let res = JSON.parse(result)
+                    if (res.success) alert(res.msg)
+                    else alert(res.error)
+                })
+            }
+        })
+    })
 </script>
 <script>
 

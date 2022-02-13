@@ -532,9 +532,9 @@
             alert("You have some child(ren) that may not show up because the school has not yet confirmed the needed information.")
         }
 
-        if (!eligible && registered) {
+        if (!eligible.length && registered.length) {
             alert("All eligible children have been enrolled. However, you can still purchase extra things.")
-        } else if (!eligible && !registered) {
+        } else if (!eligible.length && !registered.length) {
             alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
         }
 
