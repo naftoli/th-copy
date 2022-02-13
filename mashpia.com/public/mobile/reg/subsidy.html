@@ -160,13 +160,14 @@
         for (let child of children) {
             if (child.track) {
                 let half = fees[child.track] / 2
+                let difference = fees[child.track] >= 370 ? half - 100 : half
                 html += `<div class="child" id="${child.user_id}"><b>Mazel Tov! ${child.first} has passed the ${child.track} track!</b><br /><br />`
                 html += `The full cost is $${fees[child.track]}.<br />`
                 html += `We generally charge the parents a minimum of 50% which is $${half}.<br /><br />`
                 html += `I need a greater subsidy and would like to pay:
                         $<input type='number' name='payment' class='payment' style="width: 60px;" />.<br /><br />`
                 html += `<input type='checkbox' name='agree' class='agree' /> I will do my best to fundraise a minimum of
-                        $<span class='difference'>${half}</span>
+                        $<span class='difference'>${difference}</span>
                         during the fundraiser on Sunday, 24 Adar 2 / March 27 to help tzivos hashem cover my costs.<br /><hr /></div>`
             }
         }
