@@ -537,7 +537,8 @@
 
         if (!eligible.length && registered.length) {
             alert("All eligible children have been enrolled. However, you can still purchase extra things.")
-        } else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
+        }
+        else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
             alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
         }
 
@@ -551,7 +552,7 @@
             if (rohrGrant) child.raised = 370
 
             // figure out if child is in eligible for khk
-            const khk = checkKhkEligibility(child)
+            let khk = checkKhkEligibility(child)
             let trackWon = child.track[0].toUpperCase() + child.track.substr(1)
             let trackText = getTrackText(child.track, trackWon)
 
@@ -564,9 +565,10 @@
                          <div style="margin-left: 20px;">
                             <h5 class="formDetails">Dear ${child.first},</h5>
                             <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${trackWon}</b></span>
-                            Track. You are eligible for ${khk ? trackText['khk'] : trackText[child.track]}.<h5>`
+                            Track. You are eligible for ${trackText}.<h5>`
 
             // registration heading
+            khk = true
             let amounts, lowest, free
             if (khk) {
                 html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
@@ -578,7 +580,7 @@
                         </div>
                         <div class="flex">
                             <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='1:${child.user_id}' />
-                            <h5 class="formDetails"><b>Regional Trip</b> ($360)<br />
+                            <h5 class="formDetails"><b>Regional Trip</b> ($370)<br />
                             I cannot join the 3 day Ultimate Chidon Experience, however I would like to join
                                 the Regional Trip that is available in my area (including NY)
                             </h5>
@@ -621,14 +623,16 @@
             html += `</select></h5>`
 
             if (child.track === 'havonah' || child.track === 'iyun') {
-                html += `<h5 class="formDetails"><span class="title">Regional Trip</span><br />
+                let style = ''
+                if (khk) style='display: none'
+                html += `<br /><div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />
                         You will be joining your school's Regional Trip. Speak to your schools coordinator
                         with regards to any questions you have about your region's trip.</h5>`
                 html += `<div class="flex">
                         <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
                             <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
                                 I must email <a mailto:'chidon@tzivoshashem.org'>Chidon@TzivosHashem.org</a> BEFORE registration ends.</label>
-                    </div>`
+                    </div></div>`
             }
 
             html += `</div>
@@ -691,17 +695,21 @@
             ]
             const val = $(this).val()
             const info = val.split(':')
-            const idx = parseInt(info[0], 10)
+            const idx = parseInt(info[0])
             const user_id = info[1]
             $(".khk_title").text(titles[idx])
             $(".full_cost").text(costs[idx])
             calculateReg(idx, user_id)
+            if (idx) $(this).parent().parent().find('.regional_trip').show()
+            else $(this).parent().parent().find('.regional_trip').hide()
         })
 
         const calculateReg = (idx, user_id) => {
             // change to regional trip options
-            let child = children[user_id]
-            // console.log(trackInfo[child.track])
+            let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
+            let child = filtered[0]
+            console.log(child)
+            console.log(trackInfo[child.track])
             let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
             // console.log(amounts)
             lowest = getLowest(amounts, parseFloat(child.raised), !idx, parseInt(child.payment_request))
