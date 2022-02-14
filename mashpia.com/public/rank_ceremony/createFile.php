@@ -99,6 +99,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
         else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
         $logo_img = @imagecreatefromstring($logoContent);
+        imageinterlace($logo_img, true);
         $logo_url = 'images/' . $school . '.png';
         if ($logo_img) @imagepng($logo_img, $logo_url);
         else $logo_url = '';
