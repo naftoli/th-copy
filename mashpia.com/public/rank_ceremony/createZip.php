@@ -29,12 +29,12 @@ function createZip($files, $images, $filename) {
     }
     foreach($files as $file) {
         $zip->addFromString($file, file_get_contents($file));
-        unlink($file);
+//        unlink($file);
     }
     foreach ($images as $img) {
         $img = 'images/' . $img;
         $zip->addFromString($img, file_get_contents($img));
-        unlink($img);
+//        unlink($img);
     }
     $zip->close();
 }
