@@ -94,7 +94,6 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $pics = $r->getUserPic();
     $picOnly = $r->getPicOnly();
     $logos = $r->getSchoolLogos();
-    echo "<pre>"; print_r($ranks); echo "</pre>"; exit;
 
     if (count($ranks)) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
