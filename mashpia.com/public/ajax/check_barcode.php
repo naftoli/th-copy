@@ -76,6 +76,7 @@ if (mysql_num_rows($result) == 0) {
         }
     }
 }
+mysql_free_result($result);
 
 echo $msg;
 ?>
