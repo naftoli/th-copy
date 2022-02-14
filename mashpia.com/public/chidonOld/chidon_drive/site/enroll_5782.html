@@ -144,7 +144,7 @@
 
         .list {
             max-height: 350px;
-            overflow-y: scroll !important;
+            overflow-y: auto !important;
         }
     </style>
 </head>
@@ -269,8 +269,8 @@
                     to where you would like it to be shipped. Shipping is $10 to an address in the USA.</h5>
                 <br />
                 <div class="flex">
-                    <h5 class="formDetails">Mother Sweater - $25/ea</h5>
-                    <div>
+                    <h5 class="formDetails" id="mother_sweater_desc">Mother Sweater - $25/ea</h5>
+                    <div style="margin-top: 2rem;">
                         <select name="motherSweater" class="sweater" id="mother_sweater">
                             <script>
                                 for (let i = 0; i < 10; i++) {
@@ -283,8 +283,8 @@
                 <div class="addressInfo"></div>
 
                 <div class="flex">
-                    <h5 class="formDetails">Father Sweater - $25/ea</h5>
-                    <div>
+                    <h5 class="formDetails" id="father_sweater_desc">Father Sweater - $25/ea</h5>
+                    <div style="margin-top: 2rem;">
                         <select name="fatherSweater" class="sweater" id="father_sweater">
                             <script>
                                 for (let i = 0; i < 10; i++) {
@@ -295,9 +295,10 @@
                     </div>
                 </div>
                 <div class="addressInfo"></div>
+
                 <div class="flex">
-                    <h5 class="formDetails">Bubby Sweater - $25/ea</h5>
-                    <div>
+                    <h5 class="formDetails" id="bubby_sweater_desc">Bubby Sweater - $25/ea</h5>
+                    <div style="margin-top: 2rem;">
                         <select name="bubbySweater" class="sweater" id="bubby_sweater">
                             <script>
                                 for (let i = 0; i < 10; i++) {
@@ -310,8 +311,8 @@
                 <div class="addressInfo"></div>
 
                 <div class="flex">
-                    <h5 class="formDetails">Zaidy Sweater - $25/ea</h5>
-                    <div>
+                    <h5 class="formDetails" id="zaidy_sweater_desc">Zaidy Sweater - $25/ea</h5>
+                    <div style="margin-top: 2rem;">
                         <select name="zaidySweater" class="sweater" id="zaidy_sweater">
                             <script>
                                 for (let i = 0; i < 10; i++) {
@@ -455,6 +456,18 @@
     var cart = []
     var cart_total = 0
     var addresses = {} // all addresses entered
+    var sweaters = {}
+
+    function getSweaterInfo() {
+        $.post('../ajax/sweaterInfo.php', function( result ) {
+            sweaters = JSON.parse( result )
+            for (let type in sweaters) {
+                let img = sweaters[type]['medium']['img']
+                let el = '#' + type + '_sweater_desc'
+                $(el).before("<img src='http://mashpia.com" + img + "' style='max-height: 75px; margin: 10px;' />")
+            }
+        })
+    }
 
     async function getChildren(admin) {
         let result = await $.post('../ajax/getChildren.php', { admin })
@@ -510,6 +523,7 @@
     } // need it for a few functions so it needs to be global
 
     async function processChildren(admin) {
+        getSweaterInfo()
         let result = await getChildren(admin)
         if (! result.success) {
             alert(result.error)
@@ -601,10 +615,10 @@
                     We offer subsidies (as you can see below).</h5>`
 
             // coupons
-            // if (child.coupon > 0) {
-            //     html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-            //             You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
-            // }
+            if (child.coupon > 0) {
+                html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
+                        You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
+            }
 
             // chidon drive
             if (parseFloat(child.raised > 0)) {
@@ -745,6 +759,24 @@
         }
     })
 
+    function createSweaterSelect(type, options) {
+        const sizes = {
+            xs: 'Adult XS',
+            small: 'Adult Small',
+            medium: 'Adult Medium',
+            large: 'Adult Large',
+            xl: 'Adult XL'
+        }
+        let html = "<option value=''>Please Select</option>"
+        for (let size in sizes) {
+            if (options[size] && options[size]['qty'] > 0)
+                html += `<option value='${size}'>${sizes[size]} (${options[size]['qty']} left)</option>`
+            else
+                html += `<option value=''>${sizes[size]} (<i>sold out</i>)</option>`
+        }
+        return html
+    }
+
     $(".sweater").change( function() {
         let typeOfSweater = $(this).attr('id')
         let num = parseInt($(this).val())
@@ -755,18 +787,12 @@
         let typeUpper = type[0].toUpperCase() + type.substring(1)
         $(this).parent().parent().next('.addressInfo').empty()
         if (num) {
-            let html
+            let html = ''
             for (let i = 1; i <= num; i++) {
-                html += `
-                        <div class="flex medium-select">
+                html += `<div class="flex medium-select">
                             <label style="flex-basis: 40%">${typeUpper} Sweater #${i} Size:</label>
-                            <select class="sweater_size" name="${type + '_size'}" id="${typeOfSweater + '_' + i + '_size'}">
-                                <option value=''>Please Choose</option>
-                                <option value='xs'>Adult XS (50 left)</option>
-                                <option value='small'>Adult Small (50 left)</option>
-                                <option value='medium'>Adult Medium (100 left)</option>
-                                <option value='large'>Adult Large (50 Left)</option>
-                                <option value='xl'>Adult XL large (50 Left)</option>
+                            <select class="sweater_size ${type}_sweater" name="${type + '_size'}" id="${typeOfSweater + '_' + i + '_size'}">
+                                ${createSweaterSelect(type, sweaters[type])}
                             </select>
                         </div>
                         <div class="listSection" style="background-color: #394190; margin-bottom: 1rem;">
@@ -1183,45 +1209,6 @@
             location.href = 'checkout.html'
         }
     })
-
-    function getSweaterInfo() {
-        $.post('../ajax/sweaterInfo.php', function( result ) {
-            const sweaters = JSON.parse( result )
-            console.log( sweaters )
-            for (let type in sweaters) {
-                createSweaterSelect(type, sweaters[type])
-                addSweaterImage(type, sweaters[type]['Adult XS']['img']);
-            }
-        })
-    }
-
-    function createSweaterSelect(type, options) {
-        const sizes = {
-            xs: 'Adult XS',
-            small: 'Adult Small',
-            medium: 'Adult Medium',
-            large: 'Adult Large',
-            xl: 'Adult XL'
-        }
-        let html = ''
-        for (let size in sizes) {
-            if (options[sizes[size]] && options[sizes[size]]['qty'] > 0)
-                html += `<option value='${size}'>${sizes[size]} (${options[sizes[size]]['qty']} left)</option>`
-            else
-                html += `<option value=0>${sizes[size]} (<i>sold out</i>)</option>`
-        }
-        let elem = type.charAt(0).toUpperCase() + type.slice(1);
-        elem = "#sweaterFor" + elem + "Size";
-        $(elem).empty()
-        $(elem).append(html)
-        $(elem).niceSelect('update')
-    }
-
-    function addSweaterImage(type, img) {
-        let elem = type.charAt(0).toUpperCase() + type.slice(1);
-        elem = "#sweaterFor" + elem;
-        $(elem).parent().find('label').after("<img src='http://mashpia.com" + img + "' style='max-height: 100px; margin: 10px;' />")
-    }
 </script>
 
 <script>

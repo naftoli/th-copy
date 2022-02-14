@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 require __DIR__ . '/../../../db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
@@ -24,18 +24,30 @@ while ( $row = mysql_fetch_assoc($result) ) {
             $type = 'zaidy';
             break;
     }
-    // find out real quantity/stock
-    $arrSize = explode(' ', $row['size']);
-    $size = strtolower($arrSize[1]);
-    $sqlQty = "select count(*) as total from th_chidon_parent_purchases 
-                where sweater_{$type} = '$size'";
-//    echo $sqlQty;
-    $resQty = mysql_query($sqlQty);
-    $rowQty = mysql_fetch_assoc($resQty);
     $sweaters[$type][$row['size']] = [
-        // 'qty'   =>  intval($row['quantity']) - intval($row['purchased']),
-        'qty'   =>  intval($row['quantity']) - intval($rowQty['total']),
-        'img'   =>  $row['sweater_picture']
+        'qty'   => $row['quantity'],
+        'img'   => $row['sweater_picture']
     ];
 }
-echo json_encode( $sweaters );
+
+$purchases = [];
+$sql = "select * from extra_purchases where item = 'sweater' and year = " . $year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    if (isset($purchases[$row['type_of_sweater']][$row['size']])) $purchases[$row['type_of_sweater']][$row['size']] += intval($row['amount']);
+    else $purchases[$row['type_of_sweater']][$row['size']] = intval($row['amount']);
+}
+
+$info = [];
+foreach ($sweaters as $type => $more) {
+    foreach ($more as $size => $details) {
+        $sizeInfo = explode(' ', $size);
+        $sweater_size = strtolower($sizeInfo[1]);
+        // check how many of this type and size were purchased
+        $purchased = $purchases[$type][$sweater_size];
+        $available = intval($details['qty']) - $purchased;
+        $info[$type][$sweater_size]['qty'] = $available;
+        $info[$type][$sweater_size]['img'] = $details['img'];
+    }
+}
+echo json_encode( $info );
