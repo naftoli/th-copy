@@ -29,12 +29,12 @@ function createZip($files, $images, $filename) {
     }
     foreach($files as $file) {
         $zip->addFromString($file, file_get_contents($file));
-//        unlink($file);
+        unlink($file);
     }
     foreach ($images as $img) {
         $img = 'images/' . $img;
         $zip->addFromString($img, file_get_contents($img));
-//        unlink($img);
+        unlink($img);
     }
     $zip->close();
 }
@@ -49,13 +49,13 @@ $images = extractFiles($list2);
 $filename = "Data.zip";
 createZip($files, $images, $filename);
 
-//header('Content-Description: File Transfer');
-//header('Content-Type: application/octet-stream');
-//header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-//header('Expires: 0');
-//header('Cache-Control: must-revalidate');
-//header('Pragma: public');
-//header('Content-Length: ' . filesize($filename));
-//flush(); // Flush system output buffer
-//readfile($filename);
-//unlink($filename);
+header('Content-Description: File Transfer');
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+header('Expires: 0');
+header('Cache-Control: must-revalidate');
+header('Pragma: public');
+header('Content-Length: ' . filesize($filename));
+flush(); // Flush system output buffer
+readfile($filename);
+unlink($filename);

@@ -15,7 +15,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
-$school = $_POST['school'];
+$school = isset($_REQUEST['school']) ? $_REQUEST['school'] : 0;
 if (!$school) exit;
 
 $months = array(
@@ -94,7 +94,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
     $pics = $r->getUserPic();
     $picOnly = $r->getPicOnly();
     $logos = $r->getSchoolLogos();
-//    echo "<pre>"; print_r($ranks); echo "</pre>";
+    echo "<pre>"; print_r($ranks); echo "</pre>"; exit;
 
     if (count($ranks)) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
