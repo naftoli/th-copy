@@ -330,13 +330,14 @@ function getEmailMsg($trans_id) {
 
 function sendEmail($msg) {
     global $admin_email;
+    $admin_email = 'chidonreg@gmailcom';
 
     if ($admin_email) {
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: Chidon Headquarters <chidon@tzivoshashem.org>';
         $headers[] = 'Reply-to: Chidon Headquarters <chidon@tzivoshashem.org>';
-        $headers[] = 'Bcc: chidonreg@gmail.com';
+//        $headers[] = 'Bcc: chidonreg@gmail.com';
         if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
         return mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
