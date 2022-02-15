@@ -9,8 +9,8 @@ $year = GlobalSettings::getChidonRegYear();
 function getRegInfo() {
     global $reg, $year, $users;
 
-    $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.paid, tc.date_paid, tc.payment_request, 
-                tc.parent_id, tc.khk_reg  
+    $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.th_chidon_id, 
+                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg, tc.test_type, tc.reward_type   
             from users u 
             join th_chidon tc using (user_id) 
             where tc.date_paid > 0 
@@ -19,9 +19,12 @@ function getRegInfo() {
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
         $users[] = [
-            'user_id'   => $resReg['user_id'],
-            'class_id'  => $resReg['class_id'],
-            'school_id' => $resReg['school_id']
+            'user_id'   => $rowReg['user_id'],
+            'class_id'  => $rowReg['class_id'],
+            'school_id' => $rowReg['school_id'],
+            'test_type' => $rowReg['test_type'],
+            'reward_type'   => $rowReg['reward_type'],
+            'th_chidon_id'  => $rowReg['th_chidon_id']
         ];
     }
 }
@@ -30,9 +33,18 @@ function getTracks() {
     global $tracks, $users;
 
     $ct = new ChidonTests();
+    $types = $ct->getTypes();
+
     foreach ($users as $user) {
         $info = $ct->getHighestTrackPassed($user, 3);
-        $tracks[$user['user_id']] = $info['highest_track'];
+        $highest = $info['highest_track'];
+        $reward_type = $user['reward_type'];
+        if ($reward_type !== 'highest track passed') {
+            $key1 = array_search($highest, $types);
+            $key2 = array_search($reward_type, $types);
+            if ($key2 > $key1) $highest = $reward_type;
+        }
+        $tracks[$user['user_id']] = $types[$highest];
     }
 }
 
