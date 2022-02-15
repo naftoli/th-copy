@@ -8,10 +8,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 $username = mysql_real_escape_string($_POST['username']);
 $password = mysql_real_escape_string($_POST['password']);
 
-$result = mysql_query(
-    "SELECT admin_id, admin_email FROM admins WHERE username = '" . $username . 
-    "' AND password = '" . $password . "'"
-);
+$sql = "SELECT admin_id, admin_email FROM admins WHERE username = '" . $username . "' AND password = '" . $password . "'";
+$result = mysql_query($sql);
 
 if (mysql_num_rows($result) > 0) {
 	$row = mysql_fetch_assoc($result);
