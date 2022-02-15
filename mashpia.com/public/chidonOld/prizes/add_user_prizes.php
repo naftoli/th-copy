@@ -42,7 +42,6 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-        echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         mysql_query('set autocommit=0');
         mysql_query("begin");
         $success = true;
