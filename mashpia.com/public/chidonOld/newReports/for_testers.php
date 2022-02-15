@@ -26,7 +26,7 @@ function getShippingInfo() {
     $sql = "select admin_id, first, last, chidon_shipping_paid 
             from admins 
             where chidon_shipping_paid > 0";
-    $result = mysql_query($result);
+    $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $shipping[] = $row;
     }
