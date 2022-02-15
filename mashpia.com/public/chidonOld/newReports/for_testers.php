@@ -9,7 +9,7 @@ $year = GlobalSettings::getChidonRegYear();
 function getRegInfo() {
     global $reg, $year, $users;
 
-    $sqlReg = "select u.user_id, u.first, u.last, u.school_id, u.class_id, tc.paid, tc.date_paid, tc.payment_request, 
+    $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.paid, tc.date_paid, tc.payment_request, 
                 tc.parent_id, tc.khk_reg  
             from users u 
             join th_chidon tc using (user_id) 
@@ -105,6 +105,7 @@ getAddresses();
         <tr>
             <th>Parent ID</th>
             <th>User ID</th>
+            <th>Serial Number</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Track</th>
@@ -115,8 +116,8 @@ getAddresses();
         </tr>
         <?php
         foreach ($reg as $row) {
-            echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['first'] .
-                "</td><td>" . $row['last'] . "</td><td>" . $tracks[$row['user_id']] . "</td><td>";
+            echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
+                "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $tracks[$row['user_id']] . "</td><td>";
             echo $row['khk_reg'] ? 'yes' : 'no';
             echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
         }
