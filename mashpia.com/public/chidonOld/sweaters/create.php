@@ -35,7 +35,7 @@ mysql_query($sql);
 
 if (mysql_affected_rows() > 0) {
     http_response_code(302);
-    header('Location: ./index.php');
+    header('Location: ./index2.php');
 } else {
     http_response_code(302);
     header('Location: ./new.php');

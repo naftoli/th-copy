@@ -52,7 +52,7 @@ if (!$sweater){
         <? include('../../admin_header.php'); ?>
         <h1>Edit Chidon Sweater</h1>
         <p style="margin: 20px 10px">
-            <a href="./index.php" class="button">Back to All Sweaters</a>
+            <a href="./index2.php" class="button">Back to All Sweaters</a>
         </p>
         <h2><?= $sweater['sweater_name'] ?></h2>
         <? if ($sweater['sweater_picture']){ ?>
