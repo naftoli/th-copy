@@ -6,6 +6,9 @@ if( isset($_GET['debug'])){
 	//error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
+
+require_once __DIR__ . '/../../class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -46,7 +49,7 @@ if( isset($_GET['debug'])){
             </tr>
             
             <?
-                $sql = 'SELECT * FROM chidon_sweaters';
+                $sql = 'SELECT * FROM chidon_sweaters where year = ' . $year;
                 $query = mysql_query($sql);
                 while($row = mysql_fetch_assoc($query)) { ?>
                     <tr>
