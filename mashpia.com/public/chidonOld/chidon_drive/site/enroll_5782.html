@@ -457,6 +457,7 @@
     var cart_total = 0
     var addresses = {} // all addresses entered
     var sweaters = {}
+    var khk_trip = [] // array of users going on khk trip
 
     function getSweaterInfo() {
         $.post('../ajax/sweaterInfo.php', function( result ) {
@@ -491,14 +492,13 @@
         else return false
     }
 
-    function getLowest(amounts, raised, khk, subsidy) {
+    function getLowest(amounts, raised, khk) {
         let lowest = amounts[amounts.length-1]
         if (raised > 0) lowest -= raised / 2
         if (raised > 170 && raised < 270 && !khk) {
             const diff = 270 - raised
             if (diff < lowest) lowest = diff
         }
-        if (subsidy < lowest) lowest = subsidy
         if (lowest < 0) lowest = 0
         return lowest
     }
@@ -548,7 +548,7 @@
         numChildren = children_ids.length
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
+        let eligible = children.filter(child => child.track && !child.date_paid )
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
         if (schoolNotConfirmed) {
@@ -627,8 +627,18 @@
                         You raised $${child.raised} which gives you $${parseFloat(child.raised) / 2} off your registration cost.</h5>`
             }
 
-            lowest = getLowest(amounts, parseFloat(child.raised), khk, parseInt(child.payment_request))
+            lowest = getLowest(amounts, parseFloat(child.raised), khk)
             if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
+
+            let subsidy = parseInt(child.payment_request)
+            if (! isNaN(subsidy)) {
+                if (subsidy < lowest) lowest = subsidy
+                if (! amounts.includes(subsidy)) {
+                    amounts.push(subsidy)
+                    amounts.sort(function(a, b) { return b - a })
+                }
+            }
+
             if (lowest === 0) free = true
             else free = false
             html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
@@ -721,8 +731,16 @@
             $(".khk_title").text(titles[idx])
             $(".full_cost").text(costs[idx])
             calculateReg(idx, user_id)
-            if (idx) $(this).parent().parent().find('.regional_trip').show()
-            else $(this).parent().parent().find('.regional_trip').hide()
+            if (idx) {
+                $(this).parent().parent().find('.regional_trip').show()
+                // remove from khk_trip if exists
+                if (khk_trip.includes(user_id)) {
+                    khk_trip = khk_trip.filter(user => user !== user_id)
+                }
+            } else {
+                $(this).parent().parent().find('.regional_trip').hide()
+                if (! khk_trip.includes(user_id)) khk_trip.push(user_id)
+            }
         })
 
         const calculateReg = (idx, user_id) => {
@@ -733,8 +751,18 @@
             console.log(trackInfo[child.track])
             let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
             // console.log(amounts)
-            lowest = getLowest(amounts, parseFloat(child.raised), !idx, parseInt(child.payment_request))
+            lowest = getLowest(amounts, parseFloat(child.raised), !idx)
             if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
+
+            let subsidy = parseInt(child.payment_request)
+            if (! isNaN(subsidy)) {
+                if (subsidy < lowest) lowest = subsidy
+                if (! amounts.includes(subsidy)) {
+                    amounts.push(subsidy)
+                    amounts.sort(function(a, b) { return b - a })
+                }
+            }
+
             if (lowest === 0) free = true
             else free = false
             let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
@@ -1197,6 +1225,7 @@
             checkForItemsToProcess()
         ) {
             addUserInfo()
+            Cookies.set('khk_trip', khk_trip)
             json_cart = JSON.stringify(cart)
             json_addresses = JSON.stringify(addresses)
             if (window.localStorage) {
