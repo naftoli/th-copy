@@ -120,7 +120,7 @@ getAddresses();
             <th>Serial Number</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Track</th>
+            <th>Highest Track Passed</th>
             <th>KHK Trip</th>
             <th>Subsidy</th>
             <th>Paid</th>
