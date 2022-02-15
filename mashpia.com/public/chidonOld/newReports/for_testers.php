@@ -7,9 +7,10 @@ require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $year = GlobalSettings::getChidonRegYear();
 
 function getRegInfo() {
-    global $reg, $year, $user_ids;
+    global $reg, $year, $users;
 
-    $sqlReg = "select u.user_id, u.first, u.last, tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg  
+    $sqlReg = "select u.user_id, u.first, u.last, u.school_id, u.class_id, tc.paid, tc.date_paid, tc.payment_request, 
+                tc.parent_id, tc.khk_reg  
             from users u 
             join th_chidon tc using (user_id) 
             where tc.date_paid > 0 
@@ -17,16 +18,20 @@ function getRegInfo() {
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
-        $user_ids[] = $rowReg['user_id'];
+        $users[] = [
+            'user_id'   => $resReg['user_id'],
+            'class_id'  => $resReg['class_id'],
+            'school_id' => $resReg['school_id']
+        ];
     }
 }
 
 function getTracks() {
-    global $tracks, $user_ids;
+    global $tracks, $users;
 
     $ct = new ChidonTests();
-    foreach ($user_ids as $user_id) {
-        $info = $ct->getHighestTrackPassed($user_id, 3);
+    foreach ($users as $user) {
+        $info = $ct->getHighestTrackPassed($user, 3);
         $tracks[$user_id] = $info['highest_track'];
     }
 }
@@ -67,7 +72,7 @@ function getAddresses() {
 }
 
 $reg = [];
-$user_ids = [];
+$users = [];
 $tracks = [];
 $shipping = [];
 $extra_purchases = [];
