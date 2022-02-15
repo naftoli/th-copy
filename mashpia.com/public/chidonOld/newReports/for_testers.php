@@ -9,7 +9,7 @@ $year = GlobalSettings::getChidonRegYear();
 function getRegInfo() {
     global $reg, $year;
 
-    $sqlReg = "select u.user_id, u.first, u.last, tc.paid, tc.date_paid, tc.payment_request, tc.parent_id 
+    $sqlReg = "select u.user_id, u.first, u.last, tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg  
             from users u 
             join th_chidon tc using (user_id) 
             where tc.date_paid > 0 
@@ -87,6 +87,7 @@ getAddresses();
             <th>User ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>KHK Trip</th>
             <th>Subsidy</th>
             <th>Paid</th>
             <th>Date Paid</th>
@@ -94,8 +95,9 @@ getAddresses();
         <?php
         foreach ($reg as $row) {
             echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['first'] .
-                "</td><td>" . $row['last'] . "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] .
-                "</td><td>" . $row['date_paid'] . "</td></tr>";
+                "</td><td>" . $row['last'] . "</td><td>";
+            echo $row['khk_reg'] ? 'yes' : 'no';
+            echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
         }
         ?>
     </table>
