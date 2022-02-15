@@ -10,7 +10,7 @@ $year = GlobalSettings::getChidonYear();
 $info = $_POST['info'];
 $success = true;
 foreach ($info as $child) {
-    if ($child['payment']) {
+    if (is_numeric($child['payment'])) {
         $sql = "update th_chidon set payment_request = " . $child['payment'] . " where user_id = " . $child['user_id'] . " 
         and year = " . $year;
         if (! mysql_query($sql)) {

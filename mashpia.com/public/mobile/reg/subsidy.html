@@ -104,20 +104,29 @@
     function checkFields() {
         let allChecked = true
         $(".child").each( function() {
-            if (! $(this).find('.agree').is(":checked")) {
-                alert('You have not indicated your acceptance of all fundraising goals.')
-                allChecked = false
-                return false
+            // only check children that have an amount entered even if it's 0
+            let subsidy = parseInt($(this).find('.payment').val())
+            if (!isNaN(subsidy)) {
+                if (!$(this).find('.agree').is(":checked")) {
+                    alert('You have not indicated your acceptance of all fundraising goals.')
+                    allChecked = false
+                    return false
+                }
             }
         })
-        return allChecked
+        // make sure we have a total
+        if (parseInt($("#goal").text()) > 0) return allChecked
+        else {
+            alert('You have not requested any subsidies!')
+            return false
+        }
     }
 
     function getTotalGoal() {
         let total = 0
         $(".child").each( function() {
-            let amount = $(this).find('.difference').text()
-            total += parseInt(amount)
+            let amount = parseInt($(this).find('.difference').text())
+            if (!isNaN(amount)) total += amount
         })
         return total
     }
@@ -163,7 +172,7 @@
         }
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
+        let eligible = children.filter(child => child.track && !child.date_paid )
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
         if (schoolNotConfirmed) {
@@ -180,20 +189,24 @@
         let html = ''
         for (let child of eligible) {
             if (child.track) {
-                let half = fees[child.track] / 2
-                let difference = fees[child.track] >= 370 ? half - 100 : half
-                html += `<div class="child" id="${child.user_id}"><b>Mazel Tov! ${child.first} has passed the ${child.track} track!</b><br /><br />`
+                html += `<div class="child" id="${child.user_id}"><div>
+                        <b>Mazel Tov! ${child.first} has passed the ${child.track} track!</b><br /><br />`
                 html += `The full cost is $${fees[child.track]}.<br />`
-                html += `We generally charge the parents a minimum of 50% which is $${half}.<br /><br />`
-                html += `I need a greater subsidy and would like to pay:
-                        $<input type='number' name='payment' class='payment' style="width: 60px;" />.<br /><br />`
-                html += `<input type='checkbox' name='agree' class='agree' /> I will do my best to fundraise a minimum of
-                        $<span class='difference'>${difference}</span>
+                html += `We generally charge the parents a minimum of 50% which is $${fees[child.track] / 2}.<br /><br />`
+                html += `I need a greater subsidy and would like to only pay:
+                        $<input type='number' name='payment' class='payment' style="width: 60px;"`
+                if (child.payment_request != null) {
+                    html += `value='${child.payment_request}' `
+                }
+                html += `/>.<br /><br /></div>`
+                html += `<div class="fundraise" style="display: none;"><input type='checkbox' name='agree' class='agree' />
+                        I will do my best to fundraise a minimum of $<span class='difference'></span>
                         during the fundraiser on Sunday, 24 Adar 2 / March 27 to help tzivos hashem cover my costs.<br /><hr /></div>`
             }
         }
-        html += `<b>The total amount that we ask of you to fundraise is: <b>$<span id="goal"></span></b>.<br /><br />`
-        html += `<button style="padding: 10px; font-size: 18px;" id="subsidy">Apply for Subsidy</button>`
+        html += `<div id="totals" style="display: none;"><b>The total amount that we ask of you to fundraise is:
+                 <b>$<span id="goal"></span></b>.<br /><br />`
+        html += `<button style="padding: 10px; font-size: 18px;" id="subsidy">Apply for Subsidy</button></div></div>`
         $("#children").append(html)
 
         let totalGoal = getTotalGoal()
@@ -201,7 +214,7 @@
 
         $(document).on('blur', '.payment', function () {
             let amount = $(this).val()
-            let user = $(this).parent().attr('id')
+            let user = $(this).parent().parent().attr('id')
             let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user))
             let child = filtered[0]
             let fullAmount
@@ -219,8 +232,22 @@
                     break
             }
             let total = fullAmount - parseInt(amount)
-            $(this).parent().find('.difference').text(total)
+            if (total > 0) {
+                $(this).parent().parent().find('.difference').text(total)
+                $(this).parent().parent().find('.fundraise').show()
+            } else {
+                $(this).parent().parent().find('.difference').text(0)
+                $(this).parent().parent().find('.fundraise').hide()
+            }
             $("#goal").text(getTotalGoal())
+            $("#totals").show()
+        })
+
+        // trigger a blur event on any children that already have a subsidy amount entered from before
+        $(".child").each( function() {
+            if (! isNaN(parseInt($(this).find('.payment').val()))) {
+                $(this).find('.payment').trigger('blur')
+            }
         })
 
         $("#subsidy").click( function () {
