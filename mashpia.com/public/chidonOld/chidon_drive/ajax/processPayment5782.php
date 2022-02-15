@@ -40,6 +40,9 @@ $emailMsg = '';
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
 
+$sql = "update th_chidon set khk_reg = 1 where year = :year and user_id = :user";
+$sqlKhk = $MASHPIA_DB->prepare($sql);
+
 $sql = "update admins set chidon_shipping_paid = :amount where admin_id = :admin";
 $sqlShipping = $MASHPIA_DB->prepare($sql);
 
@@ -184,6 +187,25 @@ function processReg() {
         }
         return $success;
     }
+}
+
+function processKhk() {
+    global $sqlKhk, $year;
+
+    $success = true;
+    if (isset($_COOKIE['khk_trip'])) {
+        foreach ($_COOKIE['khk_trip'] as $user_id) {
+            $res = $sqlKhk->execute([
+                ':year' => $year,
+                ':user' => $user_id
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
+            }
+        }
+    }
+    return $success;
 }
 
 function updateShipping() {
@@ -352,13 +374,14 @@ setSweaterInfo();
 $MASHPIA_DB->beginTransaction();
 // first do all the db stuff and only save if payment goes through
 $registered = processReg();
+$khk = processKhk();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
+if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
     if (intval($to_charge) > 0) {
         $payment = processFee();
         if (is_array($payment)) {
