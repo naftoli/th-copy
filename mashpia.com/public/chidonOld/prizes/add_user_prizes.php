@@ -48,12 +48,14 @@ if (isset($_POST['submit'])) {
         foreach ($qrys as $qry) {
             if (! mysql_query($qry)) {
                 $success = false;
+                echo "Error: " . mysql_error() . "<br />" . $qry;
                 break;
             }
         }
         if ($success) mysql_query("commit");
         else mysql_query("rollback");
         mysql_query("set autocommit=1");
+        echo "Done.";
     }
 }
 ?>
