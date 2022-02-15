@@ -32,7 +32,7 @@ function getTracks() {
     $ct = new ChidonTests();
     foreach ($users as $user) {
         $info = $ct->getHighestTrackPassed($user, 3);
-        $tracks[$user_id] = $info['highest_track'];
+        $tracks[$user['user_id']] = $info['highest_track'];
     }
 }
 
