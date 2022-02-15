@@ -3,11 +3,12 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
 function getRegInfo() {
-    global $reg, $year;
+    global $reg, $year, $user_ids;
 
     $sqlReg = "select u.user_id, u.first, u.last, tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg  
             from users u 
@@ -17,6 +18,17 @@ function getRegInfo() {
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
+        $user_ids[] = $rowReg['user_id'];
+    }
+}
+
+function getTracks() {
+    global $tracks, $user_ids;
+
+    $ct = new ChidonTests();
+    foreach ($user_ids as $user_id) {
+        $info = $ct->getHighestTrackPassed($user_id, 3);
+        $tracks[$user_id] = $info['highest_track'];
     }
 }
 
@@ -56,11 +68,15 @@ function getAddresses() {
 }
 
 $reg = [];
+$user_ids = [];
+$tracks = [];
 $shipping = [];
 $extra_purchases = [];
 $addresses = [];
 
 getRegInfo();
+getTracks();
+getShippingInfo();
 getExtraPurchases();
 getAddresses();
 ?>
@@ -87,6 +103,7 @@ getAddresses();
             <th>User ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Track</th>
             <th>KHK Trip</th>
             <th>Subsidy</th>
             <th>Paid</th>
@@ -95,7 +112,7 @@ getAddresses();
         <?php
         foreach ($reg as $row) {
             echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['first'] .
-                "</td><td>" . $row['last'] . "</td><td>";
+                "</td><td>" . $row['last'] . "</td><td>" . $tracks[$row['user_id']] . "</td><td>";
             echo $row['khk_reg'] ? 'yes' : 'no';
             echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
         }
