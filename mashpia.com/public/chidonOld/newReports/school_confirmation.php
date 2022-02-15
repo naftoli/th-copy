@@ -17,6 +17,12 @@ $school_id = array_keys($schools)[0];
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+
+// check if confirmed already
+$sql = "select chidon_confirmed_5782 from schools where school_id = " . $school_id;
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$confirmed = intval($row['chidon_confirmed_5782']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +42,11 @@ $year = GlobalSettings::getChidonYear();
 <p>
     I verify that I have reviewed all my student's marks and eligibility, and that I confirm that all students are
     on the correct eligibility track.<br /><br />
+    <?php if (! $confirmed) : ?>
     <button id="confirm">Confirm</button>
+    <?php else: ?>
+    <button id="confirm" disabled>Already Confirmed</button>
+    <?php endif; ?>
 </p>
 </body>
 <script>
