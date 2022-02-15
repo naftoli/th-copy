@@ -135,6 +135,12 @@
             khk: 500
         }
 
+        let admin = Cookies.get('admin')
+        if (! admin) {
+            alert('You need to login first.')
+            location.href = '../index.html'
+        }
+
         let result = await getChildren(Cookies.get('admin'))
         if (! result.success) {
             alert(result.error)
