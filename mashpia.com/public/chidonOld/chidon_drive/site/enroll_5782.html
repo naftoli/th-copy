@@ -505,11 +505,11 @@
 
     function getTrackText(track, trackWon) {
         let trackText = {
-            yesod: "the Chidon Sweater, Gifts & to take the Yesod final",
-            yediah: "the Chidon Sweater, Gifts, Prizes and to take the Yediah final",
-            havonah: "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah final",
-            iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun final",
-            khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " final"
+            yesod: "the Chidon Sweater, Gifts & to take the Yesod Final",
+            yediah: "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
+            havonah: "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
+            iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
+            khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " Final"
         }
         return trackText[track]
     }
@@ -548,7 +548,7 @@
         numChildren = children_ids.length
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid )
+        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
         if (schoolNotConfirmed) {
