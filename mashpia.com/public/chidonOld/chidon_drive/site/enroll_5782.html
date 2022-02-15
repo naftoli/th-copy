@@ -210,12 +210,12 @@
                 <h5 class="title" style="font-weight: bold">Extra Purchases</h5>
                 <h5 class="formDetails">
                     To enhance your family's chidon celebration experience you can purchase Celebration Boxes,
-                    parents or grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
+                    Parents or Grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
                     <br /><br />
                     Please Note: Extra Purchases Shipping is ONLY TO THE USA!
                 </h5>
                 <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
-                <div class="listSection" style="background-color: #394190">
+                <div class="listSection" style="background-color: #394190; border-radius: 15px;">
                     <img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
                     <ul>
                         <li>10 Chidon Plates</li>
@@ -641,7 +641,7 @@
 
             if (lowest === 0) free = true
             else free = false
-            html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
+            html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!<br /><br />`
             html += `Please pay as much as you can.<br />`
             html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
             html += `<option value="">Please Choose</option>`
@@ -660,7 +660,7 @@
                 html += `<div class="flex">
                         <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
                             <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
-                                I must email <a mailto:'chidon@tzivoshashem.org'>Chidon@TzivosHashem.org</a> BEFORE registration ends.</label>
+                                I must email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE Registration ends.</label>
                     </div></div>`
             }
 
