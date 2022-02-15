@@ -156,8 +156,23 @@
             else child.track = tracks[child.user_id]
         }
 
+        let registered = children.filter(child => child.date_paid)
+        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
+        let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
+
+        if (schoolNotConfirmed) {
+            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
+        }
+
+        if (!eligible.length && registered.length) {
+            alert("All eligible children have already been enrolled.")
+        }
+        else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
+            alert("It seems like you don't have any child(ren) that are eligible this year.")
+        }
+
         let html = ''
-        for (let child of children) {
+        for (let child of eligible) {
             if (child.track) {
                 let half = fees[child.track] / 2
                 let difference = fees[child.track] >= 370 ? half - 100 : half
