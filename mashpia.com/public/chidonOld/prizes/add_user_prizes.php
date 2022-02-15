@@ -22,16 +22,27 @@ if (isset($_POST['submit'])) {
                     $prizes = [$prize];
                 }
 
-                foreach ($prizes as $prize_id) {
-                    $sql = "insert into chidon_user_prizes 
-                            set user_id = (select user_id from users where user_serial = $serial_num), 
-                            year = $year, 
-                            prize_id = $prize_id";
-                    if ($he_name) $sql .= ", he_name = '$he_name'";
-                    $qrys[] = $sql;
+                $sql = "select user_id from users where user_serial = " . $serial_num;
+                $result = mysql_query($sql);
+                $row = mysql_fetch_assoc($result);
+                $user_id = $row['user_id'];
+
+                if ($user_id) {
+                    foreach ($prizes as $prize_id) {
+                        $sql = "insert into chidon_user_prizes 
+                                set user_id = $user_id, 
+                                year = $year, 
+                                prize_id = $prize_id";
+                        if ($he_name) $sql .= ", he_name = '$he_name'";
+                        $qrys[] = $sql;
+                    }
+                } else {
+                    echo "Incorrect serial number: " . $serial_num;
+                    exit;
                 }
             }
         }
+        echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         mysql_query('set autocommit=0');
         mysql_query("begin");
         $success = true;
