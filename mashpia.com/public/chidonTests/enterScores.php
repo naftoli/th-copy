@@ -40,12 +40,14 @@ if ($admin_user['auth'] != 'super') {
     $shutdown[1] = new DateTime('2021-11-20 05:00:00');
     $shutdown[2] = new DateTime('2021-12-26 05:00:00');
     $shutdown[3] = new DateTime('2022-01-21 05:00:00');
-//  make different shutdown for 180
-    foreach ($schools as $id => $school) {
-        if ($id == 180) $shutdown[3] = new DateTime('2022-01-25 05:00:00');
-        break;
-    }
     $shutdown[4] = new DateTime('2022-02-16 14:00:00');
+    // change shutdown for certain schools
+    foreach ($schools as $id => $school) {
+        if (in_array($id, [19, 54, 615])) {
+            $shutdown[4] = new DateTime('2022-02-16 23:00:00');
+            break;
+        }
+    }
 
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
         $disabled = true;
