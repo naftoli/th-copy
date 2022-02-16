@@ -45,7 +45,7 @@ if ($admin_user['auth'] != 'super') {
         if ($id == 180) $shutdown[3] = new DateTime('2022-01-25 05:00:00');
         break;
     }
-//    $shutdown[4] = new DateTime('2021-02-24 05:00:00');
+    $shutdown[4] = new DateTime('2022-02-16 14:00:00');
 
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
         $disabled = true;
