@@ -12,7 +12,7 @@ $types = $ct->getTypes();
 $children = $_POST['children'];
 $tracks = [];
 foreach ($children as $child) {
-    $highestTrack = $ct->getHighestTrackPassed($child, 3)['highest_track'];
+    $highestTrack = $ct->getHighestTrackPassed($child)['highest_track'];
     $rewardType = $child['reward_type'];
     if ($rewardType != 'highest track passed') {
         $indexes = array_keys($types);
