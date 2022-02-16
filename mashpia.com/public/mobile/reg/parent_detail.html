@@ -238,6 +238,7 @@
 <!--                            <button class="btn btn-info gameSet">Game Set(s)</button>-->
 <!--                            <button class="btn btn-info chidondrive">ChidonDrive</button>-->
 <!--                        <button class="btn btn-info story">Submit your Rebbe Story</button>-->
+                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>
                     </div>
                 </div>
             </div>
@@ -639,6 +640,10 @@
                     //	break;
                     //}
 
+                    if (parent_id == 3 || parent_id == 1264) {
+                        $(".subsidy").show()
+                    }
+
                     // sepearate registered and un-registered
                     var registred_children = {};
                     var unregistered_children = {};
@@ -833,6 +838,10 @@
 
             $(document).on('click', '.story', function () {
                 location.href = 'http://www.tzivoshashem.com/rebbestories'
+            })
+
+            $(document).on('click', '.subsidy', function () {
+                location.href = 'subsidy.html'
             })
             /*
             $(document).on('click', '.chidonEdit', function() {
