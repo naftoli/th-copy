@@ -56,6 +56,7 @@ $confirmed = intval($row['chidon_confirmed_5782']);
             let res = JSON.parse(result)
             if (res.success) {
                 alert('Your school has been confirmed. Your students are now eligible for enrollment.')
+                location.reload()
             } else {
                 alert("Error saving confirmation.")
             }
