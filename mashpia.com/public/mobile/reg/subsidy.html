@@ -208,12 +208,12 @@
                 html += `<div class="fundraise" style="display: none;"><input type='checkbox' name='agree' class='agree' />
                          I will do my best to fundraise a minimum of $<span class='difference'></span> during the fundraiser on Sunday,
                          24 Adar 2/March 27 to help Tzivos Hashem cover my costs.<br /></div>`
-                html += "<hr />"
+                html += "<hr /></div>"
             }
         }
         html += `<div id="totals" style="display: none;"><b>The total amount that we ask of you to fundraise is:
                  <b>$<span id="goal"></span></b>.<br /><br />`
-        html += `<button style="padding: 10px; font-size: 18px;" id="subsidy">Apply for Subsidy</button></div></div>`
+        html += `<button style="padding: 10px; font-size: 18px;" id="subsidy">Apply for Subsidy</button></div>`
         $("#children").append(html)
 
         let totalGoal = getTotalGoal()
