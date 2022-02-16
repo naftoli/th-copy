@@ -192,16 +192,16 @@ if ( !empty( $users ) ) {
          }
 
         // selling game sets
-        $item_id = 4;
-        $sqlPurchased = "select * from mashpia_purchases.purchase_details
-                        join mashpia_purchases.purchases using (purchase_id)
-                        where item_id = " . $item_id . " and user_id = " . $row['user_id'] . " and year = " . $reg_year;
-        $resPurchased = mysql_query( $sqlPurchased );
-        if ( mysql_num_rows( $resPurchased ) ) {
-            $children[$row['user_id']]['gamePurchased'] = 1;
-        } else {
-            $children[$row['user_id']]['gamePurchased'] = 0;
-        }
+//        $item_id = 4;
+//        $sqlPurchased = "select * from mashpia_purchases.purchase_details
+//                        join mashpia_purchases.purchases using (purchase_id)
+//                        where item_id = " . $item_id . " and user_id = " . $row['user_id'] . " and year = " . $reg_year;
+//        $resPurchased = mysql_query( $sqlPurchased );
+//        if ( mysql_num_rows( $resPurchased ) ) {
+//            $children[$row['user_id']]['gamePurchased'] = 1;
+//        } else {
+//            $children[$row['user_id']]['gamePurchased'] = 0;
+//        }
 
         // after Nov 8, 2017 registration is closed
         //if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
@@ -270,15 +270,13 @@ if ( !empty( $users ) ) {
 //        $children[$row['user_id']]['confirmed_chidon_5781'] = $parent['confirmed_chidon_5781'];
 
         //if ( $row['school_id'] != 54 ) { // don't let beis rivka ch enroll
-        $cSql = "SELECT * FROM th_chidon WHERE can_enroll = 1 and 
-                  (shabbaton_maven = 1 or shabbaton_pro = 1 or shabbaton_expert = 1 or shabbaton_trophy = 1) 
-                  and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
+        $cSql = "SELECT * FROM th_chidon WHERE date_paid > 0 and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
         $cRes = mysql_query($cSql);
         if (mysql_num_rows($cRes) > 0) {
             $cRow = mysql_fetch_assoc($cRes);
             $children[$row['user_id']]['chidonRegistered'] = 1;
             $children[$row['user_id']]['enrollShabbaton'] = 1;
-            $children[$row['user_id']]['shabbatonPaid'] = 0;
+            $children[$row['user_id']]['shabbatonPaid'] = 1;
             $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
             // check if child is registered for chidon shabbaton
 //            if ($cRow['paid'] > 0) {
