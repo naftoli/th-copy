@@ -188,7 +188,8 @@ function ReportCard(info) {
 
     const classes = useStyles();
 
-    const showIyun = !info.showIyun || (info.showIyun && report.tests[1]['genius'] >= 90)
+    // const showIyun = !info.showIyun || (info.showIyun && report.tests[1]['genius'] >= 90)
+    const showIyun = info.showIyun && report.highestTrackPassed === 'Iyun'
 
     const learningTime = {
         'maven': 15,
