@@ -361,6 +361,7 @@
         cart = JSON.parse(Cookies.get('cart'))
         addresses = JSON.parse(Cookies.get('addresses'))
     }
+    if (!cart.length) location.href = 'enroll_5782.html'
 
     console.log(cart)
     console.log(addresses)
