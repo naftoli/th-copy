@@ -72,11 +72,20 @@ foreach ($schools as $school_id => $name) {
         ];
         $i = 0;
         foreach ($info as $row) {
-            $trackInfo = $test->getHighestTrackPassed($row);
-            $track = $trackInfo['highest_track'] ? $tracks[$trackInfo['highest_track']] : 'none';
+            $highestTrack = $test->getHighestTrackPassed($row)['highest_track'];
+            $rewardType = $row['reward_type'];
+            if ($rewardType != 'highest track passed') {
+                $indexes = array_keys($tracks);
+                $key1 = array_search($highestTrack, $indexes);
+                $key2 = array_search($rewardType, $indexes);
+                if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
+                else if ($key2) $highestTrack = $rewardType;
+            }
+
+            $track = $highestTrack ? $tracks[$highestTrack] : 'none';
             if (intval($row['class_grade']) === 8 && (in_array(strtolower($track), ['havonah', 'iyun']))) $track = 'KHK';
             $reward = $track != 'none' ? $rewards[$track] : 'none';
-            if ($track == 'KHK') $reward .= $tracks[$trackInfo['highest_track']] . ' Final';
+            if ($track == 'KHK') $reward .= $tracks[$highestTrack] . ' Final';
             $school = $schools[$row['school_id']];
             $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
