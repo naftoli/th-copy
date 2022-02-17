@@ -22,7 +22,7 @@ $admin_email = $_POST['admin_email'];
 $payment_id = $_POST['card_id'];
 $to_charge = isset($_POST['cart_total']) ? $_POST['cart_total'] : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
-$shipping = isset($_POST['shipping']) ? $_POST['shipping'] : 0;
+$shipping = isset($_POST['shipping']) ? $_POST['shipping'] : null;
 $cart = $_POST['cart'];
 $sweaters = isset($_POST['sweaters']) ? $_POST['sweaters'] : [];
 $addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
@@ -212,7 +212,7 @@ function updateShipping() {
     global $admin_id, $sqlShipping, $shipping;
 
     $updated = true;
-    if (intval($shipping)) {
+    if (! is_null($shipping)) {
         $updated = $sqlShipping->execute([
             ':amount'   => $shipping,
             ':admin'    => $admin_id

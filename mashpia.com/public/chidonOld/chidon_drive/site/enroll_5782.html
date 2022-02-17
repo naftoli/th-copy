@@ -451,8 +451,6 @@
 
     /**** GLOBAL VARS ****/
     var children = []; // global variable for children info
-    var children_ids = []; // global variable to keep track of order of children and ids
-    var numChildren; // global variable to track number of children
     var cart = []
     var cart_total = 0
     var addresses = {} // all addresses entered
@@ -544,22 +542,20 @@
             // child.schoolConfirmed = "1"
         }
 
-        children_ids = Object.keys(children)
-        numChildren = children_ids.length
-
         let registered = children.filter(child => child.date_paid)
         let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
-        if (schoolNotConfirmed) {
-            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
+        if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
+            alert("It seems like you don't have any child(ren) that are eligible this year.")
+            location.href = 'https://mashpia.com/mobile'
         }
 
-        if (!eligible.length && registered.length) {
-            alert("All eligible children have been enrolled. However, you can still purchase extra things.")
-        }
-        else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
-            alert("It seems like you don't have any child(ren) that are eligible this year. However, you can still purchase extra things.")
+        if (schoolNotConfirmed.length) {
+            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
+        } else if (!eligible.length && registered.length) {
+            alert("All eligible children have been enrolled.")
+            location.href = 'https://mashpia.com/mobile'
         }
 
         let html = ''
@@ -674,36 +670,41 @@
         Cookies.set('myshliach', myshliach ? 1 : 0)
 
         // add shipping where relevant
-        // get shipping info from spreadsheet
-        // let shippingInfo = await $.post('../ajax/getShippingInfo.php', { admin })
-        let shippingInfo = {
-            parent_id: 1246,
-            cost: 55,
-            address: '215 Lisa Cres Thornhill ON, L4J 2N2',
-            usa: true,
-            paid: false
-        }
-        if (! shippingInfo['paid']) {
-            if (shippingInfo['usa'] && myshliach) {
-                html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-                html += `<div class="flex">
-                            <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
-                            <label>I would like to pick up my package in CH during the east coast trip.</label>
-                        </div>
-                        <div class="flex">
-                            <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="25" />
-                            <label>I would like my package to be shipped to my house
-                            ${shippingInfo['address']} for $25 per family. If your address is incorrect
-                            please update it in your parent account (profile page)</label>
-                        </div>`
-            } else if (!shippingInfo['usa']) {
-                html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-                html += `<div class="flex">
-                            <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
-                            <label for="ship_intl">My package will be shipped to `
-                if (myshliach) html += `${shippingInfo['address']}`
-                else html += 'my school'
-                html += ` for $${shippingInfo['cost']}.</label></div>`
+        // get shipping info from database
+        let info = await $.post('../ajax/getShippingInfo.php')
+        let shippingParsed = JSON.parse(info)
+        if (shippingParsed.success) {
+            // let shippingInfo = {
+            //     parent_id: 1246,
+            //     cost: 55,
+            //     address: '215 Lisa Cres Thornhill ON, L4J 2N2',
+            //     usa: true,
+            //     paid: false
+            // }
+            let shippingInfo = shippingParsed.data
+            shippingInfo['address'] = shippingInfo['address'].replaceAll('\\', '')
+            if (! parseInt(shippingInfo['paid'])) {
+                if (myshliach && parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
+                    html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
+                    html += `<div class="flex">
+                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
+                                <label>I would like to pick up my package in CH during the east coast trip.</label>
+                            </div>
+                            <div class="flex">
+                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="${shippingInfo['cost']}" />
+                                <label>I would like my package to be shipped to my house
+                                ${shippingInfo['address']} for $${shippingInfo['cost']} per family. If your address is incorrect
+                                please update it in your parent account (profile page)</label>
+                            </div>`
+                } else if (! parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
+                    html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
+                    html += `<div class="flex">
+                                <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
+                                <label for="ship_intl">My package will be shipped to `
+                    if (myshliach) html += `${shippingInfo['address']}`
+                    else html += 'my school'
+                    html += ` for $${shippingInfo['cost']}.</label></div>`
+                }
             }
         }
 
@@ -1045,19 +1046,19 @@
     function checkTripTerms() {
         let elems = []
         let missing = []
-        cart.forEach(item => {
-            children_ids.forEach(id => {
-                if (item.desc === ('reg_' + id)) {
-                    const elem = "#trip_terms_" + id
-                    if (! $(elem).is(":checked")) {
-                        elems.push(elem)
-                        // get child's name
-                        const child = children[id]
-                        missing.push(child.first)
+        for (let item of cart) {
+            if (item.desc.includes('reg')) {
+                for (let child of children) {
+                    if (item.desc === ('reg_' + child.user_id)) {
+                        const elem = "#trip_terms_" + child.user_id
+                        if (!$(elem).is(":checked")) {
+                            elems.push(elem)
+                            missing.push(child.first)
+                        }
                     }
                 }
-            })
-        })
+            }
+        }
         if (missing.length) {
             alert('You must indicate your acceptance of the Regional Trip Terms for ' + missing.join(" and "))
             const elem = elems[0]
@@ -1159,38 +1160,11 @@
         if (! cart.length) {
             alert("You have not chosen anything to register for or pay for!")
             return false
-        } else {
-            let reg = false
-            let extra = false
-            cartLoop:
-            for (let item of cart) {
-                // check if there's any children being registered
-                if (item.desc.includes('reg')) {
-                    reg = true
-                    break
-                } else { // check if there's any extra purchases
-                    switch (item.desc) {
-                        case 'num_celeb_boxes':
-                        case 'mother_sweater':
-                        case 'father_sweater':
-                        case 'bubby_sweater':
-                        case 'zaidy_sweater':
-                            if (parseInt(item.value) > 0) {
-                                extra = true
-                                break cartLoop
-                            }
-                            break
-                        default:
-                            break
-                    }
-                }
-            }
-            if (reg || extra) return true
-            else return false
         }
+        return true
     }
 
-    function addUserInfo() {
+    function checkRegAddUserInfo() {
         let iyun = 0
         let reg = []
         let names = {}
@@ -1202,6 +1176,10 @@
                 reg.push(regInfo[1])
             }
         }
+        if (! reg.length) {
+            alert("You must register at least one child!")
+            return false
+        }
 
         for (let child of children) {
             if (reg.includes(child.user_id)) {
@@ -1209,22 +1187,22 @@
                 if (child.track == 'iyun') iyun = 1
             }
         }
-        if (reg.length) {
-            addToCart('names', names)
-            addToCart('iyun', iyun)
-        }
+
+        addToCart('names', names)
+        addToCart('iyun', iyun)
+        return true
     }
 
     $("#payment").click( function(e) {
         e.preventDefault()
         if (
+            checkForItemsToProcess() &&
+            checkRegAddUserInfo() &&
             checkTripTerms() &&
             checkShipping() &&
             checkChoicesAreComplete() &&
-            checkAddresses() &&
-            checkForItemsToProcess()
+            checkAddresses()
         ) {
-            addUserInfo()
             Cookies.set('khk_trip', khk_trip)
             json_cart = JSON.stringify(cart)
             json_addresses = JSON.stringify(addresses)
