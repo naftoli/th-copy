@@ -58,7 +58,6 @@
     "items": [
       { "label": "Tests",
         "items": [
-          { "label": "Change level", "legacy": true, "path": "/chidonTests/setTypes.php" },
           { "label": "Enter Chidon Test Scores",
             "items": [
               { "label": "Test #1", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=1" },
@@ -126,6 +125,8 @@
       },
 
       { "label": "School Eligibility Confirmation", "legacy": true, "path": "/chidonOld/newReports/school_confirmation.php" },
+
+      { "label": "Eligibility Report", "legacy":  true, "path":  "/chidonOld/newReports/eligibility_registered_report.php" },
 
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       
