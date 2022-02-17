@@ -1216,7 +1216,7 @@
             checkChoicesAreComplete() &&
             checkAddresses()
         ) {
-            Cookies.set('khk_trip', khk_trip)
+            if (khk_trip.length) Cookies.set('khk_trip', khk_trip)
             json_cart = JSON.stringify(cart)
             json_addresses = JSON.stringify(addresses)
             if (window.localStorage) {
