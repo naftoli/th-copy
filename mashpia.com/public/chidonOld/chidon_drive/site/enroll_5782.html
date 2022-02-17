@@ -539,10 +539,10 @@
         // update children with track info
         for (let child of children) {
             child.track = tracks[child.user_id]
-            // child.schoolConfirmed = "1"
         }
 
         let registered = children.filter(child => child.date_paid)
+        let haveTrack = children.filter(child => child.track)
         let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
@@ -551,11 +551,24 @@
             location.href = 'https://mashpia.com/mobile'
         }
 
-        if (schoolNotConfirmed.length) {
-            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
-        } else if (!eligible.length && registered.length) {
-            alert("All eligible children have been enrolled.")
+        if (! eligible.length) {
+            if (haveTrack.length === registered.length) {
+                alert("All your child(ren) that are eligible have already been registered.")
+            } else {
+                let msg = "You do not have any children that are currently able to enroll.";
+                if (schoolNotConfirmed.length && registered.length) {
+                    msg += " Some of your children have already registered, while others have not had their school " +
+                        "confirm their eligibility."
+                } else if (schoolNotConfirmed.length) {
+                    msg += " Some or all of your child(ren)'s school(s) have not yet confirmed their eligibility.";
+                }
+                alert(msg)
+            }
             location.href = 'https://mashpia.com/mobile'
+        }
+
+        if (schoolNotConfirmed.length) {
+            alert("You have some child(ren) who are not showing up because their school has not yet confirmed their eligibility.")
         }
 
         let html = ''
