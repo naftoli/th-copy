@@ -68,15 +68,15 @@ foreach ($schools as $school_id => $name) {
             'Yediah'    => 'Sweater, Gifts, Prizes, & Yediah Final',
             'Havonah'   => 'Sweater, Gifts, Trip, & Havonah Final',
             'Iyun'      => 'Sweater, Gifts, Trip & Iyun Final',
-            'khk'       => 'Sweater, Gifts, Trip & '
+            'KHK'       => 'Sweater, Gifts, Trip & '
         ];
         $i = 0;
         foreach ($info as $row) {
             $trackInfo = $test->getHighestTrackPassed($row);
             $track = $trackInfo['highest_track'] ? $tracks[$trackInfo['highest_track']] : 'none';
-            if (intval($row['class_grade']) === 8 && (in_array(strtolower($track), ['havonah', 'iyun']))) $track = 'khk';
+            if (intval($row['class_grade']) === 8 && (in_array(strtolower($track), ['havonah', 'iyun']))) $track = 'KHK';
             $reward = $track != 'none' ? $rewards[$track] : 'none';
-            if ($track == 'khk') $reward .= $tracks[$trackInfo['highest_track']] . ' Final';
+            if ($track == 'KHK') $reward .= $tracks[$trackInfo['highest_track']] . ' Final';
             $school = $schools[$row['school_id']];
             $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
