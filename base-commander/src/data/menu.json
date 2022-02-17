@@ -96,7 +96,6 @@
           { "label": "Finals", "legacy": true, "path": "/chidonTests/finals.php" },
           { "label": "Custom Test Report", "legacy": true, "path": "/chidonTests/report.php" },
           { "label": "Report Cards", "path":  "/chidonTests/reportCards" },
-          { "label": "Eligibility Report", "legacy": true, "path": "/chidonOld/newReports/eligibility_registered_report.php" }
         ]
       },
       {
