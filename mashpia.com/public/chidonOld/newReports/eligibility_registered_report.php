@@ -1,0 +1,91 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
+// get info for report: serial number, name, school, class, avg per track, highest track passed, highest eligible reward,
+// track registered for
+$info = [];
+foreach ($schools as $school_id => $name) {
+    $sql = "select u.user_id, u.school_id, u.class_id, u.user_serial, u.first, u.last, s.school_name, c.class_grade,    
+                c.class_sub, tc.date_paid, tc.khk_reg, tc.th_chidon_id, tc.test_type, tc.reward_type  
+            from users u 
+            join schools s using (school_id) 
+            join classes c on u.class_id = c.class_id 
+            join th_chidon tc using (user_id) 
+            where tc.year = " . $year . " and u.school_id = " . $school_id . " 
+            order by school_name, class_grade, class_sub, last, first";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $info[] = $row;
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Eligibility / Registered Report</title>
+    <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
+    <style>
+        tr, th, td {
+            padding: 6px;
+            font-size: 12px;
+            border-bottom: 1px solid grey;
+        }
+    </style>
+</head>
+<body>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
+    <h1>Eligibility / Registered Report</h1>
+    <table>
+        <tr>
+            <th>School</th>
+            <th>Class</th>
+            <th>Serial Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Track Eligible for</th>
+            <th>Eligible Rewards</th>
+            <th>Registered</th>
+            <th>Registered for KHK Trip</th>
+        </tr>
+        <?php
+        $test = new ChidonTests();
+        $tracks = $test->getTypes();
+        $rewards = [
+            'Yesod'     => 'Sweater, Gifts & Yesod Final',
+            'Yediah'    => 'Sweater, Gifts, Prizes, & Yediah Final',
+            'Havonah'   => 'Sweater, Gifts, Trip, & Havonah Final',
+            'Iyun'      => 'Sweater, Gifts, Trip & Iyun Final',
+            'khk'       => 'Sweater, Gifts, Trip & '
+        ];
+        $i = 0;
+        foreach ($info as $row) {
+            $trackInfo = $test->getHighestTrackPassed($row);
+            $track = $trackInfo['highest_track'] ? $tracks[$trackInfo['highest_track']] : 'none';
+            if (intval($row['class_grade']) === 8 && (in_array(strtolower($track), ['havonah', 'iyun']))) $track = 'khk';
+            $reward = $track != 'none' ? $rewards[$track] : 'none';
+            if ($track == 'khk') $reward .= $tracks[$trackInfo['highest_track']] . ' Final';
+            $school = $schools[$row['school_id']];
+            $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+            $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
+            $khk = $row['khk_reg'] > 0 ? 'yes' : '';
+            echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
+                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $track . "</td><td>" . $reward . "</td><td>" .
+                $paid . "</td><td>" . $khk . "</td></tr>";
+        }
+        ?>
+    </table>
+</body>
+</html>
