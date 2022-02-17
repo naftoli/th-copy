@@ -40,7 +40,7 @@ $emailMsg = '';
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
 
-$sql = "update th_chidon set khk_reg = 1 where year = :year and user_id = :user";
+$sql = "update th_chidon set khk_trip = 1 where year = :year and user_id = :user";
 $sqlKhk = $MASHPIA_DB->prepare($sql);
 
 $sql = "update admins set chidon_shipping_paid = :amount where admin_id = :admin";

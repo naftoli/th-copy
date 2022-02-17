@@ -18,7 +18,7 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 foreach ($schools as $school_id => $name) {
     $sql = "select u.user_id, u.school_id, u.class_id, u.user_serial, u.first, u.last, s.school_name, c.class_grade,    
-                c.class_sub, tc.date_paid, tc.khk_reg, tc.th_chidon_id, tc.test_type, tc.reward_type  
+                c.class_sub, tc.date_paid, tc.khk_trip, tc.th_chidon_id, tc.test_type, tc.reward_type  
             from users u 
             join schools s using (school_id) 
             join classes c on u.class_id = c.class_id 
@@ -58,7 +58,7 @@ foreach ($schools as $school_id => $name) {
             <th>Track Eligible for</th>
             <th>Eligible Rewards</th>
             <th>Registered</th>
-<!--            <th>Registered for KHK Trip</th>-->
+            <th>Registered for KHK Trip</th>
         </tr>
         <?php
         $test = new ChidonTests();
@@ -89,10 +89,10 @@ foreach ($schools as $school_id => $name) {
             $school = $schools[$row['school_id']];
             $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
-//            $khk = $row['khk_reg'] > 0 ? 'yes' : '';
+            $khk = $row['khk_trip'] > 0 ? 'yes' : '';
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
                 $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $track . "</td><td>" . $reward . "</td><td>" .
-                $paid . "</td></tr>";
+                $paid . "</td><td>" . $khk . "</td></tr>";
         }
         ?>
     </table>
