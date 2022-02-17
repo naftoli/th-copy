@@ -173,11 +173,11 @@
 </header>
 <div class="main">
     <div class="wrapper">
-        <h2 class="title">Chidon Enrollment</h2>
+        <h2 class="title">Chidon Experience Enrollment</h2>
         <!--		<div class="form login" style="display: none;">-->
         <div class="form login">
             <form id="loginForm">
-                <p>Please log in to your Mashpia.com account to proceed with Chidon enrollment*</p>
+                <p>Please log in with your Mashpia.com account to proceed with Chidon enrollment*</p>
                 <div class="field">
                     <label>Username: <input type="text" id="username" name="username" required /></label>
                 </div>
@@ -666,8 +666,10 @@
                         with regards to any questions you have about your region's trip.</h5>`
                 html += `<div class="flex">
                         <input class="inputCheckbox" type="checkbox" name="trip" class="trip_terms" id="trip_terms_${child.user_id}" />
-                            <label for="trip_terms_${child.user_id}" style="display: inline">I understand that if I want to switch to a different regional trip,
-                                I must email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE Registration ends.</label>
+                            <label for="trip_terms_${child.user_id}" style="display: inline">
+                            I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
+                            I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
+                            </label>
                     </div></div>`
             }
 
