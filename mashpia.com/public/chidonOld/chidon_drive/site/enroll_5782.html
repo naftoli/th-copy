@@ -560,14 +560,12 @@
                     msg += " Some of your children have already registered, while others have not had their school " +
                         "confirm their eligibility."
                 } else if (schoolNotConfirmed.length) {
-                    msg += " Some or all of your child(ren)'s school(s) have not yet confirmed their eligibility.";
+                    msg += " Some or all of your child(ren)'s school(s) have not yet confirmed their eligibility."
                 }
                 alert(msg)
             }
             location.href = 'https://mashpia.com/mobile'
-        }
-
-        if (schoolNotConfirmed.length) {
+        } else if (schoolNotConfirmed.length) {
             alert("You have some child(ren) who are not showing up because their school has not yet confirmed their eligibility.")
         }
 
