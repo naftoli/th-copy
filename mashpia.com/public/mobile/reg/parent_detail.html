@@ -399,73 +399,11 @@
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
 <!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
-                                                        {{#if this.chidon_confirmed_5782}}
-<!--                                                            <div class="chidonRegInfo" style="color: #1b2b51; margin-top: 10px;">Chidon {{ this.chidon_year }} Registration Confirmed</div>-->
-                                                        {{else}}
-<!--                                                            <button class="btn btn-primary confirm_chidon">Confirm Chidon Registration</button>-->
-<!--                                                            <div style="font-style: italic; color: darkslateblue">Chidon registration & confirmation-->
-<!--                                                                <span style="text-decoration: line-through">closes this Monday 11:59PM</span>-->
-<!--                                                                will be extended until tonight 11:59PM-->
-<!--                                                            </div>-->
+                                                        {{#if this.shabbatonPaid}}
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for the Chidon Experience</span> {{ this.chidon_year }}</div>
                                                         {{/if}}
-                                                        {{#if this.enrollShabbaton}}
-                                                            {{#if this.shabbatonPaid}}
-                                                            <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for the Chidon Experience</span> {{ this.chidon_year }}</div>
-<!--                                                            <button class="btn btn-primary shabbaton">Edit Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button>-->
-                                                            {{else}}
-<!--                                                            <button class="btn btn-primary shabbaton">Pay for Chidon {{this.chidon_year}} (ID: {{this.th_chidon_id}})</button>-->
-                                                            {{/if}}
-                                                            <!-- <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Chidon Registration {{this.chidon_year}} (ID: {{this.user_id}})</button> -->
-<!--                                                            <button class="btn btn-primary shabbatonConfirm" style="margin-top: 10px;">Confirm Personalizations {{this.chidon_year}} (ID: {{this.user_id}})</button>-->
-<!--                                                            {{#if this.confirmed_chidon_5781}}-->
-<!--                                                                <div class="chidonRegInfo"><span>Personalizations Confirmed {{this.chidon_year}} (ID: {{this.user_id}})</span></div>-->
-<!--                                                            {{/if}}-->
-                                                        {{/if}}
-<!--                                                        <button class="btn btn-primary confirmation">Confirm Chidon Registration</button>-->
-<!--                                                        <div style="margin: 10px 0px">-->
-<!--                                                            <button class="btn btn-success invitation" id="{{this.chidon_id}}">Chidon Invitation</button>-->
-<!--&lt;!&ndash;                                                            <button class="btn btn-info chidonPhoto">Upload Photo for Chidon</button>&ndash;&gt;-->
-<!--                                                        </div>-->
-                                                        {{#if this.shabbatonRegistered}}
-                                                        {{#if this.shabbatonConfirmed}}
-<!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="EnrolledChidon_msg1" class="i18n"> Chidon Shabbaton Enrolled - Chidon ID: </span>{{this.th_chidon_id}}</div>-->
-                                                        {{else}}
-<!--                                                        <div class="chidonRegInfo" data-key="EnrolledChidon_msg2" class="i18n">Chidon Shabbaton Pending Enrollment</div>-->
-                                                        {{#if this.shabbatonEdit}}
-<!--                                                        <div style="margin: 10px 0px">-->
-<!--                                                            <button class="btn btn-danger editEnrollment" data-key="EditEnrollment" class="i18n">Edit Enrollment</button>-->
-<!--                                                        </div>-->
-                                                        {{/if}}
-                                                        {{/if}}
-                                                        {{else}}
-                                                        <!-- {{#if this.enrollShabbaton}}
-                                                            <div class="button-spacing">
-                                                                <button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
-                                                            </div>
-                                                        {{/if}} -->
-                                                        <!-- <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.chidon_year }}</div> -->
-                                                        {{/if}}
-                                                        <!-- <div style="margin:10px 0px">
-                                                            <button class="btn btn-primary editChidon">Edit Sweater Size</button>
-                                                        </div> -->
                                                     </div>
                                                     {{/if}}
-                                                    <!--
-                                                    {{#if this.chidon}}
-                                                        {{#if this.chidonRegistered}}
-                                                        {{else}}
-                                                            <div class="button-spacing">
-                                                                <button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
-                                                            </div>
-                                                        {{/if}}
-                                                    {{/if}}
-
-                                                    {{#if this.auctionInfo}}
-                                                        <div class="chidonRegInfo">
-                                                            {{this.auctionInfo}}
-                                                        </div>
-                                                    {{/if}}
-                                                    -->
                                                     {{#if this.allowRemove}}
                                                     <a href="#" class="del">
                                                         <div class="button-spacing">
@@ -640,16 +578,16 @@
                     //	break;
                     //}
 
-                    if (parent_id == 3 || parent_id == 1264) {
-                        $(".subsidy").show()
-                    }
-
                     // sepearate registered and un-registered
                     var registred_children = {};
                     var unregistered_children = {};
 
                     for (var c in children) {
                         var child = children[c];
+
+                        if (child.chidonRegistered && parseInt(child.chidonConfirmed)) {
+                            $(".subsidy").show()
+                        }
 
                         child.chidon_confirmed_5782 = parent.chidon_confirmed_5782
                         console.log('confirmed: ' + child.chidon_confirmed_5782)
