@@ -193,7 +193,7 @@ function processKhk() {
     global $sqlKhk, $year;
 
     $success = true;
-    if (isset($_COOKIE['khk_trip'])) {
+    if (isset($_COOKIE['khk_trip']) && count($_COOKIE['khk_trip'])) {
         foreach ($_COOKIE['khk_trip'] as $user_id) {
             $res = $sqlKhk->execute([
                 ':year' => $year,
