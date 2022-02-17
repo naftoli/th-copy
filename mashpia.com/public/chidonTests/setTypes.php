@@ -42,54 +42,6 @@ if (isset($_POST['save'])) {
     header("Location: enterScores.php");
     exit;
 }
-
-function markInfo( $child, $school_id ) {
-    global $types, $marks, $numTests;
-
-    // get child mark info
-    $childMarkInfo = $marks[$school_id][$child['th_chidon_id']];
-
-    // get marks / avgs for child per type
-    $ct = new ChidonTests();
-    $marksPerType = [];
-    $avgs = [];
-    foreach ($types as $type => $val) {
-        $marksPerType[$type] = 0;
-        $avgs[$type] = 0;
-    }
-
-    for ($i = 1; $i <= 4; $i++) {
-        if ($i > $numTests) break;
-        if (isset($childMarkInfo[$i])) {
-            foreach ($childMarkInfo[$i] as $type => $mark) {
-                if ($mark > 0) {
-                    $marksPerType[$type] += $mark;
-                }
-            }
-        }
-    }
-
-    // calculate avgs and highest type currently eligible for
-    $highest_type = '';
-    $highest_mark = 0;
-    foreach ($types as $type => $val) {
-        if ($numTests && ($marksPerType[$type])) {
-            $avg = $marksPerType[$type] / $numTests;
-            $avgs[$type] = $avg;
-            if (($type != 'genius' && $avg >= 70) || ($type == 'genius' && $avg >= 90)) {
-                $highest_type = $type;
-                $highest_mark = $avg;
-            }
-        }
-    }
-
-    $markInfo = [];
-    $markInfo['avg'] = $avgs[$child['test_type']] ?? 0;
-    $markInfo['highest_track'] = $highest_type;
-    $markInfo['highest_track_avg'] = $highest_mark;
-
-    return $markInfo;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,13 +86,24 @@ function markInfo( $child, $school_id ) {
             echo "<form action='' method='post'>";
             echo "<div style='float: right'><input type='submit' name='save' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
             echo "<div style='clear: both'></div>";
+            $ct = new ChidonTests();
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Avg Mark</th>
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
-                    $markInfo = markInfo($child, $school);
+                    $markInfo = $ct->getHighestTrackPassed($child);
+                    $highestTrack = $markInfo['highest_track'];
+                    $rewardType = $child['reward_type'];
+                    if ($rewardType != 'highest track passed') {
+                        $indexes = array_keys($types);
+                        $key1 = array_search($highestTrack, $indexes);
+                        $key2 = array_search($rewardType, $indexes);
+                        if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
+                        else if ($key2) $highestTrack = $rewardType;
+                    }
+
                     $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
@@ -153,7 +116,7 @@ function markInfo( $child, $school_id ) {
                         echo ">" . $value . "</option>";
                     }
                     echo "</select></td><td>" . number_format($markInfo['avg'], 2) . "</td><td>";
-                    if (!empty($markInfo['highest_track'])) echo $types[$markInfo['highest_track']];
+                    if (!empty($highestTrack)) echo $types[$highestTrack];
                     echo "</td><td>" . number_format($markInfo['highest_track_avg'],2) . "</td><td>";
                     echo "<select name='reward_type[" . $child['th_chidon_id'] . "]'";
                     if ($disabled) echo " disabled='disabled' ";
