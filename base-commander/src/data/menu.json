@@ -124,37 +124,15 @@
           }
         ]
       },
-      {
-        "label": "Shabbaton",
-        "items": [
-          {
-            "label": "Enrollment",
-            "items": [
-              { "label": "Activate Enrollment HQ", "legacy": true, "user_types": [ "HQ" ], "path": "/enrollment_hq.php" },
-              { "label": "Review Enrollment", "legacy": true, "path": "/review_enrollment.php" },
-              { "label": "Print Enrollment Info", "legacy": true, "path": "/chidon_review.php" },
-              { "label": "Shabbaton Enrolled Report", "legacy": true, "path": "/reports/chidon/shabbaton_enrollment.php" }
-            ]
-          },
-          { "label": "Review / Create Chaperones", "legacy": true, "path": "/chidon_school_reg2.php" },
-          { "label": "Shabbaton Walking Report", "legacy": true, "path": "/reports/chidon/walking_groups.php" },
-          { "label": "Review Chidon Pictures", "legacy": true, "path": "/chidonOld/reports/chidon_pics.php" },
-          { "label": "Generate ID Cards", "legacy": true, "user_types": ["HQ"], "path": "/chidonOld/IDcards/" }
-        ]
-      },
+
+      { "label": "Eligibility Confirmation", "legacy": true, "path": "/chidonOld/newReports/school_confirmation.php" },
 
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
       
       { "label": "Study Guide / Book report", "legacy": true, "path": "/reports/chidon/combined.php" },
-
-
-      { "label": "School Shabbaton Enrollment", "legacy": true, "path": "/chidon_school_reg.php" },
-
-      { "label": "Activate Enrollment", "legacy": true, "user_types": [ "BC" ], "path": "/enrollment.php" },
       
       { "label": "Chidon History Report", "legacy": true, "path": "/reports/chidon/reg_history_school.php" },
 
-      { "label": "Upload Spreadsheets", "legacy": true, "user_types": [], "path": "/chidonOld/upload/" },
       { "label": "Chidon Office Reports", "legacy": true, "user_types": ["HQ"], "path": "/reports/chidon/" }
     ]
   },
