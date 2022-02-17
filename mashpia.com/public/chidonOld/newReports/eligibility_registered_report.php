@@ -58,7 +58,7 @@ foreach ($schools as $school_id => $name) {
             <th>Track Eligible for</th>
             <th>Eligible Rewards</th>
             <th>Registered</th>
-            <th>Registered for KHK Trip</th>
+<!--            <th>Registered for KHK Trip</th>-->
         </tr>
         <?php
         $test = new ChidonTests();
@@ -89,10 +89,10 @@ foreach ($schools as $school_id => $name) {
             $school = $schools[$row['school_id']];
             $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
-            $khk = $row['khk_reg'] > 0 ? 'yes' : '';
+//            $khk = $row['khk_reg'] > 0 ? 'yes' : '';
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
                 $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $track . "</td><td>" . $reward . "</td><td>" .
-                $paid . "</td><td>" . $khk . "</td></tr>";
+                $paid . "</td></tr>";
         }
         ?>
     </table>
