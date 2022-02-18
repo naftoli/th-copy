@@ -21,7 +21,7 @@ foreach ($children as $child) {
         if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
         else if ($key2) $highestTrack = $rewardType;
     }
-    $tracks[$child['user_id']] = strtolower($types[$highestTrack]);
+    $tracks[$child['user_id']] = ucwords($types[$highestTrack]);
 }
 
 echo json_encode([

@@ -97,8 +97,7 @@
     }
 
     function checkKhkEligibility(child) {
-        if (parseInt(child.grade) === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
-        else return false
+        return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun')
     }
 
     function checkFields() {
@@ -137,11 +136,11 @@
         }
 
         let fees = {
-            yesod: 70,
-            yediah: 180,
-            havonah: 370,
-            iyun: 370,
-            khk: 500
+            'Yesod': 70,
+            'Yediah': 180,
+            'Havonah': 370,
+            'Iyun': 370,
+            'Khk Trip': 500
         }
 
         let admin = Cookies.get('admin')
@@ -166,24 +165,37 @@
 
         // update children with track info
         for (let child of children) {
+            child.track = tracks[child.user_id]
             let khk = checkKhkEligibility(child)
-            if (khk) child.track = 'khk'
-            else child.track = tracks[child.user_id]
+            if (khk) child.track = 'Khk Trip'
         }
 
         let registered = children.filter(child => child.date_paid)
-        let eligible = children.filter(child => child.track && !child.date_paid )
+        let haveTrack = children.filter(child => child.track)
+        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
         let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
 
-        if (schoolNotConfirmed) {
-            alert("You have some child(ren) that may not show up because the school has not yet confirmed their information.")
+        if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
+            alert("It seems like you don't have any child(ren) that are eligible this year.")
+            location.href = 'https://mashpia.com/mobile'
         }
 
-        if (!eligible.length && registered.length) {
-            alert("All eligible children have already been enrolled.")
-        }
-        else if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
-            alert("It seems like you don't have any child(ren) that are eligible this year.")
+        if (! eligible.length) {
+            if (haveTrack.length === registered.length) {
+                alert("All your child(ren) that are eligible have already been registered.")
+            } else {
+                let msg = "You do not have any children that are currently able to enroll.";
+                if (schoolNotConfirmed.length && registered.length) {
+                    msg += " Some of your children have already registered, while others have not had their school " +
+                        "confirm their eligibility."
+                } else if (schoolNotConfirmed.length) {
+                    msg += " Some or all of your child(ren)'s school(s) have not yet confirmed their eligibility."
+                }
+                alert(msg)
+            }
+            location.href = 'https://mashpia.com/mobile'
+        } else if (schoolNotConfirmed.length) {
+            alert("You have some child(ren) who are not showing up because their school has not yet confirmed their eligibility.")
         }
 
         let html = `Each year Chidon HQ offers up to a 50% subsidy per child.<br /><br />
@@ -225,7 +237,7 @@
             let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user))
             let child = filtered[0]
             let fullAmount
-            switch (child.track) {
+            switch (child.track.toLowerCase()) {
                 case 'yesod':
                 case 'yediah':
                     fullAmount = fees[child.track]
@@ -234,7 +246,7 @@
                 case 'iyun':
                     fullAmount = 270
                     break
-                case 'khk':
+                case 'khk trip':
                     fullAmount = 400
                     break
             }

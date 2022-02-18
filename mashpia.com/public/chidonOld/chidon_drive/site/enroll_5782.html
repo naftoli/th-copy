@@ -481,13 +481,11 @@
     }
 
     function checkKhkEligibility(child) {
-        if (parseInt(child.grade) === 8 && (child.track === 'havonah' || child.track === 'iyun')) return true
-        else return false
+        return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun')
     }
 
     function checkForRohrGrant(amount) {
-        if (amount >= 270 && amount <= 370) return true
-        else return false
+        return amount >= 270 && amount <= 370
     }
 
     function getLowest(amounts, raised, khk) {
@@ -503,21 +501,21 @@
 
     function getTrackText(track, trackWon) {
         let trackText = {
-            yesod: "the Chidon Sweater, Gifts & to take the Yesod Final",
-            yediah: "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
-            havonah: "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
-            iyun: "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
-            khk: "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " Final"
+            'Yesod': "the Chidon Sweater, Gifts & to take the Yesod Final",
+            'Yediah': "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
+            'Yavonah': "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
+            'Iyun': "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
+            'Khk Trip': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " Final"
         }
         return trackText[track]
     }
 
     const trackInfo = {
-        yesod: [70, 50, 35],
-        yediah: [180, 125, 100, 90],
-        havonah: [370, 250, 200, 185],
-        iyun: [370, 250, 200, 185],
-        khk: [500, 400, 325, 250]
+        'Yesod': [70, 50, 35],
+        'Yediah': [180, 125, 100, 90],
+        'Yavonah': [370, 250, 200, 185],
+        'Iyun': [370, 250, 200, 185],
+        'Khk Trip': [500, 400, 325, 250]
     } // need it for a few functions so it needs to be global
 
     async function processChildren(admin) {
@@ -579,19 +577,24 @@
             if (rohrGrant) child.raised = 370
 
             // figure out if child is in eligible for khk
+            let trackWon = child.track
+            console.log(child)
             let khk = checkKhkEligibility(child)
-            let trackWon = child.track[0].toUpperCase() + child.track.substr(1)
+            if (khk) {
+                child.originalTrack = child.track
+                child.track = 'Khk Trip'
+            }
             let trackText = getTrackText(child.track, trackWon)
 
             const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
             html += `
-                    <div class="kid flex-kids">
+                    <div class="kid flex-kids" id="${child.user_id}">
                         <div>
                             <img class="childImg" src="//mashpia.com/${childPic}" />
                         </div>
                          <div style="margin-left: 20px;">
                             <h5 class="formDetails">Dear ${child.first},</h5>
-                            <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${trackWon}</b></span>
+                            <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
                             Track. You are eligible for ${trackText}.<h5>`
 
             // registration heading
@@ -616,7 +619,6 @@
 
             // registration
             amounts = [...trackInfo[child.track]]
-            if (khk) amounts = [...trackInfo['khk']]
             html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
             html += `Full cost: $<span class="full_cost">${amounts[0]}</span><br />
                     We offer subsidies (as you can see below).</h5>`
@@ -658,7 +660,7 @@
             }
             html += `</select></h5>`
 
-            if (child.track === 'havonah' || child.track === 'iyun') {
+            if (child.track === 'Havonah' || child.track === 'Iyun') {
                 let style = ''
                 if (khk) style='display: none'
                 html += `<br /><div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />
@@ -761,10 +763,8 @@
             // change to regional trip options
             let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
             let child = filtered[0]
-            console.log(child)
-            console.log(trackInfo[child.track])
-            let amounts = idx ? [...trackInfo[child.track]] : [...trackInfo['khk']]
-            // console.log(amounts)
+            let track = child.track === 'Khk Trip' ? child.originalTrack : child.track
+            let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Khk Trip']]
             lowest = getLowest(amounts, parseFloat(child.raised), !idx)
             if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
 
@@ -788,9 +788,11 @@
                 html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
             }
             html += `</select>`
-            $(".reg_select").empty()
-            $(".reg_select").append(html)
-            $("select.reg").niceSelect()
+            let desc = "#" + user_id;
+            let elem = $(desc).find(".reg_select");
+            $(elem).empty()
+            $(elem).append(html)
+            $(elem).find("select.reg").niceSelect()
         }
     }
 
