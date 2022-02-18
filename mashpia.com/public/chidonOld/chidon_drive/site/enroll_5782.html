@@ -1059,27 +1059,17 @@
     })
 
     function checkTripTerms() {
-        let elems = []
-        let missing = []
-        for (let item of cart) {
-            if (item.desc.includes('reg')) {
-                for (let child of children) {
-                    if (item.desc === ('reg_' + child.user_id)) {
-                        const elem = "#trip_terms_" + child.user_id
-                        if (!$(elem).is(":checked")) {
-                            elems.push(elem)
-                            missing.push(child.first)
-                        }
-                    }
+        $(".trip_terms").each( function() {
+            let topElem = $(this).parent().parent().parent().parent();
+            let user_id = $(topElem).attr('id')
+            let elem = 'reg_' + user_id
+            if ($(elem).val()) {
+                if (! $(this).is(':checked')) {
+                    alert("you must indicate your acceptance of the Regional Trip Terms.")
+                    return false
                 }
             }
-        }
-        if (missing.length) {
-            alert('You must indicate your acceptance of the Regional Trip Terms for ' + missing.join(" and "))
-            const elem = elems[0]
-            $(elem).focus()
-            return false
-        }
+        })
         return true
     }
 
