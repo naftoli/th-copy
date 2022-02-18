@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 require_once __DIR__ . '/../../../db.php';
 require_once __DIR__ . '/../../../api/header/db.php';
@@ -19,8 +19,8 @@ use classes\authorize\PaymentProfile as Payment;
 //******************* GLOBAL VARIABLES ***********************/
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
-$payment_id = $_POST['card_id'];
-$to_charge = isset($_POST['cart_total']) ? $_POST['cart_total'] : 0;
+$payment_id = intval($_POST['card_id']);
+$to_charge = isset($_POST['cart_total']) ? intval($_POST['cart_total']) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
 $shipping = isset($_POST['shipping']) ? $_POST['shipping'] : null;
 $cart = $_POST['cart'];
@@ -123,6 +123,7 @@ function setSweaterInfo() {
 
 function addNewCard() {
     global $admin_id, $ccInfo;
+
     $admin = \Admin::find('first', ['admin_id' => $admin_id]);
     if ($admin) {
         $props = [
@@ -130,17 +131,9 @@ function addNewCard() {
             'cc-exp' => $ccInfo['exp'],
             'x_card_code' => $ccInfo['cvv']
         ];
-        $created = $admin->createPaymentProfile($props);
-        if (is_array($created)) {
-            return [
-                'success' => true,
-                'card_id' => $created['customerPaymentProfileId']
-            ];
-        } else {
-            return [
-                'success' => false,
-                'error' => $created
-            ];
+        $newCard = $admin->createPaymentProfile($props);
+        if (is_object($newCard)) {
+            return $newCard->customerPaymentProfileId;
         }
     }
     return false;
@@ -149,21 +142,17 @@ function addNewCard() {
 function processFee() {
     global $year, $admin_id, $to_charge, $payment_id;
 
-    if (intval($payment_id) == 0) {
-        $newCard = addNewCard();
-        if (!$newCard) return 'There was an error creating a new card.';
-        else if (isset($newCard['error'])) return $newCard['error'];
-        else $payment_id = intval($newCard['card_id']);
-    }
+    if (! $payment_id) $payment_id = addNewCard();
+    if ($payment_id) {
+        $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $customer_id = $row['authorize_customer_profile_id'];
 
-    $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
-    $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    $customer_id = $row['authorize_customer_profile_id'];
-
-    $cp = new Customer( $customer_id );
-    $response = $cp->chargeCard( $to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id );
-    return $response;
+        $cp = new Customer($customer_id);
+        $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
+        return $response;
+    } else return false;
 }
 
 function processReg() {
@@ -381,16 +370,23 @@ $sweatersProcessed = processSweaters();
 $info = [];
 $trans_id = 0;
 if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
-    if (intval($to_charge) > 0) {
+    if ($to_charge) {
         $payment = processFee();
+        if (! $payment) {
+            $MASHPIA_DB->rollBack();
+            $info['success'] = false;
+            $info['error'] = 'There seems to have been an issue with your new card.';
+            echo json_encode($info);
+            exit;
+        }
         if (is_array($payment)) {
             $trans_id = $payment['transactionResponse']['transId'];
             // payment went through so commit to db
             $MASHPIA_DB->commit();
             $info['success'] = true;
             $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
-                    'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
-                    'You should receive an email confirmation shortly with all the details.' . "\r\n" . 'Thank You!';
+                'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
+                'You should receive an email confirmation shortly with all the details.' . "\r\n" . 'Thank You!';
             $info['msg'] = $msg;
         } else {
             $MASHPIA_DB->rollBack();

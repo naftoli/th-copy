@@ -538,7 +538,19 @@
 
         $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, admin_email, cart_total, shipping, card_id, cc, cart, sweaters, addresses}, function(result) {
             const res = JSON.parse(result)
-            if (res.success) alert(res.msg)
+            if (res.success) {
+                alert(res.msg)
+                if (window.localStorage) {
+                    window.localStorage.removeItem('cart')
+                    window.localStorage.removeItem('addresses')
+                } else {
+                    Cookies.remove('cart')
+                    Cookies.remove('addresses')
+                }
+                Cookies.remove('khk_trip')
+                Cookies.remove('myshliach')
+                location.href = 'http://mashpia.com/mobile'
+            }
             else {
                 alert(res.error)
                 $(".processPayment").attr('disabled', false)
