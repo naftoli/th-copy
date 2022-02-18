@@ -331,7 +331,7 @@ function getEmailMsg($trans_id) {
     }
 
     $msg .= "Please continue to review for the Chidon Final on Wednesday, 6 Adar 2 (March 9).<br /><br />
-        If you have any questions, please email Chidon@TzivosHashem.org.<br /><br />Much Hatzlocha!<br />Chidon HQ";
+        If you have any questions, please email chidon@tzivoshashem.org.<br /><br />Much Hatzlocha!<br />Chidon HQ";
 
     $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
             To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a></footer>";
@@ -386,7 +386,8 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
             $info['success'] = true;
             $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                 'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
-                'You should receive an email confirmation shortly with all the details.' . "\r\n" . 'Thank You!';
+                'You should receive an email confirmation shortly with all the details.' . "\r\n" .
+                'If you do not receive an email, please check your SPAM folder'. "\r\n" . 'Thank You!';
             $info['msg'] = $msg;
         } else {
             $MASHPIA_DB->rollBack();
