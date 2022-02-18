@@ -211,7 +211,7 @@
                          <b>Mazel Tov! ${child.first} has passed the ${child.track} track!</b><br /><br />`
                 html += `The full cost is $${fees[child.track]}.<br />`
                 html += `50% is $${fees[child.track] / 2}.<br /><br />`
-                html += `I need a greater subsidy than 50% and would like to pay:
+                html += `I need a greater subsidy than 50% and would like to pay during registration:
                         $<input type='number' name='payment' class='payment' style="width: 60px;"`
                 if (child.payment_request != null) {
                     html += `value='${child.payment_request}' `
