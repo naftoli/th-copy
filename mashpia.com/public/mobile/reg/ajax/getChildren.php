@@ -270,7 +270,7 @@ if ( !empty( $users ) ) {
         $sSql = "select chidon_confirmed_5782 from schools where school_id = " . $row['school_id'];
         $sRes = mysql_query($sSql);
         $sRow = mysql_fetch_assoc($sRes);
-        $children[$row['user_id']]['chidonConfirmed'] = $sRow['chidon_confirmed_5782'];
+        $children[$row['user_id']]['chidonSchoolConfirmed'] = $sRow['chidon_confirmed_5782'];
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
