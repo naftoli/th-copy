@@ -437,7 +437,6 @@
             let info = JSON.parse(result);
             if (info.success) {
                 Cookies.set('chidon_admin', info.admin);
-                Cookies.set('from_enrollment', 1);
                 processChildren(info.admin);
             } else {
                 alert(info.error);
