@@ -487,13 +487,18 @@
         return amount >= 270 && amount <= 370
     }
 
-    function getLowest(amounts, raised, khk) {
+    function getLowest(child, amounts, khk) {
         let lowest = amounts[amounts.length-1]
-        if (raised > 0) lowest -= raised / 2
+        const raised = parseInt(child.raised)
+        const coupon = parseInt(child.coupon)
+
+        if (raised) lowest -= raised / 2
         if (raised > 170 && raised < 270 && !khk) {
             const diff = 270 - raised
             if (diff < lowest) lowest = diff
         }
+        if (coupon) lowest -= coupon
+
         if (lowest < 0) lowest = 0
         return lowest
     }
@@ -635,18 +640,14 @@
                         You raised $${child.raised} which gives you $${parseFloat(child.raised) / 2} off your registration cost.</h5>`
             }
 
-            lowest = getLowest(amounts, parseFloat(child.raised), khk)
-            if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
-
-            let subsidy = parseInt(child.payment_request)
-            if (! isNaN(subsidy)) {
-                if (subsidy < lowest) lowest = subsidy
-                if (! amounts.includes(subsidy)) {
-                    amounts.push(subsidy)
-                    amounts.sort(function(a, b) { return b - a })
-                }
+            lowest = getLowest(child, amounts, khk)
+            if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
+            const subsidy = parseInt(child.subsidy)
+            if (!isNaN(subsidy)) {
+                amounts.push(subsidy)
+                if (lowest > subsidy) lowest = subsidy
             }
-
+            amounts.sort(function(a, b) { return b - a })
             if (lowest === 0) free = true
             else free = false
             html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!<br /><br />`
@@ -688,13 +689,6 @@
         let info = await $.post('../ajax/getShippingInfo.php')
         let shippingParsed = JSON.parse(info)
         if (shippingParsed.success) {
-            // let shippingInfo = {
-            //     parent_id: 1246,
-            //     cost: 55,
-            //     address: '215 Lisa Cres Thornhill ON, L4J 2N2',
-            //     usa: true,
-            //     paid: false
-            // }
             let shippingInfo = shippingParsed.data
             shippingInfo['address'] = shippingInfo['address'].replaceAll('\\', '')
             if (! parseInt(shippingInfo['paid'])) {
@@ -764,18 +758,14 @@
             let child = filtered[0]
             let track = child.track === 'Khk Trip' ? child.originalTrack : child.track
             let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Khk Trip']]
-            lowest = getLowest(amounts, parseFloat(child.raised), !idx)
+            lowest = getLowest(child, amounts, !idx)
             if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
-
-            let subsidy = parseInt(child.payment_request)
-            if (! isNaN(subsidy)) {
-                if (subsidy < lowest) lowest = subsidy
-                if (! amounts.includes(subsidy)) {
-                    amounts.push(subsidy)
-                    amounts.sort(function(a, b) { return b - a })
-                }
+            const subsidy = parseInt(child.subsidy)
+            if (!isNaN(subsidy)) {
+                amounts.push(subsidy)
+                if (lowest > subsidy) lowest = subsidy
             }
-
+            amounts.sort(function(a, b) { return b - a })
             if (lowest === 0) free = true
             else free = false
             let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`

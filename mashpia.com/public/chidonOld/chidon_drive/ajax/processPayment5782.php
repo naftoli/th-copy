@@ -16,6 +16,10 @@ require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
 use classes\authorize\PaymentProfile as Payment;
 
+//******************* Coupon Codes ************************/
+require_once __DIR__ . '/../../coupons/class.couponCode.php';
+$coupon = new CouponCode($MASHPIA_DB, $year);
+
 //******************* GLOBAL VARIABLES ***********************/
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
@@ -287,6 +291,24 @@ function processSweaters() {
     return $success;
 }
 
+function redeemCoupons() {
+    global $users, $coupon;
+
+    // get serial numbers
+    $serials = [];
+    $user_ids = array_keys($users);
+    $sql = "select user_serial from users where user_id in (" . implode(',', $user_ids) . ")";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $serials[] = $row['user_serial'];
+    }
+
+    // redeem coupons
+    foreach ($serials as $user_serial) {
+        if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+    }
+}
+
 function getEmailMsg($trans_id) {
     global $iyun, $users, $user_info, $shipping, $celebBoxes, $celebBoxShipping, $sweaters, $sweater_shipping, $to_charge, $reg_cost;
 
@@ -366,6 +388,7 @@ $khk = processKhk();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
+$couponsRedeemed = redeemCoupons();
 
 $info = [];
 $trans_id = 0;

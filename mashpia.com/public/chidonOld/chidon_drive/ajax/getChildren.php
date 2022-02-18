@@ -16,8 +16,8 @@ function getChildren() {
     $children = [];
     // track, raised, grade, trip location
     $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, c.class_grade as grade, 
-                s.chidon_confirmed_5782 as schoolConfirmed, tc.th_chidon_id, tc.reward_type, tc.payment_request, tc.date_paid,  
-                IFNULL(cus.subsidy_amount, 0) as raised, IFNULL(cc.value, 0) as coupon
+                s.chidon_confirmed_5782 as schoolConfirmed, tc.th_chidon_id, tc.reward_type, tc.payment_request as subsidy, 
+                tc.date_paid, IFNULL(cus.subsidy_amount, 0) as raised, IFNULL(cc.value, 0) as coupon
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  

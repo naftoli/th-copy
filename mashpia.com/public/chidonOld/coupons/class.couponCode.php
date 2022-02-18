@@ -186,14 +186,17 @@ class CouponCode
         return false;
     }
 
-    public function useCode( $code ) {
+    public function useUserCode($user_serial) {
         $stmt = $this->db->prepare("
-            UPDATE coupon_codes 
-            SET used = 1, 
-                date_redeemed = now() 
-            WHERE code = :code
+            update coupon_codes 
+            set used = 1, 
+            date_redeemed = now() 
+            where year = :year 
+            and serial_num = :serial
         ");
-        $res = $stmt->execute([':code' => $code]);
-        return $res;
+        $stmt->execute([
+            ':year'     => $this->year,
+            ':serial'   => $user_serial
+        ]);
     }
 }
