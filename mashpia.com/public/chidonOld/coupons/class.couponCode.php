@@ -74,7 +74,7 @@ class CouponCode
         return false;
     }
 
-    public function saveCode( $value, $created_by, $reason ) {
+    public function saveCode( $value, $created_by, $reason, $admin_id ) {
         $stmt = $this->db->prepare("
             INSERT INTO coupon_codes 
             SET 
@@ -83,18 +83,55 @@ class CouponCode
                 type = :type, 
                 year = :year, 
                 created_by = :created_by, 
-                reason = :reason
+                reason = :reason, 
+                admin_id = :admin
         ");
-        $res = $stmt->execute([
+        $stmt->execute([
             ':code'     => $this->code, 
             ':value'    => $value, 
             ':type'     => $this->type, 
             ':year'     => $this->year,
             ':created_by' => $created_by, 
-            ':reason'   => $reason
+            ':reason'   => $reason,
+            ':admin'    => $admin_id
         ]);
-        if ( $res ) return true;
-        return false;
+        if ( $stmt->rowCount() ) return true;
+        else return false;
+    }
+
+    private function isValidSerialNumber($user_serial) {
+        $stmt = $this->db->query("select user_id from users where user_serial = " . $user_serial);
+        $row = $stmt->fetch();
+        if (! empty($row)) return true;
+        else return false;
+    }
+
+    public function saveUserCode( $value, $created_by, $reason, $user_serial ) {
+        if ($this->isValidSerialNumber($user_serial)) {
+            $stmt = $this->db->prepare("
+                INSERT INTO coupon_codes 
+                SET 
+                    code = :code, 
+                    value = :value, 
+                    type = :type, 
+                    year = :year, 
+                    created_by = :created_by, 
+                    reason = :reason, 
+                    serial_num = :serial
+            ");
+            $res = $stmt->execute([
+                ':code' => $this->code,
+                ':value' => $value,
+                ':type' => $this->type,
+                ':year' => $this->year,
+                ':created_by' => $created_by,
+                ':reason' => $reason,
+                ':serial' => $user_serial
+            ]);
+            if ($res) return 1;
+            return 0;
+        }
+        return -1;
     }
 
     public static function getListOfCodes( $db, $year, $type = 'chidon' ) {
@@ -129,5 +166,34 @@ class CouponCode
             $code['amount'] = $row['value'];
         }
         return $code;
+    }
+
+    public function checkForUserCode($user_serial) {
+        $stmt = $this->db->prepare("
+            SELECT * FROM coupon_codes 
+            WHERE 
+                year = :year AND serial_num = :user 
+                    AND used = 0
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':user' => $user_serial
+        ]);
+        $row = $stmt->fetch();
+        if ($row['value']) {
+            return $row['value'];
+        }
+        return false;
+    }
+
+    public function useCode( $code ) {
+        $stmt = $this->db->prepare("
+            UPDATE coupon_codes 
+            SET used = 1, 
+                date_redeemed = now() 
+            WHERE code = :code
+        ");
+        $res = $stmt->execute([':code' => $code]);
+        return $res;
     }
 }
