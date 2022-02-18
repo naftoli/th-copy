@@ -276,10 +276,10 @@
                 $(".child").each( function () {
                     let user_id = $(this).attr('id')
                     let payment = $(this).find('.payment').val()
-                    info.push({user_id, payment})
+                    let to_fundraise = parseInt($(this).find('.difference').text())
+                    info.push({user_id, payment, to_fundraise})
                 })
-                let total = getTotalGoal()
-                $.post('ajax/updateSubsidy.php', { info, total }, function (result) {
+                $.post('ajax/updateSubsidy.php', { info }, function (result) {
                     let res = JSON.parse(result)
                     if (res.success) alert(res.msg)
                     else alert(res.error)

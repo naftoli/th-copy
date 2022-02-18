@@ -8,11 +8,13 @@ require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = $_POST['info'];
+
 $success = true;
 foreach ($info as $child) {
     if (is_numeric($child['payment'])) {
-        $sql = "update th_chidon set payment_request = " . $child['payment'] . " where user_id = " . $child['user_id'] . " 
-        and year = " . $year;
+        $to_fundraise = is_numeric($child['to_fundraise']) ? $child['to_fundraise'] : 0;
+        $sql = "update th_chidon set payment_request = " . $child['payment'] . ", to_fundraise_5782 = " . $to_fundraise . "
+             where user_id = " . $child['user_id'] . " and year = " . $year;
         if (! mysql_query($sql)) {
             $success = false;
             break;
