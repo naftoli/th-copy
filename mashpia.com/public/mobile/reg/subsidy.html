@@ -177,7 +177,7 @@
 
         if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
             alert("It seems like you don't have any child(ren) that are eligible this year.")
-            location.href = 'https://mashpia.com/mobile'
+            location.href = '/mobile/reg/parent_detail.html'
         }
 
         if (! eligible.length) {
@@ -193,7 +193,7 @@
                 }
                 alert(msg)
             }
-            location.href = 'https://mashpia.com/mobile'
+            location.href = '/mobile/reg/parent_detail.html'
         } else if (schoolNotConfirmed.length) {
             alert("You have some child(ren) who are not showing up because their school has not yet confirmed their eligibility.")
         }
@@ -278,7 +278,8 @@
                     let payment = $(this).find('.payment').val()
                     info.push({user_id, payment})
                 })
-                $.post('ajax/updateSubsidy.php', { info }, function (result) {
+                let total = getTotalGoal()
+                $.post('ajax/updateSubsidy.php', { info, total }, function (result) {
                     let res = JSON.parse(result)
                     if (res.success) alert(res.msg)
                     else alert(res.error)
