@@ -17,7 +17,7 @@ function getChildren() {
     // track, raised, grade, trip location
     $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, c.class_grade as grade, 
                 s.chidon_confirmed_5782 as schoolConfirmed, tc.th_chidon_id, tc.reward_type, tc.payment_request as subsidy, 
-                tc.date_paid, IFNULL(SUM(cus.subsidy_amount), 0) as raised, IFNULL(cc.value, 0) as coupon, cc.used as coupon_used
+                tc.date_paid, IFNULL(cc.value, 0) as coupon, cc.used as coupon_used
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  
@@ -34,6 +34,21 @@ function getChildren() {
         ':admin'    => $admin_id
     ])) {
         $children = $stmt->fetchAll();
+        // find sum of chidon drive raised for child
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT IFNULL(SUM(subsidy_amount), 0) as raised 
+            FROM chidon_user_subsidies 
+            WHERE chidon_year = :year AND user_id = :user
+        ");
+        for ($i = 0; $i < count($children); $i++) {
+            $child = $children[$i];
+            $stmt->execute([
+                ':year'     => $year,
+                ':user'     => $child['user_id']
+            ]);
+            $result = $stmt->fetch();
+            if ($result['raised']) $children[$i]['raised'] = $result['raised'];
+        }
     }
     return $children;
 }
