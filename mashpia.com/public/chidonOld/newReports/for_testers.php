@@ -14,7 +14,8 @@ function getRegInfo() {
             from users u 
             join th_chidon tc using (user_id) 
             where tc.date_paid > 0 
-            and tc.year = " . $year;
+            and tc.year = " . $year . "
+            order by date_paid, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
