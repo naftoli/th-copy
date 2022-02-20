@@ -162,24 +162,22 @@ function processFee() {
 function processReg() {
     global $admin_id, $year, $sqlReg, $users;
 
-    if (! $users) return true; // nothing to save so all is good
-    else {
-        // register users
-        $success = true;
-        foreach ($users as $user_id => $amount) {
-            $res = $sqlReg->execute([
-                ':paid' => $amount,
-                ':admin' => $admin_id,
-                ':year' => $year,
-                ':user' => $user_id
-            ]);
-            if (!$res) {
-                $success = false;
-                break;
-            }
+    if (! $users) return false; // need to be registering at least one child
+    // register users
+    $success = true;
+    foreach ($users as $user_id => $amount) {
+        $res = $sqlReg->execute([
+            ':paid' => $amount,
+            ':admin' => $admin_id,
+            ':year' => $year,
+            ':user' => $user_id
+        ]);
+        if (!$res) {
+            $success = false;
+            break;
         }
-        return $success;
     }
+    return $success;
 }
 
 function processKhk() {
@@ -420,7 +418,7 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
     } else {
         $MASHPIA_DB->commit();
         $info['success'] = true;
-        $msg = 'Congratulation! You have successfully registered your child(ren).';
+        $info['msg'] = 'Congratulation! You have successfully registered your child(ren).';
     }
 } else {
     $MASHPIA_DB->rollBack();
