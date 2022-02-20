@@ -102,7 +102,7 @@ function getRaised() {
         GROUP BY user_id";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $raised[$row['user_id']] = $raised['total'];
+        $raised[$row['user_id']] = $row['total'];
     }
 }
 
