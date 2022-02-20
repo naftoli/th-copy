@@ -620,6 +620,7 @@
                         </div>
                         <h5 class="formDetails"><span class="title khk_title">Kol Hatorah Kula Payments</span></h5>`
             }
+            if (! khk_trip.includes(child.user_id)) khk_trip.push(child.user_id)
 
             // registration
             amounts = [...trackInfo[child.track]]
