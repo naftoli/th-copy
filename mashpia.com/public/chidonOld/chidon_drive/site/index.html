@@ -25,7 +25,7 @@
 				</a>
 				<nav>
 					<a href="index.html">Home</a>
-					<a href="donate.html">Donate</a>
+					<a href="donate.html" onclick="return false">Donate</a>
 					<a href="leaderboard.html">Leaderboard</a>
 					<a href="story.html">Our Story</a>
 				</nav>
@@ -105,7 +105,7 @@
 				<a href="donate.html" class="button">Support Chidon <img src="img/arrow.png" /></a>
 			</div>
 			<div class="family half">
-				<a href="" class="button">Support a Family <img src="img/arrow.png" /></a>
+				<a href="family.html" class="button">Support a Family <img src="img/arrow.png" /></a>
 			</div>
 		</div>
 
@@ -363,7 +363,7 @@
 					<nav>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="donate.html">Donate</a></li>
+							<li><a href="donate.html" onclick="return false">Donate</a></li>
 							<li><a href="leaderboard.html">Leaderboard</a></li>
 							<li><a href="story.html">Our Story</a></li>
 						</ul>
@@ -409,6 +409,13 @@
 		// 	let newUrl = 'https' + url.substring(pos);
 		// 	location.href = newUrl;
 		// }
+
+		$(".button").click( function (e) {
+			e.preventDefault()
+			e.stopPropagation()
+			let msg = `Welcome to the Chidon Drive!\nWe appreciate all you do to keep Chidon thriving!\nThe fundraiser is being postponed until the Mega Concert & Fundraiser on Sunday, 24 Adar 2/March 27.`
+			alert(msg)
+		})
 
 		$('#fullpage').fullpage({
 			licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
