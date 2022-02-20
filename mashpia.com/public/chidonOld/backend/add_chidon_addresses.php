@@ -21,11 +21,12 @@ if (isset($_POST['submit'])) {
                 $price = $data[0];
                 $admin_id = $data[1];
                 $usa = strtolower($data[2]) == 'no' ? 0 : 1;
-                $sql = "insert into chidon_parent_shipping 
+                $sql = "insert ignore into chidon_parent_shipping 
                         set parent_id = $admin_id, 
                         year = $year, 
                         cost = $price, 
-                        usa = $usa";
+                        usa = $usa 
+                        on duplicate key update cost = $price";
                 $qrys[] = $sql;
             }
         }
