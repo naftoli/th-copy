@@ -400,7 +400,9 @@
                                                     <div class="button-spacing">
 <!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
                                                         {{#if this.shabbatonPaid}}
-                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for the Chidon Experience</span> {{ this.chidon_year }}</div>
+                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon Rewards</span> {{ this.chidon_year }}</div>
+                                                        {{else}}
+<!--                                                            <button class="btn btn-primary shabbaton">Register for Chidon Rewards {{ this.chidon_year }}</button>-->
                                                         {{/if}}
                                                     </div>
                                                     {{/if}}
@@ -694,10 +696,8 @@
             })
 
             $(document).on('click', '.shabbaton', function() {
-                // var id = $(this).parent().parent().parent().attr('id');
-                // location.href = "/mobile/chidon/index2.html?id=" + id;
-                let url = "https://chidondrive.com/site/enrollNew.html?a=" + Cookies.get('admin');
-                location.href = url;
+                Cookies.set('chidon_admin', admin)
+                location.href = 'https://chidondrive.com/site/enroll_5782.html';
             });
 
             $(document).on('click', '.shabbatonConfirm', function() {

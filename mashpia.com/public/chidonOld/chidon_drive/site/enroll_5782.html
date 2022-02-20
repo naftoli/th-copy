@@ -490,7 +490,7 @@
     function getLowest(child, amounts, khk) {
         let lowest = amounts[amounts.length-1]
         const raised = parseInt(child.raised)
-        const coupon = parseInt(child.coupon)
+        const coupon = parseInt(child.coupon_used) === 0 ? parseInt(child.coupon) : 0
 
         if (raised) lowest -= raised / 2
         if (raised > 170 && raised < 270 && !khk) {
@@ -628,7 +628,7 @@
                     We offer subsidies (as you can see below).</h5>`
 
             // coupons
-            if (child.coupon > 0) {
+            if (child.coupon > 0 && parseInt(child.coupon_used) === 0) {
                 html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
                         You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
             }
