@@ -24,7 +24,7 @@ foreach ($schools as $school_id => $name) {
             join classes c on u.class_id = c.class_id 
             join th_chidon tc using (user_id) 
             where tc.year = " . $year . " and u.school_id = " . $school_id . " 
-            order by school_name, class_grade, class_sub, last, first";
+            order by school_name, date_paid, class_grade, class_sub, last, first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[] = $row;
