@@ -3,16 +3,21 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
+
+require '../coupons/class.couponCode.php';
 
 function getRegInfo() {
     global $reg, $year, $users;
 
-    $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.th_chidon_id, 
-                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg, tc.test_type, tc.reward_type   
+    $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, c.class_grade, tc.th_chidon_id, 
+                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg, tc.test_type, tc.reward_type, tc.to_fundraise_5782    
             from users u 
-            join th_chidon tc using (user_id) 
+            join th_chidon tc using (user_id)  
+            join classes c on c.class_id = u.class_id 
             where tc.date_paid > 0 
             and tc.year = " . $year . "
             order by date_paid, last, first";
@@ -84,18 +89,64 @@ function getAddresses() {
     }
 }
 
+function getRaised() {
+    global $raised, $year;
+
+    $sql = "
+        SELECT 
+            user_id, SUM(subsidy_amount) as total 
+        FROM
+            chidon_user_subsidies
+        WHERE
+            chidon_year = $year
+        GROUP BY user_id";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $raised[$row['user_id']] = $raised['total'];
+    }
+}
+
+function get50Percent($user_id, $grade) {
+    global $half, $tracks;
+
+    $track = $tracks[$user_id];
+    if (in_array($track, ['Havonah', 'Iyun']) && parseInt($grade) == 8) $track = 'Khk Trip';
+
+    $amounts = [
+        'Yesod'     => [70, 50, 35],
+        'Yediah'    => [180, 125, 100, 90],
+        'Havonah'   => [370, 250, 200, 185],
+        'Iyun'      => [370, 250, 200, 185],
+        'Khk Trip'  => [500, 400, 325, 250]
+    ];
+    $values = $amounts[$track];
+    return $values[count($values)-1];
+}
+
+function getCoupons($user_serial) {
+    global $coupons, $MASHPIA_DB, $year;
+
+    $c = new CouponCode($MASHPIA_DB, $year);
+    $coupon = $c->checkForUsedUserCode($user_serial);
+    return $coupon;
+}
+
 $reg = [];
 $users = [];
 $tracks = [];
 $shipping = [];
 $extra_purchases = [];
 $addresses = [];
+$half = [];
+$coupons = [];
+$raised = [];
 
 getRegInfo();
 getTracks();
 getShippingInfo();
 getExtraPurchases();
 getAddresses();
+getRaised();
 ?>
 <!DOCTYPE html>
 <html>
@@ -121,18 +172,26 @@ getAddresses();
             <th>Serial Number</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Grade</th>
             <th>Highest Track Passed</th>
             <th>KHK Trip</th>
             <th>Subsidy</th>
+            <th>50% Amount</th>
+            <th>Chidon Drive</th>
+            <th>Coupon</th>
             <th>Paid</th>
             <th>Date Paid</th>
+            <th>Amount to Fundraise</th>
         </tr>
         <?php
         foreach ($reg as $row) {
             echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
-                "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $tracks[$row['user_id']] . "</td><td>";
-            echo $row['khk_reg'] ? 'yes' : 'no';
-            echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
+                "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" .
+                $tracks[$row['user_id']] . "</td><td>";
+            echo $row['khk_trip'] ? 'yes' : 'no';
+            echo "</td><td>" . $row['payment_request'] . "</td><td>" . get50Percent($row['user_id'], $row['class_grade']) .
+                "</td><td>" . $raised[$row['user_id']] . "</td><td>" . getCoupons($row['user_serial']) . "</td><td>" .
+                $row['paid'] . "</td><td>" . $row['date_paid'] . "</td><td>" . $row['to_fundraise_5782'] . "</td></tr>";
         }
         ?>
     </table>

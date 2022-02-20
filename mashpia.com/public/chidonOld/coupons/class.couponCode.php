@@ -186,6 +186,24 @@ class CouponCode
         return false;
     }
 
+    public function checkForUsedUserCode($user_serial) {
+        $stmt = $this->db->prepare("
+            SELECT * FROM coupon_codes 
+            WHERE 
+                year = :year AND serial_num = :user 
+                    AND used = 1
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':user' => $user_serial
+        ]);
+        $row = $stmt->fetch();
+        if ($row['value']) {
+            return $row['value'];
+        }
+        return false;
+    }
+
     public function useUserCode($user_serial) {
         $stmt = $this->db->prepare("
             update coupon_codes 

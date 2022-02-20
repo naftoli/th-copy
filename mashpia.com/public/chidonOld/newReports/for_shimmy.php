@@ -138,7 +138,7 @@ getAddresses();
         echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $phone .  "</td><td>" . $row['user_id'] . "</td><td>" .
             $row['user_serial'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" .
             $tracks[$row['user_id']] . "</td><td>";
-        echo $row['khk_reg'] ? 'yes' : 'no';
+        echo $row['khk_trip'] ? 'yes' : 'no';
         echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
     }
     ?>
