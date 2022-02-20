@@ -146,7 +146,7 @@ getAddresses();
         </tr>
         <?php
         foreach ($shipping as $row) {
-            echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" .
+            echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
                 "</td><td>" . $row['chidon_shipping_paid'] . "</td></tr>";
         }
         ?>
