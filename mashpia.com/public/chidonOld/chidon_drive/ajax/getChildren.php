@@ -23,7 +23,6 @@ function getChildren() {
             join th_chidon tc using (user_id)  
             join admin_auths aa on aa.id = u.user_id 
             join classes c on c.class_id = u.class_id 
-            left join chidon_user_subsidies cus on u.user_id = cus.user_id and tc.year = cus.chidon_year 
             left join coupon_codes cc on u.user_serial = cc.serial_num 
             where tc.year = :year 
             and aa.admin_id = :admin";
