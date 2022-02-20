@@ -37,7 +37,7 @@ function getTracks() {
     $types = $ct->getTypes();
 
     foreach ($users as $user) {
-        $info = $ct->getHighestTrackPassed($user, 3);
+        $info = $ct->getHighestTrackPassed($user);
         $highest = $info['highest_track'];
         $reward_type = $user['reward_type'];
         if ($reward_type !== 'highest track passed') {
