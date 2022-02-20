@@ -107,6 +107,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['chayoleiRegistered'] = false;
         $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
         $children[$row['user_id']]['school_country'] = $row['school_country'];
+        $children[$row['user_id']]['user_serial']    = $row['user_serial'];
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
@@ -270,7 +271,7 @@ if ( !empty( $users ) ) {
         $sSql = "select chidon_confirmed_5782 from schools where school_id = " . $row['school_id'];
         $sRes = mysql_query($sSql);
         $sRow = mysql_fetch_assoc($sRes);
-        $children[$row['user_id']]['chidonSchoolConfirmed'] = $sRow['chidon_confirmed_5782'];
+        $children[$row['user_id']]['chidonSchoolConfirmed'] = intval($sRow['chidon_confirmed_5782']);
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
