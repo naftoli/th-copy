@@ -430,8 +430,10 @@ if ($info['success']) {
     $msg = getEmailMsg($trans_id);
 //    echo $msg;
     if (!sendEmail($msg)) {
-        $header = 'From: chidon@tzivoshashem.org';
-        @mail('naftoli@tzivoshashem.org', 'Error Emailing Chidon Confirmation', $msg, $header);
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: chidon@tzivoshashem.org';
+        @mail('naftoli@tzivoshashem.org', 'Error Emailing Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
 }
 
