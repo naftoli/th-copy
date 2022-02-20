@@ -185,7 +185,8 @@ function processKhk() {
 
     $success = true;
     if (isset($_COOKIE['khk_trip'])) {
-        foreach ($_COOKIE['khk_trip'] as $user_id) {
+        $khk_trip = json_decode($_COOKIE['khk_trip']);
+        foreach ($khk_trip as $user_id) {
             $res = $sqlKhk->execute([
                 ':year' => $year,
                 ':user' => $user_id
