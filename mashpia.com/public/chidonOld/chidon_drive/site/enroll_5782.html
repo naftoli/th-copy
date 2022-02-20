@@ -604,6 +604,7 @@
             // registration heading
             let amounts, lowest, free
             if (khk) {
+                if (! khk_trip.includes(child.user_id)) khk_trip.push(child.user_id)
                 html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
                 html += `<div class="flex">
                             <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='0:${child.user_id}' checked />
@@ -620,7 +621,6 @@
                         </div>
                         <h5 class="formDetails"><span class="title khk_title">Kol Hatorah Kula Payments</span></h5>`
             }
-            if (! khk_trip.includes(child.user_id)) khk_trip.push(child.user_id)
 
             // registration
             amounts = [...trackInfo[child.track]]
