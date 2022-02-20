@@ -106,25 +106,22 @@ function getRaised() {
     }
 }
 
-function get50Percent($user_id, $grade) {
-    global $half, $tracks;
+function get50Percent($user_id) {
+    global $tracks;
 
     $track = $tracks[$user_id];
-    if (in_array($track, ['Havonah', 'Iyun']) && parseInt($grade) == 8) $track = 'Khk Trip';
-
     $amounts = [
         'Yesod'     => [70, 50, 35],
         'Yediah'    => [180, 125, 100, 90],
         'Havonah'   => [370, 250, 200, 185],
         'Iyun'      => [370, 250, 200, 185],
-        'Khk Trip'  => [500, 400, 325, 250]
     ];
     $values = $amounts[$track];
     return $values[count($values)-1];
 }
 
 function getCoupons($user_serial) {
-    global $coupons, $MASHPIA_DB, $year;
+    global $MASHPIA_DB, $year;
 
     $c = new CouponCode($MASHPIA_DB, $year);
     $coupon = $c->checkForUsedUserCode($user_serial);
@@ -137,8 +134,6 @@ $tracks = [];
 $shipping = [];
 $extra_purchases = [];
 $addresses = [];
-$half = [];
-$coupons = [];
 $raised = [];
 
 getRegInfo();
@@ -185,13 +180,14 @@ getRaised();
         </tr>
         <?php
         foreach ($reg as $row) {
+            $half = $row['khk_trip'] ? 250 : get50Percent($row['user_id']);
             echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
                 "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" .
                 $tracks[$row['user_id']] . "</td><td>";
             echo $row['khk_trip'] ? 'yes' : 'no';
-            echo "</td><td>" . $row['payment_request'] . "</td><td>" . get50Percent($row['user_id'], $row['class_grade']) .
-                "</td><td>" . $raised[$row['user_id']] . "</td><td>" . getCoupons($row['user_serial']) . "</td><td>" .
-                $row['paid'] . "</td><td>" . $row['date_paid'] . "</td><td>" . $row['to_fundraise_5782'] . "</td></tr>";
+            echo "</td><td>" . $row['payment_request'] . "</td><td>" . $half .  "</td><td>" .
+                (isset($raised[$row['user_id']]) ? $raised[$row['user_id']] : 0) . "</td><td>" . getCoupons($row['user_serial']) .
+                "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td><td>" . $row['to_fundraise_5782'] . "</td></tr>";
         }
         ?>
     </table>
