@@ -27,10 +27,7 @@ function getRegInfo() {
             'school_id' => $rowReg['school_id'],
             'test_type' => $rowReg['test_type'],
             'reward_type'   => $rowReg['reward_type'],
-            'th_chidon_id'  => $rowReg['th_chidon_id'],
-            'phone1'        => $rowReg['admin_phone_mobile'],
-            'phone2'        => $rowReg['admin_phone_work'],
-            'phone3'        => $rowReg['admin_phone_home']
+            'th_chidon_id'  => $rowReg['th_chidon_id']
         ];
     }
 }
@@ -135,9 +132,9 @@ getAddresses();
     </tr>
     <?php
     foreach ($reg as $row) {
-        $phone = $row['phone1'] ?? '';
-        $phone .= $row['phone2'] ? $phone == '' ? $row['phone2'] : ("<br /" . $row['phone2']) : '';
-        $phone .= $row['phone3'] ? $phone == '' ? $row['phone3'] : ("<br /" . $row['phone3']) : '';
+        $phone = $row['admin_phone_mobile'] ?? '';
+        $phone .= $row['admin_phone_work'] ? $phone == '' ? $row['admin_phone_work'] : ("<br />" . $row['admin_phone_work']) : '';
+        $phone .= $row['admin_phone_home'] ? $phone == '' ? $row['admin_phone_home'] : ("<br />" . $row['admin_phone_home']) : '';
         echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $phone .  "</td><td>" . $row['user_id'] . "</td><td>" .
             $row['user_serial'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" .
             $tracks[$row['user_id']] . "</td><td>";
