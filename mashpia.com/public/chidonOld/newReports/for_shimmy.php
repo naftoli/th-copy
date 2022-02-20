@@ -17,7 +17,7 @@ function getRegInfo() {
             join admins a on a.admin_id = tc.parent_id 
             where tc.date_paid > 0 
             and tc.year = " . $year . "
-            order by paid, last, first";
+            order by paid desc, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
