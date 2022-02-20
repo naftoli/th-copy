@@ -369,7 +369,7 @@ function sendEmail($msg) {
         $headers[] = 'Reply-to: Chidon Headquarters <chidon@tzivoshashem.org>';
         $headers[] = 'Bcc: chidonreg@gmail.com';
         if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
-        return mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
+        return @mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
     return false;
 }
@@ -429,7 +429,7 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
 if ($info['success']) {
     $msg = getEmailMsg($trans_id);
 //    echo $msg;
-    if (! @sendEmail($msg)) {
+    if (!sendEmail($msg)) {
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: chidon@tzivoshashem.org';
