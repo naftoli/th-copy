@@ -5,13 +5,16 @@ ini_set('error_reporting', E_ALL);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-//require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+
 $year = GlobalSettings::getChidonRegYear();
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
 
 require '../coupons/class.couponCode.php';
 
 function getRegInfo() {
-    global $reg, $year, $users;
+    global $reg, $year, $users, $schools, $admin_user;
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, c.class_grade, tc.th_chidon_id, 
                 tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_trip, tc.test_type, tc.reward_type, tc.to_fundraise_5782    
@@ -19,8 +22,9 @@ function getRegInfo() {
             join th_chidon tc using (user_id)  
             join classes c on c.class_id = u.class_id 
             where tc.date_paid > 0 
-            and tc.year = " . $year . "
-            order by date_paid, last, first";
+            and tc.year = " . $year;
+    if ($admin_user['auth'] != 'super') $sqlReg .= " and u.school_id in (" . explode(',', array_keys($schools)) . ")";
+    $sqlReg .= " order by date_paid, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
@@ -183,7 +187,9 @@ getRaised();
             <th>Amount to Fundraise</th>
         </tr>
         <?php
+        $parents = [];
         foreach ($reg as $row) {
+            $parents[] = $row['parent_id'];
             $half = $row['khk_trip'] ? 250 : get50Percent($row['user_id']);
             echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
                 "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" .
@@ -206,6 +212,7 @@ getRaised();
         </tr>
         <?php
         foreach ($shipping as $row) {
+            if (! in_array($row['admin_id'], $parents)) continue;
             echo "<tr><td>" . $row['admin_id'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
                 "</td><td>" . $row['chidon_shipping_paid'] . "</td></tr>";
         }
@@ -228,6 +235,7 @@ getRaised();
         </tr>
         <?php
         foreach ($extra_purchases as $purchase) {
+            if (! in_array($purchase['admin_id'], $parents)) continue;
             echo "<tr><td>" . $purchase['admin_id'] . "</td><td>" . $purchase['first'] . "</td><td>" . $purchase['last'] .
                 "</td><td>" . $purchase['item'] . "</td><td>" . $purchase['amount'] . "</td><td>" . $purchase['type_of_sweater'] .
                 "</td><td>" . $purchase['size'] . "</td><td>";
