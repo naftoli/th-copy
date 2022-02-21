@@ -18,8 +18,7 @@ foreach ($children as $child) {
         $indexes = array_keys($types);
         $key1 = array_search($highestTrack, $indexes);
         $key2 = array_search($rewardType, $indexes);
-        if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
-        else if ($key2) $highestTrack = $rewardType;
+        if ($key2 > $key1) $highestTrack = $rewardType;
     }
     $tracks[$child['user_id']] = ucwords($types[$highestTrack]);
 }
