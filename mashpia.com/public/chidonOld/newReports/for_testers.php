@@ -46,9 +46,12 @@ function getTracks() {
         $highest = $info['highest_track'];
         $reward_type = $user['reward_type'];
         if ($reward_type !== 'highest track passed') {
-            $key1 = array_search($highest, array_keys($types));
-            $key2 = array_search($reward_type, array_keys($types));
-            if ($key2 > $key1) $highest = $reward_type;
+            if ($highest == '') $highest = $reward_type;
+            else {
+                $key1 = array_search($highest, array_keys($types));
+                $key2 = array_search($reward_type, array_keys($types));
+                if ($key2 > $key1) $highest = $reward_type;
+            }
         }
         $tracks[$user['user_id']] = isset($types[$highest]) ? $types[$highest] : 'none';
     }
