@@ -110,6 +110,7 @@ function get50Percent($user_id) {
     global $tracks;
 
     $track = $tracks[$user_id];
+    if ($track == 'none') return 0;
     $amounts = [
         'Yesod'     => [70, 50, 35],
         'Yediah'    => [180, 125, 100, 90],
