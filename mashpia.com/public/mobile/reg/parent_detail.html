@@ -699,8 +699,11 @@
             })
 
             $(document).on('click', '.shabbaton', function() {
-                Cookies.set('chidon_admin', admin)
-                location.href = 'https://chidondrive.com/site/enroll_5782.html';
+                let message = "Due to technical difficulties with our payment processor, registration is temporarily suspended.  As soon as it is resolved, registration will re-open.  Thanks for your patience."
+                alert(message)
+                return false
+                // Cookies.set('chidon_admin', admin)
+                // location.href = 'https://chidondrive.com/site/enroll_5782.html';
             });
 
             $(document).on('click', '.shabbatonConfirm', function() {
