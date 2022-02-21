@@ -83,7 +83,7 @@ class CustomerProfile {
         if (!$api){
             $api = new AuthorizeAPIRequest();
         }
-        
+
         // create an authorized api call with the required data
         // see here for documentation: http://developer.authorize.net/api/reference/index.html#customer-profiles-create-customer-profile
         $api_array = [
@@ -100,16 +100,17 @@ class CustomerProfile {
         if(!!$email) {
              $api_array["profile"]["email"] = $email;
         }
-        
-        
+
+        $paymentProfile['defaultPaymentProfile'] = true;
         $api_array["profile"]["paymentProfiles"] = $paymentProfile;
-        
+
         $api_array = $auth->createApiCall("createCustomerProfileRequest", $api_array);
-        
+
         // set the data and execute the request
         $api->setPostData($api_array);
-        
+
         $api_data = $api->execute();
+
         // If it is sucessfull (the API call);
         if ($api_data && $api_data['messages']['resultCode'] == Constants::RESPONSE_OK || array_key_exists("customerProfileId", $api_data)) {
             // If we recive the correct code in the first message

@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
+ini_set('max_execution_time', 300);
 
 require_once __DIR__ . '/../../../db.php';
 require_once __DIR__ . '/../../../api/header/db.php';
@@ -125,6 +126,25 @@ function setSweaterInfo() {
     }
 }
 
+function createCustomerProfile() {
+    global $admin_id, $admin_email, $ccInfo;
+
+    $sql = "select title, first, last from admins where admin_id = " . $admin_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    if (! $row) return false;
+    else $name = $row['title'] . ' ' . $row['first'] . ' ' . $row['last'];
+
+    $paymentProfile = Payment::createBasicArray($ccInfo['num'], $ccInfo['exp'], $ccInfo['cvv']);
+    $customerProfile = Customer::create(('cth_admin_' . $admin_id), $admin_email, $name, $paymentProfile, false);
+    if ($customerProfile instanceof Customer) {
+        $sql = "update admins set authorize_customer_profile_id = " . $customerProfile->customerProfileId . " where admin_id = " . $admin_id;
+        mysql_query($sql);
+        return $customerProfile->customerProfileId;
+    }
+    return false;
+}
+
 function addNewCard() {
     global $admin_id, $ccInfo;
 
@@ -146,13 +166,15 @@ function addNewCard() {
 function processFee() {
     global $year, $admin_id, $to_charge, $payment_id;
 
-    if (! $payment_id) $payment_id = addNewCard();
-    if ($payment_id) {
-        $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $customer_id = $row['authorize_customer_profile_id'];
+    $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $customer_id = $row['authorize_customer_profile_id'];
 
+    if (! $customer_id) $customer_id = createCustomerProfile();
+    if (! $payment_id) $payment_id = addNewCard();
+
+    if ($payment_id && $customer_id) {
         $cp = new Customer($customer_id);
         $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
         return $response;
@@ -339,14 +361,14 @@ function getEmailMsg($trans_id) {
             $trans_id . ".<br /><br />";
 
         $msg .= "<b>A Summary of your charges is as follows:</b><br /><br />";
-        if ($users) $msg .= "Total Registration Charges: $" . (floatval($reg_cost) + intval($shipping)) . "<br />";
-        if ($celebBoxes) $msg .= "Total Celebration Box(es) Charge: $" . ($celebBoxes * CELEB_BOX_COST + $celebBoxShipping) . "<br />";
+        if ($users) $msg .= "Total Registration Charges: $" . (intval($reg_cost) + intval($shipping)) . "<br />";
+        if ($celebBoxes) $msg .= "Total Celebration Box(es) Charge: $" . (intval($celebBoxes) * CELEB_BOX_COST + intval($celebBoxShipping)) . "<br />";
         if ($sweaters) {
             $total = 0;
             foreach ($sweaters as $type => $amount) {
                 $total += intval($amount) * SWEATER_COST;
             }
-            $msg .= "Total Sweaters Charge: $" . ($total + $sweater_shipping) . "<br />";
+            $msg .= "Total Sweaters Charge: $" . ($total + intval($sweater_shipping)) . "<br />";
         }
         $msg .= "<br /><b>Grand Total: $" . $to_charge . "</b>.<br /><br />";
     }
