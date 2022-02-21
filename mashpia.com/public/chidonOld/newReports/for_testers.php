@@ -24,7 +24,7 @@ function getRegInfo() {
             join classes c on c.class_id = u.class_id 
             where tc.date_paid > 0 
             and tc.year = " . $year;
-    if ($admin_user['auth'] != 'super') $sqlReg .= " and u.school_id in (" . explode(',', array_keys($schools)) . ")";
+    if ($admin_user['auth'] != 'super') $sqlReg .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
     $sqlReg .= " order by date_paid, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
