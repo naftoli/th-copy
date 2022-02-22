@@ -7,8 +7,6 @@ require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $year = GlobalSettings::getChidonRegYear();
 
-require '../coupons/class.couponCode.php';
-
 function getRegInfo() {
     global $reg, $year, $users;
 
