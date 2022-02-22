@@ -93,10 +93,12 @@ getTracks();
     </tr>
     <?php
     foreach ($reg as $row) {
+        $track = $tracks[$row['user_id']];
+        if ($track == 'none') continue;
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         echo "<tr><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['parent_id'] . "</td><td>" .
             $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
-            $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $tracks[$row['user_id']] . "</td></tr>";
+            $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $track . "</td></tr>";
     }
     ?>
 </table>
