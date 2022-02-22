@@ -25,7 +25,6 @@ function getRegInfo() {
             and tc.year = " . $year;
     if ($admin_user['auth'] != 'super') $sqlReg .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
     $sqlReg .= " order by s.school_name, c.class_grade, c.class_sub, last, first";
-    echo $sqlReg;
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
