@@ -4,11 +4,15 @@ ini_set('error_reporting', E_ALL);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $year = GlobalSettings::getChidonRegYear();
 
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+
 function getRegInfo() {
-    global $reg, $year, $users;
+    global $reg, $year, $users, $schools, $admin_user;
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, c.class_grade, tc.th_chidon_id, 
                 tc.paid, tc.parent_id, tc.test_type, tc.reward_type, s.school_name, c.class_grade, c.class_sub
@@ -17,8 +21,9 @@ function getRegInfo() {
             join schools s on s.school_id = u.school_id 
             join classes c on c.class_id = u.class_id 
             where paid is null  
-            and tc.year = " . $year . "
-            order by s.school_name, c.class_grade, c.class_sub, last, first";
+            and tc.year = " . $year;
+    if ($admin_user['auth'] != 'super') $sqlReg .= " and school_id in (" . implode(',', array_keys($schools)) . ")";
+    $sqlReg .= " order by s.school_name, c.class_grade, c.class_sub, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
@@ -55,12 +60,27 @@ function getTracks() {
     }
 }
 
+function getAdminInfo() {
+    global $reg, $admins;
+
+    foreach ($reg as $row) {
+        $admin_id = $row['parent_id'];
+        $sql = "select first, last, admin_email, admin_phone_mobile, admin_phone_work, admin_phone_home from admins 
+                where admin_id = " . $admin_id;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc();
+        $admins[$admin_id] = $row;
+    }
+}
+
 $reg = [];
 $users = [];
 $tracks = [];
+$admins = [];
 
 getRegInfo();
 getTracks();
+getAdminInfo();
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,6 +101,7 @@ getTracks();
 <table>
     <caption>Unegistered Report</caption>
     <tr>
+        <th></th>
         <th>School</th>
         <th>Class</th>
         <th>Parent ID</th>
@@ -90,15 +111,25 @@ getTracks();
         <th>Last Name</th>
         <th>Grade</th>
         <th>Highest Track Passed</th>
+        <th>Parent Name</th>
+        <th>Parent Email</th>
+        <th>Parent Phone</th>
     </tr>
     <?php
+    $i = 1;
     foreach ($reg as $row) {
         $track = $tracks[$row['user_id']];
         if ($track == 'none') continue;
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-        echo "<tr><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['parent_id'] . "</td><td>" .
-            $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
-            $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $track . "</td></tr>";
+        echo "<tr><td>" . $i++ . "</td><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['parent_id'] .
+            "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
+            $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $track . "</td>";
+        $adminInfo = $admins[$row['parent_id']];
+        $phone = $row['admin_phone_mobile'] ?? '';
+        $phone .= $row['admin_phone_work'] ? $phone == '' ? $row['admin_phone_work'] : ("<br />" . $row['admin_phone_work']) : '';
+        $phone .= $row['admin_phone_home'] ? $phone == '' ? $row['admin_phone_home'] : ("<br />" . $row['admin_phone_home']) : '';
+        echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
+            $phone . "</td></tr>";
     }
     ?>
 </table>
