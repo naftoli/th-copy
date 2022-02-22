@@ -4,8 +4,8 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $year = GlobalSettings::getChidonRegYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
@@ -48,6 +48,7 @@ function getAddresses() {
 $parents = [];
 $extra_purchases = [];
 $addresses = [];
+
 getParents();
 getExtraPurchases();
 getAddresses();
