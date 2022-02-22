@@ -69,7 +69,7 @@ function getAdminInfo() {
         $sql = "select first, last, admin_email, admin_phone_mobile, admin_phone_work, admin_phone_home from admins 
                 where admin_id = " . $admin_id;
         $result = mysql_query($sql);
-        $row = mysql_fetch_assoc();
+        $row = mysql_fetch_assoc($result);
         $admins[$admin_id] = $row;
     }
 }
