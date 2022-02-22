@@ -79,8 +79,6 @@ getAddresses();
         <th>Amount purchased</th>
         <th>Sweater Type</th>
         <th>Sweater Size</th>
-        <th>Needs Shipping</th>
-        <th>Shipping Paid</th>
         <th>Address</th>
     </tr>
     <?php
@@ -88,10 +86,7 @@ getAddresses();
         if (! in_array($purchase['admin_id'], $parents)) continue;
         echo "<tr><td>" . $purchase['admin_id'] . "</td><td>" . $purchase['first'] . "</td><td>" . $purchase['last'] .
             "</td><td>" . $purchase['item'] . "</td><td>" . $purchase['amount'] . "</td><td>" . $purchase['type_of_sweater'] .
-            "</td><td>" . $purchase['size'] . "</td><td>";
-        if (intval($purchase['shipping_amount'])) echo 'yes';
-        else echo 'no';
-        echo "</td><td>" . $purchase['shipping_amount'] . "</td>";
+            "</td><td>" . $purchase['size'] . "</td>";
         if (intval($purchase['shipping_amount'])) {
             $ship_info = $addresses[$purchase['purchase_id']];
             echo "<td>" . $ship_info['address'] . "<br />" . $ship_info['city'] . ' ' . $ship_info['state'] . ' ' .
