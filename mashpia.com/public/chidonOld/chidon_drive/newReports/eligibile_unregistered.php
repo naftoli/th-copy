@@ -2,7 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
