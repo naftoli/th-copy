@@ -23,14 +23,6 @@ function getRegInfo() {
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
-        $users[] = [
-            'user_id'   => $rowReg['user_id'],
-            'class_id'  => $rowReg['class_id'],
-            'school_id' => $rowReg['school_id'],
-            'test_type' => $rowReg['test_type'],
-            'reward_type'   => $rowReg['reward_type'],
-            'th_chidon_id'  => $rowReg['th_chidon_id']
-        ];
     }
 }
 
@@ -57,7 +49,6 @@ function getTracks() {
 }
 
 $reg = [];
-$users = [];
 $tracks = [];
 
 getRegInfo();
