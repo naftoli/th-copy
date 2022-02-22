@@ -11,13 +11,14 @@ function getRegInfo() {
     global $reg, $year, $users;
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, c.class_grade, tc.th_chidon_id, 
-                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_trip, tc.test_type, tc.reward_type, tc.to_fundraise_5782    
+                tc.paid, tc.parent_id, tc.test_type, tc.reward_type, s.school_name, c.class_grade, c.class_sub
             from users u 
             join th_chidon tc using (user_id)  
+            join schools s on s.school_id = u.school_id 
             join classes c on c.class_id = u.class_id 
             where paid is null  
             and tc.year = " . $year . "
-            order by date_paid, last, first";
+            order by s.school_name, c.class_grade, c.class_sub, last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
@@ -80,6 +81,8 @@ getTracks();
 <table>
     <caption>Unegistered Report</caption>
     <tr>
+        <th>School</th>
+        <th>Class</th>
         <th>Parent ID</th>
         <th>User ID</th>
         <th>Serial Number</th>
@@ -90,9 +93,10 @@ getTracks();
     </tr>
     <?php
     foreach ($reg as $row) {
-        echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
-            "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" .
-            $tracks[$row['user_id']] . "</td></tr>";
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        echo "<tr><td>" . $row['school_name'] . "</td><td>" . $grade . "</td><td>" . $row['parent_id'] . "</td><td>" .
+            $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
+            $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $tracks[$row['user_id']] . "</td></tr>";
     }
     ?>
 </table>
