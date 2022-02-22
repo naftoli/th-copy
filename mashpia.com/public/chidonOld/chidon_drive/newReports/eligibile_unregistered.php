@@ -126,9 +126,9 @@ getAdminInfo();
             "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
             $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $track . "</td>";
         $adminInfo = $admins[$row['parent_id']];
-        $phone = $admins['admin_phone_mobile'] ?? '';
-        $phone .= $admins['admin_phone_work'] ? $phone == '' ? $admins['admin_phone_work'] : ("<br />" . $admins['admin_phone_work']) : '';
-        $phone .= $admins['admin_phone_home'] ? $phone == '' ? $admins['admin_phone_home'] : ("<br />" . $admins['admin_phone_home']) : '';
+        $phone = $adminInfo['admin_phone_mobile'] ?? '';
+        $phone .= $adminInfo['admin_phone_work'] ? $phone == '' ? $adminInfo['admin_phone_work'] : ("<br />" . $adminInfo['admin_phone_work']) : '';
+        $phone .= $adminInfo['admin_phone_home'] ? $phone == '' ? $adminInfo['admin_phone_home'] : ("<br />" . $adminInfo['admin_phone_home']) : '';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
             $phone . "</td></tr>";
     }
