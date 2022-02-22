@@ -2,6 +2,7 @@
 ini_set('display_errors',1);
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
+require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
 $chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
@@ -283,6 +284,35 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['shabbatonPaid'] = 1;
             $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
         }
+
+        $trackSql = "select * from th_chidon where paid is null and year = " . $chidon_year . " and user_id = " . $row['user_id'];
+        $trackRes = mysql_query($trackSql);
+        $trackRow = mysql_fetch_assoc($trackRes);
+
+        $ct = new ChidonTests();
+        $tracks = $ct->getTypes();
+        $child = [
+            'user_id'       => $trackRow['user_id'],
+            'class_id'      => $trackRow['class_id'],
+            'school_id'     => $trackRow['school_id'],
+            'test_type'     => $trackRow['test_type'],
+            'reward_type'   => $trackRow['reward_type'],
+            'th_chidon_id'  => $trackRow['th_chidon_id']
+        ];
+        $trackInfo = $ct->getHighestTrackPassed($child);
+        $highestTrack = $trackInfo['highest_track'];
+        $rewardType = $child['reward_type'];
+        if ($rewardType != 'highest track passed') {
+            if ($highestTrack == '') $highestTrack = $rewardType;
+            else {
+                $indexes = array_keys($tracks);
+                $key1 = array_search($highestTrack, $indexes);
+                $key2 = array_search($rewardType, $indexes);
+                if ($key2 > $key1) $highestTrack = $rewardType;
+            }
+        }
+        if ($highestTrack == '') $highestTrack = 0;
+        $children[$row['user_id']]['track'] = $highestTrack;
 
         $pSql = "select thumb from thumbs t 
 				join users u on u.user_photo_id = t.file_id 
