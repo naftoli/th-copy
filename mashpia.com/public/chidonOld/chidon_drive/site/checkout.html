@@ -540,6 +540,8 @@
             const res = JSON.parse(result)
             if (res.success) {
                 alert(res.msg)
+                // save customer to db if needed
+                if (Cookies.get('customer_id')) $.post('../ajax/setCustomerId.php', { admin_id: admin.admin_id })
                 if (window.localStorage) {
                     window.localStorage.removeItem('cart')
                     window.localStorage.removeItem('addresses')

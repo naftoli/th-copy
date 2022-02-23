@@ -126,25 +126,6 @@ function setSweaterInfo() {
     }
 }
 
-function createCustomerProfile() {
-    global $admin_id, $admin_email, $ccInfo;
-
-    $sql = "select title, first, last from admins where admin_id = " . $admin_id;
-    $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    if (! $row) return false;
-    else $name = $row['title'] . ' ' . $row['first'] . ' ' . $row['last'];
-
-    $paymentProfile = Payment::createBasicArray($ccInfo['num'], $ccInfo['exp'], $ccInfo['cvv']);
-    $customerProfile = Customer::create(('cth_admin_' . $admin_id), $admin_email, $name, $paymentProfile, false);
-    if ($customerProfile instanceof Customer) {
-        $sql = "update admins set authorize_customer_profile_id = " . $customerProfile->customerProfileId . " where admin_id = " . $admin_id;
-        mysql_query($sql);
-        return $customerProfile->customerProfileId;
-    }
-    return false;
-}
-
 function addNewCard() {
     global $admin_id, $ccInfo;
 
@@ -156,9 +137,7 @@ function addNewCard() {
             'x_card_code' => $ccInfo['cvv']
         ];
         $newCard = $admin->createPaymentProfile($props);
-        if (is_object($newCard)) {
-            return $newCard->customerPaymentProfileId;
-        }
+        return $newCard;
     }
     return false;
 }
@@ -166,19 +145,26 @@ function addNewCard() {
 function processFee() {
     global $year, $admin_id, $to_charge, $payment_id;
 
-    $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
-    $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    $customer_id = $row['authorize_customer_profile_id'];
-
-    if (! $customer_id) $customer_id = createCustomerProfile();
-    if (! $payment_id) $payment_id = addNewCard();
-
-    if ($payment_id && $customer_id) {
-        $cp = new Customer($customer_id);
+    if ($payment_id) {
+        $admin = \Admin::find('first', ['admin_id' => $admin_id]);
+        $cp = new Customer($admin->authorize_customer_profile_id);
         $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
         return $response;
-    } else return false;
+    } else {
+        $payment = addNewCard();
+        if (is_object($payment)) {
+            $payment_id = $payment->customerPaymentProfileId;
+            $customer_profile_id = $payment->customerProfileId;
+            setcookie('customer_id', $customer_profile_id, 0, '/');
+            if ($payment_id && $customer_profile_id) {
+                $cp = new Customer($customer_profile_id);
+                $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
+                return $response;
+            } else return false;
+        } else {
+            return $payment;
+        }
+    }
 }
 
 function processReg() {

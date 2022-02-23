@@ -268,8 +268,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )
                 return $this->customer_profile["message"];
             // save the valid information
-            $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
-            $this->save();
+//            $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
+//            $this->save();
             // return a new PaymentProfile instance
             return new classes\authorize\PaymentProfile(
                 $this->customer_profile->paymentProfiles[0]['customerPaymentProfileId'],
