@@ -2,10 +2,10 @@
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
-if ( $admin_user['auth'] !== "super" ) {
-    echo "Single School Report Coming Soon!"; die();
-}
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
 
 function dateToJd( $date ){
     $date = explode( "-", $date );
@@ -15,8 +15,7 @@ function dateToJd( $date ){
 $from = dateToJd( $_POST['from'] );
 $to = dateToJd( $_POST['to'] );
 
-$rank_promotions_query = mysql_query(
-     " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, "
+$qry =  " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, "
     ." r.rank_name, rm.rank_ord FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) "
     ." JOIN ranks r USING ( rank_ord ) "
@@ -25,10 +24,12 @@ $rank_promotions_query = mysql_query(
     ." AND rm.date_promoted <= '$to' "
     ." AND rm.rank_ord > 1 "
     ." AND s.test_school = 0 "
-    ." AND s.chayolei = 1 "
-    ." ORDER BY r.rank_ord DESC, s.school_name, u.last, u.first "
-);
+    ." AND s.chayolei = 1 ";
+if ($admin_user['auth'] != 'super') $qry .= " and s.school_id in (" . implode(',', array_keys($schools)) . ")";
+$qry .= " ORDER BY r.rank_ord DESC, s.school_name, u.last, u.first ";
+$rank_promotions_query = mysql_query($qry);
 
+if ($admin_user['auth'] == 'super') {
 $totals_query = mysql_query(
     " SELECT r.rank_name, COUNT(*) as total FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) JOIN ranks r USING ( rank_ord ) "
@@ -47,6 +48,7 @@ $totals_query = mysql_query(
         }
     ?>
 </div>
+<?php } ?>
 <h2>Breakdown</h2>
 <a data-clipboard-target="#breakdown" class="btn button">Copy to clipboard</a>
 <a id="zip-images" class="btn button">Generating Download....</a>
