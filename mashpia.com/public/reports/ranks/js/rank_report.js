@@ -24,7 +24,7 @@ $("#options").submit( function( event ){
     $.post( "ajax/rank_report.php", postData, function( response ){
         $("#report").html( response );
         if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
-            downloadImages();
+            // downloadImages();
         } else {
             document.querySelector("#zip-images").innerHTML = "Unable to zip images. Please use Chrome or Firefox"
         }
@@ -83,4 +83,29 @@ function downloadImages() {
             a.innerHTML = "Download General Profile Images (Zip)"
         });
     })
+}
+
+function downloadCSV() {
+    let info = JSON.parse($("#data").text())
+    let headers = ['Rank', 'Name']
+    let rows = []
+    for (rank in info) {
+        for (name of info[rank]) {
+            rows.push([rank, name])
+        }
+    }
+    // generate the csv content
+    const universalBOM = "\uFEFF";
+    let csvContent = `${headers.join(',')}\n`;
+    // Add each row to the CSV content and encode it for unicode in excel
+    rows.forEach(row => {
+        csvContent += `${row.join(',')}\n`
+    });
+    csvContent = encodeURIComponent(universalBOM + csvContent);
+    // create and click the download link
+    let link = document.createElement('a');
+    link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+    console.log(link.href)
+    link.download = `ranks.csv`;
+    link.click();
 }

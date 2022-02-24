@@ -48,22 +48,25 @@ $totals_query = mysql_query(
         }
     ?>
 </div>
-<?php } ?>
 <h2>Breakdown</h2>
 <a data-clipboard-target="#breakdown" class="btn button">Copy to clipboard</a>
-<a id="zip-images" class="btn button">Generating Download....</a>
+<?php } ?>
+<!--<a id="zip-images" class="btn button">Generating Download....</a>-->
+<a id="download" class="btn button" onclick="downloadCSV()">Download CSV</a>
 <div id="breakdown">
     <?php
     $prev_rank = "";
     $prev_school = "";
     $cutoff = 9;
 
+    $csv_info = [];
     while ( $promotion = mysql_fetch_assoc( $rank_promotions_query) ){
-        $school_name = $row['hachayol_name'] ? $promotion['hachayol_name']  : $promotion['school_name'];
+        $csv_info[$promotion['rank_name']][] = $promotion['first'] . ' ' . $promotion['last'];
+        $school_name = $promotion['hachayol_name'] ? $promotion['hachayol_name']  : $promotion['school_name'];
         if ( $promotion['rank_name'] != $prev_rank )
             echo "<br/><span class='rank'>" . $promotion['rank_name'] . "</span><br />";
         
-        if ( $promotion['rank_ord'] < $cutoff && $promotion['school_name'] != $prev_school ) {
+        if ( $admin_user['auth'] == 'super' && $promotion['rank_ord'] < $cutoff && $promotion['school_name'] != $prev_school ) {
             echo "<span class='school top'>$school_name</span><br />";
         }
 
@@ -98,5 +101,6 @@ $totals_query = mysql_query(
             echo "<span class='school'>$school_name</span><div class='clearfix'></div>";
         }
     }
+    echo "<div id='data' style='display: none;'>" . json_encode($csv_info) . "</div>";
     ?>
 </div>
