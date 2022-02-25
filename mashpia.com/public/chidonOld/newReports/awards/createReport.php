@@ -37,7 +37,7 @@ switch ($type) {
         $sql .= " and tci.highest_track in ('havonah', 'iyun')";
         break;
     case 'trophy':
-        $sql .= " and tci.highest_track == 'iyun'";
+        $sql .= " and tci.highest_track = 'iyun'";
         break;
 }
 $sql .= "
