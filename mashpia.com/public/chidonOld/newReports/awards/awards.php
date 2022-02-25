@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
                     } else {
 //                        $grade = $row['school_id'] . '-' . $row['class_grade'] . '-' . $row['class_sub'];
                         $grade = $row['school_id'] . '-' . $row['class_grade'];
-                        if ($previousGrade != $grade) {
+                        if ($previousGrade != $grade && $previousSchool == $school) {
                             $i = 1;
                             $previousGrade = $grade;
                         }
