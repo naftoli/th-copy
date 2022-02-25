@@ -21,7 +21,7 @@ $sql .= "
         join th_chidon tc using (user_id) 
         join admins a on a.admin_id = tc.parent_id 
         join th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id";
-if ($final == 'after') $sql .= "left join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id";
+if ($final == 'after') $sql .= " left join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id";
 $sql .= "
     WHERE
         tc.year = $year
