@@ -37,14 +37,7 @@ foreach ($schools as $school_id => $name) {
 $qrys = [];
 $test = new ChidonTests();
 $tracks = $test->getTypes();
-$rewards = [
-    'Yesod'     => 'Sweater, Gifts & Yesod Final',
-    'Yediah'    => 'Sweater, Gifts, Prizes, & Yediah Final',
-    'Havonah'   => 'Sweater, Gifts, Trip, & Havonah Final',
-    'Iyun'      => 'Sweater, Gifts, Trip & Iyun Final',
-    'Khk Trip'  => 'Sweater, Gifts, Trip & '
-];
-$i = 0;
+
 foreach ($info as $row) {
     $highestTrack = $test->getHighestTrackPassed($row)['highest_track'];
     $rewardType = $row['reward_type'];
@@ -64,7 +57,21 @@ foreach ($info as $row) {
                 set year = $year, 
                 user_id = " . $row['user_id'] . ", 
                 highest_track = '" . strtolower($track) . "'";
-        echo $qry . "<br />";
         $qrys[] = $qry;
     }
 }
+
+mysql_query('set autocommit=0');
+mysql_query('begin');
+$success = true;
+foreach ($qrys as $qry) {
+    if (! mysql_query($qry)) {
+        $success = false;
+        echo mysql_error() . "<br />" . $qry;
+        break;
+    }
+}
+if ($success) mysql_query("commit");
+else mysql_query("rollback");
+mysql_query('set autocommit=1');
+echo "done";
