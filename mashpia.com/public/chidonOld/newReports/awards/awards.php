@@ -80,45 +80,45 @@ if (isset($_POST['submit'])) {
                 </tr>
                 <?php
                 $i = 0;
-                $previousSchool = '';
                 $previousGrade = '';
-                foreach ($info as $row) {
-                    $school = $row['school_name'];
-                    $serial = $row['user_serial'];
-                    $he_name = $row['first_he'] . ' ' . $row['last_he'];
-                    $template = '';
-                    if ($row['gender'] == 'M') {
-                        $template = 'B-' . $row['class_grade'];
-                    } else if ($row['gender'] == 'F') {
-                        $template = 'G-' . $row['class_grade'];
-                    }
-                    $code = '';
-                    if (in_array($row['school_id'], [61, 269])) {
-                        // find number of child in admins array
-                        $key = array_search($row['user_id'], $admins[$row['admin_id']]);
-                        $code = $row['admin_id'] . '-' . ($key + 1);
-                    } else {
-//                        $grade = $row['school_id'] . '-' . $row['class_grade'] . '-' . $row['class_sub'];
-                        $grade = $row['school_id'] . '-' . $row['class_grade'];
-                        if ($previousGrade != $grade && $previousSchool == $school) {
-                            $i = 1;
-                            $previousGrade = $grade;
+                foreach ($info as $school_id => $users) {
+                    $total = count($users);
+                    foreach ($users as $idx => $row) {
+                        $school = $row['school_name'];
+                        $serial = $row['user_serial'];
+                        $he_name = $row['first_he'] . ' ' . $row['last_he'];
+                        $template = '';
+                        if ($row['gender'] == 'M') {
+                            $template = 'B-' . $row['class_grade'];
+                        } else if ($row['gender'] == 'F') {
+                            $template = 'G-' . $row['class_grade'];
                         }
-                        $code = $row['school_id'] . '-' . $row['class_grade'] . '-' . $i;
-//                        echo $grade . '-' . $i . "<br />";
-                        $i++;
+                        $code = '';
+                        if (in_array($row['school_id'], [61, 269])) {
+                            // find number of child in admins array
+                            $key = array_search($row['user_id'], $admins[$row['parent_id']]);
+                            $code = $row['admin_id'] . '-' . ($key + 1);
+                        } else {
+                            $grade = $row['school_id'] . '-' . $row['class_grade'];
+                            if ($previousGrade != $grade) {
+                                $i = 1;
+                                $previousGrade = $grade;
+                            }
+                            $code = $row['school_id'] . '-' . $row['class_grade'] . '-' . $i;
+                            $i++;
+                        }
+
+                        if ($idx == 0) {
+                            $colspan = $_POST['final'] == 'after' ? 5 : 4;
+                            echo "<tr><td>" . $school . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
+                        }
+                        echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" .
+                            $code . "</td><td>" . $template . "</td>";
+                        if ($_POST['final'] == 'after') {
+                            echo "<td></td>";
+                        }
+                        echo "</tr>";
                     }
-                    if ($previousSchool != $school) {
-                        $colspan = $_POST['final'] == 'after' ? 6 : 5;
-                        echo "<tr><td>" . $school . "</td><td colspan='$colspan'></td></tr>";
-                        $previousSchool = $school;
-                    }
-                    echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" .
-                        $code . "</td><td>" . $template . "</td>";
-                    if ($_POST['final'] == 'after') {
-                        echo "<td></td>";
-                    }
-                    echo "</tr>";
                 }
                 ?>
             </table>

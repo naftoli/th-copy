@@ -11,7 +11,7 @@ $final = $_POST['final'];
 $sql = "
     SELECT
         s.school_name, u.user_id, u.class_id, u.school_id, u.user_serial, u.first_he, u.last_he, u.gender, 
-        c.class_grade, c.class_sub, a.admin_id, tci.highest_track";
+        c.class_grade, c.class_sub, tc.parent_id, tci.highest_track";
 if ($final == 'after') $sql .= ", tcf.* ";
 $sql .= "
     FROM 
@@ -19,7 +19,6 @@ $sql .= "
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
         join th_chidon tc using (user_id) 
-        join admins a on a.admin_id = tc.parent_id 
         join th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id";
 if ($final == 'after') $sql .= " left join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id";
 $sql .= "
@@ -43,9 +42,21 @@ switch ($type) {
 $sql .= "
     ORDER BY
         s.school_id, c.class_grade, c.class_sub, u.last, u.first";
-//echo $sql . "<br />";
+//echo $sql . "<br />"; exit;
 $stmt = $MASHPIA_DB->query($sql);
-$info = $stmt->fetchAll();
+$rows = $stmt->fetchAll();
+$info = [];
+foreach ($rows as $row) {
+    $info[$row['school_id']][] = $row;
+}
+
+// figure out how to deal with 'after' the finals
+if ($final == 'after') {
+    $total = count($info);
+    for ($i = 0; $i < $total; $i++) {
+
+    }
+}
 
 // find out order of kids for admins
 $admins = [];

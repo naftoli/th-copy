@@ -26,7 +26,6 @@ foreach ($schools as $school_id => $name) {
             left join th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id 
             where tc.year = " . $year . " and u.school_id = " . $school_id . " 
             order by school_name, date_paid, class_grade, class_sub, last, first";
-//    echo $sql;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[] = $row;
@@ -74,6 +73,7 @@ foreach ($schools as $school_id => $name) {
         $i = 0;
         foreach ($info as $row) {
             $track = ucwords($row['highest_track']);
+            $highestTrack = $track;
             if (intval($row['class_grade']) === 8 && (in_array(strtolower($highestTrack), ['havonah', 'iyun']))) $highestTrack = 'Khk Trip';
             else $highestTrack = $track;
             $reward = empty($highestTrack) ? 'none' : $rewards[$highestTrack];
