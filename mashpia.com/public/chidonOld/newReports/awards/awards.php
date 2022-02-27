@@ -112,14 +112,13 @@ if (isset($_POST['submit'])) {
                         $colspan = $_POST['final'] == 'after' ? 6 : 5;
                         echo "<tr><td>" . $school . "</td><td colspan='$colspan'></td></tr>";
                         $previousSchool = $school;
-                    } else {
-                        echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" .
-                            $code . "</td><td>" . $template . "</td>";
-                        if ($_POST['final'] == 'after') {
-                            echo "<td></td>";
-                        }
-                        echo "</tr>";
                     }
+                    echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" .
+                        $code . "</td><td>" . $template . "</td>";
+                    if ($_POST['final'] == 'after') {
+                        echo "<td></td>";
+                    }
+                    echo "</tr>";
                 }
                 ?>
             </table>
@@ -135,5 +134,22 @@ if (isset($_POST['submit'])) {
                 e.preventDefault()
             }
         })
+
+        function downloadCSV(headers, rows) {
+            // generate the csv content
+            const universalBOM = "\uFEFF";
+            let csvContent = `${headers.join(',')}\n`;
+            // Add each row to the CSV content and encode it for unicode in excel
+            rows.forEach(row => {
+                csvContent += `${row.join(',')}\n`
+            });
+            csvContent = encodeURIComponent(universalBOM + csvContent);
+            // create and click the download link
+            let link = document.createElement('a');
+            link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+            console.log(link.href)
+            link.download = `awards.csv`;
+            link.click();
+        }
     </script>
 </html>
