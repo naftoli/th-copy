@@ -10,7 +10,7 @@ function getRegInfo() {
     global $reg, $year, $users;
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.th_chidon_id, 
-                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg, tc.test_type, tc.reward_type, 
+                tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_trip, tc.test_type, tc.reward_type, 
                 a.admin_phone_work, a.admin_phone_mobile, a.admin_phone_home, a.first as parent_first, a.last as parent_last       
             from users u 
             join th_chidon tc using (user_id) 
