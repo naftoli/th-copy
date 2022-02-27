@@ -11,7 +11,7 @@ function getRegInfo() {
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, tc.th_chidon_id, 
                 tc.paid, tc.date_paid, tc.payment_request, tc.parent_id, tc.khk_reg, tc.test_type, tc.reward_type, 
-                a.admin_phone_work, a.admin_phone_mobile, a.admin_phone_home       
+                a.admin_phone_work, a.admin_phone_mobile, a.admin_phone_home, a.first as parent_first, a.last as parent_last       
             from users u 
             join th_chidon tc using (user_id) 
             join admins a on a.admin_id = tc.parent_id 
@@ -119,6 +119,7 @@ getAddresses();
     <caption>Registered Report</caption>
     <tr>
         <th>Parent ID</th>
+        <th>Parent Name</th>
         <th>Phone Number(s)</th>
         <th>User ID</th>
         <th>Serial Number</th>
@@ -135,9 +136,9 @@ getAddresses();
         $phone = $row['admin_phone_mobile'] ?? '';
         $phone .= $row['admin_phone_work'] ? $phone == '' ? $row['admin_phone_work'] : ("<br />" . $row['admin_phone_work']) : '';
         $phone .= $row['admin_phone_home'] ? $phone == '' ? $row['admin_phone_home'] : ("<br />" . $row['admin_phone_home']) : '';
-        echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $phone .  "</td><td>" . $row['user_id'] . "</td><td>" .
-            $row['user_serial'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" .
-            $tracks[$row['user_id']] . "</td><td>";
+        echo "<tr><td>" . $row['parent_id'] . "</td><td>" . $row['parent_first'] . ' ' . $row['parent_last']  . "</td><td>" .
+            $phone . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $row['first'] .
+            "</td><td>" . $row['last'] . "</td><td>" . $tracks[$row['user_id']] . "</td><td>";
         echo $row['khk_trip'] ? 'yes' : 'no';
         echo "</td><td>" . $row['payment_request'] . "</td><td>" . $row['paid'] . "</td><td>" . $row['date_paid'] . "</td></tr>";
     }
