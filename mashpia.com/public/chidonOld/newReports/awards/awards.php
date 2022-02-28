@@ -72,8 +72,11 @@ if (isset($_POST['submit'])) {
                     <th>School Name</th>
                     <th>Serial Number</th>
                     <th>Full Hebrew Name</th>
-                    <th>Code</th>
+                    <th>Code Part 1</th>
+                    <th>Code Part 2</th>
+                    <th>Code Part 3</th>
                     <th>Template Code</th>
+                    <th></th>
                     <?php if ($_POST['final'] == 'after') : ?>
                     <th>Changes</th>
                     <?php endif; ?>
@@ -112,8 +115,10 @@ if (isset($_POST['submit'])) {
                             $colspan = $_POST['final'] == 'after' ? 5 : 4;
                             echo "<tr><td>" . $school . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
                         }
-                        echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" .
-                            $code . "</td><td>" . $template . "</td>";
+                        $arrCode = explode('-', $code);
+                        echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" . $arrCode[0] .
+                            "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
+                            "</td><td>" . $template . "</td>";
                         if ($_POST['final'] == 'after') {
                             echo "<td></td>";
                         }
