@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -14,10 +17,8 @@ if ( !isset( $_POST['school'] ) || !isset( $_POST['grade'] ) || !isset( $_POST['
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'mark' ) {
-    //echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
+if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Save' ) {
     $mivtzoim_id = $_POST['mivtzoim'];
-
     $m = new Mivtzoim( $mivtzoim_id );
 
     // build marks array
@@ -106,7 +107,7 @@ if ( $school && $grade && $mivtzoim_id ) {
             <span style="color: red; font-weight: bold;">If trying to delete a child's amount, you must write the number 0. Simply deleting the number, will not save as 0.</span>
         </div>
 
-        <form action="mark.php" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <input type='submit' name='submit' value='Save' />
             <input type="hidden" name="action" value="mark" />
             <input type="hidden" name="mivtzoim" value="<?=$mivtzoim_id?>" />
