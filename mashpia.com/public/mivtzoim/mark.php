@@ -4,10 +4,10 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once 'classes/mivtzoim.php';
 
 if ( !isset( $_POST['school'] ) || !isset( $_POST['grade'] ) || !isset( $_POST['mivtzoim'] ) ) {
     header("Location: index.php");
