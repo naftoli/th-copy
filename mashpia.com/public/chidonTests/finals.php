@@ -18,11 +18,14 @@ if (isset($_POST['submit'])) {
     for ($i = 1; $i <= 4; $i++) {
         $level = 'level_' . $i;
         foreach ($_POST[$level] as $id => $mark) {
-            $qrys[] = "insert into th_chidon_finals 
-                        set year = $year, 
-                        user_id = $id, 
-                        $level = $mark
-                        on duplicate key update $level = $mark";
+            if ($mark != '' && intval($mark)) {
+                $mark = intval($mark);
+                $qrys[] = "insert into th_chidon_finals 
+                            set year = $year, 
+                            user_id = $id, 
+                            $level = $mark
+                            on duplicate key update $level = $mark";
+            }
         }
     }
 
@@ -77,7 +80,7 @@ foreach ($schools as $id => $school) {
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
 <?php
 $types = $ct->getTypes();
-echo "<form action='finals.php' method='post'>";
+echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
 echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
@@ -95,7 +98,7 @@ foreach ($info as $school => $children) {
             $child['highest_track'] . "</td>";
         for ($i = 1; $i <= 4; $i++) {
             $level = 'level_' . $i;
-            echo "<td><input type='text' name='level_$i[$id]' class='$level mark'";
+            echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
             if ($child[$level]) echo " value='" . $child[$level] . "'";
             echo " /></td>";
         }
