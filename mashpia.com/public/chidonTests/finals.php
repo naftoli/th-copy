@@ -123,7 +123,9 @@ echo "</form>";
             }
         }
         $('body').show();
+        <?php if (! isset($_POST['submit'])) : ?>
         alert('Please make sure to SAVE after entering scores.');
+        <?php endif; ?>
     })
     $(".mark").focus( function() {
         let val = $(this).val()
