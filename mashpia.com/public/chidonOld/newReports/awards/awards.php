@@ -120,7 +120,9 @@ if (isset($_POST['submit'])) {
                             "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
                             "</td><td>" . $template . "</td>";
                         if ($_POST['final'] == 'after') {
-                            echo "<td></td>";
+                            if (! empty($row['award'])) $style = 'background-color: red;';
+                            else $style = '';
+                            echo "<td style='$style'>" . $row['award'] . "</td>";
                         }
                         echo "</tr>";
                     }

@@ -52,9 +52,66 @@ foreach ($rows as $row) {
 
 // figure out how to deal with 'after' the finals
 if ($final == 'after') {
-    $total = count($info);
-    for ($i = 0; $i < $total; $i++) {
+    foreach ($info as $school_id => &$rows) {
+        foreach ($rows as &$row) {
+            $tracks = [
+                1   => 'yesod',
+                2   => 'yediah',
+                3   => 'havonah',
+                4   => 'iyun'
+            ];
+            $finals = [
+                'yesod'     => 20,
+                'yediah'    => 40,
+                'havonah'   => 60,
+                'iyun'      => 80
+            ];
+            $needed = [
+                'yesod'     => 60,
+                'yediah'    => 70,
+                'havonah'   => 80,
+                'iyun'      => 90
+            ];
+            $highest_track = $row['highest_track'];
 
+            // find out if award is same as before final or not
+            $award = false;
+            $key = array_search($highest_track, $tracks);
+            if ($key !== false) {
+                // go down from key to find where the child is holding
+                for ($i = $key; $i > 0; $i--) {
+                    $level = 'level_' . $i;
+                    if ($row[$level]) {
+                        $score = number_format(($row[$level] / $finals[$highest_track]) * 100, 2);
+                        if ($score >= $needed[$tracks[$i]]) {
+                            $award = $tracks[$i];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // figure out what changes if any are applicable
+            $change = '';
+            if ($award != $highest_track) {
+                switch ($award) {
+                    case 'havonah':
+                        $change = 'plaque / medal';
+                        break;
+                    case 'yediah':
+                        $change = 'plaque';
+                        break;
+                    case 'yesod':
+                        $change = 'certificate';
+                        break;
+                    default:
+                        // nothing should be awarded
+                        $change = 'no awards';
+                        break;
+                }
+            }
+            $row['award'] = $change;
+        }
     }
 }
 
