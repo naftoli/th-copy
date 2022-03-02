@@ -62,8 +62,9 @@ class ChidonTests
     public function setStudents($school_id = 0, $class_id = 0, $user_id = 0) {
         $qry = "
             SELECT 
-                tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_rep, tc.school_rep, tc.school_rep_old, 
-                tc.chidon_final_mark, tc.trophy_final_mark, tc.khk_final_mark, tc.reward_type, 
+                tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_rep, tc.school_rep, tc.reward_type, 
+                tci.highest_track, 
+                tcf.level_1, tcf.level_2, tcf.level_3, tcf.level_4, 
                 u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub,
                 s.school_id, s.school_name 
@@ -75,6 +76,10 @@ class ChidonTests
                 schools s on s.school_id = u.school_id
                     JOIN
                 classes c ON c.class_id = u.class_id 
+                    JOIN 
+                th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id  
+                    LEFT JOIN 
+                th_chidon_finals tcf on tcf.year = tc.year and tcf.user_id = tc.user_id
             WHERE
                 tc.year = :year 
         ";

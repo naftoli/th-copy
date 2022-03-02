@@ -106,7 +106,7 @@ if ($final == 'after') {
                         break;
                     default:
                         // nothing should be awarded
-                        $change = 'no awards';
+                        $change = 'no award';
                         break;
                 }
             }
