@@ -78,14 +78,16 @@ if ($final == 'after') {
             $award = false;
             $key = array_search($highest_track, $tracks);
             if ($key !== false) {
+                $score = 0;
                 // go down from key to find where the child is holding
                 for ($i = $key; $i > 0; $i--) {
                     $level = 'level_' . $i;
                     if ($row[$level]) {
-                        $score = number_format(($row[$level] / $finals[$highest_track]) * 100, 2);
-                        if ($score >= $needed[$tracks[$i]]) {
+                        $score += $row[$level];
+                        $divide_by = $finals[$tracks[$i]];
+                        $final_score = number_format(($score / $divide_by) * 100, 2);
+                        if ($final_score >= $needed[$tracks[$i]]) {
                             $award = $tracks[$i];
-                            break;
                         }
                     }
                 }

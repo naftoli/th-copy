@@ -13,12 +13,13 @@ $year = GlobalSettings::getChidonYear();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
+// save marks
 if (isset($_POST['submit'])) {
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
         $level = 'level_' . $i;
         foreach ($_POST[$level] as $id => $mark) {
-            if ($mark != '' && intval($mark)) {
+            if ($mark != '') {
                 $mark = intval($mark);
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
@@ -46,6 +47,85 @@ if (isset($_POST['submit'])) {
     mysql_query('set autocommit=1');
 }
 
+$marks = [];
+$sql = "select * from th_khk_marks";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $marks[$row['th_chidon_id']][$row['test_number']] = $row['mark'];
+}
+
+$final_marks = [];
+$sql = "select * from th_chidon_finals where year = 5782";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $final_marks[$row['user_id']] = $row;
+}
+
+function passedKhk($id) {
+    global $marks;
+
+    $user_marks = $marks[$id];
+    $total = 0;
+    foreach ($user_marks as $mark) $total += intval($mark);
+    $total /= 4;
+    if ($total >= 70) return true;
+    else return false;
+}
+
+function getAward($child) {
+    global $final_marks;
+
+    $tracks = [
+        1   => 'yesod',
+        2   => 'yediah',
+        3   => 'havonah',
+        4   => 'iyun'
+    ];
+    $finals = [
+        'yesod'     => 20,
+        'yediah'    => 40,
+        'havonah'   => 60,
+        'iyun'      => 80
+    ];
+    $needed = [
+        'yesod'     => 60,
+        'yediah'    => 70,
+        'havonah'   => 80,
+        'iyun'      => 90
+    ];
+    $awards = [
+        'yesod'     => 'certificate',
+        'yediah'    => 'plaque',
+        'havonah'   => 'medal / plaque',
+        'iyun'      => 'trophy / medal / plaque'
+    ];
+
+    $highest_track = $child['highest_track'];
+    // find out if award is same as before final or not
+    $award = false;
+    $key = array_search($highest_track, $tracks);
+    if ($key !== false) {
+        // go down from key to find where the child is holding
+        if (isset($final_marks[$child['user_id']])) {
+            $row = $final_marks[$child['user_id']];
+            $score = 0;
+            for ($i = 1; $i <= $key; $i++) {
+                $level = 'level_' . $i;
+                if ($row[$level]) {
+                    $score += $row[$level];
+                    $divide_by = $finals[$tracks[$i]];
+                    $final_score = number_format(($score / $divide_by) * 100, 2);
+                    if ($final_score >= $needed[$tracks[$i]]) {
+                        $award = $tracks[$i];
+                    }
+                }
+            }
+        }
+    }
+    if ($award) return $awards[$award];
+    else return 'no award yet';
+}
+
 $info = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
@@ -69,8 +149,11 @@ foreach ($schools as $id => $school) {
         body {
             display: none;
         }
-        .mark {
+        .mark, .khk {
             width: 50px;
+        }
+        input:disabled {
+            background: #ccc;
         }
     </style>
 </head>
@@ -80,6 +163,7 @@ foreach ($schools as $id => $school) {
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
 <?php
 $types = $ct->getTypes();
+$levels = array_values($types);
 echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
 echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
 foreach ($info as $school => $children) {
@@ -89,6 +173,8 @@ foreach ($info as $school => $children) {
     foreach ($types as $old => $new) {
         echo "<th>$new</th>";
     }
+    echo "<th>KHK Final</th>";
+    echo "<th>Award</th>";
     echo "</tr>";
     foreach ($children as $child) {
         $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
@@ -97,12 +183,22 @@ foreach ($info as $school => $children) {
         echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
             $child['highest_track'] . "</td>";
         for ($i = 1; $i <= 4; $i++) {
+            // find out which level the child can go up to
+            $key = array_search(ucwords($child['highest_track']), $levels);
+            $key++;
+            // create the proper input box
             $level = 'level_' . $i;
             echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
             if ($child[$level]) echo " value='" . $child[$level] . "'";
+            if ($i > $key) echo " disabled='disabled'";
             echo " /></td>";
         }
-        echo "</tr>";
+        // add khk_final
+        $disabled = 'disabled';
+        // check if child should be able to take the khk final
+        if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
+        echo "<td><input type='text' name='khk[$id]' class='khk' $disabled /></td>";
+        echo "<td>" . getAward($child) . "</td></tr>";
     }
     echo "</table>";
 }
@@ -127,20 +223,44 @@ echo "</form>";
         alert('Please make sure to SAVE after entering scores.');
         <?php endif; ?>
     })
+
     $(".mark").focus( function() {
         let val = $(this).val()
         if (parseInt(val) == 0) {
             $(this).val('')
         }
     })
-    // $(".chidon_final").keyup( function() {
-    //     const max = 50;
-    //     let val = $(this).val();
-    //     if (parseInt(val) > max) {
-    //         alert('Please be sure that you are entering the number of questions scored correctly, and NOT the test mark. It should not be higher than ' + max);
-    //         $(this).val(0);
-    //         $(this).focus();
-    //     }
-    // });
+
+    const finals = {
+        1: 20,
+        2: 40,
+        3: 60,
+        4: 80
+    }
+    $(".mark").blur(function () {
+        const amount = $(this).val()
+        if (amount) {
+            const name = this.className
+            const names = name.split(' ')
+            const levelInfo = names[0]
+            const levelSplit = levelInfo.split('_')
+            const level = levelSplit[1]
+            const max = finals[level]
+            if (amount > max) {
+                alert('You cannot enter a number greater than ' + max)
+                $(this).val('')
+                $(this).focus()
+            }
+        }
+    })
+    $(".khk").blur(function () {
+        const amount = $(this).val()
+        const max = 200
+        if (amount > max) {
+            alert('You cannot enter a number greater than ' + max)
+            $(this).val('')
+            $(this).focus()
+        }
+    })
 </script>
 </html>
