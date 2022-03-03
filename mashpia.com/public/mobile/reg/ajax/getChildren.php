@@ -287,7 +287,7 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
         }
 
-        $trackSql = "select * from th_chidon where paid is null and year = " . $chidon_year . " and user_id = " . $row['user_id'];
+        $trackSql = "select * from th_chidon where date_paid > 0 and year = " . $chidon_year . " and user_id = " . $row['user_id'];
         $trackRes = mysql_query($trackSql);
         if (mysql_num_rows($trackRes) > 0) {
             $trackRow = mysql_fetch_assoc($trackRes);
@@ -302,18 +302,18 @@ if ( !empty( $users ) ) {
                 'th_chidon_id' => $trackRow['th_chidon_id']
             ];
             $highestTrack = $ct->getHighestTrackPassed($child)['highest_track'];
-                    $rewardType = $child['reward_type'];
-                    if ($rewardType != 'highest track passed') {
-                        if ($highestTrack == '') $highestTrack = $rewardType;
-                        else {
-                            $indexes = array_keys($tracks);
-                            $key1 = array_search($highestTrack, $indexes);
-                            $key2 = array_search($rewardType, $indexes);
-                            if ($key2 > $key1) $highestTrack = $rewardType;
-                        }
-                    }
-                    if ($highestTrack == '') $highestTrack = 0;
-                    $children[$row['user_id']]['track'] = $highestTrack;
+            $rewardType = $child['reward_type'];
+            if ($rewardType != 'highest track passed') {
+                if ($highestTrack == '') $highestTrack = $rewardType;
+                else {
+                    $indexes = array_keys($tracks);
+                    $key1 = array_search($highestTrack, $indexes);
+                    $key2 = array_search($rewardType, $indexes);
+                    if ($key2 > $key1) $highestTrack = $rewardType;
+                }
+            }
+            if ($highestTrack == '') $highestTrack = 0;
+            $children[$row['user_id']]['track'] = $highestTrack;
         }
 
         $pSql = "select thumb from thumbs t 
