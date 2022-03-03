@@ -60,7 +60,7 @@ while ($row = mysql_fetch_assoc($result)) {
         <th>Grade</th>
         <th>Name</th>
         <th>Sweater Size</th>
-        <th></th>
+        <th>Shipped/Missing</th>
     </tr>
     <?php
     foreach ($sweaters as $school_id => $details) {
