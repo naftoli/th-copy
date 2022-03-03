@@ -4,7 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once 'classes/mivtzoim.php';
 
