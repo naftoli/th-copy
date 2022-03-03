@@ -9,7 +9,8 @@ $year = GlobalSettings::getChidonYear();
 
 $user_id = mysql_real_escape_string($_POST['user']);
 $checked = mysql_real_escape_string($_POST['checked']);
+$field = mysql_real_escape_string($_POST['field']);
 
-$sql = "update th_chidon set sweater_shipped = " . $checked . " where year = " . $year . " and user_id = " . $user_id;
+$sql = "update th_chidon set $field = $checked where year = $year and user_id = " . $user_id;
 if (mysql_query($sql)) echo 1;
 else echo 0;

@@ -11,6 +11,11 @@ $year = GlobalSettings::getChidonRegYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
+if ($admin_user['auth'] != 'super') {
+    echo "No permission.";
+    exit;
+}
+
 $sweaters =[];
 $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.user_serial, u.school_id, u.first, u.last, 
             c.class_grade, c.class_sub 
@@ -20,7 +25,8 @@ $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.us
         where tc.date_paid > 0 
         and tc.year = " . $year . " 
         and u.school_id in (" . implode(',', array_keys($schools)) . ") 
-        order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
+        and tc.sweater_shipped = 0 
+        order by u.school_id, tc.size";
 //echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -44,25 +50,14 @@ while ($row = mysql_fetch_assoc($result)) {
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Sweater Report</h1>
-<div class="infobox">
-    We have hired extra people to pack the sweaters correctly to make sure that schools are not missing anything, mistakes do happen.
-    <br /><br />
-    Please take inventory of all of your school's sweaters BEFORE you give them out to the kids to make sure that nothing is missing.
-    If anything is missing, please uncheck it below and a new one will be shipped to your school. Once the school gives the sweaters
-    out to the kids, Chidon HQ takes NO responsibility if anything is missing.
-</div>
-<br />
 <table>
     <tr>
-        <?php if ($admin_user['auth'] == 'super') : ?>
         <th>School</th>
-        <?php endif; ?>
         <th>Serial Number</th>
         <th>Grade</th>
         <th>Name</th>
         <th>Sweater Size</th>
-        <th>Shipped/Missing</th>
-        <th></th>
+        <th>Replacement Sent</th>
     </tr>
     <?php
     foreach ($sweaters as $school_id => $details) {
@@ -70,13 +65,10 @@ while ($row = mysql_fetch_assoc($result)) {
             $user_id = $sweater['user_id'];
             $grade = $sweater['class_grade'] . (empty($sweater['class_sub']) ? '' : '-' . $sweater['class_sub']);
             $name = $sweater['first'] . ' ' . $sweater['last'];
-            $checked = intval($sweater['sweater_shipped']) ? 'checked' : '';
-            echo "<tr id='$user_id'>";
-            if ($admin_user['auth'] == 'super') echo "<td>" . $schools[$school_id] . "</td>";
-            echo "<td>" . $sweater['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
-                $sweater['size'] . "</td><td><input type='checkbox' class='sent' $checked /></td><td>";
-            if (intval($sweater['sweater_replaced'])) echo "Replacement Sent";
-            echo "</td></tr>";
+            $checked = intval($sweater['sweater_replaced']) ? 'checked' : '';
+            echo "<tr id='$user_id'><td>" . $schools[$school_id] . "</td><td>" . $sweater['user_serial'] . "</td><td>" .
+                $grade . "</td><td>" . $name . "</td><td>" . $sweater['size'] . "</td><td>";
+            echo "<input type='checkbox' class='sent' $checked /></td></tr>";
         }
     }
     ?>
@@ -86,7 +78,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $(".sent").click( function() {
         const checked = $(this).is(':checked') ? 1 : 0;
         const user = $(this).parent().parent().attr('id')
-        const field = 'sweater_shipped'
+        const field = 'sweater_replaced'
         const input = this
         $.post('../ajax/updateShipped.php', { user, checked, field }, function(success) {
             if (! parseInt(success)) {
