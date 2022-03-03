@@ -64,7 +64,6 @@ class ChidonTests
             SELECT 
                 tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_reg, tc.school_rep, tc.reward_type, 
                 tci.highest_track, 
-                tcf.level_1, tcf.level_2, tcf.level_3, tcf.level_4, 
                 u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub,
                 s.school_id, s.school_name 
@@ -78,8 +77,6 @@ class ChidonTests
                 classes c ON c.class_id = u.class_id 
                     JOIN 
                 th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id  
-                    LEFT JOIN 
-                th_chidon_finals tcf on tcf.year = tc.year and tcf.user_id = tc.user_id
             WHERE
                 tc.year = :year 
         ";

@@ -29,6 +29,18 @@ if (isset($_POST['submit'])) {
             }
         }
     }
+    if (isset($_POST['khk'])) {
+        foreach ($_POST['khk'] as $id => $mark) {
+            if ($mark != '') {
+                $mark = intval($mark);
+                $qrys[] = "insert into th_chidon_finals 
+                            set year = $year, 
+                            user_id = $id, 
+                            khk = $mark
+                            on duplicate key update khk = $mark";
+            }
+        }
+    }
 
     mysql_query('set autocommit=0');
     mysql_query('begin');
@@ -189,15 +201,17 @@ foreach ($info as $school => $children) {
             // create the proper input box
             $level = 'level_' . $i;
             echo "<td><input type='number' name='{$level}[$id]' class='$level mark'";
-            if ($child[$level]) echo " value='" . $child[$level] . "'";
+            if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
             if ($i > $key) echo " disabled='disabled'";
             echo " /></td>";
         }
         // add khk_final
-        $disabled = 'disabled';
         // check if child should be able to take the khk final
+        $disabled = 'disabled';
         if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
-        echo "<td><input type='number' name='khk[$id]' class='khk' $disabled /></td>";
+        echo "<td><input type='number' name='khk[$id]' class='khk' $disabled ";
+        if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
+        echo " /></td>";
         echo "<td>" . getAward($child) . "</td></tr>";
     }
     echo "</table>";
