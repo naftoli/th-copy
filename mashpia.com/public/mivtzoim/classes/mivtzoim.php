@@ -253,6 +253,7 @@ class Mivtzoim {
                                     ':task' =>  $task_id, 
                                     ':user' =>  $id
                                 ]);
+//                                echo $sth3->debugDumpParams();
                             } else if ( $mark == 0 ) {
                                 // delete mark
                                 $sth3 = $MASHPIA_DB->prepare("delete from date_tasks_marks where user_id = :user and date_task_id = :task");
@@ -306,7 +307,7 @@ class Mivtzoim {
                                     if ( $mark_date < $start ) $mark_date = $start;
                                     if ( $mark_date > $end ) $mark_date = $end;
                                     $sth3 = $MASHPIA_DB->prepare("insert into date_tasks_marks set done_qty = :qty, date_task_id = :task, user_id = :user, mark_date = :date, mark_points = :points");
-                                    $result = $sth3->execute([
+                                    $sth3->execute([
                                         ':qty'  =>  $mark, 
                                         ':task' =>  $task_id, 
                                         ':user' =>  $id,
