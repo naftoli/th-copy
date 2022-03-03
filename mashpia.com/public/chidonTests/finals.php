@@ -188,7 +188,7 @@ foreach ($info as $school => $children) {
             $key++;
             // create the proper input box
             $level = 'level_' . $i;
-            echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
+            echo "<td><input type='number' name='{$level}[$id]' class='$level mark'";
             if ($child[$level]) echo " value='" . $child[$level] . "'";
             if ($i > $key) echo " disabled='disabled'";
             echo " /></td>";
@@ -197,7 +197,7 @@ foreach ($info as $school => $children) {
         $disabled = 'disabled';
         // check if child should be able to take the khk final
         if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
-        echo "<td><input type='text' name='khk[$id]' class='khk' $disabled /></td>";
+        echo "<td><input type='number' name='khk[$id]' class='khk' $disabled /></td>";
         echo "<td>" . getAward($child) . "</td></tr>";
     }
     echo "</table>";
@@ -231,12 +231,6 @@ echo "</form>";
         }
     })
 
-    const finals = {
-        1: 20,
-        2: 40,
-        3: 60,
-        4: 80
-    }
     $(".mark").blur(function () {
         const amount = $(this).val()
         if (amount) {
@@ -245,7 +239,7 @@ echo "</form>";
             const levelInfo = names[0]
             const levelSplit = levelInfo.split('_')
             const level = levelSplit[1]
-            const max = finals[level]
+            const max = 20
             if (amount > max) {
                 alert('You cannot enter a number greater than ' + max)
                 $(this).val('')
