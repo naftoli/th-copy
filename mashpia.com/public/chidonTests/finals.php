@@ -234,11 +234,6 @@ echo "</form>";
     $(".mark").blur(function () {
         const amount = $(this).val()
         if (amount) {
-            const name = this.className
-            const names = name.split(' ')
-            const levelInfo = names[0]
-            const levelSplit = levelInfo.split('_')
-            const level = levelSplit[1]
             const max = 20
             if (amount > max) {
                 alert('You cannot enter a number greater than ' + max)
