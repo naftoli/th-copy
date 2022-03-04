@@ -10,6 +10,8 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
+$school_ids = array_keys($schools);
+$school_ids_str = implode(',', $school_ids);
 
 $sweaters =[];
 $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.user_serial, u.school_id, u.first, u.last, 
@@ -19,7 +21,7 @@ $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.us
         join classes c on c.class_id = u.class_id 
         where tc.date_paid > 0 
         and tc.year = " . $year . " 
-        and u.school_id in (" . implode(',', array_keys($schools)) . ") 
+        and u.school_id in ($school_ids_str) 
         order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 //echo $sql;
 $result = mysql_query($sql);
@@ -52,6 +54,11 @@ while ($row = mysql_fetch_assoc($result)) {
     out to the kids, Chidon HQ takes NO responsibility if anything is missing.
 </div>
 <br />
+<?php if ($admin_user['auth'] != 'super') : ?>
+<div class="infobox2" style="min-height: fit-content; padding: 20px;">
+    <input type="checkbox" id="<?= $school_ids_str?>" class="reviewed" name="reviewed" /> I have reviewed all of my sweaters and unchecked everything that is missing.
+</div>
+<?php endif; ?>
 <table>
     <tr>
         <?php if ($admin_user['auth'] == 'super') : ?>
@@ -94,6 +101,22 @@ while ($row = mysql_fetch_assoc($result)) {
                 $(input).attr('checked', !checked)
             } else {
                 alert('Saved.')
+            }
+        })
+    })
+
+    $(".reviewed").click( function () {
+        const ids = $(this).attr('id')
+        const checked = $(this).is(":checked") ? 1 : 0
+        const input = this
+        $.post('../ajax/updateSweaters.php', { ids, checked }, function (result) {
+            const res = JSON.parse(result)
+            if (res.success) {
+                alert('Saved.')
+            } else {
+                console.log(res.error)
+                alert('Error saving.')
+                $(input).attr('checked', !checked)
             }
         })
     })
