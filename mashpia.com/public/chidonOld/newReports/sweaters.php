@@ -15,10 +15,11 @@ $school_ids_str = implode(',', $school_ids);
 
 $sweaters =[];
 $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.user_serial, u.school_id, u.first, u.last, 
-            c.class_grade, c.class_sub 
+            c.class_grade, c.class_sub, s.sweaters_confirmed_5782 as confirmed 
         from users u 
         join th_chidon tc using (user_id) 
         join classes c on c.class_id = u.class_id 
+        join schools s on s.school_id = u.school_id 
         where tc.date_paid > 0 
         and tc.year = " . $year . " 
         and u.school_id in ($school_ids_str) 
@@ -56,7 +57,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <br />
 <?php if ($admin_user['auth'] != 'super') : ?>
 <div class="infobox2" style="min-height: fit-content; padding: 20px;">
-    <input type="checkbox" id="<?= $school_ids_str?>" class="reviewed" name="reviewed" /> I have reviewed all of my sweaters and unchecked everything that is missing.
+    <input type="checkbox" id="<?= $school_ids_str ?>" class="reviewed" name="reviewed" /> I have reviewed all of my sweaters and unchecked everything that is missing.
 </div>
 <?php endif; ?>
 <table>
@@ -74,6 +75,7 @@ while ($row = mysql_fetch_assoc($result)) {
     <?php
     foreach ($sweaters as $school_id => $details) {
         foreach ($details as $sweater) {
+            if ($sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
             $user_id = $sweater['user_id'];
             $grade = $sweater['class_grade'] . (empty($sweater['class_sub']) ? '' : '-' . $sweater['class_sub']);
             $name = $sweater['first'] . ' ' . $sweater['last'];
@@ -120,5 +122,9 @@ while ($row = mysql_fetch_assoc($result)) {
             }
         })
     })
+
+    function updateCheckbox() {
+        $(".reviewed").attr('checked', true)
+    }
 </script>
 </html>
