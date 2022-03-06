@@ -40,7 +40,7 @@ Below is the list of schools that have confirmed that they reviewed their sweate
     else {
         echo "<div style='font-size: 14px;'>";
         echo "<ul>";
-        foreach ($schools as $school) echo "<li>" . $school . "</li>";
+        foreach ($schools as $idx => $school) echo "<li>" . ($idx + 1) . ". " . $school . "</li>";
         echo "</ul>";
         echo "</div>";
     }
