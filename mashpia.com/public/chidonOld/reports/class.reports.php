@@ -71,10 +71,6 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'last_he as he_last_name',
             ),
-            'user_serial'   =>  array(
-                'table'     => 'users',
-                'column'    => 'user_serial'
-            ),
             'gender'    =>  array(
                 'table'     =>  'users',
                 'column'    =>  'gender',
@@ -163,17 +159,13 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'shabbaton_trophy'
             ),
-            'khk_rep'       =>  array(
+            'rep_type'          =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'khk_rep'
-            ),
-            'school_rep'    =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'school_rep'
+                'column'    =>  'rep_type'
             ),
             'year'      =>  array(
                 'table'     =>  'th_chidon', 
-    'column'    =>  'year'
+                'column'    =>  'year'
             ),
             'poll'      =>  array(
                 'table'     =>  'th_chidon', 
