@@ -40,7 +40,7 @@ if ( isset( $_FILES['schools'] ) ) {
         $qrys = [];
         foreach ($users as $user) {
             $qrys[] = "update users set non_th_city = '" . $user['city'] . "', non_th_state = '" . $user['state'] . "' 
-                    where user_id = " . $user_id;
+                    where user_id = " . $user['id'];
         }
 //        echo "<pre>"; print_r($qrys); echo "</pre>";
         $updated = 0;
