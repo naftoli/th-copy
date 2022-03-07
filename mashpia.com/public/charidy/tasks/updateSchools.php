@@ -44,7 +44,20 @@ if ( isset( $_FILES['schools'] ) ) {
             $qrys[] = "update users set non_th_city = '" . $user['city'] . "', non_th_state = '" . $user['state'] . "' 
                     where user_id = " . $user_id;
         }
-        echo "<pre>"; print_r($qrys); echo "</pre>";
+//        echo "<pre>"; print_r($qrys); echo "</pre>";
+        mysql_query('set autocommit=0');
+        mysql_query('begin');
+        $success = true;
+        foreach ($qrys as $qry) {
+            if (! mysql_query($qry)) {
+                echo $qry . "<br />" . mysql_error();
+                $success = false;
+                break;
+            }
+        }
+        if ($success) mysql_query('commit');
+        else mysql_query('rollback');
+        mysql_query('set autocommit=1');
     }
 }
 ?>
