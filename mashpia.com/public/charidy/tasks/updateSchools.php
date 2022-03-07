@@ -10,7 +10,12 @@ echo "<pre>"; print_r($_FILES); echo "</pre>";
 if ( isset( $_FILES['schools'] ) ) {
     if ( $file = fopen($_FILES['schools']['tmp_name'], "r") ) {
         $users = [];
+        $first = true;
         while ( $data = fgetcsv( $file ) ) {
+            if ($first) {
+                $first = false;
+                continue;
+            }
             $serial = $data[0];
             $city = $data[1];
             $state = $data[2];
