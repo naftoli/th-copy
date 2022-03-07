@@ -48,7 +48,7 @@ if ( isset( $_FILES['schools'] ) ) {
 </head>
 
 <body>
-<form action="updateSchools.php" method="post" enctype="multipart/form-data">
+<form action="updateSchoolNames.php" method="post" enctype="multipart/form-data">
     <input type="file" name="schools" id="schools">
     <input type="submit" value="upload" name="submit">
 </form>
