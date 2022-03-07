@@ -5,8 +5,6 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
-echo "<pre>"; print_r($_FILES); echo "</pre>";
-
 if ( isset( $_FILES['schools'] ) ) {
     if ( $file = fopen($_FILES['schools']['tmp_name'], "r") ) {
         $users = [];
@@ -45,6 +43,7 @@ if ( isset( $_FILES['schools'] ) ) {
                     where user_id = " . $user_id;
         }
 //        echo "<pre>"; print_r($qrys); echo "</pre>";
+        $updated = 0;
         mysql_query('set autocommit=0');
         mysql_query('begin');
         $success = true;
@@ -53,9 +52,12 @@ if ( isset( $_FILES['schools'] ) ) {
                 echo $qry . "<br />" . mysql_error();
                 $success = false;
                 break;
-            }
+            } else $updated++;
         }
-        if ($success) mysql_query('commit');
+        if ($success) {
+            mysql_query('commit');
+            echo "Updated: " . $updated;
+        }
         else mysql_query('rollback');
         mysql_query('set autocommit=1');
     }
