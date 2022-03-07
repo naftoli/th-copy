@@ -84,11 +84,13 @@ if ($final == 'after') {
                     $level = 'level_' . $i;
                     if ($row[$level]) {
                         $score += $row[$level];
-                        $divide_by = $finals[$tracks[$i]];
-                        $final_score = number_format(($score / $divide_by) * 100, 2);
-                        if ($final_score >= $needed[$tracks[$i]]) {
-                            $award = $tracks[$i];
-                        }
+                    }
+                }
+                for ($i = 1; $i <= $key; $i++) {
+                    $divide_by = $finals[$tracks[$i]];
+                    $final_score = number_format(($score / $divide_by) * 100, 2);
+                    if ($final_score >= $needed[$tracks[$i]]) {
+                        $award = $tracks[$i];
                     }
                 }
             }

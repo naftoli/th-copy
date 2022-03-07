@@ -125,11 +125,13 @@ function getAward($child) {
                 $level = 'level_' . $i;
                 if ($row[$level]) {
                     $score += $row[$level];
-                    $divide_by = $finals[$tracks[$i]];
-                    $final_score = number_format(($score / $divide_by) * 100, 2);
-                    if ($final_score >= $needed[$tracks[$i]]) {
-                        $award = $tracks[$i];
-                    }
+                }
+            }
+            for ($i = 1; $i <= $key; $i++) {
+                $divide_by = $finals[$tracks[$i]];
+                $final_score = number_format(($score / $divide_by) * 100, 2);
+                if ($final_score >= $needed[$tracks[$i]]) {
+                    $award = $tracks[$i];
                 }
             }
         }
@@ -200,17 +202,17 @@ foreach ($info as $school => $children) {
             $key++;
             // create the proper input box
             $level = 'level_' . $i;
-            echo "<td><input type='number' name='{$level}[$id]' class='$level mark'";
+            echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
             if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
             else echo "value='0'";
-            if ($i > $key) echo " disabled='disabled'";
+            if ($i > $key) echo " readonly";
             echo " /></td>";
         }
         // add khk_final
         // check if child should be able to take the khk final
-        $disabled = 'disabled';
+        $disabled = 'readonly';
         if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
-        echo "<td><input type='number' name='khk[$id]' class='khk' $disabled ";
+        echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
         if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
         else echo "value='0'";
         echo " /></td>";
@@ -242,8 +244,8 @@ echo "</form>";
 
     $(".mark").focus( function() {
         let val = $(this).val()
-        if (val == '') {
-            $(this).val(0)
+        if (parseInt(val) == 0) {
+            $(this).val('')
         }
     })
 
