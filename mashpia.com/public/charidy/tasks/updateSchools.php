@@ -28,15 +28,23 @@ if ( isset( $_FILES['schools'] ) ) {
             $user_id = $row['user_id'];
             $school_id = $row['school_id'];
 
-            $users[] = [
-                'id'    => $user_id,
-                'city'  => $city,
-                'state' => $state,
-                'school'    => $school,
-                'school_id' => $school_id
-            ];
+            // only save myshliach / anashkinder kids
+            if (in_array($school_id, [61, 269])) {
+                $users[] = [
+                    'id' => $user_id,
+                    'city' => $city,
+                    'state' => $state,
+                    'school' => $school,
+                    'school_id' => $school_id
+                ];
+            }
         }
-        echo "<pre>"; print_r($users); echo "</pre>";
+        $qrys = [];
+        foreach ($users as $user) {
+            $qrys[] = "update users set non_th_city = '" . $user['city'] . "', non_th_state = '" . $user['state'] . "' 
+                    where user_id = " . $user_id;
+        }
+        echo "<pre>"; print_r($qrys); echo "</pre>";
     }
 }
 ?>
