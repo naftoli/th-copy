@@ -202,6 +202,7 @@ foreach ($info as $school => $children) {
             $level = 'level_' . $i;
             echo "<td><input type='number' name='{$level}[$id]' class='$level mark'";
             if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
+            else echo "value='0'";
             if ($i > $key) echo " disabled='disabled'";
             echo " /></td>";
         }
@@ -211,6 +212,7 @@ foreach ($info as $school => $children) {
         if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
         echo "<td><input type='number' name='khk[$id]' class='khk' $disabled ";
         if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
+        else echo "value='0'";
         echo " /></td>";
         echo "<td>" . getAward($child) . "</td></tr>";
     }
@@ -240,8 +242,8 @@ echo "</form>";
 
     $(".mark").focus( function() {
         let val = $(this).val()
-        if (parseInt(val) == 0) {
-            $(this).val('')
+        if (val == '') {
+            $(this).val(0)
         }
     })
 
