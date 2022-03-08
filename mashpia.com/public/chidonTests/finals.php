@@ -205,7 +205,7 @@ foreach ($info as $school => $children) {
             echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
             if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
             else echo "value='0'";
-            if ($i > $key) echo " readonly";
+            if ($i > $key) echo " disabled";
             echo " /></td>";
         }
         // add khk_final
@@ -240,6 +240,13 @@ echo "</form>";
         <?php if (! isset($_POST['submit'])) : ?>
         alert('Please make sure to SAVE after entering scores.');
         <?php endif; ?>
+    })
+
+    $(".mark").focus( function() {
+        let val = $(this).val()
+        if (parseInt(val) == 0) {
+            $(this).val('')
+        }
     })
 
     $(".mark").blur(function () {
