@@ -145,6 +145,17 @@ foreach ($schools as $id => $school) {
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
 }
+// initialize all tests to not be disabled
+$tooLate = false;
+// disable marking after certain dates for bc's
+if ($admin_user['auth'] != 'super') {
+    $today = new DateTime();
+    $shutdown = new DateTime('2022-03-11 10:00:00');
+
+    if ($today >= $shutdown) {
+        $tooLate = true;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -205,13 +216,13 @@ foreach ($info as $school => $children) {
             echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
             if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
             else echo "value='0'";
-            if ($i > $key) echo " disabled";
+            if ($i > $key || $tooLate) echo " disabled";
             echo " /></td>";
         }
         // add khk_final
         // check if child should be able to take the khk final
         $disabled = 'disabled';
-        if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
+        if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
         echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
         if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
         else echo "value='0'";
