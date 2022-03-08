@@ -210,7 +210,7 @@ foreach ($info as $school => $children) {
         }
         // add khk_final
         // check if child should be able to take the khk final
-        $disabled = 'readonly';
+        $disabled = 'disabled';
         if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $disabled = '';
         echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
         if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
@@ -242,13 +242,6 @@ echo "</form>";
         <?php endif; ?>
     })
 
-    $(".mark").focus( function() {
-        let val = $(this).val()
-        if (parseInt(val) == 0) {
-            $(this).val('')
-        }
-    })
-
     $(".mark").blur(function () {
         const amount = $(this).val()
         if (amount) {
@@ -258,6 +251,8 @@ echo "</form>";
                 $(this).val('')
                 $(this).focus()
             }
+        } else {
+            if (amount == '') $(this).val(0)
         }
     })
     $(".khk").blur(function () {
