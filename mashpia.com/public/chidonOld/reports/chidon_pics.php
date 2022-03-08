@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting', 1);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -14,7 +16,9 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         left join thumbs t on u.user_photo_id = t.file_id 
-        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+        where year = " . $year . " 
+        and date_paid > 0 
+        and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;
