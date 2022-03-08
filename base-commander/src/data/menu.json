@@ -126,6 +126,12 @@
 
       { "label": "School Eligibility Confirmation", "legacy": true, "path": "/chidonOld/newReports/school_confirmation.php" },
 
+      { "label": "Sweaters Shipped", "legacy": true, "path": "/chidonOld/newReports/sweaters.php" },
+
+      { "label": "Sweaters Missing", "legacy": true, "user_types": ["HQ"], "path": "/chidonOld/newReports/sweaters_hq.php" },
+
+      { "label": "Sweaters Confirmed", "legacy": true, "user_types": ["HQ"], "path": "/chidonOld/newReports/sweaters_reviewed_hq.php" },
+
       { "label": "Eligibility Report", "legacy":  true, "path":  "/chidonOld/newReports/eligibility_registered_report.php" },
 
       { "label": "Chidon Drive", "legacy": true, "path": "/chidonOld/chidon_drive/school_donation.php" },
