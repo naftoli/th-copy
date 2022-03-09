@@ -1647,16 +1647,33 @@
 							$("#state").val(info.user_state);
 							$("#zip").val(info.user_postal);
 							var lang = parseInt(info.lang_id);
-							$("#lang option[value='" + lang + "']").attr('selected', true);
+							console.log(lang)
+							var idx = 0
+							switch (lang) {
+								case 1:
+									idx = 0
+									break
+								case 2:
+									idx = 1
+									break
+								case 4:
+									idx = 2
+									break
+							}
 							// unselect all the lang options....
 							$("#lang_select li").removeClass("selected");
-							$("#lang_select li[data-original-index='" + (lang - 1) + "']").addClass(
+							$("#lang_select li[data-original-index='" + idx + "']").addClass(
 								"selected"); // select the correct one based on it's index.
 							$("#lang_select button span.filter-option")
 								.text( // update the text for the dropdown...
-									$("#lang_select li[data-original-index='" + (lang - 1) + "']")
+									$("#lang_select li[data-original-index='" + idx + "']")
 										.text() // set it to the value of the selected item...
 								);
+
+							// for OT make sure there's no option of choosing hebrew
+							if (info.school_id === 255) {
+								$("#lang_select").find('li[data-original-index=2]').remove()
+							}
 
 							// set mission type
 							var school_type_id = Number(info.school_type_id);
