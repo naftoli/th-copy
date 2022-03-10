@@ -518,8 +518,8 @@
               $("#" + n).show();
               $(".table" + n).show();
             }
-              $(".plus").text('50');
-              $(".minus").text('-10');
+              // $(".plus").text('50');
+              // $(".minus").text('-10');
           // } else {
           //   // figure out which table to hide
           //   if (t1 !== undefined && t2 !== undefined) {
