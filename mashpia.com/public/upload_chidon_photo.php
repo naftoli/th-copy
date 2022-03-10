@@ -13,9 +13,9 @@ if (isset($_POST['action'])) {
 
     if (isset($_FILES['user_photo']))  {
         if ($pic = addFileNew($_FILES['user_photo'])) {
-            $sql = "update users set chidon_pic_5782 = '" . $pic . "' where user_id = " . $user_id;
+            $sql = "update users set chidon_pic_5782 = \"" . $pic . "\" where user_id = " . $user_id;
             mysql_query($sql);
-            $str = "Location: http://" . $_SERVER['DOCUMENT_ROOT'] . "/upload_chidon_photos.php?school_id=" . $school_id;
+            $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
             if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
             header($str);
             exit;
@@ -60,7 +60,7 @@ $user = mysql_fetch_assoc($query);
             <?=T_('Base Management')?>
         </H1>
 
-        <FORM action="admin_user_photo.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+        <FORM action="upload_chidon_photo.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="school_id" value="<?=$school_id;?>">
             <input type="hidden" name="class_id" value="<?=$class_id?>">
