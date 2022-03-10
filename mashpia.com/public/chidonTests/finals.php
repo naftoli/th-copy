@@ -205,32 +205,34 @@ foreach ($info as $school => $children) {
     echo "<th>Award</th>";
     echo "</tr>";
     foreach ($children as $child) {
-        $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
-        $name = $child['first'] . ' ' . $child['last'];
-        $id = $child['user_id'];
-        echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
-            $child['highest_track'] . "</td>";
-        for ($i = 1; $i <= 4; $i++) {
-            // find out which level the child can go up to
-            $key = array_search(ucwords($child['highest_track']), $levels);
-            $key++;
-            // create the proper input box
-            $level = 'level_' . $i;
-            echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
-            if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
+        if ($child['date_paid'] > 0) {
+            $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+            $name = $child['first'] . ' ' . $child['last'];
+            $id = $child['user_id'];
+            echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
+                $child['highest_track'] . "</td>";
+            for ($i = 1; $i <= 4; $i++) {
+                // find out which level the child can go up to
+                $key = array_search(ucwords($child['highest_track']), $levels);
+                $key++;
+                // create the proper input box
+                $level = 'level_' . $i;
+                echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
+                if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
+                else echo "value='0'";
+                if ($i > $key || $tooLate) echo " disabled";
+                echo " /></td>";
+            }
+            // add khk_final
+            // check if child should be able to take the khk final
+            $disabled = 'disabled';
+            if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
+            echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
+            if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
             else echo "value='0'";
-            if ($i > $key || $tooLate) echo " disabled";
             echo " /></td>";
+            echo "<td>" . getAward($child) . "</td></tr>";
         }
-        // add khk_final
-        // check if child should be able to take the khk final
-        $disabled = 'disabled';
-        if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
-        echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
-        if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
-        else echo "value='0'";
-        echo " /></td>";
-        echo "<td>" . getAward($child) . "</td></tr>";
     }
     echo "</table>";
 }
