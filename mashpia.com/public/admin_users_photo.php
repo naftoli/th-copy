@@ -72,7 +72,10 @@ ORDER BY users.last, users.first, users.username');
 </DIV>
 <H1><?=T_('Base Management')?></H1>
 <?if($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1):?>
-<? $school_result = mq('SELECT school_id, school_name, inst_name FROM schools JOIN institutions USING (inst_id)' . ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY inst_name, school_name'); ?>
+<? $school_result = mq('SELECT school_id, school_name FROM schools ' .
+        ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' :
+            'WHERE test_school = 0 AND school_era is NULL') .
+        ' ORDER BY school_name'); ?>
 <FORM action="admin_users_photo.php" method="get" accept-charset="UTF-8">
 <P>
 <LABEL><?=T_('Select Institution')?>: <SELECT name="school_id">
