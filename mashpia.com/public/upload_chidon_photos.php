@@ -192,7 +192,7 @@ $edit_result = mq($usersSql);
                                                 </LABEL>
                                                 <BR>
                                                 <div class="inline_top">
-                                                    <img src="/mobile/reg/<?=$row['mobile_pic']?>?time=<?=time()?>" height="80" />
+                                                    <img src="/mobile/reg/<?=$row['chidon_pic_5782']?>" height="80" />
                                                 </div>
 <!--                                                    <div class="inline_top">-->
 <!--                                                        <form action="/tasks/flip_images.php" method="post">-->
