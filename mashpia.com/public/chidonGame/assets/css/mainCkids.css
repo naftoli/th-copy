@@ -77,7 +77,7 @@ body{
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
   font-size: 100px;
   font-weight: 700;
-  color: #F3F781; /*ffffff;*/
+  color: #000;
   position: relative;
   text-align: center;
   font-family: digi;

@@ -556,8 +556,9 @@
             var points = parseInt($(this).prev('input').val());
             if (!isNaN(points)) {
               var team = '.team' + $(this).parent().attr('id');
-              $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
-                delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
+              $(team).text(points)
+              // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+              //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
             }
           });
           
@@ -576,8 +577,9 @@
               var curPoints = parseInt($(team).eq(0).text());
               curPoints += points;
               if (!isNaN(curPoints)) {
-                  $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
-                    delay().fadeIn().fadeOut(300).delay().fadeIn().text(curPoints);
+                  $(team).text(curPoints)
+                  // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+                  //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(curPoints);
                   //updateTable(id);
                 }
             }
