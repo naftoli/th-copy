@@ -76,9 +76,9 @@ while ($row = mysql_fetch_assoc($result)) {
 function passedKhk($id) {
     global $marks;
 
-    $user_marks = $marks[$id];
-    $total = 0;
-    if (!empty($user_marks)) {
+    if (isset($marks[$id])) {
+        $user_marks = $marks[$id];
+        $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 4;
         if ($total >= 70) return true;
