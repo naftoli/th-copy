@@ -20,7 +20,7 @@ body{
 
 .scoreboard {
   margin: 0 !important;
-  background: url('../img/background.png');
+  /*background: url('../img/background.png');*/
 }
 
 .btn-custom {
@@ -60,12 +60,13 @@ body{
   /* border-bottom-right-radius: 14px;
   border-bottom-left-radius: 14px; */
 }
-/* .pricing-table .team1 {
-  background: #CCCC00;
+.pricing-table .team1 {
+  background: #00b140;
 }
 .pricing-table .team2 {
-  background: #006633;
+  background: #00b140;
 }
+/*
 .pricing-table .team3 {
   background: #C80000;
 }
@@ -109,7 +110,7 @@ body{
 }
 #pricing-table .pricing .pricing-list {
   padding: 20px 0 20px 0;
-  color: #a7cded;
+  /*color: #a7cded;*/
   font-family: oscar;
   font-size: 60pt;
   /* background: #F8E0F7; */
@@ -155,7 +156,7 @@ body{
   /* color: #bdc3c7; */
 }
 #pricing-table .pricing .pricing-list ul li span {
-  /* color: #34495e; */
+  color: #34495e;
   font-weight: bold;
   font-size: 42pt;
   padding-right: 25px;
