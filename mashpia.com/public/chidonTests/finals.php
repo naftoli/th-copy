@@ -78,10 +78,13 @@ function passedKhk($id) {
 
     $user_marks = $marks[$id];
     $total = 0;
-    foreach ($user_marks as $mark) $total += intval($mark);
-    $total /= 4;
-    if ($total >= 70) return true;
-    else return false;
+    if (!empty($user_marks)) {
+        foreach ($user_marks as $mark) $total += intval($mark);
+        $total /= 4;
+        if ($total >= 70) return true;
+        else return false;
+    }
+    return false;
 }
 
 function getAward($child) {
