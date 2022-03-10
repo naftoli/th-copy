@@ -173,8 +173,9 @@
                 <div class="pricing">
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
-                    		<button class="plus">+50</button>
-                            <button class="minus">-10</button>
+                    		<button class="plusTwentyFive">+25</button>
+                            <button class="plusTen">+10</button>
+                            <button class="minusTen">-10</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -186,8 +187,9 @@
                     
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="givePoints" id="2">
-                    		<button class="plus">+50</button>
-                            <button class="minus">-10</button>
+                            <button class="plusTwentyFive">+25</button>
+                            <button class="plusTen">+10</button>
+                            <button class="minusTen">-10</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>

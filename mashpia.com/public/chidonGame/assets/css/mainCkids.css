@@ -52,16 +52,16 @@ body{
   border-bottom-left-radius: 14px;
 }
 .pricing-table .team1 {
-  background: #0033CC;
+  background: #00ff00;
 }
 .pricing-table .team2 {
-  background: #C80000;
+  background: #00ff00;
 }
 .pricing-table .team3 {
-  background: #006633;
+  background: #00ff00;
 }
 .pricing-table .team4 {
-  background: #CCCC00;
+  background: #00ff00;
 }
 #bottom-table #pricing-table .pricing .pricing-table .pricing-header {
 	padding: 0px;	
@@ -178,7 +178,7 @@ body{
 	height: 200px;
 }
 #buttons span {
-	font-size; 14px;
+	font-size: 14px;
 	padding: 10px;
 	right: 20px;
 }
