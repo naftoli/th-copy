@@ -175,7 +175,7 @@
                     	<div class="givePoints" id="1">
                     		<button class="plusTwentyFive">+25</button>
                             <button class="plusTen">+10</button>
-                            <button class="minusTen">-10</button>
+                            <button class="minusTen">-25</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
@@ -189,7 +189,7 @@
                         <div class="givePoints" id="2">
                             <button class="plusTwentyFive">+25</button>
                             <button class="plusTen">+10</button>
-                            <button class="minusTen">-10</button>
+                            <button class="minusTen">-25</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
