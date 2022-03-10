@@ -16,12 +16,17 @@ if (isset($_GET['missing'])) {
 }
 
 $class_result = mq("SELECT class_id, class_grade, class_sub FROM classes WHERE school_id = $school_id ORDER BY class_grade, class_sub");
-$edit_result = mq("
-SELECT users.user_id, users.first, users.last, users.username, class_grade, class_sub, class_teacher, users.chidon_pic_5782  
-FROM users LEFT JOIN classes USING (school_id, class_id) 
-WHERE school_id = $school_id" . ($class_id != -1 ? " AND class_id = $class_id" : '') .
-    ($missing ? " and users.chidon_pic_5782 is null " : '') . '  
-ORDER BY users.last, users.first');
+$usersSql = "select u.user_id, u.first, u.last, u.chidon_pic_5782, c.class_grade, c.class_sub, c.class_teacher 
+            from users u 
+            join classes c using (class_id) 
+            join th_chidon tc using (user_id) 
+            where tc.year = 5782 
+            and tc.date_paid > 0 
+            and u.school_id = " . $school_id;
+if ($class_id != -1) $usersSql .= " and class_id = " . $class_id;
+if ($missing) $usersSql .= " and u.chidon_pic_5782 is null";
+$usersSql .= " order by u.last, u.first";
+$edit_result = mq($usersSql);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
