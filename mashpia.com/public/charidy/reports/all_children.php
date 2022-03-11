@@ -29,7 +29,7 @@ while ($row = mysql_fetch_assoc($result)) {
     else $totals[$row['school_name']]['registered'] = 1;
 }
 
-$sql = "select u.user_id, u.user_serial, u.non_th_school, u.non_th_city, u.non_th_state, u.first, u.last, tc.parent_id, a.admin_email, s.* 
+$sql = "select distinct u.user_id, u.user_serial, u.non_th_school, u.non_th_city, u.non_th_state, u.first, u.last, tc.parent_id, a.admin_email, s.* 
         from users u 
         join schools s using (school_id) 
         join th_chidon tc using (user_id) 
@@ -71,6 +71,7 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Parent Email</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Base Name</th>
             <th>School Name</th>
             <th>City</th>
             <th>State</th>
@@ -80,13 +81,12 @@ while ($row = mysql_fetch_assoc($result)) {
         foreach ($users as $user_id => $user) {
             $parent = isset($user['admin_id']) ? $user['admin_id'] : $user['parent_id'];
             echo "<tr><td>" . $user_id . "</td><td>" . $user['user_serial'] . "</td><td>" . $parent . "</td><td>" .
-                $user['admin_email'] . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>";
+                $user['admin_email'] . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" .
+                $user['school_name'] . "</td><td>" . $user['non_th_school'] . "</td><td>";
             if (in_array($user['school_id'], [61, 269])) {
-                echo $user['non_th_school'] . "</td><td>" . $user['non_th_city'] . "</td><td>" . $user['non_th_state'] .
-                    "</td><td></td></tr>";
+                echo $user['non_th_city'] . "</td><td>" . $user['non_th_state'] . "</td><td></td></tr>";
             } else {
-                echo $user['school_name'] . "</td><td>" . $user['school_city'] . "</td><td>" . $user['school_state'] .
-                    "</td><td>" . $user['school_country'] . "</td></tr>";
+                echo $user['school_city'] . "</td><td>" . $user['school_state'] . "</td><td>" . $user['school_country'] . "</td></tr>";
             }
         }
         ?>
@@ -100,11 +100,16 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Number of chayolim signed up to Chidon</th>
         </tr>
         <?php
+        $grandTotals['registered'] = 0;
+        $grandTotals['chidon'] = 0;
         foreach ($totals as $school => $more) {
             $registered = isset($more['registered']) ? $more['registered'] : 0;
             $chidon = isset($more['chidon']) ? $more['chidon'] : 0;
             echo "<tr><td>" . $school . "</td><td>" . $registered . "</td><td>" . $chidon . "</td></tr>";
+            $grandTotals['registered'] += $registered;
+            $grandTotals['chidon'] += $chidon;
         }
+        echo "<tr><th align='right'>Total:</th><th>" . $grandTotals['registered'] . "</th><th>" . $grandTotals['chidon'] . "</th></tr>";
         ?>
     </table>
 </body>
