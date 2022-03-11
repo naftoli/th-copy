@@ -42,6 +42,8 @@ while ($row = mysql_fetch_assoc($result)) {
     if (in_array($row['school_id'], [61, 269])) {
         if (isset($totals[$row['non_th_school']]['chidon'])) $totals[$row['non_th_school']]['chidon']++;
         else $totals[$row['non_th_school']]['chidon'] = 1;
+        if (isset($totals[$row['school_name']]['chidon'])) $totals[$row['school_name']]['chidon']++;
+        else $totals[$row['school_name']]['chidon'] = 1;
     } else {
         if (isset($totals[$row['school_name']]['chidon'])) $totals[$row['school_name']]['chidon']++;
         else $totals[$row['school_name']]['chidon'] = 1;
@@ -65,6 +67,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <body>
     <table>
         <tr>
+            <th></th>
             <th>User ID</th>
             <th>User Serial</th>
             <th>Parent ID</th>
@@ -78,10 +81,11 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Country</th>
         </tr>
         <?php
+        $i = 1;
         foreach ($users as $user_id => $user) {
             $parent = isset($user['admin_id']) ? $user['admin_id'] : $user['parent_id'];
-            echo "<tr><td>" . $user_id . "</td><td>" . $user['user_serial'] . "</td><td>" . $parent . "</td><td>" .
-                $user['admin_email'] . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" .
+            echo "<tr><td>" . $i++ . "</td><td>" . $user_id . "</td><td>" . $user['user_serial'] . "</td><td>" . $parent .
+                "</td><td>" . $user['admin_email'] . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" .
                 $user['school_name'] . "</td><td>" . $user['non_th_school'] . "</td><td>";
             if (in_array($user['school_id'], [61, 269])) {
                 echo $user['non_th_city'] . "</td><td>" . $user['non_th_state'] . "</td><td></td></tr>";
@@ -100,16 +104,16 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Number of chayolim signed up to Chidon</th>
         </tr>
         <?php
-        $grandTotals['registered'] = 0;
-        $grandTotals['chidon'] = 0;
+//        $grandTotals['registered'] = 0;
+//        $grandTotals['chidon'] = 0;
         foreach ($totals as $school => $more) {
             $registered = isset($more['registered']) ? $more['registered'] : 0;
             $chidon = isset($more['chidon']) ? $more['chidon'] : 0;
             echo "<tr><td>" . $school . "</td><td>" . $registered . "</td><td>" . $chidon . "</td></tr>";
-            $grandTotals['registered'] += $registered;
-            $grandTotals['chidon'] += $chidon;
+//            $grandTotals['registered'] += $registered;
+//            $grandTotals['chidon'] += $chidon;
         }
-        echo "<tr><th align='right'>Total:</th><th>" . $grandTotals['registered'] . "</th><th>" . $grandTotals['chidon'] . "</th></tr>";
+//        echo "<tr><th align='right'>Total:</th><th>" . $grandTotals['registered'] . "</th><th>" . $grandTotals['chidon'] . "</th></tr>";
         ?>
     </table>
 </body>
