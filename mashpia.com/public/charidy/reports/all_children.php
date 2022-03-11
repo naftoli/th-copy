@@ -29,7 +29,8 @@ while ($row = mysql_fetch_assoc($result)) {
     else $totals[$row['school_name']]['registered'] = 1;
 }
 
-$sql = "select distinct u.user_id, u.user_serial, u.non_th_school, u.non_th_city, u.non_th_state, u.first, u.last, tc.parent_id, a.admin_email, s.* 
+$sql = "select distinct u.user_id, u.user_serial, u.non_th_school, u.non_th_city, u.non_th_state, u.first, u.last, 
+            u.user_registered, tc.parent_id, a.admin_email, s.* 
         from users u 
         join schools s using (school_id) 
         join th_chidon tc using (user_id) 
@@ -79,6 +80,8 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>City</th>
             <th>State</th>
             <th>Country</th>
+            <th>Chayolei</th>
+            <th>Chidon</th>
         </tr>
         <?php
         $i = 1;
@@ -88,10 +91,21 @@ while ($row = mysql_fetch_assoc($result)) {
                 "</td><td>" . $user['admin_email'] . "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" .
                 $user['school_name'] . "</td><td>" . $user['non_th_school'] . "</td><td>";
             if (in_array($user['school_id'], [61, 269])) {
-                echo $user['non_th_city'] . "</td><td>" . $user['non_th_state'] . "</td><td></td></tr>";
+                echo $user['non_th_city'] . "</td><td>" . $user['non_th_state'] . "</td><td></td>";
             } else {
-                echo $user['school_city'] . "</td><td>" . $user['school_state'] . "</td><td>" . $user['school_country'] . "</td></tr>";
+                echo $user['school_city'] . "</td><td>" . $user['school_state'] . "</td><td>" . $user['school_country'] . "</td>";
             }
+            if (isset($user['admin_id']) || $user['user_registered'] > 0) {
+                echo "<td>$54</td>";
+            } else {
+                echo "<td></td>";
+            }
+            if (isset($user['parent_id'])) {
+                echo "<td>$185</td>";
+            } else {
+                echo "<td></td>";
+            }
+            echo "</tr>";
         }
         ?>
     </table>
