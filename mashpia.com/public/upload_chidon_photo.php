@@ -12,15 +12,15 @@ if (isset($_POST['action'])) {
     $user_id = $_POST['user_id'];
 
     if (isset($_FILES['user_photo']))  {
+        $message = "Could not update system with new picture.";
         if ($pic = addFileNew($_FILES['user_photo'])) {
             $sql = "update users set chidon_pic_5782 = \"" . $pic . "\" where user_id = " . $user_id;
-            mysql_query($sql);
-            $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
-            if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
-            header($str);
-            exit;
-        } else {
-            $message = "Could not update system with new picture.";
+            if (mysql_query($sql)) {
+                $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
+                if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
+                header($str);
+                exit;
+            }
         }
     }
 }
