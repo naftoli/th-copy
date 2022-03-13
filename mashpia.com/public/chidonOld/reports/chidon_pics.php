@@ -87,7 +87,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
             <h2><?= $schools[$id] ?></h2>
             <table class="pics">
                 <tr>
-                    <th>Chidon ID</th>
+                    <th>Serial Number</th>
                     <th>Name</th>
                     <th>Chidon Picture</th>
                 </tr>
@@ -109,7 +109,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
                             break;
                         }
                     }
-                    echo "<tr><td>" . $child['th_chidon_id'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
+                    echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
                     if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
                         $imgs[] = $img;
