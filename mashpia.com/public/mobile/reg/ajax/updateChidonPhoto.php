@@ -17,6 +17,5 @@ if ( isset( $_POST['serial'] ) ) {
 }
 
 $sql = "UPDATE users SET chidon_pic_5782 = '" . mysql_real_escape_string($_POST['chidonPhoto']) . "' WHERE user_id = " . $user_id;
-echo $sql;
 $success = mysql_query( $sql );
 echo $success;
