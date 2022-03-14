@@ -428,6 +428,11 @@
                                                         <button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
                                                     </div>
                                                     {{/if}}
+                                                    {{#if this.photo}}
+                                                        <div style="margin:10px 0px">
+                                                            <button class="btn btn-primary photo">Upload Chidon Photo</button>
+                                                        </div>
+                                                    {{/if}}
                                                 </div>
                                             </td>
                                         </tr>
@@ -591,6 +596,8 @@
 
                     for (var c in children) {
                         var child = children[c];
+                        if (c == 19274) child.photo = true
+                        else child.photo = false
 
                         if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
                             $(".subsidy").show()
@@ -862,6 +869,10 @@
                 //     window.open("/mobile/reg/lulavSet.html");
                 // }
             });
+
+            $(document).on('click', '.photo', function () {
+                location.href = "upload_photo.html?id=" + $(this).parent().parent().parent().attr('id')
+            })
         });
     </script>
 
