@@ -14,6 +14,11 @@
   src: url('../fonts/GothamNarrow-Bold.otf');
 }
 
+@font-face {
+  font-family: ruso;
+  src: url("../fonts/RussoOne-Regular.ttf");
+}
+
 body{
   /*(background: url(../img/bg.jpg);*/
 }
@@ -85,12 +90,11 @@ body{
   font-weight: 700;
 }
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
-  font-size: 100px;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 62pt;
+  color: #201a57;
   position: relative;
   text-align: center;
-  font-family: digi;
+  font-family: ruso;
   padding-right: 25px;
 }
 #bottom-table .pricing .pricing-table .pricing-header .pricing-rate { 
