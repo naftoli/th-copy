@@ -138,7 +138,33 @@ function createSpreadSheet($children) {
             }
         }
     }
-    echo "<pre>"; print_r($sheet); echo "</pre>";
-
     return $sheet;
+}
+
+function extractFiles($list) {
+    $files = [];
+    foreach ($list as $name) {
+        if (is_dir($name)) continue;
+        if ($name === '.' || $name === '..' || strpos($name, '.php') !== false) continue;
+        else $files[] = $name;
+    }
+    return $files;
+}
+
+function createZip($files, $images, $filename) {
+    $zip = new ZipArchive;
+    $success = $zip->open($filename, ZipArchive::CREATE);
+    if ($success !== true) {
+        exit("cannot open <$filename>\n");
+    }
+    foreach($files as $file) {
+        $zip->addFromString($file, file_get_contents($file));
+        unlink($file);
+    }
+    foreach ($images as $img) {
+        $img = 'images/' . $img;
+        $zip->addFromString($img, file_get_contents($img));
+        unlink($img);
+    }
+    $zip->close();
 }

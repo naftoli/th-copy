@@ -25,9 +25,27 @@ $prizes = getUserPrizes();
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     $sheet = createSpreadSheet($children);
-//    createFile("$school_id.txt", $sheet);
+    $file_name = $school_id . ".txt";
+    createFile($file_name, $sheet);
 }
 
-echo json_encode([
-    'success' => true
-]);
+// loop through dir to get files
+$dir = getcwd();
+$list = scandir($dir);
+$list2 = scandir($dir . '/images');
+$files = extractFiles($list);
+$images = extractFiles($list2);
+
+$filename = "Chidon.zip";
+createZip($files, $images, $filename);
+
+header('Content-Description: File Transfer');
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+header('Expires: 0');
+header('Cache-Control: must-revalidate');
+header('Pragma: public');
+header('Content-Length: ' . filesize($filename));
+flush(); // Flush system output buffer
+readfile($filename);
+unlink($filename);
