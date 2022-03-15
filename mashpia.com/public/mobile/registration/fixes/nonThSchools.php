@@ -10,15 +10,36 @@ if (isset($_POST['submit'])) {
             $sql = "select * from non_th_schools where school_name like '%" . $school . "%'";
             $result = mysql_query($sql);
             if (mysql_num_rows($result)) {
-                echo "non th school: " . $school . ", school found: " . mysql_fetch_assoc($result)['school_name'] . "<br />";
+                if ($school == 'Ateres Chaya') {
+                    $qrys[] = "insert into non_th_schools set school_name = '" . addslashes($school) . "'";
+                }
+            } else {
+                $qrys[] = "insert into non_th_schools set school_name = '" . addslashes($school) . "'";
             }
-//            $qrys[] = "insert into non_th_schools set school_name = '" . addslashes($school) . "'";
         }
     }
-//    foreach ($qrys as $qry) {
-//        mysql_query($qry);
-//    }
+    foreach ($qrys as $qry) {
+        if (! mysql_query($qry)) {
+            echo "Error in qry: " . $qry . "<br />";
+        }
+    }
     echo "done.";
+
+    // get all non th schools with ids and update users db
+    $schools = [];
+    $sql = "select * from non_th_schools";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $schools[$row['non_th_school_id']] = $row['school_name'];
+    }
+
+    $updated = 0;
+    foreach ($schools as $id => $school) {
+        $sql = "update users set non_th_school_id = $id where non_th_school = \"" . $school . "\"";
+        if (mysql_query($sql)) $updated++;
+        else echo $sql . "<br />";
+    }
+    echo "Updated: " . $updated;
 }
 ?>
 <!DOCTYPE html>
