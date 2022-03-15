@@ -401,6 +401,9 @@
 <!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
                                                         {{#if this.shabbatonPaid}}
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon Rewards</span> {{ this.chidon_year }}</div>
+                                                        <div style="margin:10px 0px">
+                                                            <button class="btn btn-primary chidonPhoto">Upload Chidon Photo</button>
+                                                        </div>
                                                         {{else}}
 <!--                                                            {{#if this.chidonSchoolConfirmed}}-->
 <!--                                                                {{#if this.track}}-->
@@ -427,11 +430,6 @@
                                                     <div style="margin:10px 0px">
                                                         <button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
                                                     </div>
-                                                    {{/if}}
-                                                    {{#if this.photo}}
-                                                        <div style="margin:10px 0px">
-                                                            <button class="btn btn-primary photo">Upload Chidon Photo</button>
-                                                        </div>
                                                     {{/if}}
                                                 </div>
                                             </td>
@@ -595,9 +593,7 @@
                     var unregistered_children = {};
 
                     for (var c in children) {
-                        var child = children[c];
-                        if (c == 19274) child.photo = true
-                        else child.photo = false
+                        var child = children[c]
 
                         if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
                             $(".subsidy").show()
@@ -869,10 +865,6 @@
                 //     window.open("/mobile/reg/lulavSet.html");
                 // }
             });
-
-            $(document).on('click', '.photo', function () {
-                location.href = "upload_photo.html?id=" + $(this).parent().parent().parent().attr('id')
-            })
         });
     </script>
 
