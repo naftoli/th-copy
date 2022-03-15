@@ -52,9 +52,11 @@ function custom_urlencode($url) {
 
 $info = [];
 $sql = "select * from th_chidon tc 
+        join th_chidon_info tci using (user_id, year) 
         join users u using (user_id) 
         left join thumbs t on u.user_photo_id = t.file_id 
-        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
+        and highest_track = 'iyun'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;
@@ -79,7 +81,7 @@ foreach ( $info as $id => $children ) {
     }
 }
 
-$filename = 'chidonPics.zip';
+$filename = 'chidonPicsIyun.zip';
 createZip($imgs, $filename);
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
