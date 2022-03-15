@@ -105,9 +105,9 @@ function createSpreadSheet($children) {
                 $img_url = '';
                 $contents = file_get_contents($img);
                 if ($contents) {
-                    $new_img = imagecreatefromstring($contents);
+                    $new_img = @imagecreatefromstring($contents);
                     $img_url = 'images/' . $child['user_id'] . '.png';
-                    if ($new_img) imagepng($new_img, $img_url);
+                    if ($new_img) @imagepng($new_img, $img_url);
                 }
                 $school_name = $child['school_name'];
                 $school_logo = '';
@@ -127,8 +127,9 @@ function createSpreadSheet($children) {
                 $prize_6 = '';
                 if (isset($prizes[$child['user_id']])) {
                     $prize_amount = count($prizes[$child['user_id']]);
-                    for ($i = 1; $i <= 6; $i++) {
-                        if (isset($prizes[$child['user_id']][$i])) $prize_{$i} = $prizes[$child['user_id']][$i];
+                    foreach ($prizes[$child['user_id']] as $idx => $prize) {
+                        $key = $idx + 1;
+                        ${'prize_' . $key} = $prize;
                     }
                 }
 
