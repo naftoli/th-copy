@@ -25,7 +25,7 @@ $prizes = getUserPrizes();
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     $sheet = createSpreadSheet($children);
-    $file_name = $school_id . ".txt";
+    $file_name = $school . ".txt";
     createFile($file_name, $sheet);
 }
 
