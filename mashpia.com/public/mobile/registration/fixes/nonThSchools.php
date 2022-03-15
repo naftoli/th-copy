@@ -8,7 +8,6 @@ if (isset($_POST['submit'])) {
             $school = $data[0];
             // find out if school exists
             $sql = "select * from non_th_schools where school_name like '%" . $school . "%'";
-            echo $sql . "<br />";
             $result = mysql_query($sql);
             if (mysql_num_rows($result)) {
                 echo "non th school: " . $school . ", school found: " . mysql_fetch_assoc($result)['school_name'] . "<br />";
