@@ -67,7 +67,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $final_marks = [];
-$sql = "select * from th_chidon_finals where year = 5782";
+$sql = "select * from th_chidon_finals where year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $final_marks[$row['user_id']] = $row;
