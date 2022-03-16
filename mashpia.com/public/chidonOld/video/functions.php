@@ -30,7 +30,7 @@ function getChildren($school_id, $gender) {
                 tc.year = 5782 AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
-    $sql .= " ORDER BY highest_track , class_grade , last , first";
+    $sql .= " ORDER BY u.school_id, highest_track , class_grade , last , first";
 //    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -94,12 +94,12 @@ function createSpreadSheet($children) {
                 $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
                         $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
                 $img_url = '';
-                $contents = @file_get_contents($img);
-                if ($contents) {
-                    $new_img = @imagecreatefromstring($contents);
-                    $img_url = 'images/' . $child['user_id'] . '.png';
-                    if ($new_img) @imagepng($new_img, $img_url);
-                }
+//                $contents = @file_get_contents($img);
+//                if ($contents) {
+//                    $new_img = @imagecreatefromstring($contents);
+//                    $img_url = 'images/' . $child['user_id'] . '.png';
+//                    if ($new_img) @imagepng($new_img, $img_url);
+//                }
                 $school_name = $child['school_name'];
                 $school_logo = '';
                 $track = $child['highest_track'];
