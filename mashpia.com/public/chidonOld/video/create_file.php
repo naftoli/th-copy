@@ -28,11 +28,12 @@ foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($chldren)) {
         $sheet = createSpreadSheet($children);
-        $file_name = $school . ".txt";
-        createFile($file_name, $sheet);
+        echo "<pre>"; print_r($sheet); echo "</pre>";
+//        $file_name = $school . ".txt";
+//        createFile($file_name, $sheet);
     }
 }
-
+exit;
 // loop through dir to get files
 $dir = getcwd();
 $list = scandir($dir);
