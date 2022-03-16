@@ -120,7 +120,7 @@ function createSpreadSheet($children) {
                     $prize_amount = count($prizes[$child['user_id']]);
                     foreach ($prizes[$child['user_id']] as $idx => $prize) {
                         $key = $idx + 1;
-                        ${'prize_' . $key} = "Links/Prizes/Prize_" . $prize . ".png";
+                        ${'prize_' . $key} = "Prizes/Prize_" . $prize . ".png";
                     }
                 }
 
