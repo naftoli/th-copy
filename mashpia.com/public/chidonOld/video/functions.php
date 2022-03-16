@@ -91,9 +91,9 @@ function createSpreadSheet($children) {
             foreach ($info[$track] as $child) {
                 $school_id = $child['school_id'];
                 $name = $child['first'] . "<br />" . $child['last'];
-                $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
+                $img_url = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
                         $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
-                $img_url = '';
+//                $img_url = '';
 //                $contents = @file_get_contents($img);
 //                if ($contents) {
 //                    $new_img = @imagecreatefromstring($contents);
