@@ -155,7 +155,6 @@ function createSpreadSheet($children) {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                $school_id = $child['school_id'];
                 $name = $child['first'] . "<br />" . $child['last'];
                 $img_url = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
                         $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
@@ -182,9 +181,9 @@ function createSpreadSheet($children) {
                 $prize_6 = '';
                 if (isset($prizes[$child['user_id']])) {
                     $prize_amount = count($prizes[$child['user_id']]);
-                    foreach ($prizes[$child['user_id']] as $idx => $prize) {
+                    foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                         $key = $idx + 1;
-                        ${'prize_' . $key} = "Prizes/Prize_" . $prize . ".png";
+                        ${'prize_' . $key} = "Prizes/Prize_" . $prize_id . ".png";
                     }
                 }
 
