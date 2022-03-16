@@ -22,12 +22,18 @@ $gender = $_REQUEST['type'];
 require 'functions.php';
 
 $prizes = getUserPrizes();
-foreach ($schools as $school_id => $school) {
-    $children = getChildren($school_id, $gender);
-    $sheet = createSpreadSheet($children);
-    $file_name = $school . ".txt";
-    createFile($file_name, $sheet);
-}
+$children = getChildren(0, $gender);
+$sheet = createSpreadSheet($children);
+$file_name = "schools.txt";
+createFile($file_name, $sheet);
+//foreach ($schools as $school_id => $school) {
+//    $children = getChildren($school_id, $gender);
+//    if (! empty($chldren)) {
+//        $sheet = createSpreadSheet($children);
+//        $file_name = $school . ".txt";
+//        createFile($file_name, $sheet);
+//    }
+//}
 
 // loop through dir to get files
 $dir = getcwd();
