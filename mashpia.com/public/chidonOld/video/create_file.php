@@ -22,6 +22,7 @@ $gender = $_REQUEST['type'];
 require 'functions.php';
 
 $prizes = getUserPrizes();
+$final_marks = getFinalMarks();
 //$children = getChildren(0, $gender);
 //$sheet = createSpreadSheet($children);
 //$file_name = "schools.txt";
