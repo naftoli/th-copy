@@ -80,16 +80,16 @@ function createSpreadSheet($children) {
     $sheet = [];
 
     $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo',
-        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount'];
-    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', ''];
-    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', ''];
+        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount', 'track'];
+    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     $school_id = 0;
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                if (!$school_id) $school_id = $child['school_id'];
+                $school_id = $child['school_id'];
                 $name = $child['first'] . "<br />" . $child['last'];
                 $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
                         $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
@@ -102,10 +102,7 @@ function createSpreadSheet($children) {
                 }
                 $school_name = $child['school_name'];
                 $school_logo = '';
-                $award = '';
-                $sweater = '';
-                $gift = '';
-                $trip = '';
+                $track = $child['highest_track'];
 
                 // prizes
                 $prize_amount = 0;
@@ -124,10 +121,10 @@ function createSpreadSheet($children) {
                     }
                 }
 
-                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo, $award, $sweater,
-                    $gift, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount, $trip];
+                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo,
+                    $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount, $track];
             }
-            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         }
     }
     return $sheet;
