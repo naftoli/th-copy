@@ -46,9 +46,79 @@ function createZip($files, $filename) {
     $zip->close();
 }
 
+function getFinalMarks() {
+    global $year;
+
+    $marks = [];
+    $sql = "select * from th_chidon_finals where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $marks[$row['user_id']] = $row;
+    }
+    return $marks;
+}
+
+function getAward($child) {
+    global $final_marks;
+
+    $tracks = [
+        1   => 'yesod',
+        2   => 'yediah',
+        3   => 'havonah',
+        4   => 'iyun'
+    ];
+    $finals = [
+        'yesod'     => 20,
+        'yediah'    => 40,
+        'havonah'   => 60,
+        'iyun'      => 80
+    ];
+    $needed = [
+        'yesod'     => 60,
+        'yediah'    => 70,
+        'havonah'   => 80,
+        'iyun'      => 90
+    ];
+    $awards = [
+        'yesod'     => 'certificate',
+        'yediah'    => 'plaque',
+        'havonah'   => 'medal / plaque',
+        'iyun'      => 'trophy / medal / plaque'
+    ];
+
+    $highest_track = $child['highest_track'];
+    // find out if award is same as before final or not
+    $award = false;
+    $key = array_search($highest_track, $tracks);
+    if ($key !== false) {
+        // go down from key to find where the child is holding
+        if (isset($final_marks[$child['user_id']])) {
+            $row = $final_marks[$child['user_id']];
+            $score = 0;
+            for ($i = 1; $i <= $key; $i++) {
+                $level = 'level_' . $i;
+                if ($row[$level]) {
+                    $score += $row[$level];
+                }
+            }
+            for ($i = 1; $i <= $key; $i++) {
+                $divide_by = $finals[$tracks[$i]];
+                $final_score = number_format(($score / $divide_by) * 100, 2);
+                if ($final_score >= $needed[$tracks[$i]]) {
+                    $award = $tracks[$i];
+                }
+            }
+        }
+    }
+    if ($award === 'iyun') return true;
+    else return false;
+}
+
 function custom_urlencode($url) {
     return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
+
+$final_marks = getFinalMarks();
 
 $info = [];
 $sql = "select * from th_chidon tc 
@@ -59,7 +129,7 @@ $sql = "select * from th_chidon tc
         and highest_track = 'iyun'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    $info[$row['school_id']][] = $row;
+    if (getAward($row)) $info[$row['school_id']][] = $row;
 }
 
 $imgs = []; // array for keeping track of all pictures that are showing up
