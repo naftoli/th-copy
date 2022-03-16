@@ -1,4 +1,14 @@
 <?php
+function getFinalMarks() {
+    $final_marks = [];
+    $sql = "select * from th_chidon_finals where year = 5782";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $final_marks[$row['user_id']] = $row;
+    }
+    return $final_marks;
+}
+
 function getChildren($school_id, $gender) {
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
@@ -39,6 +49,62 @@ function getChildren($school_id, $gender) {
     return $children;
 }
 
+function getAward($child) {
+    global $final_marks;
+
+    $tracks = [
+        1   => 'yesod',
+        2   => 'yediah',
+        3   => 'havonah',
+        4   => 'iyun'
+    ];
+    $finals = [
+        'yesod'     => 20,
+        'yediah'    => 40,
+        'havonah'   => 60,
+        'iyun'      => 80
+    ];
+    $needed = [
+        'yesod'     => 60,
+        'yediah'    => 70,
+        'havonah'   => 80,
+        'iyun'      => 90
+    ];
+    $awards = [
+        'yesod'     => 'certificate',
+        'yediah'    => 'plaque',
+        'havonah'   => 'medal / plaque',
+        'iyun'      => 'trophy / medal / plaque'
+    ];
+
+    $highest_track = $child['highest_track'];
+    // find out if award is same as before final or not
+    $award = false;
+    $key = array_search($highest_track, $tracks);
+    if ($key !== false) {
+        // go down from key to find where the child is holding
+        if (isset($final_marks[$child['user_id']])) {
+            $row = $final_marks[$child['user_id']];
+            $score = 0;
+            for ($i = 1; $i <= $key; $i++) {
+                $level = 'level_' . $i;
+                if ($row[$level]) {
+                    $score += $row[$level];
+                }
+            }
+            for ($i = 1; $i <= $key; $i++) {
+                $divide_by = $finals[$tracks[$i]];
+                $final_score = number_format(($score / $divide_by) * 100, 2);
+                if ($final_score >= $needed[$tracks[$i]]) {
+                    $award = $tracks[$i];
+                }
+            }
+        }
+    }
+    if ($award) return array_search($award, $tracks);
+    else return 0;
+}
+
 function getUserPrizes() {
     $prizes = [];
     $sql = "SELECT 
@@ -49,7 +115,7 @@ function getUserPrizes() {
                 year = 5782";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $prizes[$row['user_id']][] = $row['prize_name'];
+        $prizes[$row['user_id']][] = $row['prize_id'];
     }
     return $prizes;
 }
@@ -79,15 +145,15 @@ function createSpreadSheet($children) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo',
+    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo', 'award',
         'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount', 'track'];
-    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     $school_id = 0;
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 $school_id = $child['school_id'];
                 $name = $child['first'] . "<br />" . $child['last'];
@@ -103,6 +169,7 @@ function createSpreadSheet($children) {
                 $school_name = $child['school_name'];
                 $school_logo = '';
                 $track = $child['highest_track'];
+                $award = getAward($child);
 
                 // prizes
                 $prize_amount = 0;
@@ -121,10 +188,10 @@ function createSpreadSheet($children) {
                     }
                 }
 
-                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo,
+                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo, $award,
                     $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount, $track];
             }
-            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         }
     }
     return $sheet;

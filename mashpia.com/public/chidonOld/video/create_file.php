@@ -16,9 +16,6 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $gender = $_REQUEST['type'];
-
-//$girlSchools = [269,54,162,45,30,2,7,112,81,613,192,50,37,265,42,61,40];
-
 require 'functions.php';
 
 $prizes = getUserPrizes();
