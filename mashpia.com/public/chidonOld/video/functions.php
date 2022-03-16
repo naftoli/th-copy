@@ -15,11 +15,6 @@ function getChildren($school_id, $gender) {
                 c.class_grade,
                 s.school_id,
                 s.school_name,
-                s.logo,
-                s.logo_boys,
-                s.logo_girls,
-                tc.khk_reg, 
-                tc.khk_trip, 
                 tci.highest_track
             FROM
                 users u
@@ -47,13 +42,11 @@ function getChildren($school_id, $gender) {
 function getUserPrizes() {
     $prizes = [];
     $sql = "SELECT 
-                user_id, prize_name
+                user_id, prize_id
             FROM
-                chidon_user_prizes cup
-                    JOIN
-                chidon_prizes cp USING (prize_id)
+                chidon_user_prizes 
             WHERE
-                cup.year = 5782";
+                year = 5782";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['user_id']][] = $row['prize_name'];
@@ -86,15 +79,15 @@ function createSpreadSheet($children) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo', 'award', 'sweater', 'gift',
-        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount', 'trip'];
-    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo',
+        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount'];
+    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     $school_id = 0;
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 if (!$school_id) $school_id = $child['school_id'];
                 $name = $child['first'] . "<br />" . $child['last'];
@@ -127,13 +120,14 @@ function createSpreadSheet($children) {
                     $prize_amount = count($prizes[$child['user_id']]);
                     foreach ($prizes[$child['user_id']] as $idx => $prize) {
                         $key = $idx + 1;
-                        ${'prize_' . $key} = $prize;
+                        ${'prize_' . $key} = "Links/Prizes/Prize_" . $prize . ".png";
                     }
                 }
 
                 $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo, $award, $sweater,
                     $gift, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount, $trip];
             }
+            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', ''];
         }
     }
     return $sheet;
