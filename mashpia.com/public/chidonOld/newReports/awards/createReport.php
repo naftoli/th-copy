@@ -97,7 +97,7 @@ if ($final == 'after') {
 
             if (in_array($type, ['medal', 'trophy'])) {
                 // only show children that got what they should be getting
-                if ($award != $highest_track) {
+                if (! in_array($award, ['havonah', 'iyun'])) {
                     unset($info[$school_id][$idx]);
                 } else {
                     $row['award'] = '';
