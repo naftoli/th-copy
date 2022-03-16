@@ -86,6 +86,8 @@ if (isset($_POST['submit'])) {
                 $previousGrade = '';
                 foreach ($info as $school_id => $users) {
                     $total = count($users);
+                    $colspan = $_POST['final'] == 'after' ? 5 : 4;
+                    echo "<tr><td>" . $schools[$school_id] . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
                     foreach ($users as $idx => $row) {
                         $school = $row['school_name'];
                         $serial = $row['user_serial'];
@@ -111,10 +113,6 @@ if (isset($_POST['submit'])) {
                             $i++;
                         }
 
-                        if ($idx == 0) {
-                            $colspan = $_POST['final'] == 'after' ? 5 : 4;
-                            echo "<tr><td>" . $school . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
-                        }
                         $arrCode = explode('-', $code);
                         echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" . $arrCode[0] .
                             "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
