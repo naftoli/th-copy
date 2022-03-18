@@ -20,6 +20,7 @@ function getChildren($school_id, $gender) {
     $children = [];
     $sql = "SELECT 
                 u.user_id,
+                u.user_serial, 
                 u.first,
                 u.last,
                 u.gender,
