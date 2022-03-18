@@ -147,7 +147,7 @@ foreach ( $info as $id => $children ) {
             return !empty($img['val']) && $img['val'] !== 'img/addphoto.png';
         });
         // map to urls,
-        $imgs[] = ['filename' => $child['th_chidon_id'], 'fallbacks' => $img_fallbacks];
+        $imgs[] = ['filename' => $child['user_serial'], 'fallbacks' => $img_fallbacks];
     }
 }
 
