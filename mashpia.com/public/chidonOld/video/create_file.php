@@ -15,6 +15,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
@@ -26,14 +29,14 @@ $final_marks = getFinalMarks();
 //createFile($file_name, $sheet);
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
-    if (! empty($chldren)) {
+    if (! empty($children)) {
         $sheet = createSpreadSheet($children);
-        echo "<pre>"; print_r($sheet); echo "</pre>";
-//        $file_name = $school . ".txt";
-//        createFile($file_name, $sheet);
+//        echo "<pre>"; print_r($sheet); echo "</pre>";
+        $file_name = $school . ".txt";
+        createFile($file_name, $sheet);
     }
 }
-exit;
+
 // loop through dir to get files
 $dir = getcwd();
 $list = scandir($dir);

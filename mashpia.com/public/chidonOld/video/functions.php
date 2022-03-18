@@ -1,7 +1,9 @@
 <?php
 function getFinalMarks() {
+    global $year;
+
     $final_marks = [];
-    $sql = "select * from th_chidon_finals where year = 5782";
+    $sql = "select * from th_chidon_finals where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $final_marks[$row['user_id']] = $row;
@@ -10,6 +12,8 @@ function getFinalMarks() {
 }
 
 function getChildren($school_id, $gender) {
+    global $year;
+
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
 
@@ -37,7 +41,7 @@ function getChildren($school_id, $gender) {
                     JOIN
                 th_chidon tc ON tc.user_id = u.user_id
             WHERE
-                tc.year = 5782 AND tc.date_paid > 0 
+                tc.year = $year AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
     $sql .= " ORDER BY u.school_id, highest_track , class_grade , last , first";
@@ -106,13 +110,15 @@ function getAward($child) {
 }
 
 function getUserPrizes() {
+    global $year;
+
     $prizes = [];
     $sql = "SELECT 
                 user_id, prize_id
             FROM
                 chidon_user_prizes 
             WHERE
-                year = 5782";
+                year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['user_id']][] = $row['prize_id'];
@@ -150,7 +156,6 @@ function createSpreadSheet($children) {
     $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
-    $school_id = 0;
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
