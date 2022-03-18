@@ -33,7 +33,6 @@ foreach ($schools as $school_id => $school) {
     $allChildren += $children;
     if (! empty($children)) {
         $sheet = createSpreadSheet($children);
-//        echo "<pre>"; print_r($sheet); echo "</pre>";
         $file_name = $school . ".tsv";
         createFile($file_name, $sheet);
     }

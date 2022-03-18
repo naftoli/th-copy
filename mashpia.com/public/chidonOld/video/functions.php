@@ -26,12 +26,12 @@ function getChildren($school_id, $gender) {
                 u.chidon_pic_5782,
                 u.chidon_pic_5781,
                 u.mobile_pic,      
-                u.khk_trip, 
                 c.class_grade,
                 s.school_id,
                 s.school_name,
                 s.school_city,
                 s.school_state, 
+                tc.khk_trip,
                 tci.highest_track
             FROM
                 users u
