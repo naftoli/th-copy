@@ -97,11 +97,9 @@ if ($final == 'after') {
 
             if (in_array($type, ['medal', 'trophy'])) {
                 // only show children that got what they should be getting
-                if (! in_array($award, ['havonah', 'iyun'])) {
-                    unset($info[$school_id][$idx]);
-                } else {
-                    $row['award'] = '';
-                }
+                if ($type == 'medal' && $award != 'havonah') unset($info[$school_id][$idx]);
+                if ($type == 'trophy' && $award != 'iyun') unset($info[$school_id][$idx]);
+                else $row['award'] = '';
             } else {
                 // figure out what changes if any are applicable for certificates and plaques
                 $change = '';
