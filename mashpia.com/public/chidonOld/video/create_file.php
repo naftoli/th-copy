@@ -27,15 +27,18 @@ $final_marks = getFinalMarks();
 //$sheet = createSpreadSheet($children);
 //$file_name = "schools.txt";
 //createFile($file_name, $sheet);
+$allChildren = [];
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
+    $allChildren += $children;
     if (! empty($children)) {
         $sheet = createSpreadSheet($children);
 //        echo "<pre>"; print_r($sheet); echo "</pre>";
-        $file_name = $school . ".txt";
+        $file_name = $school . ".tsv";
         createFile($file_name, $sheet);
     }
 }
+createImages($allChildren);
 
 // loop through dir to get files
 $dir = getcwd();

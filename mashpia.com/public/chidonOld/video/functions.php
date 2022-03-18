@@ -25,10 +25,13 @@ function getChildren($school_id, $gender) {
                 u.gender,
                 u.chidon_pic_5782,
                 u.chidon_pic_5781,
-                u.mobile_pic,
+                u.mobile_pic,      
+                u.khk_trip, 
                 c.class_grade,
                 s.school_id,
                 s.school_name,
+                s.school_city,
+                s.school_state, 
                 tci.highest_track
             FROM
                 users u
@@ -151,29 +154,23 @@ function createSpreadSheet($children) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_logo', 'award',
+    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_location', 'school_logo', 'award',
         'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount', 'track'];
-    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['school_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [$track . '_rewards_awards_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                $name = $child['first'] . "<br />" . $child['last'];
-                $img_url = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
-                        $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
-//                $img_url = '';
-//                $contents = @file_get_contents($img);
-//                if ($contents) {
-//                    $new_img = @imagecreatefromstring($contents);
-//                    $img_url = 'images/' . $child['user_id'] . '.png';
-//                    if ($new_img) @imagepng($new_img, $img_url);
-//                }
+                $name = $child['first'] . "<br>" . $child['last'];
+                $location = $child['school_city'] . ', ' . $child['school_state'];
+                $img_url = $child['user_serial'] . '.png';
                 $school_name = $child['school_name'];
                 $school_logo = '';
                 $track = $child['highest_track'];
                 $award = getAward($child);
+                $trip = intval($child['khk_trip']) ? 2 : 1;
 
                 // prizes
                 $prize_amount = 0;
@@ -188,17 +185,30 @@ function createSpreadSheet($children) {
                     $prize_amount = count($prizes[$child['user_id']]);
                     foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                         $key = $idx + 1;
-                        ${'prize_' . $key} = "Prizes/Prize_" . $prize_id . ".png";
+                        ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
                     }
                 }
 
-                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo, $award,
-                    $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount, $track];
+                $sheet[$i++] = [$track, $name, $img_url, $child['class_grade'], $school_name, $school_logo, $location,
+                    $award, $trip, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
             }
-            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         }
     }
     return $sheet;
+}
+
+function createImages($children) {
+    foreach ($children as $child) {
+        $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
+                $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
+        $contents = @file_get_contents($img);
+        if ($contents) {
+            $new_img = @imagecreatefromstring($contents);
+            $img_url = 'images/' . $child['user_serial'] . '.png';
+            if ($new_img) @imagepng($new_img, $img_url);
+        }
+    }
 }
 
 function extractFiles($list) {
