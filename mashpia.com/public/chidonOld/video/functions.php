@@ -209,7 +209,7 @@ function createSpreadSheet($children) {
     if (! empty($khk)) {
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as $child) {
-            $sheet[$i++] = addToSheet($child);
+            $sheet[$i++] = addToSheet($child, true);
         }
     }
 
@@ -235,12 +235,12 @@ function passedKhk($id) {
     return false;
 }
 
-function addToSheet($child) {
+function addToSheet($child, $khk = false) {
     global $prizes;
 
     $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
     $img_url = $child['user_serial'] . '.png';
-    $track = $child['highest_track'];
+    $track = $khk ? 'khk' : $child['highest_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
