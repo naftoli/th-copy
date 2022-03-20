@@ -188,7 +188,8 @@ $edit_result = mq($usersSql);
                                             <? if(!is_null($row['chidon_pic_5782'])) : ?>
 <!--                                                <LABEL>-->
 <!--                                                    --><?//=T_('Delete current photo')?>
-<!--                                                    <INPUT onclick="delete_photo(this, --><?//=$row['user_id'];?>//);" type="checkbox" name="photo_delete_<?//=$row['user_id']?><!--" class="checkbox" value="1">-->
+<!--                                                    <INPUT onclick="delete_photo(this, --><?//=$row['user_id'];?>
+<!--                                                );" type="checkbox" name="photo_delete_<?//=$row['user_id']?>" class="checkbox" value="1">-->
 <!--                                                </LABEL>-->
 <!--                                                <BR>-->
                                                 <div class="inline_top">
