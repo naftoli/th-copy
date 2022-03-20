@@ -116,7 +116,7 @@ function getAward($child) {
         }
     }
     if ($award) return array_search($award, $tracks);
-    else return 0;
+    else return '';
 }
 
 function getMarks() {
@@ -171,8 +171,8 @@ function createSpreadSheet($children) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_location', 'school_logo', 'award',
-        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount', 'track'];
+    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_location', 'school_logo', 'award', 'trip',
+        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount'];
     $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     // get school name, school location
@@ -182,15 +182,9 @@ function createSpreadSheet($children) {
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
             foreach ($info[$track] as $child) {
-                if ($child['school_id'] != 269) {
-                    $school_name = $child['school_name'];
-                    $school_location = $child['school_city'] . ', ' . $child['school_state'];
-                    $school_logo = 'School_' . $child['school_id'];
-                } else {
-                    $school_name = $child['non_th_school'];
-                    $school_location = $child['non_th_city'] . ', ' . $child['non_th_state'];
-                    $school_logo = 'School_' . $child['non_th_school_id'];
-                }
+                $school_name = $child['non_th_school'];
+                $school_location = $child['non_th_city'] . ', ' . $child['non_th_state'];
+                $school_logo = 'School_' . $child['non_th_school_id'];
                 if ($child['gender'] == 'M') $school_logo .= '_b';
                 else if ($child['gender'] == 'F') $school_logo .= '_g';
                 break 2;
@@ -244,7 +238,7 @@ function passedKhk($id) {
 function addToSheet($child) {
     global $prizes;
 
-    $name = $child['first'] . ' ' . $child['last'];
+    $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
     $img_url = $child['user_serial'] . '.png';
     $track = $child['highest_track'];
     $award = getAward($child);
@@ -268,7 +262,17 @@ function addToSheet($child) {
         }
     }
 
-    return [$track, $name, $img_url, $grade, '', '', '', $award, $trip,
+    $school_name = '';
+    $school_location = '';
+    $school_logo = '';
+    if ($child['school_id'] == 269) {
+        $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
+        $school_location = preg_replace('/\s+/', ' ', ($child['school_city'] . ', ' . $child['school_state']));
+        $school_logo = 'School_' . $child['school_id'];
+        if ($child['gender'] == 'M') $school_logo .= '_b';
+        else if ($child['gender'] == 'F') $school_logo .= '_g';
+    }
+    return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
         $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
 }
 
