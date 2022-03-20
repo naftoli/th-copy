@@ -82,7 +82,6 @@ function passedKhk($id) {
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 4;
         if ($total >= 70) return true;
-        else return false;
     }
     return false;
 }
