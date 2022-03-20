@@ -266,11 +266,13 @@ function addToSheet($child) {
     $school_location = '';
     $school_logo = '';
     if ($child['school_id'] == 269) {
-        $school_name = preg_replace('/\s+/', ' ', $child['non_th_school_name']);
-        $school_location = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ', ' . $child['non_th_state']));
-        $school_logo = 'School_' . $child['non_th_school_id'];
-        if ($child['gender'] == 'M') $school_logo .= '_b';
-        else if ($child['gender'] == 'F') $school_logo .= '_g';
+        if ($child['non_th_school_name']) {
+            $school_name = preg_replace('/\s+/', ' ', $child['non_th_school_name']);
+            $school_location = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ', ' . $child['non_th_state']));
+            $school_logo = 'School_' . $child['non_th_school_id'];
+            if ($child['gender'] == 'M') $school_logo .= '_b';
+            else if ($child['gender'] == 'F') $school_logo .= '_g';
+        }
     }
     return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
         $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
