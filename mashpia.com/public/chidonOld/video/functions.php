@@ -269,18 +269,18 @@ function addToSheet($child) {
         $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
 }
 
-function createImages($children) {
-    foreach ($children as $child) {
-        $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
-                $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
-        $contents = @file_get_contents($img);
-        if ($contents) {
-            $new_img = @imagecreatefromstring($contents);
-            $img_url = 'images/' . $child['user_serial'] . '.png';
-            if ($new_img) @imagepng($new_img, $img_url);
-        }
-    }
-}
+//function createImages($children) {
+//    foreach ($children as $child) {
+//        $img = 'http://mashpia.com/mobile/reg/' . (empty($child['chidon_pic_5782']) ? empty($child['chidon_pic_5781']) ?
+//                $child['mobile_pic'] : $child['chidon_pic_5781'] : $child['chidon_pic_5782']);
+//        $contents = @file_get_contents($img);
+//        if ($contents) {
+//            $new_img = @imagecreatefromstring($contents);
+//            $img_url = 'images/' . $child['user_serial'] . '.png';
+//            if ($new_img) @imagepng($new_img, $img_url);
+//        }
+//    }
+//}
 
 function extractFiles($list) {
     $files = [];
@@ -292,7 +292,7 @@ function extractFiles($list) {
     return $files;
 }
 
-function createZip($files, $images, $filename) {
+function createZip($files, $filename) {
     $zip = new ZipArchive;
     $success = $zip->open($filename, ZipArchive::CREATE);
     if ($success !== true) {
@@ -301,11 +301,6 @@ function createZip($files, $images, $filename) {
     foreach($files as $file) {
         $zip->addFromString($file, file_get_contents($file));
         unlink($file);
-    }
-    foreach ($images as $img) {
-        $img = 'images/' . $img;
-        $zip->addFromString($img, file_get_contents($img));
-        unlink($img);
     }
     $zip->close();
 }

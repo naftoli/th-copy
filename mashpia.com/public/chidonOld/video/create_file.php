@@ -38,17 +38,17 @@ foreach ($schools as $school_id => $school) {
         $allChildren += $children; // for images
     }
 }
-createImages($allChildren);
+//createImages($allChildren);
 
 // loop through dir to get files
 $dir = getcwd();
 $list = scandir($dir);
-$list2 = scandir($dir . '/images');
+//$list2 = scandir($dir . '/images');
 $files = extractFiles($list);
-$images = extractFiles($list2);
+//$images = extractFiles($list2);
 
 $filename = "Chidon.zip";
-createZip($files, $images, $filename);
+createZip($files, $filename);
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
