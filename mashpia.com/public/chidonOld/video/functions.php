@@ -212,9 +212,11 @@ function createSpreadSheet($children) {
         }
     }
 
-    $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    foreach ($khk as $child) {
-        $sheet[$i++] = addToSheet($child);
+    if (! empty($khk)) {
+        $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+        foreach ($khk as $child) {
+            $sheet[$i++] = addToSheet($child);
+        }
     }
 
     $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
