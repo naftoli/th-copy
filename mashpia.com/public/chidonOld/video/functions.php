@@ -266,7 +266,7 @@ function addToSheet($child) {
     $school_location = '';
     $school_logo = '';
     if ($child['school_id'] == 269) {
-        $school_name = preg_replace('/\s+/', ' ', $child['non_th_school_name']);
+        $school_name = preg_replace('/\s+/', ' ', $child['non_th_school']);
         $school_location = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ', ' . $child['non_th_state']));
         $school_logo = 'School_' . $child['non_th_school_id'];
         if ($child['gender'] == 'M') $school_logo .= '_b';
