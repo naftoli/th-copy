@@ -76,7 +76,7 @@ while ($row = mysql_fetch_assoc($result)) {
     foreach ($sweaters as $school_id => $details) {
 //        echo $school_id . ": " . count($details) . "<br />";
         foreach ($details as $sweater) {
-            if ($admin_user['auth'] != 'super' && $sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
+//            if ($admin_user['auth'] != 'super' && $sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
             $user_id = $sweater['user_id'];
             $grade = $sweater['class_grade'] . (empty($sweater['class_sub']) ? '' : '-' . $sweater['class_sub']);
             $name = $sweater['first'] . ' ' . $sweater['last'];
