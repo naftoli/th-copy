@@ -75,8 +75,9 @@ while ($row = mysql_fetch_assoc($result)) {
     <?php
     foreach ($sweaters as $school_id => $details) {
 //        echo $school_id . ": " . count($details) . "<br />";
+        $school_confirmed = false;
         foreach ($details as $sweater) {
-//            if ($admin_user['auth'] != 'super' && $sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
+            if ($sweater['confirmed'] && !$school_confirmed) $school_confirmed = true;
             $user_id = $sweater['user_id'];
             $grade = $sweater['class_grade'] . (empty($sweater['class_sub']) ? '' : '-' . $sweater['class_sub']);
             $name = $sweater['first'] . ' ' . $sweater['last'];
@@ -94,6 +95,9 @@ while ($row = mysql_fetch_assoc($result)) {
 </table>
 </body>
 <script>
+    let confirmed = <?= $school_confirmed ?>;
+    if (confirmed) $(".reviewed").attr('checked', true)
+
     $(".sent").click( function() {
         const checked = $(this).is(':checked') ? 1 : 0;
         const user = $(this).parent().parent().attr('id')
@@ -124,9 +128,5 @@ while ($row = mysql_fetch_assoc($result)) {
             }
         })
     })
-
-    function updateCheckbox() {
-        $(".reviewed").attr('checked', true)
-    }
 </script>
 </html>
