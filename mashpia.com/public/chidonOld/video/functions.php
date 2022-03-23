@@ -198,10 +198,8 @@ function createSpreadSheet($children) {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
+                $sheet[$i++] = addToSheet($child);
                 if (isKhk($child)) $khk[] = $child;
-                else {
-                    $sheet[$i++] = addToSheet($child);
-                }
             }
         }
     }
@@ -209,7 +207,8 @@ function createSpreadSheet($children) {
     if (! empty($khk)) {
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as $child) {
-            $sheet[$i++] = addToSheet($child, true);
+            $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
+            $sheet[$i++] = ['khk', $name, '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         }
     }
 
@@ -235,12 +234,12 @@ function passedKhk($id) {
     return false;
 }
 
-function addToSheet($child, $khk = false) {
+function addToSheet($child) {
     global $prizes;
 
     $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
     $img_url = $child['user_serial'] . '.png';
-    $track = $khk ? 'khk' : $child['highest_track'];
+    $track = $child['highest_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
@@ -272,6 +271,7 @@ function addToSheet($child, $khk = false) {
         if ($child['gender'] == 'M') $school_logo .= '_b';
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
+
     return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
         $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
 }
