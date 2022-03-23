@@ -13,7 +13,7 @@ $schools = $as->getSchools();
 $school_ids = array_keys($schools);
 $school_ids_str = implode(',', $school_ids);
 
-$sweaters =[];
+$sweaters = [];
 $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.user_serial, u.school_id, u.first, u.last, 
             c.class_grade, c.class_sub, s.sweaters_confirmed_5782 as confirmed 
         from users u 
@@ -74,12 +74,14 @@ while ($row = mysql_fetch_assoc($result)) {
     </tr>
     <?php
     foreach ($sweaters as $school_id => $details) {
+//        echo $school_id . ": " . count($details) . "<br />";
         foreach ($details as $sweater) {
-            if ($sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
+            if ($admin_user['auth'] != 'super' && $sweater['confirmed']) updateCheckbox(); // check checkbox if school is confirmed
             $user_id = $sweater['user_id'];
             $grade = $sweater['class_grade'] . (empty($sweater['class_sub']) ? '' : '-' . $sweater['class_sub']);
             $name = $sweater['first'] . ' ' . $sweater['last'];
             $checked = intval($sweater['sweater_shipped']) ? 'checked' : '';
+
             echo "<tr id='$user_id'>";
             if ($admin_user['auth'] == 'super') echo "<td>" . $schools[$school_id] . "</td>";
             echo "<td>" . $sweater['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
