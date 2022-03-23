@@ -21,9 +21,9 @@ $sql = "select tc.size, tc.sweater_shipped, tc.sweater_replaced, u.user_id, u.us
         join classes c on c.class_id = u.class_id 
         join schools s on s.school_id = u.school_id 
         where tc.date_paid > 0 
-        and tc.year = " . $year . " 
-        and u.school_id in ($school_ids_str) 
-        order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
+        and tc.year = " . $year;
+if ($admin_user['auth'] != 'super') $sql .= " and u.school_id in ($school_ids_str)";
+$sql .= " order by u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 //echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
