@@ -38,7 +38,9 @@ function getChildren($school_id, $gender) {
                 s.school_state,
                 tc.th_chidon_id, 
                 tc.khk_reg,
-                tc.khk_trip,
+                tc.khk_trip, 
+                tc.rep_type, 
+                tc.trophy_type,
                 tci.highest_track
             FROM
                 users u
