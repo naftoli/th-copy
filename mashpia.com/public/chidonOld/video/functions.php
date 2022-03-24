@@ -228,8 +228,10 @@ function createSpreadSheet($children) {
     $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     if (! empty($bronze)) {
         foreach ($bronze as $grade => $reps) {
-            foreach ($reps['grade'] as $child) {
-                $sheet[$i++] = addToSheet($child, false, true);
+            foreach ($reps as $type => $more) {
+                foreach ($more as $child) {
+                    $sheet[$i++] = addToSheet($child, false, true);
+                }
             }
         }
     }
