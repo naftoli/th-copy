@@ -264,7 +264,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $grade = 'Grade ' . $child['class_grade'];
 
     if ($trophy) {
-        $track = $child['rep_type'] . '_trophy';
+        $track = $child['trophy_type'] . '_trophy';
     }
 
     $school_name = '';
