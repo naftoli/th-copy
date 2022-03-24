@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chidon Gameshow</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <style>
+        #main {
+            margin-left: auto;
+            margin-right: auto;
+            width: 900px;
+        }
+        #bolts {
+            margin-top: 100px;
+        }
+        #action {
+            text-align: center;
+        }
+        select {
+            padding: 10px;
+            border: 1px solid grey;
+        }
+        button {
+            padding: 10px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+
+    </div>
+</body>
+<script>
+    let total = 42
+
+    $( function () {
+        let html = `<div id="bolts">`
+        let rows = 3
+        let columns = 14
+        for (let i = 0; i < rows; i++) {
+            for (let j = 1; j <= columns; j++) {
+                let number = i * columns + j
+                html += `<img id="${number}" src="imgs/grey.png" />`;
+            }
+        }
+        html += "</div><br /><br />"
+        html += `<div id="action"><select id="bolt">`
+        for (let k = 1; k <= total; k++) {
+            html += `<option value=${k}>${k}</option>`
+        }
+        html += `</select>`
+        html += "<button id='correct' class='mark'>Correct</button><button id='incorrect' class='mark'>Incorrect</button>"
+        html += `</div>`
+        $("#main").append(html)
+    })
+
+    $(document).on('click', '.mark', function() {
+        let mark = $(this).attr('id')
+        let number = $(this).parent().find('#bolt').val()
+        let image
+        if (mark === 'correct') image = 'imgs/green.png'
+        else if (mark === 'incorrect') image = 'imgs/red.png'
+        else image = 'yellow.png'
+        document.getElementById(number).src = image
+        if (number < total) $(this).parent().find('#bolt').val(++number)
+    })
+</script>
+</html>

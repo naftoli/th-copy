@@ -11,7 +11,7 @@
         #main {
             margin-left: auto;
             margin-right: auto;
-            width: 900px;
+            width: 960px;
         }
         #bolts {
             margin-top: 100px;
@@ -31,24 +31,29 @@
     </style>
 </head>
 <body>
-    <div id="main">
+<div id="main">
 
-    </div>
+</div>
 </body>
 <script>
+    let total = 44
+
     $( function () {
         let html = `<div id="bolts">`
         let rows = 3
-        let columns = 14
+        let columns = 15
+
+        outer:
         for (let i = 0; i < rows; i++) {
             for (let j = 1; j <= columns; j++) {
                 let number = i * columns + j
+                if (number > total) break outer
                 html += `<img id="${number}" src="imgs/grey.png" />`;
             }
         }
         html += "</div><br /><br />"
         html += `<div id="action"><select id="bolt">`
-        for (let k = 1; k <= 42; k++) {
+        for (let k = 1; k <= total; k++) {
             html += `<option value=${k}>${k}</option>`
         }
         html += `</select>`
@@ -65,7 +70,7 @@
         else if (mark === 'incorrect') image = 'imgs/red.png'
         else image = 'yellow.png'
         document.getElementById(number).src = image
-        if (number < 42) $(this).parent().find('#bolt').val(++number)
+        if (number < total) $(this).parent().find('#bolt').val(++number)
     })
 </script>
 </html>
