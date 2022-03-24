@@ -168,6 +168,11 @@ function createSpreadSheet($children) {
     }
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
+    $khk = [];
+    $bronze = [];
+    $silver = [];
+    $gold = [];
+
     $i = 0;
     $sheet = [];
 
@@ -179,6 +184,8 @@ function createSpreadSheet($children) {
     $school_name = '';
     $school_location = '';
     $school_logo = '';
+
+    // school info
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
             foreach ($info[$track] as $child) {
@@ -193,17 +200,21 @@ function createSpreadSheet($children) {
     }
     $sheet[$i++] = ['school_intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
 
-    $khk = [];
+    // tracks
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 $sheet[$i++] = addToSheet($child);
-                if (isKhk($child)) $khk[] = $child;
+                if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $khk[] = $child;
+                if ($child['trophy_type']) {
+                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
+                }
             }
         }
     }
 
+    // khk
     if (! empty($khk)) {
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as $child) {
@@ -211,13 +222,18 @@ function createSpreadSheet($children) {
         }
     }
 
+    // trophies
+    $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    if (! empty($bronze)) {
+        foreach ($bronze as $grade => $reps) {
+            foreach ($reps['grade'] as $child) {
+                $sheet[$i++] = addToSheet($child, false, true);
+            }
+        }
+    }
+
     $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
-}
-
-function isKhk($child) {
-    if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) return true;
-    else return false;
 }
 
 function passedKhk($id) {
@@ -233,7 +249,7 @@ function passedKhk($id) {
     return false;
 }
 
-function addToSheet($child, $khk = false) {
+function addToSheet($child, $khk = false, $trophy = false) {
     global $prizes;
 
     $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
@@ -243,21 +259,8 @@ function addToSheet($child, $khk = false) {
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
 
-    // prizes
-    $prize_amount = 0;
-    // initialize prize vars
-    $prize_1 = '';
-    $prize_2 = '';
-    $prize_3 = '';
-    $prize_4 = '';
-    $prize_5 = '';
-    $prize_6 = '';
-    if (isset($prizes[$child['user_id']])) {
-        $prize_amount = count($prizes[$child['user_id']]);
-        foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
-            $key = $idx + 1;
-            ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
-        }
+    if ($trophy) {
+        $track = $child['rep_type'] . '_trophy';
     }
 
     $school_name = '';
@@ -271,9 +274,26 @@ function addToSheet($child, $khk = false) {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    if ($khk) {
+    if ($khk || $trophy) {
         return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
     } else {
+        // prizes
+        $prize_amount = 0;
+        // initialize prize vars
+        $prize_1 = '';
+        $prize_2 = '';
+        $prize_3 = '';
+        $prize_4 = '';
+        $prize_5 = '';
+        $prize_6 = '';
+        if (isset($prizes[$child['user_id']])) {
+            $prize_amount = count($prizes[$child['user_id']]);
+            foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
+                $key = $idx + 1;
+                ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
+            }
+        }
+
         return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
             $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
     }
