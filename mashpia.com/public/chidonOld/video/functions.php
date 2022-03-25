@@ -223,12 +223,16 @@ function createSpreadSheet($children) {
     }
 
     // trophies
-    $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    if (! empty($bronze)) {
-        foreach ($bronze as $reps) {
-            foreach ($reps as $type) {
-                foreach ($type as $child) {
-                    $sheet[$i++] = addToSheet($child, false, true);
+    if (count($bronze) || count($silver) || count($gold)) {
+        $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+        foreach (['bronze', 'silver', 'gold'] as $trophy) {
+            if (!empty($$trophy)) {
+                foreach ($$trophy as $reps) {
+                    foreach ($reps as $type) {
+                        foreach ($type as $child) {
+                            $sheet[$i++] = addToSheet($child, false, true);
+                        }
+                    }
                 }
             }
         }
