@@ -234,7 +234,7 @@ function createSpreadSheet($children) {
         }
     }
 
-    $sheet[$i++] = ['outro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
 }
 
