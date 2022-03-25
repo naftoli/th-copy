@@ -162,8 +162,6 @@ function createFile($name, $info) {
 }
 
 function createSpreadSheet($children) {
-    global $prizes;
-
     $info = [];
     foreach ($children as $child) {
         $info[$child['highest_track']][] = $child;
@@ -192,7 +190,7 @@ function createSpreadSheet($children) {
         if (isset($info[$track])) {
             foreach ($info[$track] as $child) {
                 $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
-                $school_location = preg_replace('/\s+/', ' ', ($child['school_city'] . ",<br>" . $child['school_state']));
+                $school_location = preg_replace('/\s+/', ' ', ($child['school_city'] . ", " . $child['school_state']));
                 $school_logo = 'School_' . $child['school_id'];
                 if ($child['gender'] == 'M') $school_logo .= '_b';
                 else if ($child['gender'] == 'F') $school_logo .= '_g';
@@ -272,7 +270,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $school_logo = '';
     if ($child['school_id'] == 269) {
         $school_name = preg_replace('/\s+/', ' ', $child['non_th_school']);
-        $school_location = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ",<br>" . $child['non_th_state']));
+        $school_location = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ", " . $child['non_th_state']));
         $school_logo = 'School_' . $child['non_th_school_id'];
         if ($child['gender'] == 'M') $school_logo .= '_b';
         else if ($child['gender'] == 'F') $school_logo .= '_g';
