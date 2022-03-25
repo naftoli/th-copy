@@ -19,8 +19,8 @@ $admin = encrypt_decrypt('decrypt', $admin);
 // $yearly_raffle = new YearlyRaffle();
 
 // needed for checking about mivtzoim purchases
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSetting.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSetting.php';
 
 //setup json array of information to pass back to parent_detail page
 $info = array();
