@@ -5,7 +5,7 @@ ini_set('error_reporting', E_ALL);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 
 require '../coupons/class.couponCode.php';
 

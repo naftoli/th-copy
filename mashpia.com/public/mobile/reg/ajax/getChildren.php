@@ -6,7 +6,7 @@ require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
@@ -268,7 +268,7 @@ if ( !empty( $users ) ) {
         }
 
         // close chidon reg
-        $children[$row['user_id']]['reg_types']['chidon'] = false;
+//        $children[$row['user_id']]['reg_types']['chidon'] = false;
 
         // check if school confirmed to allow kids in their school to register for chidon experience
         $sSql = "select chidon_confirmed_5782 from schools where school_id = " . $row['school_id'];
