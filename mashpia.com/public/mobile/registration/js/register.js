@@ -1177,6 +1177,12 @@ var templates = function(){
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$30.</b><br />");
             }
 
+            if (user.school.school_id === 269) {
+                $("#step-2 form #reg_text").text('This fee helps cover the costs of the study guide, tests, test prizes, the Anash Kinder Chidon Coordinator Salary.')
+            } else {
+                $("#step-2 form #reg_text").text('This fee covers the costs of the study guide, tests and the 4 test prizes.')
+            }
+
             $("#step-2 form select#yahadus-poll option").prop('selected', false);
 
             $("#step-2 form .chidon-reg").hide();
