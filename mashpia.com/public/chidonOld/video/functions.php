@@ -194,6 +194,7 @@ function createSpreadSheet($children) {
                 $school_logo = 'School_' . $child['school_id'];
                 if ($child['gender'] == 'M') $school_logo .= '_b';
                 else if ($child['gender'] == 'F') $school_logo .= '_g';
+                $school_location .= '.png';
                 break 2;
             }
         }
