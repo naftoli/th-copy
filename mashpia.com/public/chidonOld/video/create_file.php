@@ -28,14 +28,27 @@ $final_marks = getFinalMarks();
 //$sheet = createSpreadSheet($children);
 //$file_name = "schools.txt";
 //createFile($file_name, $sheet);
-$allChildren = [];
+//$allChildren = [];
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($children)) {
-        $sheet = createSpreadSheet($children);
-        $file_name = $school . ".tsv";
-        createFile($file_name, $sheet);
-        $allChildren += $children; // for images
+        if (in_array($school_id, [54,106,255])) {
+            // sort children by grade and create sheet for each grade
+            $sorted = [];
+            foreach ($children as $child) {
+                $sorted[$child['class_grade']][] = $child;
+            }
+            foreach ($sorted as $grade => $details) {
+                $sheet = createSpreadSheet($details);
+                $file_name = $school . " Grade " . $grade . ".tsv";
+                createFile($file_name, $sheet);
+            }
+        } else {
+            $sheet = createSpreadSheet($children);
+            $file_name = $school . ".tsv";
+            createFile($file_name, $sheet);
+//            $allChildren += $children; // for images
+        }
     }
 }
 //createImages($allChildren);
@@ -43,8 +56,8 @@ foreach ($schools as $school_id => $school) {
 // loop through dir to get files
 $dir = getcwd();
 $list = scandir($dir);
-//$list2 = scandir($dir . '/images');
 $files = extractFiles($list);
+//$list2 = scandir($dir . '/images');
 //$images = extractFiles($list2);
 
 $filename = "Chidon.zip";
