@@ -6,7 +6,7 @@ require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
@@ -251,6 +251,13 @@ if ( !empty( $users ) ) {
 
         // chidon registration
          $exceptions = [482,544,583];
+         $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . ($chidon_year + 1);
+         $resNextChidon = mysql_query($sqlNextChidon);
+         if (mysql_num_rows($resNextChidon)) {
+             $row['reg_chidon'] = true;
+             $children[$row['user_id']]['chidon5783'] = true;
+             $children[$row['user_id']]['next_year_chidon'] = $chidon_year + 1;
+         }
          if ( !$row['reg_chidon'] // if not in chidon
          	&& intval( $row['class_grade'] ) >= 4 // and in grade 4+
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8

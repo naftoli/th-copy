@@ -395,6 +395,11 @@
                                                     </div>
                                                     {{/if}}
 
+                                                    {{#if this.chidon5783}}
+                                                    <div class="button-spacing">
+                                                        <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon {{ this.next_year_chidon }}</div>
+                                                    </div>
+                                                    {{/if}}
 
                                                     {{#if this.chidonRegistered}}
                                                     <div class="button-spacing">
@@ -403,6 +408,9 @@
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon Rewards</span> {{ this.chidon_year }}</div>
                                                         <div style="margin:10px 0px">
                                                             <button class="btn btn-primary chidonPhoto">Upload Chidon Photo</button>
+                                                        </div>
+                                                        <div style="margin:10px 0px">
+                                                            <button class="btn btn-primary invitation" id="{{ this.user_serial }}">My Siyum Hamitzvos Invite</button>
                                                         </div>
                                                         {{else}}
 <!--                                                            {{#if this.chidonSchoolConfirmed}}-->
@@ -692,8 +700,8 @@
             });
 
             $(document).on('click', '.invitation', function () {
-                var chidon_id = $(this).attr('id')
-                window.open('/chidonOld/invitations/' + chidon_id + '.jpg', '_blank')
+                var id = $(this).attr('id')
+                window.open('/chidonOld/invitations/' + id + '.jpg', '_blank')
                 // var image = new Image()
                 // image.src = '/chidonOld/invitations/' + chidon_id + '.jpg'
                 // image.style.maxWidth = '100%'
