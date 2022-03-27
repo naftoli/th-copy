@@ -375,13 +375,13 @@
             <!--                                                            <span data-key="TzivosHashem" class="i18n"> Tzivos Hashem </span> {{ this.reg_year }}-->
     <!--                                                                    {{/if}}-->
                                                                         {{#if this.reg_types.chidon }}
-                                                                        / Chidon {{ this.chidon_year }}
+                                                                        / Chidon {{ this.next_year_chidon }}
                                                                         {{/if}}
                                                                         </button>
                                                                      {{/if}}
                                                                 {{else}}
                                                                     {{#if this.reg_types.chidon }}
-                                                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.chidon_year }}</button>
+                                                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.next_year_chidon }}</button>
                                                                     {{/if}}
                                                                 {{/if}}
                                                             {{/if}}

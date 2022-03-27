@@ -253,10 +253,13 @@ if ( !empty( $users ) ) {
          $exceptions = [482,544,583];
          $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . ($chidon_year + 1);
          $resNextChidon = mysql_query($sqlNextChidon);
+         $children[$row['user_id']]['next_year_chidon'] = $chidon_year + 1;
          if (mysql_num_rows($resNextChidon)) {
              $row['reg_chidon'] = true;
              $children[$row['user_id']]['chidon5783'] = true;
-             $children[$row['user_id']]['next_year_chidon'] = $chidon_year + 1;
+         } else {
+             $row['reg_chidon'] = false;
+             $children[$row['user_id']]['chidon5783'] = false;
          }
          if ( !$row['reg_chidon'] // if not in chidon
          	&& intval( $row['class_grade'] ) >= 4 // and in grade 4+
