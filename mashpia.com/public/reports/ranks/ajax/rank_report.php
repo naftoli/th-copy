@@ -51,7 +51,7 @@ $totals_query = mysql_query(
 <h2>Breakdown</h2>
 <a data-clipboard-target="#breakdown" class="btn button">Copy to clipboard</a>
 <?php } ?>
-<!--<a id="zip-images" class="btn button">Generating Download....</a>-->
+<a id="zip-images" class="btn button" onclick="downloadImages()">Generate Download...</a>
 <a id="download" class="btn button" onclick="downloadCSV()">Download CSV</a>
 <div id="breakdown">
     <?php
