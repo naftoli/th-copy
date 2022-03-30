@@ -22,7 +22,6 @@ $final_marks = getFinalMarks();
 
 foreach ($genders as $gender) {
     $children = getAllChildrenByGender($gender);
-    echo "<pre>"; print_r($children); echo "</pre>";
     $sorted = [];
     foreach ($children as $child) {
         $award = getAward($child);
@@ -31,6 +30,7 @@ foreach ($genders as $gender) {
             $sorted[$award][] = $child;
         }
     }
+    echo "<pre>"; print($sorted); echo "</pre>"; exit;
     foreach ($tracks as $track) {
         if (isset($sorted[$track])) {
             $newSheet = [];
