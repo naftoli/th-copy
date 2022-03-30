@@ -426,14 +426,14 @@ function extractFiles($list) {
     return $files;
 }
 
-function createZip($files, $filename) {
+function createZip($files, $filename, $dir = '') {
     $zip = new ZipArchive;
     $success = $zip->open($filename, ZipArchive::CREATE);
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
+        $zip->addFromString($file, file_get_contents($dir . $file));
         unlink($file);
     }
     $zip->close();
@@ -447,7 +447,7 @@ function downloadFile($deeper = false) {
     $files = extractFiles($list);
 
     $filename = "Chidon.zip";
-    createZip($files, $filename);
+    createZip($files, $filename, $dir);
 
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
