@@ -33,6 +33,12 @@ foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($children)) {
         if (in_array($school_id, [54,106,255])) {
+            // for OT do both, by school and by grade
+            if ($school_id == 255) {
+                $sheet = createSpreadSheet($children);
+                $file_name = $school . ".tsv";
+                createFile($file_name, $sheet);
+            }
             // sort children by grade and create sheet for each grade
             $sorted = [];
             foreach ($children as $child) {
