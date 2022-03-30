@@ -82,7 +82,9 @@ function getAllChildrenByGender($gender) {
                 s.school_city,
                 s.school_state,
                 tc.th_chidon_id, 
-                tci.highest_track
+                tci.highest_track, 
+                a.admin_city, 
+                a.admin_state       
             FROM
                 users u
                     JOIN
@@ -92,7 +94,11 @@ function getAllChildrenByGender($gender) {
                     JOIN
                 th_chidon_info tci ON tci.user_id = u.user_id
                     JOIN
-                th_chidon tc ON tc.user_id = u.user_id
+                th_chidon tc ON tc.user_id = u.user_id 
+                    JOIN 
+                admin_auths aa on aa.id = u.user_id 
+                    JOIN 
+                admins a using (admin_id)
             WHERE
                 tc.year = $year AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
@@ -382,19 +388,19 @@ function createAwardCeremonyData($children) {
                 $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
                 $school_location = preg_replace('/\s+/', ' ', ($child['school_city'] . ", " . $child['school_state']));
                 $school_name_other = preg_replace('/\s+/', ' ', $child['non_th_school']);
-                $school_location_other = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ", " . $child['non_th_state']));
+                $child_location = preg_replace('/\s+/', ' ', ($child['admin_city'] . ", " . $child['admin_state']));
 
                 if ($child['school_id'] == 61) {
                     $j = 0;
                     $sheet[$j++] = $school_name;
                     $sheet[$j++] = $school_name_other;
-                    $sheet[$j++] = $school_location_other;
+                    $sheet[$j++] = $child_location;
                     foreach ($names as $name) $sheet[$j++] = $name;
                 } else if ($child['school_id'] == 269) {
                     $j = 0;
                     $sheet[$j++] = $school_name_other;
                     $sheet[$j++] = '';
-                    $sheet[$j++] = $school_location_other;
+                    $sheet[$j++] = $child_location;
                     foreach ($names as $name) $sheet[$j++] = $name;
                 } else {
                     $j = 0;
