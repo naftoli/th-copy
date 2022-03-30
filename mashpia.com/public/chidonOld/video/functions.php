@@ -367,6 +367,7 @@ function createAwardCeremonyData($children) {
     foreach ($children as $child) {
         $sorted[$child['school_name']][] = $child;
     }
+    echo "<pre>"; print_r($sorted); echo "</pre>"; exit;
 
     foreach ($sorted as $school => $more) {
         $sheet = [];
@@ -382,7 +383,7 @@ function createAwardCeremonyData($children) {
         $numChildren = count($more);
         foreach ($more as $idx => $child) {
             $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
-            $child_{$i} = $name;
+            $name_{$i} = $name;
             // we create another row once we get the total amount of children allowed per row or if we are at the last child
             if (($idx + 1) == $numChildren || $i++ == $total) {
                 $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
