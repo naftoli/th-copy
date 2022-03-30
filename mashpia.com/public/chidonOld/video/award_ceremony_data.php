@@ -31,7 +31,7 @@ foreach ($genders as $gender) {
         }
     }
     foreach ($tracks as $track) {
-        if (count($sorted[$track])) {
+        if (isset($sorted[$track])) {
             $newSheet = [];
             $sheets = createAwardCeremonyData($sorted[$track]);
             foreach ($sheets as $sheet) $newSheet += $sheet;
