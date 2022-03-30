@@ -371,19 +371,19 @@ function createAwardCeremonyData($children) {
 
     foreach ($sorted as $school => $more) {
         $sheet = [];
-        $sheetNum = 0;
+        $names = [];
 
         // setup name variables
         $total = 13; // total names to show in one row;
-        for ($i = 1; $i <= $total; $i++) {
-            $name_{$i} = '';
+        for ($i = 0; $i < $total; $i++) {
+            $names[$i] = '';
         }
 
-        $i = 1;
+        $i = 0;
         $numChildren = count($more);
         foreach ($more as $idx => $child) {
             $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
-            $name_{$i} = $name;
+            $names[$i++] = $name;
             // we create another row once we get the total amount of children allowed per row or if we are at the last child
             if (($idx + 1) == $numChildren || $i++ == $total) {
                 $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
@@ -393,32 +393,31 @@ function createAwardCeremonyData($children) {
 
                 if ($child['school_id'] == 61) {
                     $j = 0;
-                    $sheet[$sheetNum][$j++] = $school_name;
-                    $sheet[$sheetNum][$j++] = $school_name_other;
-                    $sheet[$sheetNum][$j++] = $school_location_other;
-                    for ($k = 1; $k < $total; $k++) {
-                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    $sheet[][$j++] = $school_name;
+                    $sheet[][$j++] = $school_name_other;
+                    $sheet[][$j++] = $school_location_other;
+                    for ($k = 0; $k < $total; $k++) {
+                        $sheet[][$j++] = $names[$k];
                     }
                 } else if ($child['school_id'] == 269) {
                     $j = 0;
-                    $sheet[$sheetNum][$j++] = $school_name_other;
-                    $sheet[$sheetNum][$j++] = '';
-                    $sheet[$sheetNum][$j++] = $school_location_other;
-                    for ($k = 1; $k < $total; $k++) {
-                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    $sheet[][$j++] = $school_name_other;
+                    $sheet[][$j++] = '';
+                    $sheet[][$j++] = $school_location_other;
+                    for ($k = 0; $k < $total; $k++) {
+                        $sheet[][$j++] = $names[$k];
                     }
                 } else {
                     $j = 0;
-                    $sheet[$sheetNum][$j++] = $school_name;
-                    $sheet[$sheetNum][$j++] = '';
-                    $sheet[$sheetNum][$j++] = $school_location;
-                    for ($k = 1; $k < $total; $k++) {
-                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    $sheet[][$j++] = $school_name;
+                    $sheet[][$j++] = '';
+                    $sheet[][$j++] = $school_location;
+                    for ($k = 0; $k < $total; $k++) {
+                        $sheet[][$j++] = $names[$k];
                     }
                 }
                 $i = 1; // reset $i
             }
-            $sheetNum++;
         }
         $sheets[] = $sheet;
     }
