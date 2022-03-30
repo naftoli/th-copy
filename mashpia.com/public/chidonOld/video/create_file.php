@@ -51,25 +51,27 @@ foreach ($schools as $school_id => $school) {
         }
     }
 }
+
+downloadFile();
 //createImages($allChildren);
 
-// loop through dir to get files
-$dir = getcwd();
-$list = scandir($dir);
-$files = extractFiles($list);
-//$list2 = scandir($dir . '/images');
-//$images = extractFiles($list2);
-
-$filename = "Chidon.zip";
-createZip($files, $filename);
-
-header('Content-Description: File Transfer');
-header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Length: ' . filesize($filename));
-flush(); // Flush system output buffer
-readfile($filename);
-unlink($filename);
+//// loop through dir to get files
+//$dir = getcwd();
+//$list = scandir($dir);
+//$files = extractFiles($list);
+////$list2 = scandir($dir . '/images');
+////$images = extractFiles($list2);
+//
+//$filename = "Chidon.zip";
+//createZip($files, $filename);
+//
+//header('Content-Description: File Transfer');
+//header('Content-Type: application/octet-stream');
+//header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+//header('Expires: 0');
+//header('Cache-Control: must-revalidate');
+//header('Pragma: public');
+//header('Content-Length: ' . filesize($filename));
+//flush(); // Flush system output buffer
+//readfile($filename);
+//unlink($filename);

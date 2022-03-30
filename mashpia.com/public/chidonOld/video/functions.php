@@ -65,6 +65,45 @@ function getChildren($school_id, $gender) {
     return $children;
 }
 
+function getAllChildrenByGender($gender) {
+    global $year;
+
+    $children = [];
+    $sql = "SELECT 
+                u.user_id,
+                u.first,
+                u.last,
+                u.non_th_school_id, 
+                u.non_th_school, 
+                u.non_th_city, 
+                u.non_th_state,
+                s.school_id,
+                s.school_name,
+                s.school_city,
+                s.school_state,
+                tc.th_chidon_id, 
+                tci.highest_track
+            FROM
+                users u
+                    JOIN
+                schools s USING (school_id)
+                    JOIN
+                classes c ON c.class_id = u.class_id
+                    JOIN
+                th_chidon_info tci ON tci.user_id = u.user_id
+                    JOIN
+                th_chidon tc ON tc.user_id = u.user_id
+            WHERE
+                tc.year = $year AND tc.date_paid > 0 
+                    AND u.gender = '$gender'";
+    $sql .= " ORDER BY s.school_name, u.last, u.first";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $children[] = $row;
+    }
+    return $children;
+}
+
 function getAward($child) {
     global $final_marks;
 
@@ -148,12 +187,13 @@ function getUserPrizes() {
     return $prizes;
 }
 
-function createFile($name, $info) {
+function createFile($name, $info, $csv = false) {
     $fp = fopen($name, "w");
     fputs($fp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF))); // utf8
     if (is_array($info)) {
         foreach ($info as $fields) {
-            fputcsv($fp, $fields, "\t", ' ');
+            if ($csv) fputcsv($fp, $fields);
+            else fputcsv($fp, $fields, "\t", ' ');
         }
     } else {
         fputs($fp, $info);
@@ -319,6 +359,72 @@ function addToSheet($child, $khk = false, $trophy = false) {
 //    }
 //}
 
+function createAwardCeremonyData($children) {
+    $sheets = [];
+
+    // first sort by schools
+    $sorted = [];
+    foreach ($children as $child) {
+        $sorted[$child['school_name']][] = $child;
+    }
+
+    foreach ($sorted as $school => $more) {
+        $sheet = [];
+        $sheetNum = 0;
+
+        // setup name variables
+        $total = 13; // total names to show in one row;
+        for ($i = 1; $i <= $total; $i++) {
+            $name_{$i} = '';
+        }
+
+        $i = 1;
+        $numChildren = count($more);
+        foreach ($more as $idx => $child) {
+            $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
+            $child_{$i} = $name;
+            // we create another row once we get the total amount of children allowed per row or if we are at the last child
+            if (($idx + 1) == $numChildren || $i++ == $total) {
+                $school_name = preg_replace('/\s+/', ' ', $child['school_name']);
+                $school_location = preg_replace('/\s+/', ' ', ($child['school_city'] . ", " . $child['school_state']));
+                $school_name_other = preg_replace('/\s+/', ' ', $child['non_th_school']);
+                $school_location_other = preg_replace('/\s+/', ' ', ($child['non_th_city'] . ", " . $child['non_th_state']));
+
+                if ($child['school_id'] == 61) {
+                    $j = 0;
+                    $sheet[$sheetNum][$j++] = $school_name;
+                    $sheet[$sheetNum][$j++] = $school_name_other;
+                    $sheet[$sheetNum][$j++] = $school_location_other;
+                    for ($k = 1; $k < $total; $k++) {
+                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    }
+                } else if ($child['school_id'] == 269) {
+                    $j = 0;
+                    $sheet[$sheetNum][$j++] = $school_name_other;
+                    $sheet[$sheetNum][$j++] = '';
+                    $sheet[$sheetNum][$j++] = $school_location_other;
+                    for ($k = 1; $k < $total; $k++) {
+                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    }
+                } else {
+                    $j = 0;
+                    $sheet[$sheetNum][$j++] = $school_name;
+                    $sheet[$sheetNum][$j++] = '';
+                    $sheet[$sheetNum][$j++] = $school_location;
+                    for ($k = 1; $k < $total; $k++) {
+                        $sheet[$sheetNum][$j++] = $name_{$k};
+                    }
+                }
+                $i = 1; // reset $i
+            }
+            $sheetNum++;
+        }
+        $sheets[] = $sheet;
+    }
+
+    return $sheets;
+}
+
 function extractFiles($list) {
     $files = [];
     foreach ($list as $name) {
@@ -340,4 +446,25 @@ function createZip($files, $filename) {
         unlink($file);
     }
     $zip->close();
+}
+
+function downloadFile() {
+    // loop through dir to get files
+    $dir = getcwd();
+    $list = scandir($dir);
+    $files = extractFiles($list);
+
+    $filename = "Chidon.zip";
+    createZip($files, $filename);
+
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($filename));
+    flush(); // Flush system output buffer
+    readfile($filename);
+    unlink($filename);
 }
