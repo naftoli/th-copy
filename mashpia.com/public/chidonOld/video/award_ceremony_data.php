@@ -22,6 +22,7 @@ $final_marks = getFinalMarks();
 
 foreach ($genders as $gender) {
     $children = getAllChildrenByGender($gender);
+    echo "<pre>"; print_r($children); echo "</pre>";
     $sorted = [];
     foreach ($children as $child) {
         $award = getAward($child);
