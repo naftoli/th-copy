@@ -373,7 +373,6 @@ function createAwardCeremonyData($children) {
     foreach ($sorted as $school => $more) {
         $sheet = [];
         $names = [];
-
         $name_idx = 0;
         $column_idx = 1;
         $numChildren = count($more);
@@ -393,7 +392,7 @@ function createAwardCeremonyData($children) {
                     $sheet[$j++] = $school_name_other;
                     $sheet[$j++] = $school_location_other;
                     while ($j < $total) {
-                        foreach ($names as $name) $sheets[$j++] = $name;
+                        foreach ($names as $name) $sheet[$j++] = $name;
                     }
                 } else if ($child['school_id'] == 269) {
                     $j = 0;
@@ -401,7 +400,7 @@ function createAwardCeremonyData($children) {
                     $sheet[$j++] = '';
                     $sheet[$j++] = $school_location_other;
                     while ($j < $total) {
-                        foreach ($names as $name) $sheets[$j++] = $name;
+                        foreach ($names as $name) $sheet[$j++] = $name;
                     }
                 } else {
                     $j = 0;
@@ -409,14 +408,16 @@ function createAwardCeremonyData($children) {
                     $sheet[$j++] = '';
                     $sheet[$j++] = $school_location;
                     while ($j < $total) {
-                        foreach ($names as $name) $sheets[$j++] = $name;
+                        foreach ($names as $name) $sheet[$j++] = $name;
                     }
                 }
+                $sheets[] = $sheet;
+                $sheet = [];
+                $names = [];
                 $name_idx = 0;
-                $column_idx = 1; // reset $column_idx
+                $column_idx = 1;
             }
         }
-        $sheets[] = $sheet;
     }
 
     return $sheets;
