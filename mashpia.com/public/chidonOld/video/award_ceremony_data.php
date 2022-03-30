@@ -30,7 +30,7 @@ foreach ($genders as $gender) {
             $sorted[$award][] = $child;
         }
     }
-    echo "<pre>"; print($sorted); echo "</pre>"; exit;
+    echo "<pre>"; print_r($sorted); echo "</pre>"; exit;
     foreach ($tracks as $track) {
         if (isset($sorted[$track])) {
             $newSheet = [];
