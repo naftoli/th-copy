@@ -368,6 +368,7 @@ function createAwardCeremonyData($children) {
         $sorted[$child['school_name']][] = $child;
     }
 
+    $total = 14;
     foreach ($sorted as $school => $more) {
         $sheet = [];
         $names = [];
