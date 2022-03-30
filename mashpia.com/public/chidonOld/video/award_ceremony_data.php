@@ -24,7 +24,7 @@ foreach ($genders as $gender) {
     $children = getAllChildrenByGender($gender);
     $sorted = [];
     foreach ($children as $child) {
-        $award = getAward($child);
+        $award = $tracks[getAward($child) - 1];
         if ($award) {
             $child['award'] = $award;
             $sorted[$award][] = $child;

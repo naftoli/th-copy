@@ -368,7 +368,6 @@ function createAwardCeremonyData($children) {
         $sorted[$child['school_name']][] = $child;
     }
     echo "<pre>";
-    print_r($children);
     print_r($sorted);
 
     foreach ($sorted as $school => $more) {
