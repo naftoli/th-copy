@@ -24,17 +24,18 @@ foreach ($genders as $gender) {
     $children = getAllChildrenByGender($gender);
     $sorted = [];
     foreach ($children as $child) {
-        $award = $tracks[getAward($child) - 1];
+        $award = getAward($child);
         if ($award) {
+            $award = $tracks[$award-1];
             $child['award'] = $award;
             $sorted[$award][] = $child;
         }
     }
-    echo "<pre>"; print_r($sorted); echo "</pre>"; exit;
     foreach ($tracks as $track) {
         if (isset($sorted[$track])) {
             $newSheet = [];
             $sheets = createAwardCeremonyData($sorted[$track]);
+            echo "<pre>"; print_r($sheets); echo "</pre>"; exit;
             foreach ($sheets as $sheet) $newSheet += $sheet;
             $file_name = 'sheets/' . $track . "_" . strtolower($gender) . ".csv";
             createFile($file_name, $newSheet, true);
