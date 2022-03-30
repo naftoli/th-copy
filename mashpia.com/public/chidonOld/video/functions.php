@@ -441,6 +441,7 @@ function createZip($files, $filename) {
 
 function downloadFile() {
     // loop through dir to get files
+    $dir = getcwd();
     $list = scandir($dir);
     $files = extractFiles($list);
 
