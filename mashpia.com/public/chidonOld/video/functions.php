@@ -372,12 +372,6 @@ function createAwardCeremonyData($children) {
         $sheet = [];
         $names = [];
 
-        // setup name variables
-        $total = 13; // total names to show in one row;
-        for ($i = 0; $i < $total; $i++) {
-            $names[$i] = '';
-        }
-
         $i = 0;
         $numChildren = count($more);
         foreach ($more as $idx => $child) {
@@ -396,7 +390,7 @@ function createAwardCeremonyData($children) {
                     $sheet[][$j++] = $school_name_other;
                     $sheet[][$j++] = $school_location_other;
                     for ($k = 0; $k < $total; $k++) {
-                        $sheet[][$j++] = $names[$k];
+                        if (isset($names[$k])) $sheet[][$j++] = $names[$k];
                     }
                 } else if ($child['school_id'] == 269) {
                     $j = 0;
@@ -404,7 +398,7 @@ function createAwardCeremonyData($children) {
                     $sheet[][$j++] = '';
                     $sheet[][$j++] = $school_location_other;
                     for ($k = 0; $k < $total; $k++) {
-                        $sheet[][$j++] = $names[$k];
+                        if (isset($names[$k])) $sheet[][$j++] = $names[$k];
                     }
                 } else {
                     $j = 0;
@@ -412,7 +406,7 @@ function createAwardCeremonyData($children) {
                     $sheet[][$j++] = '';
                     $sheet[][$j++] = $school_location;
                     for ($k = 0; $k < $total; $k++) {
-                        $sheet[][$j++] = $names[$k];
+                        if (isset($names[$k])) $sheet[][$j++] = $names[$k];
                     }
                 }
                 $i = 1; // reset $i
