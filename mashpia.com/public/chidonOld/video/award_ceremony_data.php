@@ -35,10 +35,10 @@ foreach ($genders as $gender) {
             $newSheet = [];
             $sheets = createAwardCeremonyData($sorted[$track]);
             foreach ($sheets as $sheet) $newSheet += $sheet;
-            $file_name = $track . "_" . strtolower($gender) . ".csv";
+            $file_name = 'sheets/' . $track . "_" . strtolower($gender) . ".csv";
             createFile($file_name, $newSheet, true);
         }
     }
 }
 
-downloadFile();
+//downloadFile();
