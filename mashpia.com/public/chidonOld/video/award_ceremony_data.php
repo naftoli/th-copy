@@ -34,6 +34,7 @@ foreach ($genders as $gender) {
         if (isset($sorted[$track])) {
             $newSheet = [];
             $sheets = createAwardCeremonyData($sorted[$track]);
+            echo "<pre>"; print_r($sheets); echo "</pre>"; exit;
             foreach ($sheets as $sheet) $newSheet += $sheet;
             $file_name = 'sheets/' . $track . "_" . strtolower($gender) . ".csv";
             createFile($file_name, $newSheet, true);
