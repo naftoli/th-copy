@@ -40,4 +40,5 @@ foreach ($genders as $gender) {
     }
 }
 
-//downloadFile();
+$dir = "sheets/";
+downloadFile($dir);
