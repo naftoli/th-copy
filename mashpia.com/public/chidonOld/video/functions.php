@@ -439,9 +439,10 @@ function createZip($files, $filename) {
     $zip->close();
 }
 
-function downloadFile($dir = 0) {
+function downloadFile($deeper = false) {
     // loop through dir to get files
-    if (! $dir) $dir = getcwd();
+    $dir = getcwd();
+    if ($deeper) $dir .= "/sheets/";
     $list = scandir($dir);
     $files = extractFiles($list);
 
