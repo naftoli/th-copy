@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+        <script>
+            let pos = location.url.indexOf('?')
+            let id = location.url.substring(pos+4)
+            $("img#invite").attr('src', (id + ".jpg"))
+        </script>
+        <style>
+            #invite {
+                max-width: fit-content;
+            }
+        </style>
+    </head>
+    <body>
+        <img id="invite" />
+    </body>
+</html>

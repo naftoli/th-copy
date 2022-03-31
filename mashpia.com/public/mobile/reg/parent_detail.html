@@ -707,14 +707,7 @@
 
             $(document).on('click', '.invitation', function () {
                 var id = $(this).attr('id')
-                window.open('/chidonOld/invitations/' + id + '.jpg', '_blank')
-                // var image = new Image()
-                // image.src = '/chidonOld/invitations/' + chidon_id + '.jpg'
-                // image.style.maxWidth = '100%'
-                // image.style.height = 'auto'
-                // var w = window.open("",'_blank')
-                // w.document.write(image.outerHTML)
-                // w.document.close()
+                window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
             })
 
             $(document).on('click', '.shabbaton', function() {
