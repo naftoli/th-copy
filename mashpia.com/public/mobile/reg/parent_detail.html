@@ -412,12 +412,12 @@
                                                         <div style="margin:10px 0px">
                                                             <button class="btn btn-primary invitation" id="{{ this.user_serial }}">My Siyum Hamitzvos Invite</button>
                                                         </div>
-                                                        {{if this.invite_used}}
-                                                        {{else}}
-                                                        <div style="margin:10px 0px">
-                                                            <button class="btn btn-primary invite_used" id="{{ this.user_serial }}">I shared my Invitation</button>
-                                                        </div>
-                                                        {{/if}}
+                                                            {{#if this.invite_used}}
+                                                            {{else}}
+                                                            <div style="margin:10px 0px">
+                                                                <button class="btn btn-primary invite_used" id="{{ this.user_serial }}">I shared my Invitation</button>
+                                                            </div>
+                                                            {{/if}}
                                                         {{else}}
 <!--                                                            {{#if this.chidonSchoolConfirmed}}-->
 <!--                                                                {{#if this.track}}-->
@@ -883,7 +883,7 @@
             $(document).on('click', '.invite_used', function () {
                 let id = $(this).attr('id')
                 $.post('ajax/updateInvite.php', { id }, function( success ) {
-                    if (parseInt(success)) {
+                    if (success) {
                         alert('Saved.')
                         location.reload()
                     }
