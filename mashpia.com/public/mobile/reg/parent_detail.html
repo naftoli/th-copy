@@ -883,7 +883,10 @@
             $(document).on('click', '.invite_used', function () {
                 let id = $(this).attr('id')
                 $.post('ajax/updateInvite.php', { id }, function( success ) {
-                    if (success) alert('Saved.')
+                    if (success) {
+                        alert('Saved.')
+                        location.reload()
+                    }
                     else alert('Error saving.')
                 })
             })
