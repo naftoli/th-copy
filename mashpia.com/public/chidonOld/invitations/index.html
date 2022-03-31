@@ -4,11 +4,13 @@
         <meta charset="utf8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
-            let url = location.toString();
-            let pos = url.indexOf('?')
-            let id = url.substring(pos + 4)
-            console.log(id)
-            document.getElementById('invite').src = id + '.jpg'
+            window.onload = event => {
+                let url = location.toString();
+                let pos = url.indexOf('?')
+                let id = url.substring(pos + 4)
+                console.log(id)
+                document.getElementById('invite').src = id + '.jpg'
+            }
         </script>
         <style>
             #invite {
