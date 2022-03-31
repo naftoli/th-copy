@@ -412,6 +412,12 @@
                                                         <div style="margin:10px 0px">
                                                             <button class="btn btn-primary invitation" id="{{ this.user_serial }}">My Siyum Hamitzvos Invite</button>
                                                         </div>
+                                                        {{if this.invite_used}}
+                                                        {{else}}
+                                                        <div style="margin:10px 0px">
+                                                            <button class="btn btn-primary invite_used" id="{{ this.user_serial }}">I shared my Invitation</button>
+                                                        </div>
+                                                        {{/if}}
                                                         {{else}}
 <!--                                                            {{#if this.chidonSchoolConfirmed}}-->
 <!--                                                                {{#if this.track}}-->
@@ -873,6 +879,14 @@
                 //     window.open("/mobile/reg/lulavSet.html");
                 // }
             });
+
+            $(document).on('click', '.invite_used', function () {
+                let id = $(this).attr('id')
+                $.post('ajax/updateInvite.php', { id }, function( success ) {
+                    if (success) alert('Saved.')
+                    else alert('Error saving.')
+                })
+            })
         });
     </script>
 

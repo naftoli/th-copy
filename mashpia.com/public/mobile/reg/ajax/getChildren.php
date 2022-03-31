@@ -125,7 +125,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['rankImg'] 	= $rowRank['rank_image_id'] ? $rowRank['rank_image_id'] : '';
 
         $reg_query = mysql_query(
-            "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, tc.th_chidon_id, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
+            "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, tc.th_chidon_id, tc.invite_used, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
             ."sri.date_paid AS registered, u.chayolei, u.chidon FROM users u "
             ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and tc.year = $chidon_year "
             ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
@@ -136,6 +136,8 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
+
+        $children[$row['user_id']]['invite_used'] = intval($row['invite_used']);
 
         //mivtza lulav 5781
 //        $children[$row['user_id']]['mivtzaLulav'] = 0;
