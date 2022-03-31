@@ -8,7 +8,8 @@
             let url = location.toString();
             let pos = url.indexOf('?')
             let id = url.substring(pos+4)
-            $("img#invite").attr('src', (id + ".jpg"))
+            console.log(id)
+            document.getElementById('invite').src = id + '.jpg'
         </script>
         <style>
             #invite {
