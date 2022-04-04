@@ -119,8 +119,75 @@ function getGift($user) {
     return $gift;
 }
 
-function getAwards($users) {
+function getAwards() {
+    global $year;
 
+    // qry to get all kids that should get any award
+    $sql = "
+        SELECT
+            s.school_name, u.user_id, u.class_id, u.school_id, u.user_serial, u.first_he, u.last_he, u.gender, 
+            c.class_grade, c.class_sub, tc.parent_id, tci.highest_track, tcf.*
+        FROM 
+            users u 
+            join schools s using (school_id) 
+            join classes c on c.class_id = u.class_id 
+            join th_chidon tc using (user_id) 
+            join th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id
+            left join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id
+        WHERE
+            tc.year = $year
+            and tc.date_paid > 0";
+    //echo $sql . "<br />"; exit;
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll();
+    $info = [];
+    foreach ($rows as $row) {
+        $info[$row['user_id']] = $row;
+    }
+
+    foreach ($info as $user_id => &$row) {
+        $tracks = [
+            1   => 'yesod',
+            2   => 'yediah',
+            3   => 'havonah',
+            4   => 'iyun'
+        ];
+        $finals = [
+            'yesod'     => 20,
+            'yediah'    => 40,
+            'havonah'   => 60,
+            'iyun'      => 80
+        ];
+        $needed = [
+            'yesod'     => 60,
+            'yediah'    => 70,
+            'havonah'   => 80,
+            'iyun'      => 90
+        ];
+        $highest_track = $row['highest_track'];
+
+        // find out what award should be
+        $row['award'] = '';
+        $key = array_search($highest_track, $tracks);
+        if ($key !== false) {
+            $score = 0;
+            // go down from key to find where the child is holding
+            for ($i = $key; $i > 0; $i--) {
+                $level = 'level_' . $i;
+                if ($row[$level]) {
+                    $score += $row[$level];
+                }
+            }
+            for ($i = 1; $i <= $key; $i++) {
+                $divide_by = $finals[$tracks[$i]];
+                $final_score = number_format(($score / $divide_by) * 100, 2);
+                if ($final_score >= $needed[$tracks[$i]]) {
+                    $row['award'] = $tracks[$i];
+                }
+            }
+        }
+    }
+    return $info;
 }
 
 

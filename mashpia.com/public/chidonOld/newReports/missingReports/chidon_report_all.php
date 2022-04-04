@@ -17,6 +17,7 @@ $recruitments = getRecruitments();
 $recruitmentPrizes = getRecruitmentPrizes();
 $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
+$awards = getAwards();
 ?>
 <!DOCTYPE html>
 <html>
@@ -88,6 +89,10 @@ $prizes = getPrizes();
                             if ($pSize) $desc .= ' ' . $pSize;
                             if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
                             echo $desc . "<br />";
+                        }
+
+                        if ($awards[$user['user_id']]) {
+                            echo "<br />Award: " . $awards[$user['user_id']] . "<br />";
                         }
                     }
                 }
