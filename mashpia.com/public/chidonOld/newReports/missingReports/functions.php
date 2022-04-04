@@ -7,7 +7,7 @@ function getUsers() {
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
             where c.class_grade in (4,5,6,7,8)";
-    if (! empty($schools)) $sql .= " and s.school_id in (" . implode(',', array_keys($schools)) . ")";
+    if (! empty($schools)) $sql .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
     $sql .= " order by u.school_id, class_grade, class_sub, last, first";
 //    echo $sql . "<br />";
     $result = mysql_query($sql);
@@ -64,7 +64,7 @@ function getRecruitments() {
 
     $recruits = [];
     $sql = "select recruited_by, count(*) as total from th_chidon where year = " . $year;
-    echo $sql . "<br />";
+//    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $recruits[$row['recruited_by']] = $row['total'];
