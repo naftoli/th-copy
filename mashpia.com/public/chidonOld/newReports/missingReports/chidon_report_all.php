@@ -39,23 +39,20 @@ $awards = getAwards();
                 foreach ($more as $user) {
                     // find out if we need to show this child
                     $chidon = false;
-                    $recruitment = false;
                     $surprise = false;
+                    $recruitment = false;
 
                     // check if child in chidon
                     $key = array_search($user['user_id'], $chidonUsers);
-                    if ($key !== false) {
-                        $chidon = true;
-                        $userInfo = $chidonUsers[$key];
-                    }
+                    if ($key !== false) $chidon = true;
+
+                    // check surprise gifts
+                    if (array_search($user['user_id'], $surpriseGifts) !== false) $surprise = true;
 
                     // check recruitments
                     $ids = array_keys($recruitments);
                     if (array_search($user['user_id'], $ids) !== false) $recruitment = $recruitments[$user['user_id']];
                     else if (array_search($user['user_serial'], $ids) !== false) $recruitment = $recruitments[$user['user_serial']];
-
-                    // check surprise gifts
-                    if (array_search($user['user_id'], $surpriseGifts) !== false) $surprise = true;
 
                     if ($chidon || $surprise || $recruitment) {
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
@@ -95,7 +92,7 @@ $awards = getAwards();
                                 echo "<input type='checkbox' name='' id='' checked /> " . $desc . "<br />";
                             }
 
-                            if ($awards[$user['user_id']]) {
+                            if (isset($awards[$user['user_id']])) {
                                 echo "<br /><input type='checkbox' name='' id='' checked /> Award: " . $awards[$user['user_id']] . "<br />";
                             }
                         }
