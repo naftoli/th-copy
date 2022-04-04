@@ -5,6 +5,9 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . "/header.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/class.adminSchools.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
+
+$year = GlobalSettings::getChidonYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 

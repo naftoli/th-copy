@@ -23,7 +23,7 @@ function getChidonUsers() {
     $users = [];
     $sql = "select * from th_chidon where year = " . $year . " and date_paid > 0";
     if (! empty($schools)) $sql .= " and school_id in (" . implode(',', array_keys($schools)) . ")";
-    echo $sql . "<br />";
+//    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $users[$row['user_id']] = $row;
@@ -41,7 +41,7 @@ function getChidonUsersLastYr() {
             join th_chidon tc using (user_id) 
             where tc.year = " . $lastYr;
     if (! empty($schools)) $sql .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
-    echo $sql . "<br />";
+//    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $users[$row['user_id']] = $row;
