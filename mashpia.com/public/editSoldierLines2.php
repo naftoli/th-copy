@@ -301,7 +301,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	<script>
 		var campaigns = {
 			tanyaCampaign:  <?=$tanyaCampaign?>,
-    	mishnaCampaign: <?=$mishnaCampaign?>
+    	    mishnaCampaign: <?=$mishnaCampaign?>
 		}
 		// after yud alef nissan disable all entries
 		// $("button").attr('disabled', true);
