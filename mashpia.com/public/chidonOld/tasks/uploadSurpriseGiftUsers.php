@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<form action="updates.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+<form action="" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
     <label>Upload your file
         <br /><input type="file" name="file" class="file"></label>
     <br /><input type="submit" name="submit" value="upload" />
