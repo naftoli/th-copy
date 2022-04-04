@@ -336,15 +336,15 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 						<option value='0'>All Grades</option>
 						<?php
 						if (count($schools) == 1) {
-								$id = key($schools);
-								//echo $id;
-								require_once 'class.schoolClasses.php';
-								$sc = new SchoolClasses($id);
-								$classes = $sc->getClasses();
-								foreach ($classes as $row) {
-										$grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-										echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
-								}
+                            $id = key($schools);
+                            //echo $id;
+                            require_once 'class.schoolClasses.php';
+                            $sc = new SchoolClasses($id);
+                            $classes = $sc->getClasses();
+                            foreach ($classes as $row) {
+                                    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                                    echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                            }
 						}
 						?>
 				</select>
