@@ -86,6 +86,7 @@ $prizes = getPrizes();
                             $desc = $pName;
                             if ($pColor) $desc .= ' ' . $pColor;
                             if ($pSize) $desc .= ' ' . $pSize;
+                            if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
                             echo $desc . "<br />";
                         }
                     }

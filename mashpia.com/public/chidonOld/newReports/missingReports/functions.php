@@ -8,7 +8,7 @@ function getUsers() {
             join classes c on c.class_id = u.class_id 
             where c.class_grade in (4,5,6,7,8)";
     if (! empty($schools)) $sql .= " and s.school_id in (" . implode(',', array_keys($schools)) . ")";
-    $sql .= "order by school_id, class_grade, class_sub, last, first";
+    $sql .= " order by school_id, class_grade, class_sub, last, first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[$row['school_id']][] = $row;
