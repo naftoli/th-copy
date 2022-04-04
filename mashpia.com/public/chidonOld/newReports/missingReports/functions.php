@@ -123,6 +123,7 @@ function getAwards() {
     global $year;
 
     // qry to get all kids that should get any award
+    $info = [];
     $sql = "
         SELECT
             s.school_name, u.user_id, u.class_id, u.school_id, u.user_serial, u.first_he, u.last_he, u.gender, 
@@ -138,10 +139,8 @@ function getAwards() {
             tc.year = $year
             and tc.date_paid > 0";
     //echo $sql . "<br />"; exit;
-    $stmt = $MASHPIA_DB->query($sql);
-    $rows = $stmt->fetchAll();
-    $info = [];
-    foreach ($rows as $row) {
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
         $info[$row['user_id']] = $row;
     }
 
