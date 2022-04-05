@@ -78,11 +78,12 @@ $awardTypes = [
                         echo "<b>Name: " . $name . "</b><br />";
                         echo "Serial: " . $user['user_serial'] . "<br />";
                         echo "School: " . $school . "<br />";
+                        echo "Grade: " . $grade . "<br />";
 
                         if ($recruitment) {
                             $prize = $recruitmentPrizes[$recruitment];
                             echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}' checked /> 
-                                    Recruitment Prize: " . $prize;
+                                    Recruitment Prize: " . $prize['prize_name'];
                             if ($recruitment == 3) {
                                 if ($user['gender'] == 'M') echo " Navy";
                                 else if ($user['gender'] == 'F') echo "Burgundy";

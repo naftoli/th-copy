@@ -56,7 +56,7 @@ function getRecruitmentPrizes() {
     $sql = "select * from chidon_credit_prizes where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $prizes[$row['credits']] = $row['prize'];
+        $prizes[$row['credits']] = $row;
     }
     return $prizes;
 }
