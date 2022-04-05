@@ -200,5 +200,29 @@ function getCelebrationItems() {
     while ($row = mysql_fetch_assoc($result)) {
         $items[$row['admin_id']][] = $row;
     }
+
+    // find out which child it should be assigned to
+    $children = [];
+    foreach ($items as $admin_id => $more) {
+        $sql = "SELECT 
+                    user_id
+                FROM
+                    th_chidon tc
+                        JOIN
+                    users u USING (user_id)
+                        JOIN
+                    classes c USING (class_id)
+                WHERE
+                    tc.year = $year AND tc.parent_id = $admin_id
+                        AND tc.date_paid > 0
+                ORDER BY c.class_grade DESC
+                LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_num_rows($result) > 0) {
+            $row = mysql_fetch_assoc($result);
+            $children[$row['user_id']] = $more;
+        }
+    }
+    return $children;
 }
 

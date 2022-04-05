@@ -29,6 +29,7 @@ $awardTypes = [
     'iyun'      => 'plaque, medal, and glass trophy'
 ];
 
+$celebItems = getCelebrationItems();
 //echo "Users: " . count($users) . "<br />";
 //echo "Chidon Users: " . count($chidonUsers) . "<br />";
 //echo "Recruits: " . count($recruitments) . "<br />";
@@ -88,7 +89,7 @@ $awardTypes = [
 
                         if ($recruitment) {
                             $prize = $recruitmentPrizes[$recruitment];
-                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}' onclick='editMissing()' checked /> 
+                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}' checked /> 
                                     Recruitment Prize: " . $prize['prize_name'];
                             if ($recruitment == 3) {
                                 if ($user['gender'] == 'M') echo " Navy";
@@ -98,12 +99,12 @@ $awardTypes = [
                         }
 
                         if ($surprise) {
-                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' onclick='editMissing()' checked /> 
+                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' checked /> 
                                     Surprise Gift: Chavat Book<br />";
                         }
 
                         if ($chidon) {
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' onclick='editMissing()' checked /> Gift: " .
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Gift: " .
                                 getGift($user, $chidonInfo) . "<br />";
                             // prizes
                             echo "<br />Prizes:<br />";
@@ -115,13 +116,29 @@ $awardTypes = [
                                 if ($pColor) $desc .= ' ' . $pColor;
                                 if ($pSize) $desc .= ' ' . $pSize;
                                 if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
-                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' onclick='editMissing()' checked /> " .
+                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
                                     $desc . "<br />";
                             }
 
                             if (isset($awards[$user['user_id']])) {
-                                echo "<br /><input type='checkbox' name='award' id='award' onclick='editMissing()' checked /> Award: " .
+                                echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " .
                                     $awardTypes[$awards[$user['user_id']]['award']] . "<br />";
+                            }
+
+                            if (isset($celebItems[$user['user_id']])) {
+                                echo "<br />Celebration Items:<br />";
+                                foreach ($celebItems[$user['user_id']] as $item) {
+                                    for ($j = 0; $j < $item['amount']; $j++) {
+                                        echo "<input type='checkbox' name='award' id='celeb_item:{$item['purchase_id']}'  checked /> ";
+                                        echo $item['item'];
+                                        if (isset($item['size'])) echo $item['size'] . " " . $item['type_of_sweater'] . " ";
+                                        if (isset($item['address'])) {
+                                            echo "- Shipped To: " . $item['address'] . " " . $item['city'] . ", " . $item['state'] .
+                                                " " . $item['zip'] . " " . $item['country'];
+                                        }
+                                        echo "<br />";
+                                    }
+                                }
                             }
                         }
                         echo "<br /></div>";
@@ -133,11 +150,11 @@ $awardTypes = [
     </body>
     <script>
         let missing = []
-        function editMissing(e) {
+        $(document).on('click', '.item', function () {
             let desc, prize_id
-            let user_id = $(e).parent().attr('id')
-            let checked = $(e).is(':checked');
-            let id = $(e).attr('id')
+            let user_id = $(this).parent().attr('id')
+            let checked = $(this).is(':checked');
+            let id = $(this).attr('id')
             if (id.includes(':')) {
                 let info = id.split(':')
                 desc = info[0]
@@ -159,6 +176,6 @@ $awardTypes = [
                     }
                 }
             }
-        }
+        })
     </script>
 </html>
