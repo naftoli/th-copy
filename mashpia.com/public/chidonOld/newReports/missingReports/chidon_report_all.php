@@ -50,7 +50,7 @@ $celebItems = getCelebrationItems();
         </style>
         <script>
             window.onload = e => {
-                var missing = []
+                var missing = {}
                 $("input").click( function () {
                     let desc, prize_id
                     let user_id = $(this).parent().attr('id')
@@ -78,10 +78,19 @@ $celebItems = getCelebrationItems();
                     }
                 })
 
+                $(".comments").blur( function () {
+                    let user_id = $(this).parent().parent().attr('id')
+                    // add comment to user id
+                    if (! missing[user_id]) {
+                        missing[user_id] = []
+                    }
+                    missing[user_id].push({comments: $(this).val()})
+                })
+
                 $("#save").click( function (e) {
                     e.preventDefault()
-                    $.post('saveMissing.php', { missing }, function (success) {
-                        if (success) alert('Saved.')
+                    $.post('saveMissing.php', { JSON.stringify(missing) }, function (success) {
+                        if (parseInt(success)) alert('Saved.')
                         else alert('Error Saving.')
                     })
                 })
@@ -193,7 +202,7 @@ $celebItems = getCelebrationItems();
                                 }
                             }
                         }
-                        echo "<br /></div>";
+                        echo "<div class='comments'>Comments:<br /><textarea cols='10' rows='5'></textarea></div></div>";
                     }
                 }
             }
