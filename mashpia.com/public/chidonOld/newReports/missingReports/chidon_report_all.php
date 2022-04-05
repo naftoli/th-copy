@@ -138,19 +138,27 @@ $awardTypes = [
                 let user_id = $(this).parent().attr('id')
                 alert(user_id)
                 let checked = $(this).is(':checked');
+                let id = $(this).attr('id')
+                if (id.includes(':')) {
+                    let info = id.split(':')
+                    let desc = info[0]
+                    let prize_id = info[1]
+                } else {
+                    let desc = id
+                }
                 if (! checked) {
                     if (! missing[user_id]) missing[user_id] = []
-                    let id = $(this).attr('id')
-                    if (id.includes(':')) {
-                        let info = id.split(':')
-                        let desc = info[0]
-                        let prize_id = info[1]
-                        missing[user_id].push({desc, prize_id})
-                    } else {
-                        let desc = id
-                        missing[user_id].push({desc})
-                    }
+                    if (prize_id) missing[user_id].push({desc, prize_id})
+                    else missing[user_id].push({desc})
                     console.log(missing.toString())
+                } else {
+                    // remove if in missing array
+                    if (missing[user_id].length) {
+                        for (let i in missing[user_id]) {
+                            let item = missing[user_id][i]
+                            if (item.desc === desc) missing.user_id.splice(i, 1)
+                        }
+                    }
                 }
             })
         })
