@@ -22,12 +22,8 @@ $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
 
-$awardTypes = [
-    'yesod'     => 'certificate',
-    'yediah'    => 'plaque',
-    'havonah'   => 'plaque and medal',
-    'iyun'      => 'plaque, medal, and glass trophy'
-];
+$awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
+$awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
 
 $celebItems = getCelebrationItems();
 //echo "Users: " . count($users) . "<br />";
@@ -52,7 +48,7 @@ $celebItems = getCelebrationItems();
             window.onload = e => {
                 var missing = {}
                 $("input").click( function () {
-                    let desc, prize_id
+                    let desc, prize_id, award
                     let user_id = $(this).parent().attr('id')
                     let checked = $(this).is(':checked');
                     let id = $(this).attr('id')
@@ -62,10 +58,15 @@ $celebItems = getCelebrationItems();
                         prize_id = info[1]
                     } else {
                         desc = id
+                    } else if (id.includes('-')) {
+                        let info = id.split('-')
+                        desc = info[0]
+                        award = info[1]
                     }
                     if (! checked) {
                         if (! missing[user_id]) missing[user_id] = []
                         if (prize_id !== undefined) missing[user_id].push({ desc, prize_id })
+                        if (award !== undefined) missing[user_id].push({ desc, award })
                         else missing[user_id].push({ desc })
                     } else {
                         // remove if in missing array
@@ -181,8 +182,12 @@ $celebItems = getCelebrationItems();
                             }
 
                             if (isset($awards[$user['user_id']])) {
-                                echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " .
-                                    $awardTypes[$awards[$user['user_id']]['award']] . "<br />";
+                                echo "<br />Awards:<br />";
+                                $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
+                                $actualAward = $awardDesc[$key];
+                                for ($a = 0; $a <= $key; $a++) {
+                                    echo "<input type='checkbox' name='award' id='award-{$actualAward}' checked /> $actualAward<br />";
+                                }
                             }
 
                             if (isset($celebItems[$user['user_id']])) {
