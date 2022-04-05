@@ -202,7 +202,7 @@ $celebItems = getCelebrationItems();
                                 }
                             }
                         }
-                        echo "<div class='comments'>Comments:<br /><textarea cols='5' rows='10'></textarea></div></div>";
+                        echo "<div class='comments'>Comments:<br /><textarea cols='50' rows='5'></textarea></div></div>";
                     }
                 }
             }
