@@ -50,7 +50,7 @@ $celebItems = getCelebrationItems();
         </style>
         <script>
             window.onload = e => {
-                let missing = []
+                var missing = []
                 $("input").click( function () {
                     let desc, prize_id
                     let user_id = $(this).parent().attr('id')
