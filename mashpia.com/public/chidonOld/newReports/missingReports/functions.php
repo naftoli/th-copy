@@ -63,7 +63,7 @@ function getRecruitments() {
     global $year;
 
     $recruits = [];
-    $sql = "select recruited_by, count(*) as total from th_chidon where year = " . $year;
+    $sql = "select recruited_by, count(*) as total from th_chidon where year = " . $year . " group by recruited_by";
 //    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
