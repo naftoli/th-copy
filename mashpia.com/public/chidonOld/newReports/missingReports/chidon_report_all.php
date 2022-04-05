@@ -133,12 +133,11 @@ $awardTypes = [
     </body>
     <script>
         let missing = []
-        function editMissing() {
-            let user_id = $(this).parent().attr('id')
-            let checked = $(this).is(':checked');
-            let id = $(this).attr('id')
-
+        function editMissing(e) {
             let desc, prize_id
+            let user_id = $(e).parent().attr('id')
+            let checked = $(e).is(':checked');
+            let id = $(e).attr('id')
             if (id.includes(':')) {
                 let info = id.split(':')
                 desc = info[0]

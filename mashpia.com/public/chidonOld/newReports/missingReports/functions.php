@@ -190,10 +190,15 @@ function getAwards() {
 }
 
 function getCelebrationItems() {
+    global $year;
+
     $items = [];
-
+    $sql = "select * from extra_purchases p 
+            left join purchase_addresses pa using (purchase_id) 
+            where p.year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $items[$row['admin_id']][] = $row;
+    }
 }
-
-
-
 
