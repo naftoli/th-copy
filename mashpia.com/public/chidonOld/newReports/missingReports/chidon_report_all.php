@@ -98,12 +98,12 @@ $awardTypes = [
                         }
 
                         if ($surprise) {
-                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' checked /> 
+                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' onclick='editMissing()' checked /> 
                                     Surprise Gift: Chavat Book<br />";
                         }
 
                         if ($chidon) {
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Gift: " .
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' onclick='editMissing()' checked /> Gift: " .
                                 getGift($user, $chidonInfo) . "<br />";
                             // prizes
                             echo "<br />Prizes:<br />";
@@ -115,12 +115,12 @@ $awardTypes = [
                                 if ($pColor) $desc .= ' ' . $pColor;
                                 if ($pSize) $desc .= ' ' . $pSize;
                                 if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
-                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
+                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' onclick='editMissing()' checked /> " .
                                     $desc . "<br />";
                             }
 
                             if (isset($awards[$user['user_id']])) {
-                                echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " .
+                                echo "<br /><input type='checkbox' name='award' id='award' onclick='editMissing()' checked /> Award: " .
                                     $awardTypes[$awards[$user['user_id']]['award']] . "<br />";
                             }
                         }
