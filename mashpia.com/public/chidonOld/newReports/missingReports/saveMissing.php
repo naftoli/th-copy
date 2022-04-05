@@ -1,7 +1,7 @@
 <?php
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . "/header.php";
-require $_SERVER['DOCUMENT_ROOT'] . "class.globalSettings.php";
+require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
