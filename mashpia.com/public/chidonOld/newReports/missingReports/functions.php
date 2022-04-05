@@ -34,24 +34,6 @@ function getChidonUsers() {
     return $users;
 }
 
-function getChidonUsersLastYr() {
-    global $year, $schools;
-
-    $lastYr = $year - 1;
-    $users = [];
-    $sql = "select u.first, u.last, u.user_id, u.user_serial, u.gender, tc.* 
-            from users u 
-            join th_chidon tc using (user_id) 
-            where tc.year = " . $lastYr;
-    if (! empty($schools)) $sql .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
-//    echo $sql . "<br />";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $users[$row['user_id']] = $row;
-    }
-    return $users;
-}
-
 function getRecruitmentPrizes() {
     global $year;
 

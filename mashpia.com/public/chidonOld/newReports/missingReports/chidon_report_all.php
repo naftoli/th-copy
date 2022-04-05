@@ -15,7 +15,6 @@ require 'functions.php';
 
 $users = getUsers();
 $chidonUsers = getChidonUsers();
-//$usersLastYr = getChidonUsersLastYr();
 $recruitments = getRecruitments();
 $recruitmentPrizes = getRecruitmentPrizes();
 $surpriseGifts = getSurpriseGifts();
