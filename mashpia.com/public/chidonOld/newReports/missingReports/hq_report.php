@@ -21,7 +21,7 @@ $recruitmentPrizes = getRecruitmentPrizes();
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Full Chidon Report</title>
+    <title>Chidon Missing Items Report</title>
     <link href="../../../admin_styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
