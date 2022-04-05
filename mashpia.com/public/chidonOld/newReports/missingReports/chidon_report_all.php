@@ -130,8 +130,8 @@ $celebItems = getCelebrationItems();
                                 foreach ($celebItems[$user['user_id']] as $item) {
                                     for ($j = 0; $j < $item['amount']; $j++) {
                                         echo "<input type='checkbox' name='award' id='celeb_item:{$item['purchase_id']}'  checked /> ";
-                                        echo $item['item'];
-                                        if (isset($item['size'])) echo $item['size'] . " " . $item['type_of_sweater'] . " ";
+                                        if ($item['item'] == 'celeb_box') echo "Celebration Box";
+                                        else echo ucwords($item['item']) . " " . $item['size'] . " " . $item['type_of_sweater'] . " ";
                                         if (isset($item['address'])) {
                                             $address = $item['address'] . " " . $item['city'] . ", " . $item['state'] .
                                                 " " . $item['zip'] . " " . $item['country'];
