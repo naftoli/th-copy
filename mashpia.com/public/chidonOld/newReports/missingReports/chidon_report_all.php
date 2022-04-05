@@ -148,7 +148,7 @@ $awardTypes = [
                 }
                 if (! checked) {
                     if (! missing[user_id]) missing[user_id] = []
-                    if (prize_id) missing[user_id].push({desc, prize_id})
+                    if (prize_id !== undefined) missing[user_id].push({desc, prize_id})
                     else missing[user_id].push({desc})
                     console.log(missing.toString())
                 } else {

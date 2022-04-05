@@ -189,6 +189,11 @@ function getAwards() {
     return $info;
 }
 
+function getCelebrationItems() {
+    $items = [];
+
+}
+
 
 
 
