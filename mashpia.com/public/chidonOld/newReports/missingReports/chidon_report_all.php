@@ -28,6 +28,7 @@ $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
 $awardNames = ['Certificate', 'Plaque', 'Plaque and Medal', 'Plaque, Medal and Glass Trophy'];
 
 function isMissing($missing, $desc, $value = '') {
+    echo "<pre>"; print_r($missing); echo "</pre>";
     foreach ($missing as $item) {
         // for comments, return comment
         if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
