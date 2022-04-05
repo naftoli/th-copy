@@ -149,7 +149,7 @@ $awardTypes = [
                         let desc = id
                         missing[user_id].push({desc})
                     }
-                    console.log(missing)
+                    alert(missing.toString())
                 }
             })
         })
