@@ -91,11 +91,11 @@ function getPrizes() {
     return $prizes;
 }
 
-function getGift($user, $chidonInfo) {
+function getGift($user) {
     $gift = '';
     switch ($user['gender']) {
         case 'M':
-            $gift = 'Yarmulka - Size: ' . $chidonInfo['yarmulka'];
+            $gift = 'Yarmulka - Size: ' . $user['yarmulka'];
             break;
         case 'F':
             $gift = 'Chidon Necklace';
@@ -222,3 +222,97 @@ function getMissingItems($user_id) {
     return [];
 }
 
+function getAllMissingItems() {
+    global $year;
+
+    $sql = "select * from chidon_missing_items where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $items[$row['user_id']] = json_decode($row['items']);
+    }
+    return $items;
+}
+
+function getMissingUsers($items) {
+    global $year;
+
+    $users = [];
+    $user_ids = array_keys($items);
+    $sql = "select * from users u 
+        join schools s using (school_id) 
+        join classes c on c.class_id = u.class_id 
+        left join th_chidon using (user_id)
+        where u.user_id in (" . implode(',', $user_ids) . ") 
+        and (tc.year is null or tc.year = $year) 
+        order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $users[$row['user_id']] = $row;
+    }
+    return $users;
+}
+
+function parseItem($item, $user) {
+    global $recruitmentPrizes;
+
+    $desc = '';
+    switch ($item->desc) {
+        case 'recruitment_prize':
+            foreach ($recruitmentPrizes as $prize) {
+                if ($item->value == $prize['chidon_credit_prize_id']) {
+                    $desc = "Recruitment Prize: " . $prize['prize'];
+                    break;
+                }
+            }
+            break;
+        case 'surprise_gift':
+            $desc = "Surprise Gift: Chavat Book";
+            break;
+        case 'chidon_gift':
+            $gift = getGift($user);
+            $desc = "Gift: " . $gift;
+            break;
+        case 'chidon_prize':
+            $prize = getChidonPrize($item->value);
+            $desc = "Prize: " . $prize['name'];
+            if ($prize['size']) $desc .= " " . $prize['size'];
+            if ($prize['color']) $desc .= " " . $prize['color'];
+            break;
+        case 'award':
+            $desc = "Award: " . $item->value;
+            break;
+        case 'celeb_item':
+            $celeb_item = getCelebItem($item->value);
+            if ($celeb_item['name'] == 'sweater') $desc = ucwords($celeb_item['type'] . " " . $celeb_item['name'] . " " . $celeb_item['size']);
+            else $desc = $celeb_item['name'];
+            break;
+        case 'comments':
+            $desc = "Comment: " . $item->value;
+            break;
+    }
+    return $desc;
+}
+
+function getChidonPrize($id) {
+    $sql = "select * from chidon_prizes where prize_id = " . $id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $prize = [
+        'name'  => $row['prize_name'],
+        'color' => $row['color'],
+        'size'  => $row['size']
+    ];
+    return $prize;
+}
+
+function getCelebItem($id) {
+    $sql = "select * from extra_purchases where purchase_id = " . $id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $item = [
+        'name'  => $row['item'],
+        'size'  => $row['size'],
+        'type'  => $row['type_of_sweater']
+    ];
+    return $item;
+}

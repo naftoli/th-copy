@@ -173,9 +173,10 @@ function isMissing($missing, $desc, $value = '') {
                         }
 
                         if ($chidon) {
+                            $user['yarmulka'] = $chidonInfo['yarmulka'];
                             echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift'";
                             if (! isMissing($missing, 'chidon_gift')) echo " checked";
-                            echo " /> Gift: " . getGift($user, $chidonInfo) . "<br />";
+                            echo " /> Gift: " . getGift($user) . "<br />";
                             // prizes
                             if ($chidonInfo['highest_track'] != 'yesod') {
                                 echo "<br />Prizes:<br />";
@@ -212,7 +213,7 @@ function isMissing($missing, $desc, $value = '') {
                                         if (! isMissing($missing, 'celeb_item', $item['purchase_id'])) echo " checked";
                                         echo " /> ";
                                         if ($item['item'] == 'celeb_box') echo "Celebration Box";
-                                        else echo ucwords($item['item']) . " " . $item['size'] . " " . $item['type_of_sweater'] . " ";
+                                        else echo ucwords($item['type_of_sweater'] . " " . $item['item'] . " " . $item['size']);
                                         if (isset($item['address'])) {
                                             $address = $item['address'] . " " . $item['city'] . ", " . $item['state'] .
                                                 " " . $item['zip'] . " " . $item['country'];
