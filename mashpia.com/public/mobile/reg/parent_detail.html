@@ -385,7 +385,7 @@
                                                                 {{else}}
                                                                     {{#if this.reg_types.chidon }}
 <!--                                                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n">Register Chidon</span> {{ this.next_year_chidon }}</button>-->
-                                                                        <button class="btn btn-primary re_register">Notify me when 5783 registration opens</button>
+                                                                        <br /><button class="btn btn-primary notify">Notify me when 5783 registration opens</button>
                                                                     {{/if}}
                                                                 {{/if}}
                                                             {{/if}}
@@ -680,12 +680,15 @@
                 //	alert("The school for this child has not yet registered. You will only be able to register once the school registers.");
                 //	return false;
                 //}
+                var id = $(this).parent().parent().parent().attr('id');
+                if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
+                else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
+            });
+
+            $(document).on('click', '.notify', function () {
                 // send to form
                 window.open('https://www.thechidon.com/registration-notification/', '_blank')
-                // var id = $(this).parent().parent().parent().attr('id');
-                // if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
-                // else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
-            });
+            })
 
             $(document).on('click', '.del', function () {
                 var del = confirm('Are you sure you want to delete this child from your profile?');
