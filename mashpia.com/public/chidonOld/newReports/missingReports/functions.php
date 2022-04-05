@@ -239,12 +239,12 @@ function getMissingUsers($items) {
     $users = [];
     $user_ids = array_keys($items);
     $sql = "select * from users u 
-        join schools s using (school_id) 
-        join classes c on c.class_id = u.class_id 
-        left join th_chidon using (user_id)
-        where u.user_id in (" . implode(',', $user_ids) . ") 
-        and (tc.year is null or tc.year = $year) 
-        order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
+            join schools s using (school_id) 
+            join classes c on c.class_id = u.class_id 
+            left join th_chidon tc using (user_id)
+            where u.user_id in (" . implode(',', $user_ids) . ") 
+            and (tc.year is null or tc.year = $year) 
+            order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $users[$row['user_id']] = $row;
