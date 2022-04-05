@@ -22,12 +22,12 @@ $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
 
-echo "Users: " . count($users) . "<br />";
-echo "Chidon Users: " . count($chidonUsers) . "<br />";
-echo "Recruits: " . count($recruitments) . "<br />";
-echo "Surprise Gift: " . count($surpriseGifts) . "<br />";
-echo "Prizes: " . count($prizes) . "<br />";
-echo "Awards: " . count($awards) . "<br />";
+//echo "Users: " . count($users) . "<br />";
+//echo "Chidon Users: " . count($chidonUsers) . "<br />";
+//echo "Recruits: " . count($recruitments) . "<br />";
+//echo "Surprise Gift: " . count($surpriseGifts) . "<br />";
+//echo "Prizes: " . count($prizes) . "<br />";
+//echo "Awards: " . count($awards) . "<br />";
 ?>
 <!DOCTYPE html>
 <html>
