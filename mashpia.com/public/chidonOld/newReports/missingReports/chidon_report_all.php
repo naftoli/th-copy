@@ -80,6 +80,7 @@ $celebItems = getCelebrationItems();
 
                 $(".comments").blur( function () {
                     let value = $(this).text()
+                    alert(value)
                     if (value) {
                         let user_id = $(this).parent().parent().attr('id')
                         // add comment to user id
