@@ -25,8 +25,8 @@ $awards = getAwards();
 $awardTypes = [
     'yesod'     => 'certificate',
     'yediah'    => 'plaque',
-    'havonah'   => 'medal',
-    'iyun'      => 'trophy'
+    'havonah'   => 'plaque and medal',
+    'iyun'      => 'plaque, medal, and glass trophy'
 ];
 
 //echo "Users: " . count($users) . "<br />";
@@ -96,7 +96,7 @@ $awardTypes = [
                         }
 
                         if ($chidon) {
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Chidon Gift: " .
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Gift: " .
                                 getGift($user, $chidonInfo) . "<br />";
                             // prizes
                             echo "<br />Prizes:<br />";
