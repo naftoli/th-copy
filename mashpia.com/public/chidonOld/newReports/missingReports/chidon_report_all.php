@@ -43,6 +43,11 @@ $celebItems = getCelebrationItems();
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Full Chidon Report</title>
         <link href="../../../admin_styles.css" rel="stylesheet" type="text/css">
+        <style>
+            button {
+                padding: 5px 10px;
+            }
+        </style>
         <script>
             window.onload = e => {
                 let missing = []
@@ -72,6 +77,14 @@ $celebItems = getCelebrationItems();
                         }
                     }
                 })
+
+                $("#save").click( function (e) {
+                    e.preventDefault()
+                    $('saveMissing.php', { missing }, function (success) {
+                        if (success) alert('Saved.')
+                        else alert('Error Saving.')
+                    })
+                })
             }
         </script>
     </head>
@@ -83,6 +96,9 @@ $celebItems = getCelebrationItems();
             <br /><br />
             Please only uncheck an item if you have not received it. If you have received an item but it broke, got lost...
             please include all of the details in the comments section under each child and we will see if a replacement can be sent.
+        </div>
+        <div>
+            <button id="save">Save</button>
         </div>
         <?php
         foreach ($users as $school_id => $more) {
