@@ -80,7 +80,7 @@ $celebItems = getCelebrationItems();
 
                 $("#save").click( function (e) {
                     e.preventDefault()
-                    $('saveMissing.php', { missing }, function (success) {
+                    $.post('saveMissing.php', { missing }, function (success) {
                         if (success) alert('Saved.')
                         else alert('Error Saving.')
                     })
