@@ -24,6 +24,7 @@ $awards = getAwards();
 
 $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
+$awardNames = ['Certificate', 'Plaque', 'Plaque and Medal', 'Plaque, Medal and Glass Trophy'];
 
 $celebItems = getCelebrationItems();
 //echo "Users: " . count($users) . "<br />";
@@ -148,6 +149,11 @@ $celebItems = getCelebrationItems();
                         echo "Serial: " . $user['user_serial'] . "<br />";
                         echo "School: " . $school . "<br />";
                         echo "Grade: " . $grade . "<br />";
+                        if ($chidon) {
+                            echo "<b>Highest track passed</b> <i>determining rewards</i>: " . $chidonInfo['highest_track'] . "<br />";
+                            $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
+                            echo "<b>Awards earned based on Final:</b> " . $awardNames[$key] . "<br />";
+                        }
 
                         if ($recruitment) {
                             $prize = $recruitmentPrizes[$recruitment];
