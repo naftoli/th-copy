@@ -22,6 +22,13 @@ $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
 
+$awardTypes = [
+    'yesod'     => 'certificate',
+    'yediah'    => 'plaque',
+    'havonah'   => 'medal',
+    'iyun'      => 'trophy'
+];
+
 //echo "Users: " . count($users) . "<br />";
 //echo "Chidon Users: " . count($chidonUsers) . "<br />";
 //echo "Recruits: " . count($recruitments) . "<br />";
@@ -104,7 +111,7 @@ $awards = getAwards();
 
                             if (isset($awards[$user['user_id']])) {
                                 echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " .
-                                    $awards[$user['user_id']]['award'] . "<br />";
+                                    $awardTypes[$awards[$user['user_id']]['award']] . "<br />";
                             }
                         }
                         echo "<br /></div>";
