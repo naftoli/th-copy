@@ -28,7 +28,7 @@ $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
 $awardNames = ['Certificate', 'Plaque', 'Plaque and Medal', 'Plaque, Medal and Glass Trophy'];
 
 function isMissing($missing, $desc, $value = '') {
-    echo "<pre>"; print_r($missing); echo "</pre>";
+    if (empty($missing)) return false;
     foreach ($missing as $item) {
         // for comments, return comment
         if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
@@ -143,7 +143,6 @@ function isMissing($missing, $desc, $value = '') {
                         $name = $user['first'] . ' ' . $user['last'];
                         $school = $schools[$school_id];
                         $missing = getMissingItems($user['user_id']);
-                        echo "<pre>"; print_r($missing); echo "</pre>";
 
                         echo "<div class='user' id='{$user['user_id']}'>";
                         echo "<b>Name: " . $name . "</b><br />";

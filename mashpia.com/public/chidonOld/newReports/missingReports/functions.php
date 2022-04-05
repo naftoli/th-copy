@@ -237,6 +237,6 @@ function getMissingItems($user_id) {
         $row = mysql_fetch_assoc($result);
         return json_decode($row['items']);
     }
-    return false;
+    return [];
 }
 
