@@ -23,7 +23,8 @@ function getChidonUsers() {
     $users = [];
     $sql = "select * from th_chidon tc 
             join schools s using (school_id) 
-            where year = " . $year . " and date_paid > 0";
+            join th_chidon_info tci using (user_id, year)
+            where tc.year = " . $year . " and tc.date_paid > 0";
     if (! empty($schools)) $sql .= " and school_id in (" . implode(',', array_keys($schools)) . ")";
 //    echo $sql . "<br />";
     $result = mysql_query($sql);

@@ -169,17 +169,19 @@ $celebItems = getCelebrationItems();
                             echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Gift: " .
                                 getGift($user, $chidonInfo) . "<br />";
                             // prizes
-                            echo "<br />Prizes:<br />";
-                            foreach ($prizes[$user['user_id']] as $prize) {
-                                $pName = $prize['prize_name'];
-                                $pColor = $prize['color'];
-                                $pSize = $prize['size'];
-                                $desc = $pName;
-                                if ($pColor) $desc .= ' ' . $pColor;
-                                if ($pSize) $desc .= ' ' . $pSize;
-                                if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
-                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
-                                    $desc . "<br />";
+                            if ($chidonInfo['highest_track'] != 'yesod') {
+                                echo "<br />Prizes:<br />";
+                                foreach ($prizes[$user['user_id']] as $prize) {
+                                    $pName = $prize['prize_name'];
+                                    $pColor = $prize['color'];
+                                    $pSize = $prize['size'];
+                                    $desc = $pName;
+                                    if ($pColor) $desc .= ' ' . $pColor;
+                                    if ($pSize) $desc .= ' ' . $pSize;
+                                    if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
+                                    echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
+                                        $desc . "<br />";
+                                }
                             }
 
                             if (isset($awards[$user['user_id']])) {
