@@ -89,6 +89,7 @@ $celebItems = getCelebrationItems();
 
                 $("#save").click( function (e) {
                     e.preventDefault()
+                    console.log(missing)
                     $.post('saveMissing.php', { missing }, function (success) {
                         if (parseInt(success)) alert('Saved.')
                         else alert('Error Saving.')
@@ -202,7 +203,7 @@ $celebItems = getCelebrationItems();
                                 }
                             }
                         }
-                        echo "<br /><div class='comments'>Comments:<br /><textarea cols='50' rows='5'></textarea><br /></div></div>";
+                        echo "<br /><div class='comments'>Comments:<br /><textarea cols='50' rows='5'></textarea><br /><br /></div></div>";
                     }
                 }
             }
