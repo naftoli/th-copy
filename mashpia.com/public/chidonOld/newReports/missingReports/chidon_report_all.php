@@ -65,8 +65,8 @@ $celebItems = getCelebrationItems();
                     }
                     if (! checked) {
                         if (! missing[user_id]) missing[user_id] = []
-                        if (prize_id !== undefined) missing[user_id].push({desc, prize_id})
-                        else missing[user_id].push({desc})
+                        if (prize_id !== undefined) missing[user_id].push({ desc, prize_id })
+                        else missing[user_id].push({ desc })
                     } else {
                         // remove if in missing array
                         if (missing[user_id].length) {
@@ -79,12 +79,15 @@ $celebItems = getCelebrationItems();
                 })
 
                 $(".comments").blur( function () {
-                    let user_id = $(this).parent().parent().attr('id')
-                    // add comment to user id
-                    if (! missing[user_id]) {
-                        missing[user_id] = []
+                    let value = $(this).text()
+                    if (value) {
+                        let user_id = $(this).parent().parent().attr('id')
+                        // add comment to user id
+                        if (!missing[user_id]) {
+                            missing[user_id] = []
+                        }
+                        missing[user_id].push({ comments: value })
                     }
-                    missing[user_id].push({comments: $(this).val()})
                 })
 
                 $("#save").click( function (e) {
