@@ -50,15 +50,14 @@ echo "Awards: " . count($awards) . "<br />";
                     $recruitment = false;
 
                     // check if child in chidon
-                    $key = array_search($user['user_id'], array_keys($chidonUsers));
-                    if ($key !== false) $chidon = true;
+                    if (isset($chidonUsers[$user['user_id']])) $chidon = true;
 
                     // check surprise gifts
                     if (array_search($user['user_id'], $surpriseGifts) !== false) $surprise = true;
 
                     // check recruitments
-                    if (array_search($user['user_id'], array_keys($recruitments)) !== false) $recruitment = $recruitments[$user['user_id']];
-                    else if (array_search($user['user_serial'], array_keys($recruitments)) !== false) $recruitment = $recruitments[$user['user_serial']];
+                    if (isset($recruitments[$user['user_id']])) $recruitment = $recruitments[$user['user_id']];
+                    else if (isset($recruitments[$user['user_serial']])) $recruitment = $recruitments[$user['user_serial']];
 
                     if ($chidon || $surprise || $recruitment) {
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
