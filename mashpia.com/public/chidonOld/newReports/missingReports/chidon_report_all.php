@@ -79,7 +79,7 @@ $celebItems = getCelebrationItems();
                 })
 
                 $(".comments").blur( function () {
-                    let value = $(this).text()
+                    let value = $.trim($(this).val())
                     alert(value)
                     if (value) {
                         let user_id = $(this).parent().parent().attr('id')
