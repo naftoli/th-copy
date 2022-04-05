@@ -136,6 +136,7 @@ $awardTypes = [
             let missing = []
             $("input").click(function () {
                 let user_id = $(this).parent().attr('id')
+                alert(user_id)
                 let checked = $(this).is(':checked');
                 if (! checked) {
                     if (! missing[user_id]) missing[user_id] = []
@@ -149,7 +150,7 @@ $awardTypes = [
                         let desc = id
                         missing[user_id].push({desc})
                     }
-                    alert(missing.toString())
+                    console.log(missing.toString())
                 }
             })
         })
