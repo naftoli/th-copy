@@ -124,4 +124,27 @@ $awardTypes = [
         }
         ?>
     </body>
+    <script>
+        $( function () {
+            let missing = []
+            $("input").click(function () {
+                let user_id = $(this).parent().attr('id')
+                if (! missing[user_id]) missing[user_id] = []
+
+                let checked = $(this).is(':checked');
+                if (! checked) {
+                    let id = $(this).attr('id')
+                    if (id.includes(':')) {
+                        let info = id.split(':')
+                        let desc = info[0]
+                        let prize_id = info[1]
+                        missing[user_id].push({desc, prize_id})
+                    } else {
+                        let desc = id
+                        missing[user_id].push({desc})
+                    }
+                }
+            })
+        })
+    </script>
 </html>
