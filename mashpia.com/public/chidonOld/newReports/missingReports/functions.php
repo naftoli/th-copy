@@ -50,8 +50,10 @@ function getChidonUsersLastYr() {
 }
 
 function getRecruitmentPrizes() {
+    global $year;
+
     $prizes = [];
-    $sql = "select * from chidon_credit_prizes";
+    $sql = "select * from chidon_credit_prizes where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['credits']] = $row['prize'];
@@ -106,15 +108,13 @@ function getPrizes() {
 
 function getGift($user) {
     $gift = '';
-    if ($user['date_paid'] > 0) {
-        switch ($user['gender']) {
-            case 'M':
-                $gift = 'Yarmulka - Size: ' . $user['yarmulka'];
-                break;
-            case 'F':
-                $gift = 'Chidon Necklace';
-                break;
-        }
+    switch ($user['gender']) {
+        case 'M':
+            $gift = 'Yarmulka - Size: ' . $user['yarmulka'];
+            break;
+        case 'F':
+            $gift = 'Chidon Necklace';
+            break;
     }
     return $gift;
 }
@@ -127,14 +127,14 @@ function getAwards() {
     $sql = "
         SELECT
             s.school_name, u.user_id, u.class_id, u.school_id, u.user_serial, u.first_he, u.last_he, u.gender, 
-            c.class_grade, c.class_sub, tc.parent_id, tci.highest_track, tcf.*
+            c.class_grade, c.class_sub, tci.highest_track, tcf.*
         FROM 
             users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
             join th_chidon tc using (user_id) 
             join th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id
-            left join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id
+            join th_chidon_finals tcf on tc.year = tcf.year and tc.user_id = tcf.user_id
         WHERE
             tc.year = $year
             and tc.date_paid > 0";
@@ -144,7 +144,7 @@ function getAwards() {
         $info[$row['user_id']] = $row;
     }
 
-    foreach ($info as $user_id => &$row) {
+    foreach ($info as &$row) {
         $tracks = [
             1   => 'yesod',
             2   => 'yediah',
