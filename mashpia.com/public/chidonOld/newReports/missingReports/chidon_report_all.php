@@ -21,6 +21,21 @@ $recruitmentPrizes = getRecruitmentPrizes();
 $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
+echo "<pre>";
+echo "Users:";
+print_r($users);
+echo "Chidon Users:";
+print_r($chidonUsers);
+echo "Recruits:";
+print_r($recruitments);
+echo "Surprise Gift:";
+print_r($surpriseGifts);
+echo "Prizes:";
+print_r($prizes);
+echo "Awards:";
+print_r($awards);
+echo "</pre>";
+exit;
 ?>
 <!DOCTYPE html>
 <html>
