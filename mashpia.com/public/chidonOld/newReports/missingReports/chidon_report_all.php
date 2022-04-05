@@ -15,7 +15,7 @@ require 'functions.php';
 
 $users = getUsers();
 $chidonUsers = getChidonUsers();
-$usersLastYr = getChidonUsersLastYr();
+//$usersLastYr = getChidonUsersLastYr();
 $recruitments = getRecruitments();
 $recruitmentPrizes = getRecruitmentPrizes();
 $surpriseGifts = getSurpriseGifts();
@@ -133,10 +133,15 @@ $celebItems = getCelebrationItems();
                                         echo $item['item'];
                                         if (isset($item['size'])) echo $item['size'] . " " . $item['type_of_sweater'] . " ";
                                         if (isset($item['address'])) {
-                                            echo "- Shipped To: " . $item['address'] . " " . $item['city'] . ", " . $item['state'] .
+                                            $address = $item['address'] . " " . $item['city'] . ", " . $item['state'] .
                                                 " " . $item['zip'] . " " . $item['country'];
+                                        } else {
+                                            // get school address
+                                            $address = $chidonInfo['school_address1'] . ' ' . $chidonInfo['school_city'] .
+                                                ', ' . $chidonInfo['school_state'] . ' ' . $chidonInfo['school_postal'] .
+                                                ' ' . $chidonInfo['school_country'];
                                         }
-                                        echo "<br />";
+                                        echo " Shipped To: " . $address . "<br />";
                                     }
                                 }
                             }
