@@ -50,7 +50,7 @@ echo "Awards: " . count($awards) . "<br />";
                     $recruitment = false;
 
                     // check if child in chidon
-                    $key = array_search($user['user_id'], $chidonUsers);
+                    $key = array_search($user['user_id'], array_keys($chidonUsers));
                     if ($key !== false) $chidon = true;
 
                     // check surprise gifts
