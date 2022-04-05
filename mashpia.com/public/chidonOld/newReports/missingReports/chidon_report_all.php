@@ -56,13 +56,14 @@ $celebItems = getCelebrationItems();
                         let info = id.split(':')
                         desc = info[0]
                         prize_id = info[1]
-                    } else {
-                        desc = id
                     } else if (id.includes('-')) {
                         let info = id.split('-')
                         desc = info[0]
                         award = info[1]
+                    } else {
+                        desc = id
                     }
+
                     if (! checked) {
                         if (! missing[user_id]) missing[user_id] = []
                         if (prize_id !== undefined) missing[user_id].push({ desc, prize_id })
