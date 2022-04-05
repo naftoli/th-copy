@@ -58,9 +58,8 @@ exit;
                     if (array_search($user['user_id'], $surpriseGifts) !== false) $surprise = true;
 
                     // check recruitments
-                    $ids = array_keys($recruitments);
-                    if (array_search($user['user_id'], $ids) !== false) $recruitment = $recruitments[$user['user_id']];
-                    else if (array_search($user['user_serial'], $ids) !== false) $recruitment = $recruitments[$user['user_serial']];
+                    if (array_search($user['user_id'], array_keys($recruitments)) !== false) $recruitment = $recruitments[$user['user_id']];
+                    else if (array_search($user['user_serial'], array_keys($recruitments)) !== false) $recruitment = $recruitments[$user['user_serial']];
 
                     if ($chidon || $surprise || $recruitment) {
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
