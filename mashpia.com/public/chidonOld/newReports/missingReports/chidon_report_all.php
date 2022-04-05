@@ -46,6 +46,12 @@ $awardTypes = [
     <body>
         <?php include('../../../admin_header.php'); ?>
         <h1>Full Chidon Report</h1>
+        <div class="infobox2">
+            Please uncheck items which have not been received so we can send it out.
+            <br /><br />
+            Please only uncheck an item if you have not received it. If you have received an item but it broke, got lost...
+            please include all of the details in the comments section under each child and we will see if a replacement can be sent.
+        </div>
         <?php
         foreach ($users as $school_id => $more) {
             if (isset($schools[$school_id])) {
