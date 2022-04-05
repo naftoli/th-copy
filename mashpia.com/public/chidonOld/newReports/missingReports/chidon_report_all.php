@@ -57,7 +57,10 @@ $awardTypes = [
                     $recruitment = false;
 
                     // check if child in chidon
-                    if (isset($chidonUsers[$user['user_id']])) $chidon = true;
+                    if (isset($chidonUsers[$user['user_id']])) {
+                        $chidon = true;
+                        $chidonInfo = $chidonUsers[$user['user_id']];
+                    }
 
                     // check surprise gifts
                     if (array_search($user['user_id'], $surpriseGifts) !== false) $surprise = true;
@@ -94,7 +97,7 @@ $awardTypes = [
 
                         if ($chidon) {
                             echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Chidon Gift: " .
-                                getGift($user) . "<br />";
+                                getGift($user, $chidonInfo) . "<br />";
                             // prizes
                             echo "<br />Prizes:<br />";
                             foreach ($prizes[$user['user_id']] as $prize) {

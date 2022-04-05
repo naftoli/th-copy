@@ -106,11 +106,11 @@ function getPrizes() {
     return $prizes;
 }
 
-function getGift($user) {
+function getGift($user, $chidonInfo) {
     $gift = '';
     switch ($user['gender']) {
         case 'M':
-            $gift = 'Yarmulka - Size: ' . $user['yarmulka'];
+            $gift = 'Yarmulka - Size: ' . $chidonInfo['yarmulka'];
             break;
         case 'F':
             $gift = 'Chidon Necklace';
