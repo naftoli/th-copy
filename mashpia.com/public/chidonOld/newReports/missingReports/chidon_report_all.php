@@ -28,7 +28,6 @@ echo "Recruits: " . count($recruitments) . "<br />";
 echo "Surprise Gift: " . count($surpriseGifts) . "<br />";
 echo "Prizes: " . count($prizes) . "<br />";
 echo "Awards: " . count($awards) . "<br />";
-exit;
 ?>
 <!DOCTYPE html>
 <html>
