@@ -80,13 +80,12 @@ $celebItems = getCelebrationItems();
 
                 $(".comments").blur( function () {
                     let value = $.trim($(this).val())
-                    alert(value)
                     if (value) {
-                        let user_id = $(this).parent().parent().attr('id')
-                        // add comment to user id
-                        if (!missing[user_id]) {
+                        let user_id = $(this).parent().attr('id')
+                        if ( !missing[user_id]) {
                             missing[user_id] = []
                         }
+                        // add comment to user id
                         missing[user_id].push({ comments: value })
                     }
                 })
