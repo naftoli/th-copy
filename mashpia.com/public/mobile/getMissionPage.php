@@ -156,7 +156,7 @@ $user = new user($row); // create a new user
 $school = $user->school_id;
 $grade = $user->class_id;
 
-if (in_array($school, [180])) {
+if (in_array($school, [180, 709])) {
     echo "Your school does not allow missions to be entered here.";
     exit;
 }
