@@ -229,3 +229,14 @@ function getCelebrationItems() {
     return $children;
 }
 
+function getMissingItems($user_id) {
+    global $year;
+    $sql = "select * from chidon_missing_items where user_id = " . $user_id . " and year = " . $year;
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) > 0) {
+        $row = mysql_fetch_assoc($result);
+        return json_decode($row['items']);
+    }
+    return false;
+}
+

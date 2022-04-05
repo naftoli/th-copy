@@ -21,18 +21,21 @@ $recruitmentPrizes = getRecruitmentPrizes();
 $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
+$celebItems = getCelebrationItems();
 
 $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
 $awardNames = ['Certificate', 'Plaque', 'Plaque and Medal', 'Plaque, Medal and Glass Trophy'];
 
-$celebItems = getCelebrationItems();
-//echo "Users: " . count($users) . "<br />";
-//echo "Chidon Users: " . count($chidonUsers) . "<br />";
-//echo "Recruits: " . count($recruitments) . "<br />";
-//echo "Surprise Gift: " . count($surpriseGifts) . "<br />";
-//echo "Prizes: " . count($prizes) . "<br />";
-//echo "Awards: " . count($awards) . "<br />";
+function isMissing($missing, $desc, $value = '') {
+    foreach ($missing as $item) {
+        // for comments, return comment
+        if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
+        if ($item->desc == $desc && $item->value == $value) return true;
+    }
+    return false;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,33 +52,28 @@ $celebItems = getCelebrationItems();
             window.onload = e => {
                 var missing = {}
                 $("input").click( function () {
-                    let desc, prize_id, award
+                    let desc, value
                     let user_id = $(this).parent().attr('id')
                     let checked = $(this).is(':checked');
                     let id = $(this).attr('id')
                     if (id.includes(':')) {
                         let info = id.split(':')
                         desc = info[0]
-                        prize_id = info[1]
-                    } else if (id.includes('-')) {
-                        let info = id.split('-')
-                        desc = info[0]
-                        award = info[1]
+                        value = info[1]
                     } else {
                         desc = id
+                        value = ''
                     }
 
                     if (! checked) {
                         if (! missing[user_id]) missing[user_id] = []
-                        if (prize_id !== undefined) missing[user_id].push({ desc, prize_id })
-                        if (award !== undefined) missing[user_id].push({ desc, award })
-                        else missing[user_id].push({ desc })
+                        missing[user_id].push({ desc, value })
                     } else {
                         // remove if in missing array
                         if (missing[user_id].length) {
                             for (let i in missing[user_id]) {
                                 let item = missing[user_id][i]
-                                if (item.desc === desc) missing[user_id].splice(i, 1)
+                                if (item.desc === desc && item.value === value) missing[user_id].splice(i, 1)
                             }
                         }
                     }
@@ -89,7 +87,7 @@ $celebItems = getCelebrationItems();
                             missing[user_id] = []
                         }
                         // add comment to user id
-                        missing[user_id].push({ comments: value })
+                        missing[user_id].push({ desc: 'comments', value })
                     }
                 })
 
@@ -143,6 +141,8 @@ $celebItems = getCelebrationItems();
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
                         $name = $user['first'] . ' ' . $user['last'];
                         $school = $schools[$school_id];
+                        $missing = getMissingItems($user['user_id']);
+                        echo "<pre>"; print_r($missing); echo "</pre>";
 
                         echo "<div class='user' id='{$user['user_id']}'>";
                         echo "<b>Name: " . $name . "</b><br />";
@@ -157,8 +157,9 @@ $celebItems = getCelebrationItems();
 
                         if ($recruitment) {
                             $prize = $recruitmentPrizes[$recruitment];
-                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}' checked /> 
-                                    Recruitment Prize: " . $prize['prize'];
+                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}'";
+                            if (! isMissing($missing, 'recruitment_prize', $prize['chidon_credit_prize_id'])) echo " checked";
+                            echo " />Recruitment Prize: " . $prize['prize'];
                             if ($recruitment == 3) {
                                 if ($user['gender'] == 'M') echo " Navy";
                                 else if ($user['gender'] == 'F') echo "Burgundy";
@@ -167,13 +168,15 @@ $celebItems = getCelebrationItems();
                         }
 
                         if ($surprise) {
-                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' checked /> 
-                                    Surprise Gift: Chavat Book<br />";
+                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift'";
+                            if (! isMissing($missing, 'surprise_gift')) echo " checked";
+                            echo " /> Surprise Gift: Chavat Book<br />";
                         }
 
                         if ($chidon) {
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Gift: " .
-                                getGift($user, $chidonInfo) . "<br />";
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift'";
+                            if (! isMissing($missing, 'chidon_gift')) echo " checked";
+                            echo " /> Gift: " . getGift($user, $chidonInfo) . "<br />";
                             // prizes
                             if ($chidonInfo['highest_track'] != 'yesod') {
                                 echo "<br />Prizes:<br />";
@@ -185,8 +188,9 @@ $celebItems = getCelebrationItems();
                                     if ($pColor) $desc .= ' ' . $pColor;
                                     if ($pSize) $desc .= ' ' . $pSize;
                                     if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
-                                    echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
-                                        $desc . "<br />";
+                                    echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}'";
+                                    if (! isMissing($missing, 'chidon_prize', $prize['prize_id'])) echo " checked";
+                                    echo " /> " . $desc . "<br />";
                                 }
                             }
 
@@ -195,7 +199,9 @@ $celebItems = getCelebrationItems();
                                 $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
                                 for ($a = 0; $a <= $key; $a++) {
                                     $actualAward = $awardDesc[$a];
-                                    echo "<input type='checkbox' name='award' id='award-{$actualAward}' checked /> $actualAward<br />";
+                                    echo "<input type='checkbox' name='award' id='award:{$actualAward}'";
+                                    if (! isMissing($missing, 'award', $actualAward)) echo " checked";
+                                    echo " /> $actualAward<br />";
                                 }
                             }
 
@@ -203,7 +209,9 @@ $celebItems = getCelebrationItems();
                                 echo "<br />Celebration Items:<br />";
                                 foreach ($celebItems[$user['user_id']] as $item) {
                                     for ($j = 0; $j < $item['amount']; $j++) {
-                                        echo "<input type='checkbox' name='award' id='celeb_item:{$item['purchase_id']}'  checked /> ";
+                                        echo "<input type='checkbox' name='celeb_item' id='celeb_item:{$item['purchase_id']}'";
+                                        if (! isMissing($missing, 'celeb_item', $item['purchase_id'])) echo " checked";
+                                        echo " /> ";
                                         if ($item['item'] == 'celeb_box') echo "Celebration Box";
                                         else echo ucwords($item['item']) . " " . $item['size'] . " " . $item['type_of_sweater'] . " ";
                                         if (isset($item['address'])) {
@@ -220,7 +228,10 @@ $celebItems = getCelebrationItems();
                                 }
                             }
                         }
-                        echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'></textarea><br /><br /></div>";
+                        echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
+                        $comments = isMissing($missing, 'comments');
+                        if ($comments) echo $comments;
+                        echo "</textarea><br /><br /></div>";
                     }
                 }
             }
