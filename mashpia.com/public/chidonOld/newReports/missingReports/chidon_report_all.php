@@ -43,6 +43,37 @@ $celebItems = getCelebrationItems();
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Full Chidon Report</title>
         <link href="../../../admin_styles.css" rel="stylesheet" type="text/css">
+        <script>
+            window.onload = e => {
+                let missing = []
+                $("input").click( function () {
+                    let desc, prize_id
+                    let user_id = $(this).parent().attr('id')
+                    let checked = $(this).is(':checked');
+                    let id = $(this).attr('id')
+                    if (id.includes(':')) {
+                        let info = id.split(':')
+                        desc = info[0]
+                        prize_id = info[1]
+                    } else {
+                        desc = id
+                    }
+                    if (! checked) {
+                        if (! missing[user_id]) missing[user_id] = []
+                        if (prize_id !== undefined) missing[user_id].push({desc, prize_id})
+                        else missing[user_id].push({desc})
+                    } else {
+                        // remove if in missing array
+                        if (missing[user_id].length) {
+                            for (let i in missing[user_id]) {
+                                let item = missing[user_id][i]
+                                if (item.desc === desc) missing[user_id].splice(i, 1)
+                            }
+                        }
+                    }
+                })
+            }
+        </script>
     </head>
     <body>
         <?php include('../../../admin_header.php'); ?>
@@ -153,36 +184,4 @@ $celebItems = getCelebrationItems();
         }
         ?>
     </body>
-    <script>
-        window.onload = e => {
-            let missing = []
-            $("input").click( function () {
-                let desc, prize_id
-                let user_id = $(this).parent().attr('id')
-                let checked = $(this).is(':checked');
-                let id = $(this).attr('id')
-                if (id.includes(':')) {
-                    let info = id.split(':')
-                    desc = info[0]
-                    prize_id = info[1]
-                } else {
-                    desc = id
-                }
-                if (! checked) {
-                    if (! missing[user_id]) missing[user_id] = []
-                    if (prize_id !== undefined) missing[user_id].push({desc, prize_id})
-                    else missing[user_id].push({desc})
-                    console.log(missing.toString())
-                } else {
-                    // remove if in missing array
-                    if (missing[user_id].length) {
-                        for (let i in missing[user_id]) {
-                            let item = missing[user_id][i]
-                            if (item.desc === desc) missing[user_id].splice(i, 1)
-                        }
-                    }
-                }
-            })
-        }
-    </script>
 </html>
