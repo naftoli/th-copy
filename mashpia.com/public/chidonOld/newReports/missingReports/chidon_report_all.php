@@ -64,13 +64,14 @@ echo "Awards: " . count($awards) . "<br />";
                         $name = $user['first'] . ' ' . $user['last'];
                         $school = $schools[$school_id];
 
+                        echo "<div class='user' id='{$user['user_id']}'>";
                         echo "<b>Name: " . $name . "</b><br />";
                         echo "Serial: " . $user['user_serial'] . "<br />";
                         echo "School: " . $school . "<br />";
 
                         if ($recruitment) {
                             $prize = $recruitmentPrizes[$recruitment];
-                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize_{$prize['chidon_credit_prize_id']}' checked /> 
+                            echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}' checked /> 
                                     Recruitment Prize: " . $prize;
                             if ($recruitment == 3) {
                                 if ($user['gender'] == 'M') echo " Navy";
@@ -80,11 +81,13 @@ echo "Awards: " . count($awards) . "<br />";
                         }
 
                         if ($surprise) {
-                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' checked /> Surprise Gift: Chavat Book<br />";
+                            echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift' checked /> 
+                                    Surprise Gift: Chavat Book<br />";
                         }
 
                         if ($chidon) {
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Chidon Gift: " . getGift($user) . "<br />";
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift' checked /> Chidon Gift: " .
+                                getGift($user) . "<br />";
                             // prizes
                             echo "<br />Prizes:<br />";
                             foreach ($prizes[$user['user_id']] as $prize) {
@@ -95,14 +98,16 @@ echo "Awards: " . count($awards) . "<br />";
                                 if ($pColor) $desc .= ' ' . $pColor;
                                 if ($pSize) $desc .= ' ' . $pSize;
                                 if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
-                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize_{$prize['prize_id']}' checked /> " . $desc . "<br />";
+                                echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}' checked /> " .
+                                    $desc . "<br />";
                             }
 
                             if (isset($awards[$user['user_id']])) {
-                                echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " . $awards[$user['user_id']] . "<br />";
+                                echo "<br /><input type='checkbox' name='award' id='award' checked /> Award: " .
+                                    $awards[$user['user_id']]['award'] . "<br />";
                             }
                         }
-                        echo "<br /><br />";
+                        echo "<br /></div>";
                     }
                 }
             }
