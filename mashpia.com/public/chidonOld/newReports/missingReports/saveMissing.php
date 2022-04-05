@@ -1,12 +1,14 @@
 <?php
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . "/header.php";
+require $_SERVER['DOCUMENT_ROOT'] . "class.globalSettings.php";
+$year = GlobalSettings::getChidonYear();
 
 $qrys = [];
 $missing = $_POST['missing'];
 foreach ($missing as $user_id => $items) {
     $sql = "insert into chidon_missing_items set user_id = " . mysql_real_escape_string($user_id) . ", items = '" .
-        json_encode($items) . "'";
+        json_encode($items) . "', year = " . $year;
     $qrys[] = $sql;
 }
 
