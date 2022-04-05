@@ -184,8 +184,8 @@ $celebItems = getCelebrationItems();
                             if (isset($awards[$user['user_id']])) {
                                 echo "<br />Awards:<br />";
                                 $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
-                                $actualAward = $awardDesc[$key];
                                 for ($a = 0; $a <= $key; $a++) {
+                                    $actualAward = $awardDesc[$a];
                                     echo "<input type='checkbox' name='award' id='award-{$actualAward}' checked /> $actualAward<br />";
                                 }
                             }
