@@ -89,7 +89,7 @@ $celebItems = getCelebrationItems();
 
                 $("#save").click( function (e) {
                     e.preventDefault()
-                    $.post('saveMissing.php', { missing: JSON.stringify(missing) }, function (success) {
+                    $.post('saveMissing.php', { missing }, function (success) {
                         if (parseInt(success)) alert('Saved.')
                         else alert('Error Saving.')
                     })
