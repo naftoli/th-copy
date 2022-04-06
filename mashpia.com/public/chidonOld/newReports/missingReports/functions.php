@@ -336,3 +336,14 @@ function getItemsBySchool($items, $users) {
     }
     return $sorted;
 }
+
+function extractInfo($schoolItems) {
+    $info = [];
+    foreach ($schoolItems as $desc => $details) {
+        foreach ($details as $value) {
+            if (isset($info[$desc][$value])) $info[$desc][$value]++;
+            else $info[$desc][$value] = 1;
+        }
+    }
+    return $info;
+}
