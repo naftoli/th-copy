@@ -10,6 +10,7 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+require $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php';
 require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
 
@@ -51,7 +52,13 @@ function updateLines($obj) {
     }
 }
 
+function updateSummary($campaign_id, $user_id) {
+    $bps = new BpSummary( $campaign_id, 'user' );
+    $bps->updateSummary( $user_id );
+}
+
 $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all"));
+echo "<pre>"; print_r($info); echo "</pre>";
 foreach ($info as $obj) {
     updateLines($obj);
 }
