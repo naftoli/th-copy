@@ -48,7 +48,7 @@ $recruitmentPrizes = getRecruitmentPrizes();
             $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $schools[$user['school_id']] . "</td><td>" . $grade .
                 "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>";
-            foreach ($items as $item) {
+            foreach ($details as $item) {
                 echo parseItem($item, $user) . "<br />";
             }
             echo "</td></tr>";

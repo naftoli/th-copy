@@ -256,10 +256,10 @@ function parseItem($item, $user) {
     global $recruitmentPrizes;
 
     $desc = '';
-    switch ($item['desc']) {
+    switch ($item->desc) {
         case 'recruitment_prize':
             foreach ($recruitmentPrizes as $prize) {
-                if ($item['value'] == $prize['chidon_credit_prize_id']) {
+                if ($item->value == $prize['chidon_credit_prize_id']) {
                     $desc = "Recruitment Prize: " . $prize['prize'];
                     break;
                 }
@@ -273,7 +273,7 @@ function parseItem($item, $user) {
             $desc = "Gift: " . $gift;
             break;
         case 'chidon_prize':
-            $prize = getChidonPrize($item['value']);
+            $prize = getChidonPrize($item->value);
             $desc = "Prize: " . $prize['name'];
             if ($prize['size']) $desc .= " " . $prize['size'];
             if ($prize['color']) $desc .= " " . $prize['color'];
@@ -282,12 +282,12 @@ function parseItem($item, $user) {
             $desc = "Award: " . $item->value;
             break;
         case 'celeb_item':
-            $celeb_item = getCelebItem($item['value']);
+            $celeb_item = getCelebItem($item->value);
             if ($celeb_item['name'] == 'sweater') $desc = ucwords($celeb_item['type'] . " " . $celeb_item['name'] . " " . $celeb_item['size']);
             else $desc = $celeb_item['name'];
             break;
         case 'comments':
-            $desc = "Comment: " . $item['value'];
+            $desc = "Comment: " . $item->value;
             break;
     }
     return $desc;
