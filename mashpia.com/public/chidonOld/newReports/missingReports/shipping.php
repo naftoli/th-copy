@@ -16,7 +16,17 @@ require 'functions.php';
 $items = getAllMissingItems();
 $users = getMissingUsers($items);
 $itemsBySchool = getItemsBySchool($items, $users);
-$recruitmentPrizes = getRecruitmentPrizes();
+$recruitmentPrizesById = getRecruitmentPrizesById();
+$chidonPrizes = getChidonPrizes();
+
+$itemTypes = [
+    'recruitement_prize'    => 'Recruitment Prize',
+    'surprise_gift'         => 'Surprise Gift',
+    'chidon_gift'           => 'Chidon Gift',
+    'award'                 => 'Award',
+    'celeb_item'            => 'Celebration Item',
+    'rebbe_pic_5781'        => 'Rebbe Picture 5781'
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,11 +48,9 @@ $recruitmentPrizes = getRecruitmentPrizes();
 <body>
     <h1>Chidon Missing Items Shipping Report</h1>
     <?php
-    echo "<pre>"; print_r($itemsBySchool); echo "</pre>";
     foreach ($itemsBySchool as $school_id => $schoolItems) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
-        $info = extractInfo($schoolItems);
-        echo "<pre>"; print_r($info); echo "</pre>";
+        $info = getItemSummary($schoolItems);
         ?>
         <table>
             <tr>
@@ -53,6 +61,30 @@ $recruitmentPrizes = getRecruitmentPrizes();
             <?php
             foreach ($info as $desc => $more) {
                 foreach ($more as $item => $total) {
+                    switch ($desc) {
+                        case 'recruitment_prize':
+                            $item = $recruitmentPrizesById[$item]['prize'];
+                            break;
+                        case 'surprise_gift':
+                            $item = "Surprise Gift: Chavat Book";
+                            break;
+                        case 'chidon_gift':
+                            $item = "Chidon Gift";
+                            break;
+                        case 'chidon_prize':
+                            $prize = $chidonPrizes[$item];
+                            $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
+                            break;
+                        case 'celeb_item':
+                            $celeb_item = getCelebItem($item);
+                            if ($celeb_item['name'] == 'sweater') $desc = ucwords($celeb_item['type'] . " " . $celeb_item['name'] . " " . $celeb_item['size']);
+                            else $desc = $celeb_item['name'];
+                            $item = $desc;
+                            break;
+                        case 'rebbe_pic_5781':
+                            $item = 'Rebbe Picture 5781';
+                            break;
+                    }
                     echo "<tr><td>" . $desc . "</td><td>" . $item . "</td><td>" . $total . "</td></tr>";
                 }
             }

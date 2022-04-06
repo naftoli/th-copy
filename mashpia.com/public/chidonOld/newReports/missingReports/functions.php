@@ -46,6 +46,18 @@ function getRecruitmentPrizes() {
     return $prizes;
 }
 
+function getRecruitmentPrizesById() {
+    global $year;
+
+    $prizes = [];
+    $sql = "select * from chidon_credit_prizes where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['chidon_credit_prize_id']] = $row;
+    }
+    return $prizes;
+}
+
 function getRecruitments() {
     global $year;
 
@@ -337,7 +349,7 @@ function getItemsBySchool($items, $users) {
     return $sorted;
 }
 
-function extractInfo($schoolItems) {
+function getItemSummary($schoolItems) {
     $info = [];
     foreach ($schoolItems as $desc => $details) {
         foreach ($details as $value) {
@@ -346,4 +358,16 @@ function extractInfo($schoolItems) {
         }
     }
     return $info;
+}
+
+function getChidonPrizes() {
+    global $year;
+
+    $prizes = [];
+    $sql = "select * from chidon_prizes where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['prize_id']] = $row;
+    }
+    return $prizes;
 }
