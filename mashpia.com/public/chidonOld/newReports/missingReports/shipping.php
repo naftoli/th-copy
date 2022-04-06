@@ -67,8 +67,7 @@ $itemTypes = [
                 }
             }
             ?>
-        </table>
-        <br /><br />
+        </table><br />
         <h3>Details</h3>
         <table>
             <tr>
@@ -91,6 +90,7 @@ $itemTypes = [
 //            }
             ?>
         </table>
+        <br />
         <div style="page-break-after: always"></div>
         <?php
     }
