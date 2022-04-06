@@ -416,7 +416,7 @@ function getItemDetails($school_id) {
         if ($school_id != $user['school_id']) continue;
         foreach ($details as $item) {
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-            $details[$grade][$user_id][] = getItemDesc($item->value, $item->description);
+            $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc);
         }
     }
     return $details;
