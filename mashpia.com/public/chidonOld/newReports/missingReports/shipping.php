@@ -43,6 +43,11 @@ $itemTypes = [
             padding: 10px;
             border-bottom: 1px solid grey;
         }
+        @media print {
+            h1 {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -68,7 +73,9 @@ $itemTypes = [
                 }
             }
             ?>
-        </table><br />
+        </table>
+        <div style="page-break-after: always"></div>
+        <?php echo "<h2>" . $schools[$school_id] . "</h2>"; ?>
         <h3>Details</h3>
         <table>
             <tr>
