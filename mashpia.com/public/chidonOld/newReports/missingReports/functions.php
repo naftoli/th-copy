@@ -286,6 +286,9 @@ function parseItem($item, $user) {
             if ($celeb_item['name'] == 'sweater') $desc = ucwords($celeb_item['type'] . " " . $celeb_item['name'] . " " . $celeb_item['size']);
             else $desc = $celeb_item['name'];
             break;
+        case 'rebbe_pic_5781':
+            $desc = "Rebbe Picture 5781";
+            break;
         case 'comments':
             $desc = "Comment: " . $item->value;
             break;

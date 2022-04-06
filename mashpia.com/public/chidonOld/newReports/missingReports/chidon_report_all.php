@@ -26,6 +26,12 @@ $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
 $awardNames = ['Certificate', 'Plaque', 'Plaque and Medal', 'Plaque, Medal and Glass Trophy'];
 
+$lastYrPrize = [7754682,7754010,7752096,7763443,7758861,7748948,7753225,7748737,7752130,7753071,7746984,7754697,7753730,
+7748773,7755768,7749743,7764867,7760035,7764916,7756308,7756824,7749838,7752995,7750084,7759623,7754585,7760545,7756413,
+7760809,7749068,7756462,7757183,7758181,7758708,7758056,7760921,7764289,7756164,7753347,7772673,7761591,7753094,7749826,
+7766087,7753789,7772982,7754181,7742515,7753093,7772511,7753435,7746921,7755492,7755493,7755624,7750813,7775611,7744977,
+7747817,7758009,7758025,7770747,7752534,7749170,7749211,7760401,7759977,7756213];
+
 function isMissing($missing, $desc, $value = '') {
     if (empty($missing)) return false;
     foreach ($missing as $item) {
@@ -66,7 +72,7 @@ function isMissing($missing, $desc, $value = '') {
 
                     if (! checked) {
                         if (! missing[user_id]) missing[user_id] = []
-                        missing[user_id].push({ desc, value })
+                        if (! ['surprise_gift_5782', 'glass trophy'].includes(desc)) missing[user_id].push({ desc, value })
                     } else {
                         // remove if in missing array
                         if (missing[user_id].length) {
@@ -122,6 +128,7 @@ function isMissing($missing, $desc, $value = '') {
                     $chidon = false;
                     $surprise = false;
                     $recruitment = false;
+                    $rebbePic = false;
 
                     // check if child in chidon
                     if (isset($chidonUsers[$user['user_id']])) {
@@ -136,7 +143,10 @@ function isMissing($missing, $desc, $value = '') {
                     if (isset($recruitments[$user['user_id']])) $recruitment = $recruitments[$user['user_id']];
                     else if (isset($recruitments[$user['user_serial']])) $recruitment = $recruitments[$user['user_serial']];
 
-                    if ($chidon || $surprise || $recruitment) {
+                    // check last yrs rebbe picture prize
+                    if (in_array($user['user_serial'], $lastYrPrize)) $rebbePic = true;
+
+                    if ($chidon || $surprise || $recruitment || $rebbePic) {
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
                         $name = $user['first'] . ' ' . $user['last'];
                         $school = $schools[$school_id];
@@ -171,7 +181,14 @@ function isMissing($missing, $desc, $value = '') {
                         if ($surprise) {
                             echo "<br /><input type='checkbox' name='surprise_gift' id='surprise_gift'";
                             if (! isMissing($missing, 'surprise_gift')) echo " checked";
-                            echo " /> Surprise Gift: Chavat Book<br />";
+                            echo " /> Surprise Gift 5781: Chavat Book<br />";
+                            if ($chidon) echo "<input type='checkbox' name='surprise_gift_5782' id='surprise_gift_5782' />
+                                    Surprise Gift 5782<br />";
+                        }
+
+                        if ($rebbePic) {
+                            echo "<br /><input type='checkbox' name='rebbe_pic_5781' id='rebbe_pic_5781' checked /> 
+                                Rebbe Picture 5781<br />";
                         }
 
                         if ($chidon) {
@@ -202,7 +219,7 @@ function isMissing($missing, $desc, $value = '') {
                                 for ($a = 0; $a <= $key; $a++) {
                                     $actualAward = $awardDesc[$a];
                                     echo "<input type='checkbox' name='award' id='award:{$actualAward}'";
-                                    if (! isMissing($missing, 'award', $actualAward)) echo " checked";
+                                    if ((!isMissing($missing, 'award', $actualAward)) && $actualAward != 'glass trophy') echo " checked";
                                     echo " /> $actualAward<br />";
                                 }
                             }
