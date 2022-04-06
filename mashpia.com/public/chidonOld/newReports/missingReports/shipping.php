@@ -69,7 +69,11 @@ $itemTypes = [
                             $item = "Surprise Gift: Chavat Book";
                             break;
                         case 'chidon_gift':
-                            $item = "Chidon Gift";
+                            if (strpos($item, 'F') !== false) $item = 'Chidon Necklace';
+                            else {
+                                $details = explode('-', $item);
+                                $item = 'Yarmulka Size ' . $details[1];
+                            }
                             break;
                         case 'chidon_prize':
                             $prize = $chidonPrizes[$item];

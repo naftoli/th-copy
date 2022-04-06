@@ -193,7 +193,7 @@ function isMissing($missing, $desc, $value = '') {
 
                         if ($chidon) {
                             $user['yarmulka'] = $chidonInfo['yarmulka'];
-                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift'";
+                            echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift:{$user['gender']}-{$user['yarmulka']}'";
                             if (! isMissing($missing, 'chidon_gift')) echo " checked";
                             echo " /> Gift: " . getGift($user) . "<br />";
                             // prizes
