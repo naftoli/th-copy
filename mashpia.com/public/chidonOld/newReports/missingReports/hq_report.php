@@ -23,6 +23,13 @@ $recruitmentPrizes = getRecruitmentPrizes();
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Chidon Missing Items Report</title>
     <link href="../../../admin_styles.css" rel="stylesheet" type="text/css">
+    <style>
+        tr, th, td {
+            font-size: 14px;
+            padding: 10px;
+            border-bottom: 1px solid grey;
+        }
+    </style>
 </head>
 <body>
     <?php include('../../../admin_header.php'); ?>
