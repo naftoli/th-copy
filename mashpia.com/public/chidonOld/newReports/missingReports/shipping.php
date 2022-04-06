@@ -61,34 +61,7 @@ $itemTypes = [
             <?php
             foreach ($info as $desc => $more) {
                 foreach ($more as $item => $total) {
-                    switch ($desc) {
-                        case 'recruitment_prize':
-                            $item = $recruitmentPrizesById[$item]['prize'];
-                            break;
-                        case 'surprise_gift':
-                            $item = "Surprise Gift: Chavat Book";
-                            break;
-                        case 'chidon_gift':
-                            if (strpos($item, 'F') !== false) $item = 'Chidon Necklace';
-                            else {
-                                $details = explode('-', $item);
-                                $item = 'Yarmulka Size ' . $details[1];
-                            }
-                            break;
-                        case 'chidon_prize':
-                            $prize = $chidonPrizes[$item];
-                            $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
-                            break;
-                        case 'celeb_item':
-                            $celeb_item = getCelebItem($item);
-                            if ($celeb_item['name'] == 'sweater') $desc = ucwords($celeb_item['type'] . " " . $celeb_item['name'] . " " . $celeb_item['size']);
-                            else $desc = $celeb_item['name'];
-                            $item = $desc;
-                            break;
-                        case 'rebbe_pic_5781':
-                            $item = 'Rebbe Picture 5781';
-                            break;
-                    }
+                    $item = getItemDesc($item, $desc);
                     echo "<tr><td>" . $desc . "</td><td>" . $item . "</td><td>" . $total . "</td></tr>";
                 }
             }
