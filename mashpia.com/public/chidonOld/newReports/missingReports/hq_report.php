@@ -50,6 +50,7 @@ $recruitmentPrizes = getRecruitmentPrizes();
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $schools[$user['school_id']] . "</td><td>" . $grade .
                 "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>";
             foreach ($items[$id] as $item) {
+                $item = json_decode($item);
                 echo parseItem($item, $user) . "<br />";
             }
             echo "</td></tr>";
