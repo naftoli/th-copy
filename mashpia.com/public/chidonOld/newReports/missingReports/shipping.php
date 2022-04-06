@@ -51,7 +51,7 @@ $itemTypes = [
     foreach ($itemsBySchool as $school_id => $schoolItems) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         $info = getItemSummary($schoolItems);
-        $details = getItemDetails();
+//        $details = getItemDetails();
         ?>
         <table>
             <tr>
