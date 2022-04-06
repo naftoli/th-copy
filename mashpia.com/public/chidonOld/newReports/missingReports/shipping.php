@@ -51,6 +51,7 @@ $itemTypes = [
     foreach ($itemsBySchool as $school_id => $schoolItems) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         $info = getItemSummary($schoolItems);
+        $details = getItemDetails();
         ?>
         <table>
             <tr>
@@ -63,6 +64,29 @@ $itemTypes = [
                 foreach ($more as $item => $total) {
                     $item = getItemDesc($item, $desc);
                     echo "<tr><td>" . $desc . "</td><td>" . $item . "</td><td>" . $total . "</td></tr>";
+                }
+            }
+            ?>
+        </table>
+        <br /><br />
+        <h3>Details</h3>
+        <table>
+            <tr>
+                <th>User Serial</th>
+                <th>Grade</th>
+                <th>Student</th>
+                <th>Item(s)</th>
+            </tr>
+            <?php
+            foreach ($details as $grade => $more) {
+                foreach ($more as $user_id => $other) {
+                    $user = $users[$user_id];
+                    echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $grade . "</td><td>" .
+                        ($user['first'] . ' ' . $user['last']) . "</td><td>";
+                    foreach ($other as $item) {
+                        echo $item . "<br />";
+                    }
+                    echo "</td></tr>";
                 }
             }
             ?>

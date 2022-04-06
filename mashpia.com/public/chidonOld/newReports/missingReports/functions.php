@@ -102,6 +102,17 @@ function getPrizes() {
     }
     return $prizes;
 }
+function getChidonPrizes() {
+    global $year;
+
+    $prizes = [];
+    $sql = "select * from chidon_prizes where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['prize_id']] = $row;
+    }
+    return $prizes;
+}
 
 function getGift($user) {
     $gift = '';
@@ -370,7 +381,9 @@ function getCelebItem($id) {
     return $item;
 }
 
-function getItemsBySchool($items, $users) {
+function getItemsBySchool() {
+    global $items, $users;
+
     $sorted = [];
     foreach ($items as $user_id => $details) {
         $user = $users[$user_id];
@@ -394,14 +407,17 @@ function getItemSummary($schoolItems) {
     return $info;
 }
 
-function getChidonPrizes() {
-    global $year;
+function getItemDetails($school_id) {
+    global $items, $users;
 
-    $prizes = [];
-    $sql = "select * from chidon_prizes where year = " . $year;
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $prizes[$row['prize_id']] = $row;
+    $details = [];
+    foreach ($items as $user_id => $details) {
+        $user = $users[$user_id];
+        if ($school_id != $user['school_id']) continue;
+        foreach ($details as $item) {
+            $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
+            $details[$grade][$user_id][] = getItemDesc($item->value, $item->description);
+        }
     }
-    return $prizes;
+
 }
