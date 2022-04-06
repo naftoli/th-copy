@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
+ini_set('max_execution_time', 300);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . "/header.php";
@@ -58,7 +59,6 @@ function updateSummary($campaign_id, $user_id) {
 }
 
 $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all"));
-echo "<pre>"; print_r($info); echo "</pre>";
 foreach ($info as $obj) {
     updateLines($obj);
 }
