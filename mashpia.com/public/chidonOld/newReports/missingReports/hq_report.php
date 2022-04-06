@@ -30,11 +30,6 @@ $recruitmentPrizes = getRecruitmentPrizes();
             border-bottom: 1px solid grey;
         }
     </style>
-    <script>
-        let items = <?= $items ?>;
-        items = JSON.parse(items)
-        console.log(items)
-    </script>
 </head>
 <body>
     <?php include('../../../admin_header.php'); ?>
