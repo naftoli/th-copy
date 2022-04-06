@@ -229,6 +229,7 @@ function getAllMissingItems() {
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         // make sure to encode problematic characters like & so that json_decode works properly
+        echo htmlspecialchars($row['items'], ENT_NOQUOTES);
         $items[$row['user_id']] = json_decode(htmlspecialchars($row['items'], ENT_NOQUOTES));
     }
     return $items;
