@@ -230,6 +230,7 @@ function getAllMissingItems() {
     while ($row = mysql_fetch_assoc($result)) {
         $items[$row['user_id']] = json_decode($row['items']);
     }
+    echo "<pre>"; print_r($items); echo "</pre>";
     return $items;
 }
 
