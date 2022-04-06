@@ -323,3 +323,16 @@ function getCelebItem($id) {
     ];
     return $item;
 }
+
+function getItemsBySchool($items, $users) {
+    $sorted = [];
+    foreach ($items as $user_id => $details) {
+        $user = $users[$user_id];
+        $school_id = $user['school_id'];
+        foreach ($details as $item) {
+            if ($item->desc == 'comments') continue; // not showing it on packing list
+            $sorted[$school_id][$item->desc][] = $item->value;
+        }
+    }
+    return $sorted;
+}
