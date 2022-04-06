@@ -52,7 +52,7 @@ $itemTypes = [
         echo "<h2>" . $schools[$school_id] . "</h2>";
         echo "<h3>Summary</h3>";
         $info = getItemSummary($schoolItems);
-//        $details = getItemDetails();
+        $details = getItemDetails($school_id);
         ?>
         <table>
             <tr>
