@@ -44,11 +44,12 @@ $recruitmentPrizes = getRecruitmentPrizes();
         </tr>
         <?php
         foreach ($users as $id => $user) {
+            echo "User ID: " . $id . "<br />";
+            echo "<pre>"; print_r($items); echo "</pre>"; exit;
             $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $schools[$user['school_id']] . "</td><td>" . $grade .
                 "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>";
             foreach ($items[$id] as $item) {
-                print_r($item);
                 echo parseItem($item, $user) . "<br />";
             }
             echo "</td></tr>";
