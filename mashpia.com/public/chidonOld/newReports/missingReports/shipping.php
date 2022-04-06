@@ -78,17 +78,17 @@ $itemTypes = [
                 <th>Item(s)</th>
             </tr>
             <?php
-            foreach ($details as $grade => $more) {
-                foreach ($more as $user_id => $other) {
-                    $user = $users[$user_id];
-                    echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $grade . "</td><td>" .
-                        ($user['first'] . ' ' . $user['last']) . "</td><td>";
-                    foreach ($other as $item) {
-                        echo $item . "<br />";
-                    }
-                    echo "</td></tr>";
-                }
-            }
+//            foreach ($details as $grade => $more) {
+//                foreach ($more as $user_id => $other) {
+//                    $user = $users[$user_id];
+//                    echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $grade . "</td><td>" .
+//                        ($user['first'] . ' ' . $user['last']) . "</td><td>";
+//                    foreach ($other as $item) {
+//                        echo $item . "<br />";
+//                    }
+//                    echo "</td></tr>";
+//                }
+//            }
             ?>
         </table>
         <div style="page-break-after: always"></div>
