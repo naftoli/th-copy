@@ -164,8 +164,8 @@ function isMissing($missing, $desc, $value = '') {
                                     if ($user['gender'] == 'M') echo " Navy";
                                     else if ($user['gender'] == 'F') echo "Burgundy";
                                 }
-                                echo "<br />";
                             }
+                            echo "<br />";
                         }
 
                         if ($surprise) {
