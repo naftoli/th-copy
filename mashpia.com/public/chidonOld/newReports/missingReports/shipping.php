@@ -40,7 +40,9 @@ $recruitmentPrizes = getRecruitmentPrizes();
     <?php
     echo "<pre>"; print_r($itemsBySchool); echo "</pre>";
     foreach ($itemsBySchool as $school_id => $more) {
-
+        echo "<h2>" . $schools[$school_id] . "</h2>";
+        $itemsPerSchool = array_count_values($more);
+        echo "<pre>"; print_r($itemsPerSchool); echo "</pre>";
     }
     ?>
 </body>
