@@ -419,5 +419,6 @@ function getItemDetails($school_id) {
             $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc);
         }
     }
+    echo "<pre>"; print_r($details); echo "</pre>";
     return $details;
 }
