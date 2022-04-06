@@ -39,10 +39,16 @@ $recruitmentPrizes = getRecruitmentPrizes();
     <h1>Chidon Missing Items Shipping Report</h1>
     <?php
     echo "<pre>"; print_r($itemsBySchool); echo "</pre>";
-    foreach ($itemsBySchool as $school_id => $more) {
+    foreach ($itemsBySchool as $school_id => $item) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
-        $itemsPerSchool = array_count_values($more);
-        echo "<pre>"; print_r($itemsPerSchool); echo "</pre>";
+        $info = [];
+        foreach ($item as $desc => $details) {
+            foreach ($details as $value) {
+                if (isset($info[$desc][$value])) $info[$desc][$value]++;
+                else $info[$desc][$value] = 1;
+            }
+        }
+        echo "<pre>"; print_r($info); echo "</pre>";
     }
     ?>
 </body>
