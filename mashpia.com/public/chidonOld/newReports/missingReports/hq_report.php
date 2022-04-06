@@ -17,6 +17,8 @@ $items = getAllMissingItems();
 $users = getMissingUsers($items);
 $recruitmentPrizes = getRecruitmentPrizes();
 echo "<pre>"; print_r($items); echo "</pre>";
+echo json_last_error_msg(); // Print out the error if any
+die(); // halt the script
 ?>
 <!DOCTYPE html>
 <html>
