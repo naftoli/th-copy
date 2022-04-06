@@ -419,5 +419,5 @@ function getItemDetails($school_id) {
             $details[$grade][$user_id][] = getItemDesc($item->value, $item->description);
         }
     }
-
+    return $details;
 }
