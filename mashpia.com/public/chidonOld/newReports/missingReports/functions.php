@@ -228,7 +228,7 @@ function getAllMissingItems() {
     $sql = "select * from chidon_missing_items where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $items[$row['user_id']] = json_decode($row['items']);
+        $items[$row['user_id']] = $row['items'];
     }
     echo "<pre>"; print_r($items); echo "</pre>";
     return $items;
