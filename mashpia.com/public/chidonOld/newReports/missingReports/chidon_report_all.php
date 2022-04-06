@@ -216,11 +216,18 @@ function isMissing($missing, $desc, $value = '') {
                             if (isset($awards[$user['user_id']])) {
                                 echo "<br />Awards:<br />";
                                 $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
-                                for ($a = 0; $a <= $key; $a++) {
-                                    $actualAward = $awardDesc[$a];
-                                    echo "<input type='checkbox' name='award' id='award:{$actualAward}'";
-                                    if ((!isMissing($missing, 'award', $actualAward)) && $actualAward != 'glass trophy') echo " checked";
-                                    echo " /> $actualAward<br />";
+                                $award = $awardDesc[$key];
+                                if ($award == 'certificate') {
+                                    echo "<input type='checkbox' name='award' id='award:{$award}'";
+                                    if (! isMissing($missing, 'award', $award)) echo " checked";
+                                    echo " /> $award<br />";
+                                } else {
+                                    for ($a = 1; $a <= $key; $a++) {
+                                        $award = $awardDesc[$a];
+                                        echo "<input type='checkbox' name='award' id='award:{$award}'";
+                                        if ((!isMissing($missing, 'award', $award)) && $award != 'glass trophy') echo " checked";
+                                        echo " /> $award<br />";
+                                    }
                                 }
                             }
 
