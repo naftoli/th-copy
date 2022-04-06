@@ -217,7 +217,9 @@ function getMissingItems($user_id) {
     $result = mysql_query($sql);
     if (mysql_num_rows($result) > 0) {
         $row = mysql_fetch_assoc($result);
-        return json_decode($row['items']);
+        // make sure there's no characters that can trip up json_decode
+        $json = preg_replace('/[[:cntrl:]]/', '', $row['items']);
+        return json_decode($json);
     }
     return [];
 }
@@ -228,6 +230,7 @@ function getAllMissingItems() {
     $sql = "select * from chidon_missing_items where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        // make sure there's no characters that can trip up json_decode
         $json = preg_replace('/[[:cntrl:]]/', '', $row['items']);
         $items[$row['user_id']] = json_decode($json);
     }
