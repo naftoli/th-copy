@@ -411,14 +411,13 @@ function getItemDetails($school_id) {
     global $items, $users;
 
     $details = [];
-    foreach ($items as $user_id => $details) {
+    foreach ($items as $user_id => $more) {
         $user = $users[$user_id];
         if ($school_id != $user['school_id']) continue;
-        foreach ($details as $item) {
+        foreach ($more as $item) {
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
             $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc);
         }
     }
-    echo "<pre>"; print_r($details); echo "</pre>";
     return $details;
 }
