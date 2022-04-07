@@ -381,7 +381,7 @@ function getCelebItem($id) {
 }
 
 function getItemsBySchool() {
-    global $items, $users;
+    global $year, $items, $users;
 
     $sorted = [];
     foreach ($items as $user_id => $details) {
@@ -389,10 +389,37 @@ function getItemsBySchool() {
         $school_id = $user['school_id'];
         foreach ($details as $item) {
             if ($item->desc == 'comments') continue; // not showing it on packing list
+            // only show celeb items being shipped to school
+            if ($item->desc == 'celeb_item') {
+                $id = $item->value;
+                $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
+                $result = mysql_query($sql);
+                if (mysql_num_rows($result) > 0) continue;
+            }
             $sorted[$school_id][$item->desc][] = $item->value;
         }
     }
     return $sorted;
+}
+
+function getCelebItemsForParents() {
+    global $items;
+
+    $parentItems = [];
+    foreach ($items as $details) {
+        foreach ($details as $item) {
+            if ($item->desc == 'celeb_item') {
+                $sql = "select * from purchase_addresses pa 
+                        join extra_purchases ep using (purchase_id) 
+                        join admins a using (admin_id) 
+                        where purchase_id = " . $item->value;
+                $result = mysql_query($sql);
+                $row = mysql_fetch_assoc($result);
+                $parentItems[$row['admin_id']][] = $row;
+            }
+        }
+    }
+    return $parentItems;
 }
 
 function getItemSummary($schoolItems) {
