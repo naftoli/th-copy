@@ -19,7 +19,6 @@ $itemsBySchool = getItemsBySchool();
 $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();
 $userPrizes = getPrizes();
-echo "<pre>"; print_r($userPrizes); echo "</pre>";
 $parentItems = getCelebItemsForParents();
 
 $itemTypes = [
