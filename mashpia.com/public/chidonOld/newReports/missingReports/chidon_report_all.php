@@ -148,6 +148,7 @@ function isMissing($missing, $desc, $value = '') {
 
                     if ($chidon || $surprise || $recruitment || $rebbePic) {
                         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
+                        if ($school_id == 612) $grade = 9;
                         $name = $user['first'] . ' ' . $user['last'];
                         $school = $schools[$school_id];
                         $missing = getMissingItems($user['user_id']);
