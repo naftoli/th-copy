@@ -204,7 +204,7 @@ foreach ($users as $school_id => $more) {
                 if ($chidon) {
                     $user['yarmulka'] = $chidonInfo['yarmulka'];
                     echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift:{$user['gender']}-{$user['yarmulka']}'";
-                    if (! isMissing($missing, 'chidon_gift')) echo " checked";
+                    if (! isMissing($missing, 'chidon_gift', ($user['gender'] . '-' . $user['yarmulka']))) echo " checked";
                     echo " /> Gift: " . getGift($user) . "<br />";
                     // prizes
                     if ($chidonInfo['highest_track'] != 'yesod') {
