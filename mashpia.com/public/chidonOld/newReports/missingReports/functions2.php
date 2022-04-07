@@ -455,11 +455,13 @@ function getHeName($prize_id, $user_id) {
     global $userPrizes;
 
     $name = '';
-    foreach ($userPrizes[$user_id] as $prize) {
-        if ($prize['prize_id'] == $prize_id) {
-            if (! empty($prize['he_name'])) {
-                $name = $prize['he_name'];
-                break;
+    foreach ($userPrizes[$user_id] as $prizes) {
+        foreach ($prizes as $prize) {
+            if ($prize['prize_id'] == $prize_id) {
+                if (! empty($prize['he_name'])) {
+                    $name = $prize['he_name'];
+                    break;
+                }
             }
         }
     }
