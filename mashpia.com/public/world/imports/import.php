@@ -18,7 +18,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 function createUpdates($obj) {
-    global $year, $campaigns;
+    global $campaigns;
 
     $user_id = $obj->soldier_pk;
     $mishna = $obj->LINES_mishna;
@@ -84,12 +84,11 @@ if (isset($_GET['school'])) {
         $qrys = createUpdates($obj);
         foreach ($qrys as $qry)  $allQrys[] = $qry;
     }
-    echo "<pre>"; print_r($allQrys); echo "</pre>";
 
     $success = true;
     mysql_query('set autocommit=0');
     mysql_query('begin');
-    foreach ($qrys as $qry) {
+    foreach ($allQrys as $qry) {
         if (!mysql_query($qry)) {
             $success = false;
             break;
