@@ -11,16 +11,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
-$schools = $as->getSchools();
-
-$school_id = null;
-foreach ( $schools as $id => $school ) {
-    $school_id = $id;
-    break;
-}
-
 require $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php';
 require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
@@ -82,10 +72,10 @@ function updateUsersSummary() {
     }
 }
 
-if ($school_id) {
+if (isset($_GET['school'])) {
     $allQrys = [];
     $user_ids = [];
-    $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all?school=" . $school_id));
+    $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all?school=" . $_GET['school']));
     foreach ($info as $obj) {
         $user_ids[] = $obj->soldier_pk;
         $qrys = createUpdates($obj);
