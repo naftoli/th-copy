@@ -75,7 +75,7 @@ function updateUsersSummary() {
 if (isset($_GET['school'])) {
     $allQrys = [];
     $user_ids = [];
-    $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all?school=" . $_GET['school']));
+    $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all&school=" . $_GET['school']));
     foreach ($info as $obj) {
         $user_ids[] = $obj->soldier_pk;
         $qrys = createUpdates($obj);

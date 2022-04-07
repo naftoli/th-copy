@@ -98,6 +98,12 @@ try {
     echo $e->getMessage();
 }
 
+// get school number for link below
+$sql = "select school_number from schools where school_id = " . $school_id;
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$school_num = $row['school_number'];
+
 include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
 ?>
 <html>
@@ -125,8 +131,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
         $("#import").click( function(e) {
             e.preventDefault()
             $(this).attr('disabled', true)
-            let school_id = <?= $school_id ?>;
-            $.get('../world/imports/import.php?school=' + school_id, function(success) {
+            let school = <?= $school_num ?>;
+            $.get('../world/imports/import.php?school=' + school, function(success) {
                 if (parseInt(success)) alert('Successfully imported.')
                 else {
                     alert('Error importing.')
