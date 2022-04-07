@@ -5,7 +5,7 @@ require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
-$missing = $_POST['missing'];
+$missing = json_decode($_POST['missing']);
 foreach ($missing as $user_id => $items) {
     if (empty($items)) $sql = "delete from chidon_missing_items where user_id = " . $user_id . " and year = " . $year;
     else $sql = "insert into chidon_missing_items set user_id = " . mysql_real_escape_string($user_id) . ", items = '" .
