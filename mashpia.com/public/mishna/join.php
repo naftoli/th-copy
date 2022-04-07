@@ -104,11 +104,32 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
     <head>
         <link href="../admin_styles.css" rel="stylesheet" type="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style>
+            button {
+                padding: 6px;
+            }
+        </style>
     </head>
     <body>
         <h1>Chevras Mishnayos</h1>
         <div>
             <a href="<?=$file?>">download file</a>
         </div>
+        <div>
+            Use the following button to import all of your children's lines learned for both mishna and tanya.<br />
+            <br />
+            <button id="import">Import Lines From chabadkid.com</button>
+        </div>
     </body>
+    <script>
+        $("#import").click( function(e) {
+            e.preventDefault()
+            $(this).attr('disabled', true)
+            let school_id = <?= $school_id ?>;
+            $.get('../world/imports/import.php?school=' + school_id, function(success) {
+                if (parseInt(success)) alert('Successfully imported.')
+                else alert('Error importing.')
+            })
+        })
+    </script>
 </html>

@@ -15,8 +15,16 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php';
 require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
 
-function updateLines($obj) {
-    global $year;
+// get correct campaign id's
+$campaigns = [];
+$sql = 'select * from line_campaigns where year = ' . $year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $campaigns[strtolower($row['type'])] = $row['id'];
+}
+
+function createUpdates($obj) {
+    global $year, $campaigns;
 
     $user_id = $obj->soldier_pk;
     $mishna = $obj->LINES_mishna;
@@ -29,14 +37,7 @@ function updateLines($obj) {
     $school_id = $row['school_id'];
     $class_id = $row['class_id'];
 
-    // get correct campaign id's
-    $campaigns = [];
-    $sql = 'select * from line_campaigns where year = ' . $year;
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $campaigns[strtolower($row['type'])] = $row['id'];
-    }
-
+    $qrys = [];
     foreach ($campaigns as $type => $campaign_id) {
         if ($$type > 0) {
             $sql = "select * from lines_learned where user_id = " . $user_id . " and campaign_id = " . $campaign_id;
@@ -50,9 +51,11 @@ function updateLines($obj) {
                 $sql2 = "insert into lines_learned set user_id = " . $user_id . ", campaign_id = " . $campaign_id . ", 
                         lines_learned = " . $$type . ", school_id = " . $school_id . ", class_id = " . $class_id;
             }
-            echo $sql2 . "<br /><br />";
+            $qrys[] = $sql2;
         }
     }
+
+    return $qrys;
 }
 
 function updateSummary($campaign_id, $user_id) {
@@ -60,7 +63,42 @@ function updateSummary($campaign_id, $user_id) {
     $bps->updateSummary( $user_id );
 }
 
+function updateUsersSummary() {
+    global $user_ids, $campaigns;
+    foreach ($user_ids as $id) {
+        foreach ($campaigns as $campaign_id) {
+            updateSummary($campaign_id, $id);
+        }
+    }
+}
+
+$allQrys = [];
+$user_ids = [];
 $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all"));
 foreach ($info as $obj) {
-    updateLines($obj);
+    $user_ids[] = $obj->soldier_pk;
+    $qrys = createUpdates($obj);
+    array_push($allQrys, $qrys);
+}
+
+echo "<pre>"; print_r($allQrys); echo "</pre>";
+exit;
+$success = true;
+mysql_query('set autocommit=0');
+mysql_query('begin');
+foreach ($qrys as $qry) {
+   if (! mysql_query($qry)) {
+       $success = false;
+       break;
+   }
+}
+if ($success) {
+    mysql_query('commit');
+    mysql_query('set autocommit=1');
+    updateUsersSummary();
+    echo 1;
+} else {
+    mysql_query('rollback');
+    mysql_query('set autocommit=1');
+    echo 0;
 }
