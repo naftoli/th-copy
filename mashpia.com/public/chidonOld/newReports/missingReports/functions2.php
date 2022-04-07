@@ -323,7 +323,7 @@ function parseItem($item, $user) {
 }
 
 function getItemDesc($item, $desc, $user_id) {
-    global $recruitmentPrizesById, $chidonPrizes, $userPrizes;
+    global $recruitmentPrizesById, $chidonPrizes;
 
     switch ($desc) {
         case 'recruitment_prize':
@@ -341,14 +341,9 @@ function getItemDesc($item, $desc, $user_id) {
             break;
         case 'chidon_prize':
             $prize = $chidonPrizes[$item];
-//            foreach ($userPrizes[$user_id] as $prize) {
-//                if ($prize['prize_id'] == $item) {
-//                    $prizeInfo = $prize;
-//                    break;
-//                }
-//            }
+            $he_name = getHeName($item, $user_id);
             $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
-//            if ($prizeInfo) $item .= ' ' . $prizeInfo['he_name'];
+            if (!empty($he_name)) $item .= ' ' . $he_name;
             break;
         case 'celeb_item':
             $celeb_item = getCelebItem($item);
@@ -454,4 +449,19 @@ function getItemDetails($school_id) {
         }
     }
     return $details;
+}
+
+function getHeName($prize_id, $user_id) {
+    global $userPrizes;
+
+    $name = '';
+    foreach ($userPrizes[$user_id] as $prize) {
+        if ($prize['prize_id'] == $prize_id) {
+            if (! empty($prize['he_name'])) {
+                $name = $prize['he_name'];
+                break;
+            }
+        }
+    }
+    return $name;
 }
