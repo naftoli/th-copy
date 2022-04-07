@@ -18,7 +18,9 @@ $users = getMissingUsers($items);
 $itemsBySchool = getItemsBySchool();
 $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();
-$userPrizes = getPrizes();$parentItems = getCelebItemsForParents();
+$userPrizes = getPrizes();
+echo "<pre>"; print_r($userPrizes); echo "</pre>";
+$parentItems = getCelebItemsForParents();
 
 $itemTypes = [
     'recruitement_prize'    => 'Recruitment Prize',
