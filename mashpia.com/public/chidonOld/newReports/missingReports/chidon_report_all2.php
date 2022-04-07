@@ -123,6 +123,7 @@ function isMissing($missing, $desc, $value = '') {
                 if (! missing[user_id]) missing[user_id] = []
                 let items = allMissing[user_id]
                 for (let item of items) {
+                    console.log(item)
                     missing[user_id].push({ desc: item.desc, value: item.value })
                 }
             }
