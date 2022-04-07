@@ -85,10 +85,6 @@ if (isset($_GET['school'])) {
         foreach ($qrys as $qry)  $allQrys[] = $qry;
     }
 
-    echo "<pre>";
-    print_r($allQrys);
-    echo "</pre>";
-    exit;
     $success = true;
     mysql_query('set autocommit=0');
     mysql_query('begin');

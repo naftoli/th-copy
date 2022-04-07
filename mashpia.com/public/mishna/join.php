@@ -132,10 +132,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
             e.preventDefault()
             $(this).attr('disabled', true)
             let school = <?= $school_num ?>;
-            $.get('../world/imports/import.php?school=' + school, function(success) {
-                if (parseInt(success)) alert('Successfully imported.')
+            $.get('../world/imports/import.php?school=' + school, function(result) {
+                let res = JSON.parse(result)
+                if (res.success) alert('Successfully imported.')
                 else {
-                    alert('Error importing.')
+                    alert(res.error)
                     $(this).attr('disabled', false)
                 }
             })
