@@ -245,9 +245,9 @@ function isMissing($missing, $desc, $value = '') {
                                                 " " . $item['zip'] . " " . $item['country'];
                                         } else {
                                             // get school address
-                                            $address = $chidonInfo['school_address1'] . ' ' . $chidonInfo['school_city'] .
-                                                ', ' . $chidonInfo['school_state'] . ' ' . $chidonInfo['school_postal'] .
-                                                ' ' . $chidonInfo['school_country'];
+                                            $address = $chidonInfo['school_name'] . " " . $chidonInfo['school_address1'] . ' ' .
+                                                $chidonInfo['school_city'] . ', ' . $chidonInfo['school_state'] . ' ' .
+                                                $chidonInfo['school_postal'] . ' ' . $chidonInfo['school_country'];
                                         }
                                         echo " Shipped To: " . $address . "<br />";
                                     }
