@@ -47,7 +47,7 @@ function isMissing($missing, $desc, $value = '') {
             }
         }
     }
-    return !$found;
+    return $found;
 }
 ?>
 <!DOCTYPE html>
@@ -240,7 +240,7 @@ foreach ($users as $school_id => $more) {
                             $award = $awardDesc[$key];
                             if ($award == 'certificate') {
                                 echo "<input type='checkbox' name='award' id='award:{$award}'";
-                                if (!isMissing($missing, 'award', $award)) echo " checked";
+                                if (! isMissing($missing, 'award', $award)) echo " checked";
                                 echo " /> $award<br />";
                             } else {
                                 // dont show certificate so start from 1
