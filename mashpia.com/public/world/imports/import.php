@@ -84,6 +84,7 @@ if (isset($_GET['school'])) {
         $qrys = createUpdates($obj);
         foreach ($qrys as $qry)  $allQrys[] = $qry;
     }
+    echo "<pre>"; print_r($allQrys); echo "</pre>";
 
     $success = true;
     mysql_query('set autocommit=0');
