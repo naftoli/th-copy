@@ -128,7 +128,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
             let school_id = <?= $school_id ?>;
             $.get('../world/imports/import.php?school=' + school_id, function(success) {
                 if (parseInt(success)) alert('Successfully imported.')
-                else alert('Error importing.')
+                else {
+                    alert('Error importing.')
+                    $(this).attr('disabled', false)
+                }
             })
         })
     </script>

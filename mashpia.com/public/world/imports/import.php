@@ -11,6 +11,16 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+$schools = $as->getSchools();
+
+$school_id = null;
+foreach ( $schools as $id => $school ) {
+    $school_id = $id;
+    break;
+}
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php';
 require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
@@ -72,33 +82,39 @@ function updateUsersSummary() {
     }
 }
 
-$allQrys = [];
-$user_ids = [];
-$info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all"));
-foreach ($info as $obj) {
-    $user_ids[] = $obj->soldier_pk;
-    $qrys = createUpdates($obj);
-    array_push($allQrys, $qrys);
-}
+if ($school_id) {
+    $allQrys = [];
+    $user_ids = [];
+    $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all?school=" . $school_id));
+    foreach ($info as $obj) {
+        $user_ids[] = $obj->soldier_pk;
+        $qrys = createUpdates($obj);
+        array_push($allQrys, $qrys);
+    }
 
-echo "<pre>"; print_r($allQrys); echo "</pre>";
-exit;
-$success = true;
-mysql_query('set autocommit=0');
-mysql_query('begin');
-foreach ($qrys as $qry) {
-   if (! mysql_query($qry)) {
-       $success = false;
-       break;
-   }
-}
-if ($success) {
-    mysql_query('commit');
-    mysql_query('set autocommit=1');
-    updateUsersSummary();
-    echo 1;
+    echo "<pre>";
+    print_r($allQrys);
+    echo "</pre>";
+    exit;
+    $success = true;
+    mysql_query('set autocommit=0');
+    mysql_query('begin');
+    foreach ($qrys as $qry) {
+        if (!mysql_query($qry)) {
+            $success = false;
+            break;
+        }
+    }
+    if ($success) {
+        mysql_query('commit');
+        mysql_query('set autocommit=1');
+        updateUsersSummary();
+        echo 1;
+    } else {
+        mysql_query('rollback');
+        mysql_query('set autocommit=1');
+        echo 0;
+    }
 } else {
-    mysql_query('rollback');
-    mysql_query('set autocommit=1');
     echo 0;
 }
