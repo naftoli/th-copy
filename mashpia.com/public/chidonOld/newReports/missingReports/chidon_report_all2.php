@@ -47,7 +47,7 @@ function isMissing($missing, $desc, $value = '') {
             }
         }
     }
-    return $found;
+    return !$found;
 }
 ?>
 <!DOCTYPE html>
