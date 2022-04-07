@@ -344,9 +344,9 @@ function getItemDesc($item, $desc, $user_id = 0) {
             if ($user_id) {
                 $he_name = getHeName($item, $user_id);
                 $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
-                if (!empty($he_name)) $item .= ' ' . $he_name;
+                if (!empty($he_name)) $item .= ' - ' . $he_name;
             } else {
-                $item = $prize['prize_name'] . ' ' . $prize['size'] . ' - ' . $prize['color'];
+                $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
             }
             break;
         case 'celeb_item':
