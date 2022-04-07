@@ -21,6 +21,7 @@ $surpriseGifts = getSurpriseGifts();
 $prizes = getPrizes();
 $awards = getAwards();
 $celebItems = getCelebrationItems();
+$allMissingItems = getAllMissingItems();
 
 $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
@@ -62,8 +63,10 @@ function isMissing($missing, $desc, $value = '') {
         }
     </style>
     <script>
+        let missing = {}
+
         window.onload = e => {
-            var missing = {}
+            initMissing()
             $("input").click( function () {
                 let desc, value
                 let user_id = $(this).parent().attr('id')
@@ -113,6 +116,17 @@ function isMissing($missing, $desc, $value = '') {
                 })
             })
         }
+
+        function initMissing() {
+            let allMissing = <?= $allMissingItems ?>;
+            for (let user_id in allMissing) {
+                if (! missing[user_id]) missing[user_id] = []
+                let items = allMissing[user_id]
+                for (let item of items) {
+                    missing[user_id].push({ desc: item.desc, value: item.value })
+                }
+            }
+        }
     </script>
 </head>
 <body>
@@ -159,7 +173,7 @@ foreach ($users as $school_id => $more) {
                 if ($school_id == 612) $grade = 9;
                 $name = $user['first'] . ' ' . $user['last'];
                 $school = $schools[$school_id];
-                $missing = getMissingItems($user['user_id']);
+                $missing = $allMissingItems[$user['user_id']];
 
                 echo "<div class='user' id='{$user['user_id']}'>";
                 echo "<b>Name: " . $name . "</b><br />";
