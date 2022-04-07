@@ -1,12 +1,12 @@
 <?php
 function getUsers() {
-    global $schools, $admin_user;
+    global $schools;
 
     $info = [];
     $sql = "select * from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id ";
-    if ((!empty($schools)) && $admin_user != 'auth') $sql .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
+    if (! empty($schools)) $sql .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
     $sql .= " order by u.school_id, class_grade, class_sub, last, first";
 //    echo $sql . "<br />";
     $result = mysql_query($sql);
