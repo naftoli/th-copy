@@ -63,8 +63,8 @@ function isMissing($missing, $desc, $value = '') {
         }
     </style>
     <script>
-        let missing = {}
         window.onload = e => {
+            let missing = {}
             initMissing()
             $("input").click( function () {
                 let desc, value
@@ -117,15 +117,8 @@ function isMissing($missing, $desc, $value = '') {
         }
 
         function initMissing() {
-            let allMissing = <?= $allMissingItems ?>;
-            // for (let user_id in allMissing) {
-            //     if (! missing[user_id]) missing[user_id] = []
-            //     let items = allMissing[user_id]
-            //     for (let item of items) {
-            //         // console.log(item)
-            //         missing[user_id].push({ desc: item.desc, value: item.value })
-            //     }
-            // }
+            let allItems = JSON.parse(<?= $allMissingItems ?>);
+            console.log(allItems)
         }
     </script>
 </head>
