@@ -82,7 +82,7 @@ if (isset($_GET['school'])) {
     foreach ($info as $obj) {
         $user_ids[] = $obj->soldier_pk;
         $qrys = createUpdates($obj);
-        array_push($allQrys, $qrys);
+        foreach ($qrys as $qry)  $allQrys[] = $qry;
     }
 
     echo "<pre>";
