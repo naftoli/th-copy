@@ -155,6 +155,7 @@ foreach ($users as $school_id => $more) {
                 $name = $user['first'] . ' ' . $user['last'];
                 $school = $schools[$school_id];
                 $missing = getMissingItems($user['user_id']);
+                echo "<pre>"; print_r($missing); echo "</pre>"
 
                 echo "<div class='user' id='{$user['user_id']}'>";
                 echo "<b>Name: " . $name . "</b><br />";
