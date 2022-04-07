@@ -5,12 +5,6 @@ ini_set('max_execution_time', 300);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . "/header.php";
-
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
 require $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php';
 require $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
