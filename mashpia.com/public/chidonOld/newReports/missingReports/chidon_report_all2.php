@@ -85,7 +85,7 @@ function isMissing($missing, $desc, $value = '') {
                     if (! ['surprise_gift_5782', 'glass trophy'].includes(desc)) missing[user_id].push({ desc, value })
                 } else {
                     // remove if in missing array
-                    if (missing[user_id].length) {
+                    if (missing[user_id] && missing[user_id].length) {
                         for (let i in missing[user_id]) {
                             let item = missing[user_id][i]
                             if (item.desc === desc && item.value === value) missing[user_id].splice(i, 1)
