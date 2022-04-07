@@ -119,7 +119,6 @@ function isMissing($missing, $desc, $value = '') {
             $(".addToMissing").each( function() {
                 let desc, value
                 let user_id = $(this).parent().attr('id')
-                let checked = false;
                 let id = $(this).attr('id')
                 if (id.includes(':')) {
                     let info = id.split(':')
@@ -130,7 +129,7 @@ function isMissing($missing, $desc, $value = '') {
                     value = ''
                 }
                 if (! missing[user_id]) missing[user_id] = []
-                if (! ['surprise_gift_5782', 'glass trophy'].includes(desc)) missing[user_id].push({ desc, value })
+                missing[user_id].push({ desc, value })
             })
         }
     </script>
