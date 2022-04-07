@@ -120,6 +120,7 @@ $itemTypes = [
                     echo $desc . "<br />";
                 }
             }
+            echo "<br />";
         }
     }
     ?>
