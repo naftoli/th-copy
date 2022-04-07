@@ -172,7 +172,7 @@ function isMissing($missing, $desc, $value = '') {
                             for ($i = 1; $i <= $recruitment; $i++) {
                                 $prize = $recruitmentPrizes[$i];
                                 echo "<br /><input type='checkbox' name='recruitment_prize' id='recruitment_prize:{$prize['chidon_credit_prize_id']}'";
-                                if (!isMissing($missing, 'recruitment_prize', $prize['chidon_credit_prize_id'])) echo " checked";
+                                if (! isMissing($missing, 'recruitment_prize', $prize['chidon_credit_prize_id'])) echo " checked";
                                 echo " /> " . $prize['prize'];
                                 if ($i == 3) {
                                     if ($user['gender'] == 'M') echo " Navy";
