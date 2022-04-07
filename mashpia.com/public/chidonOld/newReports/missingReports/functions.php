@@ -177,8 +177,8 @@ function getAwards() {
         $key = array_search($highest_track, $tracks);
         if ($key !== false) {
             $score = 0;
-            // go down from key to find where the child is holding
-            for ($i = $key; $i > 0; $i--) {
+            // get marks
+            for ($i = 1; $i <= $key; $i++) {
                 $level = 'level_' . $i;
                 if ($row[$level]) {
                     $score += $row[$level];
