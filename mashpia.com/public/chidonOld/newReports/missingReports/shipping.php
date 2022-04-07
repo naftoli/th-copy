@@ -102,20 +102,20 @@ $itemTypes = [
         <br />
         <div style="page-break-after: always"></div>
         <?php
-        if (count($parentItems)) {
-            echo "<h2>Items That need to be Shipped to Parents</h2>";
-            foreach ($parentItems as $admin => $more) {
-                $info = $parentItems[$admin][0];
-                $address = $info['address'] . ' ' . $info['city'] . ', ' . $info['state'] . ' ' . $info['zip'] . ' ' . $info['country'];
-                echo $info['first'] . ' ' . $info['last'] . "<br />";
-                echo $address . "<br />";
-                foreach ($more as $item) {
-                    if ($item['item'] == 'celeb_box') {
-                        echo "Celebration Box<br />";
-                    } else {
-                        $desc = ucwords($item['type_of_sweater'] . ' Sweater ' . $item['size']);
-                        echo $desc . "<br />";
-                    }
+    }
+    if (count($parentItems)) {
+        echo "<h2>Items That need to be Shipped to Parents</h2>";
+        foreach ($parentItems as $admin => $more) {
+            $info = $parentItems[$admin][0];
+            $address = $info['address'] . ' ' . $info['city'] . ', ' . $info['state'] . ' ' . $info['zip'] . ' ' . $info['country'];
+            echo $info['first'] . ' ' . $info['last'] . "<br />";
+            echo $address . "<br />";
+            foreach ($more as $item) {
+                if ($item['item'] == 'celeb_box') {
+                    echo "Celebration Box<br />";
+                } else {
+                    $desc = ucwords($item['type_of_sweater'] . ' Sweater ' . $item['size']);
+                    echo $desc . "<br />";
                 }
             }
         }

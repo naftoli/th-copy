@@ -32,6 +32,9 @@ $lastYrPrize = [7754682,7754010,7752096,7763443,7758861,7748948,7753225,7748737,
 7766087,7753789,7772982,7754181,7742515,7753093,7772511,7753435,7746921,7755492,7755493,7755624,7750813,7775611,7744977,
 7747817,7758009,7758025,7770747,7752534,7749170,7749211,7760401,7759977,7756213];
 
+$menorah = 98; // menorah prize id
+$exceptions = [66, 112, 61, 269, 3, 265, 432, 55, 110, 180]; // only these schools should show menorah prize with a check
+
 function isMissing($missing, $desc, $value = '') {
     if (empty($missing)) return false;
     foreach ($missing as $item) {
@@ -209,7 +212,12 @@ function isMissing($missing, $desc, $value = '') {
                                     if ($pSize) $desc .= ' ' . $pSize;
                                     if ($prize['he_name']) $desc .= ' ' . $prize['he_name'];
                                     echo "<input type='checkbox' name='chidon_prize' id='chidon_prize:{$prize['prize_id']}'";
-                                    if (! isMissing($missing, 'chidon_prize', $prize['prize_id'])) echo " checked";
+                                    if (
+                                        ($prize['prize_id'] != $menorah && !isMissing($missing, 'chidon_prize', $prize['prize_id']))
+                                        ||
+                                        ($prize['prize_id'] == $menorah && in_array($user['school_id'], $exceptions) &&
+                                            !isMissing($missing, 'chidon_prize', $prize['prize_id']))
+                                    ) echo " checked";
                                     echo " /> " . $desc . "<br />";
                                 }
                             }
