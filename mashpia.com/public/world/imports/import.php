@@ -70,6 +70,15 @@ if (isset($_GET['school'])) {
     $allQrys = [];
     $user_ids = [];
     $info = json_decode(file_get_contents("https://chabadkid.com/getuser.php?mashpia=mashpia_mbp_all&school=" . $_GET['school']));
+
+    if (empty($info)) {
+        echo json_encode([
+            'success'   => 'false',
+            'error'     => 'There are no lines learned available from chabadkid.com'
+        ]);
+        exit;
+    }
+
     foreach ($info as $obj) {
         $user_ids[] = $obj->soldier_pk;
         $qrys = createUpdates($obj);
@@ -93,12 +102,20 @@ if (isset($_GET['school'])) {
         mysql_query('commit');
         mysql_query('set autocommit=1');
         updateUsersSummary();
-        echo 1;
+        echo json_encode([
+            'success'   => true
+        ]);
     } else {
         mysql_query('rollback');
         mysql_query('set autocommit=1');
-        echo 0;
+        echo json_encode([
+            'success'   => false,
+            'error'     => 'Error updating the database.'
+        ]);
     }
 } else {
-    echo 0;
+    echo json_encode([
+        'success'   => false,
+        'error'     => 'No school number was found.'
+    ]);
 }
