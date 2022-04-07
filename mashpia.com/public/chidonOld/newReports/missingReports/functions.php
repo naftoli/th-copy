@@ -322,8 +322,8 @@ function parseItem($item, $user) {
     return $desc;
 }
 
-function getItemDesc($item, $desc) {
-    global $recruitmentPrizesById, $chidonPrizes;
+function getItemDesc($item, $desc, $user_id) {
+    global $recruitmentPrizesById, $chidonPrizes, $userPrizes;
 
     switch ($desc) {
         case 'recruitment_prize':
@@ -341,7 +341,9 @@ function getItemDesc($item, $desc) {
             break;
         case 'chidon_prize':
             $prize = $chidonPrizes[$item];
+            $extra_info = $userPrizes[$user_id];
             $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
+            if ($extra_info['he_name']) $item .= ' - ' . $extra_info['he_name'];
             break;
         case 'celeb_item':
             $celeb_item = getCelebItem($item);
@@ -443,7 +445,7 @@ function getItemDetails($school_id) {
         foreach ($more as $item) {
             if ($item->desc == 'comments') continue;
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-            $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc);
+            $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc, $user_id);
         }
     }
     return $details;

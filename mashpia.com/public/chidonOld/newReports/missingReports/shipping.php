@@ -18,6 +18,7 @@ $users = getMissingUsers($items);
 $itemsBySchool = getItemsBySchool();
 $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();
+$userPrizes = getPrizes();
 $parentItems = getCelebItemsForParents();
 
 $itemTypes = [
