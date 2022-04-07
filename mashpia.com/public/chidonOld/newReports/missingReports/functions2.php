@@ -456,6 +456,7 @@ function getHeName($prize_id, $user_id) {
 
     $name = '';
     foreach ($userPrizes[$user_id] as $prizes) {
+        echo "<pre>"; print_r($prizes); echo "</pre>";
         foreach ($prizes as $prize) {
             if ($prize['prize_id'] == $prize_id) {
                 if (! empty($prize['he_name'])) {
