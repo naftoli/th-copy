@@ -322,7 +322,7 @@ function parseItem($item, $user) {
     return $desc;
 }
 
-function getItemDesc($item, $desc) {
+function getItemDesc($item, $desc, $user_id = 0) {
     global $recruitmentPrizesById, $chidonPrizes;
 
     switch ($desc) {
@@ -341,7 +341,13 @@ function getItemDesc($item, $desc) {
             break;
         case 'chidon_prize':
             $prize = $chidonPrizes[$item];
-            $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
+            if ($user_id) {
+                $he_name = getHeName($item, $user_id);
+                $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
+                if (!empty($he_name)) $item .= ' - ' . $he_name;
+            } else {
+                $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
+            }
             break;
         case 'celeb_item':
             $celeb_item = getCelebItem($item);
@@ -443,8 +449,23 @@ function getItemDetails($school_id) {
         foreach ($more as $item) {
             if ($item->desc == 'comments') continue;
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-            $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc);
+            $details[$grade][$user_id][] = getItemDesc($item->value, $item->desc, $user_id);
         }
     }
     return $details;
+}
+
+function getHeName($prize_id, $user_id) {
+    global $userPrizes;
+
+    $name = '';
+    foreach ($userPrizes[$user_id] as $prize) {
+        if ($prize['prize_id'] == $prize_id) {
+            if (! empty($prize['he_name'])) {
+                $name = $prize['he_name'];
+                break;
+            }
+        }
+    }
+    return $name;
 }
