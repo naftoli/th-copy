@@ -22,7 +22,6 @@ $prizes = getPrizes();
 $awards = getAwards();
 $celebItems = getCelebrationItems();
 $allMissingItems = getAllMissingItems();
-echo "<pre>"; print_r($allMissingItems); echo "</pre>";
 
 $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
@@ -119,14 +118,14 @@ function isMissing($missing, $desc, $value = '') {
 
         function initMissing() {
             let allMissing = <?= $allMissingItems ?>;
-            for (let user_id in allMissing) {
-                if (! missing[user_id]) missing[user_id] = []
-                let items = allMissing[user_id]
-                for (let item of items) {
-                    // console.log(item)
-                    missing[user_id].push({ desc: item.desc, value: item.value })
-                }
-            }
+            // for (let user_id in allMissing) {
+            //     if (! missing[user_id]) missing[user_id] = []
+            //     let items = allMissing[user_id]
+            //     for (let item of items) {
+            //         // console.log(item)
+            //         missing[user_id].push({ desc: item.desc, value: item.value })
+            //     }
+            // }
         }
     </script>
 </head>
