@@ -36,13 +36,18 @@ $menorah = 98; // menorah prize id
 $exceptions = [66, 112, 61, 269, 3, 265, 432, 55, 110, 180]; // only these schools should show menorah prize with a check
 
 function isMissing($missing, $desc, $value = '') {
-    if (empty($missing)) return false;
-    foreach ($missing as $item) {
-        // for comments, return comment
-        if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
-        if ($item->desc == $desc && $item->value == $value) return true;
+    $found = false;
+    if (! empty($missing)) {
+        foreach ($missing as $item) {
+            // for comments, return comment
+            if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
+            if ($item->desc == $desc && $item->value == $value) {
+                $found = true;
+                break;
+            }
+        }
     }
-    return false;
+    return $found;
 }
 ?>
 <!DOCTYPE html>
