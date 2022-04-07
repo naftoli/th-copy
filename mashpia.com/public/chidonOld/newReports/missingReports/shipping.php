@@ -108,9 +108,11 @@ $itemTypes = [
         foreach ($parentItems as $admin => $more) {
             $info = $parentItems[$admin][0];
             $address = $info['address'] . ' ' . $info['city'] . ', ' . $info['state'] . ' ' . $info['zip'] . ' ' . $info['country'];
-            echo $info['first'] . ' ' . $info['last'] . "<br />";
-            echo $address . "<br />";
+            echo "Admin ID: " . $admin . "<br />";
+            echo "Name: " . $info['first'] . ' ' . $info['last'] . "<br />";
+            echo "Address: " . $address . "<br />";
             foreach ($more as $item) {
+                echo "Item: ";
                 if ($item['item'] == 'celeb_box') {
                     echo "Celebration Box<br />";
                 } else {
