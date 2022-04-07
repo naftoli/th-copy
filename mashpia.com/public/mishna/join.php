@@ -135,10 +135,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
             $.get('../world/imports/import.php?school=' + school, function(result) {
                 let res = JSON.parse(result)
                 if (res.success) alert('Successfully imported.')
-                else {
-                    alert(res.error)
-                    $(this).attr('disabled', false)
-                }
+                else alert(res.error)
+                $(this).attr('disabled', false)
             })
         })
     </script>
