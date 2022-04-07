@@ -115,9 +115,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php';
         <div>
             <a href="<?=$file?>">download file</a>
         </div>
+        <br />
         <div>
             Use the following button to import all of your children's lines learned for both mishna and tanya.<br />
-            <br />
             <button id="import">Import Lines From chabadkid.com</button>
         </div>
     </body>
