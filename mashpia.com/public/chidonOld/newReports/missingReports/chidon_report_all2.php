@@ -117,7 +117,7 @@ function isMissing($missing, $desc, $value = '') {
         }
 
         function initMissing() {
-            let allItems = JSON.parse(<?= $allMissingItems ?>);
+            let allItems = JSON.stringify(<?= $allMissingItems ?>);
             console.log(allItems)
         }
     </script>
