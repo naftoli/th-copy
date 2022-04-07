@@ -22,6 +22,7 @@ $prizes = getPrizes();
 $awards = getAwards();
 $celebItems = getCelebrationItems();
 $allMissingItems = getAllMissingItems();
+echo "<pre>"; print_r($allMissingItems); echo "</pre>";
 
 $awardTypes = ['yesod', 'yediah', 'havonah', 'iyun'];
 $awardDesc = ['certificate', 'plaque', 'medal', 'glass trophy'];
