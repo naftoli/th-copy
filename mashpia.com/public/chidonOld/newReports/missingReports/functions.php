@@ -343,7 +343,7 @@ function getItemDesc($item, $desc, $user_id) {
             $prize = $chidonPrizes[$item];
             $extra_info = $userPrizes[$user_id];
             $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
-            if ($extra_info['he_name']) $item .= ' - ' . $extra_info['he_name'];
+//            if ($extra_info['he_name']) $item .= ' - ' . $extra_info['he_name'];
             break;
         case 'celeb_item':
             $celeb_item = getCelebItem($item);
