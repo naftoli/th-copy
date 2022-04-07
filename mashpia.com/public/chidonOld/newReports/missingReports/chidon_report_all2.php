@@ -108,7 +108,7 @@ function isMissing($missing, $desc, $value = '') {
             $("#save").click( function (e) {
                 e.preventDefault()
                 console.log(missing)
-                $.post('saveMissing.php', { JSON.stringify(missing) }, function (success) {
+                $.post('saveMissing.php', { missing: JSON.stringify(missing) }, function (success) {
                     if (parseInt(success)) alert('Saved.')
                     else alert('Error Saving.')
                 })
