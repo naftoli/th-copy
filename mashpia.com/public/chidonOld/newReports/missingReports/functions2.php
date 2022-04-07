@@ -341,14 +341,14 @@ function getItemDesc($item, $desc, $user_id) {
             break;
         case 'chidon_prize':
             $prize = $chidonPrizes[$item];
-            foreach ($userPrizes[$user_id] as $prize) {
-                if ($prize['prize_id'] == $item) {
-                    $prizeInfo = $prize;
-                    break;
-                }
-            }
+//            foreach ($userPrizes[$user_id] as $prize) {
+//                if ($prize['prize_id'] == $item) {
+//                    $prizeInfo = $prize;
+//                    break;
+//                }
+//            }
             $item = $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'];
-            if ($prizeInfo) $item .= ' ' . $prizeInfo['he_name'];
+//            if ($prizeInfo) $item .= ' ' . $prizeInfo['he_name'];
             break;
         case 'celeb_item':
             $celeb_item = getCelebItem($item);
