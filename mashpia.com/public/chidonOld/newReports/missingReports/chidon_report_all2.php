@@ -62,8 +62,8 @@ function isMissing($missing, $desc, $value = '') {
         }
     </style>
     <script>
+        let missing = {}
         window.onload = e => {
-            let missing = {}
             initMissing()
             $("input").click( function () {
                 let desc, value
