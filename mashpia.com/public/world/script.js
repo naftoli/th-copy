@@ -88,7 +88,6 @@ $( document ).ready( function(){
             var html = '<table id="report-table" class="table table-striped table-bordered table-hover sortable style="width:100%"">';
             html += '<thead><tr><th></th>';
             html += '<th class="school">Name</th>';
-            html += '<th>Number of Chayolim Participating</th>';
             html += '<th>Lines of<br />תניא בעל פה</th>';
             html += ( postData.level !== 3 ? '<th id="defaultSort">Avg תניא Lines</th>' : "" );
             html += ( postData.level !== 3 ? '<th id="defaultSort">תניא Lines Color</th>' : "" );
@@ -127,7 +126,6 @@ $( document ).ready( function(){
 
                     html += '</td>';
                     html += '<td class="total">' + row.campaigns.tanya.learned + '</td>';
-                    html += '<td class="total">' + row.campaigns.tanya.child_count + '</td>';
                     html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
                     html += tanya_avg !== undefined ? '<td>' + getColor( tanya_avg ) + '</td>' : "";
                     html += '<td class="total">' + row.campaigns.mishna.learned + '</td>';
