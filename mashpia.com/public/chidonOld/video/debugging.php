@@ -65,12 +65,15 @@ function getAward($child) {
             echo "Score: " . $score . "<br />";
             for ($i = 1; $i <= $key; $i++) {
                 $divide_by = $finals[$tracks[$i]];
-                echo "Divide By: " . $divide_by . "<br />";
                 $final_score = number_format(($score / $divide_by) * 100, 2);
-                echo "Final Score: " . $final_score . "<br />";
-                echo "Needed: " . $needed[$tracks[$i]] . "<br /><br />";
                 if ($final_score >= $needed[$tracks[$i]]) {
                     $award = $tracks[$i];
+                }
+                if ($i == $key) {
+                    echo "Divide By: " . $divide_by . "<br />";
+                    echo "Final Score: " . $final_score . "<br />";
+                    echo "Needed: " . $needed[$tracks[$i]] . "<br />";
+                    echo "Award: " . $award . "<br /><br />";
                 }
             }
         }
