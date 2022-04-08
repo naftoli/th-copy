@@ -81,6 +81,7 @@ function isMissing($missing, $desc, $value = '') {
 
                 if (! checked) {
                     if (! missing[user_id]) missing[user_id] = []
+                    // check for menora in schools not as exception
                     if (! ['surprise_gift_5782', 'glass trophy'].includes(desc)) missing[user_id].push({ desc, value })
                 } else {
                     // remove if in missing array
@@ -108,7 +109,7 @@ function isMissing($missing, $desc, $value = '') {
             $("#save").click( function (e) {
                 e.preventDefault()
                 console.log(missing)
-                $.post('saveMissing.php', { missing: JSON.stringify(missing) }, function (success) {
+                $.post('saveMissing2.php', { missing: JSON.stringify(missing) }, function (success) {
                     if (parseInt(success)) alert('Saved.')
                     else alert('Error Saving.')
                 })
@@ -212,8 +213,6 @@ foreach ($users as $school_id => $more) {
                     if (! isMissing($missing, 'surprise_gift')) echo " checked";
                     else echo " class='addToMissing'";
                     echo " /> Surprise Gift 5781: Chavat Book<br />";
-                    if ($chidon) echo "<input type='checkbox' name='surprise_gift_5782' id='surprise_gift_5782' />
-                                    Surprise Gift 5782<br />";
                 }
 
                 if ($rebbePic) {
@@ -228,8 +227,7 @@ foreach ($users as $school_id => $more) {
                     if (! isMissing($missing, 'chidon_gift', ($user['gender'] . '-' . $user['yarmulka']))) echo " checked";
                     else echo " class='addToMissing'";
                     echo " /> Gift: " . getGift($user) . "<br />";
-                    echo "<input type='checkbox' name='surprise_gift_5782' id='surprise_gift_5782' /> Surprise Gift 5782<br />";
-
+                    echo "<input type='checkbox' name='surprise_gift_5782' id='surprise_gift_5782' disabled /> Surprise Gift 5782<br />";
                     // prizes
                     if ($chidonInfo['highest_track'] != 'yesod') {
                         echo "<br />Prizes:<br />";
@@ -254,6 +252,7 @@ foreach ($users as $school_id => $more) {
                                     !isMissing($missing, 'chidon_prize', $prize['prize_id']))
                             ) echo " checked";
                             else if (isMissing($missing, 'chidon_prize', $prize['prize_id'])) echo " class='addToMissing'";
+                            else if ($prize['prize_id'] == $menorah && !in_array($user['school_id'], $exceptions)) echo " disabled";
                             echo " /> " . $desc . "<br />";
                         }
                     }
@@ -275,6 +274,7 @@ foreach ($users as $school_id => $more) {
                                     echo "<input type='checkbox' name='award' id='award:{$award}'";
                                     if (!isMissing($missing, 'award', $award) && $award != 'glass trophy') echo " checked";
                                     else if ($award != 'glass trophy') echo " class='addToMissing'";
+                                    else if ($award == 'glass trophy') echo " disabled";
                                     echo " /> $award<br />";
                                 }
                             }
