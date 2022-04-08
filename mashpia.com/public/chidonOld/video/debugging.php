@@ -7,8 +7,18 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+function getFinalMarks() {
+    $final_marks = [];
+    $sql = "select * from th_chidon_finals where year = 5782";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $final_marks[$row['user_id']] = $row;
+    }
+    return $final_marks;
+}
+
 function getAward($child) {
-    global $final_marks;
+    $final_marks = getFinalMarks();
 
     $tracks = [
         1   => 'yesod',
