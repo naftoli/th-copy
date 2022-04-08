@@ -176,7 +176,7 @@ $( document ).ready( function(){
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
-        mishna_index = $( row ).find("th").length == 4 ? 3 : 4; // get the correct column for the mishna
+        mishna_index = $( row ).find("th").length == 5 ? 3 : 5; // get the correct column for the mishna
 
         var api = this.api(), data;
 
