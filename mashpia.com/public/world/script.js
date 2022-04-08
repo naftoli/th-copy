@@ -88,10 +88,13 @@ $( document ).ready( function(){
             var html = '<table id="report-table" class="table table-striped table-bordered table-hover sortable style="width:100%"">';
             html += '<thead><tr><th></th>';
             html += '<th class="school">Name</th>';
+            html += '<th>Number of Chayolim Participating</th>';
             html += '<th>Lines of<br />תניא בעל פה</th>';
             html += ( postData.level !== 3 ? '<th id="defaultSort">Avg תניא Lines</th>' : "" );
+            html += ( postData.level !== 3 ? '<th id="defaultSort">תניא Lines Color</th>' : "" );
             html += '<th>Lines of<br />משניות בעל פה</th>';
             html += ( postData.level !== 3 ? '<th>Avg משניות Lines</th>' : "" );
+            html += ( postData.level !== 3 ? '<th>משניות Lines Color</th>' : "" );
             html += ( postData.level !== 3 ? '<th>Avg Total Lines</th>' : "" );
             html += '</tr></thead>';
             html += '<tbody>';
@@ -124,9 +127,12 @@ $( document ).ready( function(){
 
                     html += '</td>';
                     html += '<td class="total">' + row.campaigns.tanya.learned + '</td>';
+                    html += '<td class="total">' + row.campaigns.tanya.child_count + '</td>';
                     html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
+                    html += tanya_avg !== undefined ? '<td>' + getColor( tanya_avg ) + '</td>' : "";
                     html += '<td class="total">' + row.campaigns.mishna.learned + '</td>';
                     html += mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
+                    html += tanya_avg !== undefined ? '<td>' + getColor( mishna_avg ) + '</td>' : "";
                     // if the level is not 3, calculate and render the total average for both tanya and mishna combined
                     if ( postData.level !== 3 ) {
                         html += '<td class="total">';

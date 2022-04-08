@@ -73,12 +73,11 @@ function getAward($child) {
                     echo "Divide By: " . $divide_by . "<br />";
                     echo "Final Score: " . $final_score . "<br />";
                     echo "Needed: " . $needed[$tracks[$i]] . "<br />";
-                    echo "Award: " . $award . "<br />";
+                    echo "Award: " . $award . "<br /><br />";
                 }
             }
         }
     }
-    echo "Award: " . $award . "<br /><br />";
     if ($award) return array_search($award, $tracks);
     else return '';
 }
