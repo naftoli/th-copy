@@ -222,11 +222,14 @@ foreach ($users as $school_id => $more) {
                 }
 
                 if ($chidon) {
+                    // gifts
                     $user['yarmulka'] = $chidonInfo['yarmulka'];
                     echo "<br /><input type='checkbox' name='chidon_gift' id='chidon_gift:{$user['gender']}-{$user['yarmulka']}'";
                     if (! isMissing($missing, 'chidon_gift', ($user['gender'] . '-' . $user['yarmulka']))) echo " checked";
                     else echo " class='addToMissing'";
                     echo " /> Gift: " . getGift($user) . "<br />";
+                    echo "<input type='checkbox' name='surprise_gift_5782' id='surprise_gift_5782' /> Surprise Gift 5782<br />";
+
                     // prizes
                     if ($chidonInfo['highest_track'] != 'yesod') {
                         echo "<br />Prizes:<br />";
