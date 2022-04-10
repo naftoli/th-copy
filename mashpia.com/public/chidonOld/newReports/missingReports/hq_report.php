@@ -44,6 +44,8 @@ $recruitmentPrizes = getRecruitmentPrizes();
         </tr>
         <?php
         foreach ($users as $id => $user) {
+            // if logged in as regular school, don't show all kids
+            if (!in_array($user['school_id'], array_keys($schools))) continue;
             $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $schools[$user['school_id']] . "</td><td>" . $grade .
                 "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>";
