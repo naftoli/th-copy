@@ -139,10 +139,15 @@ function isMissing($missing, $desc, $value = '') {
 <?php include('../../../admin_header.php'); ?>
 <h1>Full Chidon Report</h1>
 <div class="infobox2">
-    Please uncheck items which have not been received so we can send it out.
+    Please <b>only</b> uncheck an item if you have not received it.
     <br /><br />
-    Please only uncheck an item if you have not received it. If you have received an item but it broke, got lost...
-    please include all of the details in the comments section under each child and we will see if a replacement can be sent.
+    Certificates, Plaques, Leather Seforim & Personalized Bracelet names have been taken from what they entered during
+    Limmud Registration at the beginning of the year. We specified then, to be careful with spelling because this is
+    the spelling that will be used. After registration, parents had an opportunity to go back in & confirm everything.
+    At this point, we <b>can not</b> replace any of these items due to spelling.
+    <br /><br />
+    If you have received an item but it broke, got lost... please include <b>all of the details</b> as well as any other comments
+    that you may have in the comments section under each child and we will see if theres anything that we can do.
 </div>
 <div>
     <button id="save">Save</button>
