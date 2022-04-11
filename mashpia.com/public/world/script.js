@@ -179,7 +179,8 @@ $( document ).ready( function(){
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
-        mishna_index = $( row ).find("th").length == 6 ? 4 : 6; // get the correct column for the mishna
+        tanya_index = 3; // column 3 [starting at 0] is the total tanya lines
+        mishna_index = 6; // column 6 is the total mishna lines
 
         var api = this.api(), data;
 
@@ -194,12 +195,12 @@ $( document ).ready( function(){
 
         // calcuate the tanya totals
         total.tanya = api
-            .column( 2 ).data()
+            .column( tanya_index ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
         pageTotal.tanya = api
-            .column( 2, { page: 'current'} ).data()
+            .column( tanya_index, { page: 'current'} ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
@@ -217,7 +218,7 @@ $( document ).ready( function(){
             }, 0 );
 
         // update the footer
-        $( api.column( 2 ).footer() ).html(
+        $( api.column( tanya_index ).footer() ).html(
             pageTotal.tanya + ( pageTotal.tanya !== total.tanya ? ' / ' + total.tanya : "" )
         );
         $( api.column( mishna_index ).footer() ).html(
