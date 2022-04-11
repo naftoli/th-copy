@@ -254,6 +254,7 @@ function getAllMissingItems() {
     while ($row = mysql_fetch_assoc($result)) {
         // make sure there's no characters that can trip up json_decode
         $json = preg_replace('/[[:cntrl:]]/', '', $row['items']);
+        if ($row['user_id'] == 14307) echo $row['items'];
         $items[$row['user_id']] = json_decode($json);
     }
     return $items;
