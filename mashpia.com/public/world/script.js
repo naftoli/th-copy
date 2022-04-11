@@ -150,7 +150,7 @@ $( document ).ready( function(){
             html += '<tfoot><tr>';
             html += '<th>Total:</th>';
             html += '<th></th><th></th><th></th>';
-            if ( postData.level !== 3 ) html += '<th></th><th></th><th></th>';
+            if ( postData.level !== 3 ) html += '<th></th><th></th><th></th><th></th><th></th><th></th>';
             html += '</tfoot></table>';
             // stop the spinner
             $("button#refresh-table .fa-sync").removeClass( "fa-spin" );
