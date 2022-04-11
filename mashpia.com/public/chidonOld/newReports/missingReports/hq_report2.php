@@ -16,9 +16,6 @@ require 'functions.php';
 $items = getAllMissingItems();
 $users = getMissingUsers($items);
 $recruitmentPrizes = getRecruitmentPrizes();
-//echo "<pre>";
-//print_r($items);
-//echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
