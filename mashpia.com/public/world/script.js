@@ -124,6 +124,8 @@ $( document ).ready( function(){
                     var tanya_avg = row.campaigns.tanya.avg;
                     var mishna_avg = row.campaigns.mishna.avg;
 
+                    console.log(row)
+
                     html += '</td>';
                     html += '<td class="total">' + row.campaigns.tanya.learned + '</td>';
                     html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
