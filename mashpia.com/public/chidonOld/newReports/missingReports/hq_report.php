@@ -59,14 +59,16 @@ $recruitmentPrizes = getRecruitmentPrizes();
             echo "</td></tr>";
         }
         // sort totals
-        ksort($totals);
-        echo "</table>";
-        echo "<br /><br />";
-        echo "<h3>Totals</h3>";
-        echo "<table><tr><th>Item</th><th>Amount</th></tr>";
-        foreach ($totals as $item => $total) {
-            if (strpos($item, 'Comment:') === false)
-                echo "<tr><td>" . $item . "</td><td>" . $total . "</td></tr>";
+        if ($admin_user['auth'] == 'super') {
+            ksort($totals);
+            echo "</table>";
+            echo "<br /><br />";
+            echo "<h3>Totals</h3>";
+            echo "<table><tr><th>Item</th><th>Amount</th></tr>";
+            foreach ($totals as $item => $total) {
+                if (strpos($item, 'Comment:') === false)
+                    echo "<tr><td>" . $item . "</td><td>" . $total . "</td></tr>";
+            }
         }
         ?>
     </table>
