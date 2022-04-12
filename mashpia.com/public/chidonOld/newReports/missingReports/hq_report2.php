@@ -59,6 +59,8 @@ $recruitmentPrizes = getRecruitmentPrizes();
         echo "</td></tr>";
     }
     echo "</table>";
+    echo "<br /><br />";
+    echo "<h3>Totals</h3>";
     echo "<table><tr><th>Item</th><th>Amount</th></tr>";
     foreach ($totals as $item => $total) {
         if (strpos($item, 'Comment:') === false)
