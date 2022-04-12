@@ -58,6 +58,8 @@ $recruitmentPrizes = getRecruitmentPrizes();
         }
         echo "</td></tr>";
     }
+    // sort totals
+    ksort($totals);
     echo "</table>";
     echo "<br /><br />";
     echo "<h3>Totals</h3>";
