@@ -43,6 +43,7 @@ $recruitmentPrizes = getRecruitmentPrizes();
             <th>Missing Items</th>
         </tr>
         <?php
+        $totals = [];
         foreach ($users as $id => $user) {
             // if logged in as regular school, don't show all kids
             if (!in_array($user['school_id'], array_keys($schools))) continue;
@@ -50,9 +51,22 @@ $recruitmentPrizes = getRecruitmentPrizes();
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . $schools[$user['school_id']] . "</td><td>" . $grade .
                 "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>";
             foreach ($items[$id] as $item) {
-                echo parseItem($item, $user) . "<br />";
+                $desc = parseItem($item, $user);
+                echo $desc . "<br />";
+                if (isset($totals[$desc])) $totals[$desc]++;
+                else $totals[$desc] = 1;
             }
             echo "</td></tr>";
+        }
+        // sort totals
+        ksort($totals);
+        echo "</table>";
+        echo "<br /><br />";
+        echo "<h3>Totals</h3>";
+        echo "<table><tr><th>Item</th><th>Amount</th></tr>";
+        foreach ($totals as $item => $total) {
+            if (strpos($item, 'Comment:') === false)
+                echo "<tr><td>" . $item . "</td><td>" . $total . "</td></tr>";
         }
         ?>
     </table>
