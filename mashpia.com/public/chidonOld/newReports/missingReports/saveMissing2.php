@@ -18,6 +18,7 @@ mysql_query('set autocommit=0');
 mysql_query('begin');
 foreach ($qrys as $qry) {
     if (! mysql_query($qry)) {
+        $error = mysql_error();
         $success = false;
         break;
     }
@@ -26,4 +27,4 @@ if ($success) mysql_query('commit');
 else mysql_query('rollback');
 mysql_query('set autocommit=1');
 
-echo $success ? 1 : mysql_error();
+echo $success ? 1 : $error;
