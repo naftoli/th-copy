@@ -13,6 +13,7 @@ foreach ($missing as $user_id => $items) {
         json_encode(addslashes($items)) . "'";
     $qrys[] = $sql;
 }
+echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
 
 $success = true;
 mysql_query('set autocommit=0');
