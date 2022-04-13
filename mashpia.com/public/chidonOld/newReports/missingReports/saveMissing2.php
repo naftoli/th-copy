@@ -13,6 +13,7 @@ foreach ($missing as $user_id => $items) {
     $qrys[] = $sql;
 }
 
+$error = '';
 $success = true;
 mysql_query('set autocommit=0');
 mysql_query('begin');
