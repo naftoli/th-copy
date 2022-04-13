@@ -12,15 +12,13 @@ foreach ($missing as $user_id => $items) {
         json_encode($items) . "', year = " . $year . " on duplicate key update items = '" . json_encode($items) . "'";
     $qrys[] = $sql;
 }
-echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
 
-$error = '';
 $success = true;
 mysql_query('set autocommit=0');
 mysql_query('begin');
 foreach ($qrys as $qry) {
     if (! mysql_query($qry)) {
-        $error = mysql_error();
+        $error = $qry . "<br />" . mysql_error();
         $success = false;
         break;
     }
