@@ -26,4 +26,4 @@ if ($success) mysql_query('commit');
 else mysql_query('rollback');
 mysql_query('set autocommit=1');
 
-echo $success ? 1 : 0;
+echo $success ? 1 : mysql_error();
