@@ -321,10 +321,7 @@ foreach ($users as $school_id => $more) {
                         }
                     }
                 }
-                $class = 'comments';
-                $comments = isMissing($missing, 'comments');
-                if ($comments) $class .= ' addToMissing';
-                echo "<br />Comments:<br /><textarea cols='50' rows='5' class='$class'>";
+                echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
                 if ($comments) echo $comments;
                 echo "</textarea><br /><br /></div>";
             }
