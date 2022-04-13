@@ -101,7 +101,14 @@ function isMissing($missing, $desc, $value = '') {
                     if ( !missing[user_id]) {
                         missing[user_id] = []
                     }
-                    // add comment to user id
+                    // check if comment already exists and remove
+                    if (missing[user_id].length) {
+                        for (let i in missing[user_id]) {
+                            let item = missing[user_id][i]
+                            if (item.desc === 'comments') missing[user_id].splice(i, 1)
+                        }
+                    }
+                    // add comment to user
                     missing[user_id].push({ desc: 'comments', value })
                 }
             })
