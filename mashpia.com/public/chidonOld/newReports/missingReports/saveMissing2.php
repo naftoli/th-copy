@@ -9,8 +9,8 @@ $missing = json_decode($_POST['missing']);
 foreach ($missing as $user_id => $items) {
     if (empty($items)) $sql = "delete from chidon_missing_items where user_id = " . $user_id . " and year = " . $year;
     else $sql = "insert into chidon_missing_items set user_id = " . mysql_real_escape_string($user_id) . ", items = '" .
-        json_encode($items, JSON_UNESCAPED_UNICODE) . "', year = " . $year . " on duplicate key update items = '" .
-        json_encode($items, JSON_UNESCAPED_UNICODE) . "'";
+        json_encode($items, JSON_HEX_APOS) . "', year = " . $year . " on duplicate key update items = '" .
+        json_encode($items, JSON_HEX_APOS) . "'";
     $qrys[] = $sql;
     if ($user_id == 57418) echo $sql;
 }
