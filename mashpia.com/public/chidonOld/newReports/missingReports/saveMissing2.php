@@ -12,9 +12,7 @@ foreach ($missing as $user_id => $items) {
         json_encode($items, JSON_HEX_APOS) . "', year = " . $year . " on duplicate key update items = '" .
         json_encode($items, JSON_HEX_APOS) . "'";
     $qrys[] = $sql;
-    if ($user_id == 57418) echo $sql;
 }
-exit;
 
 $success = true;
 mysql_query('set autocommit=0');
