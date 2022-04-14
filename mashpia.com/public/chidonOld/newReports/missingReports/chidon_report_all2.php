@@ -111,8 +111,8 @@ function isMissing($missing, $desc, $value = '') {
                     }
                     // add comment to user
                     // remove any apostrophe from the comments
-                    newVal = value.replace(/'/, /\'/)
-                    missing[user_id].push({ desc: 'comments', newVal })
+                    value = value.replace(/'/, /\'/)
+                    missing[user_id].push({ desc: 'comments', value })
                 } else {
                     // check if comment already exists and remove
                     if (missing[user_id].length) {
