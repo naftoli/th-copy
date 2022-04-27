@@ -21,7 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 echo "<pre>";
 foreach ($info as $row) {
-    $items = json_decode($row, false, 512, JSON_HEX_APOS | JSON_HEX_QUOT);
+    $items = json_decode($row['items'], false, 512, JSON_HEX_APOS | JSON_HEX_QUOT);
     print_r($items);
 }
 echo "</pre>";
