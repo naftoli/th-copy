@@ -38,14 +38,17 @@ $exceptions = [66, 112, 61, 269, 3, 265, 432, 55, 110, 180]; // only these schoo
 function isMissing($missing, $desc, $value = '') {
     $found = false;
     if (! empty($missing)) {
+        // concat all comments into one str
+        $comments = '';
         foreach ($missing as $item) {
             // for comments, return comment
-            if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
+            if ($item->desc == 'comments') $comments .= $item->value . " ";
             if ($item->desc == $desc && $item->value == $value) {
                 $found = true;
                 break;
             }
         }
+        if ($desc == 'comments') return $comments;
     }
     return $found;
 }
