@@ -40,7 +40,7 @@ function isMissing($missing, $desc, $value = '') {
     if (! empty($missing)) {
         foreach ($missing as $item) {
             // for comments, return comment
-            if ($item->desc == 'comments' && $desc == 'comments') return json_decode($item->value, JSON_HEX_APOS | JSON_HEX_QUOT);
+            if ($item->desc == 'comments' && $desc == 'comments') return json_decode($item->value, false, 512, JSON_HEX_APOS | JSON_HEX_QUOT);
             if ($item->desc == $desc && $item->value == $value) {
                 $found = true;
                 break;
