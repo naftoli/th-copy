@@ -11,7 +11,7 @@ $year = GlobalSettings::getChidonYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-require 'functions.php';
+require 'functions2.php';
 
 $users = getUsers();
 $chidonUsers = getChidonUsers();
