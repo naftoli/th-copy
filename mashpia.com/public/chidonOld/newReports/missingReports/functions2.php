@@ -241,7 +241,7 @@ function getMissingItems($user_id) {
         $row = mysql_fetch_assoc($result);
         // make sure there's no characters that can trip up json_decode
         $json = preg_replace('/[[:cntrl:]]/', '', $row['items']);
-        return json_decode($json);
+        return json_decode($json, false, 512, JSON_HEX_APOS | JSON_HEX_QUOT);
     }
     return [];
 }
