@@ -323,6 +323,9 @@ foreach ($users as $school_id => $more) {
                     }
                 }
                 echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
+                if ($user['user_id'] == 64013) {
+                    echo "<pre>"; print_r($missing); echo "</pre>";
+                }
                 $comments = isMissing($missing, 'comments');
 //                if ($comments) echo str_replace('u0027', "'", $comments);
                 echo "</textarea><br /><br /></div>";
