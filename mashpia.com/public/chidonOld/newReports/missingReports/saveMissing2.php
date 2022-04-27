@@ -6,6 +6,7 @@ $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
 $missing = json_decode($_POST['missing']);
+echo "<pre>"; print_r($missing); echo "</pre>"; exit;
 foreach ($missing as $user_id => $items) {
     if (empty($items)) $sql = "delete from chidon_missing_items where user_id = " . $user_id . " and year = " . $year;
     else $sql = "insert into chidon_missing_items set user_id = " . mysql_real_escape_string($user_id) . ", items = '" .
