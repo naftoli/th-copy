@@ -327,7 +327,7 @@ foreach ($users as $school_id => $more) {
                 }
                 echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
                 $comments = isMissing($missing, 'comments');
-                if ($comments) echo str_replace('u0027', "'", $comments);
+                if ($comments) echo str_replace(['u0027', 'u0022'], ["'", "\""], $comments);
                 echo "</textarea><br /><br /></div>";
             }
         }
