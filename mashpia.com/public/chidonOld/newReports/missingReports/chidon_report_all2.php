@@ -40,7 +40,7 @@ function isMissing($missing, $desc, $value = '') {
     if (! empty($missing)) {
         foreach ($missing as $item) {
             // for comments, return comment
-            if ($item->desc == 'comments' && $desc == 'comments') return $item->value;
+            if ($item->desc == 'comments' && $desc == 'comments') return json_decode($item->value, JSON_HEX_APOS | JSON_HEX_QUOT);
             if ($item->desc == $desc && $item->value == $value) {
                 $found = true;
                 break;
@@ -324,7 +324,7 @@ foreach ($users as $school_id => $more) {
                 }
                 echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
                 $comments = isMissing($missing, 'comments');
-                if ($comments) echo str_replace('u0027', "'", $comments);
+//                if ($comments) echo str_replace('u0027', "'", $comments);
                 echo "</textarea><br /><br /></div>";
             }
         }
