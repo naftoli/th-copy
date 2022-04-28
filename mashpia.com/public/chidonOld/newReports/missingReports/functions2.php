@@ -391,22 +391,22 @@ function getItemsBySchool() {
 
     $sorted = [];
     foreach ($items as $user_id => $details) {
+        if (emtpy($details)) {
+            echo $user_id . "<br />";
+            continue;
+        }
         $user = $users[$user_id];
         $school_id = $user['school_id'];
-        if (is_array($details) || is_object($details)) {
-            foreach ($details as $item) {
-                if ($item->desc == 'comments') continue; // not showing it on packing list
-                // only show celeb items being shipped to school
-                if ($item->desc == 'celeb_item') {
-                    $id = $item->value;
-                    $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
-                    $result = mysql_query($sql);
-                    if (mysql_num_rows($result) > 0) continue;
-                }
-                $sorted[$school_id][$item->desc][] = $item->value;
+        foreach ($details as $item) {
+            if ($item->desc == 'comments') continue; // not showing it on packing list
+            // only show celeb items being shipped to school
+            if ($item->desc == 'celeb_item') {
+                $id = $item->value;
+                $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
+                $result = mysql_query($sql);
+                if (mysql_num_rows($result) > 0) continue;
             }
-        } else {
-            echo "Details: " . $details . "<br />";
+            $sorted[$school_id][$item->desc][] = empty($item->value) ? 1 : $item->value;
         }
     }
     return $sorted;
