@@ -391,7 +391,7 @@ function getItemsBySchool() {
 
     $sorted = [];
     foreach ($items as $user_id => $details) {
-        if (emtpy($details)) {
+        if (empty($details)) {
             echo $user_id . "<br />";
             continue;
         }

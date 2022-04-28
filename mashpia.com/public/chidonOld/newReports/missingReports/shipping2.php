@@ -14,7 +14,7 @@ $schools = $as->getSchools();
 require 'functions2.php';
 
 $items = getAllMissingItems();
-$users = getMissingUsers($items);
+$users = getMissingUsers();
 $itemsBySchool = getItemsBySchool();
 $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();
@@ -30,11 +30,8 @@ $itemTypes = [
     'rebbe_pic_5781'        => 'Rebbe Picture 5781'
 ];
 
-$keys = array_keys($users);
-sort($keys);
 echo "<pre>";
 print_r($items);
-print_r($keys);
 print_r($itemsBySchool);
 echo "</pre>";
 ?>
