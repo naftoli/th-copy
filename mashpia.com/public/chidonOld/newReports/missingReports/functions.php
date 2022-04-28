@@ -316,7 +316,7 @@ function parseItem($item, $user) {
             $desc = "Rebbe Picture 5781";
             break;
         case 'comments':
-            $desc = "Comment: " . str_replace('u0027', "'", $item->value);
+            $desc = "Comment: " . str_replace(['u0027', 'u0022'], ["'", "\""], $item->value);
             break;
     }
     return $desc;
