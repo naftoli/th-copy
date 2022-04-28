@@ -29,11 +29,6 @@ $itemTypes = [
     'celeb_item'            => 'Celebration Item',
     'rebbe_pic_5781'        => 'Rebbe Picture 5781'
 ];
-
-//echo "<pre>";
-//print_r($items);
-//print_r($itemsBySchool);
-//echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
