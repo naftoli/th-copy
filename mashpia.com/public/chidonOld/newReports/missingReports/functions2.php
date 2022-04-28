@@ -404,7 +404,7 @@ function getItemsBySchool() {
                     if (mysql_num_rows($result) > 0) continue;
                 }
             }
-            $sorted[$school_id][$item->desc][] = empty($item->value) ? 1 : $item->value;
+            $sorted[$school_id][$item->desc][] = $item->value;
         }
     }
     return $sorted;
