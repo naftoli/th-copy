@@ -27,18 +27,18 @@ $start_dates_to_hachayol_issues = [
     2459643 => 13,
     2459650 => 14,
     2459657 => 15,
-    2459674 => 16,
-    2459681 => 17,
-    2459688 => 18,
-    2459695 => 19,
-    2459702 => 20,
-    2459709 => 21,
-    2459716 => 22,
-    2459723 => 23,
-    2459730 => 24,
-    2459737 => 25,
-    2459744 => 26,
-    2459751 => 27
+    2459664 => 16,
+    2459671 => 17,
+    2459678 => 18,
+    2459685 => 19,
+    2459692 => 20,
+    2459699 => 21,
+    2459706 => 22,
+    2459713 => 23,
+    2459720 => 24,
+    2459727 => 25,
+    2459734 => 26,
+    2459741 => 27
 ];
 
 // get logos for schools
@@ -52,7 +52,8 @@ foreach ($schools as $school_id => $school) {
 }
 
 // get raffle id's
-$raffles = array();
+$raffles = [];
+$weeks = [];
 $sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
@@ -62,8 +63,8 @@ while ($row = mysql_fetch_assoc( $result )) {
 }
 
 // get winners
-$winners = array();
-$winners[0] = array(); // we only start counting from 1 so first index (0) needs to be initialized to empty array
+$winners = [];
+$winners[0] = []; // we only start counting from 1 so first index (0) needs to be initialized to empty array
 foreach ($schools as $school_id => $school) {
     foreach ($raffles as $id => $raffle) {
         $sql = "select u.first, u.last, u.school_id
