@@ -13,8 +13,8 @@ $schools = $as->getSchools();
 
 require 'functions2.php';
 
-$items = getAllMissingItems();
-$users = getMissingUsers($items);
+//$items = getAllMissingItems();
+$users = getMissingUsers();
 $itemsBySchool = getItemsBySchool();
 $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();

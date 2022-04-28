@@ -259,7 +259,7 @@ function getAllMissingItems() {
     return $items;
 }
 
-function getMissingUsers($items) {
+function getMissingUsers() {
     global $year;
 
     $users = [];
@@ -268,7 +268,7 @@ function getMissingUsers($items) {
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
             left join th_chidon tc using (user_id)
-            where u.user_id in (" . implode(',', $user_ids) . ") 
+            where u.user_id in (select user_id from chidon_missing_items where year = $year) 
             and (tc.year is null or tc.year = $year) 
             order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
     echo $sql; exit;
