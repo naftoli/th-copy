@@ -14,12 +14,13 @@ $schools = $as->getSchools();
 require 'functions2.php';
 
 $items = getAllMissingItems();
-$users = getMissingUsers($items);
-$itemsBySchool = getItemsBySchool();
-$recruitmentPrizesById = getRecruitmentPrizesById();
-$chidonPrizes = getChidonPrizes();
-$userPrizes = getPrizes();
-$parentItems = getCelebItemsForParents();
+//$users = getMissingUsers($items);
+//$itemsBySchool = getItemsBySchool();
+//$recruitmentPrizesById = getRecruitmentPrizesById();
+//$chidonPrizes = getChidonPrizes();
+//$userPrizes = getPrizes();
+//$parentItems = getCelebItemsForParents();
+exit;
 
 $itemTypes = [
     'recruitement_prize'    => 'Recruitment Prize',
