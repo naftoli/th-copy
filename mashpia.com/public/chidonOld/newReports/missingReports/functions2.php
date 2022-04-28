@@ -393,16 +393,20 @@ function getItemsBySchool() {
     foreach ($items as $user_id => $details) {
         $user = $users[$user_id];
         $school_id = $user['school_id'];
-        foreach ($details as $item) {
-            if ($item->desc == 'comments') continue; // not showing it on packing list
-            // only show celeb items being shipped to school
-            if ($item->desc == 'celeb_item') {
-                $id = $item->value;
-                $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
-                $result = mysql_query($sql);
-                if (mysql_num_rows($result) > 0) continue;
+        if (is_array($details) || is_object($details)) {
+            foreach ($details as $item) {
+                if ($item->desc == 'comments') continue; // not showing it on packing list
+                // only show celeb items being shipped to school
+                if ($item->desc == 'celeb_item') {
+                    $id = $item->value;
+                    $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) continue;
+                }
+                $sorted[$school_id][$item->desc][] = $item->value;
             }
-            $sorted[$school_id][$item->desc][] = empty($item->value) ? 1 : $item->value;
+        } else {
+            echo "Details: " . $details . "<br />";
         }
     }
     return $sorted;
