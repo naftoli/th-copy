@@ -20,7 +20,6 @@ $recruitmentPrizesById = getRecruitmentPrizesById();
 $chidonPrizes = getChidonPrizes();
 $userPrizes = getPrizes();
 $parentItems = getCelebItemsForParents();
-exit;
 
 $itemTypes = [
     'recruitement_prize'    => 'Recruitment Prize',
