@@ -259,8 +259,8 @@ function getAllMissingItems() {
     return $items;
 }
 
-function getMissingUsers($items) {
-    global $year;
+function getMissingUsers() {
+    global $items, $year;
 
     $users = [];
     $user_ids = array_keys($items);
