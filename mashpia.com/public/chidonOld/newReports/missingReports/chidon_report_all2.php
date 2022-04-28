@@ -200,6 +200,7 @@ foreach ($users as $school_id => $more) {
                 $name = $user['first'] . ' ' . $user['last'];
                 $school = $schools[$school_id];
                 $missing = getMissingItems($user['user_id']);
+                $key = false; // holder for actual award
 
                 echo "<div class='user' id='{$user['user_id']}'>";
                 echo "<b>Name: " . $name . "</b><br />";
@@ -208,8 +209,10 @@ foreach ($users as $school_id => $more) {
                 echo "Grade: " . $grade . "<br />";
                 if ($chidon) {
                     echo "<b>Highest track passed</b> <i>determining rewards</i>: " . $chidonInfo['highest_track'] . "<br />";
+                    echo "<b>Awards earned based on Final:</b> ";
                     $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
-                    echo "<b>Awards earned based on Final:</b> " . $awardNames[$key] . "<br />";
+                    if ($key !== false) echo $awardNames[$key];
+                    echo "<br />";
                 }
 
                 if ($recruitment) {
@@ -277,26 +280,24 @@ foreach ($users as $school_id => $more) {
                         }
                     }
 
-                    if (isset($awards[$user['user_id']])) {
-                        $key = array_search($awards[$user['user_id']]['award'], $awardTypes);
-                        if ($key !== false) {
-                            echo "<br />Awards:<br />";
-                            $award = $awardDesc[$key];
-                            if ($award == 'certificate') {
+                    // award
+                    if ($key !== false) {
+                        echo "<br />Awards:<br />";
+                        $award = $awardDesc[$key];
+                        if ($award == 'certificate') {
+                            echo "<input type='checkbox' name='award' id='award:{$award}'";
+                            if (! isMissing($missing, 'award', $award)) echo " checked";
+                            else echo " class='addToMissing'";
+                            echo " /> $award<br />";
+                        } else {
+                            // dont show certificate so start from 1
+                            for ($a = 1; $a <= $key; $a++) {
+                                $award = $awardDesc[$a];
                                 echo "<input type='checkbox' name='award' id='award:{$award}'";
-                                if (! isMissing($missing, 'award', $award)) echo " checked";
-                                else echo " class='addToMissing'";
+                                if (!isMissing($missing, 'award', $award) && $award != 'glass trophy') echo " checked";
+                                else if ($award != 'glass trophy') echo " class='addToMissing'";
+                                else if ($award == 'glass trophy') echo " disabled";
                                 echo " /> $award<br />";
-                            } else {
-                                // dont show certificate so start from 1
-                                for ($a = 1; $a <= $key; $a++) {
-                                    $award = $awardDesc[$a];
-                                    echo "<input type='checkbox' name='award' id='award:{$award}'";
-                                    if (!isMissing($missing, 'award', $award) && $award != 'glass trophy') echo " checked";
-                                    else if ($award != 'glass trophy') echo " class='addToMissing'";
-                                    else if ($award == 'glass trophy') echo " disabled";
-                                    echo " /> $award<br />";
-                                }
                             }
                         }
                     }
@@ -327,8 +328,7 @@ foreach ($users as $school_id => $more) {
                 }
                 echo "<br />Comments:<br /><textarea cols='50' rows='5' class='comments'>";
                 $comments = isMissing($missing, 'comments');
-                if ($comments) echo $comments;
-//                if ($comments) echo str_replace(['u0027', 'u0022'], ["'", "\""], $comments);
+                if ($comments) echo str_replace(['u0027', 'u0022'], ["'", "\""], $comments);
                 echo "</textarea><br /><br /></div>";
             }
         }
