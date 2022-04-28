@@ -14,7 +14,7 @@ $schools = $as->getSchools();
 require 'functions2.php';
 
 $items = getAllMissingItems();
-//$users = getMissingUsers($items);
+$users = getMissingUsers($items);
 //$itemsBySchool = getItemsBySchool();
 //$recruitmentPrizesById = getRecruitmentPrizesById();
 //$chidonPrizes = getChidonPrizes();
