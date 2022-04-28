@@ -391,10 +391,6 @@ function getItemsBySchool() {
 
     $sorted = [];
     foreach ($items as $user_id => $details) {
-        if (empty($details)) {
-            echo $user_id . "<br />";
-            continue;
-        }
         $user = $users[$user_id];
         $school_id = $user['school_id'];
         foreach ($details as $item) {
