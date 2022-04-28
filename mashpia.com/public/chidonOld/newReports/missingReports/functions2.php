@@ -398,11 +398,10 @@ function getItemsBySchool() {
             // only show celeb items being shipped to school
             if ($item->desc == 'celeb_item') {
                 $id = $item->value;
-                if ($id) {
-                    $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
-                    $result = mysql_query($sql);
-                    if (mysql_num_rows($result) > 0) continue;
-                }
+                $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
+                echo $sql . "<br />";
+                $result = mysql_query($sql);
+                if (mysql_num_rows($result) > 0) continue;
             }
             $sorted[$school_id][$item->desc][] = $item->value;
         }
