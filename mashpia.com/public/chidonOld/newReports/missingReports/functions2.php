@@ -387,7 +387,7 @@ function getCelebItem($id) {
 }
 
 function getItemsBySchool() {
-    global $year, $items, $users;
+    global $items, $users;
 
     $sorted = [];
     foreach ($items as $user_id => $details) {
@@ -398,7 +398,7 @@ function getItemsBySchool() {
             // only show celeb items being shipped to school
             if ($item->desc == 'celeb_item') {
                 $id = $item->value;
-                $sql = "select * from purchase_addresses where purchase_id = " . $id . " and year = " . $year;
+                $sql = "select * from purchase_addresses where purchase_id = " . $id;
                 echo $sql . "<br />";
                 $result = mysql_query($sql);
                 if (mysql_num_rows($result) > 0) continue;
