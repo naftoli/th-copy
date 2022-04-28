@@ -271,6 +271,7 @@ function getMissingUsers($items) {
             where u.user_id in (" . implode(',', $user_ids) . ") 
             and (tc.year is null or tc.year = $year) 
             order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
+    echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $users[$row['user_id']] = $row;
