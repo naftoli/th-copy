@@ -83,9 +83,11 @@ foreach ($admin->children as $child) {
 	}
 }
 
-if($debug) echo "<pre>";
-if($debug) print_r($children);
-if($debug) echo "</pre>";
+if (isset($debug) && $debug) {
+    echo "<pre>";
+    print_r($children);
+    echo "</pre>";
+}
 
 //$weekStart = $end - 55;
 $diff = 0;
