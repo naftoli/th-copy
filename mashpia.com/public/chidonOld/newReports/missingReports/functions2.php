@@ -264,14 +264,23 @@ function getMissingUsers() {
 
     $users = [];
 //    $user_ids = array_keys($items);
-    $sql = "select * from users u 
-            join schools s using (school_id) 
-            join classes c on c.class_id = u.class_id 
-            left join th_chidon tc using (user_id)
-            where u.user_id in (select user_id from chidon_missing_items where year = $year) 
-            and (tc.year is null or tc.year = $year) 
-            order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
-    echo $sql; exit;
+    $sql = "SELECT 
+                *
+            FROM
+                users u
+                    JOIN
+                chidon_missing_items cmi USING (user_id)
+                    JOIN
+                schools s USING (school_id)
+                    JOIN
+                classes c ON c.class_id = u.class_id
+                    LEFT JOIN
+                th_chidon tc USING (user_id)
+            WHERE
+                cmi.year = $year
+                    AND (tc.year IS NULL OR tc.year = $year)
+            ORDER BY s.school_id , c.class_grade , c.class_sub , u.last , u.first";
+//    echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $users[$row['user_id']] = $row;
