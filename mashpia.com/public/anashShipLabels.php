@@ -24,7 +24,7 @@ $heDates = $myshliach->getHeReportDates();
 	<head>
 		<meta charset="UTF-8" />
 		<link href="admin_styles.css" rel="stylesheet" type="text/css">
-		<style type="text/css">
+        <style type="text/css">
             .label {
                 width: 2.15in;
                 height: 1in;
@@ -45,7 +45,7 @@ $heDates = $myshliach->getHeReportDates();
             .medal {
                 width: 1in;
                 float: left;
-				font-size: 9px;
+                font-size: 9px;
             }
             .name {
                 width: 2.15in;
@@ -58,9 +58,9 @@ $heDates = $myshliach->getHeReportDates();
             .instructions {
                 width: 50%;
             }
-            @media screen { 
+            @media screen {
                 #report_div {
-                    /*display: none;*/
+                    display: none;
                 }
                 .no-print {
                     display: block;
@@ -69,7 +69,7 @@ $heDates = $myshliach->getHeReportDates();
             @media print {
                 #report_div {
                     display: block;
-                } 
+                }
                 .no-print {
                     display: none;
                 }
