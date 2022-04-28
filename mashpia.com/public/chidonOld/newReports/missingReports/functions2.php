@@ -263,7 +263,7 @@ function getMissingUsers() {
     global $year;
 
     $users = [];
-    $user_ids = array_keys($items);
+//    $user_ids = array_keys($items);
     $sql = "select * from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
