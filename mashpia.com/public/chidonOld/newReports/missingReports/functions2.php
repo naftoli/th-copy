@@ -399,7 +399,6 @@ function getItemsBySchool() {
             if ($item->desc == 'celeb_item') {
                 $id = $item->value;
                 $sql = "select * from purchase_addresses where purchase_id = " . $id;
-                echo $sql . "<br />";
                 $result = mysql_query($sql);
                 if (mysql_num_rows($result) > 0) continue;
             }
