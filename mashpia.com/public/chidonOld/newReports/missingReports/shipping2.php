@@ -30,8 +30,9 @@ $itemTypes = [
     'rebbe_pic_5781'        => 'Rebbe Picture 5781'
 ];
 
+$keys = array_keys($users);
 echo "<pre>";
-print_r(sort(array_keys($users)));
+print_r(sort($keys));
 print_r($itemsBySchool);
 echo "</pre>";
 ?>
