@@ -269,7 +269,7 @@ function getMissingUsers($items) {
             join classes c on c.class_id = u.class_id 
             left join th_chidon tc using (user_id)
             where u.user_id in (" . implode(',', $user_ids) . ") 
-            and (tc.year is null or tc.year = $year) 
+            and (tc.year is null or tc.year = $year or (tc.year = ($year - 1) and tc.surprise_gift = 1)) 
             order by s.school_id, c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
