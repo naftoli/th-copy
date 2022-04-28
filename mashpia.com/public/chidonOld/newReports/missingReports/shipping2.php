@@ -33,6 +33,7 @@ $itemTypes = [
 $keys = array_keys($users);
 sort($keys);
 echo "<pre>";
+print_r($items);
 print_r($keys);
 print_r($itemsBySchool);
 echo "</pre>";
