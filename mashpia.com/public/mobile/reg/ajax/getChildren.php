@@ -137,7 +137,7 @@ if ( !empty( $users ) ) {
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
 
-        $children[$row['user_id']]['invite_used'] = intval($row['invite_used']);
+//        $children[$row['user_id']]['invite_used'] = intval($row['invite_used']);
 
         //mivtza lulav 5781
 //        $children[$row['user_id']]['mivtzaLulav'] = 0;
