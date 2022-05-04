@@ -26,6 +26,9 @@ if ( $type !== "" )
 if ( $ran_only )
     $filter[] = "date_ran IS NOT NULL";
 
+// add where clause to ensure only raffles that have been flagged as showable on mobile should show up
+$filter[] = "show_on_mobile = 1";
+
 //if ( $admin_user['auth'] !== 'super' )
     //$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
