@@ -421,7 +421,7 @@ function getCelebItemsForParents() {
                         where purchase_id = " . $item->value;
                 $result = mysql_query($sql);
                 $row = mysql_fetch_assoc($result);
-                $parentItems[$row['admin_id']][] = $row;
+                if ($row) $parentItems[$row['admin_id']][] = $row;
             }
         }
     }
