@@ -304,7 +304,7 @@ if(!empty($action)) switch($action) {
 					<?if($admin_user['auth'] == 'super'):?>
 					<TD><?=es($row['school_name'])?></TD>
 					<?endif;?>
-					<TD><?=!$row['auction_ran'] ? "<A HREF=\"admin_auction.php?action=edit&amp;auction_id={$row['auction_id']}&amp;school_id={$school_id}\">" . T_('Edit Auction') . '</A>' : T_("Can't edit") ?></TD>
+					<TD><?=!$row['auction_ran'] || $row['auction_id'] == 82 ? "<A HREF=\"admin_auction.php?action=edit&amp;auction_id={$row['auction_id']}&amp;school_id={$school_id}\">" . T_('Edit Auction') . '</A>' : T_("Can't edit") ?></TD>
 					<TD><?=!$row['auction_ran'] ? "<A HREF=\"admin_auction.php?action=delete&amp;auction_id={$row['auction_id']}&amp;school_id={$school_id}\" onClick=\"return confirm('<?=es(T_('Are you sure?'))?>')\">" . T_('Delete Auction') . '</A>' : T_("Can't delete") ?></TD>
 				</TR>
 				<? endwhile; ?>
