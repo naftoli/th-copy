@@ -17,8 +17,8 @@ if (isset($_GET['school'])) {
 }
 
 //summer 5780
-$start = 2459377; // June 11, 2021
-$end = 2459453; // August 26, 2021
+$start = 2459741; // June 10, 2022
+$end = 2459831; // Sept. 8, 2022
 
 $dates = array();
 do {
