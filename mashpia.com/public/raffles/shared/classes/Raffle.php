@@ -252,8 +252,8 @@ class Raffle
             " WHERE re.raffle_id = " . $this->raffle_id . " " .
             " AND re.eligible = 1 ";
         // on non-reports we need to hide the people who already won
-        if (!$report)
-            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
+//        if (!$report)
+//            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // add the sorting by the user_id
         if ($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
