@@ -47,6 +47,18 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Birthdays By Date</span>
                 </div>
             </a>
+            <a href="/school_birthdays.php">
+                <div class="button">
+                    <img src="/mobile/img_new/cake-color-green-svg.svg" height="32" alt="tickets"/>
+                    <span class="link-text">Birthday Certificate Printing</span>
+                </div>
+            </a>
+            <a href="/age_report.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Kapitel Current Age Report</span>
+                </div>
+            </a>
         </div>
         <h2>Tools</h2>
         <div id="action-links">

@@ -12,6 +12,11 @@ require('header.php');
 	<body>
 		<? include('admin_header.php'); ?>
 		<h1>Current Age Report</h1>
+
+        <div class="infobox">
+            This report shows how many students of each age there currently are in each school.
+            For example: If it says for age 5, a total of 7, that means you need to pack 7 kapitel vov cards for that school.
+        </div>
 		
 		<?
 		require_once 'class.adminSchools.php';
