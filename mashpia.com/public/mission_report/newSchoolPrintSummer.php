@@ -1,4 +1,4 @@
-<? 
+<?php
 set_time_limit(0);
 ini_set('max_execution_time', 0);
 
@@ -16,7 +16,7 @@ if (isset($_GET['school'])) {
 	exit;
 }
 
-//summer 5780
+//summer 5782
 $start = 2459741; // June 10, 2022
 $end = 2459839; // Sept. 16, 2022
 
@@ -37,7 +37,7 @@ $numWeeks = count($dates['start']);
 	</head>
 	
 	<body>
-		<?		
+		<?php
 		require_once '../class.schoolClasses.php';
 		$sc = new SchoolClasses( $school_id );
 		$classes = $sc->getClasses();
@@ -102,7 +102,7 @@ $numWeeks = count($dates['start']);
 			<input type="button" value="Print" onclick="window.print()" />
 			<input type="button" value="Back" onclick="window.location = '../admin.php'" />
 		</div>
-		<?
+		<?php
 		require_once 'classes/missions.php';
 		require_once 'classes/noPicMission.php';
 		require_once 'classes/picMission.php';
