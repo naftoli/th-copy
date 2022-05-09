@@ -276,9 +276,9 @@ class Raffle
             " LEFT JOIN admins a USING ( admin_id ) " .
             " WHERE u.user_registered IS NOT NULL AND u.school_id " . ($school_id ? "= " . $school_id : " IS NOT NULL ");
         // on reports we need to hide the soldiers who already won
-        if (!$report)
-            // $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
-            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners WHERE raffle_id IN (SELECT raffle_id FROM raffles WHERE type in ('$this->type') AND year = $year))";
+//        if (!$report)
+//            // $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
+//            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners WHERE raffle_id IN (SELECT raffle_id FROM raffles WHERE type in ('$this->type') AND year = $year))";
         // if a user is passed in, then limit it to this user
         if ($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
