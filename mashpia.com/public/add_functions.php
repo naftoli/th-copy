@@ -641,17 +641,54 @@ function add_mark($parameters, $update = true)
     // if tehillim minutes make sure not more than 770
     // various different mivtzoim tasks have various different max amounts
     switch ($grid_id) {
+	    // tehillim kapitelach
         case 8001:
-            if ($user_mark > 150) $user_mark = 150;
+            $max = 150;
             break;
+        // tehillim minutes
         case 8002:
-            if ( $user_mark > 770 ) $user_mark = 770;
+            $max = 770;
             break;
         // ois b'sefer torah
         case 9195:
-            if ($user_mark > 200) $user_mark = 200;
+            $max = 200;
+            break;
+        // personal menorahs
+        case 9069:
+            $max = 1500;
+            break;
+        // dreidels
+        case 9067:
+        // pamphlets
+        case 9065:
+            $max = 1500;
+            break;
+        // chanuka mivtzoim minutes
+        case 9071:
+            $max = 3500;
+            break;
+        // lulav personal shakes
+        case 9039:
+            $max = 450;
+            break;
+        // lulav minutes
+        case 9041:
+            $max = 3000;
+            break;
+        // neshek minutes
+        case 9082:
+            $max = 600;
+            break;
+        // neshek
+        case 9083:
+            $max = 1000;
+            break;
+        // seforim for hei teves
+        case 9077:
+            $max = 30;
             break;
     }
+    if ($max && $user_mark > $max) $user_mark = $max;
 
 	//// get start and end date for checking marks
 	//$sql = "select start_date, end_date from date_tasks_missions where date_tasks_mission_id = " . $date_tasks_mission_id;
