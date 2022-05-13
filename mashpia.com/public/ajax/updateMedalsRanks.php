@@ -19,4 +19,4 @@ if ($user_id > 0) {
 }
 
 http_response_code(200); // set the response code to 200 in case the rank_updater touches wordpress...
-echo json_encode(['medal' => $medal ? $medal : false, 'rank' => $rank ? $rank : false]);
+echo json_encode(['medal' => $medal ?? false, 'rank' => $rank ?? false]);

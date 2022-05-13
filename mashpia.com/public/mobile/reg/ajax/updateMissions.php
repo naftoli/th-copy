@@ -19,8 +19,8 @@ $start = GlobalSettings::getCurYearDates()['start'];
 $mm = new mission_marks_updater();
 foreach ($subjects as $subject) $mm->mission_marks_update_by_subject_id($user_id, $subject, $start);
 
-$medal_updater = new medal_updater();
-$medal_updater->update_medal_two($user_id);
-
-$rank_updater = new rank_updater();
-$rank_updater->update_rank_two($user_id);
+//$medal_updater = new medal_updater();
+//$medal_updater->update_medal_two($user_id);
+//
+//$rank_updater = new rank_updater();
+//$rank_updater->update_rank_two($user_id);
