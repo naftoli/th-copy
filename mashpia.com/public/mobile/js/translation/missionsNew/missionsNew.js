@@ -78,7 +78,7 @@ function trasPlaceholder() {
 
     $("input.form-control").each(function () {
 
-        const key = $(this).attr('data-key')
+        const key = $(this).data('key')
 
         $(this).attr('placeholder', i18next.t(key))
 
