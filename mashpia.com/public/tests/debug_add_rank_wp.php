@@ -2,6 +2,7 @@
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/rank_updater.php';
+require_once $_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php";
 
 $rank = 7;
 $user = 8273;
