@@ -66,7 +66,7 @@ class rank_updater {
 		$info = $this->getInfo( $rank, $user );
 		if( empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0 ) require_once '../blog/wp-load.php'; // if running cron job
 		else require_once $_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php";
-		$this->import_promotion($info);
+		return $this->import_promotion($info);
 	}
 	
 	function getInfo( $rank, $user ) {
@@ -123,6 +123,7 @@ class rank_updater {
 			*/
 		}
 		@mysql_select_db("mashpiadb");
+		return $id;
 	}
 }
 ?>
