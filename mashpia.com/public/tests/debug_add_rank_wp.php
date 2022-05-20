@@ -45,7 +45,7 @@ function import_promotion($info) {
     );
 
     @mysql_select_db("wp");
-    $id = wp_insert_post( $post );
+    $id = @wp_insert_post( $post );
     if ($id) {
         add_post_meta( $id, 'user_id', $info['user'] );
         add_post_meta( $id, 'school', $info['school'] );
