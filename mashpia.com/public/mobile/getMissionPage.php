@@ -1189,7 +1189,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			var parameters = [user_id, date_task_id, mark_date];
             url += "?function_name=" + function_name + "&parameters=" + parameters;
             $.getJSON(url, function(success) {
-                if (success == false) {
+                if (success == 1) {
                     alert("Update not performed.");
                 } else {
 					updateMedalRanks.update(user_id);
