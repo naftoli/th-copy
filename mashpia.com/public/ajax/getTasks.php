@@ -41,14 +41,15 @@ if (isset($_GET['parent'])) {
 $tasks = $tc->getTasks( $id, $debug );
 
 if($version == "2") {
-    $mandatory = [];
-    $year = mysql_real_escape_string( isset($_GET['year']) ? $_GET['year'] : "5778" ); // get the year from the request
-    $subject_id = mysql_real_escape_string( $_GET['subject'] ); // get the subject that they are asking for
-    foreach($tasks as $cat => $details){ // get if each one is mandatory
-        $sql = "SELECT * FROM mandatory_cats WHERE cat = \"" . $cat . "\" AND subject_id = " . $subject_id . " AND year = " . $year . " AND lang_id = " . $lang;
-        $result = mysql_query( $sql );
-        $mandatory[$cat] = mysql_num_rows($result) > 0;
-    }
+//    $mandatory = [];
+//    $year = mysql_real_escape_string( isset($_GET['year']) ? $_GET['year'] : "5778" ); // get the year from the request
+//    $subject_id = mysql_real_escape_string( $_GET['subject'] ); // get the subject that they are asking for
+//    foreach($tasks as $cat => $details){ // get if each one is mandatory
+//        $sql = "SELECT * FROM mandatory_cats WHERE cat = \"" . $cat . "\" AND subject_id = " . $subject_id . " AND year = " . $year . " AND lang_id = " . $lang;
+//        $result = mysql_query( $sql );
+//        $mandatory[$cat] = mysql_num_rows($result) > 0;
+//    }
+    $mandatory = $tc->mandatory;
     echo json_encode(["tasks" => $tasks, "mandatory" => $mandatory, "parent" => $_GET['parent']]); die();
 }
 

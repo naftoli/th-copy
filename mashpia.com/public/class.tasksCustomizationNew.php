@@ -23,6 +23,8 @@ class TasksCustomizationNew {
         )
     );
 
+    public $mandatory; // array to hold mandatory categories when getting tasks
+
     public function __construct() {
         $this->start = null;
         $this->end = null;
@@ -490,6 +492,7 @@ class TasksCustomizationNew {
             $tasks[$row['cat']][] = $row['default_on'];
             $info[$row['cat']][$row['name']][$row['school_type_id']][$row['level']] = $row['quantity'];
             if ($forPersonalization) $mandatory[$row['cat']] = $row['mandatory_qty'];
+            else $this->mandatory[$row['cat']] = $row['mandatory_qty'] ? true : false;
         }
         
         //if even one level/type has default on, the cat will show default on
