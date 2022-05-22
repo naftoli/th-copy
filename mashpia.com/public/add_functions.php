@@ -409,6 +409,7 @@ function add_daily_task_mark($parameters, $update = true)
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
         echo 0;
+
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
