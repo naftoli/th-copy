@@ -335,7 +335,8 @@ function add_daily_task_mark($parameters, $update = true)
 	//echo $sql;
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
-		return json_encode(true); // it's already been marked
+		echo 0;
+		return; // it's already been marked
 	}
 
 	$sql = "INSERT INTO date_tasks_marks SET date_task_id= $date_task_id, "
@@ -407,12 +408,13 @@ function add_daily_task_mark($parameters, $update = true)
 
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
+        echo 0;
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{
-		return json_encode(false);
+		echo 1;
 	}
 }
 // ***** DAILY TASKS ***** //
