@@ -580,10 +580,10 @@
 			</div>
 
 			<div id="main">
-				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n"
-					data-key="AuctionEnded">
-					The auction for 5782 begins in Iyar. See you then!
-				</div>
+<!--				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n"-->
+<!--					data-key="AuctionEnded">-->
+<!--					The auction for 5782 begins in Iyar. See you then!-->
+<!--				</div>-->
 			</div>
 
 		</div>
@@ -673,11 +673,11 @@
 				var info = $.parseJSON(success);
 				var html = '<a href="../reg/medals/index.html?id=' + user + '">';
 				if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info
-					.mobile_pic + '">';
+						.mobile_pic + '">';
 				else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info
-					.thumb + '">';
+						.thumb + '">';
 				else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' +
-					info.photo + '">';
+						info.photo + '">';
 				html += '</a>';
 				$(".personalImg").append(html);
 			});
@@ -687,7 +687,7 @@
 			var cartQty = 0;
 			var totalPrice = 0;
 			var originalBal = 0;
-			var auction_id = 82;
+			var auction_id = 83;
 			var separator = '|';
 
 			var float_element = "";
@@ -703,68 +703,72 @@
 				var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
 				var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
 			}
-			// $.post('ajax/getBalance.php', {
-			// 	admin: Cookies.get('admin'),
-			// 	user: user,
-			// 	auction: auction_id,
-			// 	points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
-			// }, function (success) {
-			// 	var info = $.parseJSON(success);
-			// 	var html = '<div id="balance-box" ' + float_element + '>';
-			// 	html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
-			// 	html += '</div><div id="data-box" ' + data_box_css + '>'
-			// 	html += totalmilesText + info.tpoints.toLocaleString(navigator.language) + "<br />";
-			// 	html += totalmilesYearText + info.earned.toLocaleString(navigator.language) + "<br />";
-			// 	html += '</div>'
-			// 	$(".balance").html(html);
-			// 	originalBal = info.available;
-			// 	initCart();
-			// });
+			$.post('ajax/getBalance.php', {
+				admin: Cookies.get('admin'),
+				user: user,
+				auction: auction_id,
+				points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
+			}, function (success) {
+				var info = $.parseJSON(success);
+				var html = '<div id="balance-box" ' + float_element + '>';
+				html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
+				html += '</div><div id="data-box" ' + data_box_css + '>'
+				html += totalmilesText + info.tpoints.toLocaleString(navigator.language) + "<br />";
+				html += totalmilesYearText + info.earned.toLocaleString(navigator.language) + "<br />";
+				html += '</div>'
+				$(".balance").html(html);
+				originalBal = info.available;
+				initCart();
+			});
 
-			// $.post('ajax/getPrizes.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
-			//     var prizes = $.parseJSON(success);
-			//
-			//     var html = '';
-			// 	var itr = 0;
-			//     for (var amount in prizes) {
-			//         html += '<div class="panel panel-default">\
-			//                     <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Point Prizes</div>' +
-			//                     '<div class="collapse"><div class="panel-body"><div class="row">';
-			//         for (var p in prizes[amount]) {
-			// 			var prize = prizes[amount][p];
-			//             html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
-			//                     '<figure class="figure-hover-overlay">' +
-			//                         '<a href="#" class="figure-href"></a>\
-			//                         <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
-			//                     </figure>\
-			//                     <div class="product-caption">\
-			//                         <div class="block-name">\
-			//                             <a href="#" class="product-name">' + prize.prize_name + '</a>\
-			//                             <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
-			// 							<p class="onePerUser">' + prize.available + ' available.</p>\
-			//                         </div>\
-			//                         <div class="product-cart" id="' +
-			// 							prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
-			//                             <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
-			// 							<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
-			// 						</div>\
-			// 					</div></article></div>';
-			//         }
-			//         html += '</div></div></div></div>';
-			//     }
-			//
-			//     $("#main").append(html);
+			$.post('ajax/getPrizes.php', {
+				admin: Cookies.get('admin'),
+				user: user,
+				auction: auction_id
+			}, function (success) {
+				var prizes = $.parseJSON(success);
 
-			    $(".product-cart a").hover(
-			        function() {
-			            $(this).css('background-color', '#eb2c33');
-			            $(this).find('.fa').css('color', '#fff');
-			        },
-			        function() {
-			            $(this).css('background-color', '#fff');
-			            $(this).find('.fa').css('color', '#eb2c33');
-			        }
-			    );
+				var html = '';
+				var itr = 0;
+				for (var amount in prizes) {
+					html += '<div class="panel panel-default">\
+			                    <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' + amount + ' Point Prizes</div>' +
+							'<div class="collapse"><div class="panel-body"><div class="row">';
+					for (var p in prizes[amount]) {
+						var prize = prizes[amount][p];
+						html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
+								'<figure class="figure-hover-overlay">' +
+								'<a href="#" class="figure-href"></a>\
+			                        <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
+			                    </figure>\
+			                    <div class="product-caption">\
+			                        <div class="block-name">\
+			                            <a href="#" class="product-name">' + prize.prize_name + '</a>\
+			                            <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
+										<p class="onePerUser">' + prize.available + ' available.</p>\
+			                        </div>\
+			                        <div class="product-cart" id="' +
+								prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
+			                            <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
+										<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
+									</div>\
+								</div></article></div>';
+					}
+					html += '</div></div></div></div>';
+				}
+
+				$("#main").append(html);
+
+				$(".product-cart a").hover(
+						function () {
+							$(this).css('background-color', '#eb2c33');
+							$(this).find('.fa').css('color', '#fff');
+						},
+						function () {
+							$(this).css('background-color', '#fff');
+							$(this).find('.fa').css('color', '#eb2c33');
+						}
+				);
 			});
 
 			$(document).on('click', ".panel-heading", function () {
@@ -896,6 +900,7 @@
 			$("#cart-img").click(function () {
 				location.href = "cart.html?id=" + user;
 			});
+		})
 	</script>
 </body>
 
