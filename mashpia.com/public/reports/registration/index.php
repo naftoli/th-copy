@@ -88,6 +88,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">School Types</span>
                 </div>
             </a>
+            <a href="/admin_shipping_report_02.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Registrations by Date/Time</span>
+                </div>
+            </a>
         </div>
         <?} // end admin only links ?>
         </div>
