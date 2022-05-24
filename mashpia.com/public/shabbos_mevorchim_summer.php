@@ -99,7 +99,6 @@ $ids = $as->getSchools();
 // $ids = [54 => 'Beis Rivka'];
 
 // get dates
-require 'class.globalSettings.php';
 $sm = calculateSM( GlobalSettings::getCurrentYear() );
 $dates = [$sm[11], $sm[12]];
 
