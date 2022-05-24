@@ -1014,6 +1014,14 @@ class ShabbosMevorchim {
             }
         }
 
+	    // make sure dates are not in the future
+        foreach ($dates as $idx => $date) {
+            if ($date > unixtojd()) {
+                // remove date
+                unset($dates[$idx]);
+            }
+        }
+
 		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
             FROM date_tasks dt
             JOIN date_tasks_missions dtm

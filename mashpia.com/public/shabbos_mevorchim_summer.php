@@ -119,23 +119,25 @@ foreach ( $ids as $id => $name ) {
         $quotas = $sm->getStudentResults();
         $done = $sm->getStudentDoneResults();
         // echo "<pre>"; print_r($quotas); echo "</pre>"; exit;
-        foreach ($quotas as $date => $other) {
-            foreach ($other as $grade => $more) {
-                foreach ($more as $user_id => $values) {
-                    $sql = "select first, last, class_grade, class_sub from users u join classes c using (class_id) where user_id = " . $user_id;
-                    $result = mysql_query($sql);
-                    $userInfo[$user_id] = mysql_fetch_assoc($result);
-                    foreach ($values as $task => $quota) {
-                        $result = intval($done[$date][$grade][$user_id][$task]);
-                        // echo "User: " . $user_id . "<br />";
-                        // echo "Date: " . $date . "<br />";
-                        // echo "Quota: " . $quota . "<br />";
-                        // echo "Done: " . $result . "<br /><br />";
-                        if ($result && $result >= intval($quota)) {
-                            $info[$id][$user_id][$date] = [
-                                'quota' =>  $quota,
-                                'done'  =>  $result
-                            ];
+        if ($quotas && $done) {
+            foreach ($quotas as $date => $other) {
+                foreach ($other as $grade => $more) {
+                    foreach ($more as $user_id => $values) {
+                        $sql = "select first, last, class_grade, class_sub from users u join classes c using (class_id) where user_id = " . $user_id;
+                        $result = mysql_query($sql);
+                        $userInfo[$user_id] = mysql_fetch_assoc($result);
+                        foreach ($values as $task => $quota) {
+                            $result = intval($done[$date][$grade][$user_id][$task]);
+                            // echo "User: " . $user_id . "<br />";
+                            // echo "Date: " . $date . "<br />";
+                            // echo "Quota: " . $quota . "<br />";
+                            // echo "Done: " . $result . "<br /><br />";
+                            if ($result && $result >= intval($quota)) {
+                                $info[$id][$user_id][$date] = [
+                                    'quota' => $quota,
+                                    'done' => $result
+                                ];
+                            }
                         }
                     }
                 }
