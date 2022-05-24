@@ -98,6 +98,11 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], false );
 $ids = $as->getSchools();
 // $ids = [54 => 'Beis Rivka'];
 
+// get dates
+require 'class.globalSettings.php';
+$sm = calculateSM( GlobalSettings::getCurrentYear() );
+$dates = [$sm[11], $sm[12]];
+
 require_once 'class.shabbosMevorchim.php';
 $info = [];
 $userInfo = [];
@@ -109,7 +114,7 @@ foreach ( $ids as $id => $name ) {
     // }
     $sm = new ShabbosMevorchim();
     $sm->setSchool($id);
-    foreach ([2459399, 2459434] as $date) {
+    foreach ($dates as $date) {
         $sm->setReportDates($date);
         $sm->setStudentResults();
         $quotas = $sm->getStudentResults();
