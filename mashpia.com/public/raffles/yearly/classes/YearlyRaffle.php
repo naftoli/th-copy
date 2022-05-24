@@ -57,21 +57,20 @@ class YearlyRaffle {
      * @return array
      */
     public function set_user_eligibility( $user_id ) {
-        // check the cache
-        $eligibility_cache_query = $this->db_conn->query(
-             " SELECT days FROM user_yearly_raffle "
-            ." WHERE year = " . $this->year . " "
-            ." AND user_id = '$user_id' "
-        );
-        if ( $eligibility_cache_query && $eligibility_cache_query->num_rows() > 0 ){
-            $row = $eligibility_cache_query->fetch_assoc();
-            $this->eligibility[$user_id] = $row['days'];
-            return $this->eligibility;
-        }
-        // otherwize update the cache
+        // update the cache and return
         $this->eligibility[$user_id] = $this->getAndCacheEligibility(false, $user_id)[$user_id];
-        
         return $this->eligibility;
+        // check the cache
+//        $eligibility_cache_query = $this->db_conn->query(
+//             " SELECT days FROM user_yearly_raffle "
+//            ." WHERE year = " . $this->year . " "
+//            ." AND user_id = '$user_id' "
+//        );
+//        if ( $eligibility_cache_query && $eligibility_cache_query->num_rows() > 0 ){
+//            $row = $eligibility_cache_query->fetch_assoc();
+//            $this->eligibility[$user_id] = $row['days'];
+//            return $this->eligibility;
+//        }
     }
 
     /**
@@ -134,6 +133,7 @@ class YearlyRaffle {
                 AND dtm.mark_date >= " . $this->start . " 
                 AND dtm.mark_date <= " . $this->deadline ."
                 group by user_id";
+//        echo $sql;
         $result = mysql_query($sql);
 
         $totals = [];

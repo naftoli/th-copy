@@ -1,8 +1,8 @@
 <? 
 header('Location: statement.php');
-$req_school_settings = array('home_school'); ?>
-<? require('header.php'); ?>
-<?
+$req_school_settings = array('home_school');
+
+require('header.php');
 require_once('calendar.php');
 require_once('file_save.php');
 require_once('card_printer.php');

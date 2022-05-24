@@ -79,6 +79,7 @@ function checkTasks( $user_id, $start, $end, $type ) {
                 AND dt.grid_id = " . $grid_id . " 
                 AND dtm.mark_date >= " . $start . " 
                 AND dtm.mark_date <= " . $end;
+//        echo $sql . "<br />";
         $result = mysql_query($sql);
         return mysql_fetch_assoc($result)['total'];
     } else {
