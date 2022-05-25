@@ -121,10 +121,19 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Accounting Reports</span>
                 </div>
             </a>
+        </div>
+        <h2>Raffle Posters</h2>
+        <div id="action-links">
             <a href="/raffles/posters/weekly.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="reports"/>
                     <span class="link-text">Weekly Raffle Posters</span>
+                </div>
+            </a>
+            <a href="/raffles/yearly/printout/">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="reports"/>
+                    <span class="link-text">Yearly Raffle Posters</span>
                 </div>
             </a>
         </div>
