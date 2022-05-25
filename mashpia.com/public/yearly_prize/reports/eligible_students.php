@@ -64,6 +64,10 @@ if($debug) echo "</pre>";
     <body>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); // load the basic UI ?>
         <h1>Yearly Prize Eligibility Report</h1>
+        <div class="infobox">
+            It will show a chayol as having marked missions that week even if he/she only completed 1 task the entire week.<br />
+            (To see which chayolim checked off tasks for at least 5/7 days per week, go to Mission Marathon>Weekly Raffle>Eligible Students)
+        </div>
         <p class="center" style="text-align: center;">Click
             <a target="_blank" href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit">here</a>
             for the complete rewards manual
@@ -130,8 +134,7 @@ if($debug) echo "</pre>";
                 <i class="fa fa-download" aria-hidden="true"></i> Generate CSV (Excel)
             </a>
         </div>
-        
-        
+
         <div id="eligible_users_report"></div>
         
         <script>var debug = <?=$debug ? "true" : "false"?></script>
