@@ -101,6 +101,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+        <div id="action-links">
+            <a href="/shabbos_mevorchim_summer.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Summer Hachayol Report</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
         </div>
         
