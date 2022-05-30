@@ -221,7 +221,8 @@ function add_task_mark($parameters, $update = true) {
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
-		return json_encode(true); // it's already been marked
+		echo 1; // it's already been marked
+        return;
 	}
 
 	$insert_sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", done_qty=1, mark_points=" . $points;
@@ -238,10 +239,10 @@ function add_task_mark($parameters, $update = true) {
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
-		return json_encode(true);
+		echo 1;
 	}
 	else {
-		return json_encode(false);
+		echo 0;
 	}
 
 }
