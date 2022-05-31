@@ -368,3 +368,73 @@ class ChidonTests
         return $markInfo;
     }
 }
+
+class KHK {
+    public static $khkFee = 18;
+
+    /*
+     * Algorithm to determine if child is eligible for khk registration / tests
+     * takes array of user ids
+     * and returns two arrays
+     * one is whether that child is eligible for khk
+     * the other is the details of which yr the child was or wasn't eligible
+     */
+    public static function getKHKEligibility( array $ids ) {
+        // yr that we don't check registration but rather check highest track passed
+        $rollover = 5782;
+
+        // figure out which years we need to check
+        $years = [];
+        $curYr = GlobalSettings::getChidonRegYear();
+        $yr = $curYr - 1;
+        for ($i = 1; $i <= 4; $i++) {
+            $years[] = $yr--;
+        }
+
+        foreach ($ids as $id) {
+            $details[$id] = [];
+            foreach ($years as $yr) {
+                if ($yr >= $rollover) {
+                    // check highest track passed
+                    $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) {
+                        $highest_track = mysql_fetch_assoc($result)['highest_track'];
+                        // make sure child is at least on the yediah track (not on 'yesod')
+                        if ($highest_track == 'yesod') $details[$id][$yr] = false;
+                        else $details[$id][$yr] = true;
+                    }
+                    else $details[$id][$yr] = false;
+                } else {
+                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) == 0) $details[$id][$yr] = false;
+                    else $details[$id][$yr] = true;
+                }
+            }
+        }
+
+        // for each child find out if final result is eligible or not
+        foreach ($details as $id => $yrs) {
+            $khk[$id] = true;
+
+            // check if bc indicated that child is eligible
+            $sql = "select khk_eligible from users where user_id = " . $id;
+            $result = mysql_query($sql);
+            $row = mysql_fetch_assoc($result);
+            if ($row['khk_eligible'] == 1) {
+                // no need to check all years
+                continue;
+            }
+
+            foreach ($yrs as $eligible) {
+                if (! $eligible) {
+                    $khk[$id] = false;
+                    break;
+                }
+            }
+        }
+
+        return [$khk, $details];
+    }
+}
