@@ -66,11 +66,10 @@ for ($i = 1; $i <= 4; $i++) {
         <th>Grade</th>
         <th>Student</th>
         <!--                <th>Number of times Registered for Shabbaton</th>-->
-        <?php
-        for ($i = 3; $i <= 0; $i--) {
-            echo "<th>" . ($curYr - $i) . "</th>";
-        }
-        ?>
+        <th>5778</th>
+        <th>5779</th>
+        <th>5780</th>
+        <th>5781</th>
         <th>Eligible</th>
         <?php if ($super) : ?>
             <th>Eligibility Copy</th>
