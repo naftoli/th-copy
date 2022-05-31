@@ -40,6 +40,7 @@ $yr = $curYr - 1;
 for ($i = 1; $i <= 4; $i++) {
     $years[] = $yr--;
 }
+print_r($years); exit;
 ?>
 <!DOCTYPE html>
 <html>
