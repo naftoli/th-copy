@@ -92,15 +92,16 @@ for ($i = 1; $i <= 4; $i++) {
 //                    $eligibility = $khkInfo[0];
 //                    $yrsDetails = $khkInfo[1];
             foreach ($children[$id] as $child) {
-                $khkInfo = KHK::getKHKEligibility([$child['user_id']]);
+                $user_id = $child['user_id'];
+                $khkInfo = KHK::getKHKEligibility([$user_id]);
                 $eligibility = $khkInfo[0];
                 $yrsDetails = $khkInfo[1];
-                $eligible = $eligibility[$child['user_id']];
+                $eligible = $eligibility[$user_id];
                 if ($eligible) $khkTotal++;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
                     "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td>";
-                foreach ($yrsDetails[$id] as $yr => $value) {
+                foreach ($yrsDetails[$user_id] as $yr => $value) {
                     echo "<td>" . ($value ? "&#10003;" : "&#10007;") . "</td>";
                 }
                 echo "<td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
