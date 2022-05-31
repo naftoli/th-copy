@@ -40,7 +40,6 @@ $yr = $curYr - 1;
 for ($i = 1; $i <= 4; $i++) {
     $years[] = $yr--;
 }
-print_r($years); exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +68,7 @@ print_r($years); exit;
         <!--                <th>Number of times Registered for Shabbaton</th>-->
         <?php
         for ($i = 3; $i <= 0; $i--) {
-            echo "<th>" . $years[$i] . "</th>";
+            echo "<th>" . ($curYr - $i) . "</th>";
         }
         ?>
         <th>Eligible</th>
