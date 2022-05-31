@@ -67,7 +67,7 @@ for ($i = 1; $i <= 4; $i++) {
         <th>Student</th>
         <!--                <th>Number of times Registered for Shabbaton</th>-->
         <?php
-        for ($i = 4; $i <= 1; $i++) {
+        for ($i = 3; $i <= 0; $i--) {
             echo "<th>" . $years[$i] . "</th>";
         }
         ?>
