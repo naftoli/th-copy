@@ -39,22 +39,6 @@ function delete_date_tasks_marks($parameters) {
 			}
 		}
 	}
-	/*
-	require_once("classes/mission_marks_updater.php");
-	require_once 'classes/medal_updater.php';
-	require_once 'classes/rank_updater.php';
-	
-	$mm = new mission_marks_updater();
-	$medal_updater = new medal_updater();
-	$rank_updater = new rank_updater();
-	
-	foreach ($subjects as $subject) {
-        $mm->mission_marks_update_by_subject_id($user_id, $subject);
-    }
-    
-    $medal_updater->update_medal_two($user_id);
-    $rank_updater->update_rank_two($user_id);
-    */
 }
 
 function delete_task_mark($parameters) {
@@ -78,30 +62,13 @@ function delete_task_mark($parameters) {
 		if ($mandatory) {
 			$delete_sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;		
 			$delete_query = mysql_query($delete_sql);
-			/*
-			if ($delete_query) {
-			
-				require_once("classes/rank_updater.php");
-				require_once("classes/medal_updater.php");
-				
-				$medal_updater = new medal_updater();
-				$medal_updater->update_medal_two($user_id);
-						
-				$rank_updater = new rank_updater();
-				$rank_updater->update_rank_two($user_id);
-				
-				return 1;
-			}
-			*/
         }
         // update the user for the yearly gift
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
-		return 1;
+        return json_encode("1");
 	}
-	else {
-		return 0;
-	}
+	else return json_encode("0");
 }
 
 function delete_daily_task_mark($parameters) {
@@ -151,16 +118,9 @@ function delete_daily_task_mark($parameters) {
 
     // update the users information in the user_yearly_gift table
     TotalWeeklyTasks::updateUser( $user_id, $mark_date );
-	/*
-	require_once("classes/rank_updater.php");
-	require_once("classes/medal_updater.php");
-	
-	$medal_updater = new medal_updater();
-	$medal_updater->update_medal_two($user_id);
-			
-	$rank_updater = new rank_updater();
-	$rank_updater->update_rank_two($user_id);
-	*/
+
+    if ($query) return json_encode("1");
+    else return json_encode("0");
 }
 
 function delete_daily_task_mark2($parameters) {
@@ -211,10 +171,9 @@ function delete_daily_task_mark2($parameters) {
 	if ($query) {
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
-        echo 0;
-    } else {
-        echo 1;
+        return json_encode("1");
     }
+	else return json_encode("0");
 }
 
 function delete_mark($parameters) {

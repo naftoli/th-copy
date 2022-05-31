@@ -1189,7 +1189,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			var parameters = [user_id, date_task_id, mark_date];
             url += "?function_name=" + function_name + "&parameters=" + parameters;
             $.getJSON(url, function(success) {
-                if (success == 0) {
+                if (success == false) {
                     alert("Update not performed.");
                 } else {
 					updateMedalRanks.update(user_id);
@@ -1222,14 +1222,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				//alert(url);
 				var span = this;
 				$.getJSON(url, function(success) {
-					if (success == 1) {
+					if (success == false) {
 						alert("Update not performed.");
 					} else {
 						updateMedalRanks.update(user_id);
 						$(span).empty();
 						var html = "<span class='dMarkID' id='" + task_id + ':' + mark_date;
-						//if (checked) html += ":0'></span><span style='color: red'>&#x2717;</span>";
-						//else html += ":1'></span><span style='color: green'>&#x2713;</span>";
 						if (checked) html += ":0'></span><span class='unchecked'></span>";
 						else html += ":1'></span><span class='checked'></span>";
 						$(span).append(html);

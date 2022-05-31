@@ -82,7 +82,7 @@ function onInputChanged( event ){
     url = "/add_functions.php?function_name=add_mark&parameters=" + parameters.join(',');
     
     $.getJSON( url, function( response ) {
-        if (response != 1)
+        if (response == false)
             return alert("Update not performed. Please try again.");
 
         $.post('/ajax/updateMedalsRanks.php', { user : user_id });

@@ -221,8 +221,7 @@ function add_task_mark($parameters, $update = true) {
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
-		echo 1; // it's already been marked
-        return;
+        return json_encode("1");
 	}
 
 	$insert_sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", done_qty=1, mark_points=" . $points;
@@ -239,12 +238,9 @@ function add_task_mark($parameters, $update = true) {
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
-		echo 1;
+		return json_encode("1");
 	}
-	else {
-		echo 0;
-	}
-
+	else return json_encode("0");
 }
 
 function check_mission_completion($user_id, $subject_id, $date_tasks_mission_id, $mark_date, $update = true) {
@@ -336,8 +332,7 @@ function add_daily_task_mark($parameters, $update = true)
 	//echo $sql;
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
-		echo 0;
-		return; // it's already been marked
+        return json_encode("1");
 	}
 
 	$sql = "INSERT INTO date_tasks_marks SET date_task_id= $date_task_id, "
@@ -409,15 +404,13 @@ function add_daily_task_mark($parameters, $update = true)
 
 		}
 		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
-        echo 0;
 
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+
+        return json_encode("1");
 	}
-	else
-	{
-		echo 1;
-	}
+	else return json_encode("0");
 }
 // ***** DAILY TASKS ***** //
 
@@ -467,8 +460,7 @@ function add_daily_task_mark2($parameters, $update = true)
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
-		echo 0; // it's already been marked
-		return;
+        return json_encode("1");
 	}
 
 	$sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", mark_points=" . $points . ",done_qty=1";
@@ -539,15 +531,13 @@ function add_daily_task_mark2($parameters, $update = true)
 
 		}
         // ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
-        echo 0;
         
         // update the users information in the user_yearly_gift table
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+
+        return json_encode("1");
 	}
-	else
-	{
-		echo 1;
-	}
+	else return json_encode("0");
 }
 
 function check_tasks($user_id, $date_tasks_mission_id) {
@@ -803,10 +793,7 @@ function add_mark($parameters, $update = true)
 
 		return json_encode("1");
 	}
-	else
-	{
-		return json_encode("0");
-	}
+	else return json_encode("0");
 }
 
 function update_missions($user_id, $date_task_id) {
@@ -831,17 +818,6 @@ function update_missions($user_id, $date_task_id) {
 
 			$insert_sql = "INSERT INTO date_tasks_mission_marks SET user_id=" . $user_id . ", date_tasks_mission_id=" . $date_tasks_mission_id . ", subject_id=" . $row['subject_id'] . ", mission_value=" . $row['mission_value'] . ", mission_name='" . mysql_real_escape_string($row['mission_name']) . "', mark_date=" . $mark_date . ", mark_override=0";
 			$insert_query = mysql_query($insert_sql);
-			/*
-			require_once("classes/mission_marks_updater.php");
-			$mm = new mission_marks_updater();
-			$mm->mission_marks_update($user_id);
-
-			$medal_updater = new medal_updater();
-			$medal_updater->update_medal_two($user_id);
-
-			$rank_updater = new rank_updater();
-			$rank_updater->update_rank_two($user_id);
-			*/
 		}
 
 	}
