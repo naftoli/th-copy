@@ -370,7 +370,7 @@ class ChidonTests
 }
 
 class KHK {
-    public static $khkFee = 18;
+//    public static $khkFee = 20;
 
     /*
      * Algorithm to determine if child is eligible for khk registration / tests

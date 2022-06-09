@@ -6,10 +6,12 @@ include_once( __DIR__ . "/../tools/functions/format/parents.php" );
 include_once( __DIR__ . '/../tools/functions/files/images.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
-// LEGACY CODE
-require_once( __DIR__ . '/../../calendar.php' );
 require_once( __DIR__ . '/../../class.points.php' );
 require_once( __DIR__ . '/../../class.campaignEnrollment.php');
+require_once( __DIR__ . '/../../chidonTests/class.chidonTests.php');
+require_once( __DIR__ . '/../../class.globalSettings.php');
+// LEGACY CODE
+require_once( __DIR__ . '/../../calendar.php' );
 
 class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     use \traits\BuildModel;
@@ -287,13 +289,37 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // get regestration discount for soldier
     public function getDiscount() {
         global $MASHPIA_DB;
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
         require_once $_SERVER['DOCUMENT_ROOT'] . '/reports/registration/Discount.php';
         $year = GlobalSettings::getRegistrationYear();
         $d = new DiscountManager($MASHPIA_DB);
         $discount = $d->getDiscountForUserYear($year, $this->user_id);
         if (!empty($discount) && $discount[0]['used'] > 0) return [];
         return $discount;
+    }
+
+    // get chidon info for child
+    public function getChidonInfo() {
+        global $MASHPIA_DB;
+        $info = [];
+        $query = $MASHPIA_DB->prepare("
+            SELECT 
+                tc.*, rc.paid
+            FROM
+                th_chidon tc
+                    LEFT JOIN
+                registration_charges rc USING (user_id , year)
+            WHERE
+                year = :year AND user_id = :user AND rc.type = :type
+        ");
+        $res = $query->execute([
+            ':user' => $this->user_id,
+            ':year' => GlobalSettings::getChidonRegYear(),
+            ':type' => 'chidon'
+        ]);
+        if ($res) {
+            $info = $query->fetch();
+        }
+        return $info;
     }
 
     // ******************************* IMAGES ******************************* //
@@ -444,16 +470,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // disable chidon
 //        $result['chidon'] = true;
 
-        // check if child is eligible for khk if needs to register for chidon
-        $result['khk'] = true; // means not eligible for khk
-//        if (!$result['chidon']) {
-//            $stmt = $MASHPIA_DB->prepare("
-//                SELECT khk_eligible FROM users WHERE user_id = :user
-//            ");
-//            $stmt->execute([':user' => $this->user_id]);
-//            $row = $stmt->fetch();
-//            if (intval($row['khk_eligible'])) $result['khk'] = false;
-//        }
+        // check if child is eligible for khk when registering for chidon
+        $eligibility = KHK::getKHKEligibility([$this->user_id]);
+        $eligible = $eligibility[0];
+        $result['khk'] = !$eligible[$this->user_id]; // true means not eligible for khk
 
         // check if child is new to chidon
         $result['new_to_chidon'] = 1;
@@ -833,7 +853,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function removeFromBpSummary() {
         global $MASHPIA_DB;
         // find current campaign id for tanya / mishna
-        // require_once( __DIR__ . '/../../class.globalSettings.php');
         $year = GlobalSettings::getCurrentYear();
         $campaign_qry = $MASHPIA_DB->prepare( "select id from line_campaigns where year = ?" );
         $campaign_qry->execute([ $year ]);

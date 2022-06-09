@@ -242,7 +242,7 @@ class UserRegistrationRouter {
                             }
 
                             // add chidon prizes
-                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
+//                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
 
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';
@@ -286,12 +286,12 @@ class UserRegistrationRouter {
 
                             $to = $admin->admin_email;
                             if ( $to ) {
-                                if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
-                                    $to = "naftoli@tzivoshashem.org";
-                                    $subject = "Error in chidon email";
-                                    $message .= "<br /><b>Sent to " . $admin->admin_email . "</b>";
-                                    @mail( $to, $subject, $message, implode("\r\n", $headers) );
-                                }
+//                                if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
+//                                    $to = "naftoli@tzivoshashem.org";
+//                                    $subject = "Error in chidon email";
+//                                    $message .= "<br /><b>Sent to " . $admin->admin_email . "</b>";
+//                                    @mail( $to, $subject, $message, implode("\r\n", $headers) );
+//                                }
                             }
                         }
                     // Yahadus purchase
@@ -358,7 +358,7 @@ class UserRegistrationRouter {
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
                     'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id'
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount', 'getChidonInfo' ],
                 'include' => [
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id', 'school_country' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]

@@ -172,8 +172,8 @@ class GlobalSettings {
         if ( in_array( $school_id, [ 269 ] ) ) {
             return 50;
         }
-        $today = new DateTime();
-        return 18;
+//        $today = new DateTime();
+        return 20;
     }
 
     /**

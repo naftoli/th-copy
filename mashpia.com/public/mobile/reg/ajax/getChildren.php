@@ -1,12 +1,14 @@
 <?php
-ini_set('display_errors',1);
-ini_set('error_reporting', E_ALL);
+if ($_SERVER['DOCUMENT_ROOT'] != 'mashpia.com') {
+    ini_set('display_errors', 1);
+    ini_set('error_reporting', E_ALL);
+}
 
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
@@ -48,31 +50,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
     $users[] = $row['id'];
 }
 
-// find parents that have no payments even though kids are showing paid - chidon 5781
-//$purchases = [];
-//$sql = "select * from th_chidon_parent_purchases";
-//$result = mysql_query($sql);
-//while ($row = mysql_fetch_assoc($result)) {
-//    $purchases[$row['admin_id']][] = $row;
-//}
-//
-//// take out parents that have a charge
-//$remove = [];
-//foreach ($purchases as $admin_id => $details) {
-//    foreach ($details as $row) {
-//        if ($row['authorize_id'] > 1 || $row['authorize_desc'] == '0 balance.') {
-//            if (!in_array($admin_id, $remove)) {
-//                $remove[] = $admin_id;
-//                continue 2;
-//            }
-//        }
-//    }
-//}
-//
-//foreach ($remove as $admin_id) {
-//    unset($purchases[$admin_id]);
-//}
-
 if ( !empty( $users ) ) {
     $children = [];
     //need to have multiple result rows to get highest rank
@@ -99,7 +76,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
         $children[$row['user_id']]['anashkinder']   = $row['school_id'] == 269 ? 1 : 0;
         $children[$row['user_id']]['myshliach']     = $row['school_id'] == 61 ? 1 : 0;
-        $children[$row['user_id']]['chidon']        = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) > 2) && (intval($row['class_grade']) <= 8) ? 1 : 0;
+        $children[$row['user_id']]['chidon']        = $CHIDON_ACTIVE && $row['chidon'] && (intval($row['class_grade']) >= 3) && (intval($row['class_grade']) <= 8) ? 1 : 0;
         $children[$row['user_id']]['chidonRegistered'] = 0;
         $children[$row['user_id']]['chayolei']      = 1;
         $children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -136,8 +113,6 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
-
-//        $children[$row['user_id']]['invite_used'] = intval($row['invite_used']);
 
         //mivtza lulav 5781
 //        $children[$row['user_id']]['mivtzaLulav'] = 0;
@@ -209,11 +184,6 @@ if ( !empty( $users ) ) {
 //            $children[$row['user_id']]['gamePurchased'] = 0;
 //        }
 
-        // after Nov 8, 2017 registration is closed
-        //if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
-
-        //if (unixtojd() < 2457996) $children[$row['user_id']]['chidon'] = 0; // chidon registration only begins August 31, 2017
-
         // REGISTRATION
         $children[$row['user_id']]['needsReg'] = 0;
         $children[$row['user_id']]['allowRemove'] = 0;
@@ -281,12 +251,6 @@ if ( !empty( $users ) ) {
 
         // close chidon reg
 //        $children[$row['user_id']]['reg_types']['chidon'] = false;
-
-        // check if school confirmed to allow kids in their school to register for chidon experience
-        $sSql = "select chidon_confirmed_5782 from schools where school_id = " . $row['school_id'];
-        $sRes = mysql_query($sSql);
-        $sRow = mysql_fetch_assoc($sRes);
-        $children[$row['user_id']]['chidonSchoolConfirmed'] = intval($sRow['chidon_confirmed_5782']);
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;

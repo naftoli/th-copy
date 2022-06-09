@@ -284,81 +284,81 @@
                                                 <div class="avatar-container img-people" align="center" style="position:relative">
                                                     <!--<a href="medals/index.html?id={{@key}}">-->
                                                     {{#if this.needsReg}}
-                                                    {{#if this.allowRemove}}
-                                                    {{else}}
-                                                    {{#if this.new_day_school}}
-                                                    <a href="ds_intro.html">
-                                                    {{else}}
-                                                    <a href="medals/?id={{@key}}">
-                                                    {{/if}}
-                                                        {{/if}}
+                                                        {{#if this.allowRemove}}
                                                         {{else}}
+                                                            {{#if this.new_day_school}}
+                                                                <a href="ds_intro.html">
+                                                            {{else}}
+                                                                <a href="medals/?id={{@key}}">
+                                                            {{/if}}
+                                                        {{/if}}
+                                                    {{else}}
                                                         {{#if this.chayolei}}
                                                             {{#if this.new_day_school}}
-                                                            <a href="ds_intro.html">
+                                                                <a href="ds_intro.html">
                                                             {{else}}
-                                                            <a href="medals/?id={{@key}}">
+                                                                <a href="medals/?id={{@key}}">
                                                             {{/if}}
-                                                            {{/if}}
-                                                            {{/if}}
-                                                            {{#if this.mobile_pic}}
-                                                            <img src="{{mobile_pic}}" class="children-avatar">
-                                                            {{else}}
-                                                            {{#if this.photo}}
-                                                            {{#if this.thumb}}
-                                                            <img src="/thumbs/{{thumb}}" class="children-avatar">
-                                                            {{else}}
-                                                            <img src="../../git cdh{{photo}}" class="children-avatar">
-                                                            {{/if}}
-                                                            {{else}}
-                                                            <img src="images/profile-photo-default.jpg" class="children-avatar">
-                                                            {{/if}}
-                                                            {{/if}}
-                                                            <img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
-                                                            <!--</a>-->
-                                                            {{#if this.needsReg}}
-                                                            {{#if this.allowRemove}}
-                                                            {{else}}
-                                                        </a>
                                                         {{/if}}
-                                                        {{else}}
-                                                        {{#if this.chayolei}}
-                                                    </a>
                                                     {{/if}}
+                                                    {{#if this.mobile_pic}}
+                                                        <img src="{{mobile_pic}}" class="children-avatar">
+                                                    {{else}}
+                                                        {{#if this.photo}}
+                                                            {{#if this.thumb}}
+                                                                <img src="/thumbs/{{thumb}}" class="children-avatar">
+                                                            {{else}}
+                                                                <img src="../../git cdh{{photo}}" class="children-avatar">
+                                                            {{/if}}
+                                                        {{else}}
+                                                            <img src="images/profile-photo-default.jpg" class="children-avatar">
+                                                        {{/if}}
+                                                    {{/if}}
+                                                    <img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
+                                                            <!--</a>-->
+                                                    {{#if this.needsReg}}
+                                                        {{#if this.allowRemove}}
+                                                        {{else}}
+                                                            </a>
+                                                        {{/if}}
+                                                    {{else}}
+                                                        {{#if this.chayolei}}
+                                                            </a>
+                                                        {{/if}}
                                                     {{/if}}
                                                 </div>
                                             </td>
                                             <td style="padding-left:10px" id="{{@key}}">
                                                 <div class="childrens-content">
                                                     {{#if this.needsReg}}
-                                                    {{#if this.allowRemove}}
-                                                    {{else}}
-                                                    {{#if this.new_day_school}}
-                                                    <a href="ds_intro.html?id={{@key}}">
+                                                        {{#if this.allowRemove}}
                                                         {{else}}
-                                                        <a href="medals/?id={{@key}}">
+                                                            {{#if this.new_day_school}}
+                                                                <a href="ds_intro.html?id={{@key}}">
+                                                            {{else}}
+                                                                <a href="medals/?id={{@key}}">
                                                             {{/if}}
                                                         {{/if}}
-                                                        {{else}}
+                                                    {{else}}
                                                         {{#if this.chayolei}}
                                                             {{#if this.new_day_school}}
-                                                            <a href="ds_intro.html">
-                                                                {{else}}
-                                                                <a href="medals/?id={{@key}}">
-                                                                    {{/if}}
-                                                            {{/if}}
-                                                            {{/if}}
-                                                            <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
-                                                            <div class="childrens-content-h2">{{school}} - {{city}}</div>
-                                                            {{#if this.needsReg}}
-                                                            {{#if this.allowRemove}}
+                                                                <a href="ds_intro.html">
                                                             {{else}}
-                                                        </a>
+                                                                <a href="medals/?id={{@key}}">
+                                                            {{/if}}
                                                         {{/if}}
-                                                        {{else}}
-                                                        {{#if this.chayolei}}
-                                                    </a>
                                                     {{/if}}
+                                                    <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
+                                                    <div class="childrens-content-h2">{{school}} - {{city}}</div>
+                                                    {{#if this.needsReg}}
+                                                        {{#if this.allowRemove}}
+                                                        {{else}}
+                                                            </a>
+                                                        {{/if}}
+                                                    {{else}}
+                                                        {{#if this.chayolei}}
+                                                            </a>
+                                                        {{/if}}
                                                     {{/if}}
                                                     {{#if this.needsReg}}
                                                     <div class="button-spacing">
@@ -617,9 +617,6 @@
                             $(".subsidy").show()
                         }
 
-                        child.chidon_confirmed_5782 = parent.chidon_confirmed_5782
-                        console.log('confirmed: ' + child.chidon_confirmed_5782)
-
                         if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
                             unregistered_children[c] = child;
                             childrenToRegister.push({
@@ -675,11 +672,6 @@
             });
 
             $(document).on('click', ".re_register", function () {
-                //var info = $(this).attr('class');
-                //if (info.indexOf('schoolNotRegistered') != -1) {
-                //	alert("The school for this child has not yet registered. You will only be able to register once the school registers.");
-                //	return false;
-                //}
                 var id = $(this).parent().parent().parent().attr('id');
                 if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
                 else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
@@ -732,11 +724,6 @@
             $(document).on('click', '.confirm_chidon', function () {
                 location.href = '/mobile/chidon/confirmation_intro.html'
             })
-
-            //$(document).on('click', '.shabbatonEdit', function() {
-            //	var id = $(this).parent().parent().parent().attr('id');
-            //	location.href = "/mobile/chidon/edit.html?id=" + id;
-            //});
 
             $(document).on('click', '.chidondrive', function () {
                 if (location.href.includes('mashpia.com')) location.href =
@@ -806,19 +793,8 @@
                 Cookies.set('chidon_admin', admin)
                 location.href = 'subsidy.html'
             })
-            /*
-            $(document).on('click', '.chidonEdit', function() {
-                var id = $(this).parent().parent().parent().attr('id');
-                location.href = "/mobile/chidon/index.html?id=" + id + "&edit=1";
-            });
-            */
+
             $("#logOff").click(function () {
-                //Cookies.set('isconnected', 'false', { expires : -1 });
-                //Cookies.remove('isconnected');
-                //Cookies.set('admin', '0', { expires: -1 });
-                //Cookies.remove('admin', { path: '/mobile/reg' });
-                //Cookies.set('admin', '0', { expires: -1 });
-                //Cookies.set('admin_id', '0', { expires: -1 });
                 Cookies.remove('admin', {
                     path: '/'
                 });
@@ -833,10 +809,6 @@
                 }
                 window.location = "/mobile/reg/";
             });
-
-            // $("#addChild").click( function() {
-            //     //$("#popModal").modal();
-            // });
 
             $("#popup").submit(function () {
                 var answer = $(".thAdded");
@@ -855,17 +827,6 @@
                 }
             });
 
-            /*
-            $(".btn.submit").click( function() {
-                var answer = ($(this).text());
-                $("#popModal").modal('hide');
-                if (answer == 'Yes') {
-                    document.location.href = 'https://mashpia.com/mobile/reg/addchild.html';
-                } else if (answer == 'No') {
-                    //location.href = ;
-                }
-            });
-            */
             $(document).on('click', '.feedback', function () {
                 window.open("https://form.jotform.com/Chidon/chidon-feedback-form", "_blank");
             });
