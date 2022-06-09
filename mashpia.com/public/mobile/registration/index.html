@@ -152,10 +152,10 @@
                             <label for="last" class="i18n" data-key="LastName">English Last Name</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required>
+                            <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required />
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="Last Name"  id="last"  name="last"  required>
+                            <input type="text" class="form-control" placeholder="Last Name"  id="last"  name="last" required />
                         </div>
                     </div>
                     <div class="row">
@@ -166,10 +166,10 @@
                             <label for="first_he" class="i18n" data-key="HebrewName">Hebrew Last Name</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required/>
+                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required />
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he" dir="rtl" required/>
+                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he" dir="rtl" required />
                         </div>
                     </div>
 <!--                    <div class="row">-->
@@ -272,11 +272,11 @@
                                     <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
                                     <span id="anash_kinder_text" style="display: none" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
                                     <br />
-                                    <div style="text-align: center">
+                                    <div>
                                         <b>Chayolei Tzivos Hashem WhatsApp</b><hr />
                                     </div>
-                                    <div class="i18n" data-key="WantToReceive" style="padding-left: 2%; padding-right: 4%; text-align: center;">
-                                        Want to receive Chayolei Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853 to join the broadcast for Chayolei Tzivos Hashem updates.
+                                    <div class="i18n" data-key="WantToReceive">
+                                        Want to receive Chayolei Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853 to join the broadcast.
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +382,7 @@
                                             <input type="radio" name="recruit" class="recruit i18n" data-key="No" value="0" /> No<br />
                                             <br />
                                             <div id="recruited_by" class="hide">
-                                                IF YES, Add the serial number of the soldier that recruited you so that they can get
+                                                Add the serial number of the soldier that recruited you so that they can get
                                                 chidon prizes. (Their serial number can be found in their parent account).<br />
                                                 <input type="text" name="recruited_by_user_serial" id="recruited_by_user_serial"
                                                        class="form-control" style="width: 200px; height: 50px !important; margin-bottom: 10px;" />
@@ -402,10 +402,10 @@
 
                                     <div id="custom-name">
                                         <b>Chidon Customized Items</b><hr />
-                                        One of the test prizes for this coming year is a water bottle. Enroll by {date} to get
-                                        the bottle with your name on it. Please type your name in English spelled exactly
-                                        as you would like it to appear on the bottle. There is a max of 12 characters.
-                                        There will be no edits later.<br />
+                                        Any child that gets a passing average on the 4 tests on any track will be eligible to get the Chidon gifts.
+                                        One of the gifts will be a bottle with your name on it.<br /><br />
+                                        Please type your name in English, spelled exactly as you would like it to appear on the bottle.
+                                        There is a max of 12 characters. There will be no edits once enrollment closes.<br />
                                         <input type="text" maxlength="12" id="nameChoice" class="form-control"
                                                style="width: 175px; height: 50px !important; margin-bottom: 6px; margin-top: 6px;" />
                                     </div>
@@ -424,9 +424,10 @@
                                     <br />
 
                                     <b>Chidon Sweater</b><hr />
-                                    <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:
+                                    <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:<br />
                                         (Please keep in mind that sweaters are distributed at the end of Chidon so your child's size might grow.
-                                        Please size up if you believe your child's size may change. Unfortunately, size changes after registration are NOT possible.)
+                                        Please size up if you believe your child's size may change. Unfortunately, size changes after
+                                        this enrolment process will NOT be possible.)
                                     </label>
                                     <select class="form-control" id="chidon-sweater-size">
                                         <option value="0">Please choose</option>
@@ -443,7 +444,7 @@
                                     <br />
 
                                     <b>Chidon Yahadus Books</b><hr />
-                                    <label for="chidon-book">Choose the Book Number your child will need to study for Chidon:</label>
+                                    <label for="chidon-book">Choose the Book Number your child will need to study based on the their grade in 5783:</label>
                                     <select class="form-control" id="chidon-book">
                                         <option value="0" class="i18n" data-key="ChooseBookNumber">Choose Book Number</option>
                                         <option value="1" class="i18n" data-key="GradeBook1">4th Grade: Book 1</option>
@@ -668,7 +669,7 @@
                     </div>
                     <br />
 
-                    <strong>Tzivos Hashem Terms</strong>
+                    <strong>Privacy Policy</strong>
                     <hr />
                     <label>
                         <div class="row">
@@ -677,9 +678,8 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11 i18n" data-key="ParticipatingChayolei">
-                                I am aware that by participating in Tzivos Hashem and its programs
-                                I consent to having my child's names and pictures being used in any media produced by Tzivos Hashem,
-                                for publicity purposes or otherwise.
+                                I am aware that by participating in Tzivos Hashem and its programs, I consent to having my
+                                child's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.
                             </div>
                         </div>
                     </label>
@@ -1059,6 +1059,26 @@
                 if ($(this).val() == '1') $("#recruited_by").show()
                 else $("#recruited_by").hide()
             })
+
+            $("#first").blur(isEnglish)
+
+            $("#last").blur(isEnglish)
+
+            function isEnglish( event ) {
+                let str = event.target.value
+                for (s in str) {
+                    let code = str.charCodeAt(s)
+                    if (code > 122 || code < 65) {
+                        alert('You can only enter english letters for the first and last english name')
+                        // fix infinite loop without using setTimeout function
+                        setTimeout( function() {
+                            $(event.target).focus()
+                        }, 0)
+                        return false
+                    }
+                }
+                return true
+            }
         </script>
     </div>
 </body>

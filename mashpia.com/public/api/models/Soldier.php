@@ -500,6 +500,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
+
+
         return $result;
     }
     /**

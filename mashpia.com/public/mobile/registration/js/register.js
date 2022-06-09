@@ -21,7 +21,7 @@ var selected_index;
 var current_user;
 var school_id;
 var user_prizes = {}
-var khk_fee = 20
+var khk_fee = 18
 var usa = [
     'U.S.A',
     'United States',
@@ -39,14 +39,14 @@ var state = {
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
 
-    var Msg1 = "Tzivos Hashem Registration for ";
+    var Msg1 = "Tzivos Hashem Enrollment for ";
         
-    var Msg3 = "CKids Registration for ";
-    var Msg4 = "Chidon Registration for ";
+    var Msg3 = "CKids Enrollment for ";
+    var Msg4 = "Chidon Enrollment for ";
     var Msg5 = " (includes coordinator and study guide)";//
     var Msg6 = "Yahadus Book for ";
     var Msg7 = " (Shipping Included)";
-    var Msg8 = "To Register for MyShliach's online weekly classes please click ";
+    var Msg8 = "To Enroll for MyShliach's online weekly classes please click ";
     var Msg9 = "here";
     //var Msg10 = "";
     //var Msg11 = "";
@@ -530,7 +530,7 @@ var registrationApp = function() {
                 {
                     field: '#nameChoice',
                     type: 'value',
-                    error: 'You must enter the name you would like to have on your personalized prizes'
+                    error: 'You must enter the name you would like to have on the your personalized bottle'
                 },
                 {
                     field: '#chidon-sweater-size',
@@ -540,7 +540,7 @@ var registrationApp = function() {
                 {
                     field: '#chidon-book',
                     type: 'amount',
-                    error: 'You must chose the book number you will be using'
+                    error: 'You must choose the book number you will be using'
                 },
                 {
                     field: '.book-bought',
@@ -578,19 +578,19 @@ var registrationApp = function() {
                     error: 'You must indicate your acceptance of all Terms (1st term not checked)'
                 },
                 {
-                    field: '#enNameSpelling',
+                    field: '#heNameSpelling',
                     type: 'check',
                     error: 'You must indicate your acceptance of all Terms (2nd term not checked)'
                 },
                 {
-                    field: '#heNameSpelling',
+                    field: '#enNameSpelling',
                     type: 'check',
                     error: 'You must indicate your acceptance of all Terms (3rd term not checked)'
                 },
                 {
                     field: '#media',
                     type: 'check',
-                    error: 'You must indicate your acceptance of Tzivos Hashem Terms'
+                    error: 'You must indicate your acceptance of our Privacy Policy'
                 }
             ]
 
@@ -623,16 +623,15 @@ var registrationApp = function() {
                 }
             }
             if (errors.length) {
-                // convert array into string that will show each error on separate line
-                let message = errors.join(".<br />")
-                // alert(message)
-                console.log(message)
+                let html = ''
+                for (let i = 1; i <= errors.length; i++) {
+                    html +=  i + ') ' + errors[i-1] + '.<br />'
+                }
                 $("#errorModal").on('shown.bs.modal', function () {
-                    $(".modal-body").html(message)
+                    $(".modal-body").html(html)
                     $(".modal-body").css({'textAlign': 'left'});
                 })
                 $("#errorModal").modal('show');
-                return
             }
 
             // check yarmulka
@@ -1380,7 +1379,7 @@ var templates = function(){
             }
 
             var bookHtml = "<option value='0'>Please choose</option>"
-            for (var i = 2011; i <= 2022; i++) {
+            for (var i = 2011; i < 2022; i++) {
                 bookHtml += `<option value='${i}'>${i}</option>`
             }
             $("#step-2 form #bookVersion").empty()
