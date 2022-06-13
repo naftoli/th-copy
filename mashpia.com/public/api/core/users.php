@@ -99,8 +99,8 @@ class UsersRouter {
  
         // make sure soldier with this first and last name and date of birth doesn't exist in this school
         $school_id = $_POST['school_id'];
-        $first = $_POST['first'];
-        $last = $_POST['last'];
+        $first = ucwords($_POST['first']);
+        $last = ucwords($_POST['last']);
         $dob = $_POST['dob'];
         $existing_user =  Soldier::find('all',array('conditions' => array('school_id = ? and first = ? and last = ? and dob = ?', $school_id, $first, $last, $dob)));
         if ( $existing_user ) {
@@ -168,8 +168,12 @@ class UsersRouter {
         // update other properties
         } else {
             $columns = array_keys( Soldier::table()->columns );
+            $toCapitalize = ['first', 'last', 'non_th_school'];
             foreach( $_POST as $key => $value ) {
-                if ( in_array( $key, $columns ) ) $user->{ $key } = $_POST[ $key ];
+                if ( in_array( $key, $columns ) ) {
+                    if ( in_array( $key, $toCapitalize ) ) $value = ucwords( $value );
+                    $user->{ $key } = $value;
+                }
             }
             if ( !$user->is_valid() || !$user->save() )
                 json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');

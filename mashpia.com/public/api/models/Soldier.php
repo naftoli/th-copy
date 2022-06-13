@@ -303,22 +303,24 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $info = [];
         $query = $MASHPIA_DB->prepare("
             SELECT 
-                tc.*, rc.paid
+                *
             FROM
                 th_chidon tc
                     LEFT JOIN
-                registration_charges rc USING (user_id , year)
+                yahadus_book_purchases ybp USING (user_id)
             WHERE
-                year = :year AND user_id = :user AND rc.type = :type
+                tc.year = :year AND tc.user_id = :user
+                    AND ybp.year in (:year, :lastYr)
         ");
         $res = $query->execute([
             ':user' => $this->user_id,
             ':year' => GlobalSettings::getChidonRegYear(),
-            ':type' => 'chidon'
+            ':lastYr' => GlobalSettings::getChidonRegYear() - 1
         ]);
-        if ($res) {
-            $info = $query->fetch();
-        }
+//        echo $query->debugDumpParams();
+
+        if ($res) $info = $query->fetch();
+
         return $info;
     }
 
@@ -388,7 +390,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':type' =>  $type
         ]);
         $rows = $check_qry->fetchAll();
-        if ( count( $rows ) > 0 ) return true;
+        if ( count( $rows ) > 0 ) {
+            $registration_info_query = $MASHPIA_DB->prepare("
+                UPDATE registration_charges SET trans_id = :trans, amount = :amount 
+                WHERE user_id = :user AND year = :year AND type = :type
+            ");
+            return $registration_info_query->execute([
+                'type' => $type,        'trans' => $trans_id,
+                'year' => $year,        'user'  => $this->user_id,
+                'amount' => $amount
+            ]);
+        }
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
@@ -431,6 +443,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
 
+        // for some reason Mendel programmed it such that "true" means NOT to register, and "false" means YES to register
         $result = [];
 
         if ( $row['chayolei'] && !$isBC ) {
@@ -441,12 +454,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result['chayolei'] = true;
         }
         
-        // only add th_chidon_id if the user is in grade 4+
+        // only add th_chidon_id if the user is in grade 4-8
+        // chidonEdit key indicates true/false the way it's meant to mean
         $exceptions = [482,544,583];
-        if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] && !in_array( $this->school_id, $exceptions ) )
-            $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
-        else
+        if ( $this->platoon && $this->platoon->class_grade >= 3 && $this->platoon->class_grade <= 8 &&
+            $row['chidon'] && !in_array( $this->school_id, $exceptions )
+        ) {
+            $result['chidon'] = !!$row['th_chidon_id'];
+            $result['chidonEdit'] = !!$row['th_chidon_id'];
+        }
+        else {
             $result['chidon'] = true;
+            $result['chidonEdit'] = false;
+        }
 
         // turn off chayolei and chidon reg if school has not registered yet
         if ( 
@@ -650,22 +670,65 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
-        if ( $recruited && $recruited_by > 0 ) {
-            $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, recruited_by, poll, 
-                       comments, test_type) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $recruited_by, $poll,
-                $comments, $track ] );
+        // check if we are inserting or updating
+        $qry = $MASHPIA_DB->prepare("SELECT count(*) as total FROM th_chidon WHERE year = :year AND user_id = :user");
+        $qry->execute([
+            'year'  => $year,
+            'user'  => $this->user_id
+        ]);
+        $row = $qry->fetch();
+        $total = $row['total'];
+        if ($total) {
+            // we are updating
+            $chidonQry = $MASHPIA_DB->prepare("
+                UPDATE th_chidon SET 
+                size = :size, 
+                book = :book,
+                yarmulka = :yarmulka,
+                name_pref = :pref,
+                poll = :poll,
+                comments = :comments,
+                test_type = :test_type, 
+                recruited_by = :recruit
+            ");
+            return $chidonQry->execute([
+                'size'  => $size,
+                'book'  => $book,
+                'yarmulka'  => $yarmulka,
+                'pref'  => $name_pref,
+                'poll'  => $poll,
+                'comments'  => $comments,
+                'test_type' => $track,
+                'recruit'   => $recruited_by
+            ]);
         } else {
-            $chidon_query = $MASHPIA_DB->prepare(
-                "INSERT INTO th_chidon (year, school_id, user_id, size, book, yarmulka, name_pref, parent_id, poll, 
-                       comments, test_type) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            );
-            return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $book, $yarmulka, $name_pref, $parent_id, $poll,
-                $comments, $track ] );
+            $chidonQry = $MASHPIA_DB->prepare("
+                INSERT INTO th_chidon SET 
+                year = :year,
+                school_id = :school,
+                user_id = :user,
+                size = :size, 
+                book = :book,
+                yarmulka = :yarmulka,
+                name_pref = :pref,
+                poll = :poll,
+                comments = :comments,
+                test_type = :test_type, 
+                recruited_by = :recruit
+            ");
+            return $chidonQry->execute([
+                'year'  => $year,
+                'school'=> $this->school_id,
+                'user'  => $this->user_id,
+                'size'  => $size,
+                'book'  => $book,
+                'yarmulka'  => $yarmulka,
+                'pref'  => $name_pref,
+                'poll'  => $poll,
+                'comments'  => $comments,
+                'test_type' => $track,
+                'recruit'   => $recruited_by
+            ]);
         }
     }
 

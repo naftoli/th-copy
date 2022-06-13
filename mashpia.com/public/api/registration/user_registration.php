@@ -226,10 +226,11 @@ class UserRegistrationRouter {
                         $year = GlobalSettings::getChidonRegYear();
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
+//                        echo "<pre>"; print_r($registration); echo "</pre>"; return [];
                         if ( !$user->registerChidon(
-                            $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), $registration['name_pref'],
-                            $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']
-                            ), $registration['comments'], $registration['track'] ) )
+                            $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                            $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                            $registration['comments'], $registration['track'] ) )
                                 $user_errors[] = "Could not register ".$user->user_id." for chidon";
                         else {
                             // add book purchased info to db
@@ -238,7 +239,7 @@ class UserRegistrationRouter {
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
                                 $version = $registration['bookVersion'];
-                                $user->addBookPurchase( $year-1, $user->user_id, $location, '', $store_name, $store_city, $version );
+                                $user->addBookPurchase( $year-1, $user->user_id, $location, 0, $store_name, $store_city, $version );
                             }
 
                             // add chidon prizes

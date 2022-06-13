@@ -318,7 +318,7 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 <label for="chidon">
-                                    <div>
+                                    <div id="chidon-reg-text">
                                         <strong>I would like to register for Chidon</strong> ($20 minimum fee)
                                     </div>
 <!--                                <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />-->
@@ -355,7 +355,7 @@
                                             <span class="checkbox" style="margin-right: 10px; vertical-align: text-bottom; margin-top: 8px;"></span>
                                         </label>
                                         <span class="i18n" data-key="khkMsg2"></span><br />
-                                        <span class="i18n" data-key="khkMsg3"></span>
+                                        <span id="khk-reg-text" class="i18n" data-key="khkMsg3"></span>
                                         <br />
                                         <br />
                                     </div>
@@ -482,6 +482,10 @@
                                     <div id="book-purchase" class="hide" style="margin-top: -10px;">
                                         <span class="i18n" data-key="Wherebuybook">Where did you buy your chidon book?</span>
                                         <br />
+                                        <div>
+                                            <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" />
+                                            During Chidon Registration
+                                        </div>
                                         <div>
                                             <input type="radio" name="book-purchase" class="book-purchase i18n" value="event" data-key="ChidonEvent" />
                                             By a previous Chidon Event
@@ -876,7 +880,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 right">
                         <button class="btn btn-primary start-step-2">
-                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="ConfirmSoldiers">Confirm Soldiers</span>
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n2" data-key="ConfirmSoldiers">Back</span>
                         </button>
                     </div>
                 </div>
@@ -969,7 +973,10 @@
                             <polyline class="path check" fill="none" stroke="#2c539e" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                         </svg>
                     </div>
-                    <p id="success" class="primary i18n" data-key="YourchildRegistered">Your child(ren) has(have) been registered!</p>
+                    <p id="success" class="primary i18n2" data-key="YourchildRegistered">
+                        Your child(ren) has(have) been registered!<br /><br />
+                        If you were updating an existing registration, your information has been updated!<br />
+                    </p>
                     <div class="alert alert-danger" id="error-message"></div>
                 </div>
                 <div class="modal-footer">
@@ -1064,16 +1071,36 @@
 
             $("#last").blur(isEnglish)
 
+            function between(x, min, max) {
+                return x >= min && x <= max
+            }
+
             function isEnglish( event ) {
                 let str = event.target.value
                 for (s in str) {
                     let code = str.charCodeAt(s)
-                    if (code > 122 || code < 65) {
-                        alert('You can only enter english letters for the first and last english name')
-                        // fix infinite loop without using setTimeout function
-                        setTimeout( function() {
-                            $(event.target).focus()
-                        }, 0)
+                    let allowed = [26, 27, 45]
+                    let ranges = [
+                        [65, 90],
+                        [97, 122]
+                    ]
+                    if (
+                        (! allowed.includes(code)) &&
+                        (! between(code, ranges[0][0], ranges[0][1])) &&
+                        (! between(code, ranges[1][0], ranges[1][1]))
+                    ) {
+                        $("#errorModal").on('shown.bs.modal', function () {
+                            $(".modal-body").html('You can only enter english letters for the first and last english name.')
+                            $(".modal-body").css({'textAlign': 'left'});
+                        })
+                        $("#errorModal").modal('show');
+
+                        $("#errorModal").on('hide.bs.modal', function () {
+                            // fix infinite loop without using setTimeout function
+                            setTimeout( function() {
+                                $(event.target).focus()
+                            }, 0)
+                        })
                         return false
                     }
                 }
