@@ -253,8 +253,9 @@
                             </div>
                         </div>
                     </div>
+                    <br />
                     <label id="chayolei-registration">
-                        <h2  class="i18n2" data-key="ChayoleiRegistration">Chayolei Tzivos Hashem Registration <span class="chayolei_year"></span> </h2>
+                        <h2 class="i18n2" data-key="ChayoleiRegistration">Chayolei Tzivos Hashem Registration <span class="chayolei_year"></span> </h2>
                         <hr>
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -270,7 +271,7 @@
                                 <div id="chayolei-details" class="hide">
                                     <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
                                     <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
-                                    <span id="anash_kinder_text" style="display: none" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
+                                    <span id="anash_kinder_text" style="display: none; padding-top: 10px; padding-bottom: 10px;" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
                                     <br />
                                     <div>
                                         <b>Chayolei Tzivos Hashem WhatsApp</b><hr />
@@ -483,10 +484,6 @@
                                         <span class="i18n" data-key="Wherebuybook">Where did you buy your chidon book?</span>
                                         <br />
                                         <div>
-                                            <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" />
-                                            During Chidon Registration
-                                        </div>
-                                        <div>
                                             <input type="radio" name="book-purchase" class="book-purchase i18n" value="event" data-key="ChidonEvent" />
                                             By a previous Chidon Event
                                         </div>
@@ -507,7 +504,7 @@
                                         </div>
                                         <div class="book-purchase-item">
                                             <input type="radio" name="book-purchase" class="book-purchase" value="parent_account" />
-                                            <span class="i18n" data-key="ThroughParent">Through my parent account </span>
+                                            <span class="i18n" data-key="ThroughParent">During Chidon Registration (Parent account) </span>
                                         </div>
                                         <div class="book-purchase-item">
                                             <input type="radio" name="book-purchase" class="book-purchase" value="school" />
@@ -955,7 +952,7 @@
                         <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
                     </button>
                 </div>
-                <div class="modal-body"></div>
+                <div class="modal-body" id="errorBody"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="model" data-target="#errorModal">Close</button>
                 </div>
@@ -974,13 +971,13 @@
                         </svg>
                     </div>
                     <p id="success" class="primary i18n2" data-key="YourchildRegistered">
-                        Your child(ren) has(have) been registered!<br /><br />
+                        Your child(ren) has(have) been registered!<br />
                         If you were updating an existing registration, your information has been updated!<br />
                     </p>
                     <div class="alert alert-danger" id="error-message"></div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary i18n" href="/mobile/reg/parent_detail.html"  data-key="Close">Close</a>
+                    <a class="btn btn-primary i18n" data-target="#successModal" data-dismiss="model" data-key="Close">Close</a>
                 </div>
             </div>
         </div>

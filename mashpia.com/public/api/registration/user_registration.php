@@ -160,7 +160,7 @@ class UserRegistrationRouter {
             ]);
             $trans_id = $MASHPIA_DB->lastInsertId();
         } else {
-            $payment_response = 'N/A'; $trans_id = 0;
+            $trans_id = 0;
         }
 
         try {
@@ -239,7 +239,7 @@ class UserRegistrationRouter {
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
                                 $version = $registration['bookVersion'];
-                                $user->addBookPurchase( $year-1, $user->user_id, $location, 0, $store_name, $store_city, $version );
+                                $user->addBookPurchase( $year, $user->user_id, $location, 0, $store_name, $store_city, $version );
                             }
 
                             // add chidon prizes
@@ -326,21 +326,6 @@ class UserRegistrationRouter {
         } catch( Exception $e ) {
             $errors['other'] = $e;
         };
-
-        // insert into special myshliach/anash kinder table
-        // if( count($registration_table_users) > 0 ){
-        //     $registration_table_query = $MASHPIA_DB->prepare(
-        //         "INSERT INTO registration (description, approval, year, school_id, "
-        //         ."admin_id, ship_option, ship_dest, users) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        //     );
-        //     foreach( $registration_table_users as $school_id => $user_ids ){
-        //         $registration_table_query->execute([
-        //             $description, json_encode( $payment_response ), $year, $school_id,
-        //             $current_user->admin_id, $shipping_info['shipping_type'], 
-        //             $current_user->admin_country, implode( ', ', $user_ids )
-        //         ]);
-        //     }
-        // }
 
         if ( count( $errors ) > 0 ) {
 //            echo "<pre>"; print_r( $errors ); echo "</pre>";

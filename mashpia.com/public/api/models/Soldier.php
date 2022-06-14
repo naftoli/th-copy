@@ -682,25 +682,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             // we are updating
             $chidonQry = $MASHPIA_DB->prepare("
                 UPDATE th_chidon SET 
-                size = :size, 
-                book = :book,
-                yarmulka = :yarmulka,
-                name_pref = :pref,
-                poll = :poll,
-                comments = :comments,
-                test_type = :test_type, 
-                recruited_by = :recruit
+                    size = :size, 
+                    book = :book,
+                    yarmulka = :yarmulka,
+                    name_pref = :pref,
+                    poll = :poll,
+                    comments = :comments,
+                    test_type = :test_type, 
+                    recruited_by = :recruit 
+                WHERE
+                    year = :year AND school_id = :school
+                        AND user_id = :user
             ");
-            return $chidonQry->execute([
-                'size'  => $size,
-                'book'  => $book,
-                'yarmulka'  => $yarmulka,
-                'pref'  => $name_pref,
-                'poll'  => $poll,
-                'comments'  => $comments,
-                'test_type' => $track,
-                'recruit'   => $recruited_by
-            ]);
         } else {
             $chidonQry = $MASHPIA_DB->prepare("
                 INSERT INTO th_chidon SET 
@@ -716,20 +709,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 test_type = :test_type, 
                 recruited_by = :recruit
             ");
-            return $chidonQry->execute([
-                'year'  => $year,
-                'school'=> $this->school_id,
-                'user'  => $this->user_id,
-                'size'  => $size,
-                'book'  => $book,
-                'yarmulka'  => $yarmulka,
-                'pref'  => $name_pref,
-                'poll'  => $poll,
-                'comments'  => $comments,
-                'test_type' => $track,
-                'recruit'   => $recruited_by
-            ]);
         }
+        return $chidonQry->execute([
+            'year'  => $year,
+            'school'=> $this->school_id,
+            'user'  => $this->user_id,
+            'size'  => $size,
+            'book'  => $book,
+            'yarmulka'  => $yarmulka,
+            'pref'  => $name_pref,
+            'poll'  => $poll,
+            'comments'  => $comments,
+            'test_type' => $track,
+            'recruit'   => $recruited_by
+        ]);
     }
 
     /**
@@ -746,25 +739,60 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      */
     public function addBookPurchase( $year, $user_id, $location, $trans_id = '', $store_name = '', $store_city = '', $version = 0 ) {
         global $MASHPIA_DB;
-        $qry = $MASHPIA_DB->prepare(
-            "insert into yahadus_book_purchases 
-            set year = :year, 
-            user_id = :user, 
-            location = :location, 
-            trans_id = :trans_id, 
-            store_name = :store_name, 
-            store_city = :store_city, 
-            version = :version"
-        );
+
+        // figure out if adding or updating
+        $qry = $MASHPIA_DB->prepare("
+            SELECT count(*) as total FROM yahadus_book_purchases 
+            WHERE year = :year and user_id = :user
+        ");
         $qry->execute([
-            ':year' =>  $year, 
-            ':user' =>  $user_id, 
-            ':location' =>  $location, 
-            ':trans_id' =>  $trans_id, 
-            ':store_name'   =>  $store_name, 
-            ':store_city'   =>  $store_city,
-            ':version'      => intval($version)
+            'year'  => $year,
+            'user'  => $user_id
         ]);
+        $row = $qry->fetch();
+        $total = $row['total'];
+        if ($total) {
+            // updating
+            // don't update trans_id
+            $qry = $MASHPIA_DB->prepare("
+                UPDATE yahadus_book_purchases SET 
+                    location = :location, 
+                    store_name = :store_name, 
+                    store_city = :store_city, 
+                    version = :version  
+                WHERE
+                    user_id = :user AND year = :year
+            ");
+            $qry->execute([
+                ':year' =>  $year,
+                ':user' =>  $user_id,
+                ':location' =>  $location,
+                ':store_name'   =>  $store_name,
+                ':store_city'   =>  $store_city,
+                ':version'      => intval($version)
+            ]);
+        } else {
+            $qry = $MASHPIA_DB->prepare(
+                "insert into yahadus_book_purchases 
+                set year = :year, 
+                user_id = :user, 
+                location = :location, 
+                trans_id = :trans_id, 
+                store_name = :store_name, 
+                store_city = :store_city, 
+                version = :version"
+            );
+            $qry->execute([
+                ':year' =>  $year,
+                ':user' =>  $user_id,
+                ':location' =>  $location,
+                ':trans_id' =>  $trans_id,
+                ':store_name'   =>  $store_name,
+                ':store_city'   =>  $store_city,
+                ':version'      => intval($version)
+            ]);
+        }
+//        echo $qry->debugDumpParams();
     }
 
     // set khk_reg flag in db to true

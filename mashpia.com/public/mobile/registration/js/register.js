@@ -4,6 +4,7 @@
 // page setup
 if ( !checkDateInput() ) { $('#dob, input[type="date"]').datepicker({ format: "yyyy-mm-dd" }); }
 $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
+$("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").html('') });
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
@@ -207,7 +208,8 @@ var registrationApp = function() {
         // show anash kinder text if anash kinder school
         if ( school_id == anash_kinder ) {
             $("#anash_kinder_text").show();
-            // $(".shabbaton-cost").html("<b>$250</b>");
+        } else {
+            $("#anash_kinder_text").hide();
         }
 
         // yahadus registration
@@ -439,10 +441,13 @@ var registrationApp = function() {
         switch (field.type) {
             case 'value':
                 value = $(field.field).val()
+                console.log(field.field + '=' + value)
                 if (value == '' || value == 0 || value == '0' || !value.length) return field.error
+                break
             case 'amount':
                 // make sure we have a number greater than 0
                 value = parseInt($(field.field).val())
+                console.log(field.field + '=' + value)
                 if (value <= 0) return field.error
                 break
             case 'check':
@@ -512,8 +517,8 @@ var registrationApp = function() {
             // check that privacy policy is checked off
             if (! $("#media").is(":checked")) {
                 $("#errorModal").on('shown.bs.modal', function () {
-                    $(".modal-body").html('You must indicate your acceptance of our Privacy Policy.')
-                    $(".modal-body").css({'textAlign': 'left'});
+                    $("#errorBody").html('You must indicate your acceptance of our Privacy Policy.')
+                    $("#errorBody").css({'textAlign': 'left'});
                 })
                 $("#errorModal").modal('show');
                 return false
@@ -639,14 +644,15 @@ var registrationApp = function() {
                     }
                 }
             }
+            console.log(errors)
             if (errors.length) {
                 let html = ''
                 for (let i = 1; i <= errors.length; i++) {
                     html +=  i + ') ' + errors[i-1] + '.<br />'
                 }
                 $("#errorModal").on('shown.bs.modal', function () {
-                    $(".modal-body").html(html)
-                    $(".modal-body").css({'textAlign': 'left'});
+                    $("#errorBody").html(html)
+                    $("#errorBody").css({'textAlign': 'left'});
                 })
                 $("#errorModal").modal('show');
                 return false
