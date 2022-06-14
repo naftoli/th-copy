@@ -1182,6 +1182,14 @@ var templates = function(){
             // hide all sections that only should be shown under certain circumstances
             $(".hide").hide();
 
+            // hide chayolei reg if not applicable
+            if (user.registrationStatus.chayolei) $("#chayolei-registration").hide()
+            else $("#chayolei-registration").show()
+
+            // hide chidon reg if not applicable
+            if (user.registrationStatus.chidon && !user.registrationStatus.chidonEdit) $("#chidon-registration").hide()
+            else $("#chidon-registration").show()
+
             // determine if need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
                 $( '#non_th_school_id' ).val( user.non_th_school_id );

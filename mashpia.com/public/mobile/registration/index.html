@@ -271,8 +271,7 @@
                                 <div id="chayolei-details" class="hide">
                                     <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
                                     <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
-                                    <span id="anash_kinder_text" style="display: none; padding-top: 10px; padding-bottom: 10px;" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</span>
-                                    <br />
+                                    <div id="anash_kinder_text" style="display: none; padding-top: 10px; padding-bottom: 15px;" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</div>
                                     <div>
                                         <b>Chayolei Tzivos Hashem WhatsApp</b><hr />
                                     </div>
@@ -1068,11 +1067,14 @@
 
             $("#last").blur(isEnglish)
 
+            $("#nameChoice").blur(isEnglish)
+
             function between(x, min, max) {
                 return x >= min && x <= max
             }
 
             function isEnglish( event ) {
+                console.log(event)
                 let str = event.target.value
                 for (s in str) {
                     let code = str.charCodeAt(s)
@@ -1087,8 +1089,9 @@
                         (! between(code, ranges[1][0], ranges[1][1]))
                     ) {
                         $("#errorModal").on('shown.bs.modal', function () {
-                            $(".modal-body").html('You can only enter english letters for the first and last english name.')
-                            $(".modal-body").css({'textAlign': 'left'});
+                            if (event.target.id == 'nameChoice') $("#errorModal.modal-body").html('You can only enter english letters customized item.')
+                            else $("#errorModal.modal-body").html('You can only enter english letters for the first and last english name.')
+                            $("#errorModal.modal-body").css({'textAlign': 'left'});
                         })
                         $("#errorModal").modal('show');
 
