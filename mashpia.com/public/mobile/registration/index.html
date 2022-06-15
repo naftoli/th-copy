@@ -265,8 +265,9 @@
                             <div class="col-10 col-md-11">
                                 <!-- <strong>Chayolei Tzivos Hashem (Full Edition)</strong> ($<span id="chayolei-cost"></span> minimum fee) -->
                                 <div>
-                                    <strong class="i18n2" data-key="ChayoleiTzivosHashem">I would like to register for Chayolei Tzivos Hashem</strong> ($<span id="chayolei-cost"></span>
-                                    <span class="18in" data-key="MinFee">minimum fee</span>)
+                                    <strong class="i18n2" data-key="ChayoleiTzivosHashem">I would like to register for Chayolei Tzivos Hashem</strong>
+<!--                                    ($<span id="chayolei-cost"></span>-->
+<!--                                    <span class="18in" data-key="MinFee">minimum fee</span>)-->
                                 </div>
                                 <div id="chayolei-details" class="hide">
                                     <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
@@ -320,13 +321,14 @@
                             <div class="col-10 col-md-11">
                                 <label for="chidon">
                                     <div id="chidon-reg-text">
-                                        <strong>I would like to register for Chidon</strong> ($20 minimum fee)
+                                        <strong>I would like to register for Chidon</strong>
                                     </div>
 <!--                                <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />-->
 <!--                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />-->
                                 </label>
                                 <div id="chidon-details" class="hide">
-                                    <span id="reg_text">This fee covers 50% of the costs of the Study Guide, the 4 tests and the 4 test prizes. I would like to pay:</span><br />
+                                    <span id="reg_text">This fee helps cover the costs of the Study Guide, the 4 tests and the Chidon Cup Card Game.
+                                        When you do edits - you will NOT be charged again. I would like to pay:</span><br />
                                     <select class="form-control" id="chidon-fee" style="margin-top: 10px;">
                                         <option value="20">$20</option>
                                         <option value="30">$30</option>
@@ -350,13 +352,16 @@
 
                                     <div id="khk" class="hide">
                                         <b>Kol Hatorah Kulah</b><hr />
-                                        <span class="i18n" data-key="khkMsg1"></span><br />
-                                        <label>
-                                            <input type="checkbox" id="khk_enrollment" />
-                                            <span class="checkbox" style="margin-right: 10px; vertical-align: text-bottom; margin-top: 8px;"></span>
-                                        </label>
-                                        <span class="i18n" data-key="khkMsg2"></span><br />
-                                        <span id="khk-reg-text" class="i18n" data-key="khkMsg3"></span>
+                                        <div id="khk-edit-info" style="display: none;">You have already enrolled in Kol Hatorah Kula for $18, this can not be edited.</div>
+                                        <div id="khk-reg-info">
+                                            <span class="i18n" data-key="khkMsg1"></span><br />
+                                            <label>
+                                                <input type="checkbox" id="khk_enrollment" />
+                                                <span class="checkbox" style="margin-right: 10px; vertical-align: text-bottom; margin-top: 8px;"></span>
+                                            </label>
+                                            <span class="i18n" data-key="khkMsg2"></span><br />
+                                            <span id="khk-reg-text" class="i18n" data-key="khkMsg3"></span>
+                                        </div>
                                         <br />
                                         <br />
                                     </div>
@@ -634,9 +639,8 @@
                                                 <span class="checkbox"></span>
                                             </div>
                                             <div>
-                                                I am aware that if my child qualifies for the Chidon Experience which means that they will be able to get the
-                                                Rewards for getting a passing average on the 4 tests & the Awards for passing the final,
-                                                there will be a fee of $35 - $250 depending on the track that the child is on.
+                                                I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 4 tests
+                                                there will be a fee of $35 - $250 depending on the track they pass.
                                             </div>
                                         </label>
                                         <label for="heNameSpelling">

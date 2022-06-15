@@ -281,12 +281,24 @@ var registrationApp = function() {
         // show address modal if purchasing book and from anash kinder
         $("#yahadus-registration input").click( function() {
             if ( $(this).val() == '1' && selected_user.school.school_id === anash_kinder ) {
-                $("#ship-address1").val( selected_user.parentAccount.admin_address1 );
-                $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
-                $("#ship-city").val( selected_user.parentAccount.admin_city );
-                $("#ship-state").val( selected_user.parentAccount.admin_state);
-                $("#ship-zip").val( selected_user.parentAccount.admin_postal );
-                $("#ship-country").val( selected_user.parentAccount.admin_country );
+                if (selected_user.parentAccount.admin_address1.length) $("#ship-address1").val( selected_user.parentAccount.admin_address1 )
+                else $("#ship-address1").attr('placeholder', 'Address line 1')
+
+                if (selected_user.parentAccount.admin_address2.length) $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+                else $("#ship-address2").attr('placeholder', 'Address line 2')
+
+                if (selected_user.parentAccount.admin_city.length) $("#ship-city").val( selected_user.parentAccount.admin_city );
+                else $("#ship-city").attr('placeholder', 'city')
+
+                if (selected_user.parentAccount.admin_state.length) $("#ship-state").val( selected_user.parentAccount.admin_state );
+                else $("#ship-state").attr('placeholder', 'state')
+
+                if (selected_user.parentAccount.admin_postal.length) $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+                else $("#ship-zip").attr('placeholder', 'zip')
+
+                if (selected_user.parentAccount.admin_country.length) $("#ship-country").val( selected_user.parentAccount.admin_country );
+                else $("#ship-country").val('USA')
+
                 $("#shipping-modal").modal('show');
                 $("#update-shipping").click( function() {
                     var info = {};
@@ -307,7 +319,7 @@ var registrationApp = function() {
                             thisUser.parentAccount.admin_country = info.country;
                             // if (thisUser.parentAccount.admin_country.toUpperCase() == 'USA') $("#yahadus-shipping").html(shippingChargeMsg15);
                             // else $("#yahadus-shipping").html(shippingChargeMsg30);
-                            ("#yahadus-shipping").html(shippingChargeMsg15)
+                            $("#yahadus-shipping").html(shippingChargeMsg15)
                             $("#shipping-modal").modal('hide');
                         } else {
                             alert( res.error );
@@ -659,12 +671,9 @@ var registrationApp = function() {
             }
 
             // check yarmulka
-            if ($(".gender").val() === 'M') {
-                if ($("#yarmulka-size").val() == 0) {
-                    return showError(Err14)
-                }
-            } else if ($(".gender").val() === 'F') {
-                // set yarmulka size to 0
+            if ($(".gender:checked").val() === 'M' && $("#yarmulka-size").val() == 0) {
+                return showError(Err14)
+            } else if ($(".gender:checked").val() === 'F') {
                 $("#yarmulka-size").val(0)
             }
 
@@ -1552,8 +1561,8 @@ var templates = function(){
                                             break
                                         case '.book-bought':
                                             $(elem.field).each( function() {
-                                                if (this.value == 1 && info.location.length) $(this).trigger('click')
-                                                else if (this.value == 0 && !info.location.length) $(this).trigger('click')
+                                                if (this.value == 1 && info.location && info.location.length) $(this).trigger('click')
+                                                else if (this.value == 0 && (!info.location || (info.location && !info.location.length))) $(this).trigger('click')
                                             })
                                             break
                                         case '#agreements input':
@@ -1586,17 +1595,26 @@ var templates = function(){
                         }
                     }
                 }
+
                 if (user.registrationStatus.chidonEdit) {
                     $("#chidon").trigger('click')
                     $("#chidon").attr('disabled', true)
                     $("#chidon-fee").append("<option value='0' selected>$0</option>")
                     $("#chidon-fee").attr('disabled', true)
+                    $("#chidon-fee").hide()
                     $("#reg_text").hide()
-                    $("#chidon-registration").find('#chidon-reg-text').html('<strong>Already Registered</strong>')
+                    $("#chidon-registration").find('#chidon-reg-text').html(`
+                        <strong>You have already enrolled for $${user.getChidonInfo.paid}, the payment can not be edited. 
+                    `)
                     if ($("#khk_enrollment").is(':checked')) {
                         $("#khk_enrollment").attr('disabled', true)
-                        $("#khk-reg-text").html('<strong>Already Registered</strong>')
+                        $("#khk-reg-text").hide()
+                        $("#khk-reg-info").hide()
+                        $("#khk-edit-info").show()
                     }
+                } else {
+                    $("#khk-reg-info").show()
+                    $("#khk-edit-info").hide()
                 }
             }
 
@@ -1715,15 +1733,18 @@ var templates = function(){
             $("#charges").html('');
             // add each item
             cart.forEach( function( item ){
-                $("#charges").append( '<div class="row">' +
-                    '<div class="col-10">' + item.description + '</div>' +
-                    '<div class="col-2 reg_cost">$' + item.price + '</div>'
-                + "</div>" );
-                if (item.meta.discount) {
+                // only show when there's a charge
+                if (item.price > 0) {
                     $("#charges").append('<div class="row">' +
-                        '<div class="col-10">Discount</div>' +
-                        '<div class="col-2 reg_cost">-$' + item.meta.discount + '</div>'
+                        '<div class="col-10">' + item.description + '</div>' +
+                        '<div class="col-2 reg_cost">$' + item.price + '</div>'
                         + "</div>");
+                    if (item.meta.discount) {
+                        $("#charges").append('<div class="row">' +
+                            '<div class="col-10">Discount</div>' +
+                            '<div class="col-2 reg_cost">-$' + item.meta.discount + '</div>'
+                            + "</div>");
+                    }
                 }
             });
             // add the total row
