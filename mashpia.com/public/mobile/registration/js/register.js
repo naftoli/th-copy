@@ -213,6 +213,7 @@ var registrationApp = function() {
         }
 
         // yahadus registration
+        var australian = [ 55, 66, 110, 112, 180, 256 ];
         $('.book-bought').click( function() {
             if ( $(this).val() === '0' ) {
                 console.log(school_id)
@@ -262,7 +263,6 @@ var registrationApp = function() {
         current_index = parseInt( $("#current_index").val() );
         selected_user = state.selected_users[ current_index ];
         school_id = selected_user.school.school_id;
-        var australian = [ 55, 66, 110, 112, 180, 256 ];
 
         // show study guides info for all non Australian schools
         // if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
@@ -1708,7 +1708,7 @@ var templates = function(){
                 $("#" + type).checked = false;
                 if (user.registrationStatus[type] === false) {
                     $("#" + type + "-registration").show()
-                    $("#" + type + "-cost").text(user.registrationRates[type])
+                    // $("#" + type + "-cost").text(user.registrationRates[type])
                     if (type === 'chayolei') {
                         // setup chayolei fee dropdown
                         let htmlFee = '';

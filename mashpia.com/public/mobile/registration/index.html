@@ -818,7 +818,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 left">
                         <button class="btn btn-primary start-step-2">
-                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n2" data-key="ConfirmChildren">Confirm Children</span>
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n2" data-key="ConfirmChildren">Back</span>
                         </button>
                     </div>
                 </div>
@@ -1086,14 +1086,12 @@
             })
 
             $(".gender").click( function() {
-                if ($(this).val() === 'F') $("#yarmulka").hide()
-                else $("#yarmulka").show()
+                $(this).val() === 'F' ? $("#yarmulka").hide() : $("#yarmulka").show()
             })
 
             // show recruited by if recruit is checked off
             $(".recruit").click( function () {
-                if ($(this).val() == '1') $("#recruited_by").show()
-                else $("#recruited_by").hide()
+                $(this).val() == '1' $("#recruited_by").show() : $("#recruited_by").hide()
             })
 
             $("#first").blur(isEnglish)
