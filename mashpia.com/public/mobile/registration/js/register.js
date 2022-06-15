@@ -622,9 +622,14 @@ var registrationApp = function() {
                     error: 'You must indicate your acceptance of all Terms (3rd term not checked)'
                 },
                 {
-                    field: '#media',
+                    field: '#edits',
                     type: 'check',
-                    error: 'You must indicate your acceptance of our Privacy Policy'
+                    error: 'You must indicate your acceptance of all Terms (4th term not checked)'
+                },
+                {
+                    field: '#privacy',
+                    type: 'check',
+                    error: 'You must indicate your acceptance of all Terms (5th term not checked)'
                 }
             ]
 
