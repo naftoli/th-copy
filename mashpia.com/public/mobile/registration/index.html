@@ -271,12 +271,13 @@
                                 <div id="chayolei-details" class="hide">
                                     <span data-key="Charidydonors" class="i18n">Tzivos Hashem costs $100 per child and is subsidized by our generous Charidy donors. I would like to pay:</span>
                                     <select class="form-control" id="chayolei-fee" style="margin-top: 10px;"></select>
-                                    <div id="anash_kinder_text" style="display: none; padding-top: 10px; padding-bottom: 15px;" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</div>
+                                    <div id="anash_kinder_text" style="display: none; padding-top: 10px; padding-bottom: 10px;" class="i18n" data-key="PleaseNote1"> Please Note: You can only register through Anash Kinder if your child's school doesn't offer Tzivos Hashem.</div>
+                                    <br />
                                     <div>
                                         <b>Chayolei Tzivos Hashem WhatsApp</b><hr />
                                     </div>
                                     <div class="i18n" data-key="WantToReceive">
-                                        Want to receive Chayolei Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853 to join the broadcast.
+                                        Want to receive Chayolei Tzivos Hashem updates? WhatsApp the word "Army" to 1-718-907-8853.
                                     </div>
                                 </div>
                             </div>
@@ -1055,6 +1056,11 @@
             })
             $("#chidon").click( function () {
                 $(this).is(":checked") ? $("#chidon-details").show() : $("#chidon-details").hide()
+            })
+
+            $(".gender").click( function() {
+                if ($(this).val() === 'F') $("#yarmulka").hide()
+                else $("#yarmulka").show()
             })
 
             // show recruited by if recruit is checked off

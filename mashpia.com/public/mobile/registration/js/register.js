@@ -659,10 +659,13 @@ var registrationApp = function() {
             }
 
             // check yarmulka
-            if (selected_user.gender == 'M') {
+            if ($(".gender").val() === 'M') {
                 if ($("#yarmulka-size").val() == 0) {
                     return showError(Err14)
                 }
+            } else if ($(".gender").val() === 'F') {
+                // set yarmulka size to 0
+                $("#yarmulka-size").val(0)
             }
 
             // make sure that if they bought a book from a store, that the store info is filled out
@@ -1429,6 +1432,7 @@ var templates = function(){
             // }
 
             // show/hide yarmulka
+            $("#chidonWhatsapp").show()
             if (user.gender == 'M') {
                 $("#yarmulka").show()
                 $("#boysWhatsapp").show()

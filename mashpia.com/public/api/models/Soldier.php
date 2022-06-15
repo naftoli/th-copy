@@ -307,15 +307,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             FROM
                 th_chidon tc
                     LEFT JOIN
-                yahadus_book_purchases ybp USING (user_id)
+                yahadus_book_purchases ybp USING (year, user_id)
             WHERE
                 tc.year = :year AND tc.user_id = :user
-                    AND ybp.year in (:year, :lastYr)
         ");
         $res = $query->execute([
             ':user' => $this->user_id,
-            ':year' => GlobalSettings::getChidonRegYear(),
-            ':lastYr' => GlobalSettings::getChidonRegYear() - 1
+            ':year' => GlobalSettings::getChidonRegYear()
         ]);
 //        echo $query->debugDumpParams();
 
