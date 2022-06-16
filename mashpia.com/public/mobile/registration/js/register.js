@@ -108,7 +108,6 @@ var registrationApp = function() {
          picError = ""
     }
 
-    // var registration_year = 5779;
     // navigation buttons
     $(".start-step-1").click( step1 );
     $(".start-step-2").click( step2 );
@@ -464,6 +463,10 @@ var registrationApp = function() {
                 break
             case 'check':
             case 'yes/no':
+                // if only key then check that
+                if (field.only) {
+                    if (field.only == 'new' && selected_user.registrationStatus.new_to_chidon == 0) break
+                }
                 checked = $(field.field).is(":checked")
                 if (!checked) return field.error
                 break
@@ -502,7 +505,7 @@ var registrationApp = function() {
             });
         }
 
-        // make sure not to recharge khk if editing info
+        // make sure not to recharge khk if editing info (for cart info)
         if (selected_user.getChidonInfo && selected_user.getChidonInfo.khk_reg === '1') khk_fee = 0
 
         // Detect and validate the charges accepted.
@@ -552,6 +555,7 @@ var registrationApp = function() {
                 {
                     field: '.recruit',
                     type: 'yes/no',
+                    only: 'new',
                     error: 'You must indicate if someone recruited you',
                     yesDependents: [
                         {
@@ -1193,6 +1197,57 @@ var templates = function(){
                 '</div>' +
             '</label></div>';
         },
+        setChidonReg: function( user ) {
+            /*
+            There's a couple of different scenarios that can be happening
+            1. a non-registered child is shown for the first time
+            2. a non-registered child is shown by coming "back" to him/her
+            3. a non-registered child is shown "after" a child who was previously registered
+            4. a registered child is shown for editing "first" time
+            5. a registered child is shown by coming "back" to that child (so child has both original info and cart info)
+            **/
+            if (!user.getChidonInfo) {
+                // non registered child
+                // check if coming after a prev registered child
+                if ($("#chidon").prop('disabled')) {
+                    $("#chidon").attr('disabled', false)
+                    $("#chidon-fee").attr('disabled', false)
+                    if ($("#chidon").is(":checked")) {
+                        // reset chidon fee
+                        $("#chidon-fee").html(
+                            `<option value="20">$20</option>
+                            <option value="30">$30</option>
+                            <option value="40">$40</option>`
+                        )
+                        $("#chidon-fee").show()
+                        $("#reg_text").show()
+                        $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to register for Chidon</strong>')
+                    }
+                    $("#chidon").trigger('click')
+                }
+                // same idea for khk
+                if ($("khk_enrollment").prop('disabled')) {
+                    $("#khk_enrollment").attr('disabled', false)
+                    if ($("#khk_enrollment").is(":checked")) $("#khk-reg-text").html('Registration Fee: An additional $' + khk_fee)
+                }
+                $("#khk-reg-info").show()
+                $("#khk-edit-info").hide()
+            } else {
+                if (! $("#chidon").is(":checked")) $("#chidon").trigger('click')
+                $("#chidon").attr('disabled', true)
+                $("#chidon-fee").html("<option value='0'>$0</option>")
+                $("#chidon-fee").attr('disabled', true)
+                $("#chidon-fee").hide()
+                $("#reg_text").hide()
+                $("#chidon-registration").find('#chidon-reg-text').html(`
+                        <strong>You have already enrolled for $${user.getChidonInfo.amount}, the payment can not be edited. 
+                    `)
+                $("#chidon-details").show()
+                // also khk
+                $("#khk-reg-info").hide()
+                $("#khk-edit-info").show()
+            }
+        },
         showUser: function( user, index ){
             if( index > 0 ) window.location.hash = 'step-2-' + index;
 
@@ -1204,7 +1259,7 @@ var templates = function(){
             else $("#chayolei-registration").show()
 
             // hide chidon reg if not applicable
-            if (user.registrationStatus.chidon && !user.registrationStatus.chidonEdit) $("#chidon-registration").hide()
+            if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
             else $("#chidon-registration").show()
 
             // determine if need to show non th school fields or not
@@ -1268,39 +1323,42 @@ var templates = function(){
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
             }
 
-            // reset fields if coming from a previous child that needed to edit an existing registration
-            let disabled = $("#chidon").prop('disabled')
-            if (disabled) {
-                $("#chidon").attr('disabled', false)
-                $("#chidon-fee").attr('disabled', false)
-
-                if ($("#chidon").is(":checked")) {
-                    // reset chidon fee
-                    $("#chidon-fee").html(
-                        `<option value="20">$20</option>
-                        <option value="30">$30</option>
-                        <option value="40">$40</option>`
-                    )
-                    $("#chidon-fee").show()
-                    $("#reg_text").show()
-                    $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to register for Chidon</strong> ($20 minimum fee)')
-                    $("#chidon").trigger('click')
-                }
+            // show khk if relevant
+            if (!user['registrationStatus']['khk']) {
+                $("#khk").show()
+                $("#khkWhatsapp").show()
+            } else {
+                $("#khk").hide()
+                $("#khkWhatsapp").hide()
             }
 
-            let khkDis = $("khk_enrollment").prop('disabled')
-            if (khkDis) {
-                $("#khk_enrollment").attr('disabled', false)
-
-                if ($("#khk_enrollment").is(":checked")) {
-                    $("#khk-reg-text").html('Registration Fee: An additional $18')
-                    $("#khk_enrollment").trigger('click')
-                }
+            // show/hide yarmulka
+            $("#chidonWhatsapp").show()
+            if (user.gender == 'M') {
+                $("#yarmulka").show()
+                $("#boysWhatsapp").show()
+                $("#girlsWhatsapp").hide()
+            } else {
+                $("#yarmulka").hide()
+                $("#girlsWhatsapp").show()
+                $("#boysWhatsapp").hide()
             }
 
-            // reset chayolei lite reg
-            // $( '#step-2 form #chayolei-lite-registration input' )[0].checked = false;
+            if (user.registrationStatus.new_to_chidon == 1) {
+                $("#chidonRecruitment").show()
+            } else {
+                $("#chidonRecruitment").hide()
+                $("#recruited_by_user_serial").val('')
+            }
 
+            var bookHtml = "<option value='0'>Please choose</option>"
+            for (var i = 2011; i < 2022; i++) {
+                bookHtml += `<option value='${i}'>${i}</option>`
+            }
+            $("#step-2 form #bookVersion").empty()
+            $("#step-2 form #bookVersion").append(bookHtml)
+
+            // reset all fields
             let resets = [
                 {
                     field: '#chidon-fee',
@@ -1401,8 +1459,6 @@ var templates = function(){
                 {
                     field: '#media',
                     type: 'checkbox',
-                    cart: true,
-                    db: 'custom'
                 }
             ]
 
@@ -1426,50 +1482,7 @@ var templates = function(){
                 }
             }
 
-            // process existing info
-            // show khk if relevant
-            if ( !user['registrationStatus']['khk'] ) {
-                $("#khk").show()
-            }
-            //     if (parseInt(user.khk_reg)) {
-            //         $("#khk_enrollment").each( function() {
-            //             this.checked = true
-            //         })
-            //     }
-                // if (user.gender == 'M') {
-                //     $("#khkWhatsappBoys").show()
-                //     $("#khkWhatsappGirls").hide()
-                // } else {
-                //     $("#khkWhatsappBoys").hide()
-                //     $("#khkWhatsappGirls").show()
-                // }
-            // }
-
-            // show/hide yarmulka
-            $("#chidonWhatsapp").show()
-            if (user.gender == 'M') {
-                $("#yarmulka").show()
-                $("#boysWhatsapp").show()
-                $("#girlsWhatsapp").hide()
-            } else {
-                $("#yarmulka").hide()
-                $("#girlsWhatsapp").show()
-                $("#boysWhatsapp").hide()
-            }
-
-            if (parseInt(user.registrationStatus.new_to_chidon) == 1) {
-                $("#chidonRecruitment").show()
-            } else {
-                $("#chidonRecruitment").hide()
-                $("#recruited_by_user_serial").val('')
-            }
-
-            var bookHtml = "<option value='0'>Please choose</option>"
-            for (var i = 2011; i < 2022; i++) {
-                bookHtml += `<option value='${i}'>${i}</option>`
-            }
-            $("#step-2 form #bookVersion").empty()
-            $("#step-2 form #bookVersion").append(bookHtml)
+            this.setChidonReg( user ) // can only do it after the resets bc the chidon fee value is reset to 20
 
             // find out if the cart already has info for this child
             let info = state.cart.filter(item => item.meta.user_id == user.user_id)
@@ -1477,9 +1490,9 @@ var templates = function(){
                 let yahadus = false
                 // trigger clicks for the registrations already checked off
                 for (item of info) {
-                    if (['chayolei', 'chidon'].includes(item.meta.registration_type)) {
-                        let elem = '#' + item.meta.registration_type
-                        $(elem).trigger('click')
+                    if (item.meta.registration_type === 'chayolei') {
+                        $("#chayolei").trigger('click')
+                        $("#media").trigger('click')
                     }
                     if (item.meta.registration_type === 'chidon') {
                         for (elem of resets) {
@@ -1515,6 +1528,7 @@ var templates = function(){
                                 }
                             }
                         }
+                        if (! $("#chidon").is(":checked")) $("#chidon").trigger('click')
                     }
                     if (item.meta.registration_type === 'yahadus') {
                         yahadus = true
@@ -1567,7 +1581,12 @@ var templates = function(){
                                         case '.book-bought':
                                             $(elem.field).each( function() {
                                                 if (this.value == 1 && info.location && info.location.length) $(this).trigger('click')
-                                                else if (this.value == 0 && (!info.location || (info.location && !info.location.length))) $(this).trigger('click')
+                                                else if (this.value == 0 && (!info.location || (info.location && !info.location.length))) {
+                                                    $(this).trigger('click')
+                                                    $(".yahadus").each( function() {
+                                                        if (this.value == 0) this.checked = true
+                                                    })
+                                                }
                                             })
                                             break
                                         case '#agreements input':
@@ -1599,27 +1618,6 @@ var templates = function(){
                             }
                         }
                     }
-                }
-
-                if (user.registrationStatus.chidonEdit) {
-                    $("#chidon").trigger('click')
-                    $("#chidon").attr('disabled', true)
-                    $("#chidon-fee").append("<option value='0' selected>$0</option>")
-                    $("#chidon-fee").attr('disabled', true)
-                    $("#chidon-fee").hide()
-                    $("#reg_text").hide()
-                    $("#chidon-registration").find('#chidon-reg-text').html(`
-                        <strong>You have already enrolled for $${user.getChidonInfo.paid}, the payment can not be edited. 
-                    `)
-                    if ($("#khk_enrollment").is(':checked')) {
-                        $("#khk_enrollment").attr('disabled', true)
-                        $("#khk-reg-text").hide()
-                        $("#khk-reg-info").hide()
-                        $("#khk-edit-info").show()
-                    }
-                } else {
-                    $("#khk-reg-info").show()
-                    $("#khk-edit-info").hide()
                 }
             }
 
@@ -1708,24 +1706,18 @@ var templates = function(){
                 $("#" + type).checked = false;
                 if (user.registrationStatus[type] === false) {
                     $("#" + type + "-registration").show()
-                    // $("#" + type + "-cost").text(user.registrationRates[type])
                     if (type === 'chayolei') {
                         // setup chayolei fee dropdown
                         let htmlFee = '';
                         let rates = [100, 75, 60, 55, 50, 45, 40];
                         let rate = user.registrationRates[type]
-                        htmlFee += "<option value=" + rate + ">$" + rate + "</option>"
                         for (let n of rates) {
                             if (n < user.registrationRates[type]) break;
-                            if (n == user.registrationRates[type]) continue;
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
-                        // }
                         $('#chayolei-fee').empty();
                         $('#chayolei-fee').append(htmlFee);
                     }
-                } else if (! user.registrationStatus.chidonEdit) {
-                    $('#' + type + '-registration').hide();
                 }
             })
         },

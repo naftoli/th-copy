@@ -306,10 +306,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 *
             FROM
                 th_chidon tc
+                    JOIN
+                registration_charges rc USING (year , user_id)
                     LEFT JOIN
-                yahadus_book_purchases ybp USING (year, user_id)
+                yahadus_book_purchases ybp USING (year , user_id)
             WHERE
                 tc.year = :year AND tc.user_id = :user
+                    AND rc.type = 'chidon'
         ");
         $res = $query->execute([
             ':user' => $this->user_id,
@@ -375,7 +378,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // make sure we don't already have such a registration charge in system - avoid duplication
         $check_qry = $MASHPIA_DB->prepare("
             SELECT 
-                *
+                count(*) as total
             FROM
                 registration_charges
             WHERE
@@ -387,30 +390,34 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ':year' =>  $year, 
             ':type' =>  $type
         ]);
-        $rows = $check_qry->fetchAll();
-        if ( count( $rows ) > 0 ) {
-            $registration_info_query = $MASHPIA_DB->prepare("
-                UPDATE registration_charges SET trans_id = :trans, amount = :amount 
-                WHERE user_id = :user AND year = :year AND type = :type
-            ");
+        $row = $check_qry->fetch();
+        $total = $row['total'];
+        if (!$total) {
+//        if ($row['total']) {
+//            $registration_info_query = $MASHPIA_DB->prepare("
+//                UPDATE registration_charges SET trans_id = :trans, amount = :amount
+//                WHERE user_id = :user AND year = :year AND type = :type
+//            ");
+//            return $registration_info_query->execute([
+//                'type' => $type,        'trans' => $trans_id,
+//                'year' => $year,        'user'  => $this->user_id,
+//                'amount' => $amount
+//            ]);
+//        }
+            // * prepare the query
+            $registration_info_query = $MASHPIA_DB->prepare(
+                "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
+                . "VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
+            );
+            // * execte the query
             return $registration_info_query->execute([
-                'type' => $type,        'trans' => $trans_id,
-                'year' => $year,        'user'  => $this->user_id,
-                'amount' => $amount
+                'type' => $type, 'trans_id' => $trans_id,
+                'year' => $year, 'user_id' => $this->user_id,
+                'amount' => $amount, 'school_id' => $this->school_id,
+                'discount' => $discount
             ]);
         }
-        // * prepare the query
-        $registration_info_query = $MASHPIA_DB->prepare(
-            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
-            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
-        );
-        // * execte the query
-        return $registration_info_query->execute([
-            'type' => $type,        'trans_id' => $trans_id,
-            'year' => $year,        'user_id' => $this->user_id,
-            'amount' => $amount,    'school_id' => $this->school_id,
-            'discount'  => $discount
-        ]);
+        return true;
     }
     //get all of the soldiers registration charges
     public function registrationCharges() {
