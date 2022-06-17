@@ -4,7 +4,8 @@
 // page setup
 if ( !checkDateInput() ) { $('#dob, input[type="date"]').datepicker({ format: "yyyy-mm-dd" }); }
 $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
-$("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").html('') });
+$("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").empty() });
+$("#error2Modal").on('hidden.bs.modal', function () { $("#error2Body").empty() })
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
@@ -470,6 +471,8 @@ var registrationApp = function() {
                 checked = $(field.field).is(":checked")
                 if (!checked) return field.error
                 break
+            case 'functionOnly':
+                break
         }
         return false
     }
@@ -531,12 +534,7 @@ var registrationApp = function() {
         if ( selected_charges.chayolei === true ) {
             // check that privacy policy is checked off
             if (! $("#media").is(":checked")) {
-                $("#errorModal").on('shown.bs.modal', function () {
-                    $("#errorBody").html('You must indicate your acceptance of our Privacy Policy.')
-                    $("#errorBody").css({'textAlign': 'left'});
-                })
-                $("#errorModal").modal('show');
-                return false
+                return showError('You must indicate your acceptance of our Privacy Policy.')
             }
         }
 
@@ -671,12 +669,7 @@ var registrationApp = function() {
                 for (let i = 1; i <= errors.length; i++) {
                     html +=  i + ') ' + errors[i-1] + '.<br />'
                 }
-                $("#errorModal").on('shown.bs.modal', function () {
-                    $("#errorBody").html(html)
-                    $("#errorBody").css({'textAlign': 'left'});
-                })
-                $("#errorModal").modal('show');
-                return false
+                return showError(html)
             }
 
             // check yarmulka
@@ -1495,6 +1488,8 @@ var templates = function(){
                         $("#media").trigger('click')
                     }
                     if (item.meta.registration_type === 'chidon') {
+                        document.getElementById('chidon').checked = false
+                        $("#chidon").trigger('click')
                         for (elem of resets) {
                             if (elem.cart) {
                                 switch (elem.type) {
@@ -1528,7 +1523,6 @@ var templates = function(){
                                 }
                             }
                         }
-                        if (! $("#chidon").is(":checked")) $("#chidon").trigger('click')
                     }
                     if (item.meta.registration_type === 'yahadus') {
                         yahadus = true

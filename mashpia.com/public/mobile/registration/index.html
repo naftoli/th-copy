@@ -41,9 +41,9 @@
             input {
                 /*color: #1b2b51;*/
             }
-            .whatsapp, .khkWhatsapp {
-                display: none;
-            }
+            /*.whatsapp, .khkWhatsapp {*/
+            /*    display: none;*/
+            /*}*/
             #prizes input {
                 display: inline-block;
             }
@@ -993,6 +993,23 @@
         </div>
     </div>
 
+    <div class="modal fade" id="error2Modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="i18n" data-key="Error">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
+                    </button>
+                </div>
+                <div class="modal-body" id="error2Body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="model" data-target="#error2Modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -1092,7 +1109,15 @@
             })
 
             $(".gender").click( function() {
-                $(this).val() === 'F' ? $("#yarmulka").hide() : $("#yarmulka").show()
+                if ($(this).val() === 'F') {
+                    $("#yarmulka").hide()
+                    $("#boysWhatsapp").hide()
+                    $("#girlsWhatsapp").show()
+                } else if ($(this).val() === 'M') {
+                    $("#yarmulka").show()
+                    $("#boysWhatsapp").show()
+                    $("#girlsWhatsapp").hide()
+                }
             })
 
             // show recruited by if recruit is checked off
@@ -1125,18 +1150,20 @@
                         (! between(code, ranges[0][0], ranges[0][1])) &&
                         (! between(code, ranges[1][0], ranges[1][1]))
                     ) {
-                        $("#errorModal").on('shown.bs.modal', function () {
-                            if (event.target.id == 'nameChoice') $("#errorBody").html('You can only enter english letters for the customized items.')
-                            else $("#errorBody").html('You can only enter english letters for the first and last english name.')
-                            $("#errorBody").css({'textAlign': 'left'});
+                        $("#error2Modal").on('shown.bs.modal', function () {
+                            if (event.target.id == 'nameChoice') $("#error2Body").empty().text('You can only enter english letters for the customized items.')
+                            else $("#error2Body").text('You can only enter english letters for the first and last english name.')
+                            $("#error2Body").css({'textAlign': 'left'});
                         })
-                        $("#errorModal").modal('show');
+                        $("#error2Modal").modal('show');
 
-                        $("#errorModal").on('hide.bs.modal', function () {
-                            // fix infinite loop without using setTimeout function
-                            setTimeout( function() {
-                                $(event.target).focus()
-                            }, 0)
+                        $("#error2Modal").on('hide.bs.modal', function () {
+                            // fix infinite loop by using setTimeout function
+                            if (['first', 'last', 'nameChoice'].includes(event.target.id)) {
+                                setTimeout(function () {
+                                    $(event.target).focus()
+                                }, 0)
+                            }
                         })
                         return false
                     }

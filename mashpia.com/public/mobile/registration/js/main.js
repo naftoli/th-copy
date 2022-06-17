@@ -15,7 +15,7 @@ $.ajaxSetup({
  * @param {string} message 
  */
 function showError( message ){
-    $("#errorModal .modal-body").text( message );
+    $("#errorBody").html( message );
     $("#errorModal").modal('show');
     $("#payment-button").html('Pay And Register');
     return false;

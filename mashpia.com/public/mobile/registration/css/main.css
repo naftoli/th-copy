@@ -127,21 +127,21 @@ input:checked + span.checkbox {
 }
 
 /* Error Modal */
-#errorModal .modal-header {
+#errorModal .modal-header, #error2Modal .modal-header {
     background: #e92d41;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     color: #fff;
 }
-#errorModal .close {
+#errorModal .close, #error2Modal .close {
     color: #fff;
     opacity: .8;
 }
-#errorModal .close:hover {
+#errorModal .close:hover, #errorModal .close:hover {
     color: #fff;
     opacity: 1;
 }
-#errorModal .modal-body{
+#errorModal .modal-body, #errorModal .modal-body {
     text-align: center; font-size: 1.5em;
 }
 
