@@ -2,6 +2,7 @@
 ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
+include_once( __DIR__ . "/../../class.globalSettings.php" );
 
 class UserRegistrationRouter {
     // parents only
@@ -341,10 +342,10 @@ class UserRegistrationRouter {
         return array_map( function( $user ) {
             return $user->to_array([
                 'only'  => [
-                    'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id',
-                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id'
+                    'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id', 'lang_id', 'gender', 'dob',
+                    'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id'
                 ],
-                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount', 'getChidonInfo' ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount', 'getChidonInfo', 'regYears' ],
                 'include' => [
                     'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method', 'inst_id', 'school_country' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]

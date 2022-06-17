@@ -448,7 +448,7 @@ var registrationApp = function() {
     /*********************** FORM HANDLERS ***********************/
     function checkField( field ) {
         // skip if we are editing registration
-        if (field.field === '#chidon-fee') return false
+        if (field.field === '#chidon-fee' && selected_user.getChidonInfo) return false
         let value, checked
         switch (field.type) {
             case 'value':
@@ -604,8 +604,8 @@ var registrationApp = function() {
                     ]
                 },
                 {
-                    field: '#yahadus-poll',
-                    type: 'value',
+                    field: '.yahadus-poll',
+                    type: 'check',
                     error: 'You must indicate how you will be learning for the Chidon'
                 },
                 {
@@ -776,7 +776,7 @@ var registrationApp = function() {
                     bookVersion: $("#bookVersion").val(),
                     recruited: recruited,
                     recruitedBy: recruited_by,
-                    poll: $("#yahadus-poll").val(),
+                    poll: $("#yahadus-poll:checked").val(),
                     name_pref: $("#nameChoice").val(),
                     comments: $("#comments").val(),
                     // chidon_prizes: user_prizes[current_user]
@@ -1208,7 +1208,8 @@ var templates = function(){
                     // if ($("#chidon").is(":checked")) {
                         // reset chidon fee
                         $("#chidon-fee").html(
-                            `<option value="20">$20</option>
+                            `<option value="0">Select Amount to Pay</option>
+                            <option value="20">$20</option>
                             <option value="30">$30</option>
                             <option value="40">$40</option>`
                         )
@@ -1243,6 +1244,9 @@ var templates = function(){
         },
         showUser: function( user, index ){
             if( index > 0 ) window.location.hash = 'step-2-' + index;
+
+            $(".chayolei_year").text(user.regYears.chayolei)
+            $(".chidon_year").text(user.regYears.chidon)
 
             // hide all sections that only should be shown under certain circumstances
             $(".hide").hide();
@@ -1351,13 +1355,20 @@ var templates = function(){
             $("#step-2 form #bookVersion").empty()
             $("#step-2 form #bookVersion").append(bookHtml)
 
+            // setup yahadus poll html
+            let poll = ['On my own', 'With a chavrusa (study partner)', 'With a parent', 'With a Bubby or Zaidy', 'On the online class', 'Online @ thechidon.com']
+            let html = ''
+            for (let item of poll) {
+                html += `<input type='radio' name='yahadus-poll' class='yahadus-poll' value="${item}" /> ${item}<br />`
+            }
+            $("#yahadus-poll").empty().append(html)
+
             // reset all fields
             let resets = [
                 {
                     field: '#chidon-fee',
                     type: 'select',
-                    cart: 'paid',
-                    default: 20 // default value when resetting,
+                    cart: 'paid'
                 },
                 {
                     field: '.limmud',
@@ -1427,8 +1438,8 @@ var templates = function(){
                     triggerEvent: true
                 },
                 {
-                    field: '#yahadus-poll',
-                    type: 'selectMultiple',
+                    field: '.yahadus-poll',
+                    type: 'radio',
                     cart: 'poll',
                     db: 'poll'
                 },
@@ -1465,11 +1476,10 @@ var templates = function(){
                         })
                         break
                     case 'text':
-                    case 'selectMultiple':
                         $(reset.field).val('')
                         break
                     case 'select':
-                        let value = reset.default || 0
+                        let value = 0
                         $(reset.field).val(value)
                         break
                 }
@@ -1510,15 +1520,6 @@ var templates = function(){
                                                 else this.checked = true
                                             }
                                         })
-                                        break
-                                    case 'selectMultiple':
-                                        if (item.meta[elem.cart]) {
-                                            let values = item.meta[elem.cart]
-                                            let el = elem.field + ' option'
-                                            $(el).each(function () {
-                                                if (values.includes(this.value)) this.selected = true
-                                            })
-                                        }
                                         break
                                 }
                             }

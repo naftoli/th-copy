@@ -529,6 +529,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         return $result;
     }
+
+    /*
+     * regYears
+     * retreives the years for chayolei/chidon registration for this student
+     */
+    public function regYears() {
+        $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
+        $chidon_year = GlobalSettings::getChidonRegYear();
+        return [
+            'chayolei'  => $chayolei_year,
+            'chidon'    => $chidon_year
+        ];
+    }
+
     /**
      * registerChayolei
      * 

@@ -255,7 +255,7 @@
                     </div>
                     <br />
                     <label id="chayolei-registration">
-                        <h2 class="i18n2" data-key="ChayoleiRegistration">Chayolei Tzivos Hashem Registration <span class="chayolei_year"></span> </h2>
+                        <h2 class="i18n2" data-key="ChayoleiRegistration">Chayolei Tzivos Hashem Registration <span class="chayolei_year"></span></h2>
                         <hr>
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -323,7 +323,7 @@
                         </div>
                     </label>
                     <div id="chidon-registration">
-                        <h2 class="i18n2" data-key="ChidonRegistration">Chidon Limmud Enrollment<span class="chidon_year"></span> </h2>
+                        <h2 class="i18n2" data-key="ChidonRegistration">Chidon Limmud Enrollment <span class="chidon_year"></span> </h2>
                         <hr />
                         <div class="row">
                             <div class="col-2 col-md-1">
@@ -344,6 +344,7 @@
                                     <span id="reg_text">This fee helps cover the costs of the Study Guide, the 4 tests and the Chidon Cup Card Game.
                                         When you do edits - you will NOT be charged again. I would like to pay:</span><br />
                                     <select class="form-control" id="chidon-fee" style="margin-top: 10px;">
+                                        <option value="0">Select Amount to Pay</option>
                                         <option value="20">$20</option>
                                         <option value="30">$30</option>
                                         <option value="40">$40</option>
@@ -382,14 +383,14 @@
 
                                     <div id="chidonLimmud">
                                         <b>Chidon Limmud Track</b><hr />
-                                        <label>
-                                            Please choose which track you would like to be on:
+                                        <div>
+                                            Please choose which track you would like to be on:<br />
                                             (Click <a href="https://docs.google.com/document/d/1bI4tdqVBjyufZ3ZX9UbjHf7ekA8j4Td4MjgNWgUUuxo/edit#" target="_blank">here</a> to learn more about the tracks.) <br />
                                             <input type="radio" name="limmud" class="limmud" value="maven" /> Yesod<br />
                                             <input type="radio" name="limmud" class="limmud" value="pro" /> Yediah<br />
                                             <input type="radio" name="limmud" class="limmud" value="expert" /> Havonah<br />
                                             <input type="radio" name="limmud" class="limmud" value="genius" /> Iyun
-                                        </label>
+                                        </div>
                                     </div>
                                     <br />
 
@@ -598,14 +599,7 @@
                                         <b>Chidon Learning</b><hr />
                                         <span class="i18n" data-key="LearningChidon">I will be Learning for Chidon:</span>
                                         <br />
-                                        <select id="yahadus-poll" multiple style="margin-top: 6px;">
-                                            <option class="i18n" data-key="OnMyOwn">On my own</option>
-                                            <option class="i18n" data-key="WithChavrusa">With a chavrusa (study partner)</option>
-                                            <option class="i18n" data-key="WithParent">With a parent</option>
-                                            <option class="i18n" data-key="WithBubbyZaidy">With a Bubby or Zaidy</option>
-                                            <option class="i18n" data-key="OnOnlineClass">On the online class</option>
-                                            <option class="i18n" data-key="Online">Online @ thechidon.com</option>
-                                        </select>
+                                        <div id="yahadus-poll"></div>
                                     </div>
                                     <br />
 
