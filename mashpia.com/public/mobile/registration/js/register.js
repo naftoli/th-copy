@@ -1206,13 +1206,13 @@ var templates = function(){
             4. a registered child is shown for editing "first" time
             5. a registered child is shown by coming "back" to that child (so child has both original info and cart info)
             **/
-            if (!user.getChidonInfo) {
+            if (! user.getChidonInfo) {
                 // non registered child
                 // check if coming after a prev registered child
                 if ($("#chidon").prop('disabled')) {
                     $("#chidon").attr('disabled', false)
                     $("#chidon-fee").attr('disabled', false)
-                    if ($("#chidon").is(":checked")) {
+                    // if ($("#chidon").is(":checked")) {
                         // reset chidon fee
                         $("#chidon-fee").html(
                             `<option value="20">$20</option>
@@ -1222,8 +1222,8 @@ var templates = function(){
                         $("#chidon-fee").show()
                         $("#reg_text").show()
                         $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to register for Chidon</strong>')
-                    }
-                    $("#chidon").trigger('click')
+                    // }
+                    if ($("#chidon").is(":checked")) $("#chidon").trigger('click')
                 }
                 // same idea for khk
                 if ($("khk_enrollment").prop('disabled')) {
@@ -1717,6 +1717,7 @@ var templates = function(){
                         }
                         $('#chayolei-fee').empty();
                         $('#chayolei-fee').append(htmlFee);
+                        $('#chayolei-fee').val(user.registrationRates[type])
                     }
                 }
             })
