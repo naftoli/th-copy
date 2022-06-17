@@ -652,7 +652,7 @@
                                     <br />
 
                                     <div id="agreements">
-                                        <b>Chidon Experience Terms</b><hr />
+                                        <b>Chidon Terms</b><hr />
                                         <label for="shabbaton">
                                             <div style="float: left; padding-right: 15px; padding-top: 5px; padding-bottom: 30px;">
                                                 <input type="checkbox" id="shabbaton" />
@@ -1126,9 +1126,9 @@
                         (! between(code, ranges[1][0], ranges[1][1]))
                     ) {
                         $("#errorModal").on('shown.bs.modal', function () {
-                            if (event.target.id == 'nameChoice') $("#errorModal.modal-body").html('You can only enter english letters customized item.')
-                            else $("#errorModal.modal-body").html('You can only enter english letters for the first and last english name.')
-                            $("#errorModal.modal-body").css({'textAlign': 'left'});
+                            if (event.target.id == 'nameChoice') $("#errorBody").html('You can only enter english letters for the customized items.')
+                            else $("#errorBody").html('You can only enter english letters for the first and last english name.')
+                            $("#errorBody").css({'textAlign': 'left'});
                         })
                         $("#errorModal").modal('show');
 
