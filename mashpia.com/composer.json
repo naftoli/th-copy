@@ -8,7 +8,7 @@
     },
     "require": {
         "dshafik/php7-mysql-shim": "^0.2.0",
-        "php-activerecord/php-activerecord": "dev-v1.2.0-patch-1",
+        "php-activerecord/php-activerecord": "v1.2.0",
         "google/apiclient": "^2.2",
         "picqer/php-barcode-generator": "^0.2.2",
         "authorizenet/authorizenet": "2.0.0",
