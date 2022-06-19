@@ -3,6 +3,7 @@ ini_set('display_errors',1);
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 include_once( __DIR__ . "/../../class.globalSettings.php" );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/classes/recruits.php';
 
 class UserRegistrationRouter {
     // parents only
@@ -241,6 +242,13 @@ class UserRegistrationRouter {
                                 $store_city = $registration['store']['store_city'];
                                 $version = $registration['bookVersion'];
                                 $user->addBookPurchase( $year, $user->user_id, $location, 0, $store_name, $store_city, $version );
+                            }
+
+                            // send email to recruited by child
+                            if ($recruited_by) {
+                                $recruitedChild = $user->first . ' ' . $user->last;
+                                $r = new Recruits($recruited_by);
+                                $r->sendEmail($recruitedChild);
                             }
 
                             // add chidon prizes

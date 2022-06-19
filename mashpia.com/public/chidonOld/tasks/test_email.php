@@ -1,8 +1,5 @@
 <?php
-$email = 'naftolir@gmail.com';
-$subject = 'Chidon Shabbaton 5779';
-$message = "Congrats! Your child is now enrolled in the shabbaton.";
-
-$headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-          'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-@mail( $email, $subject, $message, $headers );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/classes/recruits.php';
+$r = new Recruits(7745260);
+$error = $r->sendEmail('Michel Rapoport');
+if (intval($error) != 1) echo $error;
