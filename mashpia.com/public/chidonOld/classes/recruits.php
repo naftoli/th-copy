@@ -1,6 +1,5 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/email.php';
 
 class Recruits {
     private $user;
@@ -43,86 +42,80 @@ class Recruits {
 
     public function sendEmail($recruited) {
         $name = $this->user->first . ' ' . $this->user->last;
-        $msg = <<<MSG
-Mazel Tov!
-$name has recruited $recruited to start their journey of learning all 613 Mitzvos;
-What a great accomplishment!
-MSG;
+        $msg = "
+Mazel Tov!<br /><br />
+$name has recruited $recruited to start their journey of learning all 613 Mitzvos;<br /><br />
+What a great accomplishment!<br /><br />";
         $num = $this->numRecruits();
         if (is_numeric($num)) {
             switch ($num) {
                 case 1:
-                    $msg .= <<<MORE
-    Wow! You will be receiving the Chidon Book Light.
-    Recruit a 2nd friend to also get the Chidon Rechargeable Fan.
-    Recruit a 3rd friend to also get the Chidon Watch.
-    Recruit a 4th friend to also get the Chidon Neck Pillow.
-    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.
-
-MORE;
+                    $msg .= "
+    Wow! You will be receiving the Chidon Book Light.<br />
+    Recruit a 2nd friend to also get the Chidon Rechargeable Fan.<br />
+    Recruit a 3rd friend to also get the Chidon Watch.<br />
+    Recruit a 4th friend to also get the Chidon Neck Pillow.<br />
+    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.<br />
+    <br />";
                     break;
                 case 2:
-                    $msg .= <<<MORE
-    Wow! In addition to the Chidon Book Light, you will also be receiving the Chidon Rechargeable Fan.
-    Recruit a 3rd friend to also get the Chidon Watch.
-    Recruit a 4th friend to also get the Chidon Neck Pillow.
-    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.
-
-MORE;
+                    $msg .= "
+    Wow! In addition to the Chidon Book Light, you will also be receiving the Chidon Rechargeable Fan.<br />
+    Recruit a 3rd friend to also get the Chidon Watch.<br />
+    Recruit a 4th friend to also get the Chidon Neck Pillow.<br />
+    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.<br />
+    <br />";
                     break;
                 case 3:
-                    $msg .= <<<MORE
-    Wow! In addition to the Chidon Book Light & Rechargeable Fan, you will also be receiving the Chidon Watch.
-    Recruit a 4th friend to also get the Chidon Neck Pillow.
-    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.
-
-MORE;
+                    $msg .= "
+    Wow! In addition to the Chidon Book Light & Rechargeable Fan, you will also be receiving the Chidon Watch.<br />
+    Recruit a 4th friend to also get the Chidon Neck Pillow.<br />
+    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.<br />
+    <br />";
                     break;
                 case 4:
-                    $msg .= <<<MORE
-    Wow! In addition to the Chidon Book Light, Rechargeable Fan & Watch, you will also be receiving the Chidon Neck Pillow.
-    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.
-
-MORE;
+                    $msg .= "
+    Wow! In addition to the Chidon Book Light, Rechargeable Fan & Watch, you will also be receiving the Chidon Neck Pillow.<br />
+    Recruit 5+ friends to also get the Chidon Mini Duffle Bag.<br />
+    <br />";
                     break;
                 default:
                     $msg .= "Wow! In addition to the Chidon Book Light, Rechargeable Fan, Watch & Neck Pillow, you will also be receiving the Chidon Mini Duffle Bag.<br />";
                     break;
             }
 
-            $msg .= <<<END
-    How many more will you recruit to learn 613 Mitzvos!?
-    
-    P.S. All Recruit a Friend prizes will be shipped at the end of the Chidon together with the rest of the items for the Chidon Experience.
-END;
-            $params = [];
-            $params['to'] = 'naftolir@gmail.com';
-            $params['from'] = 'chidon@tzivoshashem.org';
-            $params['fromAlias'] = 'Chidon Office';
-            $params['subject'] = 'You Recruited a Friend to Chidon!';
-            $params['msg'] = $msg;
+            $msg .= "<br />
+    How many more will you recruit to learn 613 Mitzvos!?<br /><br />    
+    P.S. All Recruit a Friend prizes will be shipped at the end of the Chidon together with the rest of the items for the Chidon Experience.";
 
-            $mail = new Email;
-            $sent = $mail->sendEmail($params);
-            if ($sent) return true;
-            else return $mail->getError();
+//            $params = [];
+//            $params['to'] = 'naftolir@gmail.com';
+//            $params['from'] = 'chidon@tzivoshashem.org';
+//            $params['fromAlias'] = 'Chidon Office';
+//            $params['subject'] = 'You Recruited a Friend to Chidon!';
+//            $params['msg'] = $msg;
+//
+//            $mail = new Email;
+//            $sent = $mail->sendEmail($params);
+//            if ($sent) return true;
+//            else return $mail->getError();
 
-//            $to = $this->user->parentAccount()['email'];
-//            echo "<pre>"; print_r($this->user); echo "</pre>"; exit;
-//            $to = 'naftolir@gmail.com';
-//
-//            $subject = 'You Recruited a Friend to Chidon!';
-//
-//            // To send HTML mail, the Content-type header must be set
-//            $headers[] = 'MIME-Version: 1.0';
-//            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-//
-//            // Additional headers
-//            $headers[] = 'To: ' . $to;
-//            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
-//
-//            // Mail it
-//            mail($to, $subject, $msg, implode("\r\n", $headers));
+            $to = $this->user->parentAccount()['email'];
+            echo $this->user->parent['admin_email']; exit;
+            $to = 'naftolir@gmail.com';
+
+            $subject = 'You Recruited a Friend to Chidon!';
+
+            // To send HTML mail, the Content-type header must be set
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+            // Additional headers
+            $headers[] = 'To: ' . $to;
+            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+
+            // Mail it
+            @mail($to, $subject, $msg, implode("\r\n", $headers));
         }
         else return $num;
     }
