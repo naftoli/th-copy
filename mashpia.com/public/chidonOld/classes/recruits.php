@@ -1,4 +1,7 @@
 <?php
+ini_set('disable_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 class Recruits {
