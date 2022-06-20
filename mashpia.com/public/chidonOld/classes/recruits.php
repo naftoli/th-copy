@@ -95,17 +95,31 @@ MORE;
     
     P.S. All Recruit a Friend prizes will be shipped at the end of the Chidon together with the rest of the items for the Chidon Experience.
 END;
-            $params = [];
-            $params['to'] = $this->user->parentAccount()['email'];
-            $params['from'] = 'chidon@tzivoshashem.org';
-            $params['fromAlias'] = 'Chidon Office';
-            $params['subject'] = 'You Recruited a Friend to Chidon!';
-            $params['msg'] = $msg;
+//            $params = [];
+//            $params['to'] = $this->user->parentAccount()['email'];
+//            $params['from'] = 'chidon@tzivoshashem.org';
+//            $params['fromAlias'] = 'Chidon Office';
+//            $params['subject'] = 'You Recruited a Friend to Chidon!';
+//            $params['msg'] = $msg;
+//
+//            $mail = new Email;
+//            $sent = $mail->sendEmail($params);
+//            if ($sent) return true;
+//            else return $mail->getError();
 
-            $mail = new Email;
-            $sent = $mail->sendEmail($params);
-            if ($sent) return true;
-            else return $mail->getError();
+            $to = $this->user->parentAccount()['email'];
+            $subject = 'You Recruited a Friend to Chidon!';
+
+            // To send HTML mail, the Content-type header must be set
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+            // Additional headers
+            $headers[] = 'To: ' . $to;
+            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+
+            // Mail it
+            mail($to, $subject, $msg, implode("\r\n", $headers));
         }
         else return $num;
     }
