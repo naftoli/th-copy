@@ -101,8 +101,7 @@ What a great accomplishment!<br /><br />";
 //            if ($sent) return true;
 //            else return $mail->getError();
 
-            $methods = get_class_methods($this->user);
-            echo "<pre>"; print_r($methods); echo "</pre>"; exit;
+            echo "<pre>"; print_r($this->user); echo "</pre>"; exit;
             $to = 'naftolir@gmail.com';
 
             $subject = 'You Recruited a Friend to Chidon!';
