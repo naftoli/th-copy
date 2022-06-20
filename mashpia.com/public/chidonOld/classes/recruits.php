@@ -104,18 +104,6 @@ What a great accomplishment!<br /><br />";
     How many more will you recruit to learn 613 Mitzvos!?<br /><br />    
     P.S. All Recruit a Friend prizes will be shipped at the end of the Chidon together with the rest of the items for the Chidon Experience.";
 
-//            $params = [];
-//            $params['to'] = 'naftolir@gmail.com';
-//            $params['from'] = 'chidon@tzivoshashem.org';
-//            $params['fromAlias'] = 'Chidon Office';
-//            $params['subject'] = 'You Recruited a Friend to Chidon!';
-//            $params['msg'] = $msg;
-//
-//            $mail = new Email;
-//            $sent = $mail->sendEmail($params);
-//            if ($sent) return true;
-//            else return $mail->getError();
-
             $to = $this->getEmail();
 
             $subject = 'You Recruited a Friend to Chidon!';
