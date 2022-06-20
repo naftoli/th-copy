@@ -108,7 +108,7 @@ END;
 //            else return $mail->getError();
 
 //            $to = $this->user->parentAccount()['email'];
-            echo "<pre>"; print_r($this->user); echo "</pre>"; exit;
+            echo "<pre>"; print_r($this->user->parentAccount()); echo "</pre>"; exit;
             $to = 'naftolir@gmail.com';
 
             $subject = 'You Recruited a Friend to Chidon!';
