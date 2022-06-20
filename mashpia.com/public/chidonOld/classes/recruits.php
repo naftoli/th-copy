@@ -21,8 +21,20 @@ class Recruits {
         // get user info
         $stmt = $MASHPIA_DB->prepare("SELECT * FROM users WHERE user_serial = :serial");
         $stmt->execute(['serial' => $serial]);
-        $user = $stmt->fetch(PDO::FETCH_OBJ);
-        $this->user = \Soldier::find( $this->user->user_id );
+        $this->user = $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    private function getEmail() {
+        global $MASHPIA_DB;
+
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT admin_email FROM admins WHERE admin_id IN (
+                SELECT admin_id FROM admin_auths WHERE id = :user AND auth = 'user'
+            )
+        ");
+        $stmt->execute(['user' => $this->user->user_id]);
+        $row = $stmt->fetch();
+        return $row['admin_email'];
     }
 
     public function numRecruits() {
@@ -104,8 +116,7 @@ What a great accomplishment!<br /><br />";
 //            if ($sent) return true;
 //            else return $mail->getError();
 
-            echo "<pre>"; print_r($this->user); echo "</pre>"; exit;
-            $to = 'naftolir@gmail.com';
+            $to = $this->getEmail();
 
             $subject = 'You Recruited a Friend to Chidon!';
 
