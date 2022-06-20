@@ -107,7 +107,8 @@ END;
 //            if ($sent) return true;
 //            else return $mail->getError();
 
-            $to = $this->user->parentAccount()['email'];
+//            $to = $this->user->parentAccount()['email'];
+            $to = 'naftolir@gmail.com';
             $subject = 'You Recruited a Friend to Chidon!';
 
             // To send HTML mail, the Content-type header must be set
