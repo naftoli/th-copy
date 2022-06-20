@@ -132,7 +132,7 @@ class ChidonTests
             } else if ($school_id > 0) {
                 $res = $stmt->execute([
                     ':year' => $this->year,
-                    ':school'   => $school_id,
+                    ':school'   => $school_id
                 ]);
             } else {
                 $res = $stmt->execute([':year' => $this->year]);
