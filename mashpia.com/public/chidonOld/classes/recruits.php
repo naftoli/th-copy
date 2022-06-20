@@ -18,7 +18,7 @@ class Recruits {
 
         // get user info
         $stmt = $MASHPIA_DB->prepare("SELECT * FROM users WHERE user_serial = :serial");
-        $stmt->execute(['serial' => $this->serial]);
+        $stmt->execute(['serial' => $serial]);
         $this->user = $stmt->fetch(PDO::FETCH_OBJ);
     }
 
