@@ -100,8 +100,8 @@ What a great accomplishment!<br /><br />";
 //            if ($sent) return true;
 //            else return $mail->getError();
 
-            $to = $this->user->parentAccount()['email'];
-            echo $this->user->parent; exit;
+            $methods = get_class_methods($this->user);
+            echo "<pre>"; print_r($methods); echo "</pre>"; exit;
             $to = 'naftolir@gmail.com';
 
             $subject = 'You Recruited a Friend to Chidon!';
