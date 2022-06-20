@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 class Recruits {
     private $user;
@@ -18,7 +18,8 @@ class Recruits {
         // get user info
         $stmt = $MASHPIA_DB->prepare("SELECT * FROM users WHERE user_serial = :serial");
         $stmt->execute(['serial' => $serial]);
-        $this->user = $stmt->fetch(PDO::FETCH_OBJ);
+        $user = $stmt->fetch(PDO::FETCH_OBJ);
+        $this->user = \Soldier::find( [$this->user->user_id] );
     }
 
     public function numRecruits() {
