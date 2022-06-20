@@ -44,7 +44,7 @@ class Recruits {
     public function sendEmail($recruited) {
         $msg = <<<MSG
 Mazel Tov!
-$this-user->first $this->user->last has recruited $recruited to start their journey of learning all 613 Mitzvos; 
+{$this-user->first} {$this->user->last} has recruited $recruited to start their journey of learning all 613 Mitzvos;
 What a great accomplishment!
 MSG;
         $num = $this->numRecruits();
