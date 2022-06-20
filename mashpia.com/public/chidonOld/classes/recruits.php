@@ -19,7 +19,7 @@ class Recruits {
         $stmt = $MASHPIA_DB->prepare("SELECT * FROM users WHERE user_serial = :serial");
         $stmt->execute(['serial' => $serial]);
         $user = $stmt->fetch(PDO::FETCH_OBJ);
-        $this->user = \Soldier::find( [$this->user->user_id] );
+        $this->user = \Soldier::find( $this->user->user_id );
     }
 
     public function numRecruits() {
