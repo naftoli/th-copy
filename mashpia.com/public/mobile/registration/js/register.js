@@ -1366,7 +1366,7 @@ var templates = function(){
                 parent: 'With a parent',
                 grandparent: 'With a Bubby or Zaidy',
                 online: 'On the online class',
-                thechidon: 'Online @ thechidon.com'
+                thechidon: 'Online at thechidon.com'
             }
             let html = ''
             for (let k in poll) {
