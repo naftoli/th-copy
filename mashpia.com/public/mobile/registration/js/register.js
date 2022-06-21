@@ -464,7 +464,7 @@ var registrationApp = function() {
                 break
             case 'check':
             case 'yes/no':
-                // if only key then check that
+                // if 'only' key then check that
                 if (field.only) {
                     if (field.only == 'new' && selected_user.registrationStatus.new_to_chidon == 0) break
                 }
@@ -754,6 +754,10 @@ var registrationApp = function() {
             var recruited_by = $("#recruited_by_user_serial").val()
             if (!recruited || recruited === '0' || recruited_by == '') recruited_by = 0
             let fee = parseInt($("#chidon-fee").val())
+            let poll = []
+            $(".yahadus-poll").each( function() {
+                if ($(this).is(":checked")) poll.push(this.value)
+            })
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1;
             state.cart.push({
                 description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : ''),
@@ -776,7 +780,7 @@ var registrationApp = function() {
                     bookVersion: $("#bookVersion").val(),
                     recruited: recruited,
                     recruitedBy: recruited_by,
-                    poll: $("#yahadus-poll:checked").val(),
+                    poll: poll,
                     name_pref: $("#nameChoice").val(),
                     comments: $("#comments").val(),
                     // chidon_prizes: user_prizes[current_user]
@@ -1356,10 +1360,25 @@ var templates = function(){
             $("#step-2 form #bookVersion").append(bookHtml)
 
             // setup yahadus poll html
-            let poll = ['On my own', 'With a chavrusa (study partner)', 'With a parent', 'With a Bubby or Zaidy', 'On the online class', 'Online @ thechidon.com']
+            let poll = {
+                own: 'On my own',
+                chavrusa: 'With a chavrusa (study partner)',
+                parent: 'With a parent',
+                grandparent: 'With a Bubby or Zaidy',
+                online: 'On the online class',
+                thechidon: 'Online @ thechidon.com'
+            }
             let html = ''
-            for (let item of poll) {
-                html += `<input type='radio' name='yahadus-poll' class='yahadus-poll' value="${item}" /> ${item}<br />`
+            for (let k in poll) {
+                html += `<label>
+                            <div style="float: left; padding-right: 15px;">
+                                <input type="checkbox" class="yahadus-poll" value="${k}" />
+                                <span class="checkbox"></span>
+                            </div>
+                            <div style="float: right;">
+                                ${poll[k]}
+                            </div>
+                        </label><br />`
             }
             $("#yahadus-poll").empty().append(html)
 
@@ -1439,7 +1458,7 @@ var templates = function(){
                 },
                 {
                     field: '.yahadus-poll',
-                    type: 'radio',
+                    type: 'multi',
                     cart: 'poll',
                     db: 'poll'
                 },
@@ -1471,6 +1490,7 @@ var templates = function(){
                 switch (reset.type) {
                     case 'checkbox':
                     case 'radio':
+                    case 'multi':
                         $(reset.field).each( function() {
                             this.checked = false
                         })
@@ -1519,6 +1539,11 @@ var templates = function(){
                                                 if (elem.triggerEvent) $(this).trigger('click')
                                                 else this.checked = true
                                             }
+                                        })
+                                        break
+                                    case 'multi':
+                                        $(elem.field).each(function () {
+                                            if (item.meta[elem.cart] && item.meta[elem.cart].includes(this.value)) this.checked = true
                                         })
                                         break
                                 }
@@ -1601,12 +1626,11 @@ var templates = function(){
                                             break
                                     }
                                     break
-                                case 'selectMultiple':
+                                case 'multi':
                                     if (info[elem.db]) {
                                         let values = info[elem.db].split(',') // coming from db it's a string
-                                        let el = elem.field + ' option'
-                                        $(el).each(function () {
-                                            if (values.includes(this.value)) this.selected = true
+                                        $(elem.field).each(function () {
+                                            if (values.includes(this.value)) this.checked = true
                                         })
                                     }
                                     break

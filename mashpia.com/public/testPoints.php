@@ -7,7 +7,7 @@ $user_id = $_GET['id'];
 $p = new Points( $user_id );
 $p->setDebugOn();
 echo $p->getV2Points();
-exit;
+//exit;
 echo "Total Points: " . $p->getTotalPoints() . "<br />";
 echo "Total this year: " . $p->getTotalThisYear() . "<br />";
 echo "Store Points: " . $p->getStorePoints();
