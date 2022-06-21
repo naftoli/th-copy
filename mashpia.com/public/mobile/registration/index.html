@@ -115,14 +115,18 @@
 
             <div class="content animated fadeIn">
                 <div class="container">
-                    <h2 class="i18n" data-key="SelectChildren">Select Children</h2>
+                    <h2 class="i18n2" data-key="SelectChildren">Who would you like to enroll (or edit)?</h2>
+                    <div>
+                        Please Note: You have the ability to enroll a child that has not been enrolled yet and to edit your selections for a child that has already been enrolled.
+                        <br />
+                    </div>
                     <div class="row">
                         <div id="children"></div>
                     </div>
                     <div class="row spaced navigation">
                         <div class="col-12 right">
                             <button class="btn btn-primary start-step-2">
-                                <span class="i18n" data-key="ConfirmInformation">Continue to review enrollment details</span>
+                                <span class="i18n2" data-key="ConfirmInformation">Continue to review enrollment details</span>
                                  &nbsp;<i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -351,7 +355,7 @@
                             <div class="col-10 col-md-11">
                                 <label for="chidon">
                                     <div id="chidon-reg-text">
-                                        <strong>I would like to register for Chidon</strong>
+                                        <strong>I would like to enroll for the Chidon Limmud Program</strong>
                                     </div>
 <!--                                <span class="i18n" data-key="RegistrationFee">Registration Fee</span>: <b>$<span id="chidon-cost"></span></b><br />-->
 <!--                                <strong class="i18n" data-key="ReadyFirstDay">Be ready for the first day of school!</strong><br />-->
@@ -655,8 +659,9 @@
                                         <br />
                                         <div id="khkWhatsapp" style="display: none">
                                             <b>KHK WhatsApp</b><hr />
-                                            Boys: <a href="https://chat.whatsapp.com/L2NCpRcARik6296EPiP8cS">https://chat.whatsapp.com/L2NCpRcARik6296EPiP8cS</a><br />
-                                            Girls: <a href="https://chat.whatsapp.com/F6Jc46W4XK4H7Xw3CKV90B">https://chat.whatsapp.com/F6Jc46W4XK4H7Xw3CKV90B</a>
+                                            In addition to the regular 8th grade group:
+                                            <div id="khkBoys"><a href="https://chat.whatsapp.com/L2NCpRcARik6296EPiP8cS">https://chat.whatsapp.com/L2NCpRcARik6296EPiP8cS</a></div>
+                                            <div id="khkGirls"><a href="https://chat.whatsapp.com/F6Jc46W4XK4H7Xw3CKV90B">https://chat.whatsapp.com/F6Jc46W4XK4H7Xw3CKV90B</a></div>
                                         </div>
                                     </div>
                                     <br />
@@ -744,7 +749,7 @@
                 <div class="row spaced navigation">
                     <div class="col-12 left">
                         <button class="btn btn-primary start-step-1">
-                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="SelectChildren">Who would you like to Register?</span>
+                            <i class="fas fa-arrow-left"></i> &nbsp; <span class="i18n" data-key="SelectChildren">Who would you like to Enroll?</span>
                         </button>
                     </div>
                 </div>
@@ -1132,10 +1137,14 @@
                     $("#yarmulka").hide()
                     $("#boysWhatsapp").hide()
                     $("#girlsWhatsapp").show()
+                    $("#khkGirls").show()
+                    $("#khkBoys").hide()
                 } else if ($(this).val() === 'M') {
                     $("#yarmulka").show()
                     $("#boysWhatsapp").show()
                     $("#girlsWhatsapp").hide()
+                    $("#khkBoys").show()
+                    $("#khkGirls").hide()
                 }
             })
 

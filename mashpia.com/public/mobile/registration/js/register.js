@@ -1339,10 +1339,14 @@ var templates = function(){
                 $("#yarmulka").show()
                 $("#boysWhatsapp").show()
                 $("#girlsWhatsapp").hide()
+                $("#khkBoys").show()
+                $("#khkGirls").hide()
             } else {
                 $("#yarmulka").hide()
                 $("#girlsWhatsapp").show()
                 $("#boysWhatsapp").hide()
+                $("#khkBoys").hide()
+                $("#khkGirls").show()
             }
 
             if (user.registrationStatus.new_to_chidon == 1) {
