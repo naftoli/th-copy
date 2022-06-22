@@ -41,7 +41,7 @@ class Points
     
     public function getTotalPoints() {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id");
-        echo $points;
+//        echo $points;
 
         $points += $this->getNonMarkPoints();
         // $arrParams['user_code'] = $this->usercode;
