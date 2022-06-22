@@ -43,7 +43,7 @@ class UsersRouter {
                 'platoon' => ( $platoon ? [ 'name' => $platoon ] : null )
             ];
         }
-//        json_response( $users );
+        json_response( $users );
     }
 
     public function show( $id ) {
