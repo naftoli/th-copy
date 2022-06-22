@@ -42,8 +42,11 @@ class Points
     public function getTotalPoints() {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id");
 //        echo $points;
-
-        $points += $this->getNonMarkPoints();
+//        if ($this->debug) {
+//            echo "Points from mashpia: " . $points . "<br />";
+//            echo "Points from V2: " . $this->getNonMarkPoints() . "<br />";
+//        }
+        $points += intval($this->getNonMarkPoints());
         // $arrParams['user_code'] = $this->usercode;
         // $arrPoints = header_total_points( $arrParams );
         // if ( $this->debug ) {
@@ -58,8 +61,11 @@ class Points
     
     public function getTotalThisYear() {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart);
-
-        $points += $this->getNonMarkPoints($this->yearStart);
+        if ($this->debug) {
+            echo "Points from mashpia: " . $points . "<br />";
+            echo "Points from V2: " . $this->getNonMarkPoints() . "<br />";
+        }
+        $points += intval($this->getNonMarkPoints($this->yearStart));
         // $arrParams['user_code'] = $this->usercode;
         // $arrParams['start_date'] = $this->yearStart;
         // $arrPoints = header_total_points( $arrParams );
@@ -78,7 +84,7 @@ class Points
         $arrParams['user_code'] = $this->usercode;
         $arrParams['auction_date'] = $auction_start_date;
         $arrPoints = header_auction_points( $arrParams );
-        $points += $arrPoints[$arrParams['user_code']];
+        $points += intval($arrPoints[$arrParams['user_code']]);
         
         if ($points >= 1200) {
             return $this->getTotalPoints();
@@ -90,8 +96,8 @@ class Points
     public function getStorePoints() {
         $reset_date = $this->getStoreResetDate();
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
-
-        $points += $this->getNonMarksStorePoints($reset_date);
+        if ($this->debug) echo "Store points from mashpia: " . $points . "<br />";
+        $points += intval($this->getNonMarksStorePoints($reset_date));
         // $arrParams['user_code'] = $this->usercode;
         // $arrParams['start_date'] = $reset_date;
         // $arrPoints = header_store_points( $arrParams );
@@ -196,6 +202,7 @@ class Points
             AND resource_name NOT IN ('store' , 'transaction_manager_store') 
             AND created >= '$formatted_date'";
         // $GLOBALS['logger']->debug($sql);
+        if ($this->debug) echo $sql . "<br />";
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         return $row ? $row['total'] : 0;
@@ -205,7 +212,7 @@ class Points
     private function getNonMarksStorePoints($start_date = false) {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         if ($this->useBetaPoints()) {
-            // ignore transaction_manager_store reversals where the origanal purchase is before the start date
+            // ignore transaction_manager_store reversals where the original purchase is before the start date
             $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
                 FROM pointsDB.user_points up
                 LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
@@ -219,6 +226,7 @@ class Points
                 AND up.institution_id = '{$this->school_id}'
                 AND up.created >= '$formatted_date'";
         }
+        if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
