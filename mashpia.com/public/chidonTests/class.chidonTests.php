@@ -379,12 +379,14 @@ class KHK {
      * one is whether that child is eligible for khk
      * the other is the details of which yr the child was or wasn't eligible
      */
-    public static function getKHKEligibility( array $ids, $yr ) {
+    public static function getKHKEligibility( array $ids ) {
         // yr that we don't check registration but rather check highest track passed
         $rollover = 5782;
 
         // figure out which years we need to check
         $years = [];
+        $curYr = GlobalSettings::getChidonRegYear();
+        $yr = $curYr - 1;
         for ($i = 1; $i <= 4; $i++) {
             $years[] = $yr--;
         }

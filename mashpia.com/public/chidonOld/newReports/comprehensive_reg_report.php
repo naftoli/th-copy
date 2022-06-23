@@ -66,7 +66,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $chidonInfo[$row['user_id']][$row['year']] = $row;
 }
 
-$eligibility = KHK::getKHKEligibility($userIds, $year)[0];
+$eligibility = KHK::getKHKEligibility($userIds)[0];
 echo "<pre>"; print_r($eligibility); echo "</pre>";
 ?>
 <!DOCTYPE html>
