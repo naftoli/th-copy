@@ -60,14 +60,17 @@ while ($row = mysql_fetch_assoc($result)) {
 
 // chidon info
 $chidonInfo = [];
-$sql = "SELECT * FROM th_chidon tc LEFT JOIN th_chidon_info tci USING (year, user_id) ORDER BY year";
+$sql = "SELECT tc.user_id, tc.khk_reg, tc.year, tc.date_paid, tci.highest_track 
+        FROM th_chidon tc 
+        LEFT JOIN th_chidon_info tci USING (year, user_id) 
+        ORDER BY year";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $chidonInfo[$row['user_id']][$row['year']] = $row;
 }
 
 $eligibility = KHK::getKHKEligibility($userIds)[0];
-echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
+//echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,21 +110,22 @@ echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
                 $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
+            // registration
             for ($i = 4; $i >= 0; $i--) {
                 echo "<td>";
-                if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
-                    echo "yes";
-                } else echo "no";
+                if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "yes";
+                else echo "no";
                 echo "</td>";
             }
-
+            // khk
             echo "<td>";
             if ($eligibility[$user['user_id']]) echo "yes";
             else echo "no";
             echo "</td><td>";
-            if ($chidonInfo[$user['user_id']][$year]['khk_reg']) echo "yes";
+            if (intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
             else echo "no";
             echo "</td>";
+            // parent info
             echo "<td>" . $user['admin_email'] . "</td>";
             $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
             $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
