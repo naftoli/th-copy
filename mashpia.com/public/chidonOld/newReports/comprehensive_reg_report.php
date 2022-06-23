@@ -51,10 +51,10 @@ $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_g
         JOIN admin_auths aa on aa.id = u.user_id 
         JOIN admins a using (admin_id) 
         WHERE 
-            aa.auth = 'user' AND class_grade in (" . implode(',', $grades) . ")
+            aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
             AND u.school_id in (" . implode(',', array_keys($schools)) . ")
         ORDER BY u.school_id, c.class_grade, c.class_sub, last, first";
-echo $sql; exit;
+// echo $sql; exit;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row;
