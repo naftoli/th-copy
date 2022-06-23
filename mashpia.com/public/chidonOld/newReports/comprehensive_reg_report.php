@@ -31,6 +31,8 @@ $schools = $as->getSchools();
 
 $startGrade = 4;
 $endGrade = 8;
+$grades = [];
+for ($i = $startGrade; $i <= $endGrade; $i++) $grades[] = "$i";
 
 $chidonYr = GlobalSettings::getChidonRegYear();
 $year = $_REQUEST['year'];
@@ -49,9 +51,10 @@ $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_g
         JOIN admin_auths aa on aa.id = u.user_id 
         JOIN admins a using (admin_id) 
         WHERE 
-            aa.auth = 'user' AND class_grade >= " . $startGrade . " AND class_grade <= " . $endGrade . " 
+            aa.auth = 'user' AND class_grade in (" . implode(',', $grades) . ")
             AND u.school_id in (" . implode(',', array_keys($schools)) . ")
         ORDER BY u.school_id, c.class_grade, c.class_sub, last, first";
+echo $sql; exit;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row;
