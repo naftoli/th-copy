@@ -156,6 +156,6 @@ $trackYr = 5782;
         $("#year").change( function () {
             let yr = $(this).val()
             location.href = "comprehensive_reg_report.php?year=" + yr
-        }
+        })
     </script>
 </html>
