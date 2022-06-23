@@ -112,7 +112,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $eligibility = KHK::getKHKEligibility([$user['user_id']]);
             $eligible = $eligibility[0];
             echo "<td>";
-            if ($eligible) echo "yes";
+            if ($eligible[$user['user_id']]) echo "yes";
             else echo "no";
             echo "</td><td>";
             if ($chidonInfo[$user['user_id']][$year]['khk_reg']) echo "yes";
