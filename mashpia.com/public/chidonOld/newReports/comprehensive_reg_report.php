@@ -122,7 +122,7 @@ $eligibility = KHK::getKHKEligibility($userIds)[0];
             if ($eligibility[$user['user_id']]) echo "yes";
             else echo "no";
             echo "</td><td>";
-            if (intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
+            if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
             else echo "no";
             echo "</td>";
             // parent info
