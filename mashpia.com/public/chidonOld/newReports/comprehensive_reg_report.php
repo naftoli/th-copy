@@ -93,6 +93,13 @@ $trackYr = 5782;
     <body>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
     <h1>Comprehensive Registration Report</h1>
+    <div>
+        Choose Year:
+        <select name="year" id="year">
+            <option value="5782">5782</option>
+            <option value="5783">5783</option>
+        </select>
+    </div>
     <table>
         <tr>
             <th>Serial Number</th>
@@ -145,4 +152,10 @@ $trackYr = 5782;
         ?>
         </table>
     </body>
+    <script>
+        $("$year").change( function () {
+            let yr = $(this).val()
+            location.href = "comprehensive_reg_report.php?year=" + yr
+        }
+    </script>
 </html>
