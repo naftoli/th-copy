@@ -115,7 +115,7 @@ while ($row = mysql_fetch_assoc($result)) {
             if ($eligible) echo "yes";
             else echo "no";
             echo "</td><td>";
-            if ($user['khk_reg']) echo "yes";
+            if ($chidonInfo[$user['user_id']][$year]['khk_reg']) echo "yes";
             else echo "no";
             echo "</td>";
             echo "<td>" . $user['admin_email'] . "</td>";
