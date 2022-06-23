@@ -96,8 +96,8 @@ $trackYr = 5782;
     <div>
         Choose Year:
         <select name="year" id="year">
-            <option value="5782">5782</option>
-            <option value="5783">5783</option>
+            <option value="5782" <?php if ($year == 5782) echo "selected" ?>>5782</option>
+            <option value="5783" <?php if ($year == 5783) echo "selected" ?>>5783</option>
         </select>
     </div>
     <table>
@@ -153,7 +153,7 @@ $trackYr = 5782;
         </table>
     </body>
     <script>
-        $("$year").change( function () {
+        $("#year").change( function () {
             let yr = $(this).val()
             location.href = "comprehensive_reg_report.php?year=" + yr
         }
