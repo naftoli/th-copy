@@ -74,6 +74,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $eligibility = KHK::getKHKEligibility($userIds)[0];
 //echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
+$trackYr = 5782;
 ?>
 <!DOCTYPE html>
 <html>
@@ -116,8 +117,14 @@ $eligibility = KHK::getKHKEligibility($userIds)[0];
             // registration
             for ($i = 4; $i >= 0; $i--) {
                 echo "<td>";
-                if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "yes";
-                else echo "no";
+                if (($year - $i) >= $trackYr){
+                    if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
+                        echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                    else echo "&#10006;";
+                } else {
+                    if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
+                    else echo "&#10006;";
+                }
                 echo "</td>";
             }
             // khk
