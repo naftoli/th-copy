@@ -41,6 +41,7 @@ if ($chidonYr > $year) {
 
 // personal info
 $users = [];
+$userIds = [];
 $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_grade, c.class_sub, a.admin_email, 
             a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
         FROM users u 
@@ -54,6 +55,7 @@ $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_g
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row;
+    $userIds[] = $row['user_id'];
 }
 
 // chidon info
@@ -63,6 +65,8 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $chidonInfo[$row['user_id']][$row['year']] = $row;
 }
+
+$eligibility = KHK::getKHKEligibility($userIds)[0];
 ?>
 <!DOCTYPE html>
 <html>
@@ -109,10 +113,9 @@ while ($row = mysql_fetch_assoc($result)) {
                 } else echo "no";
                 echo "</td>";
             }
-            $eligibility = KHK::getKHKEligibility([$user['user_id']]);
-            $eligible = $eligibility[0];
+
             echo "<td>";
-            if ($eligible[$user['user_id']]) echo "yes";
+            if ($eligibility[$user['user_id']]) echo "yes";
             else echo "no";
             echo "</td><td>";
             if ($chidonInfo[$user['user_id']][$year]['khk_reg']) echo "yes";
