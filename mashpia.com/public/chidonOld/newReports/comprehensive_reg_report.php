@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 /*
  * Make a report that has all kids that are able to register which is all kids in grade 4-8 in 5783.
 Should include the following columns:
@@ -80,47 +82,49 @@ while ($row = mysql_fetch_assoc($result)) {
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
     <h1>Comprehensive Registration Report</h1>
     <table>
-        <th>Serial Number</th>
-        <th>Full Name</th>
-        <th>School</th>
-        <th>Class</th>
+        <tr>
+            <th>Serial Number</th>
+            <th>Full Name</th>
+            <th>School</th>
+            <th>Class</th>
+            <?php
+            for ($i = 4; $i > 0; $i--) {
+                echo "<th>Registered for " . ($year - $i) . "</th>";
+            }
+            ?>
+            <th>KHK Eligible</th>
+            <th>KHK Registered</th>
+            <th>Parent Email</th>
+            <th>Parent Phone Number</th>
+        </tr>
         <?php
-        for ($i = 4; $i > 0; $i--) {
-            echo "<th>Registered for " . ($year - $i) . "</th>";
+        foreach ($users as $user) {
+            $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
+            echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
+                $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
+            for ($i = 4; $i > 0; $i--) {
+                echo "<td>";
+                if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
+                    echo "yes";
+                } else echo "no";
+                echo "</td>";
+            }
+            $eligibility = KHK::getKHKEligibility([$user['user_id']]);
+            $eligible = $eligibility[0];
+            echo "<td>";
+            if ($eligible) echo "yes";
+            else echo "no";
+            echo "</td><td>";
+            if ($user['khk_reg']) echo "yes";
+            else echo "no";
+            echo "</td>";
+            echo "<td>" . $user['admin_email'] . "</td>";
+            $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
+            $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
+            $phone .= $user['admin_phone_work'] ? $user['admin_phone_work'] . "<br />" : '';
+            echo "<td>" . $phone . "</td></tr>";
         }
         ?>
-        <th>KHK Eligible</th>
-        <th>KHK Registered</th>
-        <th>Parent Email</th>
-        <th>Parent Phone Number</th>
-    </table>
-    <?php
-    foreach ($users as $user) {
-        $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-        echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
-            $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
-        for ($i = 4; $i > 0; $i--) {
-            echo "<td>";
-            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
-                echo "yes";
-            } else echo "no";
-            echo "</td>";
-        }
-        $eligibility = KHK::getKHKEligibility([$user['user_id']]);
-        $eligible = $eligibility[0];
-        echo "<td>";
-        if ($eligible) echo "yes";
-        else echo "no";
-        echo "</td><td>";
-        if ($user['khk_reg']) echo "yes";
-        else echo "no";
-        echo "</td>";
-        echo "<td>" . $user['admin_email'] . "</td>";
-        $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
-        $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
-        $phone .= $user['admin_phone_work'] ? $user['admin_phone_work'] . "<br />" : '';
-        echo "<td>" . $phone . "</td></tr>";
-    }
-    ?>
+        </table>
     </body>
 </html>
