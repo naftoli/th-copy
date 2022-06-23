@@ -67,7 +67,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $eligibility = KHK::getKHKEligibility($userIds)[0];
-echo "<pre>"; print_r($eligibility); echo "</pre>";
+echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
