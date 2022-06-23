@@ -88,7 +88,7 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>School</th>
             <th>Class</th>
             <?php
-            for ($i = 4; $i > 0; $i--) {
+            for ($i = 4; $i >= 0; $i--) {
                 echo "<th>Registered for " . ($year - $i) . "</th>";
             }
             ?>
@@ -102,7 +102,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
             echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
                 $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
-            for ($i = 4; $i > 0; $i--) {
+            for ($i = 4; $i >= 0; $i--) {
                 echo "<td>";
                 if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
                     echo "yes";
