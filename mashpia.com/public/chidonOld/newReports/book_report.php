@@ -77,11 +77,27 @@ while ($row = mysql_fetch_assoc($result)) {
         <th>Store</th>
     </tr>
     <?php
+    $totals = [];
     foreach ($info as $row) {
         echo "<tr><td>" . $row['user_serial'] . "</td><td>" . $row['school_name'] . "</td><td>" .
             $row['first'] . ' ' . $row['last'] . "</td><td>" .
             ucwords(str_replace('_', ' ', $row['location'])) .
             "</td><td>" . $row['store_name'] . "<br />" . $row['store_city'] . "</td></tr>";
+        if (isset($totals[$row['school_name']])) $totals[$row['school_name']]++;
+        else $totals[$row['school_name']] = 1;
+    }
+    ?>
+</table>
+<br />
+<table>
+    <caption>Totals</caption>
+    <tr>
+        <th>School</th>
+        <th>Total</th>
+    </tr>
+    <?php
+    foreach ($totals as $school => $total) {
+        echo "<tr><td>" . $school . "</td><td>" . $total . "</td></tr>";
     }
     ?>
 </table>
