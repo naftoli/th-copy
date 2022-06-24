@@ -112,7 +112,7 @@ $types = [
             Choose Year:
             <select name="year" id="year">
                 <?php
-                for ($i = 0; $i <= 4; $i++) {
+                for ($i = 0; $i < 4; $i++) {
                     $yr = $year - $i;
                     echo "<option value='" . $yr . "'";
                     if ($yr == $year) echo " selected ";
