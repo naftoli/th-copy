@@ -58,7 +58,7 @@ while ($row = mysql_fetch_assoc($result)) {
     Choose Year:
     <select name="year" id="year">
         <?php
-        for ($i = 4; $i >= 0; $i--) {
+        for ($i = 0; $i <= 4; $i++) {
             $yr = $year - $i;
             echo "<option value='" . $yr . "'";
             if ($yr == $year) echo " selected ";
@@ -89,7 +89,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <script>
     $("#year").change( function () {
         let yr = $(this).val()
-        location.href = "comprehensive_reg_report.php?year=" + yr
+        location.href = "book_report.php?year=" + yr
     })
 </script>
 </html>

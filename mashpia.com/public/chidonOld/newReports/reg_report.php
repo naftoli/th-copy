@@ -112,7 +112,7 @@ $types = [
             Choose Year:
             <select name="year" id="year">
                 <?php
-                for ($i = 4; $i >= 0; $i--) {
+                for ($i = 0; $i <= 4; $i++) {
                     $yr = $year - $i;
                     echo "<option value='" . $yr . "'";
                     if ($yr == $year) echo " selected ";
@@ -193,7 +193,7 @@ $types = [
     <script>
         $("#year").change( function () {
             let yr = $(this).val()
-            location.href = "comprehensive_reg_report.php?year=" + yr
+            location.href = "reg_report.php?year=" + yr
         })
     </script>
 </html>
