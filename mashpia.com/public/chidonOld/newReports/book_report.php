@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$year = GlobalSettings::getChidonRegYear();
+$year = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
 
 $info = [];
 $sql = "
@@ -54,6 +54,19 @@ while ($row = mysql_fetch_assoc($result)) {
 </head>
 <body>
 <h1>Yahadus Book Questionnaire <?= $year ?></h1>
+<div>
+    Choose Year:
+    <select name="year" id="year">
+        <?php
+        for ($i = 4; $i <= 0; $i--) {
+            $yr = $year - $i;
+            echo "<option value='" . $yr . "'";
+            if ($yr == $year) echo " selected ";
+            echo ">" . $yr . "</option>";
+        }
+        ?>
+    </select>
+</div>
 <table>
     <tr>
         <th>Serial Number</th>
@@ -72,4 +85,10 @@ while ($row = mysql_fetch_assoc($result)) {
     ?>
 </table>
 </body>
+<script>
+    $("#year").change( function () {
+        let yr = $(this).val()
+        location.href = "comprehensive_reg_report.php?year=" + yr
+    })
+</script>
 </html>

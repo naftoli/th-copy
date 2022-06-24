@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$year = GlobalSettings::getChidonYear();
+$year = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
 
 $info = [];
 $sql = "
@@ -108,6 +108,19 @@ $types = [
     </head>
     <body>
         <h1>Chidon Registration Report</h1>
+        <div>
+            Choose Year:
+            <select name="year" id="year">
+                <?php
+                for ($i = 4; $i <= 0; $i--) {
+                    $yr = $year - $i;
+                    echo "<option value='" . $yr . "'";
+                    if ($yr == $year) echo " selected ";
+                    echo ">" . $yr . "</option>";
+                }
+                ?>
+            </select>
+        </div>
         <table>
             <tr>
                 <th>Registration Date</th>
@@ -176,4 +189,10 @@ $types = [
             ?>
         </table>
     </body>
+    <script>
+        $("#year").change( function () {
+            let yr = $(this).val()
+            location.href = "comprehensive_reg_report.php?year=" + yr
+        })
+    </script>
 </html>
