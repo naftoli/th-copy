@@ -67,6 +67,7 @@ while ($row = mysql_fetch_assoc($result)) {
         ?>
     </select>
 </div>
+<br />
 <table>
     <tr>
         <th>Serial Number</th>

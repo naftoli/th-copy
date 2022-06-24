@@ -91,6 +91,16 @@ $types = [
     'expert'=> 'Havonah',
     'genius'=> 'Iyun'
 ];
+
+$poll = [
+    'own' => 'On my own',
+    'chavrusa' => 'With a chavrusa (study partner)',
+    'parent' => 'With a parent',
+    'grandparent' => 'With a Bubby or Zaidy',
+    'online' => 'On the online class',
+    'thechidon' => 'Online at thechidon.com'
+];
+$pollKeys = array_keys($poll);
 ?>
 <!DOCTYPE html>
 <html>
@@ -121,6 +131,7 @@ $types = [
                 ?>
             </select>
         </div>
+        <br />
         <table>
             <tr>
                 <th>Registration Date</th>
@@ -164,7 +175,10 @@ $types = [
                     $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>" . $customNames[$row['name_pref']] .
                     "</td><td>" . $row['book'] . "</td><td>" .
                     ($row['khk_reg'] ? 'yes' : 'no') .
-                    "</td><td>" . $row['poll'] . "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
+                    "</td><td>";
+                if (in_array($row['poll'], $pollKeys)) echo $poll[$row['poll']];
+                else echo $row['poll'];
+                echo "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
                 if (isset($prizes[$row['user_id']])) {
                     foreach ($prizes[$row['user_id']] as $i => $prize) {
                         echo $prize['prize_name'];
