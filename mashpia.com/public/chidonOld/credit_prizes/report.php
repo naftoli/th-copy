@@ -109,7 +109,6 @@ $grandtotalPrizes = [];
         </table>
         <br />
         <h2><?= $schools[$school] ?> Totals</h2>
-        Total Recruited: <?= $totalRecruits ?><br /><br />
         <table>
             <tr>
                 <th>Prize</th>
@@ -121,6 +120,9 @@ $grandtotalPrizes = [];
             }
             ?>
         </table>
+        <br /><br />
+        Total Number of Students Recruited: <?= $totalRecruits ?><br />
+        <div style="page-break-after: always"></div>
     <?php endforeach; ?>
 </body>
 </html>
