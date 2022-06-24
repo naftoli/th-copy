@@ -48,7 +48,7 @@ $grandtotalPrizes = [];
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Chidon Credit Prizes Report</title>
+    <title>Recruitment Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/admin_styles.css" rel="stylesheet" type="text/css" />
     <style>
@@ -64,7 +64,7 @@ $grandtotalPrizes = [];
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1>Chidon Credit Prizes Report</h1>
+    <h1>Recruitment Report</h1>
     <?php foreach ($recruits as $school => $more) : ?>
         <h2><?= $schools[$school] ?> Report</h2>
         <table>
