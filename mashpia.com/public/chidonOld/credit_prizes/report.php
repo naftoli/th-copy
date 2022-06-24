@@ -57,12 +57,16 @@ $grandtotalPrizes = [];
             font-size: 14px;
             padding: 10px;
         }
+        tr {
+            border-bottom: 1px solid grey;
+        }
     </style>
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1>Chidon Credit Prizes Report</h1>
     <?php foreach ($recruits as $school => $more) : ?>
+        <h2><?= $schools[$school] ?> Report</h2>
         <table>
             <tr>
                 <th>Student</th>
@@ -104,7 +108,7 @@ $grandtotalPrizes = [];
             ?>
         </table>
         <br />
-        <h1>Totals</h1>
+        <h2><?= $schools[$school] ?> Totals</h2>
         Total Recruited: <?= $totalRecruits ?><br /><br />
         <table>
             <tr>
