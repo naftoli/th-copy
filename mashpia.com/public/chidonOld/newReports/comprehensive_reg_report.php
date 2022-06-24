@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 /*
- * Make a report that has all kids that are able to register which is all kids in grade 4-8 in 5783.
+Make a report that has all kids that are able to register which is all kids in grade 4-8 in 5783.
 Should include the following columns:
 Serial
 Full name
@@ -19,7 +19,6 @@ Parents Email
 Parents phone Number
 At the bottom of each schools section, add totals per class and totals per school registered/non registered. For HQ add the grand total of all schools.
  */
-
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
