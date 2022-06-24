@@ -107,7 +107,7 @@ $grandtotalPrizes = [];
             }
             ?>
         </table>
-        <br />
+        <br /><div style="page-break-after: always"></div><br />
         <h2><?= $schools[$school] ?> Totals</h2>
         <table>
             <tr>
@@ -121,8 +121,24 @@ $grandtotalPrizes = [];
             ?>
         </table>
         <br /><br />
-        Total Number of Students Recruited: <?= $totalRecruits ?>
-        <div style="page-break-after: always"></div><br /><br />
+        Total Number of Recruited Chayolim: <?= $totalRecruits ?>
+        <br /><div style="page-break-after: always"></div><br />
     <?php endforeach; ?>
+    <?php if ($admin_user['auth'] == 'super') : ?>
+        <h2>Grand Totals</h2>
+        <table>
+            <tr>
+                <th>Prize</th>
+                <th>Total</th>
+            </tr>
+            <?php
+            foreach ($grandtotalPrizes as $prize => $total) {
+                echo "<tr><td>" . $prize . "</td><td>" . $total . "</td></tr>";
+            }
+            ?>
+        </table>
+        <br /><br />
+        Grand Total Number of Recruited Chayolim: <?= $grandtotal ?>!
+    <?php endif; ?>
 </body>
 </html>
