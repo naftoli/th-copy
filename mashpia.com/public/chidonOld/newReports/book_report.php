@@ -58,7 +58,7 @@ while ($row = mysql_fetch_assoc($result)) {
     Choose Year:
     <select name="year" id="year">
         <?php
-        for ($i = 4; $i <= 0; $i--) {
+        for ($i = 4; $i >= 0; $i--) {
             $yr = $year - $i;
             echo "<option value='" . $yr . "'";
             if ($yr == $year) echo " selected ";

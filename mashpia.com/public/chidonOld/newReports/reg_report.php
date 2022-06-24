@@ -107,12 +107,12 @@ $types = [
         </style>
     </head>
     <body>
-        <h1>Chidon Registration Report</h1>
+        <h1>Chidon Registration Report <?= $year ?></h1>
         <div>
             Choose Year:
             <select name="year" id="year">
                 <?php
-                for ($i = 4; $i <= 0; $i--) {
+                for ($i = 4; $i >= 0; $i--) {
                     $yr = $year - $i;
                     echo "<option value='" . $yr . "'";
                     if ($yr == $year) echo " selected ";
