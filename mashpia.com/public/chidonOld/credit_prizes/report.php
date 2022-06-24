@@ -1,9 +1,8 @@
 <?php
 $admin_auth = array('school');
 require_once ( __DIR__ . '/../../header.php' );
-
 require_once ( __DIR__ . '/../../class.globalSettings.php' );
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' );
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
@@ -16,6 +15,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizes[$row['credits']] = $row;
 }
 
+$userIds = [];
 $recruits = [];
 $userInfo = [];
 $sql = "select th_chidon_id, tc.user_id, recruited_by, u.first, u.last, u.user_serial, u.gender, s.school_name, c.class_grade, c.class_sub 
@@ -23,11 +23,21 @@ $sql = "select th_chidon_id, tc.user_id, recruited_by, u.first, u.last, u.user_s
         join users u on u.user_id = tc.recruited_by or u.user_serial = tc.recruited_by
         join schools s on u.school_id = s.school_id
         join classes c on u.class_id = c.class_id 
-        where year = " . $year;
+        where u.school_id in (" . implode(',', array_keys($schools)) . ")
+        and year = " . $year . " 
+        order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $recruits[$row['user_serial']][] = $row['user_id'];
     $userInfo[$row['user_serial']] = $row;
+    $userIds[] = $row['user_id'];
+}
+
+$serials = [];
+$sql = "select user_id, user_serial from users where user_id in (" . implode(',', $userIds) . ")";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $serials[$row['user_id']] = $row['user_serial'];
 }
 ?>
 <!DOCTYPE html>
@@ -69,7 +79,7 @@ while ($row = mysql_fetch_assoc($result)) {
             echo "<tr><td>" . ($info['first'] . ' ' . $info['last']) . "</td><td>" . $grade . "</td><td>" . $info['school_name'] .
                 "</td><td>" . $info['gender'] . "</td><td>" . $serialNum . "</td><td>" . $numRecruited . "</td><td>";
             foreach ($recruited as $user_id) {
-                echo $user_id . ', ';
+                echo $serials[$user_id] . ', ';
             }
             echo "</td><td>" . $numRecruited . "</td><td>";
             for ($i = 1; $i <= $numRecruited; $i++) {
