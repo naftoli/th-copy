@@ -121,8 +121,8 @@ $grandtotalPrizes = [];
             ?>
         </table>
         <br /><br />
-        Total Number of Students Recruited: <?= $totalRecruits ?><br />
-        <div style="page-break-after: always"></div>
+        Total Number of Students Recruited: <?= $totalRecruits ?>
+        <div style="page-break-after: always"></div><br /><br />
     <?php endforeach; ?>
 </body>
 </html>
