@@ -138,7 +138,7 @@ $grandtotalPrizes = [];
             ?>
         </table>
         <br /><br />
-        <strong>Grand Total Number of Recruited Chayolim: <?= $grandtotal ?></strong>
+        Grand Total Number of Recruited Chayolim: <strong><?= $grandtotal ?></strong>
     <?php endif; ?>
 </body>
 </html>
