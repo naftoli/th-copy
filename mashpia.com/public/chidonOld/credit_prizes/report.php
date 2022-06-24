@@ -18,7 +18,8 @@ while ($row = mysql_fetch_assoc($result)) {
 $userIds = [];
 $recruits = [];
 $userInfo = [];
-$sql = "select th_chidon_id, tc.user_id, recruited_by, u.first, u.last, u.user_serial, u.gender, s.school_name, c.class_grade, c.class_sub 
+$sql = "select th_chidon_id, tc.user_id, recruited_by, u.first, u.last, u.user_serial, u.gender, u.school_id, 
+            s.school_name, c.class_grade, c.class_sub 
         from th_chidon tc
         join users u on u.user_id = tc.recruited_by or u.user_serial = tc.recruited_by
         join schools s on u.school_id = s.school_id
@@ -28,7 +29,7 @@ $sql = "select th_chidon_id, tc.user_id, recruited_by, u.first, u.last, u.user_s
         order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $recruits[$row['user_serial']][] = $row['user_id'];
+    $recruits[$row['school_id']][$row['user_serial']][] = $row['user_id'];
     $userInfo[$row['user_serial']] = $row;
     $userIds[] = $row['user_id'];
 }
@@ -39,6 +40,8 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $serials[$row['user_id']] = $row['user_serial'];
 }
+$grandtotal = 0;
+$grandtotalPrizes = [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,35 +62,61 @@ while ($row = mysql_fetch_assoc($result)) {
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1>Chidon Credit Prizes Report</h1>
-    <table>
-        <tr>
-            <th>Student</th>
-            <th>Grade</th>
-            <th>School</th>
-            <th>Gender</th>
-            <th>Serial Number</th>
-            <th>Amount of children recruited</th>
-            <th>User ID's of kids recruited</th>
-            <th>Total Credits Earned</th>
-            <th>Prize(s) Earned</th>
-        </tr>
-        <?php
-        foreach ($recruits as $serialNum => $recruited) {
-            $info = $userInfo[$serialNum];
-            $numRecruited = count($recruited);
-            $grade = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
-            echo "<tr><td>" . ($info['first'] . ' ' . $info['last']) . "</td><td>" . $grade . "</td><td>" . $info['school_name'] .
-                "</td><td>" . $info['gender'] . "</td><td>" . $serialNum . "</td><td>" . $numRecruited . "</td><td>";
-            foreach ($recruited as $user_id) {
-                echo $serials[$user_id] . ', ';
+    <?php foreach ($recruits as $school => $more) : ?>
+        <table>
+            <tr>
+                <th>Student</th>
+                <th>Grade</th>
+                <th>School</th>
+                <th>Gender</th>
+                <th>Serial Number</th>
+                <th>Amount of children recruited</th>
+                <th>User ID's of kids recruited</th>
+                <th>Total Credits Earned</th>
+                <th>Prize(s) Earned</th>
+            </tr>
+            <?php
+            $totalRecruits = 0;
+            $totalPrizes = [];
+            foreach ($more as $serialNum => $recruited) {
+                $info = $userInfo[$serialNum];
+                $numRecruited = count($recruited);
+                $grade = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
+                echo "<tr><td>" . ($info['first'] . ' ' . $info['last']) . "</td><td>" . $grade . "</td><td>" . $info['school_name'] .
+                    "</td><td>" . $info['gender'] . "</td><td>" . $serialNum . "</td><td>" . $numRecruited . "</td><td>";
+                foreach ($recruited as $user_id) {
+                    echo $serials[$user_id] . ', ';
+                }
+                echo "</td><td>" . $numRecruited . "</td><td>";
+                for ($i = 1; $i <= $numRecruited; $i++) {
+                    echo $prizes[$i]['prize'] . ', ';
+                    // totals
+                    if (isset($totalPrizes[$prizes[$i]['prize']])) $totalPrizes[$prizes[$i]['prize']]++;
+                    else $totalPrizes[$prizes[$i]['prize']] = 1;
+                    if (isset($grandtotalPrizes[$prizes[$i]['prize']])) $grandtotalPrizes[$prizes[$i]['prize']]++;
+                    else $grandtotalPrizes[$prizes[$i]['prize']] = 1;
+                }
+                echo "</td></tr>";
+                // totals
+                $totalRecruits += $numRecruited;
+                $grandtotal += $numRecruited;
             }
-            echo "</td><td>" . $numRecruited . "</td><td>";
-            for ($i = 1; $i <= $numRecruited; $i++) {
-                echo $prizes[$i]['prize'] . ', ';
+            ?>
+        </table>
+        <br />
+        <h1>Totals</h1>
+        Total Recruited: <?= $totalRecruits ?><br /><br />
+        <table>
+            <tr>
+                <th>Prize</th>
+                <th>Total</th>
+            </tr>
+            <?php
+            foreach ($totalPrizes as $prize => $total) {
+                echo "<tr><td>" . $prize . "</td><td>" . $total . "</td></tr>";
             }
-            echo "</td></tr>";
-        }
-        ?>
-    </table>
+            ?>
+        </table>
+    <?php endforeach; ?>
 </body>
 </html>
