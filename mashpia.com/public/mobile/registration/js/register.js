@@ -821,7 +821,7 @@ var registrationApp = function() {
         }
         if ( selected_charges.khk && khk_fee ) {
             state.cart.push({
-                description: "KHK Registration",
+                description: "KHK Enrollment",
                 price: khk_fee,
                 meta: {
                     type: 'registration',
