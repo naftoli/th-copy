@@ -91,7 +91,7 @@ $months = $_REQUEST['months'] ?? 1;
     <div align='center'>
         <input type='button' value='Print' onclick='window.print()'>
     </div>
-
+    <br />
     <div>
         Choose which months you would like to view:
         <select name="months" id="months">
@@ -181,4 +181,9 @@ foreach ( $ids as $id => $name ) {
     ?>
 </table>
 </body>
+<script>
+    $("#months").change( function() {
+        location.href = "shabbos_mevorchim_summer.php?months=" + <?= $months ?>;
+    })
+</script>
 </html>
