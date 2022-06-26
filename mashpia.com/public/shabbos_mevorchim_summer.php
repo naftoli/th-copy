@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('max_execution_time', 300);
 $admin_auth = ['school'];
 require('header.php');
+$months = $_REQUEST['months'] ?? 1;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -90,6 +91,14 @@ require('header.php');
     <div align='center'>
         <input type='button' value='Print' onclick='window.print()'>
     </div>
+
+    <div>
+        Choose which months you would like to view:
+        <select name="months" id="months">
+            <option value="1" <?= $months == 1 ? 'selected' : ''?>>Tamuz and Av</option>
+            <option value="2" <?= $months == 2 ? 'selected' : ''?>>Av and Elul</option>
+        </select>
+    </div>
 </div>
 <br />
 <?php
@@ -99,8 +108,13 @@ $ids = $as->getSchools();
 // $ids = [54 => 'Beis Rivka'];
 
 // get dates
-$sm = calculateSM( GlobalSettings::getCurrentYear() );
+$yr = GlobalSettings::getCurrentYear();
+$sm = calculateSM($yr);
 $dates = [$sm[11], $sm[12]];
+if ($months == 2) {
+    $sm2 = calculateSM($yr + 1);
+    $dates = [$sm[12], $sm2[0]];
+}
 
 require_once 'class.shabbosMevorchim.php';
 $info = [];
@@ -147,7 +161,7 @@ foreach ( $ids as $id => $name ) {
 }
 ?>
 <table>
-    <caption>Children that completed their quotas on both Shabbos Mevorchim Menachem Av and Elul</caption>
+    <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Av</caption>
     <tr>
         <th>School</th>
         <th>Grade</th>
