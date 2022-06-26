@@ -4,6 +4,10 @@ ini_set('max_execution_time', 300);
 $admin_auth = ['school'];
 require('header.php');
 $months = $_REQUEST['months'] ?? 1;
+$options = [
+    1 => 'Tamuz and Av',
+    2 => 'Av and Elul'
+];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -95,8 +99,13 @@ $months = $_REQUEST['months'] ?? 1;
     <div>
         Choose which months you would like to view:
         <select name="months" id="months">
-            <option value="1" <?= $months == 1 ? 'selected' : ''?>>Tamuz and Av</option>
-            <option value="2" <?= $months == 2 ? 'selected' : ''?>>Av and Elul</option>
+            <?php
+            foreach ($options as $k => $val) {
+                echo "<option value='" . $k . "'";
+                if ($k == $months) echo ' selected';
+                echo " />" . $val . "</option>";
+            }
+            ?>
         </select>
     </div>
 </div>
@@ -161,7 +170,7 @@ foreach ( $ids as $id => $name ) {
 }
 ?>
 <table>
-    <caption>Children that completed their quotas on both Shabbos Mevorchim Tamuz and Av</caption>
+    <caption>Children that completed their quotas on both Shabbos Mevorchim <?= $options[$months] ?></caption>
     <tr>
         <th>School</th>
         <th>Grade</th>
