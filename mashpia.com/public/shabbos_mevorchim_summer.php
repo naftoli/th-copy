@@ -183,7 +183,7 @@ foreach ( $ids as $id => $name ) {
 </body>
 <script>
     $("#months").change( function() {
-        location.href = "shabbos_mevorchim_summer.php?months=" + <?= $months ?>;
+        location.href = "shabbos_mevorchim_summer.php?months=" + this.value
     })
 </script>
 </html>
