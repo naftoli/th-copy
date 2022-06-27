@@ -59,11 +59,14 @@ for ($i = 1; $i <= 4; $i++) {
 <body>
 <?php include('../../admin_header.php'); ?>
 <h1>KHK Eligibility</h1>
-Choose Year:
-<select name="year" id="year">
-    <option value="<?= $curYr ?>"><?= $curYr ?></option>
-    <option value="<?= ($curYr - 1) ?>"><?= ($curYr - 1)?></option>
-</select>
+<div>
+    Choose Year:
+    <select name="year" id="year">
+        <option value="<?= $curYr ?>"><?= $curYr ?></option>
+        <option value="<?= ($curYr - 1) ?>"><?= ($curYr - 1)?></option>
+    </select>
+</div>
+<br />
 <table>
     <tr>
         <th>Serial Number</th>
@@ -142,5 +145,8 @@ Choose Year:
         })
     })
     <?php endif; ?>
+    $("#year").change( function() {
+        location.href = "khk_eligibility.php?year=" + this.value
+    })
 </script>
 </html>
