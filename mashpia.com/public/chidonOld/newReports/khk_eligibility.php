@@ -71,6 +71,7 @@ for (; $i < 0; $i--) {
             echo "<option value='" . $yr . "'";
             if ($yr == $chosen) echo " selected";
             echo " >" . $yr . "</option>";
+        }
         ?>
     </select>
 </div>
