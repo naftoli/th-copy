@@ -106,7 +106,7 @@ for (; $i > 0; $i--) {
 //                    $yrsDetails = $khkInfo[1];
             foreach ($children[$id] as $child) {
                 $user_id = $child['user_id'];
-                $khkInfo = KHK::getKHKEligibility([$user_id], $curYr);
+                $khkInfo = KHK::getKHKEligibility([$user_id], $chosen);
                 $eligibility = $khkInfo[0];
                 $yrsDetails = $khkInfo[1];
                 $eligible = $eligibility[$user_id];
@@ -127,7 +127,7 @@ for (; $i > 0; $i--) {
                     echo "</td>";
                 }
                 echo "<td>";
-                $sqlKhk = "select khk_reg from th_chidon where year = $curYr and user_id = " . $child['user_id'];
+                $sqlKhk = "select khk_reg from th_chidon where year = $chosen and user_id = " . $child['user_id'];
                 $resKhk = mysql_query($sqlKhk);
                 $rowKhk = mysql_fetch_assoc($resKhk);
                 echo $rowKhk['khk_reg'] ? "&#10003;" : "&#10007;";
