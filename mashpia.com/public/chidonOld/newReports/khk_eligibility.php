@@ -35,10 +35,12 @@ foreach ($rows as $row) {
 
 // figure out which years we need to check
 $years = [];
-$curYr = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
-$yr = $curYr - 1;
-for ($i = 1; $i <= 4; $i++) {
-    $years[] = $yr--;
+$curYr = GlobalSettings::getChidonRegYear();
+$reqYr = $_REQUEST['year'];
+$i = 4;
+$yr = $curYr - $i;
+for (; $i < 0; $i--) {
+    $years[] = $yr++;
 }
 ?>
 <!DOCTYPE html>
@@ -62,8 +64,14 @@ for ($i = 1; $i <= 4; $i++) {
 <div>
     Choose Year:
     <select name="year" id="year">
-        <option value="<?= $curYr ?>"><?= $curYr ?></option>
-        <option value="<?= ($curYr - 1) ?>"><?= ($curYr - 1)?></option>
+        <?php
+        $lastYr = $curYr - 1;
+        $chosen = $reqYr ?? $curYr;
+        foreach ([$curYr, $lastYr] as $yr) {
+            echo "<option value='" . $yr . "'";
+            if ($yr == $chosen) echo " selected";
+            echo " >" . $yr . "</option>";
+        ?>
     </select>
 </div>
 <br />
