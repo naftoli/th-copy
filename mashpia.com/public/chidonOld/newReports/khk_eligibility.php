@@ -38,7 +38,7 @@ $years = [];
 $curYr = GlobalSettings::getChidonRegYear();
 $reqYr = $_REQUEST['year'];
 $i = 4;
-$yr = $curYr - $i;
+$yr = ($reqYr ?? $curYr) - $i;
 for (; $i > 0; $i--) {
     $years[] = $yr++;
 }
