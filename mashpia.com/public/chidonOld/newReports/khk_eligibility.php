@@ -74,10 +74,7 @@ for ($i = 1; $i <= 4; $i++) {
         <th>Grade</th>
         <th>Student</th>
         <!--                <th>Number of times Registered for Shabbaton</th>-->
-        <th>5778</th>
-        <th>5779</th>
-        <th>5780</th>
-        <th>5781</th>
+        <?php foreach ($years as $yr) echo "<th>" . $yr . "</th>"; ?>
         <th>Eligible</th>
         <?php if ($super) : ?>
             <th>Eligibility Copy</th>
@@ -100,7 +97,7 @@ for ($i = 1; $i <= 4; $i++) {
 //                    $yrsDetails = $khkInfo[1];
             foreach ($children[$id] as $child) {
                 $user_id = $child['user_id'];
-                $khkInfo = KHK::getKHKEligibility([$user_id]);
+                $khkInfo = KHK::getKHKEligibility([$user_id], $curYr);
                 $eligibility = $khkInfo[0];
                 $yrsDetails = $khkInfo[1];
                 $eligible = $eligibility[$user_id];
