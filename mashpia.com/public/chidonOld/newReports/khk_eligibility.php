@@ -36,7 +36,7 @@ foreach ($rows as $row) {
 // figure out which years we need to check
 $years = [];
 $curYr = GlobalSettings::getChidonRegYear();
-$reqYr = $_REQUEST['year'];
+$reqYr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
 $i = 4;
 $yr = ($reqYr ?? $curYr) - $i;
 for (; $i > 0; $i--) {
