@@ -35,7 +35,7 @@ foreach ($rows as $row) {
 
 // figure out which years we need to check
 $years = [];
-$curYr = GlobalSettings::getChidonRegYear();
+$curYr = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
 $yr = $curYr - 1;
 for ($i = 1; $i <= 4; $i++) {
     $years[] = $yr--;
@@ -59,6 +59,11 @@ for ($i = 1; $i <= 4; $i++) {
 <body>
 <?php include('../../admin_header.php'); ?>
 <h1>KHK Eligibility</h1>
+Choose Year:
+<select name="year" id="year">
+    <option value="<?= $curYr ?>"><?= $curYr ?></option>
+    <option value="<?= ($curYr - 1) ?>"><?= ($curYr - 1)?></option>
+</select>
 <table>
     <tr>
         <th>Serial Number</th>
