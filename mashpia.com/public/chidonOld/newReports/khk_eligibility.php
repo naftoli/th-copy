@@ -83,7 +83,7 @@ for (; $i > 0; $i--) {
         <th>Grade</th>
         <th>Student</th>
         <!--                <th>Number of times Registered for Shabbaton</th>-->
-        <?php foreach ($years as $yr) echo "<th>" . $yr . "</th>"; ?>
+        <?php foreach ($years as $yr) { echo "<th>" . $yr . "</th>"; } ?>
         <th>Eligible</th>
         <?php if ($super) : ?>
             <th>Eligibility Copy</th>
