@@ -114,7 +114,8 @@ for (; $i > 0; $i--) {
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
                     "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td>";
-                foreach ($yrsDetails[$user_id] as $value) {
+                foreach ($years as $yr) {
+                    $value = $yrsDetails[$user_id][$yr];
                     echo "<td>" . ($value ? "&#10003;" : "&#10007;") . "</td>";
                 }
                 echo "<td><input type='checkbox' class='eligibility' name='eligibility[" . $user_id . "]' ";
