@@ -385,7 +385,7 @@ class KHK {
 
         // figure out which years we need to check
         $years = [];
-        $curYr = $year ?? GlobalSettings::getChidonRegYear();
+        $curYr = $year > 0 ? $year : GlobalSettings::getChidonRegYear();
         $yr = $curYr - 1;
         for ($i = 1; $i <= 4; $i++) {
             $years[] = $yr--;

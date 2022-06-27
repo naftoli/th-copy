@@ -117,7 +117,7 @@ for (; $i > 0; $i--) {
                 foreach ($yrsDetails[$user_id] as $value) {
                     echo "<td>" . ($value ? "&#10003;" : "&#10007;") . "</td>";
                 }
-                echo "<td><input type='checkbox' class='eligibility' name='eligibility[" . $child['user_id'] . "]' ";
+                echo "<td><input type='checkbox' class='eligibility' name='eligibility[" . $user_id . "]' ";
                 if ($eligible) echo "checked ";
                 if (! $super) echo " disabled ";
                 echo "/></td>";
@@ -127,7 +127,7 @@ for (; $i > 0; $i--) {
                     echo "</td>";
                 }
                 echo "<td>";
-                $sqlKhk = "select khk_reg from th_chidon where year = $chosen and user_id = " . $child['user_id'];
+                $sqlKhk = "select khk_reg from th_chidon where year = $chosen and user_id = " . $user_id;
                 $resKhk = mysql_query($sqlKhk);
                 $rowKhk = mysql_fetch_assoc($resKhk);
                 echo $rowKhk['khk_reg'] ? "&#10003;" : "&#10007;";
