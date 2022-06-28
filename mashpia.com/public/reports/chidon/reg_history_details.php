@@ -19,6 +19,7 @@ $class_id = $_GET['id'];
 // figure out which years kids were enrolled into for this school
 $info = [];
 $grades = [];
+$serials = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT tc.year, u.*, c.*  
     FROM th_chidon tc 
@@ -35,6 +36,7 @@ foreach ($rows as $row) {
     $name = $row['first'] . ' ' . $row['last'];
     $year = $row['year'];
     $info[$row['user_id']][$name][] = $year;
+    $serials[$row['user_id']] = $row['user_serial'];
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
@@ -57,6 +59,7 @@ foreach ($rows as $row) {
         <h2>Grade <?= $grades[$class_id] ?></h2>
         <table>
             <tr>
+                <th>Serial Number</th>
                 <th>Student</th>
                 <?php
                 $totals = []; // initialize totals per year
@@ -69,7 +72,7 @@ foreach ($rows as $row) {
             <?php
             foreach ($info as $user_id => $more) {
                 foreach ($more as $name => $other) {
-                    echo "<tr><td>" . $name . "</td>";
+                    echo "<tr><td>" . $name . "</td><td>" . $serials[$user_id] . "</td>";
                     for ($i = $start_yr; $i <= $cur_year; $i++) {
                         echo "<td>";
                         if (array_search($i, $other) !== false) {
