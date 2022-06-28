@@ -84,7 +84,7 @@ foreach ($rows as $row) {
                     echo "</tr>";
                 }
             }
-            echo "<tr><th align='right'>Totals:</th>";
+            echo "<tr><th></th><th>Totals:</th>";
             for ($i = $start_yr; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
             echo "</tr>";
             ?>
