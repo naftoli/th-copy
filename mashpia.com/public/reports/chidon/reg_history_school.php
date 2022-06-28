@@ -22,7 +22,7 @@ $sql = "
         u.user_serial,
         u.first,
         u.last,
-        u.school_id
+        u.school_id,
         c.class_id, 
         c.class_grade,
         c.class_sub
