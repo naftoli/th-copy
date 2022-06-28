@@ -32,7 +32,9 @@ $sql = "
             JOIN
         th_chidon tc USING (user_id)
     WHERE
-        u.school_id in (" . implode(',', array_keys($schools)) . ")";
+        u.school_id in (" . implode(',', array_keys($schools)) . ") 
+            AND tc.date_paid > 0
+";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[$row['school_id']][$row['class_id']][$row['user_id']] = $row;

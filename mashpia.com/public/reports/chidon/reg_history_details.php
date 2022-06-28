@@ -25,7 +25,8 @@ $stmt = $MASHPIA_DB->prepare("
     FROM th_chidon tc 
     JOIN users u USING (user_id) 
     JOIN classes c ON c.class_id = u.class_id 
-    WHERE u.class_id = :class_id
+    WHERE u.class_id = :class_id 
+    AND tc.date_paid > 0 
     ORDER BY class_grade, class_sub
 ");
 $stmt->execute([':class_id' => $class_id]);
