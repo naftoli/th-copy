@@ -50,34 +50,11 @@ foreach ($users as $school_id => $more) {
             $result = mysql_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 if (isset($chidonClassTotals[$school_id][$class_id][$row['year']])) $chidonClassTotals[$school_id][$class_id][$row['year']]++;
-                else $chidonClassTotals[$school_id][$class_id][$row['year']] = 0;
+                else $chidonClassTotals[$school_id][$class_id][$row['year']] = 1;
             }
         }
     }
 }
-
-//$info = [];
-//$grades = [];
-//$stmt = $MASHPIA_DB->prepare("
-//    SELECT tc.year, u.user_id, c.*
-//    FROM th_chidon tc
-//    JOIN users u USING (user_id)
-//    JOIN classes c ON c.class_id = u.class_id
-//    WHERE u.school_id = :school
-//    ORDER BY class_grade, class_sub
-//");
-//foreach ($schools as $school_id => $name) {
-//    $stmt->execute([':school' => $school_id]);
-//    $rows = $stmt->fetchAll();
-//    foreach ($rows as $row) {
-//        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-//        $year = $row['year'];
-//        if (isset($info[$school_id][$grade][$year])) $info[$school_id][$grade][$year]++;
-//        else $info[$school_id][$grade][$year] = 1;
-//        $grades[$school_id][$row['class_id']] = $grade;
-//    }
-//}
-//echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
