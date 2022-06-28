@@ -4,7 +4,6 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $cur_year = GlobalSettings::getChidonRegYear();
@@ -100,29 +99,9 @@ foreach ($users as $school_id => $more) {
                         echo "</tr>";
                     }
                     echo "<tr><th>Totals:</th>";
-                    for ($i = $start_yr; $i <= $cur_year; $i++) {
-                        if (isset($totals[$i])) echo "<th>" . $totals[$i] . "</th>";
-                        else echo "<th>0</th>";
-                    }
+                    for ($i = $start_yr; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
                     echo "</tr>";
                 }
-//                if (isset($info[$school_id])) {
-//                    foreach ($info[$school_id] as $grade => $values) {
-//                        echo "<tr><td><a href='reg_history_details.php?id=" . array_search($grade, $grades[$school_id]) . "'>" . $grade . "</a></td>";
-//                        for ($i = 5777; $i <= $cur_year; $i++) {
-//                            echo "<td>";
-//                            if (isset($info[$school_id][$grade][$i])) {
-//                                echo $info[$school_id][$grade][$i];
-//                                $totals[$i] += $info[$school_id][$grade][$i];
-//                            }
-//                            echo "</td>";
-//                        }
-//                        echo "</tr>";
-//                    }
-//                    echo "<tr><th align='right'>Totals:</th>";
-//                    for ($i = 5777; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
-//                    echo "</tr>";
-//                }
                 ?>
             </table>
         <?php endforeach; ?>

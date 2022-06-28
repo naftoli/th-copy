@@ -1,11 +1,14 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $cur_year = GlobalSettings::getChidonYear();
+$start_yr = 5777;
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true );
 $schools = $as->getSchools();
@@ -57,7 +60,7 @@ foreach ($rows as $row) {
                 <th>Student</th>
                 <?php
                 $totals = []; // initialize totals per year
-                for ($i = 5777; $i <= $cur_year; $i++) {
+                for ($i = $start_yr; $i <= $cur_year; $i++) {
                     echo "<th>" . $i . "</th>";
                     $totals[$i] = 0;
                 }
@@ -67,7 +70,7 @@ foreach ($rows as $row) {
             foreach ($info as $user_id => $more) {
                 foreach ($more as $name => $other) {
                     echo "<tr><td>" . $name . "</td>";
-                    for ($i = 5777; $i <= $cur_year; $i++) {
+                    for ($i = $start_yr; $i <= $cur_year; $i++) {
                         echo "<td>";
                         if (array_search($i, $other) !== false) {
                             echo "&#10003;";
@@ -79,7 +82,7 @@ foreach ($rows as $row) {
                 }
             }
             echo "<tr><th align='right'>Totals:</th>";
-            for ($i = 5777; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
+            for ($i = $start_yr; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
             echo "</tr>";
             ?>
         </table>
