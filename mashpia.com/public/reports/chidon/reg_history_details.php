@@ -14,7 +14,21 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 // get class_id
-$class_id = $_GET['id'];
+$id = mysql_real_escape_string(GET['id']);
+$type = $_GET['type'];
+
+// setup aray of classes to show
+$classes = [];
+$classes[] = $id;
+
+// get all class ids of school
+if ($type == 'school') {
+    $sql = "select class_id from classes where class_era = 0 and school_id = " . $_GET['id'];
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $classes[] = $row['class_id'];
+    }
+}
 
 // figure out which years kids were enrolled into for this school
 $info = [];
@@ -29,15 +43,17 @@ $stmt = $MASHPIA_DB->prepare("
     AND tc.reg_date > 0 
     ORDER BY class_grade, class_sub
 ");
-$stmt->execute([':class_id' => $class_id]);
-$rows = $stmt->fetchAll();
-foreach ($rows as $row) {
-    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-    $grades[$row['class_id']] = $grade;
-    $name = $row['first'] . ' ' . $row['last'];
-    $year = $row['year'];
-    $info[$row['user_id']][$name][] = $year;
-    $serials[$row['user_id']] = $row['user_serial'];
+foreach ($classes as $class_id) {
+    $stmt->execute([':class_id' => $class_id]);
+    $rows = $stmt->fetchAll();
+    foreach ($rows as $row) {
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        $grades[$row['class_id']] = $grade;
+        $name = $row['first'] . ' ' . $row['last'];
+        $year = $row['year'];
+        $info[$class_id][$row['user_id']][$name][] = $year;
+        $serials[$row['user_id']] = $row['user_serial'];
+    }
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
@@ -57,38 +73,40 @@ foreach ($rows as $row) {
     </head>
     <body>
         <h1>Chidon History Report</h1>
-        <h2>Grade <?= $grades[$class_id] ?></h2>
-        <table>
-            <tr>
-                <th>Serial Number</th>
-                <th>Student</th>
-                <?php
-                $totals = []; // initialize totals per year
-                for ($i = $start_yr; $i <= $cur_year; $i++) {
-                    echo "<th>" . $i . "</th>";
-                    $totals[$i] = 0;
-                }
-                ?>
-            </tr>
-            <?php
-            foreach ($info as $user_id => $more) {
-                foreach ($more as $name => $other) {
-                    echo "<tr><td>" . $name . "</td><td>" . $serials[$user_id] . "</td>";
+        <?php foreach ($info as $class_id => $other) : ?>
+            <h2>Grade <?= $grades[$class_id] ?></h2>
+            <table>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Student</th>
+                    <?php
+                    $totals = []; // initialize totals per year
                     for ($i = $start_yr; $i <= $cur_year; $i++) {
-                        echo "<td>";
-                        if (array_search($i, $other) !== false) {
-                            echo "&#10003;";
-                            $totals[$i]++;
-                        }
-                        echo "</td>";
+                        echo "<th>" . $i . "</th>";
+                        $totals[$i] = 0;
                     }
-                    echo "</tr>";
+                    ?>
+                </tr>
+                <?php
+                foreach ($other as $user_id => $more) {
+                    foreach ($more as $name => $other) {
+                        echo "<tr><td>" . $name . "</td><td>" . $serials[$user_id] . "</td>";
+                        for ($i = $start_yr; $i <= $cur_year; $i++) {
+                            echo "<td>";
+                            if (array_search($i, $other) !== false) {
+                                echo "&#10003;";
+                                $totals[$i]++;
+                            }
+                            echo "</td>";
+                        }
+                        echo "</tr>";
+                    }
                 }
-            }
-            echo "<tr><th></th><th>Totals:</th>";
-            for ($i = $start_yr; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
-            echo "</tr>";
-            ?>
-        </table>
+                echo "<tr><th></th><th>Totals:</th>";
+                for ($i = $start_yr; $i <= $cur_year; $i++) echo "<th>" . $totals[$i] . "</th>";
+                echo "</tr>";
+                ?>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>

@@ -74,7 +74,7 @@ foreach ($users as $school_id => $more) {
     <body>
         <h1>Chidon History Report</h1>
         <?php foreach ($schools as $school_id => $name) : ?>
-            <h2><?= $name ?></h2>
+            <h2><a href="reg_history_details.php?id=$school_id&type=school"><?= $name ?></a></h2>
             <table>
                 <tr>
                     <th>Grade</th>
@@ -89,7 +89,7 @@ foreach ($users as $school_id => $more) {
                 <?php
                 if (isset($chidonClassTotals[$school_id])) {
                     foreach ($chidonClassTotals[$school_id] as $class_id => $info) {
-                        echo "<tr><td><a href='reg_history_details.php?id=" . $class_id . "'>" . $grades[$class_id] . "</a></td>";
+                        echo "<tr><td><a href='reg_history_details.php?id=" . $class_id . "&type=class'>" . $grades[$class_id] . "</a></td>";
                         for ($i = $start_yr; $i <= $cur_year; $i++) {
                             if (isset($info[$i])) {
                                 echo "<td>" . $info[$i] . "</td>";
