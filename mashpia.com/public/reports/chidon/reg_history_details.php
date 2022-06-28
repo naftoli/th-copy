@@ -14,7 +14,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 // get class_id
-$id = mysql_real_escape_string(GET['id']);
+$id = mysql_real_escape_string($_GET['id']);
 $type = $_GET['type'];
 
 // setup aray of classes to show
