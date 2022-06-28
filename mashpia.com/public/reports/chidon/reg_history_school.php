@@ -47,7 +47,7 @@ $chidonClassTotals = [];
 foreach ($users as $school_id => $more) {
     foreach ($more as $class_id => $other) {
         foreach ($other as $user_id => $user) {
-            $sql = "select year from th_chidon where user_id = " . $user_id;
+            $sql = "select year from th_chidon where date_paid > 0 and user_id = " . $user_id;
             $result = mysql_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 if (isset($chidonClassTotals[$school_id][$class_id][$row['year']])) $chidonClassTotals[$school_id][$class_id][$row['year']]++;
