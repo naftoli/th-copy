@@ -113,14 +113,17 @@ foreach ($users as $school_id => $more) {
                     foreach ($chidonClassTotals[$school_id] as $class_id => $info) {
                         echo "<tr><td><a href='reg_history_details.php?id=" . $class_id . "'>" . $grades[$class_id] . "</a></td>";
                         for ($i = $start_yr; $i <= $cur_year; $i++) {
-                            echo "<td>" . $info[$i] . "</td>";
-                            $totals[$i] += $info[$i];
+                            if (isset($info[$i])) {
+                                echo "<td>" . $info[$i] . "</td>";
+                                $totals[$i] += $info[$i];
+                            }
                         }
                         echo "</tr>";
                     }
                     echo "<tr><th>Totals:</th>";
                     for ($i = $start_yr; $i <= $cur_year; $i++) {
-                        echo "<th>" . $totals[$i] . "</th>";
+                        if (isset($totals[$i])) echo "<th>" . $totals[$i] . "</th>";
+                        else echo "<th>0</th>";
                     }
                     echo "</tr>";
                 }
