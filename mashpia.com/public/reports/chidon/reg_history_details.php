@@ -19,14 +19,13 @@ $type = $_GET['type'];
 
 // setup aray of classes to show
 $classes = [];
-$classes[] = $id;
-
-// get all class ids of school
-if ($type == 'school') {
+if ($type == 'class') {
+    $classes[] = $id;
+} else {
+    // get all class ids of school
     $sql = "select class_id from classes where class_era = 0 and school_id = " . $id;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        if ($row['class_id'] == $id) continue;
         $classes[] = $row['class_id'];
     }
 }
@@ -46,7 +45,6 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 foreach ($classes as $class_id) {
     $stmt->execute([':class_id' => $class_id]);
-    $stmt->debugDumpParams();
     $rows = $stmt->fetchAll();
     foreach ($rows as $row) {
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
