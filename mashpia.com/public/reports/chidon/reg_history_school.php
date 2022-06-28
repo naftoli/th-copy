@@ -74,7 +74,7 @@ foreach ($users as $school_id => $more) {
     <body>
         <h1>Chidon History Report</h1>
         <?php foreach ($schools as $school_id => $name) : ?>
-            <h2><a href="reg_history_details.php?id=$school_id&type=school"><?= $name ?></a></h2>
+            <h2><a href="reg_history_details.php?id=<?= $school_id ?>&type=school"><?= $name ?></a></h2>
             <table>
                 <tr>
                     <th>Grade</th>
