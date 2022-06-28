@@ -117,7 +117,7 @@ foreach ($users as $school_id => $more) {
                                 echo "<td>" . $info[$i] . "</td>";
                                 $totals[$i] += $info[$i];
                             } else {
-                                echo "<td>0</td>";
+                                echo "<td></td>";
                             }
                         }
                         echo "</tr>";
