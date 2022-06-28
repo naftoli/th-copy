@@ -33,7 +33,7 @@ $sql = "
         th_chidon tc USING (user_id)
     WHERE
         u.school_id in (" . implode(',', array_keys($schools)) . ") 
-            AND tc.date_paid > 0
+            AND tc.reg_date > 0
 ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -47,7 +47,7 @@ $chidonClassTotals = [];
 foreach ($users as $school_id => $more) {
     foreach ($more as $class_id => $other) {
         foreach ($other as $user_id => $user) {
-            $sql = "select year from th_chidon where date_paid > 0 and user_id = " . $user_id;
+            $sql = "select year from th_chidon where reg_date > 0 and user_id = " . $user_id;
             $result = mysql_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 if (isset($chidonClassTotals[$school_id][$class_id][$row['year']])) $chidonClassTotals[$school_id][$class_id][$row['year']]++;
