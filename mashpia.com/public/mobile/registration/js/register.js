@@ -424,8 +424,9 @@ var registrationApp = function() {
 
         console.log(state.cart)
         
-        var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
-        if ( total === 0 ){
+        var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 )
+        alert(total)
+        if ( total <= 0 ){
             return registerUsers( { payment: { total: 0 } } );
         }
 
@@ -1747,10 +1748,11 @@ var templates = function(){
         },
         renderCheckout: function( cart ){
             console.log(cart)
-            var total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
+            let total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
             for (i = 0; i < cart.length; i++) {
                 if (cart[i].meta.discount) total -= parseInt(cart[i].meta.discount)
             }
+            if (total < 0) total = 0;
             $("#charges").html('');
             // add each item
             cart.forEach( function( item ){

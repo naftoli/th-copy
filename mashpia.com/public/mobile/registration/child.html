@@ -219,15 +219,26 @@
                             </div>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <label for="non_th_school" data-key="NameSchoolAttending" class="i18n">
+                            <label for="non_th_school_id" data-key="NameSchoolAttending" class="i18n">
                                 Name of Actual School Attending
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />
                                 </span>
+                                <select name="non_th_school" id="non_th_school_id"></select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6" id="non_th_school_div" style="display: none">
+                            <label for="non_th_school" data-key="NameSchoolAttending" class="i18n">
+                                Please Enter Name of Actual School Attending
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />
+                                </span>
                                 <input type="text" class="form-control" id="non_th_school" name="non_th_school"
-                                    required />
+                                       required />
                             </div>
                         </div>
                     </div>
@@ -500,5 +511,22 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
     <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-71974937-1');</script>
 </body>
-
-</html>
+<script>
+    $(function () {
+        $.post('api/getNonThSchools.php', function(data){
+            let schools = JSON.parse(data)
+            let html = "<option value='0'>Please Choose</option>"
+            html += "<option value='-1'>My school is not listed</option>"
+            for (let s in schools) {
+                html += `<option value=${s}>${schools[s]}</option>`
+            }
+            $("#non_th_school_id").append(html)
+        })
+        $("#non_th_school_id").change( function() {
+            let val = this.value
+            if (val === '-1') $("#non_th_school_div").show()
+            else $("#non_th_school_div").hide()
+        })
+    })
+</script>
+</html
