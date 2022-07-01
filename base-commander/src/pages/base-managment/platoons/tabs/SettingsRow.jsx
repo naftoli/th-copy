@@ -10,7 +10,7 @@ export class SettingsRow extends Component {
     const { inputProps, checkProps, onJSONChange } = this.props;
     const { 
       pic_mission_type,   allow_parent_tasks,
-      print_parent_tasks, class_gender, whatsapp,
+      print_parent_tasks, class_gender, whatsapp
     } = this.props.platoon;
 
     const xl = this.props.modalOnly ? 6 : 3;

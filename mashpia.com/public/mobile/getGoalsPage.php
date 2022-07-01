@@ -126,7 +126,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 
     	<div class="info" dir="ltr" >
 	<span class="i18n" data-key="Personalize2">Personalize the tasks that you would like to see for  </span>	<?=$first?><span class="i18n" data-key="Personalize3">'s missions.</span>
-            Tasks with a red star, are the task of that campaign that will help your child earn the medal in that campaign.</div>
+            <br /><span style="color: red">Tasks with a red star, are the task of that campaign that will help your child earn the medal in that campaign.</span></div>
     	<!--
     	<div class="text-left" style="margin-bottom: 20px;">
 			<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #1b2b51;border-color:#1b2b51;" />
