@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$year = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $info = [];
 $sql = "
@@ -122,11 +122,13 @@ $pollKeys = array_keys($poll);
             Choose Year:
             <select name="year" id="year">
                 <?php
-                for ($i = 0; $i < 4; $i++) {
-                    $yr = $year - $i;
-                    echo "<option value='" . $yr . "'";
-                    if ($yr == $year) echo " selected ";
-                    echo ">" . $yr . "</option>";
+                $req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
+                $cur_yr = $year;
+                for ($i = 0; $i < 5; $i++) {
+                    echo "<option value='" . $cur_yr . "'";
+                    if ($req_yr && $req_yr == $cur_yr) echo " selected ";
+                    echo ">" . $cur_yr . "</option>";
+                    $cur_yr--;
                 }
                 ?>
             </select>
@@ -172,8 +174,9 @@ $pollKeys = array_keys($poll);
                 if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
                 else echo "<span>";
                 echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
-                    $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>" . $customNames[$row['name_pref']] .
-                    "</td><td>" . $row['book'] . "</td><td>" .
+                    $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>";
+                echo in_array($row['name_pref'], array_keys($customNames)) ? $customNames[$row['name_pref']] : $row['name_pref'];
+                echo "</td><td>" . $row['book'] . "</td><td>" .
                     ($row['khk_reg'] ? 'yes' : 'no') .
                     "</td><td>";
                 if (in_array($row['poll'], $pollKeys)) echo $poll[$row['poll']];

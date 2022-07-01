@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$year = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $info = [];
 $sql = "
@@ -58,11 +58,13 @@ while ($row = mysql_fetch_assoc($result)) {
     Choose Year:
     <select name="year" id="year">
         <?php
-        for ($i = 0; $i < 4; $i++) {
-            $yr = $year - $i;
-            echo "<option value='" . $yr . "'";
-            if ($yr == $year) echo " selected ";
-            echo ">" . $yr . "</option>";
+        $req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
+        $cur_yr = $year;
+        for ($i = 0; $i < 5; $i++) {
+            echo "<option value='" . $cur_yr . "'";
+            if ($req_yr && $req_yr == $cur_yr) echo " selected ";
+            echo ">" . $cur_yr . "</option>";
+            $cur_yr--;
         }
         ?>
     </select>
