@@ -189,7 +189,7 @@ $grandTotals = [];
             if ($i++ == $num) echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
             else echo "<td></td><td></td></tr>";
         }
-        echo "</table><br /><br />";
+        echo "</table><br /><br /><div style='page-break-after: always'></div>";
     }
     ?>
     </body>
