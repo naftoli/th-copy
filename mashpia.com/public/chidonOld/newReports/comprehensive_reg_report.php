@@ -198,11 +198,16 @@ $trackYr = 5782;
         foreach ($totals[$school_id] as $class_id => $more) {
             $grandTotal['kids'] += $more['kids'];
             $grandTotal['reg'] += $more['reg'];
+            $grandTotals[$school_id]['kids'] += $more['kids'];
+            $grandTotals[$school_id]['reg'] += $more['reg'];
+
             echo "<tr><td>" . $classes[$class_id] . "</td><td>" . $teachers[$class_id] . "</td><td>" . $more['kids'] . "</td><td>" . $more['reg'] . "</td>";
             if (in_array($class_id, $8thGrades)) {
                 echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
                 $grandTotal['khk'] += $more['khk'];
                 $grandTotal['khk_reg'] += $more['khk_reg'];
+                $grandTotals[$school_id]['khk'] += $more['khk'];
+                $grandTotals[$school_id]['khk_reg'] += $more['khk_reg'];
             }
             else echo "<td></td><td></td></tr>";
         }
