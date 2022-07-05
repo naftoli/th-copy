@@ -45,6 +45,7 @@ $users = [];
 $userIds = [];
 $classes = [];
 $teachers = [];
+$8thGrades = [];
 $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, c.class_teacher, 
             a.admin_email, a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
         FROM users u 
@@ -62,6 +63,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $userIds[] = $row['user_id'];
     $classes[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
     $teachers[$row['class_id']] = $row['class_teacher'];
+    if ($row['class_grade'] == '8') $8thGrades[] = $row['class_id'];
 }
 
 // chidon info
@@ -78,8 +80,6 @@ while ($row = mysql_fetch_assoc($result)) {
 $eligibility = KHK::getKHKEligibility($userIds)[0];
 //echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
 $trackYr = 5782;
-
-$grandTotals = [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,7 +107,14 @@ $grandTotals = [];
     </div>
     <?php
     $totals = [];
+    $grandTotals = [];
     foreach ($users as $school_id => $more) {
+        // init grand totals
+        $grandTotals[$school_id]['kids'] = 0;
+        $grandTotals[$school_id]['reg'] = 0;
+        $grandTotals[$school_id]['khk'] = 0;
+        $grandTotals[$school_id]['khk_reg'] = 0;
+
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
             // init totals
@@ -180,16 +187,45 @@ $grandTotals = [];
                 }
             echo "</table><br />";
         }
+        // init grand total for this school
+        $grandTotal['kids'] = 0;
+        $grandTotal['reg'] = 0;
+        $grandTotal['khk'] = 0;
+        $grandTotal['khk_reg'] = 0;
+
         echo "<h2>" . $schools[$school_id] . " Summary</h2>";
         echo "<table><tr><th>Grade</th><th>Teacher</th><th>Amount eligible to enroll</th><th>Amount Enrolled</th><th>KHK Eligible</th><th>KHK Enrolled</th></tr>";
-        $i = 1;
-        $num = count($totals[$school_id]);
         foreach ($totals[$school_id] as $class_id => $more) {
+            $grandTotal['kids'] += $more['kids'];
+            $grandTotal['reg'] += $more['reg'];
             echo "<tr><td>" . $classes[$class_id] . "</td><td>" . $teachers[$class_id] . "</td><td>" . $more['kids'] . "</td><td>" . $more['reg'] . "</td>";
-            if ($i++ == $num) echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
+            if (in_array($class_id, $8thGrades)) {
+                echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
+                $grandTotal['khk'] += $more['khk'];
+                $grandTotal['khk_reg'] += $more['khk_reg'];
+            }
             else echo "<td></td><td></td></tr>";
         }
+        echo "<tr><th colspan='2'>Grand Total</th><th>" . $grandTotal['kids'] . "</th><th>" . $grandTotal['reg'] . "</th><th>" . $grandTotal['khk'] . 
+            "</th><th>" . $grandTotal['khk_reg'] . "</th></tr>";
         echo "</table><br /><br /><div style='page-break-after: always'></div>";
+    }
+    if ($admin_user['auth'] == 'super') {
+        // totals for HQ
+        $total['kids'] = 0;
+        $total['reg'] = 0;
+        $total['khk'] = 0;
+        $total['khk_reg'] = 0;
+
+        echo "<table><tr><th>School</th><th>Amount eligible to enroll</th><th>Amount Enrolled</th><th>KHK Eligible</th><th>KHK Enrolled</th></tr>";
+        foreach ($schools as $school_id => $school_name) {
+            if (isset($grandTotals[$school_id])) {
+                echo "<tr><td>" . $school_name . "</td><td>" . $grandTotals[$school_id]['kids'] . "</td><td>" . $grandTotals[$school_id]['reg'] . 
+                    "</td><td>" . $grandTotals[$school_id]['khk'] . "</td><td>" . $grandTotals[$school_id]['khk_reg'] . "</td></tr>";
+            }
+        }
+        echo "<tr><th>Grand Total</th><th>" . $total['kids'] . "</th><th>" . $total['reg'] . "</th><th>" . $total['khk'] . "</th><th>" . $total['khk_reg'] . "</th></tr>";
+        echo "</table>";
     }
     ?>
     </body>
