@@ -136,7 +136,7 @@ $trackYr = 5782;
                         if (($year - $i) >= $trackYr){
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
                                 echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
-                            else echo "Didn't Pass";
+                            else echo "didn't pass";
                         } else {
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
                             else echo "&#10006;";
