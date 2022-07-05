@@ -110,6 +110,12 @@ $grandTotals = [];
     foreach ($users as $school_id => $more) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
+            // init totals
+            $totals[$school_id][$class_id]['kids'] = 0;
+            $totals[$school_id][$class_id]['reg'] = 0;
+            $totals[$school_id][$class_id]['khk'] = 0;
+            $totals[$school_id][$class_id]['khk_reg'] = 0;
+
             echo "<h3>Grade " . $classes[$class_id] . ' - ' . $teachers[$class_id] . "</h3>";
             ?>
             <table>
@@ -130,10 +136,6 @@ $grandTotals = [];
                 </tr>
                 <?php
                 foreach ($other as $user) {
-                    // init totals
-                    $totals[$school_id][$class_id]['kids'] = 0;
-                    $totals[$school_id][$class_id]['reg'] = 0;
-
                     $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
                     echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
                         $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
@@ -156,8 +158,6 @@ $grandTotals = [];
                         echo "</td>";
                     }
                     // khk
-                    $totals[$school_id][$class_id]['khk'] = 0;
-                    $totals[$school_id][$class_id]['khk_reg'] = 0;
                     echo "<td>";
                     if ($eligibility[$user['user_id']]) {
                         echo "yes";
