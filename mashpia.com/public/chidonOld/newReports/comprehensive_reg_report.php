@@ -107,7 +107,7 @@ $trackYr = 5782;
     foreach ($users as $school_id => $more) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
-            echo "<h3>Grade " . $classes[$class_id] . '-' . $teachers[$class_id] . "</h3>";
+            echo "<h3>Grade " . $classes[$class_id] . ' - ' . $teachers[$class_id] . "</h3>";
             ?>
             <table>
                 <tr>
