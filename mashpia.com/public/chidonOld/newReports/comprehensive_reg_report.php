@@ -78,6 +78,8 @@ while ($row = mysql_fetch_assoc($result)) {
 $eligibility = KHK::getKHKEligibility($userIds)[0];
 //echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
 $trackYr = 5782;
+
+$grandTotals = [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,6 +109,7 @@ $trackYr = 5782;
     foreach ($users as $school_id => $more) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
+            $totals = [];
             echo "<h3>Grade " . $classes[$class_id] . ' - ' . $teachers[$class_id] . "</h3>";
             ?>
             <table>
@@ -134,8 +137,17 @@ $trackYr = 5782;
                     for ($i = 4; $i >= 0; $i--) {
                         echo "<td>";
                         if (($year - $i) >= $trackYr){
-                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
+                            // update total possible reg
+                            if (isset($totals[$school_id][$class_id]['kids'])) $totals[$school_id][$class_id]['kids']++;
+                            else $totals[$school_id][$class_id]['kids'] = 1;
+                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
                                 echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                                // totals are only for current yr
+                                if ($i == 0) {
+                                    if (isset($totals[$school_id][$class_id]['reg'])) $totals[$school_id]['reg']++;
+                                    else $totals[$school_id][$class_id]['reg'] = 1;
+                                }
+                            }
                             else echo "didn't pass";
                         } else {
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
@@ -145,10 +157,18 @@ $trackYr = 5782;
                     }
                     // khk
                     echo "<td>";
-                    if ($eligibility[$user['user_id']]) echo "yes";
+                    if ($eligibility[$user['user_id']]) {
+                        echo "yes";
+                        if (isset($totals[$school_id][$class_id]['khk'])) $totals[$school_id][$class_id]['khk']++;
+                        else $totals[$school_id][$class_id]['khk'] = 1;
+                    }
                     else echo "no";
                     echo "</td><td>";
-                    if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
+                    if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) {
+                        echo "yes";
+                        if (isset($totals[$school_id][$class_id]['khk_reg'])) $totals[$school_id][$class_id]['khk_reg']++;
+                        else $totals[$school_id][$class_id]['khk_reg'] = 1;
+                    }
                     else echo "no";
                     echo "</td>";
                     // parent info
@@ -158,8 +178,18 @@ $trackYr = 5782;
                     $phone .= $user['admin_phone_work'] ? $user['admin_phone_work'] . "<br />" : '';
                     echo "<td>" . $phone . "</td></tr>";
                 }
-            echo "</table><br /><br />";
+            echo "</table><br />";
         }
+        echo "<h2>" . $schools[$school_id] . " Summary</h2>";
+        echo "<table><tr><th>Grade</th><th>Teacher</th><th>Amount eligible to enroll</th><th>Amount Enrolled</th><th>KHK Eligible</th><th>KHK Enrolled</th></tr>";
+        $i = 1;
+        $num = count($totals[$school_id]);
+        foreach ($totals[$school_id] as $class_id => $more) {
+            echo "<tr><td>" . $classes[$class_id] . "</td><td>" . $teachers[$class_id] . "</td><td>" . $more['kids'] . "</td><td>" . $more['reg'] . "</td>";
+            if ($i++ == $num) echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
+            else echo "<td></td><td></td></tr>";
+        }
+        echo "</table><br /><br />";
     }
     ?>
     </body>
