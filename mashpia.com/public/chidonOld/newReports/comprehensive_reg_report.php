@@ -130,6 +130,10 @@ $grandTotals = [];
                 </tr>
                 <?php
                 foreach ($other as $user) {
+                    // init totals
+                    $totals[$school_id][$class_id]['kids'] = 0;
+                    $totals[$school_id][$class_id]['reg'] = 0;
+
                     $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
                     echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
                         $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
@@ -138,15 +142,11 @@ $grandTotals = [];
                         echo "<td>";
                         if (($year - $i) >= $trackYr){
                             // update total possible reg
-                            if (isset($totals[$school_id][$class_id]['kids'])) $totals[$school_id][$class_id]['kids']++;
-                            else $totals[$school_id][$class_id]['kids'] = 1;
+                            $totals[$school_id][$class_id]['kids']++;
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
                                 echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
                                 // totals are only for current yr
-                                if ($i == 0) {
-                                    if (isset($totals[$school_id][$class_id]['reg'])) $totals[$school_id][$class_id]['reg']++;
-                                    else $totals[$school_id][$class_id]['reg'] = 1;
-                                }
+                                if ($i == 0) $totals[$school_id][$class_id]['reg']++;
                             }
                             else echo "didn't pass";
                         } else {
@@ -156,18 +156,18 @@ $grandTotals = [];
                         echo "</td>";
                     }
                     // khk
+                    $totals[$school_id][$class_id]['khk'] = 0;
+                    $totals[$school_id][$class_id]['khk_reg'] = 0;
                     echo "<td>";
                     if ($eligibility[$user['user_id']]) {
                         echo "yes";
-                        if (isset($totals[$school_id][$class_id]['khk'])) $totals[$school_id][$class_id]['khk']++;
-                        else $totals[$school_id][$class_id]['khk'] = 1;
+                        $totals[$school_id][$class_id]['khk']++;
                     }
                     else echo "no";
                     echo "</td><td>";
                     if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) {
                         echo "yes";
-                        if (isset($totals[$school_id][$class_id]['khk_reg'])) $totals[$school_id][$class_id]['khk_reg']++;
-                        else $totals[$school_id][$class_id]['khk_reg'] = 1;
+                        $totals[$school_id][$class_id]['khk_reg']++;
                     }
                     else echo "no";
                     echo "</td>";
