@@ -45,7 +45,7 @@ $users = [];
 $userIds = [];
 $classes = [];
 $teachers = [];
-$8thGrades = [];
+$eighthGrades = [];
 $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, c.class_teacher, 
             a.admin_email, a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
         FROM users u 
@@ -63,7 +63,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $userIds[] = $row['user_id'];
     $classes[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
     $teachers[$row['class_id']] = $row['class_teacher'];
-    if ($row['class_grade'] == '8') $8thGrades[] = $row['class_id'];
+    if ($row['class_grade'] == '8') $eighthGrades[] = $row['class_id'];
 }
 
 // chidon info
@@ -202,7 +202,7 @@ $trackYr = 5782;
             $grandTotals[$school_id]['reg'] += $more['reg'];
 
             echo "<tr><td>" . $classes[$class_id] . "</td><td>" . $teachers[$class_id] . "</td><td>" . $more['kids'] . "</td><td>" . $more['reg'] . "</td>";
-            if (in_array($class_id, $8thGrades)) {
+            if (in_array($class_id, $eighthGrades)) {
                 echo "<td>" . $more['khk'] . "</td><td>" . $more['khk_reg'] . "</td></tr>";
                 $grandTotal['khk'] += $more['khk'];
                 $grandTotal['khk_reg'] += $more['khk_reg'];
