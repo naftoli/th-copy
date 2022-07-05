@@ -43,7 +43,8 @@ if ($chidonYr > $year) {
 // personal info
 $users = [];
 $userIds = [];
-$sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_grade, c.class_sub, a.admin_email, 
+$classes = [];
+$sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, a.admin_email, 
             a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
         FROM users u 
         JOIN classes c using (class_id) 
@@ -56,8 +57,9 @@ $sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_g
 // echo $sql; exit;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $users[] = $row;
+    $users[$row['school_id']][$row['class_id']][] = $row;
     $userIds[] = $row['user_id'];
+    $classes[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
 }
 
 // chidon info
@@ -99,57 +101,65 @@ $trackYr = 5782;
             <option value="5783" <?php if ($year == 5783) echo "selected" ?>>5783</option>
         </select>
     </div>
-    <table>
-        <tr>
-            <th>Serial Number</th>
-            <th>Full Name</th>
-            <th>School</th>
-            <th>Class</th>
-            <?php
-            for ($i = 4; $i >= 0; $i--) {
-                echo "<th>Registered for " . ($year - $i) . "</th>";
-            }
+    <?php
+    foreach ($users as $school_id => $more) {
+        echo "<h2>" . $schools[$school_id] . "</h2>";
+        foreach ($more as $class_id => $other) {
+            echo "<h3>" . $classes[$class_id] . "</h3>";
             ?>
-            <th>KHK Eligible</th>
-            <th>KHK Registered</th>
-            <th>Parent Email</th>
-            <th>Parent Phone Number</th>
-        </tr>
-        <?php
-        foreach ($users as $user) {
-            $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-            echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
-                $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
-            // registration
-            for ($i = 4; $i >= 0; $i--) {
-                echo "<td>";
-                if (($year - $i) >= $trackYr){
-                    if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
-                        echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
-                    else echo "&#10006;";
-                } else {
-                    if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
-                    else echo "&#10006;";
+            <table>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Full Name</th>
+                    <th>School</th>
+                    <th>Class</th>
+                    <?php
+                    for ($i = 4; $i >= 0; $i--) {
+                        echo "<th>Registered for " . ($year - $i) . "</th>";
+                    }
+                    ?>
+                    <th>KHK Eligible</th>
+                    <th>KHK Registered</th>
+                    <th>Parent Email</th>
+                    <th>Parent Phone Number</th>
+                </tr>
+                <?php
+                foreach ($other as $user) {
+                    $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
+                    echo "<tr><td>" . $user['user_serial'] . "</td><td>" . ($user['first'] . ' ' . $user['last']) . "</td><td>" .
+                        $schools[$user['school_id']] . "</td><td>" . $grade . "</td>";
+                    // registration
+                    for ($i = 4; $i >= 0; $i--) {
+                        echo "<td>";
+                        if (($year - $i) >= $trackYr){
+                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
+                                echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                            else echo "&#10006;";
+                        } else {
+                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
+                            else echo "&#10006;";
+                        }
+                        echo "</td>";
+                    }
+                    // khk
+                    echo "<td>";
+                    if ($eligibility[$user['user_id']]) echo "yes";
+                    else echo "no";
+                    echo "</td><td>";
+                    if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
+                    else echo "no";
+                    echo "</td>";
+                    // parent info
+                    echo "<td>" . $user['admin_email'] . "</td>";
+                    $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
+                    $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
+                    $phone .= $user['admin_phone_work'] ? $user['admin_phone_work'] . "<br />" : '';
+                    echo "<td>" . $phone . "</td></tr>";
                 }
-                echo "</td>";
-            }
-            // khk
-            echo "<td>";
-            if ($eligibility[$user['user_id']]) echo "yes";
-            else echo "no";
-            echo "</td><td>";
-            if (isset($chidonInfo[$user['user_id']][$year]) && intval($chidonInfo[$user['user_id']][$year]['khk_reg'])) echo "yes";
-            else echo "no";
-            echo "</td>";
-            // parent info
-            echo "<td>" . $user['admin_email'] . "</td>";
-            $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
-            $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
-            $phone .= $user['admin_phone_work'] ? $user['admin_phone_work'] . "<br />" : '';
-            echo "<td>" . $phone . "</td></tr>";
+            echo "</table><br /><br />";
         }
-        ?>
-        </table>
+    }
+    ?>
     </body>
     <script>
         $("#year").change( function () {
