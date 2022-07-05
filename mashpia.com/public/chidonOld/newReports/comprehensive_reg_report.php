@@ -144,7 +144,7 @@ $grandTotals = [];
                                 echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
                                 // totals are only for current yr
                                 if ($i == 0) {
-                                    if (isset($totals[$school_id][$class_id]['reg'])) $totals[$school_id]['reg']++;
+                                    if (isset($totals[$school_id][$class_id]['reg'])) $totals[$school_id][$class_id]['reg']++;
                                     else $totals[$school_id][$class_id]['reg'] = 1;
                                 }
                             }
