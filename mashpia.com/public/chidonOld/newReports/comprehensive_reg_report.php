@@ -106,10 +106,10 @@ $grandTotals = [];
         </select>
     </div>
     <?php
+    $totals = [];
     foreach ($users as $school_id => $more) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
-            $totals = [];
             echo "<h3>Grade " . $classes[$class_id] . ' - ' . $teachers[$class_id] . "</h3>";
             ?>
             <table>
