@@ -44,8 +44,9 @@ if ($chidonYr > $year) {
 $users = [];
 $userIds = [];
 $classes = [];
-$sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, a.admin_email, 
-            a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
+$teachers = [];
+$sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, c.class_teacher, 
+            a.admin_email, a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
         FROM users u 
         JOIN classes c using (class_id) 
         JOIN admin_auths aa on aa.id = u.user_id 
@@ -60,6 +61,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $users[$row['school_id']][$row['class_id']][] = $row;
     $userIds[] = $row['user_id'];
     $classes[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+    $teachers[$row['class_id']] = $row['class_teacher'];
 }
 
 // chidon info
@@ -105,7 +107,7 @@ $trackYr = 5782;
     foreach ($users as $school_id => $more) {
         echo "<h2>" . $schools[$school_id] . "</h2>";
         foreach ($more as $class_id => $other) {
-            echo "<h3>" . $classes[$class_id] . "</h3>";
+            echo "<h3>" . $classes[$class_id] . '-' . $teachers[$row['class_id']] . "</h3>";
             ?>
             <table>
                 <tr>
@@ -134,7 +136,7 @@ $trackYr = 5782;
                         if (($year - $i) >= $trackYr){
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0)
                                 echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
-                            else echo "&#10006;";
+                            else echo "Didn't Pass";
                         } else {
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
                             else echo "&#10006;";
