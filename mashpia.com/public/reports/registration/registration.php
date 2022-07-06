@@ -17,9 +17,8 @@ $schools = $as->getSchools();
 
 $details = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM registration_charges 
+    SELECT * FROM user_registration  
     WHERE year = :year 
-    AND type = 'chayolei'
 ");
 $stmt->execute([':year' => $year]);
 $rows = $stmt->fetchAll();
