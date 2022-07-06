@@ -425,7 +425,6 @@ var registrationApp = function() {
         console.log(state.cart)
         
         var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 )
-        alert(total)
         if ( total <= 0 ){
             return registerUsers( { payment: { total: 0 } } );
         }
@@ -1179,7 +1178,7 @@ var templates = function(){
                     '<div class="col-4">' +
                         '<img src="' + child.profilePicture + '" />' +
                     '</div><div class="col-6">' +
-                        '<p class="name">' + child.first + " " + child.last + '</p>' +
+                        '<p class="name">' + child.first + " " + child.last + '<div style="font-size: 1em;">' + child.user_serial + '</div></p>' +
                         /*
                         ( child.registrationStatus.chayolei === false ? 
                             child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) :
