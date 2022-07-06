@@ -89,7 +89,7 @@ $trackYr = 5782;
         <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
             tr, th, td {
-                padding: 6px;
+                padding: 10px;
                 font-size: 12px;
                 border-bottom: 1px solid grey;
             }
