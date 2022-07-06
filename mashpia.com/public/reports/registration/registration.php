@@ -25,8 +25,8 @@ $rows = $stmt->fetchAll();
 
 $totals = [];
 foreach ($rows as $row) {
-    if (isset($totals[$row['school_id']])) $totals[$row['school_id']] += floatval($row['amount']);
-    else $totals[$row['school_id']] = floatval($row['amount']);
+    if (isset($totals[$row['school_id']])) $totals[$row['school_id']] += floatval($row['paid']);
+    else $totals[$row['school_id']] = floatval($row['paid']);
     $details[$row['school_id']][] = $row;
 }
 
