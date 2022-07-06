@@ -760,7 +760,7 @@ var registrationApp = function() {
             })
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1;
             state.cart.push({
-                description: Msg4 + (myshliach || anash ? selected_user.school.school_name + ' ' : '') + selected_user.first + ( anash ? Msg5 : ''),
+                description: Msg4 + selected_user.first + ' ' + (myshliach || anash ? selected_user.school.school_name : '') + ( anash ? Msg5 : ''),
                 price: fee,
                 meta: {
                     type: 'registration',
@@ -821,7 +821,7 @@ var registrationApp = function() {
         }
         if ( selected_charges.khk && khk_fee ) {
             state.cart.push({
-                description: "KHK Enrollment",
+                description: selected_user.first + " KHK Enrollment",
                 price: khk_fee,
                 meta: {
                     type: 'registration',

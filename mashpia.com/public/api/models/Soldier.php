@@ -502,8 +502,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // check if child is new to chidon
         $result['new_to_chidon'] = 1;
-        $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user");
-        $stmt->execute([':user' => $this->user_id]);
+        $stmt = $MASHPIA_DB->prepare("select * from th_chidon where user_id = :user and year != :year");
+        $stmt->execute([
+            ':user' => $this->user_id,
+            ':year' => $chidon_year
+        ]);
         $rows = $stmt->fetchAll();
         if ( !empty($rows) ) $result['new_to_chidon'] = 0;
 

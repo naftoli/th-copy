@@ -1148,6 +1148,14 @@
                 }
             })
 
+            // make sure serial number is valid
+            $("#recruited_by_user_serial").blur( function() {
+                let serial = this.value
+                if (serial.length && !isNaN(serial)) {
+                    checkSerial(serial)
+                }
+            })
+
             // show recruited by if recruit is checked off
             $(".recruit").click( function () {
                 $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
@@ -1158,6 +1166,33 @@
             $("#last").blur(isEnglish)
 
             $("#nameChoice").blur(isEnglish)
+
+            function checkSerial(number) {
+                let good = true
+                if (number.length != 7) {
+                    good = false
+                    alert('Invalid serial number.')
+                }
+                else if (selected_user.user_serial == number) {
+                    good = false
+                    alert('You cannot enter your own serial number.')
+                }
+                if (!good) {
+                    setTimeout(function () {
+                        $("#recruited_by_user_serial").focus()
+                    }, 0)
+                    return false
+                }
+                $.post('api/checkSerial.php', { serial }, function(result) {
+                    if (!result) {
+                        alert('No such serial number found in our system.')
+                        setTimeout(function () {
+                            $("#recruited_by_user_serial").focus()
+                        }, 0)
+                        return false
+                    }
+                })
+            }
 
             function between(x, min, max) {
                 return x >= min && x <= max
