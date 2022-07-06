@@ -222,11 +222,17 @@ $trackYr = 5782;
         $total['khk'] = 0;
         $total['khk_reg'] = 0;
 
+        echo "<h2>School Grand Totals</h2>";
         echo "<table><tr><th>School</th><th>Amount eligible to enroll</th><th>Amount Enrolled</th><th>KHK Eligible</th><th>KHK Enrolled</th></tr>";
         foreach ($schools as $school_id => $school_name) {
             if (isset($grandTotals[$school_id])) {
                 echo "<tr><td>" . $school_name . "</td><td>" . $grandTotals[$school_id]['kids'] . "</td><td>" . $grandTotals[$school_id]['reg'] . 
                     "</td><td>" . $grandTotals[$school_id]['khk'] . "</td><td>" . $grandTotals[$school_id]['khk_reg'] . "</td></tr>";
+
+                $total['kids'] += $grandTotals[$school_id]['kids'];
+                $total['reg'] += $grandTotals[$school_id]['reg'];
+                $total['khk'] += $grandTotals[$school_id]['khk'];
+                $total['khk_reg'] += $grandTotals[$school_id]['khk_reg'];
             }
         }
         echo "<tr><th>Grand Total</th><th>" . $total['kids'] . "</th><th>" . $total['reg'] . "</th><th>" . $total['khk'] . "</th><th>" . $total['khk_reg'] . "</th></tr>";
