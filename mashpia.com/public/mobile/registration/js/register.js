@@ -158,8 +158,9 @@ var registrationApp = function() {
         $.post('api/getNonThSchools.php', function(result) {
             var res = JSON.parse(result)
             var html = '<option value="-1" selected>Please Choose</option>'
-            for (var s in res) {
-                html += '<option value=' + s + '>' + res[s] + "</option>";
+            for (let s in res) {
+                let key = s.substring(0, s.length - 1)
+                html += '<option value=' + key + '>' + res[s] + "</option>";
             }
             html += '<option value="0">My school is not listed</option>'
             $("#non_th_school_id").empty()
