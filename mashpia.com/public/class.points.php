@@ -152,6 +152,8 @@ class Points
         if ($this->store_reset > 0) {
             $reset_date = $this->store_reset;
         } else {
+//            if ($this->australian) $reset_date = $this->yearStart;
+//            else $reset_date = 2455441; // Sept 1, 2010
             $reset_date = $this->yearStart;
         }
         return $reset_date;
