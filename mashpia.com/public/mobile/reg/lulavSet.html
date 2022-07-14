@@ -197,12 +197,12 @@
             var soldOut = false;
             var now = Math.floor( new Date().getTime() / 1000);
             console.log( now );
-            if ( now >= 1631231999 ) {
-                soldOut = true;
-            }
+            // if ( now >= 1631231999 ) {
+            //     soldOut = true;
+            // }
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
-                var startWith = 2500;
+                var startWith = 2501;
                 var alreadySold = 1467; // sets set aside for hq/staff/schools
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
@@ -235,11 +235,12 @@
 
                     for (var c in children) {
                         var child = children[c];
-                        if (child.mivtzaLulav) {
-                            registred_children[c] = child;
-                        } else {
-                            unregistered_children[c] = child;
-                        }
+                        registred_children[c] = child;
+                        // if (child.mivtzaLulav) {
+                        //     registred_children[c] = child;
+                        // } else {
+                        //     unregistered_children[c] = child;
+                        // }
                     }
 
                     // Grab the template script
