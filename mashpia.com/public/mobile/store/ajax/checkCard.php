@@ -5,7 +5,7 @@ $admin = mysql_real_escape_string($_POST['admin']);
 $card = mysql_real_escape_string($_POST['card']);
 
 require '../../../class.points.php';
-$p = new Points($admin);
+$p = new Points($user);
 $msg = $p->scanMiles($card);
 echo $msg;
 
