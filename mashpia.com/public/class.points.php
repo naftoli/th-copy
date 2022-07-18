@@ -240,7 +240,7 @@ class Points
         $msg = '';
         $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
         $result = mysql_query($sql);
-        if (mysql_num_rows > 0) {
+        if (mysql_num_rows($result) > 0) {
             $row = mysql_fetch_assoc($result);
             if ($row['status'] == 'scanned') {
                 $msg = "This card has already been scanned.";
