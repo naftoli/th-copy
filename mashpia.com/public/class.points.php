@@ -234,4 +234,42 @@ class Points
         $row = mysql_fetch_assoc( $result );
         return $row ? $row['total'] : 0;
     }
+
+    // originally in mashpia.com/public/v2/application/controllers/KioskMainController.php
+    public function scanMiles($card) {
+        $msg = '';
+        $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
+        $result = mysql_query($sql);
+        if (mysql_num_rows > 0) {
+            $row = mysql_fetch_assoc($result);
+            if ($row['status'] == 'scanned') {
+                $msg = "This card has already been scanned.";
+            } else {
+                if ($row['institution_id'] > 0 && $row['institution_id'] != $this->school_id) {
+                    $msg = "You are not in the correct base to scan this card.";
+                } else if ($row['class_id'] > 0) {
+                    // get user class id
+                    $sql2 = "SELECT class_id FROM users WHERE user_id = " . $this->user_id;
+                    $result2 = mysql_query($sql2);
+                    $row2 = mysql_fetch_assoc($result2);
+                    $class_id = $row2['class_id'];
+                    if ($row['class_id'] != $class_id) {
+                        $msg = "You are not in the correct platoon to scan this card.";
+                    }
+                } else {
+                    // update db
+                    $sql3 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . mysql_real_escape_string($card);
+                    if (mysql_query($sql3)) {
+                        $msg = "Congratulations! You have just been awarded " . $row['card_points'] . " points!";
+                    } else {
+                        $msg = "Error awarding points.";
+                    }
+                }
+            }
+        } else {
+            if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) $msg = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
+            else $msg = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+        }
+        return $msg;
+    }
 }

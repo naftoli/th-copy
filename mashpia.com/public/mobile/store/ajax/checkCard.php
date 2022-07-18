@@ -4,6 +4,12 @@ $user = mysql_real_escape_string($_POST['user']);
 $admin = mysql_real_escape_string($_POST['admin']);
 $card = mysql_real_escape_string($_POST['card']);
 
+require '../../../class.points.php';
+$p = new Points($admin);
+$msg = $p->scanMiles($card);
+echo $msg;
+
+/*
 require '../../reg/ajax/encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
@@ -63,4 +69,5 @@ if ($authorized) {
     ob_end_clean();
     print $strResult;
 }
+*/
 ?>
