@@ -257,13 +257,30 @@ class Points
                         $msg = "You are not in the correct platoon to scan this card.";
                     }
                 } else {
-                    // update db
+                    // insert into user_points
+                    $sql4 = "INSERT into pointsDB.user_points SET 
+                             achievement_card_id = " . $row['achievement_card_id'] . ",
+                             user_id = " . $this->user_id . ", 
+                             campaign_id = " . $row['campaign_id'] . ", 
+                             mission_id = " . $row['mission_id'] . ", 
+                             task_id = " . $row['task_id'] . ", 
+                             institution_id = " . $this->school_id . ", 
+                             class_id = " . $row['class_id'] . ", 
+                             points = " . $row['card_points'] . ", 
+                             resource_name = 'specific achievement card'";
+                    // update achievement cards
                     $sql3 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . mysql_real_escape_string($card);
-                    if (mysql_query($sql3)) {
+                    // make sure both qrys work or don't work
+                    mysql_query('set autocommit=0');
+                    mysql_query('begin');
+                    if (mysql_query($sql4) && mysql_query($sql3)) {
                         $msg = "Congratulations! You have just been awarded " . $row['card_points'] . " points!";
+                        mysql_query('commit');
                     } else {
                         $msg = "Error awarding points.";
+                        mysql_query('rollback');
                     }
+                    mysql_query('set autocommit=1');
                 }
             }
         } else {
