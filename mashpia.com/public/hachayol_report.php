@@ -126,7 +126,6 @@ $posters = array(
             }
         }
     }
-    ?>
 //    if ( isset( $schools['pickup'] ) ) {
 //        foreach( $schools['pickup'] as $id => $school ) { ?>
 <!--            --><?php //$chidonNum = $h->getChidonNumber( $id ); ?>
@@ -227,7 +226,7 @@ $posters = array(
 <!--        --><?php
 //        }
 //    } ?>
-
+?>
     <h2>For Pickup</h2>
     <div class='info'>
         Warehouse - 300<br />
