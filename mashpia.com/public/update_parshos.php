@@ -15,7 +15,7 @@ require('header.php');
 <? if ($admin->auth == 'super') : ?>
 <h1>Update Parshos</h1>
 <?
-$handle = fopen("parshos.txt", "r");
+$handle = fopen("5783-5784 - Sheet1.csv", "r");
 $contents = stream_get_contents( $handle );
 $arrRows = preg_split("/[\n\r]+/", $contents);
 foreach ($arrRows as $strLine) {
@@ -25,7 +25,7 @@ foreach ($arrRows as $strLine) {
     $parsha = $data[2];
     $year = $data[3];
     
-    $sql = "insert into parshos values( '', $start, $end, '$parsha', '$year' )";
+    $sql = "insert into parshos values('', $start, $end, '$parsha', '$year')";
     mysql_query( $sql );
 }
 
