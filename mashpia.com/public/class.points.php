@@ -178,7 +178,7 @@ class Points
         $result = mysql_query($sql);
         if (mysql_num_rows($result) > 0) {
             while ($row = mysql_fetch_assoc($result)) {
-                $points[] = $row['user_points_id'];
+                $points[] = $row['user_point_id'];
                 $total += intval($row['points']);
             }
             // get all returns
