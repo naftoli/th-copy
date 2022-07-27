@@ -131,6 +131,15 @@ class Points
         return $points;
     }
 
+    public function getMashpiaPoints($start, $end) {
+        // convert to jd values
+        $startDetails = explode('-', $start);
+        $endDetails = explode('-', $end);
+        $startJD = gregoriantojd($startDetails[1], $startDetails[2], $startDetails[0]);
+        $endJD = gregoriantojd($endDetails[1], $endDetails[2], $endDetails[0]);
+        return $this->getTotalMarks("WHERE user_id = $this->user_id AND mark_date >= " . $startJD . " AND mark_date <= " . $endJD);
+    }
+
     private function getTotalMarks( $limit ) {
         return floor(
             mysql_result(
@@ -139,6 +148,37 @@ class Points
                 ), 0
             )
         );
+    }
+
+    public function getAchievementCardPoints($start, $end) {
+        $sql = "SELECT IFNULL(sum(points), 0) as total 
+                FROM pointsDB.user_points 
+                WHERE achievement_card_id > 0 
+                AND created >= '$start' 
+                AND created <= '$end' 
+                AND user_id = " . $this->user_id;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return $row['total'];
+    }
+
+    public function getUsedStorePoints($start, $end) {
+        // get all points from store purchases
+        $total = 0;
+        $points = [];
+        $sql = "select user_point_id, points from pointsDB.user_points where created >= '$start' and created <= '$end' and user_id = " . $this->user_id;
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $points[] = $row['user_points_id'];
+            $total += intval($row['points']);
+        }
+        // get all returns
+        $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
+                where reversed_user_point_id in (" . implode(',', $points) . ")";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $total -= abs($row['total']);
+        return $total;
     }
 
     private function getStoreResetDate() {
@@ -188,9 +228,7 @@ class Points
     }
 
     private function useBetaPoints() {
-        return (isset($_GET['points_beta']) && $_GET['points_beta'])
-            || (isset($_POST['points_beta']) && $_POST['points_beta'])
-            || $this->school_id == 5;
+        return (isset($_REQUEST['points_beta']) && $_REQUEST['points_beta']) || $this->school_id == 5;
     }
 
     // originally from mashpia.com/public/v2/application/models/Points.php user_total function
