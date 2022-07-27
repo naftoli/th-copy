@@ -137,6 +137,10 @@ class Points
         $endDetails = explode('-', $end);
         $startJD = gregoriantojd($startDetails[1], $startDetails[2], $startDetails[0]);
         $endJD = gregoriantojd($endDetails[1], $endDetails[2], $endDetails[0]);
+        if ($this->debug) {
+            echo "Start: " . $startJD . "<br />";
+            echo "End: " . $endJD . "<br />";
+        }
         return $this->getTotalMarks("WHERE user_id = $this->user_id AND mark_date >= " . $startJD . " AND mark_date <= " . $endJD);
     }
 
@@ -157,9 +161,12 @@ class Points
                 AND created >= '$start' 
                 AND created <= '$end' 
                 AND user_id = " . $this->user_id;
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['total'];
+        if ($this->debug) echo $sql . "<br />";
+        else {
+            $result = mysql_query($sql);
+            $row = mysql_fetch_assoc($result);
+            return $row['total'];
+        }
     }
 
     public function getUsedStorePoints($start, $end) {
@@ -167,17 +174,21 @@ class Points
         $total = 0;
         $points = [];
         $sql = "select user_point_id, points from pointsDB.user_points where created >= '$start' and created <= '$end' and user_id = " . $this->user_id;
+        if ($this->debug) echo $sql . "<br />";
         $result = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $points[] = $row['user_points_id'];
-            $total += intval($row['points']);
+        if (mysql_num_rows($result) > 0) {
+            while ($row = mysql_fetch_assoc($result)) {
+                $points[] = $row['user_points_id'];
+                $total += intval($row['points']);
+            }
+            // get all returns
+            $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
+                    where reversed_user_point_id in (" . implode(',', $points) . ")";
+            if ($this->debug) echo $sql . "<br />";
+            $result = mysql_query($sql);
+            $row = mysql_fetch_assoc($result);
+            $total -= abs($row['total']);
         }
-        // get all returns
-        $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
-                where reversed_user_point_id in (" . implode(',', $points) . ")";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $total -= abs($row['total']);
         return $total;
     }
 
