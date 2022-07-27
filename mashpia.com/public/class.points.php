@@ -165,7 +165,7 @@ class Points
         else {
             $result = mysql_query($sql);
             $row = mysql_fetch_assoc($result);
-            return $row['total'];
+            return intval($row['total']);
         }
     }
 
