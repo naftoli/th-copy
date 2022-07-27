@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require('header.php');
 require 'class.adminSchools.php';
@@ -30,6 +33,7 @@ function getInfo($params) {
     $sql = "select u.user_id, u.first, u.last, c.class_grade, c.class_sub 
             from users u 
             join classes c on c.class_id = u.class_id 
+            where u.school_id = $school_id 
             order by c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -40,6 +44,7 @@ function getInfo($params) {
     // get points for users
     foreach ($userIds as $id) {
         $p = new Points($id);
+//        $p->setDebugOn();
         $points[$id] = [
             'missions'          => $p->getMashpiaPoints($from, $to),
             'achievementCards'  => $p->getAchievementCardPoints($from, $to),
@@ -79,7 +84,7 @@ if (isset($_POST['submit'])) {
         }
         @media all {
             th, td {
-                padding: 5px;
+                padding: 10px;
                 font-size: 12px;
                 border-bottom: 1px solid grey;
             }
@@ -97,8 +102,8 @@ if (isset($_POST['submit'])) {
         echo "</div>";
     } else {
         $info = getInfo($_POST);
-        $users = $info[0];
-        $points = $info[1];
+        $users = $info['users'];
+        $points = $info['points'];
         foreach ($users as $school => $more) {
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<p>This report is from " . $_POST['from'] . " until " . $_POST['to'] . "</p>";
@@ -114,14 +119,11 @@ if (isset($_POST['submit'])) {
                 <?php
                 foreach ($more as $grade => $other) {
                     foreach ($other as $sub => $more) {
-                        foreach ($more as $students) {
-                            foreach ($students as $user_id => $name) {
-                                if ($sub) $grade .= '-' . $sub;
-                                echo "<tr><td>" . $grade . "</td><td>" . $name . "</td>";
-                                echo "<td>" . $points[$user_id]['missions'] . "</td>";
-                                echo "<td>" . $points[$user_id]['achievementCards'] . "</td>";
-                                echo "<td>" . $points[$user_id]['usedStore'] . "</td></tr>";
-                            }
+                        foreach ($more as $user_id => $name) {
+                            echo "<tr><td>" . ($grade . ($sub ? '-' . $sub : '')) . "</td><td>" . $name . "</td>";
+                            echo "<td>" . $points[$user_id]['missions'] . "</td>";
+                            echo "<td>" . $points[$user_id]['achievementCards'] . "</td>";
+                            echo "<td>" . $points[$user_id]['usedStore'] . "</td></tr>";
                         }
                     }
                 }
