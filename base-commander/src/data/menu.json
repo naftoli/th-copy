@@ -49,7 +49,8 @@
       { "label": "Prizes", "path": "/rewards/prizes" },
       { "label": "Prize Templates", "path": "/rewards/templates", "user_types": [ "HQ" ] },
       { "label": "Orders", "path": "/rewards/orders", "user_types": [ "BC", "TEACHER" ] },
-      { "label": "Add / Subtract Miles", "path": "/rewards/miles", "user_types": [ "HQ", "INST", "BC" ] }
+      { "label": "Add / Subtract Miles", "path": "/rewards/miles", "user_types": [ "HQ", "INST", "BC" ] },
+      { "label": "Miles Report by Date", "path": "/miles_details.php", "legacy": true, "user_types":  [ "HQ", "BC" ] }
     ]
   },
   {
