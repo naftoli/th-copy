@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
-    require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
     $school_number = mysql_real_escape_string($_POST['school']);
     $info = [];
     $sql = "
