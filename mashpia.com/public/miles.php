@@ -20,7 +20,7 @@ require('header.php');
 }
 @media all {
     th, td {
-        border-bottom: 1px dashed grey;
+        border-bottom: 1px solid grey;
         padding: 10px;
         font-size: 12px;
     }
