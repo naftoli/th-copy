@@ -1,7 +1,7 @@
 <?php
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
-    require '../db.php';
+    require '../../db.php';
     $school_number = mysql_real_escape_string($_POST['school']);
     $info = [];
     $sql = "
