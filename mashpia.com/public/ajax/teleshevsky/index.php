@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
@@ -23,7 +25,6 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             classes c ON c.class_id = u.class_id
         WHERE
             s.school_number = " . $school_number;
-    echo $sql;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[] = $row;
