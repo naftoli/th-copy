@@ -22,7 +22,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            u.school_number = " . $school_number;
+            s.school_number = " . $school_number;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[] = $row;
