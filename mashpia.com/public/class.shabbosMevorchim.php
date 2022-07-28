@@ -721,10 +721,13 @@ class ShabbosMevorchim {
 			$sql .= " and s.school_id = " . $this->school_id;
 		}
 		$sql .= " ORDER BY c.class_grade, c.class_sub";
-        foreach ( $this->db->query( $sql ) as $row ) {
-            $this->classes[$row['class_id']]['grade'] = 
-                $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
-            $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+        $res = $this->db->query( $sql );
+        if ( $res ) {
+            foreach ( $res as $row ) {
+                $this->classes[$row['class_id']]['grade'] =
+                    $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
+                $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+            }
         }
     }
     
@@ -1022,20 +1025,20 @@ class ShabbosMevorchim {
             }
         }
 
-		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
-            FROM date_tasks dt
-            JOIN date_tasks_missions dtm
-            USING ( date_tasks_mission_id )
-            JOIN user_tracks ut
-            USING ( track_id, level, subject_id )
-            WHERE dtm.subject_id = 1
-            AND dtm.start_date = ?
-            AND dtm.end_date = ?
-            AND dt.grid_id = ?
-            AND dtm.school_type_id = ?
-            AND ut.user_id = ?
-		    AND dtm.lang_id = ?
-            AND ut.enrolled =1";
+//		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
+//            FROM date_tasks dt
+//            JOIN date_tasks_missions dtm
+//            USING ( date_tasks_mission_id )
+//            JOIN user_tracks ut
+//            USING ( track_id, level, subject_id )
+//            WHERE dtm.subject_id = 1
+//            AND dtm.start_date = ?
+//            AND dtm.end_date = ?
+//            AND dt.grid_id = ?
+//            AND dtm.school_type_id = ?
+//            AND ut.user_id = ?
+//		    AND dtm.lang_id = ?
+//            AND ut.enrolled =1";
 
 //        $sql1 = "SELECT dt.quantity AS total, dt.date_task_id
 //            FROM date_tasks dt
@@ -1105,7 +1108,7 @@ class ShabbosMevorchim {
             AND grid_id = ?
             AND user_id = ?";
         $stmtBackup = $this->db->prepare( $sqlBackup );
-        
+
 		if ( $sid ) {
 			$this->classes = array();
 			$this->setClasses( $sid );
@@ -1114,7 +1117,7 @@ class ShabbosMevorchim {
         }
 
 		if ( !$sid ) $sid = $this->school_id;
-        
+
         $users = array();
 		foreach ($this->classes as $id => $info) {
 			$stmt = $this->db->query("
@@ -1127,7 +1130,7 @@ class ShabbosMevorchim {
 			$users[$id] = $stmt->fetchAll();
 		}
 
-		foreach ($users as $class => $info) {
+		foreach ($users as $info) {
 			foreach ($info as $user) {
 				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
 			}
@@ -1135,13 +1138,14 @@ class ShabbosMevorchim {
 
 		// for each report date
 //		foreach ( $this->rDates as $month => $date ) {
-        foreach ($dates as $date) {
+        // cache results
+        $cached = [];
 
+        foreach ($dates as $date) {
 			// for each task     
 	        foreach ( $this->tasks as $key => $task ) {
 	        	// skip task #2
 	        	// if ($key == 'Minutes') continue;
-
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
 	            // for each class
@@ -1149,7 +1153,6 @@ class ShabbosMevorchim {
 					//if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
 					// for each user in the class.
 	            	foreach ($info as $user) {
-
 						// figure out if we are getting results from backup table or not
 						//$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
 						//$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
@@ -1161,9 +1164,14 @@ class ShabbosMevorchim {
 //							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
 //							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
 						//}
-                        $stmt1->execute([ $task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id'] ]);
-                        $row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-						$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
+                        if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
+                            $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
+                        else {
+                            $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
+                            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                            $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
+                            $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
+                        }
 
 	                    //$stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
                         // figure out if we are getting results from backup table or not
@@ -1201,13 +1209,9 @@ class ShabbosMevorchim {
 								}
 							}
 						}
-
 	                }
-	                
 				}
-
 			}
-
 		}
 //        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
 	}
