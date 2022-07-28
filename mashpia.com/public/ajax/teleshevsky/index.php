@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -13,8 +11,8 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             u.first_he,
             u.last_he,
             u.dob,
-            u.user_serial AS serial_number,
-            u.user_code AS barcode,
+            u.user_serial,
+            u.user_code,
             c.class_grade,
             c.class_sub
         FROM
