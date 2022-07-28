@@ -173,7 +173,11 @@ class Points
         // get all points from store purchases
         $total = 0;
         $points = [];
-        $sql = "select user_point_id, points from pointsDB.user_points where created >= '$start' and created <= '$end' and user_id = " . $this->user_id;
+        $sql = "select user_point_id, points from pointsDB.user_points 
+                where created >= '$start' 
+                and created <= '$end' 
+                and user_id = " . $this->user_id . "
+                and resource_name = 'store'";
         if ($this->debug) echo $sql . "<br />";
         $result = mysql_query($sql);
         if (mysql_num_rows($result) > 0) {
@@ -181,7 +185,7 @@ class Points
                 $points[] = $row['user_point_id'];
                 $total += intval($row['points']);
             }
-            // get all returns
+            // get all returns and remove from purchases
             $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
                     where reversed_user_point_id in (" . implode(',', $points) . ")";
             if ($this->debug) echo $sql . "<br />";
@@ -248,7 +252,6 @@ class Points
         $sql = "SELECT SUM(points) AS total
             FROM pointsDB.user_points
             WHERE user_id = '{$this->user_id}'
-            AND institution_id = '{$this->school_id}'
             AND points > 0
             AND resource_name NOT IN ('store' , 'transaction_manager_store') 
             AND created >= '$formatted_date'";
@@ -260,22 +263,33 @@ class Points
     }
 
     // originally from mashpia.com/public/v2/application/models/Points.php user_store function
-    private function getNonMarksStorePoints($start_date = false) {
+    private function getNonMarksStorePoints($start_date = false)
+    {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
-        if ($this->useBetaPoints()) {
-            // ignore transaction_manager_store reversals where the original purchase is before the start date
-            $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
-                FROM pointsDB.user_points up
-                LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
-                WHERE up.user_id = '{$this->user_id}'
-                AND up.institution_id = '{$this->school_id}'
-                AND up.created >= '$formatted_date'";
+        // get sum of points and then delete reversed points
+        if (unixtojd() < 2459761 || ($this->australian && unixtojd() < 2459945)) {
+            if ($this->useBetaPoints()) {
+                // ignore transaction_manager_store reversals where the original purchase is before the start date
+                $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
+                    FROM pointsDB.user_points up
+                    LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
+                    WHERE up.user_id = '{$this->user_id}'
+                    AND up.created >= '$formatted_date'";
+            } else {
+                $sql = "SELECT SUM(points) AS total
+                    FROM pointsDB.user_points up
+                    WHERE up.user_id = '{$this->user_id}'
+                    AND up.created >= '$formatted_date'";
+            }
         } else {
-            $sql = "SELECT SUM(points) AS total 
-                FROM pointsDB.user_points up
-                WHERE up.user_id = '{$this->user_id}'
-                AND up.institution_id = '{$this->school_id}'
-                AND up.created >= '$formatted_date'";
+            // ignore transaction_manager_store reversals where the original purchase is before the start date
+            $sql = "SELECT SUM(points) AS total
+                    FROM pointsDB.user_points up
+                    WHERE up.user_id = '{$this->user_id}'
+                    AND up.created >= '$formatted_date' 
+                    AND up.reversed_user_point_id not in (
+                        SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
+                    )";
         }
         if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);

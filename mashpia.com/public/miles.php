@@ -19,8 +19,8 @@ require('header.php');
     }
 }
 @media all {
-    tr, th, td {
-        border: 1px dashed black;
+    th, td {
+        border-bottom: 1px dashed grey;
         padding: 10px;
         font-size: 12px;
     }
