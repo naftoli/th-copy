@@ -112,13 +112,13 @@ $resource_types = [
         $points = $info['points'];
         foreach ($users as $school => $more) {
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<p>This report is from " . $_POST['from'] . " until " . $_POST['to'] . "</p>";
             foreach ($more as $grade => $other) {
                 foreach ($other as $sub => $more) {
                     foreach ($more as $user_id => $name) {
                         echo "<h2></h2>";
+                        echo "Grade: " . ($grade . ($sub ? '-' . $sub : '')) . "<br />";
                         echo "Name: " . $name . "<br />";
-                        echo "Grade: " . ($grade . ($sub ? '-' . $sub : '')) . "<br /><br />";
+                        echo "This report is from " . $_POST['from'] . " until " . $_POST['to'] . "<br /><br />";
                         $missionPoints = $points[$user_id]['missions'];
                         if (!empty($missionPoints)) {
                             $total = 0;
