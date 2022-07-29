@@ -115,9 +115,10 @@ $resource_types = [
             echo "<p>This report is from " . $_POST['from'] . " until " . $_POST['to'] . "</p>";
             foreach ($more as $grade => $other) {
                 foreach ($other as $sub => $more) {
-                    echo "<h2>" . ($grade . ($sub ? '-' . $sub : '')) . "</h2>";
                     foreach ($more as $user_id => $name) {
-                        echo "Name: " . $name . "<br /><br />";
+                        echo "<h2></h2>";
+                        echo "Name: " . $name . "<br />";
+                        echo "Grade: " . ($grade . ($sub ? '-' . $sub : '')) . "<br /><br />";
                         $missionPoints = $points[$user_id]['missions'];
                         if (!empty($missionPoints)) {
                             $total = 0;
