@@ -183,7 +183,7 @@ class Points
         if (mysql_num_rows($result) > 0) {
             while ($row = mysql_fetch_assoc($result)) {
                 $points[] = $row['user_point_id'];
-                $total += intval($row['points']);
+                $total += abs($row['points']);
             }
             // get all returns and remove from purchases
             $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
@@ -351,5 +351,40 @@ class Points
             else $msg = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
         }
         return $msg;
+    }
+
+    public function getPointsHistory($start, $end = 0) {
+        $history = [];
+        $sql = "select * from pointsDB.user_points where user_id = {$this->user_id} and created >= '$start'";
+        if ($end) $sql .= " and created <= '$end'";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $history[$row['created']][] = $row;
+        }
+        ksort($history);
+        return $history;
+    }
+
+    public function getMissionHistory($start, $end) {
+        $history = [];
+        $startDetails = explode('-', $start);
+        $endDetails = explode('-', $end);
+        $startJD = gregoriantojd($startDetails[1], $startDetails[2], $startDetails[0]);
+        if ($end) $endJD = gregoriantojd($endDetails[1], $endDetails[2], $endDetails[0]);
+        else $endJD = unixtojd();
+        $sql = "select dt.short_name, dtm.mark_date from date_tasks dt 
+                join date_tasks_marks dtm using (date_task_id) 
+                where dtm.mark_date >= $startJD 
+                and dtm.mark_date <= $endJD 
+                and dtm.user_id = " . $this->user_id;
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $gregorian = jdtogregorian($row['mark_date']);
+            $dateDetails = explode('/', $gregorian);
+            $date = $dateDetails[2] . '-' . $dateDetails[0] . '-' . $dateDetails[1];
+            $history[$date][] = $row;
+        }
+        ksort($history);
+        return $history;
     }
 }
