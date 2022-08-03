@@ -71,6 +71,18 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizes[$row['user_id']][] = $row;
 }
 
+$book_purchases = [];
+$sql = "select * from yahadus_book_purchases where year = " . $year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    // only overwrite if newer row has the version info
+    if (in_array($row['user_id'], $book_purchases)) {
+        if (intval($row['version']) > intval($book_purchases[$row['user_id']]['version'])) $book_purchases[$row['user_id']] = $row;
+    } else {
+        $book_purchases[$row['user_id']] = $row;
+    }
+}
+
 $langs = [
     1   =>  'English',
     2   =>  'Yiddish',
@@ -163,6 +175,7 @@ $pollKeys = array_keys($poll);
                 <th>Non TH School</th>
                 <th>Parent Name</th>
                 <th>Parent Email</th>
+                <th>Book Version</th>
             </tr>
             <?php
             foreach ($info as $row) {
@@ -201,6 +214,8 @@ $pollKeys = array_keys($poll);
                 }
                 echo "</td><td>" . $totalCredits;
                 echo "</td><td>" . $row['non_th_school'] . "</td><td>" . $row['first'] . " " . $row['last'] . "</td><td>" . $row['admin_email'];
+                echo "</td><td>";
+                if (isset($book_purchases[$row['user_id']])) echo $book_purchases[$row['user_id']]['version'];
                 echo "</td></tr>";
             }
             ?>
