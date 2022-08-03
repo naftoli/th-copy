@@ -1358,7 +1358,7 @@ var templates = function(){
             }
 
             var bookHtml = "<option value='0'>Please choose</option>"
-            for (var i = 2011; i < 2022; i++) {
+            for (var i = 2011; i <= 2022; i++) {
                 bookHtml += `<option value='${i}'>${i}</option>`
             }
             $("#step-2 form #bookVersion").empty()
