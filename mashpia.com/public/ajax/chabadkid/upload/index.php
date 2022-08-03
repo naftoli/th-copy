@@ -6,6 +6,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     $info = [];
     $sql = "
         SELECT 
+            u.user_id, 
             u.first,
             u.last,
             u.first_he,
