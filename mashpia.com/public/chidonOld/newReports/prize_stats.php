@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
             th, td {
                 border-bottom: 1px solid grey;
                 font-size: 12px;
-                padding: 5px;
+                padding: 10px;
                 font-family: Arial, Helvetica, sans-serif;
             }
         </style>
