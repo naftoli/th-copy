@@ -784,7 +784,7 @@ var registrationApp = function() {
                     poll: poll,
                     name_pref: $("#nameChoice").val(),
                     comments: $("#comments").val(),
-                    // chidon_prizes: user_prizes[current_user]
+                    chidon_prizes: user_prizes[current_user]
                 }
             });
         }
@@ -834,12 +834,12 @@ var registrationApp = function() {
         }
 
         // show modal for chidon prizes
-        // if (selected_charges.chidon) {
-        //     setupChidonPrizes()
-        // }
-        //
-        // else nextStep()
-        nextStep()
+        if (selected_charges.chidon) {
+            setupChidonPrizes()
+        }
+
+        else nextStep()
+        // nextStep()
     }
 
     function setupChidonPrizes() {
@@ -926,7 +926,7 @@ var registrationApp = function() {
         // make sure that he name was filled out if its needed
         for (var p of user_prizes[current_user]) {
             if (parseInt(p.personalization) && (!p.he_name || p.he_name == '')) {
-                alert('You must enter a hebrew name for the prizes that need it')
+                alert('You must enter a hebrew name for the prizes that need it!')
                 return false
             }
         }

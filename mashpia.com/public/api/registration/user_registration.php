@@ -252,7 +252,7 @@ class UserRegistrationRouter {
                             }
 
                             // add chidon prizes
-//                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
+                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
 
                             // send email to parents
                             $headers[] = 'MIME-Version: 1.0';
