@@ -14,58 +14,54 @@ $schools = $as->getSchools();
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $t = new ChidonTests();
 
-$marks = [];
-foreach ($schools as $id => $name) {
-    $t->setStudents($id);
-    $t->setScores();
-    $t->calculateMarks();
-    $marks[$id] = $t->getMarks();
-}
+if (isset($_POST['submit'])) {
+    $marks = [];
+    foreach ($schools as $id => $name) {
+        $t->setStudents($id);
+        $t->setScores();
+        $t->calculateMarks();
+        $marks[$id] = $t->getMarks();
+    }
 
-$prizes = [];
-$sql = "SELECT 
-            cp.prize_id, cp.prize_name, cp.size, cp.color, COUNT(*) as total
-        FROM
-            chidon_prizes cp
-                JOIN
-            chidon_user_prizes cup USING (prize_id)
-        WHERE
-            cp.year = $year
-        GROUP BY cp.prize_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $prizes[$row['prize_id']] = $row;
-}
+    $prizes = [];
+    $sql = "SELECT 
+                cp.prize_id, cp.prize_name, cp.size, cp.color, COUNT(*) as total
+            FROM
+                chidon_prizes cp
+                    JOIN
+                chidon_user_prizes cup USING (prize_id)
+            WHERE
+                cp.year = $year
+            GROUP BY cp.prize_id";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['prize_id']] = $row;
+    }
 
-$user_prizes = [];
-$sql = "SELECT 
-            cup.user_id, cup.prize_id, tc.th_chidon_id, tc.school_id
-        FROM
-            chidon_user_prizes cup
-                JOIN
-            th_chidon tc USING (user_id, year)
-        WHERE
-            cup.year = $year
-        ORDER BY prize_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $user_prizes[$row['prize_id']][] = $row;
-}
+    $user_prizes = [];
+    $sql = "SELECT 
+                cup.user_id, cup.prize_id, tc.th_chidon_id, tc.school_id
+            FROM
+                chidon_user_prizes cup
+                    JOIN
+                th_chidon tc USING (user_id, year)
+            WHERE
+                cup.year = $year
+            ORDER BY prize_id";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $user_prizes[$row['prize_id']][] = $row;
+    }
 
-$needed = [
-    1 => 50,
-    2 => 60,
-    3 => 65,
-    4 => 70
-];
-$passed = [];
-for ($num = 1; $num <= 4; $num++) {
+    $needed = intval($_POST['needed']);
+    $testNum = intval($_POST['test_num']);
+    $passed = [];
     foreach ($user_prizes as $id => $more) {
-        $passed[$num][$id] = 0;
+        $passed[$testNum][$id] = 0;
         foreach ($more as $prize) {
-            if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$num])) {
-                $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$num]['pro'];
-                if ($mark >= $needed[$num]) $passed[$num][$id]++;
+            if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$testNum])) {
+                $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$testNum]['pro'];
+                if ($mark >= $needed) $passed[$testNum][$id]++;
             }
         }
     }
@@ -77,8 +73,8 @@ for ($num = 1; $num <= 4; $num++) {
         <meta charset="utf8" />
         <title>Prize Numbers</title>
         <style>
-            tr, th, td {
-                border: 1px solid grey;
+            th, td {
+                border-bottom: 1px solid grey;
                 font-size: 12px;
                 padding: 5px;
                 font-family: Arial, Helvetica, sans-serif;
@@ -86,6 +82,7 @@ for ($num = 1; $num <= 4; $num++) {
         </style>
     </head>
     <body>
+    <?php if (isset($_POST['submit'])) : ?>
         <h1>Prize Numbers</h1>
         <table>
             <tr>
@@ -94,23 +91,33 @@ for ($num = 1; $num <= 4; $num++) {
                 <th>Color</th>
                 <th>Size</th>
                 <th>Number of prizes chosen at Registration</th>
-                <th>50%+ after Test #1</th>
-                <th>60%+ after Test #2</th>
-                <th>65%+ after Test #3</th>
-                <th>70%+ after Test #4</th>
+                <th><?= $needed ?>%+ after Test# <?= $testNum ?></th>
             </tr>
             <?php
             foreach ($prizes as $id => $prize) {
                 echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['color'] . "</td><td>" .
-                    $prize['size'] . "</td><td>" . $prize['total'] . "</td>";
-                for ($i = 1; $i <= 4; $i++) {
-                    echo "<td>";
-                    if (isset($passed[$i][$id])) echo $passed[$i][$id];
-                    echo "</td>";
-                }
-                echo "</tr>";
+                    $prize['size'] . "</td><td>" . $prize['total'] . "</td><td>";
+                if (isset($passed[$testNum][$id])) echo $passed[$testNum][$id];
+                echo "</td></tr>";
             }
             ?>
         </table>
+    <?php else: ?>
+        <form action="prize_stats.php" method="post">
+            <p>Please enter the following in order to generate the report:</p>
+            <p style="line-height: 1.6">
+                Test Number:
+                <select name="test_num">
+                    <?php
+                    for ($i = 1; $i <= 4; $i++) {
+                        echo "<option value='" . $i . "'>" . $i . "</option>";
+                    }
+                    ?>
+                </select><br />
+                Percentage Needed: <input type="number" name="needed" style="width: 50px;" /><br /><br />
+                <input type="submit" name="submit" />
+            </p>
+        </form>
+    <?php endif; ?>
     </body>
 </html>
