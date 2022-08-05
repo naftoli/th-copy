@@ -78,8 +78,26 @@ function getTotalMedalsEarned( $user_id ) {
     return isset( $row['total'] ) ? $row['total'] : 0;
 }
 
-// determine which subjects go in which column for css styling / positioning
-$positioning = [4,45,21,100,90,42,27,13,16,41,12,1,40];
+function getPositioning( $user_id ) {
+    // determine which subjects go in which column for css styling / positioning
+    $positioning = [ 4, 45, 21, 100, 90, 42, 27, 13, 16, 41, 12, 1, 40 ];
+    $positioningFrum = [ 4, 45, 21, 100, 90, 42, 27, 92, 16, 41, 93, 1, 94 ];
+
+    $sql = "select school_type_id from users where user_id = " . $user_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $type_id = $row['school_type_id'];
+    switch ($type_id) {
+        case 2:
+        case 3:
+            return $positioning;
+        case 12:
+        case 13:
+            return $positioningFrum;
+        default:
+            return $positioning;
+    }
+}
 
 $heDateArr = explode('/', jdtojewish( unixtojd() ) );
 $heMonths = ['','Tishrei','Cheshvon','Kislev','Teves','Shvat','Adar','Adar II','Nissan','Iyar','Sivan','Tamuz','Av','Elul'];
@@ -117,6 +135,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         $subjects = $m->getSubjects();
         $missionsInfo = $m->getMissionsInfo();
 
+//        echo "<pre>"; print_r($details); echo "</pre>";
+
         $cssProps = ['','White','Red','Orange','Yellow','Green','Blue','Purple','Brown','Gray','Black']; // index for css color properties of mission totals
 
         if ( !empty($details) ) {
@@ -143,11 +163,15 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                 echo "<div class='rank $rank_pos'><img src='https://mashpia.com/file_view.php?id=" . $ranks[$i]['rank_image_id'] . "' /></div>";
                             }
 
-                            foreach ( $positioning as $column => $subject ) {
+                            // find out which subjects to show
+                            $order = getPositioning( $user );
+//                            echo "<pre>"; print_r($order); print_r($subjects); echo "</pre>";
+                            foreach ( $order as $column => $subject ) {
                                 $col_pos = "column" . ++$column;
 
                                 // find name of subject to use for key in medals array
                                 $subject_name = array_search($subject, $subjects);
+//                                echo "Subject: " . $subject . " Subject Name: " . $subject_name . "<br />";
 
                                 $row = 0; // start at row 1, each medal goes 46 pixels higher
                                 foreach ( $medals[$subject_name] as $medal ) {
@@ -163,6 +187,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                 if ( $missionsInfo[$user][$subject]['left'] != 'Completed!' ) echo ' to ' . $missionsInfo[$user][$subject]['color'];
                                 echo "</div>";
                             }
+//                            exit;
 
                             echo "</div>";
                             echo "<div style='page-break-after: always; clear: both'></div>";

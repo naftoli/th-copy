@@ -10,7 +10,7 @@ class MedalBoard extends MedalReport {
 
     public function __construct() {
         parent::__construct( false );
-        $this->campaigns = [1,4,12,13,16,21,27,40,41,42,45,90,100];
+        $this->campaigns = [ 1, 4, 12, 13, 16, 21, 27, 40, 41, 42, 45, 90, 92, 93, 94, 100 ];
     }
 
     public function setNameLang( $lang ) {
@@ -43,7 +43,7 @@ class MedalBoard extends MedalReport {
                     AND s.subject_id in (" . implode(',', $this->campaigns) . ") 
                     ORDER BY c.class_grade, c.class_sub, u.last, u.first, s.subject_id, mm.medal_ord
                 ";
-                //echo $sql . "<br />"; continue;
+//                echo $sql . "<br />"; continue;
                 $result = mysql_query($sql) or die(mysql_error());
                 while ($row = mysql_fetch_assoc($result)) {
                     
