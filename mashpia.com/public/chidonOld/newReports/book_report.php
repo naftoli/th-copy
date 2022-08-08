@@ -26,7 +26,7 @@ $sql = "
     FROM
         yahadus_book_purchases
             JOIN
-        users USING (user_id)
+        users u USING (user_id)
             JOIN
         schools USING (school_id)
     WHERE
