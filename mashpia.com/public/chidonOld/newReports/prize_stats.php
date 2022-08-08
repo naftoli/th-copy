@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
 
     $user_prizes = [];
     $sql = "SELECT 
-                cup.user_id, cup.prize_id, tc.th_chidon_id, tc.school_id
+                cup.user_id, cup.prize_id, tc.th_chidon_id, tc.school_id, tc.date_paid 
             FROM
                 chidon_user_prizes cup
                     JOIN
@@ -56,12 +56,17 @@ if (isset($_POST['submit'])) {
     $needed = intval($_POST['needed']);
     $testNum = intval($_POST['test_num']);
     $passed = [];
+    $passedAndRegistered = [];
     foreach ($user_prizes as $id => $more) {
         $passed[$testNum][$id] = 0;
+        $passedAndRegistered[$testNum][$id] = 0;
         foreach ($more as $prize) {
             if (isset($marks[$prize['school_id']][$prize['th_chidon_id']][$testNum])) {
                 $mark = $marks[$prize['school_id']][$prize['th_chidon_id']][$testNum]['pro'];
-                if ($mark >= $needed) $passed[$testNum][$id]++;
+                if ($mark >= $needed) {
+                    $passed[$testNum][$id]++;
+                    if ($prize['date_paid'] > 0) $passedAndRegistered[$testNum][$id]++;
+                }
             }
         }
     }
@@ -92,12 +97,15 @@ if (isset($_POST['submit'])) {
                 <th>Size</th>
                 <th>Number of prizes chosen at Registration</th>
                 <th><?= $needed ?>%+ after Test# <?= $testNum ?></th>
+                <th><?= $needed ?>%+ after Test# <?= $testNum ?> and Registered for Experience</th>
             </tr>
             <?php
             foreach ($prizes as $id => $prize) {
                 echo "<tr><td>" . $id . "</td><td>" . $prize['prize_name'] . "</td><td>" . $prize['color'] . "</td><td>" .
                     $prize['size'] . "</td><td>" . $prize['total'] . "</td><td>";
                 if (isset($passed[$testNum][$id])) echo $passed[$testNum][$id];
+                echo "</td><td>";
+                if (isset($passedAndRegistered[$testNum][$id])) echo $passedAndRegistered[$testNum][$id];
                 echo "</td></tr>";
             }
             ?>
