@@ -30,7 +30,8 @@ $sql = "
             JOIN
         schools USING (school_id)
     WHERE
-        year = $year AND school_id IN (" . implode(',', array_keys($schools)) . ")
+        year = $year AND school_id IN (" . implode(',', array_keys($schools)) . ") 
+    GROUP BY u.user_id 
     ORDER BY school_name , last , first
     ";
 $result = mysql_query($sql);
