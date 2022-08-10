@@ -64,10 +64,23 @@ export class ShippingTab extends Component {
             showPhone
             hideShipping={ this.state.hideShipping }
             { ...base }
-            title={ false }
+            title={ 'School Shipping Address' }
             prefix='shipping_'
             required={ required }
             onChange={ this.onChange } />
+
+          <br />
+          <Callout color="warning">
+            We need to have an alternate residential address for the times that we send out material that will not arrive in your school during school days.
+          </Callout>
+
+          <AddressRow
+              hideShipping={ this.state.hideShipping }
+              { ...base }
+              title={ 'Residential Shipping Address' }
+              prefix='res_'
+              required={ required }
+              onChange={ this.onChange } />
 
           { !this.state.hideShipping &&
           <Fragment>

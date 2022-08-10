@@ -25,7 +25,7 @@ export class AddressRow extends Component {
     return (
       <Row id='address-row'>
 
-        { title && 
+        { !this.props.hideShipping && title &&
           <Col xs={ 12 }>
             <p className='title'>{ title }</p>
           </Col>
