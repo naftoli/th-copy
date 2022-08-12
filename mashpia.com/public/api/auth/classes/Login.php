@@ -89,7 +89,7 @@ class Login implements \JsonSerializable {
         // Tzivos Hashem Offices
         if ( $this->type == 'HQ' ) {
             $this->name = 'Tzivos Hashem Headquarters';
-            $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
+            $this->img = '/mobile/img_new/TH logo favicon-03.png';
             $this->code = 'HQ';
             $this->role = 'Headquarters';
 
@@ -134,7 +134,7 @@ class Login implements \JsonSerializable {
         // Tzivos Hashem Parents
         } else if ( $this->type == 'PARENT' ) {
             $this->name = 'My Parent Portal';
-            $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
+            $this->img = '/mobile/img_new/TH logo favicon-03.png';
             $this->code = 'PARENT';
             $this->role = 'Parent';
 

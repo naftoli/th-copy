@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Tkuma;
+  src: url("FbTkuma-Bold.otf");
+}
+
 body {
   margin: 0px;
 }
@@ -60,6 +65,10 @@ img {
   font-size: 1.1em;
   font-weight: bold;
   margin: 0.3mm 0px 0.8mm 0px;
+  font-family: Exo, sans-serif;
+}
+AchievementCard .card .logos .card-details .campaign .he {
+  font-family: Tkuma, sans-serif;
 }
 .AchievementCard .card .logos .card-details .task {
   font-size: 0.7em;
@@ -69,8 +78,9 @@ img {
 }
 .AchievementCard .card .logos .card-details .miles {
   font-size: 1.2em;
-  font-weight: bold;
+  font-weight: 900;
   margin-top: 2.5mm;
+  font-family: Exo, sans-serif;
 }
 .AchievementCard .card .barcode {
   text-align: center;

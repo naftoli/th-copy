@@ -45,6 +45,11 @@ $card_serials = $POINTS_DB->prepare(
 $card_serials->execute([ $card_count ]);
 $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution Administrator';
 
+function checkForHe($str) {
+    $detector = new LanguageDetector\LanguageDetector();
+    $lang = $detector->evaluate($str)->getLanguage();
+    return $lang == 'he';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,6 +60,11 @@ $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution 
   <title><?= $card_count ?> Achivement Cards - <?= date("Y-m-d G:i:s")?></title>
   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Alef:400,700|Poppins:300,400,500,600,700|Source+Code+Pro|Roboto|Black+Ops+One' />
   <link rel="stylesheet" type="text/css" href='styles/achivement_cards.css' />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
   <?php
@@ -76,6 +86,8 @@ $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution 
       ]);
       // generate the barcode png image
       $barcode = $generator->getBarcode( $card->card_serial, $generator::TYPE_CODE_128_C );
+//      $subjectClass = 'campaign he';
+//      if (checkForHe($subject->subject_name)) $subjectClass .= ' he';
       ?>
         <div class='AchievementCard'>
           <div class='card'>
@@ -86,7 +98,9 @@ $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution 
             <div class='logos'>
               <img src='<?= $current_user->login->img ?>' alt='base' />
               <div class='card-details'>
-                <p class='campaign'><?= $subject->subject_name ?></p>
+                <p class='campaign'>
+                    <?= $subject->subject_name ?>
+                </p>
                 <p class='task'><?= $task->task ?></p>
                 <p class='miles'>
                   <span><?= number_format( $task->points ) ?> Mile<?= $task->points > 1 ? 's' : '' ?></span>
