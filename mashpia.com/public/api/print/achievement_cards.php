@@ -46,9 +46,8 @@ $card_serials->execute([ $card_count ]);
 $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution Administrator';
 
 function checkForHe($str) {
-    $detector = new LanguageDetector\LanguageDetector();
-    $lang = $detector->evaluate($str)->getLanguage();
-    return $lang == 'he';
+    $str = trim($str);
+    return mb_ord(mb_substr($str, 0, 1)) > 128;
 }
 ?>
 <!DOCTYPE html>
@@ -86,19 +85,20 @@ function checkForHe($str) {
       ]);
       // generate the barcode png image
       $barcode = $generator->getBarcode( $card->card_serial, $generator::TYPE_CODE_128_C );
-//      $subjectClass = 'campaign he';
-//      if (checkForHe($subject->subject_name)) $subjectClass .= ' he';
+      $subjectClass = 'campaign';
+      if (checkForHe($subject->subject_name)) $subjectClass .= ' he';
       ?>
         <div class='AchievementCard'>
           <div class='card'>
             <div class='icon'>
-              <img src='img/achieivement_card.png' alt='achieivement_card' />
+<!--              <img src='img/achieivement_card.png' alt='achieivement_card' />-->
+              ACHIEVEMENT CARD
             </div>
     
             <div class='logos'>
               <img src='<?= $current_user->login->img ?>' alt='base' />
               <div class='card-details'>
-                <p class='campaign'>
+                <p class='<?= $subjectClass ?>'>
                     <?= $subject->subject_name ?>
                 </p>
                 <p class='task'><?= $task->task ?></p>

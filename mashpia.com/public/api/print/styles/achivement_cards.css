@@ -33,6 +33,10 @@ img {
       -ms-flex-direction: column;
           flex-direction: column;
 }
+.AchievementCard .card .icon {
+  font-font: Exo 2;
+  font-size: 22px;
+}
 .AchievementCard .card .icon img {
   height: 8mm;
 }
@@ -67,7 +71,8 @@ img {
   margin: 0.3mm 0px 0.8mm 0px;
   font-family: Exo, sans-serif;
 }
-AchievementCard .card .logos .card-details .campaign .he {
+.AchievementCard .card .logos .card-details .he {
+  font-size: 1.3em;
   font-family: Tkuma, sans-serif;
 }
 .AchievementCard .card .logos .card-details .task {
