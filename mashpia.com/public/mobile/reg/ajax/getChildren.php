@@ -312,10 +312,12 @@ if ( !empty( $users ) ) {
         //         $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
         //     }
         // }
-        if ($row['user_id'] == 65577) {
+        if ($row['user_id'] == 5455) {
             $children[$row['user_id']]['schoolRegistered'] = 1;
             $children[$row['user_id']]['schoolTypeRegistered'] = 1;
             $children[$row['user_id']]['reg_types']['chayolei'] = 1;
+            $children[$row['user_id']]['reg_types']['chidon'] = 0;
+            $children[$row['user_id']]['chayoleiRegistered'] = 0;
             $children[$row['user_id']]['reg_year'] = 5783;
         }
     }
