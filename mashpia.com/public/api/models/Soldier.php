@@ -314,9 +314,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 tc.year = :year AND tc.user_id = :user
                     AND rc.type = 'chidon'
         ");
+        $year = GlobalSettings::getChidonRegYear();
+        if (in_array($this->user_id, [5455, 19085])) {
+            $year = 5783;
+        }
         $res = $query->execute([
             ':user' => $this->user_id,
-            ':year' => GlobalSettings::getChidonRegYear()
+            ':year' => $year
         ]);
 //        echo $query->debugDumpParams();
 
@@ -437,6 +441,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
+
+        if (in_array($this->user_id, [5455, 19085])) {
+            $year = 5783;
+            $chidon_year = 5783;
+        }
+
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
@@ -474,22 +484,24 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chayolei and chidon reg if school has not registered yet
-        if ( 
-            (isset( $result[ 'chayolei' ] ) && $result[ 'chayolei' ] == false)
-            ||
-            (isset( $result[ 'chidon' ] ) && $result[ 'chidon' ] == false)            
-        ) {
-            $school_registered = false;
-            $reg_info = $this->school->school_registrations;
-            foreach ( $reg_info as $reg ) {
-                if ( $reg->year == $year ) {
-                    $school_registered = true;
-                    break;
+        if (! in_array($this->user_id, [5455, 19085])) {
+            if (
+                (isset($result['chayolei']) && $result['chayolei'] == false)
+                ||
+                (isset($result['chidon']) && $result['chidon'] == false)
+            ) {
+                $school_registered = false;
+                $reg_info = $this->school->school_registrations;
+                foreach ($reg_info as $reg) {
+                    if ($reg->year == $year) {
+                        $school_registered = true;
+                        break;
+                    }
                 }
-            }
-            if ( !$school_registered ) {
-                $result['chayolei'] = true; // disable chayolei reg if school is not registered
-                $result['chidon'] = true; // disable chidon reg if school is not registered
+                if (!$school_registered) {
+                    $result['chayolei'] = true; // disable chayolei reg if school is not registered
+                    $result['chidon'] = true; // disable chidon reg if school is not registered
+                }
             }
         }
         // disable chidon
@@ -538,7 +550,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
-        if ($this->user_id == 5455) $chayolei_year = 5783;
+        if (in_array($this->user_id, [5455, 19085])) {
+            $chayolei_year = 5783;
+            $chidon_year = 5783;
+        }
         return [
             'chayolei'  => $chayolei_year,
             'chidon'    => $chidon_year

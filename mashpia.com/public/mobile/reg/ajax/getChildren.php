@@ -63,6 +63,10 @@ if ( !empty( $users ) ) {
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc($result) ) {
         $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
+        if (in_array($row['user_id'], [5455, 19085])) {
+            $reg_year = 5783;
+            $chidon_year = 5783;
+        }
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
@@ -112,6 +116,11 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
+
+        if (in_array($row['user_id'], [5455, 19085])) {
+            $children[$row['user_id']]['schoolRegistered'] = 1;
+            $children[$row['user_id']]['schoolTypeRegistered'] = 1;
+        }
 
         //mivtza lulav 5781
 //        $children[$row['user_id']]['mivtzaLulav'] = 0;
@@ -224,7 +233,7 @@ if ( !empty( $users ) ) {
          $exceptions = [482,544,583];
          $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . ($chidon_year + 1);
          $resNextChidon = mysql_query($sqlNextChidon);
-         $children[$row['user_id']]['next_year_chidon'] = $chidon_year + 1;
+         $children[$row['user_id']]['next_year_chidon'] = $chidon_year;
          if (mysql_num_rows($resNextChidon)) {
              $row['reg_chidon'] = true;
              $children[$row['user_id']]['chidon5783'] = true;
@@ -312,14 +321,6 @@ if ( !empty( $users ) ) {
         //         $children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
         //     }
         // }
-        if ($row['user_id'] == 5455) {
-            $children[$row['user_id']]['schoolRegistered'] = 1;
-            $children[$row['user_id']]['schoolTypeRegistered'] = 1;
-            $children[$row['user_id']]['reg_types']['chayolei'] = 1;
-            $children[$row['user_id']]['reg_types']['chidon'] = 0;
-            $children[$row['user_id']]['chayoleiRegistered'] = 0;
-            $children[$row['user_id']]['reg_year'] = 5783;
-        }
     }
 } else {
     $children = [];
