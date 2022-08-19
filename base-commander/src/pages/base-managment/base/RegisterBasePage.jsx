@@ -13,6 +13,7 @@ import { BaseTab } from './includes/tabs/registration/BaseTab';
 import { ModulesTab } from './includes/tabs/registration/ModulesTab';
 import { PaymentTab } from './includes/tabs/registration/PaymentTab';
 import { SettingsTab } from './includes/tabs/registration/SettingsTab';
+import { PlatoonsTab } from "./includes/tabs";
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
@@ -189,9 +190,10 @@ class RegistrationPage extends Component {
     const tabs = [
       { tab: 1, ...navProps, icon: 'school',    title: 'Base Information', valid: valid.base },
       { tab: 2, ...navProps, icon: 'truck',     title: 'Shipping', disabled: this.tabDisabled( 2 ), valid: valid.shipping },
-      { tab: 3, ...navProps, icon: 'tasks',     title: 'Modules', disabled: this.tabDisabled( 3 ),  valid: valid.modules },
-      { tab: 4, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 4 ) },
-      { tab: 5, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 5 ) },
+      { tab: 3, ...navProps, icon: 'school',    title: 'Platoons', disabled: this.tabDisabled( 3 ) },
+      { tab: 4, ...navProps, icon: 'tasks',     title: 'Modules', disabled: this.tabDisabled( 4 ),  valid: valid.modules },
+      { tab: 5, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 5 ) },
+      { tab: 6, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 6 ) },
     ];
 
     return (
@@ -223,24 +225,30 @@ class RegistrationPage extends Component {
             onSubmit={ this.submitTab( 2 ) }
             onValidChange={ this.updateValid('shipping') } />
 
-          <ModulesTab
-            tabId={ 3 }
-            base={ base }
-            back={ this.back }
-            onChange={ this.onCheckboxChange }
-            onSubmit={ this.submitTab( 3 ) }
-            onValidChange={ this.updateValid('modules') } />
+          <PlatoonsTab
+              tabId={ 3 }
+              back={ this.back }
+              onSubmit={ this.submitTab( 3 ) }
+              onValidChange={ this.updateValid('platoons') } />
 
-          <SettingsTab
+          <ModulesTab
             tabId={ 4 }
             base={ base }
             back={ this.back }
+            onChange={ this.onCheckboxChange }
+            onSubmit={ this.submitTab( 4 ) }
+            onValidChange={ this.updateValid('modules') } />
+
+          <SettingsTab
+            tabId={ 5 }
+            base={ base }
+            back={ this.back }
             onUpdate={ this.onUpdate }
-            onSubmit={ this.submitTab( 4 ) } />
+            onSubmit={ this.submitTab( 5 ) } />
 
           <PaymentTab
             cc={ cc }
-            tabId={ 5 }
+            tabId={ 6 }
             base={ base }
             back={ this.back }
             terms={ terms }

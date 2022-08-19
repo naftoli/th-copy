@@ -23,7 +23,7 @@ class PlatoonRouter {
         $filters = 'WHERE ' . implode( ' AND ', $filters );
         // generate the SQL
         $sql = "SELECT class_id, class_grade, class_sub, s.school_id, school_name, miles_balance, "
-            ."class_teacher as teacher, c.cell, c.email, COUNT(user_id) as soldier_count, staff_count "
+            ."class_teacher as teacher, c.cell, c.email, c.updated, COUNT(user_id) as soldier_count, staff_count "
             ."FROM classes c JOIN schools s USING (school_id) LEFT JOIN users u USING ( class_id ) "
             ."LEFT JOIN ( SELECT count(*) as staff_count, id FROM admin_auths WHERE auth='class' GROUP BY id ) s ON s.id = c.class_id "
             ." $filters GROUP BY class_id ORDER BY school_name, class_grade, class_sub;";
@@ -41,6 +41,10 @@ class PlatoonRouter {
             $platoon['school_id'] = intval( $platoon['school_id'] );
             $platoon['soldier_count'] = intval( $platoon['soldier_count'] );
             $platoon['staff_count'] = intval( $platoon['staff_count'] );
+            $platoon['teacher'] = $platoon['teacher'];
+            $platoon['cell'] = $platoon['cell'];
+            $platoon['email'] = $platoon['email'];
+            $platoon['updated'] = $platoon['updated'];
             $platoons[] = $platoon;
         }
         json_response( $platoons, true, true );

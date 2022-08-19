@@ -30,15 +30,16 @@ export class PlatoonsTab extends Component {
     this.setState({ platoons })
   }
 
-  save = () => {
+  save = elem => {
+    elem.preventDefault()
     for (let platoon of this.state.platoons) {
       API.patch('/core/platoons?id=' + platoon.class_id, platoon)
     }
-    alert(JSON.stringify(this.state.platoons))
+    this.props.onSubmit( elem )
   }
 
   render() {
-    const { tabId, back, onSubmit, onValidChange } = this.props
+    const { tabId, back, onValidChange } = this.props
     const gradeTitleCss = {
       borderBottom: '1px solid #3e6dc4',
       fontSize: '1.2em',
@@ -53,7 +54,7 @@ export class PlatoonsTab extends Component {
 
         <Form
           validateAfterSubmit
-          onSubmit={ onSubmit }
+          onSubmit={ this.save }
           onValidChange={ onValidChange }>
           <p className='title'>
             Platoons
