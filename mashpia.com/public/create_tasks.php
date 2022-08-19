@@ -10,7 +10,8 @@
 
 ini_set('memory_limit', '2048M');
 ini_set('max_execution_time', 300);
-ini_set('display_errors', TRUE);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = array('school');
 require_once 'header.php';
@@ -413,7 +414,7 @@ if (isset($_POST['submit'])) {
                     $endDate = $arrEnd[$k];
                     $start = $startDate;
                     $end = $endDate;
-					        echo $start . '-' . $end . "<br /><br />"; continue;
+//					        echo $start . '-' . $end . "<br /><br />"; continue;
 //                  echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
                     if ($start <= unixtojd()) continue;
 
@@ -500,7 +501,7 @@ if (isset($_POST['submit'])) {
                 $arrEnd = array();
                 $missionName = "";
             }
-            exit;
+            //exit;
 //            echo "<pre>";
 //			print_r($missions);
 //			echo "</pre>";
