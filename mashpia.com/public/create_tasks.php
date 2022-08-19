@@ -149,8 +149,8 @@ if (isset($_POST['submit'])) {
 	// $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
 
-    $defaultStart = 2459468;
-    $defaultEnd = 2459852;
+    $defaultStart = 2459846;
+    $defaultEnd = 2460201;
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
