@@ -49,7 +49,7 @@ if( isset($_GET['debug'])){
             </tr>
             
             <?
-                $sql = 'SELECT * FROM chidon_prizes WHERE year = 5782';
+                $sql = 'SELECT * FROM chidon_prizes WHERE year = 5783';
                 $query = mysql_query($sql);
                 while($row = mysql_fetch_assoc($query)) { ?>
                     <tr>
