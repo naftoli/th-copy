@@ -153,14 +153,18 @@ $trackYr = 5782;
                             // update total possible reg
                             $totals[$school_id][$class_id]['kids']++;
                             if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
-                                echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
-                                // totals are only for current yr
-                                if ($i == 0) $totals[$school_id][$class_id]['reg']++;
+                                if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track'])) {
+                                    echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                                    // totals are only for current yr
+                                    if ($i == 0) $totals[$school_id][$class_id]['reg']++;
+                                } else {
+                                    echo "didn't pass";
+                                }
                             }
-                            else echo "didn't pass";
+                            else echo "didn't register";
                         } else {
-                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "&#10004;";
-                            else echo "&#10006;";
+                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "registered";
+                            else echo "didn't register";
                         }
                         echo "</td>";
                     }
