@@ -98,6 +98,10 @@ $trackYr = 5782;
     <body>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
     <h1>Comprehensive Registration Report</h1>
+    <div class="infobox">
+        Please Note: the word "enrolled" refers to the enrollment in the beginning of the year. The word "registered"
+        refers to registration for the experience.
+    </div>
     <div>
         Choose Year:
         <select name="year" id="year">
@@ -133,7 +137,7 @@ $trackYr = 5782;
                     <th>Class</th>
                     <?php
                     for ($i = 4; $i >= 0; $i--) {
-                        echo "<th>Registered for " . ($year - $i) . "</th>";
+                        echo "<th>" . ($year - $i) . "</th>";
                     }
                     ?>
                     <th>KHK Eligible</th>
@@ -152,19 +156,22 @@ $trackYr = 5782;
                         if (($year - $i) >= $trackYr){
                             // update total possible reg
                             $totals[$school_id][$class_id]['kids']++;
-                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
-                                if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track'])) {
-                                    echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                            if (isset($chidonInfo[$user['user_id']][$year - $i])) {
+                                if ($chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
+                                    if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track']))
+                                        echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
+                                    else echo "didn't pass"; // will never show b/c there's no kids that registered for chidon experience but didn't pass
                                     // totals are only for current yr
                                     if ($i == 0) $totals[$school_id][$class_id]['reg']++;
-                                } else {
-                                    echo "didn't pass";
-                                }
+                                } else echo "enrolled but not registered";
                             }
-                            else echo "didn't register";
+                            else echo "not enrolled";
                         } else {
-                            if (isset($chidonInfo[$user['user_id']][$year - $i]) && $chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "registered";
-                            else echo "didn't register";
+                            if (isset($chidonInfo[$user['user_id']][$year - $i])) {
+                                if ($chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) echo "registered";
+                                else echo "enrolled but not registered";
+                            }
+                            else echo "not enrolled";
                         }
                         echo "</td>";
                     }
