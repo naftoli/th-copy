@@ -1179,7 +1179,7 @@ var templates = function(){
                     '<div class="col-4">' +
                         '<img src="' + child.profilePicture + '" />' +
                     '</div><div class="col-6">' +
-                        '<p class="name">' + child.first + " " + child.last + '<div style="font-size: 1em;">' + child.user_serial + '</div></p>' +
+                        '<p class="name">' + child.first + " " + child.last + '<div style="font-size: 1em;">Serial: ' + child.user_serial + '</div></p>' +
                         /*
                         ( child.registrationStatus.chayolei === false ? 
                             child.school.inst_id === 10 ? ( '<p class="reg_cost">CKids Registration: $0</p>' ) :
@@ -1204,6 +1204,13 @@ var templates = function(){
             4. a registered child is shown for editing "first" time
             5. a registered child is shown by coming "back" to that child (so child has both original info and cart info)
             **/
+            let html = '<option value="0">Select Amount to Pay</option>'
+            let fees = [20, 25, 30, 40];
+            if (user.school_id == 269) fees = [50, 55, 60, 70]
+            for (let fee of fees) {
+                html += `<option value="${fee}">${fee}</option>`
+            }
+
             if (! user.getChidonInfo) {
                 // non registered child
                 // check if coming after a prev registered child
@@ -1212,12 +1219,7 @@ var templates = function(){
                     $("#chidon-fee").attr('disabled', false)
                     // if ($("#chidon").is(":checked")) {
                         // reset chidon fee
-                        $("#chidon-fee").html(
-                            `<option value="0">Select Amount to Pay</option>
-                            <option value="20">$20</option>
-                            <option value="30">$30</option>
-                            <option value="40">$40</option>`
-                        )
+                        $("#chidon-fee").html(html)
                         $("#chidon-fee").show()
                         $("#reg_text").show()
                         $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to register for Chidon</strong>')
