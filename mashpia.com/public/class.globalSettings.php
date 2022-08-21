@@ -112,7 +112,7 @@ class GlobalSettings {
      * have one source of truth for the date of expiry for early bird
      */
     public static function earlyBird() {
-        return new DateTime('2021-09-14 04:00:00');
+        return new DateTime('2022-09-14 04:00:00');
     }
 
     /**

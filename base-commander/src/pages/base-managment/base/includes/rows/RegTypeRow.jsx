@@ -47,7 +47,7 @@ export class RegTypeRow extends Component {
 
           <div className='price'>
             Rate: <Rate rate={ prices.rates[0] } childFee={ childFee } />
-            <br />Payment Due: (9/13/2021)
+            <br />Payment Due: (9/13/2022)
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export class RegTypeRow extends Component {
           </div>
           <div className='price'>
             Regular Rate: <Rate rate={ prices.rates[1] } childFee={ childFee } />
-            <br />Payment Due: (9/13/2021)
+            <br />Payment Due: (9/13/2022)
           </div>
         </div>
 
