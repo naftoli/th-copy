@@ -1222,7 +1222,7 @@ var templates = function(){
                         $("#chidon-fee").html(html)
                         $("#chidon-fee").show()
                         $("#reg_text").show()
-                        $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to register for Chidon</strong>')
+                        $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to enroll for Chidon</strong>')
                     // }
                     if ($("#chidon").is(":checked")) $("#chidon").trigger('click')
                 }
