@@ -1171,7 +1171,7 @@
 
             $("#nameChoice").blur(isLang('en'))
 
-            $(".he_name").blur(isLang('he'))
+            $(document).on('blur', ".he_name", isLang('he'))
 
             function checkSerial(number) {
                 let good = true
