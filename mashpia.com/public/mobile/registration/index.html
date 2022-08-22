@@ -1165,13 +1165,13 @@
                 $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
             })
 
-            $("#first").blur(isLang('en'))
+            $("#first").blur(isLang(this, 'en'))
 
-            $("#last").blur(isLang('en'))
+            $("#last").blur(isLang(this, 'en'))
 
-            $("#nameChoice").blur(isLang('en'))
+            $("#nameChoice").blur(this, isLang('en'))
 
-            $(document).on('blur', ".he_name", isLang('he'))
+            $(document).on('blur', ".he_name", isLang(this, 'he'))
 
             function checkSerial(number) {
                 let good = true
