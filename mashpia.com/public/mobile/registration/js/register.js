@@ -856,7 +856,7 @@ var registrationApp = function() {
                 if (prize.personalization) height = 'height: 135px;'
                 var personalization = prize.personalization ? 1 : 0
                 html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
-                        <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
+                        <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
                 if (prize.quantity <= 0) html += 'disabled '
                 html += `/>
