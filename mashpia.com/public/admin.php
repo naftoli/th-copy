@@ -140,13 +140,13 @@ $admin->check_ckids_school();
 		<script src="js/admin/admin.php.js"></script>
 		
 <?php if (isset($_COOKIE['naftoli'])) : ?>
-<script src="https://global.localizecdn.com/localize.js"></script>
-
-<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
-
-<script>
-Localize.initialize({ key: 'seqkv59qMeLU8', rememberLanguage: true });
-</script>
+<!--<script src="https://global.localizecdn.com/localize.js"></script>-->
+<!---->
+<!--<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>-->
+<!---->
+<!--<script>-->
+<!--// Localize.initialize({ key: 'seqkv59qMeLU8', rememberLanguage: true });-->
+<!--</script>-->
 <?php endif; ?>
 	</HEAD>
 

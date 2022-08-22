@@ -14,9 +14,9 @@ function change_child(child_id) {
 }
 // if the school is not registered submit the prefilled form
 function check_school_registered() {
-    if (school_registered == "false" && admin_id != 2) {
-        document.forms["registration_form"].submit();
-    }
+    // if (school_registered == "false" && admin_id != 2) {
+    //     document.forms["registration_form"].submit();
+    // }
 }
 
 // validate input   
