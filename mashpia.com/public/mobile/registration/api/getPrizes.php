@@ -12,7 +12,6 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizes[] = $row;
 }
 
-$info = [];
 foreach ($prizes as $idx => $prize) {
     $sql = "select count(*) as total 
             from chidon_user_prizes 
@@ -28,4 +27,4 @@ foreach ($prizes as $idx => $prize) {
     }
 }
 
-echo json_encode($info);
+echo json_encode($prizes);
