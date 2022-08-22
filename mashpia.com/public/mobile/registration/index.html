@@ -1200,21 +1200,16 @@
                 })
             }
 
-            function between(x, min, max) {
-                return x >= min && x <= max
-            }
-
             function isEnglish( event ) {
-                let str = event.target.value
-                return checkLang(str, 'en')
+                return checkLang(event, 'en')
             }
 
             function isHebrew( event ) {
-                let str = event.target.value
-                return checkLang(str, 'he')
+                return checkLang(event, 'he')
             }
 
-            function checkLang(str, lang) {
+            function checkLang(event, lang) {
+                let str = event.target.value
                 for (s in str) {
                     let code = str.charCodeAt(s)
                     let allowed = [32, 39, 45, 95, 96]
@@ -1253,6 +1248,10 @@
                     }
                 }
                 return true
+            }
+
+            function between(x, min, max) {
+                return x >= min && x <= max
             }
         </script>
     </div>
