@@ -1308,7 +1308,10 @@
     }
 
     function checkLang(event, lang, maxLength) {
+        let errors = []
       let str = event.target.value
+        if (str.length > maxLength) errors.push(`You cannot enter more than ${maxLength} characters.`)
+
       let allowed = [32, 39, 45, 95, 96]
       let ranges = [
         [65, 90],
@@ -1320,6 +1323,7 @@
           [0x590, 0x5FF]
         ]
       }
+
       let msgs = {
         en: [
           'You can only enter english letters for the customized items.',
@@ -1329,10 +1333,6 @@
           'You can only use hebrew letters for the prize name.'
         ]
       }
-      let length = str.length
-
-      let errors = []
-      if (length > maxLength) errors.push(`You cannot enter more than ${maxLength} characters.`)
 
       for (s in str) {
         let code = str.charCodeAt(s)
@@ -1349,9 +1349,9 @@
 
       if (errors.length) {
           $("#error2Modal").on('shown.bs.modal', function () {
-              let str = ''
-              for (let e of errors) str += e + "<br />"
-              $("#error2Body").empty().text(str)
+              let txt = ''
+              for (let e of errors) txt += e + "<br />"
+              $("#error2Body").empty().text(txt)
               $("#error2Body").css({'textAlign': 'left'});
           })
           $("#error2Modal").modal('show');
