@@ -1165,13 +1165,13 @@
                 $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
             })
 
-            $("#first").blur(isLang(this, 'en'))
+            $("#first").blur(isEnglish)
 
-            $("#last").blur(isLang(this, 'en'))
+            $("#last").blur(isEnglish)
 
-            $("#nameChoice").blur(this, isLang('en'))
+            $("#nameChoice").blur(isEnglish)
 
-            $(document).on('blur', ".he_name", isLang(this, 'he'))
+            $(".he_name").blur(isHebrew)
 
             function checkSerial(number) {
                 let good = true
@@ -1204,13 +1204,17 @@
                 return x >= min && x <= max
             }
 
-            function isLang( event, lang ) {
-                console.log(event)
+            function isEnglish( event ) {
                 let str = event.target.value
-                let langs = {
-                    en: 'English',
-                    he: 'Hebrew'
-                }
+                return checkLang(str, 'en')
+            }
+
+            function isHebrew( event ) {
+                let str = event.target.value
+                return checkLang(str, 'he')
+            }
+
+            function checkLang(str, lang) {
                 for (s in str) {
                     let code = str.charCodeAt(s)
                     let allowed = [32, 39, 45, 95, 96]
@@ -1225,14 +1229,14 @@
                         ]
                     }
                     if (
-                        (! allowed.includes(code)) &&
-                        (! between(code, ranges[0][0], ranges[0][1])) &&
-                        (! between(code, ranges[1][0], ranges[1][1]))
+                      (! allowed.includes(code)) &&
+                      (! between(code, ranges[0][0], ranges[0][1])) &&
+                      (! between(code, ranges[1][0], ranges[1][1]))
                     ) {
                         $("#error2Modal").on('shown.bs.modal', function () {
                             if (event.target.id == 'nameChoice') $("#error2Body").empty().text('You can only enter english letters for the customized items.')
-                            else if (lang == 'en') $("#error2Body").empty().text('You can only enter english letters for the first and last english name.')
-                            else if (lang == 'he') $("#error2Body").empty().text('You can only enter hebrew letters for the prize names.')
+                            else if (['first', 'last'].includes(event.target.id)) $("#error2Body").empty().text('You can only enter english letters for the first and last english name.')
+                            else $("#error2Body").empty().text('You can only use hebrew letters for the prize name.') // he name in prize modal
                             $("#error2Body").css({'textAlign': 'left'});
                         })
                         $("#error2Modal").modal('show');
