@@ -857,8 +857,10 @@ var registrationApp = function() {
                 var personalization = prize.personalization ? 1 : 0
                 html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="http://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
-                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" />
-                        ${prize.prize_name}<br />
+                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
+                if (prize.quantity <= 0) html += 'disabled '
+                html += `/>
+                        ${prize.prize_name} (${prize.quantity} left in stock)<br />
                         ${parseInt(prize.price)} Credits`
                 if (prize.color) {
                     html += `<br />Color: ${prize.color}`
