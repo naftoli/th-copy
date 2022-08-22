@@ -1332,7 +1332,7 @@
       let length = str.length
 
       let errors = []
-      if (length > maxLength) error.push(`You cannot enter more than ${maxLength} characters.`)
+      if (length > maxLength) errors.push(`You cannot enter more than ${maxLength} characters.`)
 
       for (s in str) {
         let code = str.charCodeAt(s)
