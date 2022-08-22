@@ -1205,9 +1205,9 @@
             }
 
             function isHebrew( event ) {
-                let length = 22
-                console.log(event)
-                if (event.target.value.length > 22) {
+                let max = 22
+                if (event.target.classList.includes('bracelet')) max = 12
+                if (event.target.value.length > max) {
                     alert('You can only enter up to 22 characters.')
                     return false
                 }
