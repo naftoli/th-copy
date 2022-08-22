@@ -1205,6 +1205,12 @@
             }
 
             function isHebrew( event ) {
+                let length = 22
+                console.log(event)
+                if (event.target.value.length > 22) {
+                    alert('You can only enter up to 22 characters.')
+                    return false
+                }
                 return checkLang(event, 'he')
             }
 
