@@ -1209,7 +1209,7 @@
                 let max = 22
                 if (event.target.className.includes('bracelet')) max = 12
                 if (event.target.value.length > max) {
-                    alert('You can only enter up to 22 characters.')
+                    alert(`You can only enter up to ${max} characters.`)
                     return false
                 }
                 return checkLang(event, 'he')

@@ -869,8 +869,10 @@ var registrationApp = function() {
                     html += `<br />Size: ${prize.size}`
                 }
                 if (prize.personalization) {
-                    html += `<br /><span style="font-size: 12px">${prize.personalization} 
-                            <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" /></span>`
+                    html += `<br /><span style="font-size: 12px">${prize.personalization}. `
+                    if (id == 175) html += 'Limit 12 characters.'
+                    else html += 'Limit 22 characters.'
+                    html += `<input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" /></span>`
                 }
                 html += `</div>`
             }
