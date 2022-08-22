@@ -166,7 +166,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
      * @return SchoolRegistration/false
      */
     public function registration( $year = false ){
-        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
+//        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
+        $year = $year ?? 5783; // override bc we haven't yet opened up for kids for 5783
         // check for non-default option
         if ( $this->school_registrations ) {
             foreach( $this->school_registrations as $reg_info ){
