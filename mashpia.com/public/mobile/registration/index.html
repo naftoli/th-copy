@@ -1350,7 +1350,7 @@
       if (errors.length) {
           $("#error2Modal").on('shown.bs.modal', function () {
               let str = ''
-              for (let e of error) str += e + "<br />"
+              for (let e of errors) str += e + "<br />"
               $("#error2Body").empty().text(str)
               $("#error2Body").css({'textAlign': 'left'});
           })
