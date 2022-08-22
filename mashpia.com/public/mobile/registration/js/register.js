@@ -870,7 +870,7 @@ var registrationApp = function() {
                 }
                 if (prize.personalization) {
                     html += `<br /><span style="font-size: 12px">${prize.personalization} 
-                            <input type="text" name="he_name_${id}" class="he_name" data-info="${id}" /></span>`
+                            <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name" data-info="${id}" /></span>`
                 }
                 html += `</div>`
             }

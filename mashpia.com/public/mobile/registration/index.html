@@ -1238,7 +1238,7 @@
 
                         $("#error2Modal").on('hide.bs.modal', function () {
                             // fix infinite loop by using setTimeout function
-                            if (['first', 'last', 'nameChoice'].includes(event.target.id)) {
+                            if (['first', 'last', 'nameChoice', 'he_name'].includes(event.target.id)) {
                                 setTimeout(function () {
                                     $(event.target).focus()
                                 }, 0)
