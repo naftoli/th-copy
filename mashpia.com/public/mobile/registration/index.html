@@ -1334,7 +1334,7 @@
         ]
       }
 
-      for (s in str) {
+      for (let s in str) {
         let code = str.charCodeAt(s)
         if (
           (!allowed.includes(code)) &&
@@ -1344,6 +1344,7 @@
             if (event.target.id == 'nameChoice') errors.push(msgs.en[0])
             else if (['first', 'last'].includes(event.target.id)) errors.push(msgs.en[1])
             else if (event.target.className.includes('he_name')) errors.push(msgs.he[0])
+            break
         }
       }
 
@@ -1351,7 +1352,7 @@
           $("#error2Modal").on('shown.bs.modal', function () {
               let txt = ''
               for (let e of errors) txt += e + "<br />"
-              $("#error2Body").empty().text(txt)
+              $("#error2Body").empty().html(txt)
               $("#error2Body").css({'textAlign': 'left'});
           })
           $("#error2Modal").modal('show');
