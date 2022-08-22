@@ -16,8 +16,8 @@ $size = isset($_POST['size']) ? mysql_real_escape_string($_POST['size']) : "null
 $note = isset($_POST['note']) ? mysql_real_escape_string($_POST['note']) : "null";
 $price = isset($_POST['price']) ? mysql_real_escape_string($_POST['price']) : "null";
 $our_price = isset($_POST['our_price']) ? mysql_real_escape_string($_POST['our_price']) : "null";
-$year = GlobalSettings::getChidonYear();
-$year = 5782;
+$year = GlobalSettings::getChidonRegYear();
+$year = 5783;
 
 $prize_picture = "";
 switch($_FILES['prize_picture']) {
