@@ -850,6 +850,7 @@ var registrationApp = function() {
             var res = JSON.parse(results)
             console.log(res)
             var html = ''
+
             for (prize of res) {
                 var id = prize.prize_id
                 var height = 'height: 100px;'
@@ -858,7 +859,6 @@ var registrationApp = function() {
                 html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
-                if (parseInt(prize.selected, 10) === 1) html += 'checked '
                 if (prize.quantity <= 0) html += 'disabled '
                 html += `/>
                         ${prize.prize_name} (${prize.quantity} left in stock)<br />
@@ -876,6 +876,8 @@ var registrationApp = function() {
                     html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" /></span>`
                 }
                 html += `</div>`
+
+                if (prize.selected) addToPrizes(id, prize.price, personalization)
             }
             $("#listOfPrizes").empty()
             $("#listOfPrizes").append(html)
