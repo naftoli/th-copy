@@ -843,6 +843,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      */
     public function addChidonPrizes($prizes, $year) {
         global $MASHPIA_DB;
+
+        // first remove previous prizes
+        $stmt = $MASHPIA_DB->prepare("
+            delete from chidon_user_prizes 
+            where year = :year 
+            and user_id = :user
+        ");
+        $stmt->execute([
+            ':user'     => $this->user_id,
+            ':year'     => $year
+        ]);
+
+        // then add current prizes
         $stmt = $MASHPIA_DB->prepare("
                 insert into chidon_user_prizes 
                 set user_id = :user, 

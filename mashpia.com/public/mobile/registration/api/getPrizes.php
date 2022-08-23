@@ -14,10 +14,15 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizes[] = $row;
 }
 
+$selected = [];
+$sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $selected[] = $row['prize_id'];
+}
+
 foreach ($prizes as $idx => $prize) {
-    $sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and prize_id = " . $prize['prize_id'];
-    $result = mysql_query($sql);
-    if (mysql_num_rows($result) > 0) $prizes[$idx]['selected'] = 1;
+    if (in_array($prize['prize_id'], $selected)) $prizes[$idx]['selected'] = 1;
 
     $sql = "select count(*) as total 
             from chidon_user_prizes 

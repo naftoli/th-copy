@@ -851,7 +851,7 @@ var registrationApp = function() {
             console.log(res)
             var html = ''
 
-            for (prize of res) {
+            for (let prize of res) {
                 var id = prize.prize_id
                 var height = 'height: 100px;'
                 if (prize.personalization) height = 'height: 135px;'
