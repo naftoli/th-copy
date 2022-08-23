@@ -257,6 +257,9 @@ if ( !empty( $users ) ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
         }
 
+        // turn off chayolei reg
+        $children[$row['user_id']]['reg_types']['chayolei'] = true;
+
         // close chidon reg
 //        $children[$row['user_id']]['reg_types']['chidon'] = false;
 

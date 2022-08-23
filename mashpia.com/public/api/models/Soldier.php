@@ -504,8 +504,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 }
             }
         }
-        // disable chidon
-//        $result['chidon'] = true;
+        // disable chayolei
+        $result['chayolei'] = true;
 
         // check if child is eligible for khk when registering for chidon
         $eligibility = KHK::getKHKEligibility([$this->user_id]);
