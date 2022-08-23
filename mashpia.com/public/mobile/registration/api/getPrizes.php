@@ -6,7 +6,7 @@ $year = 5783;
 
 $user_id = mysql_real_escape_string($_POST['user_id']);
 $user_prizes = [];
-$sql = "select * from chidon_user_prizes where year = " . $year;
+$sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $user_prizes[] = $row['prize_id'];

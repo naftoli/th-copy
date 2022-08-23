@@ -227,6 +227,7 @@ class UserRegistrationRouter {
                     // Chidon Registration
                     } else if ( $registration['registration_type'] == 'chidon' ) {
                         $year = GlobalSettings::getChidonRegYear();
+                        if (in_array($user->user_id, [5455, 19085])) $year = 5783;
                         $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                         $recruited_by = intval( $registration['recruitedBy'] );
 //                        echo "<pre>"; print_r($registration); echo "</pre>"; return [];
