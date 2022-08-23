@@ -64,7 +64,6 @@ if ( !empty( $users ) ) {
     while ( $row = mysql_fetch_assoc($result) ) {
         $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
         if (in_array($row['user_id'], [5455, 19085])) {
-            $reg_year = 5783;
             $chidon_year = 5783;
         }
         $children[$row['user_id']]['user_id']       = $row['user_id'];
