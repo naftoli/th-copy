@@ -111,7 +111,8 @@ class UserRegistrationRouter {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
             }
-            $totals[$info['registration_type']] += intval($info['paid']) - intval($info['discount']);
+            if (isset($info['discount'])) $totals[$info['registration_type']] += intval($info['paid']) - intval($info['discount']);
+            else $totals[$info['registration_type']] += intval($info['paid']);
         }
 
         // * get all the user models
