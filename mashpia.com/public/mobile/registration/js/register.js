@@ -210,7 +210,7 @@ var registrationApp = function() {
         if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
         else $("#anash_kinder_text").hide();
 
-        if ([anash_kinder, myshliach].includes(school_id)) $(".myshliachTerms").show()
+        if ([61, 269].includes(school_id)) $(".myshliachTerms").show()
         else $(".myshliachTerms").hide()
 
         // yahadus registration
@@ -1508,10 +1508,6 @@ var templates = function(){
                 {
                     field: '#myshliach',
                     type: 'checkbox'
-                },
-                {
-                    field: '#myshliach',
-                    type: 'checkbox'
                 }
             ]
 
@@ -1537,10 +1533,10 @@ var templates = function(){
 
             this.setChidonReg( user ) // can only do it after the resets bc the chidon fee value is reset to 20
 
-            if ( user.school_id == anash_kinder ) $("#anash_kinder_text").show();
+            if ( selected_user.school_id == anash_kinder ) $("#anash_kinder_text").show();
             else $("#anash_kinder_text").hide();
 
-            if ([anash_kinder, myshliach].includes(user.school_id)) $(".myshliachTerms").show()
+            if ([61, 269].includes(selected_user.school_id)) $(".myshliachTerms").show()
             else $(".myshliachTerms").hide()
 
             // find out if the cart already has info for this child
