@@ -1533,10 +1533,10 @@ var templates = function(){
 
             this.setChidonReg( user ) // can only do it after the resets bc the chidon fee value is reset to 20
 
-            if ( selected_user.school_id == anash_kinder ) $("#anash_kinder_text").show();
+            if ( user.school.school_id == anash_kinder ) $("#anash_kinder_text").show();
             else $("#anash_kinder_text").hide();
 
-            if ([61, 269].includes(selected_user.school_id)) $(".myshliachTerms").show()
+            if ([61, 269].includes(user.school.school_id)) $(".myshliachTerms").show()
             else $(".myshliachTerms").hide()
 
             // find out if the cart already has info for this child
