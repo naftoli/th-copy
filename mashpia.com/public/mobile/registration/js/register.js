@@ -207,7 +207,7 @@ var registrationApp = function() {
         // state.cart = state.cart.filter( function(item) { return user_ids.includes( item.meta.user_id ) } );
 
         // show anash kinder text if anash kinder school
-        if ([61, 269].includes(user.school.school_id)) {
+        if ([61, 269].includes(school_id)) {
             $("#anash_kinder_text").show()
             $(".myshliachTerms").show()
         }
