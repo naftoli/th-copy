@@ -100,7 +100,7 @@ $trackYr = 5782;
     <h1>Comprehensive Registration Report</h1>
     <div class="infobox">
         Please Note: the word "enrolled" refers to the enrollment in the beginning of the year. The word "registered"
-        refers to registration for the experience.
+        refers to registration for the experience at the end of the year.
     </div>
     <div>
         Choose Year:
@@ -141,7 +141,7 @@ $trackYr = 5782;
                     }
                     ?>
                     <th>KHK Eligible</th>
-                    <th>KHK Registered</th>
+                    <th>KHK Enrolled</th>
                     <th>Parent Email</th>
                     <th>Parent Phone Number</th>
                 </tr>
