@@ -210,8 +210,7 @@ var registrationApp = function() {
         if ([61, 269].includes(school_id)) {
             $("#anash_kinder_text").show()
             $(".myshliachTerms").show()
-        }
-        else {
+        } else {
             $("#anash_kinder_text").hide()
             $(".myshliachTerms").hide()
         }
@@ -1548,8 +1547,7 @@ var templates = function(){
             if ([61, 269].includes(user.school.school_id)) {
                 $("#anash_kinder_text").show()
                 $(".myshliachTerms").show()
-            }
-            else {
+            } else {
                 $("#anash_kinder_text").hide()
                 $(".myshliachTerms").hide()
             }
