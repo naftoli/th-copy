@@ -1,7 +1,10 @@
 <?php
 require_once '../db.php';
 
-$auction_id = 82;
+$sql = 'select auction_id from auctions order by auction_id desc limit 1';
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$auction_id = $row['auction_id'];
 
 $info = [];
 $sql = "SELECT 
