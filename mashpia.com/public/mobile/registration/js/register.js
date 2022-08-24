@@ -1223,7 +1223,7 @@ var templates = function(){
             if (user.school_id == 61) fees = [30, 35, 40, 50]
             else if (user.school_id == 269) fees = [50, 55, 60, 70]
             for (let fee of fees) {
-                html += `<option value="${fee}">${fee}</option>`
+                html += `<option value="${fee}">$${fee}</option>`
             }
             $("#chidon-fee").empty().append(html)
 
