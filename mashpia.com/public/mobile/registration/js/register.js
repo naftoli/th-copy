@@ -1225,6 +1225,7 @@ var templates = function(){
             for (let fee of fees) {
                 html += `<option value="${fee}">${fee}</option>`
             }
+            $("#chidon-fee").empty().append(html)
 
             if (! user.getChidonInfo) {
                 // non registered child
