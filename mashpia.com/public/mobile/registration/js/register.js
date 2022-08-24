@@ -207,13 +207,11 @@ var registrationApp = function() {
         // state.cart = state.cart.filter( function(item) { return user_ids.includes( item.meta.user_id ) } );
 
         // show anash kinder text if anash kinder school
-        if ([61, 269].includes(school_id)) {
-            $("#anash_kinder_text").show()
-            $(".myshliachTerms").show()
-        } else {
-            $("#anash_kinder_text").hide()
-            $(".myshliachTerms").hide()
-        }
+        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
+        else $("#anash_kinder_text").hide();
+
+        if ([61, 269].includes(school_id)) $(".myshliachTerms").show()
+        else $(".myshliachTerms").hide()
 
         // yahadus registration
         var australian = [ 55, 66, 110, 112, 180, 256 ];
@@ -221,7 +219,7 @@ var registrationApp = function() {
             if ( $(this).val() === '0' ) {
                 console.log(school_id)
                 if ( !australian.includes( school_id ) ) {
-                    if (school_id == 61) {
+                    if ([61, 269].includes(school_id)) {
                         $(".yahadus-myshliach").show()
                         $('#yahadus-registration').hide();
                         // $('#step-2 form #yahadus-registration-no').hide();
@@ -243,7 +241,7 @@ var registrationApp = function() {
                 // $( '#step-2 form #yahadus-registration-no').hide();
                 $('#book-purchase').show();
                 $(".yahadus-myshliach").hide()
-                if ( school_id == 61 ) {
+                if ([61, 269].includes(school_id)) {
                     $(".book-purchase-item").hide()
                     $(".book-purchase-myshliach").show()
                 } else {
@@ -1544,13 +1542,11 @@ var templates = function(){
 
             this.setChidonReg( user ) // can only do it after the resets bc the chidon fee value is reset to 20
 
-            if ([61, 269].includes(user.school.school_id)) {
-                $("#anash_kinder_text").show()
-                $(".myshliachTerms").show()
-            } else {
-                $("#anash_kinder_text").hide()
-                $(".myshliachTerms").hide()
-            }
+            if ( user.school.school_id == anash_kinder ) $("#anash_kinder_text").show();
+            else $("#anash_kinder_text").hide();
+
+            if ([61, 269].includes(user.school.school_id)) $(".myshliachTerms").show()
+            else $(".myshliachTerms").hide()
 
             // find out if the cart already has info for this child
             let info = state.cart.filter(item => item.meta.user_id == user.user_id)
