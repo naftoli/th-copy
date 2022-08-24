@@ -315,7 +315,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     AND rc.type = 'chidon'
         ");
         $year = GlobalSettings::getChidonRegYear();
-        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) $year = 5783;
         $res = $query->execute([
             ':user' => $this->user_id,
             ':year' => $year
@@ -440,10 +439,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
 
-        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
-            $chidon_year = 5783;
-        }
-
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
@@ -501,10 +496,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         // disable chayolei
         $result['chayolei'] = true;
-        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
-            $result['chayolei'] = false;
-            $result['chidon'] = false;
-        }
 
         // check if child is eligible for khk when registering for chidon
         $eligibility = KHK::getKHKEligibility([$this->user_id]);
@@ -549,9 +540,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
-        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
-            $chidon_year = 5783;
-        }
         return [
             'chayolei'  => $chayolei_year,
             'chidon'    => $chidon_year

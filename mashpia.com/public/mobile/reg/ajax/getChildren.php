@@ -63,9 +63,6 @@ if ( !empty( $users ) ) {
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc($result) ) {
         $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
-        if (in_array($row['user_id'], [5455, 19085, 62881, 19274])) {
-            $chidon_year = 5783;
-        }
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
@@ -115,11 +112,6 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
-
-        if (in_array($row['user_id'], [5455, 19085, 62881, 19274])) {
-            $children[$row['user_id']]['schoolRegistered'] = 1;
-            $children[$row['user_id']]['schoolTypeRegistered'] = 1;
-        }
 
         //mivtza lulav 5781
 //        $children[$row['user_id']]['mivtzaLulav'] = 0;
@@ -257,7 +249,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chayolei reg
-        if (! in_array($row['user_id'], [5455, 19085, 62881, 19274])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+        $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // close chidon reg
 //        $children[$row['user_id']]['reg_types']['chidon'] = false;
