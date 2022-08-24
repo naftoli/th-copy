@@ -665,7 +665,7 @@ var registrationApp = function() {
                 }
             }
             // check myshliach term if relevant
-            if (selected_user.school_id == myshliach) {
+            if (selected_user.school.school_id == myshliach) {
                 if (! $("#myshliach").is(":checked")) {
                     errors.push("You must indicate your acceptance of all Terms (6th term not checked)")
                 }
