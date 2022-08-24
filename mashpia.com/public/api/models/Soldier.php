@@ -439,7 +439,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
 
-        if (in_array($this->user_id, [5455, 19085, 62881])) {
+        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
             $chidon_year = 5783;
         }
 
@@ -500,7 +500,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         // disable chayolei
         $result['chayolei'] = true;
-        if (in_array($this->user_id, [5455, 19085, 62881])) {
+        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
             $result['chayolei'] = false;
             $result['chidon'] = false;
         }
