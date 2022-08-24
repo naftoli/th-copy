@@ -315,6 +315,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     AND rc.type = 'chidon'
         ");
         $year = GlobalSettings::getChidonRegYear();
+        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) $year = 5783;
         $res = $query->execute([
             ':user' => $this->user_id,
             ':year' => $year
