@@ -257,7 +257,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chayolei reg
-        if (! in_array($row['user_id'], [5455, 19085])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+        if (! in_array($row['user_id'], [5455, 19085, 62881])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // close chidon reg
 //        $children[$row['user_id']]['reg_types']['chidon'] = false;
