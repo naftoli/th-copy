@@ -280,55 +280,55 @@ var registrationApp = function() {
         }
 
         // show address modal if purchasing book and from anash kinder
-        $("#yahadus-registration input").click( function() {
-            if ( $(this).val() == '1' && selected_user.school.school_id === anash_kinder ) {
-                if (selected_user.parentAccount.admin_address1.length) $("#ship-address1").val( selected_user.parentAccount.admin_address1 )
-                else $("#ship-address1").attr('placeholder', 'Address line 1')
-
-                if (selected_user.parentAccount.admin_address2.length) $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
-                else $("#ship-address2").attr('placeholder', 'Address line 2')
-
-                if (selected_user.parentAccount.admin_city.length) $("#ship-city").val( selected_user.parentAccount.admin_city );
-                else $("#ship-city").attr('placeholder', 'city')
-
-                if (selected_user.parentAccount.admin_state.length) $("#ship-state").val( selected_user.parentAccount.admin_state );
-                else $("#ship-state").attr('placeholder', 'state')
-
-                if (selected_user.parentAccount.admin_postal.length) $("#ship-zip").val( selected_user.parentAccount.admin_postal );
-                else $("#ship-zip").attr('placeholder', 'zip')
-
-                if (selected_user.parentAccount.admin_country.length) $("#ship-country").val( selected_user.parentAccount.admin_country );
-                else $("#ship-country").val('USA')
-
-                $("#shipping-modal").modal('show');
-                $("#update-shipping").click( function() {
-                    var info = {};
-                    info.address1 = $("#ship-address1").val();
-                    info.address2 = $("#ship-address2").val();
-                    info.city = $("#ship-city").val();
-                    info.state = $("#ship-state").val();
-                    info.zip = $("#ship-zip").val();
-                    info.country = $("#ship-country").val();
-                    if (!(info.address1 && info.city && info.state && info.zip && info.country)) {
-                        alert(addressErr);
-                        return false;
-                    }
-                    var thisUser = selected_user; // needed for scope
-                    $.post("updateAddress.php", { info: info }, function( res ) {
-                        if ( res.success ) {
-                            alert( res.data );
-                            thisUser.parentAccount.admin_country = info.country;
-                            // if (thisUser.parentAccount.admin_country.toUpperCase() == 'USA') $("#yahadus-shipping").html(shippingChargeMsg15);
-                            // else $("#yahadus-shipping").html(shippingChargeMsg30);
-                            $("#yahadus-shipping").html(shippingChargeMsg15)
-                            $("#shipping-modal").modal('hide');
-                        } else {
-                            alert( res.error );
-                        }
-                    });
-                });
-            }
-        });
+        // $("#yahadus-registration input").click( function() {
+        //     if ( $(this).val() == '1' && selected_user.school.school_id === anash_kinder ) {
+        //         if (selected_user.parentAccount.admin_address1.length) $("#ship-address1").val( selected_user.parentAccount.admin_address1 )
+        //         else $("#ship-address1").attr('placeholder', 'Address line 1')
+        //
+        //         if (selected_user.parentAccount.admin_address2.length) $("#ship-address2").val( selected_user.parentAccount.admin_address2 );
+        //         else $("#ship-address2").attr('placeholder', 'Address line 2')
+        //
+        //         if (selected_user.parentAccount.admin_city.length) $("#ship-city").val( selected_user.parentAccount.admin_city );
+        //         else $("#ship-city").attr('placeholder', 'city')
+        //
+        //         if (selected_user.parentAccount.admin_state.length) $("#ship-state").val( selected_user.parentAccount.admin_state );
+        //         else $("#ship-state").attr('placeholder', 'state')
+        //
+        //         if (selected_user.parentAccount.admin_postal.length) $("#ship-zip").val( selected_user.parentAccount.admin_postal );
+        //         else $("#ship-zip").attr('placeholder', 'zip')
+        //
+        //         if (selected_user.parentAccount.admin_country.length) $("#ship-country").val( selected_user.parentAccount.admin_country );
+        //         else $("#ship-country").val('USA')
+        //
+        //         $("#shipping-modal").modal('show');
+        //         $("#update-shipping").click( function() {
+        //             var info = {};
+        //             info.address1 = $("#ship-address1").val();
+        //             info.address2 = $("#ship-address2").val();
+        //             info.city = $("#ship-city").val();
+        //             info.state = $("#ship-state").val();
+        //             info.zip = $("#ship-zip").val();
+        //             info.country = $("#ship-country").val();
+        //             if (!(info.address1 && info.city && info.state && info.zip && info.country)) {
+        //                 alert(addressErr);
+        //                 return false;
+        //             }
+        //             var thisUser = selected_user; // needed for scope
+        //             $.post("updateAddress.php", { info: info }, function( res ) {
+        //                 if ( res.success ) {
+        //                     alert( res.data );
+        //                     thisUser.parentAccount.admin_country = info.country;
+        //                     // if (thisUser.parentAccount.admin_country.toUpperCase() == 'USA') $("#yahadus-shipping").html(shippingChargeMsg15);
+        //                     // else $("#yahadus-shipping").html(shippingChargeMsg30);
+        //                     $("#yahadus-shipping").html(shippingChargeMsg15)
+        //                     $("#shipping-modal").modal('hide');
+        //                 } else {
+        //                     alert( res.error );
+        //                 }
+        //             });
+        //         });
+        //     }
+        // });
 
         $.post('api/tasks/getSchools.php', function( result ) {
             if ( result.success ) {
