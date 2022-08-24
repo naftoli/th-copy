@@ -8,29 +8,34 @@ $auction_id = $row['auction_id'];
 
 $info = [];
 $sql = "SELECT 
-        aup.*,
-        pa.prize_name,
-        s.school_name,
-        c.class_grade,
-        c.class_sub,
-        u.first,
-        u.last
+            aup.user_id,
+            aup.prize_id,
+            COUNT(*) AS tickets,
+            pa.prize_name,
+            s.school_name,
+            c.class_grade,
+            c.class_sub,
+            u.first,
+            u.last
         FROM
-        auction_user_prizes aup
-            JOIN
-        auction_prizes ap USING (prize_id)
-            JOIN
-        prizes_auction pa USING (prize_id)
-            JOIN
-        users u USING (user_id)
-            JOIN
-        schools s ON s.school_id = u.school_id
-            JOIN
-        classes c ON c.class_id = u.class_id
+            auction_user_prizes aup
+                JOIN
+            prizes_auction pa USING (prize_id)
+                JOIN
+            users u USING (user_id)
+                JOIN
+            schools s ON s.school_id = u.school_id
+                JOIN
+            classes c ON c.class_id = u.class_id
         WHERE
-          aup.auction_id = $auction_id AND s.school_id != 612
-        GROUP BY prize_id , user_id
-        ORDER BY prize_id , school_name , class_grade , class_sub , last , first";
+            aup.auction_id = 83
+                AND aup.prize_id IN (SELECT 
+                    prize_id
+                FROM
+                    auction_prizes
+                WHERE
+                    auction_id = $auction_id)
+        GROUP BY aup.user_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
   $info[$row['prize_name'] . ' - Prize ID:' . $row['prize_id']][] = $row;
