@@ -207,11 +207,11 @@ var registrationApp = function() {
         // state.cart = state.cart.filter( function(item) { return user_ids.includes( item.meta.user_id ) } );
 
         // show anash kinder text if anash kinder school
-        if ( school_id == anash_kinder ) {
-            $("#anash_kinder_text").show();
-        } else {
-            $("#anash_kinder_text").hide();
-        }
+        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
+        else $("#anash_kinder_text").hide();
+
+        if ([anash_kinder, myshliach].includes(school_id)) $(".myshliachTerms").show()
+        else $(".myshliachTerms").hide()
 
         // yahadus registration
         var australian = [ 55, 66, 110, 112, 180, 256 ];
@@ -662,6 +662,12 @@ var registrationApp = function() {
                             }
                         }
                     }
+                }
+            }
+            // check myshliach term if relevant
+            if (selected_user.school_id == myshliach) {
+                if (! $("#myshliach").is(":checked")) {
+                    errors.push("You must indicate your acceptance of all Terms (6th term not checked).")
                 }
             }
             console.log(errors)
@@ -1214,7 +1220,8 @@ var templates = function(){
             **/
             let html = '<option value="0">Select Amount to Pay</option>'
             let fees = [20, 25, 30, 40];
-            if (user.school_id == 269) fees = [50, 55, 60, 70]
+            if (user.school_id == 61) fees = [30, 35, 40, 50]
+            else if (user.school_id == 269) fees = [50, 55, 60, 70]
             for (let fee of fees) {
                 html += `<option value="${fee}">${fee}</option>`
             }
@@ -1497,6 +1504,14 @@ var templates = function(){
                 {
                     field: '#media',
                     type: 'checkbox',
+                },
+                {
+                    field: '#myshliach',
+                    type: 'checkbox'
+                },
+                {
+                    field: '#myshliach',
+                    type: 'checkbox'
                 }
             ]
 
@@ -1521,6 +1536,12 @@ var templates = function(){
             }
 
             this.setChidonReg( user ) // can only do it after the resets bc the chidon fee value is reset to 20
+
+            if ( user.school_id == anash_kinder ) $("#anash_kinder_text").show();
+            else $("#anash_kinder_text").hide();
+
+            if ([anash_kinder, myshliach].includes(user.school_id)) $(".myshliachTerms").show()
+            else $(".myshliachTerms").hide()
 
             // find out if the cart already has info for this child
             let info = state.cart.filter(item => item.meta.user_id == user.user_id)
