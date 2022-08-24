@@ -600,7 +600,7 @@ var registrationApp = function() {
                             field: '.yahadus',
                             type: 'check',
                             error: 'You have not indicated whether you would like to purchase a book or not',
-                            schoolException: 61
+                            schoolExceptions: [61, 269]
                         },
                     ]
                 },
@@ -656,7 +656,7 @@ var registrationApp = function() {
                     } else if (value === '0') {
                         if (field.noDependents) {
                             for (dependent of field.noDependents) {
-                                if (dependent.schoolException && selected_user.school.school_id == dependent.schoolException) continue // don't validate if exception for this school
+                                if (dependent.schoolExceptions && dependent.schoolExceptions.includes(selected_user.school.school_id)) continue // don't validate if exception for this school
                                 error = checkField(dependent)
                                 if (error) errors.push(error)
                             }
