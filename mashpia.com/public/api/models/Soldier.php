@@ -548,7 +548,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
-        if (in_array($this->user_id, [5455, 19085, 62881])) {
+        if (in_array($this->user_id, [5455, 19085, 62881, 19274])) {
             $chidon_year = 5783;
         }
         return [
