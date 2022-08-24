@@ -65,7 +65,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       <?
       foreach ( $more as $row ) {
         echo "<tr><td>" . $row['school_name'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $row['class_sub'] . "</td><td>" . 
-          $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['quantity'] . "</td><td>" . $row['user_id'] . "</td></tr>";
+          $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['tickets'] . "</td><td>" . $row['user_id'] . "</td></tr>";
       }
       echo "</table>";
     }
