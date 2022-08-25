@@ -262,13 +262,13 @@ class UserRegistrationRouter {
                             if ($user->school_id == 61) $headers[] = "Cc: chidon@myshliach.com";
                             if ($user->school_id == 269) $headers[] = 'CC: chidonanash@gmail.com';
 
-                            $subject = "Chidon Limmud Registration Confirmation";
+                            $subject = "Chidon Limmud Enrollment Confirmation";
 
                             $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
                                         <br /><br />
                                         If you'd like to make any changes in your enrollment, you can log into your account now and do so.
                                         <br /><br />
-                                        Please reach out to your school's Chidob coordinator with any questions.
+                                        Please reach out to your school's Chidon coordinator with any questions.
                                         <br /><br />
                                         Hatzlocha Rabba in your learning!";
 //                                        <br /><br/>
