@@ -46,17 +46,43 @@ $userIds = [];
 $classes = [];
 $teachers = [];
 $eighthGrades = [];
-$sql = "SELECT u.first, u.last, u.user_serial, u.school_id, u.user_id, c.class_id, c.class_grade, c.class_sub, c.class_teacher, 
-            a.admin_email, a.admin_phone_mobile, a.admin_phone_work, a.admin_phone_home
-        FROM users u 
-        JOIN classes c using (class_id) 
-        JOIN admin_auths aa on aa.id = u.user_id 
-        JOIN admins a using (admin_id) 
-        WHERE 
-            aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
-            AND u.school_id in (" . implode(',', array_keys($schools)) . ")
-        ORDER BY u.school_id, c.class_grade, c.class_sub, last, first";
-// echo $sql; exit;
+$sql = "
+    SELECT 
+        u.first,
+        u.last,
+        u.user_serial,
+        u.school_id,
+        u.user_id,
+        c.class_id,
+        c.class_grade,
+        c.class_sub,
+        c.class_teacher,
+        tc.reg_date,
+        a.admin_email,
+        a.admin_phone_mobile,
+        a.admin_phone_work,
+        a.admin_phone_home
+    FROM
+        users u
+            JOIN
+        classes c USING (class_id)
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
+            JOIN
+        admins a USING (admin_id)
+            LEFT JOIN
+        th_chidon tc ON tc.user_id = u.user_id
+    WHERE
+        aa.auth = 'user'
+            AND c.class_id IN (SELECT 
+                class_id
+            FROM
+                classes
+            WHERE
+                aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
+                AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+    ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC , last , first
+";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[$row['school_id']][$row['class_id']][] = $row;
