@@ -73,14 +73,8 @@ $sql = "
             LEFT JOIN
         th_chidon tc ON tc.user_id = u.user_id
     WHERE
-        aa.auth = 'user'
-            AND c.class_id IN (SELECT 
-                class_id
-            FROM
-                classes
-            WHERE
-                aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
-                AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+        aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
+            AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
     ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC , last , first
 ";
 $result = mysql_query($sql);
