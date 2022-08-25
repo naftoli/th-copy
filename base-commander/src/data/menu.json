@@ -93,7 +93,7 @@
             ]
           },
           { "label": "KHK Tests", "legacy": true, "path": "/chidonTests/khk_tests.php" },
-          { "label": "Finals", "legacy": true, "path": "/chidonTests/finals.php" },
+          { "label": "Finals", "legacy": true, "path": "/chidonTests/finals.php" }
         ]
       },
 
