@@ -943,14 +943,14 @@ var registrationApp = function() {
         // make sure that he name was filled out if its needed
         for (var p of user_prizes[current_user]) {
             total += parseInt(p.price)
-            if (total < 65) {
-                alert('You must choose at least 65 credits worth of prizes.')
-                return false
-            }
             if (parseInt(p.personalization) && (!p.he_name || p.he_name == '')) {
                 alert('You must enter a hebrew name for the prizes that need it!')
                 return false
             }
+        }
+        if (total < 65) {
+            alert('You must choose at least 65 credits worth of prizes.')
+            return false
         }
         return true
     }
