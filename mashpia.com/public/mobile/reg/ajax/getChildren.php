@@ -8,12 +8,13 @@ require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
 require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
-$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
 require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
+
+$australian = [ 55, 66, 110, 112, 180, 256, 643 ];
 
 //require 'regFeeSchools.php';
 // require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
@@ -28,7 +29,7 @@ $admin = encrypt_decrypt('decrypt', $admin);
 $info = array();
 
 $parent = array();
-$sql = "SELECT father, mother, father_pic, mother_pic, show_chidon_refund, already_refunded, chidon_confirmed_5782 FROM admins WHERE admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -37,10 +38,6 @@ $parent['fatherPic'] = $row['father_pic'];
 $parent['motherPic'] = $row['mother_pic'];
 $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
-$parent['showRefund'] = intval($row['show_chidon_refund']);
-$parent['alreadyRefunded'] = intval($row['already_refunded']);
-$parent['chidon_confirmed_5782'] = boolval($row['chidon_confirmed_5782']);
-
 $info['parent'] = $parent;
 
 $users = array();
@@ -63,6 +60,7 @@ if ( !empty( $users ) ) {
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc($result) ) {
         $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
+        $chidon_year                                = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear( $row['school_id'] );
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
@@ -100,14 +98,55 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['rankOrd']	= $rowRank['rank_ord'] ? $rowRank['rank_ord'] : 0;
         $children[$row['user_id']]['rankImg'] 	= $rowRank['rank_image_id'] ? $rowRank['rank_image_id'] : '';
 
-        $reg_query = mysql_query(
-            "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, tc.th_chidon_id, tc.invite_used, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
-            ."sri.date_paid AS registered, u.chayolei, u.chidon FROM users u "
-            ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and tc.year = $chidon_year "
-            ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
-            ."LEFT JOIN school_registrations sri ON u.school_id = sri.school_id AND sri.year = $reg_year "
-            ."WHERE u.user_id = ".$row['user_id']
-        );
+        if (GlobalSettings::isAustralian($row['school_id'])) {
+            $qry = "
+                SELECT 
+                    ! ISNULL(tc.th_chidon_id) AS reg_chidon,
+                    tc.th_chidon_id,
+                    tc.invite_used,
+                    ! ISNULL(ur.user_reg_id) AS reg_chayolei,
+                    sri.date_paid AS registered,
+                    u.chayolei,
+                    u.chidon
+                FROM
+                    users u
+                        LEFT JOIN
+                    th_chidon tc ON u.user_id = tc.user_id
+                        AND tc.year = " . ($chidon_year - 1) . "
+                        LEFT JOIN
+                    user_registration ur ON u.user_id = ur.user_id
+                        AND ur.year = " . ($reg_year - 1) . "
+                        LEFT JOIN
+                    school_registrations sri ON u.school_id = sri.school_id
+                        AND sri.year = " . ($reg_year - 1) . "
+                WHERE
+                    u.user_id = ".$row['user_id'];
+        } else {
+            $qry = "
+                SELECT 
+                    ! ISNULL(tc.th_chidon_id) AS reg_chidon,
+                    tc.th_chidon_id,
+                    tc.invite_used,
+                    ! ISNULL(ur.user_reg_id) AS reg_chayolei,
+                    sri.date_paid AS registered,
+                    u.chayolei,
+                    u.chidon
+                FROM
+                    users u
+                        LEFT JOIN
+                    th_chidon tc ON u.user_id = tc.user_id
+                        AND tc.year = " . $chidon_year . "
+                        LEFT JOIN
+                    user_registration ur ON u.user_id = ur.user_id
+                        AND ur.year = " . $reg_year . "
+                        LEFT JOIN
+                    school_registrations sri ON u.school_id = sri.school_id
+                        AND sri.year = " . $reg_year . "
+                WHERE
+                    u.user_id = ".$row['user_id'];
+        }
+
+        $reg_query = mysql_query( $qry );
         $row = array_merge( $row, mysql_fetch_assoc( $reg_query ) );
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
@@ -222,7 +261,7 @@ if ( !empty( $users ) ) {
 
         // chidon registration
          $exceptions = [482,544,583];
-         $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . ($chidon_year + 1);
+         $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . $chidon_year;
          $resNextChidon = mysql_query($sqlNextChidon);
          $children[$row['user_id']]['next_year_chidon'] = $chidon_year;
          if (mysql_num_rows($resNextChidon)) {
