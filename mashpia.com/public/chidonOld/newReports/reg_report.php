@@ -54,7 +54,7 @@ $sql = "
         admins a USING (admin_id)
     WHERE
         tc.year = $year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-    ORDER BY s.school_id , u.last , u.first";
+    ORDER BY reg_date DESC";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
