@@ -94,11 +94,10 @@
           },
           { "label": "KHK Tests", "legacy": true, "path": "/chidonTests/khk_tests.php" },
           { "label": "Finals", "legacy": true, "path": "/chidonTests/finals.php" },
-          { "label": "Custom Test Report", "legacy": true, "path": "/chidonTests/report.php" },
-          { "label": "Report Cards", "path":  "/chidonTests/reportCards" },
-          { "label": "Eligibility Report", "legacy": true, "path": "/chidonTests/eligibility_check.php" }
         ]
       },
+
+      { "label":  "Chidon Registration Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
       
       { "label": "Study Guide / Book report", "legacy": true, "path": "/reports/chidon/combined.php" },
       
