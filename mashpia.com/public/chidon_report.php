@@ -308,7 +308,9 @@ $year = GlobalSettings::getChidonYear();
             foreach ( $totalsByGrade as $grade => $amount ) {
                 if ( is_numeric( $grade ) ) {
                     echo "<tr><td>" . $grade . "</td><td>" . $amount['Boys'] . "</td><td>" . $notSignedUp[$grade]['Boys']['reg'] . "</td><td>" . $notSignedUp[$grade]['Boys']['notReg'];
-                    echo "</td><td>" . $amount['Girls'] . "</td><td>" . $notSignedUp[$grade]['Girls']['reg']  . "</td><td>" . $notSignedUp[$grade]['Girls']['notReg'] . "</td></tr>";
+                    echo "</td><td>";
+                    if (isset($amount['Girls'])) echo $amount['Girls'];
+                    echo "</td><td>" . $notSignedUp[$grade]['Girls']['reg']  . "</td><td>" . $notSignedUp[$grade]['Girls']['notReg'] . "</td></tr>";
 
                     $totals['Boys']['notSignedUp'] += $notSignedUp[$grade]['Boys']['reg'];
                     $totals['Girls']['notSignedUp'] += $notSignedUp[$grade]['Girls']['reg'];
