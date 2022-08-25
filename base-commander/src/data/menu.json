@@ -97,7 +97,7 @@
         ]
       },
 
-      { "label":  "Chidon Registration Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
+      { "label":  "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
       
       { "label": "Study Guide / Book report", "legacy": true, "path": "/reports/chidon/combined.php" },
       
