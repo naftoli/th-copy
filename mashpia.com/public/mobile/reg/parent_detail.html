@@ -663,9 +663,8 @@
 
             $(document).on('click', ".re_register", function () {
                 var id = $(this).parent().parent().parent().attr('id');
-                // if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
-                // else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
-                location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
+                if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
+                else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
             });
 
             $(document).on('click', '.notify', function () {

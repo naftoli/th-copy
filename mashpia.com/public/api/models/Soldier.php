@@ -489,7 +489,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     break;
                 }
             }
-            if (!$school_registered) {
+            if (!$school_registered && !GlobalSettings::isAustralian($this->school_id)) {
                 $result['chayolei'] = true; // disable chayolei reg if school is not registered
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
