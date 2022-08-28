@@ -57,7 +57,6 @@ $sql = "
         c.class_grade,
         c.class_sub,
         c.class_teacher,
-        tc.reg_date,
         a.admin_email,
         a.admin_phone_mobile,
         a.admin_phone_work,
@@ -75,7 +74,8 @@ $sql = "
     WHERE
         aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
             AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-    ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC , last , first
+            AND tc.year = $year 
+    ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC, last , first
 ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
