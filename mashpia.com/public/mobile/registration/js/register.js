@@ -847,6 +847,17 @@ var registrationApp = function() {
         // nextStep()
     }
 
+    const deviceType = () => {
+        const ua = navigator.userAgent;
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+            return "tablet";
+        }
+        else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+            return "mobile";
+        }
+        return "desktop";
+    };
+
     function setupChidonPrizes() {
         // initialize user prize cart
         user_prizes[current_user] = []
@@ -856,12 +867,33 @@ var registrationApp = function() {
             console.log(res)
             var html = ''
 
+            // figure out height needed for items
+            const width = $(window).width()
+            // check for phones
+            // let isMobile = window.matchMedia('only screen and (max-width: 768px)').matches;
+            // if (! isMobile) {
+            //     // check a different way
+            //     const device = deviceType()
+            //     if (device === 'mobile') isMobile = true
+            // }
+            // if (isMobile) {
+            //     height = 'height: 170px;'
+            // }
             for (let prize of res) {
                 var id = prize.prize_id
-                var height = 'height: 100px;'
-                if (prize.personalization) height = 'height: 135px;'
+                var height = 100
+                if (prize.personalization) height = 135
+                if (width < 500) {
+                    if (width < 400) {
+                        height = 130
+                    }
+                    if (prize.personalization) {
+                        if (width > 354) height = 185
+                        else height = 210
+                    }
+                }
                 var personalization = prize.personalization ? 1 : 0
-                html += `<div style="${height} border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
+                html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
                 if (prize.selected) html += 'checked '
@@ -879,7 +911,7 @@ var registrationApp = function() {
                     html += `<br /><span style="font-size: 12px">${prize.personalization}. `
                     if (id == 175) html += 'Limit 12 characters.'
                     else html += 'Limit 22 characters.'
-                    html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" /></span>`
+                    html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" dir="rtl" /></span>`
                 }
                 html += `</div>`
 
@@ -887,6 +919,7 @@ var registrationApp = function() {
             }
             $("#listOfPrizes").empty()
             $("#listOfPrizes").append(html)
+            hebrew_keyboard.attach( ".he_name" ); // use hebrew in the right places
             $("#prizes").modal('show')
 
             $(".prize").click( function(e) {
