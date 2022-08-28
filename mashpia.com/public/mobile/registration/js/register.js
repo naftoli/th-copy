@@ -346,7 +346,6 @@ var registrationApp = function() {
         $("#school").change(function () {
             var gradeMsg = "Select Grade";
             if (localStorage.getItem("locallang") == "he") {
-               
                 gradeMsg = "בחירת כיתה";
             }
             $.post('api/tasks/getGrades.php', { school_id: $(this).val() }, function( result ) {
