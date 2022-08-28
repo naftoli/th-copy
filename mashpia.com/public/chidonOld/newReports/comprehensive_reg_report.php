@@ -74,7 +74,7 @@ $sql = "
     WHERE
         aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
             AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-            AND tc.year = $year 
+            AND (tc.year = $year or tc.year is null)
     ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC, last , first
 ";
 $result = mysql_query($sql);
