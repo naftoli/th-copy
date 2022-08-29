@@ -199,7 +199,7 @@ class GlobalSettings {
     }
 
     public static function isAustralian( $school_id ) {
-        $australian = [ 55, 66, 110, 112, 180, 256, 643 ];
+        $australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713 ];
         return in_array( $school_id, $australian );
     }
 
