@@ -69,13 +69,10 @@ $sql = "
         admin_auths aa ON aa.id = u.user_id
             JOIN
         admins a USING (admin_id)
-            LEFT JOIN
-        th_chidon tc ON tc.user_id = u.user_id
     WHERE
         aa.auth = 'user' AND class_grade in (\"" . implode('","', $grades) . "\")
             AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-            AND (tc.year = $year or tc.year is null)
-    ORDER BY u.school_id , c.class_grade , c.class_sub , tc.reg_date DESC, last , first
+    ORDER BY u.school_id , c.class_grade , c.class_sub , last , first
 ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
