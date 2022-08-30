@@ -174,8 +174,8 @@ $trackYr = 5782;
                     for ($i = 4; $i >= 0; $i--) {
                         echo "<td>";
                         if (($year - $i) >= $trackYr){
-                            // update total possible reg
-                            $totals[$school_id][$class_id]['kids']++;
+                            // update total possible reg for lastest yr
+                            if ($i == 0) $totals[$school_id][$class_id]['kids']++;
                             if (isset($chidonInfo[$user['user_id']][$year - $i])) {
                                 if ($chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
                                     if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track']))
@@ -183,13 +183,11 @@ $trackYr = 5782;
                                     else echo "didn't pass"; // will never show b/c there's no kids that registered for chidon experience but didn't pass
                                 } else {
                                   // if we are in the same year as enrollment, only say 'enrolled'
-                                    if (GlobalSettings::getChidonRegYear() == $year) {
-                                        echo "enrolled";
-                                        // totals are only for current yr
-                                        if ($i == 0) $totals[$school_id][$class_id]['reg']++;
-                                    }
+                                    if (GlobalSettings::getChidonRegYear() == $year) echo "enrolled";
                                     else echo "enrolled but not registered";
                                 }
+                                // totals are only for latest yr
+                                if ($i == 0) $totals[$school_id][$class_id]['reg']++;
                             }
                             else echo "not enrolled";
                         } else {
