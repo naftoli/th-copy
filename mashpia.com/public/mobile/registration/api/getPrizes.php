@@ -18,11 +18,14 @@ $selected = [];
 $sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $selected[] = $row['prize_id'];
+    $selected[$row['prize_id']] = $row;
 }
 
 foreach ($prizes as $idx => $prize) {
-    if (in_array($prize['prize_id'], $selected)) $prizes[$idx]['selected'] = 1;
+    if (in_array($prize['prize_id'], array_keys($selected))) {
+        $prizes[$idx]['selected'] = 1;
+        $prizes[$idx]['he_name'] = $selected[$prize['prize_id']]['he_name'];
+    }
 
     $sql = "select count(*) as total 
             from chidon_user_prizes 

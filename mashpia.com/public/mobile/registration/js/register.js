@@ -911,11 +911,13 @@ var registrationApp = function() {
                     html += `<br /><span style="font-size: 12px">${prize.personalization}. `
                     if (id == 175) html += 'Limit 12 characters.'
                     else html += 'Limit 22 characters.'
-                    html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" data-info="${id}" dir="rtl" /></span>`
+                    html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" 
+                        data-info="${id}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" /></span>`
                 }
                 html += `</div>`
 
                 if (prize.selected) addToPrizes(id, prize.price, personalization)
+                if (prize.he_name) addHeName(id, prize.he_name)
             }
             $("#listOfPrizes").empty()
             $("#listOfPrizes").append(html)
@@ -1301,8 +1303,10 @@ var templates = function(){
                     `)
                 $("#chidon-details").show()
                 // also khk
-                $("#khk-reg-info").hide()
-                $("#khk-edit-info").show()
+                if (user.getChidonInfo.khk_reg === '1') {
+                    $("#khk-reg-info").hide()
+                    $("#khk-edit-info").show()
+                }
             }
         },
         showUser: function( user, index ){
