@@ -181,11 +181,13 @@ $trackYr = 5782;
                                     if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track']))
                                         echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
                                     else echo "didn't pass"; // will never show b/c there's no kids that registered for chidon experience but didn't pass
-                                    // totals are only for current yr
-                                    if ($i == 0) $totals[$school_id][$class_id]['reg']++;
                                 } else {
                                   // if we are in the same year as enrollment, only say 'enrolled'
-                                    if (GlobalSettings::getChidonRegYear() == $year) echo "enrolled";
+                                    if (GlobalSettings::getChidonRegYear() == $year) {
+                                        echo "enrolled";
+                                        // totals are only for current yr
+                                        if ($i == 0) $totals[$school_id][$class_id]['reg']++;
+                                    }
                                     else echo "enrolled but not registered";
                                 }
                             }
