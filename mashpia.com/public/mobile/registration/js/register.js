@@ -804,7 +804,7 @@ var registrationApp = function() {
                 else return showError('You cannot order a Yahadus Book and have it shipped outside of the USA!');
             } else {
                 // shipping to non USA schools is an additional $15
-                let country = selected_user.school.school_country
+                let country = selected_user.school.shipping_country
                 if (! usa.includes(country)) {
                     shipping_charge = 15
                 }
