@@ -14,7 +14,7 @@ $admin = mysql_real_escape_string( $_POST['admin'] );
 require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
-$australian = [ 55, 66, 110, 112, 180, 256, 643 ];
+$australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713 ];
 
 //require 'regFeeSchools.php';
 // require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;

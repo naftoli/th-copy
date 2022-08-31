@@ -418,6 +418,7 @@ var registrationApp = function() {
     
     // cart / payment information
     function step4() {
+        // show hachayol modal first
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-4';
         showSection("step-4");
