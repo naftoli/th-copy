@@ -99,7 +99,7 @@ class UserRegistrationRouter {
         $shipping_charges = intval($shipping_info['shipping_charges']);
         
         // * get all the users that we are registering
-        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'shipping' => $shipping_charges ];
+        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'khk' => 0, 'shipping' => $shipping_charges ];
         $user_ids = [];
         
         // * get each registration
