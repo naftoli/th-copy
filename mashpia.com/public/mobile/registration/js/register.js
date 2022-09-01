@@ -33,6 +33,7 @@ var usa = [
 
 var state = {
     users: [], // the users we are registering
+    registered: [], // registered users (for choosing hachayols)
     selected_users: [], // users selected in step-1
     cart: [], // items that the user is paying for
     shipping_type: 1 // 1 or 2
@@ -141,7 +142,8 @@ var registrationApp = function() {
 
             setupNonThSchoolList()
 
-            if( users.length === 1 ) return step2();
+            // if( users.length === 1 ) return step2();
+            chooseHachayols()
 
             var html = '';
             state.users.forEach( function( user ) {
@@ -1045,7 +1047,12 @@ var registrationApp = function() {
     function nextStep() {
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
-            step3();
+            // find out if there's at least one chaylei registration
+            if (checkForChayoleiReg()) {
+                // choose which child(ren) should receive hachayols
+                chooseHachayols()
+            }
+            else step3();
         } else {
             selected_user = state.selected_users[ current_index ]
             current_user = selected_user.user_id // for using current_user in chidon prizes cart
@@ -1053,6 +1060,16 @@ var registrationApp = function() {
             templates.showUser( selected_user, current_index );
             $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to the top of the page
         }
+    }
+
+    function checkForChayoleiReg() {
+        const reg = state.cart.filter(item => item.meta.registration_type === 'chayolei')
+        return reg.length > 0 ? true : false
+    }
+
+    function chooseHachayols() {
+        const gettingRegistered = state.cart.filter(item => item.meta.registration_type === 'chayolei').filter(item => item.meta.user_id)
+        console.log(gettingRegistered)
     }
 
     function confirmShipping( event ){
@@ -1156,6 +1173,7 @@ var registrationApp = function() {
                 state.users = [];
                 response.users.forEach( function( user ) {
                     user.dob = user.dob ? user.dob.split(" ")[0] : user.dob;
+                    if (user.user_registered > 0) state.registered.push(user)
                     if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
                             user.registrationStatus.chidonEdit === true )
                         state.users.push( user );
