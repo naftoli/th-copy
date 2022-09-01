@@ -35,10 +35,10 @@ function json_error( $msg, $data = false, $code = 400, $die = true ) {
     header("Content-Type: application/json; charset=utf-8;");
     // set success to false
     echo json_encode([
-        "success" => false,
-        "error"    => $msg,
-        "message"  => $msg,
-        "data"   => $data
+        "success"   => false,
+        "error"     => $msg,
+        "message"   => $msg,
+        "data"      => $data
     ]);
     if ( $die ) die();
 }

@@ -1198,15 +1198,12 @@ var registrationApp = function() {
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
-            // if (data.success) {
-                if (showClasses) {
-                    $("#successModal #success").append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
-                }
+            if (data.success === false) {
+                alert(data.error)
+            } else {
+                if (showClasses) $("#successModal #success").append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
                 $("#successModal").modal('show');
-            // } else {
-            //     $("#errorBody").text(data.message)
-            //     $("#errorModal").modal('show')
-            // }
+            }
         });
     }
 
