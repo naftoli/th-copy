@@ -1382,11 +1382,11 @@ var templates = function(){
             templates.toggleRates( user );
 
             // add shipping text where appropriate
-            if (usa.includes(user.parentAccount.admin_country)) {
-                if (user.school.school_id === anash_kinder)  $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
-                else $("#yahadus-shipping").html("Your book will be shipped to your school free of charge.");
+            if (user.school.school_id === anash_kinder) {
+                if (usa.includes(user.parentAccount.admin_country)) $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
+                else $("#yahadus-shipping").html("We do not currently ship internationally. Orders placed to another country will be canceled.")
             } else {
-                if (user.school.school_id === anash_kinder)  $("#yahadus-shipping").html("We do not currently ship internationally. Orders placed to another country will be canceled.")
+                if (usa.includes(user.school.shipping_country)) $("#yahadus-shipping").html("Your book will be shipped to your school free of charge.");
                 else $("#yahadus-shipping").html("There is an extra shipping charge of <b>$15.</b>");
             }
 
