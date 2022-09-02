@@ -360,7 +360,7 @@ class UserRegistrationRouter {
             return $user->to_array([
                 'only'  => [
                     'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he', 'class_id', 'lang_id', 'gender', 'dob',
-                    'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id'
+                    'mobile_pic', 'user_registered', 'user_serial', 'non_th_school', 'non_th_school_id', 'hachayol'
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture', 'parentAccount', 'newPic', 'getDiscount', 'getChidonInfo', 'regYears' ],
                 'include' => [

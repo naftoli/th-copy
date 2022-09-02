@@ -142,8 +142,7 @@ var registrationApp = function() {
 
             setupNonThSchoolList()
 
-            // if( users.length === 1 ) return step2();
-            chooseHachayols()
+            if( users.length === 1 ) return step2();
 
             var html = '';
             state.users.forEach( function( user ) {
@@ -420,7 +419,6 @@ var registrationApp = function() {
     
     // cart / payment information
     function step4() {
-        // show hachayol modal first
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-4';
         showSection("step-4");
@@ -1068,11 +1066,91 @@ var registrationApp = function() {
     }
 
     function chooseHachayols() {
-        const gettingRegistered = state.cart.filter(item => item.meta.registration_type === 'chayolei').filter(item => item.meta.user_id)
-        console.log(gettingRegistered)
+        // if (hachayolAlreadyChosen()) step3()
+        // else {
+            const gettingRegistered = state.cart.filter(item => item.meta.registration_type === 'chayolei').map(item => item.meta.user_id)
+            const alreadyRegistered = state.users.filter(user => user.user_registered > 0).map(user => user.user_id)
+            const ids = [...gettingRegistered, ...alreadyRegistered]
+            const children = state.users.filter(user => ids.includes(user.user_id))
+            let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
+            for (let c in children) {
+                let child = children[c]
+                html += `<div style='float: left; margin-right: 10px;'>
+                            <input type="checkbox" name="hachayol[]" class="hachayol" value="${child.user_id}" ${c == 0 ? 'checked' : ''} /> 
+                            <span class="checkbox"></span></div>
+                          <div>
+                          <div>
+                              ${child.first} ${child.last}
+                          </div><br />`
+            }
+            html += "</div>"
+            $("#hachayolChildren").empty().append(html)
+            $("#hachayol").modal('show')
+            $("#hachayol").on('hidden.bs.modal', function (e) {
+                updateHachayol()
+                  .then(res => res.json())
+                  .then(data => {
+                      if (! data.success) {
+                          alert('Error updating hachayol.')
+                          console.log(data.error)
+                      } else {
+                          calculateHachayolCost()
+                          step3()
+                      }
+                  })
+                  .catch(error => console.error('Error: ', error))
+            })
+        // }
     }
 
-    function confirmShipping( event ){
+    function updateHachayol() {
+        let info = {}
+        $(".hachayol").each( function() {
+            let id = $(this).val()
+            let checked = $(this).is(":checked")
+            info.id = checked ? 1 : 0
+        })
+        return fetch('/ajax/updateHachayol.php', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ info })
+        })
+    }
+
+    function hachayolAlreadyChosen() {
+        const chosen = state.users.filter(user => user.hachayol == 1)
+        console.log(chosen)
+        return chosen.length ? 1 : 0
+    }
+
+    function calculateHachayolCost() {
+        let user_ids = []
+        $(".hachayol").each( function() {
+            let id = $(this).val()
+            let checked = $(this).is(":checked")
+            if (checked) user_ids.push(id)
+        })
+        const num = user_ids.length
+        if (num > 1) {
+            // only charge for children after first child
+            for (i = 1; i < num; i++) {
+                let id = user_ids[i]
+                state.cart.push({
+                    description: `Extra Hachayol Fee (ID: ${id})`,
+                    price: 20,
+                    meta: {
+                        type: 'hachayol',
+                        paid: 20,
+                        user_id: id
+                    }
+                })
+            }
+        }
+    }
+
+    function confirmShipping( event ) {
         event.preventDefault();
         // remove any old shipping items from the cart
         state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
@@ -1341,7 +1419,11 @@ var templates = function(){
 
             // hide chayolei reg if not applicable
             if (user.registrationStatus.chayolei) $("#chayolei-registration").hide()
-            else $("#chayolei-registration").show()
+            else {
+                // reset chayolei reg checkbox if needed
+                if (document.getElementById('chayolei').checked) document.getElementById('chayolei').checked = false
+                $("#chayolei-registration").show()
+            }
 
             // hide chidon reg if not applicable
             if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
