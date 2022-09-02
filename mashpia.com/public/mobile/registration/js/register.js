@@ -1145,7 +1145,11 @@ var registrationApp = function() {
         // check how many kids already have hachayol setup from before (this will tell us how many have been paid for)
         const info = await fetch('/ajax/hachayols/getHachayolsPaid.php').then(res => res.json())
         // only charge for extra hachayols not paid for
-        if (info.success) num -= info.paidFor
+        if (info.success) {
+            const users = info.data
+            const numPaid = users.length
+            num -= numPaid
+        }
         else alert(info.error)
 
         if (num > 1) {

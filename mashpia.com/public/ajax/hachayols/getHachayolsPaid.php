@@ -36,6 +36,6 @@ if (!$admin) {
     $rows = $stmt->fetchAll();
     echo json_encode([
         'success'   => true,
-        'paidFor'   => count($rows)
+        'data'      => $rows
     ]);
 }
