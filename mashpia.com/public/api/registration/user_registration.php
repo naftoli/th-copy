@@ -95,11 +95,12 @@ class UserRegistrationRouter {
         $payment_info = $_POST['payment'];
         $total = intval( $payment_info['total'] );
         $registrations = $_POST['registrations'];
+        $hachayols = $_POST['hachayols'];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         
         // * get all the users that we are registering
-        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'khk' => 0, 'shipping' => $shipping_charges ];
+        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'khk' => 0, 'hachayols' => 0, 'shipping' => $shipping_charges ];
         $user_ids = [];
         
         // * get each registration
@@ -115,6 +116,11 @@ class UserRegistrationRouter {
             else $totals[$info['registration_type']] += intval($info['paid']);
         }
 
+        // add each hachayol fee
+        foreach ($hachayols as $hachayol) {
+            if (is_numeric($hachayol['paid'])) $totals['hachayols'] += intval($hachayol['paid']);
+        }
+
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
@@ -127,7 +133,7 @@ class UserRegistrationRouter {
         $totals_string = trim( $totals_string );
         // get the description four our database
         $user_serials = array_map( function( $user ){ return $user->user_serial . ':' . $user->school_id; }, $users);
-        $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
+        $year = GlobalSettings::getRegistrationYear();
         $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
         
         /******************************** PAYMENT ********************************/
@@ -338,6 +344,7 @@ class UserRegistrationRouter {
                         );
                     }
                 }
+
                 if ( count( $user_errors ) > 0 ) 
                     $errors[$user->user_id] = $user_errors;
             }
@@ -350,7 +357,12 @@ class UserRegistrationRouter {
             @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
             json_error( 'There were errors.', $errors );
         }
-        
+
+        foreach ($hachayols as $hachayol) {
+            $user = \Soldier::find_by_pk($hachayol['user_id']);
+            $user->registrationCharge('hachayol', $hachayol['paid'], $trans_id, $year);
+        }
+
         json_response( "Successfully Registered." );
     }
 
