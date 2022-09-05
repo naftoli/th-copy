@@ -33,6 +33,7 @@ var usa = [
 
 var state = {
     users: [], // the users we are registering
+    registered: [], // registered users (for choosing hachayols)
     selected_users: [], // users selected in step-1
     cart: [], // items that the user is paying for
     shipping_type: 1 // 1 or 2
@@ -418,7 +419,6 @@ var registrationApp = function() {
     
     // cart / payment information
     function step4() {
-        // show hachayol modal first
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-4';
         showSection("step-4");
@@ -1045,7 +1045,12 @@ var registrationApp = function() {
     function nextStep() {
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
-            step3();
+            // find out if there's at least one chaylei registration
+            if (checkForChayoleiReg()) {
+                // choose which child(ren) should receive hachayols
+                chooseHachayols()
+            }
+            else step3();
         } else {
             selected_user = state.selected_users[ current_index ]
             current_user = selected_user.user_id // for using current_user in chidon prizes cart
@@ -1055,7 +1060,120 @@ var registrationApp = function() {
         }
     }
 
-    function confirmShipping( event ){
+    function checkForChayoleiReg() {
+        const reg = state.cart.filter(item => item.meta.registration_type === 'chayolei')
+        return reg.length > 0 ? true : false
+    }
+
+    function chooseHachayols() {
+        const gettingRegistered = state.cart.filter(item => item.meta.registration_type === 'chayolei').map(item => item.meta.user_id)
+        const alreadyRegistered = state.users.filter(user => user.user_registered > 0).map(user => user.user_id)
+        const ids = [...gettingRegistered, ...alreadyRegistered]
+
+        const children = state.users.filter(user => ids.includes(user.user_id))
+        let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
+        for (let c in children) {
+            let child = children[c]
+            html += `<label for="${child.user_id}">
+                          <div style='float: left; margin-right: 10px;'>
+                            <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" ${c == 0 ? 'checked' : ''} /> 
+                            <span class="checkbox"></span>
+                          </div>
+                          <div>
+                              ${child.first} ${child.last}
+                          </div>
+                      </label>
+                      <br />`
+        }
+        html += "</div>"
+
+        $("#hachayolChildren").empty().append(html)
+        $("#hachayol").modal('show')
+
+        $("#hachayol").on('hidden.bs.modal', processHachayol)
+
+        $(document).on('click', '.hachayol', function(e) {
+            // find out if there are any other checks
+            let numChecked = $(".hachayol:checked").length
+            if (! numChecked && !$(this).is(":checked")) {
+                // if not, keep this child checked
+                alert('You must have at least one child checked.')
+                e.preventDefault()
+            }
+        })
+    }
+
+    async function processHachayol() {
+        const data = await updateHachayol().then(res => res.json())
+        if (! data.success) {
+            alert(data.error)
+            $("#hachayol").modal('show')
+        } else {
+            await calculateHachayolCost()
+            step3()
+        }
+    }
+
+    async function updateHachayol() {
+        let info = {}
+        $(".hachayol").each( function() {
+            let id = $(this).val()
+            let checked = $(this).is(":checked")
+            info[id] = checked ? 1 : 0
+        })
+        return await fetch('/ajax/hachayols/updateHachayol.php', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ info })
+        })
+    }
+
+    async function calculateHachayolCost() {
+        // remove any existing hachayol info in cart
+        state.cart = state.cart.filter(item => item.meta.type != 'hachayol')
+
+        let user_ids = []
+        $(".hachayol").each( function() {
+            let id = $(this).val()
+            let checked = $(this).is(":checked")
+            if (checked) user_ids.push(id)
+        })
+        let num = user_ids.length
+
+        // check how many children were already paid for by this admin
+        const info = await fetch('/ajax/hachayols/getHachayolsPaid.php').then(res => res.json())
+        // only charge for extra hachayols not paid for
+        if (info.success) {
+            const users = info.data
+            const numPaid = users.length
+            num -= numPaid
+        }
+        else alert(info.error)
+
+        if (num > 1) {
+            // only charge for EXTRA children
+            for (i = 1; i < num; i++) {
+                let id = user_ids[i]
+                // make sure this id is not in cart already (for some reason it can be there when going "back")
+                const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
+                if (! inCart.length) {
+                    state.cart.push({
+                        description: `Extra Hachayol Fee (ID: ${id})`,
+                        price: 20,
+                        meta: {
+                            type: 'hachayol',
+                            paid: 20,
+                            user_id: id
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    function confirmShipping( event ) {
         event.preventDefault();
         // remove any old shipping items from the cart
         state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
@@ -1156,6 +1274,7 @@ var registrationApp = function() {
                 state.users = [];
                 response.users.forEach( function( user ) {
                     user.dob = user.dob ? user.dob.split(" ")[0] : user.dob;
+                    if (user.user_registered > 0) state.registered.push(user)
                     if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
                             user.registrationStatus.chidonEdit === true )
                         state.users.push( user );
@@ -1194,6 +1313,7 @@ var registrationApp = function() {
         return new Promise( function( resolve, reject ){
             var cart_details = state.cart.map( function(item){ return item.meta } );
             postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
+            postData.hachayols = cart_details.filter(item => item.type == 'hachayol')
             postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
@@ -1323,7 +1443,11 @@ var templates = function(){
 
             // hide chayolei reg if not applicable
             if (user.registrationStatus.chayolei) $("#chayolei-registration").hide()
-            else $("#chayolei-registration").show()
+            else {
+                // reset chayolei reg checkbox if needed
+                if (document.getElementById('chayolei').checked) document.getElementById('chayolei').checked = false
+                $("#chayolei-registration").show()
+            }
 
             // hide chidon reg if not applicable
             if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
