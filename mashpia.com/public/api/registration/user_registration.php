@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
+
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 include_once( __DIR__ . "/../../class.globalSettings.php" );
@@ -98,43 +100,56 @@ class UserRegistrationRouter {
         $hachayols = $_POST['hachayols'];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
-        
-        // * get all the users that we are registering
-        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'khk' => 0, 'hachayols' => 0, 'shipping' => $shipping_charges ];
+        $year = GlobalSettings::getRegistrationYear();
+
+        // make sure info is correct and create array of user ids
         $user_ids = [];
-        
-        // * get each registration
-        foreach( $registrations as $info ){
-            if (isset($info['user_id'])) {
-                if (!in_array($info['user_id'], $user_ids)) $user_ids[] = $info['user_id'];
-            }
-            if (!is_numeric($info['paid'])) {
+        foreach ($registrations as $reg) {
+            if (! is_numeric($reg['paid'])) {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
             }
-            if (isset($info['discount'])) $totals[$info['registration_type']] += intval($info['paid']) - intval($info['discount']);
-            else $totals[$info['registration_type']] += intval($info['paid']);
-        }
-
-        // add each hachayol fee
-        foreach ($hachayols as $hachayol) {
-            if (is_numeric($hachayol['paid'])) $totals['hachayols'] += intval($hachayol['paid']);
+            if (! in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
         }
 
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
-        
-        // * get the transaction description
-        $totals_string = '';
-        foreach( $totals as $k => $v ) {
-            if ( $v > 0 ) $totals_string .= "$k: $v ";
+
+        // keep user id -> serial number:school_id associations for description
+        $user_serials = [];
+        foreach ($users as $user) {
+            $user_serials[$user->user_id] = $user->user_serial . ":" . $user->school_id;
         }
-        $totals_string = trim( $totals_string );
-        // get the description four our database
-        $user_serials = array_map( function( $user ){ return $user->user_serial . ':' . $user->school_id; }, $users);
-        $year = GlobalSettings::getRegistrationYear();
-        $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
+
+        // description for authorize and db
+        $desc = [];
+        foreach ($registrations as $reg) {
+            if (intval($reg['paid']) > 0) {
+                $desc[$reg['user_id']][$reg['registration_type']] = $reg['paid'];
+            }
+        }
+        foreach ($hachayols as $hachayol) {
+            $desc[$hachayol['user_id']]['hachayol'] = $hachayol['paid'];
+        }
+
+        $description = '';
+        foreach ($desc as $user_id => $details) {
+            $serial = $user_serials[$user_id];
+            $description .= "(" . $serial . " -";
+            $first = true;
+            foreach ($details as $type => $paid) {
+                if ($first) {
+                    $first = false;
+                    $description .= " ";
+                } else {
+                    $description .= ", ";
+                }
+                $description .= $type . ": " . $paid;
+            }
+            $description .= ") ";
+        }
+        if ($shipping_charges) $description .= "Family Shipping: " . $shipping_charges;
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
@@ -277,37 +292,6 @@ class UserRegistrationRouter {
                                         Please reach out to your school's Chidon coordinator with any questions.
                                         <br /><br />
                                         Hatzlocha Rabba in your learning!";
-//                                        <br /><br/>
-//                                        We hope you will take full advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
-//                                        <br /><br />
-//                                        In order to begin learning, your child will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5)
-//                                        along with the accompanying study guide, that will help them optimize their study with information needed from each unit, corrections and study aids.
-//                                        <br /><br />
-//                                        Please speak to your school's Chidon coordinator to order these items. (The study guide is also available online.)
-//                                        <br /><br />
-//                                        To download a copy of the study guide and to view important dates for Chidon tests and the Shabbaton, visit <a href='www.thechidon.com'>www.thechidon.com</a>.
-//                                        <br /><br />
-//                                        If you have any questions regarding the Limmud, please contact your school's Base Commander.
-//                                        <br /><br />
-//                                        If you have any questions regarding your credit card charges please contact <a href='mailto:accounting@tzivoshashem.org'>Accounting@TzivosHashem.org</a>";
-//                            if ( $user->school_id == 61 ) {
-//                                $message = "
-//                                Mazal Tov! Your child(ren) are enrolled in the Chidon Limmud program for $year.
-//                                <br /><br />
-//                                We hope you will take advantage from the resources available for this phenomenal journey, and utilize the opportunities to study and bond with your child.
-//                                <br /><br />
-//                                This is also an opportunity to have a Bubby or Zaidy learn with your child weekly.
-//                                <br /><br />
-//                                MyShliach's online classes is very popular and will help keep your child/ren on a schedule as well as connect with like minded friends throughout this journey. Click <a href='https://www.thechidon.com/resources/online-classes/'>Here</a> to sign up for the classes.
-//                                In order to begin learning, your child/ren will need the Yahadus book corresponding to their grade (Grade 4 - Book 1; Grade 5 - Book 2; Grade 6- Book 3; Grade 7 - Book 4; Grade 8 - Book 5) along with the accompanying study guide, that will help them optimize their study with information needed for each unit, as well as corrections and study aids.
-//                                <br /><br />
-//                                Study guides will be shipped to your home. To download a copy of the study guide and to view important dates for the Chidon tests and Shabbaton, visit <a href='http://www.thechidon.com'>www.thechidon.com</a>.
-//                                <br /><br /><br />
-//                                Wishing you Much Hatzlocho!
-//                                <br /><br />
-//                                For any questions throughout the duration of the Chidon Zman please be in touch with your Chidon Coordinator at MyShliach.";
-//                                $headers[] = "Cc: chidon@myshliach.com";
-//                            }
 
                             $to = $admin->admin_email;
                             if ( $to ) {
