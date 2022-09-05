@@ -1142,7 +1142,7 @@ var registrationApp = function() {
         })
         let num = user_ids.length
 
-        // check how many kids already have hachayol setup from before (this will tell us how many have been paid for)
+        // check how many children were already paid for by this admin
         const info = await fetch('/ajax/hachayols/getHachayolsPaid.php').then(res => res.json())
         // only charge for extra hachayols not paid for
         if (info.success) {
@@ -1313,7 +1313,7 @@ var registrationApp = function() {
         return new Promise( function( resolve, reject ){
             var cart_details = state.cart.map( function(item){ return item.meta } );
             postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
-            postData.hachayols = cart.details.filter(item => item.type == 'hachayol')
+            postData.hachayols = cart_details.filter(item => item.type == 'hachayol')
             postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
