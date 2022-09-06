@@ -290,7 +290,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chayolei reg
-        $children[$row['user_id']]['reg_types']['chayolei'] = false;
+        if (! in_array($row['school_id'], [49, 192])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
