@@ -101,11 +101,7 @@ class GlobalSettings {
      * @return integer
      */
     public static function getRegCost( $type ) {
-        if ( $type == 1 ) { // In Tuition
-            return 50;
-        }
-        // everyone else / default return
-        return 60;
+        return $type == 1 ? 50 : 60;
     }
 
     /**
@@ -150,12 +146,12 @@ class GlobalSettings {
         if ( $no_discount )
             return $fee >= 0 ? $fee : 0;
         // add early bird discount ( not for type 1 )
-        if ( $type != 1 && $early_bird )
+        if ( $type != 1 && $early_bird && $is_soldier )
             $fee -= self::getEarlyBird();
         // add type 2 discount
-        if ( $type == 2 && $early_bird ) {
-            $fee -= self::getGuaranteedDiscount();
-        }
+//        if ( $type == 2 && $early_bird ) {
+//            $fee -= self::getGuaranteedDiscount();
+//        }
         // do not allow negative numbers
         return $fee >= 0 ? $fee : 0;
     }

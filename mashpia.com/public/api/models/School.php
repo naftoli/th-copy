@@ -122,7 +122,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         if ( !$for_type )
             $for_type = $this->reg_type;
 
-        $early_bird = new DateTime() <  $this->earlyBird();
+        $early_bird = new DateTime() <  $this->earlyBird() && $this->school_id != 269; // anash kinder doesn't get early bird
 
         // check if hq set the chayolei fee
 //        $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");

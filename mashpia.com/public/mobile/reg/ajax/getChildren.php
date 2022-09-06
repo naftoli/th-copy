@@ -236,22 +236,24 @@ if ( !empty( $users ) ) {
 
         // add remove reg button for children that are tuition school and parents registered but school didn't register
         $children[$row['user_id']]['removeRegButton'] = 0;
-        $sqlRemove = "select * from reg_confirmations where user_id = " . $row['user_id'] . " and year = " . $reg_year;
-        $resRemove = mysql_query($sqlRemove);
-        $confirmed = mysql_num_rows($resRemove);
-        if ( $confirmed ) {
-            $children[$row['user_id']]['removeRegButton'] = 1;
-        }
+//        $sqlRemove = "select * from reg_confirmations where user_id = " . $row['user_id'] . " and year = " . $reg_year;
+//        $resRemove = mysql_query($sqlRemove);
+//        $confirmed = mysql_num_rows($resRemove);
+//        if ( $confirmed ) {
+//            $children[$row['user_id']]['removeRegButton'] = 1;
+//        }
 
         // if school is tuition type, and school has registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         $children[$row['user_id']]['confirmationOnly'] = 0;
-        if ( intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !$confirmed && !GlobalSettings::isAustralian($row['school_id']) ) {
-            $children[$row['user_id']]['chayoleiRegistered'] = false;
-            $children[$row['user_id']]['reg_types']['chayolei'] = true;
-            $children[$row['user_id']]['needsReg'] = 1;
-            $children[$row['user_id']]['confirmationOnly'] = 1;
-        }
+        // if tuition school, turn off registration
+        if (intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !GlobalSettings::isAustralian($row['school_id'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+//        if ( intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !$confirmed && !GlobalSettings::isAustralian($row['school_id']) ) {
+//            $children[$row['user_id']]['chayoleiRegistered'] = false;
+//            $children[$row['user_id']]['reg_types']['chayolei'] = true;
+//            $children[$row['user_id']]['needsReg'] = 1;
+//            $children[$row['user_id']]['confirmationOnly'] = 1;
+//        }
 
         // for testing
         // if ( in_array( $row['user_id'], [ 8273, 13159, 19274, 22722, 50814, 50836 ] ) ) {

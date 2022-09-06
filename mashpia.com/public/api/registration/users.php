@@ -42,7 +42,6 @@ class UsersRouter {
             // generate the platoon name
             $platoon = Platoon::generateName( $row['class_grade'], $row['class_sub'] );
 
-            $early_bird = $school->earlyBird();
             $fee = $school->soldierFee();
             $type = $school->reg_type;
             // format and return just the data we want...

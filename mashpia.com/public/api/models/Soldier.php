@@ -496,7 +496,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         // disable chayolei
         $result['chayolei'] = true;
-        if (in_array($this->user_id, [5455, 19085])) $result['chayolei'] = false;
+        if (in_array($this->parentAccount()['admin_id'], [3, 1264])) $result['chayolei'] = false;
 
         // check if child is eligible for khk when registering for chidon
         $eligibility = KHK::getKHKEligibility([$this->user_id]);
@@ -516,20 +516,22 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         $result['confirmation'] = false;
-        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
-            $confStmt = $MASHPIA_DB->prepare("
-                SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
-            ");
-            $confStmt->execute([
-                ':user' => $this->user_id,
-                ':year' => $year
-            ]);
-            $rows = $confStmt->fetchAll();
-            if ( empty( $rows ) ) {
-//                $result['chayolei'] = false;
-                $result['confirmation'] = true;
-            }
-        }
+        // if tuition school, turn off chayolei
+        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) $result['chayolei'] = true;
+//        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
+//            $confStmt = $MASHPIA_DB->prepare("
+//                SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
+//            ");
+//            $confStmt->execute([
+//                ':user' => $this->user_id,
+//                ':year' => $year
+//            ]);
+//            $rows = $confStmt->fetchAll();
+//            if ( empty( $rows ) ) {
+////                $result['chayolei'] = false;
+//                $result['confirmation'] = true;
+//            }
+//        }
 
         return $result;
     }
