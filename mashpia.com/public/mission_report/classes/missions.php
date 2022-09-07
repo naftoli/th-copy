@@ -54,7 +54,9 @@ class Missions {
 			// the idea was to disable personalization for OT so that there's the same number of pages that get printed for every child in each class, 
 			// but since it doesn't help anyway (b/c ages could be different in same class), the if statment will not return true but false
 			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // don't show birthday missions for OT
-		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $user->lang_id, $printing_mode );
+            // only show 'en' or 'yi' for OT
+            $lang_id = $row['school_id'] == 255 ? ($user->lang_id == 1 ? $user->lang_id : 2) : $user->lang_id;
+		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $lang_id, $printing_mode );
 		    array_push( $this->missions, $user );
 		}
 	}
