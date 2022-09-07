@@ -494,8 +494,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
-        // disable chayolei
-        if (! in_array($this->school_id, [49, 192])) $result['chayolei'] = true;
+        // disable chayolei for beis rivka ch and bnos menachem
+        if (in_array($this->school_id, [7, 54])) $result['chayolei'] = true;
 
         // check if child is eligible for khk when registering for chidon
         $eligibility = KHK::getKHKEligibility([$this->user_id]);
