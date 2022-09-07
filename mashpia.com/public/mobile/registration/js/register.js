@@ -1932,7 +1932,7 @@ var templates = function(){
                     if (type === 'chayolei') {
                         // setup chayolei fee dropdown
                         let htmlFee = '';
-                        let rates = [100, 75, 60, 55, 50, 45, 40];
+                        let rates = [100, 75, 60, 55, 50];
                         let rate = user.registrationRates[type]
                         for (let n of rates) {
                             if (n < user.registrationRates[type]) break;
