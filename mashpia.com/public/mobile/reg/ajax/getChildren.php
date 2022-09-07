@@ -290,7 +290,7 @@ if ( !empty( $users ) ) {
         }
 
         // disable chayolei for beis rivka ch
-        if (in_array($row['school_id'], [54])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+        if (in_array($row['school_id'], [9, 54])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
