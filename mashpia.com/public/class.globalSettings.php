@@ -100,8 +100,19 @@ class GlobalSettings {
      * @param boolean $school
      * @return integer
      */
-    public static function getRegCost( $type ) {
-        return $type == 1 ? 50 : 60;
+    public static function getRegCost($type, bool $early_bird) {
+        if ($early_bird) {
+            switch ($type) {
+                case 1:
+                case 2:
+                    return 50;
+                    break;
+                case 3:
+                    return 55;
+                    break;
+            }
+        }
+        else return 60;
     }
 
     /**
@@ -131,29 +142,29 @@ class GlobalSettings {
         // ckids has no fee
         if ( $ckids ) return 0;
 
-        // type 1 soldiers pay nothing
+        // type 1 soldiers pay nothing in parent acct
         if ( $type == 1 && $is_soldier ) {
             return 0;
         } else if (!is_null($fee)) {
             return intval($fee);
         } else {
-            $fee = self::getRegCost( $type );
+            return self::getRegCost( $type, $early_bird );
         }
 
         // cast it to a float value
-        $fee = intval( $fee );
-        // return the final rate if requested
-        if ( $no_discount )
-            return $fee >= 0 ? $fee : 0;
-        // add early bird discount ( not for type 1 )
-        if ( $type != 1 && $early_bird && $is_soldier )
-            $fee -= self::getEarlyBird();
-        // add type 2 discount
+//        $fee = intval( $fee );
+//        // return the final rate if requested
+//        if ( $no_discount )
+//            return $fee >= 0 ? $fee : 0;
+//        // add early bird discount ( not for type 1 )
+//        if ( $type != 1 && $early_bird && $is_soldier )
+//            $fee -= self::getEarlyBird();
+//        // add type 2 discount
 //        if ( $type == 2 && $early_bird ) {
 //            $fee -= self::getGuaranteedDiscount();
 //        }
         // do not allow negative numbers
-        return $fee >= 0 ? $fee : 0;
+//        return $fee >= 0 ? $fee : 0;
     }
 
     /**
