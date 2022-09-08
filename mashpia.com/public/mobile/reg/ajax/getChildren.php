@@ -246,8 +246,6 @@ if ( !empty( $users ) ) {
         // if school is tuition type, and school has registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         $children[$row['user_id']]['confirmationOnly'] = 0;
-        // if tuition school, turn off registration
-        if (intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !GlobalSettings::isAustralian($row['school_id'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 //        if ( intval($row['reg_type']) == 1 && $children[$row['user_id']]['chayoleiRegistered'] && !$confirmed && !GlobalSettings::isAustralian($row['school_id']) ) {
 //            $children[$row['user_id']]['chayoleiRegistered'] = false;
 //            $children[$row['user_id']]['reg_types']['chayolei'] = true;
@@ -260,6 +258,9 @@ if ( !empty( $users ) ) {
         // 	$children[$row['user_id']]['needsReg'] = 1;
         // 	$children[$row['user_id']]['reg_types']['chayolei'] = true;
         // }
+
+        // if tuition school, turn off registration
+        if (intval($row['reg_type']) == 1 && $children[$row['user_id']]['reg_types']['chayolei']) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // chidon registration
          $exceptions = [482,544,583];
@@ -288,9 +289,6 @@ if ( !empty( $users ) ) {
         if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
         }
-
-        // disable chayolei for beis rivka ch
-        if (in_array($row['school_id'], [9, 54])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;

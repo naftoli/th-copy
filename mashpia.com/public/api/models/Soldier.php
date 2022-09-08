@@ -494,8 +494,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
-        // disable chayolei for beis rivka ch
-        if (in_array($this->school_id, [9, 54])) $result['chayolei'] = true;
 
         // check if child is eligible for khk when registering for chidon
         $eligibility = KHK::getKHKEligibility([$this->user_id]);
@@ -515,8 +513,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // if school is tuition type, and school registered child, we still need parent to confirm info if coming from parent acct
         // only if not australian schools
         $result['confirmation'] = false;
-        // if tuition school, turn off chayolei
-        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) $result['chayolei'] = true;
 //        if ( !$isBC && $result['chayolei'] && intval($row['reg_type']) == 1 && !GlobalSettings::isAustralian( $this->school_id ) ) {
 //            $confStmt = $MASHPIA_DB->prepare("
 //                SELECT * FROM reg_confirmations WHERE user_id = :user AND year = :year
@@ -531,6 +527,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 //                $result['confirmation'] = true;
 //            }
 //        }
+
+        // if tuition school, turn off chayolei
+        if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         return $result;
     }
