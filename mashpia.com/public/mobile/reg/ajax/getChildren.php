@@ -260,7 +260,7 @@ if ( !empty( $users ) ) {
         // }
 
         // if tuition school, turn off registration
-        if (intval($row['reg_type']) == 1 && $children[$row['user_id']]['reg_types']['chayolei']) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+        if (intval($row['reg_type']) == 1 && !$row['reg_chayolei'] && $row['chayolei']) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // chidon registration
          $exceptions = [482,544,583];
