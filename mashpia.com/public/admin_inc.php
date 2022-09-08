@@ -65,7 +65,7 @@ if (!isset($menu_type))
                 <li></li><br /> 
             <? } ?>
             <li><a href="isserRanks.php">Isser's Rank Summary Report</a></li>
-            <li><a href="isserRanksSummary.php.php">Isser's Rank Summary Only Report</a></li>
+            <li><a href="isserRanksSummary.php">Isser's Rank Summary Only Report</a></li>
             <li></li><br />
             <? if (new DateTime() < new DateTime("2021-07-01 00:00:00")) { # leave links here for a month until 2021-07-01 ?>
                 <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?> (Moved to promotions menu)</A>
