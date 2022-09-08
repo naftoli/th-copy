@@ -2170,7 +2170,7 @@ function get_block_categories( $post ) {
 	 * @param array   $default_categories Array of block categories.
 	 * @param WP_Post $post               Post being loaded.
 	 */
-	return apply_filters( 'block_categories_all', $default_categories, $post );
+	return apply_filters( 'block_categories', $default_categories, $post );
 }
 
 /**
