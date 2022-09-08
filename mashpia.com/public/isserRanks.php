@@ -84,7 +84,7 @@ function getRank($user) {
             $super = true;
         }
         require_once 'class.adminSchools.php';      
-        $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+        $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], false );
         $schools = $as->getSchools();
         ?>
         <div class='no-print'>
