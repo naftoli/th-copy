@@ -97,7 +97,7 @@ class UserRegistrationRouter {
         $payment_info = $_POST['payment'];
         $total = intval( $payment_info['total'] );
         $registrations = $_POST['registrations'];
-        $hachayols = $_POST['hachayols'];
+        $hachayols = isset($_POST['hachayol']) ? $_POST['hachayols'] : [];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         $year = GlobalSettings::getRegistrationYear();
