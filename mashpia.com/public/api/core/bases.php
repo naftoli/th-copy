@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['HTTP_HOST'] == 'localhost') header('Access-Control-Allow-Origin: *'); // CORS
+if ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == 'tzivos.local') header('Access-Control-Allow-Origin: *'); // CORS
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
