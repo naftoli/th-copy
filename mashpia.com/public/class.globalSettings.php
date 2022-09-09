@@ -101,18 +101,19 @@ class GlobalSettings {
      * @return integer
      */
     public static function getRegCost($type, bool $early_bird) {
+        $cost = 60;
         if ($early_bird) {
             switch ($type) {
                 case 1:
                 case 2:
-                    return 50;
+                    $cost = 50;
                     break;
                 case 3:
-                    return 55;
+                    $cost = 55;
                     break;
             }
         }
-        else return 60;
+        return $cost;
     }
 
     /**
@@ -147,9 +148,10 @@ class GlobalSettings {
             return 0;
         } else if (!is_null($fee)) {
             return intval($fee);
-        } else {
-            return self::getRegCost( $type, $early_bird );
         }
+
+        $fee = self::getRegCost( $type, $early_bird );
+        return $fee > 0 ?? 0;
 
         // cast it to a float value
 //        $fee = intval( $fee );
