@@ -151,7 +151,7 @@ class GlobalSettings {
         }
 
         $fee = self::getRegCost( $type, $early_bird );
-        return $fee > 0 ?? 0;
+        return $fee > 0 ? $fee : 0;
 
         // cast it to a float value
 //        $fee = intval( $fee );
