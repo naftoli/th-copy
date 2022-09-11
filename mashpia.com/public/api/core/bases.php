@@ -29,12 +29,12 @@ class BaseRouter {
     public function defaults() {
         $base = new \School();
         // format the response
-        json_response( (array) $base );
+        json_response( (array)$base );
     }
 
     public function show( $id ) {
         $base = \School::find([ $id ]);
-        json_response( (array) $base );
+        json_response( (array)$base );
     }
 
     public function update( $id ) {
