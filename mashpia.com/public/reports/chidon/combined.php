@@ -114,7 +114,7 @@ $booklet_grand_totals = [
     From Date: <input type="datetime-local" name="fromDate" />
     To Date: <input type="datetime-local" name="toDate" />
   </p>
-  <input type="checkbox" name="not_shipped" value="not_shipped" id="not_shipped" /> Only show not yet shipped books<br />
+  <input type="checkbox" name="not_shipped" value="not_shipped" id="" /> Only show not yet shipped books<br />
   <input type="submit" name="submit" value="Refresh Report" />
 </form>
 <div style="page-break-after: always;"></div>
@@ -123,11 +123,13 @@ $booklet_grand_totals = [
 <input type="checkbox" class="checkBooks" /> Mark all books as shipped<br />
 <?php
 $totals = [];
+$book_totals = [];
+$booklet_totals = [];
 foreach( $combined_users as $school_id => $users ) {
     $totals[$school_id]['booklets'] = 0;
     $totals[$school_id]['books'] = 0;
 
-    $book_totals = [
+    $book_totals[$school_id] = [
         1   =>  0,
         2   =>  0,
         3   =>  0,
@@ -135,7 +137,7 @@ foreach( $combined_users as $school_id => $users ) {
         5   =>  0
     ];
 
-    $booklet_totals = [
+    $booklet_totals[$school_id] = [
         1   =>  0,
         2   =>  0,
         3   =>  0,
@@ -193,14 +195,14 @@ foreach( $combined_users as $school_id => $users ) {
       </tr>
         <?php
         // totals of school
-        $booklet_totals[$user['book']]++;
+        $booklet_totals[$school_id][$user['book']]++;
         // totals per school
         $totals[$school_id]['booklets']++;
         // grand totals
         $booklet_grand_totals[$user['book']]++;
         // add to book totals if we have more than one entry for this student
         if ( $user['total'] > 1 ) {
-            $book_totals[$user['book']]++;
+            $book_totals[$school_id][$user['book']]++;
             $totals[$school_id]['books']++;
             $book_grand_totals[$user['book']]++;
         }
@@ -216,7 +218,7 @@ foreach( $combined_users as $school_id => $users ) {
       <th>Total</th>
     </tr>
       <?php
-      foreach ( $booklet_totals as $booklet => $total ) {
+      foreach ( $booklet_totals[$school_id] as $booklet => $total ) {
           echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
       }
       ?>
@@ -228,7 +230,7 @@ foreach( $combined_users as $school_id => $users ) {
       <th>Total</th>
     </tr>
       <?php
-      foreach ( $book_totals as $book => $total ) {
+      foreach ( $book_totals[$school_id] as $book => $total ) {
           echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
       }
       ?>
@@ -247,21 +249,41 @@ foreach( $combined_users as $school_id => $users ) {
   <thead>
   <tr>
     <th>Base</th>
-    <th># of Study Guides</th>
-    <th># of Books</th>
+    <th colspan="5">Study Guides</th>
+    <th colspan="5">Books</th>
+  </tr>
+  <tr>
+    <th></th>
+      <?php
+      for ($j = 0; $j < 2; $j++) { // do this twice
+          for ($i = 1; $i <= 5; $i++) {
+              echo "<th>$i</th>";
+          }
+      }
+      ?>
   </tr>
   </thead>
   <tbody>
   <?php
-  foreach ( $totals as $school_id => $total ) {
-      ?>
-    <tr>
-      <td><?= $schools[$school_id] ?></td>
-      <td><?= $total['booklets'] ?></td>
-      <td><?= $total['books'] ?></td>
-    </tr>
-      <?php
+  foreach ($booklet_totals as $school => $more) {
+      echo "<tr><td>" . $schools[$school] . "</td>";
+      foreach ($more as $number => $amount) {
+        echo "<td>" . $amount . "</td>";
+      }
+      foreach ($book_totals[$school] as $number => $amount) {
+          echo "<td>" . $amount . "</td>";
+      }
+      echo "</tr>";
   }
+//  foreach ( $totals as $school_id => $total ) {
+//      ?>
+<!--    <tr>-->
+<!--      <td>--><?//= $schools[$school_id] ?><!--</td>-->
+<!--      <td>--><?//= $total['booklets'] ?><!--</td>-->
+<!--      <td>--><?//= $total['books'] ?><!--</td>-->
+<!--    </tr>-->
+<!--      --><?php
+//  }
   ?>
   </tbody>
 </table>
