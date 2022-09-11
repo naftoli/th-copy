@@ -29,7 +29,7 @@ class BaseRouter {
     public function defaults() {
         $base = new \School();
         // format the response
-        json_response( (array)$base );
+        json_response( $base );
     }
 
     public function show( $id ) {
