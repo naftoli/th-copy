@@ -243,6 +243,20 @@ foreach( $combined_users as $school_id => $users ) {
   <div style="page-break-after: always;"></div>
     <?php
 }
+$totals['booklets'] = [
+  1 => 0,
+  2 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0
+];
+$totals['books'] = [
+    1 => 0,
+    2 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0
+];
 ?>
 <h2>Totals</h2>
 <table>
@@ -268,13 +282,19 @@ foreach( $combined_users as $school_id => $users ) {
   foreach ($booklet_totals as $school => $more) {
       echo "<tr><td>" . $schools[$school] . "</td>";
       foreach ($more as $number => $amount) {
-        echo "<td>" . $amount . "</td>";
+          echo "<td>" . $amount . "</td>";
+          $totals['booklets'][$number] += $amount;
       }
       foreach ($book_totals[$school] as $number => $amount) {
           echo "<td>" . $amount . "</td>";
+          $totals['books'][$number] += $amount;
       }
       echo "</tr>";
   }
+  echo "<tr><th>Grand Totals:</th>";
+  foreach ($totals['booklets'] as $amount) echo "<th>" . $amount . "</th>";
+  foreach ($totals['books'] as $amount) echo "<th>" . $amount . "</th>";
+  echo "</tr>";
 //  foreach ( $totals as $school_id => $total ) {
 //      ?>
 <!--    <tr>-->
