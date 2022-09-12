@@ -12,6 +12,7 @@ export class BaseTab extends React.Component {
     const {
       tabId, base, onUpdate, onChange, onSubmit, onValidChange
     } = this.props;
+    console.log(base)
 
     return (
       <TabPane tabId={ tabId } id='BaseTab'>

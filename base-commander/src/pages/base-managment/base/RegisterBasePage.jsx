@@ -57,7 +57,6 @@ class RegistrationPage extends Component {
     showError( // show error messages
       promise( login.id ) // load the base and update the state
       .then( base => {
-        alert()
         this.onUpdate( base )
         console.log(base)
       } )
