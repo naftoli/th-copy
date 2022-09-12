@@ -8,4 +8,4 @@ $soldier = \Soldier::find([ 4556 ]);
 //echo json_encode( $soldier );
 
 $base = \School::find([ 9 ]);
-echo $base->to_json();
+echo json_encode(json_decode($base->to_json()));
