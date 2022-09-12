@@ -34,7 +34,7 @@ class BaseRouter {
 
     public function show( $id ) {
         $base = \School::find([ $id ]);
-        json_response( $base->to_json() );
+        echo $base->to_json();
     }
 
     public function update( $id ) {

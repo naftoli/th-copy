@@ -1,9 +1,11 @@
 <?php
-require_once '../api/header/header.php';
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
-$base = \School::find([ 39 ]);
-//echo "<pre>"; print_r($base); echo "</pre>";
-echo json_encode([
-    'base'  => $base
-]);
-echo json_last_error();
+require_once '../../api/header/header.php';
+
+$soldier = \Soldier::find([ 4556 ]);
+//echo json_encode( $soldier );
+
+$base = \School::find([ 9 ]);
+echo $base->to_json();
