@@ -467,10 +467,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $this->to_array([
             // old columns that we no longer use
             'except' => [
-                'school_makeup_id', 'school_settings', 'package_id', 'school_logo_id', 'school_logo_kiosk_id',
+                'school_makeup_id', 'school_settings', 'package_id', 'school_logo_kiosk_id',
                 'school_no_logo', 'school_file_id', 'kiosk_print', 'school_store', 'camp_id', 'add_on_one',
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
-                'tanya_ord', 'school_type', 'col_show', 'tuition', 'authorize_customer_profile_id',  'early_bird'
+                'tanya_ord', 'col_show', 'tuition'
             ],
             'methods' => [ 
                 'earlyBird', 'registration', 'logoPaths', 'customerProfile', 'staff', 'currentRegPrices'
