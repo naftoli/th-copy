@@ -34,7 +34,11 @@ class BaseRouter {
 
     public function show( $id ) {
         $base = \School::find([ $id ]);
-        echo json_decode($base->to_json());
+        header("Content-Type: application/json; charset=utf-8;");
+        echo json_encode([
+            'success'   => true,
+            'data'      => $base->to_json()
+        ]);
     }
 
     public function update( $id ) {
