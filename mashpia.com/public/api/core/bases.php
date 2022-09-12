@@ -37,7 +37,7 @@ class BaseRouter {
         header("Content-Type: application/json; charset=utf-8;");
         echo json_encode([
             'success'   => true,
-            'data'      => $base->to_json()
+            'data'      => json_decode($base->to_json())
         ]);
     }
 
