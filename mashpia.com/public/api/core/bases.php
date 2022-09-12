@@ -29,16 +29,12 @@ class BaseRouter {
     public function defaults() {
         $base = new \School();
         // format the response
-        json_response( $base );
+        json_response(json_decode($base->to_json()));
     }
 
     public function show( $id ) {
         $base = \School::find([ $id ]);
-        header("Content-Type: application/json; charset=utf-8;");
-        echo json_encode([
-            'success'   => true,
-            'data'      => json_decode($base->to_json())
-        ]);
+        json_response(json_decode($base->to_json()));
     }
 
     public function update( $id ) {
