@@ -454,13 +454,13 @@ var registrationApp = function() {
         switch (field.type) {
             case 'value':
                 value = $(field.field).val()
-                console.log(field.field + '=' + value)
+                // console.log(field.field + '=' + value)
                 if (value == '' || value == 0 || value == '0' || !value.length) return field.error
                 break
             case 'amount':
                 // make sure we have a number greater than 0
                 value = parseInt($(field.field).val())
-                console.log(field.field + '=' + value)
+                // console.log(field.field + '=' + value)
                 if (value <= 0) return field.error
                 break
             case 'check':
@@ -521,7 +521,8 @@ var registrationApp = function() {
             yahadus: $('#yahadus-registration input')[0].checked,
             khk: $("#khk input")[0].checked
         }
-        if ( selected_charges.chayolei === false 
+
+        if ( selected_charges.chayolei === false
             // && selected_charges.chayolei_lite === false 
             && selected_charges.ckids === false
             && selected_charges.chidon === false 
@@ -670,7 +671,7 @@ var registrationApp = function() {
                     errors.push("You must indicate your acceptance of all Terms (6th term not checked)")
                 }
             }
-            console.log(errors)
+            // console.log(errors)
             if (errors.length) {
                 let html = ''
                 for (let i = 1; i <= errors.length; i++) {
@@ -709,7 +710,7 @@ var registrationApp = function() {
         // }
         // remove the user if we had him before...
         state.cart = state.cart.filter( function(item) { return item.meta.user_id != selected_user.user_id } );
-        console.log(state.cart)
+        // console.log(state.cart)
         // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             selected_user.registrationRates.chayolei = parseInt( $("select#chayolei-fee").val() );
@@ -865,7 +866,7 @@ var registrationApp = function() {
         // get prizes
         $.post('api/getPrizes.php', { user_id: current_user }, function(results) {
             var res = JSON.parse(results)
-            console.log(res)
+            // console.log(res)
             var html = ''
 
             // figure out height needed for items
@@ -1440,6 +1441,12 @@ var templates = function(){
 
             // hide all sections that only should be shown under certain circumstances
             $(".hide").hide();
+
+            // reset all fee checkboxes
+            $('#chayolei-registration input')[0].checked = false
+            $('#chidon-registration input')[0].checked = false
+            $('#yahadus-registration input')[0].checked = false
+            $('#khk input')[0].checked = false
 
             // hide chayolei reg if not applicable
             if (user.registrationStatus.chayolei) $("#chayolei-registration").hide()
