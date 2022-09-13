@@ -31,8 +31,9 @@ $schools = $as->getSchools();
 $combined_users = [];
 $qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
         rc.study_guide_shipped, rc.book_shipped "
-    ."FROM registration_charges rc JOIN schools s USING (school_id) "
+    ."FROM registration_charges rc "
     ."JOIN users USING (user_id) "
+    ."JOIN schools s ON s.school_id = u.school_id "
     ."JOIN classes c ON c.class_id = users.class_id "
     ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
     ."WHERE type in ('chidon', 'yahadus') "
@@ -48,7 +49,7 @@ if ( isset( $from ) && isset( $to ) ) {
 if (isset($_POST['not_shipped'])){
     $qry .= " and book_shipped = 0";
 }
-$qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
+$qry .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
