@@ -307,15 +307,18 @@ $year = GlobalSettings::getChidonYear();
             echo "<th>Chidon Registered</th><th>Chidon Not Registered but CTH Registered</th><th>Not Registered for BOTH (Chidon / CTH)</th></tr>";
             foreach ( $totalsByGrade as $grade => $amount ) {
                 if ( is_numeric( $grade ) ) {
-                    echo "<tr><td>" . $grade . "</td><td>" . $amount['Boys'] . "</td><td>" . $notSignedUp[$grade]['Boys']['reg'] . "</td><td>" . $notSignedUp[$grade]['Boys']['notReg'];
+                    echo "<tr><td>" . $grade . "</td><td>" . (isset($amount['Boys']) ? $amount['Boys'] : 0) .
+                        "</td><td>" . (isset($notSignedUp[$grade]['Boys']['reg']) ? $notSignedUp[$grade]['Boys']['reg'] : 0) .
+                        "</td><td>" . (isset($notSignedUp[$grade]['Boys']['notReg']) ? $notSignedUp[$grade]['Boys']['notReg'] : 0);
                     echo "</td><td>";
                     if (isset($amount['Girls'])) echo $amount['Girls'];
-                    echo "</td><td>" . $notSignedUp[$grade]['Girls']['reg']  . "</td><td>" . $notSignedUp[$grade]['Girls']['notReg'] . "</td></tr>";
+                    echo "</td><td>" . (isset($notSignedUp[$grade]['Girls']['reg']) ? $notSignedUp[$grade]['Girls']['reg'] : 0)  .
+                        "</td><td>" . (isset($notSignedUp[$grade]['Girls']['notReg']) ? $notSignedUp[$grade]['Girls']['notReg'] : 0) . "</td></tr>";
 
-                    $totals['Boys']['notSignedUp'] += $notSignedUp[$grade]['Boys']['reg'];
-                    $totals['Girls']['notSignedUp'] += $notSignedUp[$grade]['Girls']['reg'];
-                    $totals['Boys']['notReg'] += $notSignedUp[$grade]['Boys']['notReg'];
-                    $totals['Girls']['notReg'] += $notSignedUp[$grade]['Girls']['notReg'];
+                    if (isset($notSignedUp[$grade]['Boys']['reg'])) $totals['Boys']['notSignedUp'] += $notSignedUp[$grade]['Boys']['reg'];
+                    if (isset($notSignedUp[$grade]['Girls']['reg'])) $totals['Girls']['notSignedUp'] += $notSignedUp[$grade]['Girls']['reg'];
+                    if (isset($notSignedUp[$grade]['Boys']['notReg'])) $totals['Boys']['notReg'] += $notSignedUp[$grade]['Boys']['notReg'];
+                    if (isset($notSignedUp[$grade]['Girls']['notReg'])) $totals['Girls']['notReg'] += $notSignedUp[$grade]['Girls']['notReg'];
                 } else {
                     echo "<tr><td>" . $grade . "</td><td>" . (isset($amount['Boys']) ? $amount['Boys'] : 0) . "</td><td></td><td></td><td>" .
                         (isset($amount['Girls']) ? $amount['Girls'] : 0) . "</td><td></td><td></td></tr>";
