@@ -73,17 +73,16 @@ foreach ( $rows as $row ) {
         <h1>Mivtza Lulav Settings</h1>
         <div class='infobox'>
             Use the following form to determine what the shipping charges will be for your students.<br /><br />
+            YOU MUST CHOOSE ONE OF THE OPTIONS IF YOU WANT YOUR CHAYOLIM TO BE ABLE TO PURCHASE A SET!<br /><br />
             If you choose to PICK UP, your children will not be charged anything.<br /><br />
-            Otherwise, the automatic / default shipping charge is $15 per student. In order to bring down the cost, you need to choose how many sets you 
-            GUARANTEE to have purchased.<br /><br />
-            Here is the breakdown:<br /><br />
+            Otherwise, you will need to choose from the following options:<br /><br />
             1 - 4 children guaranteed = $15 shipping charge per child<br />
             5 - 9 children guaranteed = $10 shipping charge per child<br />
             10 - 14 children guaranteed = $6 shipping charge per child<br />
             15 - 29 children guaranteed = $5 shipping charge per child<br />
             30 - 99 children guaranteed = $4 shipping charge per child<br />
             100+ children guaranteed = $3 shipping charge per child<br /><br />
-            You can also totally opt out from allowing your children to purchase lulav sets.
+            You can also totally OPT OUT from allowing your children to purchase lulav sets.
         </div>
         <br />
         <?php 

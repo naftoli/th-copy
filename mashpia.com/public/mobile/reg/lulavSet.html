@@ -203,7 +203,7 @@
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2500;
-                var alreadySold = 1467; // sets set aside for hq/staff/schools
+                var alreadySold = 0;
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $(".sold").text( alreadySold );
@@ -269,7 +269,7 @@
 
             function calcAmount() {
                 var total = 0;
-                var cost = 10;
+                var cost = 13;
                 var numChildren = $(".lulav:checked").length;
 
                 if ( numChildren ) {
