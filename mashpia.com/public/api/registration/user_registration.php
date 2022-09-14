@@ -136,16 +136,16 @@ class UserRegistrationRouter {
         $description = '';
         foreach ($desc as $user_id => $details) {
             $serial = $user_serials[$user_id];
-            $description .= $serial . " #";
+            $description .= $serial;
             $first = true;
             foreach ($details as $type => $paid) {
                 if ($first) {
                     $first = false;
-                    $description .= " ";
+                    $description .= " #";
                 } else {
-                    $description .= ", ";
+                    $description .= ", #";
                 }
-                $description .= $type . ": " . $paid;
+                $description .= $type . " " . $paid;
             }
             $description .= " ";
         }
