@@ -134,8 +134,11 @@ class UserRegistrationRouter {
         }
 
         $description = '';
+        $firstChild = true;
         foreach ($desc as $user_id => $details) {
             $serial = $user_serials[$user_id];
+            if ($firstChild) $firstChild = false;
+            else $description .= ", ";
             $description .= $serial;
             $first = true;
             foreach ($details as $type => $paid) {
