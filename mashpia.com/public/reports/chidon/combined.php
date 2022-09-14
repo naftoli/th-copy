@@ -29,12 +29,12 @@ $schools = $as->getSchools();
 //}
 
 $combined_users = [];
-$qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
+$qry = "SELECT amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
         rc.study_guide_shipped, rc.book_shipped "
     ."FROM registration_charges rc "
-    ."JOIN users USING (user_id) "
+    ."JOIN users u USING (user_id) "
     ."JOIN schools s ON s.school_id = u.school_id "
-    ."JOIN classes c ON c.class_id = users.class_id "
+    ."JOIN classes c ON c.class_id = u.class_id "
     ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
     ."WHERE type in ('chidon', 'yahadus') "
     ."AND rc.year = $year ";
