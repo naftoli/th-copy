@@ -56,7 +56,7 @@ var registration_info = function() {
                     alert( response.message );
                 }
             })
-          .catch(error => console.log(error));
+            .catch(error => console.log(error));
     }
 
     function updateBase( school_id, updates ) {
