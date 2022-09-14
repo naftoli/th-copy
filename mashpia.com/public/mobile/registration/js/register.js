@@ -1418,8 +1418,8 @@ var templates = function(){
 
                 // determine text for new enrollment
                 let cost = 40
-                if (user.school_id == 61) cost = 50
-                if (user.school_id == 269) cost = 70
+                if (user.school.school_id == 61) cost = 50
+                if (user.school.school_id == 269) cost = 70
                 const text = `The Chidon Limmud (The Study Guide, 3 tests & the 3 test prizes) costs $${cost} per child 
                     and is subsidized by our generous donors. I would like to pay:`;
                 $("#reg_text").empty().append(text)
