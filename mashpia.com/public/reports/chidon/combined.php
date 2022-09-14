@@ -51,7 +51,7 @@ if (isset($_POST['not_shipped'])){
 }
 $qry .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
-echo $qry; exit;
+//echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
     $combined_users[$row['school_id']][] = $row;
