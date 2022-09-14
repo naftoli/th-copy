@@ -149,7 +149,7 @@ class UserRegistrationRouter {
             }
             $description .= " ";
         }
-        if ($shipping_charges) $description .= "Shipping Charges: " . $shipping_charges;
+        if ($shipping_charges) $description .= "000:269 #shipping " . $shipping_charges;
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
