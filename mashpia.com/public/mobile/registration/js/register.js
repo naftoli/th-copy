@@ -1417,12 +1417,11 @@ var templates = function(){
                 $("#khk-edit-info").hide()
 
                 // determine text for new enrollment
-                let text = "The Chidon Limmud (The Study Guide, 3 tests & the 3 test prizes)" +
-                  "costs $40 per child and is subsidized by our generous donors. I would like to pay:";
-                if (user.school_id == 61) text = "The Chidon Limmud (The Study Guide, 3 tests, 3 test prizes & shipping) costs $50 per child " +
-                  "and is subsidized by our generous donors. I would like to pay:";
-                else if (user.school_id == 269) text = "The Chidon Limmud (The Study Guide, 3 tests, 3 test prizes, shipping and Chidon Coordinator) costs $70 per child " +
-                  "and is subsidized by our generous donors. I would like to pay:";
+                let cost = 40
+                if (user.school_id == 61) cost = 50
+                if (user.school_id == 269) cost = 70
+                const text = `The Chidon Limmud (The Study Guide, 3 tests & the 3 test prizes) costs $${cost} per child 
+                    and is subsidized by our generous donors. I would like to pay:`;
                 $("#reg_text").empty().append(text)
             } else {
                 if (! $("#chidon").is(":checked")) $("#chidon").trigger('click')
