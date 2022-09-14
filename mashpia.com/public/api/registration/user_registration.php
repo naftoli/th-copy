@@ -97,7 +97,7 @@ class UserRegistrationRouter {
         $payment_info = $_POST['payment'];
         $total = intval( $payment_info['total'] );
         $registrations = $_POST['registrations'];
-        $hachayols = isset($_POST['hachayol']) ? $_POST['hachayol'] : [];
+        $hachayols = isset($_POST['hachayols']) ? $_POST['hachayols'] : [];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         $year = GlobalSettings::getRegistrationYear();
@@ -136,7 +136,7 @@ class UserRegistrationRouter {
         $description = '';
         foreach ($desc as $user_id => $details) {
             $serial = $user_serials[$user_id];
-            $description .= "(" . $serial . " -";
+            $description .= $serial . " #";
             $first = true;
             foreach ($details as $type => $paid) {
                 if ($first) {
@@ -147,9 +147,9 @@ class UserRegistrationRouter {
                 }
                 $description .= $type . ": " . $paid;
             }
-            $description .= ") ";
+            $description .= " ";
         }
-        if ($shipping_charges) $description .= "Family Shipping: " . $shipping_charges;
+        if ($shipping_charges) $description .= "Shipping Charges: " . $shipping_charges;
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
