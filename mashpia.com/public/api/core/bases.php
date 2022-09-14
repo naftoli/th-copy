@@ -56,7 +56,7 @@ class BaseRouter {
         $base->bulkUpdate( $_POST );
         if ( !$base->save() ) json_error( 'Could not save base' );
 
-        json_response( $base );
+        json_response(json_decode($base->to_json()));
     }
 
     public function register() {
@@ -88,7 +88,7 @@ class BaseRouter {
 
         $base->register( $current_user->admin_id, $cart, $total, $cc, false, $discount );
 
-        json_response( $base );
+        json_response(json_decode($base->to_json()));
     }
 
     public function deletePayment() {
