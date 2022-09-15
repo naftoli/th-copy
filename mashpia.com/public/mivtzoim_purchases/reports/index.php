@@ -95,7 +95,7 @@ foreach ( $rows as $row ) {
         <form method="post" action="">
             <select name='type'>
             <?php 
-            $i = 0; // index to find out which one is the last one and have it selected by default
+//            $i = 0; // index to find out which one is the last one and have it selected by default
             $numTypes = count( $types );
             echo $numTypes;
             foreach ( $types as $type => $details ) {
@@ -104,7 +104,7 @@ foreach ( $rows as $row ) {
                     $ids[] = $item_id;
                 }
                 echo "<option value='" . implode(',', $ids) . "'";
-                if ( ++$i == $numTypes ) echo " selected ";
+//                if ( ++$i == $numTypes ) echo " selected ";
                 echo ">" . $type . "</option>";
             }
             ?>
