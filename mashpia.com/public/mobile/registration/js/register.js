@@ -897,9 +897,10 @@ var registrationApp = function() {
                 var personalization = prize.personalization ? 1 : 0
                 html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
-                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" `
+                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
+                            data-qty="${prize.quantity}" `
                 if (prize.selected) html += 'checked '
-                if (prize.quantity <= 0) html += 'disabled '
+                // if (prize.quantity <= 0) html += 'disabled '
                 html += `/>
                         ${prize.prize_name} (${prize.quantity} left in stock)<br />
                         ${parseInt(prize.price)} Credits`
@@ -932,15 +933,14 @@ var registrationApp = function() {
                 var prize = infoArr[0]
                 var price = infoArr[1]
                 var personalization = infoArr[2]
-                if ($(this).is(":checked")) {
-                    if (!addToPrizes(prize, price, personalization)) {
-                        e.target.checked = false
-                    }
-                } else {
-                    if (!removeFromPrizes(prize)) {
-                        e.target.checked = true
-                    }
+                var qty = parseInt($(this).data('qty'))
+                var checked = $(this).is(":checked")
+
+                if (checked) {
+                    e.target.checked = qty && addToPrizes(prize, price, personalization)
+                    if (!qty) alert('This prize has nothing left in stock, please choose a different prize.')
                 }
+                else e.target.checked = !removeFromPrizes(prize)
             })
 
             $(".he_name").blur( function (e) {
