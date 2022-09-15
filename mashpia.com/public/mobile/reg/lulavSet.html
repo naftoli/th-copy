@@ -118,7 +118,9 @@
                                                 {{/if}}
                                                 <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
-                                            <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
+                                            {{#if lulav_shipping}}
+                                                <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
+                                            {{/if}}
                                             {{#if (isAnash school_id)}}
                                                 <div>IMPORTANT: You can only pick up your set from HEADQUARTERS. We will NOT be shipping it to you.</div>
                                             {{/if}}
