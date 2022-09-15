@@ -47,7 +47,7 @@ if ( isset( $from ) && isset( $to ) ) {
     $qry .= "AND rc.date >= '" . $from . "' AND rc.date <= '" . $to . "'";
 }
 if (isset($_POST['not_shipped'])){
-    $qry .= " and book_shipped = 0";
+    $qry .= " and (book_shipped = 0 or study_guide_shipped = 0)";
 }
 $qry .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
