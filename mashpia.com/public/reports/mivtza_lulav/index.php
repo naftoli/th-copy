@@ -10,30 +10,29 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 $children = [];
-$query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
-while ( $row = mysql_fetch_assoc( $query ) ) {
-    if ( strpos($row['users'], ',') !== false ) {
-        $users = explode(',', $row['users']);
-        foreach ( $users as $id ) {
-            $children[] = intval( $id );
-        }
-    } else {
-        $children[] = intval( $row['users'] );
+$query = mysql_query("select user_id from mashpia_purchases.purchase_details
+                      join mashpia_purchases.purchases using (purchase_id)
+                      where item_id = 1 and year = $year");
+if ( mysql_num_rows($query) > 0 ) {
+    while ($row = mysql_fetch_assoc($query)) {
+        $children[] = $row['user_id'];
     }
 }
 $total = count( $children );
 
 $info = [];
-$sql = "SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
-        FROM users u 
-        JOIN classes c ON c.class_id = u.class_id 
-        JOIN schools s ON s.school_id = u.school_id 
-        WHERE u.user_id in (" . implode(',', $children) . ") 
-        AND u.school_id in (" . implode(',', array_keys( $schools ) ) . ") 
-        ORDER BY school_name, class_grade, class_sub, last, first";
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-    $info[$row['school_name']][] = $row;
+if ($total) {
+    $sql = "SELECT u.user_id, u.first, u.last, c.class_grade, c.class_sub, s.school_name 
+            FROM users u 
+            JOIN classes c ON c.class_id = u.class_id 
+            JOIN schools s ON s.school_id = u.school_id 
+            WHERE u.user_id in (" . implode(',', $children) . ") 
+            AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+            ORDER BY school_name, class_grade, class_sub, last, first";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $info[$row['school_name']][] = $row;
+    }
 }
 ?>
 <!DOCTYPE html>

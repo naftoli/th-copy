@@ -10,13 +10,13 @@ $query ="
     SELECT 
         COUNT(*) as total
     FROM
-        mivtzoim_purchases.purchase_details
+        mashpia_purchases.purchase_details
     WHERE
         item_id = 1
             AND purchase_id IN (SELECT 
                 purchase_id
             FROM
-                mivtzoim_purchases.purchases
+                mashpia_purchases.purchases
             WHERE
                 year = $year)";
 $result = mysql_query($query);

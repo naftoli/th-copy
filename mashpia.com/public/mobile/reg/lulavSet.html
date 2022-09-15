@@ -75,7 +75,7 @@
             <div class="container page5">   
                 <div class="row" id="purchase_info" style="display: none;">
                     <div class="col-12" style="font-size: 16px;">                   
-                        Lulav Sets cost ONLY $10. We will only ship the sets to your child's school. Shipping charges vary by School depending on how many sets are being purchasing.
+                        Lulav Sets cost ONLY $13. We will only ship the sets to your child's school. Shipping charges may be different per school.
                         <hr />
                         <h2>Number of sets: 2500</h2>
                         <h2>Already Sold: <span class="sold"></span></h2>
@@ -119,6 +119,9 @@
                                                 <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
                                             <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>
+                                            {{#if (isAnash school_id)}}
+                                                <div>IMPORTANT: You can only pick up your set from HEADQUARTERS. We will NOT be shipping it to you.</div>
+                                            {{/if}}
                                             {{#if lulavPurchased}}
                                                 <div style='color:red'><strong><i>Child has already purchased a lulav set.</i></strong></div>
                                             {{/if}}
@@ -195,11 +198,11 @@
 
             // find out how many sets have been sold
             var soldOut = false;
-            var now = Math.floor( new Date().getTime() / 1000);
-            console.log( now );
-            if ( now >= 1631231999 ) {
-                soldOut = true;
-            }
+            // var now = Math.floor( new Date().getTime() / 1000);
+            // console.log( now );
+            // if ( now >= 1631231999 ) {
+            //     soldOut = true;
+            // }
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2500;
@@ -222,7 +225,7 @@
             });
 
             // load children
-            $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+            $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
                 if ( success == -1 ) {
                     window.location = "index.html";
                 } else {
@@ -241,6 +244,10 @@
                             unregistered_children[c] = child;
                         }
                     }
+
+                    Handlebars.registerHelper('isAnash', function(school) {
+                        return parseInt(school) === 269
+                    })
 
                     // Grab the template script
                     var tplScript = $("#childrenTpl").html();
@@ -333,7 +340,7 @@
                         var result = JSON.parse( info );
                         if ( result.success ) {
                             alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
-                            // location.reload();
+                            location.href = 'parent_detail.html'
                         } else {
                             alert( result.error );
                         }
