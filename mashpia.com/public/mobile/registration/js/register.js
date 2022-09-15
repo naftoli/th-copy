@@ -1467,7 +1467,10 @@ var templates = function(){
 
             // hide chidon reg if not applicable
             if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
-            else $("#chidon-registration").show()
+            else {
+                document.getElementById('chidon').checked = true
+                $("#chidon-registration").show()
+            }
 
             // determine if need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
@@ -1791,6 +1794,7 @@ var templates = function(){
             } else {
                 // check if child already registered and we are pulling up their info to allow changes
                 if (user.getChidonInfo) {
+
                     let info = user.getChidonInfo
                     for (elem of resets) {
                         if (elem.db) {
