@@ -27,10 +27,11 @@ $schools = $as->getSchools();
 //        $to = '2019-10-25';
 //    }
 //}
-
-$combined_users = [];
-$qry = "SELECT count(*) as total, amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
-        rc.study_guide_shipped, rc.book_shipped "
+;
+$purchases = [];
+$userInfo = [];
+$qry = "SELECT amount, date, s.*, logo, first, last, c.class_grade, c.class_sub, tc.book, rc.user_id, 
+        rc.study_guide_shipped, rc.book_shipped, rc.type "
     ."FROM registration_charges rc "
     ."JOIN users u USING (user_id) "
     ."JOIN schools s ON s.school_id = u.school_id "
@@ -55,11 +56,13 @@ if (isset($_POST['not_shipped'])){
     ";
 }
 $qry .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ") ";
-$qry .= "GROUP BY rc.user_id ORDER BY school_name, c.class_grade, c.class_sub, last, first";
+$qry .= "ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
-    $combined_users[$row['school_id']][] = $row;
+    if ($row['type'] == 'chidon') $userInfo[$row['user_id']]['chidon'] = $row['study_guide_shipped'];
+    if ($row['type'] == 'yahadus') $userInfo[$row['user_id']]['yahadus'] = $row['book_shipped'];
+    $purchases[$row['school_id']][$row['user_id']] = $row; // only show child one time on one row
 }
 
 $book_grand_totals = [
@@ -131,7 +134,7 @@ $booklet_grand_totals = [
 $totals = [];
 $book_totals = [];
 $booklet_totals = [];
-foreach( $combined_users as $school_id => $users ) {
+foreach( $purchases as $school_id => $users ) {
     $totals[$school_id]['booklets'] = 0;
     $totals[$school_id]['books'] = 0;
 
@@ -150,7 +153,7 @@ foreach( $combined_users as $school_id => $users ) {
         4   =>  0,
         5   =>  0
     ];
-    $base = $users[0];
+    $base = $users[key($users)];
     $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" .
         $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
     ?>
@@ -174,44 +177,45 @@ foreach( $combined_users as $school_id => $users ) {
     </thead>
     <tbody>
     <?php
-    foreach( $users as $user ) {
-        $grade = $user['class_grade'];
-        $id = $user['user_id'];
-        //if ( !$schoolTransitioned ) $grade++;
-        ?>
-      <tr id="<?=$id?>">
+    foreach( $users as $user_id => $user ) {
+      $grade = $user['class_grade'];
+      ?>
+      <tr id="<?=$user_id?>">
         <td><?= $user[ 'first' ]; ?></td>
         <td><?= $user[ 'last' ]; ?></td>
         <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-        <td><?= $user['book']; ?></td>
+        <td><?= isset($userInfo[$user_id]['chidon']) ? $user['book'] : '' ?></td>
         <td>
-          <input type="checkbox" name="sg_shipped[]" class="sg_shipped"
-              <?php if ($user['study_guide_shipped']) echo "checked"; ?>
-          />
+          <?php if (isset($userInfo[$user_id]['chidon'])) : ?>
+            <input type="checkbox" name="sg_shipped[]" class="sg_shipped"
+              <?php if ($userInfo[$user_id]['chidon']) echo "checked"; ?>
+            />
+          <?php endif; ?>
         </td>
-        <td><?= $user['total'] > 1 ? $user['book'] : '' ?></td>
+        <td><?= isset($userInfo[$user_id]['yahadus']) ? $user['book'] : '' ?></td>
         <td>
-            <?php if ($user['total'] > 1) : ?>
-              <input type="checkbox" name="book_shipped[]" class="book_shipped"
-                  <?php if ($user['book_shipped']) echo "checked"; ?>
-              />
-            <?php endif; ?>
+          <?php if (isset($userInfo[$user_id]['yahadus'])) : ?>
+            <input type="checkbox" name="book_shipped[]" class="book_shipped"
+                <?php if ($userInfo[$user_id]['yahadus']) echo "checked"; ?>
+            />
+          <?php endif; ?>
         </td>
         <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
       </tr>
-        <?php
+      <?php
+      if (isset($userInfo[$user_id]['chidon'])) {
         // totals of school
         $booklet_totals[$school_id][$user['book']]++;
         // totals per school
         $totals[$school_id]['booklets']++;
         // grand totals
         $booklet_grand_totals[$user['book']]++;
-        // add to book totals if we have more than one entry for this student
-        if ( $user['total'] > 1 ) {
-            $book_totals[$school_id][$user['book']]++;
-            $totals[$school_id]['books']++;
-            $book_grand_totals[$user['book']]++;
-        }
+      }
+      if (isset($userInfo[$user_id]['yahadus'])) {
+        $book_totals[$school_id][$user['book']]++;
+        $totals[$school_id]['books']++;
+        $book_grand_totals[$user['book']]++;
+      }
     }
     ?>
     </tbody>
