@@ -20,7 +20,6 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-//$description = "Mivtza Lulav " . $year . " purchase - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
 $description = "000:00 #lulav " . $amount;
 
 if ( $amount > 0 ) {
@@ -63,7 +62,8 @@ if ( $amount > 0 ) {
                 ':user'     => $user_id,
             ]);
         }
-        
+
+        $description = "Mivtza Lulav " . $year . " - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
         $qry = $MASHPIA_DB->prepare(
             "INSERT INTO transactions 
             SET trans_date = now(),
