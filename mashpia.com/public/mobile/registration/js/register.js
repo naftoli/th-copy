@@ -1467,10 +1467,7 @@ var templates = function(){
 
             // hide chidon reg if not applicable
             if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
-            else {
-                document.getElementById('chidon').checked = true
-                $("#chidon-registration").show()
-            }
+            else $("#chidon-registration").show()
 
             // determine if need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
