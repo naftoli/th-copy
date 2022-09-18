@@ -185,7 +185,9 @@ class Points
                 $points[] = $row['user_point_id'];
                 $total += abs($row['points']);
             }
-            // get all returns and remove from purchases
+        }
+        // get all returns and remove from purchases
+        if ($points) {
             $sql = "select IFNULL(sum(points), 0) as total from pointsDB.user_points 
                     where reversed_user_point_id in (" . implode(',', $points) . ")";
             if ($this->debug) echo $sql . "<br />";
@@ -267,35 +269,35 @@ class Points
     {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         // get sum of points and then delete reversed points
-        if (unixtojd() < 2459761 || ($this->australian && unixtojd() < 2459945)) {
-            if ($this->useBetaPoints()) {
-                // ignore transaction_manager_store reversals where the original purchase is before the start date
-                $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
-                    FROM pointsDB.user_points up
-                    LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
-                    WHERE up.user_id = '{$this->user_id}'
-                    AND up.created >= '$formatted_date'";
-            } else {
-                $sql = "SELECT SUM(points) AS total
-                    FROM pointsDB.user_points up
-                    WHERE up.user_id = '{$this->user_id}'
-                    AND up.created >= '$formatted_date'";
-            }
-        } else {
-            // ignore transaction_manager_store reversals where the original purchase is before the start date
-            $sql = "SELECT SUM(points) AS total
-                    FROM pointsDB.user_points up
-                    WHERE up.user_id = '{$this->user_id}'
-                    AND up.created >= '$formatted_date' 
-                    AND up.reversed_user_point_id not in (
-                        SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
-                    )";
-        }
+//        if (unixtojd() < 2459761 || ($this->australian && unixtojd() < 2459945)) {
+//            if ($this->useBetaPoints()) {
+//                // ignore transaction_manager_store reversals where the original purchase is before the start date
+//                $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
+//                    FROM pointsDB.user_points up
+//                    LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
+//                    WHERE up.user_id = '{$this->user_id}'
+//                    AND up.created >= '$formatted_date'";
+//            } else {
+//                $sql = "SELECT SUM(points) AS total
+//                    FROM pointsDB.user_points up
+//                    WHERE up.user_id = '{$this->user_id}'
+//                    AND up.created >= '$formatted_date'";
+//            }
+//        } else {
+        // ignore transaction_manager_store reversals where the original purchase is before the start date
+        $sql = "SELECT IFNULL(SUM(points), 0) AS total
+                FROM pointsDB.user_points up
+                WHERE up.user_id = '{$this->user_id}'
+                AND up.created >= '$formatted_date' 
+                AND (up.reversed_user_point_id IS NULL OR up.reversed_user_point_id not in (
+                    SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
+                ))";
+//        }
         if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
-        return $row ? $row['total'] : 0;
+        return $row['total'];
     }
 
     // originally in mashpia.com/public/v2/application/controllers/KioskMainController.php
