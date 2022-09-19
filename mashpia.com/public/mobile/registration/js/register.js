@@ -1656,6 +1656,16 @@ var templates = function(){
                     db: 'location'
                 },
                 {
+                    field: '#store-name',
+                    type: 'text',
+                    db: 'store_name'
+                },
+                {
+                    field: '#store-city',
+                    type: 'text',
+                    db: 'store_city'
+                },
+                {
                     field: '#bookVersion',
                     type: 'select',
                     cart: 'bookVersion',
@@ -1738,8 +1748,7 @@ var templates = function(){
                         $("#media").trigger('click')
                     }
                     if (item.meta.registration_type === 'chidon') {
-                        document.getElementById('chidon').checked = false
-                        $("#chidon").trigger('click')
+                        document.getElementById('chidon').checked = true
                         for (elem of resets) {
                             if (elem.cart) {
                                 switch (elem.type) {
@@ -1791,7 +1800,7 @@ var templates = function(){
             } else {
                 // check if child already registered and we are pulling up their info to allow changes
                 if (user.getChidonInfo) {
-
+                    document.getElementById('chidon').checked = true
                     let info = user.getChidonInfo
                     for (elem of resets) {
                         if (elem.db) {
@@ -1860,6 +1869,8 @@ var templates = function(){
                     }
                 }
             }
+
+
 
             // ("#step-2 form select#yahadus-poll option").prop('selected', false);
 
