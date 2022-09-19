@@ -1425,7 +1425,7 @@ var templates = function(){
                   "costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
             } else {
-                if (! $("#chidon").is(":checked")) $("#chidon").trigger('click')
+                document.getElementById('chidon').checked = true
                 $("#chidon").attr('disabled', true)
                 $("#chidon-fee").html("<option value='0'>$0</option>")
                 $("#chidon-fee").attr('disabled', true)
