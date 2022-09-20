@@ -1,5 +1,8 @@
 <?php
-$admin_auth = array('school'); 
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
+$admin_auth = array('school');
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.report.php';
@@ -23,7 +26,7 @@ $r = new Report();
                 margin: auto;
                 padding: 15px;
                 border-radius: 20px;
-                border: 2px solid #73AD21; 
+                border: 2px solid #73AD21;
             }
             legend {
                 margin-left: 20px;
@@ -49,16 +52,18 @@ $r = new Report();
 
             <fieldset>
                 <legend>Date Options</legend>
-                Choose the date period: 
+                Choose the date:
                 <select name="date">
                     <?php
-                    $r->setDateSelection();
+                    $r->setDateSelection('he');
                     // flag to determine which drop down to have selected by default;
                     $total = count( $r->date_selection );
                     $i = 0;
                     foreach ( $r->date_selection as $jd => $date ) {
-                        if ( $total == 1 || $i++ == ($total - 2) ) echo "<option value='" . $jd . "' selected>" . $date . "</option>";
-                        else echo "<option value='" . $jd . "'>" . $date . "</option>";
+                        $str1 = jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM);
+                        $heDate = iconv('WINDOWS-1255', 'UTF-8', $str1);
+                        if ( $total == 1 || $i++ == ($total - 2) ) echo "<option value='" . $jd . "' selected>" . $heDate . "</option>";
+                        else echo "<option value='" . $jd . "'>" . $heDate . "</option>";
                     }
                     ?>
                 </select>
