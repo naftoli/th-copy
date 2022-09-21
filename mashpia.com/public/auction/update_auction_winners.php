@@ -13,10 +13,10 @@ if ( isset( $_FILES['winners'] ) ) {
         $value = trim( $data[$c] );
         switch ( $c ) {
           case 0:
-            $prize_id = intval( $value );
+            $prize_id = intval($value);
             break;
           case 1:
-            $user_id = $value;
+            $user_id = intval($value);
             break;
         }
       }
@@ -29,6 +29,7 @@ if ( isset( $_FILES['winners'] ) ) {
               auction_id = " . $auction_id;
       $qrys[] = $qry;
     }
+
     mysql_query('set autocommit = 0');
     mysql_query('begin');
     $success = true;
@@ -53,6 +54,7 @@ if ( isset( $_FILES['winners'] ) ) {
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf8">
   </head>
   <body>
     <form enctype="multipart/form-data" action="update_auction_winners.php" method="POST">
