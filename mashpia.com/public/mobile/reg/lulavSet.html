@@ -208,7 +208,7 @@
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2500;
-                var alreadySold = 1076; // add 1 for extra lulav set going to rosie
+                var alreadySold = 1190; // add 1 for extra lulav set going to rosie
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $(".sold").text( alreadySold );
