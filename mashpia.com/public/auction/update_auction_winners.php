@@ -2,6 +2,8 @@
 ini_set('display_errors',1);
 require_once '../db.php';
 
+$auction_id = 83;
+
 if ( isset( $_FILES['winners'] ) ) {
   $qrys = [];
   if ( ($handle = fopen($_FILES['winners']['tmp_name'], "r")) !== FALSE ) {
@@ -24,7 +26,7 @@ if ( isset( $_FILES['winners'] ) ) {
               set user_id = " . $user_id . ", 
               prize_id = " . $prize_id . ", 
               quantity = 1, 
-              auction_id = 80";
+              auction_id = " . $auction_id;
       $qrys[] = $qry;
     }
     mysql_query('set autocommit = 0');
