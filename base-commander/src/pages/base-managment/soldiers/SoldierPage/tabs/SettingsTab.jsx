@@ -136,6 +136,7 @@ class SettingsTab extends Component {
               <UncontrolledTooltip placement="top" target="mission_comment" autohide={ false }>
                 Determines whether to show pictures on the mission sheets or not
               </UncontrolledTooltip>
+
               <Radio value='1'
                   name='pic_mission_type'
                   onChange={ this.onInputChange }
@@ -148,6 +149,13 @@ class SettingsTab extends Component {
                   onChange={ this.onInputChange }
                   checked={ pic_mission_type === 2 }>
                 Small Pictures
+              </Radio>
+
+              <Radio value='4'
+                     name='pic_mission_type'
+                     onChange={ this.onInputChange }
+                     checked={ pic_mission_type === 4 }>
+                Day School Missions
               </Radio>
             </Col>
           </Row>
