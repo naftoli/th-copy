@@ -1,13 +1,10 @@
 <?php
 ini_set('display_errors',1);
-ini_set('error_reporting', E_ALL);
-
 require_once( '../header/header.php' ); // load header
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/daySchoolMission.php' );
 
 if ( !isset( $_POST['school_id'] ) ) {
     header('Location: /new/missions/print' ); die();
