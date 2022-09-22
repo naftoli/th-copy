@@ -150,6 +150,9 @@ abstract class MissionDisplay {
 			case 3:
 				$m = new LargePicMission( $mission );
 				break;
+      case 4:
+        $m = new DaySchoolMission( $mission );
+        break;
 		}
 		$m->setMissionType( $type );
 		return $m;
