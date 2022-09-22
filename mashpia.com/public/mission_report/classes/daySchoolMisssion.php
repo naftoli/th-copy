@@ -17,7 +17,7 @@ class DaySchoolMission extends MissionDisplay {
         $newPageFirst = 22;
         $columnizeReg = 13;
         $newPageReg = 26;
-        $columnizeLast = 10;
+        $columnizeLast = 11;
         $newPageLast = 22;
 
         // added to fix overflow issue from footer when there was 49 total tasks (tasks + labels/2)
