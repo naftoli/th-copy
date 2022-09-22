@@ -20,10 +20,10 @@ abstract class MissionDisplay {
 
 	private $daySchoolSubjects;
 
-    public $user_id;
-    public $lang_id;
+  public $user_id;
+  public $lang_id;
 	public $school_type_id;
-	
+
 	public function __construct( $mission ) {
 		global $MASHPIA_DB;
 
@@ -33,11 +33,11 @@ abstract class MissionDisplay {
 		$this->dateDisplay = 1;
 		$this->dblSided = 1;
 		$this->missionType = 1;
-		
+
 		$this->start = $mission->user_tracks[0]->start_date;
 		$this->end = $mission->user_tracks[0]->end_date;
 		$this->school_type_id = $mission->school_type_id;
-		
+
 		$this->heDates = array();
 		$this->heDatesDisp = array();
 		$temp = $this->start;
@@ -47,7 +47,7 @@ abstract class MissionDisplay {
 			$this->heDates[] = $heArr[0] . ' ' . $heArr[1];
 			$this->heDatesDisp[] = $heArr[0];
 		} while (++$temp <= $this->end);
-		
+
 		$this->parsha = '';
 		$parsha_query = $MASHPIA_DB->query(
 			"SELECT name FROM parshos WHERE start = " . $this->start . " AND end = " . $this->end
@@ -56,36 +56,36 @@ abstract class MissionDisplay {
 			$this->parsha = $parsha_query->fetch()['name'];
 
 		$this->days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
-		
+
 		$this->campaignLogos = array(
-            1	=>	'Tehillim.svg',
-            4	=>	'Tefilla.svg',
-            12	=>	'Mivtzoim.svg',
-            13	=>	'Niggunim.svg',
-            16	=>	'hiskashrus.svg',
-            21	=>	'sefer-hamitzvos.svg',
-            27	=>	'tanya.svg',
-            40	=>	'Yom-Dipagra.svg',
-            41	=>	'Father-son.svg',
-            42	=>	'Footsteps.svg',
-            45	=>	'Cheshbon-Hanefesh.svg',
-            90	=>	'Chitas.svg',
-            100	=>	'Brias-Haguf.svg',
-			121 =>  "day-school-Jewish Day 250 px.svg",
-			122 =>  "day-school-Jewish Uniform 250px.svg",
-			124 =>  "day-school-Health 250px.svg",
-			125 =>  "day-school_Torah 250px.svg",
-			126 =>  "day-school_Shabbat 250px.svg",
-			127 =>  "day-school_Special Days 250px.svg",
-			129 =>  "day-school_Kosher 250px.svg",
-			130 =>  "day-school_Tefilla.svg",
+        1	=>	'Tehillim.svg',
+        4	=>	'Tefilla.svg',
+        12	=>	'Mivtzoim.svg',
+        13	=>	'Niggunim.svg',
+        16	=>	'hiskashrus.svg',
+        21	=>	'sefer-hamitzvos.svg',
+        27	=>	'tanya.svg',
+        40	=>	'Yom-Dipagra.svg',
+        41	=>	'Father-son.svg',
+        42	=>	'Footsteps.svg',
+        45	=>	'Cheshbon-Hanefesh.svg',
+        90	=>	'Chitas.svg',
+        100	=>	'Brias-Haguf.svg',
+        121 =>  "day-school-Jewish Day 250 px.svg",
+        122 =>  "day-school-Jewish Uniform 250px.svg",
+        124 =>  "day-school-Health 250px.svg",
+        125 =>  "day-school_Torah 250px.svg",
+        126 =>  "day-school_Shabbat 250px.svg",
+        127 =>  "day-school_Special Days 250px.svg",
+        129 =>  "day-school_Kosher 250px.svg",
+        130 =>  "day-school_Tefilla.svg",
 		    131 =>  "day-school-ahavat-yisrael.svg",
 		    132 =>  "day-school-brachot.svg",
 		    133 =>  "day-school-Tzedaka.svg",
 		    134 =>  "day-school-honoring parents 250px.svg",
 		    135 =>  "day-school-Middot-icon.svg"
 		);
-		
+
 		$this->stickerOutlines = array(
 			1	=>	'Shabbos Mevorchim Tehillim.gif', 	4	=>	'Tefillah.gif',
 			12	=>	'Mivtzoim.gif',				13	=>	'Niggunim.gif',
@@ -96,7 +96,7 @@ abstract class MissionDisplay {
 			92	=>	'Niggunim.gif',				93	=>	'Mivtzoim.gif',
 			94	=>	'Yomei Dipagra.gif',		100	=>	'Sticker - Brias Haguf_outline bw.png'
 		);
-		
+
 		$this->dailyStickers = array(
 			1	=>	'tehillim 5 of 7.png', 		4	=>	'tefilah 5 of 7.png',
 			12	=>	'mivtzoyim 5 of 7.png',		13	=>	'niggunim 5 of 7.png',
@@ -118,11 +118,11 @@ abstract class MissionDisplay {
 	        $this->daySchoolSubjects[] = $row['subject_id'];
         }
     }
-	
-	public function setDateDisplay( $val ) {	
+
+	public function setDateDisplay( $val ) {
 		$this->dateDisplay = $val;
 	}
-	
+
 	public function setDblSided( $val ) {
 		$this->dblSided = $val;
 	}
@@ -134,11 +134,11 @@ abstract class MissionDisplay {
 	public function setMissionType( $type ) {
 		$this->missionType = $type;
 	}
-	
+
 	public function getMissionType() {
 		return $this->missionType;
 	}
-	
+
 	public static function getInstance( $type, $mission ) {
 		switch ($type) {
 			case 1:
@@ -150,6 +150,9 @@ abstract class MissionDisplay {
 			case 3:
 				$m = new LargePicMission( $mission );
 				break;
+      case 4:
+        $m = new DSMission( $mission );
+        break;
 		}
 		$m->setMissionType( $type );
 		return $m;
