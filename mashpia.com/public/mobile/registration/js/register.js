@@ -215,7 +215,7 @@ var registrationApp = function() {
         else $(".myshliachTerms").hide()
 
         // yahadus registration
-        var australian = [ 55, 66, 110, 112, 180, 256 ];
+        var australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713, 690 ];
         $('.book-bought').click( function() {
             if ( $(this).val() === '0' ) {
                 console.log(school_id)
