@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
+
 require_once( '../header/header.php' ); // load header
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
