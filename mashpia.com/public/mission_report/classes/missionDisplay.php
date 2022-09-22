@@ -20,8 +20,8 @@ abstract class MissionDisplay {
 
 	private $daySchoolSubjects;
 
-    public $user_id;
-    public $lang_id;
+  public $user_id;
+  public $lang_id;
 	public $school_type_id;
 	
 	public function __construct( $mission ) {
@@ -58,27 +58,27 @@ abstract class MissionDisplay {
 		$this->days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 		
 		$this->campaignLogos = array(
-            1	=>	'Tehillim.svg',
-            4	=>	'Tefilla.svg',
-            12	=>	'Mivtzoim.svg',
-            13	=>	'Niggunim.svg',
-            16	=>	'hiskashrus.svg',
-            21	=>	'sefer-hamitzvos.svg',
-            27	=>	'tanya.svg',
-            40	=>	'Yom-Dipagra.svg',
-            41	=>	'Father-son.svg',
-            42	=>	'Footsteps.svg',
-            45	=>	'Cheshbon-Hanefesh.svg',
-            90	=>	'Chitas.svg',
-            100	=>	'Brias-Haguf.svg',
-			121 =>  "day-school-Jewish Day 250 px.svg",
-			122 =>  "day-school-Jewish Uniform 250px.svg",
-			124 =>  "day-school-Health 250px.svg",
-			125 =>  "day-school_Torah 250px.svg",
-			126 =>  "day-school_Shabbat 250px.svg",
-			127 =>  "day-school_Special Days 250px.svg",
-			129 =>  "day-school_Kosher 250px.svg",
-			130 =>  "day-school_Tefilla.svg",
+        1	=>	'Tehillim.svg',
+        4	=>	'Tefilla.svg',
+        12	=>	'Mivtzoim.svg',
+        13	=>	'Niggunim.svg',
+        16	=>	'hiskashrus.svg',
+        21	=>	'sefer-hamitzvos.svg',
+        27	=>	'tanya.svg',
+        40	=>	'Yom-Dipagra.svg',
+        41	=>	'Father-son.svg',
+        42	=>	'Footsteps.svg',
+        45	=>	'Cheshbon-Hanefesh.svg',
+        90	=>	'Chitas.svg',
+        100	=>	'Brias-Haguf.svg',
+        121 =>  "day-school-Jewish Day 250 px.svg",
+        122 =>  "day-school-Jewish Uniform 250px.svg",
+        124 =>  "day-school-Health 250px.svg",
+        125 =>  "day-school_Torah 250px.svg",
+        126 =>  "day-school_Shabbat 250px.svg",
+        127 =>  "day-school_Special Days 250px.svg",
+        129 =>  "day-school_Kosher 250px.svg",
+        130 =>  "day-school_Tefilla.svg",
 		    131 =>  "day-school-ahavat-yisrael.svg",
 		    132 =>  "day-school-brachot.svg",
 		    133 =>  "day-school-Tzedaka.svg",
