@@ -1,11 +1,14 @@
 <?php
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
     exit;
 }
+
+$year = GlobalSettings::getChidonYear();
 
 function getMissionNumber() {
     global $subject_id;
@@ -23,8 +26,11 @@ function getMissionNumber() {
 }
 
 function getJulianDate($heDate) {
+    global $year;
+    $yy = $year;
     $params = explode(',', $heDate);
-    $jd = jewishtojd($params[0], $params[1], 5782);
+    if ($params[0] == 13) $yy--;
+    $jd = jewishtojd($params[0], $params[1], $yy);
     return $jd;
 }
 
@@ -46,7 +52,7 @@ $minutes = [
 ];
 
 $info = [];
-if (($handle = fopen('limmudTasks.csv', "r")) !== false) {
+if (($handle = fopen('LimmudTasks5783.csv', "r")) !== false) {
     $j = 0; // counter for rows
     while (($data = fgetcsv($handle, 1000, ",")) !== false) {
         if ($j == 0) {
