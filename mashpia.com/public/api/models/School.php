@@ -330,11 +330,16 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             'early_bird' => GlobalSettings::getEarlyBird(),
             'guaranteed' => GlobalSettings::getGuaranteedDiscount()
         ];
+
+        $now = new DateTime();
+        if ($now > $discounts['early_bird']) $early_bird = false;
+        else $early_bird = true;
+
         // rates for all 3 registration types, by index (minus 1)
         $rates = [
-            GlobalSettings::getRegCost( 1 ),
-            GlobalSettings::getRegCost( 2 ),
-            GlobalSettings::getRegCost( 3 )
+            GlobalSettings::getRegCost( 1, $early_bird ),
+            GlobalSettings::getRegCost( 2, $early_bird ),
+            GlobalSettings::getRegCost( 3, $early_bird )
         ];
 
         return [ 'discounts' => $discounts, 'rates' => $rates ];
