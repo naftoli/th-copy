@@ -68,7 +68,8 @@ foreach ($schools as $school_id => $school) {
 // get raffle id's
 $raffles = [];
 $weeks = [];
-$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year . " order by start_date";
+$start = key($start_dates_to_hachayol_issues);
+$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and start_date >= $start order by start_date";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $raffles[$row['raffle_id']] = $row;
