@@ -94,8 +94,6 @@ $posters = array(
                 echo $school['shipping_name'] . "<br />";
                 echo $school['name'] . "<br />";
                 echo $school['address'] . "<br />";
-                echo "Residential Address:<br />";
-                echo $school['res_address'] . "<br />";
                 echo "Type of school: " . $school['type'] . "<br />";
                 echo "Principal: " . $school['principal'] . "<br />";
                 foreach( $school['admins'] as $admin ) {
