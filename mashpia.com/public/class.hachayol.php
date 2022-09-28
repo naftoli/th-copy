@@ -23,7 +23,8 @@ class Hachayol {
         //get list of schools with totals per school of registered students
         $sql = "SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
             s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests, s.school_gender, 
-            s.shipping_first, s.shipping_last, s.chidon_posters_boys, s.chidon_posters_girls
+            s.shipping_first, s.shipping_last, s.chidon_posters_boys, s.chidon_posters_girls, s.res_address1, s.res_address2, s.res_city, 
+            s.res_state, s.res_postal, s.res_country 
             FROM schools s
             JOIN users u
             USING ( school_id )
@@ -53,6 +54,10 @@ class Hachayol {
             $this->schools[$method][$school]['shipping_name'] = $row['shipping_first'] . ' ' . $row['shipping_last'];
             $this->schools[$method][$school]['chidon_posters_boys'] = $row['chidon_posters_boys'];
             $this->schools[$method][$school]['chidon_posters_girls'] = $row['chidon_posters_girls'];
+            $this->schools[$method][$school]['res_address'] = $row['res_address1'] .
+                ($row['res_address2'] == "" ? "<br />" . $row['res_address2'] : "<br />") .
+                $row['res_city'] . ", " . $row['res_state'] . "<br />" . $row['res_postal'] . "<br />" .
+                $row['res_country'];
             
             $sql2 = "select a.first, a.last 
                      from admins a 
