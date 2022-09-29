@@ -108,7 +108,7 @@ foreach ($info as $details) {
                     mission_description = '', 
                     start_date = $start, 
                     end_date = $end, 
-                    default_on = 1, 
+                    default_on = 0, 
                     lang_id = 1";
                 if (! mysql_query($sql)) {
                     $success = false;
@@ -131,7 +131,7 @@ foreach ($info as $details) {
                             ord = 90, 
                             needed = 1, 
                             focus_task = 0, 
-                            default_on = 1, 
+                            default_on = 0, 
                             label_ord = 90, 
                             description = '', 
                             grid_id = $grid, 
