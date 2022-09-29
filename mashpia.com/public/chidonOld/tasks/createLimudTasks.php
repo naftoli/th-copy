@@ -97,50 +97,52 @@ foreach ($info as $details) {
                 $heDateArr = explode(' ', iconv ('WINDOWS-1255', 'UTF-8', $heDate));
                 $heDateInsertable = $heDateArr[0] . ' ' . $heDateArr[1] . ' - Chidon Limmud';
                 $mission_name = addslashes($heDateInsertable);
-                $sql = "insert into date_tasks_missions 
-                    set school_type_id = $type, 
-                    subject_id = $subject_id, 
-                    level = $level, 
-                    track_id = $track, 
-                    mission_name = \"" . $mission_name . "\",   
-                    mission_value = 1.0, 
-                    mission_number = " . $missionNumber++ . ", 
-                    mission_description = '', 
-                    start_date = $start, 
-                    end_date = $end, 
-                    default_on = 0, 
-                    lang_id = 1";
-                if (! mysql_query($sql)) {
-                    $success = false;
-                    break 4;
-                } else {
-                    $id = mysql_insert_id();
-                    foreach ($tasks as $idx => $task) {
-                        $grid = $grid_id + $idx;
-                        $sql = "insert into date_tasks 
-                            set date_tasks_mission_id = $id, 
-                            name = \"" . addslashes($task['name']) . "\", 
-                            cat = 'chidon limmud', 
-                            cat_ord_new = $grid, 
-                            points = 0.5, 
-                            short_name = '" . ucwords($desc) . " Track',
-                            mandatory_qty = 0, 
-                            optional_qty = 1, 
-                            daily_task = 0, 
-                            label_id = 0, 
-                            ord = 90, 
-                            needed = 1, 
-                            focus_task = 0, 
-                            default_on = 0, 
-                            label_ord = 90, 
-                            description = '', 
-                            grid_id = $grid, 
-                            mission_marking = 1, 
-                            grid_marking = 0, 
-                            quantity = " . $task['qty'];
-                        if (! mysql_query($sql)) {
-                            $success = false;
-                            break 5;
+                foreach ([1, 2] as $lang) {
+                    $sql = "insert into date_tasks_missions 
+                        set school_type_id = $type, 
+                        subject_id = $subject_id, 
+                        level = $level, 
+                        track_id = $track, 
+                        mission_name = \"" . $mission_name . "\",   
+                        mission_value = 1.0, 
+                        mission_number = " . $missionNumber++ . ", 
+                        mission_description = '', 
+                        start_date = $start, 
+                        end_date = $end, 
+                        default_on = 0, 
+                        lang_id = " . $lang;
+                    if (! mysql_query($sql)) {
+                        $success = false;
+                        break 4;
+                    } else {
+                        $id = mysql_insert_id();
+                        foreach ($tasks as $idx => $task) {
+                            $grid = $grid_id + $idx;
+                            $sql = "insert into date_tasks 
+                                set date_tasks_mission_id = $id, 
+                                name = \"" . addslashes($task['name']) . "\", 
+                                cat = 'chidon limmud', 
+                                cat_ord_new = $grid, 
+                                points = 0.5, 
+                                short_name = '" . ucwords($desc) . " Track',
+                                mandatory_qty = 0, 
+                                optional_qty = 1, 
+                                daily_task = 0, 
+                                label_id = 0, 
+                                ord = 90, 
+                                needed = 1, 
+                                focus_task = 0, 
+                                default_on = 0, 
+                                label_ord = 90, 
+                                description = '', 
+                                grid_id = $grid, 
+                                mission_marking = 1, 
+                                grid_marking = 0, 
+                                quantity = " . $task['qty'];
+                            if (!mysql_query($sql)) {
+                                $success = false;
+                                break 5;
+                            }
                         }
                     }
                 }
