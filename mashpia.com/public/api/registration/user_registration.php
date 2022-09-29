@@ -140,19 +140,12 @@ class UserRegistrationRouter {
             if ($firstChild) $firstChild = false;
             else $description .= ", ";
             $description .= $serial;
-            $first = true;
             foreach ($details as $type => $paid) {
-                if ($first) {
-                    $first = false;
-                    $description .= " #";
-                } else {
-                    $description .= ", #";
-                }
-                $description .= $type . " " . $paid;
+                $description .= " #" . $type . " " . $paid;
             }
             $description .= " ";
         }
-        if ($shipping_charges) $description .= "000:269 #shipping " . $shipping_charges;
+        if ($shipping_charges) $description .= "#shipping " . $shipping_charges;
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {

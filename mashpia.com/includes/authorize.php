@@ -37,7 +37,7 @@ $post_values = array(
         "x_card_code"           => $cvv,
 
         "x_amount"              => $amount,
-        "x_description"         => "CTH " . $description,
+        "x_description"         => $description,
 
         "x_first_name"          => $first_name,
         "x_last_name"           => $last_name,
