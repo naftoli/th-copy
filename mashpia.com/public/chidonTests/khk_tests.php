@@ -12,7 +12,7 @@ function getMark($num, $id) {
     $result = mysql_query($sql);
     if (mysql_num_rows($result) > 0) {
         $row = mysql_fetch_assoc($result);
-        return $row['mark'];
+        return intval($row['mark']);
     }
     return '';
 }
@@ -124,7 +124,7 @@ if ($admin_user['auth'] != 'super') {
             for ($i = 1; $i <= 4; $i++) {
                 $mark = getMark($i, $id);
                 if ($mark > 0) {
-                    $avg += floatval($mark);
+                    $avg += $mark;
                     $divideBy++;
                 }
                 echo "<td><input type='text' name='marks[$id][$i]' value='" . $mark . "' size='5' ";
