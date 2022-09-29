@@ -56,7 +56,7 @@ foreach ($schools as $school_id => $school) {
 
 // initialize all tests to not be disabled
 $disable = [];
-for ($i = 1; $i <= 3; $i++) {
+for ($i = 1; $i <= 4; $i++) {
     $disable[$i] = false;
 }
 
@@ -113,7 +113,7 @@ if ($admin_user['auth'] != 'super') {
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
         echo "<h2>" . $schools[$school] . "</h2>";
-        echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Avg Mark</th></tr>";
+        echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
             $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
@@ -121,7 +121,7 @@ if ($admin_user['auth'] != 'super') {
             $avg = 0;
             echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
             $divideBy = 0;
-            for ($i = 1; $i <= 3; $i++) {
+            for ($i = 1; $i <= 4; $i++) {
                 $mark = getMark($i, $id);
                 if ($mark > 0) {
                     $avg += floatval($mark);
