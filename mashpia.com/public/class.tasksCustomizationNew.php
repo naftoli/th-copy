@@ -425,7 +425,7 @@ class TasksCustomizationNew {
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         
         if ( $this->type == 'user' ) {
-			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty "
+			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id "
 				." FROM date_tasks dt "
                 ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
 				." JOIN user_tracks ut USING (subject_id, level, track_id) "
@@ -446,7 +446,7 @@ class TasksCustomizationNew {
 //            $users = $this->getUsersInGrade($this->id);
 //            if ( empty($users) ) return false;
 //            where ut.user_id in (" . implode(',', $users) . ")
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
@@ -464,7 +464,7 @@ class TasksCustomizationNew {
 //			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //            echo $sql;
         } else {
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty 
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     where dtm.subject_id = " . $subject_id . " 
@@ -485,6 +485,8 @@ class TasksCustomizationNew {
         } 
         
         while ( $row = mysql_fetch_assoc( $result ) ) {
+            // make sure to have same name for chidon limmud tasks
+            if ($row['grid_id'] == 20010) $row['name'] = 'I learned __ minutes today.';
             //if ($row['cat'] == 'Birthday')
                 //continue;
             //since there can be more than one task with the same category and each task can 

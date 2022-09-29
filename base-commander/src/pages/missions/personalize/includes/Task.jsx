@@ -84,7 +84,7 @@ class Task extends Component {
           { !missions && <Spinner size={ 4 } /> }
 
           <div className='missions'>
-            { task !== 'chidon limmud' && missions && missions.map( ( mission, index ) =>
+            { missions && missions.map( ( mission, index ) =>
               <Mission
                 key={ index }
                 task={ task }
