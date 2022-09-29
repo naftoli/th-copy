@@ -29,8 +29,8 @@ function getJulianDate($heDate) {
     global $year;
     $yy = $year;
     $params = explode(',', $heDate);
-    if ($params[0] == 13) $yy--;
-    $jd = jewishtojd($params[0], $params[1], $yy);
+    if ($params[1] == 13) $yy--;
+    $jd = jewishtojd($params[1], $params[0], $yy);
     return $jd;
 }
 
