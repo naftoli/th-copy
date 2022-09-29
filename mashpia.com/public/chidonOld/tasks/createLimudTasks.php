@@ -37,7 +37,7 @@ function getJulianDate($heDate) {
 $grid_id = 20010;
 $subject_id = 21;
 $types = [2, 3];
-$levels = [4,5,6,7,8]; // grades
+$levels = [10, 11, 12, 13, 14]; // grades 4 - 8
 $tracks = [
     1 => 'yesod',
     2 => 'yediah',
