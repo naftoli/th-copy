@@ -96,7 +96,6 @@ class TehillimBackup {
             mysql_query('set autocommit=0');
             mysql_query('begin');
             
-            $i = 1;
             foreach ($this->marks as $mark) {
                 $sql = "insert into tehillim_backups
                         set date_task_id = " . $mark['date_task_id'] . ",
@@ -106,8 +105,9 @@ class TehillimBackup {
                         mark_description = \"" . $mark['mark_description'] . "\",
                         year = " . $this->year . ",
                         grid_id = " . $mark['grid_id'] . ",
-                        sm_date = " . $this->date;
-                //echo $i++ . ": " . $sql . "<br />";
+                        sm_date = " . $this->date . " 
+                        on duplicate key update 
+                        done_qty = " . $mark['done_qty'];
                 if (! @mysql_query( $sql )) {
                     $success = false;
                     $error = mysql_error();
