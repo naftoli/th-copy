@@ -457,7 +457,7 @@ class ShabbosMevorchim
         //			and u.school_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
@@ -507,10 +507,18 @@ class ShabbosMevorchim
                 and school_id not in (82, 612)";
         if ($col) $sql .= " and col_show = 1";
         $sql .= " order by school_name";
-        foreach ($this->db->query($sql) as $row) {
-            $this->setArmyDoneSchoolsResults($row['school_id'], $date);
-            $this->setArmySchoolsResults($row['school_id'], $date);
+        $rows = $this->db->query($sql);
+        foreach ($rows as $row) {
             $this->schools[$row['school_id']] = $row['school_name'];
+            $this->setArmySchoolsResults($row['school_id'], $date);
+            $this->setArmyDoneSchoolsResults($row['school_id'], $date);
+        }
+        if ($this->debug) {
+            echo "<pre>";
+            print_r($this->armySchoolsResults);
+            print_r($this->armySchoolsDoneResults);
+            echo "</pre>";
+            exit;
         }
         $this->setArmyResultsOrdered();
         $this->setAccomplishedRows();
@@ -632,7 +640,7 @@ class ShabbosMevorchim
 
         $stmt2 = $this->db->prepare($sql2);
 
-        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
@@ -863,7 +871,7 @@ class ShabbosMevorchim
         //			and u.class_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
@@ -953,7 +961,7 @@ class ShabbosMevorchim
         //			and tb.user_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     WHERE tb.sm_date = ? 
                     AND tb.grid_id = ?
@@ -1144,7 +1152,7 @@ class ShabbosMevorchim
         //			and user_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT sum( done_qty ) AS total
+        $sqlBackup = "SELECT IFNULL(sum( done_qty ), 0) AS total
             FROM tehillim_backups 
             WHERE sm_date = ? 
             AND grid_id = ?
