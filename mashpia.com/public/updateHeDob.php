@@ -5,15 +5,13 @@ require_once 'class.heDob.php';
 require_once 'class.birthdayEn.php';
 require_once 'class.birthdayYi.php';
 require_once 'class.birthdayHe.php';
-/*
-$users = array();
-$sql = "select user_id from users where user_registered > 0 and school_id = 110";
+
+$users = [];
+$sql = "select user_id from users where user_registered > 0";
 $result = mysql_query($sql);
 while ( $row = mysql_fetch_assoc($result) ) {
 	$users[] = $row['user_id'];
 }
-*/
-$users = array(52458); // seeing where the "interesting" user info comes from
 foreach ($users as $user_id) {
 	$h = new HeDob( $user_id, true );
 	$h->setHeDob();
