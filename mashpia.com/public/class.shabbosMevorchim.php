@@ -518,7 +518,6 @@ class ShabbosMevorchim
             print_r($this->armySchoolsResults);
             print_r($this->armySchoolsDoneResults);
             echo "</pre>";
-            exit;
         }
         $this->setArmyResultsOrdered();
         $this->setAccomplishedRows();
