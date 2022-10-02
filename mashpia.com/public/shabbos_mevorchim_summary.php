@@ -84,7 +84,7 @@ require_once('admin_header.php');
 require_once 'class.shabbosMevorchim.php';
 
 $sm = new ShabbosMevorchim();
-//$sm->setDebug();
+$sm->setDebug();
 $sm->setReportDates($_GET['date']);
 $sm->setArmyResults();
 
