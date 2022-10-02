@@ -12,7 +12,7 @@ class TehillimBackup {
         $this->year = GlobalSettings::getCurrentYear();
         $this->dates = [
             2459823,
-            2459859,
+            2459855,
             2459880,
             2459908,
             2459941,
