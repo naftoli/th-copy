@@ -141,16 +141,16 @@ foreach ( $schools as $school_id => $name ) {
     </div>
     <div class="page-break"></div>
     
-<!--    <div id="pie"></div>-->
-<!--    <div id="chart"></div>-->
-<!--    <div id="chart2"></div>-->
-<!--    <br />-->
-<!--    <div class="page-break"></div>-->
+    <div id="pie"></div>
+    <div id="chart"></div>
+    <div id="chart2"></div>
+    <br />
+    <div class="page-break"></div>
     <?php
-//    echo "<input type='hidden' id='tasks' value='" . json_encode( $sm->getKeys() ) . "'>";
-//    echo "<input type='hidden' id='kapitelach' value='" . json_encode( $sm->getAccomplishedKapitelach() ) . "'>";
-//    echo "<input type='hidden' id='minutes' value='" . json_encode( $sm->getAccomplishedMinutes() ) . "'>";
-//    echo "<input type='hidden' id='pieK' value='" . json_encode( $sm->getPieKapitelach() ) . "'>";
+    echo "<input type='hidden' id='tasks' value='" . json_encode( $sm->getKeys() ) . "'>";
+    echo "<input type='hidden' id='kapitelach' value='" . json_encode( $sm->getAccomplishedKapitelach() ) . "'>";
+    echo "<input type='hidden' id='minutes' value='" . json_encode( $sm->getAccomplishedMinutes() ) . "'>";
+    echo "<input type='hidden' id='pieK' value='" . json_encode( $sm->getPieKapitelach() ) . "'>";
 }
 ?>
 </div>
@@ -163,8 +163,8 @@ foreach ( $schools as $school_id => $name ) {
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
-  // google.load("visualization", "1", {packages:["corechart"]});
-  // google.setOnLoadCallback(drawCharts);
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawCharts);
   function drawCharts() {
       
     var data = new google.visualization.DataTable();
