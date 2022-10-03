@@ -18,6 +18,16 @@ if(!function_exists ("check_first_in_family")){
     }
 }
 
+if (! function_exists('alreadyWon')) {
+    function alreadyWon($user, $raffle) {
+        $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
+            select raffle_id from raffles where type = 'weekly' and raffle_id < " . $raffle->raffle_id . " order by raffle_id desc limit 1
+        )";
+        $result = mysql_query($sql);
+        return mysql_num_rows($result) > 0;
+    }
+}
+
 function weekly_raffle($raffle){
     
     /************************** GET USER INFO **************************/
@@ -70,7 +80,7 @@ function weekly_raffle($raffle){
     
     // set up some variables for the raffle
     $winners = []; // an array of all the users so they can be added to the database in the end
-    $winning_families = []; // array to keep track of what families have won in this raffle
+//    $winning_families = []; // array to keep track of what families have won in this raffle
     $remaining_users = []; // the users that are left after the first two rounds of picking
     
     /************************** ROUND ONE: GIVE ALL THE SCHOOLS THEIR QUOTA **************************/
@@ -82,8 +92,9 @@ function weekly_raffle($raffle){
             
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
-            if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]) {
-                echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " is currently ineligible. Sibling (user_id: ".$winning_families[$user['admin_id']].") has already won. Removing from raffle\n";
+//            if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]) {
+            if (!alreadyWon($user, $raffle) && count($user_ids) <= $school_limits[$school_id]) {
+                echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " has already won last raffle. Removing from raffle\n";
                 unset($user_ids[$user['user_id']]); // remove the user from the array
                 $i--; continue; // redo the draw
             }
