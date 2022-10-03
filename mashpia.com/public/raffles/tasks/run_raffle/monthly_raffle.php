@@ -18,6 +18,18 @@ if(!function_exists ("check_first_in_family")){
     }
 }
 
+if (! function_exists('alreadyWon')) {
+    function alreadyWon($user) {
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+        $year = GlobalSettings::getCurrentYear();
+        $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
+            select raffle_id from raffles where type = 'monthly' and year = $year
+        )";
+        $result = mysql_query($sql);
+        return mysql_num_rows($result) > 0;
+    }
+}
+
 function monthly_raffle($raffle){
     
     /************************** GET USER INFO **************************/
@@ -49,15 +61,17 @@ function monthly_raffle($raffle){
     foreach($prizes as $prize) { // for each school
         $user_ids = &$schools[$prize['school_id']];
         $winner_found = false;
-        while(!$winner_found && $user_ids){
+        while (!$winner_found && $user_ids) {
             $user = $user_ids[array_rand($user_ids)];   // get a random id from the array of user arrays (keys)
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
-            // if(!check_first_in_family($user, $winning_families)){
-            //     echo $user['school_id']."\t".$user['user_id'] . " is currently ineligible. Sibling (user_id: ".$winning_families[$user['admin_id']].") has already won. Removing from raffle\n";
-            //     unset($user_ids[$user['user_id']]); // remove the user from the array
-            //     continue; // try again
-            // }
+//             if(!check_first_in_family($user, $winning_families)){
+            if (! alreadyWon($user)) {
+                 echo $user['school_id']."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
+                 unset($user_ids[$user['user_id']]); // remove the user from the array
+                 continue; // try again
+            }
+
             // now that we have an eligible winner
             unset($user_ids[$user['user_id']]); // remove the user from the array
             $winner_found = true;
