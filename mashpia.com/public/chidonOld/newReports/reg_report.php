@@ -113,6 +113,8 @@ $poll = [
     'thechidon' => 'Online at thechidon.com'
 ];
 $pollKeys = array_keys($poll);
+
+$req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -129,12 +131,11 @@ $pollKeys = array_keys($poll);
         </style>
     </head>
     <body>
-        <h1>Chidon Registration Report <?= $year ?></h1>
+        <h1>Chidon Registration Report <?= $req_yr ?></h1>
         <div>
             Choose Year:
             <select name="year" id="year">
                 <?php
-                $req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
                 $cur_yr = $year;
                 for ($i = 0; $i < 5; $i++) {
                     echo "<option value='" . $cur_yr . "'";
