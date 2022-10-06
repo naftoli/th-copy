@@ -10,6 +10,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 
 $year = GlobalSettings::getChidonRegYear();
+$req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : $year;
 
 $info = [];
 $sql = "
@@ -53,7 +54,7 @@ $sql = "
             JOIN
         admins a USING (admin_id)
     WHERE
-        tc.year = $year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+        tc.year = $req_yr AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
     ORDER BY reg_date DESC";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -64,7 +65,7 @@ $prizes = [];
 $sql = "select u.user_id, p.prize_name, p.size, p.color, p.price, u.he_name 
         from chidon_prizes p 
         join chidon_user_prizes u using (prize_id) 
-        where u.year = $year  
+        where u.year = $req_yr  
         order by u.user_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -72,7 +73,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $book_purchases = [];
-$sql = "select * from yahadus_book_purchases where year = " . $year;
+$sql = "select * from yahadus_book_purchases where year = " . $req_yr;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     // only overwrite if newer row has the version info
@@ -113,8 +114,6 @@ $poll = [
     'thechidon' => 'Online at thechidon.com'
 ];
 $pollKeys = array_keys($poll);
-
-$req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : 0;
 ?>
 <!DOCTYPE html>
 <html>
