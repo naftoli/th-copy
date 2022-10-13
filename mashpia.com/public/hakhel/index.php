@@ -23,8 +23,6 @@
 				<div class="col-xs-2"></div>
 			</div>
 			<br />
-
-      <script type="text/javascript" src="//embed.chabad.org/multimedia/mediaplayer/embedded/embed.js.asp?aid=5655349&width=auto&height=auto"></script>
 			
 			<? if (isset($_GET['msg'])) : ?>
 				<div class="alert alert-success" role="alert">
@@ -163,5 +161,6 @@
 				});					
 			});
 		</script>
+    <script type="text/javascript" src="//embed.chabad.org/multimedia/mediaplayer/embedded/embed.js.asp?aid=5655349&width=auto&height=auto"></script>
 	</body>
 </html>
