@@ -130,6 +130,7 @@
 	              	</div>
 	              </div>
 	  		</form>
+      <br />
 		</div>
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>				
