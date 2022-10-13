@@ -161,5 +161,6 @@
 				});					
 			});
 		</script>
+    <script type="text/javascript" src="//embed.chabad.org/multimedia/mediaplayer/embedded/embed.js.asp?aid=5655349&width=auto&height=auto"></script>
 	</body>
 </html>
