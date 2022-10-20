@@ -89,6 +89,10 @@ foreach ($info as $details) {
                     [
                         'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
                         'qty'   => 300
+                    ],
+                    [
+                        'name'  => "I am Up To Date",
+                        'qty'   => 0
                     ]
                 ];
                 // find out hebrew date of mission
