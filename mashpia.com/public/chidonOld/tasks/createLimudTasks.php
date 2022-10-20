@@ -27,9 +27,8 @@ function getMissionNumber() {
 
 function getJulianDate($heDate) {
     global $year;
-    $yy = $year;
     $params = explode(',', $heDate);
-    if ($params[1] == 13) $yy--;
+    $yy = $params[1] == 13 ? $year - 1 : $year;
     $jd = jewishtojd($params[1], $params[0], $yy);
     return $jd;
 }
@@ -89,7 +88,11 @@ foreach ($info as $details) {
                 $tasks = [
                     [
                         'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
-                        'qty'   => 300
+                        'qty'   => 120
+                    ],
+                    [
+                        'name'  => "I am Up To Date",
+                        'qty'   => 0
                     ]
                 ];
                 // find out hebrew date of mission
