@@ -88,7 +88,7 @@ foreach ($info as $details) {
                 $tasks = [
                     [
                         'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
-                        'qty'   => 300
+                        'qty'   => 120
                     ],
                     [
                         'name'  => "I am Up To Date",
