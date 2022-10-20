@@ -606,7 +606,7 @@ class user {
 					$missing_label = $this->sorted_shabbos_labels[$frequency_id];
 					$logger->warning(
 						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
-						[user_id => $this->user_id]
+						['user_id' => $this->user_id]
 					);
 				}
 				array_push($this->shabbos_labels, $label_name);
