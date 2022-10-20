@@ -15,14 +15,14 @@ $colors: (
     border: 1px dashed; padding: 8px;
     &.permanent{
       page-break-after: always; display: block;
-       .rank-card .top { opacity: 0; }
+       //.rank-card .top { opacity: 0; }
       border: none; padding: 0px;
     }
   }
 
-  .rank-8 {
-    background-image: url("backgrounds/White.png");
-  }
+  //.rank-8 {
+  //  background-image: url("backgrounds/White.png");
+  //}
   
   display: inline-block;
   // Colors - go through each rank number and add the color to CSS
