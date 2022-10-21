@@ -11,8 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
-
-$super = $admin_user['auth'] == 'super';
+$year = GlobalSettings::getChidonYear();
 
 $info = [];
 foreach ($schools as $school_id => $name) {
@@ -21,7 +20,7 @@ foreach ($schools as $school_id => $name) {
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
             join th_chidon tc using (user_id) 
-            where tc.year = 5783 
+            where tc.year = $year  
             and u.school_id = " . $school_id;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -61,6 +60,7 @@ $fields = [
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Limmud Report</h1>
         <?php foreach ($schools as $school_id => $name) : ?>
+            <?= "<h2>" . $name . "</h2>"; ?>
             <table>
                 <tr>
                     <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
