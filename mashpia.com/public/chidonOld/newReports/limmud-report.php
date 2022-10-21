@@ -49,7 +49,7 @@ $fields = [
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Limmud Report</title>
-        <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+        <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
             tr, th, td {
                 font-size: 14px;
