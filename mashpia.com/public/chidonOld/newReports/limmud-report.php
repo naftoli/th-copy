@@ -25,7 +25,7 @@ foreach ($schools as $school_id => $name) {
             and u.school_id = " . $school_id;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class-sub']);
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $info[$school_id][$grade][] = $row; 
     }
 }
@@ -60,10 +60,23 @@ $fields = [
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Limmud Report</h1>
-        <table>
-            <tr>
-                <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
-            </tr>
-        </table>
+        <?php foreach ($schools as $school_id => $name) : ?>
+            <table>
+                <tr>
+                    <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
+                </tr>
+                <?php
+                foreach ($info[$school_id] as $more) {
+                    foreach ($more as $grade => $rows) {
+                        foreach ($rows as $row) {
+                            foreach ($fields as $field) {
+
+                            }
+                        }
+                    }
+                }
+                ?>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>
