@@ -60,10 +60,23 @@ $fields = [
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Limmud Report</h1>
-        <table>
-            <tr>
-                <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
-            </tr>
-        </table>
+        <?php foreach ($schools as $school_id => $name) : ?>
+            <table>
+                <tr>
+                    <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
+                </tr>
+                <?php
+                foreach ($info[$school_id] as $more) {
+                    foreach ($more as $grade => $rows) {
+                        foreach ($rows as $row) {
+                            foreach ($fields as $field) {
+
+                            }
+                        }
+                    }
+                }
+                ?>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>
