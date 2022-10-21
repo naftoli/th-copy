@@ -41,7 +41,13 @@ $fields = [
     'Learning Minutes Logged'   => 'calc-mlogged', 
     'Minutes Behind'            => 'calc-behind', 
     'Minutes Ahead'             => 'calc-ahead'
-]
+];
+
+function getFieldDesc($row, $field) {
+    $fieldArr = implode(',', $field);
+    $newField = $row[$fieldArr[0]] . (empty($row[$fieldArr[1]]) ? '' : '-' . $row[$fieldArr[1]]);
+    return $newField;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -70,9 +76,20 @@ $fields = [
                     foreach ($info[$school_id] as $more) {
                         foreach ($more as $grade => $rows) {
                             foreach ($rows as $row) {
+                                echo "<tr>";
                                 foreach ($fields as $field) {
+                                    echo "<td>";
+                                    if (is_array($field)) {
+                                        $field = getFieldDesc($row, $field);
+                                        echo $field;
+                                    } else if (strpos($field, 'calc-') !== false) {
 
+                                    } else {
+                                        echo $row[$field];
+                                    }
+                                    echo "</td>";
                                 }
+                                echo "</tr>";
                             }
                         }
                     }
