@@ -25,7 +25,7 @@ foreach ($schools as $school_id => $name) {
             and u.school_id = " . $school_id;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class-sub']);
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $info[$school_id][$grade][] = $row; 
     }
 }
