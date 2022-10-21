@@ -66,11 +66,13 @@ $fields = [
                     <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
                 </tr>
                 <?php
-                foreach ($info[$school_id] as $more) {
-                    foreach ($more as $grade => $rows) {
-                        foreach ($rows as $row) {
-                            foreach ($fields as $field) {
+                if (isset($info[$school_id])) {
+                    foreach ($info[$school_id] as $more) {
+                        foreach ($more as $grade => $rows) {
+                            foreach ($rows as $row) {
+                                foreach ($fields as $field) {
 
+                                }
                             }
                         }
                     }
