@@ -188,11 +188,11 @@ function daysPassed() {
     $today = unixtojd();
     // find today in array
     foreach ($learningDays[$test_num] as $day => $date) {
-        echo $date;
-        $dateArr = explode('/', $date);
-        $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        if ($jd == $today) return $day;
-        else if ($jd > $today) return --$day;
+        echo $day . " - " . $date . "<br />";
+//        $dateArr = explode('/', $date);
+//        $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+//        if ($jd == $today) return $day;
+//        else if ($jd > $today) return --$day;
     }
     return 0;
 }
