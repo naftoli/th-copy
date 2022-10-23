@@ -325,7 +325,7 @@ class ChidonTests
     public function getTotalDaysLearned( $user_id ) {
         $stmt = $this->db->prepare("
             SELECT 
-                count(*) AS total
+                IFNULL(count(*), 0) AS total
             FROM
                 date_tasks_marks dtm
                     JOIN
