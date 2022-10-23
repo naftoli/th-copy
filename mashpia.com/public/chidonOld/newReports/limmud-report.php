@@ -60,6 +60,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
             }
             ?>
           </select>
+          <button>Update</button>
         </form>
         <?php foreach ($schools as $school_id => $name) : ?>
             <?= "<h2>" . $name . "</h2>"; ?>
