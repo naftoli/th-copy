@@ -331,7 +331,7 @@ class ChidonTests
             return [
                 'avg' => 0,
                 'highest_track' => '',
-                'highest_track_avg' => ''
+                'highest_track_avg' => 0
             ];
         }
         $childMarkInfo = $this->marks[$child['th_chidon_id']];
