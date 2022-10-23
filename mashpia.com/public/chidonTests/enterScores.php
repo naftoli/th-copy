@@ -44,9 +44,9 @@ if ($admin_user['auth'] != 'super') {
 
     if ($school_id == 19) $shutdown[4] = new DateTime('2022-02-23 00:00:00');
 
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
-        $disabled = true;
-    }
+//    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
+//        $disabled = true;
+//    }
 }
 ?>
 <!DOCTYPE html>
