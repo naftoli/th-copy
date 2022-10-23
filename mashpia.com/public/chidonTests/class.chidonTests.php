@@ -376,7 +376,7 @@ class ChidonTests
         if ($start) {
             $stmt = $this->db->prepare("
                 SELECT 
-                    dtm.*
+                    dt.grid_id, dtm.*
                 FROM
                     date_tasks_marks dtm
                         JOIN
