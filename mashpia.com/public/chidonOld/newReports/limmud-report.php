@@ -54,8 +54,11 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
         <form action="limmud-report.php" method="get">
           Please choose which test you would like to view:
           <select name="num">
-            <?php for ($i = 1; $i < 5; $i++) : ?>
-            <option value="<?=$i?>"><?=$i?></option>
+            <?php
+            for ($i = 1; $i < 5; $i++) {
+                echo "<option value='" . $i . "'>" . $i . "</option>";
+            }
+            ?>
           </select>
         </form>
         <?php foreach ($schools as $school_id => $name) : ?>
