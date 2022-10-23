@@ -13,6 +13,7 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 
 $chidon = new ChidonTests();
+$types = $chidon->getTypes();
 
 $info = [];
 foreach ($schools as $school_id => $name) {
@@ -118,7 +119,8 @@ require_once 'codeForReport.php';
                                             break;
                                     }
                                 } else {
-                                    echo $row[$field];
+                                    if ($desc == 'Track Chosen') echo $types[$row[$field]];
+                                    else echo $row[$field];
                                 }
                                 echo "</td>";
                             }
