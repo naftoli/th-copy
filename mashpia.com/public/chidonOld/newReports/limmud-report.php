@@ -14,8 +14,6 @@ $year = GlobalSettings::getChidonYear();
 
 $chidon = new ChidonTests();
 
-require_once 'codeForReport.php';
-
 $info = [];
 foreach ($schools as $school_id => $name) {
     $sql = "select u.user_id, u.user_serial, u.first, u.last, c.class_grade, c.class_sub, tc.test_type, tc.reward_type 
@@ -33,6 +31,8 @@ foreach ($schools as $school_id => $name) {
 }
 
 $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
+
+require_once 'codeForReport.php';
 ?>
 <!DOCTYPE html>
 <html>
