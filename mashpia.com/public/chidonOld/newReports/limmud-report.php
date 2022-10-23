@@ -101,7 +101,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                             break;
                                         case 'calc-mrequired':
                                             $track = $row['test_type'];
-                                            $required = intval($days) * intval($minutes[$track]);
+                                            $required = intval($days) * $minutes[$track];
                                             echo $required;
                                             break;
                                         case 'calc-mlogged':
