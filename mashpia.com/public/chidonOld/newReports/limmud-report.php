@@ -43,9 +43,8 @@ $fields = [
     'Minutes Ahead'             => 'calc-ahead'
 ];
 
-function getFieldDesc($row, $field) {
-    $fieldArr = implode(',', $field);
-    $newField = $row[$fieldArr[0]] . (empty($row[$fieldArr[1]]) ? '' : '-' . $row[$fieldArr[1]]);
+function getFieldDesc($row, $field, $separator = ' ') {
+    $newField = $row[$field[0]] . (empty($row[$field[1]]) ? '' : ' ' . $row[$field[1]]);
     return $newField;
 }
 ?>
@@ -74,21 +73,21 @@ function getFieldDesc($row, $field) {
                 <?php
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
-                          foreach ($rows as $row) {
-                              echo "<tr>";
-                              foreach ($fields as $field) {
-                                  echo "<td>";
-                                  if (is_array($field)) {
-                                      $field = getFieldDesc($row, $field);
-                                      echo $field;
-                                  } else if (strpos($field, 'calc-') !== false) {
+                        foreach ($rows as $row) {
+                            echo "<tr>";
+                            foreach ($fields as $desc => $field) {
+                                echo "<td>";
+                                if (is_array($field)) {
+                                    if ($desc == 'Class') echo getFieldDesc($row, $field, ' - ');
+                                    else echo getFieldDesc($row, $field);
+                                } else if (strpos($field, 'calc-') !== false) {
 
-                                  } else {
-                                      echo $row[$field];
-                                  }
-                                  echo "</td>";
-                              }
-                              echo "</tr>";
+                                } else {
+                                    echo $row[$field];
+                                }
+                                echo "</td>";
+                            }
+                            echo "</tr>";
                         }
                     }
                 }
