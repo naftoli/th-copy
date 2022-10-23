@@ -75,7 +75,7 @@ class ChidonTests
                 schools s on s.school_id = u.school_id
                     JOIN
                 classes c ON c.class_id = u.class_id 
-                    JOIN 
+                    LEFT JOIN 
                 th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id  
             WHERE
                 tc.year = :year 
