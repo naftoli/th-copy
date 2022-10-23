@@ -190,7 +190,7 @@ function daysPassed() {
     foreach ($learningDays[$test_num] as $day => $full_date) {
         // create jd from date
         $dateInfo = explode('/', $full_date);
-        $date = gregoriantojd(intval($dateInfo[1]), intval($dateInfo[2]), intval($dateInfo[0]));
+        $date = gregoriantojd(intval($dateInfo[0]), intval($dateInfo[1]), intval($dateInfo[2]));
         if ($date == $now) return $day;
         else if ($date > $now) return --$day;
     }
