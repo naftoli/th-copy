@@ -7,7 +7,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
-if (! (isset($_GET['id']) && isset($GET['test']))) {
+if (!isset($_GET['id']) || !isset($GET['test'])) {
     header('Location: limmud-report.php');
     exit;
 }
