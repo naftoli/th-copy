@@ -12,13 +12,20 @@ if (! (isset($_GET['id']) && isset($GET['test']))) {
     exit;
 }
 
+require_once 'codeForReport.php';
+
 $year = GlobalSettings::getChidonYear();
 $chidon = new ChidonTests();
 $user_id = $_GET['id'];
 $test_num = $_GET['test'];
-$info = $chidon->getLimmudInfo($user_id, $test_num);
+$info = $chidon->getLimmudInfo($user_id);
+$details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num]);
 
-require_once 'codeForReport.php';
+// add to info variable
+$info['grade'] = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
+$info['track_passed'] = $test_num > 1 ? $chidon->getHighestTrackPassed($user_id, $test_num)['highest_track'] : '';
+$info['required'] = daysPassed() * $minutes[$info['test_type']];
+$info['learned'] = $chidon->getTotalDaysLearned($user_id);
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,6 +43,35 @@ require_once 'codeForReport.php';
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Limmud Detailed Report</h1>
-
+        <p>
+            Test #: <?= $test_num ?><br />
+            Serial: <?= $info['user_serial'] ?><br />
+            Name: <?= $info['first'] . ' ' . $info['last'] ?><br />
+            Class: <?= $info['grade'] ?><br />
+            Track Chosen: <?= $info['test_type'] ?><br />
+            Track Passed: <?= $info['track_passed'] ?><br />
+            Total Minutes Required: <?= $info['required'] ?><br />
+            Total Minutes Learned: <?= $info['learned'] ?><br />
+        </p>
+        <table>
+            <tr>
+                <th>Learning Days Passed</th>
+                <th>Date</th>
+                <th>Minutes Required</th>
+                <th>Minutes Logged</th>
+                <th>Balance</th>
+                <th>Up to Date</th>
+            </tr>
+            <?php
+            $balance = 0;
+            foreach ($details as $day => $row) {
+                $required = $minutes[$info['test_type']];
+                $minutes = intval($row['minutes']);
+                $balance += $required - $minutes;
+                echo "<tr><td>" . $day . "</td><td>" . $limmudDays[$test_num][$day] . "</td><td>" . $required .
+                    "</td><td>" . $minutes . "</td><td>" . $balance . "</td><td>" . $row['upToDate'] . "</td></tr>";
+            }
+            ?>
+        </table>
     </body>
 </html>

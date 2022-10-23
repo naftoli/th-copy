@@ -345,6 +345,73 @@ class ChidonTests
         return $stmt->fetch()['total'];
     }
 
+    public function getLimmudInfo($user_id) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                u.user_serial,
+                u.first,
+                u.last,
+                c.class_grade,
+                c.class_sub,
+                tc.test_type 
+            FROM
+                users u
+                    JOIN
+                th_chidon tc USING (user_id)
+                    JOIN
+                classes c ON c.class_id = u.class_id
+            WHERE
+                tc.year = :year 
+        ");
+        $stmt->execute(['year' => $this->year]);
+        return $stmt->fetch();
+    }
+
+    public function getLimmudDetails($user_id, $dates) {
+        $details = [];
+        $today = unixtojd();
+        $start = key($dates);
+
+        $info = [];
+        if ($start) {
+            $stmt = $this->db->prepare("
+                SELECT 
+                    dtm.*
+                FROM
+                    date_tasks_marks dtm
+                        JOIN
+                    date_tasks dt USING (date_task_id)
+                WHERE
+                    dt.grid_id in (20010, 20011) AND user_id = :user 
+                        AND mark_date >= :start 
+                        AND mark_date <= :end
+            ");
+            $stmt->execute([
+                'user'  => $user_id,
+                'start' => $start,
+                'end'   => $today
+            ]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $info[$row['mark_date']][$row['grid_id']] = $row['done_qty'];
+            }
+        }
+
+        foreach ($dates as $day => $date) {
+            $dateArr = explode('/', $date);
+            $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+            if (isset($info[$jd][20010])) {
+                $details[$day]['minutes'] = $info[$jd][20010];
+                $details[$day]['upToDate'] = isset($info[$jd][20011]);
+            } else {
+                $details[$day]['minutes'] = 0;
+                $details[$day]['upToDate'] = false;
+            }
+        }
+
+        return $details;
+    }
+
     public function getHighestTrackPassed( $child, $numTests = 4 ) {
         $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $this->setScores();
