@@ -56,7 +56,9 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
           <select name="num">
             <?php
             for ($i = 1; $i < 5; $i++) {
-                echo "<option value='" . $i . "'>" . $i . "</option>";
+              echo "<option value='" . $i . "'";
+              if ($test_num == $i) echo " selected";
+              echo ">" . $i . "</option>";
             }
             ?>
           </select>
