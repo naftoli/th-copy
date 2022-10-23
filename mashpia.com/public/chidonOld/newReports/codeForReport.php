@@ -186,10 +186,13 @@ function getFieldDesc($row, $field, $separator = ' ') {
 function daysPassed() {
     global $learningDays, $test_num;
     $today = unixtojd();
+    echo $today;
     // find today in array
     foreach ($learningDays[$test_num] as $day => $date) {
         $dateArr = explode('/', $date);
         $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        echo $jd;
+        echo "<br />";
         if ($jd == $today) return $day;
         else if ($jd > $today) return --$day;
     }
