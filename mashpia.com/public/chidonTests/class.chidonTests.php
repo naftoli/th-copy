@@ -361,9 +361,12 @@ class ChidonTests
                     JOIN
                 classes c ON c.class_id = u.class_id
             WHERE
-                tc.year = :year 
+                tc.year = :year AND u.user_id = :user
         ");
-        $stmt->execute(['year' => $this->year]);
+        $stmt->execute([
+            'year'  => $this->year,
+            'user'  => $user_id
+        ]);
         return $stmt->fetch();
     }
 
