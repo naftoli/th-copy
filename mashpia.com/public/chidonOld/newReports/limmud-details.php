@@ -12,12 +12,14 @@ if (!isset($_GET['id']) || !isset($_GET['test'])) {
     exit;
 }
 
+$user_id = $_GET['id'];
+$test_num = $_GET['test'];
+
 require_once 'codeForReport.php';
 
 $year = GlobalSettings::getChidonYear();
 $chidon = new ChidonTests();
-$user_id = $_GET['id'];
-$test_num = $_GET['test'];
+$types = $chidon->getTypes();
 $info = $chidon->getLimmudInfo($user_id);
 $details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num]);
 
@@ -48,7 +50,7 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id);
             Serial: <?= $info['user_serial'] ?><br />
             Name: <?= $info['first'] . ' ' . $info['last'] ?><br />
             Class: <?= $info['grade'] ?><br />
-            Track Chosen: <?= $info['test_type'] ?><br />
+            Track Chosen: <?= $types[$info['test_type']] ?><br />
             Track Passed: <?= $info['track_passed'] ?><br />
             Total Minutes Required: <?= $info['required'] ?><br />
             Total Minutes Learned: <?= $info['learned'] ?><br />
