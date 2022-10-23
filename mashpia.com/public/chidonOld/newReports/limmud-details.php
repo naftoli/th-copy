@@ -68,7 +68,7 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id);
                 $required = $minutes[$info['test_type']];
                 $minutes = intval($row['minutes']);
                 $balance += $required - $minutes;
-                echo "<tr><td>" . $day . "</td><td>" . $limmudDays[$test_num][$day] . "</td><td>" . $required .
+                echo "<tr><td>" . $day . "</td><td>" . $learningDays[$test_num][$day] . "</td><td>" . $required .
                     "</td><td>" . $minutes . "</td><td>" . $balance . "</td><td>" . $row['upToDate'] . "</td></tr>";
             }
             ?>
