@@ -184,10 +184,10 @@ function getFieldDesc($row, $field, $separator = ' ') {
 }
 
 function daysPassed() {
-    global $learningDays;
+    global $learningDays, $test_num;
     $now = unixtojd();
     // find today in array
-    foreach ($learningDays as $day => $full_date) {
+    foreach ($learningDays[$test_num] as $day => $full_date) {
         // create jd from date
         $dateInfo = implode('/', $full_date);
         $date = gregoriantojd(intval($dateInfo[1]), intval($dateInfo[2]), intval($dateInfo[0]));

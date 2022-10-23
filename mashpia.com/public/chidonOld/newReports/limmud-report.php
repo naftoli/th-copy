@@ -88,6 +88,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                     switch ($field) {
                                         case 'calc-tpassed':
                                             if ($test_num == 1) echo '';
+                                            else echo $chidon->getHighestTrackPassed($row['user_id'], $test_num)['highest_track'];
                                             break;
                                         case 'calc-lpassed':
                                             $days = daysPassed();
