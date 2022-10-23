@@ -79,6 +79,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                             break;
                                         case 'calc-dlogged':
                                             $logged = $chidon->getTotalDaysLearned($row['user_id']);
+                                            echo $logged;
                                             break;
                                         case 'calc-mrequired':
                                             $track = $row['test_type'];
