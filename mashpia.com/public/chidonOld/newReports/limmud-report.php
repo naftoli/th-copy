@@ -13,9 +13,13 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 
+$chidon = new ChidonTests();
+
+require_once 'codeForReport.php';
+
 $info = [];
 foreach ($schools as $school_id => $name) {
-    $sql = "select u.user_serial, u.first, u.last, c.class_grade, c.class_sub, tc.test_type, tc.reward_type 
+    $sql = "select u.user_id, u.user_serial, u.first, u.last, c.class_grade, c.class_sub, tc.test_type, tc.reward_type 
             from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
@@ -29,24 +33,7 @@ foreach ($schools as $school_id => $name) {
     }
 }
 
-$fields = [
-    'Serial'                    => 'user_serial', 
-    'Name'                      => ['first', 'last'], 
-    'Class'                     => ['class_grade', 'class_sub'], 
-    'Track Chosen'              => 'test_type', 
-    'Track Passed'              => 'calc-tpassed', 
-    'Learning Days Passed'      => 'calc-lpassed', 
-    'Days Logged'               => 'calc-dlogged', 
-    'Learning Minutes Required' => 'calc-mrequired', 
-    'Learning Minutes Logged'   => 'calc-mlogged', 
-    'Minutes Behind'            => 'calc-behind', 
-    'Minutes Ahead'             => 'calc-ahead'
-];
-
-function getFieldDesc($row, $field, $separator = ' ') {
-    $newField = $row[$field[0]] . (empty($row[$field[1]]) ? '' : ' ' . $row[$field[1]]);
-    return $newField;
-}
+$test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,6 +54,7 @@ function getFieldDesc($row, $field, $separator = ' ') {
         <?php foreach ($schools as $school_id => $name) : ?>
             <?= "<h2>" . $name . "</h2>"; ?>
             <table>
+                <caption>Test #<?= $test_num ?></caption>
                 <tr>
                     <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
                 </tr>
@@ -81,7 +69,35 @@ function getFieldDesc($row, $field, $separator = ' ') {
                                     if ($desc == 'Class') echo getFieldDesc($row, $field, ' - ');
                                     else echo getFieldDesc($row, $field);
                                 } else if (strpos($field, 'calc-') !== false) {
-
+                                    switch ($field) {
+                                        case 'calc-tpassed':
+                                            if ($test_num == 1) echo '';
+                                            break;
+                                        case 'calc-lpassed':
+                                            $days = daysPassed();
+                                            echo $days;
+                                            break;
+                                        case 'calc-dlogged':
+                                            $logged = $chidon->getTotalDaysLearned($row['user_id']);
+                                            break;
+                                        case 'calc-mrequired':
+                                            $track = $row['test_type'];
+                                            $required = intval($days) * intval($minutes[$track]);
+                                            echo $required;
+                                            break;
+                                        case 'calc-mlogged':
+                                            $num = $chidon->getTotalMinutesLearned($row['user_id']);
+                                            echo $num;
+                                            break;
+                                        case 'calc-behind':
+                                            if ($required > intval($num)) echo $required - intval($num);
+                                            else echo 0;
+                                            break;
+                                        case 'calc-ahead':
+                                            if (intval($num) > $required) echo intval($num) - $required;
+                                            else echo 0;
+                                            break;
+                                    }
                                 } else {
                                     echo $row[$field];
                                 }
