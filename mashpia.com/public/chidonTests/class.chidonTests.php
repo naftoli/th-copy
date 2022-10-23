@@ -322,6 +322,29 @@ class ChidonTests
         return $stmt->fetch()['total'];
     }
 
+    public function getTotalDaysLearned( $user_id ) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                count(*) AS total
+            FROM
+                date_tasks_marks dtm
+                    JOIN
+                date_tasks dt USING (date_task_id)
+                    JOIN
+                date_tasks_missions dtmm USING (date_tasks_mission_id)
+            WHERE
+                dt.grid_id = 20010 
+                    AND dtmm.start_date >= :start
+                    AND dtmm.end_date <= :end
+                    AND user_id = :user");
+        $stmt->execute([
+            ':start'    => $this->start,
+            ':end'      => $this->end,
+            ':user'     => $user_id
+        ]);
+        return $stmt->fetch()['total'];
+    }
+
     public function getHighestTrackPassed( $child, $numTests = 4 ) {
         $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $this->setScores();
