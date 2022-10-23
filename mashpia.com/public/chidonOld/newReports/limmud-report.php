@@ -4,7 +4,6 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
@@ -80,6 +79,10 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                 echo "<td>";
                                 if (is_array($field)) {
                                     if ($desc == 'Class') echo getFieldDesc($row, $field, ' - ');
+                                    else if ($desc == 'Name') {
+                                        echo "<a href='limmud-details.php?id=" . $row['user_id'] . "&test=" . $test_num . "'>" .
+                                            getFieldDesc($row, $field) . "</a>";
+                                    }
                                     else echo getFieldDesc($row, $field);
                                 } else if (strpos($field, 'calc-') !== false) {
                                     switch ($field) {
