@@ -272,7 +272,7 @@ class ChidonTests
         return $this->marks;
     }
 
-    public function getHighestTrackEligible( $chidon_id, $marks ) {
+    public function getHighestTrackEligible( $marks ) {
         foreach ($this->types as $type => $value) {
             $avgs[$type] = 0;
         }
@@ -310,7 +310,7 @@ class ChidonTests
                     JOIN
                 date_tasks_missions dtmm USING (date_tasks_mission_id)
             WHERE
-                dt.cat = 'chidon limmud'
+                dt.grid_id = 20010 
                     AND dtmm.start_date >= :start
                     AND dtmm.end_date <= :end
                     AND user_id = :user");
@@ -327,6 +327,13 @@ class ChidonTests
         $this->setScores();
         $this->calculateMarks();
         // get child mark info
+        if (! isset($this->marks[$child['th_chidon_id']])) {
+            return [
+                'avg' => 0,
+                'highest_track' => '',
+                'highest_track_avg' => ''
+            ];
+        }
         $childMarkInfo = $this->marks[$child['th_chidon_id']];
 
         $marksPerType = [];
