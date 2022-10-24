@@ -377,28 +377,26 @@ class ChidonTests
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
 
         $info = [];
-        if ($start) {
-            $stmt = $this->db->prepare("
-                SELECT 
-                    dt.grid_id, dtm.*
-                FROM
-                    date_tasks_marks dtm
-                        JOIN
-                    date_tasks dt USING (date_task_id)
-                WHERE
-                    dt.grid_id in (20010, 20011) AND user_id = :user 
-                        AND mark_date >= :start 
-                        AND mark_date <= :end
-            ");
-            $stmt->execute([
-                'user'  => $user_id,
-                'start' => $start,
-                'end'   => $today
-            ]);
-            $rows = $stmt->fetchAll();
-            foreach ($rows as $row) {
-                $info[$row['mark_date']][$row['grid_id']] = $row['done_qty'];
-            }
+        $stmt = $this->db->prepare("
+            SELECT 
+                dt.grid_id, dtm.*
+            FROM
+                date_tasks_marks dtm
+                    JOIN
+                date_tasks dt USING (date_task_id)
+            WHERE
+                dt.grid_id in (20010, 20011) AND user_id = :user 
+                    AND mark_date >= :start 
+                    AND mark_date <= :end
+        ");
+        $stmt->execute([
+            'user'  => $user_id,
+            'start' => $start,
+            'end'   => $today
+        ]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['mark_date']][$row['grid_id']] = $row['done_qty'];
         }
 
         foreach ($dates as $day => $date) {
