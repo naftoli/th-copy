@@ -23,7 +23,8 @@ foreach ($schools as $school_id => $name) {
             join classes c on c.class_id = u.class_id 
             join th_chidon tc using (user_id) 
             where tc.year = $year  
-            and u.school_id = " . $school_id;
+            and u.school_id = " . $school_id ." 
+            order by c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
