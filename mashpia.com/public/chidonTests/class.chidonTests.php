@@ -373,7 +373,8 @@ class ChidonTests
     public function getLimmudDetails($user_id, $dates) {
         $details = [];
         $today = unixtojd();
-        $start = key($dates);
+        $dateArr = explode('/', $dates[1]);
+        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
 
         $info = [];
         if ($start) {
