@@ -22,7 +22,6 @@ $chidon = new ChidonTests();
 $types = $chidon->getTypes();
 $info = $chidon->getLimmudInfo($user_id);
 $details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num]);
-echo "<pre>"; print_r($details); echo "</pre>";
 
 // add to info variable
 $info['grade'] = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
@@ -67,8 +66,8 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id);
             </tr>
             <?php
             $balance = 0;
+            $required = $minutes[$info['test_type']];
             foreach ($details as $day => $row) {
-                $required = $minutes[$info['test_type']];
                 $minutes = intval($row['minutes']);
                 $balance += $minutes - $required;
                 echo "<tr><td>" . $day . "</td><td>" . $learningDays[$test_num][$day] . "</td><td>" . $required .
