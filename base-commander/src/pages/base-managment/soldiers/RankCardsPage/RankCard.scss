@@ -28,7 +28,8 @@ $colors: (
   // Colors - go through each rank number and add the color to CSS
   @each $rank, $rank_color in $colors {
     .rank-card.rank-#{$rank} {
-      .top { background-color: $rank_color }
+      /*.top { background-color: $rank_color }*/
+      background-image: url("backgrounds/#{$rank}.png");
       .sig, .photo img { border-color: $rank_color }
       span.rank { color: $rank_color }
     }
