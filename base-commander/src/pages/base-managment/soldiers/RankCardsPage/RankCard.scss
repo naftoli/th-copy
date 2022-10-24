@@ -30,7 +30,7 @@ $colors: (
     .rank-card.rank-#{$rank} {
       /*.top { background-color: $rank_color }*/
       background-image: url("backgrounds/#{$rank}.png");
-      background-size: contain;
+      background-size: cover;
       .sig, .photo img { border-color: $rank_color }
       span.rank { color: $rank_color }
     }
