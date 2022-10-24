@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__)."/../../shared/classes/Prize.php");
 require_once(dirname(__FILE__)."/../../shared/classes/Constants.php");
+require_once(dirname(__FILE__)."/../../../class.globalSettings.php");
 
 use raffles\weekly\Prize as Prize;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
@@ -20,7 +21,6 @@ if(!function_exists ("check_first_in_family")){
 
 if (! function_exists('alreadyWon')) {
     function alreadyWon($user) {
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
         $year = GlobalSettings::getCurrentYear();
         $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
             select raffle_id from raffles where type = 'monthly' and year = $year
