@@ -73,7 +73,7 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id);
                 echo "<tr><td>" . $day . "</td><td>" . $learningDays[$test_num][$day] . "</td><td>" . $required .
                     "</td><td>" . $minutes . "</td><td>" . $balance . "</td><td><td><input type='checkbox'";
                 if ($row['upToDate']) echo " checked";
-                echo " /></td></tr>";
+                echo " disabled /></td></tr>";
             }
             ?>
         </table>
