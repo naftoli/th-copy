@@ -77,19 +77,16 @@
   <section style="width: 300px; margin: 10px auto;">
     <div class="container page5">
       <div class="row">
-        Depending on what Chidon track you pass this year, you will be eligible to get a Certificate or Plaque. <br />
-        We want to make sure that you are happy with the way that your name is spelled in Hebrew.
+        Depending on what Chidon track you pass this year, you will be eligible to get a Certificate or Plaque.
         <br /><br />
-        Please click on the button below to see exactly what it will look like.<br />
-        <button id="viewCert">View Certificate / Plaque</button><br /><br />
-        If you are happy with the Hebrew spelling of your name, please check off that you have reviewed your Certificate/Plaque.
+        We would like to make sure that you are happy with the way that your name is spelled in Hebrew.
         <br /><br />
-        <input type="checkbox" name="reviewed" id="reviewed" /> I have reviewed my certificate / plaque and I am happy with the way
-        it is spelled.
+        Please click on the button below to see exactly what your certificate / plaque will look like.
         <br /><br />
-        If you would like your name spelled differently, please click <a href="" id="edit">here</a>
-        and edit how your name is spelled in Hebrew, when you are done press submit then press back and come back here
-        to check off that you have reviewed your Certificate/Plaque.
+        <button id="viewCert">View Certificate / Plaque</button>
+        <br /><br />
+        If you would like to change the spelling of your hebrew name, please change it below and click on the "update" button.<br /><br />
+        <input type="text" id="heName" /> <button id="update">Update</button>
       </div>
     </div>
   </section>
@@ -109,10 +106,37 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 <script>
   const url = window.location.search
   const urlParams = new URLSearchParams(url)
-  const id = urlParams.get('id')
+  const ids = urlParams.get('ids')
+  // separate serial number from user id
+  const info = ids.split(':')
+  const serial = info[0]
+  const user_id = info[1]
+
+  window.onload = event => {
+    $.post('ajax/getHeName.php', { user_id }, function(res) {
+      const result = JSON.parse(res)
+      if (result.success) {
+        const name = result.heName
+        $("#name").text(name)
+        $("#heName").val(name)
+      } else {
+        alert('Could not find hebrew name.')
+        location.href = "parent_detail.html"
+      }
+    })
+  }
 
   $("#viewCert").click( function () {
-    window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
+    window.open('/chidonOld/invitations/index.html?id=' + serial, '_blank')
+  })
+
+  $("#update").click( function (e) {
+    e.preventDefault()
+    const name = this.value
+    $.post('ajax/updateHeName.php', { user_id, name }, function(success) {
+      if (success) alert('Your hebrew name has been updated!')
+      else alert('Error updating hebrew name.')
+    })
   })
 </script>
 </html>
