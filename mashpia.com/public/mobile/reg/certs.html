@@ -77,8 +77,8 @@
   <section style="width: 300px; margin: 10px auto;">
     <div class="container page5">
       <div class="row">
-        Depending on what Chidon track you pass this year, you will be eligible to get a Certificate or Plaque. We want to make
-        sure that you are happy with the way that your name is spelled in Hebrew.
+        Depending on what Chidon track you pass this year, you will be eligible to get a Certificate or Plaque. <br />
+        We want to make sure that you are happy with the way that your name is spelled in Hebrew.
         <br /><br />
         Please click on the button below to see exactly what it will look like.<br />
         <button id="viewCert">View Certificate / Plaque</button><br /><br />
@@ -109,25 +109,10 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 <script>
   const url = window.location.search
   const urlParams = new URLSearchParams(url)
-  const ids = urlParams.get('ids')
-  // split ids into serial / user id
-  const info = ids.split(':')
-  const serial = info[0]
-  const user_id = info[1]
-
-  $("#edit").attr('href', 're_register.html?child=' + user_id + '&e=1')
+  const id = urlParams.get('id')
 
   $("#viewCert").click( function () {
-    window.open('/chidonOld/invitations/index.html?id=' + serial, '_blank')
-  })
-
-  $("#reviewed").click( function () {
-    $.post('ajax/saveCert.php', { user_id }, function(success) {
-      if (success) {
-        alert('Thank you for reviewing your certificate / plaque.')
-        location.href = 'parent_detail.html'
-      }
-    })
+    window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
   })
 </script>
 </html>
