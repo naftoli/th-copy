@@ -7,7 +7,7 @@
             window.onload = event => {
                 const url = window.location.search
                 const urlParams = new URLSearchParams(url)
-                const serial = urlParams.get('id')
+                const id = urlParams.get('id')
                 document.getElementById('invite').src = 'imgs/' + id + '.jpg'
             }
         </script>
