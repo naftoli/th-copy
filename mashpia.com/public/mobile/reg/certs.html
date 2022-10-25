@@ -140,10 +140,31 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
   $("#update").click( function (e) {
     e.preventDefault()
     const name = $("#heName").val()
-    $.post('ajax/saveHeName.php', { user_id, name }, function(success) {
-      if (success) alert('Your hebrew name has been updated!')
-      else alert('Error updating hebrew name.')
-    })
+    // make sure all letters are in hebrew
+    if (nameIsHe(name)) {
+      $.post('ajax/saveHeName.php', {user_id, name}, function (success) {
+        if (success) alert('Your hebrew name has been updated!')
+        else alert('Error updating hebrew name.')
+      })
+    }
   })
+
+  function between(x, min, max) {
+    return x >= min && x <= max
+  }
+
+  function nameIsHe(name) {
+    const range = [0x590, 0x5FF]
+    const allowed = [32, 39, 45, 95, 96]
+    for (let s in name) {
+      let code = name.charCodeAt(s)
+      if (!allowed.includes(code) && !between(code, range[0], range[1])) {
+        alert('You can only use hebrew letters.')
+        $("#heName").focus()
+        return false
+      }
+    }
+    return true
+  }
 </script>
 </html>
