@@ -102,7 +102,8 @@ if ( !empty( $users ) ) {
             SELECT 
                 ! ISNULL(tc.th_chidon_id) AS reg_chidon,
                 tc.th_chidon_id,
-                tc.invite_used,
+                tc.invite_used, 
+                tc.cert_reviewed, 
                 ! ISNULL(ur.user_reg_id) AS reg_chayolei,
                 sri.date_paid AS registered,
                 u.chayolei,
@@ -127,6 +128,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
+        if ($row['th_chidon_id']) $children[$row['user_id']]['reviewCert'] = !((bool) $row['cert_reviewed']); // find out if we need to show button to review chidon certificate
 
         //mivtza lulav
         $lulavSchools = [];
