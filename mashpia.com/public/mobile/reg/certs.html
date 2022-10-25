@@ -82,7 +82,8 @@
         <br /><br />
         Please click on the button below to see exactly what it will look like.<br />
         <button id="viewCert">View Certificate / Plaque</button><br /><br />
-        If you are happy with the Hebrew spelling of your name, please check off that you have reviewed your Certificate/Plaque.<br />
+        If you are happy with the Hebrew spelling of your name, please check off that you have reviewed your Certificate/Plaque.
+        <br /><br />
         <input type="checkbox" name="reviewed" id="reviewed" /> I have reviewed my certificate / plaque and I am happy with the way
         it is spelled.
         <br /><br />
@@ -106,13 +107,27 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 }
 </script>
 <script>
-  let url = location.toString();
-  let pos = url.indexOf('?')
-  let id = url.substring(pos + 4)
+  const url = window.location.search
+  const urlParams = new URLSearchParams(url)
+  const ids = urlParams.get('ids')
+  // split ids into serial / user id
+  const info = ids.split(':')
+  const serial = info[0]
+  const user_id = info[1]
 
-  $("#edit").attr('href', 're_register.html?child=' + id + '&e=1')
+  $("#edit").attr('href', 're_register.html?child=' + user_id + '&e=1')
+
   $("#viewCert").click( function () {
-    window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
+    window.open('/chidonOld/invitations/index.html?id=' + serial, '_blank')
+  })
+
+  $("#reviewed").click( function () {
+    $.post('ajax/saveCert.php', { user_id }, function(success) {
+      if (success) {
+        alert('Thank you for reviewing your certificate / plaque.')
+        location.href = 'parent_detail.html'
+      }
+    })
   })
 </script>
 </html>

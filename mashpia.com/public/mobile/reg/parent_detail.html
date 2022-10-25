@@ -442,6 +442,12 @@
                                                         <button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
                                                     </div>
                                                     {{/if}}
+
+<!--                                                    {{#if this.reviewCert}}-->
+<!--                                                        <div style="margin:10px 0px">-->
+<!--                                                            <button class="btn btn-primary reviewCert" id="{{ this.user_serial }}:{{ this.user_id }}">Review Chidon Cert/Plaque</button>-->
+<!--                                                        </div>-->
+<!--                                                    {{/if}}-->
                                                 </div>
                                             </td>
                                         </tr>
@@ -693,6 +699,11 @@
                     });
                 }
             });
+
+            $(document).on('click', '.reviewCert', function () {
+                var id = $(this).attr('id')
+                window.open('certs.html?ids=' + id, '_blank')
+            })
 
             $(document).on('click', '.chidonPhoto', function () {
                 var id = $(this).parent().parent().parent().parent().attr('id');
