@@ -121,7 +121,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
         $("#heName").val(name)
       } else {
         alert('Could not find hebrew name.')
-        location.href = "parent_detail.html"
+        // location.href = "parent_detail.html"
       }
     })
   }
@@ -132,7 +132,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 
   $("#update").click( function (e) {
     e.preventDefault()
-    const name = this.value
+    const name = $("#heName").val()
     $.post('ajax/saveHeName.php', { user_id, name }, function(success) {
       if (success) alert('Your hebrew name has been updated!')
       else alert('Error updating hebrew name.')
