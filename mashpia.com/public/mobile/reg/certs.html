@@ -133,7 +133,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
   $("#update").click( function (e) {
     e.preventDefault()
     const name = this.value
-    $.post('ajax/updateHeName.php', { user_id, name }, function(success) {
+    $.post('ajax/saveHeName.php', { user_id, name }, function(success) {
       if (success) alert('Your hebrew name has been updated!')
       else alert('Error updating hebrew name.')
     })
