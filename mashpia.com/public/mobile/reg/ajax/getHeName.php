@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . "/header.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/db.php";
 
 $sql = "select first_he, last_he from users where user_id = " . mysql_real_escape_string($_POST['user_id']);
 $result = mysql_query($sql);

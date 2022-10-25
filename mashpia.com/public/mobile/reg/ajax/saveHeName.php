@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . "/header.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/db.php";
 
 $user_id = mysql_real_escape_string($_POST['user_id']);
 $heName = mysql_real_escape_string($_POST['name']);

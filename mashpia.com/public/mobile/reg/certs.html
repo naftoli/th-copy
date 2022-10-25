@@ -142,7 +142,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
     const name = $("#heName").val()
     // make sure all letters are in hebrew
     if (nameIsHe(name)) {
-      $.post('ajax/saveHeName.php', {user_id, name}, function (success) {
+      $.post('ajax/saveHeName.php', { user_id, name }, function (success) {
         if (success) alert('Your hebrew name has been updated!')
         else alert('Error updating hebrew name.')
       })

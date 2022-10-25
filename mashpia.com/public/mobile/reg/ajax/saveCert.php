@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . "/header.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/db.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 
 $year = GlobalSettings::getChidonYear();
