@@ -64,9 +64,9 @@ for ($i = 1; $i <= 4; $i++) {
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown1 = new DateTime('2022-10-26 05:00:00');
-    $shutdown2 = new DateTime('2020-12-26 05:00:00');
-    $shutdown3 = new DateTime('2021-02-02 05:00:00');
-    $shutdown4 = new DateTime('2021-02-24 05:00:00');
+//    $shutdown2 = new DateTime('2020-12-26 05:00:00');
+//    $shutdown3 = new DateTime('2021-02-02 05:00:00');
+//    $shutdown4 = new DateTime('2021-02-24 05:00:00');
 
     if ($today >= $shutdown1) {
         $disable[1] = true;
