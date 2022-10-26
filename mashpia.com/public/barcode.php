@@ -140,8 +140,9 @@ function &barcode128c($text) {
 
   $img = ImageCreate($bar_width*3, 50);
   $black = ImageColorAllocate($img, 0, 0, 0);
-  $white = ImageColorAllocate($img, 255, 255, 255);
-  imagefill($img, 0, 0, $white);
+//  $white = ImageColorAllocate($img, 255, 255, 255);
+  $transparency = imagecolorallocatealpha($img, 0, 0, 0, 127);
+  imagefill($img, 0, 0, $transparency);
 
   $color = true;
   $xpos = 0;
