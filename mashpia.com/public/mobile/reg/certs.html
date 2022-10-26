@@ -60,6 +60,13 @@
     body {
       font-size: medium;
     }
+
+    #reviewed {
+      margin: 0 5px 5px 0;
+      height: 20px;
+      width: 20px;
+      vertical-align: top;
+    }
   </style>
 </head>
 <body class="page-goals">
@@ -94,6 +101,10 @@
         </div>
         <br />
         <input type="text" id="heName" /> <button id="update">Update</button>
+        <br />
+        <br />
+        <input type="checkbox" id="reviewed" /> I have reviewed (and updated if necessary) my hebrew name, and confirm
+        that it is good.
       </div>
     </div>
   </section>
@@ -135,6 +146,13 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 
   $("#viewCert").click( function () {
     window.open('/chidonOld/invitations/index.html?id=' + serial, '_blank')
+  })
+
+  $("#reviewed").click( function() {
+    $.post('ajax/saveCert.php', { user_id }, function (success) {
+      if (success) alert('Thank you for confirming that.')
+      else alert('There was an error confirming.')
+    })
   })
 
   $("#update").click( function (e) {
