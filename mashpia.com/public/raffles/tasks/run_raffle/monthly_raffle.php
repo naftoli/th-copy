@@ -66,7 +66,7 @@ function monthly_raffle($raffle){
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
 //             if(!check_first_in_family($user, $winning_families)){
-            if (! alreadyWon($user)) {
+            if (alreadyWon($user)) {
                  echo $user['school_id']."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                  unset($user_ids[$user['user_id']]); // remove the user from the array
                  continue; // try again
