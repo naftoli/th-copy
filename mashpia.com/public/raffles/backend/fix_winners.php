@@ -1,6 +1,6 @@
 <?php
 $admin_auth = ['school'];
-require_once '../header.php';
+require_once '../../header.php';
 
 $winners = [];
 $sql = "SELECT 
