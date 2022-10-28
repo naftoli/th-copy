@@ -18,5 +18,6 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 foreach ($winners as $sql) {
-    echo $sql . "<br />";
+    mysql_query($sql);
 }
+echo "done.";
