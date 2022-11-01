@@ -266,6 +266,10 @@ if ( !empty( $users ) ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
         }
 
+        // shut down chidon reg
+        if (isset($children[ $row['user_id'] ]['reg_types']['chidon'])) $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
+        if (isset($children[$row['user_id']]['chidon5783'])) $children[$row['user_id']]['chidon5783'] = false;
+
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
         $cSql = "SELECT * FROM th_chidon WHERE date_paid > 0 and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
