@@ -681,6 +681,10 @@ function add_mark($parameters, $update = true)
         case 9077:
             $max = 30;
             break;
+        // minutes for chidon limmud
+        case 20010:
+            $max = 120;
+            break;
     }
     if ($max && $user_mark > $max) $user_mark = $max;
 
