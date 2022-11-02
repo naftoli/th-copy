@@ -37,7 +37,20 @@ foreach ( $info as $child ) {
             break;
         }
     } else {
-        // delete
+        // set numbers to 0
+        $res = $stmt->execute([
+            ':pic' =>  0,
+            ':year' => $year,
+            ':user' => $child->user_id,
+            ':goal' => 0,
+            ':minutes' => 0,
+            ':type' => ''
+        ]);
+        if (!$res) {
+            //        $stmt->debugDumpParams();
+            $success = false;
+            break;
+        }
     }
 }
 if ( $success ) {
