@@ -81,7 +81,7 @@
 									<div class="bar-line__circle"></div>
 									<div class="bar-line__marker"><img src="img/marker.png" /><span
 											class="bar-line__marker-number"></span> <span
-											class="bar-line__other-number">$2,248,120</span></div>
+											class="bar-line__other-number">$1.915,850</span></div>
 								</div>
 							</div>
 						</div>
@@ -469,7 +469,7 @@
 				let res = JSON.parse(result);
 				if (res.success) {
 					let amount = res.total;
-					let budget = 2248120;
+					let budget = 1915850.00;
 					$('#section0 .leader').each(function () {
 						$(this).data('amount', Math.round(amount));
 						$(this).data('percent', Math.round((amount / budget) * 100));
