@@ -22,18 +22,35 @@ $stmt = $MASHPIA_DB->prepare("
 $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ( $info as $child ) {
-    $res = $stmt->execute([
-        ':pic'                  =>  $child->show_pic ? 1 : 0,
-        ':year'                 =>  $year,
-        ':user'                 =>  $child->user_id,
-        ':goal'                 =>  $child->amount,
-        ':minutes'              =>  $child->hours,
-        ':type'                 =>  $child->track
-    ]);
-    if ( !$res ) {
-//        $stmt->debugDumpParams();
-        $success = false;
-        break;
+    if ($child->add) {
+        $res = $stmt->execute([
+            ':pic' => $child->show_pic ? 1 : 0,
+            ':year' => $year,
+            ':user' => $child->user_id,
+            ':goal' => $child->amount,
+            ':minutes' => $child->hours,
+            ':type' => $child->track
+        ]);
+        if (!$res) {
+            //        $stmt->debugDumpParams();
+            $success = false;
+            break;
+        }
+    } else {
+        // set numbers to 0
+        $res = $stmt->execute([
+            ':pic' =>  0,
+            ':year' => $year,
+            ':user' => $child->user_id,
+            ':goal' => 0,
+            ':minutes' => 0,
+            ':type' => ''
+        ]);
+        if (!$res) {
+            //        $stmt->debugDumpParams();
+            $success = false;
+            break;
+        }
     }
 }
 if ( $success ) {

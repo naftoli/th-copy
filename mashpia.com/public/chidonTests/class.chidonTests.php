@@ -299,7 +299,10 @@ class ChidonTests
         return '';
     }
 
-    public function getTotalMinutesLearned( $user_id ) {
+    public function getTotalMinutesLearned( $user_id, $dates ) {
+        $today = unixtojd();
+        $dateArr = explode('/', $dates[1]);
+        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(SUM(done_qty), 0) AS total
@@ -315,14 +318,17 @@ class ChidonTests
                     AND dtmm.end_date <= :end
                     AND user_id = :user");
         $stmt->execute([
-            ':start'    => $this->start,
-            ':end'      => $this->end,
+            ':start'    => $start,
+            ':end'      => $today,
             ':user'     => $user_id
         ]);
         return $stmt->fetch()['total'];
     }
 
-    public function getTotalDaysLearned( $user_id ) {
+    public function getTotalDaysLearned( $user_id, $dates ) {
+        $today = unixtojd();
+        $dateArr = explode('/', $dates[1]);
+        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(count(*), 0) AS total
@@ -338,8 +344,8 @@ class ChidonTests
                     AND dtmm.end_date <= :end
                     AND user_id = :user");
         $stmt->execute([
-            ':start'    => $this->start,
-            ':end'      => $this->end,
+            ':start'    => $start,
+            ':end'      => $today,
             ':user'     => $user_id
         ]);
         return $stmt->fetch()['total'];
