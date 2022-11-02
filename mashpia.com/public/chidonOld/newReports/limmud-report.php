@@ -98,7 +98,7 @@ require_once 'codeForReport.php';
                                             echo $days;
                                             break;
                                         case 'calc-dlogged':
-                                            $logged = $chidon->getTotalDaysLearned($row['user_id']);
+                                            $logged = $chidon->getTotalDaysLearned($row['user_id'], $learningDays[1]);
                                             echo $logged;
                                             break;
                                         case 'calc-mrequired':
@@ -107,7 +107,7 @@ require_once 'codeForReport.php';
                                             echo $required;
                                             break;
                                         case 'calc-mlogged':
-                                            $num = $chidon->getTotalMinutesLearned($row['user_id']);
+                                            $num = $chidon->getTotalMinutesLearned($row['user_id'], $learningDays[1]);
                                             echo $num;
                                             break;
                                         case 'calc-behind':
