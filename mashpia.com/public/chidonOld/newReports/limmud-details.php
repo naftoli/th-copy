@@ -59,6 +59,7 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id, $learningDays[$test_nu
             Class: <?= $info['grade'] ?><br />
             Track Chosen: <?= $types[$info['test_type']] ?><br />
             Track Passed: <?= $info['track_passed'] ?><br />
+            Minutes Required: <?= $minutes[$info['test_type']] ?><br />
             Total Minutes Required: <?= $info['required'] ?><br />
             Total Minutes Learned: <?= $info['learned'] ?><br />
         </p>
@@ -66,7 +67,6 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id, $learningDays[$test_nu
             <tr>
                 <th>Learning Days Passed</th>
                 <th>Date</th>
-                <th>Minutes Required</th>
                 <th>Minutes Logged</th>
                 <th>Balance</th>
                 <th>Up to Date</th>
@@ -78,8 +78,8 @@ $info['learned'] = $chidon->getTotalDaysLearned($user_id, $learningDays[$test_nu
                 $minutes = intval($row['minutes']);
                 $balance += $minutes - $required;
                 $heDay = getHeDay($learningDays[$test_num][$day]);
-                echo "<tr><td>" . $day . "</td><td>" . $heDay . "</td><td>" . $required .
-                    "</td><td>" . $minutes . "</td><td>" . $balance . "</td><td><td><input type='checkbox'";
+                echo "<tr><td>" . $day . "</td><td>" . $heDay . "</td><td>" . $minutes . "</td><td>" . $balance .
+                    "</td><td><td><input type='checkbox'";
                 if ($row['upToDate']) echo " checked";
                 echo " disabled /></td></tr>";
             }
