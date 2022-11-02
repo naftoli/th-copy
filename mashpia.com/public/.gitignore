@@ -9,6 +9,7 @@
 /nr
 /exports/*
 hesk/*
+/chidon
 
 # ignore these folders...
 cert/
