@@ -64,6 +64,8 @@ if ( $res ) {
         $row2 = $stmt2->fetch();
         $rows[$idx]['total_donation'] = $row2['total_donation'];
       }
+      // find out how much time was commited to learn
+      $rows[$idx]['total_time'] = 0;
     }
     $data['children'] = $rows;
   } else {
