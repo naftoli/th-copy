@@ -6,7 +6,7 @@ $development = isset( $_SERVER['HTTP_HOST'] ) ? strpos($_SERVER['HTTP_HOST'], "m
 $global_db_host = $development ? "50.28.66.228" : "localhost"; // mashpia.com was pointing to old ip address so i just put in new ip address
 // DBS credentials
 $global_db_user = 'mashpia_cth';
-$global_db_pass = 'UlqKsfnTUq2A';
+$global_db_pass = 'UlqKnfsTUq2A';
 
 $domain = '';
 if ( isset( $_SERVER['REQUEST_SCHEME'] ) &&  isset( $_SERVER['HTTP_HOST'] ) ) {
