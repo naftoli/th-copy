@@ -44,10 +44,135 @@
 			</p>
 			<div class="form personal-information">
 				<form id="personalInfo">
+					<h2 class="formTitle">Free registration and help Chidon thrive</h2>
+					<div>
+						<br />
+						<p>
+							Help us help you. Every dollar you raise goes directly to the cost of your registration. The
+							more you raise the more Chidon will thrive.
+						</p>
+						<p>Raise the amount of your registration fee, your balance becomes $0!</p>
+					</div>
+
+					<div class="field">
+						<h2 class="formTitle">Raffles</h2>
+						<p>
+							The more you raise, the more raffles you enter!
+						</p>
+						<table class="rafflesTable">
+							<tr class="rafflesTableHeader">
+								<td>Raise $50</td>
+								<td class="mobileOnly">
+									<div>
+										<p>Enter the raffle for an electric scooter and helmet</p>
+										<img src="img/scooter.png" alt="Electric scooter" />
+									</div>
+								</td>
+								<td>Raise $100</td>
+								<td class="mobileOnly">
+									<div>
+										<p>Enter the raffle for a drone</p>
+										<img src="img/drone.png" alt="Drone" />
+									</div>
+								</td>
+								<td>Raise $150</td>
+								<td class="mobileOnly">
+									<div>
+										<p>Enter the raffle for a set of yahadus books</p>
+										<img src="img/books.png" alt="Set of Yahadus books" />
+									</div>
+								</td>
+								<td>Raise $200</td>
+								<td class="mobileOnly">
+									<div>
+										<p>Enter the raffle for a GoPro</p>
+										<img src="img/go-pro.png" alt="GoPro" />
+									</div>
+								</td>
+							</tr>
+							<tr class="rafflesTableDetails desktopOnly">
+								<td>
+									<div>
+										<p>Enter the raffle for an electric scooter and helmet</p>
+										<img src="img/scooter.png" alt="Electric scooter" />
+									</div>
+								</td>
+								<td>
+									<div>
+										<p>Enter the raffle for a drone</p>
+										<img src="img/drone.png" alt="Drone" />
+									</div>
+								</td>
+								<td>
+									<div>
+										<p>Enter the raffle for a set of yahadus books</p>
+										<img src="img/books.png" alt="Set of Yahadus books" />
+									</div>
+								</td>
+								<td>
+									<div>
+										<p>Enter the raffle for a GoPro</p>
+										<img src="img/go-pro.png" alt="GoPro" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="field flexRow mobileFlexColumn">
+						<div>
+							<h2 class="formTitle">Grand Prize</h2>
+							<br />
+							<table class="rafflesTable">
+								<tr class="rafflesTableHeader">
+									<td>Raise $250</td>
+								</tr>
+								<tr class="rafflesTableDetails">
+									<td>
+										<div>
+											<p>
+												Raise $250 and enter the Grand Raffle for a chance to win a paid flight
+												to Crown Heights (of up to $750 in value) or $750 to the Judaica Store
+												of your choice. <br /> Every additional $50 gets you another entry into
+												the Grand Raffle - with no limit to how many entries you can put in!
+											</p>
+											<div>
+												<img style="width:75px;" src="img/cash.png" alt="Cash" />
+												<img style="margin-left: 20px;width:130px;" src="img/airplane.png"
+													alt="Airplane" />
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div>
+							<h2 class="formTitle">Chidon Ambassador</h2>
+							<br />
+							<table class="rafflesTable">
+								<tr class="rafflesTableHeader">
+									<td>Raise $500</td>
+								</tr>
+								<tr class="rafflesTableDetails">
+									<td>
+										<div>
+											<p>
+												Raise $500 and become a Chidon Ambassador! Receive a Chidon keepsake
+												with an additional 3 entries into the Grand Raffle.
+											</p>
+											<img src="img/gift-box.png" alt="Gift box" style="width:135px;" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<br />
+					<br />
 					<h2 class="formTitle">Setup Your Goal</h2>
 					<ol>
 						<li>Reward: Select the reward that your child is going for</li>
-						<li>Committed Hours: Enter the total hours that your child is learning this year for the 4 tests
+						<li>Committed Hours: Enter the total hours that your child is learning this year for the 3 tests
 							and the final</li>
 						<li>Fundraising Goal: Enter your child’s fundraising goal</li>
 					</ol>
@@ -130,14 +255,14 @@
 				<div class="footer-about">
 					<div class="icon-wrapper">
 						<a href="https://thechidon.com" target="blank">
-							<img src="img/chidon-logo.png" alt="Chidon" />
+							<img src="img/chidon-logo.png" alt="Chidon" height="84" />
 						</a>
 					</div>
 					<div class="icon-wrapper">
-						<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+						<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" height="84" />
 					</div>
 					<div class="icon-wrapper">
-						<img src="img/army-color.png" alt="Tzivos Hashem" />
+						<img src="img/army-color.png" alt="Tzivos Hashem" height="84" />
 					</div>
 					<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
 				</div>
@@ -230,33 +355,65 @@
 				yesod: {
 					id: 'yesod',
 					name: 'Yesod',
-					goal: '$70',
-					hours: '36 hours'
+					goal: '50',
+					hours: '36 hours',
+					goalSelect: { '50': { name: '$50', value: '50' }, '75': { name: '$75', value: '75' }, '100': { name: '$100', value: '100' }, '150': { name: '$150', value: '150' }, 'custom': { name: 'Custom', value: 'custom' } }
 				},
 				yediah: {
 					id: 'yediah',
 					name: 'Yediah',
-					goal: '$180',
-					hours: '72 hours'
+					goal: '100',
+					hours: '72 hours',
+					goalSelect: { '100': { name: '$100', value: '100' }, '125': { name: '$125', value: '125' }, '150': { name: '$150', value: '150' }, '200': { name: '$200', value: '200' }, 'custom': { name: 'Custom', value: 'custom' } }
 				},
 				havonah: {
 					id: 'havonah',
 					name: 'Havonah',
-					goal: '$370',
-					hours: '108 hours'
+					goal: '200',
+					hours: '108 hours',
+					goalSelect: { '200': { name: '$200', value: '200' }, '225': { name: '$225', value: '225' }, '250': { name: '$250', value: '250' }, '300': { name: '$300', value: '300' }, 'custom': { name: 'Custom', value: 'custom' } }
 				},
 				iyun: {
 					id: 'iyun',
 					name: 'Iyun',
-					goal: '$370',
-					hours: '144 hours'
+					goal: '200',
+					hours: '144 hours',
+					goalSelect: { '200': { name: '$200', value: '200' }, '225': { name: '$225', value: '225' }, '250': { name: '$250', value: '250' }, '300': { name: '$300', value: '300' }, 'custom': { name: 'Custom', value: 'custom' } }
 				},
 				ultimate: {
 					id: 'ultimate',
 					name: 'Ultimate Chidon Experience',
-					goal: '$500',
-					hours: '154 hours'
+					goal: '250',
+					hours: '154 hours',
+					goalSelect: { '250': { name: '$250', value: '250' }, '275': { name: '$275', value: '275' }, '300': { name: '$300', value: '300' }, '400': { name: '$400', value: '400' }, '500': { name: '$500', value: '500' }, 'custom': { name: 'Custom', value: 'custom' } }
 				}
+			};
+
+			const loadChildGoalSelectHTML = (track, userId, custom) => {
+				let trackGoalsOptions = tracks[track.id]?.goalSelect || {};
+				let trackGoalSelection = custom ? trackGoalsOptions.custom : trackGoalsOptions[track.goal] || trackGoalsOptions.custom;
+				let html = ``
+				if (trackGoalSelection.value === "custom") {
+					html += `
+						<input 
+							id="${userId}_goal" 
+							type="text" 
+							size="5" 
+							class="goal" 
+							value="${parseInt(track.goal, 10) > 0 ? '$' + track.goal : tracks[track.id].goal}"
+						/>
+					`;
+				} else {
+					html += `
+						<select id="${userId}_goalSelect" name="track" required>
+							${Object.keys(trackGoalsOptions).map(key => (
+						`<option ${trackGoalSelection.name === trackGoalsOptions[key].name ? 'selected="selected"' : ''}" value="${trackGoalsOptions[key].value}">${trackGoalsOptions[key].name}</option>`
+					))}
+						</select>
+				`;
+				}
+
+				return html;
 			};
 
 			$.post("../ajax/getChildrenForSetup.php", { admin: admin }, function (result) {
@@ -291,12 +448,31 @@
 						let goal = tracks[val].goal;
 						let hours = tracks[val].hours;
 						let user_id = event.data;
-						let goalInput = $("#" + user_id + "_goal")[0];
+						let goalContainer = $("#" + user_id + "_goal_container")[0];
 						let hoursInput = $("#" + user_id + "_hours")[0];
 						let checkboxInput = $("#" + user_id)[0];
-						goalInput.value = goal;
+						goalContainer.innerHTML = loadChildGoalSelectHTML(tracks[val], user_id);
+						let select = $("#" + user_id + "_goalSelect");
+						if (select) {
+							select.on("change", null, user_id, handleChangeGoal);
+							select.niceSelect();
+						}
 						hoursInput.value = hours;
 						checkboxInput.checked = true;
+					};
+
+					function handleChangeGoal(event) {
+						event.preventDefault();
+						let val = event.target.value;
+						let user_id = event.data;
+						let track = $("#" + user_id + '_select')[0].value;
+						if (val === "custom") {
+							let goalContainer = $("#" + user_id + "_goal_container")[0];
+							goalContainer.innerHTML = '';
+							goalContainer.innerHTML = loadChildGoalSelectHTML(tracks[track], user_id, true);
+							let goalInput = $("#" + user_id + "_goal");
+							goalInput.on("change", null, user_id, handleUpdateChildInfo);
+						}
 					};
 
 					function handleUpdateChildInfo(event) {
@@ -314,7 +490,7 @@
 						html += `
                                 <tr class="child">
                                     <td>
-										<label class="checkbox child-check"><input type="checkbox" class="id" id="${child.user_id}" ${child.goal ? checked = 'checked' : ''} /><span></span></label>
+										<label class="checkbox child-check"><input type="checkbox" class="id" id="${child.user_id}" ${parseInt(child.goal) ? checked = 'checked' : ''} /><span></span></label>
 									</td>
 									<td class="tdColumn">
 										<p>${child.first}: </p>
@@ -333,12 +509,12 @@
 										</div>
 										<div class="inputContainer">
 											<div>
-												<select id="${child.user_id}_select" name="track" required">
-													<option value="${tracks.yesod.id}">${tracks.yesod.name}</option>
-													<option value="${tracks.yediah.id}">${tracks.yediah.name}</option>
-													<option value="${tracks.havonah.id}">${tracks.havonah.name}</option>
-													<option value="${tracks.iyun.id}">${tracks.iyun.name}</option>
-													<option value="${tracks.ultimate.id}">${tracks.ultimate.name}</option>
+												<select id="${child.user_id}_select" name="track" required>
+													<option ${child.track.id === tracks.yesod.id ? 'selected="selected"' : ''}" value="${tracks.yesod.id}">${tracks.yesod.name}</option>
+													<option ${child.track.id === tracks.yediah.id ? 'selected="selected"' : ''}" value="${tracks.yediah.id}">${tracks.yediah.name}</option>
+													<option ${child.track.id === tracks.havonah.id ? 'selected="selected"' : ''}" value="${tracks.havonah.id}">${tracks.havonah.name}</option>
+													<option ${child.track.id === tracks.iyun.id ? 'selected="selected"' : ''}" value="${tracks.iyun.id}">${tracks.iyun.name}</option>
+													<option ${child.track.id === tracks.ultimate.id ? 'selected="selected"' : ''}" value="${tracks.ultimate.id}">${tracks.ultimate.name}</option>
 												</select>
 											</div>
 											<div class="inputContainer flexRow mobileOnly">
@@ -350,14 +526,8 @@
 												</div>
 											</div>
 											<div class="inputContainer flexRow">
-												<div>
-													<input 
-														id="${child.user_id}_goal" 
-														type="text" 
-														size="5" 
-														class="goal" 
-														value="${parseInt(track.goal, 10) > 0 ? '$' + track.goal : tracks.yesod.goal}"
-													/>
+												<div id="${child.user_id}_goal_container">
+													${loadChildGoalSelectHTML(child.track, child.user_id)}
 												</div>
 												<div>
 													<input 
@@ -379,6 +549,7 @@
 					for (child of res.info.children) {
 						let childSelect = $("#" + child.user_id + "_select");
 						let goalInput = $("#" + child.user_id + "_goal");
+						let goalSelect = $("#" + child.user_id + "_goalSelect");
 						let hoursInput = $("#" + child.user_id + "_hours");
 						goalInput.inputFilter(function (value) {
 							return /^\d*$/.test(value);    // Allow digits only, using a RegExp
@@ -387,6 +558,7 @@
 							return /^\d*$/.test(value);    // Allow digits only, using a RegExp
 						});
 						childSelect.on("change", null, child.user_id, handleChangeTrack);
+						goalSelect.on("change", null, child.user_id, handleChangeGoal);
 						goalInput.on("change", null, child.user_id, handleUpdateChildInfo);
 						hoursInput.on("change", null, child.user_id, handleUpdateChildInfo);
 					}
@@ -420,7 +592,13 @@
 					child.user_id = $(this).find('.id').attr('id');
 					child.track = $(this).find("#" + child.user_id + "_select").val();
 					child.show_pic = !hide_pic;
-					child.amount = parseInt($(this).find("#" + child.user_id + "_goal").val().replace("$", ""));
+					let goalInput = $(this).find("#" + child.user_id + "_goal")[0];
+					let goalSelect = $(this).find("#" + child.user_id + "_goalSelect")[0];
+					if (goalInput) {
+						child.amount = parseInt($(this).find("#" + child.user_id + "_goal").val().replace("$", ""));
+					} else {
+						child.amount = parseInt($(this).find("#" + child.user_id + "_goalSelect").val().replace("$", ""));
+					}
 					child.hours = parseInt($(this).find("#" + child.user_id + "_hours").val());
 					child.add = $(this).find('.id').is(":checked");
 					if (child.add) {
@@ -444,10 +622,7 @@
 							if (activate) {
 								$.post('../email/intro.php', { admin: admin_id }, function (res) {
 									console.log(res);
-									//location.href = link;
 								});
-							} else {
-								//location.href = link;
 							}
 							location.href = link;
 						} else {
@@ -469,7 +644,6 @@
 
 				if (scroll >= 100) {
 					header.addClass("header-alt");
-					console.log('called');
 				} else {
 					header.removeClass('header-alt');
 				}
