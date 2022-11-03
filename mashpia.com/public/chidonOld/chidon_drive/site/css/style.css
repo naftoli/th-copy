@@ -411,6 +411,7 @@ footer .footer-main {
 }
 footer .footer-about {
 	display: flex;
+	max-width: 50%;
 }
 footer .footer-about .icon-wrapper {
 	max-height: 7rem;

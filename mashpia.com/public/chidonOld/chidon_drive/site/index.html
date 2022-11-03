@@ -25,9 +25,10 @@
 				</a>
 				<nav>
 					<a href="index.html">Home</a>
-					<a href="donate.html" onclick="return false">Donate</a>
+					<a href="donate.html">Donate</a>
 					<a href="leaderboard.html">Leaderboard</a>
 					<a href="story.html">Our Story</a>
+					<a id="loginLogout"></a>
 				</nav>
 			</div>
 			<div class="icons">
@@ -38,11 +39,11 @@
 	</header>
 
 	<div id="fullpage">
-<!--		<div id="chidonDriveContainer">-->
-<!--			<img src="img/attention.png" alt="Attention Icon" />-->
-<!--			<p>Chidon Drive is Live!</p>-->
-<!--			<a class="button" href="/setup">Setup your family page</a>-->
-<!--		</div>-->
+		<!--		<div id="chidonDriveContainer">-->
+		<!--			<img src="img/attention.png" alt="Attention Icon" />-->
+		<!--			<p>Chidon Drive is Live!</p>-->
+		<!--			<a class="button" href="/setup">Setup your family page</a>-->
+		<!--		</div>-->
 		<!-- Home Section -->
 		<div class="section " id="section0">
 			<div class="slide asyncImage" data-src="img/home/passion.jpg" id="slide1">
@@ -80,7 +81,7 @@
 									<div class="bar-line__circle"></div>
 									<div class="bar-line__marker"><img src="img/marker.png" /><span
 											class="bar-line__marker-number"></span> <span
-											class="bar-line__other-number">$2,248,120</span></div>
+											class="bar-line__other-number">$1.915,850</span></div>
 								</div>
 							</div>
 						</div>
@@ -363,7 +364,7 @@
 					<nav>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="donate.html" onclick="return false">Donate</a></li>
+							<li><a href="donate.html">Donate</a></li>
 							<li><a href="leaderboard.html">Leaderboard</a></li>
 							<li><a href="story.html">Our Story</a></li>
 						</ul>
@@ -468,7 +469,7 @@
 				let res = JSON.parse(result);
 				if (res.success) {
 					let amount = res.total;
-					let budget = 2248120;
+					let budget = 1915850.00;
 					$('#section0 .leader').each(function () {
 						$(this).data('amount', Math.round(amount));
 						$(this).data('percent', Math.round((amount / budget) * 100));
