@@ -50,8 +50,25 @@ $res = $stmt->execute([
 //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
 if ( $res ) {
     $rows = $stmt->fetchAll();
-    if (!empty($rows)) $data['children'] = $rows;
-    else {
+    if (!empty($rows)) {
+        foreach ( $rows as $idx => $row ) {
+            // find out how much was raised so far
+            $rows[$idx]['total_donation'] = 0; // initialize amount
+            $stmt2 = $MASHPIA_DB->prepare("
+                SELECT IFNULL(SUM(subsidy_amount), 0) as total_donation 
+                FROM chidon_user_subsidies 
+                WHERE chidon_year = :year AND user_id = :user");
+            $res2 = $stmt2->execute([
+                ':year' => $year,
+                ':user' => $row['user_id']
+            ]);
+            if ($res2) {
+                $row2 = $stmt2->fetch();
+                $rows[$idx]['total_donation'] = $row2['total_donation'];
+            }
+        }
+        $data['children'] = $rows;
+    } else {
         echo json_encode([
           'success' =>  false,
           'message' =>  "Could not find any children that have a fundraising goal setup."
