@@ -84,9 +84,9 @@
                 HUGE SALE<br />
                 <b>14 Kislev Card Game</b>
                 <br /><br />
-                Regularly $13 Per Game<br />
+                Regularly $12 Per Game<br />
                 Sale Price 50% off<br />
-                ONLY $6.50 (includes delivery to school)
+                ONLY $6 (includes delivery to school)
                 <br /><br />
                 Game Includes:<br />
                     - Game Instructions<br />
@@ -116,7 +116,7 @@
 <!--                Let's see who will get the most shakes!<br />-->
 <!--            </div>-->
             <hr />
-            <h2>Number of sets: 500</h2>
+            <h2>Number of sets: 1000</h2>
             <h2>Already Sold: <span class="sold"></span></h2>
             <h2>Currently Available: <span id="leftToSell"></span></h2>
             <hr />
@@ -145,16 +145,16 @@
                             <div class="child">
                                 <div style="padding: 10px; font-size: 14px;">
                                             <span>
-                                                {{#if gamePurchased}}
-                                                {{else}}
+<!--                                                {{#if gamePurchased}}-->
+<!--                                                {{else}}-->
                                                 <input type="checkbox" class="game" style="width: 30px;" id="{{@key}}" />
-                                                {{/if}}
+<!--                                                {{/if}}-->
                                                 <b>{{rank}}</b> {{first}} {{last}}
                                             </span>
 <!--                                    <div>Shipping Charge: <strong>$<span class="shipping-charge">{{lulav_shipping}}</span></strong></div>-->
-                                    {{#if gamePurchased}}
-                                    <div style='color:red'><strong><i>Child has already purchased a game set.</i></strong></div>
-                                    {{/if}}
+<!--                                    {{#if gamePurchased}}-->
+<!--                                    <div style='color:red'><strong><i>Child has already purchased a game set.</i></strong></div>-->
+<!--                                    {{/if}}-->
                                 </div>
                             </div>
                             {{/each}}
@@ -306,7 +306,7 @@
 
         function calcAmount() {
             var total = 0;
-            var cost  = 6.5;
+            var cost  = 6;
             var numChildren = $(".game:checked").length;
 
             if ( numChildren ) {
