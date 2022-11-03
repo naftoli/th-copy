@@ -595,6 +595,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $errors[] = "Could not insert into user_registration. (Not Registered).";
                 return $errors;
             }
+//            echo $reg_query->debugDumpParams();
             // save the charge
             $type = 'chayolei';
             if ($lite) $type = 'chayolei-lite';
@@ -687,7 +688,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( !$parent_id ) {
             $stmt = $MASHPIA_DB->prepare("
                 SELECT admin_id FROM admin_auths 
-                WHERE role_id = 1 AND id = :id
+                WHERE role_id = 1 AND id = :id AND auth = 'user' 
             ");
             $res = $stmt->execute([':id' => $this->user_id]);
             if ( $res ) {
@@ -715,7 +716,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     poll = :poll,
                     comments = :comments,
                     test_type = :test_type, 
-                    recruited_by = :recruit 
+                    recruited_by = :recruit, 
+                    parent_id = :parent 
                 WHERE
                     year = :year AND school_id = :school
                         AND user_id = :user
@@ -733,10 +735,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 poll = :poll,
                 comments = :comments,
                 test_type = :test_type, 
-                recruited_by = :recruit
+                recruited_by = :recruit, 
+                parent_id = :parent
             ");
         }
-        return $chidonQry->execute([
+        $result = $chidonQry->execute([
             'year'  => $year,
             'school'=> $this->school_id,
             'user'  => $this->user_id,
@@ -747,8 +750,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'poll'  => $poll,
             'comments'  => $comments,
             'test_type' => $track,
-            'recruit'   => $recruited_by
+            'recruit'   => $recruited_by,
+            'parent'    => $parent_id
         ]);
+//        echo $chidonQry->debugDumpParams();
+        return $result;
     }
 
     /**
