@@ -727,7 +727,7 @@
 
 						// hoursDone
 						let totalHours = 0;
-						totalHours = info.data.children.reduce((prevValue, currValue) => (prevValue + currValue.minutes), 0) || 0;
+						totalHours = info.data.children.reduce((prevValue, currValue) => (prevValue + parseInt(currValue.minutes)), 0) || 0;
 						if (totalHours === 1) {
 							$("#hoursDone").text(totalHours + " hour");
 						} else {
