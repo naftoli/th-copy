@@ -84,9 +84,9 @@
                 HUGE SALE<br />
                 <b>14 Kislev Card Game</b>
                 <br /><br />
-                Regularly $12 Per Game<br />
+                Regularly $13 Per Game<br />
                 Sale Price 50% off<br />
-                ONLY $6 (includes delivery to school)
+                ONLY $6.50 (includes delivery to school)
                 <br /><br />
                 Game Includes:<br />
                     - Game Instructions<br />
@@ -235,8 +235,8 @@
         // }
 
         $.post('ajax/gamePurchases.php', function( sold ) {
-            var startWith = 500;
-            var alreadySold = 302; // sets set aside for hq/staff/schools
+            var startWith = 1000;
+            var alreadySold = 0; // sets set aside for hq/staff/schools
             if (sold) alreadySold += parseInt( sold );
             var leftToSell = startWith - alreadySold;
             $(".sold").text( alreadySold );
@@ -306,7 +306,7 @@
 
         function calcAmount() {
             var total = 0;
-            var cost  = 6;
+            var cost  = 6.5;
             var numChildren = $(".game:checked").length;
 
             if ( numChildren ) {
@@ -316,7 +316,7 @@
                     // if (shipping > 0) {
                     //     total += cost + shipping;
                     // } else {
-                        total += cost;
+                        total += floatval(cost);
                     // }
                 });
             }
