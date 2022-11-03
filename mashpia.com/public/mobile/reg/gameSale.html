@@ -120,7 +120,7 @@
             <h2>Already Sold: <span class="sold"></span></h2>
             <h2>Currently Available: <span id="leftToSell"></span></h2>
             <hr />
-            <div id="sold-out">SOLD OUT</div>
+            <div id="sold-out" style="display: none;">SOLD OUT</div>
         </div>
 
         <div style="width: 250px; margin: auto; display: none;" id='no-children'>
@@ -316,7 +316,7 @@
                     // if (shipping > 0) {
                     //     total += cost + shipping;
                     // } else {
-                        total += floatval(cost);
+                        total += parseFloat(cost);
                     // }
                 });
             }
