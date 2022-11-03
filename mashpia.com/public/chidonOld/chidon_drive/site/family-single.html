@@ -514,9 +514,10 @@
 						// let totalReg = 0;
 						let totalDonation = 0;
 						for (child of info.data.children) {
-							totalDonation += parseFloat(child.total_donation);
-							familyGoal += parseFloat(child.goal);
+							totalDonation += parseFloat(child.total_donation || 0);
+							familyGoal += parseFloat(child.goal || 0);
 						};
+
 
 						// let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
 						// $("#totalRegFee").text( totalReg );
