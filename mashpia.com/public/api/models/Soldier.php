@@ -468,11 +468,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $row['chidon'] && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
-            $result['chidonEdit'] = !!$row['th_chidon_id'];
+//            $result['chidonEdit'] = !!$row['th_chidon_id'];
         }
         else {
             $result['chidon'] = true;
-            $result['chidonEdit'] = false;
+//            $result['chidonEdit'] = false;
         }
 
         // turn off chayolei and chidon reg if school has not registered yet

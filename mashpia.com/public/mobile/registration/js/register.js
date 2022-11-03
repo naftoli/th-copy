@@ -1276,8 +1276,9 @@ var registrationApp = function() {
                 response.users.forEach( function( user ) {
                     user.dob = user.dob ? user.dob.split(" ")[0] : user.dob;
                     if (user.user_registered > 0) state.registered.push(user)
-                    if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
-                            user.registrationStatus.chidonEdit === true )
+                    // if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
+                    //         user.registrationStatus.chidonEdit === true )
+                    if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
                         state.users.push( user );
                 });
                 if ( state.users.length === 1 ) state.selected_users = state.users;
