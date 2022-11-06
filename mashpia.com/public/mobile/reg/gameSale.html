@@ -370,7 +370,7 @@
                     var result = JSON.parse( info );
                     if ( result.success ) {
                         alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
-                        // location.reload();
+                        location.href = "/mobile/reg/parent_detail.html";
                     } else {
                         alert( result.error );
                     }

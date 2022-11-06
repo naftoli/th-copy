@@ -22,6 +22,31 @@ $state = "";
 
 $description = "Game Set(s) " . $year . " purchase - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
 
+$qry1 = $MASHPIA_DB->prepare(
+    "INSERT into mashpia_purchases.purchases 
+            SET admin_id = :admin, 
+            amount_paid = :amount, 
+            authorization = :auth, 
+            year = :year"
+);
+
+$qry2 = $MASHPIA_DB->prepare(
+    "INSERT INTO mashpia_purchases.purchase_details 
+                SET purchase_id = :id, 
+                user_id = :user, 
+                item_id = 4, 
+                qty = 1"
+);
+
+$qry3 = $MASHPIA_DB->prepare(
+    "INSERT INTO transactions 
+            SET trans_date = now(),
+            admin_id = :admin, 
+            description = :desc,
+            amount = :amount,
+            response = :response"
+);
+
 if ( $amount > 0 ) {
     chdir('../../../');
     require_once 'authorize.php';
@@ -33,14 +58,7 @@ if ( $amount > 0 ) {
             $response_array[6] . ':' .
             $response_array[9];
 
-        $qry = $MASHPIA_DB->prepare(
-            "INSERT into mashpia_purchases.purchases 
-            SET admin_id = :admin, 
-            amount_paid = :amount, 
-            authorization = :auth, 
-            year = :year"
-        );
-        $qry->execute([
+        $qry1->execute([
             ':admin'    => $admin_id,
             ':amount'   => $amount,
             ':auth'     => $strResponse,
@@ -48,30 +66,14 @@ if ( $amount > 0 ) {
         ]);
         $purchase_id = $MASHPIA_DB->lastInsertId();
 
-        $qry = $MASHPIA_DB->prepare(
-            "INSERT INTO mashpia_purchases.purchase_details 
-                SET purchase_id = :id, 
-                user_id = :user, 
-                item_id = 4, 
-                qty = 1"
-        );
-
         foreach ($info['users'] as $user_id) {
-            $qry->execute([
+            $qry2->execute([
                 ':id'       => $purchase_id,
                 ':user'     => $user_id,
             ]);
         }
 
-        $qry = $MASHPIA_DB->prepare(
-            "INSERT INTO transactions 
-            SET trans_date = now(),
-            admin_id = :admin, 
-            description = :desc,
-            amount = :amount,
-            response = :response"
-        );
-        $qry->execute([
+        $qry3->execute([
             ':admin'    => $admin_id,
             ':desc'     => $description,
             ':amount'   => $amount,
