@@ -43,7 +43,7 @@ foreach ($tables as $table) {
     $numFields = count($fields);
     foreach ($info[$table] as $row) {
         // find out if row exists
-       if (! entryExists($fields[0], $row[$fields[0]])) {
+       if (! entryExists($table, $fields[0], $row[$fields[0]])) {
            $sql = "insert into mashpia_chidon.wp_antw_" . $table . " set ";
            foreach ($fields as $idx => $field) {
                $sql .= $field . "=" . $row[$idx];
