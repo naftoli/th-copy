@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 function entryExists($table, $column, $value) {
-    $sql = "select * from mashpia_chidon_old.wp_antw_" . $table . " where " . $column . " = " . $value;
+    $sql = "select * from mashpia_chidon.wp_antw_" . $table . " where " . $column . " = " . $value;
     echo $sql . "<br />";
     $result = mysql_query($sql);
     return mysql_num_rows($result);
