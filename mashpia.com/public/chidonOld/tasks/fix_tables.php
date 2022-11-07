@@ -12,7 +12,6 @@ if ($admin_user['auth'] != 'super') {
 
 function entryExists($table, $column, $value) {
     $sql = "select * from mashpia_chidon.wp_antw_" . $table . " where " . $column . " = " . $value;
-    echo $sql . "<br />";
     $result = mysql_query($sql);
     return mysql_num_rows($result);
 }
@@ -46,7 +45,7 @@ foreach ($tables as $table) {
        if (! entryExists($table, $fields[0], $row[$fields[0]])) {
            $sql = "insert into mashpia_chidon.wp_antw_" . $table . " set ";
            foreach ($fields as $idx => $field) {
-               $sql .= $field . "=" . $row[$idx];
+               $sql .= $field . "=" . $row[$fields[$idx]];
                if ($idx < ($numFields - 1)) $sql .= ", ";
            }
            $qrys[$table][] = $sql;
