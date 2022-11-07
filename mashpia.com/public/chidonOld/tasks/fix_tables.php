@@ -45,7 +45,7 @@ foreach ($tables as $table) {
        if (! entryExists($table, $fields[0], $row[$fields[0]])) {
            $sql = "insert into mashpia_chidon.wp_antw_" . $table . " set ";
            foreach ($fields as $idx => $field) {
-               $sql .= $field . " = \"" . $row[$fields[$idx]] . "\"";
+               $sql .= $field . " = '" . mysql_real_escape_string($row[$fields[$idx]]) . "'";
                if ($idx < ($numFields - 1)) $sql .= ", ";
            }
            $qrys[$table][] = $sql;
