@@ -53,8 +53,18 @@ foreach ($tables as $table) {
     }
 }
 
+$success = true;
+mysql_query('set autocommit=0');
+mysql_query('begin');
 foreach ($tables as $table) {
     foreach ($qrys[$table] as $qry) {
-        echo $qry . "<br />";
+        if (!mysql_query($qry)) {
+            $success = false;
+            break 2;
+        }
     }
 }
+if ($success) mysql_query('commit');
+else mysql_query('rollback');
+mysql_query('set autocommit=1');
+echo "done.";
