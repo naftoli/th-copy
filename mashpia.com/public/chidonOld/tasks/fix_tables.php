@@ -59,12 +59,17 @@ mysql_query('begin');
 foreach ($tables as $table) {
     foreach ($qrys[$table] as $qry) {
         if (!mysql_query($qry)) {
+            echo $qry;
             $success = false;
             break 2;
         }
     }
 }
-if ($success) mysql_query('commit');
-else mysql_query('rollback');
+if ($success) {
+    mysql_query('commit');
+    echo "done.";
+} else {
+    mysql_query('rollback');
+    echo "errors.";
+}
 mysql_query('set autocommit=1');
-echo "done.";
