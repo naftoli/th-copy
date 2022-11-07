@@ -1,6 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
-require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No Permission.";
@@ -40,7 +43,7 @@ foreach ($tables as $table) {
     $numFields = count($fields);
     foreach ($info[$table] as $row) {
         // find out if row exists
-       if (! entryExists($fields[0], $row[0])) {
+       if (! entryExists($fields[0], $row[$fields[0]])) {
            $sql = "insert into mashpia_chidon.wp_antw_" . $table . " set ";
            foreach ($fields as $idx => $field) {
                $sql .= $field . "=" . $row[$idx];
