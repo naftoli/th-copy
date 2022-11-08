@@ -51,7 +51,7 @@ foreach ($tables as $table) {
     foreach ($info[$table] as $row) {
         // find out if row exists
        if (! entryExists($table, $fields[0], $row[$fields[0]])) {
-           $sql = "insert into mashpia_chidon." . $table . " set ";
+           $sql = "insert ignore into mashpia_chidon." . $table . " set ";
            foreach ($fields as $idx => $field) {
                $sql .= $field . " = '" . $row[$fields[$idx]] . "'";
                if ($idx < ($numFields - 1)) $sql .= ", ";
