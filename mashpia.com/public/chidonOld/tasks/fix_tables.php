@@ -17,7 +17,7 @@ function entryExists($table, $column, $value) {
 }
 
 $tables = [];
-$skip = ['wp_antw_cf7_vdata_entry', 'wp_antw_wp_pro_quiz_statistic'];
+$skip = ['wp_antw_cf7_vdata_entry', 'wp_antw_wp_pro_quiz_statistic', 'wp_antw_wc_admin_note_actions'];
 $sql = "show tables from mashpia_chidon_old";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
