@@ -53,7 +53,7 @@ foreach ($tables as $table) {
        if (! entryExists($table, $fields[0], $row[$fields[0]])) {
            $sql = "insert ignore into mashpia_chidon." . $table . " set ";
            foreach ($fields as $idx => $field) {
-               $sql .= $field . " = '" . $row[$fields[$idx]] . "'";
+               $sql .= $field . " = '" . str_replace("'", "\'", $row[$fields[$idx]]) . "'";
                if ($idx < ($numFields - 1)) $sql .= ", ";
            }
            $qrys[$table][] = $sql;
