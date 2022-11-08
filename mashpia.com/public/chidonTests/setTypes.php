@@ -8,7 +8,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 $disabled = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2022-01-21 05:00:00');
+//    $shutdown = new DateTime('2022-01-21 05:00:00');
 //    if ($today >= $shutdown) {
 //        $disabled = true;
 //    }
@@ -75,11 +75,11 @@ if (isset($_POST['save'])) {
                     $message = "Averages and highest passing track is based off of a combined mark on <b>Tests 1 & 2</b>.";
                     break;
                 case 3:
-                    $message = "Averages and highest passing track is based off of a combined mark on <b>Tests 1 - 3</b>.";
+                    $message = "Averages and highest passing track is based off of a combined mark on <b>All 3 Tests</b>.";
                     break;
-                case 4:
-                    $message = "Averages and highest passing track is based off of a combined mark on <b>all 4 tests</b>.";
-                    break;
+//                case 4:
+//                    $message = "Averages and highest passing track is based off of a combined mark on <b>all 4 tests</b>.";
+//                    break;
             }
             $message .= "<br />To see for other tests, go back to the previous screen.";
             echo "<p>$message</p>";

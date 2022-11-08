@@ -53,9 +53,9 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th>";
+            echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
             foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($value) . " Mark</th>";
+                echo "<th>" . ucwords($value) . " Correct</th>";
             }
             echo "<th>Avg To Date</th>";
             echo "</tr>";

@@ -420,7 +420,7 @@ class ChidonTests
         return $details;
     }
 
-    public function getHighestTrackPassed( $child, $numTests = 4 ) {
+    public function getHighestTrackPassed( $child, $numTests = 3 ) {
         $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $this->setScores();
         $this->calculateMarks();
