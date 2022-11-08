@@ -65,7 +65,7 @@ class ChidonTests
                 tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_reg, tc.school_rep, tc.reward_type, tc.date_paid,  
                 tci.highest_track, 
                 u.first, u.last, u.gender, u.user_serial, 
-                c.class_id, c.class_grade, c.class_sub,
+                c.class_id, c.class_grade, c.class_sub, 
                 s.school_id, s.school_name 
             FROM
                 th_chidon tc

@@ -63,7 +63,7 @@
             "items": [
               { "label": "Test #1", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=1" },
               { "label": "Test #2", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=2" },
-              { "label": "Test #3", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=3" },
+              { "label": "Test #3", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=3" }
             ]
           },
           {
