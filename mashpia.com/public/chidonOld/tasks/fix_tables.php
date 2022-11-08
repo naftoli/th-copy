@@ -17,10 +17,13 @@ function entryExists($table, $column, $value) {
 }
 
 $tables = [];
+$skip = ['wp_antw_cf7_vdata_entry', 'wp_antw_wp_pro_quiz_statistic'];
 $sql = "show tables from mashpia_chidon_old";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $tables[] = $row['Tables_in_mashpia_chidon_old'];
+    $table = $row['Tables_in_mashpia_chidon_old'];
+    if (in_array($table, $skip)) continue;
+    $tables[] = $table;
 }
 
 $columns = [];
