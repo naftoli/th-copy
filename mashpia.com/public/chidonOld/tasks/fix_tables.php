@@ -11,16 +11,21 @@ if ($admin_user['auth'] != 'super') {
 }
 
 function entryExists($table, $column, $value) {
-    $sql = "select * from mashpia_chidon.wp_antw_" . $table . " where " . $column . " = " . $value;
+    $sql = "select * from mashpia_chidon." . $table . " where " . $column . " = " . $value;
     $result = mysql_query($sql);
     return mysql_num_rows($result);
 }
 
-$tables = ['postmeta', 'posts', 'term_relationships', 'usermeta'];
+$tables = [];
+$sql = "show tables from mashpia_chidon_old";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $tables[] = $row['Tables_in_mashpia_chidon_old'];
+}
 
 $columns = [];
 foreach ($tables as $table) {
-    $sql = "show columns from mashpia_chidon_old.wp_antw_" . $table;
+    $sql = "show columns from mashpia_chidon_old." . $table;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $columns[$table][] = $row['Field'];
@@ -29,7 +34,7 @@ foreach ($tables as $table) {
 
 $info = [];
 foreach ($tables as $table) {
-    $sql = "select * from mashpia_chidon_old.wp_antw_" . $table;
+    $sql = "select * from mashpia_chidon_old." . $table;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[$table][] = $row;
@@ -43,9 +48,9 @@ foreach ($tables as $table) {
     foreach ($info[$table] as $row) {
         // find out if row exists
        if (! entryExists($table, $fields[0], $row[$fields[0]])) {
-           $sql = "insert into mashpia_chidon.wp_antw_" . $table . " set ";
+           $sql = "insert into mashpia_chidon." . $table . " set ";
            foreach ($fields as $idx => $field) {
-               $sql .= $field . " = '" . mysql_real_escape_string($row[$fields[$idx]]) . "'";
+               $sql .= $field . " = '" . $row[$fields[$idx]] . "'";
                if ($idx < ($numFields - 1)) $sql .= ", ";
            }
            $qrys[$table][] = $sql;
