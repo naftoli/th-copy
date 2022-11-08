@@ -68,6 +68,7 @@ foreach ($tables as $table) {
     foreach ($qrys[$table] as $qry) {
         if (!mysql_query($qry)) {
             echo $qry;
+            echo "<br />" . mysql_error();
             $success = false;
             break 2;
         }
