@@ -30,7 +30,7 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
     }
 }
 
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
 // initialize all tests to not be disabled
 $disabled = false;
