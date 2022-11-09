@@ -115,7 +115,7 @@ if ($admin_user['auth'] != 'super') {
         echo "<h2>" . $schools[$school] . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
-            $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+            $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
             $avg = 0;

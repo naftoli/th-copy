@@ -19,7 +19,7 @@ foreach ($schools as $id => $school) {
     $ct->calculateMarks();
     $marks += $ct->getMarks();
 }
-
+//echo "<pre>"; print_r($info); echo "</pre>";
 $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
 ?>
 <!DOCTYPE html>
@@ -60,7 +60,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
             echo "<th>Avg To Date</th>";
             echo "</tr>";
             foreach ($children as $child) {
-                $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+                $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
@@ -78,11 +78,14 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                     echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
                 // figure out avg
+                $avg = 0;
                 $total = 0;
-                for ($i = 1; $i <= $testNumber; $i++) {
-                    $total += $marks[$id][$i][$child['test_type']];
+                if (isset($marks[$id])) {
+                    for ($i = 1; $i <= $testNumber; $i++) {
+                        $total += $marks[$id][$i][$child['test_type']];
+                    }
+                    $avg = number_format($total / $testNumber, 2);
                 }
-                $avg = number_format($total / $testNumber, 2);
                 echo "<td>" . $avg . "</td>";
                 echo "</tr>";
             }

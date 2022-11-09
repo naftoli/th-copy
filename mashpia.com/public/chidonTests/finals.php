@@ -205,7 +205,7 @@ foreach ($info as $school => $children) {
     echo "</tr>";
     foreach ($children as $child) {
         if ($child['date_paid'] > 0) {
-            $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+            $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['user_id'];
             echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
