@@ -194,7 +194,6 @@ class KioskMainController extends Zend_Controller_Action
 		$objUsers = new Users();
 
 		$intCard = $this->view->scan_card = $this->_request->getParam("card_id");
-		
 		$this->objUser = $objUser = first($this->objUsers->getMashpiaUser($this->_kiosk_user_session_data->barcode));
 		$this->view->objInstitution = first($objInstitutions->_institutions_select(array(
 			"institution_id" => $this->objUser->school_id
@@ -1248,11 +1247,12 @@ class KioskMainController extends Zend_Controller_Action
 		}
 		// Loop through the results and associate the corresponding line
 		$arrResults2 = array();
-		$objBookLast = end($objBooks->_book_lines_select(array(
+		$arrBookLines = $objBooks->_book_lines_select(array(
 			"book_id" => $objMission->book_id,
 			"LIMIT" => 1,
 			"ORDER" => "line_hierarchy+0 DESC"
-		)));
+		));
+		$objBookLast = end($arrBookLines);
 
 		if ($this->_verbose)
 		{
