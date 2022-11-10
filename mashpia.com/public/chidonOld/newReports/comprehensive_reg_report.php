@@ -67,7 +67,7 @@ $sql = "
         classes c USING (class_id)
             LEFT JOIN
         admin_auths aa ON aa.id = u.user_id
-            LEFT JOIN
+            JOIN
         admins a USING (admin_id)
     WHERE
         (aa.auth = 'user' or aa.auth is null) AND class_grade in (\"" . implode('","', $grades) . "\")
