@@ -90,7 +90,7 @@ if (isset($_POST['save'])) {
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
-                echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test Type</th><th>Avg Mark</th>
+                echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th><th>Avg Mark</th>
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
                     $markInfo = $ct->getHighestTrackPassed($child);
@@ -104,7 +104,7 @@ if (isset($_POST['save'])) {
                         else if ($key2) $highestTrack = $rewardType;
                     }
 
-                    $grade = $child['class_grade'] . ($child['class_sub'] ? '' : '-' . $child['class_sub']);
+                    $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
                     echo "<select name='type[" . $child['th_chidon_id'] . "]'";
@@ -143,7 +143,6 @@ if (isset($_POST['save'])) {
             echo "<option value='1'>Test 1</option>";
             echo "<option value='2'>Combine tests 1 & 2</option>";
             echo "<option value='3'>Combine tests 1 - 3</option>";
-            echo "<option value='4'>Combine tests 1 - 4</option>";
             echo "</select><br /><br />";
             echo "<input type='submit' name='submit' value='Generate Report' />";
             echo "</form>";
