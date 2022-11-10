@@ -83,11 +83,6 @@
                 "label": "Test #3",
                 "legacy": true,
                 "path": "/chidonTests/marks.php?test_num=3"
-              },
-              {
-                "label": "Test #4",
-                "legacy": true,
-                "path": "/chidonTests/marks.php?test_num=4"
               }
             ]
           },
