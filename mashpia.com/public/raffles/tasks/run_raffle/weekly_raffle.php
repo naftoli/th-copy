@@ -95,7 +95,8 @@ function weekly_raffle($raffle){
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
 //            if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]) {
-            if (alreadyWon($user, $raffle) && count($user_ids) <= $school_limits[$school_id]) {
+//            if (alreadyWon($user, $raffle) && count($user_ids) <= $school_limits[$school_id]) {
+            if (alreadyWon($user, $raffle)) {
                 echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " has already won last raffle. Removing from raffle\n";
                 unset($user_ids[$user['user_id']]); // remove the user from the array
                 $i--; continue; // redo the draw
