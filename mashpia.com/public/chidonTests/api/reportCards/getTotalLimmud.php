@@ -18,13 +18,24 @@ $dates = [
     ],
     [
         'start' => 2459543,
-        'end'   => 2459585,
-    ],
-    [
-        'start' => 2459586,
-        'end'   => 2459621
+        'end'   => 2459585
     ]
 ];
+
+//$dates = [
+//    [
+//        'start' => 2459831,
+//        'end'   => 2459879
+//    ],
+//    [
+//        'start' => 2459880,
+//        'end'   => 2459906
+//    ],
+//    [
+//        'start' => 2459907,
+//        'end'   => 2459946,
+//    ]
+//];
 
 $totals = [];
 for ($i = 0; $i < $testNum; $i++) {
@@ -37,7 +48,7 @@ for ($i = 0; $i < $testNum; $i++) {
                     JOIN
                 date_tasks_missions dtmm USING (date_tasks_mission_id)
             WHERE
-                dt.cat = 'chidon limmud'
+                dt.grid_id = 20010
                     AND dtmm.start_date >= " . $dates[$i]['start'] . "
                     AND dtmm.end_date <= " . $dates[$i]['end'] . "
                     AND user_id = " . $user_id;

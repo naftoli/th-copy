@@ -2,9 +2,10 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 // import clsx from 'clsx';
 import colors from './colors';
-import header from 'img/reportCards/reportCardHeaderBW.png';
 import footer from 'img/reportCards/footer.JPG';
-// import bwheader from 'img/reportCards/bwReportCardHeader.png';
+import test1 from 'img/reportCards/Test1.png';
+import test2 from 'img/reportCards/Test2.png';
+import test3 from 'img/reportCards/Test3.png';
 import './ReportCard.css';
 import axios from "axios";
 
@@ -167,20 +168,24 @@ function ReportCard(info) {
     const report = info.info
     const elem = report.user_id + '_rows'
     const numTests = info.testNum
-    let mainStyle
+    const currentOnly = info.current
+    let mainStyle, header
     switch (numTests) {
         case 1:
             mainStyle = {'marginTop': '20%'}
+            header = test1
             break
         case 2:
             mainStyle = {'marginTop': '16%'}
+            header = test2
             break
         case 3:
             mainStyle = {'marginTop': '12%'}
+            header = test3
             break
-        case 4:
-            mainStyle = {'marginTop': '8%'}
-            break
+        // case 4:
+        //     mainStyle = {'marginTop': '8%'}
+        //     break
         default:
             mainStyle = {'marginTop': '15%'}
             break
@@ -208,7 +213,7 @@ function ReportCard(info) {
     }
     // console.log(totals)
 
-    const totalDays = [32, 28, 30, 31]
+    const totalDays = [32, 27, 31]
 
     const state = {
         totals: []
@@ -226,6 +231,7 @@ function ReportCard(info) {
         } else {
             let html = ''
             state.totals.map((total, i) => {
+                if (currentOnly && i < (numTests - 1)) return ''
                 let totalMinutes = totalDays[i] * perDay
                 let totalHours = totalMinutes / 60
                 if (! Number.isInteger(totalHours)) totalHours = totalHours.toFixed(2)
@@ -241,6 +247,7 @@ function ReportCard(info) {
 
     let rows = []
     for (let i = 1; i <= numTests; i++) {
+        if (currentOnly && i < numTests) continue;
         rows.push(i)
     }
 

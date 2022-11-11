@@ -131,6 +131,7 @@ const ReportCards = (props) => {
     const [classId, setClassId] = useState(class_id || '-1');
     const [schoolId, setSchoolId] = useState(school_id || '-1');
     const [iyun, setIyun] = useState(false)
+    const [currentOnly, setCurrentOnly] = useState(false)
 
     // const toggleBW = useCallback(() => setBw(!bw), [bw]);
 
@@ -169,11 +170,14 @@ const ReportCards = (props) => {
         setIyun(event.target.checked)
     }
 
+    const handleUpdateCurrentOnly = event => {
+        setCurrentOnly(event.target.checked)
+    }
+
     const testOptions = useMemo(() => [
-        { label: '1', value: 1 },
-        { label: '2', value: 2 },
-        { label: '3', value: 3 },
-        { label: '4', value: 4 }
+        { label: 'Includes test 1', value: 1 },
+        { label: 'Includes test 1 & 2', value: 2 },
+        { label: 'Includes test 1, 2 & 3', value: 3 },
     ], []);
 
     return (
@@ -181,11 +185,8 @@ const ReportCards = (props) => {
             <Row className={classes.selects}>
                 <ol className={classes.instructions}>
                     <span>Printing Instructions:</span>
-                    <li>Choose Colored or Black and White</li>
                     <li>Press CTRL+P to open the Print dialog and wait for the preview to load</li>
-                    <li>Set the layout to Portrait</li>
-                    <li>Ensure that the paper size is Letter and the scale is set to 100%</li>
-                    {/*<li>If you are printing the colored version, turn on the "background graphics" checkbox</li>*/}
+                    <li>Ensure that the paper size is Letter, Layout is Landscape, and the Scale is set to 100%</li>
                     <span>It should show up nicely with one per page. Print and return to your Chayolim :)</span>
                 </ol>
                 <Col sm={6}>
@@ -245,6 +246,11 @@ const ReportCards = (props) => {
                     <label>Only show Iyun marks if child passed</label>
                 </Col>
 
+                <Col sm={6} className={classes.iyun}>
+                    <input type="checkbox" name="currentOnly" id="currentOnly" className={classes.checkbox} onClick={handleUpdateCurrentOnly} />
+                    <label>Only show current test</label>
+                </Col>
+
                 <button
                     disabled={!test}
                     onClick={generateReports}
@@ -278,6 +284,7 @@ const ReportCards = (props) => {
                                     info={report}
                                     testNum={test}
                                     showIyun={iyun}
+                                    current={currentOnly}
                                 />
                             ))}
                         </div>
