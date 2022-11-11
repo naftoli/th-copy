@@ -7,35 +7,35 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 $user_id = mysql_real_escape_string($_GET['id']);
 $testNum = $_GET['test'];
 
-$dates = [
-    [
-        'start' => 2459469,
-        'end'   => 2459514
-    ],
-    [
-        'start' => 2459514,
-        'end'   => 2459542
-    ],
-    [
-        'start' => 2459543,
-        'end'   => 2459585
-    ]
-];
-
 //$dates = [
 //    [
-//        'start' => 2459831,
-//        'end'   => 2459879
+//        'start' => 2459469,
+//        'end'   => 2459514
 //    ],
 //    [
-//        'start' => 2459880,
-//        'end'   => 2459906
+//        'start' => 2459514,
+//        'end'   => 2459542
 //    ],
 //    [
-//        'start' => 2459907,
-//        'end'   => 2459946,
+//        'start' => 2459543,
+//        'end'   => 2459585
 //    ]
 //];
+
+$dates = [
+    [
+        'start' => 2459831,
+        'end'   => 2459879
+    ],
+    [
+        'start' => 2459880,
+        'end'   => 2459906
+    ],
+    [
+        'start' => 2459907,
+        'end'   => 2459946,
+    ]
+];
 
 $totals = [];
 for ($i = 0; $i < $testNum; $i++) {
