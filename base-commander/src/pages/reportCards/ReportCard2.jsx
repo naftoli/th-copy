@@ -304,7 +304,7 @@ function ReportCard(info) {
                         </tr>
                     </thead>
                     <tbody>
-                        {rows.map(index => (
+                        {rows.map((index, test) => (
                             <React.Fragment>
                                 <tr>
                                     <td rowSpan={2}>{index}</td>
@@ -379,7 +379,7 @@ function ReportCard(info) {
                                 </tr>
                             </React.Fragment>
                         ))}
-                        {!currentOnly && numTests > 1 &&
+                        {numTests !== 1 &&
                           <React.Fragment>
                               <tr>
                                   <td rowSpan={2}>Total</td>
