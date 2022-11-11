@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 // import clsx from 'clsx';
 import colors from './colors';
