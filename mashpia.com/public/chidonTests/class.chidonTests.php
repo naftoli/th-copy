@@ -299,6 +299,32 @@ class ChidonTests
         return '';
     }
 
+    public function getLearned( $user_id, $dates ) {
+        $today = unixtojd();
+        $dateArr = explode('/', $dates[1]);
+        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $stmt = $this->db->prepare("
+            SELECT 
+                * 
+            FROM
+                date_tasks_marks dtm
+                    JOIN
+                date_tasks dt USING (date_task_id)
+                    JOIN
+                date_tasks_missions dtmm USING (date_tasks_mission_id)
+            WHERE
+                dt.grid_id = 20010 
+                    AND dtmm.start_date >= :start
+                    AND dtmm.end_date <= :end
+                    AND user_id = :user");
+        $stmt->execute([
+            ':start'    => $start,
+            ':end'      => $today,
+            ':user'     => $user_id
+        ]);
+        return $stmt->fetchAll();
+    }
+
     public function getTotalMinutesLearned( $user_id, $dates ) {
         $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
