@@ -299,13 +299,16 @@ class ChidonTests
         return '';
     }
 
-    public function getLearned( $user_id, $dates ) {
+    public function getLearned( $dates ) {
         $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[count($dates)]);
+        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        if ($today < $end) $end = $today;
         $stmt = $this->db->prepare("
             SELECT 
-                * 
+                dtm.* 
             FROM
                 date_tasks_marks dtm
                     JOIN
@@ -315,12 +318,10 @@ class ChidonTests
             WHERE
                 dt.grid_id = 20010 
                     AND dtmm.start_date >= :start
-                    AND dtmm.end_date <= :end
-                    AND user_id = :user");
+                    AND dtmm.end_date <= :end");
         $stmt->execute([
             ':start'    => $start,
-            ':end'      => $today,
-            ':user'     => $user_id
+            ':end'      => $end
         ]);
         return $stmt->fetchAll();
     }
