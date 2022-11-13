@@ -27,6 +27,13 @@ foreach ($schools as $school_id => $name) {
             order by c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        // get learned info
+        $totalMinutes = 0;
+        $learned = $chidon->getLearned($row['user_id'], $learningDays[1]);
+        $row['totalDays'] = count($learned);
+        foreach ($learned as $day) {
+            $row['totalMinutes'] += $day['done_qty'];
+        }
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $info[$school_id][$grade][] = $row; 
     }
@@ -77,12 +84,6 @@ require_once 'codeForReport.php';
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
                         foreach ($rows as $row) {
-                            $totalMinutes = 0;
-                            $learned = $chidon->getLearned($row['user_id'], $learningDays[1]);
-                            $totalDays = count($learned);
-                            foreach ($learned as $day) {
-                                $totalMinutes += $day['done_qty'];
-                            }
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
                                 echo "<td>";
@@ -106,7 +107,7 @@ require_once 'codeForReport.php';
                                         case 'calc-dlogged':
 //                                            $logged = $chidon->getTotalDaysLearned($row['user_id'], $learningDays[1]);
 //                                            $logged = 0;
-                                            echo $totalDays;
+                                            echo $row['totalDays'];
                                             break;
                                         case 'calc-mrequired':
                                             $track = $row['test_type'];
@@ -116,7 +117,7 @@ require_once 'codeForReport.php';
                                         case 'calc-mlogged':
 //                                            $num = $chidon->getTotalMinutesLearned($row['user_id'], $learningDays[1]);
 //                                            $num = 0;
-                                            echo $totalMinutes;
+                                            echo $row['totalMinutes'];
                                             break;
                                         case 'calc-behind':
                                             if ($required > intval($num)) echo $required - intval($num);
