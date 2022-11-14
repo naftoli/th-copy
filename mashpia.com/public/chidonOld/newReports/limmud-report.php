@@ -123,11 +123,11 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                             echo $minutes;
                                             break;
                                         case 'calc-behind':
-                                            if ($required > intval($num)) echo $required - intval($num);
+                                            if ($required > intval($minutes)) echo $required - intval($minutes);
                                             else echo 0;
                                             break;
                                         case 'calc-ahead':
-                                            if (intval($num) > $required) echo intval($num) - $required;
+                                            if (intval($minutes) > $required) echo intval($minutes) - $required;
                                             else echo 0;
                                             break;
                                     }
