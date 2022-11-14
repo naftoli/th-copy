@@ -62,9 +62,6 @@ if ($admin_user['auth'] != 'super') {
             td:not(.type) {
                 vertical-align: top;
             }
-            body {
-                display: none;
-            }
         </style>
     </head>
     <body>
@@ -139,18 +136,7 @@ if ($admin_user['auth'] != 'super') {
     </body>
     <script>
         $(function() {
-            // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
-            const school_id = <?=$admin_user['auths']['school'][0]?>;
             const showAlert = <?= isset($_POST['submit']) ? 1 : 0?>;
-            if (school_id == 176 && showAlert) {
-                // password protect
-                const password = 'laky';
-                let pass = '';
-                while (pass != password) {
-                    pass = prompt('Please enter password.');
-                }
-            }
-            $('body').show();
             if (showAlert) alert('Please make sure to SAVE after entering scores.');
         })
         $(".score").focus( function() {
