@@ -19,3 +19,7 @@ tr, th, td {
 .bold {
     font-weight: bold;
 }
+#bsd {
+    float: right;
+    margin-top: -30px;
+}

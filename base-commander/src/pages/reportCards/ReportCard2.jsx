@@ -265,6 +265,7 @@ function ReportCard(info) {
 
     return (
         <div className="main" style={mainStyle}>
+            <span id="bsd">בס"ד</span>
             <div className="container" style={{maxWidth: "fit-content"}}>
                 <div className={classes.card} style={{paddingRight: '20px'}}>
                     <img src={header} alt="Header" className={classes.header} />
