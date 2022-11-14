@@ -83,10 +83,10 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
                         foreach ($rows as $row) {
-                            $learned = $learnedInfo[$row['user_id']];
+                            $learned = isset($learnedInfo[$row['user_id']]) ? $learnedInfo[$row['user_id']] : [];
                             $totalLearned = count($learned);
-                            $minutes = 0;
-                            foreach ($learned as $done_qty) $minutes += $done_qty;
+                            $minutesLearned = 0;
+                            foreach ($learned as $done_qty) $minutesLearned += $done_qty;
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
                                 echo "<td>";
@@ -120,14 +120,14 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                         case 'calc-mlogged':
 //                                            $num = $chidon->getTotalMinutesLearned($row['user_id'], $learningDays[1]);
 //                                            $num = 0;
-                                            echo $minutes;
+                                            echo $minutesLearned;
                                             break;
                                         case 'calc-behind':
-                                            if ($required > intval($minutes)) echo $required - intval($minutes);
+                                            if ($required > intval($minutesLearned)) echo $required - intval($minutesLearned);
                                             else echo 0;
                                             break;
                                         case 'calc-ahead':
-                                            if (intval($minutes) > $required) echo intval($minutes) - $required;
+                                            if (intval($minutesLearned) > $required) echo intval($minutesLearned) - $required;
                                             else echo 0;
                                             break;
                                     }
