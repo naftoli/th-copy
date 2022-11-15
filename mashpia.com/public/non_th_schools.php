@@ -37,7 +37,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <head>
     <link href="admin_styles.css" rel="stylesheet" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Miles Report</title>
+    <title>Non TH Schools Report</title>
     <style type='text/css'>
       @media print {
         table {
