@@ -25,6 +25,7 @@ $sql = "SELECT
             (non_th_school_id > 0
                 OR non_th_school > 0)
                 AND u.school_id = 269 
+                AND u.user_registered > 0 
         ORDER BY c.class_grade , c.class_sub , last , first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
