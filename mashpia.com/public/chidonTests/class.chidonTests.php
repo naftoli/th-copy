@@ -385,9 +385,12 @@ class ChidonTests
             SELECT 
                 u.user_serial,
                 u.first,
-                u.last,
+                u.last, 
+                c.school_id, 
+                c.class_id, 
                 c.class_grade,
-                c.class_sub,
+                c.class_sub, 
+                tc.th_chidon_id, 
                 tc.test_type 
             FROM
                 users u

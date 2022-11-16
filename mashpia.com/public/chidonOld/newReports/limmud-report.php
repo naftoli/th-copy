@@ -25,7 +25,8 @@ foreach ($learned as $day) {
 
 $info = [];
 foreach ($schools as $school_id => $name) {
-    $sql = "select u.user_id, u.user_serial, u.first, u.last, c.class_grade, c.class_sub, tc.test_type, tc.reward_type 
+    $sql = "select u.user_id, u.user_serial, u.first, u.last, c.school_id, c.class_id, c.class_grade, c.class_sub, 
+                tc.th_chidon_id, tc.test_type, tc.reward_type 
             from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
@@ -101,7 +102,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
                                     switch ($field) {
                                         case 'calc-tpassed':
                                             if ($test_num == 1) echo '';
-                                            else echo $chidon->getHighestTrackPassed($row['user_id'], $test_num)['highest_track'];
+                                            else echo $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
                                             break;
                                         case 'calc-lpassed':
                                             $days = daysPassed();
