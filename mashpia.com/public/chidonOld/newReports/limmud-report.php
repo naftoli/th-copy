@@ -14,11 +14,13 @@ $year = GlobalSettings::getChidonYear();
 
 require_once 'codeForReport.php';
 
+$test_num = isset($_GET['num']) ? $_GET['num'] : 1;
+
 $chidon = new ChidonTests();
 $types = $chidon->getTypes();
 // get learned info
 $learnedInfo = [];
-$learned = $chidon->getLearned($learningDays[1]);
+$learned = $chidon->getLearned($learningDays[$test_num]);
 foreach ($learned as $day) {
     $learnedInfo[$day['user_id']][] = $day['done_qty'];
 }
@@ -40,8 +42,6 @@ foreach ($schools as $school_id => $name) {
         $info[$school_id][$grade][] = $row; 
     }
 }
-
-$test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 ?>
 <!DOCTYPE html>
 <html>
