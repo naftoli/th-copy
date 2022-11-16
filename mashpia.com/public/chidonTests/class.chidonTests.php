@@ -382,7 +382,8 @@ class ChidonTests
 
     public function getLimmudInfo($user_id) {
         $stmt = $this->db->prepare("
-            SELECT 
+            SELECT
+                u.user_id, 
                 u.user_serial,
                 u.first,
                 u.last, 
