@@ -26,33 +26,36 @@ while ($row = mysql_fetch_assoc($result)) {
     $info2[$user_id][$date_task_mission_id] = $mark_date;
 }
 
+$num = 0;
 $diff = [];
 foreach ($info as $user => $missions) {
     foreach ($missions as $mission_id => $date) {
         if (! isset($info2[$user][$mission_id])) {
             $diff[$user][$mission_id] = $date;
+            $num++;
         }
     }
 }
+echo $num;
 
-$qrys = [];
-$users = [];
-foreach ($diff as $user => $missions) {
-    foreach ($missions as $id => $date) {
-        $qrys[] = "delete from date_tasks_mission_marks where user_id = $user and date_tasks_mission_id = $id and mark_date = $date";
-        $users[] = $user_id;
-    }
-}
-
-foreach ($qrys as $qry) {
-    mysql_query($qry);
-}
-echo "done";
-
-$medal_updater = new medal_updater();
-$rank_updater = new rank_updater();
-foreach ($users as $user_id) {
-    $medal = $medal_updater->update_medal_two($user_id);
-    $rank = $rank_updater->update_rank_two($user_id);
-}
-echo "updated.";
+//$qrys = [];
+//$users = [];
+//foreach ($diff as $user => $missions) {
+//    foreach ($missions as $id => $date) {
+//        $qrys[] = "delete from date_tasks_mission_marks where user_id = $user and date_tasks_mission_id = $id and mark_date = $date";
+//        $users[] = $user_id;
+//    }
+//}
+//
+//foreach ($qrys as $qry) {
+//    mysql_query($qry);
+//}
+//echo "done";
+//
+//$medal_updater = new medal_updater();
+//$rank_updater = new rank_updater();
+//foreach ($users as $user_id) {
+//    $medal = $medal_updater->update_medal_two($user_id);
+//    $rank = $rank_updater->update_rank_two($user_id);
+//}
+//echo "updated.";

@@ -300,12 +300,10 @@ class ChidonTests
     }
 
     public function getLearned( $dates ) {
-        $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         $dateArr = explode('/', $dates[count($dates)]);
         $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        if ($today < $end) $end = $today;
         $stmt = $this->db->prepare("
             SELECT 
                 dtm.* 
@@ -318,7 +316,8 @@ class ChidonTests
             WHERE
                 dt.grid_id = 20010 
                     AND dtmm.start_date >= :start
-                    AND dtmm.end_date <= :end");
+                    AND dtmm.end_date <= :end 
+                    AND done_qty > 0");
         $stmt->execute([
             ':start'    => $start,
             ':end'      => $end
@@ -327,9 +326,10 @@ class ChidonTests
     }
 
     public function getTotalMinutesLearned( $user_id, $dates ) {
-        $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[count($dates)]);
+        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(SUM(done_qty), 0) AS total
@@ -346,16 +346,17 @@ class ChidonTests
                     AND user_id = :user");
         $stmt->execute([
             ':start'    => $start,
-            ':end'      => $today,
+            ':end'      => $end,
             ':user'     => $user_id
         ]);
         return $stmt->fetch()['total'];
     }
 
     public function getTotalDaysLearned( $user_id, $dates ) {
-        $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[count($dates)]);
+        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(count(*), 0) AS total
@@ -369,10 +370,11 @@ class ChidonTests
                 dt.grid_id = 20010 
                     AND dtmm.start_date >= :start
                     AND dtmm.end_date <= :end
-                    AND user_id = :user");
+                    AND user_id = :user 
+                    AND dtm.done_qty > 0");
         $stmt->execute([
             ':start'    => $start,
-            ':end'      => $today,
+            ':end'      => $end,
             ':user'     => $user_id
         ]);
         return $stmt->fetch()['total'];
@@ -404,10 +406,10 @@ class ChidonTests
     }
 
     public function getLimmudDetails($user_id, $dates) {
-        $details = [];
-        $today = unixtojd();
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[count($dates)]);
+        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
 
         $info = [];
         $stmt = $this->db->prepare("
@@ -425,13 +427,14 @@ class ChidonTests
         $stmt->execute([
             'user'  => $user_id,
             'start' => $start,
-            'end'   => $today
+            'end'   => $end
         ]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $info[$row['mark_date']][$row['grid_id']] = $row['done_qty'];
         }
 
+        $details = [];
         foreach ($dates as $day => $date) {
             $dateArr = explode('/', $date);
             $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
