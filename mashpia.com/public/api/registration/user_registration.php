@@ -323,6 +323,8 @@ class UserRegistrationRouter {
                             $trans_id, $year
                         );
                     }
+
+                    echo $registration['user_id'] . " is now registered. <br />";
                 }
 
                 if ( count( $user_errors ) > 0 ) 
