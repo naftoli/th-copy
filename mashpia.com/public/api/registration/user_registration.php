@@ -204,9 +204,9 @@ class UserRegistrationRouter {
             foreach ( $users as $user ) {
                 $user_errors = [];
                 foreach( $registrations as $registration ){
+                    echo "User: " . $user->user_id . ", Registering: " . $registration['user_id'] . "<br />";
 
-                    if ( !($user->user_id == $registration['user_id']) )
-                        continue;
+                    if ( !($user->user_id == $registration['user_id']) ) continue;
 
                     // set trans_id to empty string if false
                     if ( !$trans_id ) $trans_id = '';
