@@ -200,132 +200,131 @@ class UserRegistrationRouter {
                     'year' => GlobalSettings::getRegistrationYear()
                 ]);
             }
-            // for each user
-            foreach ( $users as $user ) {
+            // for each user registration
+            echo "<pre>"; print_r($registrations); echo "</pre>";
+            foreach( $registrations as $registration ) {
                 $user_errors = [];
-                echo "<pre>"; print_r($registrations); echo "</pre>";
-                foreach( $registrations as $registration ){
-                    echo "User: " . $user->user_id . ", Registering: " . $registration['user_id'] . "<br />";
-                    continue;
-                    if ( !($user->user_id == $registration['user_id']) ) continue;
 
-                    // set trans_id to empty string if false
-                    if ( !$trans_id ) $trans_id = '';
+                // find user modal
+                $user = array_filter($users, function($registration, $user) {
+                    $registration['user_id'] == $user->user_id;
+                });
+                // set trans_id to empty string if false
+                if ( !$trans_id ) $trans_id = '';
 
-                    // set the year based on the school id for chayolei only
-                    $year = $registration['registration_type'] == 'chayolei' ? 
-                        GlobalSettings::getRegistrationYear( $user->school_id ) : 
-                        GlobalSettings::getRegistrationYear();
-                    // if they do not pay, the value is null
-                    $amount = $registration['paid'];
-                    $discount = $registration['discount'] ?? 0;
-                    if ( $user->school->reg_type == 1 )
-                        $amount = $amount > 0 ? $amount : null;
-                    // Chayolei Registration
-                    if ( $registration['registration_type'] == 'chayolei' ) {
-                        $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
-                        $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
-                        $chayolei_errors = $user->registerChayolei(
-                            $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids, $discount
-                        );
-                        if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
-                        if ( in_array( $user->school_id, [ '269', '61' ] ) )
-                            $registration_table_users[ $user->school_id ][] = $user->user_id;
+                echo "<pre>"; print_r($user); echo "</pre>"; continue;
 
-                        if ($user->school_id == '269') {
-                            // send email to anash kinder about registration
-                            $headers[] = 'MIME-Version: 1.0';
-                            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                            $headers[] = 'From: HQ Office <admin@tzivoshashem.org>';
-                            $subject = "New Chayolei Registration";
-                            $to = 'anash@tzivoshashem.org';
-                            $msg = $user->first . ' ' . $user->last . '(User ID: ' . $user->user_id . ') just registered for chayolei tzivos hashem for the year of ' . $year;
-                            @mail($to, $subject, $msg, implode("\r\n", $headers));
-                        }
-                    // Chidon Registration
-                    } else if ( $registration['registration_type'] == 'chidon' ) {
-                        $year = GlobalSettings::getChidonRegYear();
-                        $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
-                        $recruited_by = intval( $registration['recruitedBy'] );
-//                        echo "<pre>"; print_r($registration); echo "</pre>"; return [];
-                        if ( !$user->registerChidon(
-                            $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
-                            $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                            $registration['comments'], $registration['track'] ) )
-                                $user_errors[] = "Could not register ".$user->user_id." for chidon";
-                        else {
-                            // add book purchased info to db
-                            if ( intval( $registration['purchased'] ) == 1 ) {
-                                $location = $registration['purchasedWhere'];
-                                $store_name = $registration['store']['store_name'];
-                                $store_city = $registration['store']['store_city'];
-                                $version = $registration['bookVersion'];
-                                $user->addBookPurchase( $year, $user->user_id, $location, 0, $store_name, $store_city, $version );
-                            }
+                // set the year based on the school id for chayolei only
+                $year = $registration['registration_type'] == 'chayolei' ?
+                    GlobalSettings::getRegistrationYear( $user->school_id ) :
+                    GlobalSettings::getRegistrationYear();
+                // if they do not pay, the value is null
+                $amount = $registration['paid'];
+                $discount = $registration['discount'] ?? 0;
+                if ( $user->school->reg_type == 1 )
+                    $amount = $amount > 0 ? $amount : null;
+                // Chayolei Registration
+                if ( $registration['registration_type'] == 'chayolei' ) {
+                    $lite = isset( $registration['lite_version'] ) ? $registration['lite_version'] : 0;
+                    $ckids = isset( $registration['ckids'] ) ? $registration['ckids'] : 0;
+                    $chayolei_errors = $user->registerChayolei(
+                        $admin->admin_id, $year, $amount, $trans_id, $lite, $ckids, $discount
+                    );
+                    if ( is_array( $chayolei_errors ) ) array_merge( $user_errors, $chayolei_errors );
+                    if ( in_array( $user->school_id, [ '269', '61' ] ) )
+                        $registration_table_users[ $user->school_id ][] = $user->user_id;
 
-                            // send email to recruited by child
-                            if ($recruited_by) {
-                                $recruitedChild = $user->first . ' ' . $user->last;
-                                $r = new Recruits($recruited_by);
-                                $r->sendEmail($recruitedChild);
-                            }
-
-                            // add chidon prizes
-                            $user->addChidonPrizes($registration['chidon_prizes'], $year);
-
-                            // send email to parents
-                            $headers[] = 'MIME-Version: 1.0';
-                            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                            $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
-                            if ($user->school_id == 61) $headers[] = "Cc: chidon@myshliach.com";
-                            if ($user->school_id == 269) $headers[] = 'CC: chidonanash@gmail.com';
-
-                            $subject = "Chidon Limmud Enrollment Confirmation";
-
-                            $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
-                                        <br /><br />
-                                        If you'd like to make any changes in your enrollment, you can log into your account now and do so.
-                                        <br /><br />
-                                        Please reach out to your school's Chidon coordinator with any questions.
-                                        <br /><br />
-                                        Hatzlocha Rabba in your learning!";
-
-                            $to = $admin->admin_email;
-                            if ( $to ) {
-                                if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
-                                    $to = "naftoli@tzivoshashem.org";
-                                    $subject = "Error in chidon email";
-                                    $message .= "<br /><b>Sent to " . $admin->admin_email . "</b>";
-                                    @mail( $to, $subject, $message, implode("\r\n", $headers) );
-                                }
-                            }
-                        }
-                    // Yahadus purchase
-                    } else if ( $registration['registration_type'] == 'yahadus' ) {
-                        $year = GlobalSettings::getChidonRegYear();
-                        // add the registration charge
-                        $user->registrationCharge(
-                            $registration['registration_type'],
-                            floatval($amount),
-                            $trans_id, $year
-                        );
-                        // add book purchase to db
-                        $user->addBookPurchase($year, $user->user_id, 'parent_account', $trans_id);
-                    } else if ( $registration['registration_type'] == 'khk' ) {
-                        // update khk_reg in db
-                        $year = GlobalSettings::getChidonRegYear();
-                        $user->addKhkReg($year, $user->user_id);
-                    // other registrations
-                    } else {
-                        // add the registration charge
-                        $user->registrationCharge(
-                            $registration['registration_type'],
-                            floatval( $amount ),
-                            $trans_id, $year
-                        );
+                    if ($user->school_id == '269') {
+                        // send email to anash kinder about registration
+                        $headers[] = 'MIME-Version: 1.0';
+                        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                        $headers[] = 'From: HQ Office <admin@tzivoshashem.org>';
+                        $subject = "New Chayolei Registration";
+                        $to = 'anash@tzivoshashem.org';
+                        $msg = $user->first . ' ' . $user->last . '(User ID: ' . $user->user_id . ') just registered for chayolei tzivos hashem for the year of ' . $year;
+                        @mail($to, $subject, $msg, implode("\r\n", $headers));
                     }
+                // Chidon Registration
+                } else if ( $registration['registration_type'] == 'chidon' ) {
+                    $year = GlobalSettings::getChidonRegYear();
+                    $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
+                    $recruited_by = intval( $registration['recruitedBy'] );
+//                        echo "<pre>"; print_r($registration); echo "</pre>"; return [];
+                    if ( !$user->registerChidon(
+                        $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                        $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                        $registration['comments'], $registration['track'] ) )
+                            $user_errors[] = "Could not register ".$user->user_id." for chidon";
+                    else {
+                        // add book purchased info to db
+                        if ( intval( $registration['purchased'] ) == 1 ) {
+                            $location = $registration['purchasedWhere'];
+                            $store_name = $registration['store']['store_name'];
+                            $store_city = $registration['store']['store_city'];
+                            $version = $registration['bookVersion'];
+                            $user->addBookPurchase( $year, $user->user_id, $location, 0, $store_name, $store_city, $version );
+                        }
 
-                    echo $registration['user_id'] . " is now registered. <br />";
+                        // send email to recruited by child
+                        if ($recruited_by) {
+                            $recruitedChild = $user->first . ' ' . $user->last;
+                            $r = new Recruits($recruited_by);
+                            $r->sendEmail($recruitedChild);
+                        }
+
+                        // add chidon prizes
+                        $user->addChidonPrizes($registration['chidon_prizes'], $year);
+
+                        // send email to parents
+                        $headers[] = 'MIME-Version: 1.0';
+                        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                        $headers[] = 'From: Chidon Office <chidon@tzivoshashem.org>';
+                        if ($user->school_id == 61) $headers[] = "Cc: chidon@myshliach.com";
+                        if ($user->school_id == 269) $headers[] = 'CC: chidonanash@gmail.com';
+
+                        $subject = "Chidon Limmud Enrollment Confirmation";
+
+                        $message = "Mazal Tov! Your child(ren) is / are enrolled in the Chidon Limmud program for $year.
+                                    <br /><br />
+                                    If you'd like to make any changes in your enrollment, you can log into your account now and do so.
+                                    <br /><br />
+                                    Please reach out to your school's Chidon coordinator with any questions.
+                                    <br /><br />
+                                    Hatzlocha Rabba in your learning!";
+
+                        $to = $admin->admin_email;
+                        if ( $to ) {
+                            if ( !mail( $to, $subject, $message, implode("\r\n", $headers) ) ) {
+                                $to = "naftoli@tzivoshashem.org";
+                                $subject = "Error in chidon email";
+                                $message .= "<br /><b>Sent to " . $admin->admin_email . "</b>";
+                                @mail( $to, $subject, $message, implode("\r\n", $headers) );
+                            }
+                        }
+                    }
+                // Yahadus purchase
+                } else if ( $registration['registration_type'] == 'yahadus' ) {
+                    $year = GlobalSettings::getChidonRegYear();
+                    // add the registration charge
+                    $user->registrationCharge(
+                        $registration['registration_type'],
+                        floatval($amount),
+                        $trans_id, $year
+                    );
+                    // add book purchase to db
+                    $user->addBookPurchase($year, $user->user_id, 'parent_account', $trans_id);
+                } else if ( $registration['registration_type'] == 'khk' ) {
+                    // update khk_reg in db
+                    $year = GlobalSettings::getChidonRegYear();
+                    $user->addKhkReg($year, $user->user_id);
+                // other registrations
+                } else {
+                    // add the registration charge
+                    $user->registrationCharge(
+                        $registration['registration_type'],
+                        floatval( $amount ),
+                        $trans_id, $year
+                    );
                 }
 
                 if ( count( $user_errors ) > 0 ) 
