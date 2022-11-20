@@ -200,14 +200,16 @@ class UserRegistrationRouter {
                     'year' => GlobalSettings::getRegistrationYear()
                 ]);
             }
+
+            foreach ($users as $user) {
+                $users[$user->user_id] = $user;
+            }
+
             // for each user registration
             $user_errors = [];
             foreach( $registrations as $registration ) {
-                // find user modal
-                // filter returns array
-                $user = array_filter($users, function($user) use ($registration) {
-                    return $user->user_id == $registration['user_id'];
-                })[0];
+                // get user modal
+                $user = $users[$registration['user_id']];
 
                 // set trans_id to empty string if false
                 if ( !$trans_id ) $trans_id = '';
