@@ -906,7 +906,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         @$bh->enablePrevious();
         @$bh->setBirthday();
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
-        $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();
+//        $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();
     }
 
     // ******************************* ONCREATE FUNCTIONS *******************************
