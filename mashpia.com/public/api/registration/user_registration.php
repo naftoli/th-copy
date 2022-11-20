@@ -201,13 +201,13 @@ class UserRegistrationRouter {
                 ]);
             }
             // for each user registration
+            $user_errors = [];
             foreach( $registrations as $registration ) {
-                $user_errors = [];
-
                 // find user modal
+                // filter returns array
                 $user = array_filter($users, function($user) use ($registration) {
                     return $user->user_id == $registration['user_id'];
-                });
+                })[0];
                 echo "<pre>"; print_r($user); echo "</pre>";
                 // set trans_id to empty string if false
                 if ( !$trans_id ) $trans_id = '';
