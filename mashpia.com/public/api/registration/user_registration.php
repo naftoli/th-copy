@@ -201,7 +201,6 @@ class UserRegistrationRouter {
                 ]);
             }
             // for each user registration
-            echo "<pre>"; print_r($registrations); echo "</pre>";
             foreach( $registrations as $registration ) {
                 $user_errors = [];
 
@@ -211,8 +210,6 @@ class UserRegistrationRouter {
                 });
                 // set trans_id to empty string if false
                 if ( !$trans_id ) $trans_id = '';
-
-                echo "<pre>"; print_r($user); echo "</pre>"; continue;
 
                 // set the year based on the school id for chayolei only
                 $year = $registration['registration_type'] == 'chayolei' ?
