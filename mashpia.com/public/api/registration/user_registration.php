@@ -206,7 +206,7 @@ class UserRegistrationRouter {
                 $user_errors = [];
 
                 // find user modal
-                $user = array_filter($users, function($registration, $user) {
+                $user = array_filter($users, function($user) use ($registration) {
                     return $user->user_id == $registration['user_id'];
                 });
                 // set trans_id to empty string if false
