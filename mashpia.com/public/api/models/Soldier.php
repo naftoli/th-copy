@@ -534,11 +534,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // turn off chidon reg
         $result['chidon'] = true;
         // turn off chayolei reg until site is secure
-        $result['chayolei'] = true;
-
-        if (in_array($this->user_id, [72453, 72455])) {
-            $result['chayolei'] = false;
-        }
+//        $result['chayolei'] = true;
 
         return $result;
     }
