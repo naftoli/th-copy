@@ -133,7 +133,7 @@ $types = [
             echo $prize['he_name'];
             if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
         }
-        echo "</td><td>";
+        echo "</td><td>" . $row['gender'] . "</td><td>";
         if (in_array($row['school_id'], [61, 269])) echo $row['admin_id'];
         echo "</td></tr>";
     }
