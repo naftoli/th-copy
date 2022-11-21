@@ -67,7 +67,7 @@ $sql = "
         classes c USING (class_id)
             LEFT JOIN
         admin_auths aa ON aa.id = u.user_id
-            JOIN
+            LEFT JOIN
         admins a USING (admin_id)
     WHERE
         (aa.auth = 'user' or aa.auth is null) AND class_grade in (\"" . implode('","', $grades) . "\")
@@ -211,7 +211,7 @@ $trackYr = 5782;
                     else echo "no";
                     echo "</td>";
                     // parent info
-                    if ($user['admin_email']) {
+                    if (isset($user['admin_email'])) {
                         echo "<td>" . $user['admin_email'] . "</td>";
                         $phone = $user['admin_phone_mobile'] ? $user['admin_phone_mobile'] . "<br />" : '';
                         $phone .= $user['admin_phone_home'] ? $user['admin_phone_home'] . "<br />" : '';
