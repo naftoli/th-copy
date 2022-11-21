@@ -84,21 +84,21 @@ $types = [
 </head>
 <body>
 <h1>Chidon Bracelet Report <?= $req_yr ?></h1>
-<div>
-    Choose Year:
-    <select name="year" id="year">
-        <?php
-        $cur_yr = $year;
-        for ($i = 0; $i < 5; $i++) {
-            echo "<option value='" . $cur_yr . "'";
-            if ($req_yr && $req_yr == $cur_yr) echo " selected ";
-            echo ">" . $cur_yr . "</option>";
-            $cur_yr--;
-        }
-        ?>
-    </select>
-</div>
-<br />
+<!--<div>-->
+<!--    Choose Year:-->
+<!--    <select name="year" id="year">-->
+<!--        --><?php
+//        $cur_yr = $year;
+//        for ($i = 0; $i < 5; $i++) {
+//            echo "<option value='" . $cur_yr . "'";
+//            if ($req_yr && $req_yr == $cur_yr) echo " selected ";
+//            echo ">" . $cur_yr . "</option>";
+//            $cur_yr--;
+//        }
+//        ?>
+<!--    </select>-->
+<!--</div>-->
+<!--<br />-->
 <table>
     <tr>
         <th>Serial Number</th>
@@ -116,7 +116,7 @@ $types = [
     <?php
     foreach ($info as $row) {
         $serial = $row['user_serial'];
-        $trackInfo = $ct->getHighestTrackPassed($row);
+        $trackInfo = $ct->getHighestTrackPassed($row, 1); // need it after first test
         $school = $row['school_name'];
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
 
