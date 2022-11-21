@@ -15,6 +15,18 @@ $req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : $year;
 
 $ct = new ChidonTests();
 
+$prizes = [];
+$sql = "select u.user_id, p.prize_name, p.size, p.color, p.price, u.he_name 
+        from chidon_prizes p 
+        join chidon_user_prizes u using (prize_id) 
+        where u.year = $req_yr  
+        and u.he_name != '' 
+        order by u.user_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $prizes[$row['user_id']][] = $row;
+}
+
 $info = [];
 $sql = "
     SELECT 
@@ -46,19 +58,7 @@ $sql = "
     ORDER BY school_name, class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $info[] = $row;
-}
-
-$prizes = [];
-$sql = "select u.user_id, p.prize_name, p.size, p.color, p.price, u.he_name 
-        from chidon_prizes p 
-        join chidon_user_prizes u using (prize_id) 
-        where u.year = $req_yr  
-        and u.he_name != '' 
-        order by u.user_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $prizes[$row['user_id']][] = $row;
+    if (isset($prizes[$row['user_id']])) $info[] = $row;
 }
 
 $types = [
@@ -121,25 +121,19 @@ $types = [
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
 
         echo "<tr><td>" . $serial . "</td><td>" . $trackInfo['highest_track'] . "</td><td>" . $trackInfo['highest_track_avg'] .
-            "</td><td>" . $school . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td>";
-        if (isset($prizes[$row['user_id']])) {
-            echo "<td>";
-            foreach ($prizes[$row['user_id']] as $i => $prize) {
-                echo $prize['prize_name'];
-                if ($prize['size']) echo " Size: " . $prize['size'];
-                if ($prize['color']) echo " Color: " . $prize['color'];
-                if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
-            }
-            echo "</td><td>";
-            foreach ($prizes[$row['user_id']] as $i => $prize) {
-                echo $prize['he_name'];
-                if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
-            }
-            echo "</td>";
-        } else {
-          echo "<td colspan=2></td>";
+            "</td><td>" . $school . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
+        foreach ($prizes[$row['user_id']] as $i => $prize) {
+            echo $prize['prize_name'];
+            if ($prize['size']) echo " Size: " . $prize['size'];
+            if ($prize['color']) echo " Color: " . $prize['color'];
+            if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
         }
-        echo "<td>";
+        echo "</td><td>";
+        foreach ($prizes[$row['user_id']] as $i => $prize) {
+            echo $prize['he_name'];
+            if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
+        }
+        echo "</td><td>";
         if (in_array($row['school_id'], [61, 269])) echo $row['admin_id'];
         echo "</td></tr>";
     }
