@@ -60,13 +60,6 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     if (isset($prizes[$row['user_id']])) $info[] = $row;
 }
-
-$types = [
-    'maven' => 'Yesod',
-    'pro'   => 'Yediah',
-    'expert'=> 'Havonah',
-    'genius'=> 'Iyun'
-];
 ?>
 <!DOCTYPE html>
 <html>
@@ -140,11 +133,11 @@ $types = [
     ?>
 </table>
 </body>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script>
-  $("#year").change( function () {
-    let yr = $(this).val()
-    location.href = "reg_report.php?year=" + yr
-  })
-</script>
+<!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>-->
+<!--<script>-->
+<!--  $("#year").change( function () {-->
+<!--    let yr = $(this).val()-->
+<!--    location.href = "reg_report.php?year=" + yr-->
+<!--  })-->
+<!--</script>-->
 </html>
