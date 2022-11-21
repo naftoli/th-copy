@@ -49,9 +49,9 @@ $sql = "
         th_chidon tc USING (user_id)
             JOIN
         schools s ON u.school_id = s.school_id
-            JOIN
+            LEFT JOIN
         admin_auths aa ON aa.id = tc.user_id
-            JOIN
+            LEFT JOIN
         admins a USING (admin_id)
     WHERE
         tc.year = $req_yr AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
@@ -213,7 +213,10 @@ $pollKeys = array_keys($poll);
                     }
                 }
                 echo "</td><td>" . $totalCredits;
-                echo "</td><td>" . $row['non_th_school'] . "</td><td>" . $row['first'] . " " . $row['last'] . "</td><td>" . $row['admin_email'];
+                echo "</td><td>" . $row['non_th_school'] . "</td><td>";
+                if (isset($row['first']) || isset($row['last'])) echo $row['first'] . " " . $row['last'];
+                echo "</td><td>";
+                if (isset($row['admin_email'])) echo $row['admin_email'];
                 echo "</td><td>";
                 if (isset($book_purchases[$row['user_id']])) echo $book_purchases[$row['user_id']]['version'];
                 echo "</td></tr>";
