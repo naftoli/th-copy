@@ -31,10 +31,11 @@ $info = [];
 $sql = "
     SELECT 
         u.user_id,
-        user_serial,
-        gender,
+        u.user_serial,
+        u.gender,
         u.first, 
         u.last, 
+        tc.th_chidon_id, 
         s.school_id,
         s.school_name, 
         c.class_id, 
