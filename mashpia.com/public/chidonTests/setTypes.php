@@ -94,7 +94,7 @@ if (isset($_POST['save'])) {
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
                     $markInfo = $ct->getHighestTrackPassed($child);
-                    $highestTrack = $markInfo['highest_track'];
+                    $highestTrack = isset($markInfo['highest_track']) ? $markInfo['highest_track'] : 'highest track passed';
                     $rewardType = $child['reward_type'];
                     if ($rewardType != 'highest track passed') {
                         $indexes = array_keys($types);
