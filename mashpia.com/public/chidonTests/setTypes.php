@@ -93,8 +93,8 @@ if (isset($_POST['save'])) {
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th><th>Avg Mark</th>
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
-                    $markInfo = $ct->getHighestTrackPassed($child);
-                    $highestTrack = isset($markInfo['highest_track']) ? $markInfo['highest_track'] : '';
+                    $markInfo = $ct->getHighestTrackPassed($child, $numTests);
+                    $highestTrack = $markInfo['highest_track'];
                     $rewardType = $child['reward_type'];
                     if ($rewardType != 'highest track passed') {
                         $indexes = array_keys($types);
