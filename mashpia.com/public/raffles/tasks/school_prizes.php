@@ -1,39 +1,40 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 if (isset($_FILES['file'])) {
-    $qrys = [];
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO raffles_monthly 
+        SET raffle_id = :raffle, 
+        prize_id = :prize, 
+        school_id = :school
+    ");
     $file = $_FILES['file']['tmp_name'];
     if (($handle = fopen($file, "r")) !== FALSE) {
+        $success = true;
+        $MASHPIA_DB->beginTransaction();
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $school_id = $data[0];
             $prize_id = $data[1];
             $raffle_id = $data[2];
-            $qry = "insert into raffles_monthly  
-                    set raffle_id = $raffle_id, 
-                    prize_id = $prize_id, 
-                    school_id = $school_id";
-            $qrys[] = $qry;
+            $res = $stmt->execute([
+                'raffle'  => $raffle_id,
+                'prize'   => $prize_id,
+                'school'  => $school_id
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
+            }
         }
         fclose($handle);
-    }
-
-    mysql_query('set autocommit=0');
-    mysql_query('begin');
-    $success = true;
-    foreach ($qrys as $qry) {
-        if (!mysql_query($qry)) {
-            echo $qry . "<br />" . mysql_error();
-            $success = false;
-            break;
+        if ($success) {
+            $MASHPIA_DB->commit();
+            echo "done";
+        } else {
+            $MASHPIA_DB->rollBack();
+            echo $stmt->errorInfo();
         }
     }
-    if ($success) {
-        mysql_query('commit');
-        echo "done.";
-    }
-    else mysql_query('rollback');
-    mysql_query('set autocommit=1');
 }
 ?>
 <!DOCTYPE html>
