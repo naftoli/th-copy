@@ -15,6 +15,8 @@ $req_yr = isset($_REQUEST['year']) ? $_REQUEST['year'] : $year;
 
 $ct = new ChidonTests();
 
+$types = $ct->getTypes();
+
 $prizes = [];
 $sql = "select u.user_id, p.prize_name, p.size, p.color, p.price, u.he_name 
         from chidon_prizes p 
@@ -66,7 +68,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Chidon Bracelet Report</title>
+    <title>Chidon Custom Items</title>
     <style>
       tr, th, td {
         font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -77,7 +79,7 @@ while ($row = mysql_fetch_assoc($result)) {
     </style>
 </head>
 <body>
-<h1>Chidon Bracelet Report <?= $req_yr ?></h1>
+<h1>Chidon Custom Items <?= $req_yr ?></h1>
 <!--<div>-->
 <!--    Choose Year:-->
 <!--    <select name="year" id="year">-->
@@ -96,8 +98,12 @@ while ($row = mysql_fetch_assoc($result)) {
 <table>
     <tr>
         <th>Serial Number</th>
-        <th>Highest Track Passed</th>
-        <th>Highest Track Passed Mark</th>
+        <th>Highest Track Passed Test 1</th>
+        <th>Highest Track Passed Mark Test 1</th>
+        <th>Highest Track Passed Test 2</th>
+        <th>Highest Track Passed Mark Test 2</th>
+        <th>Highest Track Passed Test 3</th>
+        <th>Highest Track Passed Mark Test 3</th>
         <th>School</th>
         <th>Class</th>
         <th>First Name</th>
@@ -111,10 +117,14 @@ while ($row = mysql_fetch_assoc($result)) {
     foreach ($info as $row) {
         $serial = $row['user_serial'];
         $trackInfo = $ct->getHighestTrackPassed($row, 1); // need it after first test
+        $trackInfo2 = $ct->getHighestTrackPassed($row, 2);
+        $trackInfo3 = $ct->getHighestTrackPassed($row, 3);
         $school = $row['school_name'];
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
 
-        echo "<tr><td>" . $serial . "</td><td>" . $trackInfo['highest_track'] . "</td><td>" . $trackInfo['highest_track_avg'] .
+        echo "<tr><td>" . $serial . "</td><td>" . $types[$trackInfo['highest_track']] . "</td><td>" . $trackInfo['highest_track_avg'] .
+            "</td><td>" . $types[$trackInfo2['highest_track']] . "</td><td>" . $trackInfo2['highest_track_avg'] .
+            "</td><td>" . $types[$trackInfo3['highest_track']] . "</td><td>" . $trackInfo3['highest_track_avg'] .
             "</td><td>" . $school . "</td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>";
         foreach ($prizes[$row['user_id']] as $i => $prize) {
             echo $prize['prize_name'];
