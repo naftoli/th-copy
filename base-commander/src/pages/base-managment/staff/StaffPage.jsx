@@ -29,15 +29,28 @@ class StaffPage extends Component {
   toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
-    const headers = [
-      'Username',   'First Name', 'Last Name', 'E-mail Address',
-      'Cell Phone', 'Position',   'Platoon'
-    ];
-    const rows = this.props.staff.map( staff => [
-      staff.username,   staff.first,  staff.last,
-      staff.email,      staff.cell,   staff.position,
-      staff.platoon
-    ]);
+    let headers, rows
+    if ( isAdmin( this.props.login.code ) ) {
+      headers = [
+        'Username',   'First Name', 'Last Name', 'E-mail Address',
+        'Cell Phone', 'Position',   'Platoon', 'Base'
+      ];
+      rows = this.props.staff.map( staff => [
+        staff.username,   staff.first,  staff.last,
+        staff.email,      staff.cell,   staff.position,
+        staff.platoon,    staff.school_name
+      ]);
+    } else {
+      headers = [
+        'Username', 'First Name', 'Last Name', 'E-mail Address',
+        'Cell Phone', 'Position', 'Platoon'
+      ];
+      rows = this.props.staff.map(staff => [
+        staff.username, staff.first, staff.last,
+        staff.email, staff.cell, staff.position,
+        staff.platoon
+      ]);
+    }
     //arrayToCSV( headers, rows, 'staff' );
     return dataToCSV( headers, rows );
   }
