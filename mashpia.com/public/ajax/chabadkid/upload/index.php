@@ -15,13 +15,16 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             u.user_serial,
             u.user_code,
             c.class_grade,
-            c.class_sub
+            c.class_sub, 
+            tc.th_chidon_id 
         FROM
             users u
                 JOIN
             schools s USING (school_id)
                 JOIN
-            classes c ON c.class_id = u.class_id
+            classes c ON c.class_id = u.class_id 
+                LEFT JOIN 
+            th_chidon tc USING (user_id) 
         WHERE
             s.school_number = " . $school_number;
     $result = mysql_query($sql);
