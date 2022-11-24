@@ -33,13 +33,13 @@ class StaffPage extends Component {
     if ( isAdmin( this.props.login.code ) ) {
       headers = [
         'Username',   'First Name', 'Last Name', 'E-mail Address',
-        'Cell Phone', 'Position',   'Platoon', 'Base', 'Base ID'
+        'Cell Phone', 'Position',   'Platoon', 'Base', 'Base ID', 'Staff ID'
       ];
       rows = this.props.staff.map( staff => [
         staff.username,   staff.first,  staff.last,
         staff.email,      staff.cell,   staff.position,
         staff.platoon,    staff.school_name,
-        staff.school_id
+        staff.school_id,  staff.admin_id
       ]);
     } else {
       headers = [
