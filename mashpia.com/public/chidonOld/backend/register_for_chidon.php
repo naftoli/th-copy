@@ -31,6 +31,40 @@ foreach ($prize_qry->fetchAll() as $prize) {
 }
 
 if ( isset( $_FILES['file'] ) ) {
+    // prepared statements
+    $schoolStmt = $MASHPIA_DB->prepare("SELECT * FROM non_th_schools WHERE school_name = ':school'");
+    $userStmt = $MASHPIA_DB->prepare("select user_id, school_id from users where user_serial = :serial");
+    $adminStmt = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
+    $chidonStmt = $MASHPIA_DB->prepare("insert into th_chidon 
+                                              set year = :year, 
+                                              school_id = :school_id, 
+                                              user_id = :user_id, 
+                                              yarmulka = :yarmulka,
+                                              size = :size, 
+                                              parent_id = :parent_id,
+                                              test_type = :type, 
+                                              book = :book, 
+                                              name_pref = :name, 
+                                              reg_date = now()");
+
+    $prizeStmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
+                                    set user_id = :user, prize_id = :prize, year = :year
+                                ");
+    $prizeStmt2 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
+                                    set user_id = :user, prize_id = :prize, year = :year, he_name = :name
+                                ");
+
+    $userStmt1 = $MASHPIA_DB->prepare("UPDATE users SET non_th_school_id = :id WHERE user_id = :user");
+    $userStmt2 = $MASHPIA_DB->prepare("UPDATE users SET non_th_school = :school WHERE user_id = :user");
+
+    $regStmt = $MASHPIA_DB->prepare("INSERT INTO registration_charges
+                                            SET user_id = :user, 
+                                            school_id = :school, 
+                                            type = 'chidon', 
+                                            amount = :amount, 
+                                            date = now(), 
+                                            year = :year");
+
     $objPHPExcel = PHPExcel_IOFactory::load( $_FILES['file']['tmp_name'] );
     $objWorksheet = $objPHPExcel->getActiveSheet();
 
@@ -53,91 +87,95 @@ if ( isset( $_FILES['file'] ) ) {
     $error = false;
     $updated = 0;
     $missingParentAccounts = [];
+
+    $track = "pro";
     
     // loop through info array and register kids
     $i = 0;
     foreach ( $info as $values ) {
         echo "<pre>" . "$i: "; print_r($values); echo "</pre>";
         $user_serial = $values[$i++];
-        $yarmulka = empty($values[$i++]) ? $values[1] : 0;
-        $sweater = $values[$i++];
-        $track = $values[$i++];
-        $book = $values[$i++];
-        $learning_method = $values[$i++];
-        $school_name = $values[$i++];
         $prizes = $values[$i++];
         $arrPrizes = explode(',', $prizes);
-        $prize_name = $values[$i++];
+        $he_name = $values[$i++];
+        $non_th_school = $values[$i++];
+        $sweater = $values[$i++];
+        $book = $values[$i++];
+        $paid = $values[$i++];
+        $name = $values[$i++];
+        $yarmulka = $values[$i++];
+        if (empty($yarmulka)) $yarmulka = 0;
+//        $track = $values[$i++];
+//        $learning_method = $values[$i++];
 
         // find out what the user id is
-        $handle = $MASHPIA_DB->prepare("select user_id, school_id from users where user_serial = :serial");
-        if ( $handle->execute([':serial' => $user_serial]) ) {
-            $result = $handle->fetch();
+        if ( $userStmt->execute([':serial' => $user_serial]) ) {
+            $result = $userStmt->fetch();
             $user_id = $result['user_id'];
             $school_id = $result['school_id'];
 
             if ( $user_id > 0 ) {
-                $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
-                if ( $handle->execute([':user_id' => $user_id]) ) {
-                    $result = $handle->fetch();
+                // find out if non th school already exists and has an ID
+                if ($schoolStmt->execute(['school' => $non_th_school])) {
+                    if ($res = $schoolStmt->fetch()) {
+                        $non_th_school_id = $result['non_th_school_id'];
+                        $userStmt1->execute([
+                            'id'    => $non_th_school_id,
+                            'user'  => $user_id
+                        ]);
+                    } else {
+                        $userStmt2->execute([
+                            'school'  => $non_th_school,
+                            'user'    => $user_id
+                        ]);
+                    }
+                }
+
+                if ( $adminStmt->execute([':user_id' => $user_id]) ) {
+                    $result = $adminStmt->fetch();
                     if ( empty( $result ) ) {
                         $missingParentAccounts[] = $user_id;
                         continue;
                     }
                     $admin_id = $result['admin_id'];
 
-                    $handle = $MASHPIA_DB->prepare("insert into th_chidon 
-                                                set year = :year, 
-                                                school_id = :school_id, 
-                                                user_id = :user_id, 
-                                                yarmulka = :yarmulka,
-                                                size = :size, 
-                                                parent_id = :parent_id,
-                                                test_type = :type, 
-                                                reward_type = :type, 
-                                                book = :book,
-                                                poll = :poll 
-                                                on duplicate key update 
-                                                school_id = :school_id, 
-                                                yarmulka = :yarmulka,
-                                                size = :size, 
-                                                parent_id = :parent_id,
-                                                test_type = :type, 
-                                                reward_type = :type, 
-                                                book = :book,
-                                                poll = :poll");
-
-                    $stmt1 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
-                                    set user_id = :user, prize_id = :prize, year = :year
-                                ");
-                    $stmt2 = $MASHPIA_DB->prepare("insert ignore into chidon_user_prizes 
-                                    set user_id = :user, prize_id = :prize, year = :year, he_name = :name
-                                ");
-
                     if (
-                        $handle->execute([
+                        $chidonStmt->execute([
                             ':year'         =>  $year,
                             ':school_id'    =>  $school_id,
                             ':user_id'      =>  $user_id,
                             ':yarmulka'     =>  $yarmulka,
                             ':size'         =>  strtolower($sweater),
                             ':parent_id'    =>  $admin_id,
-                            ':type'         =>  $tracks[strtolower($track)],
+                            ':type'         =>  $track,
                             ':book'         =>  $book,
-                            ':poll'         =>  $learning_method
+                            ':name'         =>  $name
                         ])
                     ) {
+                        if (!
+                            $regStmt->execute([
+                                'user'    => $user_id,
+                                'school'  => $school_id,
+                                'year'    => $year,
+                                'amount'  => $paid
+                            ])
+                        ) {
+                            echo "problem creating registration charge.<br />";
+                            $error = true;
+                            break;
+                        }
+
                         foreach ($arrPrizes as $prize) {
                             // if we need to add the he name
                             if ($chidon_prizes[$prize]) {
-                                $res = $stmt2->execute([
+                                $res = $prizeStmt2->execute([
                                             ':user' => $user_id,
                                             ':prize' => $prize,
                                             ':year' => $year,
-                                            ':name' => $prize_name
+                                            ':name' => $he_name
                                         ]);
                             } else {
-                                $res = $stmt1->execute([
+                                $res = $prizeStmt1->execute([
                                     ':user' => $user_id,
                                     ':prize' => $prize,
                                     ':year' => $year
@@ -145,7 +183,6 @@ if ( isset( $_FILES['file'] ) ) {
                             }
                             if (!$res) {
                                 echo "Can't insert into prizes.<br />";
-                                $stmt1->debugDumpParams();
                                 $error = true;
                                 break 2;
                             }
@@ -153,7 +190,7 @@ if ( isset( $_FILES['file'] ) ) {
                         $updated++;
                     } else {
                         echo "Can't insert/update th_chidon.<br />";
-                        $handle->debugDumpParams();
+                        $chidonStmt->debugDumpParams();
                         $error = true;
                         break;
                     }
