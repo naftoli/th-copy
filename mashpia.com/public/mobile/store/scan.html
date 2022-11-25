@@ -628,7 +628,7 @@
 								placeholder="Enter Digits" autofocus style="margin: auto;">
 						</div>
 					</div>
-					<button type="submit" class="btn btn-danger i18n" data-key="Submit">Submit</button>
+					<button type="submit" id="submit" class="btn btn-danger i18n" data-key="Submit">Submit</button>
 				</form>
 			</div>
 		</div>
@@ -735,6 +735,7 @@
 			e.preventDefault();
 			var card = $("#scanner").val();
 			if (card.length == 20) {
+				$("#submit").attr('disabled', true);
 				$.post('ajax/checkCard.php', {
 					admin: Cookies.get("admin"),
 					user: user,
@@ -742,6 +743,7 @@
 				}, function (success) {
 					alert(success);
 					$("#scanner").val('');
+					$("#submit").attr('disabled', false);
 				});
 			} else {
 				alert(i18next.t('digitstw'));
