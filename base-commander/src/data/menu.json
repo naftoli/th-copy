@@ -59,6 +59,7 @@
     "items": [
       { "label": "Tests",
         "items": [
+          { "label": "Chidon Track Info", "legacy": true, "path": "/chidonTests/setTypes.php" },
           { "label": "Enter Chidon Test Scores",
             "items": [
               { "label": "Test #1", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=1" },
