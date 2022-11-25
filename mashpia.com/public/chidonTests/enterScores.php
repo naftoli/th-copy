@@ -39,13 +39,13 @@ $school_id = implode('', array_keys($schools));
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = [];
-//    $shutdown[1] = new DateTime('2021-11-20 05:00:00');
+    $shutdown[1] = new DateTime('2022-11-25 05:00:00');
 //    $shutdown[2] = new DateTime('2021-12-26 05:00:00');
 //    $shutdown[3] = new DateTime('2022-01-21 05:00:00');
 //    $shutdown[4] = new DateTime('2022-02-16 14:00:00');
-//    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
-//        $disabled = true;
-//    }
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
+        $disabled = true;
+    }
 }
 ?>
 <!DOCTYPE html>
