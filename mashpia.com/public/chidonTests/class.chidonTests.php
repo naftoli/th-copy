@@ -178,6 +178,7 @@ class ChidonTests
     }
 
     public function insertScores($info) {
+        $success = true;
         $stmt = $this->db->prepare("
             INSERT IGNORE INTO th_chidon_marks 
             SET 
@@ -193,17 +194,20 @@ class ChidonTests
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
 //                    if ($details[$type] > 0) {
-                        $stmt->execute([
-                            ':id' => $id,
-                            ':type' => $type,
-                            ':number' => $testNum,
-                            ':questions' => $questions,
-                            ':answered' => $details[$type]
-                        ]);
+                        if (! $stmt->execute([
+                                ':id' => $id,
+                                ':type' => $type,
+                                ':number' => $testNum,
+                                ':questions' => $questions,
+                                ':answered' => $details[$type]
+                            ])) {
+                            $success = false;
+                        }
 //                    }
                 }
             }
         }
+        return $success;
     }
 
     public function setTestTypes($types) {
