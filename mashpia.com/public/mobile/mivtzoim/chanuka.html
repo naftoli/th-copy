@@ -85,15 +85,15 @@
             <div class="container page5">   
                 <div class="row" id="purchase_info" style="display: none;">
                     <div class="col-12" style="font-size: 16px;">                   
-                        Menorah Boxes cost ONLY $1.85.<br />
-                        Brochures cost ONLY $0.20.<br />
+                        Menorah Boxes cost ONLY $<span class="menoraCost"></span>.<br />
+                        Brochures cost ONLY $<span class="brochureCost"></span>.<br />
                         We will only ship the sets to your child's school. Shipping charges vary by School 
                         depending on how many sets are being purchased (by school).
                         <hr />
-                        <h2>Number of Menorah Boxes: 5600</h2>
+                        <h2>Number of Menorah Boxes: 3000</h2>
                         <h2>Already Sold: <span class="menorahSold"></span></h2>
                         <h2>Currently Available: <span class="menorahLeft"></span></h2>
-                        <h2>Number of Brochures: 2500</h2>
+                        <h2>Number of Brochures: 3000</h2>
                         <h2>Already Sold: <span class="brochureSold"></span></h2>
                         <h2>Currently Available: <span class="brochureLeft"></span></h2>
 <!--                        <h2><strong>PLEASE NOTE: YOU MUST MAKE A PURCHASE OF AT LEAST $5 FOR ANY CHARGE TO GO THROUGH</strong></h2>-->
@@ -139,7 +139,7 @@
                                                     <table>
                                                         <tr>
                                                             <td><input type="text" class="menorah" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Menorah Box(es): <strong>$1.85</strong>/ea</td>
+                                                            <td>Menorah Box(es): <strong>$<span class="menoraCost"></span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
@@ -151,7 +151,7 @@
                                                     <table>
                                                         <tr>
                                                             <td><input type="text" class="brochure" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Brochure(s): <strong>$0.20</strong>/ea</td>
+                                                            <td>Brochure(s): <strong>$<span class="brochureCost"></span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
@@ -230,6 +230,11 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
+
+            var menoraCost = 2.5
+            var brochureCost = 0.25
+            $(".menoraCost").text(menoraCost)
+            $(".brochureCost").text(brochureCost)
             
             var menorahSoldOut = false;
             var brochureSoldOut = false;
@@ -248,9 +253,9 @@
             // $("#purchases").hide();
 
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
-                var menorahStart = 5600;
+                var menorahStart = 3000;
                 var menorahSold = parseInt( sold );
-                menorahSold += 1911;
+                // menorahSold += ;
                 var menorahLeft = menorahStart - menorahSold;
                 $(".menorahSold").text( menorahSold );
                 $(".menorahLeft").text( menorahLeft );
@@ -265,9 +270,9 @@
             });
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
-                var brochureStart = 2500;
+                var brochureStart = 3000;
                 var brochureSold = parseInt( sold );
-                brochureSold += 5;
+                // brochureSold += ;
                 var brochureLeft = brochureStart - brochureSold;
                 $(".brochureSold").text( brochureSold );
                 $(".brochureLeft").text( brochureLeft );
@@ -350,8 +355,8 @@
                 var total = 0;
 
                 var types = [
-                    { type: 'menorah', cost: 1.85 },
-                    { type: 'brochure', cost: 0.2 }
+                    { type: 'menorah', cost: menoraCost },
+                    { type: 'brochure', cost: brochureCost }
                 ];
                 for ( t of types ) {
                     var elem = "." + t.type;
