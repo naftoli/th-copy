@@ -114,6 +114,7 @@ section#leaderboard {
 }
 div#load-more-box {
     padding: 25px;
+    margin-bottom: 100px;
 }
 @media ( min-width: 630px ) {
     .user {

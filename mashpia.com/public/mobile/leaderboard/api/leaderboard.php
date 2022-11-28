@@ -62,7 +62,7 @@ if ( $location === "army" && ( !$rank || $rank == 1 ) ) {
 }
 
 render_json_response([
-    "leaderboard" => array_slice($leaderboard, intval($offset), 25),
+    "leaderboard" => array_slice($leaderboard, intval($offset), 24),
     "user_location" => $user_location,
     "total" => $total
 ]);
