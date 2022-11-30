@@ -845,8 +845,8 @@ var registrationApp = function() {
         //     setupChidonPrizes()
         // }
 
-        else nextStep()
-        // nextStep()
+        // else nextStep()
+        nextStep()
     }
 
     const deviceType = () => {
