@@ -156,8 +156,7 @@ if (isset($_POST['submit'])) {
     // $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
 
-//    $defaultStart = 2459846;
-    $defaultStart = 2459909;
+    $defaultStart = 2459846;
     $defaultEnd = 2460201;
 
     $weeks = array();
