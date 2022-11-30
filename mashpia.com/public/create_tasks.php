@@ -156,7 +156,8 @@ if (isset($_POST['submit'])) {
     // $defaultStart = $defaultDates['start'];
     // $defaultEnd = $defaultDates['end'];
 
-    $defaultStart = 2459846;
+//    $defaultStart = 2459846;
+    $defaultStart = 2459909;
     $defaultEnd = 2460201;
 
     $weeks = array();
@@ -387,22 +388,21 @@ if (isset($_POST['submit'])) {
 
                 //make sure start and end date is greater than or equal to today
                 // also need to make sure start and end date is from friday to thursday if changing see commented out below at end of loop
-
-                $today = unixtojd();
-                $day = date("w");
-                if ($day != 5) {
-                    if ($day < 5) {
-                       $today -= (2 + $day);
-                    } else if ($day == 6) {
-                       $today -= 1;
-                    }
-                }
-                if ($startDate < $today) {
-                    $startDate = $today;
-                }
-                if ($endDate < $today) {
-                    $endDate = $today;
-                }
+//                $today = unixtojd() + 1;
+//                $day = date("w");
+//                if ($day != 5) {
+//                    if ($day < 5) {
+//                       $today -= (2 + $day);
+//                    } else if ($day == 6) {
+//                       $today -= 1;
+//                    }
+//                }
+//                if ($startDate < $today) {
+//                    $startDate = $today;
+//                }
+//                if ($endDate < $today) {
+//                    $endDate = $today;
+//                }
 
                 // if no dates were entered create array based on default start and end dates
                 if (empty($arrStart)) {
