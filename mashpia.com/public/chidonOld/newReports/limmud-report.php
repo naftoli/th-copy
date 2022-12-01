@@ -18,6 +18,7 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 
 $chidon = new ChidonTests();
 $types = $chidon->getTypes();
+
 // get learned info
 $learnedInfo = [];
 $learned = $chidon->getLearned($learningDays[$test_num]);
@@ -101,8 +102,9 @@ foreach ($schools as $school_id => $name) {
                                 } else if (strpos($field, 'calc-') !== false) {
                                     switch ($field) {
                                         case 'calc-tpassed':
-                                            if ($test_num == 1) echo '';
-                                            else echo $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
+                                            // if ($test_num == 1) echo '';
+                                            // else echo $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
+                                            echo $types[$chidon->getHighestTrackPassed($row, $test_num)['highest_track']];
                                             break;
                                         case 'calc-lpassed':
                                             $days = daysPassed();
