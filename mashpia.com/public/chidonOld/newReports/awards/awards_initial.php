@@ -12,8 +12,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require 'afterTest1.php';
 
 // order by type
-$awards = array_column($info, 'award');
-array_multisort($awards, SORT_ASC, $info);
+$data = [];
+foreach ($info as $school => $children) {
+  foreach ($children as $child) {
+    $data[$row['award']][$school][] = $row;
+  }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,7 +65,8 @@ array_multisort($awards, SORT_ASC, $info);
             <?php
             $i = 0;
             $previousGrade = '';
-            foreach ($info as $school_id => $users) {
+            foreach ($data as $schools) {
+              foreach ($schools as $school => $users) {
                 $total = count($users);
                 $colspan = 4;
                 echo "<tr><td>" . $schools[$school_id] . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
@@ -95,6 +100,7 @@ array_multisort($awards, SORT_ASC, $info);
                         "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
                         "</td><td>" . $template . "</td><td>" . $row['award'] . "</td></tr>";
                 }
+              }
             }
             ?>
         </table>
