@@ -415,7 +415,7 @@ if (isset($_POST['submit'])) {
 									foreach ($lookup[$column] as $val) {
 										$html .= $row[$val] . $sep;
 									}
-									$html = mb_substr($html, 0, strlen($html) - 2);
+									$html = mb_substr($html, 0, mb_strlen($html) - 2);
 								}
 								echo "<td>" . $encoding . " : " . $html . "</td>";
 							}
