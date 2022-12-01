@@ -10,6 +10,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 require 'afterTest1.php';
+
+// order by type
+$awards = array_column($info, 'award');
+array_multisort($awards, SORT_ASC, $info);
 ?>
 <!DOCTYPE html>
 <html>
