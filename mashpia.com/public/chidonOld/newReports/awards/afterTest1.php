@@ -49,10 +49,11 @@ foreach ($info as $school => &$rows) {
                 }
             } else {
                 if ($marks[$type] >= 70) {
-                    $row['award'] = 'plaque';
+                    $award = 'plaque';
                 }
             }
         }
+        $row['award'] = $award;
     }
 }
 
