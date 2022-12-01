@@ -306,7 +306,7 @@ if (isset($_POST['submit'])) {
 					$totals = array();
 					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
-						echo "<pre>"; print_r( $row ); echo "</pre>"; continue;
+						echo "<pre>"; print_r( $row ); echo "</pre>";
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
