@@ -104,7 +104,9 @@ foreach ($schools as $school_id => $name) {
                                         case 'calc-tpassed':
                                             // if ($test_num == 1) echo '';
                                             // else echo $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
-                                            echo $types[$chidon->getHighestTrackPassed($row, $test_num)['highest_track']];
+                                            $track_passed = $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
+                                            if ($track_passed == '') echo '';
+                                            else echo $types[$track_passed];
                                             break;
                                         case 'calc-lpassed':
                                             $days = daysPassed();
