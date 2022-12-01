@@ -258,7 +258,6 @@ if (isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -282,24 +281,6 @@ if (isset($_POST['submit'])) {
 	</head>
 	
 	<body>
-			<?
-			/*
-			$files = array();
-			if ($handle = opendir(getcwd())) {		
-			    while (false !== ($entry = readdir($handle))) {
-			        if ($entry != '.' && $entry != '..' && $entry != 'index.php' && strpos($entry, '.') !== false) {
-			        	$files[] = $entry;
-			        }
-			    }
-			    closedir($handle);
-			}
-			
-			foreach ($files as $file) {
-				$report = ucwords(str_replace('_', ' ', substr($file, 0, strpos($file, '.'))));
-				echo "<li><a href='" . $file . "'>" . $report . "</a></li>";
-			}
-			*/
-			?>
 		<?php if (isset($_POST['submit'])) : ?>
 			<h2>Chidon Reports</h2>
 			<table id="table" class="table table-striped table-condensed">
