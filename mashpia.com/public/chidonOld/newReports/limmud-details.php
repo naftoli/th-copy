@@ -30,9 +30,11 @@ $types = $chidon->getTypes();
 $info = $chidon->getLimmudInfo($user_id);
 $details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num]);
 
+$types = $chidon->getTypes();
+
 // add to info variable
 $info['grade'] = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
-$info['track_passed'] = $chidon->getHighestTrackPassed($info, $test_num)['highest_track'];
+$info['track_passed'] = $types[$chidon->getHighestTrackPassed($info, $test_num)['highest_track']];
 $info['required'] = daysPassed() * $minutes[$info['test_type']];
 $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test_num]);
 ?>
