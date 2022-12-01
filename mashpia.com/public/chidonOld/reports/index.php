@@ -308,6 +308,7 @@ if (isset($_POST['submit'])) {
 					foreach ($report as $index => $row) {
 						echo "<tr>";
 						foreach ($data as $column) {
+							$encoding = mb_detect_encoding($row[$column]);
 							if (!array_key_exists($column, $lookup)) {
 								if ($column == 'history') {
 									if (!empty($row[$column])) $history = explode(',', $row[$column]);
@@ -414,9 +415,9 @@ if (isset($_POST['submit'])) {
 									foreach ($lookup[$column] as $val) {
 										$html .= $row[$val] . $sep;
 									}
-									$html = substr($html, 0, strlen($html) - 2);
+									$html = mb_substr($html, 0, strlen($html) - 2);
 								}
-								echo "<td>" . $html . "</td>";
+								echo "<td>" . $encoding . " : " . $html . "</td>";
 							}
 						}
 						echo "</tr>";
