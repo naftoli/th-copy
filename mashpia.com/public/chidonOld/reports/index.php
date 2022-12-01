@@ -525,9 +525,9 @@ if (isset($_POST['submit'])) {
 	<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.js"></script>
 	<script>
 		<?php if (isset($_POST['submit'])) : ?>
-		$('#table').DataTable({
-			paging : false
-		});
+		// $('#table').DataTable({
+		// 	paging : false
+		// });
 		<?php endif; ?>
 	</script>
 </html>
