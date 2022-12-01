@@ -52,6 +52,7 @@ require 'afterTest1.php';
                 <th>Code Part 2</th>
                 <th>Code Part 3</th>
                 <th>Template Code</th>
+                <th>Type of Award</th>
             </tr>
             <?php
             $i = 0;
@@ -73,8 +74,10 @@ require 'afterTest1.php';
                     $code = '';
                     if (in_array($row['school_id'], [61, 269])) {
                         // find number of child in admins array
-                        $key = array_search($row['user_id'], $admins[$row['parent_id']]);
-                        $code = $row['parent_id'] . '-' . ($key + 1);
+                        if (isset($admins[$row['parent_id']])) {
+                            $key = array_search($row['user_id'], $admins[$row['parent_id']]);
+                            $code = $row['parent_id'] . '-' . ($key + 1);
+                        }
                     } else {
                         $grade = $row['school_id'] . '-' . $row['class_grade'];
                         if ($previousGrade != $grade) {
@@ -88,8 +91,7 @@ require 'afterTest1.php';
                     $arrCode = explode('-', $code);
                     echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" . $arrCode[0] .
                         "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
-                        "</td><td>" . $template . "</td>";
-                    echo "</tr>";
+                        "</td><td>" . $template . "</td><td>" . $row['award'] . "</td></tr>";
                 }
             }
             ?>
