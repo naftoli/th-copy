@@ -15,7 +15,7 @@ require 'afterTest1.php';
 $data = [];
 foreach ($info as $school => $children) {
   foreach ($children as $child) {
-    $data[$row['award']][$school][] = $row;
+    $data[$row['award']][$school][] = $child;
   }
 }
 ?>
