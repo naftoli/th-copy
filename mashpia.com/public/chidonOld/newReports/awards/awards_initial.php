@@ -68,7 +68,7 @@ foreach ($info as $school => $children) {
             <?php
             $i = 0;
             $previousGrade = '';
-            foreach ($data as $more) {
+            foreach ($data as $award => $more) {
               foreach ($more as $school_id => $users) {
                 $total = count($users);
                 $colspan = 4;
@@ -101,7 +101,7 @@ foreach ($info as $school => $children) {
                     $arrCode = explode('-', $code);
                     echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" . $arrCode[0] .
                         "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
-                        "</td><td>" . $template . "</td><td>" . $row['award'] . "</td></tr>";
+                        "</td><td>" . $template . "</td><td>" . $award . "</td></tr>";
                 }
               }
             }
