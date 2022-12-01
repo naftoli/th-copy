@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = array('school'); 
 require('../../header.php');
@@ -305,6 +306,7 @@ if (isset($_POST['submit'])) {
 				<thead>
 					<tr>
 						<?php
+						echo "<pre>"; print_r($data); echo "</pre>"; exit;
 						foreach ($data as $column) {	
 							foreach ($info as $legend => $other) {
 								if (array_key_exists($column, $info[$legend])) {
