@@ -162,7 +162,6 @@ require_once '../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 if (isset($_POST['submit'])) {	
-	header("Content-type: text/html; charset=utf-8");
     $data = array();
 	$gender = false;
 	$limit = false;
