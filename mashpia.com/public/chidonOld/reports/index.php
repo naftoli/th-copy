@@ -308,7 +308,6 @@ if (isset($_POST['submit'])) {
 					foreach ($report as $index => $row) {
 						echo "<tr>";
 						foreach ($data as $column) {
-							$encoding = mb_detect_encoding($row[$column]);
 							if (!array_key_exists($column, $lookup)) {
 								if ($column == 'history') {
 									if (!empty($row[$column])) $history = explode(',', $row[$column]);
