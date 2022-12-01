@@ -231,7 +231,6 @@ if (isset($_POST['submit'])) {
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
 		$result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
 		while ($row = mysql_fetch_assoc($result)) {
-
 			$report[] = $row;
 		}
 	} else {
@@ -255,6 +254,7 @@ if (isset($_POST['submit'])) {
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
 }
+echo "<pre>"; print_r($report); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -306,7 +306,6 @@ if (isset($_POST['submit'])) {
 				<thead>
 					<tr>
 						<?php
-						echo "<pre>"; print_r($data); echo "</pre>"; exit;
 						foreach ($data as $column) {	
 							foreach ($info as $legend => $other) {
 								if (array_key_exists($column, $info[$legend])) {
