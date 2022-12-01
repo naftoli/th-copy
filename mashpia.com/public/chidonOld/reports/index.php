@@ -305,6 +305,7 @@ if (isset($_POST['submit'])) {
 				</thead>
 				<tbody>
 					<?php
+					echo "<pre>"; print_r($report); echo "</pre>"; exit;
 					$totals = array();
 					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
