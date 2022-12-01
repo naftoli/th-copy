@@ -224,8 +224,6 @@ if (isset($_POST['submit'])) {
 	else if ($bunkOnly) $root = 'th_chidon_bunks';
 	else $root = 'th_chidon';
 	
-	//echo $root; exit;
-		//echo "<pre>"; print_r( $data ); echo "</pre>"; exit;
     if ($sql = $r->createSQL($data, $root, $gender, $limit, $chidonType)) {
 		echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
@@ -305,11 +303,10 @@ if (isset($_POST['submit'])) {
 				</thead>
 				<tbody>
 					<?php
-					echo "<pre>"; print_r($report); echo "</pre>"; exit;
 					$totals = array();
 					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
-						//echo "<pre>"; print_r( $row ); echo "</pre>"; continue;
+						echo "<pre>"; print_r( $row ); echo "</pre>"; continue;
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
