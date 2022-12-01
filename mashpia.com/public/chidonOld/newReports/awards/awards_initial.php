@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 require 'afterTest1.php';
 
-// order by type
+// order by award
 $data = [];
 foreach ($info as $school => $children) {
   foreach ($children as $child) {
