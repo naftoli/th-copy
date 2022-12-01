@@ -36,8 +36,8 @@ foreach ($rows as $row) {
     $info[$row['school_id']][] = $row;
 }
 
-foreach ($info as $school => $rows) {
-    foreach ($rows as $row) {
+foreach ($info as $school => &$rows) {
+    foreach ($rows as &$row) {
         $id = $row['th_chidon_id'];
         $marks = $all_marks[$id][1];
         $award = 'certificate';
@@ -49,7 +49,7 @@ foreach ($info as $school => $rows) {
                 }
             } else {
                 if ($marks[$type] >= 70) {
-                    $award = 'plaque';
+                    $row['award'] = 'plaque';
                 }
             }
         }
