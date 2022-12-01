@@ -52,17 +52,13 @@ require 'afterTest1.php';
                 <th>Code Part 2</th>
                 <th>Code Part 3</th>
                 <th>Template Code</th>
-                <th></th>
-                <?php if ($_POST['final'] == 'after') : ?>
-                    <th>Changes</th>
-                <?php endif; ?>
             </tr>
             <?php
             $i = 0;
             $previousGrade = '';
             foreach ($info as $school_id => $users) {
                 $total = count($users);
-                $colspan = $_POST['final'] == 'after' ? 5 : 4;
+                $colspan = 4;
                 echo "<tr><td>" . $schools[$school_id] . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
                 foreach ($users as $idx => $row) {
                     $school = $row['school_name'];
@@ -93,11 +89,6 @@ require 'afterTest1.php';
                     echo "<tr><td></td><td>" . $serial . "</td><td>" . $he_name . "</td><td>" . $arrCode[0] .
                         "</td><td>" . $arrCode[1] . "</td><td>" . (isset($arrCode[2]) ? $arrCode[2] : '') .
                         "</td><td>" . $template . "</td>";
-                    if ($_POST['final'] == 'after') {
-                        if (! empty($row['award']) && in_array($_POST['award_type'], ['cert', 'plaque'])) $style = 'background-color: red;';
-                        else $style = '';
-                        echo "<td style='$style'>" . $row['award'] . "</td>";
-                    }
                     echo "</tr>";
                 }
             }
