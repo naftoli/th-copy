@@ -306,7 +306,6 @@ if (isset($_POST['submit'])) {
 					$totals = array();
 					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
-						echo "<pre>"; print_r( $row ); echo "</pre>";
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
@@ -358,7 +357,8 @@ if (isset($_POST['submit'])) {
                                 } else if ($column == 'chidon_final_mark') {
 								    echo "<td>" . intval($row[$column]) * 2 . "%</td>";
                                 } else {
-									echo "<td>" . $row[$column] . "</td>";
+									$encoding = mb_detect_encoding($row[$column]);
+									echo "<td>" . $encoding . " : " . $row[$column] . "</td>";
                                     if ($column == 'raised') {
                                         // check if we need to add any chidon drive stuff
                                         if ($rohr) {
