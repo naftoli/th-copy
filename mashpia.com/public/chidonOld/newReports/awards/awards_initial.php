@@ -15,7 +15,10 @@ require 'afterTest1.php';
 $data = [];
 foreach ($info as $school => $children) {
   foreach ($children as $child) {
-    $data[$child['award']][$school][] = $child;
+    if (is_array($child['award'])) {
+      foreach ($child['award'] as $award) $data[$award][$school][] = $child;
+    } 
+    else $data[$child['award']][$school][] = $child;
   }
 }
 ?>

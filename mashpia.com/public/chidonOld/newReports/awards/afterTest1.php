@@ -44,7 +44,7 @@ foreach ($info as $school => &$rows) {
         foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
             if ($type == 'genius') {
                 if ($marks[$type] >= 84) {
-                    $award = 'trophy';
+                    $award = ['plaque', 'trophy'];
                     break;
                 }
             } else {
