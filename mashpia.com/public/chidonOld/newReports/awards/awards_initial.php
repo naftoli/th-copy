@@ -65,8 +65,8 @@ foreach ($info as $school => $children) {
             <?php
             $i = 0;
             $previousGrade = '';
-            foreach ($data as $schools) {
-              foreach ($schools as $school_id => $users) {
+            foreach ($data as $more) {
+              foreach ($more as $school_id => $users) {
                 $total = count($users);
                 $colspan = 4;
                 echo "<tr><td>" . $schools[$school_id] . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
