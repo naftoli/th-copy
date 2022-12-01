@@ -74,10 +74,8 @@ require 'afterTest1.php';
                     $code = '';
                     if (in_array($row['school_id'], [61, 269])) {
                         // find number of child in admins array
-                        if (isset($admins[$row['parent_id']])) {
-                            $key = array_search($row['user_id'], $admins[$row['parent_id']]);
-                            $code = $row['parent_id'] . '-' . ($key + 1);
-                        }
+                        $key = array_search($row['user_id'], $admins[$row['parent_id']]);
+                        $code = $row['parent_id'] . '-' . ($key + 1);
                     } else {
                         $grade = $row['school_id'] . '-' . $row['class_grade'];
                         if ($previousGrade != $grade) {

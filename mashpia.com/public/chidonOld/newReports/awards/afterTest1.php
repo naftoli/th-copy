@@ -63,7 +63,6 @@ $sql = "select aa.admin_id, aa.id from admin_auths aa
         join users u on u.user_id = aa.id 
         join th_chidon tc using (user_id) 
         where tc.year = $year 
-        and tc.date_paid > 0 
         and u.school_id in (61, 269)";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
