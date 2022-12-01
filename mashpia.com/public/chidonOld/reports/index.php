@@ -254,7 +254,6 @@ if (isset($_POST['submit'])) {
 //		'avg2'			=>	array('test1b', 'test2b', 'test3b')
 	);
 }
-echo "<pre>"; print_r($report); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
