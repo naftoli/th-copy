@@ -303,11 +303,14 @@ class ChidonTests
         return '';
     }
 
-    public function getLearned( $dates ) {
+    public function getLearned( $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        $dateArr = explode('/', $dates[count($dates)]);
-        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        if ($untilToday) $end = unixtojd();
+        else {
+            $dateArr = explode('/', $dates[count($dates)]);
+            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        }
         $stmt = $this->db->prepare("
             SELECT 
                 dtm.* 
@@ -329,11 +332,14 @@ class ChidonTests
         return $stmt->fetchAll();
     }
 
-    public function getTotalMinutesLearned( $user_id, $dates ) {
+    public function getTotalMinutesLearned( $user_id, $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        $dateArr = explode('/', $dates[count($dates)]);
-        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        if ($untilToday) $end = unixtojd();
+        else {
+            $dateArr = explode('/', $dates[count($dates)]);
+            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        }
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(SUM(done_qty), 0) AS total
@@ -354,11 +360,14 @@ class ChidonTests
         return $stmt->fetch()['total'];
     }
 
-    public function getTotalDaysLearned( $user_id, $dates ) {
+    public function getTotalDaysLearned( $user_id, $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        $dateArr = explode('/', $dates[count($dates)]);
-        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        if ($untilToday) $end = unixtojd();
+        else {
+            $dateArr = explode('/', $dates[count($dates)]);
+            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        }
         $stmt = $this->db->prepare("
             SELECT 
                 IFNULL(count(*), 0) AS total

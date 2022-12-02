@@ -19,12 +19,6 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 $chidon = new ChidonTests();
 $types = $chidon->getTypes();
 
-// get learned info
-$learnedInfo = [];
-$learned = $chidon->getLearned($learningDays[$test_num]);
-foreach ($learned as $day) {
-    $learnedInfo[$day['user_id']][] = $day['done_qty'];
-}
 
 $info = [];
 foreach ($schools as $school_id => $name) {
@@ -89,10 +83,8 @@ foreach ($schools as $school_id => $name) {
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
                         foreach ($rows as $row) {
-                            $learned = isset($learnedInfo[$row['user_id']]) ? $learnedInfo[$row['user_id']] : [];
-                            $totalLearned = count($learned);
-                            $minutesLearned = 0;
-                            foreach ($learned as $done_qty) $minutesLearned += $done_qty;
+                            $totalDays = $ct->getTotalDaysLearned($row['user_id'], $learningDays[$test_num], true);
+                            $totalMinutes = $ct->getTotalMinutesLearned($row['user_id'], $learningDays[$test_num], true);
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
                                 echo "<td>";
@@ -117,9 +109,7 @@ foreach ($schools as $school_id => $name) {
                                             echo $days;
                                             break;
                                         case 'calc-dlogged':
-//                                            $logged = $chidon->getTotalDaysLearned($row['user_id'], $learningDays[1]);
-//                                            $logged = 0;
-                                            echo $totalLearned;
+                                            echo $totalDays;
                                             break;
                                         case 'calc-mrequired':
                                             $track = $row['test_type'];
@@ -127,16 +117,14 @@ foreach ($schools as $school_id => $name) {
                                             echo $required;
                                             break;
                                         case 'calc-mlogged':
-//                                            $num = $chidon->getTotalMinutesLearned($row['user_id'], $learningDays[1]);
-//                                            $num = 0;
-                                            echo $minutesLearned;
+                                            echo $totalMinutes;
                                             break;
                                         case 'calc-behind':
-                                            if ($required > intval($minutesLearned)) echo $required - intval($minutesLearned);
+                                            if ($required > intval($totalMinutes)) echo $required - intval($totalMinutes);
                                             else echo 0;
                                             break;
                                         case 'calc-ahead':
-                                            if (intval($minutesLearned) > $required) echo intval($minutesLearned) - $required;
+                                            if (intval($totalMinutes) > $required) echo intval($totalMinutes) - $required;
                                             else echo 0;
                                             break;
                                     }

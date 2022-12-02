@@ -27,8 +27,8 @@ require_once 'codeForReport.php';
 $year = GlobalSettings::getChidonYear();
 $chidon = new ChidonTests();
 $types = $chidon->getTypes();
-$info = $chidon->getLimmudInfo($user_id);
-$details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num]);
+$info = $chidon->getLimmudInfo($user_id, true);
+$details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num], true);
 
 $types = $chidon->getTypes();
 
@@ -37,7 +37,7 @@ $info['grade'] = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . 
 $passed = $chidon->getHighestTrackPassed($info, $test_num)['highest_track'];
 $info['track_passed'] = $passed ? $types[$passed] : '';
 $info['required'] = daysPassed() * $minutes[$info['test_type']];
-$info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test_num]);
+$info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test_num], true);
 ?>
 <!DOCTYPE html>
 <html>
