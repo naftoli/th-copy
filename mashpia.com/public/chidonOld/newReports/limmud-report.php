@@ -90,11 +90,11 @@ foreach ($schools as $school_id => $name) {
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
                         foreach ($rows as $row) {
-                            $totalDays = count($limmudInfo[$row['user_id']]);
+                            $totalDays = isset($limmudInfo[$row['user_id']]) ? count($limmudInfo[$row['user_id']]) : 0;
                             $totalMinutes = 0;
-                            array_walk($limmudInfo[$row['user_id']], function($child) use ($totalMinutes) {
-                                $totalMinutes += $child['done_qty'];
-                            });
+                            if (isset($limmudInfo[$row['user_id']])) {
+                                foreach ($limmudInfo[$row['user_id']] as $amount) $totalMinutes += $amount;
+                            }
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
                                 echo "<td>";
