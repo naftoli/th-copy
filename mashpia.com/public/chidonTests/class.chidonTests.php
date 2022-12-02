@@ -449,9 +449,7 @@ class ChidonTests
             $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
             if (isset($info[$jd][20010])) {
                 // could have multiple entries
-                $minutes = 0;
-                foreach ($info[$jd][20010] as $amount) $minutes += $amount;
-                $details[$day]['minutes'] = $minutes;
+                foreach ($info[$jd][20010] as $amount) $details[$day]['minutes'][] = $amount;
             }
             if (isset($info[$jd][20011])) $details[$day]['upToDate'] = true;
         }
