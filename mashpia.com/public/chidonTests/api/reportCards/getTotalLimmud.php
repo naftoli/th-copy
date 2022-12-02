@@ -3,58 +3,30 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $user_id = mysql_real_escape_string($_GET['id']);
 $testNum = $_GET['test'];
-
-//$dates = [
-//    [
-//        'start' => 2459469,
-//        'end'   => 2459514
-//    ],
-//    [
-//        'start' => 2459514,
-//        'end'   => 2459542
-//    ],
-//    [
-//        'start' => 2459543,
-//        'end'   => 2459585
-//    ]
-//];
+$ct = new ChidonTests();
 
 $dates = [
     [
-        'start' => 2459831,
-        'end'   => 2459879
+        1 => '9/8/2022',
+        2 => '11/9/2022'
     ],
     [
-        'start' => 2459880,
-        'end'   => 2459906
+        1 => '11/10/2022',
+        2 => '12/11/2022'
     ],
     [
-        'start' => 2459907,
-        'end'   => 2459946,
+        1 => '12/12/2022',
+        2 => '1/29/2023'
     ]
 ];
 
 $totals = [];
 for ($i = 0; $i < $testNum; $i++) {
-    $sql = "SELECT 
-                IFNULL(SUM(done_qty), 0) AS total
-            FROM
-                date_tasks_marks dtm
-                    JOIN
-                date_tasks dt USING (date_task_id)
-                    JOIN
-                date_tasks_missions dtmm USING (date_tasks_mission_id)
-            WHERE
-                dt.grid_id = 20010
-                    AND dtmm.start_date >= " . $dates[$i]['start'] . "
-                    AND dtmm.end_date <= " . $dates[$i]['end'] . "
-                    AND user_id = " . $user_id;
-    $result = mysql_query($sql);
-    $total = mysql_fetch_assoc($result)['total'];
-    $totals[$i] = $total;
+    $totals[$i] = $ct->getTotalMinutesLearned($user_id, $dates[$i]);
 }
 
 echo json_encode($totals);
