@@ -55,6 +55,21 @@ $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Limmud Detailed Report</h1>
+        <form action="limmud-details.php" method="get">
+          Please choose which test you would like to view:
+          <select name="test">
+            <?php
+            for ($i = 1; $i < 5; $i++) {
+              echo "<option value='" . $i . "'";
+              if ($test_num == $i) echo " selected";
+              if ($i == 4) echo ">Final</option>";
+              else echo ">" . $i . "</option>";
+            }
+            ?>
+          </select>
+          <input type="hidden" name="id" value="<?= $user_id ?>" />
+          <button>Update</button>
+        </form>
         <p>
             Test #: <?= $test_num ?><br />
             Serial: <?= $info['user_serial'] ?><br />
