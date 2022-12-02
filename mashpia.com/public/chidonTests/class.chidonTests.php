@@ -444,15 +444,13 @@ class ChidonTests
 
         $details = [];
         foreach ($dates as $day => $date) {
+            $details[$day]['minutes'] = 0;
+            $details[$day]['upToDate'] = false;
+
             $dateArr = explode('/', $date);
             $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-            if (isset($info[$jd][20010])) {
-                $details[$day]['minutes'] = $info[$jd][20010];
-                $details[$day]['upToDate'] = isset($info[$jd][20011]);
-            } else {
-                $details[$day]['minutes'] = 0;
-                $details[$day]['upToDate'] = false;
-            }
+            if (isset($info[$jd][20010])) $details[$day]['minutes'] = $info[$jd][20010];
+            if (isset($info[$jd][20011])) $details[$day]['upToDate'] = true;
         }
 
         return $details;
