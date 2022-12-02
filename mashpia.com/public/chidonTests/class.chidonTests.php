@@ -437,7 +437,7 @@ class ChidonTests
         ]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $info[$row['mark_date']][$row['grid_id']] = $row['done_qty'];
+            $info[$row['mark_date']][$row['grid_id']][] = $row['done_qty'];
         }
 
         $details = [];
@@ -447,7 +447,12 @@ class ChidonTests
 
             $dateArr = explode('/', $date);
             $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-            if (isset($info[$jd][20010])) $details[$day]['minutes'] = $info[$jd][20010];
+            if (isset($info[$jd][20010])) {
+                // could have multiple entries
+                $minutes = 0;
+                foreach ($info[$jd][20010] as $amount) $minutes += $amount;
+                $details[$day]['minutes'] = $minutes;
+            }
             if (isset($info[$jd][20011])) $details[$day]['upToDate'] = true;
         }
 
