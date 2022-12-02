@@ -76,8 +76,12 @@ foreach ($schools as $school_id => $name) {
         </form>
         <?php foreach ($schools as $school_id => $name) : ?>
             <?= "<h2>" . $name . "</h2>"; ?>
+            <?php
+            $caption = "Test # " . $test_num;
+            if ($test_num == 4) $caption = "Final";
+            ?>
             <table>
-                <caption>Test #<?= $test_num ?></caption>
+                <caption><?= $caption ?></caption>
                 <tr>
                     <?php foreach ($fields as $desc => $field) echo "<th>" . $desc . "</th>"; ?>
                 </tr>
