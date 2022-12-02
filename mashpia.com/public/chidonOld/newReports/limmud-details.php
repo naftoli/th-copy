@@ -78,10 +78,10 @@ $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test
             $balance = 0;
             $required = $minutes[$info['test_type']];
             foreach ($details as $day => $row) {
-                $minutes = intval($row['minutes']);
-                $balance += $minutes - $required;
+                $min = intval($row['minutes']);
+                $balance += $min - $required;
                 $heDay = getHeDay($learningDays[$test_num][$day]);
-                echo "<tr><td>" . $day . "</td><td>" . $heDay . "</td><td>" . $minutes . "</td><td>" . $balance .
+                echo "<tr><td>" . $day . "</td><td>" . $heDay . "</td><td>" . $min . "</td><td>" . $balance .
                     "</td><td><td><input type='checkbox'";
                 if ($row['upToDate']) echo " checked";
                 echo " disabled /></td></tr>";
