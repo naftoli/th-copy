@@ -442,7 +442,7 @@ class ChidonTests
 
         $details = [];
         foreach ($dates as $day => $date) {
-            $details[$day]['minutes'] = 0;
+            $details[$day]['minutes'] = [];
             $details[$day]['upToDate'] = false;
 
             $dateArr = explode('/', $date);
