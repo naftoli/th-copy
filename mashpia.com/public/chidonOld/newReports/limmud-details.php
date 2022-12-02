@@ -70,6 +70,7 @@ $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test
           <input type="hidden" name="id" value="<?= $user_id ?>" />
           <button>Update</button>
         </form>
+        <br />
         <p>
             Test #: <?= $test_num ?><br />
             Serial: <?= $info['user_serial'] ?><br />
