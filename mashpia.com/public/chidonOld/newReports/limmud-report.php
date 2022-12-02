@@ -19,6 +19,13 @@ $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 $ct = new ChidonTests();
 $types = $ct->getTypes();
 
+// quicker to get all info for all kids in one sql query
+$limmud = $ct->getLearned($learningDays[$test_num], true);
+$limmudInfo = [];
+foreach ($limmud as $row) {
+    $limmudInfo[$row['user_id']][] = $row;
+}
+
 
 $info = [];
 foreach ($schools as $school_id => $name) {
@@ -83,8 +90,11 @@ foreach ($schools as $school_id => $name) {
                 if (isset($info[$school_id])) {
                     foreach ($info[$school_id] as $grade => $rows) {
                         foreach ($rows as $row) {
-                            $totalDays = $ct->getTotalDaysLearned($row['user_id'], $learningDays[$test_num], true);
-                            $totalMinutes = $ct->getTotalMinutesLearned($row['user_id'], $learningDays[$test_num], true);
+                            $totalDays = count($limmudInfo[$row['user_id']]);
+                            $totalMinutes = 0;
+                            array_walk($limmudInfo[$row['user_id']], function($child) use ($totalMinutes) {
+                                $totalMinutes += $child['done_qty'];
+                            });
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
                                 echo "<td>";

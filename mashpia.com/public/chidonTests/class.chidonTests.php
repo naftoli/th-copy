@@ -318,12 +318,10 @@ class ChidonTests
                 date_tasks_marks dtm
                     JOIN
                 date_tasks dt USING (date_task_id)
-                    JOIN
-                date_tasks_missions dtmm USING (date_tasks_mission_id)
             WHERE
                 dt.grid_id = 20010 
-                    AND dtmm.start_date >= :start
-                    AND dtmm.end_date <= :end 
+                    AND dtm.mark_date >= :start
+                    AND dtm.mark_date <= :end 
                     AND done_qty > 0");
         $stmt->execute([
             ':start'    => $start,
