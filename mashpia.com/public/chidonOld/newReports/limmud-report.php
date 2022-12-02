@@ -16,8 +16,8 @@ require_once 'codeForReport.php';
 
 $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
 
-$chidon = new ChidonTests();
-$types = $chidon->getTypes();
+$ct = new ChidonTests();
+$types = $ct->getTypes();
 
 
 $info = [];
@@ -99,8 +99,8 @@ foreach ($schools as $school_id => $name) {
                                     switch ($field) {
                                         case 'calc-tpassed':
                                             // if ($test_num == 1) echo '';
-                                            // else echo $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
-                                            $track_passed = $chidon->getHighestTrackPassed($row, $test_num)['highest_track'];
+                                            // else echo $ct->getHighestTrackPassed($row, $test_num)['highest_track'];
+                                            $track_passed = $ct->getHighestTrackPassed($row, $test_num)['highest_track'];
                                             if ($track_passed == '') echo '';
                                             else echo $types[$track_passed];
                                             break;
