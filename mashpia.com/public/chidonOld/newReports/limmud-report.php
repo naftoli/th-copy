@@ -93,7 +93,7 @@ foreach ($schools as $school_id => $name) {
                             $totalDays = isset($limmudInfo[$row['user_id']]) ? count($limmudInfo[$row['user_id']]) : 0;
                             $totalMinutes = 0;
                             if (isset($limmudInfo[$row['user_id']])) {
-                                foreach ($limmudInfo[$row['user_id']] as $amount) $totalMinutes += $amount;
+                                foreach ($limmudInfo[$row['user_id']] as $child) $totalMinutes += $child['done_qty'];
                             }
                             echo "<tr>";
                             foreach ($fields as $desc => $field) {
