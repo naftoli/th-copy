@@ -319,7 +319,8 @@
 				admin = Cookies.get('chidon_admin') || Cookies.get('admin_auth')
 			}
 
-			$("#logout").click( function() {
+			$("#logout").click( function(e) {
+				e.preventDefault()
 				if (Cookies.get('chidon_admin')) Cookies.remove('chidon_admin')
 				if (Cookies.get('admin_auth')) Cookies.remove('admin_auth')
 				location.href = 'login.html'
