@@ -623,7 +623,6 @@
 				}
 
 				if (children.length > 0) {
-
 					$.post("../ajax/setupChidonDrive.php", { admin_id: Cookies.get('chidon_admin'), info: JSON.stringify(children) }, function (res) {
 						var result = JSON.parse(res);
 						if (result.success) {
