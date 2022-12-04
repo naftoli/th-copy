@@ -43,7 +43,9 @@ if ( $stmt->execute([':year' => $year]) ) $info = $stmt->fetchAll();
                 <th>Raised</th>
                 <th>Registration Paid</th>
                 <th>Total</th>
-                <th>Rohr</th>
+                <?php if ($year < 5783) : ?>
+                    <th>Rohr</th>
+                <?php endif; ?>
             </tr>
             <?php
             $totals['raised'] = 0;
@@ -62,11 +64,14 @@ if ( $stmt->execute([':year' => $year]) ) $info = $stmt->fetchAll();
                 $totals['raised'] += $raised;
                 $totals['paid'] += $paid;
                 $totals['rohr'] += $rohr;
-                echo "<tr><td>" . $first . "</td><td>" . $last . "</td><td>" . $raised . "</td><td>" . $paid . "</td><td>" . ($raised + $paid) . 
-                    "</td><td>" . $rohr . "</td></tr>";
+                echo "<tr><td>" . $first . "</td><td>" . $last . "</td><td>" . $raised . "</td><td>" . $paid . "</td><td>" . ($raised + $paid);
+                if ($year < 5783) echo "</td><td>" . $rohr;
+                echo "</td></tr>";
             }
             echo "<tr><th colspan='2'>Totals:</th><th>" . number_format($totals['raised']) . "</th><th>" . number_format($totals['paid']) . 
-                "</th><th>" . number_format($totals['raised'] + $totals['paid']) . "</th><th>" . number_format($totals['rohr']) . "</th></tr>";
+                "</th><th>" . number_format($totals['raised'] + $totals['paid']);
+            if ($year < 5783) echo "</th><th>" . number_format($totals['rohr']);
+            echo "</th></tr>";
             ?>
         </table>
     </body>
