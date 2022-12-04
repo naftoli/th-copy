@@ -614,7 +614,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                         <label class="checkbox">
                                                             <div class="actions">
                                                                 <? if ($weekly_task->quantity) : ?>
-                                                                <input type="number"  pattern="[0-9]+" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>" 
+                                                                <input type="number"  pattern="\d+" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>" 
                                                                     size="2" maxlength="3" 
                                                                     <? 
                                                                     if ($lang == 2) echo 'style="left: 15px; right: auto;'; 
