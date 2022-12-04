@@ -228,14 +228,16 @@
 								<a target="_blank" rel="noopener noreferer" id="famPageLink"></a>
 							</span>
 						</p>
-						<button class="button" style="max-width: 150px;" id="copyShareLinkButton">Copy page
-							link</button>
+						<button class="button" style="max-width: 150px;" id="copyShareLinkButton">Copy page link</button>
 					</div>
-
 
 					<div class="group save-detail">
 						<input type="submit" name="submit" value="Activate Page" class="button"
 							style="width: auto !important; cursor: pointer;" id="submitButton" />
+					</div>
+
+					<div class="field">
+						<button class="button" style="max-width: 150px;" id="logout">Logout</button>
 					</div>
 				</form>
 			</div>
@@ -316,6 +318,12 @@
 			} else {
 				admin = Cookies.get('chidon_admin') || Cookies.get('admin_auth')
 			}
+
+			$("#logout").click( function() {
+				if (Cookies.get('chidon_admin')) Cookies.remove('chidon_admin')
+				if (Cookies.get('admin_auth')) Cookies.remove('admin_auth')
+				location.href = 'login.html'
+			})
 
 			$.fn.inputFilter = function (inputFilter) {
 				return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
