@@ -41,6 +41,7 @@ foreach ($info as $school => &$rows) {
         $id = $row['th_chidon_id'];
         $marks = $all_marks[$id][1];
         $award = 'certificate';
+        $noMarks = true;
         foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
             if ($type == 'genius') {
                 if ($marks[$type] >= 84) {
@@ -52,7 +53,10 @@ foreach ($info as $school => &$rows) {
                     $award = 'plaque';
                 }
             }
+            // check if child got ANY mark on ANY test
+            if ($marks[$type] > 0) $noMarks = false;
         }
+        if ($noMarks) $award = 'cert';
         $row['award'] = $award;
     }
 }
