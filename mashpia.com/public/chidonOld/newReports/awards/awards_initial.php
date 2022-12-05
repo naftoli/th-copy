@@ -39,7 +39,7 @@ foreach ($info as $school => $children) {
         foreach ($admins as $admin_id => $more) {
           foreach ($more as $user_id) {
             if ($user_id == $child['user_id']) {
-              $adminsSorted[$admin_id][$award][] = $user_id;
+              $adminsSorted[$admin_id][$child['award']][] = $user_id;
             }
           }
         }
@@ -47,6 +47,8 @@ foreach ($info as $school => $children) {
     }
   }
 }
+// sort by award
+ksort($data);
 ?>
 <!DOCTYPE html>
 <html>
