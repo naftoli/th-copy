@@ -13,12 +13,38 @@ require 'afterTest1.php';
 
 // order by award
 $data = [];
+$adminsSorted = [];
 foreach ($info as $school => $children) {
+  if (in_array($school, [61, 269])) $myShliach = true;
+  else $myShliach = false;
   foreach ($children as $child) {
     if (is_array($child['award'])) {
-      foreach ($child['award'] as $award) $data[$award][$school][] = $child;
-    } 
-    else $data[$child['award']][$school][] = $child;
+      foreach ($child['award'] as $award) {
+        $data[$award][$school][] = $child;
+        if ($myShliach) {
+          // find admin id
+          foreach ($admins as $admin_id => $more) {
+            foreach ($more as $user_id) {
+              if ($user_id == $child['user_id']) {
+                $adminsSorted[$admin_id][$award][] = $user_id;
+              }
+            }
+          }
+        }
+      }
+    } else {
+      $data[$child['award']][$school][] = $child;
+      if ($myShliach) {
+        // find admin id
+        foreach ($admins as $admin_id => $more) {
+          foreach ($more as $user_id) {
+            if ($user_id == $child['user_id']) {
+              $adminsSorted[$admin_id][$award][] = $user_id;
+            }
+          }
+        }
+      }
+    }
   }
 }
 ?>
@@ -86,7 +112,7 @@ foreach ($info as $school => $children) {
                     $code = '';
                     if (in_array($row['school_id'], [61, 269])) {
                         // find number of child in admins array
-                        $key = array_search($row['user_id'], $admins[$row['parent_id']]);
+                        $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$award]);
                         $code = $row['parent_id'] . '-' . ($key + 1);
                     } else {
                         $grade = $row['school_id'] . '-' . $row['class_grade'];
