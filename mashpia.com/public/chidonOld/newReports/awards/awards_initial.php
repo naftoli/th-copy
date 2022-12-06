@@ -20,8 +20,7 @@ foreach ($info as $school => $children) {
   foreach ($children as $child) {
     if (is_array($child['award'])) {
       foreach ($child['award'] as $award) {
-        if (is_array($award)) foreach ($award as $type) $data[$type][$school][] = $child;
-        else $data[$award][$school][] = $child;
+        $data[$award][$school][] = $child;
         if ($myShliach) {
           // find admin id
           foreach ($admins as $admin_id => $more) {
