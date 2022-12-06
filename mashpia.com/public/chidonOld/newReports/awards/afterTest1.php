@@ -13,6 +13,7 @@ $ct->calculateMarks();
 $ct->setScores();
 $ct->calculateMarks();
 $all_marks = $ct->getMarks();
+echo "<pre>"; print_r($all_marks); echo "</pre>";
 
 // qry to get all kids that should get the award
 $sql = "

@@ -49,7 +49,6 @@ foreach ($info as $school => $children) {
 }
 // sort by award
 ksort($data);
-echo "<pre>"; print_r($data); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
