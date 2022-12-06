@@ -13,7 +13,6 @@ $ct->calculateMarks();
 $ct->setScores();
 $ct->calculateMarks();
 $all_marks = $ct->getMarks();
-echo "<pre>"; print_r($all_marks); echo "</pre>";
 
 // qry to get all kids that should get the award
 $sql = "
@@ -62,7 +61,7 @@ foreach ($info as $school => &$rows) {
         $row['award'] = $award;
     }
 }
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
 // find out order of kids for admins
 $admins = [];
 $sql = "select aa.admin_id, aa.id from admin_auths aa 
