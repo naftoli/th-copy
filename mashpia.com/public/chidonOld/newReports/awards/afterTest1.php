@@ -53,7 +53,7 @@ foreach ($info as $school => &$rows) {
         $row['award'] = $award;
     }
 }
-
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 // find out order of kids for admins
 $admins = [];
 $sql = "select aa.admin_id, aa.id from admin_auths aa 
