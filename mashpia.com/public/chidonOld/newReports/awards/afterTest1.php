@@ -48,7 +48,7 @@ foreach ($info as $school => &$rows) {
             // check if child got ANY mark on ANY test
             if ($marks[$type] > 0) $noMarks = false;
         }
-//        if ($noMarks) $award = 'cert';
+        if ($noMarks) $award = 'cert';
         $row['award'] = $award;
     }
 }
