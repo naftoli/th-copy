@@ -43,15 +43,8 @@ foreach ($info as $school => &$rows) {
         $award = 'certificate';
         $noMarks = true;
         foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
-            if ($type == 'genius') {
-                if ($marks[$type] >= 84) {
-                    $award = ['plaque', 'trophy'];
-                }
-            } else if ($type != 'maven') {
-                if ($marks[$type] >= 70) {
-                    $award = 'plaque';
-                }
-            }
+            if ($type == 'genius' && $marks[$type] >= 84) $award = ['plaque', 'trophy'];
+            else if ($type != 'maven' && $marks[$type] >= 70) $award = 'plaque';
             // check if child got ANY mark on ANY test
             if ($marks[$type] > 0) $noMarks = false;
         }
