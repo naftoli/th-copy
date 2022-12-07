@@ -509,7 +509,7 @@
 			$.post('../ajax/getTotalDonation.php', function (result) {
 				let res = JSON.parse(result);
 				if (res.success) {
-					let cost = 370;
+					let cost = 350;
 					let totalChildren = 7048;
 					let totalGoal = totalChildren * cost;
 					let totalAmount = Math.round(res.total);
