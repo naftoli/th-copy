@@ -26,6 +26,7 @@ if (! function_exists('alreadyWon')) {
         $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
             select raffle_id from raffles where type = 'weekly' and year = $year 
         )";
+        echo $sql; exit;
         $result = mysql_query($sql);
         return mysql_num_rows($result) > 0;
     }
