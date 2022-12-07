@@ -24,6 +24,26 @@ require_once(dirname(__FILE__)."/weekly_raffle.php");
 // namespaces
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
+function alreadyWon($user, $type) {
+    $year = GlobalSettings::getCurrentYear();
+    $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
+            select raffle_id from raffles where type = '$type' and year = $year
+        )";
+    echo $sql . "<br />";
+    $result = mysql_query($sql);
+    return mysql_num_rows($result) > 0;
+}
+
+//function check_first_in_family($user, &$winning_families){
+//    // siblings cannot win (if there are more students in the school then the max amount of winners)
+//    if (isset($winning_families[$user['admin_id']])){ // if the users "admin_id" is already in the array
+//        return false;
+//    } elseif ($user['admin_id']) { // do not count for null
+//        if ($user['user_id']) $winning_families[$user['admin_id']] = $user['user_id']; // mark the family as having already won. (avoid nulls);
+//    }
+//    return true; // they are the first in the family
+//}
+
 if($web) echo "<pre>";
 // log some data
 $script_start_time = time();

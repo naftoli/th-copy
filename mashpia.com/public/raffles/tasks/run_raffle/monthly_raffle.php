@@ -6,31 +6,6 @@ require_once(dirname(__FILE__)."/../../../class.globalSettings.php");
 use raffles\weekly\Prize as Prize;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
-/************************** ONLY ONE CHILD PER FAMILY **************************/
-if ( !function_exists ("check_first_in_family")) {
-    function check_first_in_family($user, &$winning_families){
-        // siblings cannot win (if there are more students in the school then the max amount of winners)
-        if (isset($winning_families[$user['admin_id']])){ // if the users "admin_id" is already in the array
-            return false;
-        } elseif ($user['admin_id']) { // do not count for null
-            if ($user['user_id']) $winning_families[$user['admin_id']] = $user['user_id']; // mark the family as having already won. (avoid nulls);
-        }
-        return true; // they are the first in the family
-    }
-}
-
-if (! function_exists('alreadyWon')) {
-    function alreadyWon($user) {
-        $year = GlobalSettings::getCurrentYear();
-        $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
-            select raffle_id from raffles where type = 'monthly' and year = $year
-        )";
-        echo $sql . "<br />";
-        $result = mysql_query($sql);
-        return mysql_num_rows($result) > 0;
-    }
-}
-
 function monthly_raffle($raffle){
     /************************** GET USER INFO **************************/
     echo "\n\nRunning raffle_id ".$raffle->raffle_id."\n"; // log that we are running a raffle
@@ -66,7 +41,7 @@ function monthly_raffle($raffle){
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
 //             if(!check_first_in_family($user, $winning_families)){
-            if (alreadyWon($user['user_id'])) {
+            if (alreadyWon($user['user_id'], 'monthly')) {
                  echo $user['school_id']."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                  unset($user_ids[$user['user_id']]); // remove the user from the array
                  continue; // try again
