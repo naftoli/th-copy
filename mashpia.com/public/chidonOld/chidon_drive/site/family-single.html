@@ -614,18 +614,18 @@
 							let donationPercent = donation > 0 ? Math.round((donation / cost) * 100) : 0;
 							if (donationPercent > 100) donationPercent = 100;
 
-							let subsidy = donation >= 270 ? 100 : 0;
+							// let subsidy = donation >= 270 ? 100 : 0;
 
 							// make sure subsidy together with donation isn't more than goal
-							if (donation + subsidy > cost) {
-								subsidy = cost - donation;
-								if (subsidy < 0) subsidy = 0;
-							}
+							// if (donation + subsidy > cost) {
+							// 	subsidy = cost - donation;
+							// 	if (subsidy < 0) subsidy = 0;
+							// }
 
-							let subsidyPercent = subsidy > 0 ? Math.round(((donation + subsidy) / cost) * 100) : 0;
+							// let subsidyPercent = subsidy > 0 ? Math.round(((donation + subsidy) / cost) * 100) : 0;
 
 							let percent = ((child.total_donation / cost) * 100).toFixed(2);
-							let balance = Math.round(cost - donation - subsidy);
+							let balance = Math.round(cost - donation);
 							if (balance < 0) balance = 0;
 
 							// add to family charts 
@@ -668,15 +668,15 @@
 															</div>
 														</div>`;
 
-							if (subsidy > 0)
-								familyCharts += `
-														<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
-															<div class="bar-bar__circle"></div>
-															<div class="bar-bar__marker">
-																<img src="img/marker.png" />
-																<p>${subsidy}</p>
-															</div>
-														</div>`;
+							// if (subsidy > 0)
+							// 	familyCharts += `
+							// 							<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
+							// 								<div class="bar-bar__circle"></div>
+							// 								<div class="bar-bar__marker">
+							// 									<img src="img/marker.png" />
+							// 									<p>${subsidy}</p>
+							// 								</div>
+							// 							</div>`;
 
 							if (balance > 0)
 								familyCharts += `
