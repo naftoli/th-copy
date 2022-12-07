@@ -13,7 +13,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 //if ($admin_user['auth'] != 'super') {
 //    header("Location: /raffles/shared/forms/eligible_form.php");
 //}
-echo "<pre>"; print_r($admin_user); echo "</pre>";
 $links = [
     269	=> 'https://docs.google.com/spreadsheets/d/1jwoKxYDCe3IyxbVOfXz68AJytifmWaq51se2p4n10lY/edit#gid=0',
     621	=> 'https://docs.google.com/spreadsheets/d/1EmtGrkSR5RT7MbilT23TNd-tyCi_4OyUtM8EtYxJp64/edit#gid=0',
