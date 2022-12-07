@@ -2,7 +2,6 @@
 require_once(dirname(__FILE__)."/../../shared/classes/Prize.php");
 require_once(dirname(__FILE__)."/../../shared/classes/Constants.php");
 require_once(dirname(__FILE__)."/../../../class.globalSettings.php");
-$year = GlobalSettings::getCurrentYear();
 
 use raffles\weekly\Prize as Prize;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
@@ -22,11 +21,10 @@ if (! function_exists("check_first_in_family")) {
 
 if (! function_exists('alreadyWon')) {
     function alreadyWon($user) {
-        global $year;
+        $year = GlobalSettings::getCurrentYear();
         $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
             select raffle_id from raffles where type = 'weekly' and year = $year 
         )";
-        echo $sql; exit;
         $result = mysql_query($sql);
         return mysql_num_rows($result) > 0;
     }
@@ -97,7 +95,7 @@ function weekly_raffle($raffle){
             // if the user is not the first in the family and the school has more then it's quota to give out...
 //            if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]) {
 //            if (alreadyWon($user, $raffle) && count($user_ids) <= $school_limits[$school_id]) {
-            if (alreadyWon($user)) {
+            if (alreadyWon($user['user_id'])) {
                 echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " has already won last raffle. Removing from raffle\n";
                 unset($user_ids[$user['user_id']]); // remove the user from the array
                 $i--; continue; // redo the draw

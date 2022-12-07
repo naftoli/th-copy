@@ -25,7 +25,6 @@ if (! function_exists('alreadyWon')) {
         $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
             select raffle_id from raffles where type = 'monthly' and year = $year
         )";
-        echo $sql; exit;
         $result = mysql_query($sql);
         return mysql_num_rows($result) > 0;
     }
@@ -66,7 +65,7 @@ function monthly_raffle($raffle){
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more then it's quota to give out...
 //             if(!check_first_in_family($user, $winning_families)){
-            if (alreadyWon($user)) {
+            if (alreadyWon($user['user_id'])) {
                  echo $user['school_id']."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                  unset($user_ids[$user['user_id']]); // remove the user from the array
                  continue; // try again
