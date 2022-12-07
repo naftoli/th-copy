@@ -8,24 +8,28 @@ use raffles\weekly\Prize as Prize;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 /************************** ONLY ONE CHILD PER FAMILY **************************/
-function check_first_in_family($user, &$winning_families){
-    // siblings cannot win (if there are more students in the school then the max amount of winners)
-    if(isset($winning_families[$user['admin_id']])){ // if the users "admin_id" is already in the array
-        return false;
-    } elseif($user['admin_id']) { // do not count for null/blank
-        if($user['user_id']) $winning_families[$user['admin_id']] = $user['user_id']; // mark the family as having already won. (avoid nulls);
+if (! function_exists("check_first_in_family")) {
+    function check_first_in_family($user, &$winning_families){
+        // siblings cannot win (if there are more students in the school then the max amount of winners)
+        if (isset($winning_families[$user['admin_id']])) { // if the users "admin_id" is already in the array
+            return false;
+        } elseif ($user['admin_id']) { // do not count for null/blank
+            if ($user['user_id']) $winning_families[$user['admin_id']] = $user['user_id']; // mark the family as having already won. (avoid nulls);
+        }
+        return true; // they are the first in the family
     }
-    return true; // they are the first in the family
 }
 
-function alreadyWon($user) {
-    global $year;
-    $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
-        select raffle_id from raffles where type = 'weekly' and year = $year 
-    )";
-    echo $sql; exit;
-    $result = mysql_query($sql);
-    return mysql_num_rows($result) > 0;
+if (! function_exists('alreadyWon')) {
+    function alreadyWon($user) {
+        global $year;
+        $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
+            select raffle_id from raffles where type = 'weekly' and year = $year 
+        )";
+        echo $sql; exit;
+        $result = mysql_query($sql);
+        return mysql_num_rows($result) > 0;
+    }
 }
 
 function weekly_raffle($raffle){
