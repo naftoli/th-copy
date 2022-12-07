@@ -71,7 +71,10 @@ foreach($raffles as $raffle){
     }
     
     /***************************** SKIP THE SAVING IF THE WEB DID NOT SEND THE "SAVE" COMMAND ********************************/
-    if($web && !$_GET['save']) continue; // if it is on the website and save is not set to on then do not save the results
+    if($web && !$_GET['save']) {
+        echo "<pre>"; print_r($winners); echo "</pre>";
+        continue;
+    } // if it is on the website and save is not set to on then do not save the results
     
     /***************************** SAVE THE WINNERS INTO THE DATABASE ********************************/
     // save the winners to the database    
