@@ -29,7 +29,6 @@ function alreadyWon($user, $type) {
     $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
             select raffle_id from raffles where type = '$type' and year = $year
         )";
-    echo $sql . "<br />";
     $result = mysql_query($sql);
     return mysql_num_rows($result) > 0;
 }
