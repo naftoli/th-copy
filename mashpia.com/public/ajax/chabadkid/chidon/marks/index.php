@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 $year = GlobalSettings::getChidonYear();
 
-echo "<pre>"; print_r($_POST['scores']); echo "</pre>"; exit;
+echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
 
 $marks = [];
 $info = $_POST['mashpia_form'];
