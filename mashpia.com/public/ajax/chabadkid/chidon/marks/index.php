@@ -6,9 +6,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 $year = GlobalSettings::getChidonYear();
 
+echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+
 $marks = [];
 $info = $_POST['mashpia_form'];
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
 foreach ($info as $row) {
     $serial = $row['serial_number'];
     // find out th_chidon_id
