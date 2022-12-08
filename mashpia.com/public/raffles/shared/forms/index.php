@@ -252,7 +252,7 @@ $school_ids = $admin_user['auths']['school'];
           <a href="<?= $links[$id] ?>">
             <div class="button">
               <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
-              <span class="link-text">Prize Sheet</span>
+              <span class="link-text">Prizes Fulfillment Report</span>
             </div>
           </a>
         </div>
