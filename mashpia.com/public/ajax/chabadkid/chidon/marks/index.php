@@ -8,7 +8,7 @@ $year = GlobalSettings::getChidonYear();
 
 $marks = [];
 $info = $_POST['mashpia_form'];
-echo "<pre>"; print_r($marks); echo "</pre>"; exit;
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 foreach ($info as $row) {
     $serial = $row['serial_number'];
     // find out th_chidon_id
