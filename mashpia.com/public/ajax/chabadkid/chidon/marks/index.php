@@ -16,5 +16,20 @@ foreach ($info as $id => $more) {
     }
 }
 
-if ($ct->insertScores($marks)) echo "Marks Saved.";
-else echo "Error saving marks.";
+$test_num = $_POST['test_num'];
+$success = $ct->insertScores($marks);
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let success = <?= $success ? 1 : 0 ?>;
+            let test = <?= $test_num ?>;
+            if (success) {
+                alert('Marks saved.')
+                location.href = "https://mashpia.com/chidonTests/marks.php?test_num=" + test;
+            }
+            else alert('Error saving marks.')
+        </script>
+    </head>
+</html>
