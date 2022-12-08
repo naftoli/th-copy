@@ -7,7 +7,7 @@ $ct = new ChidonTests();
 $year = GlobalSettings::getChidonYear();
 
 $marks = [];
-$info = json_decode($_POST['info']);
+$info = json_decode($_POST['mashpia_form']);
 echo "<pre>"; print_r($marks); echo "</pre>"; exit;
 foreach ($info as $row) {
     $serial = $row['serial_number'];
