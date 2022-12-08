@@ -11,7 +11,7 @@ $info = $_POST['scores'];
 foreach ($info as $id => $more) {
     foreach ($more as $test_num => $scores) {
         foreach ($scores as $type => $mark) {
-            $marks[$id][$test_num]['$type'] = $mark;
+            $marks[$id][$test_num]["$type"] = $mark;
         }
     }
 }
