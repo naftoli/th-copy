@@ -8,6 +8,7 @@ $year = GlobalSettings::getChidonYear();
 
 $marks = [];
 $info = json_decode($_POST['info']);
+echo "<pre>"; print_r($marks); echo "</pre>"; exit;
 foreach ($info as $row) {
     $serial = $row['serial_number'];
     // find out th_chidon_id
