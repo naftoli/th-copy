@@ -889,7 +889,8 @@ abstract class MissionDisplay {
 		}
 		if ($page % 2 != 0 && $this->dblSided == 1) {
 			$page += 1;
-			echo "<div style='page-break-after: always'>&nbsp;</div>";
+//			echo "<div style='page-break-after: always;'>&nbsp;</div>";
+      echo "<div>&nbsp;</div>";
 		}
 
 		echo "<script src='/scripts/JSBarcode.all.min.js'></script>";
