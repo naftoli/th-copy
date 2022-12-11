@@ -1,9 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+    $year = GlobalSettings::getChidonYear();
     $school_number = mysql_real_escape_string($_POST['school']);
     $info = [];
     $sql = "
