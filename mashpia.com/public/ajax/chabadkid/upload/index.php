@@ -16,21 +16,21 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             u.user_serial,
             u.user_code,
             c.class_grade,
-            c.class_sub, 
-            tc.th_chidon_id 
+            c.class_sub 
         FROM
             users u
                 JOIN
             schools s USING (school_id)
                 JOIN
             classes c ON c.class_id = u.class_id 
-                LEFT JOIN 
-            th_chidon tc USING (user_id) 
         WHERE
-            s.school_number = $school_number 
-                AND (tc.year = $year OR tc.year IS NULL)";
+            s.school_number = " . $school_number;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        // find out if child is currently enrolled into chidon this yr
+        $sqlChidon = "select * from th_chidon where year = $year and user_id = " . $row['user_id'];
+        $resultChidon = mysql_query($sqlChidon);
+        $row['chidon_enrolled'] = mysql_num_rows($resultChidon);
         $info[] = $row;
     }
     echo json_encode($info);
