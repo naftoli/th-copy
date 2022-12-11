@@ -36,6 +36,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             $chidon = mysql_fetch_assoc($resultChidon);
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
+        else $row['th_chidon_id'] = 0;
         $row['chidon_enrolled'] = $enrolled;
         $info[] = $row;
     }
