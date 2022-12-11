@@ -27,6 +27,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             s.school_number = " . $school_number;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $row['th_chidon_id'] = 0;
         // find out if child is currently enrolled into chidon this yr
         $enrolled = false;
         $sqlChidon = "select * from th_chidon where year = $year and user_id = " . $row['user_id'];
@@ -36,8 +37,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             $chidon = mysql_fetch_assoc($resultChidon);
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
-        else $row['th_chidon_id'] = 0;
-        $row['chidon_enrolled'] = $enrolled;
+        $row['chidon_enrolled'] = $enrolled ? 1 : 0;
         $info[] = $row;
     }
     echo json_encode($info);
