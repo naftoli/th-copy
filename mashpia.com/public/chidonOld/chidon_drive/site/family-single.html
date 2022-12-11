@@ -51,7 +51,7 @@
 					</p>
 					<p>
 						<span id="childrenNamesHave"></span> committed to learn for <span id="hoursDone"></span> and
-						have undertaken a goal of $<span class="familyGoal"></span> to support this amazing cause.
+						<span id="haveHas">have</span> undertaken a goal of $<span class="familyGoal"></span> to support this amazing cause.
 					</p>
 					<p>
 						Please be a sponsor, and help us reach our family goal. Together we will show them just how
@@ -518,6 +518,8 @@
 							familyGoal += parseFloat(child.goal || 0);
 						};
 
+						// fix up text
+						if (numChildren == 1) $("#haveHas").text('has')
 
 						// let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
 						// $("#totalRegFee").text( totalReg );
@@ -758,12 +760,9 @@
 						$(".sponsor-list").append(sponsorList);
 					} else {
 						alert(info.message);
-						location.href = "intro.html";
+						location.href = "setup.html";
 					}
 				});
-			} else {
-				// invalid url
-				// location.href = "index.html";
 			}
 
 			$("#donationForm").submit(function (e) {
