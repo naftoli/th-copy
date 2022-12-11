@@ -1,4 +1,6 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -26,7 +28,8 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 LEFT JOIN 
             th_chidon tc USING (user_id) 
         WHERE
-            s.school_number = " . $school_number;
+            s.school_number = $school_number 
+                AND (tc.year = $year OR tc.year IS NULL)";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[] = $row;
