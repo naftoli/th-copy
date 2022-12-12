@@ -55,6 +55,18 @@ $endDates = [
 <body>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
     <h1>Eligibility / Registered Report</h1>
+    <div class="infobox">
+      Once registration opens, each child will register for the highest track passed on the 3 tests or the modified track that you gave the child for rewards.
+      <br /><br />
+      It could be that you mistakenly once missed inputting one mark for one child or that you put it in but it didnt save for whatever reason. We want each child to be able to get what they earned, please review what we have each child as eligible for to confirm that it adds up.
+      <br /><br />
+      If there are any issues, please message us BEFORE pressing confirm, once you confirm, there will be no changes.
+      <br /><br />
+      Once registration opens, the children in your school will not have the option to register if you have not pressed the 'Confirm' button.”
+    </div>
+    <br /><br />
+    <button style="padding: 10px;" id="confirm">Confirm Eligibility</button>
+    <br /><br />
     <table>
         <tr>
             <th>School</th>
@@ -104,4 +116,21 @@ $endDates = [
         ?>
     </table>
 </body>
+<script>
+  $("#confirm").click( function(e) {
+    e.preventDefault()
+    $(this).attr('disabled', true)
+    let id = <?= $admin_user['admin_id'] ?>;
+    let year = <?= $year ?>;
+    let button = this
+    $.post('saveConfirmation.php', { id, year }, function(result) {
+      let res = JSON.parse(result)
+      if (res.success) alert('Your school has been confirmed. Your children will now be able to register for the Chidon Experience.')
+      else {
+        alert(res.error)
+        $(button).attr('disabled', false)
+      }
+    })
+  })
+</script>
 </html>
