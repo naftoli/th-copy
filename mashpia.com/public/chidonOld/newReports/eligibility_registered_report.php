@@ -33,9 +33,9 @@ foreach ($schools as $school_id => $name) {
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
 $endDates = [
-    1 => 2459868,
-    2 => 2459928,
-    3 => 2459999
+    1 => 2459894,
+    2 => 2459932,
+    3 => 2459975
 ];
 ?>
 <!DOCTYPE html>
