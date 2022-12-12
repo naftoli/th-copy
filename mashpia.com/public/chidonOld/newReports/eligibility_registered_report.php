@@ -119,15 +119,20 @@ $endDates = [
     </table>
 </body>
 <script>
+  let year = <?= $year ?>;
+
+  $.post('checkConfirmation.php', { year }, function(result) {
+    let res = JSON.parse(result)
+    if (res.alreadyConfirmed) $("#confirm").attr('disabled', true)
+  })
+
   $("#confirm").click( function(e) {
     e.preventDefault()
     $(this).attr('disabled', true)
-    let id = <?= $admin_user['admin_id'] ?>;
-    let year = <?= $year ?>;
     let button = this
-    $.post('saveConfirmation.php', { id, year }, function(result) {
+    $.post('saveConfirmation.php', { year }, function(result) {
       let res = JSON.parse(result)
-      if (res.success) alert('Your school has been confirmed. Your children will now be able to register for the Chidon Experience.')
+      if (res.success) alert(res.msg)
       else {
         alert(res.error)
         $(button).attr('disabled', false)
