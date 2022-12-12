@@ -16,7 +16,12 @@ if (isset($_GET['year'])) $year = $_GET['year'];
 
 $sql = "select school_id from chidon_confirmations where year = " . $year;
 $res = $mysqli->query($sql);
-$confirmations = $res->fetch_all();
+$confirmations = $res->fetch_all(MYSQLI_ASSOC);
+
+$school_ids = [];
+foreach ($confirmations as $conf) {
+  $school_ids[] = $conf['school_id'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,7 +60,7 @@ $confirmations = $res->fetch_all();
             <?php
             foreach ($schools as $id => $school) {
                 echo "<tr><td>" . $school . "</td><td>";
-                if (in_array($id, $confirmations)) echo "yes";
+                if (in_array($id, $school_ids)) echo "yes";
                 else echo "no";
                 echo "</td></tr>";
             }
