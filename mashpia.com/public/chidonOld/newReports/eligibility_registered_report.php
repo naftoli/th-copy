@@ -34,7 +34,7 @@ foreach ($schools as $school_id => $name) {
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
 $endDates = [
     1 => 2459894,
-    2 => 2459932,
+    2 => 2459933,
     3 => 2459975
 ];
 ?>
@@ -66,7 +66,6 @@ $endDates = [
             <th>Eligible Rewards</th>
         </tr>
         <?php
-        $test = new ChidonTests();
         $rewards = [
             'Yesod'     => 'Sweater, Gifts & Yesod Final',
             'Yediah'    => 'Sweater, Gifts, Prizes, & Yediah Final',
@@ -81,7 +80,10 @@ $endDates = [
                 // find out which test number to pass to the highest track function
                 $today = unixtojd();
                 foreach ($endDates as $num => $date) {
-                    if ($date >= $today) break;
+                    if ($today < $date) {
+                        if ($num > 1) $num--; // when test is in future, go back one index if not the first
+                        break;
+                    }
                 }
                 $ct = new ChidonTests();
                 $highest = $ct->getHighestTrackPassed($row, $num)['highest_track'];
