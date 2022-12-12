@@ -85,9 +85,8 @@ $endDates = [
                 }
                 $ct = new ChidonTests();
                 $highest = $ct->getHighestTrackPassed($row, $num);
-                echo $highest; exit;
                 $types = $ct->getTypes();
-                $track = $types[$highest];
+                $track = $types[$highest['highest_track']];
             }
             $highestTrack = $track;
             if (intval($row['class_grade']) === 8 && (in_array(strtolower($highestTrack), ['havonah', 'iyun']))) $highestTrack = 'Khk Trip';
