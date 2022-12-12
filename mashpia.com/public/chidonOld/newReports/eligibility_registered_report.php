@@ -31,6 +31,12 @@ foreach ($schools as $school_id => $name) {
         $info[] = $row;
     }
 }
+// echo "<pre>"; print_r($info); echo "</pre>"; exit;
+$endDates = [
+    1 => 99,
+    2 => 122,
+    3 => 443
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,8 +64,6 @@ foreach ($schools as $school_id => $name) {
             <th>Last Name</th>
             <th>Track Eligible for</th>
             <th>Eligible Rewards</th>
-            <th>Registered</th>
-            <th>Registered for KHK Trip</th>
         </tr>
         <?php
         $test = new ChidonTests();
@@ -73,9 +77,19 @@ foreach ($schools as $school_id => $name) {
         $i = 0;
         foreach ($info as $row) {
             $track = ucwords($row['highest_track']);
+            if (empty($track)) {
+                // find out which test number to pass to the highest track function
+                $today = unixtojd();
+                foreach ($endDates as $num => $date) {
+                    if ($date >= $today) break;
+                }
+                $ct = new ChidonTests();
+                $highest = $ct->getHighestTrackPassed($row, $num);
+                $types = $ct->getTypes();
+                $track = $types[$highest];
+            }
             $highestTrack = $track;
             if (intval($row['class_grade']) === 8 && (in_array(strtolower($highestTrack), ['havonah', 'iyun']))) $highestTrack = 'Khk Trip';
-            else $highestTrack = $track;
             $reward = empty($highestTrack) ? 'none' : $rewards[$highestTrack];
             if ($highestTrack == 'Khk Trip') $reward .= ucwords($track) . ' Final';
             $school = $schools[$row['school_id']];
@@ -83,8 +97,7 @@ foreach ($schools as $school_id => $name) {
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
             $khk = $row['khk_trip'] > 0 ? 'yes' : '';
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
-                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $highestTrack . "</td><td>" . $reward . "</td><td>" .
-                $paid . "</td><td>" . $khk . "</td></tr>";
+                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $highestTrack . "</td><td>" . $reward . "</td></tr>";
         }
         ?>
     </table>
