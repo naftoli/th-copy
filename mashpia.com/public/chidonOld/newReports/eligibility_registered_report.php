@@ -65,7 +65,9 @@ $endDates = [
       Once registration opens, the children in your school will not have the option to register if you have not pressed the 'Confirm' button.”
     </div>
     <br />
+    <?php if ($admin_user['auth'] != 'super') : ?>
     <button style="padding: 10px;" id="confirm">Confirm Eligibility</button>
+    <?php endif; ?>
     <br /><br />
     <table>
         <tr>
