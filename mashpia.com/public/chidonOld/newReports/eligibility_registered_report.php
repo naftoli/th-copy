@@ -85,6 +85,7 @@ $endDates = [
                 }
                 $ct = new ChidonTests();
                 $highest = $ct->getHighestTrackPassed($row, $num);
+                echo $highest; exit;
                 $types = $ct->getTypes();
                 $track = $types[$highest];
             }
