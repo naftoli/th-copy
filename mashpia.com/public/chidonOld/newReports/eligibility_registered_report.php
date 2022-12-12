@@ -64,7 +64,7 @@ $endDates = [
       <br /><br />
       Once registration opens, the children in your school will not have the option to register if you have not pressed the 'Confirm' button.”
     </div>
-    <br /><br />
+    <br />
     <button style="padding: 10px;" id="confirm">Confirm Eligibility</button>
     <br /><br />
     <table>
