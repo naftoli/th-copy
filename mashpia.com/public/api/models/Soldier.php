@@ -363,7 +363,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* REGISTRATION *******************************
     // returns array of registration rates. Call $this->registrationStatus() to get each ones status
     public function registrationRates() {
-        global $current_user;
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
         // add chidon if user is in grade 3+
