@@ -13,7 +13,7 @@ $children = $_POST['children'];
 $tracks = [];
 foreach ($children as $child) {
     $highestTrack = $ct->getHighestTrackPassed($child)['highest_track'];
-    $rewardType = $child['reward_type'];
+    $rewardType = !empty($child['reward_type']) ? $child['reward_type'] : $child['test_type'];
     if ($rewardType != 'highest track passed') {
         if ($highestTrack == '') $highestTrack = $rewardType;
         else {
