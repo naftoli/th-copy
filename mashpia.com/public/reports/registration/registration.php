@@ -162,7 +162,7 @@ foreach ($temp as $row) {
             <th>Soldier</th>
             <th>Registered</th>
             <th>Fee</th>
-            <th>Discount</th>
+            <th>Coupon Discount</th>
             <th>Owes</th>
             <th>Paid</th>
             <th>Balance</th>
