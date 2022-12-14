@@ -187,7 +187,16 @@ foreach ($temp as $row) {
             $stmt->execute([':id' => $student['user_id']]);
             $row = $stmt->fetch();
             if (! $row['school_name']) continue;
-            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], false, true);
+
+            $early = true;
+            $registered = $student['reg_date'];
+            if ($registered) {
+                $early_bird = GlobalSettings::earlyBird();
+                $reg_date = new DateTime($registered);
+                if ($reg_date > $early_bird) $early = false;
+            }
+            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], false, $early);
+
             echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $row['school_number'] . "</td>";
             if ($idx == 0) echo "<td id='$school_id'>";
             else echo "<td>";
