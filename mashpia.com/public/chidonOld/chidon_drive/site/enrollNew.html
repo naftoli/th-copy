@@ -215,55 +215,55 @@
 					Please Note: Extra Purchases Shipping is ONLY TO THE USA!
 				</h5>
 				<h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
-				<h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>
-				<!--                <div class="listSection" style="background-color: #394190; border-radius: 15px;">-->
-				<!--                    <img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />-->
-				<!--                    <ul>-->
-				<!--                        <li>10 Chidon Plates</li>-->
-				<!--                        <li>10 Chidon Cups</li>-->
-				<!--                        <li>10 Chidon Napkins</li>-->
-				<!--                        <li>7 Chidon Latex Balloons (with stand)</li>-->
-				<!--                        <li>1 Chidon Foil Balloon</li>-->
-				<!--                        <li>1 Chidon Tablecloth</li>-->
-				<!--                        <li>2 Laminated Benching Cards</li>-->
-				<!--                    </ul>-->
-				<!--                </div>-->
-				<!--                <div class="flex small-select">-->
-				<!--                    <h5 class="formDetails">-->
-				<!--                        Select how many Celebration Box(es) you would like to purchase - $20/ea-->
-				<!--                    </h5>-->
-				<!--                    <select class="numCelebBoxes" id="num_celeb_boxes">-->
-				<!--                        <script>-->
-				<!--                            for (let i = 0; i < 10; i++) {-->
-				<!--                                document.write("<option value=" + i + ">" + i + "</option>")-->
-				<!--                            }-->
-				<!--                        </script>-->
-				<!--                    </select>-->
-				<!--                </div>-->
-				<!--                <div id="celeb_box_shipping" style="display: none;">-->
-				<!--                    <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>-->
-				<!--                    <div class="flex">-->
-				<!--                        <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="0" />-->
-				<!--                        <label style="display: inline">-->
-				<!--                            Please ship to school free of charge.<br />-->
-				<!--                            Please Note: If you have more than one child your extra purchases will be given to your oldest child that registered.-->
-				<!--                        </label>-->
-				<!--                    </div>-->
-				<!--                    <div class="flex">-->
-				<!--                        <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="10" />-->
-				<!--                        <label style="display: inline">-->
-				<!--                            Please ship to an address in the USA for $10.-->
-				<!--                        </label>-->
-				<!--                    </div>-->
-				<!--                    <div class="flex" style="margin-bottom: 10px;">-->
-				<!--                        <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />-->
-				<!--                    </div>-->
-				<!--                    <div class="flex">-->
-				<!--                        <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />-->
-				<!--                        <div id="celeb_state_span"></div>-->
-				<!--                        <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />-->
-				<!--                    </div>-->
-				<!--                </div>-->
+<!--				<h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>-->
+				<div class="listSection" style="background-color: #394190; border-radius: 15px;">
+						<img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
+						<ul>
+								<li>10 Chidon Plates</li>
+								<li>10 Chidon Cups</li>
+								<li>10 Chidon Napkins</li>
+								<li>7 Chidon Latex Balloons (with stand)</li>
+								<li>1 Chidon Foil Balloon</li>
+								<li>1 Chidon Tablecloth</li>
+								<li>2 Laminated Benching Cards</li>
+						</ul>
+				</div>
+				<div class="flex small-select">
+						<h5 class="formDetails">
+								Select how many Celebration Box(es) you would like to purchase - $20/ea
+						</h5>
+						<select class="numCelebBoxes" id="num_celeb_boxes">
+								<script>
+										for (let i = 0; i < 10; i++) {
+												document.write("<option value=" + i + ">" + i + "</option>")
+										}
+								</script>
+						</select>
+				</div>
+				<div id="celeb_box_shipping" style="display: none;">
+						<h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>
+						<div class="flex">
+								<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="0" />
+								<label style="display: inline">
+										Please ship to school free of charge.<br />
+										Please Note: If you have more than one child your extra purchases will be given to your oldest child that registered.
+								</label>
+						</div>
+						<div class="flex">
+								<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="10" />
+								<label style="display: inline">
+										Please ship to an address in the USA for $10.
+								</label>
+						</div>
+						<div class="flex" style="margin-bottom: 10px;">
+								<input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />
+						</div>
+						<div class="flex">
+								<input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
+								<div id="celeb_state_span"></div>
+								<input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
+						</div>
+				</div>
 
 				<h5 class="title" style="font-weight: bold;">Parents and Grandparents Sweaters</h5>
 				<h5 class="formDetails">Please select how many you want of each type, the size and
@@ -459,7 +459,7 @@
 	var cart_total = 0
 	var addresses = {} // all addresses entered
 	var sweaters = {}
-	var khk_trip = [] // array of users going on khk trip
+	var ultimate_trip = [] // array of users going on ultamite trip
 
 	function getSweaterInfo() {
 		$.post('../ajax/sweaterInfo.php', function( result ) {
@@ -484,15 +484,21 @@
 		return tracks
 	}
 
-	function checkKhkEligibility(child) {
-		return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun')
+	function checkForUltimate(child) {
+		const base = 5782
+		const year = parseInt(child.year)
+		let pastYrs = true
+		const checkYrs = base - year
+		// check history
+		if (checkYrs) {
+			for (let i = 1; i <= checkYrs; i++) {
+				if (child.history[year - i] === 'Yesod') pastYrs = false
+			}
+		}
+		return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun') && pastYrs
 	}
 
-	function checkForRohrGrant(amount) {
-		return amount >= 270 && amount <= 370
-	}
-
-	function getLowest(child, amounts, khk) {
+	function getLowest(child, amounts) {
 		const raised = parseInt(child.raised)
 		const coupon = parseInt(child.coupon_used) === 0 ? parseInt(child.coupon) : 0
 
@@ -502,14 +508,15 @@
 		return lowest
 	}
 
-	function getTrackText(track, trackWon) {
+	function getTrackText(track, ultimate) {
 		let trackText = {
 			'Yesod': "the Chidon Sweater, Gifts & to take the Yesod Final",
 			'Yediah': "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
 			'Havonah': "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
 			'Iyun': "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
-			'Khk Trip': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + trackWon + " Final"
+			'Ultimate': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + track + " Final"
 		}
+		if (ultimate) track = 'Ultimate'
 		return trackText[track]
 	}
 
@@ -518,7 +525,7 @@
 		'Yediah': [200, 180, 150, 120, 100],
 		'Havonah': [300, 250, 225, 200],
 		'Iyun': [350, 300, 250, 220, 200],
-		'Khk Trip': [500, 400, 300, 275, 250]
+		'Ultimate': [500, 400, 300, 275, 250]
 	} // need it for a few functions so it needs to be global
 
 	async function processChildren(admin) {
@@ -575,17 +582,13 @@
 		for (let child of eligible) {
 			if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
 
-			// figure out if child is eligible for khk
+			// figure out if child is eligible for ultimate experience
 			let trackWon = child.track
 			console.log(child)
-			let khk = checkKhkEligibility(child)
-			if (khk) {
-				child.originalTrack = child.track
-				child.track = 'Khk Trip'
-			}
-			let trackText = getTrackText(child.track, trackWon)
+			let ultimate = checkForUltimate(child)
+			let trackText = getTrackText(child.track, ultimate)
 
-			const childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+			const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
 			html += `
                     <div class="kid flex-kids" id="${child.user_id}">
                         <div>
@@ -598,27 +601,28 @@
 
 			// registration heading
 			let amounts, lowest, free
-			if (khk) {
-				if (! khk_trip.includes(child.user_id)) khk_trip.push(child.user_id)
+			if (ultimate) {
+				if (! ultimate_trip.includes(child.user_id)) ultimate_trip.push(child.user_id)
 				html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 				html += `<div class="flex">
-                            <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='0:${child.user_id}' checked />
-                            <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ${trackInfo['Khk Trip'][0]}<br />
+                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' checked />
+                            <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
                                 I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday, 25-27 Adar 2/March 28-30.
                             </h5>
                         </div>
                         <div class="flex">
-                            <input class="inputCheckbox khk_trip" type="radio" name="khk_trip" value='1:${child.user_id}' />
-                            <h5 class="formDetails"><b>Regional Trip</b> ($${trackInfo[child.track][0]}) <br />
+                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='1:${child.user_id}' />
+                            <h5 class="formDetails"><b>Regional Trip</b> ($300) <br />
                             I cannot join the 3 day Ultimate Chidon Experience, however I would like to join
                                 the Regional Trip that is available in my area (including NY)
                             </h5>
                         </div>
-                        <h5 class="formDetails"><span class="title khk_title">Kol Hatorah Kula Payments</span></h5>`
+                        <h5 class="formDetails"><span class="title ultimate_title">Kol Hatorah Kula Payments</span></h5>`
 			}
 
 			// registration
-			amounts = [...trackInfo[child.track]]
+			let track = ultimate ? 'Ultimate' : child.track
+			amounts = [...trackInfo[track]]
 			html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
 			html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
 
@@ -634,7 +638,7 @@
                         You raised $${child.raised} which will be taken off your registration cost.</h5>`
 			}
 
-			lowest = getLowest(child, amounts, khk)
+			lowest = getLowest(child, amounts)
 			if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
 			const subsidy = parseInt(child.subsidy)
 			if (!isNaN(subsidy)) {
@@ -646,8 +650,8 @@
 			else free = false
 			html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!<br /><br />`
 			html += `Please pay as much as you can.<br />`
-			html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-			html += `<option value="">Please Choose</option>`
+			html += `<select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
+			html += `<option value="">I would like to pay</option>`
 			let last = amounts.length - 1
 			for (let i = 0; i <= last; i++) {
 				html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
@@ -656,7 +660,7 @@
 
 			if (child.track === 'Havonah' || child.track === 'Iyun') {
 				let style = ''
-				if (khk) style='display: none'
+				if (ultimate) style='display: none'
 				html += `<br /><div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />
                         You will be joining your school's Regional Trip. Speak to your schools coordinator
                         with regards to any questions you have about your region's trip.</h5>`
@@ -718,31 +722,31 @@
 		$(".children").show();
 		$("select.reg").niceSelect()
 
-		$(".khk_trip").click( function() {
+		$(".ultimate_trip").click( function() {
 			const titles = [
-				'Kol Hatorah Kula Payments',
+				'Ultimate Experience Payments',
 				'Regional Trip Payments'
 			]
 			const costs = [
 				500,
-				360
+				300
 			]
 			const val = $(this).val()
 			const info = val.split(':')
 			const idx = parseInt(info[0])
 			const user_id = info[1]
-			$(".khk_title").text(titles[idx])
+			$(".ultamite_title").text(titles[idx])
 			$(".full_cost").text(costs[idx])
 			calculateReg(idx, user_id)
 			if (idx) {
 				$(this).parent().parent().find('.regional_trip').show()
-				// remove from khk_trip if exists
-				if (khk_trip.includes(user_id)) {
-					khk_trip = khk_trip.filter(user => user !== user_id)
+				// remove from ultimate_trip if exists
+				if (ultimate_trip.includes(user_id)) {
+					ultimate_trip = ultimate_trip.filter(user => user !== user_id)
 				}
 			} else {
 				$(this).parent().parent().find('.regional_trip').hide()
-				if (! khk_trip.includes(user_id)) khk_trip.push(user_id)
+				if (! ultimate_trip.includes(user_id)) ultimate_trip.push(user_id)
 			}
 		})
 
@@ -750,9 +754,9 @@
 			// change to regional trip options
 			let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
 			let child = filtered[0]
-			let track = child.track === 'Khk Trip' ? child.originalTrack : child.track
-			let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Khk Trip']]
-			lowest = getLowest(child, amounts, !idx)
+			let track = child.track === 'Ultamite' ? child.originalTrack : child.track
+			let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultamite']]
+			lowest = getLowest(child, amounts)
 			if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
 			const subsidy = parseInt(child.subsidy)
 			if (!isNaN(subsidy)) {
@@ -764,8 +768,8 @@
 			else free = false
 			let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
 			html += `Please pay as much as you can.<br />`
-			html += `I would like to pay: <select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-			html += `<option value="">Please Choose</option>`
+			html += `<select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
+			html += `<option value="">I would like to pay</option>`
 			let last = amounts.length - 1
 			for (let i = 0; i <= last; i++) {
 				html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
@@ -1193,7 +1197,7 @@
 			checkChoicesAreComplete() &&
 			checkAddresses()
 		) {
-			if (khk_trip.length) Cookies.set('khk_trip', khk_trip)
+			if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			json_cart = JSON.stringify(cart)
 			json_addresses = JSON.stringify(addresses)
 			if (window.localStorage) {
