@@ -23,7 +23,7 @@ $sql = "SELECT
                 JOIN
             mashpiadb.classes c ON c.class_id = u.class_id
         WHERE
-            institution_id = 255
+            institution_id = 9
                 AND resource_name = 'specific achievement card'
                 AND created > '2022-08-31'
         ORDER BY class_grade, class_sub, last, first";
@@ -83,7 +83,7 @@ if ($success) {
     $mysqli->rollback();
     echo "Error deleting rows.";
 }
-//?>
+?>
 <!--<!DOCTYPE html>-->
 <!--<html>-->
 <!--    <head>-->
