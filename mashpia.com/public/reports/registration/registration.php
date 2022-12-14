@@ -187,7 +187,7 @@ foreach ($temp as $row) {
             $stmt->execute([':id' => $student['user_id']]);
             $row = $stmt->fetch();
             if (! $row['school_name']) continue;
-            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], true, true);
+            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], false, true);
             echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $row['school_number'] . "</td>";
             if ($idx == 0) echo "<td id='$school_id'>";
             else echo "<td>";
