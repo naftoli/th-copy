@@ -203,7 +203,7 @@ foreach ($temp as $row) {
             echo $row['school_name'] . "</td><td>" . ($row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : 0)) .
                 "</td><td>" . $row['first'] . ' ' . $row['last'] . "</td><td>" . $row['user_registered'] . "</td><td>" .
                 $fee . "</td><td>" . $student['discount'] . "</td><td>" . ($fee - $student['discount']) . "</td><td>" .
-                $student['amount'] . "</td>";
+                $student['paid'] . "</td>";
             $style = '';
             $balance = (($fee - $student['discount']) - $student['amount']);
             if ($balance > 0) {
