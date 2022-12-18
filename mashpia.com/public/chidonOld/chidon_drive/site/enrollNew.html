@@ -755,7 +755,7 @@
 			let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
 			let child = filtered[0]
 			let track = child.track === 'Ultamite' ? child.originalTrack : child.track
-			let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultamite']]
+			let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultimate']]
 			lowest = getLowest(child, amounts)
 			if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
 			const subsidy = parseInt(child.subsidy)
@@ -1052,10 +1052,15 @@
 			let user_id = $(topElem).attr('id')
 			let elem = '#reg_' + user_id
 			if ($(elem).val()) {
-				if (! $(this).is(':checked')) {
-					alert("you must indicate your acceptance of the Regional Trip Terms.")
-					good = false
-					return false
+				// check if it's showing or not
+				const display = $(topElem).find('.regional_trip').css('display')
+				alert(display)
+				if (display != 'none') {
+					if (!$(this).is(':checked')) {
+						alert("You must indicate your acceptance of the Regional Trip Terms.")
+						good = false
+						return false
+					}
 				}
 			}
 		})

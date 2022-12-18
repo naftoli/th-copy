@@ -168,7 +168,7 @@
 </header>
 <div class="main">
     <div class="wrapper">
-        <h2 class="title">Chidon Checkout</h2>
+        <h2 class="title">Checkout & Pay</h2>
 
         <div class="form" id="checkout">
             <form class="personalInfo">
@@ -481,6 +481,7 @@
             <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
             <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
             <span id="creditCards"></span>
+<!--            <input type='text' id='cvc' placeholder='CVC' style="width: 50px;" />-->
         </div>
         <div class="flex">
             <input type="radio" name="payment" class="inputCheckbox payment" value="1" />
@@ -516,6 +517,8 @@
         if (cart_total) {
             if (parseInt($(".payment:checked").val()) === 0) {
                 card_id = parseInt($(".payment-card").val())
+                // check if cvc is correct
+                // let cvc = $("#cvc").val()
             } else {
                 let num = $("#cc_num").val()
                 cc.num = num.replaceAll(' ', '')
