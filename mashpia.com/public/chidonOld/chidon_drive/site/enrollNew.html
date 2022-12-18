@@ -215,54 +215,53 @@
 					Please Note: Extra Purchases Shipping is ONLY TO THE USA!
 				</h5>
 				<h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
-<!--				<h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>-->
-				<div class="listSection" style="background-color: #394190; border-radius: 15px;">
-						<img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
-						<ul>
-								<li>10 Chidon Plates</li>
-								<li>10 Chidon Cups</li>
-								<li>10 Chidon Napkins</li>
-								<li>7 Chidon Latex Balloons (with stand)</li>
-								<li>1 Chidon Foil Balloon</li>
-								<li>1 Chidon Tablecloth</li>
-								<li>2 Laminated Benching Cards</li>
-						</ul>
+				<div id="celebBoxesSoldOut" style="display: none;">
+					<h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>
 				</div>
-				<div class="flex small-select">
-						<h5 class="formDetails">
-								Select how many Celebration Box(es) you would like to purchase - $20/ea
-						</h5>
-						<select class="numCelebBoxes" id="num_celeb_boxes">
-								<script>
-										for (let i = 0; i < 10; i++) {
-												document.write("<option value=" + i + ">" + i + "</option>")
-										}
-								</script>
-						</select>
-				</div>
-				<div id="celeb_box_shipping" style="display: none;">
-						<h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>
-						<div class="flex">
-								<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="0" />
-								<label style="display: inline">
-										Please ship to school free of charge.<br />
-										Please Note: If you have more than one child your extra purchases will be given to your oldest child that registered.
-								</label>
-						</div>
-						<div class="flex">
-								<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" id="celeb_box_ship" value="10" />
-								<label style="display: inline">
-										Please ship to an address in the USA for $10.
-								</label>
-						</div>
-						<div class="flex" style="margin-bottom: 10px;">
-								<input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />
-						</div>
-						<div class="flex">
-								<input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
-								<div id="celeb_state_span"></div>
-								<input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
-						</div>
+				<div id="celebBoxes">
+					<div class="listSection" style="background-color: #394190; border-radius: 15px;">
+							<img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
+							<ul>
+									<li>10 Chidon Plates</li>
+									<li>10 Chidon Cups</li>
+									<li>10 Chidon Napkins</li>
+									<li>7 Chidon Latex Balloons (with stand)</li>
+									<li>1 Chidon Foil Balloon</li>
+									<li>1 Chidon Tablecloth</li>
+									<li>2 Laminated Benching Cards</li>
+							</ul>
+					</div>
+					<div class="flex small-select">
+							<h5 class="formDetails">
+									Select how many Celebration Box(es) you would like to purchase - $20/ea. THERE ARE
+									<span id="celeb_boxes_total"></span> BOXES AVAILABLE FOR PURCHASE.
+							</h5>
+							<select class="numCelebBoxes" id="num_celeb_boxes"></select>
+					</div>
+					<div id="celeb_box_shipping" style="display: none;">
+							<h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>
+							<div class="flex">
+									<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />
+									<label style="display: inline">
+											Please ship to school free of charge.<br />
+											Please Note: If you have more than one child your extra purchases will be given to your oldest child that registered.
+									</label>
+							</div>
+							<div class="flex">
+									<input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />
+									<label style="display: inline">
+											Please ship to an address in the USA for $10.
+									</label>
+							</div>
+							<div class="flex" style="margin-bottom: 10px;">
+									<input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />
+							</div>
+							<div class="flex">
+									<input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
+									<div id="celeb_state_span"></div>
+									<input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
+							</div>
+					</div>
 				</div>
 
 				<h5 class="title" style="font-weight: bold;">Parents and Grandparents Sweaters</h5>
@@ -419,7 +418,7 @@
 		location.href = newUrl;
 	}
 
-	$("select").niceSelect()
+	$("select").not('#num_celeb_boxes').niceSelect()
 
 	let url = window.location.href;
 	let pos = url.indexOf('?a=');
@@ -459,17 +458,37 @@
 	var cart_total = 0
 	var addresses = {} // all addresses entered
 	var sweaters = {}
+	var celeb_boxes = 950
 	var ultimate_trip = [] // array of users going on ultamite trip
 
 	function getSweaterInfo() {
 		$.post('../ajax/sweaterInfo.php', function( result ) {
-			sweaters = JSON.parse( result )
+			const res = JSON.parse( result )
+			celeb_boxes -= parseInt(res.celeb_boxes)
+			setupCelebBoxes()
+			sweaters = res.sweaters
 			for (let type in sweaters) {
 				let img = sweaters[type]['medium']['img']
 				let el = '#' + type + '_sweater_desc'
 				$(el).before("<img src='http://mashpia.com" + img + "' style='max-height: 75px; margin: 10px;' />")
 			}
 		})
+	}
+
+	function setupCelebBoxes() {
+		if (celeb_boxes > 0) {
+			$("#celeb_boxes_total").text(celeb_boxes)
+			let html = ''
+			for (let i = 1; i <= celeb_boxes; i++) {
+				html += `<option value='${i}'>${i}</option>`
+				if (i == 10) break
+			}
+			$("#num_celeb_boxes").append(html)
+			$("#num_celeb_boxes").niceSelect();
+		} else {
+			$("#celebBoxes").hide()
+			$("#celebBoxesSoldOut").show()
+		}
 	}
 
 	async function getChildren(admin) {
@@ -560,7 +579,7 @@
 		}
 
 		if (! eligible.length) {
-			if (haveTrack.length === registered.length) {
+			if (registered.length && haveTrack.length && haveTrack.length === registered.length) {
 				alert("All your child(ren) that are eligible have already been registered.")
 			} else {
 				let msg = "You do not have any children that are currently able to enroll.";
@@ -735,7 +754,7 @@
 			const info = val.split(':')
 			const idx = parseInt(info[0])
 			const user_id = info[1]
-			$(".ultamite_title").text(titles[idx])
+			$(".ultimate_title").text(titles[idx])
 			$(".full_cost").text(costs[idx])
 			calculateReg(idx, user_id)
 			if (idx) {
@@ -968,7 +987,11 @@
 	}
 
 	function utilityFn(event, elem) {
-		const id = $(elem).attr('id')
+		let id = $(elem).attr('id')
+		if (!id) {
+			let class_names = $(elem).attr('class').split(' ')
+			id = class_names[1] // get celeb_box_ship for celebration boxes shipping
+		}
 		const value = $(elem).val()
 		if (value !== '') addToCart(id, value)
 
@@ -1073,11 +1096,11 @@
 			switch (item.desc) {
 				case 'num_celeb_boxes':
 					if (parseInt(item.value) > 0) {
-						if (! $("#celeb_box_ship:checked").length) {
+						if (! $(".celeb_box_ship:checked").length) {
 							alert("You indicated that you would like some Celebration Boxes, however you have not chosen the shipping method!")
-							$("#celeb_box_ship").eq(0).focus()
+							$(".celeb_box_ship").eq(0).focus()
 							return false
-						} else if ($("#celeb_box_ship:checked").val() > 0) {
+						} else if ($(".celeb_box_ship:checked").val() > 0) {
 							// make sure we have address info
 							if (addresses.celeb_box === undefined) {
 								alert("You have asked for Celebration Boxes to be shipped to you, but you haven't provided us with an address!")

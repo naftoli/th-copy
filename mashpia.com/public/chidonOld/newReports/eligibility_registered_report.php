@@ -32,11 +32,6 @@ foreach ($schools as $school_id => $name) {
     }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
-$endDates = [
-    1 => 2459894,
-    2 => 2459933,
-    3 => 2459975
-];
 ?>
 <!DOCTYPE html>
 <html>
@@ -91,16 +86,8 @@ $endDates = [
         foreach ($info as $row) {
             $track = ucwords($row['highest_track']);
             if (empty($track)) {
-                // find out which test number to pass to the highest track function
-                $today = unixtojd();
-                foreach ($endDates as $num => $date) {
-                    if ($today < $date) {
-                        if ($num > 1) $num--; // when test is in future, go back one index if not the first
-                        break;
-                    }
-                }
                 $ct = new ChidonTests();
-                $highest = $ct->getHighestTrackPassed($row, $num)['highest_track'];
+                $highest = $ct->getHighestTrackPassed($row)['highest_track'];
                 $types = $ct->getTypes();
                 if (! empty($highest)) $track = $types[$highest];
             }

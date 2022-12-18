@@ -31,11 +31,15 @@ while ( $row = mysql_fetch_assoc($result) ) {
 }
 
 $purchases = [];
-$sql = "select * from extra_purchases where item = 'sweater' and year = " . $year;
+$celeb_boxes = 0;
+$sql = "select * from extra_purchases where year = " . $year;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    if (isset($purchases[$row['type_of_sweater']][$row['size']])) $purchases[$row['type_of_sweater']][$row['size']] += intval($row['amount']);
-    else $purchases[$row['type_of_sweater']][$row['size']] = intval($row['amount']);
+    if ($row['item'] == 'sweater') {
+        if (isset($purchases[$row['type_of_sweater']][$row['size']])) $purchases[$row['type_of_sweater']][$row['size']] += intval($row['amount']);
+        else $purchases[$row['type_of_sweater']][$row['size']] = intval($row['amount']);
+    }
+    else $celeb_boxes += intval($row['amount']);
 }
 
 $info = [];
@@ -50,4 +54,8 @@ foreach ($sweaters as $type => $more) {
         $info[$type][$sweater_size]['img'] = $details['img'];
     }
 }
-echo json_encode( $info );
+
+echo json_encode([
+    'sweaters'      => $info,
+    'celeb_boxes'   => $celeb_boxes
+]);
