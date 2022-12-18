@@ -1037,6 +1037,7 @@
 		// check if size was already chosen
 		let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
 		if (!size) {
+			$(this).blur()
 			alert('You must first choose a size!')
 			return false
 		}
