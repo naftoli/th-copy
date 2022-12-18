@@ -19,9 +19,7 @@ foreach ($info as $school => $children) {
   else $myShliach = false;
   foreach ($children as $child) {
     if (is_array($child['award'])) {
-      foreach ($child['award'] as $award) {
-        $data[$award][$school][] = $child;
-      }
+      foreach ($child['award'] as $award) $data[$award][$school][] = $child;
       if ($myShliach) {
           // find admin id
           foreach ($admins as $admin_id => $more) {
@@ -40,9 +38,7 @@ foreach ($info as $school => $children) {
         // find admin id
         foreach ($admins as $admin_id => $more) {
           foreach ($more as $user_id) {
-            if ($user_id == $child['user_id']) {
-              $adminsSorted[$admin_id][$child['award']][] = $user_id;
-            }
+            if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
           }
         }
       }
@@ -117,6 +113,7 @@ ksort($data);
                     if (in_array($row['school_id'], [61, 269])) {
                         // find number of child in admins array
                         if (!isset($adminsSorted[$row['parent_id']][$award])) {
+                          echo "Award: " . $award;
                           echo "<pre>"; print_r($row); print_r($adminsSorted[$row['parent_id']]); echo "</pre>"; exit;
                         }
                         $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$award]);
