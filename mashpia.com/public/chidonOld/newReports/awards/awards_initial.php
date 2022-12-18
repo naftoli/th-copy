@@ -110,12 +110,9 @@ ksort($data);
                     $code = '';
                     if (in_array($row['school_id'], [61, 269])) {
                         // find number of child in admins array
-                        if (!isset($adminsSorted[$row['parent_id']][$award])) {
-                          echo "Award: " . $award;
-                          echo "<pre>"; print_r($row); print_r($adminsSorted[$row['parent_id']]); echo "</pre>"; exit;
-                        }
                         $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$award]);
-                        $code = $row['parent_id'] . '-' . ($key + 1);
+                        if ($key !== false) $code = $row['parent_id'] . '-' . ($key + 1);
+                        else $code = $row['parent_id'] . '-';
                     } else {
                         $grade = $row['school_id'] . '-' . $row['class_grade'];
                         if ($previousGrade != $grade) {
