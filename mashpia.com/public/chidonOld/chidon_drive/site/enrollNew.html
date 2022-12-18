@@ -479,7 +479,7 @@
 		if (celeb_boxes > 0) {
 			$("#celeb_boxes_total").text(celeb_boxes)
 			let html = ''
-			for (let i = 1; i <= celeb_boxes; i++) {
+			for (let i = 0; i <= celeb_boxes; i++) {
 				html += `<option value='${i}'>${i}</option>`
 				if (i == 10) break
 			}
