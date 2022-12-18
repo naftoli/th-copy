@@ -21,16 +21,18 @@ foreach ($info as $school => $children) {
     if (is_array($child['award'])) {
       foreach ($child['award'] as $award) {
         $data[$award][$school][] = $child;
-        if ($myShliach) {
+      }
+      if ($myShliach) {
           // find admin id
           foreach ($admins as $admin_id => $more) {
-            foreach ($more as $user_id) {
-              if ($user_id == $child['user_id']) {
-                $adminsSorted[$admin_id][$award][] = $user_id;
+              foreach ($more as $user_id) {
+                  if ($user_id == $child['user_id']) {
+                    foreach ($child['award'] as $award) {
+                      $adminsSorted[$admin_id][$award][] = $user_id;
+                    }
+                  }
               }
-            }
           }
-        }
       }
     } else {
       $data[$child['award']][$school][] = $child;
