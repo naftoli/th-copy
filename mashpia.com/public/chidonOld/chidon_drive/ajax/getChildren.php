@@ -17,7 +17,7 @@ function getChildren() {
     // track, raised, grade, trip location
     $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, c.class_grade as grade, 
                 tc.th_chidon_id, tc.test_type, tc.reward_type, tc.payment_request as subsidy, 
-                tc.date_paid, IFNULL(cc.value, 0) as coupon, cc.used as coupon_used, 
+                tc.date_paid, IFNULL(cc.value, 0) as coupon, cc.used as coupon_used, cc.reason as coupon_reason,  
                 conf.chidon_confirmation_id as schoolConfirmed, tc.year 
             from users u 
             join schools s using (school_id)
@@ -52,8 +52,8 @@ function getChildren() {
             ]);
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
-//            $children[$i]['raised'] = 200;
-//            $children[$i]['schoolConfirmed'] = 1;
+            $children[$i]['raised'] = 200;
+            $children[$i]['schoolConfirmed'] = 1;
 
             $stmt2->execute([':user' => $child['user_id']]);
             $rows = $stmt2->fetchAll();

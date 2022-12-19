@@ -307,7 +307,7 @@
     }
 
     if (! Cookies.get('chidon_admin')) {
-        location.href = 'enroll_5782.html'
+        location.href = 'enrollNew.html'
     }
 
     $('#menu-opener').click(function (e) {
@@ -360,10 +360,16 @@
         cart = JSON.parse(Cookies.get('cart'))
         addresses = JSON.parse(Cookies.get('addresses'))
     }
-    if (!cart.length) location.href = 'enroll_5782.html'
+    if (!cart.length) location.href = 'enrollNew.html'
 
-    console.log(cart)
-    console.log(addresses)
+    let coupons, raised // keep track of coupons and raised
+    if (window.localStorage) {
+        coupons = window.localStorage.getItem('coupons')
+        raised = window.localStorage.getItem('raised')
+    } else {
+        coupons = Cookies.get('coupons')
+        raised = Cookies.get('raised')
+    }
 
     let names = cart.filter(item => item.desc === 'names')
     if (names.length) children = names[0].value
@@ -545,15 +551,7 @@
             return false
         }
 
-        let coupons, raised
-        if (window.localStorage) {
-            coupons = window.localStorage.getItem('coupons')
-            raised = window.localStorage.getItem('raised')
-        } else {
-            coupons = Cookies.get('coupons')
-            raised = Cookies.get('raised')
-        }
-
+        const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
         $.post('../ajax/processPayment5782.php', {
             admin_id: admin.admin_id,
             admin_email,
@@ -565,25 +563,19 @@
             sweaters,
             addresses,
             coupons,
-            raised
+            raised,
+            tracks
         }, function(result) {
             const res = JSON.parse(result)
             if (res.success) {
                 alert(res.msg)
                 // save customer to db if needed
                 if (Cookies.get('customer_id')) $.post('../ajax/setCustomerId.php', { admin_id: admin.admin_id })
-                if (window.localStorage) {
-                    window.localStorage.removeItem('cart')
-                    window.localStorage.removeItem('addresses')
-                    window.localStorage.removeItem('coupons')
-                    window.localStorage.removeItem('raised')
-                } else {
-                    Cookies.remove('cart')
-                    Cookies.remove('addresses')
-                    Cookies.remove('coupons')
-                    Cookies.remove('raised')
+                let items = ['cart', 'addresses', 'coupons', 'raised', 'tracks', 'ultimate_trip']
+                for (let item of items) {
+                    if (window.localStorage) window.localStorage.removeItem(item)
+                    else Cookies.remove(item)
                 }
-                Cookies.remove('ultimate_trip')
                 Cookies.remove('myshliach')
                 location.href = 'http://mashpia.com/mobile'
             }

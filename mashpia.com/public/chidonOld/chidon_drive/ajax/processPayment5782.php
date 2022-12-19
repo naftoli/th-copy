@@ -40,8 +40,12 @@ $celebBoxShipping = 0;
 $sweater_info = [];
 $sweater_shipping = 0;
 $emailMsg = '';
-$coupons = arrayByField(json_decode($_POST['coupons']), 'user_id', 'coupon');
-$raised = arrayByField(json_decode($_POST['raised']), 'user_id', 'raised');
+$couponsArr = json_decode($_POST['coupons']);
+$coupons = arrayByField($couponsArr, 'user_id', '');
+$raisedArr = json_decode($_POST['raised']);
+$raised = arrayByField($raisedArr, 'user_id', 'raised');
+$tracksArr = json_decode($_POST['tracks']);
+$tracks = arrayByField($tracksArr, 'user_id', 'track');
 
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
@@ -81,10 +85,13 @@ $sql = "insert into purchase_addresses set
 $sqlAddress = $MASHPIA_DB->prepare($sql);
 
 //******************* CUSTOM FUNCTIONS ***********************/
-function arrayByField($rows, $key, $value) {
+function arrayByField($array, $key, $value) {
     $info = [];
-    foreach ($rows as $row) {
-        $info[$row[$key]] = $row[$value];
+    if (!empty($array)) {
+        foreach ($array as $obj) {
+            if (!$value) $info[$obj->$key] = (array) $obj;
+            else $info[$obj->$key] = $obj->$value;
+        }
     }
     return $info;
 }
@@ -331,23 +338,23 @@ function extractAddress($info) {
 }
 
 function getEmailMsg($trans_id) {
-    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised;
+    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks;
 
     define('CELEB_BOX_COST', 20);
     define('SWEATER_COST', 25);
 
-    $msg = '';
+    $msg = "Mazal Tov for registering for the Chidon Experience<br /><br />";
+    $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
 
     if ($users) {
-        $msg .= "Mazal Tov for registering for the Chidon Experience<br /><br />";
-        $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
         $msg .= "REGISTRATION<br /><br /><blockquote>";
         foreach ($users as $user_id => $amount) {
             $msg .= "Registered " . $user_info[$user_id] . " for: $" . $amount . "<br />";
-            $msg .= "Track: <br />";
+            $msg .= "Track: " . $tracks[$user_id] . "<br />";
             if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
                 $msg .= "Discounts applied:<br /><ul>";
-                if (isset($coupons[$user_id])) $msg .= "<li>A $" . $coupons[$user_id] . " coupon has been applied.</li>";
+                if (isset($coupons[$user_id])) $msg .= "<li>A $" . $coupons[$user_id]['coupon'] . " coupon has been applied 
+                    (" . $coupons[$user_id]['coupon_reason'] . ").</li>";
                 if (isset($raised[$user_id])) $msg .= "<li>A $" . $raised[$user_id] . " deduction was applied from what was raised on 
                     the Chidon Drive.</li>";
                 $msg .= "</ul>";
@@ -359,22 +366,21 @@ function getEmailMsg($trans_id) {
     if ($celebBoxes || $sweaters) {
         $msg .= "EXTRA PURCHASES<br /><br /><blockquote>";
         if ($celebBoxes) $msg .= "You purchased " . $celebBoxes . " Celebration Boxes for: $" . ($celebBoxes * CELEB_BOX_COST) . "<br />";
-        if ($celebBoxShipping) $msg .= "Will be shipped to: " . extractAddress($addresses['celeb_box']) . "<br />";
+        if ($celebBoxShipping) $msg .= "It will be shipped to: " . extractAddress($addresses['celeb_box']) . "<br />";
         else $msg .= "Will be sent to your child's school.<br />";
         if ($sweaters) {
             $msg .= "Sweater(s) Purchased:<br />";
-            foreach ($sweater_info as $type => $more)  {
-                foreach ($more as $num_sweaters => $sweater) {
+            foreach ($sweater_info as $type => $other)  {
+                foreach ($other as $num_sweaters => $sweater) {
                     $size = $sweater['size'];
-                    $shipping = parseInt($sweater['ship']);
+                    $shipping = intval($sweater['ship']);
                     for ($i = 1; $i <= $num_sweaters; $i++) {
                         $typeStr = str_replace('_', ' ', $type);
-                        $msg .= $size . " " . ucwords($typeStr) . " purchased.";
+                        $msg .= $size . " " . ucwords($typeStr) . " purchased.<br />";
                         if ($shipping) {
                             $key = $type . "_" . $i;
                             $msg .= "Will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
-                        }
-                        else "Will be sent to you child's school.<br />";
+                        } else $msg .= "Will be sent to you child's school.<br />";
                     }
                 }
             }
@@ -382,7 +388,7 @@ function getEmailMsg($trans_id) {
         $msg .= "</blockquote><br />";
     }
 
-    if ($to_charge) $msg .= "You were charged a total of: " . $to_charge . " today. Your transaction ID is: " . $trans_id . "<br /><br />";
+    if ($to_charge) $msg .= "You were charged a total of: " . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
 
     $msg .= "All purchases are non-refundable.<br /><br />Please continue to review for the Chidon Final.<br /><br />";
     $msg .= "If you have any questions, please email <a href='mailto:chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a><br /><br />";
@@ -428,6 +434,7 @@ $trans_id = 0;
 if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
     if ($to_charge) {
         $payment = processFee();
+        $payment = ['transactionResponse' => 23434555];
         if (! $payment) {
             $MASHPIA_DB->rollBack();
             $info['success'] = false;
