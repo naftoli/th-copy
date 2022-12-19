@@ -148,7 +148,7 @@ class NewTasks {
                         end_date = " . $this->dates['end'] . ",
 						lang_id = " . $this->lang . ", 
                         personal = 1";
-                if ( $result = mysql_query( $sql ) ) {
+                if ( mysql_query( $sql ) ) {
                     $this->mission_id = mysql_insert_id();
                     return true;
                 } else {
@@ -190,7 +190,7 @@ class NewTasks {
         if ( $grid_id ) {
             $sql .= ", grid_id = " . $grid_id;
         }
-        if ( $result = mysql_query( $sql ) ) {
+        if ( mysql_query( $sql ) ) {
             return true;
         } 
         return false;

@@ -434,7 +434,6 @@ $trans_id = 0;
 if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
     if ($to_charge) {
         $payment = processFee();
-        $payment = ['transactionResponse' => 23434555];
         if (! $payment) {
             $MASHPIA_DB->rollBack();
             $info['success'] = false;
