@@ -208,4 +208,16 @@ class MivtzoimPurchases {
             return false;
         }
     }
+
+    /**
+     * gets list of items available for type / yom tov
+     */
+    public function getItemsByType($type) {
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM mashpia_purchases.mivtzoim_items WHERE yom_tov = :type
+        ");
+        $stmt->execute(['type' => $type]);
+        $rows = $stmt->fetchAll();
+        return $rows;
+    }
 }

@@ -129,62 +129,62 @@ if ( !empty( $users ) ) {
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
 
         //mivtza lulav
-        $lulavSchools = [];
-        $sqlLulav = "select ls.*
-                     from lulav_settings ls
-                     join schools s using (school_id)
-                     where school_country in ('United States','US','USA','U.S.A.','Canada','canada')
-                     and year = " . $reg_year;
-        $resLulav = mysql_query( $sqlLulav );
-        while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
-           if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
-        }
+//        $lulavSchools = [];
+//        $sqlLulav = "select ls.*
+//                     from lulav_settings ls
+//                     join schools s using (school_id)
+//                     where school_country in ('United States','US','USA','U.S.A.','Canada','canada')
+//                     and year = " . $reg_year;
+//        $resLulav = mysql_query( $sqlLulav );
+//        while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
+//           if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
+//        }
 
-         $children[$row['user_id']]['mivtzaLulav'] = 0;
-         if ( $children[$row['user_id']]['schoolRegistered']
-         	&& $children[$row['user_id']]['schoolTypeRegistered']
-         	&& $children[$row['user_id']]['user_registered']
-         	&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
-         	) {
-         	$children[$row['user_id']]['lulavPurchased'] = 0;
-         	$children[$row['user_id']]['mivtzaLulav'] = 1;
-         	$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
-         }
+//         $children[$row['user_id']]['mivtzaLulav'] = 0;
+//         if ( $children[$row['user_id']]['schoolRegistered']
+//         	&& $children[$row['user_id']]['schoolTypeRegistered']
+//         	&& $children[$row['user_id']]['user_registered']
+//         	&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
+//         	) {
+//         	$children[$row['user_id']]['lulavPurchased'] = 0;
+//         	$children[$row['user_id']]['mivtzaLulav'] = 1;
+//         	$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
+//         }
+//
+//         // find out if user already purchases a set
+//         if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
+//         	$sqlPurchased = "select * from mashpia_purchases.purchase_details
+//                            join mashpia_purchases.purchases using (purchase_id)
+//                            where item_id = 1 and user_id = " . $row['user_id'] . " and year = " . $reg_year;
+//         	$resPurchased = mysql_query( $sqlPurchased );
+//         	if ( mysql_num_rows( $resPurchased ) ) {
+//         		$children[$row['user_id']]['lulavPurchased'] = 1;
+//         	}
+//         }
 
-         // find out if user already purchases a set
-         if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
-         	$sqlPurchased = "select * from mashpia_purchases.purchase_details
-                            join mashpia_purchases.purchases using (purchase_id)
-                            where item_id = 1 and user_id = " . $row['user_id'] . " and year = " . $reg_year;
-         	$resPurchased = mysql_query( $sqlPurchased );
-         	if ( mysql_num_rows( $resPurchased ) ) {
-         		$children[$row['user_id']]['lulavPurchased'] = 1;
-         	}
-         }
-
-         // mivtza chanuka
-         $children[$row['user_id']]['menorah'] = 0;
-         $children[$row['user_id']]['brochure'] = 0;
-         $chanukaSchools = MivtzoimSetting::getEnabledSchools( $chidon_year, [2, 3] );
-         foreach ( $chanukaSchools as $school ) {
-         	$school_id = $school['school_id'];
-         	if (
-         		$row['school_id'] == $school_id &&
-         		$children[$row['user_id']]['schoolRegistered'] &&
-         		$children[$row['user_id']]['schoolTypeRegistered'] &&
-         		$children[$row['user_id']]['user_registered']
-         	) {
-         		if ( $school['item_id'] == 2 ) {
-         			$children[$row['user_id']]['menorah'] = 1;
-         			$children[$row['user_id']]['menorah_purchased'] = 0;
-         			$children[$row['user_id']]['menorah_shipping'] = $school['shipping_charge'];
-         		} else if ( $school['item_id'] == 3 ) {
-         			$children[$row['user_id']]['brochure'] = 1;
-         			$children[$row['user_id']]['brochure_purchased'] = 0;
-         			$children[$row['user_id']]['brochure_shipping'] = $school['shipping_charge'];
-         		}
-         	}
-         }
+//         // mivtza chanuka
+//         $children[$row['user_id']]['menorah'] = 0;
+//         $children[$row['user_id']]['brochure'] = 0;
+//         $chanukaSchools = MivtzoimSetting::getEnabledSchools( $chidon_year, [2, 3] );
+//         foreach ( $chanukaSchools as $school ) {
+//         	$school_id = $school['school_id'];
+//         	if (
+//         		$row['school_id'] == $school_id &&
+//         		$children[$row['user_id']]['schoolRegistered'] &&
+//         		$children[$row['user_id']]['schoolTypeRegistered'] &&
+//         		$children[$row['user_id']]['user_registered']
+//         	) {
+//         		if ( $school['item_id'] == 2 ) {
+//         			$children[$row['user_id']]['menorah'] = 1;
+//         			$children[$row['user_id']]['menorah_purchased'] = 0;
+//         			$children[$row['user_id']]['menorah_shipping'] = $school['shipping_charge'];
+//         		} else if ( $school['item_id'] == 3 ) {
+//         			$children[$row['user_id']]['brochure'] = 1;
+//         			$children[$row['user_id']]['brochure_purchased'] = 0;
+//         			$children[$row['user_id']]['brochure_shipping'] = $school['shipping_charge'];
+//         		}
+//         	}
+//         }
 
         // selling game sets
 //        $item_id = 4;
