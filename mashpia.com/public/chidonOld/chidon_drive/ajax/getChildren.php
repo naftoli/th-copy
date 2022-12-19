@@ -52,8 +52,8 @@ function getChildren() {
             ]);
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
-            $children[$i]['raised'] = 200;
-            $children[$i]['schoolConfirmed'] = 1;
+//            $children[$i]['raised'] = 200;
+//            $children[$i]['schoolConfirmed'] = 1;
 
             $stmt2->execute([':user' => $child['user_id']]);
             $rows = $stmt2->fetchAll();

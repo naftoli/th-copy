@@ -40,6 +40,8 @@ $celebBoxShipping = 0;
 $sweater_info = [];
 $sweater_shipping = 0;
 $emailMsg = '';
+$coupons = arrayByField(json_decode($_POST['coupons']), 'user_id', 'coupon');
+$raised = arrayByField(json_decode($_POST['raised']), 'user_id', 'raised');
 
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
@@ -79,6 +81,14 @@ $sql = "insert into purchase_addresses set
 $sqlAddress = $MASHPIA_DB->prepare($sql);
 
 //******************* CUSTOM FUNCTIONS ***********************/
+function arrayByField($rows, $key, $value) {
+    $info = [];
+    foreach ($rows as $row) {
+        $info[$row[$key]] = $row[$value];
+    }
+    return $info;
+}
+
 function processCart() {
     global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $iyun, $reg_cost;
 
@@ -192,8 +202,8 @@ function processKhk() {
     global $sqlKhk, $year;
 
     $success = true;
-    if (isset($_COOKIE['khk_trip'])) {
-        $khk_trip = json_decode($_COOKIE['khk_trip']);
+    if (isset($_COOKIE['ultimate_trip'])) {
+        $khk_trip = json_decode($_COOKIE['ultimate_trip']);
         foreach ($khk_trip as $user_id) {
             $res = $sqlKhk->execute([
                 ':year' => $year,
@@ -304,10 +314,10 @@ function redeemCoupons() {
     // get serial numbers
     $serials = [];
     $user_ids = array_keys($users);
-    $sql = "select user_serial from users where user_id in (" . implode(',', $user_ids) . ")";
+    $sql = "select user_id, user_serial from users where user_id in (" . implode(',', $user_ids) . ")";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $serials[] = $row['user_serial'];
+        $serials[$row['user_id']] = $row['user_serial'];
     }
 
     // redeem coupons
@@ -316,8 +326,12 @@ function redeemCoupons() {
     }
 }
 
+function extractAddress($info) {
+    return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
+}
+
 function getEmailMsg($trans_id) {
-    global $iyun, $users, $user_info, $shipping, $celebBoxes, $celebBoxShipping, $sweaters, $sweater_shipping, $to_charge, $reg_cost;
+    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised;
 
     define('CELEB_BOX_COST', 20);
     define('SWEATER_COST', 25);
@@ -325,42 +339,54 @@ function getEmailMsg($trans_id) {
     $msg = '';
 
     if ($users) {
-        $msg .= "THANK YOU FOR REGISTERING YOUR CHILD(REN).<br /><br />";
-        $msg .= 'Your registration is complete for ';
-        $numUsers = count($users);
-        $i = 1;
+        $msg .= "Mazal Tov for registering for the Chidon Experience<br /><br />";
+        $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
+        $msg .= "REGISTRATION<br /><br /><blockquote>";
         foreach ($users as $user_id => $amount) {
-            $msg .= $user_info[$user_id];
-            if ($i++ < $numUsers) $msg .= ' and ';
-        }
-        $msg .= ".<br />";
-        if ($iyun) $msg .= 'The Iyun part of the final will be online on Sunday, 10 Adar 2 (March 13).<br />';
-        $msg .= "<br />";
-    }
-
-    // check if there was payment
-    if ($to_charge) {
-        if (! $users) {
-            $msg .= "THANK YOU FOR YOUR PURCHASES.<br /><br />";
-        }
-        $msg .= "Your payment of $" . $to_charge . " was received. Your transaction ID for your records is: " .
-            $trans_id . ".<br /><br />";
-
-        $msg .= "<b>A Summary of your charges is as follows:</b><br /><br />";
-        if ($users) $msg .= "Total Registration Charges: $" . (intval($reg_cost) + intval($shipping)) . "<br />";
-        if ($celebBoxes) $msg .= "Total Celebration Box(es) Charge: $" . (intval($celebBoxes) * CELEB_BOX_COST + intval($celebBoxShipping)) . "<br />";
-        if ($sweaters) {
-            $total = 0;
-            foreach ($sweaters as $type => $amount) {
-                $total += intval($amount) * SWEATER_COST;
+            $msg .= "Registered " . $user_info[$user_id] . " for: $" . $amount . "<br />";
+            $msg .= "Track: <br />";
+            if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
+                $msg .= "Discounts applied:<br /><ul>";
+                if (isset($coupons[$user_id])) $msg .= "<li>A $" . $coupons[$user_id] . " coupon has been applied.</li>";
+                if (isset($raised[$user_id])) $msg .= "<li>A $" . $raised[$user_id] . " deduction was applied from what was raised on 
+                    the Chidon Drive.</li>";
+                $msg .= "</ul>";
             }
-            $msg .= "Total Sweaters Charge: $" . ($total + intval($sweater_shipping)) . "<br />";
         }
-        $msg .= "<br /><b>Grand Total: $" . $to_charge . "</b>.<br /><br />";
+        $msg .= "</blockquote><br /><br />";
     }
 
-    $msg .= "Please continue to review for the Chidon Final on Wednesday, 6 Adar 2 (March 9).<br /><br />
-        If you have any questions, please email chidon@tzivoshashem.org.<br /><br />Much Hatzlocha!<br />Chidon HQ";
+    if ($celebBoxes || $sweaters) {
+        $msg .= "EXTRA PURCHASES<br /><br /><blockquote>";
+        if ($celebBoxes) $msg .= "You purchased " . $celebBoxes . " Celebration Boxes for: $" . ($celebBoxes * CELEB_BOX_COST) . "<br />";
+        if ($celebBoxShipping) $msg .= "Will be shipped to: " . extractAddress($addresses['celeb_box']) . "<br />";
+        else $msg .= "Will be sent to your child's school.<br />";
+        if ($sweaters) {
+            $msg .= "Sweater(s) Purchased:<br />";
+            foreach ($sweater_info as $type => $more)  {
+                foreach ($more as $num_sweaters => $sweater) {
+                    $size = $sweater['size'];
+                    $shipping = parseInt($sweater['ship']);
+                    for ($i = 1; $i <= $num_sweaters; $i++) {
+                        $typeStr = str_replace('_', ' ', $type);
+                        $msg .= $size . " " . ucwords($typeStr) . " purchased.";
+                        if ($shipping) {
+                            $key = $type . "_" . $i;
+                            $msg .= "Will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
+                        }
+                        else "Will be sent to you child's school.<br />";
+                    }
+                }
+            }
+        }
+        $msg .= "</blockquote><br />";
+    }
+
+    if ($to_charge) $msg .= "You were charged a total of: " . $to_charge . " today. Your transaction ID is: " . $trans_id . "<br /><br />";
+
+    $msg .= "All purchases are non-refundable.<br /><br />Please continue to review for the Chidon Final.<br /><br />";
+    $msg .= "If you have any questions, please email <a href='mailto:chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a><br /><br />";
+    $msg .= "Wishing you much continued Nachas,<br /<br />Chidon HQ";
 
     $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
             To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a></footer>";

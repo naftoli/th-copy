@@ -213,8 +213,7 @@
                 <div class="flex">
                     <input type="checkbox" name="terms1" class="inputCheckbox" id="terms1" />
                     <label for="terms1">We are doing our best to ensure all items will be received at your school
-                        or at the US addresses specified before the Chidon Event on Sunday, 2 Nissan 5782, April 3rd 2022.
-                        We do not take responsibility in case of unforeseen circumstances.</label>
+                        or at the US addresses specified before the Chidon Event. We do not take responsibility in case of unforeseen circumstances.</label>
                 </div>
                 <div class="flex">
                     <input type="checkbox" name="terms2" class="inputCheckbox" id="terms2" />
@@ -475,7 +474,7 @@
     html += `<h5 class="formDetails">Total Charge Today: $${cart_total}</h5>`
 
     // payment
-    html += `<h5 class="formDetails"><span class="title">Payment</span></h5>`
+    html += `<h5 class="formDetails" id="paymentDetails"><span class="title">Payment</span></h5>`
     html += `
         <div class="flex">
             <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
@@ -493,6 +492,13 @@
     if (reg.length && cart_total === 0) $(".processPayment").val('Register')
     else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
     else if (cart_total > 0) $(".processPayment").val('Pay')
+
+    // hide payment option if nothing is being charged
+    if (cart_total === 0) {
+        $("#paymentDetails").next('div').next('div').hide()
+        $("#paymentDetails").next('div').hide()
+        $("#paymentDetails").hide()
+    }
 
     $(".payment").click( function() {
         if (parseInt($(this).val())) {
@@ -539,7 +545,28 @@
             return false
         }
 
-        $.post('../ajax/processPayment5782.php', { admin_id: admin.admin_id, admin_email, cart_total, shipping, card_id, cc, cart, sweaters, addresses}, function(result) {
+        let coupons, raised
+        if (window.localStorage) {
+            coupons = window.localStorage.getItem('coupons')
+            raised = window.localStorage.getItem('raised')
+        } else {
+            coupons = Cookies.get('coupons')
+            raised = Cookies.get('raised')
+        }
+
+        $.post('../ajax/processPayment5782.php', {
+            admin_id: admin.admin_id,
+            admin_email,
+            cart_total,
+            shipping,
+            card_id,
+            cc,
+            cart,
+            sweaters,
+            addresses,
+            coupons,
+            raised
+        }, function(result) {
             const res = JSON.parse(result)
             if (res.success) {
                 alert(res.msg)
@@ -548,11 +575,15 @@
                 if (window.localStorage) {
                     window.localStorage.removeItem('cart')
                     window.localStorage.removeItem('addresses')
+                    window.localStorage.removeItem('coupons')
+                    window.localStorage.removeItem('raised')
                 } else {
                     Cookies.remove('cart')
                     Cookies.remove('addresses')
+                    Cookies.remove('coupons')
+                    Cookies.remove('raised')
                 }
-                Cookies.remove('khk_trip')
+                Cookies.remove('ultimate_trip')
                 Cookies.remove('myshliach')
                 location.href = 'http://mashpia.com/mobile'
             }

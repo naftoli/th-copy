@@ -459,7 +459,7 @@
 	var addresses = {} // all addresses entered
 	var sweaters = {}
 	var celeb_boxes = 950
-	var ultimate_trip = [] // array of users going on ultamite trip
+	var ultimate_trip = [] // array of users going on ultimate trip
 
 	function getSweaterInfo() {
 		$.post('../ajax/sweaterInfo.php', function( result ) {
@@ -485,6 +485,10 @@
 			}
 			$("#num_celeb_boxes").append(html)
 			$("#num_celeb_boxes").niceSelect();
+			$("#celeb_state_span").html(
+				createStateDropdown('celeb_box')
+			)
+			// $("select#celeb_box_state").niceSelect()
 		} else {
 			$("#celebBoxes").hide()
 			$("#celebBoxesSoldOut").show()
@@ -804,11 +808,8 @@
 
 	$(".numCelebBoxes").change( function() {
 		let number = $(this).val()
-		if (parseInt(number)) {
-			$("#celeb_box_shipping").show()
-		} else {
-			$("#celeb_box_shipping").hide()
-		}
+		if (parseInt(number)) $("#celeb_box_shipping").show()
+		else $("#celeb_box_shipping").hide()
 	})
 
 	function createSweaterSelect(type, options) {
@@ -943,11 +944,6 @@
 		return html
 	}
 
-	$("#celeb_state_span").html(
-		createStateDropdown('celeb_box')
-	)
-	$("select#celeb_box_state").niceSelect()
-
 	function addToCart(desc, value) {
 		// if item doesn't already exist add to cart
 		let add = true;
@@ -1038,9 +1034,6 @@
 		let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
 		if (!size) {
 			alert('You must first choose a size!')
-			setTimeout( function () {
-				$(this).focus()
-			})
 			return false
 		}
 		utilityFn(e, this)
@@ -1230,13 +1223,20 @@
 			if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			json_cart = JSON.stringify(cart)
 			json_addresses = JSON.stringify(addresses)
+			// add coupons and chidon drive raised
+			json_coupons = JSON.stringify(children.filter(child => child.coupon > 0 && parseInt(child.coupon_used) === 0))
+			json_raised = JSON.stringify(children.filter(child => parseFloat(child.raised) > 0))
 			if (window.localStorage) {
 				window.localStorage.setItem('cart', json_cart)
 				window.localStorage.setItem('addresses', json_addresses)
+				window.localStorage.setItem('coupons', json_coupons)
+				window.localStorage.setItem('raised', json_raised)
 			} else {
 				// put in cookie
 				Cookies.set('cart', json_cart)
 				Cookies.set('addresses', json_addresses)
+				Cookies.set('coupons', json_coupons)
+				Cookies.set('raised', json_raised)
 			}
 			// go to checkout page
 			location.href = 'checkout.html'

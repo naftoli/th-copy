@@ -216,5 +216,8 @@ class CouponCode
             ':year'     => $this->year,
             ':serial'   => $user_serial
         ]);
+
+        if ($stmt->errorCode() > 0) return false;
+        else return true;
     }
 }
