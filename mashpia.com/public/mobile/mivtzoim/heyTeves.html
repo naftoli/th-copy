@@ -118,7 +118,9 @@
 
         <div style="width: 100%; margin: auto; display: none; overflow-x: scroll;" id="purchases">
             <div class="row">
-                <h2>Purchase For:</h2>
+                <div style="font-size: larger">Please Note: If your child does not show up, that means that their school is not participating in this mivtza.</div>
+                <hr />
+                <h2>Purchase For</h2>
                 <div class="col-12">
                     <div class="chilrens" id="children">
                         <script id="childrenTpl" type="text/x-handlebars-template">
@@ -214,6 +216,8 @@
           }
           html += "</table><hr />"
           $(".listOfItems").each( function() {
+              let id = $(this).parent().parent().attr('id')
+
               $(this).empty().append(html)
           })
       })
@@ -341,7 +345,7 @@
 
                 for (var c in children) {
                     var child = children[c];
-                    if (child.user_registered || child.chidon5783) {
+                    if ((child.user_registered || child.chidon5783) && ![58, 61, 269].includes(child.school_id)) {
                         registred_children[c] = child;
                     } else {
                         unregistered_children[c] = child;
