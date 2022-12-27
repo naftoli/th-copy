@@ -16,7 +16,7 @@ $purchases = $m->getPurchasesPerItem($year, $type);
 // update in stock / available
 foreach ($items as &$item) {
     $stock = intval($item['stock']);
-    if (isset($purchases[$item['item_id']])) $stock -= intval($purchases[$item['item_id']]);
+    if (isset($purchases[$item['mivtzoim_item_id']])) $stock -= intval($purchases[$item['mivtzoim_item_id']]);
     if ($stock < 0) $stock = 0;
     $item['stock'] = $stock;
 }

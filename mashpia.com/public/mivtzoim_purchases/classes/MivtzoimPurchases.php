@@ -118,13 +118,14 @@ class MivtzoimPurchases {
             SELECT 
                 item_id, IFNULL(SUM(qty), 0) AS total
             FROM
-                mashpia_purchases.purchases
+                mashpia_purchases.purchases p
                     JOIN
-                mashpia_purchases.purchase_details USING (purchase_id)
+                mashpia_purchases.purchase_details d USING (purchase_id)
+                    JOIN
+                mashpia_purchases.mivtzoim_items i ON i.mivtzoim_item_id = d.item_id
             WHERE
                 year = :year AND yom_tov = :yom_tov 
-            GROUP BY 
-                item_id 
+            GROUP BY item_id
         ");
         $stmt->execute([
             ':year'     =>  $year,

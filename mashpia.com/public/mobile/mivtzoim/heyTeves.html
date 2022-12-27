@@ -186,11 +186,11 @@
   const setupItems = () => {
       $.post('ajax/getItems.php', { type: 'Hei Teves' }, function(result) {
           items = JSON.parse(result)
-          let html = "<table><tr><th>Qty</th><th>Seforim</th><th>MSRP</th><th>Sale Price</th><th>In Stock</th></tr>"
+          let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>MSRP</th><th>Sale Price</th><th>In Stock</th></tr>"
           for (let item of items) {
               html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
-              html += ` /></td>
+              html += ` /></td><td><image src="images/${image.thumb}" /></td>
                   <td>${item.item}</td><td>${item.msrp}</td><td style="color: red;">${item.sale}</td><td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
           }
           html += "</table>"
@@ -290,7 +290,7 @@
                   if (result.success) {
                       var msg = "Thank you! Your purchase(s) have been saved. Your child(ren)'s school will receive them for your child(ren).";
                       alert(msg);
-                      // location.reload();
+                      location.reload();
                   } else {
                       alert(result.error);
                       $("button#purchase").attr('disabled', false);
