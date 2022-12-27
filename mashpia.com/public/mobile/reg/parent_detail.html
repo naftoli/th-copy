@@ -233,6 +233,7 @@
                 </div>
                 <div class="col-xs-6" id="chidonDriveButton">
                     <div class="button-spacing childrens-content" style="float:right;">
+                        <button class="btn btn-primary heyTeves">5 Teves Sale</button>
 <!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
 <!--                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>-->
 <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
@@ -753,9 +754,9 @@
             //     location.href = "/mobile/chidon/edit.html?id=" + id;
             // });
 
-            $(document).on('click', '.chanuka', function () {
-                location.href = "/mobile/mivtzoim/chanuka.html";
-            });
+            // $(document).on('click', '.chanuka', function () {
+            //     location.href = "/mobile/mivtzoim/chanuka.html";
+            // });
 
             // $(document).on('click', '.enroll', function() {
             //     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
@@ -765,6 +766,10 @@
             //     let url = "https://chidondrive.com/site/enroll.html?a=" + Cookies.get('admin');
             //     location.href = url;
             // });
+
+            $(document).on('click', '.heyTeves', function() {
+                location.href = "https://mashpia.com/mobile/mivtzoim/heyTeves.html";
+            })
 
             $(document).on('click', '.editEnrollment', function () {
                 let url = "https://chidondrive.com/site/edit.html?a=" + Cookies.get('admin');
