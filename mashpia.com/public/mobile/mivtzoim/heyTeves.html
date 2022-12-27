@@ -102,7 +102,7 @@
             <hr />
         </div>
 
-        <div style="width: 450px; margin: auto; display: none;" id="purchases">
+        <div style="width: 350px; margin: auto; display: none;" id="purchases">
             <div class="row">
                 <h2>Purchase For:</h2>
                 <div class="col-12">
@@ -190,10 +190,11 @@
           for (let item of items) {
               html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
-              html += ` /></td><td><image src="images/${item.thumb}" width="75px" /></td>
-                  <td>${item.item}</td><td>${item.msrp}</td><td style="color: red;">${item.sale}</td><td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
+              html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="50px" /></td>
+                  <td style="padding: 2px;">${item.item}</td><td>${item.msrp}</td><td style="color: red;">${item.sale}</td>
+                  <td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
           }
-          html += "</table>"
+          html += "</table><hr />"
           $(".listOfItems").each( function() {
               $(this).empty().append(html)
           })
