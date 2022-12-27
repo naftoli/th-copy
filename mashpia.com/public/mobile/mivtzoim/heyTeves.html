@@ -76,10 +76,15 @@
           width: 50px;
       }
 
-      @media only screen and (max-width: 325px) {
+      @media only screen and (max-width: 400px) {
           img {
               display: none;
           }
+          th, td {
+              max-width: 75px;
+          }
+      }
+      @media only screen and (max-width: 255px) {
           th, td {
               max-width: 65px;
           }
@@ -111,7 +116,7 @@
             <hr />
         </div>
 
-        <div style="width: 300px; margin: auto; display: none; overflow-x: scroll;" id="purchases">
+        <div style="width: 350px; margin: auto; display: none; overflow-x: scroll;" id="purchases">
             <div class="row">
                 <h2>Purchase For:</h2>
                 <div class="col-12">
@@ -191,6 +196,9 @@
 </script>
 <script>
   let admin
+
+  // force https
+  if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
 
   const setupItems = () => {
       $.post('ajax/getItems.php', { type: 'Hei Teves' }, function(result) {
