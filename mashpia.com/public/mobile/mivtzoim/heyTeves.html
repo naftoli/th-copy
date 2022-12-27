@@ -102,7 +102,7 @@
             <hr />
         </div>
 
-        <div style="width: 350px; margin: auto; display: none;" id="purchases">
+        <div style="width: 300px; margin: auto; display: none;" id="purchases">
             <div class="row">
                 <h2>Purchase For:</h2>
                 <div class="col-12">
@@ -112,7 +112,7 @@
                                 <div class="child" id="{{user_id}}">
                                     <div style="font-size: 14px;">
                                         <span>
-                                            <b>{{rank}}</b> {{first}} {{last}}<br />
+                                            <span style="font-size: 18px;"><b>{{rank}}</b> {{first}} {{last}}</span><br />
                                         </span>
                                         <span class="listOfItems"></span>
                                     </div>
@@ -186,12 +186,13 @@
   const setupItems = () => {
       $.post('ajax/getItems.php', { type: 'Hei Teves' }, function(result) {
           items = JSON.parse(result)
-          let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>MSRP</th><th>Sale Price</th><th>In Stock</th></tr>"
+          let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
           for (let item of items) {
               html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
-              html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="50px" /></td>
-                  <td style="padding: 2px;">${item.item}</td><td>${item.msrp}</td><td style="color: red;">${item.sale}</td>
+              html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
+                  <td style="padding: 2px;">${item.item}</td><td><strike>${item.msrp}</strike><br />
+                  <span style="color: red;">${item.sale}</span></td>
                   <td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
           }
           html += "</table><hr />"
