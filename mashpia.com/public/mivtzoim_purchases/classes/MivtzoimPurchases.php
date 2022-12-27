@@ -111,6 +111,35 @@ class MivtzoimPurchases {
     }
 
     /**
+     * gets number of purchases done for each item in the specific yom tov
+     */
+    public function getPurchasesPerItem( $year, $yom_tov ) {
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                item_id, IFNULL(SUM(qty), 0) AS total
+            FROM
+                mashpia_purchases.purchases
+                    JOIN
+                mashpia_purchases.purchase_details USING (purchase_id)
+            WHERE
+                year = :year AND yom_tov = :yom_tov 
+            GROUP BY 
+                item_id 
+        ");
+        $stmt->execute([
+            ':year'     =>  $year,
+            ':yom_tov'  => $yom_tov
+        ]);
+//        $stmt->debugDumpParams();
+        $info = [];
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['item_id']] = $row['total'];
+        }
+        return $info;
+    }
+
+    /**
      * gets list of purchases done for specific year / item within specific school
      * if item doesn't exist in list of items, returns error msg
      */
