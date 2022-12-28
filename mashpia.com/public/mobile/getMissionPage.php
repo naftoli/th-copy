@@ -53,6 +53,9 @@ $stickerOutlines = array(
 	42	=>	'Vihalachta Bidrachov.gif',
 	45	=>	'Cheshbon Hanefesh.gif',
 	90	=>	'Chitas.gif',
+  92  =>  'Niggunim.gif',
+  93  =>  'Mivtzoim.gif',
+  94  =>  'Yomei Dipagra.gif',
 	100	=>	'Sticker - Brias Haguf_outline bw.png'
 );
 /********************** STICKERS FOR DAILY MISSION GOALS **********************/
@@ -69,6 +72,9 @@ $dailyStickers = array(
 	42	=>	'halachta bdrachav5 of 7.png',
 	45	=>	'cheshbon hanefesh 5 of 7.png',
 	90	=>	'chitas 5 of 7.png',
+  92  =>  'niggunim 5 of 7.png',
+  93  =>  'mivtzoyim 5 of 7.png',
+  94  =>  'yoma dipagra 5 of 7.png',
 	100	=>	'brias haguf 5 of 7.png'
 );
 /********************** LOAD UP THE DATABASE CONNECTION **********************/
