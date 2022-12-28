@@ -38,10 +38,11 @@ foreach ($admins as $children) {
                 SET 
                     hachayol = 1
                 WHERE
-                    user_id = :id";
+                    user_id = ?";
         echo $sql . "<br />";
         $result = $mysqli->prepare($sql);
-        $result->execute(['id' => $user_id]);
+        $result->bind_param("i", $user_id);
+        $result->execute();
     }
 }
 echo "done";
