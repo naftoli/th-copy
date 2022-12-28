@@ -23,9 +23,9 @@ $sql = "SELECT
                 JOIN
             mashpiadb.classes c ON c.class_id = u.class_id
         WHERE
-            institution_id = 9
+            institution_id = 255 
                 AND resource_name = 'specific achievement card'
-                AND created > '2022-08-31'
+                AND created > '2022-12-13'
         ORDER BY class_grade, class_sub, last, first";
 $res = $mysqli->query($sql);
 $rows = $res->fetch_all(MYSQLI_ASSOC);
@@ -94,7 +94,7 @@ if ($success) {
 <!--            font-family: Arial, Helvetica, sans-serif;-->
 <!--            padding: 6px;-->
 <!--            font-size: 12px;-->
-<!--            /*border-bottom: 1px solid grey;*/-->
+<!--            border-bottom: 1px solid grey;-->
 <!--          }-->
 <!--        </style>-->
 <!--    </head>-->
