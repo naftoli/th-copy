@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require '../header.php';
 require '../api/header/db.php';
@@ -26,10 +29,10 @@ foreach ($info as $row) {
     $admins[$row['admin_id']][] = $row;
 }
 
-// find first child that's registered for each admin that doesn't have hachayol marked
+// find first child per admin
 foreach ($admins as $children) {
     $first = $children[0];
-    if ($first['hachayol'] == 0) {
+    if ($first['hachayol'] == 0) { // if child does not have hachayol set, update child
         $user_id = $first['user_id'];
         $sql = "UPDATE users 
                 SET 
