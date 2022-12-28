@@ -101,13 +101,14 @@ $posters = array(
                     if (!empty($admin)) echo "Admin: " . $admin . "<br />";
                 }
                 echo "Total Teachers: " . $school['teachers'] . "<br />";
-                echo "Total Registered children: " . $school['total'] . "<br />";
+                echo "Total children getting Hachayol: " . $school['total'] . "<br />";
                 if ($id == 162) $extra = get_extra_hachayols($id, $school['total']);
                 else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                 if ($extra != 0) echo "Extra: " . $extra . "<br />";
                 ?>
                 <span style="font-size: 50px; font-weight: bold;">Total: <?=$total?></span><br />
-                Already Registered for Chidon: <?=$school['chidonReg']?><br />
+                Total Registered Children: <?= $school['totalReg']?><br />
+                Total Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id] ?? 0?><br />
                 Number of boys posters: <?=$school['chidon_posters_boys'] ?? 0?><br />
                 Number of girls posters: <?=$school['chidon_posters_girls'] ?? 0?><br />

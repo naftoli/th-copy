@@ -41,11 +41,11 @@ class Hachayol {
             $school = $row['school_id']; 
             $method = $row['shipping_method'];
             $total = $row['total'];
-            
+
+            $this->schools[$method][$school]['total'] = $total;
             $this->schools[$method][$school]['principal'] = $row['principal'];
             $this->schools[$method][$school]['name'] = $row['hachayol_name'] ? $row['hachayol_name'] : $row['school_name'];
-            $this->schools[$method][$school]['total'] = $total;
-            $this->schools[$method][$school]['address'] = $row['shipping_address1'] . 
+            $this->schools[$method][$school]['address'] = $row['shipping_address1'] .
                 ($row['shipping_address2'] == "" ? "<br />" . $row['shipping_address2'] : "<br />") . 
                 $row['shipping_city'] . ", " . $row['shipping_state'] . "<br />" . $row['shipping_postal'] . "<br />" . 
                 $row['shipping_country'];
@@ -81,7 +81,12 @@ class Hachayol {
             $stmt3 = $this->db->query( $sql3 );
             $this->schools[$method][$school]['teachers'] = $stmt3->rowCount();
             
-            // find out how many kids in school already registered for chidon
+            // find out how many kids in school are registered for chayolei / chidon
+            $sqlReg = "select count(*) as registered from users where user_registered > 0 and school_id = " . $school;
+            $stmtReg = $this->db->query($sqlReg);
+            $resReg = $stmtReg->fetch(PDO::FETCH_OBJ);
+            $this->schools[$method][$school]['totalReg'] = $resReg->registered;
+
             $sql4 = "select count(*) as registered from th_chidon
                     where year = " . $this->chidonYear . "
                     and school_id = " . $school;

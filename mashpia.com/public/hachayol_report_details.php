@@ -61,7 +61,7 @@ if ( isset( $schools['pickup'] ) ) {
             echo "Admin: " . $admin . "<br />";
         }
         echo "Total Teachers: " . $school['teachers'] . "<br />";
-        echo "Total Registered children: " . $school['total'] . "<br />";
+        echo "Total children getting Hachayol: " . $school['total'] . "<br />";
         $total = $school['teachers'] + $school['total'];
         echo "Total: " . $total . "<br /><br />";
         $grandTotal += $total;
@@ -89,7 +89,7 @@ if ( isset( $schools['deliver'] ) ) {
             echo "Admin: " . $admin . "<br />";
         }
         echo "Total Teachers: " . $school['teachers'] . "<br />";
-        echo "Total Registered children: " . $school['total'] . "<br />";
+        echo "Total children getting Hachayol: " . $school['total'] . "<br />";
         $total = $school['teachers'] + $school['total'];
         echo "Total: " . $total . "<br /><br />";
         $grandTotal += $total;
