@@ -312,7 +312,6 @@
 	<script src="js/js.cookie.js"></script>
 	<script type="text/javascript">
 		$(function () {
-
 			let admin
 			if (!Cookies.get('chidon_admin') && !Cookies.get('admin_auth')) {
 				location.href = "login.html";
@@ -401,8 +400,17 @@
 			};
 
 			const loadChildGoalSelectHTML = (track, userId, custom) => {
-				let trackGoalsOptions = tracks[track.id]?.goalSelect || {};
-				let trackGoalSelection = custom ? trackGoalsOptions.custom : trackGoalsOptions[track.goal] || trackGoalsOptions.custom;
+				console.log(track)
+				let trackGoalsOptions, trackGoalSelection
+				if (track.id) {
+					trackGoalsOptions = tracks[track.id].goalSelect
+					trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[track.goal]
+				} else {
+					trackGoalsOptions = tracks.yesod.goalSelect
+					trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[tracks.yesod.goal]
+				}
+				// let trackGoalsOptions = tracks[track.id]?.goalSelect || {};
+				// let trackGoalSelection = custom ? trackGoalsOptions.custom : trackGoalsOptions[track.goal] || trackGoalsOptions.custom;
 				let html = ``
 				if (trackGoalSelection.value === "custom") {
 					html += `
