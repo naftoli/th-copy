@@ -102,6 +102,7 @@ class Hachayol {
                 join classes c using (class_id) 
                 join schools s on (u.school_id = s.school_id) 
                 where u.user_registered > 0 
+                and u.hachayol = 1   
                 and s.school_id = ?  
                 order by c.class_grade, c.class_sub, u.last, u.first";
         $stmt = $this->db->prepare( $sql );
