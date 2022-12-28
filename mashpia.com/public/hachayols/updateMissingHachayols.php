@@ -39,6 +39,7 @@ foreach ($admins as $children) {
                     hachayol = 1
                 WHERE
                     user_id = :id";
+        echo $sql . "<br />";
         $result = $mysqli->prepare($sql);
         $result->execute(['id' => $user_id]);
     }
