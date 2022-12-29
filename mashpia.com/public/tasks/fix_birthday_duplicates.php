@@ -46,4 +46,13 @@ foreach ($info as $row) {
     }
 }
 
-echo "<pre>"; print_r($missions); echo "</pre>";
+$duplicates = [];
+foreach ($missions as $user_id => $more) {
+    foreach ($more as $lang_id => $details) {
+        foreach ($details as $idx => $id) {
+            if ($idx > 0) $duplicates[$user_id][$lang_id][] = $id;
+        }
+    }
+}
+
+echo "<pre>"; print_r($duplicates); echo "</pre>";
