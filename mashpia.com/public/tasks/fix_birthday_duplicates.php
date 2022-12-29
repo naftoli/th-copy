@@ -55,4 +55,18 @@ foreach ($missions as $user_id => $more) {
     }
 }
 
-echo "<pre>"; print_r($duplicates); echo "</pre>";
+//echo "<pre>"; print_r($duplicates); echo "</pre>";
+$stmt = $MASHPIA_DB->prepare("
+    delete from birthdays where user_id = :user and date_tasks_mission_id = :id
+");
+foreach ($duplicates as $user => $more) {
+    foreach ($more as $lang => $other) {
+        foreach ($other as $id) {
+            $stmt->execute([
+                'user'  => $user_id,
+                'id'    => $id
+            ]);
+        }
+    }
+}
+echo "done.";
