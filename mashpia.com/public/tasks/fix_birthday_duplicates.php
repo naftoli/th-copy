@@ -37,6 +37,7 @@ WHERE
     user_id = ?"
 );
 foreach ($info as $row) {
+    print_r($row);
     $stmt->bind_param("i", $row['user_id']);
     $stmt->execute();
     while ($row = $stmt->fetch_assoc()) {
