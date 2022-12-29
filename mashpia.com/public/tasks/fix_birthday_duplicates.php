@@ -26,7 +26,7 @@ $result = $mysqli->query($sql);
 $info = $result->fetch_all(MYSQLI_ASSOC);
 
 $missions = [];
-$stmt = $mysqli->prepare("
+$stmt = $MASHPIA_DB->prepare("
 SELECT 
     user_id, date_tasks_mission_id, lang_id
 FROM
@@ -34,13 +34,14 @@ FROM
         JOIN
     date_tasks_missions dtm USING (date_tasks_mission_id)
 WHERE
-    user_id = ? and lang_id = ?"
+    user_id = :user and lang_id = :lang"
 );
 foreach ($info as $row) {
-    print_r($row);
-    $stmt->bind_param("ii", $row['user_id'], $row['lang_id']);
-    $stmt->execute();
-    while ($row = $stmt->fetch_assoc()) {
+    $stmt->execute([
+        'user'  => $row['user_id'],
+        'lang'  => $row['lang_id']
+    ]);
+    while ($row = $stmt->fetch()) {
         $missions[$row['user_id']][$row['lang_id']][] = $row['date_tasks_mission_id'];
     }
 }
