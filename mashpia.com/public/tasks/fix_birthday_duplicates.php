@@ -63,7 +63,7 @@ foreach ($duplicates as $user => $more) {
     foreach ($more as $lang => $other) {
         foreach ($other as $id) {
             $stmt->execute([
-                'user'  => $user_id,
+                'user'  => $user,
                 'id'    => $id
             ]);
         }
