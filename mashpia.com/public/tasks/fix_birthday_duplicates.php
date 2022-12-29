@@ -34,11 +34,11 @@ FROM
         JOIN
     date_tasks_missions dtm USING (date_tasks_mission_id)
 WHERE
-    user_id = ?"
+    user_id = ? and lang_id = ?"
 );
 foreach ($info as $row) {
     print_r($row);
-    $stmt->bind_param("i", $row['user_id']);
+    $stmt->bind_param("ii", $row['user_id'], $row['lang_id']);
     $stmt->execute();
     while ($row = $stmt->fetch_assoc()) {
         $missions[$row['user_id']][$row['lang_id']][] = $row['date_tasks_mission_id'];
