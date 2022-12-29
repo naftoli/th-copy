@@ -55,7 +55,7 @@ foreach ($missions as $user_id => $more) {
     }
 }
 
-//echo "<pre>"; print_r($duplicates); echo "</pre>";
+echo "<pre>"; print_r($duplicates); echo "</pre>";
 $stmt = $MASHPIA_DB->prepare("
     delete from birthdays where user_id = :user and date_tasks_mission_id = :id
 ");
