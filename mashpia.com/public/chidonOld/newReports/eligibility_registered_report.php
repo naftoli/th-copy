@@ -103,7 +103,7 @@ foreach ($schools as $school_id => $name) {
             $khk = $row['khk_trip'] > 0 ? 'yes' : '';
             if ($highestTrack == '') $highestTrack = 'none';
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
-                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . ($highestTrack !== 'Khk Trip' ? $highestTrack : 'Experience Trip') .
+                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . ($highestTrack !== 'Khk Trip' ? $highestTrack : 'Ultimate Trip') .
                 "</td><td>" . $reward . "</td><td>" . ($row['date_paid'] ?? '') . "</td></tr>";
         }
         ?>
