@@ -18,7 +18,8 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 foreach ($schools as $school_id => $name) {
     $sql = "select u.user_id, u.school_id, u.class_id, u.user_serial, u.first, u.last, s.school_name, c.class_grade,    
-                c.class_sub, tc.date_paid, tc.khk_trip, tc.th_chidon_id, tc.test_type, tc.reward_type, tci.highest_track  
+                c.class_sub, tc.date_paid, tc.khk_trip, tc.th_chidon_id, tc.test_type, tc.reward_type, tc.date_paid, 
+                tci.highest_track  
             from users u 
             join schools s using (school_id) 
             join classes c on u.class_id = c.class_id 
@@ -73,6 +74,7 @@ foreach ($schools as $school_id => $name) {
             <th>Last Name</th>
             <th>Track Eligible for</th>
             <th>Eligible Rewards</th>
+            <th>Registered For Experience</th>
         </tr>
         <?php
         $rewards = [
@@ -99,8 +101,10 @@ foreach ($schools as $school_id => $name) {
             $class = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $paid = $row['date_paid'] > 0 ? 'yes' : 'no';
             $khk = $row['khk_trip'] > 0 ? 'yes' : '';
+            if ($highestTrack == '') $highestTrack = 'none';
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
-                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $highestTrack . "</td><td>" . $reward . "</td></tr>";
+                $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . ($highestTrack !== 'Khk Trip' ? $highestTrack : 'Experience Trip') .
+                "</td><td>" . $reward . "</td><td>" . ($row['date_paid'] ?? '') . "</td></tr>";
         }
         ?>
     </table>
