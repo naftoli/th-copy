@@ -220,7 +220,14 @@
 				</div>
 				<div id="celebBoxes">
 					<div class="listSection" style="background-color: #394190; border-radius: 15px;">
-							<img src="../assets/Chidon 5781 Box.png" style="float: right; width: 200px;" />
+						<div style="float: right;">
+							<img src="../assets/Chidon 5781 Box.png" style="width: 200px;" />
+							<br /><br />
+							<ul>
+								<li>Chidon Trophy Glitter (NEW)</li>
+								<li>Chidon Wall Hanging Sign (NEW)</li>
+							</ul>
+						</div>
 							<ul>
 									<li>10 Chidon Plates</li>
 									<li>10 Chidon Cups</li>
@@ -622,6 +629,11 @@
                             <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
                             Track. You are eligible for ${trackText}.<h5>`
 
+			const tripDates = {
+				M: '27 - 29 Adar, March 20 - 22',
+				F: '20 - 22 Adar, March 13 - 15'
+			}
+
 			// registration heading
 			let amounts, lowest, free
 			if (ultimate) {
@@ -630,7 +642,8 @@
 				html += `<div class="flex">
                             <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' checked />
                             <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights. Monday - Wednesday, 25-27 Adar 2/March 28-30.
+                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender]}<br />
+                                Please Note: Those participating in the Ultimate Chidon Experience will not receive the 75 credits worth of prizes that they choose.
                             </h5>
                         </div>
                         <div class="flex">
@@ -640,7 +653,7 @@
                                 the Regional Trip that is available in my area (including NY)
                             </h5>
                         </div>
-                        <h5 class="formDetails"><span class="title ultimate_title">Kol Hatorah Kula Payments</span></h5>`
+                        <h5 class="formDetails"><span class="title ultimate_title">Ultimate Chidon Experience Payment</span></h5>`
 			}
 
 			// registration
