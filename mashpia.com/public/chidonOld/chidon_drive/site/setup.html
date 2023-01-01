@@ -401,16 +401,16 @@
 
 			const loadChildGoalSelectHTML = (track, userId, custom) => {
 				console.log(track)
-				let trackGoalsOptions, trackGoalSelection
-				if (track.id) {
-					trackGoalsOptions = tracks[track.id].goalSelect
-					trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[track.goal]
-				} else {
-					trackGoalsOptions = tracks.yesod.goalSelect
-					trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[tracks.yesod.goal]
-				}
-				// let trackGoalsOptions = tracks[track.id]?.goalSelect || {};
-				// let trackGoalSelection = custom ? trackGoalsOptions.custom : trackGoalsOptions[track.goal] || trackGoalsOptions.custom;
+				// let trackGoalsOptions, trackGoalSelection
+				// if (track.id) {
+				// 	trackGoalsOptions = tracks[track.id].goalSelect
+				// 	trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[track.goal]
+				// } else {
+				// 	trackGoalsOptions = tracks.yesod.goalSelect
+				// 	trackGoalSelection = custom ? trackGoalsOptions['custom'] : trackGoalsOptions[tracks.yesod.goal]
+				// }
+				let trackGoalsOptions = tracks[track.id].goalSelect || {};
+				let trackGoalSelection = custom ? trackGoalsOptions.custom : trackGoalsOptions[track.goal] || trackGoalsOptions.custom;
 				let html = ``
 				if (trackGoalSelection.value === "custom") {
 					html += `
