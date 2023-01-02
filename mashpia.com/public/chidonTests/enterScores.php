@@ -2,6 +2,7 @@
 //ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+print_r($admin_user); exit;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
@@ -35,6 +36,7 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 // initialize all tests to not be disabled
 $disabled = false;
 $school_id = implode('', array_keys($schools));
+$exceptions = [89];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
@@ -43,7 +45,7 @@ if ($admin_user['auth'] != 'super') {
     $shutdown[2] = new DateTime('2022-12-28 05:00:00');
 //    $shutdown[3] = new DateTime('2022-01-21 05:00:00');
 //    $shutdown[4] = new DateTime('2022-02-16 14:00:00');
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions)) {
         $disabled = true;
     }
 }
