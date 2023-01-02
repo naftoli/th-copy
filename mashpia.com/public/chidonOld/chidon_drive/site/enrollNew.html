@@ -643,7 +643,7 @@
                             <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' checked />
                             <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
                                 I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender]}<br />
-                                Please Note: Those participating in the Ultimate Chidon Experience will not receive the 75 credits worth of prizes that they choose.
+                                Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
                             </h5>
                         </div>
                         <div class="flex">
@@ -1046,14 +1046,19 @@
 		// check if size was already chosen
 		let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
 		if (!size) {
-			alert('You must first choose a size!')
-			return false
+			setTimeout( function() {
+				alert('You must first choose a size!')
+				// uncheck the radio button
+				$(this).attr('checked', false)
+				return false
+			})
+		} else {
+			utilityFn(e, this)
+			// add to addresses object
+			let field = $(this).attr('id')
+			let key = field.substr(0, field.lastIndexOf('_'))
+			addresses[key] = {}
 		}
-		utilityFn(e, this)
-		// add to addresses object
-		let field = $(this).attr('id')
-		let key = field.substr(0, field.lastIndexOf('_'))
-		addresses[key] = {}
 	})
 
 	$(document).on('blur change', '.address', function() {
