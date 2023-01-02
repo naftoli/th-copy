@@ -23,7 +23,7 @@ class RankReport extends Report {
         $this->userInfo = array();
         $this->userHeNames = array();
         $this->rankOrds['Private'] = 1;
-        $this->schoolExceptions = [588,612];
+        $this->schoolExceptions = [180, 585, 588, 612, 709];
         $this->schoolLogos = [];
         $this->userSchool = [];
         $this->userPic = [];

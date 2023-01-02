@@ -27,10 +27,10 @@ class IdCardsRouter {
             $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
         }
         // combine the filters
-        $filters[] = 'u.user_registered IS NOT NULL';
-        $filters[] = 'u.chayolei = 1 AND s.chayolei = 1';
+        $filters[] = 'u.user_registered > 0';
+        $filters[] = 'u.medals_ranks = 1';
         // add schools exceptions
-        $filters[] = 'u.school_id not in (180,585,588,612)';
+        $filters[] = 'u.school_id not in (180, 585, 588, 612, 709)';
         $filters = implode( ' AND ', $filters );
 
         $rank_marks = "(SELECT MAX(rank_ord) max_rank, user_id FROM rank_marks GROUP BY user_id) cr USING (user_id) "
