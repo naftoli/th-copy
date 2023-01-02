@@ -861,7 +861,7 @@
                                 ${createSweaterSelect(type, sweaters[type])}
                             </select>
                         </div>
-                        <div class="listSection" style="background-color: #394190; margin-bottom: 1rem;">
+                        <div class="listSection" style="background-color: #394190; margin-bottom: 1rem; display: none;">
                             <div class="flex">
                                 <input class="inputCheckbox sweater_ship" type="radio" name="${typeOfSweater + '_' + i}"
                                     id="${typeOfSweater + '_' + i + '_ship'}" value="0">
@@ -1013,6 +1013,18 @@
 		}
 	}
 
+	function toggleAddress(elem) {
+		const val = $(elem).val()
+		alert(val)
+		if (val) {
+			// show address section
+			$(elem).parent().parent().find('.listSection').show()
+		} else {
+			// hide address section
+			$(elem).parent().parent().find('.listSection').hide()
+		}
+	}
+
 	// function calculateTotal() {
 	//     cart_total = cart.reduce((accumulator, item) => accumulator + parseInt(item.value), 0)
 	// }
@@ -1039,6 +1051,7 @@
 	})
 
 	$(document).on('change', '.sweater_size', function(e) {
+		toggleAddress(this)
 		utilityFn(e, this)
 	})
 
@@ -1048,8 +1061,6 @@
 		if (!size) {
 			setTimeout( function() {
 				alert('You must first choose a size!')
-				// uncheck the radio button
-				$(this).attr('checked', false)
 				return false
 			})
 		} else {
