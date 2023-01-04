@@ -10,7 +10,8 @@ if ( isset( $_FILES['add'] ) ) {
 
     while ( $data = fgetcsv( $file ) ) {
       $serial = $data[0];
-      $prize = $data[1];
+      $school = $data[1];
+      $prize = $data[2];
 
       // find out user id from serial
       $sql = "select user_id from users where user_serial = " . $serial;
