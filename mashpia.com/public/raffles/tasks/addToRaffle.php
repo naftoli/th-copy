@@ -24,7 +24,7 @@ if ( isset( $_FILES['add'] ) ) {
                 set user_id = " . $user_id . ", 
                 prize_id = " . $prize . ",  
                 raffle_id = " . $raffle;
-        //echo $sql . "<br />";
+//        echo $sql . "<br />";
         if ( mysql_query( $sql ) ) $updated++;
       }
     }
