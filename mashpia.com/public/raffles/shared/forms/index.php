@@ -115,8 +115,14 @@ $school_ids = $admin_user['auths']['school'];
             <a href="winners_form.php">
                 <div class="button">
                     <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
-                    <span class="link-text">Winners</span>
+                    <span class="link-text">Raffle Winners</span>
                 </div>
+            </a>
+            <a href="/auction/winners">
+              <div class="button">
+                <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                <span class="link-text">Auction Winners</span>
+              </div>
             </a>
         </div>
         
@@ -234,16 +240,6 @@ $school_ids = $admin_user['auths']['school'];
                 </a>
             </div>
         <?} // end admin only links ?>
-        </div>
-        
-        <h2>Auction</h2>
-        <div id="action-links">
-            <a href="/auction/winners">
-                <div class="button">
-                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
-                    <span class="link-text">Auction Winners</span>
-                </div>
-            </a>
         </div>
 
         <h2>Prizes</h2>

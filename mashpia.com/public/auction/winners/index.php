@@ -65,7 +65,7 @@ $schools = $as->getSchools();
 
     <BODY>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
-        <h1>End of year auction winners 5781</h1>
+        <h1>End of year auction winners</h1>
         <p style="text-align: center;">
             <a class="button" id="export-to-csv">Export to CSV</a>
         </p>

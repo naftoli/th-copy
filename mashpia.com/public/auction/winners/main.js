@@ -23,7 +23,7 @@ function reloadRaffleWinners() {
         
         // if the data is undefined (no raffle selected)
         if (auction_winners[0] === undefined) {
-            return $('div#winner_list_container').html("<h3 style='margin-top: 15px; text-align: center'>No Winners Found</h3>");
+            return $('div#winner_list_container').html("<h3 style='margin-top: 15px; text-align: center'>Sorry, there are no auction winners for your school</h3>");
         }
         $("p#loader-status").text("Generating Table...."); // update the status on slow devices
         
