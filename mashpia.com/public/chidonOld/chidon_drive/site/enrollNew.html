@@ -221,7 +221,7 @@
 				<div id="celebBoxes">
 					<div class="listSection" style="background-color: #394190; border-radius: 15px;">
 						<div style="float: right;">
-							<img src="../assets/Chidon 5781 Box.png" style="width: 200px;" />
+							<img src="../assets/Chidon 5781 Box.png" style="width: 200px; padding-top: 7px;" />
 							<br /><br />
 							<ul>
 								<li>Chidon Trophy Glitter (NEW)</li>
@@ -642,7 +642,7 @@
 				html += `<div class="flex">
                             <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' checked />
                             <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender]}<br />
+                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
                                 Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
                             </h5>
                         </div>

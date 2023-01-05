@@ -693,6 +693,7 @@
 					for (c in info.children) {
 						let child = info.children[c];
 						if (parseInt(child.date_paid) > 0) continue;
+						child.history = ['5779', '5780', '5781', '5782']
 						children[child.user_id] = child;
 						children_ids.push(child.user_id);
 						let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
