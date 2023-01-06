@@ -1062,15 +1062,7 @@ class ShabbosMevorchim
         if ($date) $dates[] = $date;
         else {
             foreach ($this->rDates as $date) {
-                $dates[] = $date;
-            }
-        }
-
-        // make sure dates are not in the future
-        foreach ($dates as $idx => $date) {
-            if ($date > unixtojd()) {
-                // remove date
-                unset($dates[$idx]);
+                if ($date <= unixtojd()) $dates[] = $date;
             }
         }
 
@@ -1217,6 +1209,7 @@ class ShabbosMevorchim
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
+                            $stmt1->debugDumpParams();
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
