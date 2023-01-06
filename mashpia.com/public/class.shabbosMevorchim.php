@@ -1733,7 +1733,8 @@ class ShabbosMevorchim
                 }
                 echo "<tr><td align='right'>Totals:</td>";
                 foreach ($totals as $task) {
-                    echo "<td>" . $task['goal'] . "</td><td>" . $task['done'] . "</td>";
+                    echo "<td>" . $task['goal'] . "</td>";
+                    if (!$future) echo "<td>" . $task['done'] . "</td>";
                 }
                 echo "</tr>";
                 echo "</table></div>";

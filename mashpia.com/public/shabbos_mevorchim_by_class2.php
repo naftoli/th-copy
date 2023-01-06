@@ -68,7 +68,6 @@ $sm->setArmyResults();
 
                 // changes from shabbos_mevorchim.php
                 $sm->setStudentResults(0, $_GET['date']);
-                $details = $sm->getStudentResults();
                 $sm->generateStudentReport();
                 if (isset($_GET['school'])) break;
             }
