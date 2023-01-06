@@ -1686,13 +1686,19 @@ class ShabbosMevorchim
         //echo "<pre>"; print_r($this->studentResults); echo "</pre>";
         //echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>"; return;
         foreach ($this->studentResults as $date => $info) {
+            if ($date > unixtojd()) $future = true;
+            else $future = false;
             foreach ($info as $class => $users) {
                 $totals = array();
                 echo "<h2>" . $this->school_name . ' ' . $this->classes[$class]['grade'] . "</h2>";
                 echo "<div align='center'>";
                 echo $this->getHebrewMonth(array_search($date, $this->dates)) . "<br />";
                 echo "<table>";
-                echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th><th>Minutes Goal</th><th>Minutes Accomplishment</th></tr>";
+                echo "<tr><th>Chayol</th><th>Goal</th>";
+                if (!$future) echo "<th>Accomplishment</th>";
+                echo "<th>Minutes Goal</th>";
+                if (!$future) echo "<th>Minutes Accomplishment</th>";
+                echo "</tr>";
                 foreach ($users as $user => $info) {
                     echo "<tr><td>" . $this->users[$user] . "</td>";
                     foreach ($info as $task => $total) {
@@ -1701,24 +1707,27 @@ class ShabbosMevorchim
                         } else {
                             $totals[$task]['goal'] = $total;
                         }
-                        echo "<td>" . $total . ' ' . $task . "</td><td>";
-                        if (isset($this->studentDoneResults[$date][$class][$user][$task])) {
-                            echo $this->studentDoneResults[$date][$class][$user][$task] . ' ' . $task;
-                            if (isset($totals[$task]['done'])) {
-                                $totals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
+                        echo "<td>" . $total . ' ' . $task . "</td>";
+                        if (!$future) {
+                            echo "<td>";
+                            if (isset($this->studentDoneResults[$date][$class][$user][$task])) {
+                                echo $this->studentDoneResults[$date][$class][$user][$task] . ' ' . $task;
+                                if (isset($totals[$task]['done'])) {
+                                    $totals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
+                                } else {
+                                    $totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+                                }
                             } else {
-                                $totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+                                echo "0 " . $task;
+                                if (isset($totals[$task]['done'])) {
+                                    $totals[$task]['done'] += 0;
+                                } else {
+                                    $totals[$task]['done'] = 0;
+                                }
+                                echo "&nbsp;";
                             }
-                        } else {
-                            echo "0 " . $task;
-                            if (isset($totals[$task]['done'])) {
-                                $totals[$task]['done'] += 0;
-                            } else {
-                                $totals[$task]['done'] = 0;
-                            }
-                            echo "&nbsp;";
+                            echo "</td>";
                         }
-                        echo "</td>";
                     }
                     echo "</tr>";
                 }
