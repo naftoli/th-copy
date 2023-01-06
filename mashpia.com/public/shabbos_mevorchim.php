@@ -67,7 +67,6 @@ $sm->setArmyResults();
             $sm->setSchool( $id );
             $sm->setSchoolResults( $id );
             $sm->setClassResults();
-            
             ?>
 
             <p align='center' style='font-size: 54px'>שבת מברכים <?=$sm->getHebrewMonthFromJd($date)?></p>
