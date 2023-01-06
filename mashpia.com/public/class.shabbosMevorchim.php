@@ -206,7 +206,7 @@ class ShabbosMevorchim
             $month = array_search($date, $this->dates); // get the name of the month.
             // TODO figure out where these are being used.
             $this->rDates[$month] = $date; // set the date for this month to the internal rDates array.
-            $this->showDone[] = $date; // add the date to the showDone array.
+            if ($date < $today) $this->showDone[] = $date; // add the date to the showDone array if it's less than today
             // if no date was passed in.
         } else {
             $dates = array();
