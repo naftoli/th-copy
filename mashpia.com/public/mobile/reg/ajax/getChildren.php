@@ -10,9 +10,9 @@ require_once( __DIR__ . '/../../../chidonTests/class.chidonTests.php');
 
 $CHIDON_ACTIVE = true; // change to activate chidon
 
-$admin = mysql_real_escape_string( $_POST['admin'] );
+$adminEnc = isset($_POST['admin']) ? mysql_real_escape_string( $_POST['admin'] ) : $_COOKIE['admin'];
 require 'encrypt.php';
-$admin = encrypt_decrypt('decrypt', $admin);
+$admin = encrypt_decrypt('decrypt', $adminEnc);
 
 $australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713 ];
 
@@ -50,7 +50,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 if ( !empty( $users ) ) {
     $children = [];
     $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, s.school_country, c.class_grade, "
-        ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, "
+        ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, u.hachayol, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, s.school_id, c.class_id "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
@@ -85,6 +85,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
         $children[$row['user_id']]['school_country'] = $row['school_country'];
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
+        $children[$row['user_id']]['hachayol']       = $row['hachayol'];
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
