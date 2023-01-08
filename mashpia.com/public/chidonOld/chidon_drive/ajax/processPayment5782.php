@@ -25,7 +25,8 @@ $coupon = new CouponCode($MASHPIA_DB, $year);
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = intval($_POST['card_id']);
-$to_charge = isset($_POST['cart_total']) ? intval($_POST['cart_total']) : 0;
+$shipping_charge = isset($_POST['shipping_charge']) ? intval($_POST['shipping_charge']) : 0;
+$to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
 $shipping = isset($_POST['shipping']) ? $_POST['shipping'] : null;
 $cart = $_POST['cart'];
@@ -160,7 +161,7 @@ function addNewCard() {
 }
 
 function processFee() {
-    global $year, $admin_id, $to_charge, $payment_id;
+    global $year, $admin_id, $to_charge, $payment_id, $shipping_charge;
 
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
@@ -333,6 +334,24 @@ function redeemCoupons() {
     }
 }
 
+function processShippingCharge() {
+    global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
+
+    if ($shipping_charge) {
+        $stmt = $MASHPIA_DB->prepare("
+            UPDATE chidon_admin_shipping 
+            SET paid = :amount, date_paid = now() 
+            WHERE admin_id = :admin AND year = :year");
+        $res = $stmt->execute([
+            'amount'    => $shipping_charge,
+            'year'      => $year,
+            'admin'     => $admin_id
+        ]);
+        return $res;
+    }
+    else return true;
+}
+
 function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
@@ -428,10 +447,11 @@ $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
 $couponsRedeemed = redeemCoupons();
+$shippingCharge = processShippingCharge();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
+if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $shippingCharge) {
     if ($to_charge) {
         $payment = processFee();
         if (! $payment) {

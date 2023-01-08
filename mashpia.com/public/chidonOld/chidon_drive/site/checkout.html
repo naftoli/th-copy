@@ -434,13 +434,43 @@
         }
     }
 
+    let shipping_charge = 0
+    const shipping_cost = 50
+
     let html = ''
+    // find out if we need to charge for shipping
+    let myshliach = false
+    for (let i of reg) {
+        if (children[i.id].myshliach) {
+            myshliach = true
+            break
+        }
+    }
+    myshliach = true
+    if (myshliach) {
+        html += `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+                <div class="flex">
+                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+                  <label>
+                    (FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+                    Sunday & Monday, 19 & 20 Adar: 6-9PM; Thursday, 23 Adar: 9-11AM.
+                  </label>
+                </div>
+                <div class="flex">
+                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_cost}" />
+                  <label>
+                    ($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+                    check to confirm that it has the correct address saved.
+                  </label>
+                </div>`
+    }
+
     let reg_fee = 0
     if (reg.length) {
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
         for (let info of reg) {
             let child = children[info.id]
-            html += `<h5 class="formDetails">Registering for ${child} : $${info.fee}</h5>`
+            html += `<h5 class="formDetails">Registering for ${child.first} : $${info.fee}</h5>`
             reg_fee += info.fee
         }
     }
@@ -479,7 +509,7 @@
         cart_total += sweater_cost
     }
     html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
-    html += `<h5 class="formDetails">Total Charge Today: $${cart_total}</h5>`
+    html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total}</span></h5>`
 
     // payment
     html += `<h5 class="formDetails" id="paymentDetails"><span class="title">Payment</span></h5>`
@@ -508,6 +538,21 @@
         $("#paymentDetails").hide()
     }
 
+    $(document).on('change', '.shipping', function () {
+        const amount = parseInt($(this).val())
+        shipping_charge = amount
+        $("#total").text(cart_total + shipping_charge)
+        if (shipping_charge) {
+            if (reg.length) $(".processPayment").val('Pay & Register')
+            else $(".processPayment").val('Pay')
+            if (cart_total === 0) {
+                $("#paymentDetails").next('div').next('div').show()
+                $("#paymentDetails").next('div').show()
+                $("#paymentDetails").show()
+            }
+        }
+    })
+
     $(".payment").click( function() {
         if (parseInt($(this).val())) {
             $("#newCreditCard").show()
@@ -520,7 +565,7 @@
         evt.preventDefault()
         $(".processPayment").attr('disabled', true)
 
-        if (cart_total && ! $(".payment:checked").length) {
+        if ((cart_total || shipping_charge) && ! $(".payment:checked").length) {
             alert('You must indicate how your are going to pay!')
             $(".processPayment").attr('disabled', false)
             return false
@@ -528,7 +573,7 @@
 
         let cc = {}
         let card_id = 0
-        if (cart_total) {
+        if (cart_total || shipping_charge) {
             if (parseInt($(".payment:checked").val()) === 0) {
                 card_id = parseInt($(".payment-card").val())
                 // check if cvc is correct
@@ -558,6 +603,7 @@
             admin_id: admin.admin_id,
             admin_email,
             cart_total,
+            shipping_charge,
             shipping,
             card_id,
             cc,
