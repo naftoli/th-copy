@@ -93,8 +93,6 @@
       <div class="col-12" style="font-size: 16px;">
         You can use this form to change/update which children should get Hachayols.<br />
         If you add more children, you will be charged $20 per child.<br />
-        If you remove children, you will lose your $20 that was paid in the beginning of the yr.<br />
-        If you only switch from one child to another, you will not be charged anything.
       </div>
       <hr />
     </div>
@@ -200,9 +198,23 @@
     const calcTotal = () => {
       let checked = 0
       const fee = 20
+
+      // calculate how many children have been checked off
       $(".child").each( function() {
         if ($(this).is(":checked")) checked++
       })
+
+      // we have to have at least one checked child
+      if (!checked) {
+        alert('You must have at least one child getting hachayols.')
+        return false
+      }
+      // make sure we don't have less than the amount paid for already
+      if (numHachayols > checked) {
+        alert('You have already paid for ' + numHachayols + ' children. You must have at least ' + numHachayols + ' children checked off.')
+        return false
+      }
+
       let toCharge = checked > numHachayols ? checked - numHachayols : 0
       if (toCharge) {
         total = toCharge * fee
