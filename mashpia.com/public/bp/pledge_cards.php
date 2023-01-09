@@ -167,7 +167,7 @@ foreach ($users as $school_id => $grades) {
 
                 if ($year < $start) continue;
                 $diff = $cur_year - $year;
-                $history = $all_grades[$diff];
+                $history = $all_grades[$diff-1];
                 echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
             }
             echo "</tbody></table>";
