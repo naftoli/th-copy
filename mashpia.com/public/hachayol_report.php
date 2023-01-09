@@ -70,7 +70,7 @@ $posters = array(
         foreach ($info as $id => $school) {
 //            if ($id != 162) $total = $school['total'] + $school['teachers'] + get_extra_hachayols($id, $school['total'] + $school['teachers']);
 //            else $total = $school['total'] + get_extra_hachayols($id, $school['total']);
-            $total = $school['total'] + $school['teachers'];
+            $total = intval($school['total']) + intval($school['teachers']);
             $orderedSchools[$total][$type][] = $school;
         }
     }
@@ -125,6 +125,8 @@ $posters = array(
             }
         }
     }
+    print_r($teacher_totals);
+    print_r($children_totals);
     ?>
     <h2>For Pickup</h2>
     <div class='info'>
@@ -140,14 +142,5 @@ $posters = array(
     Total for Pickup: <?=$totals['pickup']?><br />
     Total for Delivery: <?=$totals['deliver']?><br />
     Grand Total: <?=$grandTotal?>
-
-    <div>
-        <?php
-        echo "<pre>";
-        print_r($teacher_totals);
-        print_r($children_totals);
-        echo "</pre>";
-        ?>
-    </div>
 </body>
 </html>
