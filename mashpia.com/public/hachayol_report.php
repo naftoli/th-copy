@@ -69,8 +69,9 @@ $posters = array(
     $orderedSchools = [];
     foreach ($schools as $type => $info) {
         foreach ($info as $id => $school) {
-            if ($id != 162) $total = $school['total'] + $school['teachers'] + get_extra_hachayols($id, $school['total'] + $school['teachers']);
-            else $total = $school['total'] + get_extra_hachayols($id, $school['total']);
+//            if ($id != 162) $total = $school['total'] + $school['teachers'] + get_extra_hachayols($id, $school['total'] + $school['teachers']);
+//            else $total = $school['total'] + get_extra_hachayols($id, $school['total']);
+            $total = $school['total'] + $school['teachers'];
             $orderedSchools[$total][$type][] = $school;
         }
     }
@@ -103,9 +104,9 @@ $posters = array(
                 echo "Total Teachers: " . $school['teachers'] . "<br />";
                 echo "Total children getting Hachayol: " . $school['total'] . "<br />";
 
-                if ($id == 162) $extra = get_extra_hachayols($id, $school['total']);
-                else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
-                echo "Total: "  . $school['total'] . "; Extra: " . $extra . "<br />";
+//                if ($id == 162) $extra = get_extra_hachayols($id, $school['total']);
+//                else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
+//                echo "Total: "  . $school['total'] . "; Extra: " . $extra . "<br />";
                 ?>
                 <span style="font-size: 50px; font-weight: bold;">Total: <?=$total?></span><br />
                 Total Registered Children: <?= $school['totalReg']?><br />
