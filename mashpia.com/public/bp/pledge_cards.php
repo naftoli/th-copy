@@ -5,6 +5,9 @@ ini_set('max_execution_time', 600);
 $admin_auth = array('school');
 require('../header.php');
 
+require_once '../class.globalSettings.php';
+$cur_year = GlobalSettings::getCurrentYear();
+
 require '../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
@@ -22,6 +25,8 @@ $sql = "SELECT
             line_campaigns l ON l.id = bus.campaign_id 
                 JOIN 
             classes c on c.class_id = u.class_id 
+        WHERE 
+            l.year != $cur_year 
         ORDER BY 
             s.school_id, c.class_grade, c.class_sub, u.last, u.first ";
 $result = mysql_query($sql);
@@ -110,6 +115,7 @@ foreach ($users as $school_id => $grades) {
 //        $name = $users[$school_id][$user_id]['name'];
 
             $bpInfo = isset($lines_learned[$school_id][$user_id]) ? $lines_learned[$school_id][$user_id] : [];
+            ksort($bpInfo);
 
             $highestTanya = 0;
             $highestMishna = 0;
@@ -151,9 +157,6 @@ foreach ($users as $school_id => $grades) {
                 $history = $start < 0 ? '' : $grades[$start];
                 $start++;
                 echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
-            }
-            if (! isset($year) || $year != 5782) {
-                echo "<tr><td>Grade " . $grade . " (" . 5782 . ")</td><td></td><td></td></tr>";
             }
             echo "</tbody></table>";
             echo "<p></p>";
