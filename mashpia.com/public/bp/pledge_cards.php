@@ -172,8 +172,8 @@ foreach ($users as $school_id => $grades) {
                     echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
                 }
                 echo "</tbody></table>";
+                echo "<p></p>";
             }
-            echo "<p></p>";
             echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
             echo "<div style='page-break-after: always'></div>";
         }
