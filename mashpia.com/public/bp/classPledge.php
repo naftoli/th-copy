@@ -142,8 +142,8 @@ foreach ($users as $school => $grades) {
                 $name = $info['first'] . ' ' . $info['last'];
                 echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
-                    for ($i = $start; $i <= $year; $i++) {
-                        if ($i == 5782) {
+                    for ($i = $start; $i < $year; $i++) {
+                        if ($i == ($year - 1)) {
                             echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
                         } else {
                             echo "<td class='cell'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
@@ -159,8 +159,8 @@ foreach ($users as $school => $grades) {
             }
             echo "<tr><th style='border: 2px solid black;'>Total:</th>";
             foreach ($types as $type) {
-                for ($i = $start; $i <= $year; $i++) {
-                    if ($i == 5782) {
+                for ($i = $start; $i < $year; $i++) {
+                    if ($i == ($year - 1)) {
                         echo "<th style='border-bottom: 2px solid black; border-right: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$grade][$i][$type] ?? 0) . "</th>";
                     } else {
                         echo "<th style='border-bottom: 2px solid black; border-top: 2px solid black;'>" . ($totals[$school][$grade][$i][$type] ?? 0) . "</th>";
