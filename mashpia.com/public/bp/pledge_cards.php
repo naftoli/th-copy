@@ -105,7 +105,7 @@ foreach ($schools as $school_id => $school_name) {
 <h1 class="no-print">Bal Peh Pledge Cards</h1>
 <button class="no-print" onclick="window.print()">Print</button>
 <?php
-$all_grades = ['8', '7', '6', '5', '4', '3', '2', '1', 'Pre1a'];
+$all_grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
 $startYr = [
     'Pre1a' => 5783,
     '1'   => 5782,
