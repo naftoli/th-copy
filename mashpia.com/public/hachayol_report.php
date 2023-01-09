@@ -87,8 +87,8 @@ $posters = array(
         foreach ($more as $type => $other) {
             $totals[$type] += $total;
             foreach ($other as $school) {
-                $teacher_totals[$school] = 0;
-                $children_totals[$school] = 0;
+                $teacher_totals[$school['school_id']] = 0;
+                $children_totals[$school['school_id']] = 0;
                 $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
@@ -120,8 +120,8 @@ $posters = array(
                 </div>
                 <div class='page-break'></div>
                 <?php
-                $teacher_totals[$school] += $school['teachers'];
-                $children_totals[$school] += $total;
+                $teacher_totals[$school['school_id']] += $school['teachers'];
+                $children_totals[$school['school_id']] += $total;
             }
         }
     }
