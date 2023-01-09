@@ -128,7 +128,7 @@ foreach ($users as $school_id => $grades) {
 //        $name = $users[$school_id][$user_id]['name'];
 
             $bpInfo = isset($lines_learned[$school_id][$user_id]) ? $lines_learned[$school_id][$user_id] : [];
-            krsort($bpInfo);
+            ksort($bpInfo);
 
             $highestTanya = 0;
             $highestMishna = 0;
@@ -167,7 +167,7 @@ foreach ($users as $school_id => $grades) {
 
                     if ($year < $start) continue;
                     $diff = $cur_year - $year;
-                    $history = $all_grades[$diff - 1];
+                    $history = $all_grades[$diff];
                     echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
                 }
                 echo "</tbody></table>";
