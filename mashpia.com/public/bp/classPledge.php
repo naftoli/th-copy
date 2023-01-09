@@ -11,7 +11,7 @@ $start = 5775;
 
 $types = ['tanya', 'mishna'];
 
-$sql = "select * from line_campaigns where year != 5782 order by year";
+$sql = "select * from line_campaigns where year != $year order by year";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $campaigns[$row['year']][$row['id']] = strtolower( $row['type'] );
@@ -124,8 +124,8 @@ foreach ($users as $school => $grades) {
                 <th style="border-left: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black;"></th>
                 <?php
                 foreach ($types as $type) {
-                    for ($i = $start; $i <= $year; $i++) {
-                        if ($i == 5782) {
+                    for ($i = $start; $i < $year; $i++) {
+                        if ($i == ($year - 1)) {
                             echo "<th style='border-right: 2px solid black; border-bottom: 2px solid black;'>$i</th>";
                         } else {
                             echo "<th style='border-bottom: 2px solid black;'>$i</th>";
