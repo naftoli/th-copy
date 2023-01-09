@@ -71,7 +71,7 @@ $posters = array(
 //            if ($id != 162) $total = $school['total'] + $school['teachers'] + get_extra_hachayols($id, $school['total'] + $school['teachers']);
 //            else $total = $school['total'] + get_extra_hachayols($id, $school['total']);
             $total = intval($school['total']) + intval($school['teachers']);
-            $orderedSchools[$total][$type][] = $school;
+            $orderedSchools[$total][$type][$id] = $school;
         }
     }
     // sort by total
@@ -88,7 +88,7 @@ $posters = array(
         $grandTotal += $total;
         foreach ($more as $type => $other) {
             $totals[$type] += $total;
-            foreach ($other as $school) {
+            foreach ($other as $school_id => $school) {
                 $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
@@ -120,13 +120,15 @@ $posters = array(
                 </div>
                 <div class='page-break'></div>
                 <?php
-                $teacher_totals[$school['school_id']] = $school['teachers'];
-                $children_totals[$school['school_id']] = $school['total'];
+                $teacher_totals[$school_id] = $school['teachers'];
+                $children_totals[$school_id] = $school['total'];
             }
         }
     }
+    echo "<pre>";
     print_r($teacher_totals);
     print_r($children_totals);
+    echo "</pre>";
     ?>
     <h2>For Pickup</h2>
     <div class='info'>
