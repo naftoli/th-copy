@@ -105,7 +105,20 @@ foreach ($schools as $school_id => $school_name) {
 <h1 class="no-print">Bal Peh Pledge Cards</h1>
 <button class="no-print" onclick="window.print()">Print</button>
 <?php
-$grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
+$all_grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
+$startYr = [
+    'Pre1a' => 5783,
+    '1'   => 5782,
+    '2'   => 5781,
+    '3'   => 5780,
+    '4'   => 5779,
+    '5'   => 5778,
+    '6'   => 5777,
+    '5'   => 5776,
+    '6'   => 5775,
+    '7'   => 5774,
+    '8'   => 5773
+];
 
 foreach ($users as $school_id => $grades) {
     foreach ($grades as $grade => $more) {
@@ -145,17 +158,16 @@ foreach ($users as $school_id => $grades) {
             }
 
             // figure out which grade child started at
-            $totalYears = count($bpInfo);
-            $key = array_search($gradeOnly, $grades);
-            $start = $key - $totalYears;
+            $start = $startYr[$gradeOnly];
 
             echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
             foreach ($bpInfo as $year => $lines) {
                 $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
                 $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
 
-                $history = $start < 0 ? '' : $grades[$start];
-                $start++;
+                if ($year < $start) continue;
+                $diff = $cur_year - $year;
+                $history = $all_grades[$diff];
                 echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
             }
             echo "</tbody></table>";
