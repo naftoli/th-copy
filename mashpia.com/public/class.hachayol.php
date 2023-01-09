@@ -16,7 +16,7 @@ class Hachayol {
         $this->schoolDetails = array();
         $this->chidonYear = GlobalSettings::getChidonYear();
         $this->chidonNumbers = array();
-        $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 585, 588, 612];
+        $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612];
     }
     
     public function setSchools( $id = null ) {
