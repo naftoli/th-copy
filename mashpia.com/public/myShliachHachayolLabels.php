@@ -196,7 +196,9 @@ $children = $m->getChildren();
 					echo "<span class='name'>";
 					echo "<b>";
 //          if (checkChidon($admin_id)) echo "*";
-					echo $name . " Family </b><br />" . $address . "</span></div>";
+					echo $name . " Family </b><br />" . $address . "</span><br />";
+          echo count($children[$admin_id]);
+          echo "</div>";
 					checkForBreak();
 					/*
 					echo "<div class='label'>";
