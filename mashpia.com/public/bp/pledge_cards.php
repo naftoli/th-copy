@@ -166,8 +166,9 @@ foreach ($users as $school_id => $grades) {
                     $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
 
                     if ($year < $start) continue;
+                    $max = key($all_grades[$gradeOnly]);
                     $diff = $cur_year - $year;
-                    $history = $all_grades[$diff];
+                    $history = $all_grades[$max - $diff];
                     echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
                 }
                 echo "</tbody></table>";
