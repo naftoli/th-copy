@@ -85,10 +85,10 @@ $posters = array(
     $teacher_totals = [];
     $children_totals = [];
     foreach ($orderedSchools as $total => $more) {
-        $grandTotal += $total;
         foreach ($more as $type => $other) {
             $totals[$type] += $total;
             foreach ($other as $school_id => $school) {
+                $grandTotal += $total;
                 $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
@@ -153,7 +153,7 @@ $posters = array(
         $total_children = 0;
         $total_teachers = 0;
         foreach ($children_totals as $id => $total) {
-          echo "<tr><td>" . $schools[$id] . "</td><td>" . $total . "</td><td>" . $teacher_totals[$id] . "</td></tr>";
+          echo "<tr><td>" . $id . "</td><td>" . $total . "</td><td>" . $teacher_totals[$id] . "</td></tr>";
           $total_children += $total;
           $total_teachers += $teacher_totals[$id];
         }
