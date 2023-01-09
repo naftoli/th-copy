@@ -14,6 +14,9 @@ $posters = array(
     472 => 0,   474 => 0,   475 => 0,   480 => 0,   517 => 1,   542 => 1,   554 => 1,   
     560 => 0
 );
+
+$teacher_totals = [];
+$children_totals = [];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -119,7 +122,7 @@ $posters = array(
                 <div class='page-break'></div>
                 <?php
                 $teacher_totals[$school['school_id']] = $school['teachers'];
-                $children_totals[$school['school_id']] = $total;
+                $children_totals[$school['school_id']] = $school['total'];
             }
         }
     }
