@@ -128,7 +128,7 @@ foreach ($users as $school_id => $grades) {
 //        $name = $users[$school_id][$user_id]['name'];
 
             $bpInfo = isset($lines_learned[$school_id][$user_id]) ? $lines_learned[$school_id][$user_id] : [];
-            ksort($bpInfo);
+            krsort($bpInfo);
 
             $highestTanya = 0;
             $highestMishna = 0;
