@@ -105,8 +105,7 @@ $posters = array(
 
                 if ($id == 162) $extra = get_extra_hachayols($id, $school['total']);
                 else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
-                if ($extra > $school['total']) echo "Extra Hachayols: " . $extra . "<br />";
-                else if ($extra < $school['total']) echo "Extra Hachayols: " . $extra . "<br />";
+                echo "Total: "  . $school['total'] . "; Real Total: " . $total . "<br />";
 //                echo "Extra Hachayols: " . ($extra > 0 ? $extra : 0) . "<br />";
 //                echo "Less Hachayols: " . ($extra < 0 ? $extra : 0) . "<br />";
                 ?>
