@@ -86,9 +86,9 @@ $posters = array(
     $children_totals = [];
     foreach ($orderedSchools as $total => $more) {
         foreach ($more as $type => $other) {
-            $totals[$type] += $total;
             foreach ($other as $school_id => $school) {
                 $grandTotal += $total;
+                $totals[$type] += $total;
                 $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
