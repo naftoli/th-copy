@@ -126,16 +126,6 @@ $posters = array(
         }
     }
     ?>
-    <h2>For Pickup</h2>
-    <div class='info'>
-        Warehouse - 300<br />
-        Shterna Karp - 75<br />
-        Shuls - 100
-    </div>
-    <div class='page-break'></div>
-    
-    <?php $totals['pickup'] += 475; ?>
-    
     <h2>Totals</h2>
     Total for Pickup: <?=$totals['pickup']?><br />
     Total for Delivery: <?=$totals['deliver']?><br />
