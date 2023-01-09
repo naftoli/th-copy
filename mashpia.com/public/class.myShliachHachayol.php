@@ -9,17 +9,16 @@ class MyShliachHachayol {
 	}	
 	
 	private function setInfo( $noShip, $id ) {
-		$sql = "SELECT a.*, a.first as afirst, a.last as alast, u.* from admins a 
+		$sql = "SELECT a.*, a.first as afirst, a.last as alast, u.*  
+                from admins a 
 				join admin_auths aa using (admin_id) 
 				join users u on aa.id = u.user_id 
 				where aa.auth = 'user' 
 				and u.school_id = $id  
-				and u.user_registered > 0 
-				and u.hachayols = 1 ";
+				and u.user_registered > 0 ";
 		if ($noShip) {
 			$sql .= "and no_shipping = 0 ";
 		}
-		$sql .= "order by num_hachayols";
 		$result = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($result)) {
 			$info[] = $row;
@@ -40,7 +39,6 @@ class MyShliachHachayol {
 	}
 	
 	public function sortByAddress() {
-		$admins = $this->admins;
 		foreach ($this->admins as $admin) {
 			switch (strtolower(trim($admin['admin_country']))) {
 				case '':

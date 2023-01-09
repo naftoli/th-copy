@@ -113,12 +113,11 @@ $parents = $m->getSortedAdmins();
 					$name = $parent['alast'];
 					$address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] . 
 						" " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
-					$num = $parent['num_hachayols'];
-					
+
 					echo "<div class='label'>";
 					echo "<span class='name'>";
 					echo "<b>";
-                    if (checkChidon($admin_id)) echo "*";
+//          if (checkChidon($admin_id)) echo "*";
 					echo $name . " Family (AK) </b><br />" . $address . "</span></div>";
 					checkForBreak();
 					/*

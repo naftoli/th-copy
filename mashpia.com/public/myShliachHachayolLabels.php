@@ -1,9 +1,13 @@
-<?php
+0<?php
 $admin_auth = array('school'); 
 require('header.php');
 
+require 'class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 function checkChidon($id) {
-    $sql = "select * from th_chidon where year = 5781 and user_id in (
+    global $year;
+    $sql = "select * from th_chidon where year = $year and user_id in (
             select id from admin_auths where admin_id = $id and auth = 'user')";
     $result = mysql_query($sql);
     return mysql_num_rows($result);
@@ -41,7 +45,7 @@ $m = new MyShliachHachayol( true );
 //sort for shipping
 $m->sortByAddress();
 $parents = $m->getSortedAdmins();
-//$children = $m->getChildren();
+$children = $m->getChildren();
 ?>
 <!doctype html>
 <html>
@@ -187,12 +191,11 @@ $parents = $m->getSortedAdmins();
 					$name = $parent['last'];
 					$address = $parent['admin_address1'] . "<br />" . $parent['admin_city'] . ', ' . $parent['admin_state'] . 
 						" " . $parent['admin_postal'] . "<br />" . (empty($parent['admin_country']) ? 'USA' : $parent['admin_country']);
-					$num = $parent['num_hachayols'];
-					
+
 					echo "<div class='label'>";
 					echo "<span class='name'>";
 					echo "<b>";
-                    if (checkChidon($admin_id)) echo "*";
+//          if (checkChidon($admin_id)) echo "*";
 					echo $name . " Family </b><br />" . $address . "</span></div>";
 					checkForBreak();
 					/*
@@ -241,17 +244,18 @@ $parents = $m->getSortedAdmins();
         }
 
         let headers = []
-        headers.push(['Name', 'Address', 'Number of Hachayols'])
+        headers.push(['Name', 'Address', 'Number of Registered Children'])
         const info = <?= json_encode($parents) ?>;
+        const children = <?= json_encode($children) ?>;
         let rows = []
         for (let p in info) {
             for (let id in info[p]) {
                 const parent = info[p][id]
                 const name = parent['last']
-                const address = parent['admin_address1'] + ' ' + parent['admin_city'] + ', ' + parent['admin_state'] +
+                const address = parent['admin_address1'] + ' ' + parent['admin_city'] + ' ' + parent['admin_state'] +
                     ' ' + parent['admin_postal'] + ' ' + (parent['admin_country'].length ? parent['admin_country'] : 'USA');
-                const hachayols = parent['num_hachayols']
-                rows.push([name, address, hachayols])
+                const num_children = children[parent['admin_id']].length
+                rows.push([name, address, num_children])
             }
         }
         generateCsv(headers, rows, 'myshliach')
