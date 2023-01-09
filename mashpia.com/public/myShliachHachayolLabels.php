@@ -246,7 +246,7 @@ $children = $m->getChildren();
         }
 
         let headers = []
-        headers.push(['Name', 'Address', 'Number of Registered Children'])
+        headers.push(['Name', 'Address', 'City', 'State', 'Zip', 'Country', 'Number of Registered Children'])
         const info = <?= json_encode($parents) ?>;
         const children = <?= json_encode($children) ?>;
         let rows = []
@@ -254,10 +254,13 @@ $children = $m->getChildren();
             for (let id in info[p]) {
                 const parent = info[p][id]
                 const name = parent['last']
-                const address = parent['admin_address1'] + ' ' + parent['admin_city'] + ' ' + parent['admin_state'] +
-                    ' ' + parent['admin_postal'] + ' ' + (parent['admin_country'].length ? parent['admin_country'] : 'USA');
+                const address = parent['admin_address1']
+                const city = parent['admin_city']
+                const state = parent['admin_state']
+                const zip = parent['admin_postal']
+                const country = parent['admin_country'].length ? parent['admin_country'] : 'USA'
                 const num_children = children[parent['admin_id']].length
-                rows.push([name, address, num_children])
+                rows.push([name, address, city, state, zip, country, num_children])
             }
         }
         generateCsv(headers, rows, 'myshliach')
