@@ -22,16 +22,16 @@ class Hachayol {
     public function setSchools( $id = null ) {
         //get list of schools with totals per school of registered students
         $sql = "SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
-            s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests, s.school_gender, 
-            s.shipping_first, s.shipping_last, s.chidon_posters_boys, s.chidon_posters_girls, s.res_address1, s.res_address2, s.res_city, 
-            s.res_state, s.res_postal, s.res_country 
-            FROM schools s
-            JOIN users u
-            USING ( school_id )
-            WHERE s.chayolei = 1 
-            AND u.user_registered > 0 
-            AND u.hachayol = 1 
-            AND s.test_school = 0 ";
+                    s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, 
+                    s.shipping_requests, s.school_gender, s.shipping_first, s.shipping_last, s.chidon_posters_boys, s.chidon_posters_girls, 
+                    s.res_address1, s.res_address2, s.res_city, s.res_state, s.res_postal, s.res_country 
+                FROM schools s
+                JOIN users u
+                USING ( school_id )
+                WHERE s.chayolei = 1 
+                AND u.user_registered > 0 
+                AND u.hachayol = 1 
+                AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
         $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
