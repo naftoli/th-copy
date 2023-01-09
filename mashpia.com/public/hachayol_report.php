@@ -125,10 +125,6 @@ $posters = array(
             }
         }
     }
-    echo "<pre>";
-    print_r($teacher_totals);
-    print_r($children_totals);
-    echo "</pre>";
     ?>
     <h2>For Pickup</h2>
     <div class='info'>
@@ -144,5 +140,25 @@ $posters = array(
     Total for Pickup: <?=$totals['pickup']?><br />
     Total for Delivery: <?=$totals['deliver']?><br />
     Grand Total: <?=$grandTotal?>
+    <hr />
+
+    <h2>Total Details</h2>
+    <table>
+      <tr>
+        <th>School</th>
+        <th>Total Children</th>
+        <th>Total Teachers</th>
+      </tr>
+        <?php
+        $total_children = 0;
+        $total_teachers = 0;
+        foreach ($children_totals as $id => $total) {
+          echo "<tr><td>" . $schools[$id] . "</td><td>" . $total . "</td><td>" . $teacher_totals[$id] . "</td></tr>";
+          $total_children += $total;
+          $total_teachers += $teacher_totals[$id];
+        }
+        echo "<tr><th>Totals: </th><th>" . $total_children . "</th><th>" . $total_teachers . "</th></tr>";
+        ?>
+    </table>
 </body>
 </html>
