@@ -102,9 +102,11 @@ $posters = array(
                 }
                 echo "Total Teachers: " . $school['teachers'] . "<br />";
                 echo "Total children getting Hachayol: " . $school['total'] . "<br />";
+
                 if ($id == 162) $extra = get_extra_hachayols($id, $school['total']);
                 else $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
-                if ($extra != 0) echo "Extra: " . $extra . "<br />";
+                echo "Extra Hachayols: " . ($extra > 0 ? $extra : 0) . "<br />";
+                echo "Less Hachayols: " . ($extra < 0 ? $extra : 0) . "<br />";
                 ?>
                 <span style="font-size: 50px; font-weight: bold;">Total: <?=$total?></span><br />
                 Total Registered Children: <?= $school['totalReg']?><br />

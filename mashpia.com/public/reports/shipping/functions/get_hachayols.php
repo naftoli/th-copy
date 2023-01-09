@@ -107,7 +107,6 @@ function get_extra_hachayols($school_id, $current_amount=false){
         return 0;
 
     $row = $query->fetch();
-
     if ( $row['hachayol_extra_total'] )
         return reduce_to_total( $current_amount, intval( $row['hachayol_extra'] ) );
 
