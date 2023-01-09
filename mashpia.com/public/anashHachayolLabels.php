@@ -19,7 +19,7 @@ $m = new MyShliachHachayol( true, 269 );
 //sort for shipping
 $m->sortByAddress();
 $parents = $m->getSortedAdmins();
-//$children = $m->getChildren();
+$children = $m->getChildren();
 ?>
 <!doctype html>
 <html>
@@ -118,7 +118,9 @@ $parents = $m->getSortedAdmins();
 					echo "<span class='name'>";
 					echo "<b>";
           if (checkChidon($admin_id)) echo "*";
-					echo $name . " Family (AK) </b><br />" . $address . "</span></div>";
+					echo $name . " Family (AK) </b><br />" . $address . "</span><br />";
+          echo count($children[$admin_id]);
+          echo "</div>";
 					checkForBreak();
 					/*
 					echo "<div class='label'>";
