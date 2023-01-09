@@ -14,7 +14,6 @@ $posters = array(
     472 => 0,   474 => 0,   475 => 0,   480 => 0,   517 => 1,   542 => 1,   554 => 1,   
     560 => 0
 );
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -88,6 +87,8 @@ $posters = array(
         foreach ($more as $type => $other) {
             $totals[$type] += $total;
             foreach ($other as $school) {
+                $teacher_totals[$school] = 0;
+                $children_totals[$school] = 0;
                 $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
@@ -119,6 +120,8 @@ $posters = array(
                 </div>
                 <div class='page-break'></div>
                 <?php
+                $teacher_totals[$school] += $school['teachers'];
+                $children_totals[$school] += $total;
             }
         }
     }
@@ -137,5 +140,14 @@ $posters = array(
     Total for Pickup: <?=$totals['pickup']?><br />
     Total for Delivery: <?=$totals['deliver']?><br />
     Grand Total: <?=$grandTotal?>
+
+    <div>
+        <?php
+        echo "<pre>";
+        print_r($teacher_totals);
+        print_r($children_totals);
+        echo "</pre>";
+        ?>
+    </div>
 </body>
 </html>
