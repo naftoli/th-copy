@@ -140,16 +140,6 @@ foreach ($users as $school_id => $grades) {
                 if ($mishna > $highestMishna) $highestMishna = $mishna;
             }
 
-            echo "<div class='card'>";
-            echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
-            echo "<b>School:</b> " . $schools[$school_id] . "<br />";
-            echo "<b>Grade:</b> " . $grade . "<br />";
-            echo "<b>Student:</b> " . $name . "<br />";
-            echo "<br />";
-            echo "<b>Highest amount of lines of Tanya:</b> " . $highestTanya . "<br />";
-            echo "<b>Highest amount of lines of Mishna:</b> " . $highestMishna . "<br /><br />";
-//        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
-
             if (strpos($grade, '-') !== false) {
                 $gradeInfo = explode('-', $grade);
                 $gradeOnly = $gradeInfo[0];
@@ -157,20 +147,31 @@ foreach ($users as $school_id => $grades) {
                 $gradeOnly = $grade;
             }
 
-            // figure out which grade child started at
-            $start = $startYr[$gradeOnly];
+            echo "<div class='card'>";
+            echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
+            echo "<b>School:</b> " . $schools[$school_id] . "<br />";
+            echo "<b>Grade:</b> " . $grade . "<br />";
+            echo "<b>Student:</b> " . $name . "<br />";
+            echo "<br />";
+            if ($gradeOnly != 'Pre1a') {
+                echo "<b>Highest amount of lines of Tanya:</b> " . $highestTanya . "<br />";
+                echo "<b>Highest amount of lines of Mishna:</b> " . $highestMishna . "<br /><br />";
+                //        echo "Pledge for the Rebbe's 120th Birthday: Tanya _______ Mishna _______<br /><br />";
 
-            echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
-            foreach ($bpInfo as $year => $lines) {
-                $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
-                $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
+                // figure out which grade child started at
+                $start = $startYr[$gradeOnly];
+                echo "<table><thead><tr><th>Grade / Year</th><th>Total Tanya Lines</th><th>Total Mishna Lines</th></tr></thead><tbody>";
+                foreach ($bpInfo as $year => $lines) {
+                    $tanya = isset($lines['tanya']) ? $lines['tanya'] : 0;
+                    $mishna = isset($lines['mishna']) ? $lines['mishna'] : 0;
 
-                if ($year < $start) continue;
-                $diff = $cur_year - $year;
-                $history = $all_grades[$diff-1];
-                echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
+                    if ($year < $start) continue;
+                    $diff = $cur_year - $year;
+                    $history = $all_grades[$diff - 1];
+                    echo "<tr><td>Grade " . $history . " (" . $year . ")</td><td>" . $tanya . "</td><td>" . $mishna . "</td></tr>";
+                }
+                echo "</tbody></table>";
             }
-            echo "</tbody></table>";
             echo "<p></p>";
             echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
             echo "<div style='page-break-after: always'></div>";
