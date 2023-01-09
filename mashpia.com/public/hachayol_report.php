@@ -14,9 +14,6 @@ $posters = array(
     472 => 0,   474 => 0,   475 => 0,   480 => 0,   517 => 1,   542 => 1,   554 => 1,   
     560 => 0
 );
-
-$teacher_totals = [];
-$children_totals = [];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -85,6 +82,8 @@ $children_totals = [];
         <input type='button' value='Print' onclick='window.print();' />
     </div>
     <?php
+    $teacher_totals = [];
+    $children_totals = [];
     foreach ($orderedSchools as $total => $more) {
         $grandTotal += $total;
         foreach ($more as $type => $other) {
