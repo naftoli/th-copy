@@ -25,9 +25,24 @@ while ($row = mysql_fetch_assoc( $result )) {
     <title>Bal Peh Class Pledge for Rebbe</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
+        @font-face {
+          font-family: Exo;
+          src: url("/fonts/Exo/Exo-VariableFont_wght.ttf")
+        }
+
+        @font-face {
+          font-family: Hebrew;
+          src: url("/fonts/FbTkuma-Regular.otf")
+        }
+
+        h2 {
+            font-family: Exo;
+        }
+
         table {
             margin-left: auto;
             margin-right: auto;
+            font-family: Exo;
         }
         tr, th, td {
             font-size: 12px;
@@ -134,13 +149,16 @@ foreach ($users as $school => $grades) {
         } else {
             $gradeOnly = $grade;
         }
+
+        // make sure grade is one of the options in the array
+        if (! in_array($gradeOnly, $all_grades)) continue;
         ?>
         <table width="75%">
             <thead>
             <tr>
                 <th class="ches">Chayol</th>
-                <th class="ches" colspan="8" style="text-align: center">תניא בעל פה <br />Lines Learned</th>
-                <th class="ches" colspan="8" style="text-align: center">משניות בעל פה <br />Lines Learned</th>
+                <th class="ches" colspan="8" style="text-align: center; font-family: Hebrew;">תניא בעל פה <br />Lines Learned</th>
+                <th class="ches" colspan="8" style="text-align: center; font-family: Hebrew;">משניות בעל פה <br />Lines Learned</th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black;"></th>

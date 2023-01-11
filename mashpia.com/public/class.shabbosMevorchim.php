@@ -1367,7 +1367,12 @@ class ShabbosMevorchim
 
         <tr>
           <td><?= $class['grade'] ?></td>
-          <td><?= $class['teacher'] ?></td>
+          <td>
+              <?php
+              if (preg_match('/[א-ת]/',$class['teacher'])) echo "<span class='hebrewFont'>" . $class['teacher'] . "</span>";
+              else echo $class['teacher'];
+              ?>
+          </td>
           <td><?= number_format($this->classResults[$key][$date][$class_id]) ?> <?= $key ?></td>
             <? if ($this->showDone($date)) { ?>
               <td><?= number_format($this->classDoneResults[$key][$date][$class_id]) ?> <?= $key ?></td>
@@ -1692,7 +1697,7 @@ class ShabbosMevorchim
                 $totals = array();
                 echo "<h2>" . $this->school_name . ' ' . $this->classes[$class]['grade'] . "</h2>";
                 echo "<div align='center'>";
-                echo $this->getHebrewMonth(array_search($date, $this->dates)) . "<br />";
+                echo "<span class='hebrewDate'>" . $this->getHebrewMonth(array_search($date, $this->dates)) . "</span><br />";
                 echo "<table>";
                 echo "<tr><th>Chayol</th><th>Goal</th>";
                 if (!$future) echo "<th>Accomplishment</th>";

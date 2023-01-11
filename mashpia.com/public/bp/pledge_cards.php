@@ -61,6 +61,15 @@ foreach ($schools as $school_id => $school_name) {
     <title>Bal Peh Pledge Cards</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
+        @font-face {
+          font-family: Exo;
+          src: url("/fonts/Exo/Exo-VariableFont_wght.ttf")
+        }
+
+        h1 {
+            font-font: Exo;
+        }
+
         tr, th, td {
             font-size: 12px;
             padding: 10px;
@@ -70,12 +79,14 @@ foreach ($schools as $school_id => $school_name) {
             width: 8in;
             line-height: 1.3;
             text-align: center;
+            font-family: Exo;
         }
         .card table {
             margin-left: auto;
             margin-right: auto;
             width: 75%;
             margin-top: 10px;
+            font-family: Exo;
         }
         @media print {
             .no-print {
@@ -146,6 +157,9 @@ foreach ($users as $school_id => $grades) {
             } else {
                 $gradeOnly = $grade;
             }
+
+            // make sure grade is one of the options in the array
+            if (! in_array($gradeOnly, $all_grades)) continue;
 
             echo "<div class='card'>";
             echo "<img src='JPGs/TBP Pledge Card 5783 Header.jpg' class='imgHeader' />";
