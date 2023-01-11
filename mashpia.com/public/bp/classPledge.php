@@ -107,11 +107,33 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 //echo "<pre>"; print_r($results); echo "</pre>"; exit;
 
+$all_grades = ['Pre1a', '1', '2', '3', '4', '5', '6', '7', '8'];
+$startYr = [
+    'Pre1a' => 5783,
+    '1'   => 5782,
+    '2'   => 5781,
+    '3'   => 5780,
+    '4'   => 5779,
+    '5'   => 5778,
+    '6'   => 5777,
+    '5'   => 5776,
+    '6'   => 5775,
+    '7'   => 5774,
+    '8'   => 5773
+];
+
 $totals = [];
 foreach ($users as $school => $grades) {
     foreach ($grades as $grade => $other) {
         echo "<img src='classPledgeHeader.jpg' class='imgHeader' />";
         echo "<h2>" . $schools[$school] . ' - ' . $grade . "</h2>";
+
+        if (strpos($grade, '-') !== false) {
+            $gradeInfo = explode('-', $grade);
+            $gradeOnly = $gradeInfo[0];
+        } else {
+            $gradeOnly = $grade;
+        }
         ?>
         <table width="75%">
             <thead>
@@ -143,10 +165,12 @@ foreach ($users as $school => $grades) {
                 echo "<tr><td style='border-left: 2px solid black; border-right: 2px solid black;'>" . $name . '</td>';
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
+                        $amount = '';
+                        if ($start >= $startYr[$gradeOnly] && isset($bpInfo[$i][$type])) $amount = $bpInfo[$i][$type];
                         if ($i == ($year - 1)) {
-                            echo "<td class='cell' style='border-right: 2px solid black;'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
+                            echo "<td class='cell' style='border-right: 2px solid black;'>" . $amount . "</td>";
                         } else {
-                            echo "<td class='cell'>" . (isset($bpInfo[$i][$type]) ? $bpInfo[$i][$type] : '') . "</td>";
+                            echo "<td class='cell'>" . $amount . "</td>";
                         }
                         // update totals
                         if (isset($bpInfo[$i][$type])) {
