@@ -173,9 +173,9 @@ foreach ($users as $school => $grades) {
                             echo "<td class='cell'>" . $amount . "</td>";
                         }
                         // update totals
-                        if (isset($bpInfo[$i][$type])) {
-                            if (isset($totals[$school][$grade][$i][$type])) $totals[$school][$grade][$i][$type] += $bpInfo[$i][$type];
-                            else $totals[$school][$grade][$i][$type] = $bpInfo[$i][$type];
+                        if ($amount > 0) {
+                            if (isset($totals[$school][$grade][$i][$type])) $totals[$school][$grade][$i][$type] += $amount;
+                            else $totals[$school][$grade][$i][$type] = $amount;
                         }
                     }
                 }
