@@ -24,7 +24,7 @@ $sm->setArmyResults();
         <style type='text/css'>
             @font-face {
               font-family: Exo;
-              src: url("/fonts/Exo/static/Exo-Regular.ttf")
+              src: url("/fonts/Exo/Exo-VariableFont_wght.ttf")
             }
             @font-face {
               font-family: Hebrew;
