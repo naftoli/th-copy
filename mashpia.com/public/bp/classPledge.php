@@ -166,7 +166,7 @@ foreach ($users as $school => $grades) {
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
                         $amount = '';
-                        if ($start >= $startYr[$gradeOnly] && isset($bpInfo[$i][$type])) $amount = $bpInfo[$i][$type];
+                        if ($start >= intval($startYr[$gradeOnly]) && isset($bpInfo[$i][$type])) $amount = $bpInfo[$i][$type];
                         if ($i == ($year - 1)) {
                             echo "<td class='cell' style='border-right: 2px solid black;'>" . $amount . "</td>";
                         } else {
