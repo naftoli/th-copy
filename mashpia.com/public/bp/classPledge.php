@@ -125,7 +125,7 @@ $startYr = [
 $totals = [];
 foreach ($users as $school => $grades) {
     foreach ($grades as $grade => $other) {
-        echo "<img src='classPledgeHeader.jpg' class='imgHeader' />";
+        echo "<img src='JPGs/TBP Pledge Card Class 5783 Header.jpg' class='imgHeader' />";
         echo "<h2>" . $schools[$school] . ' - ' . $grade . "</h2>";
 
         if (strpos($grade, '-') !== false) {
@@ -195,7 +195,7 @@ foreach ($users as $school => $grades) {
             ?>
             </tbody>
         </table>
-        <img src="classPledgeFooter.jpg" class="imgFooter" />
+        <img src="JPGs/TBP Pledge Card Class 5783 Footer.jpg" class="imgFooter" />
         <div style="page-break-after: always"></div>
         <?php
     }

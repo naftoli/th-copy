@@ -148,7 +148,7 @@ foreach ($users as $school_id => $grades) {
             }
 
             echo "<div class='card'>";
-            echo "<img src='MishnaHeader.jpg' class='imgHeader' />";
+            echo "<img src='JPGs/TBP Pledge Card 5783 Header.jpg' class='imgHeader' />";
             echo "<b>School:</b> " . $schools[$school_id] . "<br />";
             echo "<b>Grade:</b> " . $grade . "<br />";
             echo "<b>Student:</b> " . $name . "<br />";
@@ -174,7 +174,7 @@ foreach ($users as $school_id => $grades) {
                 echo "</tbody></table>";
                 echo "<p></p>";
             }
-            echo "<img src='MishnaFooter.jpg' class='imgFooter' /></div>";
+            echo "<img src='JPGs/TBP Pledge Card 5783 Footer.jpg' class='imgFooter' /></div>";
             echo "<div style='page-break-after: always'></div>";
         }
     }
