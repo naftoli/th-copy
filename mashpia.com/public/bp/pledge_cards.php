@@ -63,7 +63,7 @@ foreach ($schools as $school_id => $school_name) {
     <style>
         @font-face {
           font-family: Exo;
-          src: url("/fonts/Exo/Exo-VariableFont_wght.ttf")
+          src: url("/fonts/Exo/static/Exo-Regular.ttf")
         }
 
         h1 {

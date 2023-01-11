@@ -27,7 +27,7 @@ while ($row = mysql_fetch_assoc( $result )) {
     <style>
         @font-face {
           font-family: Exo;
-          src: url("/fonts/Exo/Exo-VariableFont_wght.ttf")
+          src: url("/fonts/Exo/static/Exo-Regular.ttf")
         }
 
         @font-face {
