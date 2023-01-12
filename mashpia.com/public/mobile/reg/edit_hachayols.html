@@ -91,8 +91,11 @@
   <div class="container page5">
     <div class="row">
       <div class="col-12" style="font-size: 16px;">
-        You can use this form to change/update which children should get Hachayols.<br />
-        If you add more children, you will be charged $10 per child.<br />
+        You can use this form to change/update/add which children should get Hachayols.<br />
+        When changing children, the change should go into effect after the following Mon.<br />
+        When adding children, the change will only go into effect anywhere from a week to a few weeks
+        (depending on when the next batch of hachayols will be shipped).<br />
+        When adding children, you will be charged based on the amount of hachayols that you will be getting.<br />
       </div>
       <hr />
     </div>
@@ -194,38 +197,18 @@
       }
     })
 
-    const calcFee = adding => {
+    const calcFee = () => {
       let fee
       const today = new Date()
-
-      if (adding) {
-        let dates = ['01/31/23', '02/28/23', '04/04/23', '05/02/23']
-        let hachayols = [17, 13, 8, 4]
-        // find out when the next shipment is
-        let d
-        for (d in dates) {
-          let day = new Date(dates[d])
-          if (day > today) break
-        }
-        fee = hachayols[d]
-      } else {
-        let dayOfWeek = today.getDay()
-
-        // get next Mon
-        let toAdd, nextMon
-        if (dayOfWeek > 1) toAdd = 8 - dayOfWeek
-        else if (dayOfWeek === 1) toAdd = 0
-        else toAdd = 1
-        nextMon = new Date()
-        nextMon.setDate(today.getDate() + toAdd)
-
-        // calculate how many weeks of hachayols child will be getting
-        let endDate = new Date('06/05/23') // last day that will work to still get a hachayol
-        let diff = Math.abs(endDate - nextMon)
-        let days = Math.ceil(diff / (1000 * 60 * 60 * 24)) // number of days
-        fee = Math.ceil(days / 7) // number of weeks / hachayols
+      let dates = ['01/31/23', '02/28/23', '04/04/23', '05/02/23']
+      let hachayols = [17, 13, 8, 4]
+      // find out when the next shipment is
+      let d
+      for (d in dates) {
+        let day = new Date(dates[d])
+        if (day > today) break
       }
-
+      fee = hachayols[d]
       return fee
     }
 
@@ -251,7 +234,7 @@
 
       let toCharge = checked > numHachayols ? checked - numHachayols : 0
       if (toCharge) {
-        const fee = calcFee(checked > numHachayols)
+        const fee = calcFee()
         total = toCharge * fee
         $("#purchase").text('Pay and Update Hachayols')
         $("#payment").show()
