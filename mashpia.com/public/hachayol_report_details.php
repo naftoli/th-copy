@@ -19,6 +19,13 @@ require('header.php');
     .hide {
         display: none;
     }
+    body {
+      display: none;
+    }
+    .details {
+      display: block;
+      page-break-after: always;
+    }
 }
 </style>
 </head>
@@ -68,13 +75,15 @@ if ( isset( $schools['pickup'] ) ) {
         $totals['pickup'] += $total;
         
         foreach ( $schoolDetails[$id] as $class => $users ) {
+            $num_hachayols = count($users);
+            echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
-            echo "Grade: " . $class . "<br />";
+            echo "Grade: " . $class . "<br /> <b>(" . $num_hachayols . ")</b>";
             echo "<div class='students'>";
             foreach ( $users as $user ) {
                 echo $user . "<br />";
             }
-            echo "</div><br />";
+            echo "</div></div><br />";
         }
         echo "<div class='page-break'></div>";
     }
@@ -96,13 +105,15 @@ if ( isset( $schools['deliver'] ) ) {
         $totals['deliver'] += $total;
         
         foreach ( $schoolDetails[$id] as $class => $users ) {
+            $num_hachayols = count($users);
+            echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
-            echo "Grade: " . $class . "<br />";
+            echo "Grade: " . $class . "<br /> <b>(" . $num_hachayols . ")</b>";
             echo "<div class='students'>";
             foreach ( $users as $user ) {
                 echo $user . "<br />";
             }
-            echo "</div><br />";
+            echo "</div></div><br />";
         }
         echo "<div class='page-break'></div>";
     }
