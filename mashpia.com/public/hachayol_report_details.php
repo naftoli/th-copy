@@ -19,11 +19,10 @@ require('header.php');
     .hide {
         display: none;
     }
-    body {
+    body:not('.details') {
       display: none;
     }
     .details {
-      display: block;
       page-break-after: always;
     }
 }
