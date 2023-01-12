@@ -78,7 +78,7 @@ if ( isset( $schools['pickup'] ) ) {
             $num_hachayols = count($users);
             echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
-            echo "Grade: " . $class . "<br /> <b>(" . $num_hachayols . ")</b>";
+            echo "Grade: " . $class . " <b>(" . $num_hachayols . ")</b><br />";
             echo "<div class='students'>";
             foreach ( $users as $user ) {
                 echo $user . "<br />";
@@ -108,7 +108,7 @@ if ( isset( $schools['deliver'] ) ) {
             $num_hachayols = count($users);
             echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
-            echo "Grade: " . $class . "<br /> <b>(" . $num_hachayols . ")</b>";
+            echo "Grade: " . $class . " <b>(" . $num_hachayols . ")</b><br />";
             echo "<div class='students'>";
             foreach ( $users as $user ) {
                 echo $user . "<br />";
