@@ -19,9 +19,6 @@ require('header.php');
     .hide {
         display: none;
     }
-    body:not('.details') {
-      display: none;
-    }
     .details {
       page-break-after: always;
     }
