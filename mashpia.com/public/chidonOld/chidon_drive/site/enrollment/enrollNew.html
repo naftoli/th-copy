@@ -628,12 +628,12 @@
 		lowest -= raised + coupon
 
 		// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce a further $100
-		if (!idx && [61, 269].includes(child.school_id)) {
+		if (idx && [61, 269].includes(child.school_id)) {
 			let elem = '#' + user_id
 			let trip = $(elem).find('#regional_trip').val()
 			if (trip === 'no_trip') lowest -= 100
 		}
-
+		alert(lowest)
 		if (lowest < 0) lowest = 0
 		if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
 		amounts.sort(function (a, b) {
