@@ -11,7 +11,7 @@ if ( $url_end && is_numeric( $url_end ) ) {
 } else {
     if ( strpos($url, '/setup') !== false ) {
         if ($host == 'tzivos.local') {
-            header("Location: http://" . $host . "/chidonOld/chidon_drive/site/login.html");
+            header("Location: http://" . $host . "/chidonOld/chidon_drive/site/login.html?a=" . url_encode($_COOKIE['chidon_admin']));
             exit;
         } else if ($host == 'mashpia.com') {
             header("Location: https://" . $host . "/chidonOld/chidon_drive/site/login.html");

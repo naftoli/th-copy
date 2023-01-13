@@ -724,7 +724,7 @@
 
             $(document).on('click', '.shabbaton', function() {
                 Cookies.set('chidon_admin', admin)
-                location.href = 'https://chidondrive.com/site/enroll_5782.html';
+                location.href = 'https://chidondrive.com/site/enrollNew.html';
             });
 
             $(document).on('click', '.shabbatonConfirm', function() {
@@ -737,6 +737,7 @@
             })
 
             $(document).on('click', '.chidondrive', function () {
+                Cookies.set('chidon_admin', admin)
                 if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/";
                 else location.href = "/chidonOld/chidon_drive/setup/";
             });
