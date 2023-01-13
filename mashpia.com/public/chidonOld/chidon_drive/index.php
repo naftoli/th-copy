@@ -17,7 +17,7 @@ if ( $url_end && is_numeric( $url_end ) ) {
             header("Location: https://" . $host . "/chidonOld/chidon_drive/site/login.html");
             exit;
         }
-        header("Location: https://" . $host . "/site/login.html?a=" . url_encode($_COOKIE['chidon_admin']));
+        header("Location: https://" . $host . "/site/login.html?a=" . $_GET['a']);
         exit;
     }
     switch ( $url ) {

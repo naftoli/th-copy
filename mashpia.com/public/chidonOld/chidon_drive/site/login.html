@@ -125,7 +125,7 @@ $(function() {
 			let url = window.location.href;
 			let pos = url.indexOf('?a=');
 			if (pos > 0) {
-				let admin = url.substring(pos + 3);
+				let admin = decodeURI(url.substring(pos + 3));
 				Cookies.set('chidon_admin', admin);
 			}
 

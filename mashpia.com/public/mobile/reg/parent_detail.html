@@ -737,8 +737,7 @@
             })
 
             $(document).on('click', '.chidondrive', function () {
-                Cookies.set('chidon_admin', admin)
-                if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/";
+                if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
                 else location.href = "/chidonOld/chidon_drive/setup/";
             });
 
