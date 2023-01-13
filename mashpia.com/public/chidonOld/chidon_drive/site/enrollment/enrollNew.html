@@ -201,6 +201,9 @@
 				<div class="children">
 
 				</div>
+				<div id="paymentDiv">
+					<a href="#" class="button" id="extra" style="color: #000; text-decoration: none;">Continue to Extra Purchases</a>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -664,8 +667,7 @@
 		$(elem).empty()
 		$(elem).append(html)
 		$(elem).find("select.reg").niceSelect()
-
-		$(".registration").show()
+		$(desc).find(".registration").show()
 	}
 
 	function addToCart(desc, value) {
@@ -694,7 +696,12 @@
 		const id = $(this).attr('id')
 		const info = id.split('_')
 		const user_id = info[2]
-		calculateReg(1, user_id)
+		if ($(this).is(":checked")) {
+			calculateReg(1, user_id)
+		} else {
+			let desc = "#" + user_id;
+			$(desc).find(".registration").hide()
+		}
 	})
 
 	$(document).on('change', '#regional_trip', function () {
@@ -808,7 +815,7 @@
 		return true
 	}
 
-	$("#payment").click( function(e) {
+	$("#extra").click( function(e) {
 		e.preventDefault()
 		if (
 			checkForItemsToProcess() &&
