@@ -633,7 +633,7 @@
 			let trip = $(elem).find('#regional_trip').val()
 			if (trip === 'no_trip') lowest -= 100
 		}
-		alert(lowest)
+
 		if (lowest < 0) lowest = 0
 		if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
 		amounts.sort(function (a, b) {
@@ -690,12 +690,18 @@
 	}
 
 	$(document).on('click', '.ultimate_trip', updateTripChoice)
+	$(document).on('click', '.trip_terms', function () {
+		const id = $(this).attr('id')
+		const info = id.split('_')
+		const user_id = info[2]
+		calculateReg(1, user_id)
+	})
 
 	$(document).on('change', '#regional_trip', function () {
 		let elem = $(this).parent().parent().find('.ultimate_trip')
 		if (! $(elem).is(":checked")) $(elem).trigger('click')
-		let val = $(elem).val()
-		let info = val.split(':')
+		const val = $(elem).val()
+		const info = val.split(':')
 		const idx = parseInt(info[0])
 		const user_id = info[1]
 		calculateReg(idx, user_id)
@@ -717,10 +723,6 @@
 				$(this).trigger('click')
 			}
 		}
-	})
-
-	$(document).on('click', '.trip_terms', function() {
-		$(this).parent().parent().parent().find('.registration').show()
 	})
 
 	function checkTripTerms() {
