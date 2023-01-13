@@ -320,7 +320,6 @@
 
     /**** GLOBAL VARS ****/
     var children = []; // global variable for children info
-    var children_ids = []; // global variable to keep track of order of children and ids
     var numChildren; // global variable to track number of children
     var cart = []
     var cart_total = 0
@@ -446,8 +445,8 @@
             break
         }
     }
-    myshliach = true
-    if (myshliach) {
+    // myshliach = true
+    if (myshliach && reg.length) {
         html += `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
                 <div class="flex">
                   <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />

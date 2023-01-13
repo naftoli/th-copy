@@ -173,39 +173,8 @@
 </header>
 <div class="main">
     <div class="wrapper">
-        <h2 class="title">Chidon Experience Enrollment</h2>
-        <!--		<div class="form login" style="display: none;">-->
-        <div class="form login">
-            <form id="loginForm">
-                <p>Please log in with your Mashpia.com account to proceed with Chidon enrollment*</p>
-                <div class="field">
-                    <label>Username: <input type="text" id="username" name="username" required /></label>
-                </div>
-                <div class="field">
-                    <label>Password: <input type="password" id="password" name="password" required /></label>
-                </div>
-                <h5 class="field formDetails">
-                    *<i>If you don't remember your username or password, please go to mashpia.com/mobile
-                        and click on the "forgot user/password" link</i>
-                </h5>
-                <input type="submit" class="button" value="LOGIN" />
-            </form>
-        </div>
-        <!--        <div class="form kids-wrapper blue-circle" style="display: none;"></div>-->
-
-        <!--        <div class="floating-div">-->
-        <!--            <p>Total: $<span id="total">0</span></p>-->
-        <!--        </div>-->
-        <div class="form" id="regForm" style="display: none">
-            <form class="personalInfo">
-                <div class="children">
-
-                </div>
-            </form>
-        </div>
-
         <!-- FORM PART 2 -->
-        <div class="form form2" id="purchasesForm" style="display: none">
+        <div class="form form2" id="purchasesForm">
             <form id="formPart2">
                 <h5 class="title" style="font-weight: bold">Extra Purchases</h5>
                 <h5 class="formDetails">
@@ -412,12 +381,6 @@
 <script src='../js/circles.min.js'></script>
 <script src="../js/js.cookie.js"></script>
 <script type="text/javascript">
-  // let closed = "Due to technical difficulties with our payment processor, registration is temporarily suspended.  As soon as it is resolved, registration will re-open.  Thanks for your patience."
-  // alert(closed)
-  // location.href = 'https://mashpia.com/mobile'
-
-  // alert("Enrollment is now closed.");
-  // location.href = "/";
   if (location.protocol != 'https:') {
     let url = window.location.href;
     let pos = url.indexOf(':');
@@ -433,40 +396,20 @@
     let admin = url.substring(pos + 3);
     Cookies.set('chidon_admin', admin);
   }
-
-  if (Cookies.get('chidon_admin')) {
-    processChildren(Cookies.get('chidon_admin'));
-  }  else {
-    $(".login").show();
-  }
-
-  $("#loginForm").submit(function (evt) {
-    evt.preventDefault();
-    let user = $("#username").val();
-    let pass = $("#password").val();
-    $.post('../../ajax/login.php', { username: user, password: pass }, function (result) {
-      let info = JSON.parse(result);
-      if (info.success) {
-        Cookies.set('chidon_admin', info.admin);
-        processChildren(info.admin);
-      } else {
-        alert(info.error);
-      }
-    });
-  });
+  if (! Cookies.get('chidon_admin')) location.href = 'enrollNew.html'
 
   $('#menu-opener').click(function (e) {
     $('header nav').toggleClass('open');
   });
 
   /**** GLOBAL VARS ****/
-  var children = []; // global variable for children info
   var cart = []
   var cart_total = 0
   var addresses = {} // all addresses entered
   var sweaters = {}
   var celeb_boxes = 950
-  var ultimate_trip = [] // array of users going on ultimate trip
+
+  getSweaterInfo()
 
   function getSweaterInfo() {
     $.post('../../ajax/sweaterInfo.php', function( result ) {
@@ -499,367 +442,6 @@
     } else {
       $("#celebBoxes").hide()
       $("#celebBoxesSoldOut").show()
-    }
-  }
-
-  async function getChildren(admin) {
-    let result = await $.post('../../ajax/getChildren.php', { admin })
-    let info = JSON.parse(result);
-    return info
-  }
-
-  async function getTracks(children) {
-    let result = await $.post('../../ajax/getTracks.php', { children })
-    let tracks = JSON.parse(result)
-    return tracks
-  }
-
-  function checkForUltimate(child) {
-    const base = 5782
-    const year = parseInt(child.year)
-    let pastYrs = true
-    const checkYrs = base - year
-    // check history
-    if (checkYrs) {
-      for (let i = 1; i <= checkYrs; i++) {
-        if (child.history[year - i] === 'Yesod') pastYrs = false
-      }
-    }
-    return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun') && pastYrs
-  }
-
-  function getLowest(child, amounts) {
-    const raised = parseInt(child.raised)
-    const coupon = parseInt(child.coupon_used) === 0 ? parseInt(child.coupon) : 0
-
-    let lowest = amounts[amounts.length-1]
-    lowest -= raised + coupon
-    if (lowest < 0) lowest = 0
-    return lowest
-  }
-
-  function getTrackText(track, ultimate) {
-    let trackText = {
-      'Yesod': "the Chidon Sweater, Gifts & to take the Yesod Final",
-      'Yediah': "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
-      'Havonah': "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
-      'Iyun': "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
-      'Ultimate': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + track + " Final"
-    }
-    if (ultimate) track = 'Ultimate'
-    return trackText[track]
-  }
-
-  const trackInfo = {
-    'Yesod': [150, 100, 70, 50],
-    'Yediah': [200, 180, 150, 120, 100],
-    'Havonah': [300, 250, 225, 200],
-    'Iyun': [350, 300, 250, 220, 200],
-    'Ultimate': [500, 400, 300, 275, 250]
-  } // need it for a few functions so it needs to be global
-
-  async function processChildren(admin) {
-    getSweaterInfo()
-    let result = await getChildren(admin)
-    if (! result.success) {
-      alert(result.error)
-      return false
-    }
-    children = result.children
-
-    result = await getTracks(children)
-    if (! result.success) {
-      alert(result.error)
-      return false
-    }
-    let tracks = result.tracks
-
-    // update children with track info
-    for (let child of children) {
-      child.track = tracks[child.user_id]
-    }
-
-    let registered = children.filter(child => child.date_paid)
-    let haveTrack = children.filter(child => child.track)
-    let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-    let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
-
-    // if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
-    // 	alert("It seems like you don't have any child(ren) that are eligible this year.")
-    // 	location.href = '/mobile'
-    // }
-
-    // if (! eligible.length) {
-    // 	if (registered.length && haveTrack.length && haveTrack.length === registered.length) {
-    // 		alert("All your child(ren) that are eligible have already been registered.")
-    // 	} else {
-    // 		let msg = "You do not have any children that are currently able to enroll.";
-    // 		if (schoolNotConfirmed.length && registered.length) {
-    // 			msg += " Some of your children have already registered, while others have not had their school " +
-    // 				"confirm their eligibility."
-    // 		} else if (schoolNotConfirmed.length) {
-    // 			msg += " Some or all of your child(ren)'s school(s) have not yet confirmed their eligibility."
-    // 		}
-    // 		alert(msg)
-    // 	}
-    // 	location.href = '/mobile'
-    // } else if (schoolNotConfirmed.length) {
-    // 	alert("You have some child(ren) who are not showing up because their school has not yet confirmed their eligibility.")
-    // }
-    if (schoolNotConfirmed.length) alert('Only children that have had their school confirm their eligibility will show up for registration.')
-
-    // list of children serial numbers that should have the option of choosing europe as their trip
-    const europe = [
-      7753570, 7753546, 7761795, 7763181, 7776765, 7776764, 7756652, 7758688, 7782458, 7763859, 7758418, 7737412, 7780905,
-      7758272, 7763863, 7775382, 7750675, 7759857, 7759217, 7776086, 7771187, 7753437, 7763867, 7781649, 7763926, 7753613,
-      7753614, 7759727, 7763101, 7780903, 7772725, 7772723, 7772724, 7757180, 7761789, 7760644, 7748757, 7754201, 7750723,
-      7758464, 7753478, 7758685, 7758100, 7755754, 7758720, 7769927, 7772528, 7772704, 7782182, 7762209, 7777553, 7777554,
-      7758301, 7779510, 7760728, 7763903, 7758410, 7776662, 7763363, 7779423, 7773936, 7758082, 7782413, 7764759, 7750646,
-      7764449, 7775002, 7758500, 7770578, 7763906, 7758686, 7748637, 7754164, 7762008, 7750697, 7757841, 7761936, 7753118,
-      7758286, 7758285, 7772670, 7761884, 7752952, 7760626, 7763929, 7758777, 7756294, 7782388, 7782387, 7760554, 7774758,
-      7758189, 7763980, 7754572, 7754573, 7754575, 7772608, 7763079, 7763080, 7751046, 7782326, 7782434, 7777474, 7770919,
-      7754418, 7781281, 7781404, 7781403, 7762082, 7758771, 7752009, 7774443, 7779561, 7782181, 7780827, 7758295, 7758747,
-      7770031, 7770034, 7771369, 7764290, 7764289
-    ]
-
-    let html = ''
-    let hasMyShliachChild = false
-    for (let child of eligible) {
-      let myshliach = false // flag for determining if need to show shipping section
-      if ([61, 269].includes(parseInt(child.school_id))) {
-        myshliach = true
-        hasMyShliachChild = true
-      }
-      // figure out if child is eligible for ultimate experience
-      console.log(child)
-      let ultimate = checkForUltimate(child)
-      let trackText = getTrackText(child.track, ultimate)
-
-      const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
-      html += `
-                    <div class="kid flex-kids" id="${child.user_id}">
-                        <div>
-                            <img class="childImg" src="//mashpia.com/${childPic}" />
-                        </div>
-                         <div style="margin-left: 20px;">
-                            <h5 class="formDetails">Dear ${child.first},</h5>
-                            <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
-                            Track. You are eligible for ${trackText}.<h5>`
-
-      const tripDates = {
-        M: '27 - 29 Adar, March 20 - 22',
-        F: '20 - 22 Adar, March 13 - 15'
-      }
-
-      // registration heading
-      let amounts, lowest, free
-      if (ultimate) {
-        if (! ultimate_trip.includes(child.user_id)) ultimate_trip.push(child.user_id)
-        let text = `<h5 class="formDetails"><b>Regional Trip</b> ($300) <br />
-						I cannot join the 3 day Ultimate Chidon Experience, however I would like to join the Regional Trip that is available in my area (including NY)
-					</h5>`
-        if (myshliach) text = `You will be joining one of your base's Regional Trips. If you are unable to join any of the trips, please select the 'no trip' option below and
-						$100 will be deducted from your registration fee.<br /><br />
-						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
-						<select name="regional_trip" id="regional_trip">
-							<option value="0">Please select which trip you will be joining</option>
-							<option value="ny">New York</option>
-							<option value="west">West Coast</option>`
-        if (europe.includes(child.user_serial)) text += `<option value="europe">Europe</option>`
-        text += `<option value="no_trip">No Trip</option>
-						</select>`
-        html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
-        html += `<div class="flex">
-                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' />
-                            <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
-                                Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
-                            </h5>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='1:${child.user_id}' />
-                            <h5 class="formDetails"><b>Regional Trip</b> ($300) <br />
-                            	${text}
-														</h5>
-                        </div>
-                        <br />
-<!--                        <h5 class="formDetails"><span class="title ultimate_title">Ultimate Chidon Experience Payment</span></h5>-->
-`
-      } else if (child.track === 'Havonah' || child.track === 'Iyun') {
-        let style = ''
-        if (ultimate) style='display: none'
-        let text = 'You will be joining your school\'s Regional Trip. Speak to your schools coordinator with regards to any questions you have about your region\'s trip.'
-        if (myshliach) {
-          text = `You will be joining one of your base's Regional Trips. If you are unable to join any of the trips, please select the 'no trip' option below and
-						$100 will be deducted from your registration fee.<br /><br />
-						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
-						<select name="regional_trip" id="regional_trip">
-							<option value="0">Please select which trip you will be joining</option>
-							<option value="ny">New York</option>
-							<option value="west">West Coast</option>`
-          if (europe.includes(child.user_serial)) text += `<option value="europe">Europe</option>`
-          text += `<option value="no_trip">No Trip</option>
-						</select>`
-        }
-        html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
-        if (!myshliach) {
-          html += `<div class="flex">
-													<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
-															<label for="trip_terms_${child.user_id}" style="display: inline">
-															I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
-															I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
-															</label>
-											</div>`
-        }
-        html += '</div>'
-      }
-
-      // registration
-      let track = ultimate ? 'Ultimate' : child.track
-      amounts = [...trackInfo[track]]
-      html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
-      html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
-
-      // coupons
-      if (child.coupon > 0 && parseInt(child.coupon_used) === 0) {
-        html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-                        You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
-      }
-
-      // chidon drive
-      if (parseFloat(child.raised) > 0) {
-        html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
-                        You raised $${child.raised} which will be taken off your registration cost.</h5>`
-      }
-
-      lowest = getLowest(child, amounts)
-      if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
-      const subsidy = parseInt(child.subsidy)
-      if (!isNaN(subsidy)) {
-        amounts.push(subsidy)
-        if (lowest > subsidy) lowest = subsidy
-      }
-      amounts.sort(function(a, b) { return b - a })
-      if (lowest === 0) free = true
-      else free = false
-      html += `<h5 class="formDetails reg_select">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!<br /><br />`
-      html += `Please pay as much as you can.<br />`
-      html += `<select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-      html += `<option value="">I would like to pay</option>`
-      let last = amounts.length - 1
-      for (let i = 0; i <= last; i++) {
-        html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
-      }
-      html += `</select></h5>`
-
-      html += `</div>
-                </div>
-            </div>
-            <div style="clear: both"></div>
-            <br />`
-    }
-    // set myshliach cookie; needed for processing registration page
-    Cookies.set('myshliach', hasMyShliachChild ? 1 : 0)
-
-    // add shipping where relevant
-    // get shipping info from database
-    let info = await $.post('../../ajax/getShippingInfo.php')
-    let shippingParsed = JSON.parse(info)
-    if (shippingParsed.success) {
-      let shippingInfo = shippingParsed.data
-      shippingInfo['address'] = shippingInfo['address'].replaceAll('\\', '')
-      if (! parseInt(shippingInfo['paid'])) {
-        if (myshliach && parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
-          html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-          html += `<div class="flex">
-                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
-                                <label>I would like to pick up my package in CH during the east coast trip.</label>
-                            </div>
-                            <div class="flex">
-                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="${shippingInfo['cost']}" />
-                                <label>I would like my package to be shipped to my house
-                                ${shippingInfo['address']} for $${shippingInfo['cost']} per family. If your address is incorrect
-                                please update it in your parent account (profile page)</label>
-                            </div>`
-        } else if (! parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
-          html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-          html += `<div class="flex">
-                                <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
-                                <label for="ship_intl">My package will be shipped to `
-          if (myshliach) html += `${shippingInfo['address']}`
-          else html += 'my school'
-          html += ` for $${shippingInfo['cost']}.</label></div>`
-        }
-      }
-    }
-
-    $(".login").hide();
-    if (eligible.length) $("#regForm").show();
-    $("#purchasesForm").show();
-    $(".children").empty();
-    $(".children").append(html);
-    $(".children").show();
-    $("select.reg").niceSelect()
-    $("select#regional_trip").niceSelect()
-
-    $(".ultimate_trip").click( function() {
-      const titles = [
-        'Ultimate Experience Payments',
-        'Regional Trip Payments'
-      ]
-      const costs = [
-        500,
-        300
-      ]
-      const val = $(this).val()
-      const info = val.split(':')
-      const idx = parseInt(info[0])
-      const user_id = info[1]
-      $(".ultimate_title").text(titles[idx])
-      $(".full_cost").text(costs[idx])
-      calculateReg(idx, user_id)
-      if (idx) {
-        $(this).parent().parent().find('.regional_trip').show()
-        // remove from ultimate_trip if exists
-        if (ultimate_trip.includes(user_id)) {
-          ultimate_trip = ultimate_trip.filter(user => user !== user_id)
-        }
-      } else {
-        $(this).parent().parent().find('.regional_trip').hide()
-        if (! ultimate_trip.includes(user_id)) ultimate_trip.push(user_id)
-      }
-    })
-
-    const calculateReg = (idx, user_id) => {
-      // change to regional trip options
-      let filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
-      let child = filtered[0]
-      let track = child.track === 'Ultamite' ? child.originalTrack : child.track
-      let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultimate']]
-      lowest = getLowest(child, amounts)
-      if (lowest < amounts[amounts.length-1]) amounts.push(lowest)
-      const subsidy = parseInt(child.subsidy)
-      if (!isNaN(subsidy)) {
-        amounts.push(subsidy)
-        if (lowest > subsidy) lowest = subsidy
-      }
-      amounts.sort(function(a, b) { return b - a })
-      if (lowest === 0) free = true
-      else free = false
-      let html = `You can register for ${free ? 'FREE' : 'as little as $' + lowest}!.<br /><br />`
-      html += `Please pay as much as you can.<br />`
-      html += `<select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-      html += `<option value="">I would like to pay</option>`
-      let last = amounts.length - 1
-      for (let i = 0; i <= last; i++) {
-        html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
-      }
-      html += `</select>`
-      let desc = "#" + user_id;
-      let elem = $(desc).find(".reg_select");
-      $(elem).empty()
-      $(elem).append(html)
-      $(elem).find("select.reg").niceSelect()
     }
   }
 
@@ -1072,10 +654,6 @@
   //     cart_total = cart.reduce((accumulator, item) => accumulator + parseInt(item.value), 0)
   // }
 
-  $(document).on('change', '.reg', function(e) {
-    utilityFn(e, this)
-  })
-
   $(document).on('click', '.shipping', function(e) {
     if ($(this).is(":checked")) utilityFn(e, this)
     else removeFromCart($(this).attr('id'))
@@ -1223,102 +801,15 @@
     return true
   }
 
-  function checkShipping() {
-    // only check shipping if at least one child is being registered
-    let check = false
-    for (let item of cart) {
-      if (item.desc.includes('reg')) {
-        check = true
-        break
-      }
-    }
-    if (check) {
-      if ($(".shipping").length) {
-        if (!$(".shipping:checked").length) {
-          alert("You must indicate how you would like to have your package shipped!")
-          $(".shipping").eq(0).focus()
-          return false
-        }
-      }
-    }
-    return true
-  }
-
-  function checkForItemsToProcess() {
-    // check if we have anything in the cart
-    if (! cart.length) {
-      alert("You have not chosen anything to register for or pay for!")
-      return false
-    }
-    return true
-  }
-
-  function checkRegAddUserInfo() {
-    let iyun = 0
-    let reg = []
-    let names = {}
-    for (let item of cart) {
-      // check if there's any children being registered
-      if (item.desc.includes('reg')) {
-        // get user id
-        const regInfo = item.desc.split('_')
-        reg.push(regInfo[1])
-      }
-    }
-    // if (! reg.length) {
-    // 	alert("You must register at least one child!")
-    // 	return false
-    // }
-
-    for (let child of children) {
-      if (reg.includes(child.user_id)) {
-        names[child.user_id] = {
-          first: child.first,
-          myshliach: [61, 269].includes(child.school_id)
-        }
-        if (child.track == 'iyun') iyun = 1
-      }
-    }
-
-    addToCart('names', names)
-    addToCart('iyun', iyun)
-    return true
-  }
-
   $("#payment").click( function(e) {
     e.preventDefault()
     if (
-      checkForItemsToProcess() &&
-      checkRegAddUserInfo() &&
-      checkTripTerms() &&
-      checkShipping() &&
       checkChoicesAreComplete() &&
       checkAddresses()
     ) {
-      json_cart = JSON.stringify(cart)
       json_addresses = JSON.stringify(addresses)
-      // add coupons and chidon drive raised
-      json_coupons = JSON.stringify(children.filter(child => child.coupon > 0 && parseInt(child.coupon_used) === 0))
-      json_raised = JSON.stringify(children.filter(child => parseFloat(child.raised) > 0))
-      // add track info
-      json_tracks = JSON.stringify(children.filter(child => child.track != ''))
-
-      if (window.localStorage) {
-        window.localStorage.setItem('cart', json_cart)
-        window.localStorage.setItem('addresses', json_addresses)
-        window.localStorage.setItem('coupons', json_coupons)
-        window.localStorage.setItem('raised', json_raised)
-        window.localStorage.setItem('tracks', json_tracks)
-        if (ultimate_trip.length) window.localStorage.setItem('ultimate_trip', ultimate_trip)
-      } else {
-        // put in cookie
-        Cookies.set('cart', json_cart)
-        Cookies.set('addresses', json_addresses)
-        Cookies.set('coupons', json_coupons)
-        Cookies.set('raised', json_raised)
-        Cookies.set('tracks', json_tracks)
-        if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
-      }
+      if (window.localStorage) window.localStorage.setItem('addresses', json_addresses)
+      else Cookies.set('addresses', json_addresses)
       // go to checkout page
       location.href = 'checkout.html'
     }
