@@ -10,12 +10,6 @@ $year = GlobalSettings::getChidonYear();
 $start = 5775;
 
 $types = ['tanya', 'mishna'];
-
-$sql = "select * from line_campaigns where year != $year order by year";
-$result = mysql_query( $sql );
-while ($row = mysql_fetch_assoc( $result )) {
-    $campaigns[$row['year']][$row['id']] = strtolower( $row['type'] );
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -111,6 +105,8 @@ $sql = "SELECT
             line_campaigns l ON l.id = bus.campaign_id 
                 JOIN 
             classes c on c.class_id = u.class_id 
+        WHERE 
+            l.year != $year                  
         ORDER BY 
             s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $result = mysql_query($sql);
@@ -184,7 +180,7 @@ foreach ($users as $school => $grades) {
                 foreach ($types as $type) {
                     for ($i = $start; $i < $year; $i++) {
                         $amount = '';
-                        if ($start >= $startYr[$gradeOnly] && isset($bpInfo[$i][$type])) $amount = $bpInfo[$i][$type];
+                        if ($i >= $startYr[$gradeOnly] && isset($bpInfo[$i][$type])) $amount = $bpInfo[$i][$type];
                         if ($i == ($year - 1)) {
                             echo "<td class='cell' style='border-right: 2px solid black;'>" . $amount . "</td>";
                         } else {
