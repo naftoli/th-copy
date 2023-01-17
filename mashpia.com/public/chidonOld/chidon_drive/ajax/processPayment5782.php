@@ -25,10 +25,9 @@ $coupon = new CouponCode($MASHPIA_DB, $year);
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = intval($_POST['card_id']);
-$shipping_charge = isset($_POST['shipping_charge']) ? intval($_POST['shipping_charge']) : 0;
+$shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
-$shipping = isset($_POST['shipping']) ? $_POST['shipping'] : null;
 $cart = $_POST['cart'];
 $sweaters = isset($_POST['sweaters']) ? $_POST['sweaters'] : [];
 $addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
@@ -54,9 +53,6 @@ $sqlReg = $MASHPIA_DB->prepare($sql);
 
 $sql = "update th_chidon set khk_trip = 1 where year = :year and user_id = :user";
 $sqlKhk = $MASHPIA_DB->prepare($sql);
-
-$sql = "update admins set chidon_shipping_paid = :amount where admin_id = :admin";
-$sqlShipping = $MASHPIA_DB->prepare($sql);
 
 $sql = "insert into extra_purchases set 
         year = :year, 
@@ -161,7 +157,7 @@ function addNewCard() {
 }
 
 function processFee() {
-    global $year, $admin_id, $to_charge, $payment_id, $shipping_charge;
+    global $year, $admin_id, $to_charge, $payment_id;
 
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
@@ -227,13 +223,21 @@ function processKhk() {
 }
 
 function updateShipping() {
-    global $admin_id, $sqlShipping, $shipping;
+    global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
+
+    $sqlInsert = "INSERT INTO chidon_admin_shipping 
+                    SET admin_id = :admin, 
+                    year = :year, 
+                    paid = :amount, 
+                    date_paid = now()";
+    $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $updated = true;
-    if (! is_null($shipping)) {
-        $updated = $sqlShipping->execute([
-            ':amount'   => $shipping,
-            ':admin'    => $admin_id
+    if ($shipping_charge) {
+        $updated = $stmtInsert->execute([
+            'admin'     => $admin_id,
+            'year'      => $year,
+            'amount'    => $shipping_charge
         ]);
     }
     return $updated;
@@ -334,24 +338,6 @@ function redeemCoupons() {
     }
 }
 
-function processShippingCharge() {
-    global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
-
-    if ($shipping_charge) {
-        $stmt = $MASHPIA_DB->prepare("
-            UPDATE chidon_admin_shipping 
-            SET paid = :amount, date_paid = now() 
-            WHERE admin_id = :admin AND year = :year");
-        $res = $stmt->execute([
-            'amount'    => $shipping_charge,
-            'year'      => $year,
-            'admin'     => $admin_id
-        ]);
-        return $res;
-    }
-    else return true;
-}
-
 function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
@@ -446,12 +432,11 @@ $khk = processKhk();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
-$couponsRedeemed = redeemCoupons();
-$shippingCharge = processShippingCharge();
+redeemCoupons();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $shippingCharge) {
+if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
     if ($to_charge) {
         $payment = processFee();
         if (! $payment) {

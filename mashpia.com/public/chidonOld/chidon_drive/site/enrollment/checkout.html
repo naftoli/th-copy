@@ -7,11 +7,11 @@
     <meta name="google" content="notranslate">
     <title>Chidon Enrollment | Chidon Drive</title>
     <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
-    <link rel="icon" type="image/png" href="img/favicon.png" />
-    <link rel="stylesheet" href="css/font.css" type="text/css" />
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-    <link rel="stylesheet" href="css/nice-select.css" type="text/css" />
-    <link rel="stylesheet" href="css/enroll.css" type="text/css" />
+    <link rel="icon" type="image/png" href="../img/favicon.png" />
+    <link rel="stylesheet" href="../css/font.css" type="text/css" />
+    <link rel="stylesheet" href="../css/style.css" type="text/css" />
+    <link rel="stylesheet" href="../css/nice-select.css" type="text/css" />
+    <link rel="stylesheet" href="../css/enroll.css" type="text/css" />
     <style>
         #loginForm input:not(.button) {
             margin: 10px 0;
@@ -150,19 +150,19 @@
     <div class="wrapper">
         <div class="left">
             <a href="#" id="menu-opener"><span></span><span></span><span></span></a>
-            <a href="index.html" class="logo">
-                <h1>Chidon</h1><img src="img/chidon.png?v=1" alt="Chidon" />
+            <a href="../index.html" class="logo">
+                <h1>Chidon</h1><img src="../img/chidon.png?v=1" alt="Chidon" />
             </a>
             <nav>
-                <a href="index.html">Home</a>
-                <a href="donate.html">Donate</a>
-                <a href="leaderboard.html">Leaderboard</a>
-                <a href="story.html">Our Story</a>
+                <a href="../index.html">Home</a>
+                <a href="../donate.html">Donate</a>
+                <a href="../leaderboard.html">Leaderboard</a>
+                <a href="../story.html">Our Story</a>
             </nav>
         </div>
         <div class="icons">
-            <a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
-            <a href="#"><img src="img/army.png" alt="Tzivos Hashem" /></a>
+            <a href="#"><img src="../img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+            <a href="#"><img src="../img/army.png" alt="Tzivos Hashem" /></a>
         </div>
     </div>
 </header>
@@ -247,30 +247,30 @@
             <div class="footer-about">
                 <div class="icon-wrapper">
                     <a href="https://thechidon.com" target="blank">
-                        <img src="img/chidon-logo.png" alt="Chidon" />
+                        <img src="../img/chidon-logo.png" alt="Chidon" />
                     </a>
                 </div>
                 <div class="icon-wrapper">
-                    <img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+                    <img src="../img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
                 </div>
                 <div class="icon-wrapper">
-                    <img src="img/army-color.png" alt="Tzivos Hashem" />
+                    <img src="../img/army-color.png" alt="Tzivos Hashem" />
                 </div>
                 <p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="donate.html">Donate</a></li>
-                    <li><a href="leaderboard.html">Leaderboard</a></li>
-                    <li><a href="story.html">Our Story</a></li>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../donate.html">Donate</a></li>
+                    <li><a href="../leaderboard.html">Leaderboard</a></li>
+                    <li><a href="../story.html">Our Story</a></li>
                 </ul>
                 <ul>
                     <li>
                         <h5>Quick Links</h5>
                     </li>
-                    <li><a href="family.html">Find a Family</a></li>
-                    <li><a href="sponsor.html">Sponsors</a></li>
+                    <li><a href="../family.html">Find a Family</a></li>
+                    <li><a href="../sponsor.html">Sponsors</a></li>
                     <!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
                 </ul>
                 <ul>
@@ -294,10 +294,10 @@
 </footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="js/circletype.min.js"></script>
-<script src="js/jquery.nice-select.min.js"></script>
-<script src='js/circles.min.js'></script>
-<script src="js/js.cookie.js"></script>
+<script src="../js/circletype.min.js"></script>
+<script src="../js/jquery.nice-select.min.js"></script>
+<script src='../js/circles.min.js'></script>
+<script src="../js/js.cookie.js"></script>
 <script type="text/javascript">
     // alert("Enrollment is now closed.");
     // location.href = "/";
@@ -324,10 +324,9 @@
     var cart = []
     var cart_total = 0
     var addresses = {} // all addresses entered
-    var admin
-    var admin_email
+    var admin, admin_email, shipping, coupons, raised
 
-    $.post('../ajax/getAdminInfo.php', function(result) {
+    $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function(result) {
         admin = JSON.parse(result)
         admin_email = admin.admin_email
         let cards = []
@@ -357,27 +356,23 @@
     if (window.localStorage) {
         cart = JSON.parse(window.localStorage.getItem('cart'))
         addresses = JSON.parse(window.localStorage.getItem('addresses'))
+        coupons = window.localStorage.getItem('coupons')
+        raised = window.localStorage.getItem('raised')
+        shipping = window.localStorage.getItem('shipping')
     } else {
         cart = JSON.parse(Cookies.get('cart'))
         addresses = JSON.parse(Cookies.get('addresses'))
-    }
-    if (!cart.length) location.href = 'enrollNew.html'
-
-    let coupons, raised // keep track of coupons and raised
-    if (window.localStorage) {
-        coupons = window.localStorage.getItem('coupons')
-        raised = window.localStorage.getItem('raised')
-    } else {
         coupons = Cookies.get('coupons')
         raised = Cookies.get('raised')
+        shipping = Cookies.get('shipping')
     }
+    if (!cart.length) location.href = 'enrollNew.html'
 
     let names = cart.filter(item => item.desc === 'names')
     if (names.length) children = names[0].value
 
     // parse cart info
     let reg = []
-    let shipping = 0
     let celeb_boxes = 0
     let celeb_box_shipping = 0
     let sweaters = []
@@ -396,8 +391,6 @@
                 fee: parseInt(item.value)
             }
             reg.push(reg_item)
-        } else if (item.desc === 'ship_usa' || item.desc === 'ship_intl') {
-            shipping = parseInt(item.value)
         } else if (item.desc === 'num_celeb_boxes') {
             celeb_boxes = parseInt(item.value)
         } else if (item.desc === 'celeb_box_ship') {
@@ -433,37 +426,7 @@
         }
     }
 
-    let shipping_charge = 0
-    const shipping_cost = 50
-
     let html = ''
-    // find out if we need to charge for shipping
-    let myshliach = false
-    for (let i of reg) {
-        if (children[i.id].myshliach) {
-            myshliach = true
-            break
-        }
-    }
-    // myshliach = true
-    if (myshliach && reg.length) {
-        html += `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-                <div class="flex">
-                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-                  <label>
-                    (FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-                    Sunday & Monday, 19 & 20 Adar: 6-9PM; Thursday, 23 Adar: 9-11AM.
-                  </label>
-                </div>
-                <div class="flex">
-                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_cost}" />
-                  <label>
-                    ($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
-                    check to confirm that it has the correct address saved.
-                  </label>
-                </div>`
-    }
-
     let reg_fee = 0
     if (reg.length) {
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
@@ -529,6 +492,7 @@
     if (reg.length && cart_total === 0) $(".processPayment").val('Register')
     else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
     else if (cart_total > 0) $(".processPayment").val('Pay')
+    else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
 
     // hide payment option if nothing is being charged
     if (cart_total === 0) {
@@ -536,21 +500,6 @@
         $("#paymentDetails").next('div').hide()
         $("#paymentDetails").hide()
     }
-
-    $(document).on('change', '.shipping', function () {
-        const amount = parseInt($(this).val())
-        shipping_charge = amount
-        $("#total").text(cart_total + shipping_charge)
-        if (shipping_charge) {
-            if (reg.length) $(".processPayment").val('Pay & Register')
-            else $(".processPayment").val('Pay')
-            if (cart_total === 0) {
-                $("#paymentDetails").next('div').next('div').show()
-                $("#paymentDetails").next('div').show()
-                $("#paymentDetails").show()
-            }
-        }
-    })
 
     $(".payment").click( function() {
         if (parseInt($(this).val())) {
@@ -564,7 +513,7 @@
         evt.preventDefault()
         $(".processPayment").attr('disabled', true)
 
-        if ((cart_total || shipping_charge) && ! $(".payment:checked").length) {
+        if (cart_total && ! $(".payment:checked").length) {
             alert('You must indicate how your are going to pay!')
             $(".processPayment").attr('disabled', false)
             return false
@@ -572,7 +521,7 @@
 
         let cc = {}
         let card_id = 0
-        if (cart_total || shipping_charge) {
+        if (cart_total) {
             if (parseInt($(".payment:checked").val()) === 0) {
                 card_id = parseInt($(".payment-card").val())
                 // check if cvc is correct
@@ -598,11 +547,10 @@
         }
 
         const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
-        $.post('../ajax/processPayment5782.php', {
+        $.post('../../ajax/processPayment5782.php', {
             admin_id: admin.admin_id,
             admin_email,
             cart_total,
-            shipping_charge,
             shipping,
             card_id,
             cc,
@@ -617,7 +565,7 @@
             if (res.success) {
                 alert(res.msg)
                 // save customer to db if needed
-                if (Cookies.get('customer_id')) $.post('../ajax/setCustomerId.php', { admin_id: admin.admin_id })
+                if (Cookies.get('customer_id')) $.post('../../ajax/setCustomerId.php', { admin_id: admin.admin_id })
                 let items = ['cart', 'addresses', 'coupons', 'raised', 'tracks', 'ultimate_trip']
                 for (let item of items) {
                     if (window.localStorage) window.localStorage.removeItem(item)

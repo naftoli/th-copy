@@ -4,8 +4,7 @@
 
 require_once __DIR__ . '/../../../db.php';
 require_once __DIR__ . '/../encrypt.php';
-$admin = $_COOKIE['chidon_admin'];
-$admin_id = encrypt_decrypt('decrypt', $admin);
+$admin_id = encrypt_decrypt('decrypt', $_POST['admin']);
 
 require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
 use \classes\authorize\CustomerProfile as Customer;

@@ -202,7 +202,7 @@
 
 				</div>
 				<div id="paymentDiv">
-					<button id="extra" class="button">Continue to Extra Purchases</button>
+					<button id="extra" class="button" style="font-size: 18px;">Continue to Extra Purchases</button>
 				</div>
 			</form>
 		</div>
@@ -239,7 +239,7 @@
 					<li><a href="../index.html">Home</a></li>
 					<li><a href="../donate.html">Donate</a></li>
 					<li><a href="../leaderboard.html">Leaderboard</a></li>
-					<li><a href="../story.html">Our Story</a></li>
+					<eli><a href="../story.html">Our Story</a></eli>
 				</ul>
 				<ul>
 					<li>
@@ -268,6 +268,26 @@
 		</div>
 	</div>
 </footer>
+
+<div class="modal" id="ch_info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Modal body text goes here.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="../js/circletype.min.js"></script>
@@ -328,6 +348,8 @@
 	var cart_total = 0
 	var addresses = {} // all addresses entered
 	var ultimate_trip = [] // array of users going on ultimate trip
+	var shipping = 0 // cost of shipping chidon stuff to parents where applicable
+	var shipping_cost = 50
 
 	async function getChildren(admin) {
 		let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -418,8 +440,8 @@
 			alert('All of your eligible children have already registered.')
 			location.href = 'enroll_extra.php'
 		} else if (!eligible.length && !registered.length) {
-			alert("You don't have any eligible children to register.")
-			location.href = '/mobile'
+			alert("You don't have any eligible children to register, however, you can purchase some items for the chidon.")
+			location.href = 'enroll_extra.php'
 		}	else if (schoolNotConfirmed.length) {
 			alert('Only children that have had their school confirm their eligibility will show up for registration.')
 		}
@@ -546,36 +568,24 @@
 		// set myshliach cookie; needed for processing registration page
 		Cookies.set('myshliach', hasMyShliachChild ? 1 : 0)
 
-		// add shipping where relevant
-		// get shipping info from database
-		let info = await $.post('../../ajax/getShippingInfo.php')
-		let shippingParsed = JSON.parse(info)
-		if (shippingParsed.success) {
-			let shippingInfo = shippingParsed.data
-			shippingInfo['address'] = shippingInfo['address'].replaceAll('\\', '')
-			if (! parseInt(shippingInfo['paid'])) {
-				if (myshliach && parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
-					html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-					html += `<div class="flex">
-                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="0" />
-                                <label>I would like to pick up my package in CH during the east coast trip.</label>
-                            </div>
-                            <div class="flex">
-                                <input type="radio" name="ship_usa" class="inputCheckbox shipping" id="ship_usa" value="${shippingInfo['cost']}" />
-                                <label>I would like my package to be shipped to my house
-                                ${shippingInfo['address']} for $${shippingInfo['cost']} per family. If your address is incorrect
-                                please update it in your parent account (profile page)</label>
-                            </div>`
-				} else if (! parseInt(shippingInfo['usa']) && parseInt(shippingInfo['cost'])) {
-					html += `<h5 class="formDetails"><span class="title">Shipping</span></h5>`
-					html += `<div class="flex">
-                                <input type="checkbox" class="inputCheckbox shipping" id="ship_intl" value="${shippingInfo['cost']}" />
-                                <label for="ship_intl">My package will be shipped to `
-					if (myshliach) html += `${shippingInfo['address']}`
-					else html += 'my school'
-					html += ` for $${shippingInfo['cost']}.</label></div>`
-				}
-			}
+		// find out if we need to charge for shipping
+		// myshliach = true
+		if (hasMyShliachChild) {
+			html += `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+                <div class="flex">
+                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+                  <label>
+                    (FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+                    Sunday & Monday, 19 & 20 Adar: 6-9PM; Thursday, 23 Adar: 9-11AM.
+                  </label>
+                </div>
+                <div class="flex">
+                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="1" />
+                  <label>
+                    ($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+                    check to confirm that it has the correct address saved.
+                  </label>
+                </div>`
 		}
 
 		$(".login").hide();
@@ -732,6 +742,12 @@
 		}
 	})
 
+	$(document).on('click', '.shipping', function () {
+		const charge = parseInt($(this).val())
+		if (charge) shipping = shipping_cost
+		else shipping = 0
+	})
+
 	function checkTripTerms() {
 		let good = true
 		$(".trip_terms").each( function() {
@@ -765,7 +781,7 @@
 		if (check) {
 			if ($(".shipping").length) {
 				if (!$(".shipping:checked").length) {
-					alert("You must indicate how you would like to have your package shipped!")
+					alert("You must indicate how you would like to have your chidon stuff shipped!")
 					$(".shipping").eq(0).focus()
 					return false
 				}
@@ -774,14 +790,14 @@
 		return true
 	}
 
-	function checkForItemsToProcess() {
-		// check if we have anything in the cart
-		if (! cart.length) {
-			alert("You have not chosen anything to register for or pay for!")
-			return false
-		}
-		return true
-	}
+	// function checkForItemsToProcess() {
+	// 	// check if we have anything in the cart
+	// 	if (! cart.length) {
+	// 		alert("You have not chosen anything to register for or pay for!")
+	// 		return false
+	// 	}
+	// 	return true
+	// }
 
 	function checkRegAddUserInfo() {
 		let iyun = 0
@@ -815,10 +831,18 @@
 		return true
 	}
 
+	function checkExtraInfo() {
+		if ($(".ultimate_trip").length) {
+			if ($(".ultimate_trip").eq(0).is(":checked")) {
+				$("#ch_info").modal('show')
+			}
+		}
+	}
+
 	$("#extra").click( function(e) {
 		e.preventDefault()
 		if (
-			checkForItemsToProcess() &&
+			checkExtraInfo() && // check if we need to show modal and if it's filled out
 			checkRegAddUserInfo() &&
 			checkTripTerms() &&
 			checkShipping()
@@ -835,6 +859,7 @@
 				window.localStorage.setItem('coupons', json_coupons)
 				window.localStorage.setItem('raised', json_raised)
 				window.localStorage.setItem('tracks', json_tracks)
+				window.localStorage.setItem('shipping', shipping)
 				if (ultimate_trip.length) window.localStorage.setItem('ultimate_trip', ultimate_trip)
 			} else {
 				// put in cookie
@@ -842,6 +867,7 @@
 				Cookies.set('coupons', json_coupons)
 				Cookies.set('raised', json_raised)
 				Cookies.set('tracks', json_tracks)
+				Cookies.set('shipping', shipping)
 				if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			}
 			// go to checkout page
