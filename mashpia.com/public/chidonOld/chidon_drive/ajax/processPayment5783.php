@@ -46,6 +46,7 @@ $raisedArr = json_decode($_POST['raised']);
 $raised = arrayByField($raisedArr, 'user_id', 'raised');
 $tracksArr = json_decode($_POST['tracks']);
 $tracks = arrayByField($tracksArr, 'user_id', 'track');
+$trips = json_decode($_POST['trips']);
 
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
@@ -53,6 +54,9 @@ $sqlReg = $MASHPIA_DB->prepare($sql);
 
 $sql = "update th_chidon set khk_trip = 1 where year = :year and user_id = :user";
 $sqlKhk = $MASHPIA_DB->prepare($sql);
+
+$sql = "update th_chidon set trip = :trip where user_id = :user";
+$sqlTrip = $MASHPIA_DB->prepare($sql);
 
 $sql = "insert into extra_purchases set 
         year = :year, 
@@ -339,6 +343,22 @@ function redeemCoupons() {
     }
 }
 
+function saveTripInfo() {
+    global $sqlTrip, $trips;
+
+    $success = true;
+    foreach ($trips as $trip) {
+        if (! $sqlTrip->execute([
+            'trip'  => $trip['trip'],
+            'user_id'  => $trip['user_id']
+        ])) {
+            $success = false;
+            break;
+        }
+    }
+    return $success;
+}
+
 function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
@@ -433,11 +453,12 @@ $khk = processKhk();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
+$tripsSaved = saveTripInfo();
 redeemCoupons();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed) {
+if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved) {
     if ($to_charge) {
         $payment = processFee();
         if (! $payment) {

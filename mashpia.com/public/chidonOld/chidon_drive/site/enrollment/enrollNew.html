@@ -361,6 +361,7 @@
 	var cart_total = 0
 	var addresses = {} // all addresses entered
 	var ultimate_trip = [] // array of users going on ultimate trip
+	var trips = [] // array of trips for myshliach / anash kinder
 	var shipping = 0 // cost of shipping chidon stuff to parents where applicable
 	var shipping_cost = 50
 	var errors = []
@@ -752,6 +753,19 @@
 		const regElem = '#' + user_id
 		if (trip != '0' && trip != 0) $(regElem).find(".registration").show()
 		else $(regElem).find(".registration").hide()
+		// update trips variable
+		let found = false
+		for (t of trips) {
+			if (t.user_id == user_id) {
+				found = true
+				t.trip = trip
+			}
+		}
+		if (! found) {
+			trips.push({
+				user_id, trip
+			})
+		}
 	})
 
 	$(document).on('change', '.reg', function(e) {
@@ -901,6 +915,7 @@
 				window.localStorage.setItem('raised', json_raised)
 				window.localStorage.setItem('tracks', json_tracks)
 				window.localStorage.setItem('shipping', shipping)
+				window.localStorage.setItem('trips', trips)
 				if (ultimate_trip.length) window.localStorage.setItem('ultimate_trip', ultimate_trip)
 			} else {
 				// put in cookie
@@ -909,10 +924,11 @@
 				Cookies.set('raised', json_raised)
 				Cookies.set('tracks', json_tracks)
 				Cookies.set('shipping', shipping)
+				Cookies.set('trips', trips)
 				if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			}
 			// go to checkout page
-			location.href = 'enroll_extra.php'
+			location.href = 'enroll_extra.html'
 		} else {
 			alert(errors.join('\n'))
 			errors = [] // reset errors
