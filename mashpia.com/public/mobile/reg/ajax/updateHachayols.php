@@ -16,7 +16,7 @@ foreach ($users as $user) {
         'val'   => $user['checked']
     ]);
     if (!$res) {
-        $stmt->debugDumpParams();
+//        $stmt->debugDumpParams();
         $MASHPIA_DB->rollBack();
         echo json_encode([
             'success'   => false,
