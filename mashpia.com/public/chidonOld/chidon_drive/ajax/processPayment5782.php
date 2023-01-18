@@ -34,7 +34,7 @@ $addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
 $users = [];
 $user_info = [];
 $reg_cost = 0;
-$iyun = false;
+//$iyun = false;
 $celebBoxes = 0;
 $celebBoxShipping = 0;
 $sweater_info = [];
@@ -94,7 +94,7 @@ function arrayByField($array, $key, $value) {
 }
 
 function processCart() {
-    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $iyun, $reg_cost;
+    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $reg_cost;
 
     $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
 
@@ -112,9 +112,10 @@ function processCart() {
             $sweaters[$item['desc']] = intval($item['value']);
         } else if ($item['desc'] == 'names') {
             $user_info = $item['value'];
-        } else if ($item['desc'] == 'iyun' && intval($item['value'])) {
-            $iyun = true;
         }
+//        else if ($item['desc'] == 'iyun' && intval($item['value'])) {
+//            $iyun = true;
+//        }
     }
 }
 

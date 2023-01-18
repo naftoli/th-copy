@@ -284,7 +284,7 @@
 				<p>Modal body text goes here.</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
@@ -756,6 +756,10 @@
 		else shipping = 0
 	})
 
+	function checkTripChoice() {
+
+	}
+
 	function checkTripTerms() {
 		let good = true
 		$(".trip_terms").each( function() {
@@ -808,7 +812,7 @@
 	// }
 
 	function checkRegAddUserInfo() {
-		let iyun = 0
+		// let iyun = 0
 		let reg = []
 		let names = {}
 		for (let item of cart) {
@@ -830,26 +834,40 @@
 					first: child.first,
 					myshliach: [61, 269].includes(child.school_id)
 				}
-				if (child.track == 'iyun') iyun = 1
+				// if (child.track == 'iyun') iyun = 1
 			}
 		}
 
 		addToCart('names', names)
-		addToCart('iyun', iyun)
+		// addToCart('iyun', iyun)
 		return true
 	}
 
 	function checkExtraInfo() {
 		if ($(".ultimate_trip").length && $(".ultimate_trip").eq(0).is(":checked")) {
+			// check if all info needed for experience reg is filled out
+
+			// if not, show modal
 			$("#ch_info").modal('show')
+			return false
+		} else if (!$(".ultimate_trip").eq(1).is(":checked")) {
+			// make sure the other one is chosen
+			alert('You must choose which trip you would like your child to attend.')
+			return false
 		}
+		return false
 	}
+
+	$(".close").click( function () {
+		$("#ch_info").modal('hide')
+	})
 
 	$("#extra").click( function(e) {
 		e.preventDefault()
 		if (
 			checkExtraInfo() && // check if we need to show modal and if it's filled out
 			checkRegAddUserInfo() &&
+			checkTripChoice() &&
 			checkTripTerms() &&
 			checkShipping()
 		) {

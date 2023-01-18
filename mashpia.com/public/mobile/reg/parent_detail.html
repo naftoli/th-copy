@@ -240,6 +240,7 @@
                             <button class="btn btn-info chidondrive">ChidonDrive Setup</button>
 <!--                        <button class="btn btn-info story">Submit your Rebbe Story</button>-->
 <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
+                        <button class="btn btn-info chidon_reg" style="display: none;">Chidon Registration</button>
                     </div>
                 </div>
             </div>
@@ -555,6 +556,12 @@
             Cookies.remove('shipping');
             Cookies.remove('shipOpt');
             Cookies.remove('destination');
+
+            // find out if we should show link for chidon registration
+            if (Cookies.get('naftoli')) $(".chidon_reg").show()
+            $(".chidon_reg").click( function () {
+                location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+            })
 
             // get the current year
             var year;
