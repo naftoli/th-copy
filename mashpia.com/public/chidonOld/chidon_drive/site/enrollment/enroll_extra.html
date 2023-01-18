@@ -216,18 +216,41 @@
                         </h5>
                         <select class="numCelebBoxes" id="num_celeb_boxes"></select>
                     </div>
-                    <div id="celeb_box_shipping" style="display: none;">
-                        <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>
+<!--                    <div id="celeb_box_shipping" style="display: none;">-->
+<!--                        <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>-->
+<!--                        <div class="flex">-->
+<!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />-->
+<!--                            <label style="display: inline">-->
+<!--                                Please ship to our school free of charge.<br />-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />-->
+<!--                            <label style="display: inline">-->
+<!--                                Please ship to an address in the USA for $10.-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                        <div class="flex" style="margin-bottom: 10px;">-->
+<!--                            <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />-->
+<!--                        </div>-->
+<!--                        <div class="flex">-->
+<!--                            <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />-->
+<!--                            <div id="celeb_state_span"></div>-->
+<!--                            <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <br />
+                    <div id="celeb_box_shipping" style="background-color: #394190; padding: 20px; border-radius: 15px; display: none;">
                         <div class="flex">
-                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />
-                            <label style="display: inline">
-                                Please ship to our school free of charge.<br />
+                            <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="0">
+                            <label class="checkboxLabel">
+                                to be shipped to our school. (FREE)
                             </label>
                         </div>
                         <div class="flex">
-                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />
-                            <label style="display: inline">
-                                Please ship to an address in the USA for $10.
+                            <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="10">
+                            <label class="checkboxLabel">
+                                +$10 to be shipped to an address in the USA
                             </label>
                         </div>
                         <div class="flex" style="margin-bottom: 10px;">
@@ -235,7 +258,7 @@
                         </div>
                         <div class="flex">
                             <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
-                            <div id="celeb_state_span"></div>
+                            <span id="celeb_state_dropdown"></span>
                             <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
                         </div>
                     </div>
@@ -435,10 +458,8 @@
       }
       $("#num_celeb_boxes").append(html)
       $("#num_celeb_boxes").niceSelect();
-      $("#celeb_state_span").html(
-        createStateDropdown('celeb_box')
-      )
-      // $("select#celeb_box_state").niceSelect()
+      $("#celeb_state_dropdown").html(createStateDropdown('celeb_box'))
+      $("#celeb_box_state").niceSelect()
     } else {
       $("#celebBoxes").hide()
       $("#celebBoxesSoldOut").show()
@@ -487,7 +508,7 @@
                                 ${createSweaterSelect(type, sweaters[type])}
                             </select>
                         </div>
-                        <div class="listSection" style="background-color: #394190; margin-bottom: 1rem; display: none;">
+                        <div class="listSection" style="background-color: #394190; margin-bottom: 1rem; border-radius: 15px; display: none;">
                             <div class="flex">
                                 <input class="inputCheckbox sweater_ship" type="radio" name="${typeOfSweater + '_' + i}"
                                     id="${typeOfSweater + '_' + i + '_ship'}" value="0">

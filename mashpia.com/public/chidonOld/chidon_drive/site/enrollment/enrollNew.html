@@ -308,6 +308,7 @@
 				<h5 class="modal-title">Extra Information</h5>
 				<p>In order to reserve for the ultimate chidon experience, we need some more information from you.</p>
 				<form>
+					<input type="hidden" name="user_id" id="user_id" />
 					<div class="flex">
 						<label>Shoe Size:</label>
 						<select id="shoe" name="shoe">
@@ -381,29 +382,31 @@
 					</div>
 					<br />
 
-					<div id="insideZone" style="display: none;">
+					<div class="flex">
+						<label>Crown Heights Family Name:</label>
+						<input type="text" id="acc_family" name="acc_family" required />
+					</div>
+					<div>
+					<div class="flex">
+						<label>House Number ONLY:</label>
+						<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
+						<label>House Number Suffix:</label>
+						<select id="acc_street_num_suffix">
+							<option></option>
+							<option>A</option>
+							<option>B</option>
+							<option>C</option>
+							<option>D</option>
+						</select>
+					</div>
+					<div class="flex">
+						<label>Apt/Suite #</label>
+						<input type="text" id="acc_street_apt" maxlength="5" />
+					</div>
+
+					<div  id="insideZone" style="display: none;">
 						<div class="flex">
-							<label>Crown Heights Family Name:</label>
-							<input type="text" id="acc_family" name="acc_family" required />
-						</div>
-						<div class="flex">
-							<label>House - Number ONLY:</label>
-							<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
-							<label>House Number Suffix:</label>
-							<select id="acc_street_num_suffix">
-								<option></option>
-								<option>A</option>
-								<option>B</option>
-								<option>C</option>
-								<option>D</option>
-							</select>
-						</div>
-						<div class="flex">
-							<label>Apt/Suite #</label>
-							<input type="text" id="acc_street_apt" maxlength="5" />
-						</div>
-						<div class="flex">
-							<label>Street Name:</label>
+							<label>Street Name (Name Only):</label>
 							<select id="acc_street" name="acc_street"></select>
 						</div>
 						<div class="flex">
@@ -412,6 +415,10 @@
 							<label>And:</label>
 							<input type="text" id="acc_cross2" name="acc_cross2" disabled />
 						</div>
+						<p>
+							<i>Address not showing up? Please email chidon@tzivoshashem.org
+								with the exact address and cross streets to have it updated.</i>
+						</p>
 					</div>
 
 					<div id="outsideZone" style="display: none;">
@@ -425,10 +432,6 @@
 							<label>And:</label>
 							<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
 						</div>
-						<p>
-							<i>Address not showing up? Please email chidon@tzivoshashem.org
-							with the exact address and cross streets to have it updated.</i>
-						</p>
 						<input type="hidden" name="walking_zone" id="walking_zone" />
 					</div>
 					<br />
@@ -448,7 +451,7 @@
 					<h5>Feedback</h5>
 					<p>What makes Chidon special to you? Please share.</p>
 					<div class="flex">
-						<textarea id="chidonAnswer"></textarea>
+						<textarea cols="50" rows="5" id="chidonAnswer"></textarea>
 					</div>
 
 					<h5>Terms</h5>
@@ -470,7 +473,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-primary save">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -485,6 +488,8 @@
 
 <script>
 	// for modal
+	var ultimate_info = []
+
 	$(".in_zone").click( function () {
 		let val = $(this).val()
 		if (parseInt(val)) {
@@ -493,6 +498,163 @@
 		}	else {
 			$("#insideZone").hide()
 			$("#outsideZone").show()
+		}
+	})
+
+	function getCrossStreets(number, street) {
+		if (street && street != 'Choose One' && parseInt($(".in_zone:checked").val()) == 1) {
+			if (!number) {
+				alert('You must enter a Street Number.');
+				return false;
+			} else if (isNaN(number)) {
+				alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
+				return false;
+			}
+
+			// $("#walkingException").hide();
+			$.post('../../ajax/getCrossStreets.php', { num: number, street: street }, function (result) {
+				let info = JSON.parse(result);
+				if (info.success) {
+					let cross = info.data;
+					$("#acc_cross1").val(cross.cross1);
+					$("#acc_cross2").val(cross.cross2);
+					$("#walking_zone").val(cross.zone_5780);
+				} else {
+					alert(info.error);
+					$("#walking_zone").val(0);
+				}
+			});
+		} else {
+			$("#walking_zone").val(0);
+		}
+	}
+
+	// get streets for dropdown
+	$.post('../../ajax/getStreets.php', function (result) {
+		let data = JSON.parse(result);
+		let html = '<option>Choose One</option>';
+		for (s in data.streets) {
+			html += "<option>" + data.streets[s].street + "</option>";
+		}
+		// html += "<option>East Flatbush (out of the walking zone)</option>";
+		$("#acc_street").append(html);
+		$('select#acc_street').niceSelect('update');
+	});
+
+	$("#acc_street_num").blur(function () {
+		if (parseInt($(".in_zone:checked").val()) == 1) {
+			let number = $(this).val();
+			let street = $("#acc_street").val();
+			getCrossStreets(number, street);
+		}
+	});
+
+	$("#acc_street").change(function () {
+		let street = $(this).val();
+		let number = $("#acc_street_num").val();
+		getCrossStreets(number, street);
+	});
+
+	$(".save").click( function (e) {
+		e.preventDefault()
+		let errors = []
+		const needed = [
+			{	elem: '#shoe', type: 'select', error: 'You need to enter what shoe size your child needs.' },
+			{ elem: '#sandwich', type: 'select', error: 'You need to enter which sandwhich your child would like to have.' },
+			{ elem: '.allergy', type: 'radio', error: 'You must indicate whether your child has any allergies or not.',
+				yes: [
+					{ elem: '#allergies', type: 'val', error: 'You must enter what allergies your child has.' }
+				]
+			},
+			{ elem: '#acc_family', type: 'val', error: 'You must enter the accomodation family name.' },
+			{ elem: '#acc_street_num', type: 'val', error: 'You must enter the accomodation street number.' },
+			{ elem: '.in_zone', type: 'radio', error: 'You must indicate whether the accomodation family is within the walking zone or not.',
+				yes: [
+					{ elem: '#acc_street', type: 'val', error: 'You must enter the accomodation street.' },
+					{ elem: '#acc_cross1', type: 'val', error: 'You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.' },
+				],
+				no:	[
+					{ elem: '#acc_street_outside_zone', type: 'val', error: 'You must enter the accomodation street.' },
+					{ elem: '#acc_cross1_outside_zone', type: 'val', error: 'You must enter the cross streets.' },
+					{ elem: '#acc_cross2_outside_zone', type: 'val', error: 'You must enter the cross streets.' },
+				]
+			},
+			{ elem: '#acc_phone', type: 'val', error: 'You must enter a phone number where you can be reached.' },
+			{ elem: '#terms1', type: 'checkbox', error: 'You must check off all Terms.' },
+			{ elem: '#terms2', type: 'checkbox', error: 'You must check off all Terms.' },
+			{ elem: '#initials', type: 'val', error: 'You must enter your initials in the last Term.'}
+		]
+		for (let obj of needed) {
+			switch (obj.type) {
+				case 'select':
+					if (parseInt($(obj.elem).val()) === 0) errors.push(obj.error)
+					break;
+				case 'val':
+					if (! $(obj.elem).val().trim().length) errors.push(obj.error)
+					break
+				case 'radio':
+				case 'checkbox':
+					if (! $(obj.elem).is(':checked')) errors.push(obj.error)
+					// check dependants
+					else {
+						let e = obj.elem + ':checked'
+						let val = $(e).val()
+						if (parseInt(val) === 1) {
+							if (obj.yes) {
+								for (let id of obj.yes) {
+									if (!$(id.elem).val().trim().length) errors.push(id.error)
+								}
+							}
+						} else if (parseInt(val) === 0) {
+							if (obj.no) {
+								for (let id of obj.no) {
+									if (!$(id.elem).val().trim().length) errors.push(id.error)
+								}
+							}
+						}
+					}
+					break
+			}
+		}
+
+		if (errors.length) alert(errors.join('\n'))
+		else {
+			const user_id = $("#user_id").val()
+			const shoe = $("#shoe").val()
+			const sandwich = $("#sandwich").val()
+			const allergy = $(".allegy:checked").val() === '1'
+			const allergies = $("#allergies").val()
+			const in_zone = $(".in_zone:checked").val() === '1'
+			const walk_alone = $("#walking").is(":checked")
+			const chidon_answer = $("#chidonAnswer").val()
+			let acc = {}
+			acc.family = $("#acc_family").val()
+			acc.number = $("#acc_street_num").val()
+			acc.suffix = $("#acc_street_num_suffix").val()
+			acc.apt = $("#acc_street_apt").val()
+			if (in_zone) {
+				acc.street = $("#acc_street").val()
+				acc.between1 = $("#acc_cross1").val()
+				acc.between2 = $("#acc_cross2").val()
+				acc.zone = $("#walking_zone").val()
+				if (parseInt(acc.zone) === 0) {
+					alert('You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.')
+					return false
+				}
+			} else {
+				acc.street = $("#acc_street_outside_zone").val()
+				acc.between1 = $("#acc_cross1_outside_zone").val()
+				acc.between2 = $("acc_cross2_outside_zone").val()
+				acc.zone = 0
+			}
+			acc.phone = $("#acc_phone").val()
+			let info = { shoe, sandwich, allergy, allergies, in_zone, walk_alone, chidon_answer }
+			info.accomodation = acc
+			ultimate_info[user_id] = info
+			$("#ch_info").modal('hide')
+			if (window.localStorage) window.localStorage.setItem('ultimate_info', JSON.stringify(ultimate_info))
+			else Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
+			console.log(JSON.stringify(ultimate_info))
 		}
 	})
 </script>
@@ -975,7 +1137,16 @@
 			id = class_names[1] // get celeb_box_ship for celebration boxes shipping
 		}
 		const value = $(this).val()
-		if (value !== '') addToCart(id, value)
+		if (value !== '') {
+			addToCart(id, value)
+			// check if we should show the modal for ultimate trip
+			if ($(".ultimate_trip").length && $(".ultimate_trip").eq(0).is(":checked")) {
+				// find this child's user id
+				const user_id = $(this).parent().parent().parent().parent().parent().attr('id')
+				$("#ch_info #user_id").val(user_id)
+				$("#ch_info").modal('show')
+			}
+		}
 
 		// keep dropdown open
 		if (e.type === 'change') {
@@ -1075,13 +1246,17 @@
 		return true
 	}
 
-	function checkModal() {
-		if ($(".ultimate_trip").length && $(".ultimate_trip").eq(0).is(":checked")) {
-			// check if all info needed for experience reg is filled out
-			let shoe_size, sandwich, allergies, accInfo, terms
-			// if not, show modal
-			$("#ch_info").modal('show')
+	function checkExtraInfo() {
+		if (ultimate_trip.length && $(".ultimate_trip").eq(0).is(":checked")) {
+			for (let user of ultimate_trip) {
+				if (ultimate_info === undefined || !ultimate_info[user]) {
+					$("#ch_info #user_id").val(user)
+					$("#ch_info").modal('show')
+					return false
+				}
+			}
 		}
+		return true
 	}
 
 	$(".close").click( function () {
@@ -1092,9 +1267,7 @@
 		e.preventDefault()
 		checkForm() // checks to make sure all needed reg items are chosen correctly
 		checkShipping() // checks to make sure shipping info is filled out when needed
-		checkModal()
-		return
-		if (!errors.length && checkRegAddUserInfo()) {
+		if (!errors.length && checkExtraInfo() && checkRegAddUserInfo()) {
 			json_cart = JSON.stringify(cart)
 			// add coupons and chidon drive raised
 			json_coupons = JSON.stringify(children.filter(child => child.coupon > 0 && parseInt(child.coupon_used) === 0))
@@ -1122,7 +1295,7 @@
 			}
 			// go to checkout page
 			location.href = 'enroll_extra.html'
-		} else {
+		} else if (errors.length) {
 			alert(errors.join('\n'))
 			errors = [] // reset errors
 		}

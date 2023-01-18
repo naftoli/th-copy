@@ -55,7 +55,7 @@ class WalkingZones {
     if ( $res ) {
       $row = $stmt->fetch();
       if ( empty( $row ) ) {
-        return "There's no such address in our system. Either the Street Number or Street Name are incorrect. You won't be able to submit the form until it's fixed.";
+        return "There's no such address in our system. Either the Street Number or Street Name are incorrect. Please fix.";
       } else {
         return $row;
       }

@@ -57,7 +57,7 @@
 			<!-- <div class="next-btn" style="display: none;">
 					<a href="#" class="button">next child</a>
 				</div> -->
-			<div class="form personal-information" style="display: none;">
+			<div class="form personal-information" >
 				<form id="personalInfo">
 					<input type="hidden" name="user_id" id="user_id" />
 					<input type="hidden" name="school_id" id="school_id" />
@@ -941,7 +941,7 @@
 				}
 
 				// $("#walkingException").hide();
-				$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function (result) {
+				$.post('../../ajax/getCrossStreets.php', { num: number, street: street }, function (result) {
 					let info = JSON.parse(result);
 					if (info.success) {
 						let cross = info.data;

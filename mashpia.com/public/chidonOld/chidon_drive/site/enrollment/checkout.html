@@ -324,7 +324,7 @@
     var cart = []
     var cart_total = 0
     var addresses = {} // all addresses entered
-    var admin, admin_email, shipping, coupons, raised, trips
+    var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
 
     $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function(result) {
         admin = JSON.parse(result)
@@ -360,6 +360,10 @@
         raised = window.localStorage.getItem('raised')
         shipping = parseInt(window.localStorage.getItem('shipping'))
         trips = window.localStorage.getItem('trips')
+        if (window.localStorage.getItem('ultimate_trip')) {
+            ultimate_trip = window.localStorage.getItem('ultimate_trip')
+            ultimate_info = JSON.parse(window.localStorage.getItem('ultimate_info'))
+        }
     } else {
         cart = JSON.parse(Cookies.get('cart'))
         addresses = JSON.parse(Cookies.get('addresses'))
@@ -367,6 +371,10 @@
         raised = Cookies.get('raised')
         shipping = parseInt(Cookies.get('shipping'))
         trips = Cookies.get('trips')
+        if (Cookies.get('ultimate_trip')) {
+            ultimate_trip = Cookies.get('ultimate_trip')
+            ultimate_info = JSON.parse(Cookies.get('ultimate_info'))
+        }
     }
     if (!cart.length) location.href = 'enrollNew.html'
 
