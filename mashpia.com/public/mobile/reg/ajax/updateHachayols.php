@@ -4,7 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['user'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $stmt = $MASHPIA_DB->prepare("update users set hachayol = :val where user_id = :user");
 $users = $_POST['list'];
