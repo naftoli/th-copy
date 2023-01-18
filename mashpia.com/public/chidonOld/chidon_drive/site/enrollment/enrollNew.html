@@ -1125,7 +1125,6 @@
 		e.preventDefault()
 		checkForm() // checks to make sure all needed reg items are chosen correctly
 		checkShipping() // checks to make sure shipping info is filled out when needed
-		return
 		if (!errors.length && checkRegAddUserInfo()) {
 			json_cart = JSON.stringify(cart)
 			// add coupons and chidon drive raised
