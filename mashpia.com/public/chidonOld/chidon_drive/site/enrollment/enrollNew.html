@@ -148,6 +148,10 @@
 			max-height: 350px;
 			overflow-y: auto !important;
 		}
+
+		#regional_trip {
+			display: none;
+		}
 	</style>
 </head>
 
@@ -351,13 +355,15 @@
 	});
 
 	/**** GLOBAL VARS ****/
-	var children = []; // global variable for children info
+	var children = [] // global variable for children info
+	var users = [] // keep track of user id -> names
 	var cart = []
 	var cart_total = 0
 	var addresses = {} // all addresses entered
 	var ultimate_trip = [] // array of users going on ultimate trip
 	var shipping = 0 // cost of shipping chidon stuff to parents where applicable
 	var shipping_cost = 50
+	var errors = []
 
 	async function getChildren(admin) {
 		let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -426,6 +432,9 @@
 			return false
 		}
 		children = result.children
+		for (let child of children) {
+			users[child.user_id] = child.first + ' ' + child.last
+		}
 
 		result = await getTracks(children)
 		if (! result.success) {
@@ -537,7 +546,7 @@
 				if (!myshliach) {
 					html += `<div class="flex">
 													<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
-															<label for="trip_terms_${child.user_id}" style="display: inline">
+															<label for="trip_terms_${child.user_id}" style="display: inline; text-transform: none;">
 															I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
 															I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
 															</label>
@@ -550,7 +559,7 @@
 			let track = ultimate ? 'Ultimate' : child.track
 			amounts = [...trackInfo[track]]
 			html += "<div class='registration' style='display: none;'>";
-			html += `<h5 class="formDetails"><span class="title">Registration</span><br />`
+			html += `<h5 class="formDetails"><span class="title">Registration Fee</span><br />`
 			html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
 
 			// coupons
@@ -584,7 +593,7 @@
                   <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
                   <label>
                     (FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-                    Sunday & Monday, 19 & 20 Adar: 6-9PM; Thursday, 23 Adar: 9-11AM.
+                    Sunday 19 Adar: 4-6PM; Monday 20 Adar: 6-9PM; Thursday 23 Adar: 9-11AM.
                   </label>
                 </div>
                 <div class="flex">
@@ -603,7 +612,6 @@
 		$(".children").append(html);
 		$(".children").show();
 		$("select.reg").niceSelect()
-		$("select#regional_trip").niceSelect()
 	}
 
 	function updateTripChoice() {
@@ -620,9 +628,10 @@
 		const info = val.split(':')
 		const idx = parseInt(info[0])
 		const user_id = info[1]
+		const desc = "#" + user_id
 
 		$(".ultimate_title").text(titles[idx])
-		$(".full_cost").text(costs[idx])
+		$(desc).find(".full_cost").text(costs[idx])
 
 		if (idx) {
 			// $(this).parent().parent().find('.regional_trip').show()
@@ -661,10 +670,10 @@
 			return b - a
 		})
 
-		createRegDropdown(child, amounts)
+		createRegDropdown(child, amounts, idx)
 	}
 
-	function createRegDropdown(child, amounts) {
+	function createRegDropdown(child, amounts, selection) {
 		let free, lowest
 		lowest = amounts[amounts.length - 1]
 		if (lowest === 0) free = true
@@ -685,7 +694,15 @@
 		$(elem).empty()
 		$(elem).append(html)
 		$(elem).find("select.reg").niceSelect()
-		$(desc).find(".registration").show()
+		if (!selection) {
+			$(desc).find('.registration').show()
+			$(desc).find('#regional_trip').niceSelect('destroy')
+			$(desc).find('#regional_trip').hide()
+		}	else {
+			if ($("#regional_trip").val() == '0')	$(desc).find('.registration').hide()
+			$(desc).find('#regional_trip').show()
+			$(desc).find('#regional_trip').niceSelect()
+		}
 	}
 
 	function addToCart(desc, value) {
@@ -714,10 +731,11 @@
 		const id = $(this).attr('id')
 		const info = id.split('_')
 		const user_id = info[2]
+		const desc = "#" + user_id;
 		if ($(this).is(":checked")) {
 			calculateReg(1, user_id)
+			$(desc).find(".registration").show()
 		} else {
-			let desc = "#" + user_id;
 			$(desc).find(".registration").hide()
 		}
 	})
@@ -730,6 +748,10 @@
 		const idx = parseInt(info[0])
 		const user_id = info[1]
 		calculateReg(idx, user_id)
+		const trip = $(this).val()
+		const regElem = '#' + user_id
+		if (trip != '0' && trip != 0) $(regElem).find(".registration").show()
+		else $(regElem).find(".registration").hide()
 	})
 
 	$(document).on('change', '.reg', function(e) {
@@ -756,29 +778,45 @@
 		else shipping = 0
 	})
 
-	function checkTripChoice() {
-
-	}
-
-	function checkTripTerms() {
-		let good = true
-		$(".trip_terms").each( function() {
-			let topElem = $(this).parent().parent().parent().parent();
-			let user_id = $(topElem).attr('id')
-			let elem = '#reg_' + user_id
-			if ($(elem).val()) {
-				// check if it's showing or not
-				const display = $(topElem).find('.regional_trip').css('display')
-				if (display != 'none') {
-					if (!$(this).is(':checked')) {
-						alert("You must indicate your acceptance of the Regional Trip Terms.")
-						good = false
-						return false
+	function checkForm() {
+		// make sure that if any trip choices are selected, that the required other selections are done
+		if ($(".ultimate_trip").length) {
+			let checked = false
+			$(".ultimate_trip").each( function () {
+				if ($(this).is(":checked")) {
+					let val = $(this).val()
+					let info = val.split(':')
+					let ultimate = parseInt(info[0]) === 0 ? true : false
+					let user_id = parseInt(info[1])
+					let elem = '#' + user_id
+					if (ultimate) {
+						// make sure there's an amount chosen
+						let amount = $(elem).find(".reg").val()
+						if (!amount) errors.push(`${users[user_id]} has chosen to go on the ultimate trip, but you have not selected how much you are paying!`)
+					} else {
+						let trip = $("#regional_trip").val()
+						if (trip == 0 || trip == '0') errors.push(`${users[user_id]} has chosen to go on the regional trip but you have not chosen which trip you are going on!`)
+						else {
+							let amount = $(elem).find(".reg").val()
+							if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
+						}
 					}
 				}
-			}
-		})
-		return good
+			})
+		}
+		if ($(".trip_terms").length) {
+			$(".trip_terms").each( function() {
+				if ($(this).is(':checked')) {
+					// make sure there's a registration amount chosen
+					let id = $(this).attr('id')
+					let info = id.split('_')
+					let user_id = info[2]
+					let elem = '#' + user_id
+					let amount = $(elem).find('.reg').val()
+					if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
+				}
+			})
+		}
 	}
 
 	function checkShipping() {
@@ -793,23 +831,12 @@
 		if (check) {
 			if ($(".shipping").length) {
 				if (!$(".shipping:checked").length) {
-					alert("You must indicate how you would like to have your chidon stuff shipped!")
+					errors.push("You must indicate how you would like to have your chidon stuff shipped!")
 					$(".shipping").eq(0).focus()
-					return false
 				}
 			}
 		}
-		return true
 	}
-
-	// function checkForItemsToProcess() {
-	// 	// check if we have anything in the cart
-	// 	if (! cart.length) {
-	// 		alert("You have not chosen anything to register for or pay for!")
-	// 		return false
-	// 	}
-	// 	return true
-	// }
 
 	function checkRegAddUserInfo() {
 		// let iyun = 0
@@ -823,10 +850,10 @@
 				reg.push(regInfo[1])
 			}
 		}
-		// if (! reg.length) {
-		// 	alert("You must register at least one child!")
-		// 	return false
-		// }
+		if (! reg.length) {
+			const next = confirm("Are you sure that you want to continue without registering any children?")
+			if (!next) return false
+		}
 
 		for (let child of children) {
 			if (reg.includes(child.user_id)) {
@@ -843,19 +870,13 @@
 		return true
 	}
 
-	function checkExtraInfo() {
+	function checkModal() {
 		if ($(".ultimate_trip").length && $(".ultimate_trip").eq(0).is(":checked")) {
 			// check if all info needed for experience reg is filled out
-
+			let shoe_size, sandwich, allergies, accInfo, terms
 			// if not, show modal
 			$("#ch_info").modal('show')
-			return false
-		} else if (!$(".ultimate_trip").eq(1).is(":checked")) {
-			// make sure the other one is chosen
-			alert('You must choose which trip you would like your child to attend.')
-			return false
 		}
-		return true
 	}
 
 	$(".close").click( function () {
@@ -864,13 +885,9 @@
 
 	$("#extra").click( function(e) {
 		e.preventDefault()
-		if (
-			checkExtraInfo() && // check if we need to show modal and if it's filled out
-			checkRegAddUserInfo() &&
-			checkTripChoice() &&
-			checkTripTerms() &&
-			checkShipping()
-		) {
+		checkForm() // checks to make sure all needed reg items are chosen correctly
+		checkShipping() // checks to make sure shipping info is filled out when needed
+		if (!errors.length && checkRegAddUserInfo()) {
 			json_cart = JSON.stringify(cart)
 			// add coupons and chidon drive raised
 			json_coupons = JSON.stringify(children.filter(child => child.coupon > 0 && parseInt(child.coupon_used) === 0))
@@ -896,6 +913,9 @@
 			}
 			// go to checkout page
 			location.href = 'enroll_extra.php'
+		} else {
+			alert(errors.join('\n'))
+			errors = [] // reset errors
 		}
 	})
 </script>

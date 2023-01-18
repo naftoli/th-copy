@@ -181,7 +181,9 @@
                     To enhance your family's chidon celebration experience you can purchase Celebration Boxes,
                     Parents or Grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
                     <br /><br />
-                    Please Note: Extra Purchases Shipping is ONLY TO THE USA!
+                    Please Note: <br />
+                    1. Extra Purchases Shipping is ONLY TO THE USA!
+                    2. If you have more than one child your extra purchases will be given to your oldest child that registered.
                 </h5>
                 <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
                 <div id="celebBoxesSoldOut" style="display: none;">
@@ -219,8 +221,7 @@
                         <div class="flex">
                             <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />
                             <label style="display: inline">
-                                Please ship to school free of charge.<br />
-                                Please Note: If you have more than one child your extra purchases will be given to your oldest child that registered.
+                                Please ship to our school free of charge.<br />
                             </label>
                         </div>
                         <div class="flex">
@@ -492,7 +493,7 @@
                                 <input class="inputCheckbox sweater_ship" type="radio" name="${typeOfSweater + '_' + i}"
                                     id="${typeOfSweater + '_' + i + '_ship'}" value="0">
                                 <label class="checkboxLabel">
-                                    to be shipped to my school.
+                                    to be shipped to our school. (FREE)
                                 </label>
                             </div>
                             <div class="flex">
