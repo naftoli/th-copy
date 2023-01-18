@@ -504,7 +504,7 @@
 				html += `<div class="flex">
                             <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' />
                             <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($${trackInfo['Ultimate'][0]})<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
+                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
                                 Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
                             </h5>
                         </div>
@@ -855,7 +855,7 @@
 			alert('You must choose which trip you would like your child to attend.')
 			return false
 		}
-		return false
+		return true
 	}
 
 	$(".close").click( function () {
