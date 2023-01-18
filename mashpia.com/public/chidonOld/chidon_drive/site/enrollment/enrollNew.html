@@ -279,13 +279,202 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Modal title</h5>
+				<h5 class="modal-title">ULtimate Chidon Experience</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<p>Modal body text goes here.</p>
+				<h5 class="modal-title">Extra Information</h5>
+				<p>In order to reserve for the ultimate chidon experience, we need some more information from you.</p>
+				<form>
+					<div class="flex">
+						<label>Shoe Size:</label>
+						<select id="shoe" name="shoe">
+							<option value="0">Please Select</option>
+							<option value='children 11'>Children 11</option>
+							<option value='children 12'>Children 12</option>
+							<option value='children 13'>Children 13</option>
+							<option value='adult 1'>Adult 1</option>
+							<option value='adult 2'>Adult 2</option>
+							<option value='adult 3'>Adult 3</option>
+							<option value='adult 4 '>Adult 4 </option>
+							<option value='adult 5 '>Adult 5 </option>
+							<option value='adult 6'>Adult 6</option>
+							<option value='adult 7'>Adult 7</option>
+							<option value='adult 8'>Adult 8</option>
+							<option value='adult 9'>Adult 9</option>
+							<option value='adult 10'>Adult 10</option>
+							<option value='adult 11'>Adult 11</option>
+						</select>
+					</div>
+
+					<div class="flex">
+						<label>Sandwich Preference:</label>
+						<select id="sandwich" name="sandwich">
+							<option value="0">Please Select</option>
+							<option value="tuna">Tuna</option>
+							<option value="egg">Egg</option>
+							<option value="cc">Cream Cheese</option>
+							<option value="plain">Plain</option>
+							<option value="cheese">Hard Cheese</option>
+						</select>
+					</div>
+
+					<h5>Allergies</h5>
+					<p>Does your child have any allergies?</p>
+					<div class="field">
+						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
+																							value="0" /><span></span></label>My child has NO KNOWN allergies.</p>
+					</div>
+					<div class="field">
+						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
+																							value="1" /><span></span></label>My child DOES HAVE allergies.</p>
+						<div class="field">
+							<textarea id="allergies"></textarea>
+						</div>
+					</div>
+
+					<h5>Accommodation Information</h5>
+					<p>
+						Chidon staff will supervise a safe drop-off FROM all Chidon programs on Thursday night, Friday
+						afternoon, and Motzei Shabbos if they are within our walking group zones.
+						See <a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0"
+									 target="_blank">here</a> for a map.<br />
+						It will be your responsibility to get your child TO Chidon programs each morning.
+					</p>
+					<h5>Where will your child be staying?</h5>
+					<p>
+						Please note: If you live in Crown Heights, please provide your home address. <br />
+						We will need an address on record even if it is outside of the walking zones.<br />
+					</p>
+					<div class="group">
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
+																								value="1" /><span></span></label>My child will be staying WITHIN the Crown
+								Heights walking zone</p>
+							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
+																								value="0" /><span></span></label>My child will be staying OUTSIDE of the walking
+								zone.
+								I understand I will need to make arrangements to get them home after Chidon programs.
+								Click
+								<a href="https://chat.whatsapp.com/ENXQ6jOOnxr0RSW8K9Hs4H" target="_blank">here to join
+									a whatsapp group</a>
+								with other parents from outside the walking zone to coordinate transportation
+								arrangements.
+							</p>
+						</div>
+					</div>
+					<div class="flex">
+						<label>Crown Heights Family Name:</label>
+						<input type="text" id="acc_family" name="acc_family" required />
+					</div>
+						<div class="flex">
+							<label>House Number ONLY:</label>
+							<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
+						</div>
+						<div class="flex">
+							<label>House Number Suffix:</label>
+							<select id="acc_street_num_suffix">
+								<option></option>
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+							</select>
+						</div>
+						<div class="flex">
+							<label>Apt/Suite #</label>
+							<input type="text" id="acc_street_apt" maxlength="5" />
+						</div>
+
+							<div class="flex">
+								<label>Street Name:</label>
+								<select id="acc_street" name="acc_street"></select>
+							</div>
+							<div class="flex">
+								<label>Between:</label>
+								<input type="text" id="acc_cross1" name="acc_cross1" disabled />
+							</div>
+							<div class="flex">
+								<label>And:</label>
+								<input type="text" id="acc_cross2" name="acc_cross2" disabled />
+							</div>
+							<div class="flex">
+								<label>Street Name:</label>
+								<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
+							</div>
+							<div class="flex">
+								<label>Between:</label>
+								<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
+							</div>
+							<div class="flex">
+								<label>And:</label>
+								<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
+							</div>
+						<div class="flex">
+							<p><i style="font-size: 16px;">Address not showing up? Please email chidon@tzivoshashem.org
+								with the exact address and cross streets to have it updated.</i></p>
+						</div>
+					<input type="hidden" name="walking_zone" id="walking_zone" />
+					<div class="field">
+						<label>Crown Heights Phone Number:</label>
+						<input type="text" id="acc_phone" name="acc_phone" required />
+					</div>
+					<div class="field">
+						<p>
+							<i><span style="font-size: 16px !important;">ONLY FOR 6-8 GRADE</span></i><br />
+							<label class="checkbox"><input type="checkbox" name="walking"
+																						 id="walking" /><span></span></label>
+							I allow my child to walk home alone at any time of the day and night, from ALL chidon
+							programs.
+							Please Note: Even if your child has permission to walk home alone at the time of dismissal
+							they will need to get into a
+							walking group and only after their walking group has left the building will they be able to
+							walk home alone.
+						</p>
+					</div>
+					<div class="anash_kinder">
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"
+																								value="1" /><span></span></label>
+								My child will be staying with a family we know.</p>
+							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"
+																								value="0" /><span></span></label>
+								My child will be staying with a family that was arranged for us, but we don't know
+								personally.</p>
+						</div>
+						<h5>Travel Plans</h5>
+						<div class="field">
+							<p>
+								How will you be getting to Shabbaton?
+							</p>
+						</div>
+						<div class="group">
+							<div class="field">
+								<label>Airport / Station:</label>
+								<input type="text" name="anash_airport" id="anash_airport" />
+							</div>
+							<div class="field">
+								<label>Date and Time of Arrival:</label>
+								<input type="text" name="anash_arrival" id="anash_arrival" />
+							</div>
+						</div>
+						<div class="field">
+							<p>
+								How will you get to Chidon programs in the mornings?
+							</p>
+						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
+																								value="0" /><span></span></label>
+								My host will drop me off.</p>
+							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
+																								value="1" /><span></span></label>
+								Please arrange a pick up for my child for an additional cost of $25.</p>
+						</div>
+					</div>
+
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
@@ -897,6 +1086,8 @@
 		e.preventDefault()
 		checkForm() // checks to make sure all needed reg items are chosen correctly
 		checkShipping() // checks to make sure shipping info is filled out when needed
+		checkModal()
+		return
 		if (!errors.length && checkRegAddUserInfo()) {
 			json_cart = JSON.stringify(cart)
 			// add coupons and chidon drive raised
