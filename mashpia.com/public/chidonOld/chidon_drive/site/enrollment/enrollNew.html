@@ -152,6 +152,26 @@
 		#regional_trip {
 			display: none;
 		}
+
+		#ch_info .flex .nice-select {
+			background-color: #fff;
+		}
+
+		#ch_info .flex input, #ch_info .flex textarea {
+			background-color: #fff;
+			border: 2px solid #85abda
+		}
+
+		#ch_info h5 {
+			padding-top: 10px;
+		}
+		#ch_info p {
+			padding: 5px;
+		}
+		#ch_info div, #ch_info p {
+			line-height: 1.4;
+			font-size: small;
+		}
 	</style>
 </head>
 
@@ -323,16 +343,17 @@
 
 					<h5>Allergies</h5>
 					<p>Does your child have any allergies?</p>
-					<div class="field">
-						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
-																							value="0" /><span></span></label>My child has NO KNOWN allergies.</p>
+					<div class="flex">
+						<label><input type="radio" name="allergy" class="allergy" value="0" /></label>
+						My child has NO KNOWN allergies.
 					</div>
-					<div class="field">
-						<p><label class="checkbox"><input type="radio" name="allergy" class="allergy"
-																							value="1" /><span></span></label>My child DOES HAVE allergies.</p>
-						<div class="field">
-							<textarea id="allergies"></textarea>
-						</div>
+					<div class="flex">
+						<label><input type="radio" name="allergy" class="allergy" value="1" /></label>
+						My child DOES HAVE allergies.
+					</div>
+					<br />
+					<div class="flex">
+						<textarea id="allergies" placeholder="Please enter any allergies..." style="width: 200px;"></textarea>
 					</div>
 
 					<h5>Accommodation Information</h5>
@@ -340,177 +361,109 @@
 						Chidon staff will supervise a safe drop-off FROM all Chidon programs on Monday, Tuesday & wednesday night
 						if they are within our walking group zones. See
 						<a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0" target="_blank">here</a>
-						for a map.<br />
-						It will be your responsibility to get your child TO the Chidon programs each morning.
+						for a map. It will be your responsibility to get your child TO the Chidon programs each morning.
 					</p>
 					<h5>Where will your child be staying?</h5>
 					<p>
 						Please note: If you live in Crown Heights, please provide your home address. <br />
 						We will need an address on record even if it is outside of the walking zones.<br />
 					</p>
-					<div class="group">
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
-																								value="1" /><span></span></label>My child will be staying WITHIN the Crown
-								Heights walking zone</p>
-							<p><label class="checkbox"><input type="radio" name="in_zone" class="in_zone"
-																								value="0" /><span></span></label>My child will be staying OUTSIDE of the walking
-								zone.
-								I understand I will need to make arrangements to get them home after Chidon programs.
-								Click
-								<a href="https://chat.whatsapp.com/FFKRUKX1Blp7D7hcrYyGZs" target="_blank">here to join
-									a whatsapp group</a>
-								with other parents from outside the walking zone to coordinate transportation
-								arrangements.
-							</p>
-						</div>
+
+					<div>
+						<label><input type="radio" name="in_zone" class="in_zone"	value="1" /></label>
+						My child will be staying WITHIN the Crown	Heights walking zone.
 					</div>
-					<div class="flex">
-						<label>Crown Heights Family Name:</label>
-						<input type="text" id="acc_family" name="acc_family" required />
+					<div>
+						<label><input type="radio" name="in_zone" class="in_zone"	value="0" /></label>
+						My child will be staying OUTSIDE of the walking zone.	I understand I will need to make arrangements
+						to get them home after Chidon programs.	Click	<a href="https://chat.whatsapp.com/FFKRUKX1Blp7D7hcrYyGZs" target="_blank">here</a>
+						to join	a whatsapp group with other parents from outside the walking zone to coordinate transportation	arrangements.
 					</div>
+					<br />
+
+					<div id="insideZone" style="display: none;">
 						<div class="flex">
-							<label>House Number ONLY:</label>
+							<label>Crown Heights Family Name:</label>
+							<input type="text" id="acc_family" name="acc_family" required />
+						</div>
+						<div class="flex">
+							<label>House - Number ONLY:</label>
 							<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
-						</div>
-						<div class="flex">
 							<label>House Number Suffix:</label>
 							<select id="acc_street_num_suffix">
 								<option></option>
 								<option>A</option>
 								<option>B</option>
 								<option>C</option>
+								<option>D</option>
 							</select>
 						</div>
 						<div class="flex">
 							<label>Apt/Suite #</label>
 							<input type="text" id="acc_street_apt" maxlength="5" />
 						</div>
-
-							<div class="flex">
-								<label>Street Name:</label>
-								<select id="acc_street" name="acc_street"></select>
-							</div>
-							<div class="flex">
-								<label>Between:</label>
-								<input type="text" id="acc_cross1" name="acc_cross1" disabled />
-							</div>
-							<div class="flex">
-								<label>And:</label>
-								<input type="text" id="acc_cross2" name="acc_cross2" disabled />
-							</div>
-							<div class="flex">
-								<label>Street Name:</label>
-								<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
-							</div>
-							<div class="flex">
-								<label>Between:</label>
-								<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
-							</div>
-							<div class="flex">
-								<label>And:</label>
-								<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
-							</div>
 						<div class="flex">
-							<p><i style="font-size: 16px;">Address not showing up? Please email chidon@tzivoshashem.org
-								with the exact address and cross streets to have it updated.</i></p>
+							<label>Street Name:</label>
+							<select id="acc_street" name="acc_street"></select>
 						</div>
-					<input type="hidden" name="walking_zone" id="walking_zone" />
+						<div class="flex">
+							<label>Between:</label>
+							<input type="text" id="acc_cross1" name="acc_cross1" disabled />
+							<label>And:</label>
+							<input type="text" id="acc_cross2" name="acc_cross2" disabled />
+						</div>
+					</div>
+
+					<div id="outsideZone" style="display: none;">
+						<div class="flex">
+							<label>Street Name:</label>
+							<input type="test" id="acc_street_outside_zone" name="acc_street_outside_zone" />
+						</div>
+						<div class="flex">
+							<label>Between:</label>
+							<input type="text" id="acc_cross1_outside_zone" name="acc_cross1_outside_zone" />
+							<label>And:</label>
+							<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
+						</div>
+						<p>
+							<i>Address not showing up? Please email chidon@tzivoshashem.org
+							with the exact address and cross streets to have it updated.</i>
+						</p>
+						<input type="hidden" name="walking_zone" id="walking_zone" />
+					</div>
+					<br />
 					<div class="flex">
 						<label>Crown Heights Phone Number:</label>
 						<input type="text" id="acc_phone" name="acc_phone" required />
 					</div>
 					<div class="flex">
-						<p>
-							<label class="checkbox"><input type="checkbox" name="walking" id="walking" /><span></span></label>
-							I allow my child to walk home alone at any time of the day and night, from ALL chidon
-							programs.
-							Please Note: Even if your child has permission to walk home alone at the time of dismissal
-							they will need to get into a
-							walking group and only after their walking group has left the building will they be able to
-							walk home alone.
-						</p>
-					</div>
-					<div class="anash_kinder">
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"	value="1" /><span></span></label>
-								My child will be staying with a family we know.</p>
-							<p><label class="checkbox"><input type="radio" name="known_family" class="known_family"	value="0" /><span></span></label>
-								My child will be staying with a family that was arranged for us, but we don't know personally.</p>
-						</div>
-						<h5>Travel Plans</h5>
-						<div class="flex">
-							<p>
-								How will you be getting to Shabbaton?
-							</p>
-						</div>
-						<div class="group">
-							<div class="field">
-								<label>Airport / Station:</label>
-								<input type="text" name="anash_airport" id="anash_airport" />
-							</div>
-							<div class="field">
-								<label>Date and Time of Arrival:</label>
-								<input type="text" name="anash_arrival" id="anash_arrival" />
-							</div>
-						</div>
-						<div class="field">
-							<p>
-								How will you get to Chidon programs in the mornings?
-							</p>
-						</div>
-						<div class="field">
-							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
-																								value="0" /><span></span></label>
-								My host will drop me off.</p>
-							<p><label class="checkbox"><input type="radio" name="morning_pickup" class="morning_pickup"
-																								value="1" /><span></span></label>
-								Please arrange a pick up for my child for an additional cost of $25.</p>
-						</div>
+						<label><input type="checkbox" name="walking" id="walking" /></label>
+						I allow my child to walk home alone at any time of the day and night, from ALL chidon
+						programs. <br /><br />
+						Please Note: Even if your child has permission to walk home alone at the time of dismissal
+						they will need to get into a walking group and only after their walking group has left the building will
+						they be able to	walk home alone.
 					</div>
 
+					<h5>Feedback</h5>
 					<p>What makes Chidon special to you? Please share.</p>
-					<div class="field">
+					<div class="flex">
 						<textarea id="chidonAnswer"></textarea>
 					</div>
+
 					<h5>Terms</h5>
-					<div class="field">
-						<p><label class="checkbox"><input type="checkbox" id="terms2"	class="terms" /><span></span></label>I authorize my child's chaperone to sign the
-							trip waivers on my behalf if needed. I understand that Chidon will not be responsible for
-							any injury that may occur.</p>
+					<div class="flex">
+						<label><input type="checkbox" id="terms1"	class="terms" /></label>
+						I authorize my child's chaperone to sign the trip waivers on my behalf if needed. I understand that
+						Chidon will not be responsible for any injury that may occur.
 					</div>
-					<div class="field">
-						<p><label class="checkbox"><input type="checkbox" id="terms3"	class="terms" /><span></span></label>I am aware that by participating in the Chidon
-							I consent to my child's name and picture being used in any media produced by Tzivos Hashem,
-							for publicity purposes or otherwise.</p>
-					</div>
-					<div class="field">
-						<p>
-							<label class="checkbox"><input type="checkbox" id="terms4" class="terms" /><span></span></label>
-							Please read with your child and initial: I will abide by all rules established by Chidon
-							headquarters.
-							Any behavior deemed inappropriate by staff or a departure from an activity without the
-							consent of your counselor and safety officer
-							is terms for dismissal from the Program. The Program fee will not be refunded. <input
-							type="text" id="initials" style="width: 40px;" />
-						</p>
-					</div>
-					<div class="field">
-						<p>
-							<label class="checkbox"><input type="checkbox" id="terms5" class="terms" /><span></span></label>
-							The Chidon Program is a major undertaking, and requires extensive coordination to ensure
-							everyone's safety at all times.
-							For this reason, changes to information submitted after enrollment will incur additional
-							charges:
-						<blockquote>
-							<p>From Feb 23, changes can be made through your account at an additional charge of $50.
-							</p>
-							<p>On Wednesday the day before the Program begins, changes can be made between 12:00
-								and 5:00pm in the lobby of the Jewish children's Museum at a cost of $100.</p>
-							<p>Any changes we are informed about during the actual Program will incur a $150
-								charge and must be submitted at the information desk.</p>
-						</blockquote>
-						</p>
+					<div class="flex">
+						<label><input type="checkbox" id="terms2" class="terms" /></label>
+						Please read with your child and initial: I will abide by all rules established by Chidon
+						headquarters. Any behavior deemed inappropriate by staff or a departure from an activity without the
+						consent of your counselor and safety officer is terms for dismissal from the Program.
+						The Program fee will NOT be refunded.
+						<input type="text" id="initials" style="width: 40px;" />
 					</div>
 
 				</form>
@@ -529,6 +482,20 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 				integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 				crossorigin="anonymous"></script>
+
+<script>
+	// for modal
+	$(".in_zone").click( function () {
+		let val = $(this).val()
+		if (parseInt(val)) {
+			$("#outsideZone").hide()
+			$("#insideZone").show()
+		}	else {
+			$("#insideZone").hide()
+			$("#outsideZone").show()
+		}
+	})
+</script>
 
 <script src="../js/circletype.min.js"></script>
 <script src="../js/jquery.nice-select.min.js"></script>
@@ -1125,6 +1092,8 @@
 		e.preventDefault()
 		checkForm() // checks to make sure all needed reg items are chosen correctly
 		checkShipping() // checks to make sure shipping info is filled out when needed
+		checkModal()
+		return
 		if (!errors.length && checkRegAddUserInfo()) {
 			json_cart = JSON.stringify(cart)
 			// add coupons and chidon drive raised
