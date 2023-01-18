@@ -349,8 +349,8 @@ function saveTripInfo() {
     $success = true;
     foreach ($trips as $trip) {
         if (! $sqlTrip->execute([
-            'trip'  => $trip['trip'],
-            'user_id'  => $trip['user_id']
+            'trip'      => $trip['trip'],
+            'user_id'   => $trip['user_id']
         ])) {
             $success = false;
             break;

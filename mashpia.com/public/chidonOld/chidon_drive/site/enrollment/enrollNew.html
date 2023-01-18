@@ -365,6 +365,7 @@
 	var shipping = 0 // cost of shipping chidon stuff to parents where applicable
 	var shipping_cost = 50
 	var errors = []
+	var needsShipping = false
 
 	async function getChildren(admin) {
 		let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -465,13 +466,12 @@
 		}
 
 		let html = ''
-		let hasMyShliachChild = false
 		for (let child of eligible) {
 			if (parseInt(child.user_id) === 5455) child.school_id = 61
 			let myshliach = false // flag for determining if need to show shipping section
 			if ([61, 269].includes(parseInt(child.school_id))) {
 				myshliach = true
-				hasMyShliachChild = true
+				needsShipping = true
 			}
 			// figure out if child is eligible for ultimate experience
 			console.log(child)
@@ -584,12 +584,13 @@
 		}
 
 		// set myshliach cookie; needed for processing registration page
-		Cookies.set('myshliach', hasMyShliachChild ? 1 : 0)
+		Cookies.set('myshliach', needsShipping ? 1 : 0)
 
 		// find out if we need to charge for shipping
 		// myshliach = true
-		if (hasMyShliachChild) {
-			html += `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+		if (needsShipping) {
+			html += `<div id="shipping_charges" style="display: none;">
+								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
                 <div class="flex">
                   <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
                   <label>
@@ -603,7 +604,7 @@
                     ($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
                     check to confirm that it has the correct address saved.
                   </label>
-                </div>`
+                </div></div>`
 		}
 
 		$(".login").hide();
@@ -695,7 +696,11 @@
 		$(elem).empty()
 		$(elem).append(html)
 		$(elem).find("select.reg").niceSelect()
-		if (!selection) {
+		// show shipping charges if relevant
+		if (needsShipping && $(".ultimate_trip:checked").length) $("#shipping_charges").show()
+
+		// figure out what else to show / hide
+		if (selection != undefined && selection == 0) {
 			$(desc).find('.registration').show()
 			$(desc).find('#regional_trip').niceSelect('destroy')
 			$(desc).find('#regional_trip').hide()
@@ -834,20 +839,11 @@
 	}
 
 	function checkShipping() {
-		// only check shipping if at least one child is being registered
-		let check = false
-		for (let item of cart) {
-			if (item.desc.includes('reg')) {
-				check = true
-				break
-			}
-		}
-		if (check) {
-			if ($(".shipping").length) {
-				if (!$(".shipping:checked").length) {
-					errors.push("You must indicate how you would like to have your chidon stuff shipped!")
-					$(".shipping").eq(0).focus()
-				}
+		// only check shipping if at least one child from myshliach or anash kinder is being registered
+		if (needsShipping && $(".ultimate_trip:checked").length) {
+			if (!$(".shipping:checked").length) {
+				errors.push("You must indicate how you would like to have your chidon stuff shipped!")
+				$(".shipping").eq(0).focus()
 			}
 		}
 	}
@@ -915,7 +911,7 @@
 				window.localStorage.setItem('raised', json_raised)
 				window.localStorage.setItem('tracks', json_tracks)
 				window.localStorage.setItem('shipping', shipping)
-				window.localStorage.setItem('trips', trips)
+				window.localStorage.setItem('trips', JSON.stringify(trips))
 				if (ultimate_trip.length) window.localStorage.setItem('ultimate_trip', ultimate_trip)
 			} else {
 				// put in cookie
@@ -924,7 +920,7 @@
 				Cookies.set('raised', json_raised)
 				Cookies.set('tracks', json_tracks)
 				Cookies.set('shipping', shipping)
-				Cookies.set('trips', trips)
+				Cookies.set('trips', JSON.stringify(trips))
 				if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			}
 			// go to checkout page
