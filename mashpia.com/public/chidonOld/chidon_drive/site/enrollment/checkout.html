@@ -362,7 +362,7 @@
         trips = window.localStorage.getItem('trips')
         if (window.localStorage.getItem('ultimate_trip')) {
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
-            ultimate_info = JSON.parse(window.localStorage.getItem('ultimate_info'))
+            ultimate_info = window.localStorage.getItem('ultimate_info')
         }
     } else {
         cart = JSON.parse(Cookies.get('cart'))
@@ -373,7 +373,7 @@
         trips = Cookies.get('trips')
         if (Cookies.get('ultimate_trip')) {
             ultimate_trip = Cookies.get('ultimate_trip')
-            ultimate_info = JSON.parse(Cookies.get('ultimate_info'))
+            ultimate_info = Cookies.get('ultimate_info')
         }
     }
     if (!cart.length) location.href = 'enrollNew.html'
@@ -559,7 +559,7 @@
         }
 
         const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
-        $.post('../../ajax/processPayment5782.php', {
+        $.post('../../ajax/processPayment5783.php', {
             admin_id: admin.admin_id,
             admin_email,
             cart_total,
@@ -572,7 +572,9 @@
             coupons,
             raised,
             tracks,
-            trips
+            trips,
+            ultimate_trip,
+            ultimate_info
         }, function(result) {
             const res = JSON.parse(result)
             if (res.success) {

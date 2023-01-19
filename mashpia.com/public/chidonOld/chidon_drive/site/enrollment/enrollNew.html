@@ -632,6 +632,7 @@
 			acc.number = $("#acc_street_num").val()
 			acc.suffix = $("#acc_street_num_suffix").val()
 			acc.apt = $("#acc_street_apt").val()
+			acc.in_zone = in_zone
 			if (in_zone) {
 				acc.street = $("#acc_street").val()
 				acc.between1 = $("#acc_cross1").val()
@@ -1294,7 +1295,7 @@
 				if (ultimate_trip.length) Cookies.set('ultimate_trip', ultimate_trip)
 			}
 			// go to checkout page
-			location.href = 'enroll_extra.html'
+			// location.href = 'enroll_extra.html'
 		} else if (errors.length) {
 			alert(errors.join('\n'))
 			errors = [] // reset errors

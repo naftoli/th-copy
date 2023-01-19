@@ -47,6 +47,8 @@ $raised = arrayByField($raisedArr, 'user_id', 'raised');
 $tracksArr = json_decode($_POST['tracks']);
 $tracks = arrayByField($tracksArr, 'user_id', 'track');
 $trips = json_decode($_POST['trips']);
+$ultimate_trip = json_decode($_POST['ultimate_trip']);
+$ultimate_info = json_decode($_POST['ultimate_info']);
 
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
@@ -359,6 +361,63 @@ function saveTripInfo() {
     return $success;
 }
 
+function saveUltimateTripInfo() {
+    global $MASHPIA_DB, $ultimate_trip, $ultimate_info;
+
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE th_chidon
+        SET
+            ultimate_trip = 1, 
+            host = :family, 
+            host_number = :phone, 
+            host_street = :street, 
+            host_street_num = :street_num, 
+            host_street_num_suffix = :suffix, 
+            host_street_apt = :apt, 
+            in_zone = :in_zone, 
+            between_street1 = :between1, 
+            between_street2 = :between2, 
+            allergies = :allergies, 
+            sandwich = :sandwich, 
+            walking_zone = :zone, 
+            shoe_size = :shoe, 
+            walking = :walk_alone, 
+            poll = :chidon_answer
+        WHERE
+            user_id = :user AND year = :year
+    ");
+
+    $success = true;
+    if (count($ultimate_trip)) {
+        foreach ($ultimate_trip as $user_id) {
+            $info = $ultimate_info[$user_id];
+            $acc = $info['accomodation'];
+            $res = $stmt->execute([
+                'family' => $acc['family'],
+                'phone' => $acc['phone'],
+                'street' => $acc['street'],
+                'suffix' => $acc['suffix'],
+                'apt' => $acc['apt'],
+                'in_zone' => $info['in_zone'],
+                'between1' => $acc['between1'],
+                'between2' => $acc['between2'],
+                'allergies' => $info['allergy'] ? $info['allergies'] : '',
+                'sandwich' => $info['sandwich'],
+                'zone' => $acc['zone'],
+                'shoe' => $info['shoe'],
+                'walk_alone' => $info['walk_alone'],
+                'chidon_answer' => $info['chidon_answer'],
+                'street_num' => $acc['number']
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
+            }
+        }
+    }
+    return $success;
+}
+
 function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
@@ -455,10 +514,11 @@ $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
 $tripsSaved = saveTripInfo();
 redeemCoupons();
+$ultimate = saveUltimateTripInfo();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved) {
+if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
     if ($to_charge) {
         $payment = processFee();
         if (! $payment) {
