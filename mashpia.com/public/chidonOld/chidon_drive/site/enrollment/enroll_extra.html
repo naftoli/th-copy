@@ -183,7 +183,7 @@
                     <br /><br />
                     Please Note: <br />
                     1. Extra Purchases Shipping is ONLY TO THE USA!
-                    2. If you have more than one child your extra purchases will be given to your oldest child that registered.
+                    2. If you have more than one child your extra purchases will be given to your oldest child.
                 </h5>
                 <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
                 <div id="celebBoxesSoldOut" style="display: none;">
@@ -431,6 +431,9 @@
   var addresses = {} // all addresses entered
   var sweaters = {}
   var celeb_boxes = 950
+
+  if (window.localStorage) cart = JSON.parse(window.localStorage.getItem('cart'))
+  else cart = JSON.parse(Cookies.get('cart'))
 
   getSweaterInfo()
 
@@ -735,27 +738,6 @@
     }
   })
 
-  function checkTripTerms() {
-    let good = true
-    $(".trip_terms").each( function() {
-      let topElem = $(this).parent().parent().parent().parent();
-      let user_id = $(topElem).attr('id')
-      let elem = '#reg_' + user_id
-      if ($(elem).val()) {
-        // check if it's showing or not
-        const display = $(topElem).find('.regional_trip').css('display')
-        if (display != 'none') {
-          if (!$(this).is(':checked')) {
-            alert("You must indicate your acceptance of the Regional Trip Terms.")
-            good = false
-            return false
-          }
-        }
-      }
-    })
-    return good
-  }
-
   function checkChoicesAreComplete() {
     const num = cart.length
     for (let i = 0; i < num; i++) {
@@ -828,11 +810,17 @@
       checkChoicesAreComplete() &&
       checkAddresses()
     ) {
-      json_addresses = JSON.stringify(addresses)
-      if (window.localStorage) window.localStorage.setItem('addresses', json_addresses)
-      else Cookies.set('addresses', json_addresses)
-      // go to checkout page
-      location.href = 'checkout.html'
+        json_cart = JSON.stringify(cart)
+        json_addresses = JSON.stringify(addresses)
+        if (window.localStorage) {
+            window.localStorage.setItem('cart', json_cart)
+            window.localStorage.setItem('addresses', json_addresses)
+        } else {
+            Cookies.set('cart', json_cart)
+            Cookies.set('addresses', json_addresses)
+        }
+        // go to checkout page
+        location.href = 'checkout.html'
     }
   })
 </script>
