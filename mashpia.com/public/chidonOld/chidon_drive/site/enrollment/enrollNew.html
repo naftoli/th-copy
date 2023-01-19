@@ -1067,7 +1067,7 @@
 		$(elem).append(html)
 		$(elem).find("select.reg").niceSelect()
 		// show shipping charges if relevant
-		if (needsShipping && $(".ultimate_trip:checked").length) $("#shipping_charges").show()
+		if (needsShipping) $("#shipping_charges").show()
 
 		// figure out what else to show / hide
 		if (selection != undefined && selection == 0) {

@@ -442,7 +442,7 @@
         html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
         for (let info of reg) {
             let child = children[info.id]
-            html += `<h5 class="formDetails">Registering for ${child.first} : $${info.fee}</h5>`
+            html += `<h5 class="formDetails">Registering for ${child.first}: $${info.fee}</h5>`
             reg_fee += info.fee
         }
     }

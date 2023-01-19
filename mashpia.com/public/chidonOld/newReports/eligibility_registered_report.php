@@ -79,10 +79,10 @@ foreach ($schools as $school_id => $name) {
         <?php
         $rewards = [
             'Yesod'     => 'Sweater, Gifts & Yesod Final',
-            'Yediah'    => 'Sweater, Gifts, Prizes, & Yediah Final',
-            'Havonah'   => 'Sweater, Gifts, Trip, & Havonah Final',
-            'Iyun'      => 'Sweater, Gifts, Trip & Iyun Final',
-            'Khk Trip'  => 'Sweater, Gifts, Trip & '
+            'Yediah'    => 'Sweater, Gifts, $75 Prize credits, & Yediah Final',
+            'Havonah'   => 'Sweater, Gifts, $75 Prize credits, Trip, & Havonah Final',
+            'Iyun'      => 'Sweater, Gifts, $75 Prize credits, Trip & Iyun Final',
+            'Khk Trip'  => 'Sweater, Gifts, $75 Prize credits, Trip & '
         ];
         $i = 0;
         foreach ($info as $row) {
