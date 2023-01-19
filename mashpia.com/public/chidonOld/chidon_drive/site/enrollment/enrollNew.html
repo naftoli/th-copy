@@ -754,10 +754,10 @@
 	function getTrackText(track, ultimate) {
 		let trackText = {
 			'Yesod': "the Chidon Sweater, Gifts & to take the Yesod Final",
-			'Yediah': "the Chidon Sweater, Gifts, Prizes and to take the Yediah Final",
-			'Havonah': "the Chidon Sweater, Gifts, Regional Trip and to take the Havonah Final",
-			'Iyun': "the Chidon Sweater, Gifts, Regional Trip and to take the Iyun Final",
-			'Ultimate': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip and to take the " + track + " Final"
+			'Yediah': "the Chidon Sweater, Gifts, $75 Prize credits, and to take the Yediah Final",
+			'Havonah': "the Chidon Sweater, Gifts, $75 Prize credits, Regional Trip, and to take the Havonah Final",
+			'Iyun': "the Chidon Sweater, Gifts, $75 Prize credits, Regional Trip, and to take the Iyun Final",
+			'Ultimate': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, $75 Prize credits, Ultimate Chidon Experience Trip, and to take the " + track + " Final"
 		}
 		if (ultimate) track = 'Ultimate'
 		return trackText[track]
@@ -809,7 +809,7 @@
 		}
 
 		let registered = children.filter(child => child.date_paid)
-		let haveTrack = children.filter(child => child.track)
+		// let haveTrack = children.filter(child => child.track)
 		let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 		let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
 
@@ -818,7 +818,7 @@
 			location.href = 'enroll_extra.php'
 		} else if (!eligible.length && !registered.length) {
 			alert("You don't have any eligible children to register, however, you can purchase some items for the chidon.")
-			location.href = 'enroll_extra.php'
+			// location.href = 'enroll_extra.html'
 		}	else if (schoolNotConfirmed.length) {
 			alert('Only children that have had their school confirm their eligibility will show up for registration.')
 		}
@@ -886,8 +886,6 @@
 <!--                        <h5 class="formDetails"><span class="title ultimate_title">Ultimate Chidon Experience Payment</span></h5>-->
 `
 			} else if (child.track === 'Havonah' || child.track === 'Iyun') {
-				let style = ''
-				if (ultimate) style='display: none'
 				let text = 'You will be joining your school\'s Regional Trip. Speak to your schools coordinator with regards to any questions you have about your region\'s trip.'
 				if (myshliach) {
 					text = `You will be joining one of your base's Regional Trips. If you are unable to join any of the trips, please select the 'no trip' option below and
@@ -901,6 +899,8 @@
 					text += `<option value="no_trip">No Trip</option>
 						</select>`
 				}
+				let style = ''
+				if (ultimate) style='display: none'
 				html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
 				if (!myshliach) {
 					html += `<div class="flex">
@@ -972,6 +972,18 @@
 		$(".children").append(html);
 		$(".children").show();
 		$("select.reg").niceSelect()
+
+		for (let child of eligible) {
+			let myshliach = [61, 269].includes(parseInt(child.school_id))
+			// if myshliach show trip options
+			if (myshliach) calculateReg(1, child.user_id)
+			// if on yediah track, there's nothing to select so we need to trigger the registration options
+			else if (child.track == 'Yediah') {
+				calculateReg(1, child.user_id)
+				let elem = '#' + child.user_id
+				$(elem).find('.registration').show()
+			}
+		}
 	}
 
 	function updateTripChoice() {
@@ -1105,12 +1117,18 @@
 	})
 
 	$(document).on('change', '#regional_trip', function () {
-		let elem = $(this).parent().parent().find('.ultimate_trip')
-		if (! $(elem).is(":checked")) $(elem).trigger('click')
-		const val = $(elem).val()
-		const info = val.split(':')
-		const idx = parseInt(info[0])
-		const user_id = info[1]
+		let user_id, idx, elem
+		if ($(".ultimate_trip").length) {
+			elem = $(this).parent().parent().find('.ultimate_trip')
+			if (!$(elem).is(":checked")) $(elem).trigger('click')
+			const val = $(elem).val()
+			const info = val.split(':')
+			idx = parseInt(info[0])
+			user_id = info[1]
+		} else {
+			user_id = $(this).parent().parent().parent().parent().parent().attr('id')
+			idx = 1
+		}
 		calculateReg(idx, user_id)
 		const trip = $(this).val()
 		const regElem = '#' + user_id
