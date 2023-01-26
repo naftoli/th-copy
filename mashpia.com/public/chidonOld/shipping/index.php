@@ -4,11 +4,12 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
+
+require 'class.chidonShipping.php';
 
 $categories = [
     'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'sweaters', 'celebration boxes', 'trip items',
@@ -44,21 +45,21 @@ $items = [
     ],
     'sweaters'  => [
         'kids'  => [
-            'boys'  => $sizes[0],
-            'girls  '  => $sizes[0]
+            'boys'  => $this->sizes[0],
+            'girls  '  => $this->sizes[0]
         ],
         'hq' => [
-            'boys'  => $sizes[0],
-            'girls  '  => $sizes[0]
+            'boys'  => $this->sizes[0],
+            'girls  '  => $this->sizes[0]
         ],
         'trip staff'    => [
-            'boys'  => $sizes[1],
-            'girls' => $sizes[1]
+            'boys'  => $this->sizes[1],
+            'girls' => $this->sizes[1]
         ],
-        'bubby'     => $sizes[1],
-        'zaidy'     => $sizes[1],
-        'mother'    => $sizes[1],
-        'father'    => $sizes[1],
+        'bubby'     => $this->sizes[1],
+        'zaidy'     => $this->sizes[1],
+        'mother'    => $this->sizes[1],
+        'father'    => $this->sizes[1],
     ],
     'celebration boxes'     => ['celebration box'],
     'trip items'            => ['plates', 'napkins', 'tablecloth', 'cups'],
@@ -95,11 +96,11 @@ $items = [
         'chidon T-shirt' => [
             'boys'  => [
                 'color' => 'navy',
-                'sizes' => $sizes[2]
+                'sizes' => $this->sizes[2]
             ],
             'girls' => [
                 'color' => 'burgundy',
-                'sizes' => $sizes[2]
+                'sizes' => $this->sizes[2]
             ]
         ],
         'chidon art set',
@@ -152,3 +153,41 @@ $items = [
         'reb hillel paritcher'
     ]
 ];
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shipping Reports</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size: 14px;
+        padding-left: 3%;
+        padding-right: 3%;
+      }
+      fieldset {
+        float: left;
+        width: 40%;
+        padding-right: 20px;
+        padding-left: 20px;
+        padding-bottom: 20px;
+      }
+    </style>
+</head>
+<body>
+    <h1>Create Your Own Shipping Report</h1>
+    <form>
+        <fieldset>
+            <legend>Campaigns</legend>
+            <?php
+            foreach ($categories as $category) {
+                echo "<input type='checkbox' value='" . strtolower($category) . "' />" . ucwords($category) . "<br />";
+            }
+            ?>
+        </fieldset>
+    </form>
+</body>
+</html>

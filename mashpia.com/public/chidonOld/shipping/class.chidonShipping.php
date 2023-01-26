@@ -1,0 +1,291 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
+class ChidonShipping
+{
+    private $db, $year;
+
+    public function __construct() {
+        global $MASHPIA_DB;
+        $this->db = $MASHPIA_DB;
+        $this->year = GlobalSettings::getChidonYear();
+    }
+
+    public function getBrochures($schools = [], $grades = [], $users = [], $early = false) {
+        /**
+         * get all brochures that need to be sent out
+         *
+         * QUALIFICATIONS:
+         * all children signed up to TH between grades 4-8
+         * (or 3-7) if doing it before end of yr
+         *
+         * @return array all user info from users db with the user id as the key
+         */
+
+        $info = [];
+        $in_grades = "('4', '5', '6', '7', '8')";
+        if ($early) $in_grades = "('3', '4', '5', '6', '7')";
+        $sql = "SELECT * FROM users u 
+            JOIN classes c ON c.class_id = u.class_id 
+            WHERE c.class_grade in $in_grades 
+            AND u.user_registered > 0";
+        if ($schools) {
+            $sql .= " and u.school_id in (" . implode(',', $schools) . ")";
+        }
+        if ($grades) {
+            $sql .= " and c.class_id in (" . implode(',', $grades) . ")";
+        }
+        if ($users) {
+            $sql .= " and u.user_id in (" . implode(',', $users) . ")";
+        }
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']] = $row;
+        }
+        return $info;
+    }
+
+    public function getBooks($year) {
+        /**
+         * get all books purchased for specific year
+         *
+         * QUALIFICATIONS:
+         * any one that ordered it
+         *
+         * @return array all book info from db with user id as the key
+         */
+
+        $info = [];
+        $sql = "SELECT * FROM yahadus_book_purchases where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']] = $row;
+        }
+    }
+
+    public function getGuides() {
+        /**
+         * get all guides to send out
+         *
+         * QUALIFICATIONS:
+         *
+         */
+    }
+
+    public function getRecruitmentPrizes() {
+        /**
+         * get list of children and which prizes they should get for specific year
+         */
+
+        $info = [];
+        // get list of prizes
+        $prizes = $this->getListofRecruitmentPrizes();
+        // find out list of children and how many credits they have
+        $children  = $this->getChildrenRecruitments();
+        foreach ($children as $user_id => $credits) {
+            $info[$user_id] = $prizes[$credits];
+        }
+        return $info;
+    }
+
+    private function getListofRecruitmentPrizes() {
+        /**
+         * get list of prizes in system with how many credits is needed for each prize
+         */
+
+        $prizes = [];
+        $sql = "select prize from chidon_credit_prizes where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $prizes[$row['credits']] = $row['prize'];
+        }
+        return $prizes;
+    }
+
+    private function getChildrenRecruitments() {
+        /**
+         * finds out which children recruited others since 5782 and how many they recruited
+         */
+        $children = [];
+        $start = 5782;
+        $sql = "select u.user_id, count(*) as credits from users u 
+                join th_chidon tc on u.user_serial = tc.recruited_by 
+                where year >= $start as credits 
+                group by u.user_id";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $children[$row['user_id']] = $row['credits'];
+        }
+        return $children;
+    }
+
+    public function getTestPrizes() {
+        /**
+         * get list of prizes children should be receiving for each test & final
+         */
+    }
+
+    public function getChildrenSweaters() {
+        /**
+         * get all children that signed up to chidon with their sweater size
+         * need to know size/color/school for personalization
+         */
+
+        $info = [];
+        $sql = "SELECT 
+                    user_id, size, gender, s.school_name
+                FROM
+                    th_chidon tc
+                        JOIN
+                    users u USING (user_id)
+                        JOIN
+                    schools s ON u.school_id = s.school_id
+                WHERE
+                    year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $details = [];
+            $details['color'] = strtolower($row['gender']) == 'm' ? 'blue' : strtolower($row['gender']) == 'f' ? 'burgundy' : '';
+            $details['school'] = $row['school_name'];
+            $info[$row['user_id']] = $details;
+        }
+        return $info;
+    }
+
+    public function getHQSweaters() {
+
+    }
+
+    public function getTripStaffSweaters() {
+
+    }
+
+    public function getExtraPurchases() {
+        /**
+         * get list of extra purchases per family
+         */
+
+        $info = [];
+        $sql = "select * from extra_purchases where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['admin_id']][$row['item']][] = $row;
+        }
+        return $info;
+    }
+
+    public function getTripItems() {
+
+    }
+
+    public function getGifts() {
+        /**
+         * gets gifts for all children registered end of chidon
+         * 1. yarmulka for boys
+         * 2. jewelery for girls
+         * 3. personalized water bottle for all (blue/pink)
+         */
+
+        $info = [];
+        $sql = "select * from th_chidon where date_paid > 0 and year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $gift = '';
+            $name = $row['name_pref'];
+            if (strtolower($row['gender']) == 'm') $gift = 'Yarmulka size: ' . $row['yarmulka'];
+            else if (strtolower($row['gender']) == 'f') $gift = 'Jewelery';
+            $gift .= " / Personalized Bottle (" . $name . ")";
+            $info[$row['user_id']] = $gift;
+        }
+        return $info;
+    }
+
+    public function getIDCards() {
+        /**
+         * get all children that need ID card
+         */
+
+        $info = [];
+        $sql = "select * from th_chidon where date_paid > 0 and year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']] = $row;
+        }
+        return $info;
+    }
+
+    public function getAwards() {
+        /**
+         * gets award needed for each child
+         * based off the highest track saved in db - th_chidon_info
+         */
+
+        $info = [];
+        $sql = "select * from th_chidon_info where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $award = '';
+            switch ($row['highest_track']) {
+                case 'yesod':
+                    $award = 'certificate';
+                    break;
+                case 'yediah':
+                    $award = 'plaque';
+                    break;
+                case 'havonah':
+                    $award = 'medal';
+                    break;
+                case 'iyun':
+                    $award = 'medal / trophy';
+                    break;
+            }
+            $info[$row['user_id']] = $award;
+        }
+        return $info;
+    }
+
+    public function getPrizes() {
+        /**
+         * gets the prizes the children chose when signing up
+         * db tables = chidon_user_prizes / chidon_prizes
+         */
+
+        $info = [];
+        $sql = "SELECT 
+                    *
+                FROM
+                    chidon_user_prizes cup
+                        JOIN
+                    chidon_prizes cp USING (prize_id)
+                WHERE
+                    cup.year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']][] = $row;
+        }
+        return $info;
+    }
+
+    public function getEventItems() {
+
+    }
+}
