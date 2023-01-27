@@ -60,7 +60,7 @@ if ( !empty( $users ) ) {
         ." JOIN schools s USING (school_id) "
         ." LEFT JOIN classes c ON c.class_id = u.class_id "
         ." WHERE u.user_id IN (" . implode(',', $users) . ") ";
-    echo $sql;
+//    echo $sql;
 
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc($result) ) {
