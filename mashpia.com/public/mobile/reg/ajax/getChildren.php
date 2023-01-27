@@ -54,7 +54,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 if ( !empty( $users ) ) {
     $children = [];
     $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, s.school_country, c.class_grade, "
-        ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, "
+        ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, u.hachayol, "
         ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, s.school_id, c.class_id "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
