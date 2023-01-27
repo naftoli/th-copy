@@ -3,13 +3,15 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-require_once __DIR__ . '/../../../header.php';
-$year = 5781;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
     exit;
 }
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 
 $only_flagged = isset($_GET['only_flagged']) && $_GET['only_flagged'];
 

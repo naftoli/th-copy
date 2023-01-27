@@ -10,184 +10,75 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 
 require 'class.chidonShipping.php';
+require 'data.php';
 
-$categories = [
-    'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'sweaters', 'celebration boxes', 'trip items',
-    'gifts', 'ID cards', 'awards', 'prizes', 'event'
-];
+function build_fields() {
+    global $fields;
+    $html = '';
+    foreach ($fields as $field => $desc) {
+        $html .= "<input type='checkbox' name='" . $field . "' /> " . $desc . "<br />";
+    }
+    return $html;
+}
 
-$sizes = [
-    ['children xs', 'children s', 'children m', 'children l', 'children xl', 'adult xs', 'adult s', 'adult m',
-        'adult l', 'adult xl', 'adult xxl', 'adult xxxl'],
-    ['adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl'],
-    ['children s', 'children m', 'children l', 'children xl', 'adult s', 'adult m', 'adult l']
-];
-
-$items = [
-    'brochures' => ['brochure'],
-    'books'     => ['books'],
-    'guides'    => ['study guide', 'khk guide'],
-    'recruitment prizes'    => [
-        'book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag',
-        'watch' => [
-            'colors' => ['blue', 'burgundy']
-        ]
-    ],
-    'test prizes'   => [
-        'kop cards game'    => [
-            'colors'    => ['blue', 'red', 'purple', 'green', 'yellow']
-        ],
-        'leather book mark' => [
-            'colors'    => ['blue', 'red', 'purple', 'green', 'yellow']
-        ],
-        'drawstring bag',
-        'shape shifting cube'
-    ],
-    'sweaters'  => [
-        'kids'  => [
-            'boys'  => $this->sizes[0],
-            'girls  '  => $this->sizes[0]
-        ],
-        'hq' => [
-            'boys'  => $this->sizes[0],
-            'girls  '  => $this->sizes[0]
-        ],
-        'trip staff'    => [
-            'boys'  => $this->sizes[1],
-            'girls' => $this->sizes[1]
-        ],
-        'bubby'     => $this->sizes[1],
-        'zaidy'     => $this->sizes[1],
-        'mother'    => $this->sizes[1],
-        'father'    => $this->sizes[1],
-    ],
-    'celebration boxes'     => ['celebration box'],
-    'trip items'            => ['plates', 'napkins', 'tablecloth', 'cups'],
-    'gifts'                 => [
-        'boys'  => [
-            'yarmulka'  => [
-                'sizes'     => ['4', '5', '6']
-            ],
-            'personalized name bottle'  => [
-                'color'    => 'blue'
-            ]
-        ],
-        'girls'     => [
-            'jewelery',
-            'personalized name bottle'  => [
-                'color'    => 'pink'
-            ]
-        ]
-    ],
-    'ID cards'              => ['ID card'],
-    'awards'                => [
-        'certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque', 'gold trophy', 'silver trophy', 'bronze trophy'
-    ],
-    'event'                 => [
-        '25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag', 'flag pole', 'carpet',
-        'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes', 'back drop', 'back drop medal frame'
-    ],
-    'prizes'                => [
-        'remote control helicopter',
-        'video drone',
-        'bracelet',
-        'necklace',
-        'earrings',
-        'chidon T-shirt' => [
-            'boys'  => [
-                'color' => 'navy',
-                'sizes' => $this->sizes[2]
-            ],
-            'girls' => [
-                'color' => 'burgundy',
-                'sizes' => $this->sizes[2]
-            ]
-        ],
-        'chidon art set',
-        'chidon juggling set',
-        'chidon soccer ball',
-        'chidon basket ball',
-        'chidon football',
-        'framed rebbe picture 5782',
-        'chidon cap'    => [
-            'boys'  => [
-                'color' => 'navy',
-            ],
-            'girls' => [
-                'color' => 'burgundy'
-            ]
-        ],
-        'der rebbe ret tzu kinder',
-        'chidon leather sefer hamitzvos'    => ['boys', 'girls'],
-        'chidon leather chitas' => ['boys', 'girls'],
-        'chidon leather siddur' => ['boys', 'girls'],
-        'chidon leather tehillim'   => ['boys', 'girls'],
-        'chidon leather machzor'    => ['boys', 'girls'],
-        'chidon baseball',
-        'chidon carry-on',
-        'personalized name bracelet',
-        'chidon pogo ball',
-        'comic book'    => [
-            'the jewish underground vol 1',
-            'the jewish underground vol 2',
-            'iron curtain vol 1',
-            'iron curtain vol 2',
-            'escape from europe',
-            'the Rebbe and the mazkir'
-        ],
-        'chidon towel'  => ['boys', 'girls'],
-        'chocolate mold',
-        'backpack'  => [
-            'boys'  => [
-                'color' => 'navy'
-            ],
-            'girls' => [
-                'color' => 'burgundy'
-            ]
-        ],
-        'waffle maker',
-        'chidon cookie cutters',
-        'reb binyomin kletzker',
-        'reb shmuel munkes',
-        'the slavita brothers',
-        'reb hillel paritcher'
-    ]
-];
+function build_items() {
+    global $categories, $items;
+    $html = '';
+    foreach ($categories as $cat) {
+        $html .= "<h4>" . ucwords($cat) . "</h4>";
+        foreach ($items[$cat] as $item) {
+            $name = strtolower($item);
+            $html .= "<input type='checkbox' name='" . $name . "' /> " . ucwords($item) . "<br />";
+        }
+    }
+    return $html;
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shipping Reports</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        font-size: 14px;
-        padding-left: 3%;
-        padding-right: 3%;
-      }
-      fieldset {
-        float: left;
-        width: 40%;
-        padding-right: 20px;
-        padding-left: 20px;
-        padding-bottom: 20px;
-      }
-    </style>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shipping Reports</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 14px;
+      padding-left: 3%;
+      padding-right: 3%;
+    }
+    fieldset {
+      float: left;
+      width: 40%;
+      padding-right: 20px;
+      padding-left: 20px;
+      padding-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Create Your Own Shipping Report</h1>
-    <form>
-        <fieldset>
-            <legend>Campaigns</legend>
-            <?php
-            foreach ($categories as $category) {
-                echo "<input type='checkbox' value='" . strtolower($category) . "' />" . ucwords($category) . "<br />";
-            }
-            ?>
-        </fieldset>
-    </form>
+  <h1>Create Your Own Shipping Report</h1>
+  <form id="shippingForm" action="report.php" method="post">
+    <fieldset>
+      <legend>Choose Fields</legend>
+      <?= build_fields(); ?>
+      <br />
+      <button id="create">Create Report</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Choose Items</legend>
+      <?= build_items(); ?>
+    </fieldset>
+  </form>
+  <p></p>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+  $( function () {
+
+  })
+</script>
 </html>
