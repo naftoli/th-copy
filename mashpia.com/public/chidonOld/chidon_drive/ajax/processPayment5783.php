@@ -252,8 +252,7 @@ function updateShipping() {
 
 function processCelebBoxes() {
     global $MASHPIA_DB, $year, $admin_id, $addresses, $sqlCelebBox, $sqlAddress, $celebBoxes, $celebBoxShipping;
-    echo "Celeb Boxes: " . $celebBoxes . "<br />";
-    echo "Celeb Box SHipping: " . $celebBoxShipping . "<br />";
+
     if (!$celebBoxes) return true; // no need to process anything so there's no issues
     else {
         $res = $sqlCelebBox->execute([
@@ -275,15 +274,14 @@ function processCelebBoxes() {
             ]);
             if ($res2) return true;
         }
-        else if ($res && !$celebBoxShipping) return true;
-        else if (!$res) return false;
+        else if ($res) return true;
     }
     return false;
 }
 
 function processSweaters() {
     global $admin_id, $year, $addresses, $sqlSweater, $sqlAddress, $MASHPIA_DB, $sweaters, $sweater_info;
-
+    echo "Sweater Info: " . print_r($sweater_info); echo "</pre>";
     // update db
     $success = true;
     foreach ($sweaters as $sweater) {
