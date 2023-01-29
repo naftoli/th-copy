@@ -7,7 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -54,11 +54,15 @@ foreach ($tables as $table) {
   if ($table == 'u') continue;
   $sql .= $tableAliases[$table] . " ";
 }
-
 $sql .= " WHERE tc.year = " . $year;
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
+
+$resultsBySchool = [];
+foreach ($results as $row) {
+  $resultsBySchool[$row['school_id']][] = $row;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,31 +84,70 @@ $results = $stmt->fetchAll();
       padding: 5px;
       border-bottom: 1px solid grey;
     }
+    #header {
+      font-size: 14px;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
-  <h1>Create Your Own Shipping Report</h1>
-  <table>
-    <tr>
+  <?php foreach ($resultsBySchool as $school => $more) : ?>
+    <div id="header">
+      <?= $schools[$school] . ' - ' . $year ?>
       <?php
+      $address = '';
       foreach ($fields_chosen as $field) {
-        if (strpos($field, '.') !== false) echo "<th>" . $fields[$field] . "</th>";
+        switch ($field) {
+            case 's.shipping_first':
+            case 's.shipping_last':
+              $address .= $field . ' ';
+              break;
+            case 's.shipping_phone':
+              $address = "Contact Phone Number: " . $field . "<br />";
+              break;
+            case 's.shipping_address1':
+            case 's.shipping_address2':
+            case 's.shipping_city':
+            case 's.shipping_state':
+            case 's.shipping_postal':
+            case 's.shipping_country':
+              $address .= $field;
+              break;
+            case 's.shipping_requests':
+              $address .= "<br />Shipping Requests: " . $field;
+              break;
+        }
       }
+      echo "<br />" . $address . "<br />";
       ?>
-    </tr>
-      <?php
-      foreach ($results as $row) {
-        echo "<tr>";
+    </div>
+
+    <table>
+      <tr>
+        <?php
         foreach ($fields_chosen as $field) {
-          if (strpos($field, '.') !== false) {
-            $pos = strpos($field, '.');
-            $desc = substr($field, $pos + 1);
-              echo "<td>" . $row[$desc] . "</td>";
+          if (in_array($field, $details)) {
+              if (strpos($field, '.') !== false) echo "<th>" . $fields[$field] . "</th>";
           }
         }
-        echo "</tr>";
-      }
-      ?>
-  </table>
+        ?>
+      </tr>
+        <?php
+        foreach ($more as $row) {
+          echo "<tr>";
+          foreach ($fields_chosen as $field) {
+            if (in_array($field, $details)) {
+                if (strpos($field, '.') !== false) {
+                    $pos = strpos($field, '.');
+                    $desc = substr($field, $pos + 1);
+                    echo "<td>" . $row[$desc] . "</td>";
+                }
+            }
+          }
+          echo "</tr>";
+        }
+        ?>
+    </table>
+  <?php endforeach; ?>
 </body>
 </html>

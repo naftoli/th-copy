@@ -35,15 +35,13 @@ $items = [
 // key contains the table/field that we need to fetch
 // if key does not refer to table, then it has just a description or variable name
 $fields = [
-    'tc.year'       => 'Year',
-    'u.user_serial' => 'Serial Number',
-    'u.first'       => 'First Name',
-    'u.last'        => 'Last Name',
-    'tc.parent_id'  => 'Parent ID',
     's.school_name' => 'School',
     'c.class_grade' => 'Class Grade',
     'c.class_sub'   => 'Class Sub',
     'c.class_teacher'   => 'Teacher',
+    'u.user_serial' => 'Serial Number',
+    'u.first'       => 'First Name',
+    'u.last'        => 'Last Name',
     'category'      => 'Category',
     'item'          => 'Item Name',
     'cup.prize_id'  => 'Prize ID',
@@ -53,7 +51,7 @@ $fields = [
     'shipping_type' => 'Shipping Type',
     's.shipping_first'      => 'Shipping First Name',
     's.shipping_last'       => 'Shipping Last Name',
-    's.shipping_phone'      => 'Shipping Number',
+    's.shipping_phone'      => 'Shipping Contact Number',
     's.shipping_address1'   => 'Shipping Address 1',
     's.shipping_address2'   => 'Shipping Address 2',
     's.shipping_city'       => 'Shipping City',
@@ -61,6 +59,12 @@ $fields = [
     's.shipping_postal'     => 'Shipping Zip',
     's.shipping_country'    => 'Shipping Country',
     's.shipping_requests'   => 'Shipping Requests'
+];
+
+// for details section
+$details = [
+    'c.class_grade', 'c.class_sub', 'c.class_teacher', 'u.user_serial', 'u.first', 'u.last', 'category', 'item', 'cup.prize_id',
+    'size', 'color', 'tc.name_pref'
 ];
 
 //$sizes = [
