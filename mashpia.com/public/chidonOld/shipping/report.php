@@ -100,10 +100,10 @@ foreach ($results as $row) {
         switch ($field) {
             case 's.shipping_first':
             case 's.shipping_last':
-              $address .= $field . ' ';
+              $address .= $more[0][$field] . ' ';
               break;
             case 's.shipping_phone':
-              $address = "Contact Phone Number: " . $field . "<br />";
+              $address = "Contact Phone Number: " . $more[0][$field] . "<br />";
               break;
             case 's.shipping_address1':
             case 's.shipping_address2':
@@ -111,10 +111,10 @@ foreach ($results as $row) {
             case 's.shipping_state':
             case 's.shipping_postal':
             case 's.shipping_country':
-              $address .= $field;
+              $address .= $more[0][$field] . ' ';
               break;
             case 's.shipping_requests':
-              $address .= "<br />Shipping Requests: " . $field;
+              $address .= "<br />Shipping Requests: " . $more[0][$field];
               break;
         }
       }
