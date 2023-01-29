@@ -552,6 +552,13 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
+    echo "Registered: " . $registered . "<br />";
+    echo "KHK" . $khk . "<br />";
+    echo "Shipping Updated: " . $shippingUpdated . "<br />";
+    echo "Celeb Boxes:" . $celebBoxShipping . "<br />";
+    echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
+    echo "Trips Saved: " . $tripsSaved . "<br />";
+    echo "Ultimate Trips: " . $ultimate;
 }
 // send email confirmation
 if ($info['success']) {
