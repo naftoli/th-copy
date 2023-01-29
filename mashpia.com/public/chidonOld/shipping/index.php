@@ -4,6 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+$super = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -14,21 +15,21 @@ require 'data.php';
 
 function build_fields() {
     global $fields;
-    $html = '';
+    $html = "<input type='checkbox' name='all_fields' id='all_fields' class='field' /> ALL FIELDS<br />";
     foreach ($fields as $field => $desc) {
-        $html .= "<input type='checkbox' name='" . $field . "' /> " . $desc . "<br />";
+        $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field' /> " . $desc . "<br />";
     }
     return $html;
 }
 
 function build_items() {
     global $categories, $items;
-    $html = '';
+    $html = "<input type='checkbox' name='all_items' id='all_items' /> ALL ITEMS<br />";
     foreach ($categories as $cat) {
         $html .= "<h4>" . ucwords($cat) . "</h4>";
         foreach ($items[$cat] as $item) {
             $name = strtolower($item);
-            $html .= "<input type='checkbox' name='" . $name . "' /> " . ucwords($item) . "<br />";
+            $html .= "<input type='checkbox' name='items[" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
         }
     }
     return $html;
@@ -62,23 +63,61 @@ function build_items() {
   <h1>Create Your Own Shipping Report</h1>
   <form id="shippingForm" action="report.php" method="post">
     <fieldset>
-      <legend>Choose Fields</legend>
-      <?= build_fields(); ?>
-      <br />
-      <button id="create">Create Report</button>
+      <legend>Choose Items</legend>
+        <?= build_items(); ?>
     </fieldset>
 
     <fieldset>
-      <legend>Choose Items</legend>
-      <?= build_items(); ?>
+      <legend>Choose Fields</legend>
+      <?= build_fields(); ?>
+    </fieldset>
+
+    <fieldset>
+      <legend>Limit To</legend>
+      <h4>Gender</h4>
+      <select name="gender">
+        <option value="0">All</option>
+        <option value="m">Boys</option>
+        <option value="f">Girls</option>
+      </select><br />
+      <h4>School</h4>
+      <select name="school">
+          <?php if ($super) echo '<option value="0">All Schools</option>'; ?>
+          <?php foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Group By</legend>
+    </fieldset>
+
+    <fieldset>
+      <legend>Type of Report</legend>
+      <select name="report_type">
+        <option value="all">Summary and Details</option>
+        <option value="summery">Summary Only</option>
+        <option value="details">Details Only</option>
+      </select><br />
+      <br />
+      <button id="create">Create Report</button>
     </fieldset>
   </form>
   <p></p>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>
-  $( function () {
+  function checkAll() {
+    let id = $(this).attr('id')
+    let info = id.split('_')
+    let elem = '.' + info[1].substring(0, info[1].length - 1)
+    let checked = $(this).is(":checked")
+    console.log( { elem, checked })
+    $(elem).each( function () {
+      this.checked = checked
+    })
+  }
 
-  })
+  $("#all_items").click(checkAll)
+  $("#all_fields").click(checkAll)
 </script>
 </html>

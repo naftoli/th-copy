@@ -5,9 +5,9 @@ $categories = [
 ];
 
 $items = [
-    'brochures'             => ['brochure'],
+    'brochures'             => ['brochures'],
     'books'                 => ['books'],
-    'guides'                => ['study guide', 'khk guide'],
+    'guides'                => ['study guides', 'khk guides'],
     'recruitment prizes'    => ['book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag', 'watch'],
     'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
     'children sweaters'     => ['children sweaters'],
@@ -36,7 +36,6 @@ $items = [
 // if key does not refer to table, then it has just a description or variable name
 $fields = [
     'tc.year'       => 'Year',
-    'tc.user_id'    => 'User ID"',
     'u.user_serial' => 'Serial Number',
     'u.first'       => 'First Name',
     'u.last'        => 'Last Name',
@@ -63,7 +62,6 @@ $fields = [
     's.shipping_country'    => 'Shipping Country',
     's.shipping_requests'   => 'Shipping Requests'
 ];
-
 
 //$sizes = [
 //    ['children xs', 'children s', 'children m', 'children l', 'children xl', 'adult xs', 'adult s', 'adult m',

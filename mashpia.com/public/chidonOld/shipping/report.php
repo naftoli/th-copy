@@ -4,6 +4,10 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -16,17 +20,45 @@ $cs = new ChidonShipping();
 $cs->setSchools(array_keys($schools));
 $children = $cs->getChildren();
 
+//echo "<pre>"; print_r($_POST); echo "</pre>";
+$items = array_keys($_POST['items']);
+$fields_chosen = array_keys($_POST['fields']);
 
-
-$cats = [];
-$info = [];
-// figure out which functions to run based on which categories were chosen and save it in info array
-// with the category name as the index
-foreach ($_POST['cats'] as $cat => $val) {
-    $cats[] = $cat; // keep track of chosen categories
-    $func = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$func();
+// find all unique tables to fetch from
+$tables = [];
+foreach ($fields_chosen as $field) {
+  if (strpos($field, '.') !== false) {
+    $pos = strpos($field, '.');
+    $table = substr($field, 0, $pos);
+    if (! in_array($table, $tables)) $tables[] = $table;
+  }
 }
+
+// build sql statement
+$tableAliases = [
+    'tc'    => 'join th_chidon tc using (user_id)',
+    's'     => 'join schools s on u.school_id = s.school_id',
+    'c'     => 'join classes c on c.class_id = u.class_id',
+    'cup'   => 'join chidon_user_prizes cup using (user_id) ',
+    'cp'    => 'join chidon_prizes cp using (chidon_prize_id) '
+];
+
+$sql = "SELECT u.user_id, ";
+foreach ($fields_chosen as $field) {
+  if (strpos($field, '.') !== false) $sql .= $field . ", ";
+}
+$sql = substr($sql, 0, strlen($sql) - 2);
+
+$sql .= " FROM users u ";
+foreach ($tables as $table) {
+  if ($table == 'u') continue;
+  $sql .= $tableAliases[$table] . " ";
+}
+
+$sql .= " WHERE tc.year = " . $year;
+
+$stmt = $MASHPIA_DB->query($sql);
+$results = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,6 +84,27 @@ foreach ($_POST['cats'] as $cat => $val) {
 </head>
 <body>
   <h1>Create Your Own Shipping Report</h1>
-
+  <table>
+    <tr>
+      <?php
+      foreach ($fields_chosen as $field) {
+        if (strpos($field, '.') !== false) echo "<th>" . $fields[$field] . "</th>";
+      }
+      ?>
+    </tr>
+      <?php
+      foreach ($results as $row) {
+        echo "<tr>";
+        foreach ($fields_chosen as $field) {
+          if (strpos($field, '.') !== false) {
+            $pos = strpos($field, '.');
+            $desc = substr($field, $pos + 1);
+              echo "<td>" . $row[$desc] . "</td>";
+          }
+        }
+        echo "</tr>";
+      }
+      ?>
+  </table>
 </body>
 </html>
