@@ -97,13 +97,17 @@ foreach ($results as $row) {
       <?php
       $address = '';
       foreach ($fields_chosen as $field) {
+        if (strpos($field, '.') !== false) {
+            $pos = strpos($field, '.');
+            $desc = substr($field, $pos + 1);
+        }
         switch ($field) {
             case 's.shipping_first':
             case 's.shipping_last':
-              $address .= $more[0][$field] . ' ';
+              $address .= $more[0][$desc] . ' ';
               break;
             case 's.shipping_phone':
-              $address = "Contact Phone Number: " . $more[0][$field] . "<br />";
+              $address = "Contact Phone Number: " . $more[0][$desc] . "<br />";
               break;
             case 's.shipping_address1':
             case 's.shipping_address2':
@@ -111,10 +115,10 @@ foreach ($results as $row) {
             case 's.shipping_state':
             case 's.shipping_postal':
             case 's.shipping_country':
-              $address .= $more[0][$field] . ' ';
+              $address .= $more[0][$desc] . ' ';
               break;
             case 's.shipping_requests':
-              $address .= "<br />Shipping Requests: " . $more[0][$field];
+              $address .= "<br />Shipping Requests: " . $more[0][$desc];
               break;
         }
       }
