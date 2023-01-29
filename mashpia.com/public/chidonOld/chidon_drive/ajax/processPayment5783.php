@@ -253,7 +253,7 @@ function updateShipping() {
 function processCelebBoxes() {
     global $MASHPIA_DB, $year, $admin_id, $addresses, $sqlCelebBox, $sqlAddress, $celebBoxes, $celebBoxShipping;
     echo "Celeb Boxes: " . $celebBoxes . "<br />";
-    echo "Celeb Box SHipping: " . print_r($celebBoxShipping) . "<br />";
+    echo "Celeb Box SHipping: " . $celebBoxShipping . "<br />";
     if (!$celebBoxes) return true; // no need to process anything so there's no issues
     else {
         $res = $sqlCelebBox->execute([
