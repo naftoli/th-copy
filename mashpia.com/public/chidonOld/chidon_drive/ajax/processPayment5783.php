@@ -280,8 +280,13 @@ function processCelebBoxes() {
 }
 
 function processSweaters() {
-    global $admin_id, $year, $addresses, $sqlSweater, $sqlAddress, $MASHPIA_DB, $sweaters, $sweater_info;
-    echo "Sweater Info: " . print_r($sweater_info); echo "</pre>";
+    global $MASHPIA_DB, $admin_id, $year, $addresses, $sqlSweater, $sqlAddress, $sweaters, $sweater_info;
+
+    echo "<pre>";
+    print_r($sweaters);
+    print_r($sweater_info);
+    print_r($addresses);
+    echo "</pre>";
     // update db
     $success = true;
     foreach ($sweaters as $sweater) {
@@ -554,7 +559,7 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
     echo "Registered: " . $registered . "<br />";
     echo "KHK" . $khk . "<br />";
     echo "Shipping Updated: " . $shippingUpdated . "<br />";
-    echo "Celeb Boxes:" . $celebBoxShipping . "<br />";
+    echo "Celeb Boxes:" . $celebBoxesProcessed . "<br />";
     echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
     echo "Trips Saved: " . $tripsSaved . "<br />";
     echo "Ultimate Trips: " . $ultimate;
