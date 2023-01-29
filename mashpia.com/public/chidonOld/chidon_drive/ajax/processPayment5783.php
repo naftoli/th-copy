@@ -291,9 +291,8 @@ function processSweaters() {
     $success = true;
     foreach ($sweaters as $sweater) {
         $type = $sweater['type'];
-        $num = $sweater['amount'];
         $typeInfo = explode('_', $type);
-        foreach ($sweater_info[$type] as $details) {
+        foreach ($sweater_info[$type] as $idx => $details) {
             $res = $sqlSweater->execute([
                 ':year'     => $year,
                 ':size'     => $details['size'],
@@ -306,7 +305,7 @@ function processSweaters() {
                 break 2;
             } else if (intval($details['ship'])) {
                 $purchase_id = $MASHPIA_DB->lastInsertId();
-                $key = $type . '_' . $num;
+                $key = $type . '_' . $idx;
                 $addressInfo = isset($addresses[$key]) ? $addresses[$key] : false;
                 if (!$addressInfo) {
                     $success = false;
