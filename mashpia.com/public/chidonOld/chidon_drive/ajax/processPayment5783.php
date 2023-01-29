@@ -47,7 +47,7 @@ $raised = arrayByField($raisedArr, 'user_id', 'raised');
 $tracksArr = json_decode($_POST['tracks']);
 $tracks = arrayByField($tracksArr, 'user_id', 'track');
 $trips = json_decode($_POST['trips']);
-$ultimate_trip = isset($_POST['ultimate_trip']) ? json_decode($_POST['ultimate_trip']) : 0;
+$ultimate_trip = isset($_POST['ultimate_trip']) ? json_decode($_POST['ultimate_trip']) : [];
 $ultimate_info = isset($_POST['ultimate_info']) ? json_decode($_POST['ultimate_info']) : [];
 
 //******************* SQL QUERIES ***********************/
