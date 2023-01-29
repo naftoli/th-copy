@@ -282,11 +282,6 @@ function processCelebBoxes() {
 function processSweaters() {
     global $MASHPIA_DB, $admin_id, $year, $addresses, $sqlSweater, $sqlAddress, $sweaters, $sweater_info;
 
-    echo "<pre>";
-    print_r($sweaters);
-    print_r($sweater_info);
-    print_r($addresses);
-    echo "</pre>";
     // update db
     $success = true;
     foreach ($sweaters as $sweater) {
@@ -555,13 +550,6 @@ if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweaters
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
-    echo "Registered: " . $registered . "<br />";
-    echo "KHK" . $khk . "<br />";
-    echo "Shipping Updated: " . $shippingUpdated . "<br />";
-    echo "Celeb Boxes:" . $celebBoxesProcessed . "<br />";
-    echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
-    echo "Trips Saved: " . $tripsSaved . "<br />";
-    echo "Ultimate Trips: " . $ultimate;
 }
 // send email confirmation
 if ($info['success']) {
