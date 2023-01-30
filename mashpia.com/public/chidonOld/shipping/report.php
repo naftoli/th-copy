@@ -52,6 +52,7 @@ $tableAliases = [
     'cp'    => 'join chidon_prizes cp using (chidon_prize_id) '
 ];
 
+//********* SELECT **********//
 $sql = "SELECT u.user_id, u.school_id ";
 foreach ($fields_chosen as $field) {
   if (strpos($field, '.') !== false) $sql .= ", " . $field;
@@ -61,16 +62,20 @@ foreach ($tables as $table) {
   if ($table == 'u') continue;
   $sql .= $tableAliases[$table] . " ";
 }
+
+//********* WHERE *********//
 $sql .= " WHERE u.user_registered > 0 ";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
-if (in_array('c.class_grade', $fields_chosen) && in_array('c.class_sub', $fields_chosen))
-  $sql .= " ORDER BY u.school_id, c.class_grade, c.class_sub";
-else if (in_array('c.class_grade', $fields_chosen)) $sql .= "ORDER BY u.school_id, c.class_grade";
-else $sql .= " ORDER BY u.school_id";
-if (in_array('u.first', $fields_chosen) && in_array('u.last', $fields_chosen)) $sql .= ", u.last, u.first";
+
+//******* ORDER BY *********//
+$sql .= "ORDER BY u.school_id";
+if (in_array('c.class_grade', $fields_chosen)) $sql .= ", c.class_grade";
+if (in_array('c.class_sub', $fields_chosen)) $sql .= ", c.class_sub";
+if (in_array('u.last', $fields_chosen)) $sql .= ", u.last";
+if (in_array('u.first', $fields_chosen)) $sql .= ", u.first";
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
