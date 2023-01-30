@@ -61,7 +61,7 @@ foreach ($tables as $table) {
   if ($table == 'u') continue;
   $sql .= $tableAliases[$table] . " ";
 }
-$sql .= " WHERE 1 ";
+$sql .= " WHERE u.user_registered > 0 ";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
