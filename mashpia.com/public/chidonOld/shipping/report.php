@@ -52,12 +52,10 @@ $tableAliases = [
     'cp'    => 'join chidon_prizes cp using (chidon_prize_id) '
 ];
 
-$sql = "SELECT u.user_id, u.school_id, ";
+$sql = "SELECT u.user_id, u.school_id ";
 foreach ($fields_chosen as $field) {
-  if (strpos($field, '.') !== false) $sql .= $field . ", ";
+  if (strpos($field, '.') !== false) $sql .= ", " . $field;
 }
-$sql = substr($sql, 0, strlen($sql) - 2);
-
 $sql .= " FROM users u ";
 foreach ($tables as $table) {
   if ($table == 'u') continue;
