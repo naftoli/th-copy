@@ -43,7 +43,7 @@ $tableAliases = [
     'cp'    => 'join chidon_prizes cp using (chidon_prize_id) '
 ];
 
-$sql = "SELECT u.user_id, ";
+$sql = "SELECT u.user_id, u.school_id, ";
 foreach ($fields_chosen as $field) {
   if (strpos($field, '.') !== false) $sql .= $field . ", ";
 }
@@ -96,6 +96,7 @@ foreach ($results as $row) {
     #header {
       font-size: 14px;
       line-height: 1.4;
+      margin-bottom: 20px;
     }
   </style>
 </head>
