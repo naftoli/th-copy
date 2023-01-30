@@ -70,7 +70,7 @@ if (isset($_POST['c.class_grade']) && isset($_POST['c.class_sub']))
 else if (isset($_POST['c.class_grade'])) $sql .= "ORDER BY u.school_id, c.class_grade";
 else $sql .= " ORDER BY u.school_id";
 if (isset($_POST['u.first']) && isset($_POST['last'])) $sql .= ", u.last, u.first";
-
+echo $sql;
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
 
@@ -152,7 +152,7 @@ foreach ($results as $row) {
         }
         // now show categories
         foreach ($items_chosen as $cat => $other) {
-          echo "<th>" . $cat . "</th>";
+          echo "<th>" . ucwords($cat) . "</th>";
         }
         ?>
       </tr>
