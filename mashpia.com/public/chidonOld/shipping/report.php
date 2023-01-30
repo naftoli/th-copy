@@ -6,6 +6,8 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
+//echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
 
@@ -16,13 +18,20 @@ $schools = $as->getSchools();
 require 'class.chidonShipping.php';
 require 'data.php';
 
+$items_chosen = $_POST['items'];
+$fields_chosen = array_keys($_POST['fields']);
+
 $cs = new ChidonShipping();
 $cs->setSchools(array_keys($schools));
 $children = $cs->getChildren();
 
-//echo "<pre>"; print_r($_POST); echo "</pre>";
-$items = array_keys($_POST['items']);
-$fields_chosen = array_keys($_POST['fields']);
+// get results for chosen items
+$info = [];
+foreach ($items_chosen as $cat => $itemsPerCat) {
+    $listOfItems = array_keys($itemsPerCat);
+    $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+    $info[$cat] = $cs->$nameOfFunc();
+}
 
 // find all unique tables to fetch from
 $tables = [];
@@ -63,7 +72,6 @@ if (isset($_POST['c.class_grade']) && isset($_POST['c.class_sub']))
 else if (isset($_POST['c.class_grade'])) $sql .= "ORDER BY u.school_id, c.class_grade";
 else $sql .= " ORDER BY u.school_id";
 if (isset($_POST['u.first']) && isset($_POST['last'])) $sql .= ", u.last, u.first";
-
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
@@ -144,6 +152,10 @@ foreach ($results as $row) {
               if (strpos($field, '.') !== false) echo "<th>" . $fields[$field] . "</th>";
           }
         }
+        // now show categories
+        foreach ($items_chosen as $cat => $more) {
+          echo "<th>" . $cat . "</th>";
+        }
         ?>
       </tr>
         <?php
@@ -157,6 +169,12 @@ foreach ($results as $row) {
                     echo "<td>" . $row[$desc] . "</td>";
                 }
             }
+          }
+          // now show items
+          foreach ($items_chosen as $cat => $more) {
+              echo "<td>";
+              if (in_array($row['user_id'], $info[$cat])) echo 'yes';
+              echo "</td>";
           }
           echo "</tr>";
         }

@@ -29,7 +29,7 @@ function build_items() {
         $html .= "<h4>" . ucwords($cat) . "</h4>";
         foreach ($items[$cat] as $item) {
             $name = strtolower($item);
-            $html .= "<input type='checkbox' name='items[" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
+            $html .= "<input type='checkbox' name='items[" . $cat . "][" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
         }
     }
     return $html;
@@ -56,6 +56,10 @@ function build_items() {
       padding-right: 20px;
       padding-left: 20px;
       padding-bottom: 20px;
+    }
+    fieldset h4 {
+      margin-top: 20px;
+      margin-bottom: 5px;
     }
   </style>
 </head>

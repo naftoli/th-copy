@@ -1,7 +1,7 @@
 <?php
 $categories = [
     'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-    'trip items', 'gifts', 'ID cards', 'awards', 'prizes', 'event'
+    'trip items', 'gifts', 'ID cards', 'awards', 'prizes'
 ];
 
 $items = [
@@ -25,9 +25,9 @@ $items = [
         'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
         'escape from europe', 'the Rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
         'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkes', 'the slavita brothers', 'reb hillel paritcher'],
-    'event'                 => ['25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag',
-        'flag pole', 'carpet', 'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes',
-        'back drop', 'back drop medal frame'],
+//    'event'                 => ['25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag',
+//        'flag pole', 'carpet', 'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes',
+//        'back drop', 'back drop medal frame'],
 ];
 
 // create array of fields for the admin to choose from
@@ -44,7 +44,6 @@ $fields = [
     'u.last'        => 'Last Name',
     'category'      => 'Category',
     'item'          => 'Item Name',
-    'cup.prize_id'  => 'Prize ID',
     'size'          => 'Size',
     'color'         => 'Color',
     'tc.name_pref'  => 'Personalization Name',
@@ -63,7 +62,7 @@ $fields = [
 
 // for details section
 $details = [
-    'c.class_grade', 'c.class_sub', 'c.class_teacher', 'u.user_serial', 'u.first', 'u.last', 'category', 'item', 'cup.prize_id',
+    'c.class_grade', 'c.class_sub', 'c.class_teacher', 'u.user_serial', 'u.first', 'u.last', 'category', 'item',
     'size', 'color', 'tc.name_pref'
 ];
 
