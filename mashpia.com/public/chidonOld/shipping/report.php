@@ -111,7 +111,7 @@ foreach ($results as $row) {
   <?php foreach ($resultsBySchool as $school => $more) : ?>
     <div id="header">
       <?php
-      echo $schools[$school] . ' - ' . $year . "<br />";
+      echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
       $address = '';
       foreach ($fields_chosen as $field) {
         if (strpos($field, '.') !== false) {
