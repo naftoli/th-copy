@@ -171,7 +171,7 @@ foreach ($results as $row) {
           // now show items
           foreach ($items_chosen as $cat => $more) {
               echo "<td>";
-              if (in_array($row['user_id'], $info[$cat])) echo 'yes';
+              if (isset($info[$cat]) && in_array($row['user_id'], $info[$cat])) echo 'yes';
               echo "</td>";
           }
           echo "</tr>";
