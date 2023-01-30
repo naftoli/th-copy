@@ -153,7 +153,7 @@ foreach ($results as $row) {
           }
         }
         // now show categories
-        foreach ($items_chosen as $cat => $more) {
+        foreach ($items_chosen as $cat => $other) {
           echo "<th>" . $cat . "</th>";
         }
         ?>
