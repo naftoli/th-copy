@@ -66,11 +66,11 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
-if (isset($_POST['c.class_grade']) && isset($_POST['c.class_sub']))
+if (in_array('c.class_grade', $fields_chosen) && in_array('c.class_sub', $fields_chosen))
   $sql .= " ORDER BY u.school_id, c.class_grade, c.class_sub";
-else if (isset($_POST['c.class_grade'])) $sql .= "ORDER BY u.school_id, c.class_grade";
+else if (in_array('c.class_grade', $fields_chosen)) $sql .= "ORDER BY u.school_id, c.class_grade";
 else $sql .= " ORDER BY u.school_id";
-if (isset($_POST['u.first']) && isset($_POST['last'])) $sql .= ", u.last, u.first";
+if (in_array('u.first', $fields_chosen) && in_array('u.last', $fields_chosen)) $sql .= ", u.last, u.first";
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
