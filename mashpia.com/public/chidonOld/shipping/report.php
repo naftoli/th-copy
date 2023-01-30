@@ -55,6 +55,9 @@ foreach ($tables as $table) {
   $sql .= $tableAliases[$table] . " ";
 }
 $sql .= " WHERE tc.year = " . $year;
+if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
+if ($_POST['gender'] == 'm') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
+else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = '" . $_POST['gender'] . "'";
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
@@ -93,33 +96,33 @@ foreach ($results as $row) {
 <body>
   <?php foreach ($resultsBySchool as $school => $more) : ?>
     <div id="header">
-      <?= $schools[$school] . ' - ' . $year ?>
       <?php
+      echo $schools[$school] . ' - ' . $year . "<br />";
       $address = '';
       foreach ($fields_chosen as $field) {
         if (strpos($field, '.') !== false) {
-            $pos = strpos($field, '.');
-            $desc = substr($field, $pos + 1);
+          $pos = strpos($field, '.');
+          $desc = substr($field, $pos + 1);
         }
         switch ($field) {
-            case 's.shipping_first':
-            case 's.shipping_last':
-              $address .= $more[0][$desc] . ' ';
-              break;
-            case 's.shipping_phone':
-              $address = "Contact Phone Number: " . $more[0][$desc] . "<br />";
-              break;
-            case 's.shipping_address1':
-            case 's.shipping_address2':
-            case 's.shipping_city':
-            case 's.shipping_state':
-            case 's.shipping_postal':
-            case 's.shipping_country':
-              $address .= $more[0][$desc] . ' ';
-              break;
-            case 's.shipping_requests':
-              $address .= "<br />Shipping Requests: " . $more[0][$desc];
-              break;
+          case 's.shipping_first':
+          case 's.shipping_last':
+            $address .= $more[0][$desc] . ' ';
+            break;
+          case 's.shipping_phone':
+            $address = "Contact Phone Number: " . $more[0][$desc] . "<br />";
+            break;
+          case 's.shipping_address1':
+          case 's.shipping_address2':
+          case 's.shipping_city':
+          case 's.shipping_state':
+          case 's.shipping_postal':
+          case 's.shipping_country':
+            $address .= $more[0][$desc] . ' ';
+            break;
+          case 's.shipping_requests':
+            $address .= "<br />Shipping Requests: " . $more[0][$desc];
+            break;
         }
       }
       echo "<br />" . $address . "<br />";
