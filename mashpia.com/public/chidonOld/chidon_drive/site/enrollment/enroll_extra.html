@@ -495,9 +495,9 @@
 
   $(".sweater").change( function() {
     let typeOfSweater = $(this).attr('id')
+    removeRelatedItems(typeOfSweater) // first remove from cart existing info
     let num = parseInt($(this).val())
     addToCart(typeOfSweater, num)
-    if (num === 0) removeRelatedItems(typeOfSweater) // remove from cart and addresses all related items if it was changed to 0
 
     let type = typeOfSweater.split('_')[0]
     let typeUpper = type[0].toUpperCase() + type.substring(1)
@@ -634,14 +634,10 @@
 
   function removeRelatedItems(original) {
     for (let item of cart) {
-      if (item.desc.includes(original)) {
-        removeFromCart(item.desc)
-      }
+      if (item.desc.includes(original)) removeFromCart(item.desc)
     }
     for (let address in addresses) {
-      if (address.includes(original)) {
-        delete addresses[address]
-      }
+      if (address.includes(original)) delete addresses[address]
     }
   }
 
@@ -691,10 +687,6 @@
     utilityFn(e, this)
   })
 
-  $(document).on('change', '.sweater', function(e) {
-    utilityFn(e, this)
-  })
-
   $(document).on('change', '.sweater_size', function(e) {
     toggleAddress(this)
     utilityFn(e, this)
@@ -704,6 +696,8 @@
     // check if size was already chosen
     let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
     if (!size) {
+        // uncheck this input
+        this.checked = false
       setTimeout( function() {
         alert('You must first choose a size!')
         return false
@@ -767,16 +761,27 @@
             let good = true
             const el = "#" + item.desc
             const elem = $(el).parent().parent().next('.addressInfo')
+            // first check that size is chosen
+            let sizeElem = '.' + item.desc
+            $(elem).find(sizeElem).each( function (i, v) {
+                // only check up to number of sweaters being chosen
+                if ((i + 1) > parseInt(item.value)) return false
+                if (! $(this).val()) {
+                    good = false
+                    alert('You must choose the sweater size for all ' + item.desc.replace('_', ' ') + 's')
+                    return false
+                }
+            })
+            // then check that address is chosen
             $(elem).find('.listSection').each(function () {
               if (! $(this).find('input[type="radio"]:checked').length) {
-                good = false
+                  good = false
+                  alert("You must indicate how ALL YOUR SWEATERS should be shipped!")
+                  $(this).find('input[type="radio"]').eq(0).focus()
+                  return false
               }
             })
-            if (! good) {
-              alert("You must indicate how ALL YOUR SWEATERS should be shipped!")
-              $(this).find('input[type="radio"]').eq(0).focus()
-              return false
-            }
+            return good
           }
           break
       }
