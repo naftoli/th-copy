@@ -790,7 +790,6 @@
                 // only check up to number of sweaters being chosen
                 if ((i + 1) > parseInt(item.value)) return false
                 if (! $(this).val()) {
-                    alert("Size: " + $(this).val() + ' i: ' + i)
                     good = false
                     alert('You must choose the sweater size for all ' + item.desc.replace('_', ' ') + 's')
                     return false
