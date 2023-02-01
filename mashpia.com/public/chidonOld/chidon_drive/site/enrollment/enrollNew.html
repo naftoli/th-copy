@@ -872,7 +872,7 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-					if (europe.includes(child.user_serial)) text += `<option value="europe">Europe</option>`
+					if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
 					text += `<option value="no_trip">No Trip</option></select>`
 				}
 				html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
@@ -902,7 +902,7 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-					if (europe.includes(child.user_serial)) text += `<option value="europe">Europe</option>`
+					if (europe.includes(parseIng(child.user_serial))) text += `<option value="europe">Europe</option>`
 					text += `<option value="no_trip">No Trip</option>
 						</select>`
 				}
@@ -1054,8 +1054,6 @@
 		amounts.sort(function (a, b) {
 			return b - a
 		})
-
-		console.log(amounts)
 
 		createRegDropdown(child, amounts, idx)
 	}
@@ -1273,7 +1271,7 @@
 			if (reg.includes(child.user_id)) {
 				names[child.user_id] = {
 					first: child.first,
-					myshliach: [61, 269].includes(child.school_id)
+					myshliach: [61, 269].includes(parseInt(child.school_id))
 				}
 				// if (child.track == 'iyun') iyun = 1
 			}
