@@ -336,7 +336,7 @@ function saveTripInfo() {
 
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
-    echo "<pre>"; print_r($ultimate_info); echo "</pre>";
+    echo "<pre>"; print_r((array) $ultimate_info); echo "</pre>";
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
         SET
