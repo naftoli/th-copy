@@ -1046,6 +1046,7 @@
 		if (idx && [61, 269].includes(child.school_id)) {
 			let elem = '#' + user_id
 			let trip = $(elem).find('#regional_trip').val()
+			alert(trip)
 			if (trip === 'no_trip') lowest -= 100
 		}
 
