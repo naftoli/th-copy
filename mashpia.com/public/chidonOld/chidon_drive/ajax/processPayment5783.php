@@ -335,7 +335,7 @@ function saveTripInfo() {
 }
 
 function saveUltimateTripInfo() {
-    global $MASHPIA_DB, $ultimate_trip, $ultimate_info;
+    global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
 
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
@@ -369,6 +369,7 @@ function saveUltimateTripInfo() {
                 'family' => $acc['family'],
                 'phone' => $acc['phone'],
                 'street' => $acc['street'],
+                'street_num' => $acc['number'],
                 'suffix' => $acc['suffix'],
                 'apt' => $acc['apt'],
                 'in_zone' => $info['in_zone'],
@@ -380,7 +381,8 @@ function saveUltimateTripInfo() {
                 'shoe' => $info['shoe'],
                 'walk_alone' => $info['walk_alone'],
                 'chidon_answer' => $info['chidon_answer'],
-                'street_num' => $acc['number']
+                'user'  => $user_id,
+                'year'  => $year
             ]);
             if (!$res) {
                 $success = false;
