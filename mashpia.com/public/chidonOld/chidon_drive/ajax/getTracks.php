@@ -10,7 +10,10 @@ $types = $ct->getTypes();
 
 $children = $_POST['children'];
 $tracks = [];
-foreach ($children as $child) $tracks[$child['user_id']] = $ct->getHighestTrackPassed($child)['highest_track'];
+foreach ($children as $child) {
+    $track = $ct->getHighestTrackPassed($child)['highest_track'];
+    $tracks[$child['user_id']] = $track ? $types[$track] : '';
+}
 
 echo json_encode([
     'success'   => true,
