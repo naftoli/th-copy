@@ -93,19 +93,15 @@ if (isset($_POST['save'])) {
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th><th>Avg Mark</th>
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
-                    $markInfo = $ct->getHighestTrackPassed($child, $numTests);
-                    $highestTrack = $markInfo['highest_track'];
+                    $highestTrack = $ct->getHighestTrackPassed($child, $numTests)['highest_track'];
                     $rewardType = empty($child['reward_type']) ? 'highest track passed' : $child['reward_type'];
-                    if ($rewardType != 'highest track passed') {
+                    if (!empty($highestTrack) && $rewardType && $rewardType != 'highest track passed') {
                         $indexes = array_keys($types);
+                        $key = array_search($child['test_type'], $indexes);
                         $key1 = array_search($highestTrack, $indexes);
                         $key2 = array_search($rewardType, $indexes);
-                        // first make sure child passed the track they are on
-                        $key = array_search($child['test_type'], $indexes);
-                        if ($key2 >= $key) {
-                            if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
-                            else if ($key2) $highestTrack = $rewardType;
-                        }
+                        // make sure child passed the track they are on
+                        if ($key1 >= $key && $key2 > $key1) $highestTrack = $rewardType;
                     }
 
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
