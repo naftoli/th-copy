@@ -1166,8 +1166,9 @@
 			let elem = '#' + user_id
 			if ($(elem).find('.ultimate_trip').length) {
 				if ($(elem).find('.ultimate_trip').eq(0).is(":checked")) {
-				$("#ch_info #user_id").val(user_id)
-				$("#ch_info").modal('show')
+					$("#ch_info #user_id").val(user_id)
+					$("#ch_info").modal('show')
+				}
 			}
 		}
 
