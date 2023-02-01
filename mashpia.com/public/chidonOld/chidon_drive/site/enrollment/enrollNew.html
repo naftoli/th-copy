@@ -828,7 +828,6 @@
 
 		let html = ''
 		for (let child of eligible) {
-			if (parseInt(child.user_id) === 5455) child.school_id = 61
 			let myshliach = false // flag for determining if need to show shipping section
 			if ([61, 269].includes(parseInt(child.school_id))) {
 				myshliach = true
