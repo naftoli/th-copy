@@ -337,6 +337,7 @@ function saveTripInfo() {
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
 
+    echo "<pre>"; print_r($ultimate_trip); print_r($ultimate_info); echo "</pre>";
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
         SET
@@ -363,6 +364,7 @@ function saveUltimateTripInfo() {
     $success = true;
     if (count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
+            echo $user_id . "<br />";
             $info = $ultimate_info[$user_id];
             $acc = $info->accomodation;
             $res = $stmt->execute([
@@ -388,6 +390,7 @@ function saveUltimateTripInfo() {
                 $success = false;
                 break;
             }
+            echo 'here';
         }
     }
     return $success;
@@ -493,11 +496,8 @@ $ultimate = saveUltimateTripInfo();
 $info = [];
 $trans_id = 0;
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
-    echo '1';
     if ($to_charge) {
-        echo '2';
         $payment = processFee();
-        echo "<pre>"; print_r($payment); echo "</pre>";
         if (! $payment) {
             $MASHPIA_DB->rollBack();
             $info['success'] = false;
