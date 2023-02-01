@@ -493,8 +493,11 @@ $ultimate = saveUltimateTripInfo();
 $info = [];
 $trans_id = 0;
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
+    echo '1';
     if ($to_charge) {
+        echo '2';
         $payment = processFee();
+        echo "<pre>"; print_r($payment); echo "</pre>";
         if (! $payment) {
             $MASHPIA_DB->rollBack();
             $info['success'] = false;
