@@ -363,7 +363,6 @@ function saveUltimateTripInfo() {
     $success = true;
     if (count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
-            echo $user_id . "<br />";
             $info = $ultimate_info[$user_id];
             $acc = $info->accomodation;
             $sql = "UPDATE th_chidon 
@@ -386,7 +385,7 @@ function saveUltimateTripInfo() {
                     poll = '" . mysql_real_escape_string($info->chidon_answer) . "', 
                 WHERE 
                     user_id = " . $user_id . " AND year = " . $year;
-            $res = mysql_query($sql);
+            $res = mysql_query($sql) or die(mysql_error());
             /*
             $res = $stmt->execute([
                 'family' => $acc->family,
