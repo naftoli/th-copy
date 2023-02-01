@@ -1,7 +1,7 @@
 <?php
 $categories = [
     'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-    'trip items', 'gifts', 'ID cards', 'awards', 'prizes'
+    'gifts', 'ID cards', 'awards', 'prizes'
 ];
 
 $items = [
@@ -12,18 +12,16 @@ $items = [
     'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
     'children sweaters'     => ['children sweaters'],
     'extra purchases'       => ['celebration boxes', 'sweaters'],
-    'trip items'            => ['plates', 'napkins', 'tablecloth', 'cups'],
-    'gifts'                 => ['yarmulka', 'personalized bottle', 'jewelery'],
+    'gifts'                 => ['yarmulka', 'personalized bottle', 'bracelet'],
     'ID cards'              => ['ID card'],
-    'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque', 'gold trophy',
-        'silver trophy', 'bronze trophy'],
+    'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
     'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
         'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
         'chidon football', 'framed rebbe picture 5782', 'chidon cap', 'der rebbe ret tzu kinder',
         'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
         'chidon leather machzor', 'chidon baseball', 'chidon carry-on', 'personalized name bracelet', 'chidon pogo ball',
         'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
-        'escape from europe', 'the Rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
+        'escape from european', 'the Rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
         'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkes', 'the slavita brothers', 'reb hillel paritcher'],
 //    'event'                 => ['25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag',
 //        'flag pole', 'carpet', 'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes',

@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -22,15 +19,13 @@ $items_chosen = $_POST['items'];
 $fields_chosen = array_keys($_POST['fields']);
 
 $cs = new ChidonShipping();
-$cs->setSchools(array_keys($schools));
-$children = $cs->getChildren();
 
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
     $listOfItems = array_keys($itemsPerCat);
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$nameOfFunc();
+    $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
 
 // find all unique tables to fetch from

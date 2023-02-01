@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
@@ -54,7 +57,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getBrochures($early = false) {
+    public function getBrochures($gender, $school, $brochures = [], $early = false) {
         /**
          * get all brochures that need to be sent out
          *
@@ -72,24 +75,19 @@ class ChidonShipping
                 JOIN classes c ON c.class_id = u.class_id 
                 WHERE c.class_grade in $in_grades 
                 AND u.user_registered > 0";
-        if ($this->schools) {
-            $sql .= " and u.school_id in (" . implode(',', $this->schools) . ")";
-        }
-        if ($this->grades) {
-            $sql .= " and c.class_id in (" . implode(',', $this->grades) . ")";
-        }
-        if ($this->users) {
-            $sql .= " and u.user_id in (" . implode(',', $this->users) . ")";
-        }
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
+
         $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $info[$row['user_id']] = $row;
+            $info[$row['user_id']] = 1;
         }
         return $info;
     }
 
-    public function getBooks() {
+    public function getBooks($gender, $school, $books = []) {
         /**
          * get all books purchased for specific year
          *
@@ -100,7 +98,12 @@ class ChidonShipping
          */
 
         $info = [];
-        $sql = "SELECT * FROM yahadus_book_purchases where year = :year";
+        $sql = "SELECT * FROM yahadus_book_purchases 
+                JOIN users u USING (user_id) 
+                WHERE year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -110,7 +113,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getGuides() {
+    public function getGuides($gender, $school, $guides = []) {
         /**
          * get all guides to send out
          *
@@ -119,7 +122,7 @@ class ChidonShipping
          */
     }
 
-    public function getRecruitmentPrizes() {
+    public function getRecruitmentPrizes($gender, $school, $prizes = []) {
         /**
          * get list of children and which prizes they should get for specific year
          */
@@ -128,10 +131,17 @@ class ChidonShipping
         // get list of prizes
         $prizes = $this->getListofRecruitmentPrizes();
         // find out list of children and how many credits they have
-        $children  = $this->getChildrenRecruitments();
+        $children  = $this->getChildrenRecruitments($gender, $school);
         foreach ($children as $user_id => $credits) {
             if ($credits > 5) $credits = 5;
-            $info[$user_id] = $prizes[$credits];
+            $info[$user_id][] = $prizes[$credits];
+        }
+
+        // limit return to $prizes
+        foreach ($info as $user => $prize_names) {
+            foreach ($prize_names as $idx => $prize) {
+                if (! in_array($prize, $prizes)) unset($info[$user][$idx]);
+            }
         }
         return $info;
     }
@@ -152,16 +162,20 @@ class ChidonShipping
         return $prizes;
     }
 
-    private function getChildrenRecruitments() {
+    private function getChildrenRecruitments($gender, $school, $limitTo = []) {
         /**
          * finds out which children recruited others since 5782 and how many they recruited
          */
+
         $children = [];
         $start = 5782;
         $sql = "select u.user_id, count(*) as credits from users u 
                 join th_chidon tc on u.user_serial = tc.recruited_by 
-                where year >= :start  
-                group by u.user_id";
+                where year >= :start";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        $sql .= " group by u.user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['start' => $start]);
 //        $stmt->debugDumpParams();
@@ -172,13 +186,25 @@ class ChidonShipping
         return $children;
     }
 
-    public function getTestPrizes() {
+    public function getTestPrizes($gender, $school, $prizes = []) {
         /**
          * get list of prizes children should be receiving for each test & final
          */
+
+        $info = [];
+        $sql = "select user_id from th_chidon where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            foreach ($prizes as $prize) {
+                $info[$row['user_id']][] = $prize;
+            }
+        }
+        return $info;
     }
 
-    public function getChildrenSweaters() {
+    public function getChildrenSweaters($gender, $school, $sweaters = []) {
         /**
          * get all children that signed up to chidon with their sweater size
          * need to know size/color/school for personalization
@@ -195,6 +221,9 @@ class ChidonShipping
                     schools s ON u.school_id = s.school_id
                 WHERE
                     year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -207,15 +236,15 @@ class ChidonShipping
         return $info;
     }
 
-    public function getHQSweaters() {
+    public function getHQSweaters($gender, $school, $sweaters = []) {
 
     }
 
-    public function getTripStaffSweaters() {
+    public function getTripStaffSweaters($gender, $school, $sweaters = []) {
 
     }
 
-    public function getExtraPurchases($item = '') {
+    public function getExtraPurchases($gender, $school, $items = []) {
         /**
          * get list of extra purchases per family
          *
@@ -235,41 +264,51 @@ class ChidonShipping
         return $info;
     }
 
-    public function getTripItems() {
+    public function getTripItems($gender, $school, $items = []) {
 
     }
 
-    public function getGifts() {
+    public function getGifts($gender, $school, $gifts = []) {
         /**
          * gets gifts for all children registered end of chidon
          * 1. yarmulka for boys
-         * 2. jewelery for girls
+         * 2. bracelet for girls
          * 3. personalized water bottle for all (blue/pink)
          */
 
         $info = [];
-        $sql = "select * from th_chidon where date_paid > 0 and year = :year";
+        $sql = "select * from th_chidon 
+                join users u using (user_id) 
+                where date_paid > 0 and year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $gift = '';
+            $gift = [];
             $name = $row['name_pref'];
-            if (strtolower($row['gender']) == 'm') $gift = 'Yarmulka size: ' . $row['yarmulka'];
-            else if (strtolower($row['gender']) == 'f') $gift = 'Jewelery';
-            $gift .= " / Personalized Bottle (" . $name . ")";
+            if (strtolower($row['gender']) == 'm') $gift[] = 'Yarmulka size: ' . $row['yarmulka'];
+            else if (strtolower($row['gender']) == 'f') $gift[] = 'Bracelet';
+            $gift[] = "Personalized Bottle (" . $name . ")";
             $info[$row['user_id']] = $gift;
         }
         return $info;
     }
 
-    public function getIDCards() {
+    public function getIDCards($gender, $school, $cards = []) {
         /**
          * get all children that need ID card
          */
 
         $info = [];
-        $sql = "select * from th_chidon where date_paid > 0 and year = :year";
+        $sql = "select * from th_chidon 
+                join users u using (user_id) 
+                where date_paid > 0 and year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -279,14 +318,19 @@ class ChidonShipping
         return $info;
     }
 
-    public function getAwards() {
+    public function getAwards($gender, $school, $awards = []) {
         /**
          * gets award needed for each child
          * based off the highest track saved in db - th_chidon_info
          */
 
         $info = [];
-        $sql = "select * from th_chidon_info where year = :year";
+        $sql = "select * from th_chidon_info 
+                join users u using (user_id) 
+                where year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -311,7 +355,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getPrizes($limitTo = []) {
+    public function getPrizes($gender, $school, $limitTo = []) {
         /**
          * gets the prizes the children chose when signing up
          * db tables = chidon_user_prizes / chidon_prizes
@@ -334,9 +378,14 @@ class ChidonShipping
                     chidon_user_prizes cup
                         JOIN
                     chidon_prizes cp USING (prize_id)
+                        JOIN 
+                    users u USING (user_id)
                 WHERE
                     cup.year = :year";
         if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
+        if ($gender == 'm') $sql .= " and u.gender = 'm'";
+        if ($gender == 'f') $sql .= " and u.gender = 'f'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
