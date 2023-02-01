@@ -385,6 +385,7 @@ function saveUltimateTripInfo() {
                     poll = '" . mysql_real_escape_string($info->chidon_answer) . "', 
                 WHERE 
                     user_id = " . $user_id . " AND year = " . $year;
+            echo $sql;
             $res = mysql_query($sql) or die(mysql_error());
             /*
             $res = $stmt->execute([
