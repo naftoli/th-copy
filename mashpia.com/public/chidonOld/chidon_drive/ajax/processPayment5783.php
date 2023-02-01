@@ -187,14 +187,14 @@ function processFee() {
 }
 
 function getDescForAuthorize() {
-    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks;
+    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $to_charge;
 
     define('CELEB_BOX_COST', 20);
     define('SWEATER_COST', 25);
 
-    $desc = $admin_id . ": ";
+    $desc = $admin_id . ": $" . $to_charge . " = ";
     if ($celebBoxes) {
-        $desc .=  $celebBoxes . " celebration boxes-$" . ($celebBoxes * CELEB_BOX_COST) . ", shipping-$" . $celebBoxShipping . ", ";
+        $desc .=  $celebBoxes . " celebration boxes-$" . ($celebBoxes * CELEB_BOX_COST) . ", shipping-$" . $celebBoxShipping . "; ";
     }
 
     if ($sweaters) {
