@@ -902,7 +902,7 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-					if (europe.includes(parseIng(child.user_serial))) text += `<option value="europe">Europe</option>`
+					if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
 					text += `<option value="no_trip">No Trip</option>
 						</select>`
 				}
