@@ -1088,7 +1088,7 @@
 			$(desc).find('#regional_trip').niceSelect('destroy')
 			$(desc).find('#regional_trip').hide()
 		}	else {
-			if ($("#regional_trip").val() == '0')	$(desc).find('.registration').hide()
+			if ($(desc).find("#regional_trip").val() == '0')	$(desc).find('.registration').hide()
 			$(desc).find('#regional_trip').show()
 			$(desc).find('#regional_trip').niceSelect()
 		}
