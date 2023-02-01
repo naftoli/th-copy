@@ -242,11 +242,9 @@ function processReg() {
 function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
 
-    $sqlInsert = "INSERT INTO chidon_admin_shipping 
-                    SET admin_id = :admin, 
-                    year = :year, 
-                    paid = :amount, 
-                    date_paid = now()";
+    $sqlInsert = "UPDATE chidon_parent_shipping 
+                    SET amount_paid = :amount, date_paid = now()
+                    WHERE admin_id = :admin AND year = :year";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $updated = true;
