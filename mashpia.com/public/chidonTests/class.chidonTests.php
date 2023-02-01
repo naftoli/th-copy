@@ -517,6 +517,13 @@ class ChidonTests
 
         return $markInfo;
     }
+
+    public function getPrevHighestTrack($year, $user_id) {
+        $sql = "select * from th_chidon_info where year = " . $year . " and user_id = " . $user_id;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return $row['highest_track'];
+    }
 }
 
 class KHK {

@@ -94,7 +94,11 @@ foreach ($schools as $school_id => $name) {
                 if (! empty($highest)) $track = $types[$highest];
             }
             $highestTrack = $track;
-            if (intval($row['class_grade']) === 8 && (in_array(strtolower($highestTrack), ['havonah', 'iyun']))) $highestTrack = 'Khk Trip';
+            if (intval($row['class_grade']) === 8 && (in_array(strtolower($highestTrack), ['havonah', 'iyun']))) {
+              // check highest track passed for 5782; if not 'yesod' then can do ultimate trip (khk trip)
+              $prev = $ct->getPrevHighestTrack($year - 1, $row['user_id']);
+              if ($prev && $prev != 'yesod') $highestTrack = 'Khk Trip';
+            }
             $reward = empty($highestTrack) ? 'none' : $rewards[$highestTrack];
             if ($highestTrack == 'Khk Trip') $reward .= ucwords($track) . ' Final';
             $school = $schools[$row['school_id']];
