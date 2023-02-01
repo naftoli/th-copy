@@ -336,7 +336,7 @@ function saveTripInfo() {
 
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
-
+    echo "<pre>"; print_r($ultimate_info); echo "</pre>";
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
         SET
@@ -531,7 +531,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     echo "Celebration Boxes Processed: " . $celebBoxesProcessed . "<br />";
     echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
     echo "Trips Saved: " . $tripsSaved . "<br />";
-    echo "Ultimate Trip Info Saved " . $ultimate;
+    echo "Ultimate Trip Info Saved: " . $ultimate;
 }
 // send email confirmation
 if ($info['success']) {
