@@ -363,32 +363,8 @@ function saveUltimateTripInfo() {
     $success = true;
     if (count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
-            $info = $ultimate_info[$user_id];
-            print_r($info);
+            $info = $ultimate_info->$$user_id;
             $acc = $info->accomodation;
-            $sql = "UPDATE th_chidon 
-                SET 
-                    ultimate_trip = 1, 
-                    host = '" . mysql_real_escape_string($acc->family) . "', 
-                    host_number = '" . mysql_real_escape_string($acc->phone) . "', 
-                    host_street = '" . mysql_real_escape_string($acc->street) . "', 
-                    host_street_num = " . mysql_real_escape_string($acc->number) . ", 
-                    host_street_num_suffix = '" . mysql_real_escape_string($acc->suffix) . ", 
-                    host_street_apt = '" . mysql_real_escape_string($acc->apt) . "', 
-                    in_zone = " . mysql_real_escape_string($info->in_zone) . ", 
-                    between_street1 = '" . mysql_real_escape_string($acc->between1) . "', 
-                    between_street2 = '" . mysql_real_escape_string($acc->between2) . "', 
-                    allergies = '" . mysql_real_escape_string($info->allergies) . "', 
-                    sandwich = '" . mysql_real_escape_string($info->sandwich) . "', 
-                    walking_zone = '" . mysql_real_escape_string($acc->zone) . "', 
-                    shoe_size = '" . mysql_real_escape_string($info->shoe) . "', 
-                    walking = " . mysql_real_escape_string($info->walk_alone) . ", 
-                    poll = '" . mysql_real_escape_string($info->chidon_answer) . "', 
-                WHERE 
-                    user_id = " . $user_id . " AND year = " . $year;
-            echo $sql;
-            $res = mysql_query($sql) or die(mysql_error());
-            /*
             $res = $stmt->execute([
                 'family' => $acc->family,
                 'phone' => $acc->phone,
@@ -408,11 +384,32 @@ function saveUltimateTripInfo() {
                 'user'  => $user_id,
                 'year'  => $year
             ]);
-            */
             if (!$res) {
                 $success = false;
                 break;
             }
+//            $sql = "UPDATE th_chidon
+//                SET
+//                    ultimate_trip = 1,
+//                    host = '" . mysql_real_escape_string($acc->family) . "',
+//                    host_number = '" . mysql_real_escape_string($acc->phone) . "',
+//                    host_street = '" . mysql_real_escape_string($acc->street) . "',
+//                    host_street_num = " . mysql_real_escape_string($acc->number) . ",
+//                    host_street_num_suffix = '" . mysql_real_escape_string($acc->suffix) . ",
+//                    host_street_apt = '" . mysql_real_escape_string($acc->apt) . "',
+//                    in_zone = " . mysql_real_escape_string($info->in_zone) . ",
+//                    between_street1 = '" . mysql_real_escape_string($acc->between1) . "',
+//                    between_street2 = '" . mysql_real_escape_string($acc->between2) . "',
+//                    allergies = '" . mysql_real_escape_string($info->allergies) . "',
+//                    sandwich = '" . mysql_real_escape_string($info->sandwich) . "',
+//                    walking_zone = '" . mysql_real_escape_string($acc->zone) . "',
+//                    shoe_size = '" . mysql_real_escape_string($info->shoe) . "',
+//                    walking = " . mysql_real_escape_string($info->walk_alone) . ",
+//                    poll = '" . mysql_real_escape_string($info->chidon_answer) . "',
+//                WHERE
+//                    user_id = " . $user_id . " AND year = " . $year;
+//            echo $sql;
+//            $res = mysql_query($sql) or die(mysql_error());
         }
     }
     return $success;
