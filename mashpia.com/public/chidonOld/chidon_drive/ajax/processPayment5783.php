@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
+$admin_auth = ['school', 'user'];
+
 require_once __DIR__ . '/../../../db.php';
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../api/models/Admin.php';
