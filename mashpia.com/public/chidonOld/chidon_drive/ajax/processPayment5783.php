@@ -54,9 +54,6 @@ $ultimate_info = json_decode($_POST['ultimate_info']);
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
 
-$sql = "update th_chidon set khk_trip = 1 where year = :year and user_id = :user";
-$sqlKhk = $MASHPIA_DB->prepare($sql);
-
 $sql = "update th_chidon set trip = :trip where user_id = :user";
 $sqlTrip = $MASHPIA_DB->prepare($sql);
 
@@ -209,26 +206,6 @@ function processReg() {
     return $success;
 }
 
-function processKhk() {
-    global $sqlKhk, $year;
-
-    $success = true;
-    if (isset($_COOKIE['ultimate_trip'])) {
-        $khk_trip = json_decode($_COOKIE['ultimate_trip']);
-        foreach ($khk_trip as $user_id) {
-            $res = $sqlKhk->execute([
-                ':year' => $year,
-                ':user' => $user_id
-            ]);
-            if (!$res) {
-                $success = false;
-                break;
-            }
-        }
-    }
-    return $success;
-}
-
 function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
 
@@ -349,8 +326,8 @@ function saveTripInfo() {
     $success = true;
     foreach ($trips as $trip) {
         if (! $sqlTrip->execute([
-            'trip'      => $trip['trip'],
-            'user_id'   => $trip['user_id']
+            'trip'  => $trip->trip,
+            'user'  => $trip->user_id
         ])) {
             $success = false;
             break;
@@ -506,7 +483,6 @@ setSweaterInfo();
 $MASHPIA_DB->beginTransaction();
 // first do all the db stuff and only save if payment goes through
 $registered = processReg();
-$khk = processKhk();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
@@ -516,7 +492,7 @@ $ultimate = saveUltimateTripInfo();
 
 $info = [];
 $trans_id = 0;
-if ($registered && $khk && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
+if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
     if ($to_charge) {
         $payment = processFee();
         if (! $payment) {
