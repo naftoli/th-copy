@@ -161,10 +161,13 @@ function addNewCard() {
 function processFee() {
     global $year, $admin_id, $to_charge, $payment_id;
 
+    // create description for authorize
+    $desc = getDescForAuthorize();
+
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
         $cp = new Customer($admin->authorize_customer_profile_id);
-        $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
+        $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);
         return $response;
     } else {
         $payment = addNewCard();
@@ -174,13 +177,45 @@ function processFee() {
             setcookie('customer_id', $customer_profile_id, 0, '/');
             if ($payment_id && $customer_profile_id) {
                 $cp = new Customer($customer_profile_id);
-                $response = $cp->chargeCard($to_charge, $payment_id, null, null, 'Chidon Payment ' . $year . ' for Parent: ' . $admin_id);
+                $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);
                 return $response;
             } else return false;
         } else {
             return $payment;
         }
     }
+}
+
+function getDescForAuthorize() {
+    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks;
+
+    define('CELEB_BOX_COST', 20);
+    define('SWEATER_COST', 25);
+
+    $desc = $admin_id . ": ";
+    if ($celebBoxes) {
+        $desc .=  $celebBoxes . " celebration boxes-$" . ($celebBoxes * CELEB_BOX_COST) . ", shipping-$" . $celebBoxShipping . ", ";
+    }
+
+    if ($sweaters) {
+        $shipping = 0;
+        $num_sweaters = 0;
+        foreach ($sweater_info as $other)  {
+            foreach ($other as $sweater) {
+                $num_sweaters++;
+                $shipping += intval($sweater['ship']);
+            }
+        }
+        $desc .= "sweaters-$" . ($num_sweaters * SWEATER_COST) . ", shipping-$" . $shipping . "; ";
+    }
+
+    if ($users) {
+        $serials = getSerials();
+        foreach ($users as $user_id => $amount) {
+            $desc .= $serials[$user_id] . ": $" . $amount . " - " . $tracks[$user_id] . "; ";
+        }
+    }
+    return $desc;
 }
 
 function processReg() {
@@ -300,9 +335,8 @@ function processSweaters() {
     return $success;
 }
 
-function redeemCoupons() {
-    global $users, $coupon;
-
+function getSerials() {
+    global $users;
     // get serial numbers
     $serials = [];
     $user_ids = array_keys($users);
@@ -311,7 +345,12 @@ function redeemCoupons() {
     while ($row = mysql_fetch_assoc($result)) {
         $serials[$row['user_id']] = $row['user_serial'];
     }
+    return $serials;
+}
 
+function redeemCoupons() {
+    global $coupon;
+    $serials = getSerials();
     // redeem coupons
     foreach ($serials as $user_serial) {
         if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
