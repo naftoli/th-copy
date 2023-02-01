@@ -1247,7 +1247,7 @@
 		}
 		if (! reg.length) {
 			const next = confirm("Are you sure that you want to continue without registering any children?")
-			if (!next) return false
+			return next
 		}
 
 		for (let child of children) {
@@ -1259,8 +1259,7 @@
 				// if (child.track == 'iyun') iyun = 1
 			}
 		}
-
-		if (names.length) addToCart('names', names)
+		addToCart('names', names)
 		// addToCart('iyun', iyun)
 		return true
 	}

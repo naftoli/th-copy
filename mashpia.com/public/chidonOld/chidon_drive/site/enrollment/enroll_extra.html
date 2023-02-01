@@ -435,7 +435,14 @@
   if (window.localStorage) cart = JSON.parse(window.localStorage.getItem('cart'))
   else cart = JSON.parse(Cookies.get('cart'))
 
+  // reset cart for extra purchases
+  resetCart()
+
   getSweaterInfo()
+
+  function resetCart() {
+      cart = cart.filter(item => item.desc.includes('reg') || item.desc === 'names')
+  }
 
   function getSweaterInfo() {
     $.post('../../ajax/sweaterInfo.php', function( result ) {
@@ -467,6 +474,22 @@
       $("#celebBoxes").hide()
       $("#celebBoxesSoldOut").show()
     }
+    // // check if cart already has info about celeb boxes
+    // let boxes = 0, ship = 0
+    // for (let item of cart) {
+    //     if (item.desc === 'num_celeb_boxes') boxes = parseInt(item.value)
+    //     else if (item.desc === 'celeb_box_ship') ship = parseInt(item.value)
+    // }
+    // if (boxes) {
+    //     $("#num_celeb_boxes").niceSelect('destroy')
+    //     $("#num_celeb_boxes").val(boxes)
+    //     $("#num_celeb_boxes").trigger('change')
+    //     $("#num_celeb_boxes").niceSelect()
+    //     if (ship) {
+    //         $(".celeb_box_ship").eq(1).trigger('click')
+    //     }
+    //     else $(".celeb_box_ship").eq(0).trigger('click')
+    // }
   }
 
   $(".numCelebBoxes").change( function() {
@@ -714,7 +737,7 @@
   $(document).on('blur change', '.address', function() {
     // check off $10 option if it's not checked
     const elem = $(this).parent().parent().find('input').eq(1)
-    if (! $(elem).is(':checked'))  elem.trigger('click')
+    if (! $(elem).is(':checked')) elem.trigger('click')
 
     // add to addresses object
     const id = $(this).attr('id')
@@ -743,7 +766,7 @@
               alert("You indicated that you would like some Celebration Boxes, however you have not chosen the shipping method!")
               $(".celeb_box_ship").eq(0).focus()
               return false
-            } else if ($(".celeb_box_ship:checked").val() > 0) {
+            } else if (parseInt($(".celeb_box_ship:checked").val()) > 0) {
               // make sure we have address info
               if (addresses.celeb_box === undefined) {
                 alert("You have asked for Celebration Boxes to be shipped to you, but you haven't provided us with an address!")
