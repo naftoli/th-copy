@@ -411,7 +411,7 @@ function getEmailMsg($trans_id) {
     if ($users) {
         $msg .= "REGISTRATION<br /><br /><blockquote>";
         foreach ($users as $user_id => $amount) {
-            $msg .= "Registered " . $user_info[$user_id] . " for: $" . $amount . "<br />";
+            $msg .= "Registered " . $user_info[$user_id]['first'] . " for: $" . $amount . "<br />";
             $msg .= "Track: " . $tracks[$user_id] . "<br />";
             if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
                 $msg .= "Discounts applied:<br /><ul>";
@@ -427,22 +427,22 @@ function getEmailMsg($trans_id) {
 
     if ($celebBoxes || $sweaters) {
         $msg .= "EXTRA PURCHASES<br /><br /><blockquote>";
-        if ($celebBoxes) $msg .= "You purchased " . $celebBoxes . " Celebration Boxes for: $" . ($celebBoxes * CELEB_BOX_COST) . "<br />";
+        if ($celebBoxes) $msg .= "You purchased " . $celebBoxes . " Celebration Boxes for: $" . ($celebBoxes * CELEB_BOX_COST) . ". ";
         if ($celebBoxShipping) $msg .= "It will be shipped to: " . extractAddress($addresses['celeb_box']) . "<br />";
-        else $msg .= "Will be sent to your child's school.<br />";
+        else $msg .= "It will be sent to your child's school.<br />";
         if ($sweaters) {
-            $msg .= "Sweater(s) Purchased:<br />";
+            $msg .= "<br />(s) Purchased:<br /><blockquote>";
             foreach ($sweater_info as $type => $other)  {
                 foreach ($other as $num => $sweater) {
                     $size = $sweater['size'];
                     $shipping = intval($sweater['ship']);
                     $typeStr = str_replace('_', ' ', $type);
-                    $msg .= $size . " " . ucwords($typeStr) . " purchased.<br />";
+                    $msg .= '1 ' . ucwords($size) . " " . ucwords($typeStr) . " purchased. ";
                     if ($shipping) {
                         $key = $type . "_" . $num;
-                        $msg .= "Will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
+                        $msg .= "It will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
                     }
-                    else $msg .= "Will be sent to you child's school.<br />";
+                    else $msg .= "It will be sent to you child's school.<br />";
                 }
             }
         }
