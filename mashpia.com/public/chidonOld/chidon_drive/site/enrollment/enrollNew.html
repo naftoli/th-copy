@@ -653,9 +653,6 @@
 			info.accomodation = acc
 			ultimate_info[user_id] = info
 			$("#ch_info").modal('hide')
-			if (window.localStorage) window.localStorage.setItem('ultimate_info', JSON.stringify(ultimate_info))
-			else Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
-			console.log(JSON.stringify(ultimate_info))
 		}
 	})
 </script>
@@ -1299,7 +1296,8 @@
 				window.localStorage.setItem('tracks', json_tracks)
 				window.localStorage.setItem('shipping', shipping)
 				window.localStorage.setItem('trips', JSON.stringify(trips))
-				window.localStorage.setItem('ultimate_trip', ultimate_trip)
+				window.localStorage.setItem('ultimate_trip', JSON.stringify(ultimate_trip))
+				window.localStorage.setItem('ultimate_trip', JSON.stringify(ultimate_info))
 			} else {
 				// put in cookie
 				Cookies.set('cart', json_cart)
@@ -1308,7 +1306,8 @@
 				Cookies.set('tracks', json_tracks)
 				Cookies.set('shipping', shipping)
 				Cookies.set('trips', JSON.stringify(trips))
-				Cookies.set('ultimate_trip', ultimate_trip)
+				Cookies.set('ultimate_trip', JSON.stringify(ultimate_trip))
+				Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
 			}
 			// go to checkout page
 			location.href = 'enroll_extra.html'
