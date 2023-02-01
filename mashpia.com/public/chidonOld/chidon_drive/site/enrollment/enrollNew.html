@@ -1042,9 +1042,9 @@
 		let lowest = amounts[amounts.length-1]
 		lowest -= raised + coupon
 
-		// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce a further $100
-		alert(child.school_id)
+		// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
 		if (idx && [61, 269].includes(child.school_id)) {
+			alert()
 			let elem = '#' + user_id
 			let trip = $(elem).find('#regional_trip').val()
 			if (trip === 'no_trip') lowest -= 100
