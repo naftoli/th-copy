@@ -91,15 +91,6 @@ foreach ($schools as $school_id => $name) {
                 $ct = new ChidonTests();
                 $types = $ct->getTypes();
                 $highest = $ct->getHighestTrackPassed($row)['highest_track'];
-                $rewardType = empty($child['reward_type']) ? 'highest track passed' : $child['reward_type'];
-                if (!empty($highest) && $rewardType && $rewardType != 'highest track passed') {
-                    $indexes = array_keys($types);
-                    $key = array_search($child['test_type'], $indexes);
-                    $key1 = array_search($highest, $indexes);
-                    $key2 = array_search($rewardType, $indexes);
-                    // make sure child passed the track they are on
-                    if ($key1 >= $key && $key2 > $key1) $highest = $rewardType;
-                }
                 if (!empty($highest)) $track = $types[$highest];
             }
             $highestTrack = $track;

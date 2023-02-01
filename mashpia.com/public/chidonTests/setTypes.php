@@ -93,17 +93,8 @@ if (isset($_POST['save'])) {
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th><th>Avg Mark</th>
                     <th>Highest Track Passed</th><th>Avg Mark</th><th>Reward Type for Child</th></tr>";
                 foreach ($children as $child) {
-                    $highestTrack = $ct->getHighestTrackPassed($child, $numTests)['highest_track'];
-                    $rewardType = empty($child['reward_type']) ? 'highest track passed' : $child['reward_type'];
-                    if (!empty($highestTrack) && $rewardType && $rewardType != 'highest track passed') {
-                        $indexes = array_keys($types);
-                        $key = array_search($child['test_type'], $indexes);
-                        $key1 = array_search($highestTrack, $indexes);
-                        $key2 = array_search($rewardType, $indexes);
-                        // make sure child passed the track they are on
-                        if ($key1 >= $key && $key2 > $key1) $highestTrack = $rewardType;
-                    }
-
+                    $markInfo = $ct->getHighestTrackPassed($child, $numTests);
+                    $highestTrack = $markInfo['highest_track'];
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
@@ -128,7 +119,7 @@ if (isset($_POST['save'])) {
                         echo ">" . $value . "</option>";
                     }
                     echo "<option value='highest track passed'";
-                    if ($rewardType == 'highest track passed') echo " selected ";
+                    if ($markInfo['reward_type'] == 'highest track passed') echo " selected ";
                     echo ">Highest Track Passed</option>";
                     echo "</select></td></tr>";
                 }

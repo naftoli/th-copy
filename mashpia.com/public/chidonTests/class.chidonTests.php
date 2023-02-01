@@ -510,10 +510,29 @@ class ChidonTests
             }
         }
 
+        // check if child has a reward type set
+        $sql = "select test_type, reward_type from th_chidon where th_chidon_id = " . $child['th_chidon_id'];
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        $testType = $row['test_type'];
+        $rewardType = $row['reward_type'];
+
+        // check which type is higher
+        if (!empty($highest_type) && $rewardType && $rewardType != 'highest track passed') {
+            $indexes = array_keys($this->types);
+            $key = array_search($testType, $indexes);
+            $key1 = array_search($highest_type, $indexes);
+            $key2 = array_search($rewardType, $indexes);
+            // make sure child passed the track they are on
+            if ($key1 >= $key && $key2 > $key1) $highest_type = $rewardType;
+        }
+
         $markInfo = [];
         $markInfo['avg'] = $avgs[$child['test_type']] ?? 0;
         $markInfo['highest_track'] = $highest_type;
         $markInfo['highest_track_avg'] = round($highest_mark, 2);
+        $markInfo['test_type'] = $testType;
+        $markInfo['reward_type'] = $rewardType;
 
         return $markInfo;
     }
