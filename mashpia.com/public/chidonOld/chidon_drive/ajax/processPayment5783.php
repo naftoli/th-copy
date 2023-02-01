@@ -372,7 +372,7 @@ function saveUltimateTripInfo() {
                 'street_num' => $acc->number,
                 'suffix' => $acc->suffix,
                 'apt' => $acc->apt,
-                'in_zone' => $info->in_zone,
+                'in_zone' => $info->in_zone ? 1 : 0,
                 'between1' => $acc->between1,
                 'between2' => $acc->between2,
                 'allergies' => $info->allergy ? $info->allergies : '',
@@ -384,7 +384,6 @@ function saveUltimateTripInfo() {
                 'user'  => $user_id,
                 'year'  => $year
             ]);
-            $stmt->debugDumpParams();
             if (!$res) {
                 $success = false;
                 break;
