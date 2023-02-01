@@ -1128,9 +1128,9 @@
 	})
 
 	$(document).on('change', '#regional_trip', function () {
-		let user_id, idx, elem
-		if ($(".ultimate_trip").length) {
-			elem = $(this).parent().parent().find('.ultimate_trip')
+		let user_id, idx
+		let elem = $(this).parent().parent().find('.ultimate_trip')
+		if (elem.length) {
 			if (!$(elem).is(":checked")) $(elem).trigger('click')
 			const val = $(elem).val()
 			const info = val.split(':')
