@@ -1225,6 +1225,7 @@
 				}
 			})
 		}
+
 		if ($(".trip_terms").length) {
 			$(".trip_terms").each( function() {
 				if ($(this).is(':checked')) {
@@ -1234,6 +1235,18 @@
 					let user_id = info[2]
 					let elem = '#' + user_id
 					let amount = $(elem).find('.reg').val()
+					if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
+				}
+			})
+		}
+
+		// make sure that if child is in myshliach/ak and chooses a trip, they should also choose an amount to register for
+		if ($("#regional_trip").length) {
+			$("#regional_trip").each( function () {
+				// get the value
+				let value = $(this).val()
+				if (value) {
+					let amount = $(this).parent().parent().parent().find('.reg').val()
 					if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
 				}
 			})
