@@ -3,24 +3,20 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
-$admin_auth = ['school', 'user'];
-
-require_once __DIR__ . '/../../../db.php';
-require_once __DIR__ . '/../../../api/header/db.php';
-require_once __DIR__ . '/../../../api/models/Admin.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once __DIR__ . '/../../../class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
-require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
-use classes\authorize\PaymentProfile as Payment;
 
 //******************* Coupon Codes ************************/
-require_once __DIR__ . '/../../coupons/class.couponCode.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 $coupon = new CouponCode($MASHPIA_DB, $year);
 
 //******************* GLOBAL VARIABLES ***********************/
