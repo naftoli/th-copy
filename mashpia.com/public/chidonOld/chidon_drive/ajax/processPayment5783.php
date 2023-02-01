@@ -364,6 +364,7 @@ function saveUltimateTripInfo() {
     if (count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
             $info = $ultimate_info[$user_id];
+            print_r($info);
             $acc = $info->accomodation;
             $sql = "UPDATE th_chidon 
                 SET 
