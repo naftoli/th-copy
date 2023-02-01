@@ -1032,8 +1032,7 @@
 
 	function calculateReg(idx, user_id) {
 		const filtered = children.filter(child => parseInt(child.user_id) === parseInt(user_id))
-		console.log(filtered)
-		return false
+		const child = filtered[0]
 		const track = child.track === 'Ultimate' ? child.originalTrack : child.track
 		let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultimate']]
 
