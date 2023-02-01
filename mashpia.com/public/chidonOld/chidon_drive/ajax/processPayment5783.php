@@ -390,28 +390,6 @@ function saveUltimateTripInfo() {
                 $success = false;
                 break;
             }
-//            $sql = "UPDATE th_chidon
-//                SET
-//                    ultimate_trip = 1,
-//                    host = '" . mysql_real_escape_string($acc->family) . "',
-//                    host_number = '" . mysql_real_escape_string($acc->phone) . "',
-//                    host_street = '" . mysql_real_escape_string($acc->street) . "',
-//                    host_street_num = " . mysql_real_escape_string($acc->number) . ",
-//                    host_street_num_suffix = '" . mysql_real_escape_string($acc->suffix) . ",
-//                    host_street_apt = '" . mysql_real_escape_string($acc->apt) . "',
-//                    in_zone = " . mysql_real_escape_string($info->in_zone) . ",
-//                    between_street1 = '" . mysql_real_escape_string($acc->between1) . "',
-//                    between_street2 = '" . mysql_real_escape_string($acc->between2) . "',
-//                    allergies = '" . mysql_real_escape_string($info->allergies) . "',
-//                    sandwich = '" . mysql_real_escape_string($info->sandwich) . "',
-//                    walking_zone = '" . mysql_real_escape_string($acc->zone) . "',
-//                    shoe_size = '" . mysql_real_escape_string($info->shoe) . "',
-//                    walking = " . mysql_real_escape_string($info->walk_alone) . ",
-//                    poll = '" . mysql_real_escape_string($info->chidon_answer) . "',
-//                WHERE
-//                    user_id = " . $user_id . " AND year = " . $year;
-//            echo $sql;
-//            $res = mysql_query($sql) or die(mysql_error());
         }
     }
     return $success;
@@ -455,17 +433,16 @@ function getEmailMsg($trans_id) {
         if ($sweaters) {
             $msg .= "Sweater(s) Purchased:<br />";
             foreach ($sweater_info as $type => $other)  {
-                foreach ($other as $num_sweaters => $sweater) {
+                foreach ($other as $num => $sweater) {
                     $size = $sweater['size'];
                     $shipping = intval($sweater['ship']);
-                    for ($i = 1; $i <= $num_sweaters; $i++) {
-                        $typeStr = str_replace('_', ' ', $type);
-                        $msg .= $size . " " . ucwords($typeStr) . " purchased.<br />";
-                        if ($shipping) {
-                            $key = $type . "_" . $i;
-                            $msg .= "Will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
-                        } else $msg .= "Will be sent to you child's school.<br />";
+                    $typeStr = str_replace('_', ' ', $type);
+                    $msg .= $size . " " . ucwords($typeStr) . " purchased.<br />";
+                    if ($shipping) {
+                        $key = $type . "_" . $num;
+                        $msg .= "Will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
                     }
+                    else $msg .= "Will be sent to you child's school.<br />";
                 }
             }
         }
