@@ -384,6 +384,7 @@ function saveUltimateTripInfo() {
                 'user'  => $user_id,
                 'year'  => $year
             ]);
+            $stmt->debugDumpParams();
             if (!$res) {
                 $success = false;
                 break;
