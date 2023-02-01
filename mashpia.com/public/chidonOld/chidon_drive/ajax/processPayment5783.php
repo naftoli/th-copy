@@ -116,7 +116,7 @@ function processCart() {
             $celebBoxShipping = intval($item['value']);
         } else if (in_array($item['desc'], $sweater_types)) {
             $sweaters[$item['desc']] = intval($item['value']);
-        } else if ($item['desc'] == 'names') {
+        } else if ($item['desc'] == 'names' && $item['value']) {
             $user_info = $item['value'];
         }
 //        else if ($item['desc'] == 'iyun' && intval($item['value'])) {
