@@ -87,10 +87,12 @@ foreach ($schools as $school_id => $name) {
         $i = 0;
         foreach ($info as $row) {
             $track = ucwords($row['highest_track']);
-            if ($row['user_id'] == 61473) echo "Track: " . $track;
             if (empty($track)) {
                 $ct = new ChidonTests();
                 $highest = $ct->getHighestTrackPassed($row)['highest_track'];
+                if ($row['user_id'] == 61473) {
+                  echo "Highest: " . $highest;
+                }
                 $types = $ct->getTypes();
                 if (! empty($highest)) $track = $types[$highest];
             }
