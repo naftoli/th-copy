@@ -336,7 +336,6 @@ function saveTripInfo() {
 
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
-    echo "<pre>"; print_r($ultimate_info); echo "</pre>";
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
         SET
@@ -362,31 +361,32 @@ function saveUltimateTripInfo() {
 
     $success = true;
     if (count($ultimate_trip)) {
-        foreach ($ultimate_trip as $user_id) {
-            $info = $ultimate_info[$user_id];
-            $acc = $info['accomodation'];
-            $res = $stmt->execute([
-                'family' => $acc['family'],
-                'phone' => $acc['phone'],
-                'street' => $acc['street'],
-                'street_num' => $acc['number'],
-                'suffix' => $acc['suffix'],
-                'apt' => $acc['apt'],
-                'in_zone' => $info['in_zone'],
-                'between1' => $acc['between1'],
-                'between2' => $acc['between2'],
-                'allergies' => $info['allergy'] ? $info['allergies'] : '',
-                'sandwich' => $info['sandwich'],
-                'zone' => $acc['zone'],
-                'shoe' => $info['shoe'],
-                'walk_alone' => $info['walk_alone'],
-                'chidon_answer' => $info['chidon_answer'],
-                'user'  => $user_id,
-                'year'  => $year
-            ]);
-            if (!$res) {
-                $success = false;
-                break;
+        foreach ($ultimate_trip as $user_id => $info) {
+            if ($info) {
+                $acc = $info['accomodation'];
+                $res = $stmt->execute([
+                    'family' => $acc['family'],
+                    'phone' => $acc['phone'],
+                    'street' => $acc['street'],
+                    'street_num' => $acc['number'],
+                    'suffix' => $acc['suffix'],
+                    'apt' => $acc['apt'],
+                    'in_zone' => $info['in_zone'],
+                    'between1' => $acc['between1'],
+                    'between2' => $acc['between2'],
+                    'allergies' => $info['allergy'] ? $info['allergies'] : '',
+                    'sandwich' => $info['sandwich'],
+                    'zone' => $acc['zone'],
+                    'shoe' => $info['shoe'],
+                    'walk_alone' => $info['walk_alone'],
+                    'chidon_answer' => $info['chidon_answer'],
+                    'user' => $user_id,
+                    'year' => $year
+                ]);
+                if (!$res) {
+                    $success = false;
+                    break;
+                }
             }
         }
     }
