@@ -100,8 +100,12 @@ if (isset($_POST['save'])) {
                         $indexes = array_keys($types);
                         $key1 = array_search($highestTrack, $indexes);
                         $key2 = array_search($rewardType, $indexes);
-                        if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
-                        else if ($key2) $highestTrack = $rewardType;
+                        // first make sure child passed the track they are on
+                        $key = array_search($child['test_type'], $indexes);
+                        if ($key2 >= $key) {
+                            if ($key1 && $key2) $highestTrack = $key1 >= $key2 ? $highestTrack : $rewardType;
+                            else if ($key2) $highestTrack = $rewardType;
+                        }
                     }
 
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
