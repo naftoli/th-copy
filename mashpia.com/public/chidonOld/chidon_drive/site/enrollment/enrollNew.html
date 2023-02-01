@@ -1043,7 +1043,7 @@
 		lowest -= raised + coupon
 
 		// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce a further $100
-		alert(idx, child.school_id)
+		alert(child.school_id)
 		if (idx && [61, 269].includes(child.school_id)) {
 			let elem = '#' + user_id
 			let trip = $(elem).find('#regional_trip').val()
