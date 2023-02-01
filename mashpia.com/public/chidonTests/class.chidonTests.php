@@ -515,10 +515,6 @@ class ChidonTests
         $markInfo['highest_track'] = $highest_type;
         $markInfo['highest_track_avg'] = round($highest_mark, 2);
 
-        if ($child['user_id'] == 61473) {
-            echo "<pre>"; print_r($markInfo); echo "</pre>"; exit;
-        }
-
         return $markInfo;
     }
 
