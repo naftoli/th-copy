@@ -846,8 +846,8 @@
                             <img class="childImg" src="//mashpia.com/${childPic}" />
                         </div>
                          <div style="margin-left: 20px;">
-                            <h5 class="formDetails">Dear ${child.first},</h5>
-                            <h5 class="formDetails">Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
+                            <h5 class="formDetails">Dear ${child.first},<br /><br />
+                            Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
                             Track. You are eligible for ${trackText}.<h5>`
 
 			const tripDates = {
@@ -1160,10 +1160,12 @@
 		const value = $(this).val()
 		if (value !== '') {
 			addToCart(id, value)
-			// check if we should show the modal for ultimate trip
-			if ($(".ultimate_trip").length && $(".ultimate_trip").eq(0).is(":checked")) {
-				// find this child's user id
-				const user_id = $(this).parent().parent().parent().parent().parent().attr('id')
+			// find this child's user id
+			let user_id = $(this).attr('id').split('_')[1]
+			// check if we should show the modal for ultimate trip for this specific child
+			let elem = '#' + user_id
+			if ($(elem).find('.ultimate_trip').length) {
+				if ($(elem).find('.ultimate_trip').eq(0).is(":checked")) {
 				$("#ch_info #user_id").val(user_id)
 				$("#ch_info").modal('show')
 			}
