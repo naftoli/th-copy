@@ -382,26 +382,35 @@
 					</div>
 					<br />
 
-					<div class="flex">
-						<label>Crown Heights Family Name:</label>
-						<input type="text" id="acc_family" name="acc_family" required />
-					</div>
-					<div>
-					<div class="flex">
-						<label>House Number ONLY:</label>
-						<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
-						<label>House Number Suffix:</label>
-						<select id="acc_street_num_suffix">
-							<option></option>
-							<option>A</option>
-							<option>B</option>
-							<option>C</option>
-							<option>D</option>
-						</select>
-					</div>
-					<div class="flex">
-						<label>Apt/Suite #</label>
-						<input type="text" id="acc_street_apt" maxlength="5" />
+					<div id="zoneAddress" style="display: none;">
+						<h5>Crown Heights Address</h5>
+
+						<div class="flex">
+							<label>Crown Heights Family Name:</label>
+							<input type="text" id="acc_family" name="acc_family" required />
+						</div>
+
+						<div class="flex">
+							<label>Crown Heights Phone Number:</label>
+							<input type="text" id="acc_phone" name="acc_phone" required />
+						</div>
+
+						<div class="flex">
+							<label>House Number ONLY:</label>
+							<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5" />
+							<label>House Number Suffix:</label>
+							<select id="acc_street_num_suffix">
+								<option></option>
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+								<option>D</option>
+							</select>
+						</div>
+						<div class="flex">
+							<label>Apt/Suite #</label>
+							<input type="text" id="acc_street_apt" maxlength="5" />
+						</div>
 					</div>
 
 					<div  id="insideZone" style="display: none;">
@@ -433,12 +442,9 @@
 							<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
 						</div>
 						<input type="hidden" name="walking_zone" id="walking_zone" />
+						<p></p>
 					</div>
 					<br />
-					<div class="flex">
-						<label>Crown Heights Phone Number:</label>
-						<input type="text" id="acc_phone" name="acc_phone" required />
-					</div>
 					<div class="flex">
 						<label><input type="checkbox" name="walking" id="walking" /></label>
 						I allow my child to walk home alone at any time of the day and night, from ALL chidon
@@ -468,7 +474,6 @@
 						The Program fee will NOT be refunded.
 						<input type="text" id="initials" style="width: 40px;" />
 					</div>
-
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -491,6 +496,7 @@
 	var ultimate_info = []
 
 	$(".in_zone").click( function () {
+		$("#zoneAddress").show()
 		let val = $(this).val()
 		if (parseInt(val)) {
 			$("#outsideZone").hide()
