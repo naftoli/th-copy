@@ -785,7 +785,7 @@
             const el = "#" + item.desc
             const elem = $(el).parent().parent().next('.addressInfo')
             // first check that size is chosen
-            let sizeElem = '.' + item.desc
+            let sizeElem = 'select .' + item.desc
             $(elem).find(sizeElem).each( function ( i ) {
                 // only check up to number of sweaters being chosen
                 if ((i + 1) > parseInt(item.value)) return false
