@@ -336,7 +336,8 @@ function saveTripInfo() {
 
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
-    echo "<pre>"; print_r((array) $ultimate_info); echo "</pre>";
+
+    $ultimate_info = (array) $ultimate_info;
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon
         SET
@@ -363,7 +364,7 @@ function saveUltimateTripInfo() {
     $success = true;
     if (count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
-            $info = $ultimate_info->$$user_id;
+            $info = $ultimate_info[$user_id];
             $acc = $info->accomodation;
             $res = $stmt->execute([
                 'family' => $acc->family,
