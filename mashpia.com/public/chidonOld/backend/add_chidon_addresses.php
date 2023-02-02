@@ -20,11 +20,12 @@ if (isset($_POST['submit'])) {
                 }
                 $admin_id = $data[0];
                 $price = $data[1];
+                $myshliach = $data[2];
                 $sql = "insert ignore into chidon_parent_shipping 
                         set parent_id = $admin_id, 
                         year = $year, 
-                        cost = $price 
-                        on duplicate key update cost = $price";
+                        cost = $price, 
+                        myshliach_ak = $myshliach";
                 $qrys[] = $sql;
             }
         }
