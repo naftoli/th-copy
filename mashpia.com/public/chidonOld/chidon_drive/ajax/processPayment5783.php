@@ -162,7 +162,7 @@ function addNewCard() {
 }
 
 function processFee() {
-    global $year, $admin_id, $to_charge, $payment_id;
+    global $admin_id, $to_charge, $payment_id;
 
     // create description for authorize
     $desc = getDescForAuthorize();
@@ -244,7 +244,7 @@ function updateShipping() {
 
     $sqlInsert = "UPDATE chidon_parent_shipping 
                     SET amount_paid = :amount, date_paid = now()
-                    WHERE admin_id = :admin AND year = :year";
+                    WHERE parent_id = :admin AND year = :year";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $updated = true;
@@ -561,12 +561,12 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
-//    echo "Registered: " . $registered . "<br />";
-//    echo "Shipping Updated: " . $shippingUpdated . "<br />";
-//    echo "Celebration Boxes Processed: " . $celebBoxesProcessed . "<br />";
-//    echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
-//    echo "Trips Saved: " . $tripsSaved . "<br />";
-//    echo "Ultimate Trip Info Saved: " . $ultimate;
+    echo "Registered: " . $registered . "<br />";
+    echo "Shipping Updated: " . $shippingUpdated . "<br />";
+    echo "Celebration Boxes Processed: " . $celebBoxesProcessed . "<br />";
+    echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
+    echo "Trips Saved: " . $tripsSaved . "<br />";
+    echo "Ultimate Trip Info Saved: " . $ultimate;
 }
 // send email confirmation
 if ($info['success']) {
