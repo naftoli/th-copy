@@ -48,6 +48,9 @@ $trips = json_decode($_POST['trips']);
 $ultimate_trip = json_decode($_POST['ultimate_trip']);
 $ultimate_info = json_decode($_POST['ultimate_info']);
 
+define('CELEB_BOX_COST', 20);
+define('SWEATER_COST', 25);
+
 //******************* SQL QUERIES ***********************/
 $sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
@@ -188,9 +191,6 @@ function processFee() {
 
 function getDescForAuthorize() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $to_charge;
-
-    define('CELEB_BOX_COST', 20);
-    define('SWEATER_COST', 25);
 
     $desc = $admin_id . ": $" . $to_charge . " = ";
     if ($celebBoxes) {
@@ -438,9 +438,6 @@ function extractAddress($info) {
 
 function getEmailMsg($trans_id) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks;
-
-    define('CELEB_BOX_COST', 20);
-    define('SWEATER_COST', 25);
 
     $msg = "Mazal Tov for registering for the Chidon Experience<br /><br />";
     $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
