@@ -483,7 +483,7 @@ function getEmailMsg($trans_id) {
         $msg .= "</blockquote><br />";
     }
 
-    if ($to_charge) $msg .= "You were charged a total of: " . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
+    if ($to_charge) $msg .= "You were charged a total of: $" . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
 
     $msg .= "All purchases are non-refundable.<br /><br />Please continue to review for the Chidon Final.<br /><br />";
     $msg .= "If you have any questions, please email <a href='mailto:chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a><br /><br />";
