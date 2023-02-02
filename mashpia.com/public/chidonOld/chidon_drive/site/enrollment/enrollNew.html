@@ -1127,9 +1127,12 @@
 				$(desc).find('#regional_trip').niceSelect('destroy')
 				$(desc).find('#regional_trip').hide()
 			} else {
-				if ($(desc).find("#regional_trip").val() === '0') $(desc).find('.registration').hide()
-				$(desc).find('#regional_trip').show()
-				$(desc).find('#regional_trip').niceSelect()
+				if ($(desc).find("#regional_trip").length) {
+					if ($(desc).find("#regional_trip").val() === '0') $(desc).find('.registration').hide()
+					$(desc).find('#regional_trip').show()
+					$(desc).find('#regional_trip').niceSelect()
+				}
+				else $(desc).find('.registration').show()
 			}
 		}
 
