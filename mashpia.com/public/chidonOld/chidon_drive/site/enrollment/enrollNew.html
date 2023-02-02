@@ -1052,7 +1052,7 @@
 		const user_id = info[1]
 		const desc = "#" + user_id
 
-		$(".ultimate_title").text(titles[idx])
+		$(desc).find(".ultimate_title").text(titles[idx])
 		$(desc).find(".full_cost").text(costs[idx])
 
 		if (idx) {
@@ -1120,12 +1120,12 @@
 		if (needsShipping) $("#shipping_charges").show()
 
 		// figure out what else to show / hide
-		if (selection != undefined && selection == 0) {
+		if (selection !== undefined && selection == 0) {
 			$(desc).find('.registration').show()
 			$(desc).find('#regional_trip').niceSelect('destroy')
 			$(desc).find('#regional_trip').hide()
 		}	else {
-			if ($(desc).find("#regional_trip").val() == '0')	$(desc).find('.registration').hide()
+			if ($(desc).find("#regional_trip").val() === '0')	$(desc).find('.registration').hide()
 			$(desc).find('#regional_trip').show()
 			$(desc).find('#regional_trip').niceSelect()
 		}
@@ -1176,13 +1176,13 @@
 			idx = parseInt(info[0])
 			user_id = info[1]
 		} else {
-			user_id = $(this).parent().parent().parent().parent().parent().attr('id')
+			user_id = $(this).closest('.kid').attr('id')
 			idx = 1
 		}
 		calculateReg(idx, user_id)
 		const trip = $(this).val()
 		const regElem = '#' + user_id
-		if (trip != '0' && trip != 0) $(regElem).find(".registration").show()
+		if (trip !== '0') $(regElem).find(".registration").show()
 		else $(regElem).find(".registration").hide()
 		// update trips variable
 		let found = false
@@ -1241,24 +1241,21 @@
 		if ($(".ultimate_trip").length) {
 			let checked = false
 			$(".ultimate_trip").each( function () {
+				let val = $(this).val()
+				let info = val.split(':')
+				let ultimate = parseInt(info[0]) === 0 ? true : false
+				let user_id = parseInt(info[1])
+				let elem = '#' + user_id
 				if ($(this).is(":checked")) {
-					let val = $(this).val()
-					let info = val.split(':')
-					let ultimate = parseInt(info[0]) === 0 ? true : false
-					let user_id = parseInt(info[1])
-					let elem = '#' + user_id
-					if (ultimate) {
-						// make sure there's an amount chosen
-						let amount = $(elem).find(".reg").val()
-						if (!amount) errors.push(`${users[user_id]} has chosen to go on the ultimate trip, but you have not selected how much you are paying!`)
-					} else {
-						let trip = $("#regional_trip").val()
-						if (trip == 0 || trip == '0') errors.push(`${users[user_id]} has chosen to go on the regional trip but you have not chosen which trip you are going on!`)
-						else {
-							let amount = $(elem).find(".reg").val()
-							if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
-						}
+					// if not ultimate check that they chose which trip to go on
+					if (!ultimate) {
+						let trip = $(elem).find("#regional_trip").val()
+						if (trip === '0') errors.push(`${users[user_id]} has chosen to go on the regional trip but you have not chosen which trip you are going on!`)
+						return false
 					}
+					// make sure there's a reg amount chosen
+					let amount = parseInt($(elem).find(".reg").val())
+					if (!amount) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
 				}
 			})
 		}
@@ -1271,7 +1268,7 @@
 					let info = id.split('_')
 					let user_id = info[2]
 					let elem = '#' + user_id
-					let amount = $(elem).find('.reg').val()
+					let amount = parseInt($(elem).find('.reg').val())
 					if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
 				}
 			})
@@ -1281,10 +1278,12 @@
 		if ($("#regional_trip").length) {
 			$("#regional_trip").each( function () {
 				// get the value
-				let value = $(this).val()
-				if (value) {
-					let amount = $(this).parent().parent().parent().find('.reg').val()
-					if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
+				let trip = $(this).val()
+				if (trip !== '0') {
+					let user_id = $(this).closest('.kid').attr('id')
+					let elem = '#' + user_id
+					let amount = parseInt($(elem).find('.reg').val())
+					if (!amount) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
 				}
 			})
 		}
