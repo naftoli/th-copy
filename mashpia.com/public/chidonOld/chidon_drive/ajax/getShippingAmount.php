@@ -11,7 +11,7 @@ $amount = 50;
 $paid = false;
 
 $stmt = $MASHPIA_DB->prepare("
-        SELECT * FROM chidon_parent_shipping WHERE year = :year AND parent_id = :id
+        SELECT * FROM chidon_parent_shipping WHERE year = :year AND parent_id = :id 
     ");
 $res = $stmt->execute([
     'year'  => $year,

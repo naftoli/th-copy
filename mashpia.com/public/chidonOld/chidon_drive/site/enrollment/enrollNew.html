@@ -765,7 +765,6 @@
 		var ultimate_trip = [] // array of users going on ultimate trip
 		var trips = [] // array of trips for myshliach / anash kinder
 		var shipping = 0 // cost of shipping chidon stuff to parents where applicable
-		var shipping_cost = 50
 		var errors = []
 		var needsShipping = false
 
@@ -995,11 +994,10 @@
 			Cookies.set('myshliach', needsShipping ? 1 : 0)
 
 			// find out if we need to charge for shipping
-			// myshliach = true
-			if (needsShipping) {
-				let res = await getShippingAmount(admin)
-				if (res.amount && !res.paid) {
-					let shipping_cost = res.amount
+			let res = await getShippingAmount(admin)
+			if (res.amount && !res.paid) {
+				shipping = res.amount
+				if (needsShipping) {
 					html += `<div id="shipping_charges" style="display: none;">
 									<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
 									<div class="flex">
@@ -1010,9 +1008,9 @@
 										</label>
 									</div>
 									<div class="flex">
-										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="1" />
+										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
 										<label>
-											($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+											($${shipping}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
 											check to confirm that it has the correct address saved.
 										</label>
 									</div></div>`
@@ -1235,9 +1233,9 @@
 		})
 
 		$(document).on('click', '.shipping', function () {
-			const charge = parseInt($(this).val())
-			if (charge) shipping = shipping_cost
-			else shipping = 0
+			const val = parseInt($(this).val())
+			if (!val) shipping = 0 // only reduce shipping if clearly doesn't want it
+			else shipping = val
 		})
 
 		function checkForm() {
