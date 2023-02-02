@@ -7,7 +7,7 @@ $year = GlobalSettings::getChidonYear();
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
-$amount = 50;
+$amount = 0;
 $paid = false;
 
 $stmt = $MASHPIA_DB->prepare("
