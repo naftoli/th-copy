@@ -1,10 +1,22 @@
 div.modal-dialog {
     max-width: 80%;
+    margin: auto;
+}
+
+@media (max-width: 900px) {
+    div.modal-dialog {
+        max-width: 94%;
+    }
+
+    div.wrapper div.form {
+        box-sizing: border-box !important;
+    }
 }
 
 div.modal-dialog div.flex {
     align-items: center;
     margin-bottom: 5px;
+    flex-wrap: wrap;
 }
 
 div.modal-dialog div.flex>label {
@@ -117,6 +129,7 @@ div.modal-flex {
     justify-content: space-between;
     gap: 30px;
     margin: 30px 0;
+    flex-wrap: wrap;
 }
 
 div.modal-flex>.flex1 {
