@@ -2,533 +2,550 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta name="viewport" content="width=device-width">
-    <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
-    <title>Chidon Enrollment | Chidon Drive</title>
-    <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
-    <link rel="icon" type="image/png" href="../img/favicon.png" />
-    <link rel="stylesheet" href="../css/font.css" type="text/css" />
-    <link rel="stylesheet" href="../css/style.css" type="text/css" />
-    <link rel="stylesheet" href="../css/nice-select.css" type="text/css" />
-    <link rel="stylesheet" href="../css/enroll.css" type="text/css" />
-    <style>
-      #loginForm input:not(.button) {
-        margin: 10px 0;
-      }
-      .login form {
-        padding-bottom: 0;
-      }
-      .login input.button {
-        top: 10px;
-      }
+  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <title>Chidon Enrollment | Chidon Drive</title>
+  <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
+  <link rel="icon" type="image/png" href="../img/favicon.png" />
+  <link rel="stylesheet" href="../css/font.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/nice-select.css" type="text/css" />
+  <link rel="stylesheet" href="../css/enroll.css" type="text/css" />
+  <style>
+    html,
+    body {
+      overflow: hidden;
+      overflow-y: scroll;
+    }
 
-      .floating-div {
-        background: rgba(6, 9, 47, .8);
-        border-radius: .5rem;
-        width: 150px;
-        padding: 2rem;
-        margin: auto;
-        z-index: 100;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-      }
-      .floating-div p {
-        color: #85abda;
-        font-size: 1.4rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-family: 'Gotham Narrow', sans-serif;
-      }
+    #loginForm input:not(.button) {
+      margin: 10px 0;
+    }
 
-      .listSection {
-        padding-bottom: 5px;
-      }
+    .login form {
+      padding-bottom: 0;
+    }
 
-      .prizes {
-        padding: 10px;
-        /*display: none;*/
-      }
+    .login input.button {
+      top: 10px;
+    }
 
-      .flex-kids {
-        display: flex;
-        align-items: flex-start;
-      }
+    .floating-div {
+      background: rgba(6, 9, 47, .8);
+      border-radius: .5rem;
+      width: 150px;
+      padding: 2rem;
+      margin: auto;
+      z-index: 100;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+    }
 
-      /*.form input[type='checkbox'], .form input[type='radio'] {*/
-      /*	margin-top: -15px;*/
-      /*}*/
-      .bar {
-        position: relative;
-        padding-top: 1.1rem;
-        margin-top: 2rem;
-        height: 3rem;
-      }
+    .floating-div p {
+      color: #85abda;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: 'Gotham Narrow', sans-serif;
+    }
 
-      .wrapper {
-        font-family: 'Gotham Narrow', sans-serif;
-      }
+    .listSection {
+      padding-bottom: 5px;
+    }
 
-      .wrapper .form {
-        box-sizing: initial !important;
-      }
+    .prizes {
+      padding: 10px;
+      /*display: none;*/
+    }
 
-      .form h5 {
-        font-family: 'bould', sans-serif;
-        font-weight: normal;
-      }
+    .flex-kids {
+      display: flex;
+      align-items: flex-start;
+    }
 
-      .form .nice-select .option, .form .nice-select .option .selected, .form .nice-select .option .selected .focus {
-        padding-top: 10px !important;
-        text-align: center !important;
-      }
+    /*.form input[type='checkbox'], .form input[type='radio'] {*/
+    /*	margin-top: -15px;*/
+    /*}*/
+    .bar {
+      position: relative;
+      padding-top: 1.1rem;
+      margin-top: 2rem;
+      height: 3rem;
+    }
 
-      .form .nice-select .option, .form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
-        padding: 0;
-      }
+    .wrapper {
+      font-family: 'Gotham Narrow', sans-serif;
+    }
 
-      .childImg {
-        border-radius: 15px;
-        width: 90px;
-        margin-top: 15px;
-      }
+    .wrapper .form {
+      box-sizing: initial !important;
+    }
 
-      h5 .title {
-        font-size: 1.6rem;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Gotham Narrow', sans-serif;
-        font-weight: bold;
-      }
+    .form h5 {
+      font-family: 'bould', sans-serif;
+      font-weight: normal;
+    }
 
-      .form h5 span.track {
-        font-family: 'Tahu', sans-serif;
-        font-weight: normal;
-        color: #e3b949;
-      }
+    .form .nice-select .option,
+    .form .nice-select .option .selected,
+    .form .nice-select .option .selected .focus {
+      padding-top: 10px !important;
+      text-align: center !important;
+    }
 
-      form h5.formDetails {
-        font-size: 1.3rem;
-        line-height: 1.5;
-      }
+    .form .nice-select .option,
+    .form .nice-select .option:hover,
+    .form .nice-select .option.focus,
+    .form .nice-select .option.selected.focus {
+      padding: 0;
+    }
 
-      .form form .checkboxLabel .xtra {
-        font-family: 'bould', sans-serif !important;
-        font-weight: normal !important;
-      }
+    .childImg {
+      border-radius: 15px;
+      width: 90px;
+      margin-top: 15px;
+    }
 
-      .form form .flex > label {
-        font-size: 1.3rem;
-        font-weight: normal;
-      }
+    h5 .title {
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      margin-top: 1rem;
+      font-family: 'Gotham Narrow', sans-serif;
+      font-weight: bold;
+    }
 
-      .field {
-        margin-top: 0 !important;
-      }
+    .form h5 span.track {
+      font-family: 'Tahu', sans-serif;
+      font-weight: normal;
+      color: #e3b949;
+    }
 
-      #paymentDiv {
-        padding-top: 20px;
-        text-align: center;
-      }
+    form h5.formDetails {
+      font-size: 1.3rem;
+      line-height: 1.5;
+    }
 
-      #payment {
-        color: #000;
-        text-decoration: none;
-        text-align: center;
-      }
+    .form form .checkboxLabel .xtra {
+      font-family: 'bould', sans-serif !important;
+      font-weight: normal !important;
+    }
 
-      .addressInfo {
-        margin-bottom: 1rem;
-      }
+    .form form .flex>label {
+      font-size: 1.3rem;
+      font-weight: normal;
+    }
 
-      .list {
-        max-height: 350px;
-        overflow-y: auto !important;
-      }
-    </style>
+    .field {
+      margin-top: 0 !important;
+    }
+
+    #paymentDiv {
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    #payment {
+      color: #000;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .addressInfo {
+      margin-bottom: 1rem;
+    }
+
+    .list {
+      max-height: 350px;
+      overflow-y: auto !important;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
+  <header>
     <div class="wrapper">
-        <div class="left">
-            <a href="#" id="menu-opener"><span></span><span></span><span></span></a>
-            <a href="../index.html" class="logo">
-                <h1>Chidon</h1><img src="../img/chidon.png?v=1" alt="Chidon" />
+      <div class="left">
+        <a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+        <a href="../index.html" class="logo">
+          <h1>Chidon</h1><img src="../img/chidon.png?v=1" alt="Chidon" />
+        </a>
+        <nav>
+          <a href="../index.html">Home</a>
+          <a href="../donate.html">Donate</a>
+          <a href="../leaderboard.html">Leaderboard</a>
+          <a href="../story.html">Our Story</a>
+        </nav>
+      </div>
+      <div class="icons">
+        <a href="#"><img src="../img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+        <a href="#"><img src="../img/army.png" alt="Tzivos Hashem" /></a>
+      </div>
+    </div>
+  </header>
+  <div class="main">
+    <div class="wrapper">
+      <!-- FORM PART 2 -->
+      <div class="form form2" id="purchasesForm">
+        <form id="formPart2">
+          <h5 class="title" style="font-weight: bold">Extra Purchases</h5>
+          <h5 class="formDetails">
+            To enhance your family's chidon celebration experience you can purchase Celebration Boxes,
+            Parents or Grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
+            <br /><br />
+            Please Note: <br />
+            1. Extra Purchases Shipping is ONLY TO THE USA!
+            2. If you have more than one child your extra purchases will be given to your oldest child.
+          </h5>
+          <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
+          <div id="celebBoxesSoldOut" style="display: none;">
+            <h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>
+          </div>
+          <div id="celebBoxes">
+            <div class="listSection" style="background-color: #394190; border-radius: 15px;">
+              <div style="float: right;">
+                <img src="../../assets/Chidon 5781 Box.png" style="width: 200px; padding-top: 7px;" />
+                <br /><br />
+                <ul>
+                  <li>Chidon Trophy Glitter (NEW)</li>
+                  <li>Chidon Wall Hanging Sign (NEW)</li>
+                </ul>
+              </div>
+              <ul>
+                <li>10 Chidon Plates</li>
+                <li>10 Chidon Cups</li>
+                <li>10 Chidon Napkins</li>
+                <li>7 Chidon Latex Balloons (with stand)</li>
+                <li>1 Chidon Foil Balloon</li>
+                <li>1 Chidon Tablecloth</li>
+                <li>2 Laminated Benching Cards</li>
+              </ul>
+            </div>
+            <div class="flex small-select">
+              <h5 class="formDetails">
+                Select how many Celebration Box(es) you would like to purchase - $20/ea. THERE ARE
+                <span id="celeb_boxes_total"></span> BOXES AVAILABLE FOR PURCHASE.
+              </h5>
+              <select class="numCelebBoxes" id="num_celeb_boxes"></select>
+            </div>
+            <!--                    <div id="celeb_box_shipping" style="display: none;">-->
+            <!--                        <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>-->
+            <!--                        <div class="flex">-->
+            <!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />-->
+            <!--                            <label style="display: inline">-->
+            <!--                                Please ship to our school free of charge.<br />-->
+            <!--                            </label>-->
+            <!--                        </div>-->
+            <!--                        <div class="flex">-->
+            <!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />-->
+            <!--                            <label style="display: inline">-->
+            <!--                                Please ship to an address in the USA for $10.-->
+            <!--                            </label>-->
+            <!--                        </div>-->
+            <!--                        <div class="flex" style="margin-bottom: 10px;">-->
+            <!--                            <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />-->
+            <!--                        </div>-->
+            <!--                        <div class="flex">-->
+            <!--                            <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />-->
+            <!--                            <div id="celeb_state_span"></div>-->
+            <!--                            <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <br />
+            <div id="celeb_box_shipping"
+              style="background-color: #394190; padding: 20px; border-radius: 15px; display: none;">
+              <div class="flex">
+                <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="0">
+                <label class="checkboxLabel">
+                  to be shipped to our school. (FREE)
+                </label>
+              </div>
+              <div class="flex">
+                <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="10">
+                <label class="checkboxLabel">
+                  +$10 to be shipped to an address in the USA
+                </label>
+              </div>
+              <div class="flex" style="margin-bottom: 10px;">
+                <input type="text" placeholder="Address" name="celeb_box_address" class="address"
+                  id="celeb_box_address" />
+              </div>
+              <div class="flex">
+                <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
+                <span id="celeb_state_dropdown"></span>
+                <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
+              </div>
+            </div>
+          </div>
+
+          <h5 class="title" style="font-weight: bold;">Parents and Grandparents Sweaters</h5>
+          <h5 class="formDetails">Please select how many you want of each type, the size and
+            to where you would like it to be shipped. Shipping is $10 to an address in the USA.</h5>
+          <br />
+          <div class="flex">
+            <h5 class="formDetails" id="mother_sweater_desc">Mother Sweater - $25/ea</h5>
+            <div style="margin-top: 2rem;">
+              <select name="motherSweater" class="sweater" id="mother_sweater">
+                <script>
+                  for (let i = 0; i < 10; i++) {
+                    document.write("<option value=" + i + ">" + i + "</option>")
+                  }
+                </script>
+              </select>
+            </div>
+          </div>
+          <div class="addressInfo"></div>
+
+          <div class="flex">
+            <h5 class="formDetails" id="father_sweater_desc">Father Sweater - $25/ea</h5>
+            <div style="margin-top: 2rem;">
+              <select name="fatherSweater" class="sweater" id="father_sweater">
+                <script>
+                  for (let i = 0; i < 10; i++) {
+                    document.write("<option value=" + i + ">" + i + "</option>")
+                  }
+                </script>
+              </select>
+            </div>
+          </div>
+          <div class="addressInfo"></div>
+
+          <div class="flex">
+            <h5 class="formDetails" id="bubby_sweater_desc">Bubby Sweater - $25/ea</h5>
+            <div style="margin-top: 2rem;">
+              <select name="bubbySweater" class="sweater" id="bubby_sweater">
+                <script>
+                  for (let i = 0; i < 10; i++) {
+                    document.write("<option value=" + i + ">" + i + "</option>")
+                  }
+                </script>
+              </select>
+            </div>
+          </div>
+          <div class="addressInfo"></div>
+
+          <div class="flex">
+            <h5 class="formDetails" id="zaidy_sweater_desc">Zaidy Sweater - $25/ea</h5>
+            <div style="margin-top: 2rem;">
+              <select name="zaidySweater" class="sweater" id="zaidy_sweater">
+                <script>
+                  for (let i = 0; i < 10; i++) {
+                    document.write("<option value=" + i + ">" + i + "</option>")
+                  }
+                </script>
+              </select>
+            </div>
+          </div>
+          <div class="addressInfo"></div>
+
+          <h5 class="formDetails">
+            <b>Please note:</b> We are doing our best to ensure all items will be received before the Chidon Event &
+            Awards Ceremony.
+            We do not take responsibility in case of unforeseen circumstances.
+          </h5>
+          <div id="paymentDiv">
+            <a href="#" class="button" id="payment" style="color: #000; text-decoration: none;">Continue to Payment</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- END OF FORMS -->
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrapper">
+      <a href="#" id="top">Back to top</a>
+
+      <div class="credits">
+        <p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+        <p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+          לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+      </div>
+
+      <div class="footer-main">
+        <div class="footer-about">
+          <div class="icon-wrapper">
+            <a href="https://thechidon.com" target="blank">
+              <img src="../img/chidon-logo.png" alt="Chidon" />
             </a>
-            <nav>
-                <a href="../index.html">Home</a>
-                <a href="../donate.html">Donate</a>
-                <a href="../leaderboard.html">Leaderboard</a>
-                <a href="../story.html">Our Story</a>
-            </nav>
+          </div>
+          <div class="icon-wrapper">
+            <img src="../img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+          </div>
+          <div class="icon-wrapper">
+            <img src="../img/army-color.png" alt="Tzivos Hashem" />
+          </div>
+          <p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
         </div>
-        <div class="icons">
-            <a href="#"><img src="../img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
-            <a href="#"><img src="../img/army.png" alt="Tzivos Hashem" /></a>
+        <nav>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../donate.html">Donate</a></li>
+            <li><a href="../leaderboard.html">Leaderboard</a></li>
+            <li><a href="../story.html">Our Story</a></li>
+          </ul>
+          <ul>
+            <li>
+              <h5>Quick Links</h5>
+            </li>
+            <li><a href="../family.html">Find a Family</a></li>
+            <li><a href="../sponsor.html">Sponsors</a></li>
+            <!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
+          </ul>
+          <ul>
+            <li>
+              <h5>Contact Us</h5>
+            </li>
+            <li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+            <li><a href="tel:7189078884">718.907.8884</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="social">
+          <a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+          <a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
         </div>
+        <p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
+      </div>
     </div>
-</header>
-<div class="main">
-    <div class="wrapper">
-        <!-- FORM PART 2 -->
-        <div class="form form2" id="purchasesForm">
-            <form id="formPart2">
-                <h5 class="title" style="font-weight: bold">Extra Purchases</h5>
-                <h5 class="formDetails">
-                    To enhance your family's chidon celebration experience you can purchase Celebration Boxes,
-                    Parents or Grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
-                    <br /><br />
-                    Please Note: <br />
-                    1. Extra Purchases Shipping is ONLY TO THE USA!
-                    2. If you have more than one child your extra purchases will be given to your oldest child.
-                </h5>
-                <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
-                <div id="celebBoxesSoldOut" style="display: none;">
-                    <h5 class="formDetails">We are sorry, but we are currently SOLD OUT of Celebration Boxes.</h5>
-                </div>
-                <div id="celebBoxes">
-                    <div class="listSection" style="background-color: #394190; border-radius: 15px;">
-                        <div style="float: right;">
-                            <img src="../../assets/Chidon 5781 Box.png" style="width: 200px; padding-top: 7px;" />
-                            <br /><br />
-                            <ul>
-                                <li>Chidon Trophy Glitter (NEW)</li>
-                                <li>Chidon Wall Hanging Sign (NEW)</li>
-                            </ul>
-                        </div>
-                        <ul>
-                            <li>10 Chidon Plates</li>
-                            <li>10 Chidon Cups</li>
-                            <li>10 Chidon Napkins</li>
-                            <li>7 Chidon Latex Balloons (with stand)</li>
-                            <li>1 Chidon Foil Balloon</li>
-                            <li>1 Chidon Tablecloth</li>
-                            <li>2 Laminated Benching Cards</li>
-                        </ul>
-                    </div>
-                    <div class="flex small-select">
-                        <h5 class="formDetails">
-                            Select how many Celebration Box(es) you would like to purchase - $20/ea. THERE ARE
-                            <span id="celeb_boxes_total"></span> BOXES AVAILABLE FOR PURCHASE.
-                        </h5>
-                        <select class="numCelebBoxes" id="num_celeb_boxes"></select>
-                    </div>
-<!--                    <div id="celeb_box_shipping" style="display: none;">-->
-<!--                        <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>-->
-<!--                        <div class="flex">-->
-<!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />-->
-<!--                            <label style="display: inline">-->
-<!--                                Please ship to our school free of charge.<br />-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="flex">-->
-<!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />-->
-<!--                            <label style="display: inline">-->
-<!--                                Please ship to an address in the USA for $10.-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="flex" style="margin-bottom: 10px;">-->
-<!--                            <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />-->
-<!--                        </div>-->
-<!--                        <div class="flex">-->
-<!--                            <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />-->
-<!--                            <div id="celeb_state_span"></div>-->
-<!--                            <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    <br />
-                    <div id="celeb_box_shipping" style="background-color: #394190; padding: 20px; border-radius: 15px; display: none;">
-                        <div class="flex">
-                            <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="0">
-                            <label class="checkboxLabel">
-                                to be shipped to our school. (FREE)
-                            </label>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox celeb_box_ship" type="radio" name="celeb_box_ship" value="10">
-                            <label class="checkboxLabel">
-                                +$10 to be shipped to an address in the USA
-                            </label>
-                        </div>
-                        <div class="flex" style="margin-bottom: 10px;">
-                            <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />
-                        </div>
-                        <div class="flex">
-                            <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />
-                            <span id="celeb_state_dropdown"></span>
-                            <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />
-                        </div>
-                    </div>
-                </div>
+  </footer>
 
-                <h5 class="title" style="font-weight: bold;">Parents and Grandparents Sweaters</h5>
-                <h5 class="formDetails">Please select how many you want of each type, the size and
-                    to where you would like it to be shipped. Shipping is $10 to an address in the USA.</h5>
-                <br />
-                <div class="flex">
-                    <h5 class="formDetails" id="mother_sweater_desc">Mother Sweater - $25/ea</h5>
-                    <div style="margin-top: 2rem;">
-                        <select name="motherSweater" class="sweater" id="mother_sweater">
-                            <script>
-                              for (let i = 0; i < 10; i++) {
-                                document.write("<option value=" + i + ">" + i + "</option>")
-                              }
-                            </script>
-                        </select>
-                    </div>
-                </div>
-                <div class="addressInfo"></div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../js/circletype.min.js"></script>
+  <script src="../js/jquery.nice-select.min.js"></script>
+  <script src='../js/circles.min.js'></script>
+  <script src="../js/js.cookie.js"></script>
+  <script type="text/javascript">
+    if (location.protocol != 'https:') {
+      let url = window.location.href;
+      let pos = url.indexOf(':');
+      let newUrl = 'https' + url.substring(pos);
+      location.href = newUrl;
+    }
 
-                <div class="flex">
-                    <h5 class="formDetails" id="father_sweater_desc">Father Sweater - $25/ea</h5>
-                    <div style="margin-top: 2rem;">
-                        <select name="fatherSweater" class="sweater" id="father_sweater">
-                            <script>
-                              for (let i = 0; i < 10; i++) {
-                                document.write("<option value=" + i + ">" + i + "</option>")
-                              }
-                            </script>
-                        </select>
-                    </div>
-                </div>
-                <div class="addressInfo"></div>
+    $("select").not('#num_celeb_boxes').niceSelect()
 
-                <div class="flex">
-                    <h5 class="formDetails" id="bubby_sweater_desc">Bubby Sweater - $25/ea</h5>
-                    <div style="margin-top: 2rem;">
-                        <select name="bubbySweater" class="sweater" id="bubby_sweater">
-                            <script>
-                              for (let i = 0; i < 10; i++) {
-                                document.write("<option value=" + i + ">" + i + "</option>")
-                              }
-                            </script>
-                        </select>
-                    </div>
-                </div>
-                <div class="addressInfo"></div>
-
-                <div class="flex">
-                    <h5 class="formDetails" id="zaidy_sweater_desc">Zaidy Sweater - $25/ea</h5>
-                    <div style="margin-top: 2rem;">
-                        <select name="zaidySweater" class="sweater" id="zaidy_sweater">
-                            <script>
-                              for (let i = 0; i < 10; i++) {
-                                document.write("<option value=" + i + ">" + i + "</option>")
-                              }
-                            </script>
-                        </select>
-                    </div>
-                </div>
-                <div class="addressInfo"></div>
-
-                <h5 class="formDetails">
-                    <b>Please note:</b> We are doing our best to ensure all items will be received before the Chidon Event & Awards Ceremony.
-                    We do not take responsibility in case of unforeseen circumstances.
-                </h5>
-                <div id="paymentDiv">
-                    <a href="#" class="button" id="payment" style="color: #000; text-decoration: none;">Continue to Payment</a>
-                </div>
-            </form>
-        </div>
-
-        <!-- END OF FORMS -->
-
-    </div>
-</div>
-
-<footer>
-    <div class="wrapper">
-        <a href="#" id="top">Back to top</a>
-
-        <div class="credits">
-            <p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
-            <p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
-                לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
-        </div>
-
-        <div class="footer-main">
-            <div class="footer-about">
-                <div class="icon-wrapper">
-                    <a href="https://thechidon.com" target="blank">
-                        <img src="../img/chidon-logo.png" alt="Chidon" />
-                    </a>
-                </div>
-                <div class="icon-wrapper">
-                    <img src="../img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
-                </div>
-                <div class="icon-wrapper">
-                    <img src="../img/army-color.png" alt="Tzivos Hashem" />
-                </div>
-                <p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../donate.html">Donate</a></li>
-                    <li><a href="../leaderboard.html">Leaderboard</a></li>
-                    <li><a href="../story.html">Our Story</a></li>
-                </ul>
-                <ul>
-                    <li>
-                        <h5>Quick Links</h5>
-                    </li>
-                    <li><a href="../family.html">Find a Family</a></li>
-                    <li><a href="../sponsor.html">Sponsors</a></li>
-                    <!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
-                </ul>
-                <ul>
-                    <li>
-                        <h5>Contact Us</h5>
-                    </li>
-                    <li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
-                    <li><a href="tel:7189078884">718.907.8884</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="social">
-                <a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
-                <a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
-            </div>
-            <p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
-        </div>
-    </div>
-</footer>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="../js/circletype.min.js"></script>
-<script src="../js/jquery.nice-select.min.js"></script>
-<script src='../js/circles.min.js'></script>
-<script src="../js/js.cookie.js"></script>
-<script type="text/javascript">
-  if (location.protocol != 'https:') {
     let url = window.location.href;
-    let pos = url.indexOf(':');
-    let newUrl = 'https' + url.substring(pos);
-    location.href = newUrl;
-  }
+    let pos = url.indexOf('?a=');
+    if (pos > 0) {
+      let admin = url.substring(pos + 3);
+      Cookies.set('chidon_admin', admin);
+    }
+    if (!Cookies.get('chidon_admin')) location.href = 'enrollNew.html'
 
-  $("select").not('#num_celeb_boxes').niceSelect()
+    $('#menu-opener').click(function (e) {
+      $('header nav').toggleClass('open');
+    });
 
-  let url = window.location.href;
-  let pos = url.indexOf('?a=');
-  if (pos > 0) {
-    let admin = url.substring(pos + 3);
-    Cookies.set('chidon_admin', admin);
-  }
-  if (! Cookies.get('chidon_admin')) location.href = 'enrollNew.html'
+    /**** GLOBAL VARS ****/
+    var cart = []
+    var addresses = {} // all addresses entered
+    var sweaters = {}
+    var celeb_boxes = 950
 
-  $('#menu-opener').click(function (e) {
-    $('header nav').toggleClass('open');
-  });
+    if (window.localStorage) cart = JSON.parse(window.localStorage.getItem('cart'))
+    else cart = JSON.parse(Cookies.get('cart'))
 
-  /**** GLOBAL VARS ****/
-  var cart = []
-  var addresses = {} // all addresses entered
-  var sweaters = {}
-  var celeb_boxes = 950
+    // reset cart for extra purchases
+    resetCart()
 
-  if (window.localStorage) cart = JSON.parse(window.localStorage.getItem('cart'))
-  else cart = JSON.parse(Cookies.get('cart'))
+    getSweaterInfo()
 
-  // reset cart for extra purchases
-  resetCart()
-
-  getSweaterInfo()
-
-  function resetCart() {
+    function resetCart() {
       cart = cart.filter(item => item.desc.includes('reg') || item.desc === 'names')
-  }
+    }
 
-  function getSweaterInfo() {
-    $.post('../../ajax/sweaterInfo.php', function( result ) {
-      const res = JSON.parse( result )
-      celeb_boxes -= parseInt(res.celeb_boxes)
-      setupCelebBoxes()
-      sweaters = res.sweaters
-      for (let type in sweaters) {
-        let img = sweaters[type]['medium']['img']
-        let el = '#' + type + '_sweater_desc'
-        $(el).before("<img src='http://mashpia.com" + img + "' style='max-height: 75px; margin: 10px;' />")
+    function getSweaterInfo() {
+      $.post('../../ajax/sweaterInfo.php', function (result) {
+        const res = JSON.parse(result)
+        celeb_boxes -= parseInt(res.celeb_boxes)
+        setupCelebBoxes()
+        sweaters = res.sweaters
+        for (let type in sweaters) {
+          let img = sweaters[type]['medium']['img']
+          let el = '#' + type + '_sweater_desc'
+          $(el).before("<img src='http://mashpia.com" + img + "' style='max-height: 75px; margin: 10px;' />")
+        }
+      })
+    }
+
+    function setupCelebBoxes() {
+      if (celeb_boxes > 0) {
+        $("#celeb_boxes_total").text(celeb_boxes)
+        let html = ''
+        for (let i = 0; i <= celeb_boxes; i++) {
+          html += `<option value='${i}'>${i}</option>`
+          if (i == 10) break
+        }
+        $("#num_celeb_boxes").append(html)
+        $("#num_celeb_boxes").niceSelect();
+        $("#celeb_state_dropdown").html(createStateDropdown('celeb_box'))
+        $("#celeb_box_state").niceSelect()
+      } else {
+        $("#celebBoxes").hide()
+        $("#celebBoxesSoldOut").show()
       }
+      // // check if cart already has info about celeb boxes
+      // let boxes = 0, ship = 0
+      // for (let item of cart) {
+      //     if (item.desc === 'num_celeb_boxes') boxes = parseInt(item.value)
+      //     else if (item.desc === 'celeb_box_ship') ship = parseInt(item.value)
+      // }
+      // if (boxes) {
+      //     $("#num_celeb_boxes").niceSelect('destroy')
+      //     $("#num_celeb_boxes").val(boxes)
+      //     $("#num_celeb_boxes").trigger('change')
+      //     $("#num_celeb_boxes").niceSelect()
+      //     if (ship) {
+      //         $(".celeb_box_ship").eq(1).trigger('click')
+      //     }
+      //     else $(".celeb_box_ship").eq(0).trigger('click')
+      // }
+    }
+
+    $(".numCelebBoxes").change(function () {
+      let number = $(this).val()
+      if (parseInt(number)) $("#celeb_box_shipping").show()
+      else $("#celeb_box_shipping").hide()
     })
-  }
 
-  function setupCelebBoxes() {
-    if (celeb_boxes > 0) {
-      $("#celeb_boxes_total").text(celeb_boxes)
-      let html = ''
-      for (let i = 0; i <= celeb_boxes; i++) {
-        html += `<option value='${i}'>${i}</option>`
-        if (i == 10) break
+    function createSweaterSelect(type, options) {
+      const sizes = {
+        xs: 'Adult XS',
+        small: 'Adult Small',
+        medium: 'Adult Medium',
+        large: 'Adult Large',
+        xl: 'Adult XL'
       }
-      $("#num_celeb_boxes").append(html)
-      $("#num_celeb_boxes").niceSelect();
-      $("#celeb_state_dropdown").html(createStateDropdown('celeb_box'))
-      $("#celeb_box_state").niceSelect()
-    } else {
-      $("#celebBoxes").hide()
-      $("#celebBoxesSoldOut").show()
+      let html = "<option value=''>Please Select</option>"
+      for (let size in sizes) {
+        if (options[size] && options[size]['qty'] > 0)
+          html += `<option value='${size}'>${sizes[size]} (${options[size]['qty']} left)</option>`
+        else
+          html += `<option value=''>${sizes[size]} (<i>sold out</i>)</option>`
+      }
+      return html
     }
-    // // check if cart already has info about celeb boxes
-    // let boxes = 0, ship = 0
-    // for (let item of cart) {
-    //     if (item.desc === 'num_celeb_boxes') boxes = parseInt(item.value)
-    //     else if (item.desc === 'celeb_box_ship') ship = parseInt(item.value)
-    // }
-    // if (boxes) {
-    //     $("#num_celeb_boxes").niceSelect('destroy')
-    //     $("#num_celeb_boxes").val(boxes)
-    //     $("#num_celeb_boxes").trigger('change')
-    //     $("#num_celeb_boxes").niceSelect()
-    //     if (ship) {
-    //         $(".celeb_box_ship").eq(1).trigger('click')
-    //     }
-    //     else $(".celeb_box_ship").eq(0).trigger('click')
-    // }
-  }
 
-  $(".numCelebBoxes").change( function() {
-    let number = $(this).val()
-    if (parseInt(number)) $("#celeb_box_shipping").show()
-    else $("#celeb_box_shipping").hide()
-  })
+    $(".sweater").change(function () {
+      let typeOfSweater = $(this).attr('id')
+      removeRelatedItems(typeOfSweater) // first remove from cart existing info
+      let num = parseInt($(this).val())
+      addToCart(typeOfSweater, num)
 
-  function createSweaterSelect(type, options) {
-    const sizes = {
-      xs: 'Adult XS',
-      small: 'Adult Small',
-      medium: 'Adult Medium',
-      large: 'Adult Large',
-      xl: 'Adult XL'
-    }
-    let html = "<option value=''>Please Select</option>"
-    for (let size in sizes) {
-      if (options[size] && options[size]['qty'] > 0)
-        html += `<option value='${size}'>${sizes[size]} (${options[size]['qty']} left)</option>`
-      else
-        html += `<option value=''>${sizes[size]} (<i>sold out</i>)</option>`
-    }
-    return html
-  }
-
-  $(".sweater").change( function() {
-    let typeOfSweater = $(this).attr('id')
-    removeRelatedItems(typeOfSweater) // first remove from cart existing info
-    let num = parseInt($(this).val())
-    addToCart(typeOfSweater, num)
-
-    let type = typeOfSweater.split('_')[0]
-    let typeUpper = type[0].toUpperCase() + type.substring(1)
-    $(this).parent().parent().next('.addressInfo').empty()
-    if (num) {
-      let html = ''
-      for (let i = 1; i <= num; i++) {
-        html += `<div class="flex medium-select">
+      let type = typeOfSweater.split('_')[0]
+      let typeUpper = type[0].toUpperCase() + type.substring(1)
+      $(this).parent().parent().next('.addressInfo').empty()
+      if (num) {
+        let html = ''
+        for (let i = 1; i <= num; i++) {
+          html += `<div class="flex medium-select">
                             <label style="flex-basis: 40%">${typeUpper} Sweater #${i} Size:</label>
                             <select class="sweater_size ${type}_sweater" name="${type + '_size'}" id="${typeOfSweater + '_' + i + '_size'}">
                                 ${createSweaterSelect(type, sweaters[type])}
@@ -556,22 +573,22 @@
                             <div class="flex">
                                 <input type="text" placeholder="City" name="${typeOfSweater + '_' + i + '_city'}"
                                     class="address" id="${typeOfSweater + '_' + i + '_city'}" />`
-        html += createStateDropdown(typeOfSweater + '_' + i)
-        html += `
+          html += createStateDropdown(typeOfSweater + '_' + i)
+          html += `
                                 <input type="text" placeholder="Zip" name="${typeOfSweater + '_' + i + '_zip'}"
                                     class="address" id="${typeOfSweater + '_' + i + '_zip'}" />
                             </div>
                         </div>
                     `
+        }
+        $(this).parent().parent().next('.addressInfo').append(html)
+        $("select.sweater_size").niceSelect()
+        $(".addressInfo").find("select.state").niceSelect()
       }
-      $(this).parent().parent().next('.addressInfo').append(html)
-      $("select.sweater_size").niceSelect()
-      $(".addressInfo").find("select.state").niceSelect()
-    }
-  })
+    })
 
-  function createStateDropdown(type) {
-    let html = `
+    function createStateDropdown(type) {
+      let html = `
                 <select name="${type + '_state'}" id="${type + '_state'}" class="state address">
                   <option value="" selected="selected">Select a State</option>
                   <option value="AL">Alabama</option>
@@ -627,247 +644,247 @@
                   <option value="WY">Wyoming</option>
                 </select>
             `
-    return html
-  }
+      return html
+    }
 
-  function addToCart(desc, value) {
-    // if item doesn't already exist add to cart
-    let add = true;
-    for (let c in cart) {
-      let item = cart[c]
-      if (item.desc == desc) {
-        // update cart
-        item.value = value
-        add = false
-        break
+    function addToCart(desc, value) {
+      // if item doesn't already exist add to cart
+      let add = true;
+      for (let c in cart) {
+        let item = cart[c]
+        if (item.desc == desc) {
+          // update cart
+          item.value = value
+          add = false
+          break
+        }
+      }
+      if (add) {
+        let item = {
+          desc: desc,
+          value: value
+        }
+        cart.push(item)
       }
     }
-    if (add) {
-      let item = {
-        desc: desc,
-        value: value
+
+    function removeFromCart(desc) {
+      cart = cart.filter(item => item.desc !== desc)
+    }
+
+    function removeRelatedItems(original) {
+      for (let item of cart) {
+        if (item.desc.includes(original)) removeFromCart(item.desc)
       }
-      cart.push(item)
-    }
-  }
-
-  function removeFromCart(desc) {
-    cart = cart.filter(item => item.desc !== desc)
-  }
-
-  function removeRelatedItems(original) {
-    for (let item of cart) {
-      if (item.desc.includes(original)) removeFromCart(item.desc)
-    }
-    for (let address in addresses) {
-      if (address.includes(original)) delete addresses[address]
-    }
-  }
-
-  function utilityFn(event, elem) {
-    let id = $(elem).attr('id')
-    if (!id) {
-      let class_names = $(elem).attr('class').split(' ')
-      id = class_names[1] // get celeb_box_ship for celebration boxes shipping
-    }
-    const value = $(elem).val()
-    if (value !== '') addToCart(id, value)
-
-    // keep dropdown open
-    if (event.type === 'change') {
-      if (value === '') {
-        alert("Please make a valid choice!")
-        $(elem).trigger('click')
+      for (let address in addresses) {
+        if (address.includes(original)) delete addresses[address]
       }
     }
-  }
 
-  function toggleAddress(elem) {
-    const val = $(elem).val()
-    if (val) {
-      // show address section
-      $(elem).parent().parent().find('.listSection').show()
-    } else {
-      // hide address section
-      $(elem).parent().parent().find('.listSection').hide()
+    function utilityFn(event, elem) {
+      let id = $(elem).attr('id')
+      if (!id) {
+        let class_names = $(elem).attr('class').split(' ')
+        id = class_names[1] // get celeb_box_ship for celebration boxes shipping
+      }
+      const value = $(elem).val()
+      if (value !== '') addToCart(id, value)
+
+      // keep dropdown open
+      if (event.type === 'change') {
+        if (value === '') {
+          alert("Please make a valid choice!")
+          $(elem).trigger('click')
+        }
+      }
     }
-  }
 
-  // function calculateTotal() {
-  //     cart_total = cart.reduce((accumulator, item) => accumulator + parseInt(item.value), 0)
-  // }
+    function toggleAddress(elem) {
+      const val = $(elem).val()
+      if (val) {
+        // show address section
+        $(elem).parent().parent().find('.listSection').show()
+      } else {
+        // hide address section
+        $(elem).parent().parent().find('.listSection').hide()
+      }
+    }
 
-  $(document).on('click', '.shipping', function(e) {
-    if ($(this).is(":checked")) utilityFn(e, this)
-    else removeFromCart($(this).attr('id'))
-  })
+    // function calculateTotal() {
+    //     cart_total = cart.reduce((accumulator, item) => accumulator + parseInt(item.value), 0)
+    // }
 
-  $(document).on('change', '.numCelebBoxes', function(e) {
-    utilityFn(e, this)
-  })
+    $(document).on('click', '.shipping', function (e) {
+      if ($(this).is(":checked")) utilityFn(e, this)
+      else removeFromCart($(this).attr('id'))
+    })
 
-  $(document).on('click', '.celeb_box_ship', function(e) {
-    utilityFn(e, this)
-  })
+    $(document).on('change', '.numCelebBoxes', function (e) {
+      utilityFn(e, this)
+    })
 
-  $(document).on('change', '.sweater_size', function(e) {
-    toggleAddress(this)
-    utilityFn(e, this)
-  })
+    $(document).on('click', '.celeb_box_ship', function (e) {
+      utilityFn(e, this)
+    })
 
-  $(document).on('click', '.sweater_ship', function(e) {
-    // check if size was already chosen
-    let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
-    if (!size) {
+    $(document).on('change', '.sweater_size', function (e) {
+      toggleAddress(this)
+      utilityFn(e, this)
+    })
+
+    $(document).on('click', '.sweater_ship', function (e) {
+      // check if size was already chosen
+      let size = $(this).parent().parent().prev('div').find('.sweater_size').val()
+      if (!size) {
         // uncheck this input
         this.checked = false
-      setTimeout( function() {
-        alert('You must first choose a size!')
-        return false
-      })
-    } else {
-      utilityFn(e, this)
-      // add to addresses object
-      let field = $(this).attr('id')
-      let key = field.substr(0, field.lastIndexOf('_'))
-      addresses[key] = {}
-    }
-  })
-
-  $(document).on('blur change', '.address', function() {
-    // check off $10 option if it's not checked
-    const elem = $(this).parent().parent().find('input').eq(1)
-    if (! $(elem).is(':checked')) elem.trigger('click')
-
-    // add to addresses object
-    const id = $(this).attr('id')
-    if (id) {
-      const info = id.split('_')
-      let key = []
-      for (let i = 0; i < (info.length - 1); i++) {
-        key.push(info[i])
+        setTimeout(function () {
+          alert('You must first choose a size!')
+          return false
+        })
+      } else {
+        utilityFn(e, this)
+        // add to addresses object
+        let field = $(this).attr('id')
+        let key = field.substr(0, field.lastIndexOf('_'))
+        addresses[key] = {}
       }
-      key = key.join('_')
-      const type = info[info.length - 1]
-      const value = $(this).val()
-      if (!addresses[key]) addresses[key] = {}
-      addresses[key][type] = value
-    }
-  })
+    })
 
-  function checkChoicesAreComplete() {
-    const num = cart.length
-    for (let i = 0; i < num; i++) {
-      let item = cart[i]
-      switch (item.desc) {
-        case 'num_celeb_boxes':
-          if (parseInt(item.value) > 0) {
-            if (! $(".celeb_box_ship:checked").length) {
-              alert("You indicated that you would like some Celebration Boxes, however you have not chosen the shipping method!")
-              $(".celeb_box_ship").eq(0).focus()
-              return false
-            } else if (parseInt($(".celeb_box_ship:checked").val()) > 0) {
-              // make sure we have address info
-              if (addresses.celeb_box === undefined) {
-                alert("You have asked for Celebration Boxes to be shipped to you, but you haven't provided us with an address!")
-                $("#celeb_box_address").focus()
+    $(document).on('blur change', '.address', function () {
+      // check off $10 option if it's not checked
+      const elem = $(this).parent().parent().find('input').eq(1)
+      if (!$(elem).is(':checked')) elem.trigger('click')
+
+      // add to addresses object
+      const id = $(this).attr('id')
+      if (id) {
+        const info = id.split('_')
+        let key = []
+        for (let i = 0; i < (info.length - 1); i++) {
+          key.push(info[i])
+        }
+        key = key.join('_')
+        const type = info[info.length - 1]
+        const value = $(this).val()
+        if (!addresses[key]) addresses[key] = {}
+        addresses[key][type] = value
+      }
+    })
+
+    function checkChoicesAreComplete() {
+      const num = cart.length
+      for (let i = 0; i < num; i++) {
+        let item = cart[i]
+        switch (item.desc) {
+          case 'num_celeb_boxes':
+            if (parseInt(item.value) > 0) {
+              if (!$(".celeb_box_ship:checked").length) {
+                alert("You indicated that you would like some Celebration Boxes, however you have not chosen the shipping method!")
+                $(".celeb_box_ship").eq(0).focus()
                 return false
+              } else if (parseInt($(".celeb_box_ship:checked").val()) > 0) {
+                // make sure we have address info
+                if (addresses.celeb_box === undefined) {
+                  alert("You have asked for Celebration Boxes to be shipped to you, but you haven't provided us with an address!")
+                  $("#celeb_box_address").focus()
+                  return false
+                }
               }
             }
-          }
-          break
-        case 'mother_sweater':
-        case 'father_sweater':
-        case 'bubby_sweater':
-        case 'zaidy_sweater':
-          if (parseInt(item.value) > 0) {
-            let good = true
-            const el = "#" + item.desc
-            const elem = $(el).parent().parent().next('.addressInfo')
-            // first check that size is chosen
-            let sizeElem = 'select .' + item.desc
-            $(elem).find(sizeElem).each( function ( i ) {
+            break
+          case 'mother_sweater':
+          case 'father_sweater':
+          case 'bubby_sweater':
+          case 'zaidy_sweater':
+            if (parseInt(item.value) > 0) {
+              let good = true
+              const el = "#" + item.desc
+              const elem = $(el).parent().parent().next('.addressInfo')
+              // first check that size is chosen
+              let sizeElem = 'select .' + item.desc
+              $(elem).find(sizeElem).each(function (i) {
                 // only check up to number of sweaters being chosen
                 if ((i + 1) > parseInt(item.value)) return false
-                if (! $(this).val()) {
-                    good = false
-                    alert('You must choose the sweater size for all ' + item.desc.replace('_', ' ') + 's')
-                    return false
+                if (!$(this).val()) {
+                  good = false
+                  alert('You must choose the sweater size for all ' + item.desc.replace('_', ' ') + 's')
+                  return false
                 }
-            })
-            // then check that address is chosen
-            $(elem).find('.listSection').each(function () {
-              if (! $(this).find('input[type="radio"]:checked').length) {
+              })
+              // then check that address is chosen
+              $(elem).find('.listSection').each(function () {
+                if (!$(this).find('input[type="radio"]:checked').length) {
                   good = false
                   alert("You must indicate how ALL YOUR SWEATERS should be shipped!")
                   $(this).find('input[type="radio"]').eq(0).focus()
                   return false
-              }
-            })
-            return good
-          }
-          break
+                }
+              })
+              return good
+            }
+            break
+        }
       }
+      return true
     }
-    return true
-  }
 
-  function checkAddresses() {
-    const fields = ['address', 'city', 'state', 'zip']
-    const keys = Object.keys(addresses)
-    for (let i = 0; i < keys.length; i++) {
-      let address = addresses[keys[i]]
-      // make sure the ship to address is checked off
-      let ship = '#' + keys[i] + '_ship:checked'
-      if (parseInt($(ship).val())) {
-        for (let j = 0; j < fields.length; j++) {
-          let field = fields[j]
-          if (address[field] === undefined || address[field] === '') {
-            alert('Not all addresses have been fully entered. Please review and fix.')
-            return false
+    function checkAddresses() {
+      const fields = ['address', 'city', 'state', 'zip']
+      const keys = Object.keys(addresses)
+      for (let i = 0; i < keys.length; i++) {
+        let address = addresses[keys[i]]
+        // make sure the ship to address is checked off
+        let ship = '#' + keys[i] + '_ship:checked'
+        if (parseInt($(ship).val())) {
+          for (let j = 0; j < fields.length; j++) {
+            let field = fields[j]
+            if (address[field] === undefined || address[field] === '') {
+              alert('Not all addresses have been fully entered. Please review and fix.')
+              return false
+            }
           }
         }
       }
+      return true
     }
-    return true
-  }
 
-  $("#payment").click( function(e) {
-    e.preventDefault()
-    if (
-      checkChoicesAreComplete() &&
-      checkAddresses()
-    ) {
+    $("#payment").click(function (e) {
+      e.preventDefault()
+      if (
+        checkChoicesAreComplete() &&
+        checkAddresses()
+      ) {
         json_cart = JSON.stringify(cart)
         json_addresses = JSON.stringify(addresses)
         if (window.localStorage) {
-            window.localStorage.setItem('cart', json_cart)
-            window.localStorage.setItem('addresses', json_addresses)
+          window.localStorage.setItem('cart', json_cart)
+          window.localStorage.setItem('addresses', json_addresses)
         } else {
-            Cookies.set('cart', json_cart)
-            Cookies.set('addresses', json_addresses)
+          Cookies.set('cart', json_cart)
+          Cookies.set('addresses', json_addresses)
         }
         // go to checkout page
         location.href = 'checkout.html'
-    }
-  })
-</script>
-
-<script>
-  $(function () {
-    var header = $("header");
-    $(window).scroll(function () {
-      var scroll = $(window).scrollTop();
-
-      if (scroll >= 100) {
-        header.addClass("header-alt");
-        console.log('called');
-      } else {
-        header.removeClass('header-alt');
       }
+    })
+  </script>
+
+  <script>
+    $(function () {
+      var header = $("header");
+      $(window).scroll(function () {
+        var scroll = $(window).scrollTop();
+
+        if (scroll >= 100) {
+          header.addClass("header-alt");
+          console.log('called');
+        } else {
+          header.removeClass('header-alt');
+        }
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
 

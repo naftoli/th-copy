@@ -13,12 +13,20 @@
     <link rel="stylesheet" href="../css/nice-select.css" type="text/css" />
     <link rel="stylesheet" href="../css/enroll.css" type="text/css" />
     <style>
+        html,
+        body {
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
         #loginForm input:not(.button) {
             margin: 10px 0;
         }
+
         .login form {
             padding-bottom: 0;
         }
+
         .login input.button {
             top: 10px;
         }
@@ -34,6 +42,7 @@
             bottom: 0;
             right: 0;
         }
+
         .floating-div p {
             color: #85abda;
             font-size: 1.4rem;
@@ -79,12 +88,17 @@
             font-weight: normal;
         }
 
-        .form .nice-select .option, .form .nice-select .option .selected, .form .nice-select .option .selected .focus {
+        .form .nice-select .option,
+        .form .nice-select .option .selected,
+        .form .nice-select .option .selected .focus {
             padding-top: 10px !important;
             text-align: center !important;
         }
 
-        .form .nice-select .option, .form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
+        .form .nice-select .option,
+        .form .nice-select .option:hover,
+        .form .nice-select .option.focus,
+        .form .nice-select .option.selected.focus {
             padding: 0;
         }
 
@@ -118,7 +132,7 @@
             font-weight: normal !important;
         }
 
-        .form form .flex > label {
+        .form form .flex>label {
             font-size: 1.3rem;
             font-weight: normal;
         }
@@ -146,342 +160,363 @@
 
 <body>
 
-<header>
-    <div class="wrapper">
-        <div class="left">
-            <a href="#" id="menu-opener"><span></span><span></span><span></span></a>
-            <a href="../index.html" class="logo">
-                <h1>Chidon</h1><img src="../img/chidon.png?v=1" alt="Chidon" />
-            </a>
-            <nav>
-                <a href="../index.html">Home</a>
-                <a href="../donate.html">Donate</a>
-                <a href="../leaderboard.html">Leaderboard</a>
-                <a href="../story.html">Our Story</a>
-            </nav>
+    <header>
+        <div class="wrapper">
+            <div class="left">
+                <a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+                <a href="../index.html" class="logo">
+                    <h1>Chidon</h1><img src="../img/chidon.png?v=1" alt="Chidon" />
+                </a>
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../donate.html">Donate</a>
+                    <a href="../leaderboard.html">Leaderboard</a>
+                    <a href="../story.html">Our Story</a>
+                </nav>
+            </div>
+            <div class="icons">
+                <a href="#"><img src="../img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+                <a href="#"><img src="../img/army.png" alt="Tzivos Hashem" /></a>
+            </div>
         </div>
-        <div class="icons">
-            <a href="#"><img src="../img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
-            <a href="#"><img src="../img/army.png" alt="Tzivos Hashem" /></a>
-        </div>
-    </div>
-</header>
-<div class="main">
-    <div class="wrapper">
-        <h2 class="title">Checkout & Pay</h2>
+    </header>
+    <div class="main">
+        <div class="wrapper">
+            <h2 class="title">Checkout & Pay</h2>
 
-        <div class="form" id="checkout">
-            <form class="personalInfo">
+            <div class="form" id="checkout">
+                <form class="personalInfo">
 
-            </form>
-        </div>
+                </form>
+            </div>
 
-        <div class="payment-box" id="newCreditCard" style="display: none">
+            <div class="payment-box" id="newCreditCard" style="display: none">
+                <div class="form">
+                    <form id="paymentForm">
+                        <div id="paymentFormDetails">
+                            <h5 class="formDetails"><span class="title">New Credit Card</span></h5>
+                            <div class="field">
+                                <label>Card Number:</label>
+                                <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
+                            </div>
+                            <div class="group">
+                                <div class="field">
+                                    <label>Exp. Month:</label>
+                                    <select id="exp_mm">
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Exp. Year:</label>
+                                    <select id="exp_yy">
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                        <option>2027</option>
+                                        <option>2028</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>CVV:</label>
+                                    <input type="text" id="cc_cvv" placeholder="CVV" required />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="form">
-                <form id="paymentForm">
-                    <div id="paymentFormDetails">
-                        <h5 class="formDetails"><span class="title">New Credit Card</span></h5>
-                        <div class="field">
-                            <label>Card Number:</label>
-                            <input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
-                        </div>
-                        <div class="group">
-                            <div class="field">
-                                <label>Exp. Month:</label>
-                                <select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
-                            </div>
-                            <div class="field">
-                                <label>Exp. Year:</label>
-                                <select id="exp_yy">
-                                    <option>2022</option><option>2023</option><option>2024</option>
-                                    <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>CVV:</label>
-                                <input type="text" id="cc_cvv" placeholder="CVV" required />
-                            </div>
-                        </div>
+                <form id="terms">
+                    <h5 class="formDetails"><span class="title">Terms & Conditions</span></h5>
+                    <div class="flex">
+                        <input type="checkbox" name="terms1" class="inputCheckbox" id="terms1" />
+                        <label for="terms1">
+                            We are doing our best to ensure all items will be received at your school or at the
+                            addresses
+                            specified before the Chidon Event. We do not take responsibility in case of unforeseen
+                            circumstances.
+                        </label>
+                    </div>
+                    <div class="flex">
+                        <input type="checkbox" name="terms2" class="inputCheckbox" id="terms2" />
+                        <label for="terms2">All payments are final. There are no refunds.</label>
+                    </div>
+                    <div align="center">
+                        <br />
+                        <input type="submit" class="button processPayment" value="Pay & Register"
+                            style="cursor: pointer; font-size: 20px;" />
                     </div>
                 </form>
             </div>
-        </div>
 
-        <div class="form">
-            <form id="terms">
-                <h5 class="formDetails"><span class="title">Terms & Conditions</span></h5>
-                <div class="flex">
-                    <input type="checkbox" name="terms1" class="inputCheckbox" id="terms1" />
-                    <label for="terms1">
-                        We are doing our best to ensure all items will be received at your school or at the addresses
-                        specified before the Chidon Event. We do not take responsibility in case of unforeseen circumstances.
-                    </label>
-                </div>
-                <div class="flex">
-                    <input type="checkbox" name="terms2" class="inputCheckbox" id="terms2" />
-                    <label for="terms2">All payments are final. There are no refunds.</label>
-                </div>
-                <div align="center">
-                    <br />
-                    <input type="submit" class="button processPayment" value="Pay & Register" style="cursor: pointer; font-size: 20px;" />
-                </div>
-            </form>
-        </div>
+            <!-- END OF FORMS -->
 
-        <!-- END OF FORMS -->
-
-    </div>
-</div>
-
-<footer>
-    <div class="wrapper">
-        <a href="#" id="top">Back to top</a>
-
-        <div class="credits">
-            <p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
-            <p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
-                לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
-        </div>
-
-        <div class="footer-main">
-            <div class="footer-about">
-                <div class="icon-wrapper">
-                    <a href="https://thechidon.com" target="blank">
-                        <img src="../img/chidon-logo.png" alt="Chidon" />
-                    </a>
-                </div>
-                <div class="icon-wrapper">
-                    <img src="../img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
-                </div>
-                <div class="icon-wrapper">
-                    <img src="../img/army-color.png" alt="Tzivos Hashem" />
-                </div>
-                <p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../donate.html">Donate</a></li>
-                    <li><a href="../leaderboard.html">Leaderboard</a></li>
-                    <li><a href="../story.html">Our Story</a></li>
-                </ul>
-                <ul>
-                    <li>
-                        <h5>Quick Links</h5>
-                    </li>
-                    <li><a href="../family.html">Find a Family</a></li>
-                    <li><a href="../sponsor.html">Sponsors</a></li>
-                    <!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
-                </ul>
-                <ul>
-                    <li>
-                        <h5>Contact Us</h5>
-                    </li>
-                    <li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
-                    <li><a href="tel:7189078884">718.907.8884</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="social">
-                <a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
-                <a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
-            </div>
-            <p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
         </div>
     </div>
-</footer>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="../js/circletype.min.js"></script>
-<script src="../js/jquery.nice-select.min.js"></script>
-<script src='../js/circles.min.js'></script>
-<script src="../js/js.cookie.js"></script>
-<script type="text/javascript">
-    // alert("Enrollment is now closed.");
-    // location.href = "/";
-    if (location.protocol != 'https:') {
-        let url = window.location.href;
-        let pos = url.indexOf(':');
-        let newUrl = 'https' + url.substring(pos);
-        location.href = newUrl;
-    }
+    <footer>
+        <div class="wrapper">
+            <a href="#" id="top">Back to top</a>
 
-    if (! Cookies.get('chidon_admin')) {
-        location.href = 'enrollNew.html'
-    }
+            <div class="credits">
+                <p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+                <p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+                    לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+            </div>
 
-    $('#menu-opener').click(function (e) {
-        $('header nav').toggleClass('open');
-    });
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="icon-wrapper">
+                        <a href="https://thechidon.com" target="blank">
+                            <img src="../img/chidon-logo.png" alt="Chidon" />
+                        </a>
+                    </div>
+                    <div class="icon-wrapper">
+                        <img src="../img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+                    </div>
+                    <div class="icon-wrapper">
+                        <img src="../img/army-color.png" alt="Tzivos Hashem" />
+                    </div>
+                    <p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../donate.html">Donate</a></li>
+                        <li><a href="../leaderboard.html">Leaderboard</a></li>
+                        <li><a href="../story.html">Our Story</a></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <h5>Quick Links</h5>
+                        </li>
+                        <li><a href="../family.html">Find a Family</a></li>
+                        <li><a href="../sponsor.html">Sponsors</a></li>
+                        <!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
+                    </ul>
+                    <ul>
+                        <li>
+                            <h5>Contact Us</h5>
+                        </li>
+                        <li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+                        <li><a href="tel:7189078884">718.907.8884</a></li>
+                    </ul>
+                </nav>
+            </div>
 
-    $("select").niceSelect()
+            <div class="footer-bottom">
+                <div class="social">
+                    <a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+                    <a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
+                </div>
+                <p>&copy; 2021 Tzivos Hashem - All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
 
-    /**** GLOBAL VARS ****/
-    var children = []; // global variable for children info
-    var numChildren; // global variable to track number of children
-    var cart = []
-    var cart_total = 0
-    var addresses = {} // all addresses entered
-    var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../js/circletype.min.js"></script>
+    <script src="../js/jquery.nice-select.min.js"></script>
+    <script src='../js/circles.min.js'></script>
+    <script src="../js/js.cookie.js"></script>
+    <script type="text/javascript">
+        // alert("Enrollment is now closed.");
+        // location.href = "/";
+        if (location.protocol != 'https:') {
+            let url = window.location.href;
+            let pos = url.indexOf(':');
+            let newUrl = 'https' + url.substring(pos);
+            location.href = newUrl;
+        }
 
-    $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function(result) {
-        admin = JSON.parse(result)
-        admin_email = admin.admin_email
-        let cards = []
-        if (admin['cards']) {
-            for (let i in admin['cards']) {
-                let cardInfo = admin['cards'][i]
-                let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
-                let card = {
-                    profile: cardInfo.customerPaymentProfileId,
-                    type: info,
-                    number: cardInfo.payment.creditCard.cardNumber
+        if (!Cookies.get('chidon_admin')) {
+            location.href = 'enrollNew.html'
+        }
+
+        $('#menu-opener').click(function (e) {
+            $('header nav').toggleClass('open');
+        });
+
+        $("select").niceSelect()
+
+        /**** GLOBAL VARS ****/
+        var children = []; // global variable for children info
+        var numChildren; // global variable to track number of children
+        var cart = []
+        var cart_total = 0
+        var addresses = {} // all addresses entered
+        var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
+
+        $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function (result) {
+            admin = JSON.parse(result)
+            admin_email = admin.admin_email
+            let cards = []
+            if (admin['cards']) {
+                for (let i in admin['cards']) {
+                    let cardInfo = admin['cards'][i]
+                    let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
+                    let card = {
+                        profile: cardInfo.customerPaymentProfileId,
+                        type: info,
+                        number: cardInfo.payment.creditCard.cardNumber
+                    }
+                    cards.push(card)
                 }
-                cards.push(card)
             }
-        }
-        // console.log(cards)
-        let html = ''
-        html += `<select name="payment-card" class="payment-card">`
-        for (let card of cards) {
-            html += `<option value=${card.profile}>${card.type}</option>`
-        }
-        html += '</select>'
-        $("#creditCards").html(html)
-        $("select.payment-card").niceSelect()
-    })
-
-    if (window.localStorage) {
-        cart = JSON.parse(window.localStorage.getItem('cart'))
-        addresses = JSON.parse(window.localStorage.getItem('addresses'))
-        coupons = window.localStorage.getItem('coupons')
-        raised = window.localStorage.getItem('raised')
-        shipping = parseInt(window.localStorage.getItem('shipping'))
-        trips = window.localStorage.getItem('trips')
-        ultimate_trip = window.localStorage.getItem('ultimate_trip')
-        ultimate_info = window.localStorage.getItem('ultimate_info')
-    } else {
-        cart = JSON.parse(Cookies.get('cart'))
-        addresses = JSON.parse(Cookies.get('addresses'))
-        coupons = Cookies.get('coupons')
-        raised = Cookies.get('raised')
-        shipping = parseInt(Cookies.get('shipping'))
-        trips = Cookies.get('trips')
-        ultimate_trip = Cookies.get('ultimate_trip')
-        ultimate_info = Cookies.get('ultimate_info')
-    }
-    if (!cart.length) location.href = 'enrollNew.html'
-
-    let names = cart.filter(item => item.desc === 'names')
-    if (names.length) children = names[0].value
-
-    // parse cart info
-    let reg = []
-    let celeb_boxes = 0
-    let celeb_box_shipping = 0
-    let sweaters = []
-    let sweater_shipping = 0
-
-    const celeb_box_price = 20
-    const sweater_price = 25
-
-    const fields = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater']
-
-    for (let item of cart) {
-        if (item.desc.includes('reg')) {
-            const reg_info = item.desc.split('_')
-            const reg_item = {
-                id: reg_info[1],
-                fee: parseInt(item.value)
+            // console.log(cards)
+            let html = ''
+            html += `<select name="payment-card" class="payment-card">`
+            for (let card of cards) {
+                html += `<option value=${card.profile}>${card.type}</option>`
             }
-            reg.push(reg_item)
-        } else if (item.desc === 'num_celeb_boxes') {
-            celeb_boxes = parseInt(item.value)
-        } else if (item.desc === 'celeb_box_ship') {
-            celeb_box_shipping = parseInt(item.value)
+            html += '</select>'
+            $("#creditCards").html(html)
+            $("select.payment-card").niceSelect()
+        })
+
+        if (window.localStorage) {
+            cart = JSON.parse(window.localStorage.getItem('cart'))
+            addresses = JSON.parse(window.localStorage.getItem('addresses'))
+            coupons = window.localStorage.getItem('coupons')
+            raised = window.localStorage.getItem('raised')
+            shipping = parseInt(window.localStorage.getItem('shipping'))
+            trips = window.localStorage.getItem('trips')
+            ultimate_trip = window.localStorage.getItem('ultimate_trip')
+            ultimate_info = window.localStorage.getItem('ultimate_info')
         } else {
-            if (!item.desc.includes('sweater')) continue
-            for (let field of fields) {
-                if (item.desc === field) {
-                    if (parseInt(item.value) > 0) {
-                        let sweater = {
-                            type: item.desc,
-                            amount: parseInt(item.value)
+            cart = JSON.parse(Cookies.get('cart'))
+            addresses = JSON.parse(Cookies.get('addresses'))
+            coupons = Cookies.get('coupons')
+            raised = Cookies.get('raised')
+            shipping = parseInt(Cookies.get('shipping'))
+            trips = Cookies.get('trips')
+            ultimate_trip = Cookies.get('ultimate_trip')
+            ultimate_info = Cookies.get('ultimate_info')
+        }
+        if (!cart.length) location.href = 'enrollNew.html'
+
+        let names = cart.filter(item => item.desc === 'names')
+        if (names.length) children = names[0].value
+
+        // parse cart info
+        let reg = []
+        let celeb_boxes = 0
+        let celeb_box_shipping = 0
+        let sweaters = []
+        let sweater_shipping = 0
+
+        const celeb_box_price = 20
+        const sweater_price = 25
+
+        const fields = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater']
+
+        for (let item of cart) {
+            if (item.desc.includes('reg')) {
+                const reg_info = item.desc.split('_')
+                const reg_item = {
+                    id: reg_info[1],
+                    fee: parseInt(item.value)
+                }
+                reg.push(reg_item)
+            } else if (item.desc === 'num_celeb_boxes') {
+                celeb_boxes = parseInt(item.value)
+            } else if (item.desc === 'celeb_box_ship') {
+                celeb_box_shipping = parseInt(item.value)
+            } else {
+                if (!item.desc.includes('sweater')) continue
+                for (let field of fields) {
+                    if (item.desc === field) {
+                        if (parseInt(item.value) > 0) {
+                            let sweater = {
+                                type: item.desc,
+                                amount: parseInt(item.value)
+                            }
+                            sweaters.push(sweater)
                         }
-                        sweaters.push(sweater)
                     }
                 }
             }
         }
-    }
 
-    // check shipping for this sweater
-    console.log(sweaters)
-    for (let sweater of sweaters) {
-        let num = sweater.amount
-        let desc = sweater.type
-        for (let i = 1; i <= num; i++) {
-            let newField = desc + '_' + i + '_ship'
-            for (let item of cart) {
-                if (item.desc === newField) {
-                    sweater_shipping += parseInt(item.value)
+        // check shipping for this sweater
+        console.log(sweaters)
+        for (let sweater of sweaters) {
+            let num = sweater.amount
+            let desc = sweater.type
+            for (let i = 1; i <= num; i++) {
+                let newField = desc + '_' + i + '_ship'
+                for (let item of cart) {
+                    if (item.desc === newField) {
+                        sweater_shipping += parseInt(item.value)
+                    }
                 }
             }
         }
-    }
 
-    let html = ''
-    let reg_fee = 0
-    if (reg.length) {
-        html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
-        for (let info of reg) {
-            let child = children[info.id]
-            html += `<h5 class="formDetails">Registering for ${child.first}: $${info.fee}</h5>`
-            reg_fee += info.fee
-        }
-    }
-    if (shipping) {
-        html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
-    }
-    if (reg.length) {
-        html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
-        cart_total += reg_fee + shipping
-    }
-    if (celeb_boxes) {
-        html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
-        html += `<h5 class="formDetails">Number of Celebration Boxes: ${celeb_boxes}</h5>`
-        html += `<h5 class="formDetails">Cost per Celebration Box: $${celeb_box_price}</h5>`
-        html += `<h5 class="formDetails">Additional Shipping Fee: $${celeb_box_shipping}</h5>`
-        html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
-        cart_total += celeb_boxes * celeb_box_price + celeb_box_shipping
-    }
-    if (sweaters.length) {
-        let sweater_cost = 0
-        html += `<h5 class="formDetails"><span class="title">Sweaters</span></h5>`
-        html += `<h5 class="formDetails">Cost per Sweater: $${sweater_price}</h5>`
-        for (let sweater of sweaters) {
-            let type = sweater.type
-            let typeInfo = type.split('_')
-            for (let i = 0; i < typeInfo.length; i++) {
-                typeInfo[i] = typeInfo[i][0].toUpperCase() + typeInfo[i].substr(1)
+        let html = ''
+        let reg_fee = 0
+        if (reg.length) {
+            html += `<h5 class="formDetails"><span class="title">Registration Summary</span></h5>`
+            for (let info of reg) {
+                let child = children[info.id]
+                html += `<h5 class="formDetails">Registering for ${child.first}: $${info.fee}</h5>`
+                reg_fee += info.fee
             }
-            let typeName = typeInfo.join(' ')
-            html += `<h5 class="formDetails">Number of ${typeName}s: ${sweater.amount}</h5>`
-            sweater_cost += sweater.amount * sweater_price
         }
-        html += `<h5 class="formDetails">Additional Sweater Shipping: $${sweater_shipping}</h5>`
-        sweater_cost += sweater_shipping
-        html += `<h5 class="formDetails">Total Sweater Cost: $${sweater_cost}</h5>`
-        cart_total += sweater_cost
-    }
-    html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
-    html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total}</span></h5>`
+        if (shipping) {
+            html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
+        }
+        if (reg.length) {
+            html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
+            cart_total += reg_fee + shipping
+        }
+        if (celeb_boxes) {
+            html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
+            html += `<h5 class="formDetails">Number of Celebration Boxes: ${celeb_boxes}</h5>`
+            html += `<h5 class="formDetails">Cost per Celebration Box: $${celeb_box_price}</h5>`
+            html += `<h5 class="formDetails">Additional Shipping Fee: $${celeb_box_shipping}</h5>`
+            html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
+            cart_total += celeb_boxes * celeb_box_price + celeb_box_shipping
+        }
+        if (sweaters.length) {
+            let sweater_cost = 0
+            html += `<h5 class="formDetails"><span class="title">Sweaters</span></h5>`
+            html += `<h5 class="formDetails">Cost per Sweater: $${sweater_price}</h5>`
+            for (let sweater of sweaters) {
+                let type = sweater.type
+                let typeInfo = type.split('_')
+                for (let i = 0; i < typeInfo.length; i++) {
+                    typeInfo[i] = typeInfo[i][0].toUpperCase() + typeInfo[i].substr(1)
+                }
+                let typeName = typeInfo.join(' ')
+                html += `<h5 class="formDetails">Number of ${typeName}s: ${sweater.amount}</h5>`
+                sweater_cost += sweater.amount * sweater_price
+            }
+            html += `<h5 class="formDetails">Additional Sweater Shipping: $${sweater_shipping}</h5>`
+            sweater_cost += sweater_shipping
+            html += `<h5 class="formDetails">Total Sweater Cost: $${sweater_cost}</h5>`
+            cart_total += sweater_cost
+        }
+        html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
+        html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total}</span></h5>`
 
-    // payment
-    html += `<h5 class="formDetails" id="paymentDetails"><span class="title">Payment</span></h5>`
-    html += `
+        // payment
+        html += `<h5 class="formDetails" id="paymentDetails"><span class="title">Payment</span></h5>`
+        html += `
         <div class="flex">
             <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
             <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
@@ -493,122 +528,122 @@
             <label for="payment" style="display: inline">I will enter a new card (will be added to your profile for future use)</label>
         </div>
     `
-    $(".personalInfo").append(html)
+        $(".personalInfo").append(html)
 
-    if (reg.length && cart_total === 0) $(".processPayment").val('Register')
-    else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
-    else if (cart_total > 0) $(".processPayment").val('Pay')
-    else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
+        if (reg.length && cart_total === 0) $(".processPayment").val('Register')
+        else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
+        else if (cart_total > 0) $(".processPayment").val('Pay')
+        else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
 
-    // hide payment option if nothing is being charged
-    // if (cart_total === 0) {
-    //     $("#paymentDetails").next('div').next('div').hide()
-    //     $("#paymentDetails").next('div').hide()
-    //     $("#paymentDetails").hide()
-    // }
+        // hide payment option if nothing is being charged
+        // if (cart_total === 0) {
+        //     $("#paymentDetails").next('div').next('div').hide()
+        //     $("#paymentDetails").next('div').hide()
+        //     $("#paymentDetails").hide()
+        // }
 
-    $(".payment").click( function() {
-        if (parseInt($(this).val())) {
-            $("#newCreditCard").show()
-        } else {
-            $("#newCreditCard").hide()
-        }
-    })
-
-    console.log(trips)
-
-    $(document).on('click', '.processPayment', function( evt ) {
-        evt.preventDefault()
-        $(".processPayment").attr('disabled', true)
-
-        if (cart_total && ! $(".payment:checked").length) {
-            alert('You must indicate how your are going to pay!')
-            $(".processPayment").attr('disabled', false)
-            return false
-        }
-
-        let cc = {}
-        let card_id = 0
-        if (cart_total) {
-            if (parseInt($(".payment:checked").val()) === 0) {
-                card_id = parseInt($(".payment-card").val())
-                // check if cvc is correct
-                // let cvc = $("#cvc").val()
+        $(".payment").click(function () {
+            if (parseInt($(this).val())) {
+                $("#newCreditCard").show()
             } else {
-                let num = $("#cc_num").val()
-                cc.num = num.replaceAll(' ', '')
-                cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val()
-                cc.cvv = $("#cc_cvv").val()
-                if (!(cc.num && cc.exp && cc.cvv)) {
-                    alert('You are missing credit card info or it is inaccurate.')
-                    $(".processPayment").attr('disabled', false)
-                    return false
-                }
+                $("#newCreditCard").hide()
             }
-        }
-
-        // check terms
-        if (! ($("#terms1").is(":checked") && $("#terms2").is(":checked"))) {
-            $(".processPayment").attr('disabled', false)
-            alert("You must indicate your acceptance of our terms.")
-            return false
-        }
-
-        const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
-        $.post('../../ajax/processPayment5783.php', {
-            admin_id: admin.admin_id,
-            admin_email,
-            cart_total,
-            shipping,
-            card_id,
-            cc,
-            cart,
-            sweaters,
-            addresses,
-            coupons,
-            raised,
-            tracks,
-            trips,
-            ultimate_trip,
-            ultimate_info
-        }, function(result) {
-            const res = JSON.parse(result)
-            if (res.success) {
-                alert(res.msg)
-                // save customer to db if needed
-                if (Cookies.get('customer_id')) $.post('../../ajax/setCustomerId.php', { admin_id: admin.admin_id })
-                let items = ['cart', 'addresses', 'coupons', 'raised', 'tracks', 'ultimate_trip']
-                for (let item of items) {
-                    if (window.localStorage) window.localStorage.removeItem(item)
-                    else Cookies.remove(item)
-                }
-                Cookies.remove('myshliach')
-                location.href = 'http://mashpia.com/mobile'
-            }
-            else {
-                alert(res.error)
-                $(".processPayment").attr('disabled', false)
-            }
-            console.log(res)
         })
-    })
-</script>
 
-<script>
-    $(function () {
-        var header = $("header");
-        $(window).scroll(function () {
-            var scroll = $(window).scrollTop();
+        console.log(trips)
 
-            if (scroll >= 100) {
-                header.addClass("header-alt");
-                console.log('called');
-            } else {
-                header.removeClass('header-alt');
+        $(document).on('click', '.processPayment', function (evt) {
+            evt.preventDefault()
+            $(".processPayment").attr('disabled', true)
+
+            if (cart_total && !$(".payment:checked").length) {
+                alert('You must indicate how your are going to pay!')
+                $(".processPayment").attr('disabled', false)
+                return false
             }
+
+            let cc = {}
+            let card_id = 0
+            if (cart_total) {
+                if (parseInt($(".payment:checked").val()) === 0) {
+                    card_id = parseInt($(".payment-card").val())
+                    // check if cvc is correct
+                    // let cvc = $("#cvc").val()
+                } else {
+                    let num = $("#cc_num").val()
+                    cc.num = num.replaceAll(' ', '')
+                    cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val()
+                    cc.cvv = $("#cc_cvv").val()
+                    if (!(cc.num && cc.exp && cc.cvv)) {
+                        alert('You are missing credit card info or it is inaccurate.')
+                        $(".processPayment").attr('disabled', false)
+                        return false
+                    }
+                }
+            }
+
+            // check terms
+            if (!($("#terms1").is(":checked") && $("#terms2").is(":checked"))) {
+                $(".processPayment").attr('disabled', false)
+                alert("You must indicate your acceptance of our terms.")
+                return false
+            }
+
+            const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
+            $.post('../../ajax/processPayment5783.php', {
+                admin_id: admin.admin_id,
+                admin_email,
+                cart_total,
+                shipping,
+                card_id,
+                cc,
+                cart,
+                sweaters,
+                addresses,
+                coupons,
+                raised,
+                tracks,
+                trips,
+                ultimate_trip,
+                ultimate_info
+            }, function (result) {
+                const res = JSON.parse(result)
+                if (res.success) {
+                    alert(res.msg)
+                    // save customer to db if needed
+                    if (Cookies.get('customer_id')) $.post('../../ajax/setCustomerId.php', { admin_id: admin.admin_id })
+                    let items = ['cart', 'addresses', 'coupons', 'raised', 'tracks', 'ultimate_trip']
+                    for (let item of items) {
+                        if (window.localStorage) window.localStorage.removeItem(item)
+                        else Cookies.remove(item)
+                    }
+                    Cookies.remove('myshliach')
+                    location.href = 'http://mashpia.com/mobile'
+                }
+                else {
+                    alert(res.error)
+                    $(".processPayment").attr('disabled', false)
+                }
+                console.log(res)
+            })
+        })
+    </script>
+
+    <script>
+        $(function () {
+            var header = $("header");
+            $(window).scroll(function () {
+                var scroll = $(window).scrollTop();
+
+                if (scroll >= 100) {
+                    header.addClass("header-alt");
+                    console.log('called');
+                } else {
+                    header.removeClass('header-alt');
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
 
