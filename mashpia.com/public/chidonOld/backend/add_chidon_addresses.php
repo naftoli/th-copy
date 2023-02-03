@@ -18,14 +18,12 @@ if (isset($_POST['submit'])) {
                     $first = false;
                     continue;
                 }
-                $price = $data[0];
-                $admin_id = $data[1];
-                $usa = strtolower($data[2]) == 'no' ? 0 : 1;
+                $admin_id = $data[0];
+                $price = $data[1];
                 $sql = "insert ignore into chidon_parent_shipping 
                         set parent_id = $admin_id, 
                         year = $year, 
-                        cost = $price, 
-                        usa = $usa 
+                        cost = $price 
                         on duplicate key update cost = $price";
                 $qrys[] = $sql;
             }

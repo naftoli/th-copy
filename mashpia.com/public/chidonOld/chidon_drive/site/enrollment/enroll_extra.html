@@ -491,22 +491,6 @@
         $("#celebBoxes").hide()
         $("#celebBoxesSoldOut").show()
       }
-      // // check if cart already has info about celeb boxes
-      // let boxes = 0, ship = 0
-      // for (let item of cart) {
-      //     if (item.desc === 'num_celeb_boxes') boxes = parseInt(item.value)
-      //     else if (item.desc === 'celeb_box_ship') ship = parseInt(item.value)
-      // }
-      // if (boxes) {
-      //     $("#num_celeb_boxes").niceSelect('destroy')
-      //     $("#num_celeb_boxes").val(boxes)
-      //     $("#num_celeb_boxes").trigger('change')
-      //     $("#num_celeb_boxes").niceSelect()
-      //     if (ship) {
-      //         $(".celeb_box_ship").eq(1).trigger('click')
-      //     }
-      //     else $(".celeb_box_ship").eq(0).trigger('click')
-      // }
     }
 
     $(".numCelebBoxes").change(function () {

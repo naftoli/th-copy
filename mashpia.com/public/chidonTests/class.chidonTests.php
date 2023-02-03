@@ -496,6 +496,22 @@ class ChidonTests
             }
         }
 
+        // needed avgs
+        $neededAvgs['maven']    = 70;
+        $neededAvgs['pro']      = 70;
+        $neededAvgs['expert']   = 70;
+        $neededAvgs['genius']   = 90;
+
+        // change for some schools
+        $school_id = $child['school_id'];
+        switch ($school_id) {
+            case '5':
+            case '50':
+            case '255':
+                $neededAvgs['expert'] = 80;
+                break;
+        }
+
         // calculate avgs and highest type currently eligible for
         $highest_type = '';
         $highest_mark = 0;
@@ -503,7 +519,7 @@ class ChidonTests
             if ($numTests && ($marksPerType[$type])) {
                 $avg = $marksPerType[$type] / $numTests;
                 $avgs[$type] = $avg;
-                if (($type != 'genius' && $avg >= 70) || ($type == 'genius' && $avg >= 90)) {
+                if ($avg >= $neededAvgs[$type]) {
                     $highest_type = $type;
                     $highest_mark = $avg;
                 }

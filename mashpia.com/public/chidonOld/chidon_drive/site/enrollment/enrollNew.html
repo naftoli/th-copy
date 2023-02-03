@@ -779,6 +779,12 @@
 			return tracks
 		}
 
+		async function getShippingAmount(admin) {
+			let result = await $.post('../../ajax/getShippingAmount.php', { admin })
+			let amount = JSON.parse(result)
+			return amount
+		}
+
 		function checkForUltimate(child) {
 			const base = 5782
 			const year = parseInt(child.year)
@@ -957,7 +963,9 @@
 				// registration
 				let track = ultimate ? 'Ultimate' : child.track
 				amounts = [...trackInfo[track]]
-				html += "<div class='registration' style='display: none;'>";
+				let style = '';
+				if (child.track === 'Havonah' || child.track === 'Iyun') style = 'display: none'
+				html += `<div class='registration' style="${style}">`
 				html += `<h5 class="formDetails"><span class="title">Registration Fee</span><br />`
 				html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
 
@@ -987,22 +995,26 @@
 			// find out if we need to charge for shipping
 			// myshliach = true
 			if (needsShipping) {
-				html += `<div id="shipping_charges" style="display: none;">
-								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-                <div class="flex">
-                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-                  <label>
-                    (FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-                    Sunday 19 Adar: 4-6PM; Monday 20 Adar: 6-9PM; Thursday 23 Adar: 9-11AM.
-                  </label>
-                </div>
-                <div class="flex">
-                  <input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="1" />
-                  <label>
-                    ($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
-                    check to confirm that it has the correct address saved.
-                  </label>
-                </div></div>`
+				let res = await getShippingAmount(admin)
+				if (res.amount && !res.paid) {
+					let shipping_cost = res.amount
+					html += `<div id="shipping_charges" style="display: none;">
+									<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+									<div class="flex">
+										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+										<label>
+											(FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+											Sunday 19 Adar: 4-6PM; Monday 20 Adar: 6-9PM; Thursday 23 Adar: 9-11AM.
+										</label>
+									</div>
+									<div class="flex">
+										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="1" />
+										<label>
+											($${shipping_cost}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+											check to confirm that it has the correct address saved.
+										</label>
+									</div></div>`
+				}
 			}
 
 			$(".login").hide();
@@ -1070,6 +1082,7 @@
 			lowest -= raised + coupon
 
 			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce a further $100
+			alert(idx, child.school_id)
 			if (idx && [61, 269].includes(child.school_id)) {
 				let elem = '#' + user_id
 				let trip = $(elem).find('#regional_trip').val()
@@ -1081,6 +1094,8 @@
 			amounts.sort(function (a, b) {
 				return b - a
 			})
+
+			console.log(amounts)
 
 			createRegDropdown(child, amounts, idx)
 		}
@@ -1115,7 +1130,7 @@
 				$(desc).find('#regional_trip').niceSelect('destroy')
 				$(desc).find('#regional_trip').hide()
 			} else {
-				if ($("#regional_trip").val() == '0') $(desc).find('.registration').hide()
+				if ($(desc).find("#regional_trip").val() == '0') $(desc).find('.registration').hide()
 				$(desc).find('#regional_trip').show()
 				$(desc).find('#regional_trip').niceSelect()
 			}
@@ -1157,9 +1172,9 @@
 		})
 
 		$(document).on('change', '#regional_trip', function () {
-			let user_id, idx, elem
-			if ($(".ultimate_trip").length) {
-				elem = $(this).parent().parent().find('.ultimate_trip')
+			let user_id, idx
+			let elem = $(this).parent().parent().find('.ultimate_trip')
+			if (elem.length) {
 				if (!$(elem).is(":checked")) $(elem).trigger('click')
 				const val = $(elem).val()
 				const info = val.split(':')
