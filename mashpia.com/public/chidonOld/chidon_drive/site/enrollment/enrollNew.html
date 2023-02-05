@@ -1275,7 +1275,7 @@
 						let user_id = info[2]
 						let elem = '#' + user_id
 						let amount = parseInt($(elem).find('.reg').val())
-						if (!amount) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
+						if (! amount >= 0) errors.push(`${users[user_id]} has chosen to go on the regional trip, but you have not selected how much you are paying!`)
 					}
 				})
 			}
@@ -1289,7 +1289,7 @@
 						let user_id = $(this).closest('.kid').attr('id')
 						let elem = '#' + user_id
 						let amount = parseInt($(elem).find('.reg').val())
-						if (!amount) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
+						if (! amount >= 0) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
 					}
 				})
 			}
