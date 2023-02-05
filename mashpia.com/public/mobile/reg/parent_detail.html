@@ -394,7 +394,10 @@
 
                                                     {{#if this.chidon5783}}
                                                     <div class="button-spacing">
-                                                        <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon {{ this.next_year_chidon }}</div>
+                                                        {{#if this.shabbatonPaid}}
+                                                            <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Rewards {{ this.next_year_chidon }}</div>-->
+                                                        {{/if}}
+<!--                                                        <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon {{ this.next_year_chidon }}</div>-->
 <!--                                                        <button class="btn btn-primary re_register"><span>Edit Chidon {{ this.next_year_chidon }} Limmud Enrollment</span></button>-->
                                                     </div>
                                                     {{/if}}
@@ -405,57 +408,6 @@
                                                         </div>
                                                     {{/if}}
 
-<!--                                                    {{#if this.chidonRegistered}}-->
-<!--                                                    <div class="button-spacing">-->
-<!--                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon</span> {{ this.chidon_year }}</div>-->
-<!--                                                        {{#if this.shabbatonPaid}}-->
-<!--                                                             <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredChidon" class="i18n"> Registered for Chidon Rewards</span> {{ this.chidon_year }}</div>-->
-<!--                                                        <div style="margin:10px 0px">-->
-<!--                                                            <button class="btn btn-primary chidonPhoto">Upload Chidon Photo</button>-->
-<!--                                                        </div>-->
-<!--                                                        <div style="margin:10px 0px">-->
-<!--                                                            <button class="btn btn-primary invitation" id="{{ this.user_serial }}">My Siyum Hamitzvos Invite</button>-->
-<!--                                                        </div>-->
-<!--                                                            {{#if this.invite_used}}-->
-<!--                                                            {{else}}-->
-<!--                                                            <div style="margin:10px 0px">-->
-<!--                                                                <button class="btn btn-primary invite_used" id="{{ this.user_serial }}">I shared my Invitation</button>-->
-<!--                                                            </div>-->
-<!--                                                            {{/if}}-->
-<!--                                                            {{else}}-->
-<!--                                                            {{#if this.chidonSchoolConfirmed}}-->
-<!--                                                                {{#if this.track}}-->
-<!--                                                                    <button class="btn btn-primary shabbaton">Register for Chidon Rewards {{ this.chidon_year }}</button><br />-->
-<!--                                                                    <span style="font-size: larger">(Serial #: {{ this.user_serial }})</span>-->
-<!--                                                                {{/if}}-->
-<!--                                                            {{/if}}-->
-<!--                                                        {{/if}}-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                    {{/if}}-->
-                                                    {{#if this.allowRemove}}
-                                                    <a href="#" class="del">
-                                                        <div class="button-spacing">
-                                                            <span class="glyphicon glyphicon-trash"></span>
-                                                            <span class="ln-delete"><b data-key="REMOVE" class="i18n">REMOVE FROM ACCOUNT</b></span>
-                                                        </div>
-                                                    </a>
-                                                    {{/if}}
-
-                                                    {{#if this.showStory}}
-                                                    <div style="margin:10px 0px">
-                                                        <a href="https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit" data-key="RebbeStoryContest_1" class="i18n">Rebbe Story Contest</a>
-                                                    </div>
-                                                    <div style="margin:10px 0px">
-                                                        <button class="btn btn-primary story" data-key="RebbeStoryContest_2" class="i18n">Rebbe Story Contest</button>
-                                                    </div>
-                                                    {{/if}}
-
-<!--                                                    {{#if this.chidon5783}}-->
-<!--                                                        <div style="margin:10px 0px">-->
-<!--                                                            <button class="btn btn-primary reviewCert" id="{{ this.user_serial }}:{{ this.user_id }}">Review Chidon Cert/Plaque</button>-->
-<!--                                                        </div>-->
-<!--                                                    {{/if}}-->
                                                 </div>
                                             </td>
                                         </tr>
