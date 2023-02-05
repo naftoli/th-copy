@@ -552,13 +552,13 @@
             evt.preventDefault()
             $(".processPayment").attr('disabled', true)
 
-            if (cart_total && !$(".payment:checked").length) {
+            if ((cart_total || shipping) && !$(".payment:checked").length) {
                 alert('You must indicate how your are going to pay!')
                 $(".processPayment").attr('disabled', false)
                 return false
             }
 
-            if (cart_total) {
+            if (cart_total || shipping) {
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val())
                     // check if cvc is correct
