@@ -917,34 +917,30 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-
 						// add few options for anash kinder only
 						if (parseInt(child.school_id) === 269) {
 							text += `<option value="atlanta">Atlanta</option>
 											<option value="houston">Houston</option>
 											<option value="seattle">Seattle</option>`
 						}
-
 						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
 						text += `<option value="no_trip">No Trip</option></select>`
 					}
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 					html += `<div class="flex">
-                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' />
-                            <h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250)<br />
-                                I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
-                                Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
-                            </h5>
-                        </div>
-                        <div class="flex">
-                            <input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='1:${child.user_id}' />
-                            <h5 class="formDetails"><b>Regional Trip</b> ($200) <br />
-                            	${text}
-														</h5>
-                        </div>
-                        <br />
-<!--                        <h5 class="formDetails"><span class="title ultimate_title">Ultimate Chidon Experience Payment</span></h5>-->
-`
+											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' />
+											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250)<br />
+													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
+													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
+											</h5>
+									</div>
+									<div class="flex">
+											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='1:${child.user_id}' />
+											<h5 class="formDetails"><b>Regional Trip</b> ($200) <br />
+												${text}
+											</h5>
+									</div>
+									<br />yes`
 				} else if (child.track === 'Havonah' || child.track === 'Iyun') {
 					let text = 'You will be joining your school\'s Regional Trip. Speak to your schools coordinator with regards to any questions you have about your region\'s trip.'
 					if (myshliach) {
@@ -955,19 +951,16 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-
 						// add few options for anash kinder only
 						if (parseInt(child.school_id) === 269) {
 							text += `<option value="atlanta">Atlanta</option>
 											<option value="houston">Houston</option>
 											<option value="seattle">Seattle</option>`
 						}
-
 						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
 						text += `<option value="no_trip">No Trip</option>
 						</select>`
 					}
-
 					let style = ''
 					if (ultimate) style = 'display: none'
 					html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
