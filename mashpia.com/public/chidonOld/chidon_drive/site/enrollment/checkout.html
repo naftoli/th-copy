@@ -530,7 +530,7 @@
 
         $(".personalInfo").append(html)
 
-        if (reg.length && cart_total === 0) {
+        if (reg.length && cart_total === 0 && shipping === 0) {
             $("#paymentDetails").hide()
             $(".processPayment").val('Register')
         }
