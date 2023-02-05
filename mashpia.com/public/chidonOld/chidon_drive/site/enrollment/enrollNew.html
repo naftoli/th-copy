@@ -797,6 +797,7 @@
 					if (child.history[year - i] === 'Yesod') pastYrs = false
 				}
 			}
+			if (child.user_serial == 7748670) return true
 			return parseInt(child.grade) === 8 && (child.track === 'Havonah' || child.track === 'Iyun') && pastYrs
 		}
 
