@@ -512,7 +512,7 @@
             cart_total += sweater_cost
         }
         html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
-        html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total}</span></h5>`
+        html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total + shipping}</span></h5>`
 
         // payment
         html += `
