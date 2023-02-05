@@ -963,6 +963,8 @@
 											</div>`
 					}
 					html += '</div>'
+				} else {
+
 				}
 
 				// registration
@@ -1033,8 +1035,8 @@
 				let myshliach = [61, 269].includes(parseInt(child.school_id))
 				// if myshliach show trip options
 				if (myshliach) calculateReg(1, child.user_id)
-				// if on yediah track, there's nothing to select so we need to trigger the registration options
-				else if (child.track == 'Yediah') {
+				// if on yesod / yediah track, there's nothing to select so we need to trigger the registration options
+				else if (child.track === 'Yediah' || child.track === 'Yesod') {
 					calculateReg(1, child.user_id)
 					let elem = '#' + child.user_id
 					$(elem).find('.registration').show()
