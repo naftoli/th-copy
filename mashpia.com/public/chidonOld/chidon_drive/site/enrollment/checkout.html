@@ -360,6 +360,8 @@
         var cart_total = 0
         var addresses = {} // all addresses entered
         var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
+        var cc = {}
+        var card_id = 0
 
         $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function (result) {
             admin = JSON.parse(result)
@@ -556,8 +558,6 @@
                 return false
             }
 
-            let cc = {}
-            let card_id = 0
             if (cart_total) {
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val())
