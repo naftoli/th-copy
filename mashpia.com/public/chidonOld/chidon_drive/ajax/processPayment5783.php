@@ -102,24 +102,23 @@ function processCart() {
 
     $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
 
-    foreach ($cart as $item) {
-        if (strpos($item['desc'], 'reg') !== false) {
-            $regInfo = explode('_', $item['desc']);
-            $user_id = $regInfo[1];
-            $users[$user_id] = floatval($item['value']);
-            $reg_cost .= $users[$user_id];
-        } else if ($item['desc'] == 'num_celeb_boxes') {
-            $celebBoxes = intval($item['value']);
-        } else if ($item['desc'] == 'celeb_box_ship') {
-            $celebBoxShipping = intval($item['value']);
-        } else if (in_array($item['desc'], $sweater_types)) {
-            $sweaters[$item['desc']] = intval($item['value']);
-        } else if ($item['desc'] == 'names' && $item['value']) {
-            $user_info = $item['value'];
+    if ($cart) {
+        foreach ($cart as $item) {
+            if (strpos($item['desc'], 'reg') !== false) {
+                $regInfo = explode('_', $item['desc']);
+                $user_id = $regInfo[1];
+                $users[$user_id] = floatval($item['value']);
+                $reg_cost .= $users[$user_id];
+            } else if ($item['desc'] == 'num_celeb_boxes') {
+                $celebBoxes = intval($item['value']);
+            } else if ($item['desc'] == 'celeb_box_ship') {
+                $celebBoxShipping = intval($item['value']);
+            } else if (in_array($item['desc'], $sweater_types)) {
+                $sweaters[$item['desc']] = intval($item['value']);
+            } else if ($item['desc'] == 'names' && $item['value']) {
+                $user_info = $item['value'];
+            }
         }
-//        else if ($item['desc'] == 'iyun' && intval($item['value'])) {
-//            $iyun = true;
-//        }
     }
 }
 
@@ -127,18 +126,20 @@ function setSweaterInfo() {
     global $cart, $sweaters, $sweater_info, $sweater_shipping;
 
     // find out size and shipping info for sweaters purchased
-    foreach ($sweaters as $sweater) {
-        $type = $sweater['type'];
-        $num = $sweater['amount'];
-        for ($i = 1; $i <= $num; $i++) {
-            $size = $type . '_' . $i . '_size';
-            $ship = $type . '_' . $i . '_ship';
-            foreach ($cart as $item) {
-                if ($item['desc'] == $size) {
-                    $sweater_info[$type][$i]['size'] = $item['value'];
-                } else if ($item['desc'] == $ship) {
-                    $sweater_info[$type][$i]['ship'] = $item['value'];
-                    $sweater_shipping += intval($item['value']);
+    if ($sweaters) {
+        foreach ($sweaters as $sweater) {
+            $type = $sweater['type'];
+            $num = $sweater['amount'];
+            for ($i = 1; $i <= $num; $i++) {
+                $size = $type . '_' . $i . '_size';
+                $ship = $type . '_' . $i . '_ship';
+                foreach ($cart as $item) {
+                    if ($item['desc'] == $size) {
+                        $sweater_info[$type][$i]['size'] = $item['value'];
+                    } else if ($item['desc'] == $ship) {
+                        $sweater_info[$type][$i]['ship'] = $item['value'];
+                        $sweater_shipping += intval($item['value']);
+                    }
                 }
             }
         }
@@ -297,39 +298,41 @@ function processSweaters() {
 
     // update db
     $success = true;
-    foreach ($sweaters as $sweater) {
-        $type = $sweater['type'];
-        $typeInfo = explode('_', $type);
-        foreach ($sweater_info[$type] as $idx => $details) {
-            $res = $sqlSweater->execute([
-                ':year'     => $year,
-                ':size'     => $details['size'],
-                ':type'     => $typeInfo[0],
-                ':admin'    => $admin_id,
-                ':shipping' => $details['ship']
-            ]);
-            if (!$res) {
-                $success = false;
-                break 2;
-            } else if (intval($details['ship'])) {
-                $purchase_id = $MASHPIA_DB->lastInsertId();
-                $key = $type . '_' . $idx;
-                $addressInfo = isset($addresses[$key]) ? $addresses[$key] : false;
-                if (!$addressInfo) {
+    if ($sweaters) {
+        foreach ($sweaters as $sweater) {
+            $type = $sweater['type'];
+            $typeInfo = explode('_', $type);
+            foreach ($sweater_info[$type] as $idx => $details) {
+                $res = $sqlSweater->execute([
+                    ':year' => $year,
+                    ':size' => $details['size'],
+                    ':type' => $typeInfo[0],
+                    ':admin' => $admin_id,
+                    ':shipping' => $details['ship']
+                ]);
+                if (!$res) {
                     $success = false;
                     break 2;
-                } else {
-                    $res2 = $sqlAddress->execute([
-                        ':purchase_id'  => $purchase_id,
-                        ':address'      => $addressInfo['address'],
-                        ':city'         => $addressInfo['city'],
-                        ':state'        => $addressInfo['state'],
-                        ':zip'          => $addressInfo['zip'],
-                        ':country'      => 'USA'
-                    ]);
-                    if (!$res2) {
+                } else if (intval($details['ship'])) {
+                    $purchase_id = $MASHPIA_DB->lastInsertId();
+                    $key = $type . '_' . $idx;
+                    $addressInfo = isset($addresses[$key]) ? $addresses[$key] : false;
+                    if (!$addressInfo) {
                         $success = false;
                         break 2;
+                    } else {
+                        $res2 = $sqlAddress->execute([
+                            ':purchase_id' => $purchase_id,
+                            ':address' => $addressInfo['address'],
+                            ':city' => $addressInfo['city'],
+                            ':state' => $addressInfo['state'],
+                            ':zip' => $addressInfo['zip'],
+                            ':country' => 'USA'
+                        ]);
+                        if (!$res2) {
+                            $success = false;
+                            break 2;
+                        }
                     }
                 }
             }
@@ -355,8 +358,10 @@ function redeemCoupons() {
     global $coupon;
     $serials = getSerials();
     // redeem coupons
-    foreach ($serials as $user_serial) {
-        if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+    if ($serials) {
+        foreach ($serials as $user_serial) {
+            if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+        }
     }
 }
 
@@ -364,13 +369,15 @@ function saveTripInfo() {
     global $sqlTrip, $trips;
 
     $success = true;
-    foreach ($trips as $trip) {
-        if (! $sqlTrip->execute([
-            'trip'  => $trip->trip,
-            'user'  => $trip->user_id
-        ])) {
-            $success = false;
-            break;
+    if ($trips) {
+        foreach ($trips as $trip) {
+            if (!$sqlTrip->execute([
+                'trip' => $trip->trip,
+                'user' => $trip->user_id
+            ])) {
+                $success = false;
+                break;
+            }
         }
     }
     return $success;
