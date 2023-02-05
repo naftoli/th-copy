@@ -458,7 +458,7 @@
     getSweaterInfo()
 
     function resetCart() {
-      cart = cart.filter(item => item.desc.includes('reg') || item.desc === 'names')
+      if (cart.length) cart = cart.filter(item => item.desc.includes('reg') || item.desc === 'names')
     }
 
     function getSweaterInfo() {
