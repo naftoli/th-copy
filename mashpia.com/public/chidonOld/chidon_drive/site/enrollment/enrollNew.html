@@ -947,12 +947,19 @@
 							<option value="0">Please select which trip you will be joining</option>
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
-						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
-						// add few options for anash kinder only
 
+						// add few options for anash kinder only
+						if (parseInt(child.school_id) === 269) {
+							text += `<option value="atlanta">Atlanta</option>
+											<option value="houston">Houston</option>
+											<option value="seattle">Seattle</option>`
+						}
+
+						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
 						text += `<option value="no_trip">No Trip</option>
 						</select>`
 					}
+
 					let style = ''
 					if (ultimate) style = 'display: none'
 					html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
@@ -966,8 +973,6 @@
 											</div>`
 					}
 					html += '</div>'
-				} else {
-
 				}
 
 				// registration
