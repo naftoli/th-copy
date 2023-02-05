@@ -802,7 +802,7 @@
 				}
 			}
 			if (child.user_serial == 7748670) return true
-			return parseInt(child.grade) === 8 && ['Havonah', 'Iyun'].includes(child.track) && pastYrs
+			return parseInt(child.grade) === 8 && ['Havonah', 'Iyun'].includes(child.track) && child.history && pastYrs
 		}
 
 		function getTrackText(track, ultimate) {
