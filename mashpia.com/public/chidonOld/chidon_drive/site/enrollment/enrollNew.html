@@ -801,7 +801,7 @@
 					}
 				}
 			}
-			if (child.user_serial == 7748670) return true
+			if ([7748670, 7755774].includes(child.user_serial)) return true
 			return parseInt(child.grade) === 8 && ['Havonah', 'Iyun'].includes(child.track) && child.history && pastYrs
 		}
 
