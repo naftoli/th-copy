@@ -515,32 +515,28 @@
         html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total}</span></h5>`
 
         // payment
-        html += `<h5 class="formDetails" id="paymentDetails"><span class="title">Payment</span></h5>`
         html += `
-        <div class="flex">
-            <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
-            <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
-            <span id="creditCards"></span>
-<!--            <input type='text' id='cvc' placeholder='CVC' style="width: 50px;" />-->
-        </div>
-        <div class="flex">
-            <input type="radio" name="payment" class="inputCheckbox payment" value="1" />
-            <label for="payment" style="display: inline">I will enter a new card (will be added to your profile for future use)</label>
-        </div>
-    `
+            <div id="paymentDetails"><h5 class="formDetails"><span class="title">Payment</span></h5>
+                <div class="flex">
+                    <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
+                    <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
+                    <span id="creditCards"></span>
+                </div>
+                <div class="flex">
+                    <input type="radio" name="payment" class="inputCheckbox payment" value="1" />
+                    <label for="payment" style="display: inline">I will enter a new card (will be added to your profile for future use)</label>
+                </div>
+            </div>`
+
         $(".personalInfo").append(html)
 
-        if (reg.length && cart_total === 0) $(".processPayment").val('Register')
+        if (reg.length && cart_total === 0) {
+            $("#paymentDetails").hide()
+            $(".processPayment").val('Register')
+        }
         else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
         else if (cart_total > 0) $(".processPayment").val('Pay')
         else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
-
-        // hide payment option if nothing is being charged
-        // if (cart_total === 0) {
-        //     $("#paymentDetails").next('div').next('div').hide()
-        //     $("#paymentDetails").next('div').hide()
-        //     $("#paymentDetails").hide()
-        // }
 
         $(".payment").click(function () {
             if (parseInt($(this).val())) {
