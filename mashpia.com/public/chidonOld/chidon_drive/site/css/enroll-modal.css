@@ -3,6 +3,10 @@ div.modal-dialog {
     margin: auto;
 }
 
+div.flex1.small {
+    max-width: 320px;
+}
+
 @media (max-width: 900px) {
     div.modal-dialog {
         max-width: 94%;
@@ -11,12 +15,21 @@ div.modal-dialog {
     div.wrapper div.form {
         box-sizing: border-box !important;
     }
+
+    div.flex1.small {
+        max-width: none;
+    }
+
+    div.modal-dialog div.wrap {
+        flex-wrap: wrap !important;
+    }
+
 }
 
 div.modal-dialog div.flex {
     align-items: center;
     margin-bottom: 5px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 div.modal-dialog div.flex>label {
@@ -86,7 +99,7 @@ p.modal-notice {
 
 div.modal-dialog textarea {
     background-color: #fff !important;
-    border: 1px solid #ebebeb !important;
+    border: 1px solid #a5a5a5 !important;
     border-radius: 5px;
     padding: 10px 15px;
     width: 100% !important;
@@ -94,7 +107,7 @@ div.modal-dialog textarea {
 }
 
 div.modal-dialog input {
-    border: 1px solid #ebebeb !important;
+    border: 1px solid #a5a5a5 !important;
     color: black;
     width: 100%;
 }
