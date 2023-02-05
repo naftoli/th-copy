@@ -576,6 +576,7 @@
 
 		// get streets for dropdown
 		$.post('../../ajax/getStreets.php', function (result) {
+			$('select#acc_street').niceSelect('destroy');
 			let data = JSON.parse(result);
 			let html = '<option>Choose One</option>';
 			for (s in data.streets) {
@@ -583,7 +584,7 @@
 			}
 			// html += "<option>East Flatbush (out of the walking zone)</option>";
 			$("#acc_street").append(html);
-			$('select#acc_street').niceSelect('update');
+			$('select#acc_street').niceSelect();
 		});
 
 		$("#acc_street_num").blur(function () {
@@ -944,6 +945,8 @@
 							<option value="ny">New York</option>
 							<option value="west">West Coast</option>`
 						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
+						// add few options for anash kinder only
+
 						text += `<option value="no_trip">No Trip</option>
 						</select>`
 					}
