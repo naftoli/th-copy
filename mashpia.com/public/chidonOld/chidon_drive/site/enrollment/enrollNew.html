@@ -1107,7 +1107,7 @@
 			let html = `<h5 class="formDetails">You can register for ${free ? 'FREE' : 'as little as $' + lowest}!<br /><br />`
 			html += `Please pay as much as you can.<br />`
 			html += `<select name="reg_${child.user_id}" class="reg" id="reg_${child.user_id}">`
-			html += `<option value="">I would like to pay</option>`
+			html += `<option value="-1">I would like to pay</option>`
 			let last = amounts.length - 1
 			for (let i = 0; i <= last; i++) {
 				html += `<option value='${amounts[i]}'>$${amounts[i]}</option>`
@@ -1261,7 +1261,7 @@
 						}
 						// make sure there's a reg amount chosen
 						let amount = parseInt($(elem).find(".reg").val())
-						if (!amount) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
+						if (! amount >= 0) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
 					}
 				})
 			}
