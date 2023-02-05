@@ -411,7 +411,7 @@ function saveUltimateTripInfo() {
     ");
 
     $success = true;
-    if (count($ultimate_trip)) {
+    if ($ultimate_trip) {
         foreach ($ultimate_trip as $user_id) {
             $info = $ultimate_info[$user_id];
             $acc = $info->accomodation;
