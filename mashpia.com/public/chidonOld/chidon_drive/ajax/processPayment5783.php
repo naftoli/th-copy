@@ -102,7 +102,7 @@ function processCart() {
 
     $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
 
-    if ($cart) {
+    if ($cart && count($cart)) {
         foreach ($cart as $item) {
             if (strpos($item['desc'], 'reg') !== false) {
                 $regInfo = explode('_', $item['desc']);
@@ -126,7 +126,7 @@ function setSweaterInfo() {
     global $cart, $sweaters, $sweater_info, $sweater_shipping;
 
     // find out size and shipping info for sweaters purchased
-    if ($sweaters) {
+    if ($sweaters && count($sweaters)) {
         foreach ($sweaters as $sweater) {
             $type = $sweater['type'];
             $num = $sweater['amount'];
@@ -298,7 +298,7 @@ function processSweaters() {
 
     // update db
     $success = true;
-    if ($sweaters) {
+    if ($sweaters && count($sweaters)) {
         foreach ($sweaters as $sweater) {
             $type = $sweater['type'];
             $typeInfo = explode('_', $type);
@@ -358,7 +358,7 @@ function redeemCoupons() {
     global $coupon;
     $serials = getSerials();
     // redeem coupons
-    if ($serials) {
+    if ($serials && count($serials)) {
         foreach ($serials as $user_serial) {
             if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
         }
@@ -369,7 +369,7 @@ function saveTripInfo() {
     global $sqlTrip, $trips;
 
     $success = true;
-    if ($trips) {
+    if ($trips && count($trips)) {
         foreach ($trips as $trip) {
             if (!$sqlTrip->execute([
                 'trip' => $trip->trip,
@@ -411,33 +411,35 @@ function saveUltimateTripInfo() {
     ");
 
     $success = true;
-    if ($ultimate_trip) {
+    if ($ultimate_trip && count($ultimate_trip)) {
         foreach ($ultimate_trip as $user_id) {
-            $info = $ultimate_info[$user_id];
-            $acc = $info->accomodation;
-            $res = $stmt->execute([
-                'family' => $acc->family,
-                'phone' => $acc->phone,
-                'street' => $acc->street,
-                'street_num' => $acc->number,
-                'suffix' => $acc->suffix,
-                'apt' => $acc->apt,
-                'in_zone' => $info->in_zone,
-                'between1' => $acc->between1,
-                'between2' => $acc->between2,
-                'allergies' => $info->allergies,
-                'sandwich' => $info->sandwich,
-                'zone' => $acc->zone,
-                'shoe' => $info->shoe,
-                'walk_alone' => $info->walk_alone,
-                'chidon_answer' => $info->chidon_answer,
-                'user'  => $user_id,
-                'year'  => $year
-            ]);
-            if (!$res) {
-                $stmt->debugDumpParams();
-                $success = false;
-                break;
+            if (isset($ultimate_info[$user_id])) {
+                $info = $ultimate_info[$user_id];
+                $acc = $info->accomodation;
+                $res = $stmt->execute([
+                    'family' => $acc->family,
+                    'phone' => $acc->phone,
+                    'street' => $acc->street,
+                    'street_num' => $acc->number,
+                    'suffix' => $acc->suffix,
+                    'apt' => $acc->apt,
+                    'in_zone' => $info->in_zone,
+                    'between1' => $acc->between1,
+                    'between2' => $acc->between2,
+                    'allergies' => $info->allergies,
+                    'sandwich' => $info->sandwich,
+                    'zone' => $acc->zone,
+                    'shoe' => $info->shoe,
+                    'walk_alone' => $info->walk_alone,
+                    'chidon_answer' => $info->chidon_answer,
+                    'user' => $user_id,
+                    'year' => $year
+                ]);
+                if (!$res) {
+                    $stmt->debugDumpParams();
+                    $success = false;
+                    break;
+                }
             }
         }
     }
