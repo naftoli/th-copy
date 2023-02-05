@@ -362,6 +362,7 @@
         var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
         var cc = {}
         var card_id = 0
+        var shipping = 0
 
         $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function (result) {
             admin = JSON.parse(result)
@@ -395,7 +396,7 @@
             addresses = JSON.parse(window.localStorage.getItem('addresses'))
             coupons = window.localStorage.getItem('coupons')
             raised = window.localStorage.getItem('raised')
-            shipping = parseInt(window.localStorage.getItem('shipping'))
+            if (window.localStorage.getItem('shipping')) shipping = parseInt(window.localStorage.getItem('shipping'))
             trips = window.localStorage.getItem('trips')
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
             ultimate_info = window.localStorage.getItem('ultimate_info')
@@ -404,7 +405,7 @@
             addresses = JSON.parse(Cookies.get('addresses'))
             coupons = Cookies.get('coupons')
             raised = Cookies.get('raised')
-            shipping = parseInt(Cookies.get('shipping'))
+            if (Cookies.get('shipping')) shipping = parseInt(Cookies.get('shipping'))
             trips = Cookies.get('trips')
             ultimate_trip = Cookies.get('ultimate_trip')
             ultimate_info = Cookies.get('ultimate_info')
