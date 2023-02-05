@@ -795,7 +795,7 @@
 			// check history
 			if (checkYrs) {
 				for (let i = 1; i <= checkYrs; i++) {
-					if (child.history[year - i] === 'Yesod') pastYrs = false
+					if (!child.history || !child.history[year-i] || child.history[year-i] === 'Yesod') pastYrs = false
 				}
 			}
 			if (child.user_serial == 7748670) return true
