@@ -534,7 +534,7 @@
             $("#paymentDetails").hide()
             $(".processPayment").val('Register')
         }
-        else if (reg.length && cart_total > 0) $(".processPayment").val('Pay & Register')
+        else if (reg.length) $(".processPayment").val('Pay & Register')
         else if (cart_total > 0) $(".processPayment").val('Pay')
         else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
 
