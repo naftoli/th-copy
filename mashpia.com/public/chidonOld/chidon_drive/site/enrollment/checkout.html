@@ -607,7 +607,7 @@
                     alert(res.msg)
                     // save customer to db if needed
                     if (Cookies.get('customer_id')) $.post('../../ajax/setCustomerId.php', { admin_id: admin.admin_id })
-                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping']
+                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks']
                     for (let item of items) {
                         if (window.localStorage) window.localStorage.removeItem(item)
                         else Cookies.remove(item)
