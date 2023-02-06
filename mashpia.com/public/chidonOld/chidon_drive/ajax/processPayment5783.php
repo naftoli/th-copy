@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -227,19 +227,20 @@ function getDescForAuthorize() {
 function processReg() {
     global $admin_id, $year, $sqlReg, $users;
 
-    if (! $users) return false; // need to be registering at least one child
     // register users
     $success = true;
-    foreach ($users as $user_id => $amount) {
-        $res = $sqlReg->execute([
-            ':paid' => $amount,
-            ':admin' => $admin_id,
-            ':year' => $year,
-            ':user' => $user_id
-        ]);
-        if (!$res) {
-            $success = false;
-            break;
+    if ($users && count($users)) {
+        foreach ($users as $user_id => $amount) {
+            $res = $sqlReg->execute([
+                ':paid' => $amount,
+                ':admin' => $admin_id,
+                ':year' => $year,
+                ':user' => $user_id
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
+            }
         }
     }
     return $success;
@@ -355,12 +356,15 @@ function getSerials() {
 }
 
 function redeemCoupons() {
-    global $coupon;
-    $serials = getSerials();
-    // redeem coupons
-    if ($serials && count($serials)) {
-        foreach ($serials as $user_serial) {
-            if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+    global $coupon, $users;
+
+    if ($users && count($users)) {
+        $serials = getSerials();
+        // redeem coupons
+        if ($serials && count($serials)) {
+            foreach ($serials as $user_serial) {
+                if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+            }
         }
     }
 }

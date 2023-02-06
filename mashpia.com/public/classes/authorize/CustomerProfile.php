@@ -275,25 +275,17 @@ class CustomerProfile {
         //set the data to the api post and execute it
         $this->api->setPostData($api_array);
         $api_data = $this->api->execute();
-        // print the refId for now
-        //echo "refId: " . $api_data['refId'] . "\n";
-        // handle errors:
-        if ($api_data['messages']['resultCode'] == Constants::RESPONSE_OK) {
-            //print_r($api_data['transactionResponse']); // TODO save data in transactions table?
-            if ($api_data['transactionResponse']['responseCode'] != "1") {
-                
-                $errors = $api_data['transactionResponse']['errors'][0];
-                return "Error(". $errors["errorCode"] . "): " . $errors["errorText"];
 
-            } else {
-                return $api_data;
-            }
-        } else {
+        if ($api_data['transactionResponse']['errors']) {
+            $error = $api_data['transactionResponse']['errors'][0];
+            return "Error(" . $error['errorCode'] . "): " . $error['errorText'];
+        } else if ($api_data['messages']['resultCode'] != Constants::RESPONSE_OK) {
             $status = $api_data['messages']['resultCode'];
             $code = $api_data['messages']['message'][0]['code'];
             $text = $api_data['messages']['message'][0]['text'];
-            
             return "$status ($code): $text";
+        } else {
+            return $api_data;
         }
     }
 }
