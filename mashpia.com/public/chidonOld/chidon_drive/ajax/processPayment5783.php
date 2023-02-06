@@ -178,7 +178,6 @@ function processFee() {
         if (is_object($payment)) {
             $payment_id = $payment->customerPaymentProfileId;
             $customer_profile_id = $payment->customerProfileId;
-            setcookie('customer_id', $customer_profile_id, 0, '/');
             if ($payment_id && $customer_profile_id) {
                 $cp = new Customer($customer_profile_id);
                 $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);

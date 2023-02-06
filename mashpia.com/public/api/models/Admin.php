@@ -262,29 +262,23 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
             );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
-                "cth_admin_".$this->admin_id, $this->admin_email, $this->name(), $payment_profile
+                "cth_admin_" . $this->admin_id, $this->admin_email, $this->name(), $payment_profile
             );
+
             // handle errors
-            if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )
+            if (!$this->customer_profile instanceof classes\authorize\CustomerProfile)
                 return $this->customer_profile["message"];
             // save the valid information
-//            $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
-//            $this->save();
-            // return a new PaymentProfile instance
-            return new classes\authorize\PaymentProfile(
-                $this->customer_profile->paymentProfiles[0]['customerPaymentProfileId'],
-                $this->customer_profile->customerProfileId
-            );
-        // if we do have a customer profile
-        } else {
-            $payment_profile = classes\authorize\PaymentProfile::create(
-                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
-                $this->authorize_customer_profile_id
-            );
-            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                return $payment_profile['messages']['message'][0]['text'];
-            return $payment_profile;
+            $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
+            $this->save();
         }
+        $payment_profile = classes\authorize\PaymentProfile::create(
+            $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
+            $this->authorize_customer_profile_id
+        );
+        if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+            return $payment_profile['messages']['message'][0]['text'];
+        return $payment_profile;
     }
 
     //*********************************************************************************/
