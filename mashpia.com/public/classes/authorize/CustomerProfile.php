@@ -276,7 +276,7 @@ class CustomerProfile {
         $this->api->setPostData($api_array);
         $api_data = $this->api->execute();
 
-        if ($api_data['transactionResponse']['errors']) {
+        if (isset($api_data['transactionResponse']['errors'])) {
             $error = $api_data['transactionResponse']['errors'][0];
             return "Error(" . $error['errorCode'] . "): " . $error['errorText'];
         } else if ($api_data['messages']['resultCode'] != Constants::RESPONSE_OK) {
