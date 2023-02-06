@@ -540,7 +540,6 @@ $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
 $tripsSaved = saveTripInfo();
-redeemCoupons();
 $ultimate = saveUltimateTripInfo();
 
 $info = [];
@@ -559,6 +558,8 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             $trans_id = $payment['transactionResponse']['transId'];
             // payment went through so commit to db
             $MASHPIA_DB->commit();
+            // redeem coupons
+            redeemCoupons();
             $info['success'] = true;
             $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                 'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
