@@ -33,7 +33,7 @@ foreach ($schools as $school_id => $name) {
     }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
-$tracks = ['none', 'yesod', 'yediah', 'havonah', 'iyun'];
+$tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 $totals = [];
 $registered = [];
 ?>
@@ -52,7 +52,7 @@ $registered = [];
         .rightBorder {
             border-right: 1px solid black;
         }
-        #totals > tr, th, td {
+        #totals tr, th, td {
             border: 1px solid grey;
         }
     </style>
@@ -123,12 +123,13 @@ $registered = [];
                 "</td></tr>";
 
             // Totals
-            $highestTrack = strtolower($highestTrack);
-            if (isset($totals[$row['school_id']][$highestTrack])) $totals[$row['school_id']][$highestTrack]++;
-            else $totals[$row['school_id']][$highestTrack] = 1;
-            if ($row['date_paid']) {
-              if (isset($registered[$row['school_id']][$highestTrack])) $registered[$row['school_id']][$highestTrack]++;
-              else $registered[$row['school_id']][$highestTrack] = 1;
+            if (empty($track)) continue;
+            $track = strtolower($track);
+            if (isset($totals[$row['school_id']][$track])) $totals[$row['school_id']][$track]++;
+            else $totals[$row['school_id']][$track] = 1;
+            if ($row['date_paid'] > 0) {
+              if (isset($registered[$row['school_id']][$track])) $registered[$row['school_id']][$track]++;
+              else $registered[$row['school_id']][$track] = 1;
             }
         }
         ?>
@@ -136,8 +137,8 @@ $registered = [];
     <?php
     if ($admin_user['auth'] == 'super') {
         echo "<p></p>";
-        echo "<table id='totals'>";
-        echo "<tr><th class='rightBorder'>School</th>";
+        echo "<div id='totals'>";
+        echo "<table><tr><th class='rightBorder'>School</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Eligible</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Registered</th>";
         echo "</tr>";
@@ -149,7 +150,7 @@ $registered = [];
             }
             echo "</tr>";
         }
-        echo "</table>";
+        echo "</table></div>";
     }
     ?>
 </body>
