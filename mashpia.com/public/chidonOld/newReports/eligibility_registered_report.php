@@ -49,6 +49,12 @@ $registered = [];
             font-size: 12px;
             border-bottom: 1px solid grey;
         }
+        .rightBorder {
+            border-right: 1px solid black;
+        }
+        #totals tr, th, td {
+            border: 1px solid grey;
+        }
     </style>
 </head>
 <body>
@@ -129,13 +135,13 @@ $registered = [];
     </table>
     <?php
     if ($admin_user['auth'] == 'super') {
-        echo "<hr /><table>";
-        echo "<tr><th>School</th>";
+        echo "<hr /><table id='totals'>";
+        echo "<tr><th class='rightBorder'>School</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Eligible</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Registered</th>";
         echo "</tr>";
         foreach ($schools as $school_id => $name) {
-            echo "<tr><td>" . $schools[$school_id] . "</td>";
+            echo "<tr><td class='rightBorder'>" . $schools[$school_id] . "</td>";
             foreach ($tracks as $track) {
                 echo "<td>" . $totals[$school_id][$track] . "</td>";
                 echo "<td>" . $registered[$school_id][$track] . "</td>";
