@@ -185,7 +185,7 @@ $registered = [];
         echo "<th>" . $grandTotals['eligible'] . "</th>";
         foreach ($tracks as $track) echo "<th>" . $eligibleTotals[$track] . "</th>";
         echo "<th class='leftBorder'>" . $grandTotals['registered'] . "</th>";
-        foreach ($tracks as $track) echo "<th>" . $registeredTotals[$tracks] . "</th>";
+        foreach ($tracks as $track) echo "<th>" . $registeredTotals[$track] . "</th>";
         echo "</tr>";
         echo "</table></div>";
     }
