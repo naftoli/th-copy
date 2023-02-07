@@ -126,29 +126,31 @@ $registered = [];
               else $registered[$row['school_id']][$track] = 1;
             }
         }
-        if ($admin_user['auth'] == 'super') {
-            echo "<hr /><table>";
-            echo "<tr><th>School</th>";
-            foreach ($totals as $school_id => $more) {
-                foreach (['Eligible', 'Registered'] as $type) {
-                    foreach ($more as $track => $amount) {
-                        echo "<th>" . ucwords($track) . " " . ucwords($type) . "</th>";
-                    }
-                }
-            }
-            echo "</tr>";
-            foreach ($schools as $school_id => $name) {
-                echo "<tr><td>" . $schools[$school_id] . "</td>";
-                foreach ($tracks as $track) {
-                    echo "<td>" . $totals[$school_id][$track] . "</td>";
-                    echo "<td>" . $registered[$school_id][$track] . "</td>";
-                }
-                echo "</tr>";
-            }
-            echo "</table>";
-        }
         ?>
     </table>
+    <?php
+    if ($admin_user['auth'] == 'super') {
+        echo "<hr /><table>";
+        echo "<tr><th>School</th>";
+        foreach ($totals as $school_id => $more) {
+            foreach (['Eligible', 'Registered'] as $type) {
+                foreach ($more as $track => $amount) {
+                    echo "<th>" . ucwords($track) . " " . ucwords($type) . "</th>";
+                }
+            }
+        }
+        echo "</tr>";
+        foreach ($schools as $school_id => $name) {
+            echo "<tr><td>" . $schools[$school_id] . "</td>";
+            foreach ($tracks as $track) {
+                echo "<td>" . $totals[$school_id][$track] . "</td>";
+                echo "<td>" . $registered[$school_id][$track] . "</td>";
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+    ?>
 </body>
 <script>
   let year = <?= $year ?>;
