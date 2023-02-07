@@ -166,6 +166,8 @@ $registered = [];
             $grandTotals['eligible'] += $total['eligible'];
             $grandTotals['registered'] += $total['registered'];
 
+            if ($total['eligible'] == 0) continue;
+
             echo "<tr><td class='rightBorder'>" . $schools[$school_id] . "</td>";
             echo "<td>" . $total['eligible'] . "</td>";
             foreach ($tracks as $track) {
