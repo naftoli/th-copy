@@ -147,6 +147,7 @@ $registered = [];
             foreach ($tracks as $track) {
                 echo "<td>" . $totals[$school_id][$track] . "</td>";
                 echo "<td>" . $registered[$school_id][$track] . "</td>";
+
             }
             echo "</tr>";
         }
