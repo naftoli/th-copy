@@ -33,6 +33,7 @@ foreach ($schools as $school_id => $name) {
     }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
+$tracks = [];
 $totals = [];
 $registered = [];
 ?>
@@ -117,6 +118,7 @@ $registered = [];
 
             // Totals
             if ($track == '') $track = 'no track';
+            if (! in_array($track, $tracks)) $tracks[] = $track;
             if (isset($totals[$row['school_id']][$track])) $totals[$row['school_id']][$track]++;
             else $totals[$row['school_id']][$track] = 1;
             if ($row['date_paid']) {
@@ -137,15 +139,9 @@ $registered = [];
             echo "</tr>";
             foreach ($schools as $school_id => $name) {
                 echo "<tr><td>" . $schools[$school_id] . "</td>";
-                foreach ($totals[$school_id] as $more) {
-                    foreach ($more as $amount) {
-                        echo "<td>" . $amount . "</td>";
-                    }
-                }
-                foreach ($registered[$school_id] as $more) {
-                    foreach ($more as $amount) {
-                        echo "<td>" . $amount . "</td>";
-                    }
+                foreach ($tracks as $track) {
+                    echo "<td>" . $totals[$school_id][$track] . "</td>";
+                    echo "<td>" . $registered[$school_id][$track] . "</td>";
                 }
                 echo "</tr>";
             }
