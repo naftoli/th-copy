@@ -117,13 +117,12 @@ $registered = [];
                 "</td></tr>";
 
             // Totals
-            if ($track == '') $track = 'no track';
-            if (! in_array($track, $tracks)) $tracks[] = $track;
-            if (isset($totals[$row['school_id']][$track])) $totals[$row['school_id']][$track]++;
-            else $totals[$row['school_id']][$track] = 1;
+            if (! in_array($highestTrack, $tracks)) $tracks[] = $highestTrack;
+            if (isset($totals[$row['school_id']][$highestTrack])) $totals[$row['school_id']][$highestTrack]++;
+            else $totals[$row['school_id']][$highestTrack] = 1;
             if ($row['date_paid']) {
-              if (isset($registered[$row['school_id']][$track])) $registered[$row['school_id']][$track]++;
-              else $registered[$row['school_id']][$track] = 1;
+              if (isset($registered[$row['school_id']][$highestTrack])) $registered[$row['school_id']][$highestTrack]++;
+              else $registered[$row['school_id']][$highestTrack] = 1;
             }
         }
         ?>
