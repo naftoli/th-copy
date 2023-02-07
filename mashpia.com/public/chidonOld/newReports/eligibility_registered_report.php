@@ -33,6 +33,8 @@ foreach ($schools as $school_id => $name) {
     }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
+$totals = [];
+$registered = [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -112,6 +114,20 @@ foreach ($schools as $school_id => $name) {
                 $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . ($highestTrack !== 'Khk Trip' ? $highestTrack : 'Ultimate Trip') .
                 "</td><td>" . $reward . "</td><td>" . ($row['date_paid'] ?? '') . "</td><td>" . (intval($row['ultimate_trip']) ? 'yes' : '') .
                 "</td></tr>";
+
+            // Totals
+            if (isset($totals[$row['school_id']][$track])) $totals[$row['school_id']][$track]++;
+            else $totals[$row['school_id']][$track] = 1;
+            if ($row['date_paid']) {
+              if (isset($registered[$row['school_id']][$track])) $registered[$row['school_id']][$track]++;
+              else $registered[$row['school_id']][$track] = 1;
+            }
+        }
+        if ($admin_user['auth'] == 'super') {
+            echo "<pre>";
+            print_r($totals);
+            print_r($registered);
+            echo "</pre>";
         }
         ?>
     </table>
