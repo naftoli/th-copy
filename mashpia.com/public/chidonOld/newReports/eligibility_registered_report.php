@@ -50,9 +50,12 @@ $registered = [];
             border-bottom: 1px solid grey;
         }
         .rightBorder {
-            border-right: 1px solid black;
+            border-right: 2px solid black;
         }
-        #totals tr, th, td {
+        .leftBorder {
+            border-left: 2px solid black;
+        }
+        #totals tr, #totals th, #totals td {
             border: 1px solid grey;
         }
     </style>
@@ -136,31 +139,53 @@ $registered = [];
     </table>
     <?php
     if ($admin_user['auth'] == 'super') {
+        $eligibleTotals = [];
+        $registeredTotals = [];
+        foreach ($tracks as $track) {
+            $eligibleTotals[$track] = 0;
+            $registeredTotals[$track] = 0;
+        }
+        $grandTotals['eligible'] = 0;
+        $grandTotals['registered'] = 0;
+
         echo "<p></p>";
         echo "<div id='totals'>";
         echo "<table><tr><th class='rightBorder'>School</th><th>Total Eligibile</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Eligible</th>";
-        echo "<th>Total Registered</th>";
+        echo "<th class='leftBorder'>Total Registered</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Registered</th>";
         echo "</tr>";
+
         foreach ($schools as $school_id => $name) {
             $total['eligible'] = 0;
             $total['registered'] = 0;
             foreach ($tracks as $track) {
                 $total['eligible'] += $totals[$school_id][$track];
+                $grandTotals['eligible'] += $totals[$school_id][$track];
                 $total['registered'] += $registered[$school_id][$track];
+                $grandTotals['registered'] += $registered[$school_id][$track];
             }
+
             echo "<tr><td class='rightBorder'>" . $schools[$school_id] . "</td>";
             echo "<td>" . $total['eligible'] . "</td>";
             foreach ($tracks as $track) {
                 echo "<td>" . $totals[$school_id][$track] . "</td>";
+                $eligibleTotals[$track] += $totals[$school_id][$track];
             }
-            echo "<td>" . $total['registered'] . "</td>";
+            echo "<td class='leftBorder'>" . $total['registered'] . "</td>";
             foreach ($tracks as $track) {
                 echo "<td>" . $registered[$school_id][$track] . "</td>";
+                $registeredTotals[$track] += $registered[$school_id][$track];
             }
             echo "</tr>";
         }
+        // all totals
+        echo "<tr><th align='right' class='rightBorder'>Totals:</th>";
+        echo "<th>" . $grandTotals['eligible'] . "</th>";
+        foreach ($tracks as $track) echo "<th>" . $eligibleTotals[$track] . "</th>";
+        echo "<th class='leftBorder'>" . $grandTotals['registered'] . "</th>";
+        foreach ($tracks as $track) echo "<th>" . $registeredTotals[$tracks] . "</th>";
+        echo "</tr>";
         echo "</table></div>";
     }
     ?>
