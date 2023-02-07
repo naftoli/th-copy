@@ -116,6 +116,7 @@ $registered = [];
                 "</td></tr>";
 
             // Totals
+            if ($track == '') $track = 'no track';
             if (isset($totals[$row['school_id']][$track])) $totals[$row['school_id']][$track]++;
             else $totals[$row['school_id']][$track] = 1;
             if ($row['date_paid']) {
@@ -124,10 +125,31 @@ $registered = [];
             }
         }
         if ($admin_user['auth'] == 'super') {
-            echo "<pre>";
-            print_r($totals);
-            print_r($registered);
-            echo "</pre>";
+            echo "<hr /><table>";
+            echo "<tr><th>School</th>";
+            foreach ($totals as $school_id => $more) {
+                foreach (['Eligible', 'Registered'] as $type) {
+                    foreach ($more as $track => $amount) {
+                        echo "<th>" . ucwords($track) . " " . ucwords($type) . "</th>";
+                    }
+                }
+            }
+            echo "</tr>";
+            foreach ($schools as $school_id => $name) {
+                echo "<tr><td>" . $schools[$school_id] . "</td>";
+                foreach ($totals[$school_id] as $more) {
+                    foreach ($more as $amount) {
+                        echo "<td>" . $amount . "</td>";
+                    }
+                }
+                foreach ($registered[$school_id] as $more) {
+                    foreach ($more as $amount) {
+                        echo "<td>" . $amount . "</td>";
+                    }
+                }
+                echo "</tr>";
+            }
+            echo "</table>";
         }
         ?>
     </table>
