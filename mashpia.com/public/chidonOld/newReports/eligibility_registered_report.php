@@ -138,16 +138,26 @@ $registered = [];
     if ($admin_user['auth'] == 'super') {
         echo "<p></p>";
         echo "<div id='totals'>";
-        echo "<table><tr><th class='rightBorder'>School</th>";
+        echo "<table><tr><th class='rightBorder'>School</th><th>Total Eligibile</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Eligible</th>";
+        echo "<th>Total Registered</th>";
         foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Registered</th>";
         echo "</tr>";
         foreach ($schools as $school_id => $name) {
+            $total['eligible'] = 0;
+            $total['registered'] = 0;
+            foreach ($tracks as $track) {
+                $total['eligible'] += $totals[$school_id][$track];
+                $total['registered'] += $registered[$school_id][$track];
+            }
             echo "<tr><td class='rightBorder'>" . $schools[$school_id] . "</td>";
+            echo "<td>" . $total['eligible'] . "</td>";
             foreach ($tracks as $track) {
                 echo "<td>" . $totals[$school_id][$track] . "</td>";
+            }
+            echo "<td>" . $total['registered'] . "</td>";
+            foreach ($tracks as $track) {
                 echo "<td>" . $registered[$school_id][$track] . "</td>";
-
             }
             echo "</tr>";
         }
