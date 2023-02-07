@@ -161,10 +161,10 @@ $registered = [];
             $total['registered'] = 0;
             foreach ($tracks as $track) {
                 $total['eligible'] += $totals[$school_id][$track];
-                $grandTotals['eligible'] += $totals[$school_id][$track];
                 $total['registered'] += $registered[$school_id][$track];
-                $grandTotals['registered'] += $registered[$school_id][$track];
             }
+            $grandTotals['eligible'] += $total['eligible'];
+            $grandTotals['registered'] += $total['registered'];
 
             echo "<tr><td class='rightBorder'>" . $schools[$school_id] . "</td>";
             echo "<td>" . $total['eligible'] . "</td>";
@@ -180,6 +180,7 @@ $registered = [];
             echo "</tr>";
         }
         // all totals
+        echo "<tr></tr>";
         echo "<tr><th align='right' class='rightBorder'>Totals:</th>";
         echo "<th>" . $grandTotals['eligible'] . "</th>";
         foreach ($tracks as $track) echo "<th>" . $eligibleTotals[$track] . "</th>";
