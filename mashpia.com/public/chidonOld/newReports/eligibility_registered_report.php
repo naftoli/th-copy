@@ -33,7 +33,7 @@ foreach ($schools as $school_id => $name) {
     }
 }
 // echo "<pre>"; print_r($info); echo "</pre>"; exit;
-$tracks = [];
+$tracks = ['none', 'yesod', 'yediah', 'havonah', 'iyun'];
 $totals = [];
 $registered = [];
 ?>
@@ -117,7 +117,7 @@ $registered = [];
                 "</td></tr>";
 
             // Totals
-            if (! in_array($highestTrack, $tracks)) $tracks[] = $highestTrack;
+            $highestTrack = strtolower($highestTrack);
             if (isset($totals[$row['school_id']][$highestTrack])) $totals[$row['school_id']][$highestTrack]++;
             else $totals[$row['school_id']][$highestTrack] = 1;
             if ($row['date_paid']) {
@@ -131,13 +131,8 @@ $registered = [];
     if ($admin_user['auth'] == 'super') {
         echo "<hr /><table>";
         echo "<tr><th>School</th>";
-        foreach ($totals as $school_id => $more) {
-            foreach (['Eligible', 'Registered'] as $type) {
-                foreach ($more as $track => $amount) {
-                    echo "<th>" . ucwords($track) . " " . ucwords($type) . "</th>";
-                }
-            }
-        }
+        foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Eligible</th>";
+        foreach ($tracks as $track) echo "<th>" . ucwords($track) . " Registered</th>";
         echo "</tr>";
         foreach ($schools as $school_id => $name) {
             echo "<tr><td>" . $schools[$school_id] . "</td>";
