@@ -49,14 +49,14 @@ $registered = [];
             font-size: 12px;
             border-bottom: 1px solid grey;
         }
-        .rightBorder {
-            border-right: 2px solid black;
-        }
-        .leftBorder {
-            border-left: 2px solid black;
-        }
         #totals tr, #totals th, #totals td {
             border: 1px solid grey;
+        }
+        #totals .rightBorder {
+          border-right: 2px solid black;
+        }
+        #totals .leftBorder {
+          border-left: 2px solid black;
         }
     </style>
 </head>
