@@ -15,7 +15,6 @@ function get_raffles() {
 }
 
 function updateRaffle() {
-    
     $('div#winner_list_container').html("<div class='loader'></div><p id='loader-status'>Getting Data....</p>"); // show the loader
     
     var school_id = $("select#school_id").val();
@@ -23,7 +22,9 @@ function updateRaffle() {
     var sorting = $("select#sorting").val();
     var single_school = $("select#school_id")[0].disabled;
     
-    $.post("/raffles/shared/ajax/get_raffle_winners.php", {school_id: school_id, raffle_id: raffle_id, single_list: true, sorting: sorting}, function(data){
+    $.post("/raffles/shared/ajax/get_raffle_winners.php", {
+        school_id: school_id, raffle_id: raffle_id, single_list: true, sorting: sorting
+    }, function(data){
         $("p#loader-status").text("Parsing Data...."); // update the status on slow devices
         raffles = JSON.parse( data ); // get the raffle info
         
@@ -40,11 +41,11 @@ function updateRaffle() {
         } else {
             html += '<th>Raffle</th>';
         }
-        html += '<th>Grade</th> <th>Soldier Name</th> <th>Full Address</th>';
+        html += '<th>Grade</th> <th>User ID</th> <th>Soldier Name</th> <th>Full Address</th>';
         if (school_id == 269 || school_id == 61 ) {
             html += '<th>Country</th>';
         }
-        html += '<th>Prize Won</th></thead>';
+        html += '<th>Prize ID</th><th>Prize Won</th></thead>';
         html += '<tbody>';
         
         raffles.forEach( function ( raffle ){
@@ -81,13 +82,15 @@ winner_renderer.prototype.render = function(show_country, show_school, raffle_na
     }
 
     this.html += '<td>' + this.winner.grade + '</td>';
+    this.html += '<td>' + this.winner.user_id + '</td>';
     this.html += '<td>' + this.winner.first_name + ' ' + this.winner.last_name + '</td>';
     this.html += '<td>' + this.winner.address.street + ' ' + this.winner.address.city + ', ' +
       this.winner.address.state + ' ' + this.winner.address.zip;
     if (show_country) {
         this.html += ' ' + this.winner.address.country;
     }
-    this.html += '</td><td>' + this.winner.prize_name + '</td>';
+    this.html += '</td>' + this.winner.prize_id + '</td>';
+    this.html += '<td>' + this.winner.prize_name + '</td>';
     this.html += '</tr>';
     return this.html;
 };
