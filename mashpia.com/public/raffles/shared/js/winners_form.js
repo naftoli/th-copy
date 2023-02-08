@@ -42,9 +42,9 @@ function updateRaffle() {
             html += '<th>Raffle</th>';
         }
         html += '<th>Grade</th> <th>User ID</th> <th>Soldier Name</th> <th>Full Address</th>';
-        if (school_id == 269 || school_id == 61 ) {
-            html += '<th>Country</th>';
-        }
+        // if (school_id == 269 || school_id == 61 ) {
+        //     html += '<th>Country</th>';
+        // }
         html += '<th>Prize ID</th><th>Prize Won</th></thead>';
         html += '<tbody>';
         
