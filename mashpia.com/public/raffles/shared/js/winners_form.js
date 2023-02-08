@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 
 function get_raffles() {
-    $.post("/raffles/shared/ajax/list_raffles.php", {type: "", ran_only: true, all: true}, function(data){
+    $.post("/raffles/shared/ajax/list_raffles.php", { type: "", ran_only: true, all: true }, function(data){
         $("#raffle_select_container").html(data);
         $("select#raffle_id").change(updateRaffle); // now that the raffle_id option is on the screen, set the on change function
     });
@@ -40,7 +40,7 @@ function updateRaffle() {
         } else {
             html += '<th>Raffle</th>';
         }
-        html += '<th>Grade</th> <th>Last Name</th> <th>First Name</th> <th>Address</th> <th>City</th> <th>State</th> <th>Zip</th>';
+        html += '<th>Grade</th> <th>Soldier Name</th> <th>Full Address</th>';
         if (school_id == 269 || school_id == 61 ) {
             html += '<th>Country</th>';
         }
@@ -67,10 +67,10 @@ function winner_renderer(winner) {
     this.winner = winner;
 }
 
-winner_renderer.prototype.render = function( show_country, show_school, raffle_name){
+winner_renderer.prototype.render = function(show_country, show_school, raffle_name){
     // set the address to N/A if it is null.
     if (this.winner.address.street === null) {
-        this.winner.address = {street: "N/A", city: "N/A", state: "N/A", zip: "N/A"};
+        this.winner.address = { street: "N/A", city: "N/A", state: "N/A", zip: "N/A" };
     }
     // render the table row
     this.html = '<tr class="winner">';
@@ -81,16 +81,13 @@ winner_renderer.prototype.render = function( show_country, show_school, raffle_n
     }
 
     this.html += '<td>' + this.winner.grade + '</td>';
-    this.html += '<td>' + this.winner.last_name + '</td>';
-    this.html += '<td>' + this.winner.first_name + '</td>';
-    this.html += '<td>' + this.winner.address.street + '</td>';
-    this.html += '<td>' + this.winner.address.city + '</td>';
-    this.html += '<td>' + this.winner.address.state + '</td>';
-    this.html += '<td>' + this.winner.address.zip + '</td>';
+    this.html += '<td>' + this.winner.first_name + ' ' + this.winner.last_name + '</td>';
+    this.html += '<td>' + this.winner.address.street + ' ' + this.winner.address.city + ', ' +
+      this.winner.address.state + ' ' + this.winner.address.zip;
     if (show_country) {
-        this.html += '<td>' + this.winner.address.country + '</td>';
+        this.html += ' ' + this.winner.address.country;
     }
-    this.html += '<td>' + this.winner.prize_name + '</td>';
+    this.html += '</td><td>' + this.winner.prize_name + '</td>';
     this.html += '</tr>';
     return this.html;
 };
