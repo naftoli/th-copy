@@ -89,7 +89,7 @@ winner_renderer.prototype.render = function(show_country, show_school, raffle_na
     if (show_country) {
         this.html += ' ' + this.winner.address.country;
     }
-    this.html += '</td>' + this.winner.prize_id + '</td>';
+    this.html += '</td><td>' + this.winner.prize_id + '</td>';
     this.html += '<td>' + this.winner.prize_name + '</td>';
     this.html += '</tr>';
     return this.html;
