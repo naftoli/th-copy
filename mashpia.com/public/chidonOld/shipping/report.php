@@ -79,6 +79,7 @@ $resultsBySchool = [];
 foreach ($results as $row) {
     $resultsBySchool[$row['school_id']][] = $row;
 }
+echo "<pre>"; print_r($resultsBySchool); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
