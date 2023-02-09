@@ -801,7 +801,7 @@
 					}
 				}
 			}
-			if ([7748670, 7755774, 7751863, 7751890, 7782690].includes(parseInt(child.user_serial))) return true
+			if ([7748670, 7755774, 7751863, 7751890, 7782690, 7777469].includes(parseInt(child.user_serial))) return true
 			return parseInt(child.grade) === 8 && ['Havonah', 'Iyun'].includes(child.track) && child.history && pastYrs
 		}
 
@@ -928,14 +928,14 @@
 					}
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 					html += `<div class="flex">
-											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='0:${child.user_id}' />
+											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='0:${child.user_id}' />
 											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250)<br />
 													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
 													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
 											</h5>
 									</div>
 									<div class="flex">
-											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip" value='1:${child.user_id}' />
+											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='1:${child.user_id}' />
 											<h5 class="formDetails"><b>Regional Trip</b> ($200) <br />
 												${text}
 											</h5>
