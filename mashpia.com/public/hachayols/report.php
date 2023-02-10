@@ -12,6 +12,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
+// info on all schools
+$sqlSchools = "select school_id, school_name from schools";
+$stmtSchools = $MASHPIA_DB->query($sqlSchools);
+$rows = $stmtSchools->fetchAll();
+foreach ($rows as $row) {
+    $all_schools[$row['school_id']] = $row['school_name'];
+}
+
 // first get all admins for all children in each school
 $sqlAdmins = "select a.* from admins a 
                 join admin_auths aa using (admin_id) 
@@ -85,7 +93,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
                     foreach ($children as $child) {
                         // find out child's school / grade
-                        $school = isset($schools[$child['school_id']]) ? $schools[$child['school_id']] : 'N/A';
+                        $school = $all_schools[$child['school_id']];
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
                         echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
