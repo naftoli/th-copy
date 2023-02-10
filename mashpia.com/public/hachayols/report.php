@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
 // first get all admins for all children in each school
@@ -19,14 +19,15 @@ $sqlAdmins = "select a.* from admins a
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
-$sqlUsers = "select user_id, school_id, hachayol, first from users u 
+$sqlUsers = "select user_id, school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+            join classes c on c.class_id = u.class_id 
             join admin_auths aa on u.user_id = aa.id 
             where u.user_registered > 0 and aa.admin_id = :id 
             order by u.dob";
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
-$sqlMissing = "select user_id, school_id, hachayol, first from users u 
+$sqlMissing = "select user_id, school_id, hachayol, first, c.class_grade, c.class_sub from users u 
                 left join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
                 and aa.admin_id is null 
@@ -68,13 +69,26 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                 foreach ($admins as $admin) {
                     $stmtUsers->execute(['id' => $admin['admin_id']]);
                     $children = $stmtUsers->fetchAll();
+                    // find out if hachayol child is in this school or not
+                    $disable = false;
+                    foreach ($children as $child) {
+                        if ($child['hachayol'] && $child['school_id'] != $school_id) {
+                            $disable = true;
+                            break;
+                        }
+                    }
+
                     echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
                     foreach ($children as $child) {
+                        // find out child's school / grade
+                        $school = isset($schools[$child['school_id']]) ? $schools[$child['school_id']] : 'N/A';
+                        $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+
                         echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
                         if ($child['hachayol']) echo " checked";
-                        if ($child['school_id'] != $school_id) echo " disabled";
+                        if ($disable || $child['school_id'] != $school_id) echo " disabled";
                         echo " />";
-                        echo $child['first'] . " (" . $schools[$child['school_id']] . ")<br />";
+                        echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
                     }
                     echo "</td></tr>";
                     // find kids with missing parent account
