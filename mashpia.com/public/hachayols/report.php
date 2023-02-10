@@ -22,7 +22,7 @@ $sqlAdmins = "select a.* from admins a
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
-$sqlUsers = "select user_id, school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+$sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub from users u 
             join classes c on c.class_id = u.class_id 
             join admin_auths aa on u.user_id = aa.id 
             where u.user_registered > 0 and aa.admin_id = :id 
@@ -30,7 +30,7 @@ $sqlUsers = "select user_id, school_id, hachayol, first, c.class_grade, c.class_
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
-$sqlMissing = "select user_id, school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+$sqlMissing = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub from users u 
                 join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
