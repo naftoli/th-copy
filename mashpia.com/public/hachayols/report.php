@@ -26,7 +26,8 @@ $sqlAdmins = "select a.* from admins a
                 join users u on u.user_id = aa.id 
                 where u.user_registered > 0 
                 and u.school_id = :school 
-                group by admin_id";
+                group by admin_id 
+                order by a.last, a.first";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
@@ -103,16 +104,16 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                         echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
                     }
                     echo "</td></tr>";
-                    // find kids with missing parent account
-                    $stmtMissing->execute(['school' => $school_id]);
-                    $missing = $stmtMissing->fetchAll();
-                    foreach ($missing as $idx => $child) {
-                        echo "<tr><td colspan='2'></td><td>";
-                        echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
-                        if ($child['hachayol']) echo " checked";
-                        echo " />";
-                        echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
-                    }
+                }
+                // find kids with missing parent account
+                $stmtMissing->execute(['school' => $school_id]);
+                $missing = $stmtMissing->fetchAll();
+                foreach ($missing as $idx => $child) {
+                    echo "<tr><td colspan='2'></td><td>";
+                    echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
+                    if ($child['hachayol']) echo " checked";
+                    echo " />";
+                    echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
                 }
                 ?>
             </table>
