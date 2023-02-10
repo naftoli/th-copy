@@ -11,7 +11,6 @@ foreach ($users as $user) {
         'user'  => $user['user_id'],
         'val'   => $user['checked']
     ]);
-    $stmt->debugDumpParams();
     if (!$res) {
 //        $stmt->debugDumpParams();
         $MASHPIA_DB->rollBack();
