@@ -122,4 +122,18 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
             </table>
         <?php endforeach; ?>
     </body>
+    <script>
+      $(".hachayol").click( function () {
+        let user_id = $(this).attr('id')
+        let checked = $(this).is(":checked")
+        if (checked) {
+          // update db
+          $.post('/mobile/reg/ajax/updateHachayols.php', { list: [{ user_id, checked }] }, function(result) {
+            const res = JSON.parse(result)
+            if (res.success) alert('updated')
+            else alert('error updating')
+          })
+        }
+      })
+    </script>
 </html>
