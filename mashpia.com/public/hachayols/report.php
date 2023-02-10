@@ -14,7 +14,8 @@ $sqlAdmins = "select a.* from admins a
                 join admin_auths aa using (admin_id) 
                 join users u on u.user_id = aa.id 
                 where u.user_registered > 0 
-                and u.school_id = :school";
+                and u.school_id = :school 
+                group by admin_id";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
@@ -23,6 +24,14 @@ $sqlUsers = "select user_id, school_id, hachayol, first from users u
             where u.user_registered > 0 and aa.admin_id = :id 
             order by u.dob";
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
+
+// get users that don't have an admin account
+$sqlMissing = "select user_id, school_id, hachayol, first from users u 
+                left join admin_auths aa on aa.id = u.user_id 
+                where u.user_registered > 0 
+                and aa.admin_id is null 
+                and u.school_id = :school";
+$stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,6 +46,7 @@ $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
           }
           th, td {
             padding: 3px 10px;
+            border-bottom: 1px solid grey;
           }
         </style>
     </head>
@@ -60,12 +70,23 @@ $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
                     $children = $stmtUsers->fetchAll();
                     echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
                     foreach ($children as $child) {
-                        echo "<input type='checkbox' name='hachayol[" . $child['user_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
+                        echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
+                        if ($child['hachayol']) echo " checked";
                         if ($child['school_id'] != $school_id) echo " disabled";
                         echo " />";
                         echo $child['first'] . " (" . $schools[$child['school_id']] . ")<br />";
                     }
                     echo "</td></tr>";
+                    // find kids with missing parent account
+                    $stmtMissing->execute(['school' => $school_id]);
+                    $missing = $stmtMissing->fetchAll();
+                    foreach ($missing as $idx => $child) {
+                        echo "<tr><td colspan='2'></td><td>";
+                        echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
+                        if ($child['hachayol']) echo " checked";
+                        echo " />";
+                        echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
+                    }
                 }
                 ?>
             </table>
