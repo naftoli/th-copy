@@ -125,7 +125,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
     <script>
       $(".hachayol").click( function () {
         let user_id = $(this).attr('id')
-        let checked = $(this).is(":checked")
+        let checked = $(this).is(":checked") ? 1 : 0
         if (checked) {
           // update db
           $.post('/mobile/reg/ajax/updateHachayols.php', { list: [{ user_id, checked }] }, function(result) {
