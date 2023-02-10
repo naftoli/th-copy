@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -28,6 +31,7 @@ $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
 $sqlMissing = "select user_id, school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+                join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
                 and aa.admin_id is null 
@@ -92,8 +96,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     }
                     echo "</td></tr>";
                     // find kids with missing parent account
-                    $stmtMissing->execute(['school' => $school_id]);
-                    $missing = $stmtMissing->fetchAll();
+//                    $stmtMissing->execute(['school' => $school_id]);
+//                    $missing = $stmtMissing->fetchAll();
 //                    foreach ($missing as $idx => $child) {
 //                        echo "<tr><td colspan='2'></td><td>";
 //                        echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
