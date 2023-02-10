@@ -109,11 +109,14 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                 $stmtMissing->execute(['school' => $school_id]);
                 $missing = $stmtMissing->fetchAll();
                 foreach ($missing as $idx => $child) {
+                    $school = $all_schools[$child['school_id']];
+                    $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+
                     echo "<tr><td colspan='2'></td><td>";
                     echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
                     if ($child['hachayol']) echo " checked";
                     echo " />";
-                    echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
+                    echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
                 }
                 ?>
             </table>
