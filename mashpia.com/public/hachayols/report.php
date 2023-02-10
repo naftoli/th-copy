@@ -104,15 +104,15 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     }
                     echo "</td></tr>";
                     // find kids with missing parent account
-//                    $stmtMissing->execute(['school' => $school_id]);
-//                    $missing = $stmtMissing->fetchAll();
-//                    foreach ($missing as $idx => $child) {
-//                        echo "<tr><td colspan='2'></td><td>";
-//                        echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
-//                        if ($child['hachayol']) echo " checked";
-//                        echo " />";
-//                        echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
-//                    }
+                    $stmtMissing->execute(['school' => $school_id]);
+                    $missing = $stmtMissing->fetchAll();
+                    foreach ($missing as $idx => $child) {
+                        echo "<tr><td colspan='2'></td><td>";
+                        echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
+                        if ($child['hachayol']) echo " checked";
+                        echo " />";
+                        echo $child['first'] . ' ' . $child['last'] . "</td></tr>";
+                    }
                 }
                 ?>
             </table>
