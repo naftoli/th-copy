@@ -39,7 +39,7 @@ $sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.clas
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
-$sqlMissing = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+$sqlMissing = "select user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub from users u 
                 join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
                 where u.user_registered > 0 
