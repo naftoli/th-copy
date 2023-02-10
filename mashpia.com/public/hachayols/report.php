@@ -112,7 +112,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     $school = $all_schools[$child['school_id']];
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
-                    echo "<tr><td colspan='2'></td><td>";
+                    echo "<tr><td colspan='2'>No Parent Account</td><td>";
                     echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
                     if ($child['hachayol']) echo " checked";
                     echo " />";
@@ -124,16 +124,21 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
     </body>
     <script>
       $(".hachayol").click( function () {
-        let user_id = $(this).attr('id')
-        let checked = $(this).is(":checked") ? 1 : 0
-        if (checked) {
-          // update db
-          $.post('/mobile/reg/ajax/updateHachayols.php', { list: [{ user_id, checked }] }, function(result) {
-            const res = JSON.parse(result)
-            if (res.success) alert('updated')
-            else alert('error updating')
-          })
-        }
+        let list = []
+        let elem = $(this).parent()
+        // get all kids in this admin and remove from the rest
+        let children = $(elem).find('input').each( function () {
+          let user_id = $(this).attr('id')
+          let checked = $(this).is(":checked") ? 1 : 0
+          list.push({ user_id, checked })
+        })
+
+        // update db
+        $.post('/mobile/reg/ajax/updateHachayols.php', { list }, function(result) {
+          const res = JSON.parse(result)
+          if (res.success) alert('updated')
+          else alert('error updating')
+        })
       })
     </script>
 </html>
