@@ -134,7 +134,7 @@ $summary = [];
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shipping Reports</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
   <style>
     body {
       font-family: sans-serif;
@@ -195,25 +195,29 @@ $summary = [];
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
     <h4>Details</h4>
-    <table>
-      <tr>
-        <?php
-        foreach ($detailed_fields as $field) {
-          if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
-        }
-        echo "<th>Category</th><th>Item</th>";
-        foreach ($extra_fields as $field) {
-          if ($field == 'name') $field = 'name preference';
-          echo "<th>" . ucwords($field) . "</th>";
-        }
-        ?>
-      </tr>
+    <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
+      <thead>
+        <tr>
+          <?php
+          foreach ($detailed_fields as $field) {
+            if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
+          }
+          echo "<th>Category</th><th>Item</th>";
+          foreach ($extra_fields as $field) {
+            if ($field == 'name') $field = 'name preference';
+            echo "<th>" . ucwords($field) . "</th>";
+          }
+          ?>
+        </tr>
+      </thead>
+      <tbody>
         <?php
         foreach ($more as $row) {
           if (! in_array($row['class_grade'], ['4', '5', '6', '7', '8', '9'])) continue;
           createHtmlForItem($school, $row);
         }
         ?>
+      </tbody>
     </table>
     <?php endif; ?>
     <hr />
@@ -221,7 +225,7 @@ $summary = [];
   <?php endforeach; ?>
   <?php if ($admin_user['auth'] == 'super') : ?>
     <h2>Grand Summary</h2>
-    <table>
+    <table id="table2" class="table table-striped table-condensed cell-border hover row-order order-column">
       <tr>
         <th>School</th>
         <th>Item</th>
@@ -243,4 +247,14 @@ $summary = [];
     </table>
   <?php endif; ?>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+  $('#table').DataTable({
+    paging: false
+  });
+  $('#table2').DataTable({
+    paging: false
+  });
+</script>
 </html>
