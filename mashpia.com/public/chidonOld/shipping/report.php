@@ -189,12 +189,10 @@ $summary = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-    <h4>Summary</h4>
 
     <p></p>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
-    <h4>Details</h4>
     <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
       <thead>
         <tr>
