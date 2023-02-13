@@ -15,9 +15,12 @@ require 'data.php';
 
 function build_fields() {
     global $fields;
-    $html = "<input type='checkbox' name='all_fields' id='all_fields' class='field' /> ALL FIELDS<br />";
+    $i = 1;
+    $html = "<input type='checkbox' name='all_fields' id='all_fields' /> ALL FIELDS<br />";
     foreach ($fields as $field => $desc) {
-        $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field' /> " . $desc . "<br />";
+        $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field'";
+        if ($i++ <= 7) $html .= " checked disabled";
+        $html .= " /> " . $desc . "<br />";
     }
     return $html;
 }
@@ -99,7 +102,7 @@ function build_items() {
       <legend>Type of Report</legend>
       <select name="report_type">
         <option value="all">Summary and Details</option>
-        <option value="summery">Summary Only</option>
+        <option value="summary">Summary Only</option>
         <option value="details">Details Only</option>
       </select><br />
       <br />
@@ -123,5 +126,18 @@ function build_items() {
 
   $("#all_items").click(checkAll)
   $("#all_fields").click(checkAll)
+
+  $("#create").click( function(e) {
+    e.preventDefault()
+    if (! $(".item:checked").length) {
+      alert('You must choose at least one item!')
+      return false
+    }
+    if (! $(".field:checked").length) {
+      alert('You must choose at least one field!')
+      return false
+    }
+    $("form").submit()
+  })
 </script>
 </html>

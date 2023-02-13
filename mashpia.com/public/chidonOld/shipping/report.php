@@ -1,4 +1,42 @@
 <?php
+function createHtmlForItem($school, $row) {
+    global $info, $detailed_fields, $extra_fields, $items_chosen, $summary;
+
+    foreach ($items_chosen as $cat => $more) {
+        if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
+            $items = $info[$cat][$row['user_id']];
+            foreach ($items as $item) {
+                // create new row
+                echo "<tr>";
+                foreach ($detailed_fields as $field) {
+                    if (strpos($field, 'shipping') === false) {
+                        $desc = substr($field, strpos($field, '.') + 1);
+                        echo "<td>" . $row[$desc] . "</td>";
+                    }
+                }
+                echo "<td>" . $cat . "</td><td>";
+                if (isset($item['amount'])) echo $item['amount'];
+                if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
+                echo " " . $item['item'];
+                foreach ($extra_fields as $field) {
+                    echo "</td><td>";
+                    if (isset($item[$field])) echo $item[$field];
+                }
+                echo "</td></tr>";
+
+                // update summary
+                if (isset($summary[$school][$item['item']])) {
+                    if (isset($item['amount'])) $summary[$school][$item['item']] += intval($item['amount']);
+                    else $summary[$school][$item['item']]++;
+                } else {
+                    if (isset($item['amount'])) $summary[$school][$item['item']] = intval($item['amount']);
+                    $summary[$school][$item['item']] = 1;
+                }
+            }
+        }
+    }
+}
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -18,10 +56,9 @@ $extra_fields = [];
 $detailed_fields = [];
 $fields_chosen = array_keys($_POST['fields']);
 foreach ($fields_chosen as $field) {
-  if (strpos($field, '.') !== false) $detailed_fields[] = $field;
-  else $extra_fields[] = $field;
+    if (strpos($field, '.') !== false) $detailed_fields[] = $field;
+    else $extra_fields[] = $field;
 }
-$num_extra_fields = count($extra_fields);
 
 $cs = new ChidonShipping();
 
@@ -34,7 +71,7 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
-//echo "<pre>"; print_r($info); echo "</pre>";
+echo "<pre>"; print_r($info); echo "</pre>";
 
 // find all unique tables to fetch from
 $tables = [];
@@ -150,97 +187,40 @@ $summary = [];
       echo "<br />" . $address . "<br />";
       ?>
     </div>
+    <p></p>
+    <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
+    <h2>Details</h2>
 
+    <p></p>
+    <?php endif; ?>
+    <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
+    <h2>Details</h2>
     <table>
       <tr>
         <?php
         foreach ($detailed_fields as $field) {
           if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
         }
-        echo "<th>Category</th><th>Item</th><th>Size</th><th>Color</th><th>Name Preference</th>";
+        echo "<th>Category</th><th>Item</th>";
+        foreach ($extra_fields as $field) {
+          if ($field == 'name_pref') $field = 'name preference';
+          echo "<th>" . ucwords($field) . "</th>";
+        }
         ?>
       </tr>
         <?php
         foreach ($more as $row) {
           if (! in_array($row['class_grade'], ['4', '5', '6', '7', '8', '9'])) continue;
-          echo "<tr>";
-          $num_fields = 0;
-          foreach ($detailed_fields as $field) {
-            if (strpos($field, 'shipping') === false) {
-              $num_fields++;
-              $desc = substr($field, strpos($field, '.') + 1);
-              echo "<td>" . $row[$desc] . "</td>";
-            }
-          }
-          echo "<td colspan='5'></td></tr>";
-          // now show items
-          foreach ($items_chosen as $cat => $more) {
-            if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
-              $items = $info[$cat][$row['user_id']];
-              switch ($cat) {
-                case 'extra purchases':
-                    foreach ($items as $item) {
-                        if ($item['shipping_amount'] == 0) {
-                            echo "<tr><td colspan='" . $num_fields . "'></td><td>" . $cat . "</td><td>";
-                            if ($item['item'] == 'celeb_box') echo $item['amount'] . ' Celebration Box(es)';
-                            else echo $item['amount'] . ' ' . ucwords($item['type_of_sweater']) . ' Sweater(s)';
-                            foreach ($extra_fields as $ex_field) {
-                              echo "</td><td>";
-                              if (isset($item[$ex_field])) echo $item[$ex_field];
-                            }
-                            echo "</td></tr>";
-                            // update summary
-                            if (isset($summary[$school][$item['item']])) $summary[$school][$item['item']] += intval($item['amount']);
-                            else $summary[$school][$item['item']] = intval($item['amount']);
-                        }
-                    }
-                    break;
-                case 'children sweaters':
-                case 'gifts':
-                case 'prizes':
-                    foreach ($items as $item) {
-                        echo "<tr><td colspan='" . $num_fields . "'></td><td>" . $cat . "</td><td>" . $item['item'];
-                        foreach ($extra_fields as $ex_field) {
-                            echo "</td><td>";
-                            if (isset($item[$ex_field])) echo $item[$ex_field];
-                        }
-                        echo "</td></tr>";
-                        if (isset($summary[$school][$item['item']])) $summary[$school][$item['item']]++;
-                        else $summary[$school][$item['item']] = 1;
-                    }
-                    break;
-                default:
-                    if (is_array($items)) {
-                        foreach ($items as $item) {
-                            echo "<tr><td colspan='" . $num_fields . "'></td><td>" . $cat . "</td><td>" . $item;
-                            foreach ($extra_fields as $ex_field) {
-                                echo "</td><td>";
-                            }
-                            echo "</td></tr>";
-                            if (isset($summary[$school][$item])) $summary[$school][$item]++;
-                            else $summary[$school][$item] = 1;
-                        }
-                    } else {
-                        echo "<tr><td colspan='" . $num_fields . "'></td><td>" . $cat . "</td><td>" . $items;
-                        foreach ($extra_fields as $ex_field) {
-                            echo "</td><td>";
-                        }
-                        echo "</td></tr>";
-                        if (isset($summary[$school][$items])) $summary[$school][$items]++;
-                        else $summary[$school][$items] = 1;
-                    }
-                    break;
-              }
-            }
-          }
+          createHtmlForItem($school, $row);
         }
         ?>
     </table>
+    <?php endif; ?>
     <hr />
     <p></p>
   <?php endforeach; ?>
   <?php if ($admin_user['auth'] == 'super') : ?>
-    <h2>Summary</h2>
+    <h2>Grand Summary</h2>
     <table>
       <tr>
         <th>School</th>
