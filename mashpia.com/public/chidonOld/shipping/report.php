@@ -189,7 +189,7 @@ $summary = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-    <h4>Details</h4>
+    <h4>Summary</h4>
 
     <p></p>
     <?php endif; ?>

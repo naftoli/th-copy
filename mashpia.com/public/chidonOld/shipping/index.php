@@ -19,7 +19,7 @@ function build_fields() {
     $html = "<input type='checkbox' name='all_fields' id='all_fields' /> ALL FIELDS<br />";
     foreach ($fields as $field => $desc) {
         $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field'";
-        if ($i++ <= 7) $html .= " checked disabled";
+        if ($i++ <= 7) $html .= " checked";
         $html .= " /> " . $desc . "<br />";
     }
     return $html;
