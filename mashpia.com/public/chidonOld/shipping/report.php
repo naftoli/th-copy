@@ -203,7 +203,7 @@ $summary = [];
         }
         echo "<th>Category</th><th>Item</th>";
         foreach ($extra_fields as $field) {
-          if ($field == 'name_pref') $field = 'name preference';
+          if ($field == 'name') $field = 'name preference';
           echo "<th>" . ucwords($field) . "</th>";
         }
         ?>
