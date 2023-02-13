@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
  *
  * list of functions needed for figuring out what to ship
  * all functions need to return an array or items
- * each item needs to have item/size/color/name keys
+ * each item needs to have item/qty/size/color/name keys
  */
 
 class ChidonShipping
@@ -297,6 +297,7 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $purchases[$row['admin_id']][] = [
+                'qty'   => $row['amount'],
                 'item'  => $row['item'] == 'celeb_box' ? 'celebration box' : 'sweater',
                 'size'  => $row['size'],
                 'color' => $row['color'],

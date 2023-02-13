@@ -15,7 +15,7 @@ function createHtmlForItem($school, $row) {
                     }
                 }
                 echo "<td>" . $cat . "</td><td>";
-                if (isset($item['amount'])) echo $item['amount'];
+                echo (isset($item['qty']) ? $item['qty'] : 1) . "</td><td>";
                 if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
                 echo " " . $item['item'];
                 foreach ($extra_fields as $field) {
@@ -200,7 +200,7 @@ $summary = [];
           foreach ($detailed_fields as $field) {
             if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
           }
-          echo "<th>Category</th><th>Item</th>";
+          echo "<th>Category</th><th>Quantity</th><th>Item</th>";
           foreach ($extra_fields as $field) {
             if ($field == 'name') $field = 'name preference';
             echo "<th>" . ucwords($field) . "</th>";
