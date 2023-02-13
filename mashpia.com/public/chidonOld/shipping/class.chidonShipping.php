@@ -409,22 +409,24 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             if ($gifts && count($gifts)) {
-                foreach ($gifts as $idx => $gift) {
+                foreach ($gifts as $gift) {
                     $add = false;
                     if ($gift == 'yarmulka' && $row['gender'] == 'M' && ($gender == 'm' || $gender == 0)) $add = true;
                     else if ($gift == 'bracelet' && $row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $add = true;
                     else if ($gift == 'personalized bottle') $add = true;
                     if ($add) {
                         $color = '';
+                        $name = '';
                         if ($gift == 'personalized bottle') {
                             if ($row['gender'] == 'M') $color = 'blue';
                             else if ($row['gender'] == 'F') $color = 'pink';
+                            $name = $row['name_pref'];
                         }
                         $info[$row['user_id']][] = [
-                            'item' => $gift,
-                            'size' => $row['yarmulka'] > 0 ? $row['yarmulka'] : '',
+                            'item'  => $gift,
+                            'size'  => $row['yarmulka'] > 0 ? $row['yarmulka'] : '',
                             'color' => $color,
-                            'name' => $row['name_pref']
+                            'name'  => $name
                         ];
                     }
                 }
