@@ -18,8 +18,9 @@ function createHtmlForItem($school, $row) {
                 echo "<td>" . $item['item'];
                 foreach ($item_details_chosen as $field) {
                     echo "</td><td>";
-                    if (isset($item[$field])) echo $item[$field];
                     if ($field == 'cat') echo $cat;
+                    else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                    else if (isset($item[$field])) echo $item[$field];
                 }
                 echo "</td></tr>";
 
