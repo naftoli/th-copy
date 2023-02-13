@@ -77,7 +77,7 @@ function build_items() {
     </fieldset>
 
     <fieldset>
-      <legend>Limit To</legend>
+      <legend style="margin-bottom: -5px;">Limit To</legend>
       <h4>Gender</h4>
       <select name="gender">
         <option value="0">All</option>

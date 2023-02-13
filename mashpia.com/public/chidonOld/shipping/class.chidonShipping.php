@@ -215,7 +215,7 @@ class ChidonShipping
     public function getChildrenSweaters($gender, $school, $sweaters = []) {
         $info = [];
         $sql = "SELECT 
-                    user_id, size, gender, s.school_name
+                    user_id, size, gender  
                 FROM
                     th_chidon tc
                         JOIN
@@ -232,9 +232,10 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $details = [];
+            $details['item'] = 'sweater';
+            $details['size'] = $row['size'];
             $details['color'] = $row['gender'] == 'M' ? 'blue' : $row['gender'] == 'F' ? 'burgundy' : '';
-            $details['school'] = $row['school_name'];
-            $info[$row['user_id']] = $details;
+            $info[$row['user_id']][] = $details;
         }
         return $info;
     }
@@ -382,21 +383,22 @@ class ChidonShipping
             $to_give = [];
             $name = $row['name_pref'];
             if ($gifts && count($gifts)) {
-                foreach ($gifts as $gift) {
+                foreach ($gifts as $idx => $gift) {
                     switch ($gift) {
                         case 'yarmulka':
-                            if ($row['gender'] == 'M' && ($gender == 'm' || $gender == 0)) $to_give[] = 'Yarmulka Size: ' . $row['yarmulka'];
+                            if ($row['gender'] == 'M' && ($gender == 'm' || $gender == 0)) $to_give[$idx]['item'] = 'Yarmulka Size: ' . $row['yarmulka'];
                             break;
                         case 'bracelet':
-                            if ($row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $to_give[] = 'Bracelet';
+                            if ($row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $to_give[$idx]['item'] = 'Bracelet';
                             break;
                         case 'personalized bottle':
-                            $to_give[] = "Personalized Bottle (" . ucwords($name) . ")";
+                            $to_give[$idx]['item'] = "Personalized Bottle";
+                            $to_give[$idx]['name_pref'] = ucwords(trim($name));
                             break;
                     }
                 }
             }
-            $info[$row['user_id']] = implode(",", $to_give);
+            $info[$row['user_id']] = $to_give;
         }
         return $info;
     }
@@ -481,7 +483,7 @@ class ChidonShipping
 
         $info = [];
         $sql = "SELECT 
-                    *
+                    cup.user_id, cup.he_name as name_pref, cp.prize_name as item, cp.size, cp.color
                 FROM
                     chidon_user_prizes cup
                         JOIN
