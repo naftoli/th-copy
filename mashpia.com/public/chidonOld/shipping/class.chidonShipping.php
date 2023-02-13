@@ -297,7 +297,7 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $purchases[$row['admin_id']][] = [
-                'qty'   => $row['amount'],
+                'qty'   => intval($row['amount']),
                 'item'  => $row['item'] == 'celeb_box' ? 'celebration box' : 'sweater',
                 'size'  => $row['size'],
                 'color' => $row['color'],

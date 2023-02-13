@@ -1,6 +1,6 @@
 <?php
 function createHtmlForItem($school, $row) {
-    global $info, $detailed_fields, $extra_fields, $items_chosen, $summary;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $summary;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -8,19 +8,18 @@ function createHtmlForItem($school, $row) {
             foreach ($items as $item) {
                 // create new row
                 echo "<tr>";
-                foreach ($detailed_fields as $field) {
+                foreach ($fields_chosen as $field) {
                     if (strpos($field, 'shipping') === false) {
                         $desc = substr($field, strpos($field, '.') + 1);
                         echo "<td>" . $row[$desc] . "</td>";
                     }
                 }
-                echo "<td>" . $cat . "</td><td>";
-                echo (isset($item['qty']) ? $item['qty'] : 1) . "</td><td>";
                 if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
-                echo " " . $item['item'];
-                foreach ($extra_fields as $field) {
+                echo "<td>" . $item['item'];
+                foreach ($item_details_chosen as $field) {
                     echo "</td><td>";
                     if (isset($item[$field])) echo $item[$field];
+                    if ($field == 'cat') echo $cat;
                 }
                 echo "</td></tr>";
 
@@ -51,19 +50,12 @@ $schools = $as->getSchools();
 require 'class.chidonShipping.php';
 require 'data.php';
 
-// chosen fields
-$extra_fields = [];
-$detailed_fields = [];
+$items_chosen = $_POST['items'];
 $fields_chosen = array_keys($_POST['fields']);
-foreach ($fields_chosen as $field) {
-    if (strpos($field, '.') !== false) $detailed_fields[] = $field;
-    else $extra_fields[] = $field;
-}
+$item_details_chosen = array_keys($_POST['details']);
 
 $cs = new ChidonShipping();
 
-// chosen items
-$items_chosen = $_POST['items'];
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
@@ -76,11 +68,9 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
 // find all unique tables to fetch from
 $tables = [];
 foreach ($fields_chosen as $field) {
-  if (strpos($field, '.') !== false) {
     $pos = strpos($field, '.');
     $table = substr($field, 0, $pos);
     if (! in_array($table, $tables)) $tables[] = $table;
-  }
 }
 
 // build sql statement
@@ -94,7 +84,7 @@ $tableAliases = [
 
 //********* SELECT **********//
 $sql = "SELECT u.user_id, u.school_id ";
-foreach ($detailed_fields as $field) $sql .= ", " . $field;
+foreach ($fields_chosen as $field) $sql .= ", " . $field;
 $sql .= " FROM users u ";
 foreach ($tables as $table) {
   if ($table == 'u') continue;
@@ -160,7 +150,7 @@ $summary = [];
       <?php
       echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
       $address = '';
-      foreach ($detailed_fields as $field) {
+      foreach ($fields_chosen as $field) {
         $pos = strpos($field, '.');
         $desc = substr($field, $pos + 1);
         switch ($field) {
@@ -197,11 +187,11 @@ $summary = [];
       <thead>
         <tr>
           <?php
-          foreach ($detailed_fields as $field) {
+          foreach ($fields_chosen as $field) {
             if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
           }
-          echo "<th>Category</th><th>Quantity</th><th>Item</th>";
-          foreach ($extra_fields as $field) {
+          echo "<th>Item</th>";
+          foreach ($item_details_chosen as $field) {
             if ($field == 'name') $field = 'name preference';
             echo "<th>" . ucwords($field) . "</th>";
           }

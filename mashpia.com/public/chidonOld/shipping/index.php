@@ -25,6 +25,15 @@ function build_fields() {
     return $html;
 }
 
+function build_details() {
+    global $item_details;
+    $html = "<input type='checkbox' name='all_details' id='all_details' /> ALL DETAILS<br />";
+    foreach ($item_details as $desc => $detail) {
+        $html .= "<input type='checkbox' name='details[" . $desc . "]' class='detail' /> " . ucwords($detail) . "<br />";
+    }
+    return $html;
+}
+
 function build_items() {
     global $categories, $items;
     $html = "<input type='checkbox' name='all_items' id='all_items' /> ALL ITEMS<br />";
@@ -72,6 +81,11 @@ function build_items() {
     <fieldset>
       <legend>Choose Items</legend>
         <?= build_items(); ?>
+    </fieldset>
+
+    <fieldset>
+      <legend>Choose Item Details</legend>
+      <?= build_details(); ?>
     </fieldset>
 
     <fieldset>
@@ -125,6 +139,7 @@ function build_items() {
   }
 
   $("#all_items").click(checkAll)
+  $("#all_details").click(checkAll)
   $("#all_fields").click(checkAll)
 
   $("#create").click( function(e) {
