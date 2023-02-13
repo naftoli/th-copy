@@ -16,11 +16,13 @@ function createHtmlForItem($school, $row) {
                 }
                 if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
                 echo "<td>" . $item['item'];
-                foreach ($item_details_chosen as $field) {
-                    echo "</td><td>";
-                    if ($field == 'cat') echo $cat;
-                    else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
-                    else if (isset($item[$field])) echo $item[$field];
+                if ($item_details_chosen && count($item_details_chosen)) {
+                    foreach ($item_details_chosen as $field) {
+                        echo "</td><td>";
+                        if ($field == 'cat') echo $cat;
+                        else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                        else if (isset($item[$field])) echo $item[$field];
+                    }
                 }
                 echo "</td></tr>";
 
@@ -192,9 +194,11 @@ $summary = [];
             if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
           }
           echo "<th>Item</th>";
-          foreach ($item_details_chosen as $field) {
-            if ($field == 'name') $field = 'name preference';
-            echo "<th>" . ucwords($field) . "</th>";
+          if ($item_details_chosen && count($item_details_chosen)) {
+              foreach ($item_details_chosen as $field) {
+                  if ($field == 'name') $field = 'name preference';
+                  echo "<th>" . ucwords($field) . "</th>";
+              }
           }
           ?>
         </tr>
