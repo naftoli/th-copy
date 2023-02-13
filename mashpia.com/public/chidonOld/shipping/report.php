@@ -71,7 +71,7 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
-echo "<pre>"; print_r($info); echo "</pre>";
+//echo "<pre>"; print_r($info); echo "</pre>";
 
 // find all unique tables to fetch from
 $tables = [];
@@ -189,12 +189,12 @@ $summary = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-    <h2>Details</h2>
+    <h4>Details</h4>
 
     <p></p>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
-    <h2>Details</h2>
+    <h4>Details</h4>
     <table>
       <tr>
         <?php
