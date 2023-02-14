@@ -130,7 +130,7 @@ class ChidonShipping
      * @param $prizes
      * @return array - list prizes to give per user ID
      */
-    public function getRecruitmentPrizes($gender, $school, $prizes = []) {
+    public function getRecruitmentPrizes($gender, $school, $limitTo = []) {
         $info = [];
         // get list of prizes
         $prizes = $this->getListofRecruitmentPrizes();
@@ -138,12 +138,15 @@ class ChidonShipping
         $children  = $this->getChildrenRecruitments($gender, $school);
         foreach ($children as $user_id => $credits) {
             if ($credits > 5) $credits = 5;
-            $info[$user_id][] = [
-                'item'  => $prizes[$credits],
-                'size'  => '',
-                'color' => '',
-                'name'  => ''
-            ];
+            $prize = $prizes[$credits];
+            if (in_array(strtolower($prize), $limitTo)) {
+                $info[$user_id][] = [
+                    'item' => $prize,
+                    'size' => '',
+                    'color' => '',
+                    'name' => ''
+                ];
+            }
         }
 
         // limit return to $prizes
@@ -290,8 +293,9 @@ class ChidonShipping
                 if ($item == 'sweaters') $tmp[] = "sweater";
                 if ($item == 'celebration boxes') $tmp[] = 'celeb_box';
             }
-            $sql .= " and item in ('" . implode(',', $tmp) . "')";
+            $sql .= " and item in ('" . implode("','", $tmp) . "')";
         }
+//        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -300,8 +304,8 @@ class ChidonShipping
                 'qty'   => intval($row['amount']),
                 'item'  => $row['item'] == 'celeb_box' ? 'celebration box' : 'sweater',
                 'size'  => $row['size'],
-                'color' => $row['color'],
-                'name'  => $row['']
+                'color' => '',
+                'name'  => ''
             ];
         }
 
@@ -310,13 +314,13 @@ class ChidonShipping
             $admin_info = $this->getOldestChild(array_keys($purchases), $gender, $school);
             foreach ($purchases as $admin_id => $more) {
                 foreach ($more as $purchase) {
-                    $info[$admin_info[$admin_id]][] = $purchase;
+                    if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
                 }
             }
         } else if ($method == 'byFamily') {
             $info = $purchases;
         }
-
+//        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -490,6 +494,7 @@ class ChidonShipping
                 ];
             }
         }
+//        echo "</pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -592,13 +597,13 @@ class ChidonShipping
         // get prize ids based on prize names
         $ids = [];
         foreach ($limitTo as $prize) {
-            $id = array_search($prize, $prizes);
+            $id = array_search(ucwords($prize), $prizes);
             if ($id !== false) $ids[] = $id;
         }
 
         $info = [];
         $sql = "SELECT 
-                    cup.user_id, cup.he_name, cp.prize_name, cp.size, cp.color, th.ultimate_trip 
+                    cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, tc.ultimate_trip 
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -606,13 +611,14 @@ class ChidonShipping
                         JOIN 
                     users u USING (user_id) 
                         JOIN 
-                    th_chidon tc using (user_id, year) 
+                    th_chidon tc on tc.user_id = u.user_id and tc.year = cup.year 
                 WHERE
                     cup.year = :year";
         if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
+//        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -622,9 +628,11 @@ class ChidonShipping
                 'item'  => $row['prize_name'],
                 'size'  => $row['size'],
                 'color' => $row['color'],
-                'name'  => $row['he_name']
+                'name'  => $row['he_name'],
+                'prize_id'  => $row['prize_id']
             ];
         }
+//        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 

@@ -55,7 +55,7 @@ require 'data.php';
 
 $items_chosen = $_POST['items'];
 $fields_chosen = array_keys($_POST['fields']);
-$item_details_chosen = array_keys($_POST['details']);
+$item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 
 $cs = new ChidonShipping();
 
@@ -182,7 +182,7 @@ $summary = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-
+    
     <p></p>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
@@ -196,7 +196,9 @@ $summary = [];
           echo "<th>Item</th>";
           if ($item_details_chosen && count($item_details_chosen)) {
               foreach ($item_details_chosen as $field) {
-                  if ($field == 'name') $field = 'name preference';
+                  if ($field == 'cat') $field = 'category';
+                  else if ($field == 'name') $field = 'name preference';
+                  else if ($field == 'prize_id') $field = 'prize id';
                   echo "<th>" . ucwords($field) . "</th>";
               }
           }
@@ -215,13 +217,13 @@ $summary = [];
     <?php endif; ?>
     <p></p>
   <?php endforeach; ?>
-  <?php if ($admin_user['auth'] == 'super') : ?>
-    <p></p>
-    <?php
+  <?php
+  if ($admin_user['auth'] == 'super') {
     foreach ($summary as $item => $more) {
       $grand_total = 0;
+      echo "<br />";
       echo "<h2>" . ucwords($item) . " Summary</h2>";
-    ?>
+      ?>
       <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
         <thead>
           <tr>
@@ -231,16 +233,17 @@ $summary = [];
         </thead>
         <tbody>
         <?php
-          foreach ($more as $school_id => $total) {
-            echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
-            $grand_total += intval($total);
-          }
-//          echo "<tr><th>Grand Total:</th><th>" . $grand_total . "</th></tr>";
+        foreach ($more as $school_id => $total) {
+          echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
+          $grand_total += intval($total);
         }
         ?>
         </tbody>
       </table>
-  <?php endif; ?>
+  <?php
+    }
+  }
+  ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>

@@ -5,8 +5,8 @@ $categories = [
 ];
 
 $items = [
-    'brochures'             => ['brochures'],
-    'books'                 => ['books'],
+    'brochures'             => ['brochure'],
+    'books'                 => ['yahadus book'],
     'guides'                => ['study guides', 'khk guides'],
     'recruitment prizes'    => ['book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag', 'watch'],
     'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
@@ -57,6 +57,7 @@ $item_details = [
     'size'      => 'Size',
     'color'     => 'Color',
     'name'      => 'Personalization Name',
+    'prize_id'  => 'Prize ID',
     'cat'       => 'Category'
 ];
 
