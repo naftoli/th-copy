@@ -217,10 +217,12 @@ $summary = [];
     <p></p>
   <?php endforeach; ?>
   <?php if ($admin_user['auth'] == 'super') : ?>
+    <p></p>
+    <hr />
     <?php
-    $totals = [];
     foreach ($summary as $item => $more) {
-      echo "<h3>" . $item . " Summary</h3>";
+      $grand_total = 0;
+      echo "<h3>" . ucwords($item) . " Summary</h3>";
     ?>
       <table id="table2" class="table table-striped table-condensed cell-border hover row-order order-column">
         <thead>
@@ -233,9 +235,9 @@ $summary = [];
         <?php
           foreach ($more as $school_id => $total) {
             echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
-            if (isset($totals[$item])) $totals[$item] += $total;
-            else $totals[$item] = $total;
+            $grand_total += intval($total);
           }
+          echo "<tr><td>Grand Total:</td><td>" . $grand_total . "</td></tr>";
         }
         ?>
         </tbody>
