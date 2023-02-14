@@ -222,7 +222,7 @@ $summary = [];
       $grand_total = 0;
       echo "<h2>" . ucwords($item) . " Summary</h2>";
     ?>
-      <table class="table table-striped table-condensed cell-border hover row-order order-column">
+      <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
         <thead>
           <tr>
             <th>School</th>
@@ -246,7 +246,10 @@ $summary = [];
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
   $('.table').DataTable({
-    paging: false
+    paging: false,
+    columnDefs: [
+      { orderable: false, targets: -1 }
+    ]
   });
 </script>
 </html>
