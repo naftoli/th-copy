@@ -27,12 +27,12 @@ function createHtmlForItem($school, $row) {
                 echo "</td></tr>";
 
                 // update summary
-                if (isset($summary[$school][$item['item']])) {
-                    if (isset($item['amount'])) $summary[$school][$item['item']] += intval($item['amount']);
-                    else $summary[$school][$item['item']]++;
+                if (isset($summary[$item['item']][$school])) {
+                    if (isset($item['amount'])) $summary[$item['item']][$school] += intval($item['amount']);
+                    else $summary[$item['item']][$school]++;
                 } else {
-                    if (isset($item['amount'])) $summary[$school][$item['item']] = intval($item['amount']);
-                    $summary[$school][$item['item']] = 1;
+                    if (isset($item['amount'])) $summary[$item['item']][$school] = intval($item['amount']);
+                    $summary[$item['item']][$school] = 1;
                 }
             }
         }
@@ -217,27 +217,29 @@ $summary = [];
     <p></p>
   <?php endforeach; ?>
   <?php if ($admin_user['auth'] == 'super') : ?>
-    <h2>Grand Summary</h2>
-    <table id="table2" class="table table-striped table-condensed cell-border hover row-order order-column">
-      <tr>
-        <th>School</th>
-        <th>Item</th>
-        <th>Total</th>
-      </tr>
+    <?php
+    $totals = [];
+    foreach ($summary as $item => $more) {
+      echo "<h3>" . $item . " Summary</h3>";
+    ?>
+      <table id="table2" class="table table-striped table-condensed cell-border hover row-order order-column">
+        <thead>
+          <tr>
+            <th>School</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
         <?php
-        $totals = [];
-        foreach ($summary as $school_id => $more) {
-          foreach ($more as $item => $total) {
-            echo "<tr><td>" . $schools[$school_id] . "</td><td>". $item . "</td><td>" . $total . "</td></tr>";
+          foreach ($more as $school_id => $total) {
+            echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
             if (isset($totals[$item])) $totals[$item] += $total;
             else $totals[$item] = $total;
           }
         }
-        foreach ($totals as $item => $amount) {
-          echo "<tr></th><th>Grand Total:</th><th>" . $item . "</th><th>" . $amount . "</th></tr>";
-        }
         ?>
-    </table>
+        </tbody>
+      </table>
   <?php endif; ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
