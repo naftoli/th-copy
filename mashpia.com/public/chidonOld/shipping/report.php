@@ -235,7 +235,7 @@ $summary = [];
             echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
             $grand_total += intval($total);
           }
-          echo "<tr><th>Grand Total:</th><th>" . $grand_total . "</th></tr>";
+//          echo "<tr><th>Grand Total:</th><th>" . $grand_total . "</th></tr>";
         }
         ?>
         </tbody>
@@ -246,10 +246,7 @@ $summary = [];
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
   $('.table').DataTable({
-    paging: false,
-    columnDefs: [
-      { orderable: false, targets: -1 }
-    ]
+    paging: false
   });
 </script>
 </html>
