@@ -186,7 +186,7 @@ $summary = [];
     <p></p>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
-    <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
+    <table class="table table-striped table-condensed cell-border hover row-order order-column">
       <thead>
         <tr>
           <?php
@@ -213,18 +213,16 @@ $summary = [];
       </tbody>
     </table>
     <?php endif; ?>
-    <hr />
     <p></p>
   <?php endforeach; ?>
   <?php if ($admin_user['auth'] == 'super') : ?>
     <p></p>
-    <hr />
     <?php
     foreach ($summary as $item => $more) {
       $grand_total = 0;
-      echo "<h3>" . ucwords($item) . " Summary</h3>";
+      echo "<h2>" . ucwords($item) . " Summary</h2>";
     ?>
-      <table id="table2" class="table table-striped table-condensed cell-border hover row-order order-column">
+      <table class="table table-striped table-condensed cell-border hover row-order order-column">
         <thead>
           <tr>
             <th>School</th>
@@ -247,10 +245,7 @@ $summary = [];
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
-  $('#table').DataTable({
-    paging: false
-  });
-  $('#table2').DataTable({
+  $('.table').DataTable({
     paging: false
   });
 </script>
