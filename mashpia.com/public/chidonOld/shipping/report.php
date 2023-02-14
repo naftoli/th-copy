@@ -235,7 +235,7 @@ $summary = [];
             echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
             $grand_total += intval($total);
           }
-          echo "<tr><td>Grand Total:</td><td>" . $grand_total . "</td></tr>";
+          echo "<tr><th>Grand Total:</th><th>" . $grand_total . "</th></tr>";
         }
         ?>
         </tbody>
