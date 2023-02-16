@@ -258,7 +258,11 @@ $item_descriptions = [];
         }
         ?>
         </tbody>
+        <tfoot>
+          <tr><th>Grand Total:</th><th><?= $grand_total; ?></th></tr>
+        </tfoot>
       </table>
+
   <?php
     }
   }
