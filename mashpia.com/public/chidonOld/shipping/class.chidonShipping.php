@@ -70,14 +70,19 @@ class ChidonShipping
 
         $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
+
+        $cat = 'brochures';
+        $item = 'brochure';
+        $id = 0;
+//        $id = $this->getItemID([$cat][$item]);
+
         foreach ($rows as $row) {
-            $brochure = 'brochure';
-            if ($brochures && count($brochures)) $brochure = implode(',', $brochures);
             $info[$row['user_id']][] = [
-                'item'  => $brochure,
+                'item'  => $item,
                 'size'  => '',
                 'color' => '',
-                'name'  => ''
+                'name'  => '',
+                'id'    => $id
             ];
         }
         return $info;
@@ -103,12 +108,19 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $cat = 'yahadus books';
+        $item = 'yahadus book';
+        $id = 0;
+//        $id = $this->getItemID([$cat][$item]);
+
         foreach ($rows as $row) {
             $info[$row['user_id']][] = [
                 'item'  => 'yahadus book',
                 'size'  => '',
                 'color' => '',
-                'name'  => ''
+                'name'  => '',
+                'id'    => $id
             ];
         }
         return $info;
@@ -134,25 +146,39 @@ class ChidonShipping
         $info = [];
         // get list of prizes
         $prizes = $this->getListofRecruitmentPrizes();
+        // get list of id's per prize
+        $ids = [];
+        $cat = 'recruitment prizes';
+        foreach ($prizes as $prize) {
+            if ($prize == 'watch') {
+                if ($gender == 'm') $color = 'blue';
+                else if ($gender == 'f') $color = 'burgundy';
+                $id = 0;
+//                $id = $this->getItemID([$cat][$prize][$color]);
+//                $ids[$prize][$color] = $id;
+            } else {
+                $id = 0;
+//                $id = $this->getItemID([$cat][$prize]);
+//                $ids[$prize] = $id;
+            }
+        }
+
         // find out list of children and how many credits they have
         $children  = $this->getChildrenRecruitments($gender, $school);
+
         foreach ($children as $user_id => $credits) {
             if ($credits > 5) $credits = 5;
             $prize = $prizes[$credits];
             if (in_array(strtolower($prize), $limitTo)) {
+                $color = '';
+                if ($prize == 'watch') $color = $gender == 'm' ? 'blue' : $gender == 'f' ? 'burgundy' : '';
                 $info[$user_id][] = [
-                    'item' => $prize,
-                    'size' => '',
-                    'color' => '',
-                    'name' => ''
+                    'item'  => $prize,
+                    'size'  => '',
+                    'color' => $color,
+                    'name'  => '',
+//                    'id'    => $color ? $ids[$prize][$color] : $ids[$prize]
                 ];
-            }
-        }
-
-        // limit return to $prizes
-        foreach ($info as $user => $prize_names) {
-            foreach ($prize_names as $idx => $prize) {
-                if (! in_array($prize['item'], $prizes)) unset($info[$user][$idx]);
             }
         }
         return $info;
@@ -210,18 +236,30 @@ class ChidonShipping
      * @return array
      */
     public function getTestPrizes($gender, $school, $prizes = []) {
+        $colors = [
+            '1'   => 'blue',
+            '2'   => 'red',
+            '3'   => 'purple',
+            '4'   => 'green',
+            '5'   => 'yellow'
+        ];
         $info = [];
-        $sql = "select user_id from th_chidon where year = :year";
+        $sql = "select user_id, book from th_chidon where year = :year";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
+            $book = $row['book'];
+            $cat = 'test prizes';
             foreach ($prizes as $prize) {
+                $id = 0;
+//                $id = $this->getItemID([$cat][$prize][$colors[$book]]);
                 $info[$row['user_id']][] = [
                     'item'  => $prize,
                     'size'  => '',
                     'color' => '',
-                    'name'  => ''
+                    'name'  => '',
+                    'id'    => $id
                 ];
             }
         }
@@ -255,12 +293,24 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $genders = [
+            'M' => 'boys',
+            'F' => 'girls'
+        ];
+
+        $cat = 'children sweaters';
+        $item = ['children sweaters'];
         foreach ($rows as $row) {
+            $size = $row['size'];
+            $id = 0;
+//            $id = $this->getItemID([$cat][$item][$genders[$row['gender']]][$size]);
             $info[$row['user_id']][] = [
-                'item'  => 'sweater',
-                'size'  => $row['size'],
+                'item'  => $item,
+                'size'  => $size,
                 'color' => $row['gender'] == 'M' ? 'blue' : $row['gender'] == 'F' ? 'burgundy' : '',
-                'name'  => ''
+                'name'  => '',
+                'id'    => $id
             ];
         }
         return $info;
@@ -299,13 +349,25 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $cat = 'extra purchases';
         foreach ($rows as $row) {
+            if ($row['item'] == 'celeb_box') {
+                $size = '';
+                $id = 0;
+//                $id = $this->getItemID([$cat]['celebration boxes']);
+            } else {
+                $size = $row['size'];
+                $id = 0;
+//                $id = $this->getItemID([$cat]['sweaters'][$row['type_of_sweater'] . ' sweater'][$size]);
+            }
             $purchases[$row['admin_id']][] = [
                 'qty'   => intval($row['amount']),
                 'item'  => $row['item'] == 'celeb_box' ? 'celebration box' : 'sweater',
-                'size'  => $row['size'],
+                'size'  => $size,
                 'color' => '',
-                'name'  => ''
+                'name'  => '',
+                'id'    => $id
             ];
         }
 
@@ -403,15 +465,17 @@ class ChidonShipping
         if (! count($gifts)) $gifts = ['yarmulka', 'bracelet', 'personalized bottle'];
 
         $info = [];
-        $sql = "select * from th_chidon 
+        $sql = "select * from th_chidon tc 
                 join users u using (user_id) 
-                where date_paid > 0 and year = :year";
+                where tc.date_paid > 0 and tc.year = :year";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+        $cat = 'gifts';
+
         foreach ($rows as $row) {
             if ($gifts && count($gifts)) {
                 foreach ($gifts as $gift) {
@@ -426,12 +490,21 @@ class ChidonShipping
                             if ($row['gender'] == 'M') $color = 'blue';
                             else if ($row['gender'] == 'F') $color = 'pink';
                             $name = $row['name_pref'];
+                            $id = 0;
+//                            $id = $this->getItemID([$cat][$gift][$color]);
+                        } else if ($gift == 'yarmulka') {
+                            $id = 0;
+//                            $id = $this->getItemID([$cat][$gift][$row['yarmulka']]);
+                        } else {
+                            $id = 0;
+//                            $id = $this->getItemID([$cat][$gift]);
                         }
                         $info[$row['user_id']][] = [
                             'item'  => $gift,
                             'size'  => $row['yarmulka'] > 0 ? $row['yarmulka'] : '',
                             'color' => $color,
-                            'name'  => $name
+                            'name'  => $name,
+                            'id'    => $id
                         ];
                     }
                 }
@@ -451,12 +524,19 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $cat = 'ID cards';
+        $item = 'ID card';
+        $id = 0;
+//        $id = $this->getItemID([$cat][$item]);
+
         foreach ($rows as $row) {
             $info[$row['user_id']][] = [
                 'item'  => 'ID card',
                 'size'  => '',
                 'color' => '',
-                'name'  => ''
+                'name'  => '',
+                'id'    => $id
             ];
         }
         return $info;
@@ -483,14 +563,26 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $ids = [];
+        $cat = 'awards';
         foreach ($rows as $row) {
             $award = $this->getAward($row, $awards);
             if ($award) {
+                $award_info = explode('/', $award);
+                if (count($award_info) && count($award_info) > 0) {
+                    foreach ($award_info as $item) {
+//                        $ids[] = $this->getItemID([$cat][$item]);
+                    }
+                } else {
+//                    $ids[] = $this->getItemID([$cat][$award]);
+                }
                 $info[$row['user_id']][] = [
-                    'item' => $award,
-                    'size' => '',
+                    'item'  => $award,
+                    'size'  => '',
                     'color' => '',
-                    'name' => ''
+                    'name'  => '',
+                    'id'    => $ids
                 ];
             }
         }
@@ -624,11 +716,13 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             if (intval($row['ultimate_trip']) == 1) continue; // ultimate trip kids do NOT get prizes
+            $id = 'CHI' . $row['prize_id'];
             $info[$row['user_id']][] = [
                 'item'  => $row['prize_name'],
                 'size'  => $row['size'],
                 'color' => $row['color'],
                 'name'  => $row['he_name'],
+                'id'    => $id,
                 'prize_id'  => $row['prize_id']
             ];
         }
@@ -654,5 +748,552 @@ class ChidonShipping
 
     public function getEventItems() {
 
+    }
+
+    public function getCategories() {
+        $categories = [
+            'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
+            'gifts', 'ID cards', 'awards', 'prizes'
+        ];
+        return $categories;
+    }
+
+    public function getItems() {
+        $items = [
+            'brochures'             => ['brochure'],
+            'books'                 => ['yahadus book'],
+            'guides'                => ['study guides', 'khk guides'],
+            'recruitment prizes'    => ['book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag', 'watch'],
+            'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
+            'children sweaters'     => ['children sweaters'],
+            'extra purchases'       => ['celebration boxes', 'sweaters'],
+            'gifts'                 => ['yarmulka', 'personalized bottle', 'bracelet'],
+            'ID cards'              => ['ID card'],
+            'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
+            'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
+                'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
+                'chidon football', 'framed rebbe picture 5782', 'chidon cap', 'der rebbe ret tzu kinder',
+                'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
+                'chidon leather machzor', 'chidon baseball', 'chidon carry-on', 'personalized name bracelet', 'chidon pogo ball',
+                'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
+                'escape from europe', 'the Rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
+                'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkes', 'the slavita brothers', 'reb hillel paritcher'],
+        ];
+        return $items;
+    }
+
+    public function getItemID($info) {
+        // keys to find IDs are category / item / (color/gender) / size - has to match the items array from prev function
+        $item_ids = [
+            'brochures' => [
+                'brochure'  => [
+                    'id'    => 'CHI009'
+                ]
+            ],
+            'books' => [
+                'yahadus book'  => [
+                    'id'    => 'CHI010'
+                ]
+            ],
+            'guides'    => [
+                'study guides'  => [
+                    'id'    => 'CHI011'
+                ],
+                'khk guide' => [
+                    'id'    => 'CHI012'
+                ]
+            ],
+            'recruitment prizes'    => [
+                'book light'    => [
+                    'id'    => 'CHI013'
+                ],
+                'rechargeable fan'  => [
+                    'id'    => 'CHI014'
+                ],
+                'neck pillow'  => [
+                    'id'    => 'CHI017'
+                ],
+                'mini duffle bag'  => [
+                    'id'    => 'CHI018'
+                ],
+                'watch'  => [
+                    'blue' => [
+                        'id'    => 'CHI015'
+                    ],
+                    'burgundy' => [
+                        'id'    => 'CHI016'
+                    ]
+                ]
+            ],
+            'test prizes'   => [
+                'kop cards game'    => [
+                    'blue'      => [
+                        'id'    => 'CHI019'
+                    ],
+                    'red'       => [
+                        'id'    => 'CHI020'
+                    ],
+                    'purple'    => [
+                        'id'    => 'CHI021'
+                    ],
+                    'green'     => [
+                        'id'    => 'CHI022'
+                    ],
+                    'yellow'    => [
+                        'id'    => 'CHI023'
+                    ]
+                ],
+                'leather book mark' => [
+                    'blue'      => [
+                        'id'    => 'CHI025'
+                    ],
+                    'red'       => [
+                        'id'    => 'CHI026'
+                    ],
+                    'purple'    => [
+                        'id'    => 'CHI027'
+                    ],
+                    'green'     => [
+                        'id'    => 'CHI028'
+                    ],
+                    'yellow'    => [
+                        'id'    => 'CHI029'
+                    ]
+                ],
+                'drawstring bag'    => [
+                    'id'        => 'CHI024'
+                ],
+                'shape shifting cube'   => [
+                    'id'        => 'CHI030'
+                ]
+            ],
+            'children sweaters'     => [
+                'children sweaters' => [
+                    'boys'  => [
+                        'children xs'   => [
+                            'id'    => 'CHI031'
+                        ],
+                        'children s'    => [
+                            'id'    => 'CHI032'
+                        ],
+                        'children m'    => [
+                            'id'    => 'CHI033'
+                        ],
+                        'children l'    => [
+                            'id'    => 'CHI034'
+                        ],
+                        'children xl'   => [
+                            'id'    => 'CHI035'
+                        ],
+                        'adult xs'  => [
+                            'id'    => 'CHI036'
+                        ],
+                        'adult s'   => [
+                            'id'    => 'CHI037'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI038'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI039'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI040'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI041'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI042'
+                        ]
+                    ],
+                    'girls' => [
+                        'children xs'   => [
+                            'id'    => 'CHI043'
+                        ],
+                        'children s'    => [
+                            'id'    => 'CHI044'
+                        ],
+                        'children m'    => [
+                            'id'    => 'CHI045'
+                        ],
+                        'children l'    => [
+                            'id'    => 'CHI046'
+                        ],
+                        'children xl'   => [
+                            'id'    => 'CHI047'
+                        ],
+                        'adult xs'  => [
+                            'id'    => 'CHI048'
+                        ],
+                        'adult s'   => [
+                            'id'    => 'CHI049'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI050'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI051'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI052'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI053'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI054'
+                        ]
+                    ]
+                ]
+            ],
+            'extra purchases'   => [
+                'celebration boxes' => [
+                    'id'    => 'CHI115'
+                ],
+                'sweaters'  => [
+                    'bubby sweater'    => [
+                        'adult s'   => [
+                            'id'    => 'CHI091'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI092'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI093'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI094'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI095'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI096'
+                        ]
+                    ],
+                    'zaidy sweater' => [
+                        'adult s'   => [
+                            'id'    => 'CHI097'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI098'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI099'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI100'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI101'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI102'
+                        ]
+                    ],
+                    'mother sweater' => [
+                        'adult s'   => [
+                            'id'    => 'CHI103'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI104'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI105'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI106'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI107'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI108'
+                        ]
+                    ],
+                    'father sweater' => [
+                        'adult s'   => [
+                            'id'    => 'CHI109'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI110'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI111'
+                        ],
+                        'adult xl'  => [
+                            'id'    => 'CHI112'
+                        ],
+                        'adult xxl' => [
+                            'id'    => 'CHI113'
+                        ],
+                        'adult xxxl'    => [
+                            'id'    => 'CHI114'
+                        ]
+                    ]
+                ]
+            ],
+            'gifts' => [
+                'yarmulka'  => [
+                    '4' => [
+                        'id'    => 'CHI116'
+                    ],
+                    '5' => [
+                        'id'    => 'CHI117'
+                    ],
+                    '6' => [
+                        'id'    => 'CHI118'
+                    ]
+                ],
+                'personalized bottle'   => [
+                    'boys'  => [
+                        'id'    => 'CHI120'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI121'
+                    ]
+                ],
+                'bracelet'  => [
+                    'id'    => 'CHI119'
+                ]
+            ],
+            'ID cards'  => [
+                'ID card'   => [
+                    'id'    => 'CHI122'
+                ]
+            ],
+            'awards'    => [
+                'certificate'   => [
+                    'id'    => 'CHI127'
+                ],
+                'plaque'    => [
+                    'id'    => 'CHI128'
+                ],
+                'medal'     => [
+                    'id'    => 'CHI129'
+                ],
+                'glass trophy'  => [
+                    'id'    => 'CHI130'
+                ],
+                'khk plaque'    => [
+                    'id'    => 'CHI131'
+                ],
+                'trophy'    => [
+                    'gold'  => [
+                        'id'    => 'CHI132'
+                    ],
+                    'silver'    => [
+                        'id'    => 'CHI133'
+                    ],
+                    'bronze'    => [
+                        'id'    => 'CHI134'
+                    ]
+                ]
+            ],
+            'prizes'    => [
+                'remote control helicopter' => [
+                    'id'    => 'CHI135'
+                ],
+                'video drone'   => [
+                    'id'    => 'CHI136'
+                ],
+                'bracelet'  => [
+                    'id'    => 'CHI137'
+                ],
+                'necklace'  => [
+                    'id'    => 'CHI138'
+                ],
+                'earrings'  => [
+                    'id'    => 'CHI139'
+                ],
+                'chidon T-shirt'    => [
+                    'boys'  => [
+                        'children s'    => [
+                            'id'    => 'CHI140'
+                        ],
+                        'children m'    => [
+                            'id'    => 'CHI141'
+                        ],
+                        'children l'    => [
+                            'id'    => 'CHI142'
+                        ],
+                        'children xl'   => [
+                            'id'    => 'CHI143'
+                        ],
+                        'adult s'   => [
+                            'id'    => 'CHI144'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI145'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI146'
+                        ]
+                    ],
+                    'girls' => [
+                        'children s'    => [
+                            'id'    => 'CHI147'
+                        ],
+                        'children m'    => [
+                            'id'    => 'CHI148'
+                        ],
+                        'children l'    => [
+                            'id'    => 'CHI149'
+                        ],
+                        'children xl'   => [
+                            'id'    => 'CHI150'
+                        ],
+                        'adult s'   => [
+                            'id'    => 'CHI151'
+                        ],
+                        'adult m'   => [
+                            'id'    => 'CHI152'
+                        ],
+                        'adult l'   => [
+                            'id'    => 'CHI153'
+                        ]
+                    ]
+                ],
+                'chidon art set'    => [
+                    'id'    => 'CHI154'
+                ],
+                'chidon juggling set'   => [
+                    'id'    => 'CHI155'
+                ],
+                'chidon soccer ball'    => [
+                    'id'    => 'CHI156'
+                ],
+                'chidon basket ball'    => [
+                    'id'    => 'CHI157'
+                ],
+                'chidon football'   => [
+                    'id'    => 'CHI158'
+                ],
+                'framed rebbe picture 5782' => [
+                    'id'    => 'CHI159'
+                ],
+                'chidon cap'    => [
+                    'boys'  => [
+                        'id'    => 'CHI160'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI161'
+                    ]
+                ],
+                'der rebbe ret tzu kinder'  => [
+                    'id'    => 'CHI162'
+                ],
+                'chidon leather sefer hamitzvos'    => [
+                    'boys'  => [
+                        'id'    => 'CHI164'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI163'
+                    ]
+                ],
+                'chidon leather chitas' => [
+                    'boys'  => [
+                        'id'    => 'CHI165'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI166'
+                    ]
+                ],
+                'chidon leather siddur' => [
+                    'boys'  => [
+                        'id'    => 'CHI167'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI168'
+                    ]
+                ],
+                'chidon leather tehillim'   => [
+                    'boys'  => [
+                        'id'    => 'CHI169'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI170'
+                    ]
+                ],
+                'chidon leather machzor'    => [
+                    'boys'  => [
+                        'id'    => 'CHI172'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI171'
+                    ]
+                ],
+                'chidon baseball'   => [
+                    'id'    => 'CHI173'
+                ],
+                'chidon carry-on'   => [
+                    'id'    => 'CHI174'
+                ],
+                'personalized name bracelet'    => [
+                    'id'    => 'CHI175'
+                ],
+                'chidon pogo ball'  => [
+                    'id'    => 'CHI176'
+                ],
+                'the jewish underground vol 1'  => [
+                    'id'    => 'CHI177'
+                ],
+                'the jewish underground vol 2'  => [
+                    'id'    => 'CHI178'
+                ],
+                'iron curtain vol 1'    => [
+                    'id'    => 'CHI179'
+                ],
+                'iron curtain vol 2'    => [
+                    'id'    => 'CHI180'
+                ],
+                'escape from europe'    => [
+                    'id'    => 'CHI181'
+                ],
+                'the Rebbe and the mazkir'  => [
+                    'id'    => 'CHI182'
+                ],
+                'chidon towel'  => [
+                    'boys'  => [
+                        'id'    => 'CHI183'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI184'
+                    ]
+                ],
+                'chocolate mold'    => [
+                    'id'    => 'CHI185'
+                ],
+                'backpack'  => [
+                    'boys'  => [
+                        'id'    => 'CHI187'
+                    ],
+                    'girls' => [
+                        'id'    => 'CHI186'
+                    ]
+                ],
+                'waffle maker'  => [
+                    'id'    => 'CHI188'
+                ],
+                'chidon cookie cutters' => [
+                    'id'    => 'CHI189'
+                ],
+                'reb binyomin kletzker' => [
+                    'id'    => 'CHI190'
+                ],
+                'reb shmuel munkes' => [
+                    'id'    => 'CHI191'
+                ],
+                'the slavita brothers'  => [
+                    'id'    => 'CHI192'
+                ],
+                'reb hillel paritcher'  => [
+                    'id'    => 'CHI193'
+                ]
+            ]
+        ];
+
+        return $item_ids[$info['id']];
     }
 }

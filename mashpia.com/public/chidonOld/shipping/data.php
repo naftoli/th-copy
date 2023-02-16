@@ -1,37 +1,7 @@
 <?php
-$categories = [
-    'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-    'gifts', 'ID cards', 'awards', 'prizes'
-];
-
-$items = [
-    'brochures'             => ['brochure'],
-    'books'                 => ['yahadus book'],
-    'guides'                => ['study guides', 'khk guides'],
-    'recruitment prizes'    => ['book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag', 'watch'],
-    'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
-    'children sweaters'     => ['children sweaters'],
-    'extra purchases'       => ['celebration boxes', 'sweaters'],
-    'gifts'                 => ['yarmulka', 'personalized bottle', 'bracelet'],
-    'ID cards'              => ['ID card'],
-    'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
-    'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
-        'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
-        'chidon football', 'framed rebbe picture 5782', 'chidon cap', 'der rebbe ret tzu kinder',
-        'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
-        'chidon leather machzor', 'chidon baseball', 'chidon carry-on', 'personalized name bracelet', 'chidon pogo ball',
-        'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
-        'escape from european', 'the Rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
-        'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkes', 'the slavita brothers', 'reb hillel paritcher'],
-//    'event'                 => ['25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag',
-//        'flag pole', 'carpet', 'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes',
-//        'back drop', 'back drop medal frame'],
-];
-
 // create array of fields for the admin to choose from
 // key refers to input name and value refers to what the user will see
 // key contains the table/field that we need to fetch
-// if key does not refer to table, then it has just a description or variable name
 $fields = [
     's.school_name'         => 'School',
     'c.class_grade'         => 'Class Grade',
@@ -61,140 +31,36 @@ $item_details = [
     'cat'       => 'Category'
 ];
 
-//$sizes = [
-//    ['children xs', 'children s', 'children m', 'children l', 'children xl', 'adult xs', 'adult s', 'adult m',
-//        'adult l', 'adult xl', 'adult xxl', 'adult xxxl'],
-//    ['adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl'],
-//    ['children s', 'children m', 'children l', 'children xl', 'adult s', 'adult m', 'adult l']
-//];
-//
-//$items2 = [
-//    'brochures' => ['brochure'],
-//    'books'     => ['books'],
-//    'guides'    => ['study guide', 'khk guide'],
-//    'recruitment prizes'    => [
-//        'book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag',
-//        'watch' => [
-//            'colors' => ['blue', 'burgundy']
-//        ]
-//    ],
-//    'test prizes'   => [
-//        'kop cards game'    => [
-//            'colors'    => ['blue', 'red', 'purple', 'green', 'yellow']
-//        ],
-//        'leather book mark' => [
-//            'colors'    => ['blue', 'red', 'purple', 'green', 'yellow']
-//        ],
-//        'drawstring bag',
-//        'shape shifting cube'
-//    ],
-//    'sweaters'  => [
-//        'kids'  => [
-//            'boys'  => $sizes[0],
-//            'girls  '  => $sizes[0]
-//        ],
-//        'hq' => [
-//            'boys'  => $sizes[0],
-//            'girls  '  => $sizes[0]
-//        ],
-//        'trip staff'    => [
-//            'boys'  => $sizes[1],
-//            'girls' => $sizes[1]
-//        ],
-//        'bubby'     => $sizes[1],
-//        'zaidy'     => $sizes[1],
-//        'mother'    => $sizes[1],
-//        'father'    => $sizes[1],
-//    ],
-//    'celebration boxes'     => ['celebration box'],
-//    'trip items'            => ['plates', 'napkins', 'tablecloth', 'cups'],
-//    'gifts'                 => [
-//        'boys'  => [
-//            'yarmulka'  => [
-//                'sizes'     => ['4', '5', '6']
-//            ],
-//            'personalized name bottle'  => [
-//                'color'    => 'blue'
-//            ]
-//        ],
-//        'girls'     => [
-//            'jewelery',
-//            'personalized name bottle'  => [
-//                'color'    => 'pink'
-//            ]
-//        ]
-//    ],
-//    'ID cards'              => ['ID card'],
-//    'awards'                => [
-//        'certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque', 'gold trophy', 'silver trophy', 'bronze trophy'
-//    ],
-//    'event'                 => [
-//        '25 foot bunting', 'podium sign', 'chidon 4 foot flag', 'tzivos hashem 4 foot flag', 'flag pole', 'carpet',
-//        'foil baloon', 'navy baloon', 'blue baloon', 'stanchion poles', 'stanchion ropes', 'back drop', 'back drop medal frame'
-//    ],
-//    'prizes'                => [
-//        'remote control helicopter',
-//        'video drone',
-//        'bracelet',
-//        'necklace',
-//        'earrings',
-//        'chidon T-shirt' => [
-//            'boys'  => [
-//                'color' => 'navy',
-//                'sizes' => $sizes[2]
-//            ],
-//            'girls' => [
-//                'color' => 'burgundy',
-//                'sizes' => $sizes[2]
-//            ]
-//        ],
-//        'chidon art set',
-//        'chidon juggling set',
-//        'chidon soccer ball',
-//        'chidon basket ball',
-//        'chidon football',
-//        'framed rebbe picture 5782',
-//        'chidon cap'    => [
-//            'boys'  => [
-//                'color' => 'navy',
-//            ],
-//            'girls' => [
-//                'color' => 'burgundy'
-//            ]
-//        ],
-//        'der rebbe ret tzu kinder',
-//        'chidon leather sefer hamitzvos'    => ['boys', 'girls'],
-//        'chidon leather chitas' => ['boys', 'girls'],
-//        'chidon leather siddur' => ['boys', 'girls'],
-//        'chidon leather tehillim'   => ['boys', 'girls'],
-//        'chidon leather machzor'    => ['boys', 'girls'],
-//        'chidon baseball',
-//        'chidon carry-on',
-//        'personalized name bracelet',
-//        'chidon pogo ball',
-//        'comic book'    => [
-//            'the jewish underground vol 1',
-//            'the jewish underground vol 2',
-//            'iron curtain vol 1',
-//            'iron curtain vol 2',
-//            'escape from europe',
-//            'the Rebbe and the mazkir'
-//        ],
-//        'chidon towel'  => ['boys', 'girls'],
-//        'chocolate mold',
-//        'backpack'  => [
-//            'boys'  => [
-//                'color' => 'navy'
-//            ],
-//            'girls' => [
-//                'color' => 'burgundy'
-//            ]
-//        ],
-//        'waffle maker',
-//        'chidon cookie cutters',
-//        'reb binyomin kletzker',
-//        'reb shmuel munkes',
-//        'the slavita brothers',
-//        'reb hillel paritcher'
-//    ]
-//];
+function build_fields() {
+    global $fields;
+    $i = 1;
+    $html = "<input type='checkbox' name='all_fields' id='all_fields' /> ALL FIELDS<br />";
+    foreach ($fields as $field => $desc) {
+        $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field'";
+        if ($i++ <= 7) $html .= " checked";
+        $html .= " /> " . $desc . "<br />";
+    }
+    return $html;
+}
+
+function build_details() {
+    global $item_details;
+    $html = "<input type='checkbox' name='all_details' id='all_details' /> ALL DETAILS<br />";
+    foreach ($item_details as $desc => $detail) {
+        $html .= "<input type='checkbox' name='details[" . $desc . "]' class='detail' /> " . ucwords($detail) . "<br />";
+    }
+    return $html;
+}
+
+function build_items() {
+    global $categories, $items;
+    $html = "<input type='checkbox' name='all_items' id='all_items' /> ALL ITEMS<br />";
+    foreach ($categories as $cat) {
+        $html .= "<h4>" . ucwords($cat) . "</h4>";
+        foreach ($items[$cat] as $item) {
+            $name = strtolower($item);
+            $html .= "<input type='checkbox' name='items[" . $cat . "][" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
+        }
+    }
+    return $html;
+}

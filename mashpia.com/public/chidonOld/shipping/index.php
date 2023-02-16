@@ -13,39 +13,9 @@ $schools = $as->getSchools();
 require 'class.chidonShipping.php';
 require 'data.php';
 
-function build_fields() {
-    global $fields;
-    $i = 1;
-    $html = "<input type='checkbox' name='all_fields' id='all_fields' /> ALL FIELDS<br />";
-    foreach ($fields as $field => $desc) {
-        $html .= "<input type='checkbox' name='fields[" . $field . "]' class='field'";
-        if ($i++ <= 7) $html .= " checked";
-        $html .= " /> " . $desc . "<br />";
-    }
-    return $html;
-}
-
-function build_details() {
-    global $item_details;
-    $html = "<input type='checkbox' name='all_details' id='all_details' /> ALL DETAILS<br />";
-    foreach ($item_details as $desc => $detail) {
-        $html .= "<input type='checkbox' name='details[" . $desc . "]' class='detail' /> " . ucwords($detail) . "<br />";
-    }
-    return $html;
-}
-
-function build_items() {
-    global $categories, $items;
-    $html = "<input type='checkbox' name='all_items' id='all_items' /> ALL ITEMS<br />";
-    foreach ($categories as $cat) {
-        $html .= "<h4>" . ucwords($cat) . "</h4>";
-        foreach ($items[$cat] as $item) {
-            $name = strtolower($item);
-            $html .= "<input type='checkbox' name='items[" . $cat . "][" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
-        }
-    }
-    return $html;
-}
+$cs = new ChidonShipping();
+$categories = $cs->getCategories();
+$items = $cs->getItems();
 ?>
 <!DOCTYPE html>
 <html>

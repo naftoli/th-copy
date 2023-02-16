@@ -1,6 +1,6 @@
 <?php
 function createHtmlForItem($school, $row) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $summary;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -27,15 +27,22 @@ function createHtmlForItem($school, $row) {
                 echo "</td></tr>";
 
                 // update summary
-                if (isset($summary[$item['item']][$school])) {
-                    if (isset($item['amount'])) $summary[$item['item']][$school] += intval($item['amount']);
-                    else $summary[$item['item']][$school]++;
-                } else {
-                    if (isset($item['amount'])) $summary[$item['item']][$school] = intval($item['amount']);
-                    $summary[$item['item']][$school] = 1;
-                }
+                addToSummary($item, $school);
             }
         }
+    }
+}
+
+function addToSummary($item, $school) {
+    global $summary;
+
+    $key = $item['item'];
+    if (isset($summary[$key][$school])) {
+        if (isset($item['qty'])) $summary[$key][$school] += intval($item['qty']);
+        else $summary[$key][$school]++;
+    } else {
+        if (isset($item['qty'])) $summary[$key][$school] = intval($item['qty']);
+        $summary[$key][$school] = 1;
     }
 }
 
@@ -66,7 +73,6 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
-//echo "<pre>"; print_r($info); echo "</pre>";
 
 // find all unique tables to fetch from
 $tables = [];
@@ -95,7 +101,7 @@ foreach ($tables as $table) {
 }
 
 //********* WHERE *********//
-$sql .= " WHERE u.user_registered > 0 ";
+$sql .= " WHERE 1";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
@@ -107,18 +113,17 @@ if (in_array('c.class_grade', $fields_chosen)) $sql .= ", c.class_grade";
 if (in_array('c.class_sub', $fields_chosen)) $sql .= ", c.class_sub";
 if (in_array('u.last', $fields_chosen)) $sql .= ", u.last";
 if (in_array('u.first', $fields_chosen)) $sql .= ", u.first";
-//echo $sql;
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
-//echo "<pre>"; print_r($results); echo "</pre>";
 
 $resultsBySchool = [];
 foreach ($results as $row) {
     $resultsBySchool[$row['school_id']][] = $row;
 }
-//echo "<pre>"; print_r($resultsBySchool); echo "</pre>"; exit;
+
 $summary = [];
+$item_descriptions = [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -182,7 +187,21 @@ $summary = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-    
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Prize ID</th>
+          <th>Category</th>
+        </tr>
+        <?php
+        if (isset($summary[$school])) {
+            foreach ($summary[$school] as $id => $qty) {
+                echo "<tr><td>" . $id . "</td><td>" . $qty . "</td><td>" . "</td><td>" . "</td></tr>";
+            }
+        }
+        ?>
+      </table>
     <p></p>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
@@ -198,7 +217,7 @@ $summary = [];
               foreach ($item_details_chosen as $field) {
                   if ($field == 'cat') $field = 'category';
                   else if ($field == 'name') $field = 'name preference';
-                  else if ($field == 'prize_id') $field = 'prize id';
+                  else if ($field == 'prize_id') $field = 'prize ID';
                   echo "<th>" . ucwords($field) . "</th>";
               }
           }
