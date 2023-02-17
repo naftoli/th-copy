@@ -274,7 +274,11 @@ foreach ($resultsBySchool as $school => $more) {
   <?php
   if ($admin_user['auth'] == 'super') {
     foreach ($grand_summary as $item => $more) {
-      $grand_total = 0;
+      $item_details = $summary_items[$item];
+      $desc = $item_details['item'];
+      foreach (['item', 'size', 'color', 'prize_id'] as $attr) {
+        if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
+      }
       echo "<br />";
       echo "<h2>" . ucwords($item) . " Summary</h2>";
       ?>
@@ -297,7 +301,7 @@ foreach ($resultsBySchool as $school => $more) {
           <tr><th>Grand Total:</th><th><?= $grand_total; ?></th></tr>
         </tfoot>
       </table>
-
+      <div style="page-break-after: always;"></div>
   <?php
     }
   }
