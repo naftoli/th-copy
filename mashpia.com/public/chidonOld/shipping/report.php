@@ -141,6 +141,9 @@ foreach ($resultsBySchool as $school => $more) {
         createHtmlForItem($school, $row, false);
     }
 }
+// sort summary
+foreach ($summary as $school => $more) ksort($summary[$school]);
+ksort($grand_summary);
 ?>
 <!DOCTYPE html>
 <html>
