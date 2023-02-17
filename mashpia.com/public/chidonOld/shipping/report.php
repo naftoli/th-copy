@@ -136,6 +136,7 @@ $summary_items = []; // mapping of item ID to item info
 // go through it once so that we can have totals
 foreach ($resultsBySchool as $school => $more) {
     if (! isset($schools[$school])) continue;
+    if (empty($more)) continue;
     foreach ($more as $row) {
         if (! in_array($row['class_grade'], ['4', '5', '6', '7', '8', '9'])) continue;
         createHtmlForItem($school, $row, false);
