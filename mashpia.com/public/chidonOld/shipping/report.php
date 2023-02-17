@@ -221,11 +221,12 @@ foreach ($resultsBySchool as $school => $more) {
         <?php
         if (isset($summary[$school])) {
             foreach ($summary[$school] as $id => $qty) {
-                echo "<tr><td>" . $id . "</td><td>" . $qty . "</td><td>";
+                echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                 $item = $summary_items[$id];
                 foreach (['item', 'size', 'color', 'prize_id'] as $attr) {
+                   echo "<td>";
                    if (isset($item[$attr])) echo $item[$attr];
-                   echo "</td><td>";
+                   echo "</td>";
                 }
                 echo "</tr>";
             }
