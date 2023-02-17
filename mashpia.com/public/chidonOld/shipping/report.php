@@ -280,7 +280,7 @@ foreach ($resultsBySchool as $school => $more) {
         if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
       }
       echo "<br />";
-      echo "<h2>" . ucwords($item) . " Summary</h2>";
+      echo "<h2>" . ucwords($desc) . " Summary</h2>";
       ?>
       <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
         <thead>
