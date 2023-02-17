@@ -277,6 +277,7 @@ ksort($grand_summary);
   <?php
   if ($admin_user['auth'] == 'super') {
     foreach ($grand_summary as $item => $more) {
+      $grand_total = 0;
       $item_details = $summary_items[$item];
       $desc = "($item)";
       foreach (['item', 'size', 'color'] as $attr) {
