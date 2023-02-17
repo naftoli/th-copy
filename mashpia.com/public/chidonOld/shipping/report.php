@@ -205,16 +205,19 @@ foreach ($resultsBySchool as $school => $more) {
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-      <table class="summary">
-        <tr>
-          <th>Item ID</th>
-          <th>Quantity</th>
-          <th>Item Name</th>
-          <th>Size</th>
-          <th>Gender/Color</th>
-          <th>Prize ID</th>
-<!--          <th>Category</th>-->
-        </tr>
+      <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Quantity</th>
+            <th>Item Name</th>
+            <th>Size</th>
+            <th>Gender/Color</th>
+            <th>Prize ID</th>
+  <!--          <th>Category</th>-->
+          </tr>
+        </thead>
+        <tbody>
         <?php
         if (isset($summary[$school])) {
             foreach ($summary[$school] as $id => $qty) {
@@ -228,6 +231,7 @@ foreach ($resultsBySchool as $school => $more) {
             }
         }
         ?>
+        </tbody>
       </table>
       <p></p>
       <div style="page-break-after: always"></div>
