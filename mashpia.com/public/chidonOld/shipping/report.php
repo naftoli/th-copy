@@ -275,8 +275,8 @@ foreach ($resultsBySchool as $school => $more) {
   if ($admin_user['auth'] == 'super') {
     foreach ($grand_summary as $item => $more) {
       $item_details = $summary_items[$item];
-      $desc = $item_details['item'];
-      foreach (['item', 'size', 'color', 'prize_id'] as $attr) {
+      $desc = "($item)";
+      foreach (['item', 'size', 'color'] as $attr) {
         if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
       }
       echo "<br />";
