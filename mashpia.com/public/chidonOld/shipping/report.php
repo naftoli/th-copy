@@ -1,30 +1,32 @@
 <?php
-function createHtmlForItem($school, $row) {
+function createHtmlForItem($school, $row, $output = true) {
     global $info, $fields_chosen, $item_details_chosen, $items_chosen;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
             $items = $info[$cat][$row['user_id']];
             foreach ($items as $item) {
-                // create new row
-                echo "<tr>";
-                foreach ($fields_chosen as $field) {
-                    if (strpos($field, 'shipping') === false) {
-                        $desc = substr($field, strpos($field, '.') + 1);
-                        echo "<td>" . $row[$desc] . "</td>";
+                if ($output) {
+                    // create new row
+                    echo "<tr>";
+                    foreach ($fields_chosen as $field) {
+                        if (strpos($field, 'shipping') === false) {
+                            $desc = substr($field, strpos($field, '.') + 1);
+                            echo "<td>" . $row[$desc] . "</td>";
+                        }
                     }
-                }
-                if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
-                echo "<td>" . $item['item'];
-                if ($item_details_chosen && count($item_details_chosen)) {
-                    foreach ($item_details_chosen as $field) {
-                        echo "</td><td>";
-                        if ($field == 'cat') echo $cat;
-                        else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
-                        else if (isset($item[$field])) echo $item[$field];
+                    if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
+                    echo "<td>" . $item['item'];
+                    if ($item_details_chosen && count($item_details_chosen)) {
+                        foreach ($item_details_chosen as $field) {
+                            echo "</td><td>";
+                            if ($field == 'cat') echo $cat;
+                            else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                            else if (isset($item[$field])) echo $item[$field];
+                        }
                     }
+                    echo "</td></tr>";
                 }
-                echo "</td></tr>";
 
                 // update summary
                 addToSummary($item, $school);
@@ -34,16 +36,21 @@ function createHtmlForItem($school, $row) {
 }
 
 function addToSummary($item, $school) {
-    global $summary;
+    global $summary, $grand_summary,$summary_items;
 
-    $key = $item['item'];
-    if (isset($summary[$key][$school])) {
-        if (isset($item['qty'])) $summary[$key][$school] += intval($item['qty']);
-        else $summary[$key][$school]++;
-    } else {
-        if (isset($item['qty'])) $summary[$key][$school] = intval($item['qty']);
-        $summary[$key][$school] = 1;
-    }
+    // only awards has array of ids
+    if (is_array($item['id'])) return;
+
+    $key = $item['id'];
+    $qty = isset($item['qty']) ? intval($item['qty']) : 1;
+
+    if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
+
+    if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
+    else $summary[$school][$key] = $qty;
+
+    if (isset($grand_summary[$key][$school])) $grand_summary[$key][$school] += $qty;
+    else $grand_summary[$key][$school] = $qty;
 }
 
 $admin_auth = ['school'];
@@ -122,8 +129,18 @@ foreach ($results as $row) {
     $resultsBySchool[$row['school_id']][] = $row;
 }
 
-$summary = [];
-$item_descriptions = [];
+$summary = []; // for schools
+$grand_summary = []; // for HQ
+$summary_items = []; // mapping of item ID to item info
+
+// go through it once so that we can have totals
+foreach ($resultsBySchool as $school => $more) {
+    if (! isset($schools[$school])) continue;
+    foreach ($more as $row) {
+        if (! in_array($row['class_grade'], ['4', '5', '6', '7', '8', '9'])) continue;
+        createHtmlForItem($school, $row, false);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -145,7 +162,7 @@ $item_descriptions = [];
       padding: 5px;
       border-bottom: 1px solid grey;
     }
-    #header {
+    .header {
       font-size: 14px;
       line-height: 1.4;
       margin-bottom: 20px;
@@ -154,8 +171,9 @@ $item_descriptions = [];
 </head>
 <body>
   <?php foreach ($resultsBySchool as $school => $more) : ?>
-    <div id="header">
+    <div class="header" id="<?=$school?>">
       <?php
+      if (! isset($schools[$school])) continue;
       echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
       $address = '';
       foreach ($fields_chosen as $field) {
@@ -187,24 +205,35 @@ $item_descriptions = [];
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-      <table>
+      <table class="summary">
         <tr>
-          <th>Item</th>
+          <th>Item ID</th>
           <th>Quantity</th>
+          <th>Item Name</th>
+          <th>Size</th>
+          <th>Gender/Color</th>
           <th>Prize ID</th>
-          <th>Category</th>
+<!--          <th>Category</th>-->
         </tr>
         <?php
         if (isset($summary[$school])) {
             foreach ($summary[$school] as $id => $qty) {
-                echo "<tr><td>" . $id . "</td><td>" . $qty . "</td><td>" . "</td><td>" . "</td></tr>";
+                echo "<tr><td>" . $id . "</td><td>" . $qty . "</td><td>";
+                $item = $summary_items[$id];
+                foreach (['item', 'size', 'color', 'prize_id'] as $attr) {
+                   if (isset($item[$attr])) echo $item[$attr];
+                   echo "</td><td>";
+                }
+                echo "</tr>";
             }
         }
         ?>
       </table>
-    <p></p>
+      <p></p>
+      <div style="page-break-after: always"></div>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
+    <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
     <table class="table table-striped table-condensed cell-border hover row-order order-column">
       <thead>
         <tr>
@@ -235,10 +264,11 @@ $item_descriptions = [];
     </table>
     <?php endif; ?>
     <p></p>
+    <div style="page-break-after: always"></div>
   <?php endforeach; ?>
   <?php
   if ($admin_user['auth'] == 'super') {
-    foreach ($summary as $item => $more) {
+    foreach ($grand_summary as $item => $more) {
       $grand_total = 0;
       echo "<br />";
       echo "<h2>" . ucwords($item) . " Summary</h2>";
