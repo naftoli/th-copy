@@ -760,7 +760,7 @@ class ChidonShipping
             'brochures'             => ['brochure'],
             'books'                 => ['yahadus book'],
             'guides'                => ['study guides', 'khk guides'],
-            'recruitment prizes'    => ['book light', 'rechargeable fan', 'neck pillow', 'mini duffle bag', 'watch'],
+            'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
             'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
             'children sweaters'     => ['children sweaters'],
             'extra purchases'       => ['celebration boxes', 'sweaters'],
