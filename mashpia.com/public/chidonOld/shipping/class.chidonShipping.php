@@ -499,7 +499,7 @@ class ChidonShipping
                         }
                         $info[$row['user_id']][] = [
                             'item'  => $gift,
-                            'size'  => $row['yarmulka'] > 0 ? $row['yarmulka'] : '',
+                            'size'  => $gift == 'yarmulka' ? $row['yarmulka'] > 0 ? $row['yarmulka'] : '' : '',
                             'color' => $color,
                             'name'  => $name,
                             'id'    => $id
