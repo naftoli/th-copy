@@ -53,10 +53,11 @@ foreach ($info as $row) {
 
     $track = $highestTrack ? $tracks[$highestTrack] : 'none';
     if ($track !== 'none') {
-        $qry = "insert into th_chidon_info 
+        $qry = "insert ignore into th_chidon_info 
                 set year = $year, 
                 user_id = " . $row['user_id'] . ", 
-                highest_track = '" . strtolower($track) . "'";
+                highest_track = '" . strtolower($track) . "' 
+                on duplicate key update highest_track = '" . strtolower($track) . "'";
         $qrys[] = $qry;
     }
 }
