@@ -769,7 +769,7 @@ class ChidonShipping
             'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
             'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
                 'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
-                'chidon football', 'framed rebbe picture 5782', 'chidon cap', 'der rebbe ret tzu kinder',
+                'chidon football', 'framed rebbe picture', 'chidon cap', 'der rebbe ret tzu kinder',
                 'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
                 'chidon leather machzor', 'chidon baseball', 'chidon carry-on', 'personalized name bracelet', 'chidon pogo ball',
                 'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
@@ -945,7 +945,7 @@ class ChidonShipping
                 'chidon soccer ball'    => 'CHI156',
                 'chidon basket ball'    => 'CHI157',
                 'chidon football'   => 'CHI158',
-                'framed rebbe picture 5782' => 'CHI159',
+                'framed rebbe picture' => 'CHI159',
                 'chidon cap'    => [
                     'boys'  => 'CHI160',
                     'girls' => 'CHI161'
