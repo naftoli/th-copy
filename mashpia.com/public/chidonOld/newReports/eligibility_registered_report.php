@@ -19,7 +19,7 @@ $info = [];
 foreach ($schools as $school_id => $name) {
     $sql = "select u.user_id, u.school_id, u.class_id, u.user_serial, u.first, u.last, s.school_name, c.class_grade,    
                 c.class_sub, tc.date_paid, tc.khk_trip, tc.th_chidon_id, tc.test_type, tc.reward_type, tc.date_paid, 
-                tc.ultimate_trip, tci.highest_track  
+                tc.trip, tc.ultimate_trip, tci.highest_track  
             from users u 
             join schools s using (school_id) 
             join classes c on u.class_id = c.class_id 
@@ -88,6 +88,9 @@ $registered = [];
             <th>Eligible Rewards</th>
             <th>Registered For Experience</th>
             <th>Registered for Ultimate Trip</th>
+            <?php
+            if (in_array(61, array_keys($schools)) || in_array(269, array_keys($schools))) echo "<th>Trip</th>";
+            ?>
         </tr>
         <?php
         $rewards = [
@@ -123,7 +126,9 @@ $registered = [];
             echo "<tr><td>" . $school . "</td><td>" . $class . "</td><td>" . $row['user_serial'] .  "</td><td>" .
                 $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . ($highestTrack !== 'Khk Trip' ? $highestTrack : 'Ultimate Trip') .
                 "</td><td>" . $reward . "</td><td>" . ($row['date_paid'] ?? '') . "</td><td>" . (intval($row['ultimate_trip']) ? 'yes' : '') .
-                "</td></tr>";
+                "</td>";
+            if (in_array($row['school_id'], [61, 269])) echo "<td>" . $row['trip'] . "</td>";
+            echo "</tr>";
 
             // Totals
             if (empty($track)) continue;
