@@ -15,7 +15,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             echo "<td>" . $row[$desc] . "</td>";
                         }
                     }
-                    if (isset($item['type_of_sweater'])) echo " " . ucwords($item['type_of_sweater']);
+                    if (isset($item['type'])) echo " " . ucwords($item['type']);
                     echo "<td>" . $item['item'];
                     if ($item_details_chosen && count($item_details_chosen)) {
                         foreach ($item_details_chosen as $field) {
@@ -218,7 +218,7 @@ ksort($grand_summary);
             <th>Item Name</th>
             <th>Size</th>
             <th>Gender/Color</th>
-  <!--          <th>Category</th>-->
+            <th>Category</th>
           </tr>
         </thead>
         <tbody>
@@ -227,7 +227,7 @@ ksort($grand_summary);
             foreach ($summary[$school] as $id => $qty) {
                 echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                 $item = $summary_items[$id];
-                foreach (['item', 'size', 'color'] as $attr) {
+                foreach (['item', 'size', 'color', 'cat'] as $attr) {
                    echo "<td>";
                    if (isset($item[$attr])) echo $item[$attr];
                    echo "</td>";

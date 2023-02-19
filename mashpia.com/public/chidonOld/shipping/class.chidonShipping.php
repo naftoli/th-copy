@@ -81,7 +81,8 @@ class ChidonShipping
                 'size'  => '',
                 'color' => '',
                 'name'  => '',
-                'id'    => $id
+                'id'    => $id ,
+                'cat'   => $cat
             ];
         }
         return $info;
@@ -118,7 +119,8 @@ class ChidonShipping
                 'size'  => '',
                 'color' => '',
                 'name'  => '',
-                'id'    => $id
+                'id'    => $id,
+                'cat'   => $cat
             ];
         }
         return $info;
@@ -173,7 +175,8 @@ class ChidonShipping
                     'size'  => '',
                     'color' => $color,
                     'name'  => '',
-                    'id'    => $color ? $ids[$prize][$color] : $ids[$prize]
+                    'id'    => $color ? $ids[$prize][$color] : $ids[$prize],
+                    'cat'   => $cat
                 ];
             }
         }
@@ -256,7 +259,8 @@ class ChidonShipping
                     'size'  => '',
                     'color' => '',
                     'name'  => '',
-                    'id'    => $id
+                    'id'    => $id,
+                    'cat'   => $cat
                 ];
             }
         }
@@ -306,7 +310,8 @@ class ChidonShipping
                 'size'  => $size,
                 'color' => $row['gender'] == 'M' ? 'blue' : $row['gender'] == 'F' ? 'burgundy' : '',
                 'name'  => '',
-                'id'    => $id
+                'id'    => $id,
+                'cat'   => $cat
             ];
         }
         return $info;
@@ -363,7 +368,9 @@ class ChidonShipping
                 'size'  => $size,
                 'color' => '',
                 'name'  => '',
-                'id'    => $id
+                'id'    => $id,
+                'type'  => $row['item'] == 'sweater' ? $row['type_of_sweater'] : '',
+                'cat'   => $cat
             ];
         }
 
@@ -502,7 +509,8 @@ class ChidonShipping
                             'size'  => $gift == 'yarmulka' ? $row['yarmulka'] > 0 ? $row['yarmulka'] : '' : '',
                             'color' => $color,
                             'name'  => $name,
-                            'id'    => $id
+                            'id'    => $id,
+                            'cat'   => $cat
                         ];
                     }
                 }
@@ -533,7 +541,8 @@ class ChidonShipping
                 'size'  => '',
                 'color' => '',
                 'name'  => '',
-                'id'    => $id
+                'id'    => $id,
+                'cat'   => $cat
             ];
         }
         return $info;
@@ -579,7 +588,8 @@ class ChidonShipping
                     'size'  => '',
                     'color' => '',
                     'name'  => '',
-                    'id'    => $ids
+                    'id'    => $ids,
+                    'cat'   => $cat
                 ];
             }
         }
@@ -719,7 +729,8 @@ class ChidonShipping
                 'size'  => $row['size'],
                 'color' => $row['color'],
                 'name'  => $row['he_name'],
-                'id'    => $id
+                'id'    => $id,
+                'cat'   => $cat
             ];
         }
 //        echo "<pre>"; print_r($info); echo "</pre>";
