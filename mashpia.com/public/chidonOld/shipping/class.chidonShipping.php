@@ -773,7 +773,7 @@ class ChidonShipping
             'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
             'children sweaters'     => ['children sweaters'],
             'extra purchases'       => ['celebration boxes', 'sweaters'],
-            'gifts'                 => ['yarmulka', 'personalized bottle', 'bracelet'],
+            'gifts'                 => ['yarmulka', 'personalized bottle', 'jewelry'],
             'ID cards'              => ['ID card'],
             'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
             'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
@@ -906,7 +906,7 @@ class ChidonShipping
                     'boys'  => 'CHI120',
                     'girls' => 'CHI121'
                 ],
-                'bracelet'  => 'CHI119'
+                'jewelry'  => 'CHI119'
             ],
             'ID cards'  => [
                 'ID card'   => 'CHI122'
