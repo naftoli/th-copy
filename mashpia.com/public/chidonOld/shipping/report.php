@@ -177,6 +177,7 @@ ksort($grand_summary);
     <div class="header" id="<?=$school?>">
       <?php
       if (! isset($schools[$school])) continue;
+      if (! isset($summary[$school])) continue;
       if (empty($more)) continue;
       echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
       $address = '';
