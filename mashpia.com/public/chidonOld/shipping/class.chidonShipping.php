@@ -711,7 +711,7 @@ class ChidonShipping
                         JOIN 
                     th_chidon tc on tc.user_id = u.user_id and tc.year = cup.year 
                 WHERE
-                    cup.year = :year";
+                    cup.year = :year AND tc.date_paid > 0 AND tc.ultimate_trip = 0";
         if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
@@ -721,7 +721,6 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            if (intval($row['ultimate_trip']) == 1) continue; // ultimate trip kids do NOT get prizes
             $id = 'CHI' . $row['prize_id'];
             $info[$row['user_id']][] = [
                 'item'  => $row['prize_name'],
