@@ -226,7 +226,7 @@ ksort($grand_summary);
             foreach ($summary[$school] as $id => $qty) {
                 echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                 $item = $summary_items[$id];
-                foreach (['item', 'id', 'size', 'color', 'cat'] as $attr) {
+                foreach (['item', 'size', 'color', 'cat'] as $attr) {
                    echo "<td>";
                    if (isset($item[$attr])) echo $item[$attr];
                    echo "</td>";
@@ -257,6 +257,7 @@ ksort($grand_summary);
               foreach ($item_details_chosen as $field) {
                   if ($field == 'cat') $field = 'category';
                   else if ($field == 'name') $field = 'name preference';
+                  else if ($field == 'id') $field = 'Item ID';
                   echo "<th>" . ucwords($field) . "</th>";
               }
           }
