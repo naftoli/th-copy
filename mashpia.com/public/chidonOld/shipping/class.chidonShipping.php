@@ -719,8 +719,7 @@ class ChidonShipping
                 'size'  => $row['size'],
                 'color' => $row['color'],
                 'name'  => $row['he_name'],
-                'id'    => $id,
-                'prize_id'  => $row['prize_id']
+                'id'    => $id
             ];
         }
 //        echo "<pre>"; print_r($info); echo "</pre>";

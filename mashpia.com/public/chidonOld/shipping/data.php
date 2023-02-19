@@ -27,7 +27,6 @@ $item_details = [
     'size'      => 'Size',
     'color'     => 'Color',
     'name'      => 'Personalization Name',
-    'prize_id'  => 'Prize ID',
     'cat'       => 'Category'
 ];
 
