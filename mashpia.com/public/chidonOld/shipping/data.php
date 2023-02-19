@@ -23,6 +23,7 @@ $fields = [
 ];
 
 $item_details = [
+    'id'        => 'Item ID',
     'qty'       => 'Quantity',
     'size'      => 'Size',
     'color'     => 'Color',
