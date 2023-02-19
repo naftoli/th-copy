@@ -861,9 +861,7 @@ class ChidonShipping
                 ]
             ],
             'extra purchases'   => [
-                'celebration boxes' => [
-                    'id'    => 'CHI115'
-                ],
+                'celebration boxes' => 'CHI115',
                 'sweaters'  => [
                     'bubby sweater' => [
                         'xs'            => 'CHI095',
