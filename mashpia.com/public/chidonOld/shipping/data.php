@@ -26,7 +26,7 @@ $item_details = [
     'id'        => 'Item ID',
     'qty'       => 'Quantity',
     'size'      => 'Size',
-    'color'     => 'Color',
+    'color'     => 'Color/Gender',
     'name'      => 'Personalization Name',
     'cat'       => 'Category'
 ];
