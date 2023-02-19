@@ -133,7 +133,7 @@ $summary_items = []; // mapping of item ID to item info
 foreach ($resultsBySchool as $school => $more) {
     if (! isset($schools[$school])) continue;
     foreach ($more as $row) {
-        if (! in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
+        if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
         createHtmlForItem($school, $row, false);
     }
 }
