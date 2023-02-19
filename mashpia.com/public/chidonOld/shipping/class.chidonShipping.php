@@ -364,12 +364,11 @@ class ChidonShipping
             }
             $purchases[$row['admin_id']][] = [
                 'qty'   => intval($row['amount']),
-                'item'  => $row['item'] == 'celeb_box' ? 'celebration boxes' : 'sweaters',
+                'item'  => $row['item'] == 'celeb_box' ? 'celebration boxes' : ($row['type_of_sweater'] . ' sweater'),
                 'size'  => $size,
                 'color' => '',
                 'name'  => '',
                 'id'    => $id,
-                'type'  => $row['item'] == 'sweater' ? $row['type_of_sweater'] : '',
                 'cat'   => $cat
             ];
         }

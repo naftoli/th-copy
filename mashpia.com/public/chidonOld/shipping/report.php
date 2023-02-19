@@ -15,7 +15,6 @@ function createHtmlForItem($school, $row, $output = true) {
                             echo "<td>" . $row[$desc] . "</td>";
                         }
                     }
-                    if (isset($item['type'])) echo " " . ucwords($item['type']);
                     echo "<td>" . $item['item'];
                     if ($item_details_chosen && count($item_details_chosen)) {
                         foreach ($item_details_chosen as $field) {
