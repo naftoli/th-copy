@@ -170,6 +170,9 @@ ksort($grand_summary);
       line-height: 1.4;
       margin-bottom: 20px;
     }
+    .dataTables_filter {
+      display: none;
+    }
   </style>
 </head>
 <body>
