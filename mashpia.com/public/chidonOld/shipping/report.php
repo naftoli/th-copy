@@ -36,7 +36,7 @@ function createHtmlForItem($school, $row, $output = true) {
 }
 
 function addToSummary($item, $school) {
-    global $summary, $grand_summary,$summary_items;
+    global $summary, $grand_summary, $summary_items;
 
     // only awards has array of ids
     if (is_array($item['id'])) return;
@@ -279,6 +279,7 @@ ksort($grand_summary);
   <?php endforeach; ?>
   <?php
   if ($admin_user['auth'] == 'super') {
+    echo "<pre>"; print_r($grand_summary); echo "</pre>"; exit;
     foreach ($grand_summary as $item => $more) {
       $grand_total = 0;
       $item_details = $summary_items[$item];
