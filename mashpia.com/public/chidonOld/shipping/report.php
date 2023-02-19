@@ -209,6 +209,7 @@ ksort($grand_summary);
     </div>
     <p></p>
     <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
+      <h3>Summary</h3>
       <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
         <thead>
           <tr>
@@ -283,7 +284,7 @@ ksort($grand_summary);
         if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
       }
       echo "<br />";
-      echo "<h2>" . ucwords($desc) . " Summary</h2>";
+      echo "<h2>" . ucwords($desc) . " Totals</h2>";
       ?>
       <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
         <thead>
