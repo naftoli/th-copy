@@ -169,6 +169,11 @@ ksort($grand_summary);
     .dataTables_filter {
       display: none;
     }
+    @media print {
+      .no-print {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -240,7 +245,7 @@ ksort($grand_summary);
         ?>
         </tbody>
       </table>
-      <p></p>
+      <p class="no-print"></p>
       <div style="page-break-after: always"></div>
     <?php endif; ?>
     <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
@@ -273,9 +278,9 @@ ksort($grand_summary);
         ?>
       </tbody>
     </table>
-    <?php endif; ?>
-    <p></p>
+    <p class="no-print"></p>
     <div style="page-break-after: always"></div>
+    <?php endif; ?>
   <?php endforeach; ?>
 <!--  --><?php
 //  if ($admin_user['auth'] == 'super') {
