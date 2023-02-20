@@ -75,7 +75,7 @@ if ( isset( $_POST['school'] ) && isset( $_POST['grade'] ) ) {
 		}
 	}
 }
-
+//echo "<pre>"; print_r($users); echo "</pre>";
 /****************** BAL PEH INFORMATION ******************/
 require_once( $_SERVER['DOCUMENT_ROOT'].'/class.bpSummary.php' );
 $bpsTanya 	= new BpSummary( $tanyaCampaign, 	'school' );
@@ -183,6 +183,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	foreach ($schools as $id => $name) {
 		$tanyaSummary = $bpsTanya->getSummary($id) ? $bpsTanya->getSummary($id) : 0;
 		$mishnaSummary = $bpsMishna->getSummary($id) ? $bpsMishna->getSummary($id) : 0;
+    if (isset($classes[$id])) {
 		?>
 		<br />
 		<div id="school_<?=$id?>">
@@ -220,50 +221,52 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
                     // for each class...
                     foreach ($classes[$id] as $class) {
                         // for each student...
-                        foreach ($users[$id][$class] as $user) {
-                            // get the totals of amount learned
-                            $totalTanya['learned'] = $tanya->getTotalLearned( 'user', $user );
-                            $totalMishna['learned'] = $mishna->getTotalLearned( 'user', $user );
+                        if (isset($users[$id][$class])) {
+                            foreach ($users[$id][$class] as $user) {
+                                // get the totals of amount learned
+                                $totalTanya['learned'] = $tanya->getTotalLearned( 'user', $user );
+                                $totalMishna['learned'] = $mishna->getTotalLearned( 'user', $user );
 
-                            // get parent entered
-                            $totalTanya['parentEntered'] = $tanya->getParentEntered( $user );
-                            $totalMishna['parentEntered'] = $mishna->getParentEntered( $user );
+                                // get parent entered
+                                $totalTanya['parentEntered'] = $tanya->getParentEntered( $user );
+                                $totalMishna['parentEntered'] = $mishna->getParentEntered( $user );
 
-                            // sum them up in the grand totals
-                            $grandTotals['tanya']['learned'] += $totalTanya['learned'];
-                            $grandTotals['mishna']['learned'] += $totalMishna['learned'];
-                            ?>
-                            <tr>
-                                <td><?=$classNames[$class]?></td>
-                                <td>
-                                    <?=$userNames[$user]?>
-                                    <input type='hidden' class='userID' value='<?=$user?>' />
-                                    <input type='hidden' class='classID' value='<?=$class?>' />
-                                    <input type='hidden' class='schoolID' value='<?=$id?>' />
-                                </td>
-                                <td class='middle'>
-                                    <input type='text' size='5' class='tanya learn tlearn' value='<?=$totalTanya['learned']?>' />
-                                </td>
-                                <td class='parentTanyaEntered'>
-                                    <?=($totalTanya['parentEntered'] > 0 ? $totalTanya['parentEntered'] : '')?>
-                                </td>
-                                <td class='middle'>
-                                    <input type='text' size='5' class='mishna learn mlearn' value='<?= $totalMishna['learned'] ?>' />
-                                </td>
-                                <td class='parentMishnaEntered'>
-                                    <?=($totalMishna['parentEntered'] > 0 ? $totalMishna['parentEntered'] : '')?>
-                                </td>
-                                <td>
-                                    <button class='by_mishna'>Calcuate Mishna</button>
-                                </td>
-                                <td>
-                                    <button class='sync'>Confirm & Sync</button>
-                                </td>
-                            </tr>
-                        <?php
-                        } // end foreach student
+                                // sum them up in the grand totals
+                                $grandTotals['tanya']['learned'] += $totalTanya['learned'];
+                                $grandTotals['mishna']['learned'] += $totalMishna['learned'];
+                                ?>
+                                <tr>
+                                    <td><?=$classNames[$class]?></td>
+                                    <td>
+                                        <?=$userNames[$user]?>
+                                        <input type='hidden' class='userID' value='<?=$user?>' />
+                                        <input type='hidden' class='classID' value='<?=$class?>' />
+                                        <input type='hidden' class='schoolID' value='<?=$id?>' />
+                                    </td>
+                                    <td class='middle'>
+                                        <input type='text' size='5' class='tanya learn tlearn' value='<?=$totalTanya['learned']?>' />
+                                    </td>
+                                    <td class='parentTanyaEntered'>
+                                        <?=($totalTanya['parentEntered'] > 0 ? $totalTanya['parentEntered'] : '')?>
+                                    </td>
+                                    <td class='middle'>
+                                        <input type='text' size='5' class='mishna learn mlearn' value='<?= $totalMishna['learned'] ?>' />
+                                    </td>
+                                    <td class='parentMishnaEntered'>
+                                        <?=($totalMishna['parentEntered'] > 0 ? $totalMishna['parentEntered'] : '')?>
+                                    </td>
+                                    <td>
+                                        <button class='by_mishna'>Calcuate Mishna</button>
+                                    </td>
+                                    <td>
+                                        <button class='sync'>Confirm & Sync</button>
+                                    </td>
+                                </tr>
+                            <?php
+                            } // end foreach student
+                        }
 				    } // end foreach class
-                }
+        }
 				?>
 				<script>
 					var tlearned = <?=$grandTotals['tanya']['learned']?>;
@@ -276,7 +279,10 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 				</script>
 			</table>
 		</div>
-	<? } // end foreach school ?>
+	<?php
+    } // end if
+  }// end foreach school
+  ?>
 	<div class="modal" id="mishna-selector">
 		<div class="modal-content">
 			<h1>
