@@ -464,7 +464,7 @@ class ChidonShipping
      * @return array - list of user IDs with the gifts they should get
      */
     public function getGifts($gender, $school, $gifts = []) {
-        if (! count($gifts)) $gifts = ['yarmulka', 'bracelet', 'personalized bottle'];
+        if (! count($gifts)) $gifts = ['yarmulka', 'jewelry', 'personalized bottle'];
 
         $info = [];
         $sql = "select * from th_chidon tc 
@@ -483,7 +483,7 @@ class ChidonShipping
                 foreach ($gifts as $gift) {
                     $add = false;
                     if ($gift == 'yarmulka' && $row['gender'] == 'M' && ($gender == 'm' || $gender == 0)) $add = true;
-                    else if ($gift == 'bracelet' && $row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $add = true;
+                    else if ($gift == 'jewelry' && $row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $add = true;
                     else if ($gift == 'personalized bottle') $add = true;
                     if ($add) {
                         $color = '';
