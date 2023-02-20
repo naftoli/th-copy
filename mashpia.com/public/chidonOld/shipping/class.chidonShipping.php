@@ -338,7 +338,7 @@ class ChidonShipping
         $sql = "select * from extra_purchases ep 
                 left join purchase_addresses pa using (purchase_id) 
                 where ep.year = :year";
-        if ($method == 'bySchool') $sql .= " and ep.shipping_amount != 10";
+        if ($method == 'bySchool') $sql .= " and (ep.shipping_amount != 10 or ep.shipping_amount is null)";
         else if ($method == 'byFamily') $sql .= " and ep.shipping_amount = 10";
         if ($items && count($items)) {
             $fields = [];
@@ -348,7 +348,7 @@ class ChidonShipping
             }
             $sql .= " and item in ('" . implode("','", $fields) . "')";
         }
-//        echo $sql;
+        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -374,10 +374,12 @@ class ChidonShipping
                 'cat'   => $cat
             ];
         }
+        echo "<pre>"; print_r($purchases); echo "</pre>";
 
         if ($method == 'bySchool') {
             // find out oldest child for each admin ID
             $admin_info = $this->getOldestChild(array_keys($purchases), $gender, $school);
+//            echo "<pre>"; print_r($admin_info); echo "</pre>";
             foreach ($purchases as $admin_id => $more) {
                 foreach ($more as $purchase) {
                     if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
@@ -386,7 +388,7 @@ class ChidonShipping
         } else if ($method == 'byFamily') {
             $info = $purchases;
         }
-//        echo "<pre>"; print_r($info); echo "</pre>";
+        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -401,7 +403,8 @@ class ChidonShipping
         $sql = "select user_id, dob from users u 
                 join admin_auths aa on aa.id = u.user_id 
                 join th_chidon tc using (user_id)
-                where admin_id = :id and auth = 'user'";
+                where admin_id = :id and auth = 'user' 
+                group by user_id";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
