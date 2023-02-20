@@ -200,12 +200,14 @@ if (isset($_POST['submit'])) {
                                 
                                 // check if quota was reached 
                                 if (intval($val) >= $quota && mysql_num_rows( $result ) == 0) {
-                                    $sql = "INSERT INTO date_tasks_mission_marks
+                                    $sql = "INSERT IGNORE INTO date_tasks_mission_marks
                                             SET user_id = " . $user . ",
                                             date_tasks_mission_id = " . $missionID . ",
                                             mission_value = 1.0, 
                                             subject_id = 1,
                                             mission_name = \"" . mysql_real_escape_string( $row['mission_name'] ) . "\",
+                                            mark_date = " . $date . " 
+                                            ON DUPLICATE KEY UPDATE 
                                             mark_date = " . $date;
                                     $qrys[] = $sql;
                                 } else if (intval($val) < $quota && mysql_num_rows( $result ) == 1) {
@@ -228,6 +230,7 @@ if (isset($_POST['submit'])) {
         foreach ($qrys as $qry) {
             // echo $qry . "<br />";
             if (! mysql_query($qry)) {
+//              echo $qry . "<br />" . mysql_error();
               $updated = false;
               break;
             }
