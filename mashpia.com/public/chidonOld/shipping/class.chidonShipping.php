@@ -692,13 +692,6 @@ class ChidonShipping
         // get list of prizes in system with prize ids
         $prizes = $this->getChidonPrizes();
 
-        // get prize ids based on prize names
-        $ids = [];
-        foreach ($limitTo as $prize) {
-            $id = array_search(ucwords($prize), $prizes);
-            if ($id !== false) $ids[] = $id;
-        }
-
         $info = [];
         $sql = "SELECT 
                     cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, tc.ultimate_trip 
@@ -712,7 +705,7 @@ class ChidonShipping
                     th_chidon tc on tc.user_id = u.user_id and tc.year = cup.year 
                 WHERE
                     cup.year = :year AND tc.date_paid > 0 AND tc.ultimate_trip = 0";
-        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
+//        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
@@ -721,15 +714,28 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $id = 'CHI' . $row['prize_id'];
-            $info[$row['user_id']][] = [
-                'item'  => $row['prize_name'],
-                'size'  => $row['size'],
-                'color' => $row['color'],
-                'name'  => $row['he_name'],
-                'id'    => $id,
-                'cat'   => 'prizes'
-            ];
+            // make sure it's one of the prizes selected to show
+            if (count($limitTo)) {
+                $found = false;
+                $p = strtolower($row['prize_name']);
+                foreach ($limitTo as $toShow) {
+                    if (strpos($p, $toShow) !== false) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+            if ($found) {
+                $id = 'CHI' . $row['prize_id'];
+                $info[$row['user_id']][] = [
+                    'item' => $row['prize_name'],
+                    'size' => $row['size'],
+                    'color' => $row['color'],
+                    'name' => $row['he_name'],
+                    'id' => $id,
+                    'cat' => 'prizes'
+                ];
+            }
         }
 //        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
@@ -779,10 +785,10 @@ class ChidonShipping
                 'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
                 'chidon football', 'framed rebbe picture', 'chidon cap', 'der rebbe ret tzu kinder',
                 'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
-                'chidon leather machzor', 'chidon baseball', 'chidon carry-on', 'personalized name bracelet', 'chidon pogo ball',
-                'the jewish underground vol 1', 'the jewish underground vol 2', 'iron curtain vol 1', 'iron curtain vol 2',
-                'escape from europe', 'the rebbe and the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
-                'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkes', 'the slavita brothers', 'reb hillel paritcher'],
+                'chidon leather machzor', 'chidon base ball', 'chidon carry-on', 'chidon towel', 'personalized name bracelet',
+                'chidon pogo ball', 'the jewish underground volume 1', 'the jewish underground volume 2', 'iron curtain vol 1',
+                'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
+                'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
         ];
         return $items;
     }
