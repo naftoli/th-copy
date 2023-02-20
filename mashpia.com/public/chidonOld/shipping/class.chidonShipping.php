@@ -348,7 +348,7 @@ class ChidonShipping
             }
             $sql .= " and item in ('" . implode("','", $fields) . "')";
         }
-        echo $sql;
+//        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -374,7 +374,7 @@ class ChidonShipping
                 'cat'   => $cat
             ];
         }
-        echo "<pre>"; print_r($purchases); echo "</pre>";
+//        echo "<pre>"; print_r($purchases); echo "</pre>";
 
         if ($method == 'bySchool') {
             // find out oldest child for each admin ID
@@ -388,7 +388,7 @@ class ChidonShipping
         } else if ($method == 'byFamily') {
             $info = $purchases;
         }
-        echo "<pre>"; print_r($info); echo "</pre>";
+//        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -447,7 +447,7 @@ class ChidonShipping
             else {
                 $d1 = new DateTime($child['dob']);
                 $d2 = new DateTime($row['dob']);
-                if ($d2 > $d1) $child = $row;
+                if ($d2 < $d1) $child = $row;
             }
         }
         return $child['user_id'];
