@@ -566,9 +566,14 @@ class ChidonShipping
     public function getAwards($gender, $school, $awards = []) {
         $info = [];
         $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
-                join th_chidon tc using (user_id) 
+                join th_chidon tc using (user_id, year) 
                 join users u using (user_id) 
-                where tcf.year = :year";
+                where tcf.year = :year 
+                    AND (level_1 > 0 OR level_2 > 0
+                    OR level_3 > 0
+                    OR level_4 > 0
+                    OR tcf.khk > 0)
+                GROUP BY user_id";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
@@ -576,30 +581,25 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
-        $ids = [];
         $cat = 'awards';
         foreach ($rows as $row) {
             $award = $this->getAward($row, $awards);
             if ($award) {
-                $award_info = explode('/', $award);
-                if (count($award_info) && count($award_info) > 0) {
-                    foreach ($award_info as $item) {
-                        $ids[] = $this->getItemID($cat, $item);
-                    }
-                } else {
-                    $ids[] = $this->getItemID($cat, $award);
+                $award_info = explode(' / ', $award);
+                foreach ($award_info as $item) {
+                    $id = $this->getItemID($cat, $item);
+                    $info[$row['user_id']][] = [
+                        'item'  => $item,
+                        'size'  => '',
+                        'color' => '',
+                        'name'  => '',
+                        'id'    => $id,
+                        'cat'   => $cat
+                    ];
                 }
-                $info[$row['user_id']][] = [
-                    'item'  => $award,
-                    'size'  => '',
-                    'color' => '',
-                    'name'  => '',
-                    'id'    => $ids,
-                    'cat'   => $cat
-                ];
             }
         }
-//        echo "</pre>"; print_r($info); echo "</pre>";
+//        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -626,7 +626,7 @@ class ChidonShipping
             'yediah'    => 70,
             'havonah'   => 80,
             'iyun'      => 90,
-            'khk'       => 140
+            'khk'       => 140 // not a mark but rather number of correct answers (out of 200)
         ];
         $awards = [
             'yesod'     => 'certificate',
@@ -637,30 +637,33 @@ class ChidonShipping
         ];
 
         $ct = new ChidonTests();
+        $types = $ct->getTypes();
         $highest_track = $ct->getHighestTrackPassed($child)['highest_track'];
         // find out if award is same as before final or not
         $award = false;
-        $key = array_search($highest_track, $tracks);
-        if ($key !== false) {
-            // go down from key to find where the child is holding
-            $score = 0;
-            for ($i = 1; $i <= $key; $i++) {
-                $level = 'level_' . $i;
-                if (isset($child[$level])) {
-                    $score += $child[$level];
+        if ($highest_track) {
+            $key = array_search(strtolower($types[$highest_track]), $tracks);
+            if ($key !== false) {
+                // go down from key to find where the child is holding
+                $score = 0;
+                for ($i = 1; $i <= $key; $i++) {
+                    $level = 'level_' . $i;
+                    if (isset($child[$level])) {
+                        $score += $child[$level];
+                    }
                 }
-            }
-            for ($i = 1; $i <= $key; $i++) {
-                $divide_by = $finals[$tracks[$i]];
-                $final_score = number_format(($score / $divide_by) * 100, 2);
-                if ($final_score >= $needed[$tracks[$i]]) {
-                    $award = $tracks[$i];
+                for ($i = 1; $i <= $key; $i++) {
+                    $divide_by = $finals[$tracks[$i]];
+                    $final_score = number_format(($score / $divide_by) * 100, 2);
+                    if ($final_score >= $needed[$tracks[$i]]) {
+                        $award = $tracks[$i];
+                    }
                 }
-            }
-            // check for khk trophy
-            if (intval($child['khk_reg']) && intval($child['khk_final']) >= $needed['khk']) {
-                if (intval($child['ultimate_trip']) == 0) $award = 'khk'; // only show khk trophy if NOT going on ultimate trip
-                else if (intval($child['ultimate_trip']) == 1) $award = '';
+                // check for khk trophy
+                if (intval($child['khk_reg']) && intval($child['khk_final']) >= $needed['khk']) {
+                    if (intval($child['ultimate_trip']) == 0) $award = 'khk'; // only show khk trophy if NOT going on ultimate trip
+                    else if (intval($child['ultimate_trip']) == 1) $award = '';
+                }
             }
         }
         if ($award) {
@@ -674,6 +677,7 @@ class ChidonShipping
                     break;
                 case 'havonah':
                     if (in_array('medal', $limitTo)) $show = true;
+                    break;
                 case 'iyun':
                     if (in_array('glass trophy', $limitTo)) $show = true;
                     break;
@@ -790,7 +794,7 @@ class ChidonShipping
             'extra purchases'       => ['celebration boxes', 'sweaters'],
             'gifts'                 => ['yarmulka', 'personalized bottle', 'jewelry'],
             'ID cards'              => ['ID card'],
-            'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
+            'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk trophy'],
             'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
                 'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
                 'chidon football', 'framed rebbe picture', 'chidon cap', 'der rebbe ret tzu kinder',
@@ -929,7 +933,7 @@ class ChidonShipping
                 'plaque'        => 'CHI128',
                 'medal'         => 'CHI129',
                 'glass trophy'  => 'CHI130',
-                'khk plaque'    => 'CHI131',
+                'khk trophy'    => 'CHI131',
                 'trophy'    => [
                     'gold'      => 'CHI132',
                     'silver'    => 'CHI133',
