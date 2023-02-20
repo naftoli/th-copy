@@ -404,6 +404,7 @@ class ChidonShipping
                 join admin_auths aa on aa.id = u.user_id 
                 join th_chidon tc using (user_id)
                 where admin_id = :id and auth = 'user' 
+                and u.school_id != 612 
                 group by user_id";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
@@ -414,7 +415,8 @@ class ChidonShipping
         $sql2 = "select user_id, dob from users u 
                  join admin_auths aa on aa.id = u.user_id 
                  where admin_id = :id and auth = 'user' 
-                 and u.user_registered > 0";
+                 and u.user_registered > 0 
+                 and u.school_id != 612";
         if ($gender == 'm') $sql2 .= " and u.gender = 'M'";
         if ($gender == 'f') $sql2 .= " and u.gender = 'F'";
         if ($school > 0) $sql2 .= " and u.school_id = " . $school;
