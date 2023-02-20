@@ -109,13 +109,13 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
-        $cat = 'yahadus books';
+        $cat = 'books';
         $item = 'yahadus book';
         $id = $this->getItemID($cat, $item);
 
         foreach ($rows as $row) {
             $info[$row['user_id']][] = [
-                'item'  => 'yahadus book',
+                'item'  => $item,
                 'size'  => '',
                 'color' => '',
                 'name'  => '',
