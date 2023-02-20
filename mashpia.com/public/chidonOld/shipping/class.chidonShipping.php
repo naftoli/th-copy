@@ -338,6 +338,8 @@ class ChidonShipping
         $sql = "select * from extra_purchases ep 
                 left join purchase_addresses pa using (purchase_id) 
                 where ep.year = :year";
+        if ($method == 'bySchool') $sql .= " and ep.shipping_amount != 10";
+        else if ($method == 'byFamily') $sql .= " and ep.shipping_amount = 10";
         if ($items && count($items)) {
             $fields = [];
             foreach ($items as $item) {
@@ -694,7 +696,7 @@ class ChidonShipping
 
         $info = [];
         $sql = "SELECT 
-                    cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, tc.ultimate_trip 
+                    cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, tc.ultimate_trip  
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -702,9 +704,12 @@ class ChidonShipping
                         JOIN 
                     users u USING (user_id) 
                         JOIN 
-                    th_chidon tc on tc.user_id = u.user_id and tc.year = cup.year 
+                    th_chidon tc ON tc.user_id = u.user_id AND tc.year = cup.year 
+                        LEFT JOIN
+                    th_chidon_info tci ON u.user_id = tci.user_id AND tc.year = tci.year 
                 WHERE
-                    cup.year = :year AND tc.date_paid > 0 AND tc.ultimate_trip = 0";
+                    cup.year = :year AND tc.date_paid > 0 
+                        AND tc.ultimate_trip = 0 AND tci.highest_track != 'yesod'";
 //        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
