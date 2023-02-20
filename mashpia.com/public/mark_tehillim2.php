@@ -35,9 +35,9 @@ $months = array(
 );
 //echo "<pre>"; print_r($sm); echo "</pre>"; exit;
 //echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+$msg = '';
 
 if (isset($_POST['submit'])) {
-    
     if($debug) echo "<pre>";
     if($debug) print_r($_POST);
     if($debug) echo "</pre>";
@@ -126,13 +126,14 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['marks']) && $mark) {
         //echo count($_POST['kapitelach']);
         //echo "<br />" . count($_POST['minutes']);
-        //echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+//        echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
         $qrys = array();
         $types = array('kapitelach', 'minutes');
         $grids = array(
             'kapitelach'    => 8001,
             'minutes'       => 8002
         );
+
         foreach ($types as $key => $type) {
             foreach ($_POST[$type] as $user => $task) {
                 foreach ($task as $id => $val) {
@@ -221,10 +222,24 @@ if (isset($_POST['submit'])) {
             }
         }
         //echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
+        $updated = true;
+        mysql_query('set autocommit=0');
+        mysql_query('start transaction');
         foreach ($qrys as $qry) {
             // echo $qry . "<br />";
-            mysql_query($qry);
+            if (! mysql_query($qry)) {
+              $updated = false;
+              break;
+            }
         }
+        if ($updated) {
+            mysql_query('commit');
+            $msg = 'Saved.';
+        } else {
+            mysql_query('rollback');
+            $msg = 'Error Saving.';
+        }
+        mysql_query('set autocommit=1');
     }
     
     //get marked info
@@ -298,9 +313,10 @@ if (isset($_POST['submit'])) {
     <body>
         <? include('admin_header.php') ?>
         <h1>Mark Tehillim</h1>
+
+        <?= $msg ? "<div style='color: red;'>$msg</div>" : '' ?>
         
-        <? if (isset($_POST['submit'])) {
-            ?>
+        <?php if (isset($_POST['submit'])) { ?>
             <form action='mark_tehillim2.php<?=$debug ? "?debug=true" : ""?>' method='post'>
             <input type="hidden" name="marks" value="1" />
             <input type="hidden" name="date" value="<?=$date?>" />
@@ -308,7 +324,7 @@ if (isset($_POST['submit'])) {
             <input type="hidden" name="oldGrade" id="oldGrade" value="<?=$grade?>" />
 
             <h2>Shabbos Mevorchim 
-                <?
+                <?php
                 foreach ($sm as $month => $smdate) {
                     if ($sm[6] == $sm[7]) {
                         if ($month == 5) $months[$month] = "Adar";
@@ -376,7 +392,7 @@ if (isset($_POST['submit'])) {
                 </tr>
             </table>
             </form>
-        <? } else { ?>
+        <?php } else { ?>
             <form action='mark_tehillim2.php<?=$debug ? "?debug=true" : ""?>' method="post">				
                 <select name="school" id="school">
                     <?php
@@ -410,7 +426,7 @@ if (isset($_POST['submit'])) {
                 
                 <select name="date" required>
                     <option value='' disabled selected>Choose Shabbos Mevorchim</option>
-                    <?
+                    <?php
                     foreach ($sm as $month => $date) {
                         if ($sm[6] == $sm[7]) {
                             if ($month == 5) $months[$month] = "Adar";
