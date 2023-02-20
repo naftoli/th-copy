@@ -506,6 +506,7 @@ class ChidonShipping
                             $name = $row['name_pref'];
                             $id = $this->getItemID($cat, $gift, $gender);
                         } else if ($gift == 'yarmulka') {
+                            if ($row['yarmulka'] == 0) $row['yarmulka'] = 5;
                             $id = $this->getItemID($cat, $gift, $row['yarmulka']);
                         } else {
                             $id = $this->getItemID($cat, $gift);
@@ -1028,5 +1029,17 @@ class ChidonShipping
         if (! empty($deeper)) return $item_ids[$cat][$item][$deep][$deeper];
         else if (! empty($deep)) return $item_ids[$cat][$item][$deep];
         else return $item_ids[$cat][$item];
+    }
+
+    public function getStatus() {
+        $info = [];
+        $sql = "select * from th_chidon_shipping where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']][$row['item_id']] = $row;
+        }
+        return $info;
     }
 }
