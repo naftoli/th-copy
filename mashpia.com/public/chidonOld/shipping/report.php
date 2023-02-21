@@ -379,12 +379,12 @@ ksort($grand_summary);
     info.push({ action, item, user })
   }
 
-  function save() {
+  function save(reload = true) {
     $.post('ajax/saveShipping.php', { info }, function (result) {
       const res = JSON.parse(result)
       if (res.success) {
         alert('Saved.')
-        location.reload()
+        if (reload) location.reload()
       }
       else alert(res.error)
     })
@@ -407,7 +407,7 @@ ksort($grand_summary);
   $(".shipping").change( function () {
     const action = this.value
     update(this, action)
-    save()
+    save(false)
   })
 </script>
 </html>
