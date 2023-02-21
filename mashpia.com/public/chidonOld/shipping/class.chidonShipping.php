@@ -146,36 +146,27 @@ class ChidonShipping
         $info = [];
         // get list of prizes
         $prizes = $this->getListofRecruitmentPrizes();
-        // get list of id's per prize
-        $ids = [];
-        $cat = 'recruitment prizes';
-        foreach ($prizes as $prize) {
-            if ($prize == 'watch') {
-                if ($gender == 'm') $gender = 'boys';
-                else if ($gender == 'f') $gender = 'girls';
-                $id = $this->getItemID($cat, $prize, $gender);
-                $ids[$prize][$gender] = $id;
-            } else {
-                $id = $this->getItemID($cat, $prize);
-                $ids[$prize] = $id;
-            }
-        }
-
         // find out list of children and how many credits they have
         $children  = $this->getChildrenRecruitments($gender, $school);
 
-        foreach ($children as $user_id => $credits) {
-            if ($credits > 5) $credits = 5;
-            $prize = $prizes[$credits];
+        $cat = 'recruitment prizes';
+        foreach ($children as $user_id => $details) {
+            if ($details['credits'] > 5) $details['credits'] = 5;
+            $prize = $prizes[$details['credits']];
             if (in_array(strtolower($prize), $limitTo)) {
                 $color = '';
-                if ($prize == 'watch') $color = $gender == 'm' ? 'blue' : $gender == 'f' ? 'burgundy' : '';
+                if (strtolower($prize) == 'watch') {
+                    if ($details['gender'] == 'M') $color = 'blue';
+                    else if ($details['gender'] == 'F') $color = 'burgundy';
+                }
+                if (empty($color)) $id = $this->getItemID($cat, strtolower($prize));
+                else $id = $this->getItemID($cat, strtolower($prize), $color);
                 $info[$user_id][] = [
                     'item'  => $prize,
                     'size'  => '',
                     'color' => $color,
                     'name'  => '',
-                    'id'    => $color ? $ids[$prize][$color] : $ids[$prize],
+                    'id'    => $id,
                     'cat'   => $cat
                 ];
             }
@@ -209,7 +200,7 @@ class ChidonShipping
     private function getChildrenRecruitments($gender, $school) {
         $children = [];
         $start = 5782;
-        $sql = "select u.user_id, count(*) as credits from users u 
+        $sql = "select u.user_id, u.gender, count(*) as credits from users u 
                 join th_chidon tc on u.user_serial = tc.recruited_by 
                 where year >= :start";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
@@ -221,7 +212,10 @@ class ChidonShipping
 //        $stmt->debugDumpParams();
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $children[$row['user_id']] = $row['credits'];
+            $children[$row['user_id']] = [
+                'gender'    => $row['gender'],
+                'credits'   => $row['credits']
+            ];
         }
         return $children;
     }
@@ -506,7 +500,7 @@ class ChidonShipping
                             $name = $row['name_pref'];
                             $id = $this->getItemID($cat, $gift, $gender);
                         } else if ($gift == 'yarmulka') {
-                            if ($row['yarmulka'] == 0) $row['yarmulka'] = 5;
+                            if ($row['yarmulka'] == 0) $row['yarmulka'] = 5; // make sure yarmulka has a size
                             $id = $this->getItemID($cat, $gift, $row['yarmulka']);
                         } else {
                             $id = $this->getItemID($cat, $gift);
@@ -827,8 +821,8 @@ class ChidonShipping
                 'neck pillow'  => 'CHI017',
                 'mini duffle bag'  => 'CHI018',
                 'watch'  => [
-                    'blue' => 'CHI015',
-                    'burgundy' => 'CHI016'
+                    'blue'      => 'CHI015',
+                    'burgundy'  => 'CHI016'
                 ]
             ],
             'test prizes'   => [

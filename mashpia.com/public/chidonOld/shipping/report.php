@@ -28,7 +28,7 @@ function createHtmlForItem($school, $row, $output = true) {
                     }
                     echo "</td>";
                     // add column for shipping info
-                    echo "<td>";
+                    echo "<td class='no-print'>";
                     echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'>";
                     $options = ['Not Yet Shipped', 'Shipped', 'Missing'];
                     foreach ($options as $i => $val) {
@@ -61,6 +61,7 @@ function addToSummary($item, $school) {
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
+    if (is_array($key)) print_r($key);
 
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
@@ -306,7 +307,7 @@ ksort($grand_summary);
                 }
             }
             // add status column
-            echo "<th>Status</th>";
+            echo "<th class='no-print'>Status</th>";
             ?>
           </tr>
         </thead>
