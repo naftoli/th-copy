@@ -1,87 +1,4 @@
 <?php
-function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super;
-
-    foreach ($items_chosen as $cat => $more) {
-        if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
-            $items = $info[$cat][$row['user_id']];
-            foreach ($items as $item) {
-                if ($output) {
-                    // get status
-                    $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
-                    // create new row
-                    echo "<tr>";
-                    foreach ($fields_chosen as $field) {
-                        if (strpos($field, 'shipping') === false) {
-                            $desc = substr($field, strpos($field, '.') + 1);
-                            echo "<td>" . $row[$desc] . "</td>";
-                        }
-                    }
-                    echo "<td>" . $item['item'];
-                    if ($item_details_chosen && count($item_details_chosen)) {
-                        foreach ($item_details_chosen as $field) {
-                            echo "</td><td>";
-                            if ($field == 'cat') echo $cat;
-                            else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
-                            else if (isset($item[$field])) echo $item[$field];
-                        }
-                    }
-                    echo "</td>";
-                    // add column for shipping info
-                    echo "<td class='no-print'>";
-                    echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
-                    // figure out if it should be disabled or not
-                    if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
-                    echo ">";
-                    $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
-                    foreach ($options as $i => $val) {
-                        echo "<option value='$i'";
-                        /*
-                         * 0 = not yet shipped
-                         * 1 = shipped
-                         * 2 = missing
-                         * 3 = damaged
-                         */
-                        switch ($i) {
-                            case 0:
-                              if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
-                              break;
-                            case 1:
-                              if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
-                                  && intval($status['damaged']) == 0) echo " selected ";
-                              break;
-                            case 2:
-                              if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
-                              break;
-                            case 3:
-                              if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
-                              break;
-                      }
-                      echo ">" . $val . "</option>";
-                    }
-                    echo "</select></td></tr>";
-                }
-
-                // update summary
-                addToSummary($item, $school);
-            }
-        }
-    }
-}
-
-function addToSummary($item, $school) {
-    global $summary, $summary_items;
-
-    $key = $item['id'];
-    $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (is_array($key)) print_r($key);
-
-    if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
-
-    if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
-    else $summary[$school][$key] = $qty;
-}
-
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -102,6 +19,28 @@ $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 
 $cs = new ChidonShipping();
+
+$report_type = $_POST['report_type'];
+if ($report_type == 'file') {
+    $info = [];
+    $extra_purchases = [];
+    foreach ([61, 269] as $school_id) {
+        $tmp = [];
+        foreach ($items_chosen as $cat => $itemsPerCat) {
+            $listOfItems = array_keys($itemsPerCat);
+            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+            if ($cat == 'extra purchases') $tmp[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily');
+            else $tmp[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+        }
+        $info = array_merge_recursive($info, $tmp);
+    }
+    $csv = createCSV($info);
+    echo "<pre>"; print_r($csv); echo "</pre>";
+//    $file = 'shipping.txt';
+//    createFile($file, $csv);
+//    downloadFile($file);
+    exit;
+}
 
 // get results for chosen items
 $info = [];

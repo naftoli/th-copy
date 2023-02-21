@@ -64,3 +64,181 @@ function build_items() {
     }
     return $html;
 }
+
+function createHtmlForItem($school, $row, $output = true) {
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super;
+
+    foreach ($items_chosen as $cat => $more) {
+        if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
+            $items = $info[$cat][$row['user_id']];
+            foreach ($items as $item) {
+                if ($output) {
+                    // get status
+                    $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
+                    // create new row
+                    echo "<tr>";
+                    foreach ($fields_chosen as $field) {
+                        if (strpos($field, 'shipping') === false) {
+                            $desc = substr($field, strpos($field, '.') + 1);
+                            echo "<td>" . $row[$desc] . "</td>";
+                        }
+                    }
+                    echo "<td>" . $item['item'];
+                    if ($item_details_chosen && count($item_details_chosen)) {
+                        foreach ($item_details_chosen as $field) {
+                            echo "</td><td>";
+                            if ($field == 'cat') echo $cat;
+                            else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                            else if (isset($item[$field])) echo $item[$field];
+                        }
+                    }
+                    echo "</td>";
+                    // add column for shipping info
+                    echo "<td class='no-print'>";
+                    echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
+                    // figure out if it should be disabled or not
+                    if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
+                    echo ">";
+                    $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                    foreach ($options as $i => $val) {
+                        echo "<option value='$i'";
+                        /*
+                         * 0 = not yet shipped
+                         * 1 = shipped
+                         * 2 = missing
+                         * 3 = damaged
+                         */
+                        switch ($i) {
+                            case 0:
+                                if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
+                                break;
+                            case 1:
+                                if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
+                                    && intval($status['damaged']) == 0) echo " selected ";
+                                break;
+                            case 2:
+                                if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
+                                break;
+                            case 3:
+                                if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
+                                break;
+                        }
+                        echo ">" . $val . "</option>";
+                    }
+                    echo "</select></td></tr>";
+                }
+
+                // update summary
+                addToSummary($item, $school);
+            }
+        }
+    }
+}
+
+function addToSummary($item, $school) {
+    global $summary, $summary_items, $MASHPIA_DB;
+
+    $key = $item['id'];
+    $qty = isset($item['qty']) ? intval($item['qty']) : 1;
+    if (is_array($key)) print_r($key);
+
+    if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
+
+    if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
+    else $summary[$school][$key] = $qty;
+}
+
+function createCSV($items) {
+    global $items_chosen, $MASHPIA_DB, $schools;
+
+    // create sql to get all needed fields
+    $sql = "SELECT 
+                a.*, u.user_id, u.first AS u_first, u.last AS u_last, u.user_serial, u.school_id 
+            FROM
+                admins a
+                    JOIN
+                admin_auths aa USING (admin_id)
+                    JOIN
+                users u ON u.user_id = aa.id
+            WHERE
+                aa.auth = 'user'
+                    AND u.school_id IN (61 , 269)
+                    AND u.user_registered > 0";
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll();
+
+    $admins = [];
+    $children = [];
+    $users = [];
+    foreach ($rows as $row) {
+        $admins[$row['admin_id']] = $row;
+        $children[$row['admin_id']][] = $row['user_id'];
+        $users[$row['user_id']] = $row;
+    }
+
+    $info = [];
+    foreach ($children as $more) {
+        foreach ($more as $user_id) {
+            foreach ($items_chosen as $cat => $other) {
+                if (isset($items[$cat]) && isset($items[$cat][$user_id])) {
+                    $details = $items[$cat][$user_id];
+                    foreach ($details as $item) {
+                        $info[$user_id][] = $item;
+                    }
+                }
+            }
+        }
+    }
+//    echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
+    $i = 0;
+    $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+        'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
+        'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options'];
+    $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
+        'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+        'Full Item Name', 'Quantity', 'Child Name - Serial #'];
+    foreach ($children as $admin_id => $more) {
+        foreach ($more as $user_id) {
+            foreach ($info[$user_id] as $details) {
+                foreach ($details as $item) {
+                    $admin = $admins[$admin_id];
+                    $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                    $user = $users[$user_id];
+                    $school = $user['school_id'] == 61 ? 'MyShliach - Shipping' : 'Anash Kinder - Pickup';
+                    $csv[$i++] = [$admin_id, ($admin['first'] . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                        $phone, $school, $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                        $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $item['item'],
+                        $item['qty'], ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
+                }
+            }
+        }
+    }
+    return $csv;
+}
+
+function createFile($name, $info) {
+    $fp = fopen($name, "w");
+    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+    if (is_array($info)) {
+        foreach ($info as $fields) {
+            fputcsv($fp, $fields, "\t", ' ');
+        }
+    } else {
+        fputs($fp, $info);
+    }
+    fclose($fp);
+}
+
+function downloadFile($filename) {
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($filename));
+    flush(); // Flush system output buffer
+    readfile($filename);
+    unlink($filename);
+}

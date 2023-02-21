@@ -88,6 +88,7 @@ $items = $cs->getItems();
         <option value="all">Summary and Details</option>
         <option value="summary">Summary Only</option>
         <option value="details">Details Only</option>
+        <?php if ($super) echo "<option value='file'>CSV File</option>"; ?>
       </select><br />
       <br />
       <button id="create">Create Report</button>
