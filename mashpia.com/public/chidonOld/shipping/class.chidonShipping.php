@@ -302,7 +302,7 @@ class ChidonShipping
             $info[$row['user_id']][] = [
                 'item'  => $item,
                 'size'  => $size,
-                'color' => $row['gender'] == 'M' ? 'blue' : $row['gender'] == 'F' ? 'burgundy' : '',
+                'color' => $genders[$row['gender']],
                 'name'  => '',
                 'id'    => $id,
                 'cat'   => $cat

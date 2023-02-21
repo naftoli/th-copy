@@ -1,6 +1,6 @@
 <?php
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -29,20 +29,33 @@ function createHtmlForItem($school, $row, $output = true) {
                     echo "</td>";
                     // add column for shipping info
                     echo "<td class='no-print'>";
-                    echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'>";
-                    $options = ['Not Yet Shipped', 'Shipped', 'Missing'];
+                    echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
+                    // figure out if it should be disabled or not
+                    if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
+                    echo ">";
+                    $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                     foreach ($options as $i => $val) {
-                      echo "<option value='$i'";
-                      switch ($i) {
-                          case 0:
-                            if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
-                            break;
-                          case 1:
-                            if (isset($status['shipped']) && intval($status['shipped']) == 1 && intval($status['missing']) == 0) echo " selected ";
-                            break;
-                          case 2:
-                            if (isset($status['missing']) && intval($status['missing']) == 1) echo " selected ";
-                            break;
+                        echo "<option value='$i'";
+                        /*
+                         * 0 = not yet shipped
+                         * 1 = shipped
+                         * 2 = missing
+                         * 3 = damaged
+                         */
+                        switch ($i) {
+                            case 0:
+                              if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
+                              break;
+                            case 1:
+                              if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
+                                  && intval($status['damaged']) == 0) echo " selected ";
+                              break;
+                            case 2:
+                              if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
+                              break;
+                            case 3:
+                              if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
+                              break;
                       }
                       echo ">" . $val . "</option>";
                     }
@@ -72,6 +85,7 @@ function addToSummary($item, $school) {
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+$super = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
@@ -207,14 +221,16 @@ ksort($grand_summary);
   </style>
 </head>
 <body>
-  <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
+  <?php if ($super) : ?>
+    <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
+  <?php endif; ?>
   <?php foreach ($resultsBySchool as $school => $more) : ?>
     <div class="header" id="<?=$school?>">
       <?php
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
       echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
-      echo "<button class='saveSchool'>Save " . $schools[$school] . " as Shipped</button>";
+      if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
       foreach ($fields_chosen as $field) {
         $pos = strpos($field, '.');
@@ -370,6 +386,7 @@ ksort($grand_summary);
   });
 
   let info = []
+  const super_admin = <?= $super ? 1 : 0; ?>;
 
   function update(elem, action) {
     const id = $(elem).attr('id')
@@ -383,7 +400,6 @@ ksort($grand_summary);
     $.post('ajax/saveShipping.php', { info }, function (result) {
       const res = JSON.parse(result)
       if (res.success) {
-        alert('Saved.')
         if (reload) location.reload()
       }
       else alert(res.error)
@@ -405,7 +421,11 @@ ksort($grand_summary);
   })
 
   $(".shipping").change( function () {
-    const action = this.value
+    const action = parseInt(this.value)
+    if (!super_admin && action == 0) {
+      alert('You cannot change this to not yet shipped, it will not be saved.')
+      return false
+    }
     update(this, action)
     save(false)
   })
