@@ -199,6 +199,7 @@ function createCSV($items) {
     foreach ($children as $user_id => $admin_id) {
         foreach ($info[$user_id] as $details) {
             foreach ($details as $item) {
+                echo "User: " . $user_id . ", Admin: " . $admin_id . ", Item: " . print_r($item) . "<br />";
                 $admin = $admins[$admin_id];
                 $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
                 $user = $users[$user_id];
