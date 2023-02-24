@@ -121,7 +121,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                     foreach ( $users as $user ) {
                     // get level, track_id
                     $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'];
-                    $result = mysql_query( $sql );
+                    $result = mysql_query( $sql ) or die($sql . "<br />" . mysql_error());
                     $row = mysql_fetch_assoc( $result );
                     
                     // get kapitelach quota
@@ -135,7 +135,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                         ." AND dtm.level = " . $row['level']
                         ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
-                    $resultKapitelach = mysql_query( $sqlKapitelach ) or die(mysql_error());
+                    $resultKapitelach = mysql_query( $sqlKapitelach ) or die($sql . "<br />" . mysql_error());
                     $rowKapitelach = mysql_fetch_assoc( $resultKapitelach );
 
                     // get minutes quota
@@ -149,7 +149,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                         ." AND dtm.level = " . $row['level']
                         ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
-                    $resultMinutes = mysql_query( $sqlMinutes ) or die(mysql_error());
+                    $resultMinutes = mysql_query( $sqlMinutes ) or die($sql . "<br />" . mysql_error());
                     $rowMinutes = mysql_fetch_assoc( $resultMinutes );
 
                     ?>
