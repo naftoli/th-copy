@@ -189,7 +189,7 @@ function createCSV($items) {
             }
         }
     }
-//    echo "<pre>"; print_r($info); echo "</pre>"; 
+   echo "<pre>"; print_r($info); echo "</pre>";
 
     $i = 0;
     $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
@@ -200,15 +200,17 @@ function createCSV($items) {
         'Full Item Name', 'Quantity', 'Child Name - Serial #'];
     foreach ($children as $admin_id => $more) {
         foreach ($more as $user_id) {
-            foreach ($info[$user_id] as $item) {
-                $admin = $admins[$admin_id];
-                $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
-                $user = $users[$user_id];
-                $school = $user['school_id'] == 61 ? 'MyShliach - Shipping' : 'Anash Kinder - Pickup';
-                $csv[$i++] = [$admin_id, ($admin['first'] . ' ' . $admin['last']), $admin['first'], $admin['last'],
-                    $phone, $school, $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
-                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $item['item'],
-                    $item['qty'], ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
+            foreach ($info[$user_id] as $details) {
+                foreach ($details as $item) {
+                    $admin = $admins[$admin_id];
+                    $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                    $user = $users[$user_id];
+                    $school = $user['school_id'] == 61 ? 'MyShliach - Shipping' : 'Anash Kinder - Pickup';
+                    $csv[$i++] = [$admin_id, ($admin['first'] . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                        $phone, $school, $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                        $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $item['item'],
+                        $item['qty'], ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
+                }
             }
         }
     }
