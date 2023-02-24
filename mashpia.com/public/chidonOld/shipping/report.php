@@ -35,10 +35,9 @@ if ($report_type == 'file') {
         $info = array_merge_recursive($info, $tmp);
     }
     $csv = createCSV($info);
-    echo "<pre>"; print_r($csv); echo "</pre>";
-//    $file = 'shipping.txt';
-//    createFile($file, $csv);
-//    downloadFile($file);
+    $file = 'shipping.csv';
+    createFile($file, $csv);
+    downloadFile($file);
     exit;
 }
 

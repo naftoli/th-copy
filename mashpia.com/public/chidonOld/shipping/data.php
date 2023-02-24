@@ -187,7 +187,6 @@ function createCSV($items) {
             }
         }
     }
-    // echo "<pre>"; print_r($info); echo "</pre>";
 
     $i = 0;
     $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
@@ -220,7 +219,7 @@ function createFile($name, $info) {
     fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
     if (is_array($info)) {
         foreach ($info as $fields) {
-            fputcsv($fp, $fields, "\t", ' ');
+            fputcsv($fp, $fields);
         }
     } else {
         fputs($fp, $info);
