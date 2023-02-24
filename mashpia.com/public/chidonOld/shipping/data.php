@@ -187,7 +187,7 @@ function createCSV($items) {
             }
         }
     }
-   echo "<pre>"; print_r($info); echo "</pre>";
+    // echo "<pre>"; print_r($info); echo "</pre>";
 
     $i = 0;
     $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
@@ -198,15 +198,16 @@ function createCSV($items) {
         'Full Item Name', 'Quantity', 'Child Name - Serial #'];
     foreach ($children as $user_id => $admin_id) {
         foreach ($info[$user_id] as $item) {
-            echo "User: " . $user_id . ", Admin: " . $admin_id . ", Item: " . print_r($item) . "<br />";
             $admin = $admins[$admin_id];
             $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
             $user = $users[$user_id];
             $school = $user['school_id'] == 61 ? 'MyShliach - Shipping' : 'Anash Kinder - Pickup';
+            $qty = $item['qty'] ?? 1;
+
             $csv[$i++] = [$admin_id, ($admin['first'] . ' ' . $admin['last']), $admin['first'], $admin['last'],
                 $phone, $school, $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
                 $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $item['item'],
-                $item['qty'], ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
+                $qty, ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
         }
     }
     return $csv;
