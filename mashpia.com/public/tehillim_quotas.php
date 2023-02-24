@@ -122,7 +122,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                     // get level, track_id
                     $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'];
                     $result = mysql_query( $sql ) or die($sql . "<br />" . mysql_error());
-                    if (mysql_num_rows($result)) {
+                    if (mysql_num_rows($result) > 0) {
                         $row = mysql_fetch_assoc( $result );
                         
                         // get kapitelach quota
