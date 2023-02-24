@@ -189,7 +189,7 @@ function createCSV($items) {
             }
         }
     }
-//    echo "<pre>"; print_r($info); echo "</pre>"; exit;
+   echo "<pre>"; print_r($info); echo "</pre>"; 
 
     $i = 0;
     $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
