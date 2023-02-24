@@ -75,7 +75,14 @@ $items = $cs->getItems();
       <select name="school">
           <?php if ($super) echo '<option value="0">All Schools</option>'; ?>
           <?php foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
-      </select>
+      </select><br />
+      <h4>Status</h4>
+      <select name="status">
+        <option value="0">All</option>
+        <option value="1">Shipped</option>
+        <option value="2">Missing</option>
+        <option value="3">Damaged</option>
+      </select><br />
     </fieldset>
 
     <fieldset>

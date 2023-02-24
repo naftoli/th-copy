@@ -66,15 +66,23 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super, $limit_to_status;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
             $items = $info[$cat][$row['user_id']];
             foreach ($items as $item) {
+                // get status and whether to show this item
+                $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
+                $statusDesc = [
+                    1   => 'shipped', 
+                    2   => 'missing', 
+                    3   => 'damaged'
+                ];
+                if ($limit_to_status > 0) {
+                    if (!isset($status[$statusDesc[$limit_to_status]]) || intval($status[$statusDesc[$limit_to_status]]) == 0) continue;
+                }
                 if ($output) {
-                    // get status
-                    $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
                     // create new row
                     echo "<tr>";
                     foreach ($fields_chosen as $field) {
