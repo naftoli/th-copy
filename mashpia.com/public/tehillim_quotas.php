@@ -135,7 +135,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                         ." AND dtm.level = " . $row['level']
                         ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
-                    $resultKapitelach = mysql_query( $sqlKapitelach );
+                    $resultKapitelach = mysql_query( $sqlKapitelach ) or die(mysql_error());
                     $rowKapitelach = mysql_fetch_assoc( $resultKapitelach );
 
                     // get minutes quota
@@ -149,7 +149,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                         ." AND dtm.level = " . $row['level']
                         ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
-                    $resultMinutes = mysql_query( $sqlMinutes );
+                    $resultMinutes = mysql_query( $sqlMinutes ) or die(mysql_error());
                     $rowMinutes = mysql_fetch_assoc( $resultMinutes );
 
                     ?>
