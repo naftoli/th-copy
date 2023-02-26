@@ -173,8 +173,8 @@ function checkShippingStatus($admin_id) {
     return $status;
 }
 
-function createCSV($items) {
-    global $items_chosen, $MASHPIA_DB, $schools;
+function createCSV($items, $school_id) {
+    global $items_chosen, $MASHPIA_DB;
 
     // create sql to get all needed fields
     $sql = "SELECT 
@@ -187,7 +187,7 @@ function createCSV($items) {
                 users u ON u.user_id = aa.id
             WHERE
                 aa.auth = 'user'
-                    AND u.school_id IN (61 , 269)
+                    AND u.school_id = $school_id 
                     AND u.user_registered > 0";
     $stmt = $MASHPIA_DB->query($sql);
     $rows = $stmt->fetchAll();
