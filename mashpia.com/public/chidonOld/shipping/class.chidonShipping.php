@@ -568,7 +568,10 @@ class ChidonShipping
     public function getAwards($gender, $school, $awards = [], $remove = []) {
         $info = [];
         if (in_array($school, [61, 269])) {
-            $sql = "select * from th_chidon_info where year = :year";
+            $sql = "select * from th_chidon_info tci 
+                    join users u using (user_id) 
+                    where year = :year 
+                    and u.school_id = $school";
         } else {
             $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
                     join th_chidon tc using (user_id, year) 
@@ -590,7 +593,8 @@ class ChidonShipping
         $cat = 'awards';
         foreach ($rows as $row) {
             if (in_array($row['user_id'], $remove)) continue;
-            $award = $this->getAward($row, $awards);
+            if (in_array($school, [61, 269])) $award = $this->getAwardFromTests($row);
+            else $award = $this->getAward($row, $awards);
             if ($award) {
                 $award_info = explode(' / ', $award);
                 foreach ($award_info as $item) {
@@ -608,6 +612,18 @@ class ChidonShipping
         }
 //        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
+    }
+
+    private function getAwardFromTests($child) {
+        $awards = [
+            'yesod'     => 'certificate',
+            'yediah'    => 'plaque',
+            'havonah'   => 'medal / plaque',
+            'iyun'      => 'medal / plaque / glass trophy',
+            'khk'       => 'medal / plaque / khk trophy'
+        ];
+        if (isset($child['highest_track'])) return $awards[$child['highest_track']];
+        return '';
     }
 
     /**
