@@ -1115,15 +1115,17 @@ class ChidonShipping
             'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
         foreach ($info as $row) {
             $phone = $row['admin_phone_mobile'] ?? $row['admin_phone_work'] ?? $row['admin_phone_home'] ?? '';
-            $user = '';
-            $school = '';
             $shipping = 'shipping';
             $qty = $row['amount'];
-            if ($row['item'] == 'celeb_box') $itemDesc = 'celebration box(es)';
-            else $itemDesc = $row['type_of_sweater'] . ' ' . $row['size'] . ' sweater';
-
-            // get item it
-            $item_id = $this->getItemID('extra purchases', 'sweaters', ($row['type_of_sweater'] . ' sweater'), $row['size']);
+            if ($row['item'] == 'celeb_box') {
+                $itemDesc = 'celebration box(es)';
+                // get item it
+                $item_id = $this->getItemID('extra purchases', 'celebration boxes');
+            } else {
+                $itemDesc = $row['type_of_sweater'] . ' ' . $row['size'] . ' sweater';
+                // get item it
+                $item_id = $this->getItemID('extra purchases', 'sweaters', ($row['type_of_sweater'] . ' sweater'), $row['size']);
+            }
 
             $csv[$i++] = [$row['admin_id'], ($row['first'] . ' ' . $row['last']), $row['first'], $row['last'],
                 $phone, ucwords($shipping), $row['address'], '', '', $row['city'], $row['state'], $row['zip'],
