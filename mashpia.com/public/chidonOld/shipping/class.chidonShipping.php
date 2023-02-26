@@ -567,18 +567,22 @@ class ChidonShipping
      */
     public function getAwards($gender, $school, $awards = [], $remove = []) {
         $info = [];
-        $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
-                join th_chidon tc using (user_id, year) 
-                join users u using (user_id) 
-                where tcf.year = :year 
-                    AND (level_1 > 0 OR level_2 > 0
-                    OR level_3 > 0
-                    OR level_4 > 0
-                    OR tcf.khk > 0)
-                GROUP BY user_id";
-        if ($gender == 'm') $sql .= " and u.gender = 'M'";
-        if ($gender == 'f') $sql .= " and u.gender = 'F";
-        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        if (in_array($school, [61, 269])) {
+            $sql = "select * from th_chidon_info where year = :year";
+        } else {
+            $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
+                    join th_chidon tc using (user_id, year) 
+                    join users u using (user_id) 
+                    where tcf.year = :year 
+                        AND (level_1 > 0 OR level_2 > 0
+                        OR level_3 > 0
+                        OR level_4 > 0
+                        OR tcf.khk > 0)
+                    GROUP BY user_id";
+            if ($gender == 'm') $sql .= " and u.gender = 'M'";
+            if ($gender == 'f') $sql .= " and u.gender = 'F";
+            if ($school > 0) $sql .= " and u.school_id = " . $school;
+        }
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -1076,5 +1080,55 @@ class ChidonShipping
             $remove[] = $row['id'];
         }
         return $remove;
+    }
+
+    public function getExtraPurchasesToShip() {
+        $sql = "SELECT 
+                    *
+                FROM
+                    extra_purchases ep
+                        JOIN
+                    purchase_addresses pa USING (purchase_id) 
+                        JOIN
+                    admins a USING (admin_id)
+                WHERE
+                    year = :year
+                        AND admin_id NOT IN (SELECT 
+                            parent_id
+                        FROM
+                            chidon_parent_shipping
+                        WHERE
+                            myshliach_ak = 1 AND year = :year)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        return $rows;
+    }
+
+    public function createCSVFromExtraPurchases($info) {
+        $i = 0;
+        $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+            'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
+            'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email'];
+        $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
+            'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+            'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
+        foreach ($info as $row) {
+            $phone = $row['admin_phone_mobile'] ?? $row['admin_phone_work'] ?? $row['admin_phone_home'] ?? '';
+            $user = '';
+            $school = '';
+            $shipping = 'shipping';
+            $qty = $row['amount'];
+            if ($row['item'] == 'celeb_box') $itemDesc = 'celebration box(es)';
+            else $itemDesc = $row['type_of_sweater'] . ' ' . $row['size'] . ' sweater';
+
+            // get item it
+            $item_id = $this->getItemID('extra purchases', 'sweaters', ($row['type_of_sweater'] . ' sweater'), $row['size']);
+
+            $csv[$i++] = [$row['admin_id'], ($row['first'] . ' ' . $row['last']), $row['first'], $row['last'],
+                $phone, ucwords($shipping), $row['address'], '', '', $row['city'], $row['state'], $row['zip'],
+                $row['country'], $item_id, $itemDesc, $qty, '', $row['admin_email']];
+        }
+        return $csv;
     }
 }

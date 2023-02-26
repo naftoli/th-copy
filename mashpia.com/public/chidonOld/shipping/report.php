@@ -40,6 +40,13 @@ if ($report_type == 'file') {
         createFile($file, $csv);
         $files[] = $file;
     }
+    // add extra purchases not ak/myshliach to ship
+    $extra = getExtraPurchasesToShip();
+    $csv = createCSVFromExtraPurchases($extra);
+    $file = 'extra_purchases.csv';
+    createFile($file, $csv);
+    $files[] = $file;
+
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
     exit;
