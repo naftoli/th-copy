@@ -286,7 +286,7 @@ class ChidonShipping
                         JOIN
                     schools s ON u.school_id = s.school_id
                 WHERE
-                    year = :year";
+                    year = :year AND tc.date_paid > 0";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
@@ -570,7 +570,10 @@ class ChidonShipping
         if (in_array($school, [61, 269])) {
             $sql = "select * from th_chidon_info tci 
                     join users u using (user_id) 
-                    where year = :year 
+                    join th_chidon tc using (user_id) 
+                    where tc.year = :year 
+                    and tci.year = :year 
+                    and tc.date_paid > 0 
                     and u.school_id = $school";
         } else {
             $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
