@@ -40,7 +40,8 @@ if ($report_type == 'file') {
         createFile($file, $csv);
         $files[] = $file;
     }
-    downloadFile($files);
+    createZip($files, 'shipping.zip');
+    downloadFile('shipping.zip');
     exit;
 }
 
