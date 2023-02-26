@@ -23,22 +23,22 @@ $cs = new ChidonShipping();
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
-    $info = [];
-    $extra_purchases = [];
+    $remove = $cs->getChildrenToRemove();
     foreach ([61, 269] as $school_id) {
-        $tmp = [];
+        $info = [];
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            if ($cat == 'extra purchases') $tmp[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily');
-            else $tmp[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+//            if ($cat == 'extra purchases') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily', $remove);
+            if ($cat == 'extra purchases') continue;
+            if ($cat == 'brochures') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, false, $remove);
+            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, $remove);
         }
-        $info = array_merge_recursive($info, $tmp);
+        $csv = createCSV($info);
+        $file = $school_id . '.csv';
+        createFile($file, $csv);
+        downloadFile($file);
     }
-    $csv = createCSV($info);
-    $file = 'shipping.csv';
-    createFile($file, $csv);
-    downloadFile($file);
     exit;
 }
 

@@ -144,7 +144,7 @@ function createHtmlForItem($school, $row, $output = true) {
 }
 
 function addToSummary($item, $school) {
-    global $summary, $summary_items, $MASHPIA_DB;
+    global $summary, $summary_items;
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
@@ -154,6 +154,23 @@ function addToSummary($item, $school) {
 
     if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
     else $summary[$school][$key] = $qty;
+}
+
+function checkShippingStatus($admin_id) {
+    global $MASHPIA_DB, $year;
+
+    $status = 'pickup';
+    $sql = "select * from chidon_parent_shipping 
+            where year = :year 
+            and parent_id = :id";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([
+        'year'  => $year,
+        'id'    => $admin_id
+    ]);
+    $row = $stmt->fetch();
+    if ($row && $row['amount_paid'] > 0) $status = 'shipping';
+    return $status;
 }
 
 function createCSV($items) {
@@ -178,10 +195,12 @@ function createCSV($items) {
     $admins = [];
     $children = [];
     $users = [];
+    $shipping_status = [];
     foreach ($rows as $row) {
         $admins[$row['admin_id']] = $row;
         $children[$row['user_id']] = $row['admin_id'];
         $users[$row['user_id']] = $row;
+        $shipping_status[$row['user_id']] = checkShippingStatus($row['admin_id']);
     }
 
     $info = [];
@@ -199,23 +218,28 @@ function createCSV($items) {
     $i = 0;
     $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
         'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-        'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options'];
+        'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email'];
     $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
         'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-        'Full Item Name', 'Quantity', 'Child Name - Serial #'];
+        'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
     foreach ($children as $user_id => $admin_id) {
         if (isset($info[$user_id])) {
             foreach ($info[$user_id] as $item) {
                 $admin = $admins[$admin_id];
                 $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
                 $user = $users[$user_id];
-                $school = $user['school_id'] == 61 ? 'MyShliach - Shipping' : 'Anash Kinder - Pickup';
+                $school = $user['school_id'] == 61 ? 'MyShliach' : 'Anash Kinder';
+                $shipping = $shipping_status[$user_id];
                 $qty = $item['qty'] ?? 1;
+                $itemDesc = $item['item'];
+                if ($item['color']) $itemDesc .= ", " . $item['color'];
+                if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+                if ($item['name']) $itemDesc .= ", personalized name: " . $item['name'];
 
                 $csv[$i++] = [$admin_id, ($admin['first'] . ' ' . $admin['last']), $admin['first'], $admin['last'],
-                    $phone, $school, $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
-                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $item['item'],
-                    $qty, ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial'])];
+                    $phone, ($school . '-' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
+                    $qty, ($user['first'] . ' ' . $user['last'] . ' - ' . $user['user_serial']), $admin['admin_email']];
             }
         }
     }
