@@ -35,6 +35,7 @@ if ($report_type == 'file') {
             if ($cat == 'brochures') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, false, $remove);
             else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, $remove);
         }
+//        echo "<pre>"; print_r($info); echo "</pre>";
         $csv = createCSV($info, $school_id);
         $file = $school_id . '.csv';
         createFile($file, $csv);

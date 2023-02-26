@@ -187,9 +187,9 @@ function createCSV($items, $school_id) {
                 users u ON u.user_id = aa.id
             WHERE
                 aa.auth = 'user'
-                    AND u.school_id = $school_id 
-                    AND u.user_registered > 0";
-    $stmt = $MASHPIA_DB->query($sql);
+                    AND u.school_id = :id";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute(['id' => $school_id]);
     $rows = $stmt->fetchAll();
 
     $admins = [];
