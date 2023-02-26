@@ -23,6 +23,7 @@ $cs = new ChidonShipping();
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
+    $files = [];
     $remove = $cs->getChildrenToRemove();
     foreach ([61, 269] as $school_id) {
         $info = [];
@@ -37,8 +38,9 @@ if ($report_type == 'file') {
         $csv = createCSV($info);
         $file = $school_id . '.csv';
         createFile($file, $csv);
-        downloadFile($file);
+        $files[] = $file;
     }
+    downloadFile($files);
     exit;
 }
 
