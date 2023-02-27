@@ -42,7 +42,7 @@ if ($test_num == 4) {
             }
         }
     }
-
+    echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
     $success = true;
     mysql_query('set autocommit=0');
     mysql_query('begin');
