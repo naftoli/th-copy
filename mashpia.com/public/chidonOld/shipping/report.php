@@ -56,6 +56,8 @@ if ($report_type == 'file') {
      * 3. (for parents that paid for shipping but have) extra purchases that go to different address
      */
     // first
+    // reset the array of kids to remove
+    $cs->setToExclude([]);
     foreach ([61, 269] as $school_id) {
         $info = [];
         $ids = $cs->getChildrenToRemove(true);

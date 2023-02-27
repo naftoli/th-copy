@@ -1166,9 +1166,10 @@ class ChidonShipping
                         FROM
                             chidon_parent_shipping
                         WHERE
-                            myshliach_ak = 1 AND year = :year)";
-        if ($paid) $sql .= " and admin_id in (select parent_id from chidon_parent_shipping where year = :year and date_paid is not null)";
-        else if ($notPaid) $sql .= " and admin_id in (select parent_id from chidon_parent_shipping where year = :year and date_paid is null)";
+                            myshliach_ak = 1 AND year = :year";
+        if ($paid) $sql .= " and date_paid is not null)";
+        else if ($notPaid) $sql .= " and date_paid is null)";
+        else $sql .= ")";
         $sql .= " GROUP BY admin_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
