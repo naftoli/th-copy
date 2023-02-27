@@ -57,6 +57,7 @@ if ($report_type == 'file') {
      */
     // first
     foreach ([61, 269] as $school_id) {
+        $info = [];
         $ids = $cs->getChildrenToRemove(true);
         $cs->setOnly($ids);
 
@@ -74,6 +75,7 @@ if ($report_type == 'file') {
 
     //second
     foreach ([61, 269] as $school_id) {
+        $info = [];
         $ids = $cs->getChildrenToRemove(false, true);
         $cs->setOnly($ids);
 
