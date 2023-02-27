@@ -232,10 +232,11 @@ function createCSV($items, $school_id) {
                 $school = $user['school_id'] == 61 ? 'MyShliach' : 'Anash Kinder';
                 $shipping = $shipping_status[$user_id];
                 $qty = $item['qty'] ?? 1;
-                $itemDesc = $item['item'];
+                $itemDesc = '';
+                if ($item['name']) $itemDesc .= "Personalized ";
+                $itemDesc .= $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
-                if ($item['name']) $itemDesc .= ", personalized name: " . $item['name'];
 
                 $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . '-' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],

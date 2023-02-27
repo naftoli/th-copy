@@ -25,6 +25,8 @@ class ChidonShipping
         $this->schools = [];
         $this->grades = [];
         $this->users = [];
+        $this->toExclude = [];
+        $this->only = [];
     }
 
     public function setYear($yr) {
@@ -43,6 +45,14 @@ class ChidonShipping
         $this->users = $users;
     }
 
+    public function setToExclude($ids) {
+        $this->toExclude = $ids;
+    }
+
+    public function setOnly($ids) {
+        $this->only = $ids;
+    }
+
     /**
      * get list of user IDs that need to have brochures sent out
      *
@@ -57,7 +67,7 @@ class ChidonShipping
      * @param $remove - user ids to remove
      * @return array - all user info from users db with the user id as the key
      */
-    public function getBrochures($gender, $school, $brochures = [], $early = false, $remove = []) {
+    public function getBrochures($gender, $school, $brochures = [], $early = false) {
         $info = [];
         $in_grades = "('4', '5', '6', '7', '8')";
         if ($early) $in_grades = "('3', '4', '5', '6', '7')";
@@ -77,7 +87,8 @@ class ChidonShipping
         $id = $this->getItemID($cat, $item);
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             $info[$row['user_id']][] = [
                 'item'  => $item,
                 'size'  => '',
@@ -99,7 +110,7 @@ class ChidonShipping
      * @return array - all book info from db with user IDs as the key
      * TODO - DBL CHECK ABOUT BOOKS BEING BOUGHT
      */
-    public function getBooks($gender, $school, $books = [], $remove = []) {
+    public function getBooks($gender, $school, $books = []) {
         $info = [];
         $sql = "SELECT * FROM yahadus_book_purchases 
                 JOIN users u USING (user_id) 
@@ -116,7 +127,8 @@ class ChidonShipping
         $id = $this->getItemID($cat, $item);
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             $info[$row['user_id']][] = [
                 'item'  => $item,
                 'size'  => '',
@@ -145,7 +157,7 @@ class ChidonShipping
      * @param $prizes
      * @return array - list prizes to give per user ID
      */
-    public function getRecruitmentPrizes($gender, $school, $limitTo = [], $remove = []) {
+    public function getRecruitmentPrizes($gender, $school, $limitTo = []) {
         $info = [];
         // get list of prizes
         $prizes = $this->getListofRecruitmentPrizes();
@@ -154,7 +166,9 @@ class ChidonShipping
 
         $cat = 'recruitment prizes';
         foreach ($children as $user_id => $details) {
-            if (in_array($user_id, $remove)) continue;
+            if (in_array($user_id, $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
+
             if ($details['credits'] > 5) $details['credits'] = 5;
             $prize = $prizes[$details['credits']];
             if (in_array(strtolower($prize), $limitTo)) {
@@ -232,7 +246,7 @@ class ChidonShipping
      * @param $prizes
      * @return array
      */
-    public function getTestPrizes($gender, $school, $prizes = [], $remove = []) {
+    public function getTestPrizes($gender, $school, $prizes = []) {
         $colors = [
             '1'   => 'blue',
             '2'   => 'red',
@@ -246,7 +260,9 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
             $book = $row['book'];
             $cat = 'test prizes';
             foreach ($prizes as $prize) {
@@ -275,7 +291,7 @@ class ChidonShipping
      * @param $sweaters
      * @return array
      */
-    public function getChildrenSweaters($gender, $school, $sweaters = [], $remove = []) {
+    public function getChildrenSweaters($gender, $school, $sweaters = []) {
         $info = [];
         $sql = "SELECT 
                     user_id, size, gender  
@@ -302,7 +318,9 @@ class ChidonShipping
         $cat = 'children sweaters';
         $item = 'children sweaters';
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
             $size = $row['size'];
             $id = $this->getItemID($cat, $item, $genders[$row['gender']], $size);
             $info[$row['user_id']][] = [
@@ -332,14 +350,13 @@ class ChidonShipping
      * @param $method
      * @return array
      */
-    public function getExtraPurchases($gender, $school, $items = [], $method = 'bySchool') {
+    public function getExtraPurchases($gender, $school, $items = []) {
         $info = [];
         $purchases = [];
         $sql = "select * from extra_purchases ep 
                 left join purchase_addresses pa using (purchase_id) 
-                where ep.year = :year";
-        if ($method == 'bySchool') $sql .= " and (ep.shipping_amount != 10 or ep.shipping_amount is null)";
-//        else if ($method == 'byFamily') $sql .= " and ep.shipping_amount = 10";
+                where ep.year = :year 
+                and (ep.shipping_amount != 10 or ep.shipping_amount is null)";
         if ($items && count($items)) {
             $fields = [];
             foreach ($items as $item) {
@@ -374,22 +391,13 @@ class ChidonShipping
                 'cat'   => $cat
             ];
         }
-//        echo "<pre>"; print_r($purchases); echo "</pre>";
 
-//        if ($method == 'bySchool') {
-            // find out oldest child for each admin ID
-//            $admin_info = $this->getOldestChild(array_keys($purchases), $gender, $school);
-//            echo "<pre>"; print_r($admin_info); echo "</pre>";
-            $admin_info = $this->getOldestChild(array_keys($purchases));
-            foreach ($purchases as $admin_id => $more) {
-                foreach ($more as $purchase) {
-                    if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
-                }
+        $admin_info = $this->getOldestChild(array_keys($purchases));
+        foreach ($purchases as $admin_id => $more) {
+            foreach ($more as $purchase) {
+                if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
             }
-//        } else if ($method == 'byFamily') {
-//            $info = $purchases;
-//        }
-//        echo "<pre>"; print_r($info); echo "</pre>";
+        }
         return $info;
     }
 
@@ -454,6 +462,75 @@ class ChidonShipping
         return $child['user_id'];
     }
 
+    public function getExtraPurchasesAK($toShip = true) {
+        $info = [];
+        $purchases = [];
+        if ($toShip) {
+            $sql = "SELECT 
+                        *
+                    FROM
+                        extra_purchases ep
+                            JOIN
+                        purchase_addresses pa USING (purchase_id)
+                    WHERE
+                        year = :year
+                            AND admin_id IN (SELECT 
+                                parent_id
+                            FROM
+                                chidon_parent_shipping
+                            WHERE
+                                myshliach_ak = 1 AND year = :year) 
+                    AND use_admin_shipping_address = 1";
+        } else {
+            $sql = "SELECT 
+                        *
+                    FROM
+                        extra_purchases 
+                    WHERE
+                        year = :year
+                            AND admin_id IN (SELECT 
+                                parent_id
+                            FROM
+                                chidon_parent_shipping
+                            WHERE
+                                myshliach_ak = 1 AND year = :year)
+                            AND shipping_amount = 0";
+        }
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+
+        $cat = 'extra purchases';
+        foreach ($rows as $row) {
+            if ($row['item'] == 'celeb_box') {
+                $size = '';
+                $item = 'celebration boxes';
+                $id = $this->getItemID($cat, $item);
+            } else {
+                $size = $row['size'];
+                $item = 'sweaters';
+                $id = $this->getItemID($cat, $item, ($row['type_of_sweater'] . ' sweater'), $size);
+            }
+            $purchases[$row['admin_id']][] = [
+                'qty'   => intval($row['amount']),
+                'item'  => $row['item'] == 'celeb_box' ? 'celebration boxes' : ($row['type_of_sweater'] . ' sweater'),
+                'size'  => $size,
+                'color' => '',
+                'name'  => '',
+                'id'    => $id,
+                'cat'   => $cat
+            ];
+        }
+
+        $admin_info = $this->getOldestChild(array_keys($purchases));
+        foreach ($purchases as $admin_id => $more) {
+            foreach ($more as $purchase) {
+                if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
+            }
+        }
+        return $info;
+    }
+
     public function getTripItems($gender, $school, $items = []) {
 
     }
@@ -469,7 +546,7 @@ class ChidonShipping
      * @param $gifts - limits to certain gifts
      * @return array - list of user IDs with the gifts they should get
      */
-    public function getGifts($gender, $school, $gifts = [], $remove = []) {
+    public function getGifts($gender, $school, $gifts = []) {
         if (! count($gifts)) $gifts = ['yarmulka', 'jewelry', 'personalized bottle'];
 
         $info = [];
@@ -485,7 +562,9 @@ class ChidonShipping
         $cat = 'gifts';
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
             if ($gifts && count($gifts)) {
                 foreach ($gifts as $gift) {
                     $add = false;
@@ -526,7 +605,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getIDCards($gender, $school, $cards = [], $remove = []) {
+    public function getIDCards($gender, $school, $cards = []) {
         $info = [];
         $sql = "select * from th_chidon 
                 join users u using (user_id) 
@@ -543,7 +622,8 @@ class ChidonShipping
         $id = $this->getItemID($cat, $item);
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             $info[$row['user_id']][] = [
                 'item'  => 'ID card',
                 'size'  => '',
@@ -565,7 +645,7 @@ class ChidonShipping
      * @param $awards
      * @return array
      */
-    public function getAwards($gender, $school, $awards = [], $remove = []) {
+    public function getAwards($gender, $school, $awards = []) {
         $info = [];
         if (in_array($school, [61, 269])) {
             $sql = "select * from th_chidon_info tci 
@@ -595,7 +675,9 @@ class ChidonShipping
 
         $cat = 'awards';
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
             if (in_array($school, [61, 269])) $award = $this->getAwardFromTests($row);
             else $award = $this->getAward($row, $awards);
             if ($award) {
@@ -725,7 +807,7 @@ class ChidonShipping
      * @param $limitTo
      * @return array
      */
-    public function getPrizes($gender, $school, $limitTo = [], $remove = []) {
+    public function getPrizes($gender, $school, $limitTo = []) {
         // get list of prizes in system with prize ids
         $prizes = $this->getChidonPrizes();
 
@@ -754,7 +836,9 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $remove)) continue;
+            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
             // make sure it's one of the prizes selected to show
             if (count($limitTo)) {
                 $found = false;
@@ -1069,7 +1153,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getChildrenToRemove() {
+    public function getChildrenToRemove($paid = false, $notPaid = false) {
         $admins = [];
         $sql = "SELECT 
                     admin_id
@@ -1082,8 +1166,10 @@ class ChidonShipping
                         FROM
                             chidon_parent_shipping
                         WHERE
-                            myshliach_ak = 1 AND year = :year)
-                GROUP BY admin_id";
+                            myshliach_ak = 1 AND year = :year)";
+        if ($paid) $sql .= " and admin_id in (select parent_id from chidon_parent_shipping where year = :year and date_paid is not null)";
+        else if ($notPaid) $sql .= " and admin_id in (select parent_id from chidon_parent_shipping where year = :year and date_paid is null)";
+        $sql .= " GROUP BY admin_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -1101,7 +1187,7 @@ class ChidonShipping
         return $remove;
     }
 
-    public function getExtraPurchasesToShip() {
+    public function getExtraPurchasesToShip($myshliach = false) {
         $sql = "SELECT 
                     *
                 FROM
@@ -1112,12 +1198,15 @@ class ChidonShipping
                     admins a USING (admin_id)
                 WHERE
                     year = :year
-                        AND admin_id NOT IN (SELECT 
+                        AND admin_id ";
+        if (! $myshliach) $sql .= "NOT";
+        $sql .= " IN (SELECT 
                             parent_id
                         FROM
                             chidon_parent_shipping
                         WHERE
                             myshliach_ak = 1 AND year = :year)";
+        if ($myshliach) $sql .= " AND use_admin_shipping = 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();

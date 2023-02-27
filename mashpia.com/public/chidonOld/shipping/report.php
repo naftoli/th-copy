@@ -24,16 +24,16 @@ $cs = new ChidonShipping();
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
-    $remove = $cs->getChildrenToRemove();
+    $ids = $cs->getChildrenToRemove();
     foreach ([61, 269] as $school_id) {
         $info = [];
+        $cs->setToExclude($ids);
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
 //            if ($cat == 'extra purchases') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily', $remove);
             if ($cat == 'extra purchases') continue;
-            if ($cat == 'brochures') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, false, $remove);
-            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, $remove);
+            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
 //        echo "<pre>"; print_r($info); echo "</pre>";
         $csv = createCSV($info, $school_id);
@@ -45,6 +45,54 @@ if ($report_type == 'file') {
     $extra = $cs->getExtraPurchasesToShip();
     $csv = $cs->createCSVFromExtraPurchases($extra);
     $file = 'extra_purchases.csv';
+    createFile($file, $csv);
+    $files[] = $file;
+
+    /*
+     * create myshliach / anash kinder with extra purchases files
+     * there's 3 files needed
+     * 1. for parents that paid for shipping and include extra purchases that are to be shipped to home address
+     * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
+     * 3. (for parents that paid for shipping but have) extra purchases that go to different address
+     */
+    // first
+    foreach ([61, 269] as $school_id) {
+        $ids = $cs->getChildrenToRemove(true);
+        $cs->setOnly($ids);
+
+        foreach ($items_chosen as $cat => $itemsPerCat) {
+            $listOfItems = array_keys($itemsPerCat);
+            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+            if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK();
+            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+        }
+        $csv = createCSV($info, $school_id);
+        $file = $school_id . 'withEPtoShip.csv';
+        createFile($file, $csv);
+        $files[] = $file;
+    }
+
+    //second
+    foreach ([61, 269] as $school_id) {
+        $ids = $cs->getChildrenToRemove(false, true);
+        $cs->setOnly($ids);
+
+        foreach ($items_chosen as $cat => $itemsPerCat) {
+            $listOfItems = array_keys($itemsPerCat);
+            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+            if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK(false);
+            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+        }
+        $csv = createCSV($info, $school_id);
+        $file = $school_id . 'withEPtoPickup.csv';
+        createFile($file, $csv);
+        $files[] = $file;
+    }
+
+    //third
+    $extra = $cs->getExtraPurchasesToShip(true);
+    $csv = $cs->createCSVFromExtraPurchases($extra);
+    $file = 'extra_purchases_myshliach_ak.csv';
     createFile($file, $csv);
     $files[] = $file;
 
