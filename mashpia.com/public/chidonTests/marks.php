@@ -84,7 +84,8 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                     for ($i = 1; $i <= $testNumber; $i++) {
                         $total += $marks[$id][$i][$child['test_type']];
                     }
-                    $avg = number_format($total / $testNumber, 2);
+                    if ($total > 0) $avg = number_format($total / $testNumber, 2);
+                    else $avg = 0;
                 }
                 echo "<td>" . $avg . "</td>";
                 echo "</tr>";

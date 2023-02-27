@@ -1,10 +1,20 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $ct = new ChidonTests();
 $year = GlobalSettings::getChidonYear();
+
+function getUserID($serial) {
+    $sql = "select user_id from users where user_serial = " . $serial;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    return $row['user_id'];
+}
 
 $test_num = intval($_POST['test_num']);
 if ($test_num == 4) {
