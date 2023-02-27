@@ -1207,7 +1207,7 @@ class ChidonShipping
                             chidon_parent_shipping
                         WHERE
                             myshliach_ak = 1 AND year = :year)";
-        if ($myshliach) $sql .= " AND use_admin_shipping = 0";
+        if ($myshliach) $sql .= " AND use_admin_shipping_address = 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
