@@ -9,8 +9,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 $year = GlobalSettings::getChidonYear();
 
-function getUserID($serial) {
-    $sql = "select user_id from users where user_serial = " . $serial;
+function getUserID($chidon_id) {
+    $sql = "select user_id from th_chidon where th_chidon_id = " . mysql_real_escape_string($chidon_id);
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     return $row['user_id'];
