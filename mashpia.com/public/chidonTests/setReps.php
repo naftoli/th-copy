@@ -35,22 +35,23 @@ $numTests = 3;
 $child_marks = [];
 $child_info = [];
 $types = $ct->getTypes();
+$questions = $ct->getTestQuestions();
 foreach ($info as $school => $children) {
     foreach ($children as $child) {
         $id = $child['th_chidon_id'];
         $grade = $child['class_grade'];
         $avg = 0;
+        $total = 0;
+        $totalQuestions = 150;
         foreach ($types as $type => $desc) {
-            $total = 0;
             for ($i = 1; $i <= $numTests; $i++) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
-            $avg += floatval($total / $numTests);
         }
-        $final = round($avg / count($types), 2);
+        $avg = round($total / $totalQuestions, 2);
         $order = empty($child['highest_track']) ? 5 : $trackOrder[$child['highest_track']];
-        $child_marks[$schools[$school]][$grade][$order][$id] = $final;
+        $child_marks[$schools[$school]][$grade][$order][$id] = $avg;
         $child_info[$id] = [
             'first'         => $child['first'],
             'last'          => $child['last'],
