@@ -49,7 +49,8 @@ foreach ($info as $school => $children) {
             'school_rep'    => $child['school_rep'],
             'regional_rep'  => $child['regional_rep'],
             'intl_rep'      => $child['intl_rep'],
-            'khk_reg'       => $child['khk_reg']
+            'khk_reg'       => $child['khk_reg'],
+            'track'         => $child['highest_track']
         ];
     }
 }
@@ -101,7 +102,7 @@ foreach ($child_marks as $school => $more) {
         <?php
         foreach ($more as $grade => $other) {
             foreach ($other as $id => $avg) {
-                $highest_track = $child_info[$id]['highest_track'];
+                $highest_track = $child_info[$id]['track'];
                 $first = $child_info[$id]['first'];
                 $last = $child_info[$id]['last'];
                 echo "<tr id=$id><td>" . $id . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last . "</td><td>" . $avg . "</td><td>";
