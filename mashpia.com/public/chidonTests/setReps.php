@@ -189,6 +189,7 @@ foreach ($child_marks as $school => $more) {
 <script>
   $(function() {
     function saveRep(elem) {
+      alert($(elem).attr('class'))
       let id = $(elem).parent().parent().attr('id')
       let checked = $(elem).is(":checked") ? 1 : 0
       let field = $(elem).attr('class') + '_rep'
@@ -212,7 +213,7 @@ foreach ($child_marks as $school => $more) {
       })
     }
 
-    $(document).on('click', '.school', saveRep(this))
+    $(document).on('click', '.school', saveRep)
     $(document).on('click', '.regional', saveRep)
     $(document).on('click', '.intl', saveRep)
     $(document).on('change', '.school_team', saveTeam)
