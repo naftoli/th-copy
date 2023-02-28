@@ -21,14 +21,14 @@ foreach ($schools as $id => $school) {
     $ct->calculateMarks();
     $marks += $ct->getMarks();
 }
-echo "<pre>"; print_r($marks); echo "</pre>"; exit;
+//echo "<pre>"; print_r($marks); echo "</pre>"; exit;
 $child_marks = [];
 $child_info = [];
+$types = ['maven', 'pro', 'expert', 'genius'];
 foreach ($info as $school => $children) {
     foreach ($children as $child) {
         $id = $child['th_chidon_id'];
         $grade = $child['class_grade'];
-        $types = ['expert', 'trophy'];
         $totalAvg = 0;
         foreach ($types as $type) {
             $total = 0;
@@ -39,24 +39,15 @@ foreach ($info as $school => $children) {
             $avg = round($total / $num_tests, 2);
             $totalAvg += $avg;
         }
-        $final = $totalAvg / 2;
+        $final = $totalAvg / count($types);
         $child_marks[$schools[$school]][$child['gender']][$grade][$id] = $final;
-
-        // add old avg
-        $total = 0;
-        for ($i = 1; $i <= $num_tests; $i++) {
-            $mark = isset($marks[$id][$i]['trophy_extra']) ? $marks[$id][$i]['trophy_extra'] : 0;
-            $total += $mark;
-        }
-        $oldAvg = round($total / $num_tests, 2);
 
         $child_info[$id] = [
             'first' =>  $child['first'],
             'last'  =>  $child['last'],
             'khk'   =>  $child['khk_rep'],
             'rep'   =>  $child['school_rep'],
-            'rep_old'   =>  $child['school_rep_old'],
-            'old_avg'   =>  $oldAvg
+            'rep_old'   =>  $child['school_rep_old']
         ];
     }
 }
