@@ -73,6 +73,12 @@ foreach ($child_marks as $school => $more) {
         }
     }
 }
+// sort by track order
+foreach ($child_marks as $school => $more) {
+    foreach ($more as $grade => $other) {
+          arsort($child_marks[$school][$grade]);
+    }
+}
 
 //echo "<pre>"; print_r($child_info); print_r($child_marks); echo "</pre>";
 $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnayos', 'Igeres Horambam'];
