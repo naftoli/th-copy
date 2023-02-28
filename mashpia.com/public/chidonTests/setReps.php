@@ -41,15 +41,18 @@ foreach ($info as $school => $children) {
         $id = $child['th_chidon_id'];
         $grade = $child['class_grade'];
         $avg = 0;
+        $num = 0; // variable to know how to decide avg
         foreach ($types as $type => $desc) {
             $total = 0;
             for ($i = 1; $i <= $numTests; $i++) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
+            $num++;
             $avg += floatval($total / $numTests);
+            if (strtolower($desc) == $child['highest_track']) break;
         }
-        $finalAvg = round($avg / count($types), 2);
+        $finalAvg = round($avg / $num, 2);
         $order = empty($child['highest_track']) ? 5 : $trackOrder[$child['highest_track']];
         $child_marks[$schools[$school]][$grade][$order][$id] = $finalAvg;
         $child_info[$id] = [
