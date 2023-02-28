@@ -61,7 +61,7 @@ foreach ($child_marks as $school => $more) {
     }
 }
 //echo "<pre>"; print_r($child_info); print_r($child_marks); echo "</pre>";
-$teams = ['Sefer Hamitzvos', 'Yad Hachazoko', 'Moreh Nevuchim', 'Pirush Hamishnayos', 'Igeres Horambam'];
+$teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnayos', 'Igeres Horambam'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -95,7 +95,9 @@ foreach ($child_marks as $school => $more) {
             <th>School Rep</th>
             <th>School Rep Team</th>
             <th>Regional Rep</th>
+            <th>Regional Rep Team</th>
             <th>Intl Rep</th>
+            <th>Intl Rep Team</th>
             <th>KHK Registered</th>
         </tr>
         </thead>
@@ -110,17 +112,25 @@ foreach ($child_marks as $school => $more) {
                     "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
                 echo "<input type='checkbox' class='school' ";
                 if (intval($child_info[$id]['school_rep'])) echo " checked ";
-                echo "/></td><td>";
-                echo "<select name='team'>";
+                echo "/></td>";
+                echo "<td><select name='school-team'>";
                 foreach ($teams as $team) echo "<option>" . $team . "</option>";
                 echo "</select></td>";
                 echo "<td><input type='checkbox' class='regional' ";
                 if (intval($child_info[$id]['regional_rep'])) echo " checked ";
                 if (! $super) echo " disabled ";
-                echo "/></td><td><input type='checkbox' class='intl' ";
+                echo "/></td>";
+                echo "<td><select name='regional-team'>";
+                foreach ($teams as $team) echo "<option>" . $team . "</option>";
+                echo "</select></td>";
+                echo "<td><input type='checkbox' class='intl' ";
                 if (intval($child_info[$id]['intl_rep'])) echo " checked ";
                 if (! $super) echo " disabled ";
-                echo "/></td><td>";
+                echo "/></td>";
+                echo "<td><select name='intl-team'>";
+                foreach ($teams as $team) echo "<option>" . $team . "</option>";
+                echo "</select></td>";
+                echo "<td>";
                 if (intval($child_info[$id]['khk_reg'])) echo 'yes';
                 else echo 'no';
                 echo "</td></tr>";
