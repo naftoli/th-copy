@@ -16,6 +16,21 @@ function getUserID($chidon_id) {
     return $row['user_id'];
 }
 
+function checkTrack($user_id, $level) {
+    global $year;
+    $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
+
+    $sql = "select highest_track from th_chidon_info where year = $year and user_id = $user_id";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) > 0) {
+        $row = mysql_fetch_assoc($result);
+        $track = $row['highest_track'];
+        $key = array_search($track, $tracks);
+        if ($level <= ++$key) return true; // only marks for levels that are less than or equal to the highest track can be saved
+    }
+    return false;
+}
+
 $test_num = intval($_POST['test_num']);
 if ($test_num == 4) {
     $levels = [
@@ -33,12 +48,16 @@ if ($test_num == 4) {
             foreach ($scores as $type => $mark) {
                 $mark = intval($mark);
                 $level = 'level_' . $levels[$type];
-                $sql = "insert into th_chidon_finals 
-                        set year = $year, 
-                        user_id = $user_id, 
-                        $level = $mark
-                        on duplicate key update $level = $mark";
-                $qrys[] = $sql;
+                // make sure child is allowed to enter mark for this level
+                $allowed = checkTrack($user_id, $levels[$type]);
+                if ($allowed) {
+                    $sql = "insert into th_chidon_finals 
+                            set year = $year, 
+                            user_id = $user_id, 
+                            $level = $mark
+                            on duplicate key update $level = $mark";
+                    $qrys[] = $sql;
+                }
             }
         }
     }
