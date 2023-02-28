@@ -212,12 +212,12 @@ foreach ($child_marks as $school => $more) {
       })
     }
 
-    $(".school").click(saveRep(this))
-    $(".regional").click(saveRep(this))
-    $(".intl").click(saveRep(this))
-    $(".school_team").change(saveTeam(this))
-    $(".regional_team").change(saveTeam(this))
-    $(".intl_team").change(saveTeam(this))
+    $(document).on('click', '.school', saveRep)
+    $(document).on('click', '.regional', saveRep)
+    $(document).on('click', '.intl', saveRep)
+    $(document).on('change', '.school_team', saveTeam)
+    $(document).on('change', '.regional_team', saveTeam)
+    $(document).on('change', '.intl_team', saveTeam)
   })
 </script>
 </html>
