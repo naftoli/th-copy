@@ -207,7 +207,7 @@ foreach ($child_marks as $school => $more) {
     function saveTeam(elem) {
       let id = $(elem).parent().parent().attr('id')
       let val = JSON.stringify($(elem).val())
-      let field = $(elem).parent().attr('name')
+      let field = $(elem).attr('class')
       update(id, val, field, 'varchar')
     }
 
