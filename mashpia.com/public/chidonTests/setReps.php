@@ -201,18 +201,18 @@ foreach ($child_marks as $school => $more) {
       let id = $(elem).parent().parent().attr('id')
       let checked = $(elem).is(":checked") ? 1 : 0
       let field = $(elem).attr('class') + '_rep'
-      update(id, checked, field, 'int')
+      update(id, checked, field)
     }
 
     function saveTeam(elem) {
       let id = $(elem).parent().parent().attr('id')
       let val = $(elem).val()
       let field = $(elem).attr('class')
-      update(id, val, field, 'varchar')
+      update(id, val, field)
     }
 
-    function update(id, val, field, typeOfField) {
-      $.post('setRep.php', { id, val, field, typeOfField }, function(success) {
+    function update(id, val, field) {
+      $.post('setRep.php', { id, val, field }, function(success) {
         if (parseInt(success)) {
           alert("Saved.")
         } else {
