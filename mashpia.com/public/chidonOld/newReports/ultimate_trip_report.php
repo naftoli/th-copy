@@ -35,7 +35,7 @@ $info = $stmt->fetchAll();
         tr, th, td {
           font-size: 14px;
           padding: 10px;
-          border-bottom: grey;
+          border-bottom: 1px solid grey;
           font-family: Arial, Helvetica, sans-serif;
         }
     </style>
