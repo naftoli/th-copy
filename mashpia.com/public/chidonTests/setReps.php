@@ -143,9 +143,9 @@ foreach ($child_marks as $school => $more) {
                     echo "<td><select name='school_team' class='school_team'";
                     if (! $super) echo " disabled";
                     echo ">";
-                    echo "<option>Please Choose</option>";
-                    foreach ($teams as $team) {
-                        echo "<option";
+                    echo "<option value='0'>Please Choose</option>";
+                    foreach ($teams as $idx => $team) {
+                        echo "<option value='" . ($idx + 1) . "'";
                         if ($child_info[$id]['school_team'] == $team) echo " selected";
                         echo ">" . $team . "</option>";
                     }
@@ -157,9 +157,9 @@ foreach ($child_marks as $school => $more) {
                     echo "<td><select name='regional_team' class='regional_team'";
                     if (! $super) echo " disabled";
                     echo ">";
-                    echo "<option>Please Choose</option>";
-                    foreach ($teams as $team) {
-                        echo "<option";
+                    echo "<option value='0'>Please Choose</option>";
+                    foreach ($teams as $idx => $team) {
+                        echo "<option value='" . ($idx + 1) . "'";
                         if ($child_info[$id]['regional_team'] == $team) echo " selected";
                         echo ">" . $team . "</option>";
                     }
@@ -171,9 +171,9 @@ foreach ($child_marks as $school => $more) {
                     echo "<td><select name='intl_team' class='intl_team'";
                     if (! $super) echo " disabled";
                     echo ">";
-                    echo "<option>Please Choose</option>";
-                    foreach ($teams as $team) {
-                        echo "<option";
+                    echo "<option value='0'>Please Choose</option>";
+                    foreach ($teams as $idx => $team) {
+                        echo "<option value='" . ($idx + 1) . "'";
                         if ($child_info[$id]['intl_team'] == $team) echo " selected";
                         echo ">" . $team . "</option>";
                     }
@@ -206,7 +206,7 @@ foreach ($child_marks as $school => $more) {
 
     function saveTeam(elem) {
       let id = $(elem).parent().parent().attr('id')
-      let val = JSON.stringify($(elem).val())
+      let val = $(elem).val()
       let field = $(elem).attr('class')
       update(id, val, field, 'varchar')
     }
