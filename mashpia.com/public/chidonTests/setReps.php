@@ -110,10 +110,10 @@ foreach ($child_marks as $school => $more) {
                     "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
                 echo "<input type='checkbox' class='school' ";
                 if (intval($child_info[$id]['school_rep'])) echo " checked ";
-                echo "/></td>";
+                echo "/></td><td>";
                 echo "<select name='team'>";
                 foreach ($teams as $team) echo "<option>" . $team . "</option>";
-                echo "</select>";
+                echo "</select></td>";
                 echo "<td><input type='checkbox' class='regional' ";
                 if (intval($child_info[$id]['regional_rep'])) echo " checked ";
                 echo "/></td><td><input type='checkbox' class='intl' ";
