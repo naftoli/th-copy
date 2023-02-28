@@ -191,7 +191,7 @@ foreach ($child_marks as $school => $more) {
     function saveRep(elem) {
       let id = $(elem).parent().parent().attr('id')
       let checked = $(elem).is(":checked") ? 1 : 0
-      let field = $(elem).className + '_rep'
+      let field = $(elem).attr('class') + '_rep'
       update(id, checked, field, 'int')
     }
 
