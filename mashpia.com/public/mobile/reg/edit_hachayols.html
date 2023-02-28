@@ -193,6 +193,7 @@
         }
         html += '<hr />'
         $("#children").empty().append(html)
+        if (numHachayols == 0) numHachayols = 1 // allow at least one child to get checked without needing to pay
       }
     })
 
