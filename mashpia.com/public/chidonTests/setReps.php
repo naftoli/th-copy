@@ -141,6 +141,7 @@ foreach ($child_marks as $school => $more) {
                     if (intval($child_info[$id]['school_rep'])) echo " checked ";
                     echo "/></td>";
                     echo "<td><select name='school_team'>";
+                    echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
                         if ($child_info[$id]['school_team'] == $team) echo " selected";
@@ -152,6 +153,7 @@ foreach ($child_marks as $school => $more) {
                     if (!$super) echo " disabled ";
                     echo "/></td>";
                     echo "<td><select name='regional_team'>";
+                    echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
                         if ($child_info[$id]['regional_team'] == $team) echo " selected";
@@ -163,6 +165,7 @@ foreach ($child_marks as $school => $more) {
                     if (!$super) echo " disabled ";
                     echo "/></td>";
                     echo "<td><select name='intl_team'>";
+                    echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
                         if ($child_info[$id]['intl_team'] == $team) echo " selected";
