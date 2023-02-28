@@ -46,8 +46,7 @@ foreach ($info as $school => $children) {
             'first' =>  $child['first'],
             'last'  =>  $child['last'],
             'khk'   =>  $child['khk_rep'],
-            'rep'   =>  $child['school_rep'],
-            'rep_old'   =>  $child['school_rep_old']
+            'rep'   =>  $child['school_rep']
         ];
     }
 }
