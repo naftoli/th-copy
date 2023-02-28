@@ -123,7 +123,7 @@ foreach ($child_marks as $school => $more) {
                     $serial = $child_info[$id]['serial'];
                     $first = $child_info[$id]['first'];
                     $last = $child_info[$id]['last'];
-                    $highest_track = $child_info[$id]['track'];
+                    $highest_track = array_search($order, $trackOrder);
 
                     echo "<tr id='$id'><td>" . $serial . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last .
                         "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
