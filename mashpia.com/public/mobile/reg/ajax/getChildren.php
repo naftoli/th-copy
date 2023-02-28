@@ -90,6 +90,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
         $children[$row['user_id']]['school_country'] = $row['school_country'];
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
+        $children[$row['user_id']]['hachayol']       = $row['hachayol'];
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
