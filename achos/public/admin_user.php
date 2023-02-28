@@ -99,21 +99,21 @@ if(!empty($action)) {
 			mysql_query("set autocommit=0");
 			mysql_query("begin");
 			$success = false;
-			if (mysql_query("delete from date_tasks_mission_marks where user_id = " . $user_id)) {
-				if (mysql_query("delete from date_tasks_marks where user_id = " . $user_id)) {
-					if (mysql_query("delete from user_tracks where user_id = " . $user_id)) {
-						if (mysql_query("delete from users where user_id = " . $user_id)) {
-							if (mysql_query("delete from admins where admin_id = " . $admin_id)) {
-								if (mysql_query("delete from admin_auths where admin_id = " . $admin_id . " and id = " . $user_id)) {
-									mysql_query("commit");
-									$message = T_('Soldier deleted.');
-									$success = true;
-								}
-							}
-						}
-					}
-				}
-			}
+//			if (mysql_query("delete from date_tasks_mission_marks where user_id = " . $user_id)) {
+//				if (mysql_query("delete from date_tasks_marks where user_id = " . $user_id)) {
+//					if (mysql_query("delete from user_tracks where user_id = " . $user_id)) {
+//						if (mysql_query("delete from users where user_id = " . $user_id)) {
+//							if (mysql_query("delete from admins where admin_id = " . $admin_id)) {
+//								if (mysql_query("delete from admin_auths where admin_id = " . $admin_id . " and id = " . $user_id)) {
+//									mysql_query("commit");
+//									$message = T_('Soldier deleted.');
+//									$success = true;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 			if (!$success) {
 				mysql_query("rollback");
 				$message = T_("Soldier could not be deleted.");

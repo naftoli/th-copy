@@ -235,18 +235,19 @@ if(!empty($action)) {
 
 		case 'delete':
 			$user_id = gri('user_id', -1);
-			if (mysql_result(mq(totalMarks("WHERE user_id = $user_id")), 0) == 0) {
-				mq("DELETE FROM files USING files JOIN users ON (files.file_id = users.user_photo_id) WHERE user_id = $user_id AND school_id = $school_id");
-				mq("DELETE FROM users WHERE user_id = $user_id AND school_id = $school_id");
-				mq("DELETE FROM user_tracks USING user_tracks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
-				mq("DELETE FROM admin_auths USING admin_auths JOIN users ON (id = user_id) WHERE auth = 'user' AND id = $user_id AND school_id = $school_id");
-				mq("DELETE FROM medal_marks USING medal_marks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
-				mq("DELETE FROM rank_marks USING rank_marks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
-				$message = T_('Soldier deleted');
-			}
-			else {
-				$message = T_("Can't delete, Soldier has points");
-			}
+      $message = "we don't allow deleting of users.";
+//			if (mysql_result(mq(totalMarks("WHERE user_id = $user_id")), 0) == 0) {
+//				mq("DELETE FROM files USING files JOIN users ON (files.file_id = users.user_photo_id) WHERE user_id = $user_id AND school_id = $school_id");
+//				mq("DELETE FROM users WHERE user_id = $user_id AND school_id = $school_id");
+//				mq("DELETE FROM user_tracks USING user_tracks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
+//				mq("DELETE FROM admin_auths USING admin_auths JOIN users ON (id = user_id) WHERE auth = 'user' AND id = $user_id AND school_id = $school_id");
+//				mq("DELETE FROM medal_marks USING medal_marks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
+//				mq("DELETE FROM rank_marks USING rank_marks JOIN users USING (user_id) WHERE user_id = $user_id AND school_id = $school_id");
+//				$message = T_('Soldier deleted');
+//			}
+//			else {
+//				$message = T_("Can't delete, Soldier has points");
+//			}
 		break;
 
 		case 'remove':

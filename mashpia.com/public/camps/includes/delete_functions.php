@@ -56,16 +56,16 @@ function deactivate_campaign($parameters) {
 }
 
 
-function delete_user($parameters) {
-	$user_id = $parameters[0];
-	
-	$sql = "DELETE FROM users WHERE user_id=" . $user_id;
-	$query = mysql_query($sql);
-	if ($query)
-		return true;
-	else
-		return false;
-}
+//function delete_user($parameters) {
+//	$user_id = $parameters[0];
+//
+//	$sql = "DELETE FROM users WHERE user_id=" . $user_id;
+//	$query = mysql_query($sql);
+//	if ($query)
+//		return true;
+//	else
+//		return false;
+//}
 
 function delete_group_type($parameters) {
 	$group_type_id = $parameters[0];

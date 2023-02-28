@@ -94,8 +94,8 @@ if ($action != "") {
 		break;
 		
 		case "delete":
-			$sql = "DELETE FROM users WHERE user_id=" . gri("member_id");
-			mq($sql);
+//			$sql = "DELETE FROM users WHERE user_id=" . gri("member_id");
+//			mq($sql);
 			$action = "";
 		break;
 		
