@@ -24,6 +24,13 @@ foreach ($schools as $id => $school) {
 }
 //echo "<pre>"; print_r($info); print_r($marks); echo "</pre>"; exit;
 
+$trackOrder = [
+    'iyun'    => 1,
+    'havonah' => 2,
+    'yediah'  => 3,
+    'yesod'   => 4
+];
+
 $numTests = 3;
 $child_marks = [];
 $child_info = [];
@@ -42,7 +49,8 @@ foreach ($info as $school => $children) {
             $avg += floatval($total / $numTests);
         }
         $final = round($avg / count($types), 2);
-        $child_marks[$schools[$school]][$grade][$id] = $final;
+        $order = isset($trackOrder[$child['highest_track']]) ? $trackOrder[$child['highest_track']] : 5;
+        $child_marks[$schools[$school]][$grade][$order][$id] = $final;
         $child_info[$id] = [
             'first'         => $child['first'],
             'last'          => $child['last'],
@@ -50,7 +58,6 @@ foreach ($info as $school => $children) {
             'regional_rep'  => $child['regional_rep'],
             'intl_rep'      => $child['intl_rep'],
             'khk_reg'       => $child['khk_reg'],
-            'track'         => $child['highest_track'],
             'serial'        => $child['user_serial'],
             'school_team'   => $child['school_team'],
             'regional_team' => $child['regional_team'],
@@ -61,9 +68,12 @@ foreach ($info as $school => $children) {
 // sort by mark desc
 foreach ($child_marks as $school => $more) {
     foreach ($more as $grade => $other) {
-        arsort($child_marks[$school][$grade]);
+        foreach ($other as $track => $more) {
+            arsort($child_marks[$school][$grade][$track]);
+        }
     }
 }
+
 //echo "<pre>"; print_r($child_info); print_r($child_marks); echo "</pre>";
 $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnayos', 'Igeres Horambam'];
 ?>
@@ -107,51 +117,53 @@ foreach ($child_marks as $school => $more) {
         </thead>
         <tbody>
         <?php
-        foreach ($more as $grade => $other) {
-            foreach ($other as $id => $avg) {
-                $serial = $child_info[$id]['serial'];
-                $first = $child_info[$id]['first'];
-                $last = $child_info[$id]['last'];
-                $highest_track = $child_info[$id]['track'];
+        foreach ($more as $grade => $details) {
+            foreach ($details as $order => $other) {
+                foreach ($other as $id => $avg) {
+                    $serial = $child_info[$id]['serial'];
+                    $first = $child_info[$id]['first'];
+                    $last = $child_info[$id]['last'];
+                    $highest_track = $child_info[$id]['track'];
 
-                echo "<tr id='$id'><td>" . $serial . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last .
-                    "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
-                echo "<input type='checkbox' class='school' ";
-                if (intval($child_info[$id]['school_rep'])) echo " checked ";
-                echo "/></td>";
-                echo "<td><select name='school_team'>";
-                foreach ($teams as $team) {
-                  echo "<option";
-                  if ($child_info[$id]['school_team'] == $team) echo " selected";
-                  echo ">" . $team . "</option>";
+                    echo "<tr id='$id'><td>" . $serial . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last .
+                        "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
+                    echo "<input type='checkbox' class='school' ";
+                    if (intval($child_info[$id]['school_rep'])) echo " checked ";
+                    echo "/></td>";
+                    echo "<td><select name='school_team'>";
+                    foreach ($teams as $team) {
+                        echo "<option";
+                        if ($child_info[$id]['school_team'] == $team) echo " selected";
+                        echo ">" . $team . "</option>";
+                    }
+                    echo "</select></td>";
+                    echo "<td><input type='checkbox' class='regional' ";
+                    if (intval($child_info[$id]['regional_rep'])) echo " checked ";
+                    if (!$super) echo " disabled ";
+                    echo "/></td>";
+                    echo "<td><select name='regional_team'>";
+                    foreach ($teams as $team) {
+                        echo "<option";
+                        if ($child_info[$id]['regional_team'] == $team) echo " selected";
+                        echo ">" . $team . "</option>";
+                    }
+                    echo "</select></td>";
+                    echo "<td><input type='checkbox' class='intl' ";
+                    if (intval($child_info[$id]['intl_rep'])) echo " checked ";
+                    if (!$super) echo " disabled ";
+                    echo "/></td>";
+                    echo "<td><select name='intl_team'>";
+                    foreach ($teams as $team) {
+                        echo "<option";
+                        if ($child_info[$id]['intl_team'] == $team) echo " selected";
+                        echo ">" . $team . "</option>";
+                    }
+                    echo "</select></td>";
+                    echo "<td>";
+                    if (intval($child_info[$id]['khk_reg'])) echo 'yes';
+                    else echo 'no';
+                    echo "</td></tr>";
                 }
-                echo "</select></td>";
-                echo "<td><input type='checkbox' class='regional' ";
-                if (intval($child_info[$id]['regional_rep'])) echo " checked ";
-                if (! $super) echo " disabled ";
-                echo "/></td>";
-                echo "<td><select name='regional_team'>";
-                foreach ($teams as $team) {
-                    echo "<option";
-                    if ($child_info[$id]['regional_team'] == $team) echo " selected";
-                    echo ">" . $team . "</option>";
-                }
-                echo "</select></td>";
-                echo "<td><input type='checkbox' class='intl' ";
-                if (intval($child_info[$id]['intl_rep'])) echo " checked ";
-                if (! $super) echo " disabled ";
-                echo "/></td>";
-                echo "<td><select name='intl_team'>";
-                foreach ($teams as $team) {
-                    echo "<option";
-                    if ($child_info[$id]['intl_team'] == $team) echo " selected";
-                    echo ">" . $team . "</option>";
-                }
-                echo "</select></td>";
-                echo "<td>";
-                if (intval($child_info[$id]['khk_reg'])) echo 'yes';
-                else echo 'no';
-                echo "</td></tr>";
             }
         }
         ?>
@@ -189,6 +201,13 @@ foreach ($child_marks as $school => $more) {
         }
       })
     }
+
+    $(".school").click(saveRep)
+    $(".regional").click(saveRep)
+    $(".intl").click(saveRep)
+    $(".school_team").change(saveTeam)
+    $(".regional_team").change(saveTeam)
+    $(".intl_team").change(saveTeam)
   })
 </script>
 </html>
