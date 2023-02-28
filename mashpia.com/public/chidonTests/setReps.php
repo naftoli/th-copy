@@ -76,7 +76,7 @@ foreach ($child_marks as $school => $more) {
 // sort by track order
 foreach ($child_marks as $school => $more) {
     foreach ($more as $grade => $other) {
-          arsort($child_marks[$school][$grade]);
+        ksort($child_marks[$school][$grade]);
     }
 }
 
