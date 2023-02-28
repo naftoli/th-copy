@@ -140,7 +140,9 @@ foreach ($child_marks as $school => $more) {
                     echo "<input type='checkbox' class='school' ";
                     if (intval($child_info[$id]['school_rep'])) echo " checked ";
                     echo "/></td>";
-                    echo "<td><select name='school_team' class='school_team'>";
+                    echo "<td><select name='school_team' class='school_team'";
+                    if (! $super) echo " disabled";
+                    echo ">";
                     echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
@@ -150,9 +152,11 @@ foreach ($child_marks as $school => $more) {
                     echo "</select></td>";
                     echo "<td><input type='checkbox' class='regional' ";
                     if (intval($child_info[$id]['regional_rep'])) echo " checked ";
-                    if (!$super) echo " disabled ";
+                    if (! $super) echo " disabled ";
                     echo "/></td>";
-                    echo "<td><select name='regional_team' class='regional_team'>";
+                    echo "<td><select name='regional_team' class='regional_team'";
+                    if (! $super) echo " disabled";
+                    echo ">";
                     echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
@@ -162,9 +166,11 @@ foreach ($child_marks as $school => $more) {
                     echo "</select></td>";
                     echo "<td><input type='checkbox' class='intl' ";
                     if (intval($child_info[$id]['intl_rep'])) echo " checked ";
-                    if (!$super) echo " disabled ";
+                    if (! $super) echo " disabled ";
                     echo "/></td>";
-                    echo "<td><select name='intl_team' class='intl_team'>";
+                    echo "<td><select name='intl_team' class='intl_team'";
+                    if (! $super) echo " disabled";
+                    echo ">";
                     echo "<option>Please Choose</option>";
                     foreach ($teams as $team) {
                         echo "<option";
