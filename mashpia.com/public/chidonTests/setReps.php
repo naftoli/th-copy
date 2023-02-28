@@ -49,7 +49,7 @@ foreach ($info as $school => $children) {
             $avg += floatval($total / $numTests);
         }
         $final = round($avg / count($types), 2);
-        $order = isset($trackOrder[$child['highest_track']]) ? $trackOrder[$child['highest_track']] : 5;
+        $order = empty($child['highest_track']) ? 5 : $trackOrder[$child['highest_track']];
         $child_marks[$schools[$school]][$grade][$order][$id] = $final;
         $child_info[$id] = [
             'first'         => $child['first'],
@@ -68,8 +68,8 @@ foreach ($info as $school => $children) {
 // sort by mark desc
 foreach ($child_marks as $school => $more) {
     foreach ($more as $grade => $other) {
-        foreach ($other as $track => $more) {
-            arsort($child_marks[$school][$grade][$track]);
+        foreach ($other as $order => $more) {
+            arsort($child_marks[$school][$grade][$order]);
         }
     }
 }
