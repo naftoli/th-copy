@@ -58,7 +58,7 @@ foreach ($child_marks as $school => $more) {
         }
     }
 }
-//echo "<pre>"; print_r($child_marks); echo "</pre>";
+echo "<pre>"; print_r($child_marks); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
