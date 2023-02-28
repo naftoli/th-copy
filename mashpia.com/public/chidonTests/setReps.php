@@ -116,8 +116,10 @@ foreach ($child_marks as $school => $more) {
                 echo "</select></td>";
                 echo "<td><input type='checkbox' class='regional' ";
                 if (intval($child_info[$id]['regional_rep'])) echo " checked ";
+                if (! $super) echo " disabled ";
                 echo "/></td><td><input type='checkbox' class='intl' ";
                 if (intval($child_info[$id]['intl_rep'])) echo " checked ";
+                if (! $super) echo " disabled ";
                 echo "/></td><td>";
                 if (intval($child_info[$id]['khk_reg'])) echo 'yes';
                 else echo 'no';
