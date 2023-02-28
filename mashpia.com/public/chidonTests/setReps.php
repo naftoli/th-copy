@@ -120,7 +120,7 @@ foreach ($child_marks as $school => $more) {
                 echo "<td><select name='school-team'>";
                 foreach ($teams as $team) {
                   echo "<option";
-                  if ($child[$info][$id]['school_team'] == $team) echo " selected";
+                  if ($child_info[$id]['school_team'] == $team) echo " selected";
                   echo ">" . $team . "</option>";
                 }
                 echo "</select></td>";
@@ -131,7 +131,7 @@ foreach ($child_marks as $school => $more) {
                 echo "<td><select name='regional-team'>";
                 foreach ($teams as $team) {
                     echo "<option";
-                    if ($child[$info][$id]['regional_team'] == $team) echo " selected";
+                    if ($child_info[$id]['regional_team'] == $team) echo " selected";
                     echo ">" . $team . "</option>";
                 }
                 echo "</select></td>";
@@ -142,7 +142,7 @@ foreach ($child_marks as $school => $more) {
                 echo "<td><select name='intl-team'>";
                 foreach ($teams as $team) {
                     echo "<option";
-                    if ($child[$info][$id]['intl_team'] == $team) echo " selected";
+                    if ($child_info[$id]['intl_team'] == $team) echo " selected";
                     echo ">" . $team . "</option>";
                 }
                 echo "</select></td>";
