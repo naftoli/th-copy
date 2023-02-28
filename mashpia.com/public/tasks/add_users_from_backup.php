@@ -14,9 +14,10 @@ while ($row = mysql_fetch_assoc($result)) {
     $table_info[] = $row['Field'];
 }
 
-$qrys = [];
-$serials = [7782529];
-$sql = "select * from mashpia_backup2.users where user_serial in (" . implode(',', $serials) . ")";
+$updated = 0;
+//$serials = [7749798, 7780392, 7780394];
+//$sql = "select * from mashpia_backup2.users where user_serial in (" . implode(',', $serials) . ")";
+$sql = "SELECT * FROM mashpia_backup2.users where user_id not in (select user_id from users)";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $sql = "insert ignore into users set ";
@@ -25,5 +26,6 @@ while ($row = mysql_fetch_assoc($result)) {
     }
     $sql = substr($sql, 0, -2);
     mysql_query($sql) or die(mysql_error() . "<br />" . $sql . "<br />");
+    $updated++;
 }
-echo "done.";
+echo "Updated: " . $updated;
