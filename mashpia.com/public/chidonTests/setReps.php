@@ -109,15 +109,17 @@ foreach ($child_marks as $school => $more) {
         <?php
         foreach ($more as $grade => $other) {
             foreach ($other as $id => $avg) {
-                $highest_track = $child_info[$id]['track'];
+                $serial = $child_info[$id]['serial'];
                 $first = $child_info[$id]['first'];
                 $last = $child_info[$id]['last'];
-                echo "<tr id=$id><td>" . $id . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last .
+                $highest_track = $child_info[$id]['track'];
+
+                echo "<tr id='$id'><td>" . $serial . "</td><td>" . $grade . "</td><td>" . $first . "</td><td>" . $last .
                     "</td><td>" . $highest_track . "</td><td>" . $avg . "</td><td>";
                 echo "<input type='checkbox' class='school' ";
                 if (intval($child_info[$id]['school_rep'])) echo " checked ";
                 echo "/></td>";
-                echo "<td><select name='school-team'>";
+                echo "<td><select name='school_team'>";
                 foreach ($teams as $team) {
                   echo "<option";
                   if ($child_info[$id]['school_team'] == $team) echo " selected";
@@ -128,7 +130,7 @@ foreach ($child_marks as $school => $more) {
                 if (intval($child_info[$id]['regional_rep'])) echo " checked ";
                 if (! $super) echo " disabled ";
                 echo "/></td>";
-                echo "<td><select name='regional-team'>";
+                echo "<td><select name='regional_team'>";
                 foreach ($teams as $team) {
                     echo "<option";
                     if ($child_info[$id]['regional_team'] == $team) echo " selected";
@@ -139,7 +141,7 @@ foreach ($child_marks as $school => $more) {
                 if (intval($child_info[$id]['intl_rep'])) echo " checked ";
                 if (! $super) echo " disabled ";
                 echo "/></td>";
-                echo "<td><select name='intl-team'>";
+                echo "<td><select name='intl_team'>";
                 foreach ($teams as $team) {
                     echo "<option";
                     if ($child_info[$id]['intl_team'] == $team) echo " selected";
@@ -159,28 +161,27 @@ foreach ($child_marks as $school => $more) {
 }
 ?>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
 <script>
   $(function() {
-    $(".school").click( function() {
-      let id = $(this).attr('id')
-      let checked = $(this).is(":checked") ? 1 : 0
-      update(id, checked, 'school_rep')
-    })
+    function saveRep(elem) {
+      let id = $(elem).parent().parent().attr('id')
+      let checked = $(elem).is(":checked") ? 1 : 0
+      let field = $(elem).className + '_rep'
+      update(id, checked, field, 'int')
+    }
 
-    $(".regional").click( function() {
-      let id = $(this).attr('id')
-      let checked = $(this).is(":checked") ? 1 : 0
-      update(id, checked, 'regional_rep')
-    })
+    function saveTeam(elem) {
+      let id = $(elem).parent().parent().parent().attr('id')
+      let val = $(elem).val()
+      let field = $(elem).parent().attr('name')
+      update(id, val, field, 'varchar')
+    }
 
-    $(".intl").click( function() {
-      let id = $(this).attr('id')
-      let checked = $(this).is(":checked") ? 1 : 0
-      update(id, checked, 'intl_rep')
-    })
-
-    function update(id, checked, field) {
-      $.post('setRep.php', { id: id, state: checked, field: field }, function(success) {
+    function update(id, val, field, typeOfField) {
+      $.post('setRep.php', { id, val, field, typeOfField }, function(success) {
         if (parseInt(success)) {
           alert("Saved.")
         } else {
