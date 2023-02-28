@@ -121,7 +121,7 @@ foreach ($child_marks as $school => $more) {
                 echo "/></td><td>";
                 if (intval($child_info[$id]['khk_reg'])) echo 'yes';
                 else echo 'no';
-                echo "/></td></tr>";
+                echo "</td></tr>";
             }
         }
         ?>
