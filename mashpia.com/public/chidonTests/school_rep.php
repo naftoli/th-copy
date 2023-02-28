@@ -91,11 +91,9 @@ foreach ($child_marks as $school => $other) {
                 <th>Grade</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Avg (3 Parts)</th>
-                <th>Avg (Expert + Trophy)</th>
+                <th>Avg</th>
+                <th>School Rep</th>
                 <th>KHK Rep</th>
-                <th>Old School Rep</th>
-                <th>New School Rep</th>
             </tr>
             </thead>
             <tbody>
@@ -104,31 +102,16 @@ foreach ($child_marks as $school => $other) {
                 $i = 1;
                 foreach ($other as $id => $avg) {
                     echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $child_info[$id]['first'] . "</td><td>" .
-                        $child_info[$id]['last'] . "</td><td>" . $child_info[$id]['old_avg'] . "</td><td>" . $avg . "</td><td>";
+                        $child_info[$id]['last'] . "</td><td>" . $child_marks[$school][$child['gender']][$grade][$id];
+                    echo "</td><td>" . $avg . "</td><td>";
+                    echo "<input type='checkbox' class='rep' id='$id' ";
+                    if ($child_info[$id]['school_rep']) echo " checked ";
+                    echo "disabled /></td><td>";
                     echo "<input type='checkbox' class='khk' id='$id' ";
-                    if ($child_info[$id]['khk']) echo " checked ";
-                    echo "disabled /></td><td>";
-                    echo "<input type='checkbox' id='$id' ";
-                    if ($child_info[$id]['rep_old']) echo " checked ";
-                    echo "disabled /></td><td>";
-                    echo "<input type='checkbox' class='contestant' id='$id' ";
-                    if ($child_info[$id]['rep']) echo " checked ";
+                    if ($child_info[$id]['khk_rep']) echo " checked ";
                     echo "disabled /></td></tr>";
                     if (!$child_info[$id]['khk']) $i++;
                 }
-                ?>
-                <tr>
-                    <th>Chidon ID</th>
-                    <th>Grade</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Avg (3 Parts)</th>
-                    <th>Avg (Expert + Trophy)</th>
-                    <th>KHK Rep</th>
-                    <th>Old School Rep</th>
-                    <th>New School Rep</th>
-                </tr>
-                <?php
             }
             ?>
             </tbody>
