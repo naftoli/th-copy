@@ -212,7 +212,7 @@ foreach ($child_marks as $school => $more) {
       })
     }
 
-    $(document).on('click', '.school', saveRep)
+    $(document).on('click', '.school', saveRep(this))
     $(document).on('click', '.regional', saveRep)
     $(document).on('click', '.intl', saveRep)
     $(document).on('change', '.school_team', saveTeam)
