@@ -8,6 +8,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+
 $sql = "SELECT 
             *
         FROM
@@ -20,6 +24,7 @@ $sql = "SELECT
             classes c ON c.class_id = u.class_id
         WHERE
             tc.year = :year AND tc.ultimate_trip = 1 
+                AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
         ORDER BY u.school_id , class_grade , class_sub , last , first";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute(['year' => $year]);
@@ -54,15 +59,20 @@ $info = $stmt->fetchAll();
             <th>In Walking Zone</th>
             <th>Host</th>
             <th>Host Phone Number</th>
-            <th>Host Address</th>
+            <th>Street Number</th>
+            <th>Street Number Suffix</th>
+            <th>Street Name</th>
+            <th>Apt. #</th>
             <th>Host Cross Street 1</th>
             <th>Host Cross Street 2</th>
-            <th>Permission to walk alone/th>
+            <th>Permission to walk alone</th>
             <th>Zone ID</th>
             <th>Poll</th>
+            <th></th>
         </tr>
         <?php
         foreach ($info as $row) {
+            $chidon_id = $row['th_chidon_id'];
             $school = $row['school_name'];
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $student = $row['first'] . ' ' . $row['last'];
@@ -77,19 +87,43 @@ $info = $stmt->fetchAll();
             $suffix = $row['host_street_num_suffix'];
             $street = $row['host_street'];
             $apt = $row['host_street_apt'];
-            $address = $street_num . ' ' . $suffix . ' ' . $street . ' ' . $apt;
             $zone = $row['walking_zone'];
             $cross1 = $row['between_streets1'];
             $cross2 = $row['between_streets2'];
             $permission = $row['walking'];
             $poll = $row['poll'];
 
-            echo "<tr><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
-            echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') .
-                "</td><td>" . $host . "</td><td>" . $host_phone . "</td><td>" . $address . "</td><td>" . $cross1 . "</td><td>";
-            echo $cross2 . "</td><td>" . ($permission ? 'yes' : 'no') . "</td><td>" . $zone . "</td><td>" . $poll . "</td></tr>";
+            echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
+            echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') . "</td> 
+                <td><input type='text' class='host' value='" . $host . "' /></td>
+                <td><input type='text' class='host_phone' value='" . "' /></td>
+                <td><input type='text' class='street_num' value='" . $street_num . "' size='3' /></td>
+                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' /></td>
+                <td><input type='text' class='street' value='" . $street . "' /></td>
+                <td><input type='text' class='apt' value='" . $apt . "' size='3' /></td> 
+                <td><input type='text' class='cross1' value='" . $cross1 . "' /></td>
+                <td><input type='text' class='cross2' value='" . $cross2 . "' /></td>
+                <td>" . ($permission ? 'yes' : 'no') . "</td><td>" . $zone . "</td><td>" . $poll . "</td>
+                <td><button class='save'>Save</button></td></tr>";
         }
         ?>
     </table>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+      $(".save").click( function () {
+        let row = $(this).parent().parent()
+        let chidon_id = $(row).attr('id')
+        let fields = ['host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
+        let info = {}
+        for (let field of fields) {
+          let elem = '.' + field
+          let val = $(row).find(elem).val()
+          info[field] = val
+        }
+        console.log(info)
+      })
+    })
+</script>
 </html>
