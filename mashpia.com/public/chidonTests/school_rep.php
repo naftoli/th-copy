@@ -58,7 +58,6 @@ foreach ($child_marks as $school => $more) {
         }
     }
 }
-echo "<pre>"; print_r($child_marks); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -104,7 +103,7 @@ foreach ($child_marks as $school => $other) {
                     echo "<tr><td>" . $id . "</td><td>" . $grade . "</td><td>" . $child_info[$id]['first'] . "</td><td>" .
                         $child_info[$id]['last'] . "</td><td>" . $avg . "</td><td>";
                     echo "<input type='checkbox' class='rep' id='$id' ";
-                    if (intval($child_info[$id]['school_rep'])) echo " checked ";
+                    if (intval($child_info[$id]['rep'])) echo " checked ";
                     echo "disabled /></td><td>";
                     echo "<input type='checkbox' class='khk' id='$id' ";
                     if (intval($child_info[$id]['khk_reg']) && intval($child_info[$id]['khk_rep'])) echo " checked ";
