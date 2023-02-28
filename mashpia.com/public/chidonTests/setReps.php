@@ -68,16 +68,16 @@ $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnay
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>School Representatives Report</title>
-    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
       tr, th, td {
         font-size: 14px;
-        padding: 5px;
+        padding: 10px;
+        border-bottom: 1px solid grey;
+        font-family: Arial, Helvetica, sans-serif;
       }
     </style>
 </head>
 <body>
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>School Representatives Report</h1>
 <?php
 foreach ($child_marks as $school => $more) {
