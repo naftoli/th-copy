@@ -54,7 +54,7 @@ foreach ($info as $school => $children) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
-            $avg += floatval($total / $totalQuestions[$type]);
+            $avg += floatval(($total / $totalQuestions[$type]) * 100);
         }
         $finalAvg = round($avg / count($types), 2);
         $order = empty($child['highest_track']) ? 5 : $trackOrder[$child['highest_track']];
