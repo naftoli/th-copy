@@ -10,6 +10,7 @@ $schools = $as->getSchools();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
+$num_tests = 3;
 
 $info = [];
 $marks = [];
@@ -20,7 +21,7 @@ foreach ($schools as $id => $school) {
     $ct->calculateMarks();
     $marks += $ct->getMarks();
 }
-//echo "<pre>"; print_r($marks); echo "</pre>"; exit;
+echo "<pre>"; print_r($marks); echo "</pre>"; exit;
 $child_marks = [];
 $child_info = [];
 foreach ($info as $school => $children) {
@@ -31,11 +32,11 @@ foreach ($info as $school => $children) {
         $totalAvg = 0;
         foreach ($types as $type) {
             $total = 0;
-            for ($i = 1; $i <= 4; $i++) {
+            for ($i = 1; $i <= $num_tests; $i++) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
-            $avg = round($total / 4, 2);
+            $avg = round($total / $num_tests, 2);
             $totalAvg += $avg;
         }
         $final = $totalAvg / 2;
@@ -43,11 +44,11 @@ foreach ($info as $school => $children) {
 
         // add old avg
         $total = 0;
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= $num_tests; $i++) {
             $mark = isset($marks[$id][$i]['trophy_extra']) ? $marks[$id][$i]['trophy_extra'] : 0;
             $total += $mark;
         }
-        $oldAvg = round($total / 4, 2);
+        $oldAvg = round($total / $num_tests, 2);
 
         $child_info[$id] = [
             'first' =>  $child['first'],
