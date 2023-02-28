@@ -36,6 +36,7 @@ $info = $stmt->fetchAll();
           font-size: 14px;
           padding: 10px;
           border-bottom: grey;
+          font-family: Arial, Helvetica, sans-serif;
         }
     </style>
 </head>
