@@ -241,6 +241,7 @@
 <!--                        <button class="btn btn-info story">Submit your Rebbe Story</button>-->
 <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
 <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
+                        <button class="btn btn-info contest">Purim Costume Contest</button>
                     </div>
                 </div>
             </div>
@@ -708,6 +709,10 @@
             $(document).on('click', '.story', function () {
                 location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
             });
+
+            $(document).on('click', '.contest', function () {
+                location.href = "https://forms.gle/k44DGdcQcXGurqiWA"
+            })
 
             // $(document).on('click', '.editChidon', function() {
             //     var id = $(this).parent().parent().parent().parent().attr('id');
