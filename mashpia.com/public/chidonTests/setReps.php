@@ -22,7 +22,7 @@ foreach ($schools as $id => $school) {
     $ct->calculateMarks();
     $marks += $ct->getMarks();
 }
-echo "<pre>"; print_r($info); print_r($marks); echo "</pre>"; exit;
+//echo "<pre>"; print_r($info); print_r($marks); echo "</pre>"; exit;
 
 $numTests = 3;
 $child_marks = [];
@@ -59,7 +59,7 @@ foreach ($child_marks as $school => $more) {
         arsort($child_marks[$school][$grade]);
     }
 }
-echo "<pre>"; print_r($child_info); print_r($child_marks); echo "</pre>";
+//echo "<pre>"; print_r($child_info); print_r($child_marks); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
