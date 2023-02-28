@@ -189,7 +189,6 @@ foreach ($child_marks as $school => $more) {
 <script>
   $(function() {
     function saveRep(elem) {
-      alert($(elem).attr('class'))
       let id = $(elem).parent().parent().attr('id')
       let checked = $(elem).is(":checked") ? 1 : 0
       let field = $(elem).attr('class') + '_rep'
@@ -213,12 +212,29 @@ foreach ($child_marks as $school => $more) {
       })
     }
 
-    $(document).on('click', '.school', saveRep)
-    $(document).on('click', '.regional', saveRep)
-    $(document).on('click', '.intl', saveRep)
-    $(document).on('change', '.school_team', saveTeam)
-    $(document).on('change', '.regional_team', saveTeam)
-    $(document).on('change', '.intl_team', saveTeam)
+    $(".school").click( function () {
+      saveRep(this)
+    })
+
+    $(".regional").click( function () {
+      saveRep(this)
+    })
+
+    $(".intl").click( function () {
+      saveRep(this)
+    })
+
+    $(".school_team").change( function () {
+      saveTeam(this)
+    })
+
+    $(".regional_team").change( function () {
+      saveTeam(this)
+    })
+
+    $(".intl_team").change( function () {
+      saveTeam(this)
+    })
   })
 </script>
 </html>
