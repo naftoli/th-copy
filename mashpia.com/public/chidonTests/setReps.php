@@ -24,13 +24,6 @@ foreach ($schools as $id => $school) {
 }
 //echo "<pre>"; print_r($info); print_r($marks); echo "</pre>"; exit;
 
-$totalQuestions = [
-    'maven'   => 30,
-    'pro'     => 30,
-    'expert'  => 60,
-    'genius'  => 30
-];
-
 $trackOrder = [
     'iyun'    => 1,
     'havonah' => 2,
@@ -54,7 +47,7 @@ foreach ($info as $school => $children) {
                 $mark = isset($marks[$id][$i][$type]) ? $marks[$id][$i][$type] : 0;
                 $total += $mark;
             }
-            $avg += floatval(($total / $totalQuestions[$type]) * 100);
+            $avg += floatval($total / $numTests);
         }
         $finalAvg = round($avg / count($types), 2);
         $order = empty($child['highest_track']) ? 5 : $trackOrder[$child['highest_track']];
