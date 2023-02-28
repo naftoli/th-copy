@@ -95,21 +95,23 @@ $info = $stmt->fetchAll();
 
             echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
             echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') . "</td> 
-                <td><input type='text' class='host' value='" . $host . "' /></td>
-                <td><input type='text' class='host_phone' value='" . "' /></td>
-                <td><input type='text' class='street_num' value='" . $street_num . "' size='3' /></td>
-                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' /></td>
-                <td><input type='text' class='street' value='" . $street . "' /></td>
-                <td><input type='text' class='apt' value='" . $apt . "' size='3' /></td> 
-                <td><input type='text' class='cross1' value='" . $cross1 . "' /></td>
-                <td><input type='text' class='cross2' value='" . $cross2 . "' /></td>
+                <td><input type='text' class='host' value='" . $host . "' disabled /></td>
+                <td><input type='text' class='host_phone' value='" . "' disabled /></td>
+                <td><input type='text' class='street_num' value='" . $street_num . "' size='3' disabled /></td>
+                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' disabled /></td>
+                <td><input type='text' class='street' value='" . $street . "' disabled /></td>
+                <td><input type='text' class='apt' value='" . $apt . "' size='3' disabled /></td> 
+                <td><input type='text' class='cross1' value='" . $cross1 . "' disabled /></td>
+                <td><input type='text' class='cross2' value='" . $cross2 . "' disabled /></td>
                 <td>" . ($permission ? 'yes' : 'no') . "</td><td>" . $zone . "</td><td>" . $poll . "</td>
                 <td><button class='save'>Save</button></td></tr>";
         }
         ?>
     </table>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+        crossorigin="anonymous"></script>
 <script>
     $(function () {
       $(".save").click( function () {
