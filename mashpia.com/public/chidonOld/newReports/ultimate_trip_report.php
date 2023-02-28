@@ -20,7 +20,7 @@ $sql = "SELECT
             classes c ON c.class_id = u.class_id
         WHERE
             tc.year = :year AND tc.ultimate_trip = 1 
-        ORDER BY school_id , class_grade , class_sub , last , first";
+        ORDER BY u.school_id , class_grade , class_sub , last , first";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute(['year' => $year]);
 $info = $stmt->fetchAll();
