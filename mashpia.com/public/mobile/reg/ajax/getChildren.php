@@ -137,7 +137,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
-        if (isset($_COOKIE['naftoli'])) $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
+        $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
         $children[$row['user_id']]['rep'] = intval($row['school_rep']) ? 1 : intval($row['regional_rep']) ? 1 : intval($row['intl_rep']) ? 1 : 0;
 
         //mivtza lulav
