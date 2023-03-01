@@ -645,7 +645,7 @@ class ChidonShipping
      * @param $awards
      * @return array
      */
-    public function getAwards($gender, $school, $awards = []) {
+    public function getAwards($gender, $school, $limitTo = []) {
         $info = [];
         if (in_array($school, [61, 269])) {
             $sql = "select * from th_chidon_info tci 
@@ -674,16 +674,27 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
+        $awards = [
+            'yesod'     => 'certificate',
+            'yediah'    => 'plaque',
+            'havonah'   => 'medal / plaque',
+            'iyun'      => 'medal / plaque / glass trophy',
+            'khk'       => 'medal / plaque / khk trophy'
+        ];
+
         $cat = 'awards';
         foreach ($rows as $row) {
             if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
-            if (in_array($school, [61, 269])) $award = $this->getAwardFromTests($row);
-            else $award = $this->getAward($row, $awards);
+            if (in_array($school, [61, 269])) $awardTrack = isset($child['highest_track']) ? $child['highest_track'] : '';
+            else $awardTrack = $this->getAwardTrack($row);
+            $award = $awardTrack ? $awards[$awardTrack] : '';
+
             if ($award) {
                 $award_info = explode(' / ', $award);
                 foreach ($award_info as $item) {
+                    if (!empty($limitTo) && !in_array($item, $limitTo)) continue;
                     $id = $this->getItemID($cat, $item);
                     $info[$row['user_id']][] = [
                         'item'  => $item,
@@ -700,23 +711,11 @@ class ChidonShipping
         return $info;
     }
 
-    private function getAwardFromTests($child) {
-        $awards = [
-            'yesod'     => 'certificate',
-            'yediah'    => 'plaque',
-            'havonah'   => 'medal / plaque',
-            'iyun'      => 'medal / plaque / glass trophy',
-            'khk'       => 'medal / plaque / khk trophy'
-        ];
-        if (isset($child['highest_track'])) return $awards[$child['highest_track']];
-        return '';
-    }
-
     /**
      * @param $child
      * @return string
      */
-    private function getAward($child, $limitTo, $debug = false) {
+    private function getAwardTrack($child) {
         $tracks = [
             1   => 'yesod',
             2   => 'yediah',
@@ -737,20 +736,13 @@ class ChidonShipping
             'iyun'      => 90,
             'khk'       => 140 // not a mark but rather number of correct answers (out of 200)
         ];
-        $awards = [
-            'yesod'     => 'certificate',
-            'yediah'    => 'plaque',
-            'havonah'   => 'medal / plaque',
-            'iyun'      => 'medal / plaque / glass trophy',
-            'khk'       => 'medal / plaque / khk trophy'
-        ];
 
         $ct = new ChidonTests();
         $types = $ct->getTypes();
         $highest_track = $ct->getHighestTrackPassed($child)['highest_track'];
 
         // find out if award is same as before final or not
-        $award = false;
+        $award = '';
         if ($highest_track) {
             $key = array_search(strtolower($types[$highest_track]), $tracks);
             if ($key !== false) {
@@ -776,28 +768,7 @@ class ChidonShipping
                 }
             }
         }
-        if ($award) {
-            $show = false;
-            switch ($award) {
-                case 'yesod':
-                    if (in_array('certificate', $limitTo)) $show = true;
-                    break;
-                case 'yediah':
-                    if (in_array('plaque', $limitTo)) $show = true;
-                    break;
-                case 'havonah':
-                    if (count(array_intersect(['plaque', 'medal'], $limitTo)) > 0) $show = true;
-                    break;
-                case 'iyun':
-                    if (count(array_intersect(['plaque', 'medal', 'glass trophy'], $limitTo)) > 0) $show = true;
-                    break;
-                case 'khk':
-                    if (count(array_intersect(['plaque', 'medal', 'khk trophy'], $limitTo)) > 0) $show = true;
-                    break;
-            }
-            if ($show) return $awards[$award];
-        }
-        return '';
+        return $award;
     }
 
     /**
