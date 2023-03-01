@@ -140,9 +140,7 @@ foreach ($child_marks as $school => $more) {
                     echo "<input type='checkbox' class='school' ";
                     if (intval($child_info[$id]['school_rep'])) echo " checked ";
                     echo "/></td>";
-                    echo "<td><select name='school_team' class='school_team'";
-                    if (! $super) echo " disabled";
-                    echo ">";
+                    echo "<td><select name='school_team' class='school_team'>";
                     echo "<option value='0'>Please Choose</option>";
                     foreach ($teams as $idx => $team) {
                         echo "<option value='" . ($idx + 1) . "'";

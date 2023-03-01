@@ -13,5 +13,6 @@ if (strpos($field, 'team') !== false) {
     $sql = "update th_chidon set $field = '$val' where th_chidon_id = " . $chidon_id;
 }
 else $sql = "update th_chidon set $field = $value where th_chidon_id = " . $chidon_id;
+echo $sql;
 if (isset($sql) && mysql_query($sql)) echo 1;
 else echo 0;
