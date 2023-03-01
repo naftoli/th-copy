@@ -13,6 +13,7 @@ if (strpos($field, 'team') !== false) {
         $val = $teams[$value - 1];
         $sql = "update th_chidon set $field = '$val' where th_chidon_id = " . $chidon_id;
     }
+    else $sql = "update th_chidon set $field = '' where th_chidon_id = " . $chidon_id;
 }
 else $sql = "update th_chidon set $field = $value where th_chidon_id = " . $chidon_id;
 if (isset($sql) && mysql_query($sql)) echo 1;

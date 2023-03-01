@@ -211,11 +211,7 @@ foreach ($child_marks as $school => $more) {
 
     function update(id, val, field) {
       $.post('setRep.php', { id, val, field }, function(success) {
-        if (parseInt(success)) {
-          alert("Saved.")
-        } else {
-          alert('Error saving.')
-        }
+        if (! parseInt(success)) alert('Error saving.')
       })
     }
 
