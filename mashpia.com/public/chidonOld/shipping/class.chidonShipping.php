@@ -687,7 +687,7 @@ class ChidonShipping
             if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
-            if (in_array($school, [61, 269])) $awardTrack = isset($child['highest_track']) ? $child['highest_track'] : '';
+            if (in_array($school, [61, 269])) $awardTrack = isset($row['highest_track']) ? $row['highest_track'] : '';
             else $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
 
