@@ -786,13 +786,13 @@ class ChidonShipping
                     if (in_array('plaque', $limitTo)) $show = true;
                     break;
                 case 'havonah':
-                    if (in_array('medal', $limitTo)) $show = true;
+                    if (count(array_intersect(['plaque', 'medal'], $limitTo)) > 0) $show = true;
                     break;
                 case 'iyun':
-                    if (in_array('glass trophy', $limitTo)) $show = true;
+                    if (count(array_intersect(['plaque', 'medal', 'glass trophy'], $limitTo)) > 0) $show = true;
                     break;
                 case 'khk':
-                    if (in_array('khk trophy', $limitTo)) $show = true;
+                    if (count(array_intersect(['plaque', 'medal', 'khk trophy'], $limitTo)) > 0) $show = true;
                     break;
             }
             if ($show) return $awards[$award];
