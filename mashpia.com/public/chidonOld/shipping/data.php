@@ -73,71 +73,81 @@ function createHtmlForItem($school, $row, $output = true) {
             $items = $info[$cat][$row['user_id']];
             foreach ($items as $item) {
                 // get status and whether to show this item
+                $show_item = false;
                 $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
                 $statusDesc = [
-                    1   => 'shipped', 
-                    2   => 'missing', 
+                    1   => 'shipped',
+                    2   => 'missing',
                     3   => 'damaged'
                 ];
-                if ($limit_to_status > 0) {
-                    if (!isset($status[$statusDesc[$limit_to_status]]) || intval($status[$statusDesc[$limit_to_status]]) == 0) continue;
+                if (empty($limit_to_status)) $show_item = true;
+                else {
+                    foreach ($limit_to_status as $idx) {
+                        if ($idx == 0) {
+                            if (empty($status)) $show_item = true;
+                        } else {
+                            if (intval($status[$statusDesc[$idx]]) == 1) $show_item = true;
+                        }
+                    }
                 }
-                if ($output) {
-                    // create new row
-                    echo "<tr>";
-                    foreach ($fields_chosen as $field) {
-                        if (strpos($field, 'shipping') === false) {
-                            $desc = substr($field, strpos($field, '.') + 1);
-                            echo "<td>" . $row[$desc] . "</td>";
+                if ($show_item) {
+                    if ($output) {
+                        // create new row
+                        echo "<tr>";
+                        foreach ($fields_chosen as $field) {
+                            if (strpos($field, 'shipping') === false) {
+                                $desc = substr($field, strpos($field, '.') + 1);
+                                echo "<td>" . $row[$desc] . "</td>";
+                            }
                         }
-                    }
-                    echo "<td>" . $item['item'];
-                    if ($item_details_chosen && count($item_details_chosen)) {
-                        foreach ($item_details_chosen as $field) {
-                            echo "</td><td>";
-                            if ($field == 'cat') echo $cat;
-                            else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
-                            else if (isset($item[$field])) echo $item[$field];
+                        echo "<td>" . $item['item'];
+                        if ($item_details_chosen && count($item_details_chosen)) {
+                            foreach ($item_details_chosen as $field) {
+                                echo "</td><td>";
+                                if ($field == 'cat') echo $cat;
+                                else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                                else if (isset($item[$field])) echo $item[$field];
+                            }
                         }
-                    }
-                    echo "</td>";
-                    // add column for shipping info
-                    echo "<td class='no-print'>";
-                    echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
-                    // figure out if it should be disabled or not
-                    if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
-                    echo ">";
-                    $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
-                    foreach ($options as $i => $val) {
-                        echo "<option value='$i'";
-                        /*
-                         * 0 = not yet shipped
-                         * 1 = shipped
-                         * 2 = missing
-                         * 3 = damaged
-                         */
-                        switch ($i) {
-                            case 0:
-                                if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
-                                break;
-                            case 1:
-                                if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
-                                    && intval($status['damaged']) == 0) echo " selected ";
-                                break;
-                            case 2:
-                                if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
-                                break;
-                            case 3:
-                                if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
-                                break;
+                        echo "</td>";
+                        // add column for shipping info
+                        echo "<td class='no-print'>";
+                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
+                        // figure out if it should be disabled or not
+                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
+                        echo ">";
+                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        foreach ($options as $i => $val) {
+                            echo "<option value='$i'";
+                            /*
+                             * 0 = not yet shipped
+                             * 1 = shipped
+                             * 2 = missing
+                             * 3 = damaged
+                             */
+                            switch ($i) {
+                                case 0:
+                                    if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
+                                    break;
+                                case 1:
+                                    if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
+                                        && intval($status['damaged']) == 0) echo " selected ";
+                                    break;
+                                case 2:
+                                    if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
+                                    break;
+                                case 3:
+                                    if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
+                                    break;
+                            }
+                            echo ">" . $val . "</option>";
                         }
-                        echo ">" . $val . "</option>";
+                        echo "</select></td></tr>";
                     }
-                    echo "</select></td></tr>";
-                }
 
-                // update summary
-                addToSummary($item, $school);
+                    // update summary
+                    addToSummary($item, $school);
+                }
             }
         }
     }

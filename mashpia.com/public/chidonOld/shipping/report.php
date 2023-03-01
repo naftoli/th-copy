@@ -17,7 +17,7 @@ require 'data.php';
 $items_chosen = $_POST['items'];
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
-$limit_to_status = intval($_POST['status']);
+$limit_to_status = $_POST['status'];
 
 $cs = new ChidonShipping();
 

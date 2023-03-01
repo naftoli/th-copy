@@ -77,12 +77,12 @@ $items = $cs->getItems();
           <?php foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
       </select><br />
       <h4>Status</h4>
-      <select name="status">
-        <option value="0">All</option>
-        <option value="1">Shipped</option>
-        <option value="2">Missing</option>
-        <option value="3">Damaged</option>
-      </select><br />
+      <p>
+        <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
+        <input type="checkbox" name="status[]" value="1" /> Shipped<br />
+        <input type="checkbox" name="status[]" value="2" /> Missing<br />
+        <input type="checkbox" name="status[]" value="3" /> Damaged<br />
+      </p>
     </fieldset>
 
     <fieldset>
