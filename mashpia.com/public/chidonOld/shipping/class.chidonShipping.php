@@ -663,19 +663,20 @@ class ChidonShipping
                         AND (level_1 > 0 OR level_2 > 0
                         OR level_3 > 0
                         OR level_4 > 0
-                        OR tcf.khk > 0)
-                    GROUP BY user_id";
+                        OR tcf.khk > 0)";
             if ($gender == 'm') $sql .= " and u.gender = 'M'";
             if ($gender == 'f') $sql .= " and u.gender = 'F";
             if ($school > 0) $sql .= " and u.school_id = " . $school;
+            $sql .= " GROUP BY user_id";
         }
+//        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
         $cat = 'awards';
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $this->toExclude)) continue;
+            if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
             if (in_array($school, [61, 269])) $award = $this->getAwardFromTests($row);
@@ -715,7 +716,7 @@ class ChidonShipping
      * @param $child
      * @return string
      */
-    private function getAward($child, $limitTo) {
+    private function getAward($child, $limitTo, $debug = false) {
         $tracks = [
             1   => 'yesod',
             2   => 'yediah',
@@ -747,6 +748,7 @@ class ChidonShipping
         $ct = new ChidonTests();
         $types = $ct->getTypes();
         $highest_track = $ct->getHighestTrackPassed($child)['highest_track'];
+
         // find out if award is same as before final or not
         $award = false;
         if ($highest_track) {
