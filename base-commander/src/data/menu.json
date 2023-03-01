@@ -102,6 +102,8 @@
       { "label":  "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
       
       { "label": "Study Guide / Book report", "legacy": true, "path": "/reports/chidon/combined.php" },
+
+      { "label":  "Chidon Shipping", "legacy": true, "path": "/chidonOld/shipping/" },
       
       { "label": "Chidon History Report", "legacy": true, "path": "/reports/chidon/reg_history_school.php" },
 
