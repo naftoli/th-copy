@@ -83,11 +83,8 @@ function createHtmlForItem($school, $row, $output = true) {
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
-                        if ($idx == 0) {
-                            if (empty($status)) $show_item = true;
-                        } else {
-                            if (intval($status[$statusDesc[$idx]]) == 1) $show_item = true;
-                        }
+                        if ($idx == 0 && empty($status)) $show_item = true;
+                        else if ($idx && !empty($status) && $status[$statusDesc[$idx]]) $show_item = true;
                     }
                 }
                 if ($show_item) {
