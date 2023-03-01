@@ -1,5 +1,5 @@
 <?php
-$admin_auth = ['user'];
+$admin_auth = ['school', 'user'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
