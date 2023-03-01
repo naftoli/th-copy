@@ -35,7 +35,7 @@ foreach ($info as $row) {
     if ($action == 0) {
         $res = $stmtDel->execute([
             'year'  => $year,
-            'id'    => $row['user_id']
+            'id'    => $row['user']
         ]);
     } else {
         switch ($action) {
