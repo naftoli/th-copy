@@ -1,6 +1,9 @@
 <?php
-$admin_auth = ['school', 'user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+// authenticate
+if (! isset($_COOKIE['chidon_admin'])) {
+    echo "no permission.";
+    exit;
+}
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
