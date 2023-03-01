@@ -8,10 +8,10 @@ $field = mysql_real_escape_string($_POST['field']);
 
 $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnayos', 'Igeres Horambam'];
 
-if (strpos($field, 'rep') !== false) $sql = "update th_chidon set $field = $value where th_chidon_id = " . $chidon_id;
-else {
-    if ($value) $val = $teams[$value - 1];
+if (strpos($field, 'team') !== false) {
+    if ($value > 0) $val = $teams[$value - 1];
     $sql = "update th_chidon set $field = '$val' where th_chidon_id = " . $chidon_id;
 }
+else $sql = "update th_chidon set $field = $value where th_chidon_id = " . $chidon_id;
 if (isset($sql) && mysql_query($sql)) echo 1;
 else echo 0;
