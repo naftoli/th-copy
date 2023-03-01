@@ -112,7 +112,8 @@ if ( !empty( $users ) ) {
                 ! ISNULL(ur.user_reg_id) AS reg_chayolei,
                 sri.date_paid AS registered,
                 u.chayolei,
-                u.chidon
+                u.chidon, 
+                tc.ultimate_trip 
             FROM
                 users u
                     LEFT JOIN
@@ -133,6 +134,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
         if ( intval( $row['reg_chidon'] ) ) $children[$row['user_id']]['chidonRegistered'] = 1;
         if ( intval( $row['th_chidon_id'] ) ) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
+        if (isset($_COOKIE['naftoli'])) $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
 
         //mivtza lulav
 //        $lulavSchools = [];

@@ -387,6 +387,12 @@
                                                     </div>
                                                     {{/if}}
 
+                                                    {{#if this.ultimate_trip}}
+                                                    <div class="button-spacing">
+                                                        <button class="btn btn-primary ultimate_trip">Edit Ultimate Trip Info</button>
+                                                    </div>
+                                                    {{/if}}
+
                                                     {{#if this.chayoleiRegistered}}
                                                     <div class="button-spacing">
                                                         <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH" class="i18n2"> Enrolled for Chayolei TH </span> {{ this.reg_year }}</div>
@@ -666,6 +672,11 @@
                     });
                 }
             });
+
+            $(document).on('click', '.ultimate_trip', function () {
+                Cookies.set('chidon_admin', admin)
+                location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+            })
 
             $(document).on('click', '.reviewCert', function () {
                 var id = $(this).attr('id')

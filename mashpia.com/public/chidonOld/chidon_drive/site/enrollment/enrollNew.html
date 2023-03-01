@@ -700,7 +700,31 @@
 				let info = { shoe, sandwich, allergy, allergies, in_zone, walk_alone, chidon_answer }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
-				$("#ch_info").modal('hide')
+				if (editing_mode) {
+					// check if we need to show modal for another child
+					let show = false
+					for (let user of ultimate_trip) {
+						if (! ultimate_info[user]) {
+							show = true
+							alert("We will now show your other child's ultimate trip info.")
+							let next_user = children.filter(child => parseInt(child.user_id) == parseInt(user))
+							updateModal(next_user)
+						}
+					}
+					if (! show) {
+						$.post('save.php', {
+							ultimate_trip: JSON.stringify(ultimate_trip),
+							ultimate_info: JSON.stringify(ultimate_info)
+						}, function (result) {
+							if (parseInt(result)) alert("Error saving info.")
+							else {
+								alert('Saved.')
+								location.href = '/mobile'
+							}
+						})
+					}
+				}
+				else $("#ch_info").modal('hide')
 			}
 		})
 	</script>
@@ -768,6 +792,7 @@
 		var shipping = 0 // cost of shipping chidon stuff to parents where applicable
 		var errors = []
 		var needsShipping = false
+		var editing_mode = false // only in editing mode for ultimate trip info
 
 		async function getChildren(admin) {
 			let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -862,6 +887,61 @@
 				child.track = tracks[child.user_id]
 			}
 
+			// only let ultimate trip kids to update their trip info
+			let registered = children.filter(child => child.date_paid)
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			if (registered.length && !eligible.length) {
+				editing_mode = true
+				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
+				if (to_edit.length) {
+					for (let c of to_edit) ultimate_trip.push(c.user_id)
+					// if we have an id passed in, use that
+
+					updateModal(to_edit[0])
+				} else {
+					location.href = '/mobile'
+				}
+			}
+		}
+
+		function updateModal(user) {
+			$("#ch_info #user_id").val(user.user_id)
+			$("#ch_info #shoe").val(user.shoe_size)
+			$("#ch_info #sandwich").val(user.sandwich)
+
+			// allergies
+			if (user.allergies.length) {
+				$("#ch_info .allergy").eq(1).attr('checked', true)
+				$("#ch_info #allergies").val(user.allergies)
+			}
+			else $("#ch_info .allergy").eq(0).attr('checked', true)
+
+			// zone
+			$("#ch_info #acc_family").val(user.host)
+			$("#ch_info #acc_phone").val(user.host_number)
+			$("#ch_info #acc_street_num").val(user.host_street_num)
+			$("#ch_info #acc_street_num_suffix").val(user.host_street_num_suffix)
+			$("#ch_info #acc_street_apt").val(user.hos_street_apt)
+			if (parseInt(user.in_zone)) {
+				$("#ch_info .in_zone").eq(0).trigger('click')
+				$("#ch_info #acc_street").val(user.host_street)
+				$("#ch_info #acc_cross1").val(user.between_streets1)
+				$("#ch_info #acc_cross2").val(user.between_streets2)
+			} else {
+				$("#ch_info .in_zone").eq(1).trigger('click')
+				$("#ch_info #acc_street_outside_zone").val(user.host_street)
+				$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
+				$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
+			}
+
+			if (parseInt(user.walking)) $("#ch_info #walking").attr('checked', true)
+			$("#ch_info #chidonAnswer").val(user.poll)
+
+			$("#ch_info select").niceSelect('update')
+			$("#ch_info").modal('show')
+		}
+
+			/*
 			let registered = children.filter(child => child.date_paid)
 			// let haveTrack = children.filter(child => child.track)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
@@ -1407,6 +1487,7 @@
 				errors = [] // reset errors
 			}
 		})
+			 */
 	</script>
 
 	<script>
