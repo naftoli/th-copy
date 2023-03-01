@@ -103,7 +103,7 @@
 
       { "label": "Choosing Reps", "legacy": true, "path": "/chidonTests/setReps.php" },
 
-      { "label": "Updating Chidon Photos", "legacy":  true, "path": "/upload_chidon_photos.php" },
+      { "label": "Updating Chidon Photos", "legacy": true, "path": "/upload_chidon_photos.php" },
       
       { "label": "Chidon History Report", "legacy": true, "path": "/reports/chidon/reg_history_school.php" },
 
