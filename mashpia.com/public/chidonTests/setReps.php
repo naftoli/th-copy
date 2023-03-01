@@ -103,6 +103,8 @@ $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnay
 </head>
 <body>
 <h1>School Representatives Report</h1>
+<button id="repsOnly">Only Show Reps</button>
+<button id="showAll">Show All Students</button>
 <?php
 foreach ($child_marks as $school => $more) {
     echo "<h2>" . $school . "</h2>";
@@ -130,6 +132,9 @@ foreach ($child_marks as $school => $more) {
         foreach ($more as $grade => $details) {
             foreach ($details as $order => $other) {
                 foreach ($other as $id => $avg) {
+                    if (isset($_GET['repsOnly']) && $_GET['repsOnly'] == 1) {
+                        if (! ($child_info[$id]['school_rep'] || $child_info[$id]['regional_rep'] || $child_info[$id]['intl_info'])) continue;
+                    }
                     $serial = $child_info[$id]['serial'];
                     $first = $child_info[$id]['first'];
                     $last = $child_info[$id]['last'];
@@ -237,6 +242,14 @@ foreach ($child_marks as $school => $more) {
 
     $(".intl_team").change( function () {
       saveTeam(this)
+    })
+
+    $("#repsOnly").click( function () {
+      location.href = 'setReps.php?repsOnly=1'
+    })
+
+    $("#showAll").click( function () {
+      location.href = 'setReps.php'
     })
   })
 </script>
