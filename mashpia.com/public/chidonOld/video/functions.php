@@ -64,7 +64,7 @@ function getChildren($school_id, $gender) {
                     AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
     $sql .= " GROUP BY u.user_id";
-    $sql .= " ORDER BY u.school_id, highest_track , class_grade , last , first";
+    $sql .= " ORDER BY u.school_id, class_grade , last , first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $award = getAward($row);
@@ -322,7 +322,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
 
     $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
     $img_url = $child['user_serial'] . '.png';
-    $track = $khk ? 'khk' : $child['highest_track'];
+    $track = $khk ? 'khk' : $child['award_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
