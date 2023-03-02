@@ -14,6 +14,13 @@ function getFinalMarks() {
 function getChildren($school_id, $gender) {
     global $year;
 
+    $tracks = [
+        1   => 'yesod',
+        2   => 'yediah',
+        3   => 'havonah',
+        4   => 'iyun'
+    ];
+
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
 
@@ -60,6 +67,9 @@ function getChildren($school_id, $gender) {
 //    echo $sql . "<br />";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $award = getAward($row);
+        if (empty($award)) continue;
+        $row['award_track'] = $tracks[$award];
         $children[] = $row;
     }
     return $children;
@@ -67,6 +77,13 @@ function getChildren($school_id, $gender) {
 
 function getAllChildrenByGender($gender) {
     global $year;
+
+    $tracks = [
+        1   => 'yesod',
+        2   => 'yediah',
+        3   => 'havonah',
+        4   => 'iyun'
+    ];
 
     $children = [];
     $sql = "SELECT 
@@ -105,6 +122,9 @@ function getAllChildrenByGender($gender) {
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $award = getAward($row);
+        if (empty($award)) continue;
+        $row['award_track'] = $tracks[$award];
         $children[] = $row;
     }
     return $children;
@@ -131,12 +151,6 @@ function getAward($child) {
         'havonah'   => 80,
         'iyun'      => 90
     ];
-//    $awards = [
-//        'yesod'     => 'certificate',
-//        'yediah'    => 'plaque',
-//        'havonah'   => 'medal / plaque',
-//        'iyun'      => 'trophy / medal / plaque'
-//    ];
 
     $highest_track = $child['highest_track'];
     // find out if award is same as before final or not
@@ -210,14 +224,14 @@ function createFile($name, $info, $csv = false) {
 function createSpreadSheet($children) {
     $info = [];
     foreach ($children as $child) {
-        $info[$child['highest_track']][] = $child;
+        $info[$child['award_track']][] = $child;
     }
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
     $khk = [];
-    $bronze = [];
-    $silver = [];
-    $gold = [];
+//    $bronze = [];
+//    $silver = [];
+//    $gold = [];
 
     $i = 0;
     $sheet = [];
@@ -254,9 +268,9 @@ function createSpreadSheet($children) {
             foreach ($info[$track] as $child) {
                 $sheet[$i++] = addToSheet($child);
                 if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $khk[] = $child;
-                if ($child['trophy_type']) {
-                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
-                }
+//                if ($child['trophy_type']) {
+//                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
+//                }
             }
         }
     }
@@ -270,20 +284,20 @@ function createSpreadSheet($children) {
     }
 
     // trophies
-    if (count($bronze) || count($silver) || count($gold)) {
-        $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-        foreach (['bronze', 'silver', 'gold'] as $trophy) {
-            if (!empty($$trophy)) {
-                foreach ($$trophy as $reps) {
-                    foreach ($reps as $type) {
-                        foreach ($type as $child) {
-                            $sheet[$i++] = addToSheet($child, false, true);
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    if (count($bronze) || count($silver) || count($gold)) {
+//        $sheet[$i++] = ['trophies_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+//        foreach (['bronze', 'silver', 'gold'] as $trophy) {
+//            if (!empty($$trophy)) {
+//                foreach ($$trophy as $reps) {
+//                    foreach ($reps as $type) {
+//                        foreach ($type as $child) {
+//                            $sheet[$i++] = addToSheet($child, false, true);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     $sheet[$i++] = ['outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
