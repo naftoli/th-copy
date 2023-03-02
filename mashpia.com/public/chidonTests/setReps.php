@@ -108,7 +108,14 @@ $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnay
 <?php
 foreach ($child_marks as $school => $more) {
     echo "<h2>" . $school . "</h2>";
+    // find out how many vidoes they want
     ?>
+    <p id="<?= array_search($school, $schools); ?>">
+      Please choose how many videos you want to have for the school reps.<br />
+      <input type="radio" name="videos" class="videos" value="1" /> One Video<br />
+      <input type="radio" name="videos" class="videos" value="5" /> Five Videos<br />
+    </p>
+    <br />
     <table>
         <thead>
         <tr>
@@ -219,6 +226,14 @@ foreach ($child_marks as $school => $more) {
         if (! parseInt(success)) alert('Error saving.')
       })
     }
+
+    $(".videos").click( function () {
+      let numVideos = $(this).val()
+      let school_id = $(this).parent().attr('id')
+      $.post('setVideos.php', { school_id, numVideos }, function(res) {
+        if (parseInt(res)) alert('Error saving.')
+      })
+    })
 
     $(".school").click( function () {
       saveRep(this)

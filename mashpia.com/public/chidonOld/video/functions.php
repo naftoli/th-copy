@@ -131,12 +131,12 @@ function getAward($child) {
         'havonah'   => 80,
         'iyun'      => 90
     ];
-    $awards = [
-        'yesod'     => 'certificate',
-        'yediah'    => 'plaque',
-        'havonah'   => 'medal / plaque',
-        'iyun'      => 'trophy / medal / plaque'
-    ];
+//    $awards = [
+//        'yesod'     => 'certificate',
+//        'yediah'    => 'plaque',
+//        'havonah'   => 'medal / plaque',
+//        'iyun'      => 'trophy / medal / plaque'
+//    ];
 
     $highest_track = $child['highest_track'];
     // find out if award is same as before final or not
