@@ -63,8 +63,10 @@ function getChildren($school_id, $gender) {
                 tc.year = $year AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
+    $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY u.school_id, highest_track , class_grade , last , first";
-//    echo $sql . "<br />";
+    echo $sql . "<br />";
+    exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $award = getAward($row);
