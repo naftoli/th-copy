@@ -108,12 +108,16 @@ $teams = ['Sefer Hamitzvos', 'Mishna Torah', 'Moreh Nevuchim', 'Pirush Hamishnay
 <?php
 foreach ($child_marks as $school => $more) {
     echo "<h2>" . $school . "</h2>";
-    // find out how many vidoes they want
+    // find out how many videos were chosen
+    $school_id = array_search($school, $schools);
+    $sql = "select num_chidon_videos from schools where school_id = " . $school_id;
+    $result = mysql_query($sql);
+    $num_videos = mysql_fetch_assoc($result)['num_chidon_videos'];
     ?>
-    <p id="<?= array_search($school, $schools); ?>">
+    <p id="<?=$school_id?>">
       Please choose how many videos you want to have for the school reps.<br />
-      <input type="radio" name="videos" class="videos" value="1" /> One Video<br />
-      <input type="radio" name="videos" class="videos" value="5" /> Five Videos<br />
+      <input type="radio" name="videos" class="videos" value="1" <? $num_videos == 1 ? 'checked' : '' ?> /> One Video<br />
+      <input type="radio" name="videos" class="videos" value="5" <? $num_videos == 5 ? 'checked' : '' ?> /> Five Videos<br />
     </p>
     <br />
     <table>
