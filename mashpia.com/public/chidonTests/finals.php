@@ -188,12 +188,14 @@ if ($admin_user['auth'] != 'super') {
 <h1>Enter Test Score</h1>
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
 <?php
+$exceptions = [192, 63, 13, 42, 726];
 $types = $ct->getTypes();
 $levels = array_values($types);
 echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
 echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
+    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
     echo "<h2>" . $schools[$school] . "</h2>";
     echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
     foreach ($types as $old => $new) {
