@@ -111,7 +111,6 @@ foreach ($child_marks as $school => $more) {
     // find out how many videos were chosen
     $school_id = array_search($school, $schools);
     $sqlV = "select num_chidon_videos from schools where school_id = " . $school_id;
-    echo $sqlV . "<br />";
     $resultV = mysql_query($sqlV);
     $num_videos = mysql_fetch_assoc($resultV)['num_chidon_videos'];
     ?>
