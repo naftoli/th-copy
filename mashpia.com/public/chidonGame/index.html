@@ -48,6 +48,26 @@
         	.pricing-header p {
         		margin: 0;
         	}
+
+          #main {
+            margin-left: auto;
+            margin-right: auto;
+            width: 365px;
+            background-color: #ffff00;
+            padding: 20px;
+          }
+          #action {
+            text-align: center;
+          }
+          #main select {
+            padding: 10px;
+            border: 1px solid grey;
+          }
+          #main button {
+            padding: 10px;
+            font-size: 14px;
+            margin-left: 10px;
+          }
         </style>            
       </head>
 
@@ -66,14 +86,14 @@
 					<div class="tname t2n">Team 2</div>
 					<div class="tpoints t2p">0</div>
 				</td>
-<!--				<td>-->
-<!--					<div class="tname t3n">Team 3</div>-->
-<!--					<div class="tpoints t3p">0</div>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--					<div class="tname t4n">Team 4</div>-->
-<!--					<div class="tpoints t4p">0</div>-->
-<!--				</td>-->
+				<td>
+					<div class="tname t3n">Team 3</div>
+					<div class="tpoints t3p">0</div>
+        </td>
+        <td>
+					<div class="tname t4n">Team 4</div>
+					<div class="tpoints t4p">0</div>
+				</td>
 			</tr>
 		</tbody></table>
 		<table class="table table-bordered" id="round2">
@@ -87,68 +107,68 @@
 					<div class="tname t2n">Team 2</div>
 					<div class="tpoints t2p">0</div>
 				</td>
-<!--				<td>-->
-<!--					<div class="tname t3n">Team 3</div>-->
-<!--					<div class="tpoints t3p">0</div>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--					<div class="tname t4n">Team 4</div>-->
-<!--					<div class="tpoints t4p">0</div>-->
-<!--				</td>-->
+				<td>
+					<div class="tname t3n">Team 3</div>
+					<div class="tpoints t3p">0</div>
+        </td>
+        <td>
+					<div class="tname t4n">Team 4</div>
+					<div class="tpoints t4p">0</div>
+				</td>
 			</tr>
 		</tbody></table>
-<!--		<table class="table table-bordered" id="round3">-->
-<!--			<tbody><tr>-->
-<!--				<th width="390px"><h2>Round 3</h2></th>-->
-<!--				<td colspan="2">-->
-<!--					<div class="tname t1n">Team 1</div>-->
-<!--					<div class="tpoints t1p">0</div>-->
-<!--				</td>-->
-<!--				<td colspan="2">-->
-<!--					<div class="tname t2n">Team 2</div>-->
-<!--					<div class="tpoints t2p">0</div>-->
-<!--				</td>-->
-<!--			</tr>-->
-<!--		</tbody></table>-->
+		<table class="table table-bordered" id="round3">
+			<tbody><tr>
+				<th width="390px"><h2>Round 3</h2></th>
+				<td colspan="2">
+					<div class="tname t1n">Team 1</div>
+					<div class="tpoints t1p">0</div>
+				</td>
+				<td colspan="2">
+					<div class="tname t2n">Team 2</div>
+					<div class="tpoints t2p">0</div>
+				</td>
+			</tr>
+		</tbody></table>
 	</div>
     	 	
  	<div id="teams">
 	 		<div id="saveTeams">
 	 		<button id="save1">Save as Round 1</button>
 	 		<button id="save2">Save as Round 2</button>
-<!--			<button id="save3">Save as Round 3</button>-->
+			<button id="save3">Save as Round 3</button>
 	 	</div>
  		<table id="teamNames">
  			<tbody><tr>
  				<td class="teamName">משנה תורה</td>
  				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
-<!--        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>-->
-<!--        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>-->
+        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>
  				<td><input type="radio" name="t1" value="0" checked=""> None</td>
  			</tr>
  			<tr>
  				<td class="teamName">אגרת הרמב"ם</td>
  				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
-<!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
-<!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
+        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>
  				<td><input type="radio" name="t2" value="0" checked=""> None</td>
  			</tr>
  			<tr>
  				<td class="teamName">ספר המצוות</td>
  				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>
-<!--        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>-->
-<!--        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>-->
+        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>
  				<td><input type="radio" name="t3" value="0" checked=""> None</td>
  			</tr>
  			<tr>
  				<td class="teamName">פירוש המשניות</td>
  				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>
-<!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
-<!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
+        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>
  				<td><input type="radio" name="t4" value="0" checked=""> None</td>
  			</tr>
  			<tr>
@@ -157,12 +177,12 @@
 					<button id="update">Update</button>
 				</td>
              </tr>
-             <!-- <tr>
- 				<td colspan="5">
-					<br />
-					<button id="round3">Change Boxes for Round 3</button>
-				</td>
- 			</tr> -->
+<!--             &lt;!&ndash; <tr>-->
+<!-- 				<td colspan="5">-->
+<!--					<br />-->
+<!--					<button id="round3">Change Boxes for Round 3</button>-->
+<!--				</td>-->
+<!-- 			</tr> &ndash;&gt;-->
  		</tbody></table>     		
  	</div>
  	
@@ -174,11 +194,11 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
                             <button class="plus">+10</button>
-                            <button class="plus">+30</button>
-                            <button class="plus">+45</button>
-                            <!-- <button class="minus">-100</button>  -->
-                            <button class="plus">+60</button>
-                            <input type="text" size="3"> 
+                            <button class="plus">+20</button>
+                            <button class="minus">-10</button>
+                            <button class="minus">-20</button>
+                            <br />
+                            <input type="text" size="3" style="margin-top: 10px;">
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
                             <input type="text" name="points" size="5">
@@ -190,11 +210,11 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="givePoints" id="2">
                             <button class="plus">+10</button>
-                            <button class="plus">+30</button>
-                            <button class="plus">+45</button>
-                            <!-- <button class="minus">-100</button>  -->
-                            <button class="plus">+60</button>
-                            <input type="text" size="3">
+                            <button class="plus">+20</button>
+                            <button class="minus">-10</button>
+                            <button class="minus">-20</button>
+                            <br />
+                            <input type="text" size="3" style="margin-top: 10px;">
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
                             <input type="text" name="points" size="5">
@@ -203,39 +223,37 @@
                     	</div>
                     </div>
                     
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="givePoints" id="3">-->
-<!--                            <button class="plus">+5</button> -->
-<!--                            <button class="plus">+10</button> -->
-<!--                            <button class="plus">+100</button> -->
-<!--                            &lt;!&ndash; <button class="minus">-100</button>  &ndash;&gt;-->
-<!--                            <button class="plus">+150</button> -->
-<!--                            <button class="plus">+200</button> -->
-<!--                            <input type="text" size="3"> -->
-<!--                            <button>Go</button><br>-->
-<!--                            <label for="points">Set Points</label>-->
-<!--                            <input type="text" name="points" size="5">-->
-<!--                            <button class="setPoints">Set</button>-->
-<!--                            <button class="resetPoints">Reset</button>-->
-<!--                    	</div>-->
-<!--                    </div>-->
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="3">
+                          <button class="plus">+10</button>
+                          <button class="plus">+20</button>
+                          <button class="minus">-10</button>
+                          <button class="minus">-20</button>
+                          <br />
+                          <input type="text" size="3" style="margin-top: 10px;">
+                          <button>Go</button><br>
+                          <label for="points">Set Points</label>
+                          <input type="text" name="points" size="5">
+                          <button class="setPoints">Set</button>
+                          <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
 
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="givePoints" id="4">-->
-<!--                            <button class="plus">+5</button> -->
-<!--                            <button class="plus">+10</button> -->
-<!--                            <button class="plus">+100</button> -->
-<!--                            &lt;!&ndash; <button class="minus">-100</button>  &ndash;&gt;-->
-<!--                            <button class="plus">+150</button> -->
-<!--                            <button class="plus">+200</button> -->
-<!--                            <input type="text" size="3"> -->
-<!--                            <button>Go</button><br>-->
-<!--                            <label for="points">Set Points</label>-->
-<!--                            <input type="text" name="points" size="5">-->
-<!--                            <button class="setPoints">Set</button>-->
-<!--                            <button class="resetPoints">Reset</button>-->
-<!--                    	</div>-->
-<!--                    </div>-->
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="4">
+                          <button class="plus">+10</button>
+                          <button class="plus">+20</button>
+                          <button class="minus">-10</button>
+                          <button class="minus">-20</button>
+                          <br />
+                          <input type="text" size="3" style="margin-top: 10px;">
+                          <button>Go</button><br>
+                          <label for="points">Set Points</label>
+                          <input type="text" name="points" size="5">
+                          <button class="setPoints">Set</button>
+                          <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
             	</div>
             </div>
         </div>
@@ -275,38 +293,42 @@
                         </div>
                     </div>
                     
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="pricing-table table3">-->
-<!--                        	<div class="pricing-list t3">-->
-<!--                                <ul>-->
-<!--                                    <li><span>ספר המצוות</span></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            -->
-<!--                            <div class="pricing-header">-->
-<!--                                <p class="pricing-rate team3">0</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table3">
+                        	<div class="pricing-list t3">
+                                <ul>
+                                    <li><span>ספר המצוות</span></li>
+                                </ul>
+                            </div>
 
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="pricing-table table4">-->
-<!--                        	<div class="pricing-list t4">-->
-<!--                                <ul>-->
-<!--                                    <li><span>משנה תורה</span></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            -->
-<!--                            <div class="pricing-header">-->
-<!--                                <p class="pricing-rate team4">0</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                            <div class="pricing-header">
+                                <p class="pricing-rate team3" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table4">
+                        	<div class="pricing-list t4">
+                                <ul>
+                                    <li><span>משנה תורה</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="pricing-header">
+                                <p class="pricing-rate team4" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
             	</div>
             </div>
         </div>
     </section>
 	<!-- Pricing Table Section End -->
+
+    <p></p>
+    <div id="main"></div>
+    <p></p>
 	
     <!-- <div style="margin-top: 100px;">
         <section id="pricing-table" style="padding-top: 20px; padding-bottom: 20px;">
@@ -439,11 +461,10 @@
         </section> -->
 		<!-- Pricing Table Section End -->
 	<!-- </div> -->
-	
     
     <script src="../jquery-1.8.1.min.js"></script>
     <script>
-    	$(function() { 
+    	$(function() {
     		$(".one").click( function(e) {
     			var checked = 0;
     			$(".one").each( function() {
@@ -514,12 +535,12 @@
     					return;
     				}
     			});
-    			/*
-    			if (t1 == undefined || t2 == undefined || t3 == undefined) {
-    				alert('You have not chosen all three teams.');
+
+    			if (t1 == undefined || t2 == undefined || t3 == undefined || t4 == undefined) {
+    				alert('You have not chosen all four teams.');
     				return;
     			}
-    			*/        			
+
     			$(".t1 span").text(t1);
     			$(".t2 span").text(t2);
           $(".t3 span").text(t3);
@@ -568,7 +589,7 @@
             var points = parseInt($(this).prev('input').val());
             if (!isNaN(points)) {
               var team = '.team' + $(this).parent().attr('id');
-              $(team).text(curPoints);
+              $(team).text(points);
               // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
               //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
             }
@@ -586,7 +607,7 @@
               var points = parseInt(val);
               var id = $(this).parent().attr('id');
               var team = '.team' + id;
-              var curPoints = parseInt($(team).eq(0).text());
+              var curPoints = parseInt($(team).text());
               curPoints += points;
               if (!isNaN(curPoints)) {
                   $(team).text(curPoints);
@@ -652,19 +673,19 @@
 				if (conf) {
 					var t1 = $(".t1").eq(0).text().trim();
 					var t2 = $(".t2").eq(0).text().trim();
-					//var t3 = $(".t3").eq(0).text().trim();
+					var t3 = $(".t3").eq(0).text().trim();
 					
 					var team1 = $(".team1").eq(0).text();
 					var team2 = $(".team2").eq(0).text();
-					//var team3 = $(".team3").eq(0).text();
+					var team3 = $(".team3").eq(0).text();
 					
 					$("#round3 .t1n").text(t1);       			
 					$("#round3 .t2n").text(t2);
-					//$("#round3 .t3n").text(t3);
+					$("#round3 .t3n").text(t3);
 					
 					$("#round3 .t1p").text(team1);
 					$("#round3 .t2p").text(team2);
-					//$("#round3 .t3p").text(team3);
+					$("#round3 .t3p").text(team3);
 				}
     		});
     		
@@ -702,6 +723,85 @@
     			$(".table" + id).parent().find('.pricing-table').trigger('click')
     		}, 3000);
     	}
+    </script>
+    <script>
+      let total = 15
+      let teams = ['משנה תורה', 'אגרת הרמב"ם', 'ספר המצוות', 'פירוש המשניות']
+
+      $( function () {
+        let html = `<div id="bolts">`
+        let rows = 3
+        let columns = 5
+
+        outer:
+          for (let i = 0; i < rows; i++) {
+            for (let j = 1; j <= columns; j++) {
+              let number = i * columns + j
+              if (number > total) break outer
+              html += `<img id="bolt_${number}" src="5782/imgs/grey.png" />`;
+            }
+          }
+        html += "</div><br /><br />"
+        html += `<div id="action">`
+        html += `<select id="team">`
+        for (let i = 0; i < teams.length; i++) {
+          html += `<option value='${teams[i]}'>${teams[i]}</option>`
+        }
+        html += '</select>&nbsp;&nbsp;&nbsp;'
+        html += `<select id="bolt">`
+        for (let k = 1; k <= total; k++) {
+          html += `<option value=${k}>${k}</option>`
+        }
+        html += `</select><br />`
+        html += "<div id='buttons' style='margin-top: 10px; margin-bottom: 10px;'><button id='correct' class='mark'>Correct</button><button id='incorrect' class='mark'>Incorrect</button>"
+        html += "<button id='reset' class='mark'>Reset</button></div><div><button id='resetAll' class='mark'>Reset All</button></div>"
+        html += `</div>`
+        $("#main").append(html)
+      })
+
+      function updatePoints(team) {
+        let team_number = 0
+        for (let i = 1; i < 5; i++) {
+          let team_name = $(".t" + i).find('span').eq(0).text()
+          if (team === team_name) {
+            team_number = i
+            break
+          }
+        }
+        if (team_number) {
+          // add 10 points to team
+          let elem = '.team' + team_number
+          let amount = parseInt($(elem).text())
+          amount += 10
+          $(elem).text(amount)
+        }
+      }
+
+      $(document).on('click', '.mark', function() {
+        let image
+        let action = $(this).attr('id')
+        let number = $(this).parent().parent().find('#bolt').val()
+        let team = $(this).parent().parent().find('#team').val()
+
+        if (action === 'correct') {
+          image = '5782/imgs/green.png'
+          document.getElementById('bolt_' + number).src = image
+          updatePoints(team)
+        } else if (action === 'incorrect') {
+          image = '5782/imgs/red.png'
+          document.getElementById('bolt_' + number).src = image
+        } else if (action === 'reset') {
+          image = '5782/imgs/grey.png'
+          document.getElementById('bolt_' + --number).src = image
+        }
+
+        if (number < total && !['reset', 'resetAll'].includes(action)) $(this).parent().parent().find('#bolt').val(++number)
+        else if (action === 'reset') $(this).parent().parent().find('#bolt').val(number)
+        else if (action === 'resetAll') {
+          for (let i = 1; i <= total; i++) document.getElementById('bolt_' + i).src = '5782/imgs/grey.png'
+          $(this).parent().parent().find('#bolt').val(1)
+        }
+      })
     </script>
     </body>
 </html>

@@ -71,13 +71,12 @@ body{
 .pricing-table .team2 {
   background: #00ff00;
 }
-/*
 .pricing-table .team3 {
-  background: #C80000;
+  background: #00ff00;
 }
 .pricing-table .team4 {
-  background: #0033CC;
-} */
+  background: #00ff00;
+}
 #bottom-table #pricing-table .pricing .pricing-table .pricing-header {
 	padding: 0px;	
 }
