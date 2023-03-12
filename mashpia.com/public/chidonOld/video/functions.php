@@ -225,7 +225,7 @@ function createFile($name, $info, $csv = false) {
 function createSpreadSheet($children) {
     $info = [];
     foreach ($children as $child) {
-        $info[$child['award_track']][] = $child;
+        $info[$child['highest_track']][] = $child;
     }
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
@@ -322,7 +322,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
 
     $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
     $img_url = $child['user_serial'] . '.png';
-    $track = $khk ? 'khk' : $child['award_track'];
+    $track = $khk ? 'khk' : $child['highest_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
