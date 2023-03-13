@@ -490,8 +490,9 @@ function getSchoolReps($school, $gender) {
             where tc.year = $year 
             and school_id = $school 
             and school_rep = 1";
-    if ($gender == 'M') $sql .= " and u.gender = 'M'";
-    else if ($gender == 'F') $sql .= " and u.gender = 'F'";
+    if ($gender == 'boys') $sql .= " and u.gender = 'M'";
+    else if ($gender == 'girls') $sql .= " and u.gender = 'F'";
+    $sql .= "order by tc.book, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $reps[] = $row;
@@ -499,6 +500,29 @@ function getSchoolReps($school, $gender) {
     return $reps;
 }
 
-function createRepsSheet($children) {
+function createRepsSheet($children, $school, $gender) {
+    $info = [];
+    foreach ($children as $child) {
+        $info[$child['book']][] = $child;
+    }
 
+    $school_logo = 'School_' . $school;
+    if ($gender == 'boys') $school_logo .= '_b';
+    else if ($gender == 'girls') $school_logo .= '_g';
+    $school_logo .= '.png';
+
+    $sheet = [];
+    $sheet[] = ['comp', 'logo', 'image', 'name', 'team name'];
+    $sheet[] = ['intro', $school_logo, '', '', ''];
+
+    foreach ($info as $book => $more) {
+        $sheet[] = [('book ' . $book . ' intro'), '', '', '', ''];
+        foreach ($more as $child) {
+            $image = $child['user_serial'] . '.png';
+            $name = trim($child['first']) . ' ' . trim($child['last']);
+            $team = $child['school_team'];
+            $sheet[] = [('book ' . $book), '', $image, $name, $team];
+        }
+    }
+    return $sheet;
 }
