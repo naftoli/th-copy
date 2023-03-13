@@ -396,7 +396,7 @@ function createAwardCeremonyData($children) {
         $i = 0;
         $numChildren = count($more);
         foreach ($more as $idx => $child) {
-            $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
+            $name = trim($child['first']) . ' ' . trim($child['last']);
             $names[$i++] = $name;
             // we create another row once we get the total amount of children allowed per row or if we are at the last child
             if (($idx + 1) == $numChildren || $i == $total) {
@@ -479,4 +479,26 @@ function downloadFile() {
     flush(); // Flush system output buffer
     readfile($filename);
     unlink($filename);
+}
+
+function getSchoolReps($school, $gender) {
+    global $year;
+
+    $reps = [];
+    $sql = "select * from users u 
+            join th_chidon tc using (user_id) 
+            where tc.year = $year 
+            and school_id = $school 
+            and school_rep = 1";
+    if ($gender == 'M') $sql .= " and u.gender = 'M'";
+    else if ($gender == 'F') $sql .= " and u.gender = 'F'";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $reps[] = $row;
+    }
+    return $reps;
+}
+
+function createRepsSheet($children) {
+
 }
