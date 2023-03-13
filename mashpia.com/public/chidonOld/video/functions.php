@@ -492,7 +492,8 @@ function getSchoolReps($school, $gender) {
             and school_rep = 1";
     if ($gender == 'boys') $sql .= " and u.gender = 'M'";
     else if ($gender == 'girls') $sql .= " and u.gender = 'F'";
-    $sql .= "order by tc.book, u.last, u.first";
+    $sql .= " order by tc.book, u.last, u.first";
+    echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $reps[] = $row;
