@@ -488,7 +488,7 @@ function getSchoolReps($school, $gender) {
     $sql = "select * from users u 
             join th_chidon tc using (user_id) 
             where tc.year = $year 
-            and school_id = $school 
+            and u.school_id = $school 
             and school_rep = 1";
     if ($gender == 'boys') $sql .= " and u.gender = 'M'";
     else if ($gender == 'girls') $sql .= " and u.gender = 'F'";
