@@ -67,9 +67,9 @@ function getChildren($school_id, $gender) {
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $award = getAward($row);
-        if (empty($award)) continue;
-        $row['award_track'] = $tracks[$award];
+//        $award = getAward($row);
+//        if (empty($award)) continue;
+//        $row['award_track'] = $tracks[$award];
         $children[] = $row;
     }
     return $children;
@@ -123,9 +123,9 @@ function getAllChildrenByGender($gender) {
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $award = getAward($row);
-        if (empty($award)) continue;
-        $row['award_track'] = $tracks[$award];
+//        $award = getAward($row);
+//        if (empty($award)) continue;
+//        $row['award_track'] = $tracks[$award];
         $children[] = $row;
     }
     return $children;
