@@ -56,7 +56,7 @@ function getChildren($school_id, $gender) {
                     JOIN
                 classes c ON c.class_id = u.class_id
                     JOIN
-                th_chidon_info tci ON tci.user_id = u.user_id
+                th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
                     JOIN
                 th_chidon tc ON tc.user_id = u.user_id
             WHERE
@@ -111,7 +111,7 @@ function getAllChildrenByGender($gender) {
                     JOIN
                 th_chidon_info tci ON tci.user_id = u.user_id
                     JOIN
-                th_chidon tc ON tc.user_id = u.user_id 
+                th_chidon tc ON tc.user_id = u.user_id AND tci.year = tc.year 
                     JOIN 
                 admin_auths aa on aa.id = u.user_id 
                     JOIN 
