@@ -320,7 +320,7 @@ function passedKhk($id) {
 function addToSheet($child, $khk = false, $trophy = false) {
     global $prizes;
 
-    $name = preg_replace('/\s+/', ' ', ($child['first'] . ' ' . $child['last']));
+    $name = preg_replace('/\s+/', ' ', ($child['first'] . $child['last']));
     $img_url = $child['user_serial'] . '.png';
     $track = $khk ? 'khk' : $child['highest_track'];
     $award = getAward($child);
