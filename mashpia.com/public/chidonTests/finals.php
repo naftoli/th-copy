@@ -195,7 +195,7 @@ echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
 echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
 foreach ($info as $school => $children) {
     if (empty($children)) continue;
-    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
+//    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
     echo "<h2>" . $schools[$school] . "</h2>";
     echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
     foreach ($types as $old => $new) {
