@@ -42,11 +42,15 @@ $awards = [
               border-bottom: 1px solid grey;
               font-family: Arial, Helvetica, sans-serif;
             }
+            caption {
+              font-size: 22px;
+            }
         </style>
     </head>
     <body>
         <?php foreach ($sheets as $school => $sheet) : ?>
             <table>
+                <caption><?= $schools[$school] ?></caption>
                 <tr>
                     <th>Highest Track</th>
                     <th>Name</th>
@@ -79,6 +83,7 @@ $awards = [
                 }
                 ?>
             </table>
+            <p></p>
         <?php endforeach; ?>
     </body>
 </html>
