@@ -83,8 +83,10 @@ $awards = [
                     foreach ($prizes as $prize) {
                         // extract prize id
                         $prize_id = substr($prize, strpos('_') + 1, strpos('.png'));
-                        $prize_info = $prizesInfo[$prize_id]['prize_name'];
-                        echo "<td>" . $prize_info . "</td>";
+                        $prize_info = $prizesInfo[$prize_id];
+                        $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' Size: ' . $prize_info['size']) .
+                            (empty($prize_info['color']) ? '' : ' Color: ' . $prize_info['color']);
+                        echo "<td>" . $desc . "</td>";
                     }
                     echo "<td>" . $total_prizes . "</td></tr>";
                 }
