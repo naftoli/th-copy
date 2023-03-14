@@ -78,14 +78,14 @@ $awards = [
                     $name = $row[1];
                     $serial = substr($row[2], 0, strpos($row[2], '.png'));
                     $grade = $row[3];
-                    $award = $awards[$row[7]];
+                    $award = $row[7] ? $awards[$row[7]] : '';
                     $prizes = [$row[9], $row[10], $row[11], $row[12], $row[13], $row[14]];
                     $total_prizes = $row[15];
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
                     foreach ($prizes as $prize) {
                         // extract prize id
-                        $prize_id = substr($prize, strpos('_') + 1, strpos('.png'));
+                        $prize_id = substr($prize, strpos('_') + 1, strpos($prize,'.png'));
                         $prize_info = $prizesInfo[$prize_id];
                         $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' Size: ' . $prize_info['size']) .
                             (empty($prize_info['color']) ? '' : ' Color: ' . $prize_info['color']);
