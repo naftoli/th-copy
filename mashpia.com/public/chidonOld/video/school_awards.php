@@ -45,23 +45,23 @@ $awards = [
         </style>
     </head>
     <body>
-        <table>
-            <tr>
-                <th>Highest Track</th>
-                <th>Name</th>
-                <th>Serial</th>
-                <th>Grade</th>
-                <th>Award</th>
-                <th>Prize 1</th>
-                <th>Prize 2</th>
-                <th>Prize 3</th>
-                <th>Prize 4</th>
-                <th>Prize 5</th>
-                <th>Prize 6</th>
-                <th>Total Prizes</th>
-            </tr>
-            <?php
-            foreach ($sheets as $school => $sheet) {
+        <?php foreach ($sheets as $school => $sheet) : ?>
+            <table>
+                <tr>
+                    <th>Highest Track</th>
+                    <th>Name</th>
+                    <th>Serial</th>
+                    <th>Grade</th>
+                    <th>Award</th>
+                    <th>Prize 1</th>
+                    <th>Prize 2</th>
+                    <th>Prize 3</th>
+                    <th>Prize 4</th>
+                    <th>Prize 5</th>
+                    <th>Prize 6</th>
+                    <th>Total Prizes</th>
+                </tr>
+                <?php
                 foreach ($sheet as $idx => $row) {
                     if ($idx == 0) continue; // skip first row
                     if (empty($row[1])) continue; // only show rows with names of children
@@ -77,8 +77,8 @@ $awards = [
                     foreach ($prizes as $prize) echo "<td>" . $prize . "</td>";
                     echo "<td>" . $total_prizes . "</td></tr>";
                 }
-            }
-            ?>
-        </table>
+                ?>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>
