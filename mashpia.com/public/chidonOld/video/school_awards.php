@@ -27,7 +27,7 @@ foreach ($schools as $school_id => $school) {
         $sheets[$school_id] = createSpreadSheet($children);
     }
 }
-echo "<pre>"; print_r($sheets); echo "</pre>";
+//echo "<pre>"; print_r($sheets); echo "</pre>";
 $awards = [
     1 => 'certificate',
     2 => 'plaque',
@@ -40,6 +40,7 @@ $awards = [
     <head>
         <meta charset="utf8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--        <link href="../../admin_styles.css" rel="stylesheet" type="text/css"/>-->
         <style>
             tr, th, td {
               padding: 10px;
@@ -53,6 +54,7 @@ $awards = [
         </style>
     </head>
     <body>
+<!--        --><?php //include('../../admin_header.php'); ?>
         <?php foreach ($sheets as $school => $sheet) : ?>
             <table>
                 <caption><?= $schools[$school] ?></caption>
