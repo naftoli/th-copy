@@ -12,6 +12,7 @@ $year = GlobalSettings::getChidonYear();
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
+$prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
 
@@ -43,7 +44,7 @@ $awards = [
               font-family: Arial, Helvetica, sans-serif;
             }
             caption {
-              font-size: 22px;
+              font-size: 24px;
             }
         </style>
     </head>
