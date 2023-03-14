@@ -526,3 +526,15 @@ function createRepsSheet($children, $school, $gender) {
     }
     return $sheet;
 }
+
+function getPrizeInfo() {
+    global $year;
+
+    $prizes = [];
+    $sql = "select * from chidon_prizes where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['prize_id']] = $row;
+    }
+    return $prizes;
+}

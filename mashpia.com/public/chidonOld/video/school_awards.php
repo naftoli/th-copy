@@ -12,6 +12,7 @@ $year = GlobalSettings::getChidonYear();
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
+$prizesInfo = getPrizeInfo();
 $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
@@ -79,7 +80,12 @@ $awards = [
                     $total_prizes = $row[15];
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
-                    foreach ($prizes as $prize) echo "<td>" . $prize . "</td>";
+                    foreach ($prizes as $prize) {
+                        // extract prize id
+                        $prize_id = substr($prize, strpos('_') + 1, strpos('.png'));
+                        $prize_info = $prizesInfo[$prize_id]['prize_name'];
+                        echo "<td>" . $prize_info . "</td>";
+                    }
                     echo "<td>" . $total_prizes . "</td></tr>";
                 }
                 ?>
