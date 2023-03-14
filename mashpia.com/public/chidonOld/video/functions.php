@@ -527,7 +527,7 @@ function createRepsSheet($children, $school, $gender) {
     return $sheet;
 }
 
-function getPrizeInfo() {
+function getPrizesInfo() {
     global $year;
 
     $prizes = [];

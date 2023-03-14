@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -12,7 +15,7 @@ $year = GlobalSettings::getChidonYear();
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
-$prizesInfo = getPrizeInfo();
+$prizesInfo = getPrizesInfo();
 $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
