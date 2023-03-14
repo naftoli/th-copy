@@ -27,7 +27,7 @@ foreach ($schools as $school_id => $school) {
         $sheets[$school_id] = createSpreadSheet($children);
     }
 }
-
+echo "<pre>"; print_r($sheets); echo "</pre>";
 $awards = [
     1 => 'certificate',
     2 => 'plaque',
@@ -84,11 +84,14 @@ $awards = [
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
                     foreach ($prizes as $prize) {
-                        // extract prize id
-                        $prize_id = substr($prize, strpos('_') + 1, strpos($prize,'.png'));
-                        $prize_info = $prizesInfo[$prize_id];
-                        $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' Size: ' . $prize_info['size']) .
-                            (empty($prize_info['color']) ? '' : ' Color: ' . $prize_info['color']);
+                        $desc = '';
+                        if ($prize) {
+                            $prize_id_desc = substr($prize, strpos($prize, '_') + 1);
+                            $prize_id = substr($prize_id_desc, 0, strpos($prize_id_desc, '.png'));
+                            $prize_info = $prizesInfo[$prize_id];
+                            $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' ' . $prize_info['size']) .
+                                (empty($prize_info['color']) ? '' : ' ' . $prize_info['color']);
+                        }
                         echo "<td>" . $desc . "</td>";
                     }
                     echo "<td>" . $total_prizes . "</td></tr>";
