@@ -144,7 +144,7 @@ foreach ($child_marks as $school => $more) {
             foreach ($details as $order => $other) {
                 foreach ($other as $id => $avg) {
                     if (isset($_GET['repsOnly']) && $_GET['repsOnly'] == 1) {
-                        if (! ($child_info[$id]['school_rep'] || $child_info[$id]['regional_rep'] || $child_info[$id]['intl_info'])) continue;
+                        if (! ($child_info[$id]['school_rep'] || $child_info[$id]['regional_rep'] || $child_info[$id]['intl_rep'])) continue;
                     }
                     $serial = $child_info[$id]['serial'];
                     $first = $child_info[$id]['first'];
