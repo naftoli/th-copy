@@ -838,6 +838,7 @@ class ChidonShipping
                     'last' => $row['last'],
                     'track' => $row['highest_track'],
                     'grade' => $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : ''),
+                    'serial' => $row['user_serial'],
                     'cat' => 'prizes'
                 ];
             }

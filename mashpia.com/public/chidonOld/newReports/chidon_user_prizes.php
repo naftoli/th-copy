@@ -45,7 +45,7 @@ foreach ($schools as $id => $name) {
         foreach ($chidon_prizes as $school => $more) {
             foreach ($more as $user_id => $prizes) {
                 foreach ($prizes as $prize) {
-                    echo "<tr><td>" . $prize['user_serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $prize['grade'] .
+                    echo "<tr><td>" . $prize['serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $prize['grade'] .
                         "</td><td>" . $prize['first'] . "</td><td>" . $prize['last'] . "</td><td>" . $prize['track'] .
                         "</td><td>" . $prize['item'] . ' ' . ($prize['size'] ?? '') . ' ' . ($prize['color'] ?? '') . "</td></tr>";
                 }
