@@ -401,7 +401,7 @@
 
                                                     {{#if this.chidon5783}}
                                                     <div class="button-spacing">
-                                                        <button class="btn btn-danger invitation">Share your Invitation</button>
+                                                        <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation</button>
                                                         {{#if this.rep}}
                                                             <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button>
                                                         {{/if}}
@@ -693,7 +693,7 @@
             });
 
             $(document).on('click', '.invitation', function () {
-                let id = $(this).parent().parent().parent().attr('id')
+                let id = $(this).attr('id')
                 window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
             })
 
