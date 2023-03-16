@@ -321,7 +321,8 @@ class Points
                     if ($row['class_id'] != $class_id) {
                         $msg = "You are not in the correct platoon to scan this card.";
                     }
-                } else {
+                }
+                if (empty($msg)) {
                     // insert into user_points
                     $sql4 = "INSERT into pointsDB.user_points SET 
                              achievement_card_id = " . $row['achievement_card_id'] . ",
