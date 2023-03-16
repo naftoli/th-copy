@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -19,6 +22,7 @@ $cs = new ChidonShipping();
 foreach ($schools as $id => $name) {
     $chidon_prizes[$id] = $cs->getPrizes('M', $id);
 }
+echo "<pre>"; print_r($chidon_prizes); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
