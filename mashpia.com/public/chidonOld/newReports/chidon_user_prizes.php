@@ -41,12 +41,14 @@ foreach ($schools as $id => $name) {
         <h1>Chidon Student Prizes</h1>
         <?php
         echo "<table><tr><th>Serial Number</th><th>School</th></th><th>Grade</th><th>First Name</th><th>Last Name</th>
-        <th>Highest Track</th><th>Prize(s) Selected</th></tr>";
+            <th>Highest Track</th><th>Prize(s) Selected</th></tr>";
         foreach ($chidon_prizes as $school => $more) {
-            foreach ($more as $user_id => $prize_info) {
-              echo "<tr><td>" . $prize_info['user_serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $prize_info['grade'] .
-                  "</td><td>" . $prize_info['first_name'] . "</td><td>" . $prize_info['last_name'] . "</td><td>" . $prize_info['track'] .
-                  "</td><td>" . $prize_info['item'] . ' ' . ($prize_info['size'] ?? '') . ' '  . ($prize_info['color'] ?? '') . "</td></tr>";
+            foreach ($more as $user_id => $prizes) {
+                foreach ($prizes as $prize_info) {
+                    echo "<tr><td>" . $prize_info['user_serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $prize_info['grade'] .
+                        "</td><td>" . $prize_info['first_name'] . "</td><td>" . $prize_info['last_name'] . "</td><td>" . $prize_info['track'] .
+                        "</td><td>" . $prize_info['item'] . ' ' . ($prize_info['size'] ?? '') . ' ' . ($prize_info['color'] ?? '') . "</td></tr>";
+                }
             }
         }
         echo "</table>";
