@@ -816,6 +816,7 @@ class ChidonShipping
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
             // make sure it's one of the prizes selected to show
+            $found = true;
             if (count($limitTo)) {
                 $found = false;
                 $p = strtolower($row['prize_name']);

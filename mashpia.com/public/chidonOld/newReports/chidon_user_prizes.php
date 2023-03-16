@@ -7,22 +7,16 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
 $schools = $as->getSchools();
 
 $chidon_prizes = [];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.chidonShipping.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/shipping/class.chidonShipping.php';
 $cs = new ChidonShipping();
 foreach ($schools as $id => $name) {
     $chidon_prizes[$id] = $cs->getPrizes('M', $id);
 }
-echo "<pre>"; print_r($chidon_prizes); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,11 +42,13 @@ echo "<pre>"; print_r($chidon_prizes); echo "</pre>"; exit;
             <th>Highest Track</th><th>Prize(s) Selected</th></tr>";
         foreach ($chidon_prizes as $school => $more) {
             foreach ($more as $user_id => $prizes) {
+                $info = $prizes[0];
+                echo "<tr><td>" . $info['serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $info['grade'] .
+                    "</td><td>" . $info['first'] . "</td><td>" . $info['last'] . "</td><td>" . $info['track'] . "</td><td>";
                 foreach ($prizes as $prize) {
-                    echo "<tr><td>" . $prize['serial'] . "</td><td>" . $schools[$school] . "</td><td>" . $prize['grade'] .
-                        "</td><td>" . $prize['first'] . "</td><td>" . $prize['last'] . "</td><td>" . $prize['track'] .
-                        "</td><td>" . $prize['item'] . ' ' . ($prize['size'] ?? '') . ' ' . ($prize['color'] ?? '') . "</td></tr>";
+                    echo $prize['item'] . ' ' . ($prize['size'] ?? '') . ' ' . ($prize['color'] ?? '') . ", ";
                 }
+                echo "</td></tr>";
             }
         }
         echo "</table>";
