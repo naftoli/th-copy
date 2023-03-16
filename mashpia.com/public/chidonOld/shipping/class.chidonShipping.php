@@ -764,7 +764,7 @@ class ChidonShipping
                 // check for khk trophy
                 if (intval($child['khk_reg']) && intval($child['khk_final']) >= $needed['khk']) {
                     if (intval($child['ultimate_trip']) == 0) $award = 'khk'; // only show khk trophy if NOT going on ultimate trip
-                    else if (intval($child['ultimate_trip']) == 1) $award = '';
+                    else if (intval($child['ultimate_trip']) == 1) $award = 'havonah'; // if going on ultimate trip, gets medal / plaque
                 }
             }
         }
