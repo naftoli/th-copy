@@ -786,7 +786,8 @@ class ChidonShipping
 
         $info = [];
         $sql = "SELECT 
-                    cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, tc.ultimate_trip  
+                    cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, 
+                    tc.ultimate_trip, u.first, u.last, u.user_serial, tci.highest_track, c.class_grade, c.class_sub  
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -797,6 +798,8 @@ class ChidonShipping
                     th_chidon tc ON tc.user_id = u.user_id AND tc.year = cup.year 
                         LEFT JOIN
                     th_chidon_info tci ON u.user_id = tci.user_id AND tc.year = tci.year 
+                        JOIN 
+                    classes c ON u.class_id = c.class_id 
                 WHERE
                     cup.year = :year AND tc.date_paid > 0 
                         AND tc.ultimate_trip = 0 AND tci.highest_track != 'yesod'";
@@ -826,11 +829,15 @@ class ChidonShipping
             if ($found) {
                 $id = 'CHI' . $row['prize_id'];
                 $info[$row['user_id']][] = [
+                    'id' => $id,
                     'item' => $row['prize_name'],
                     'size' => $row['size'],
                     'color' => $row['color'],
                     'name' => $row['he_name'],
-                    'id' => $id,
+                    'first' => $row['first'],
+                    'last' => $row['last'],
+                    'track' => $row['highest_track'],
+                    'grade' => $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : ''),
                     'cat' => 'prizes'
                 ];
             }
