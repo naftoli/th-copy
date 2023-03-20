@@ -85,18 +85,23 @@ $awards = [
                     $total_prizes = $row[15];
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
-                    foreach ($prizes as $prize) {
-                        $desc = '';
-                        if ($prize) {
-                            $prize_id_desc = substr($prize, strpos($prize, '_') + 1);
-                            $prize_id = substr($prize_id_desc, 0, strpos($prize_id_desc, '.png'));
-                            $prize_info = $prizesInfo[$prize_id];
-                            $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' ' . $prize_info['size']) .
-                                (empty($prize_info['color']) ? '' : ' ' . $prize_info['color']);
+                    if ($track == 'yesod') {
+                        echo "<td colspan='6'></td></tr>";
+                        continue;
+                    } else {
+                        foreach ($prizes as $prize) {
+                            $desc = '';
+                            if ($prize) {
+                                $prize_id_desc = substr($prize, strpos($prize, '_') + 1);
+                                $prize_id = substr($prize_id_desc, 0, strpos($prize_id_desc, '.png'));
+                                $prize_info = $prizesInfo[$prize_id];
+                                $desc = $prize_info['prize_name'] . (empty($prize_info['size']) ? '' : ' ' . $prize_info['size']) .
+                                    (empty($prize_info['color']) ? '' : ' ' . $prize_info['color']);
+                            }
+                            echo "<td>" . $desc . "</td>";
                         }
-                        echo "<td>" . $desc . "</td>";
+                        echo "<td>" . $total_prizes . "</td></tr>";
                     }
-                    echo "<td>" . $total_prizes . "</td></tr>";
                 }
                 ?>
             </table>

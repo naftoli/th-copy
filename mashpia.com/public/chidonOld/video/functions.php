@@ -343,7 +343,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    if ($khk || $trophy) {
+    if ($khk || $trophy || $award == 1) {
         return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
     } else {
         // prizes
