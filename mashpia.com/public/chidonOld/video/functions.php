@@ -343,7 +343,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    if ($khk || $trophy || $award == 1) {
+    if ($khk || $trophy) {
         return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
     } else {
         // prizes
@@ -355,7 +355,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         $prize_4 = '';
         $prize_5 = '';
         $prize_6 = '';
-        if (isset($prizes[$child['user_id']])) {
+        if ($award != 1 && isset($prizes[$child['user_id']])) {
             $prize_amount = count($prizes[$child['user_id']]);
             foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                 $key = $idx + 1;
