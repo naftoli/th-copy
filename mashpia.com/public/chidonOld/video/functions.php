@@ -208,13 +208,13 @@ function getUserPrizes() {
     return $prizes;
 }
 
-function createFile($name, $info, $csv = false) {
+function createFile($name, $info, $csv = false, $enclosure = ' ') {
     $fp = fopen($name, "w");
     fputs($fp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF))); // utf8
     if (is_array($info)) {
         foreach ($info as $fields) {
             if ($csv) fputcsv($fp, $fields);
-            else fputcsv($fp, $fields, "\t", ' ');
+            else fputcsv($fp, $fields, "\t", $enclosure);
         }
     } else {
         fputs($fp, $info);
