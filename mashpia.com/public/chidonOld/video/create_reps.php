@@ -26,7 +26,7 @@ foreach ($schools as $school_id => $school) {
     if (! empty($children)) {
         $sheet = createRepsSheet($children, $school_id, $gender);
         $file_name = $school . ".tsv";
-        createFile($file_name, $sheet, false, '');
+        createFile($file_name, $sheet, false, "\"");
     }
 }
 
