@@ -1,70 +1,45 @@
-<?php
-function calculateDistance($lat1, $lon1, $lat2, $lon2) {
-    $earth_radius = 6371; // in km
+<!DOCTYPE html>
+<html>
+<head>
+    <title>World Map</title>
+    <!-- Load Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+JQLhRjOErjOiGg6aLw6U7Y6UAWOd1n" crossorigin="anonymous">
+    <!-- Load Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-CHJjh7x+8l4yjKX9n2ShN7bckC/8zS7+mN/aD4p/BwN78wu4x4fyKjgYDsoNhRiZ6CLH8p+znU5m3q6+iwU5jQ==" crossorigin="anonymous" />
+    <!-- Load Leaflet JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-jZ7KuW/C8Fv7V+a72jc0KjVoA+Dx8ymvBtq3X9fVZd2QGg7AEeekmE/Y/vBOKyLg8Wx7cEkpTtTn7/PyZ86tWQ==" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center my-4">World Map</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Continents</h5>
+                </div>
+                <div class="card-body">
+                    <select class="form-control" id="continents">
+                        <option value="" selected disabled>Select a continent</option>
+                        <option value="africa">Africa</option>
+                        <option value="asia">Asia</option>
+                        <option value="europe">Europe</option>
+                        <option value="north-america">North America</option>
+                        <option value="south-america">South America</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-lg-10">
+            <div id="map" style="height: 500px;"></div>
+        </div>
+    </div>
+</div>
 
-    $d_lat = deg2rad($lat2 - $lat1);
-    $d_lon = deg2rad($lon2 - $lon1);
-
-    $a = sin($d_lat / 2) * sin($d_lat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($d_lon / 2) * sin($d_lon / 2);
-    $c = 2 * asin(sqrt($a));
-    $distance = $earth_radius * $c;
-
-    return $distance;
-}
-
-function tsp($locations, $radius) {
-    $visited = array();
-    $current = 0;
-    $total_distance = 0;
-
-    $visited[] = $current;
-
-    while (count($visited) < count($locations)) {
-        $min_distance = INF;
-        $min_index = -1;
-
-        for ($i = 0; $i < count($locations); $i++) {
-            if (!in_array($i, $visited)) {
-                $distance = calculateDistance($locations[$current][0], $locations[$current][1], $locations[$i][0], $locations[$i][1]);
-
-                if ($distance < $min_distance && $distance <= $radius) {
-                    $min_distance = $distance;
-                    $min_index = $i;
-                }
-            }
-        }
-
-        $visited[] = $min_index;
-        $current = $min_index;
-        $total_distance += $min_distance;
-    }
-
-    $total_distance += calculateDistance($locations[$visited[count($visited)-1]][0], $locations[$visited[count($visited)-1]][1], $locations[0][0], $locations[0][1]);
-
-    return array($visited, $total_distance);
-}
-
-$locations = array(
-    array(40.7128, -74.0060), // New York
-    array(37.7749, -122.4194), // San Francisco
-    array(51.5074, -0.1278), // London
-    array(35.6895, 139.6917) // Tokyo
-);
-
-$result = tsp($locations, 50); // 50 mile radius
-
-$waypoints = array();
-foreach ($result[0] as $index) {
-    $waypoints[] = $locations[$index][0] . ',' . $locations[$index][1];
-}
-
-$waypoints_str = implode('|', $waypoints);
-
-$url = 'https://www.google.com/maps/dir/' . $waypoints_str;
-
-echo 'Visited locations: ';
-foreach ($result[0] as $index) {
-    echo $index . ' ';
-}
-echo '<br>Total distance: ' . $result[1] . ' km<br>';
-echo '<a href="' . $url . '">View on Google Maps</a>';
+<!-- Load jQuery and Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper-core.min.js"></
