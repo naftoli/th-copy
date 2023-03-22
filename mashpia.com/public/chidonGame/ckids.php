@@ -120,7 +120,7 @@
 	 	</div>
  		<table id="teamNames">
  			<tbody><tr>
- 				<td class="teamName">Kosher</td>
+ 				<td class="teamName">Torah</td>
  				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
@@ -128,7 +128,7 @@
  				<td><input type="radio" name="t1" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">Shabbat</td>
+ 				<td class="teamName">Mitzvot</td>
  				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
@@ -173,23 +173,29 @@
                 <div class="pricing">
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
-                    		<button class="plusTwentyFive">+25</button>
-                            <button class="plusTen">+10</button>
-                            <button class="minusTen">-25</button>
-                            <input type="text" size="3"> 
-                            <button>Go</button><br>
-                            <label for="points">Set Points</label>
-                            <input type="text" name="points" size="5">
-                            <button class="setPoints">Set</button>
-                            <button class="resetPoints">Reset</button>
+                        <button class="plus">+50</button>
+                    		<button class="plus">+20</button>
+                        <button class="plus">+10</button>
+                        <button class="minus">-5</button>
+                        <button class="minus">-10</button>
+                        <button class="minus">-25</button>
+                        <input type="text" size="3">
+                        <button>Go</button><br>
+                        <label for="points">Set Points</label>
+                        <input type="text" name="points" size="5">
+                        <button class="setPoints">Set</button>
+                        <button class="resetPoints">Reset</button>
                     	</div>
                     </div>
                     
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="givePoints" id="2">
-                            <button class="plusTwentyFive">+25</button>
-                            <button class="plusTen">+10</button>
-                            <button class="minusTen">-25</button>
+                          <button class="plus">+50</button>
+                          <button class="plus">+20</button>
+                          <button class="plus">+10</button>
+                          <button class="minus">-5</button>
+                          <button class="minus">-10</button>
+                          <button class="minus">-25</button>
                             <input type="text" size="3"> 
                             <button>Go</button><br>
                             <label for="points">Set Points</label>
