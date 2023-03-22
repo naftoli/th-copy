@@ -327,7 +327,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $track = $khk ? 'khk' : $child['highest_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
-    $grade = 'Grade ' . $child['class_grade'] . ($child['class_sub'] ? '-' . $child['class_sub'] : '');
+    $grade = 'Grade ' . $child['class_grade'];
 
     if ($trophy) {
         $track = $child['trophy_type'] . '_trophy';
