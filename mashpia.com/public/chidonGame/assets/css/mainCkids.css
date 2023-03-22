@@ -1,5 +1,6 @@
 /*Font Loded*/
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+@import url(//db.onlinewebfonts.com/c/af869cc43c4c9e28e2397c73138d4bba?family=Termina);
 
 @font-face {
 	font-family: digi;
@@ -52,16 +53,16 @@ body{
   border-bottom-left-radius: 14px;
 }
 .pricing-table .team1 {
-  background: #00ff00;
+  background: deepskyblue;
 }
 .pricing-table .team2 {
-  background: #00ff00;
+  background: deepskyblue;
 }
 .pricing-table .team3 {
-  background: #00ff00;
+  background: deepskyblue;
 }
 .pricing-table .team4 {
-  background: #00ff00;
+  background: deepskyblue;
 }
 #bottom-table #pricing-table .pricing .pricing-table .pricing-header {
 	padding: 0px;	
@@ -77,10 +78,10 @@ body{
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
   font-size: 100px;
   font-weight: 700;
-  color: #000;
+  color: #eadba7;
   position: relative;
   text-align: center;
-  font-family: digi;
+  font-family: Termina;
 }
 #bottom-table .pricing .pricing-table .pricing-header .pricing-rate { 
   font-size: 260px;	
