@@ -332,7 +332,7 @@ ksort($grand_summary);
             }
             // add status column
             echo "<th class='no-print'>Status</th>";
-            echo "<th class='no-print'>Description of Problem</th>"
+            echo "<th class='no-print'>Explain the damage</th>"
             ?>
           </tr>
         </thead>

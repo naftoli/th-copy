@@ -887,7 +887,7 @@ class ChidonShipping
             'extra purchases'       => ['celebration boxes', 'sweaters'],
             'gifts'                 => ['yarmulka', 'personalized bottle', 'jewelry'],
             'ID cards'              => ['ID card'],
-            'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk trophy'],
+            'awards'                => ['certificate', 'plaque', 'medal', 'glass trophy', 'khk plaque'],
             'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
                 'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
                 'chidon football', 'framed rebbe picture', 'chidon cap', 'der rebbe ret tzu kinder',
