@@ -871,7 +871,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes'
         ];
         return $categories;
     }
@@ -896,6 +896,7 @@ class ChidonShipping
                 'chidon pogo ball', 'the jewish underground volume 1', 'the jewish underground volume 2', 'iron curtain vol 1',
                 'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
+            'ambassador prizes'     => ['ambassador prize']
         ];
         return $items;
     }
@@ -1115,6 +1116,9 @@ class ChidonShipping
                 'reb shmuel munkes' => 'CHI191',
                 'the slavita brothers'  => 'CHI192',
                 'reb hillel paritcher'  => 'CHI193'
+            ],
+            'ambassador prizes' => [
+                'ambassador prize' => 'CHI194'
             ]
         ];
 
@@ -1223,5 +1227,29 @@ class ChidonShipping
                 $row['country'], $item_id, $itemDesc, $qty, '', $row['admin_email']];
         }
         return $csv;
+    }
+
+    public function getAmbassadorPrizes($gender, $school, $limit = []) {
+        $info = [];
+        $sql = "SELECT 
+                    user_id, SUM(subsidy_amount) AS total
+                FROM
+                    chidon_user_subsidies cus
+                        JOIN 
+                    users u USING (user_id) 
+                WHERE
+                    chidon_year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'M'";
+        if ($gender == 'f') $sql .= " and u.gender = 'F'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        $sql .= " GROUP BY user_id
+                HAVING total >= 500";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_id']] = $row['total'];
+        }
+        return $info;
     }
 }

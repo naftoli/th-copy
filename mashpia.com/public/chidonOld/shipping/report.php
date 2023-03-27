@@ -180,7 +180,6 @@ foreach ($resultsBySchool as $school => $more) {
 // sort summary
 foreach ($summary as $school => $more) ksort($summary[$school]);
 ksort($grand_summary);
-//echo "<pre>"; print_r($summary); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
