@@ -14,6 +14,8 @@ $schools = $as->getSchools();
 require 'class.chidonShipping.php';
 require 'data.php';
 
+$updated = getUpdatedSchools($schools);
+
 $items_chosen = $_POST['items'];
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
@@ -260,7 +262,11 @@ ksort($grand_summary);
       }
       if (! empty($address)) echo "<br />" . $address . "<br />";
       ?>
-      <p></p>
+      <p>
+        <input type='checkbox' class='updated' value='<?= $updated[$school] ?>'
+        <?php if (intval($updated[$school]) == 1) echo "checked"; ?>
+        /> I have reviewed and updated the shipping status for the entire school.
+      </p>
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
@@ -326,6 +332,7 @@ ksort($grand_summary);
             }
             // add status column
             echo "<th class='no-print'>Status</th>";
+            echo "<th class='no-print'>Description of Problem</th>"
             ?>
           </tr>
         </thead>
@@ -390,12 +397,13 @@ ksort($grand_summary);
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action) {
+  function update(elem, action, desc = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const user = ids[1]
-    info.push({ action, item, user })
+    // get description
+    info.push({ action, item, user, desc })
   }
 
   function save(reload = true) {
@@ -430,6 +438,23 @@ ksort($grand_summary);
     }
     update(this, action)
     save(false)
+  })
+
+  $(".description").blur( function() {
+    const val = $(this).val()
+    const elem = $(this).parent().parent().find('.shipping')
+    const action = parseInt($(elem).val())
+    update(elem, action, val)
+    save(false)
+  })
+
+  $(".updated").click( function() {
+    const school_id = $(this).parent().parent().attr('id')
+    const checked = $(this).is(":checked") ? 1 : 0
+    $.post('ajax/updateSchool.php', { school_id, checked }, function (result) {
+      const res = JSON.parse(result)
+      if (!res.success) alert(res.error)
+    })
   })
 </script>
 </html>

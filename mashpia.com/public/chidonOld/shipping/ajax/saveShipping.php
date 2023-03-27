@@ -17,11 +17,13 @@ $sql = "INSERT IGNORE INTO th_chidon_shipping
             item_id = :item, 
             shipped = :shipped, 
             missing = :missing, 
-            damaged = :damaged
+            damaged = :damaged, 
+            description = :desc
         ON DUPLICATE KEY UPDATE 
             shipped = :shipped, 
             missing = :missing, 
-            damaged = :damaged";
+            damaged = :damaged, 
+            description = :desc";
 $stmt = $MASHPIA_DB->prepare($sql);
 
 $MASHPIA_DB->beginTransaction();
@@ -56,7 +58,8 @@ foreach ($info as $row) {
         'item'      => $row['item'],
         'shipped'   => $shipped,
         'missing'   => $missing,
-        'damaged'   => $damaged
+        'damaged'   => $damaged,
+        'desc'      => $row['desc']
     ]);
     if (! $res) {
 //        $stmt->debugDumpParams();

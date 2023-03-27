@@ -141,7 +141,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                             echo ">" . $val . "</option>";
                         }
-                        echo "</select></td></tr>";
+                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
                     }
 
                     // update summary
@@ -294,4 +294,16 @@ function downloadFile($filename) {
     flush(); // Flush system output buffer
     readfile($filename);
     unlink($filename);
+}
+
+function getUpdatedSchools($schools) {
+    global $MASHPIA_DB;
+    $sql = "select * from schools where school_id in (" . implode(',', array_keys($schools)) . ")";
+    $result = $MASHPIA_DB->query($sql);
+    $rows = $result->fetchAll();
+    $schools = [];
+    foreach ($rows as $row) {
+        $schools[$row['school_id']] = $row['chidon_5783_updated_shipping'];
+    }
+    return $schools;
 }
