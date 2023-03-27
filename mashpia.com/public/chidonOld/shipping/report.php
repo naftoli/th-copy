@@ -180,6 +180,7 @@ foreach ($resultsBySchool as $school => $more) {
 // sort summary
 foreach ($summary as $school => $more) ksort($summary[$school]);
 ksort($grand_summary);
+//echo "<pre>"; print_r($summary); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -330,7 +331,6 @@ ksort($grand_summary);
                     echo "<th>" . ucwords($field) . "</th>";
                 }
             }
-            // add status column
             echo "<th class='no-print'>Status</th>";
             echo "<th class='no-print'>Explain the damage</th>"
             ?>
@@ -350,42 +350,6 @@ ksort($grand_summary);
       <?php endif; ?>
     </div>
   <?php endforeach; ?>
-<!--  --><?php
-//  if ($admin_user['auth'] == 'super') {
-//    foreach ($grand_summary as $item => $more) {
-//      $grand_total = 0;
-//      $item_details = $summary_items[$item];
-//      $desc = "($item)";
-//      foreach (['item', 'size', 'color'] as $attr) {
-//        if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
-//      }
-//      echo "<br />";
-//      echo "<h2>" . ucwords($desc) . " Totals</h2>";
-//      ?>
-<!--      <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">-->
-<!--        <thead>-->
-<!--          <tr>-->
-<!--            <th>School</th>-->
-<!--            <th>Total</th>-->
-<!--          </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        --><?php
-//        foreach ($more as $school_id => $total) {
-//          echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
-//          $grand_total += intval($total);
-//        }
-//        ?>
-<!--        </tbody>-->
-<!--        <tfoot>-->
-<!--          <tr><th>Grand Total:</th><th>--><?//= $grand_total; ?><!--</th></tr>-->
-<!--        </tfoot>-->
-<!--      </table>-->
-<!--      <div style="page-break-after: always;"></div>-->
-<!--  --><?php
-//    }
-//  }
-//  ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -434,6 +398,9 @@ ksort($grand_summary);
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
       alert('You cannot change this to not yet shipped, it will not be saved.')
+      return false
+    } else if (!super_admin && action == 3) {
+      alert('You must explain the damage before it can be saved.')
       return false
     }
     update(this, action)
