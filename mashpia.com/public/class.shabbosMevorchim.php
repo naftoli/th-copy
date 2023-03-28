@@ -1172,13 +1172,6 @@ class ShabbosMevorchim
             }
         }
 
-        echo "<pre>";
-        print_r($dates);
-        print_r($this->tasks);
-        print_r($users);
-        echo "</pre>";
-        return;
-
         // cache results
         $cached = [];
         foreach ($dates as $date) {
@@ -1234,11 +1227,6 @@ class ShabbosMevorchim
                 }
             }
         }
-        echo "<pre>";
-        print_r($this->studentResults);
-        print_r($this->studentDoneResults);
-        echo "</pre>";
-        exit;
     }
 
     public function getStudentResults()
