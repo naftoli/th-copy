@@ -1172,6 +1172,13 @@ class ShabbosMevorchim
             }
         }
 
+        echo "<pre>";
+        print_r($dates);
+        print_r($this->tasks);
+        print_r($users);
+        echo "</pre>";
+        return;
+
         // cache results
         $cached = [];
         foreach ($dates as $date) {
@@ -1185,7 +1192,6 @@ class ShabbosMevorchim
                 foreach ($users as $class => $info) {
                     // for each user in the class.
                     foreach ($info as $user) {
-                        print_r($user); echo "<br />"; return;
                         if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
