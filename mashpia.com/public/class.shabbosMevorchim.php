@@ -1177,8 +1177,6 @@ class ShabbosMevorchim
             }
         }
 
-        // for each report date
-//		foreach ( $this->rDates as $month => $date ) {
         // cache results
         $cached = [];
 
@@ -1194,28 +1192,15 @@ class ShabbosMevorchim
                     //if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
                     // for each user in the class.
                     foreach ($info as $user) {
-                        // figure out if we are getting results from backup table or not
-                        //$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
-                        //$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
-                        //if ($rowQuota['total'] > 0) {
-                        //	$this->studentResults[$date][$class][$user['user_id']][$key] = $rowQuota['total'];
-                        //	$row1['total'] = $rowQuota['total']; // needed for later checking
-                        //} else {
-//							$stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id'] ) );
-//							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-//							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
-                        //}
                         if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
-                            $stmt->debugDumpParams();
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
                         }
 
-                        //$stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
                         $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
@@ -1229,12 +1214,6 @@ class ShabbosMevorchim
                             if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
                                 $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
                                 $stmt2->execute(array($user['user_id'], $date, $date, $task));
-                                $stmt2->debugDumpParams();
-//                                if ($user['user_id'] == 60421) {
-//                                    $stmt2->debugDumpParams(); exit;
-//                                } else {
-//                                    continue;
-//                                }
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
                                 $total = $row2['total'];
                                 $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
@@ -1243,13 +1222,10 @@ class ShabbosMevorchim
                             }
                         }
 
-                        if ($sid) {
-                            //if ($sid == 176 && $user['user_id'] == 17267) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />";
-                            if ($total > 0) {
-                                $this->participated[$key][$sid]++;
-                                if ($total >= $row1['quantity']) {
-                                    $this->doneQuotas[$key][$sid]++;
-                                }
+                        if ($sid && $total > 0) {
+                            $this->participated[$key][$sid]++;
+                            if ($total >= $row1['quantity']) {
+                                $this->doneQuotas[$key][$sid]++;
                             }
                         }
                     }
