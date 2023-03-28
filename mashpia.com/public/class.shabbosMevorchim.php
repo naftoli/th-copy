@@ -1165,7 +1165,7 @@ class ShabbosMevorchim
                         ORDER BY last, first");
             $users[$id] = $stmt->fetchAll();
         }
-
+        echo "<pre>"; print_r($users); echo "</pre>"; return;
         foreach ($users as $info) {
             foreach ($info as $user) {
                 $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
@@ -1185,7 +1185,6 @@ class ShabbosMevorchim
                 foreach ($users as $class => $info) {
                     // for each user in the class.
                     foreach ($info as $user) {
-                      print_r($user);
                         if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
