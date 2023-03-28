@@ -1152,7 +1152,7 @@ class ShabbosMevorchim
 
         if (!$sid) $sid = $this->school_id;
         if (empty($this->classes)) $this->setClasses($sid);
-        echo "<pre>"; print_r($this->classes); echo "</pre>"; return;
+
         $users = array();
         foreach ($this->classes as $id => $info) {
             echo "Class ID: " . $id . "<br />";
@@ -1165,7 +1165,7 @@ class ShabbosMevorchim
                         ORDER BY last, first");
             $users[$id] = $stmt->fetchAll();
         }
-
+        echo "<pre>"; print_r($users); echo "</pre>"; return;
         foreach ($users as $info) {
             foreach ($info as $user) {
                 $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
