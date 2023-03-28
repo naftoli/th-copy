@@ -275,23 +275,23 @@ class ShabbosMevorchim
     {
         // select the total tehillim marks for each kid in each campaign
         $sql1 = "SELECT sum( dt.quantity ) AS total
-            FROM date_tasks dt
-            JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
-            JOIN user_tracks ut USING ( track_id, LEVEL, subject_id )
-            JOIN users u USING ( user_id ) 
-            JOIN schools s USING (school_id) 
-            JOIN classes c USING (class_id) 
-            WHERE ut.subject_id = 1
-            AND ut.enrolled = 1
-            AND dtm.start_date = ?
-            AND dtm.end_date = ?
-            AND dtm.school_type_id = u.school_type_id
-            AND dt.grid_id = ?
-            AND s.school_era is null
-            AND c.class_era = 0
-            AND u.user_registered > 0
-        AND u.user_id = ut.user_id
-        AND u.lang_id = dtm.lang_id";
+                      FROM date_tasks dt
+                      JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
+                      JOIN user_tracks ut USING ( track_id, LEVEL, subject_id )
+                      JOIN users u USING ( user_id ) 
+                      JOIN schools s USING (school_id) 
+                      JOIN classes c USING (class_id) 
+                      WHERE ut.subject_id = 1
+                      AND ut.enrolled = 1
+                      AND dtm.start_date = ?
+                      AND dtm.end_date = ?
+                      AND dtm.school_type_id = u.school_type_id
+                      AND dt.grid_id = ?
+                      AND s.school_era is null
+                      AND c.class_era = 0
+                      AND u.user_registered > 0
+                  AND u.user_id = ut.user_id
+                  AND u.lang_id = dtm.lang_id";
         $stmt1 = $this->db->prepare($sql1);
 
         // select the total done from date_tasks_missions for this mission in general
@@ -312,9 +312,9 @@ class ShabbosMevorchim
 
         // select the totals from the backup table ( pre-deadline )
         $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
-                    FROM tehillim_backups tb 
-                    WHERE tb.sm_date = ? 
-                    AND tb.grid_id = ?";
+                      FROM tehillim_backups tb 
+                      WHERE tb.sm_date = ? 
+                      AND tb.grid_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
 
         // for each date that we are generating this report for
@@ -944,13 +944,13 @@ class ShabbosMevorchim
         $stmt1 = $this->db->prepare($sql1);
 
         $sql2 = "select MAX(dtm.done_qty) as total 
-				from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				join date_tasks_missions dtmm using (date_tasks_mission_id) 
-				where dtm.user_id = ? 
-				and dtmm.start_date = ? 
-				and dtmm.end_date = ? 
-				and dt.grid_id = ?";
+                from date_tasks_marks dtm
+                join date_tasks dt using (date_task_id)
+                join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                where dtm.user_id = ? 
+                and dtmm.start_date = ? 
+                and dtmm.end_date = ? 
+                and dt.grid_id = ?";
         $stmt2 = $this->db->prepare($sql2);
 
         //$sqlQuota = "select sum( tb.quota ) as total
@@ -961,11 +961,13 @@ class ShabbosMevorchim
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
         $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
-                    FROM tehillim_backups tb
-                    WHERE tb.sm_date = ? 
-                    AND tb.grid_id = ?
-                    AND tb.user_id = ?";
+                      FROM tehillim_backups tb
+                      WHERE tb.sm_date = ? 
+                      AND tb.grid_id = ?
+                      AND tb.user_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
+
+        $cahed = []; // add ability to cache results
 
         foreach ($this->rDates as $month => $date) {
 
@@ -980,17 +982,14 @@ class ShabbosMevorchim
 
                     foreach ($info as $user) {
 
-                        // figure out if we are getting results from backup table or not
-                        //$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
-                        //$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
-                        //if ($rowQuota['total'] > 0) {
-                        //	$this->studentResults[$date][$class][$user['user_id']][$key] = $rowQuota['total'];
-                        //	$row1['total'] = $rowQuota['total']; // needed for later checking
-                        //} else {
-                        $stmt1->execute(array($date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id']));
-                        $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                        $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
-                        //}
+                        if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
+                            $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
+                        else {
+                            $stmt1->execute(array($date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id']));
+                            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                            $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
+                            $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['total'];
+                        }
 
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
