@@ -1209,6 +1209,7 @@ class ShabbosMevorchim
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
+                            $stmt->debugDumpParams();
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
@@ -1228,6 +1229,7 @@ class ShabbosMevorchim
                             if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
                                 $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
                                 $stmt2->execute(array($user['user_id'], $date, $date, $task));
+                                $stmt2->debugDumpParams();
 //                                if ($user['user_id'] == 60421) {
 //                                    $stmt2->debugDumpParams(); exit;
 //                                } else {
