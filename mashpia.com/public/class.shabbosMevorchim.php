@@ -1112,14 +1112,14 @@ class ShabbosMevorchim
         $stmt1 = $this->db->prepare($sql1);
 
         $sql2 = "SELECT MAX(dtm.done_qty) AS total 
-				FROM date_tasks_marks dtm
-				JOIN date_tasks dt USING (date_task_id)
-				JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
-				WHERE dtm.user_id = ? 
-				AND dtmm.start_date = ? 
-				AND dtmm.end_date = ? 
-				AND dt.grid_id = ? 
-				AND dtmm.subject_id = 1";
+                FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id)
+                JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
+                WHERE dtm.user_id = ? 
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ? 
+                AND dtmm.subject_id = 1";
         /*
             $sql2 = "SELECT sum( dtm.done_qty ) AS total
                     FROM users u
@@ -1144,10 +1144,10 @@ class ShabbosMevorchim
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
         $sqlBackup = "SELECT IFNULL(sum( done_qty ), 0) AS total
-            FROM tehillim_backups 
-            WHERE sm_date = ? 
-            AND grid_id = ?
-            AND user_id = ?";
+                      FROM tehillim_backups 
+                      WHERE sm_date = ? 
+                      AND grid_id = ?
+                      AND user_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
 
         if ($sid) {
@@ -1196,6 +1196,7 @@ class ShabbosMevorchim
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
+                            $stmt1->debugDumpParams() . "<br />";
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
@@ -1203,6 +1204,7 @@ class ShabbosMevorchim
 
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
+                        $stmtBackup->debugDumpParams() . "<br />";
                         $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
                         // check if we have run the backup for this date
                         $backupRan = $this->getBackupRan($date);
