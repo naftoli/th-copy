@@ -1256,7 +1256,11 @@ class ShabbosMevorchim
                 }
             }
         }
-//        echo "<pre>"; print_r($this->studentResults); echo "</pre>";
+        echo "<pre>";
+        print_r($this->studentResults);
+        print_r($this->studentDoneResults);
+        echo "</pre>";
+        exit;
     }
 
     public function getStudentResults()
