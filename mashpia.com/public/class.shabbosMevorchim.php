@@ -1006,9 +1006,7 @@ class ShabbosMevorchim
 
                         if ($total > 0) {
                             $this->participated[$key][$class_id]++;
-                            if ($total >= $row1['total']) {
-                                $this->doneQuotas[$key][$class_id]++;
-                            }
+                            if ($total >= $row1['total']) $this->doneQuotas[$key][$class_id]++;
                         }
                     }
                 }
