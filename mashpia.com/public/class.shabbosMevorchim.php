@@ -1155,7 +1155,6 @@ class ShabbosMevorchim
 
         $users = array();
         foreach ($this->classes as $id => $info) {
-            echo "Class ID: " . $id . "<br />";
             $stmt = $this->db->query("
                         SELECT u.*, ut.track_id, ut.level FROM users u 
                         join user_tracks ut using (user_id) 
@@ -1189,7 +1188,7 @@ class ShabbosMevorchim
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
-                            $stmt1->debugDumpParams() . "<br />";
+//                            $stmt1->debugDumpParams() . "<br />";
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
@@ -1197,7 +1196,7 @@ class ShabbosMevorchim
 
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
-                        $stmtBackup->debugDumpParams() . "<br />";
+//                        $stmtBackup->debugDumpParams() . "<br />";
                         $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
                         // check if we have run the backup for this date
                         $backupRan = $this->getBackupRan($date);
