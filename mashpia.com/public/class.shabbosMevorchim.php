@@ -1165,7 +1165,7 @@ class ShabbosMevorchim
                         ORDER BY last, first");
             $users[$id] = $stmt->fetchAll();
         }
-        echo "<pre>"; print_r($users); echo "</pre>"; return;
+
         foreach ($users as $info) {
             foreach ($info as $user) {
                 $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
@@ -1189,7 +1189,7 @@ class ShabbosMevorchim
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
-//                            $stmt1->debugDumpParams() . "<br />";
+                            $stmt1->debugDumpParams() . "<br />";
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
@@ -1197,7 +1197,7 @@ class ShabbosMevorchim
 
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
-//                        $stmtBackup->debugDumpParams() . "<br />";
+                        $stmtBackup->debugDumpParams() . "<br />";
                         $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
                         // check if we have run the backup for this date
                         $backupRan = $this->getBackupRan($date);
