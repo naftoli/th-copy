@@ -468,8 +468,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
 //            $result['chidonEdit'] = !!$row['th_chidon_id'];
-        }
-        else {
+        } else {
             $result['chidon'] = true;
 //            $result['chidonEdit'] = false;
         }
