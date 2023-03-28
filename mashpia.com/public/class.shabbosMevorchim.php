@@ -1150,24 +1150,19 @@ class ShabbosMevorchim
                       AND user_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
 
-        if ($sid) {
-            $this->classes = array();
-            $this->setClasses($sid);
-        } else if (empty($this->classes)) {
-            $this->setClasses($sid);
-        }
-
         if (!$sid) $sid = $this->school_id;
+        if (empty($this->classes)) $this->setClasses($sid);
 
         $users = array();
         foreach ($this->classes as $id => $info) {
+            echo "Class ID: " . $id . "<br />";
             $stmt = $this->db->query("
-                SELECT u.*, ut.track_id, ut.level FROM users u 
-                join user_tracks ut using (user_id) 
-                WHERE class_id = $id 
-                AND user_registered > 0 
-                AND ut.subject_id = 1 
-                ORDER BY last, first");
+                        SELECT u.*, ut.track_id, ut.level FROM users u 
+                        join user_tracks ut using (user_id) 
+                        WHERE class_id = $id 
+                        AND user_registered > 0 
+                        AND ut.subject_id = 1 
+                        ORDER BY last, first");
             $users[$id] = $stmt->fetchAll();
         }
 
@@ -1179,7 +1174,6 @@ class ShabbosMevorchim
 
         // cache results
         $cached = [];
-
         foreach ($dates as $date) {
             // for each task
             foreach ($this->tasks as $key => $task) {
@@ -1189,14 +1183,13 @@ class ShabbosMevorchim
                 $this->participated[$key][$sid] = 0;
                 // for each class
                 foreach ($users as $class => $info) {
-                    //if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
                     // for each user in the class.
                     foreach ($info as $user) {
                         if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
                             $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
-                            $stmt1->debugDumpParams() . "<br />";
+//                            $stmt1->debugDumpParams() . "<br />";
                             $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
                             $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
@@ -1204,7 +1197,7 @@ class ShabbosMevorchim
 
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute(array($date, $task, $user['user_id']));
-                        $stmtBackup->debugDumpParams() . "<br />";
+//                        $stmtBackup->debugDumpParams() . "<br />";
                         $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
                         // check if we have run the backup for this date
                         $backupRan = $this->getBackupRan($date);
