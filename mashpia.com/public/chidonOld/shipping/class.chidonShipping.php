@@ -1247,8 +1247,20 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
+
+        $cat = 'ambassador prizes';
+        $item = 'ambassador prize';
+        $id = $this->getItemID($cat, $item);
         foreach ($rows as $row) {
             $info[$row['user_id']] = $row['total'];
+            $info[$row['user_id']][] = [
+                'item'  => $item,
+                'size'  => '',
+                'color' => '',
+                'name'  => '',
+                'id'    => $id,
+                'cat'   => $cat
+            ];
         }
         return $info;
     }

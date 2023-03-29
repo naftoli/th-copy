@@ -16,7 +16,7 @@ require 'data.php';
 
 $updated = getUpdatedSchools($schools);
 
-$items_chosen = $_POST['items'];
+$items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];

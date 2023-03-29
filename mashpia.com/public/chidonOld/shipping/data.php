@@ -67,7 +67,6 @@ function build_items() {
 
 function createHtmlForItem($school, $row, $output = true) {
     global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super, $limit_to_status;
-
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
             $items = $info[$cat][$row['user_id']];
