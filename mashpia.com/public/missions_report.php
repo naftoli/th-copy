@@ -153,7 +153,7 @@ require_once('calendar.php');
                 if ( isset( $start_he ) )
                     echo "<p>Missions earned between " . $start_he . " and " . $end_he . "</p>";
                 echo "<table>";
-                echo "<tr><th>Grade</th><th>Student</th>";
+                echo "<tr><th>School</th><th>Grade</th><th>Student</th>";
                 foreach ( $missionsPosted as $mp ) {
                     echo "<th>" . $missions[$mp]['name'] . "</th>";
                     //initialize totals for this school
@@ -162,7 +162,7 @@ require_once('calendar.php');
                 echo "</tr>";
                 foreach ( $users as $class => $user ) {
                     foreach ( $user as $name => $mission ) {
-                        echo "<tr><td>" . $class . "</td><td>" . $name . "</td>"; 
+                        echo "<tr><td>" . $schools[$school] . "</td><td>" . $class . "</td><td>" . $name . "</td>";
                         foreach ( $missionsPosted as $m ) {
                             if ( !isset( $mission[$missions[$m]['name']] ) ) {
                                 echo "<td>0</td>";                            
