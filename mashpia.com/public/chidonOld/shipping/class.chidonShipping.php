@@ -1252,7 +1252,6 @@ class ChidonShipping
         $item = 'ambassador prize';
         $id = $this->getItemID($cat, $item);
         foreach ($rows as $row) {
-            $info[$row['user_id']] = $row['total'];
             $info[$row['user_id']][] = [
                 'item'  => $item,
                 'size'  => '',
