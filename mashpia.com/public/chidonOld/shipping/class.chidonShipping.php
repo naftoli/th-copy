@@ -702,7 +702,8 @@ class ChidonShipping
                         'color' => '',
                         'name'  => '',
                         'id'    => $id,
-                        'cat'   => $cat
+                        'cat'   => $cat,
+                        'he_name'   => $row['first_he'] . ' ' . $row['last_he']
                     ];
                 }
             }
