@@ -1391,4 +1391,27 @@ class ChidonShipping
         }
         return $info;
     }
+
+    public function getRaffles($gender, $school, $limit = []) {
+        $school_raffles = $this->getSchoolRaffles($school);
+        $info = [];
+        foreach ($school_raffles as $row) {
+            $qty = $row['qty'];
+            for ($i = 0; $i < $qty; $i++) {
+                $info[] = [
+                    'item'  => $row['item'],
+                    'size'  => $row['size'],
+                    'color' => $row['color'],
+                    'name'  => $row['name'],
+                    'id'    => $row['id'],
+                    'cat'   => $row['cat']
+                ];
+            }
+        }
+        return $info;
+    }
+
+    public function getSchoolRaffles($school) {
+
+    }
 }
