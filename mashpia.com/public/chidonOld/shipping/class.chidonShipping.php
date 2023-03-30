@@ -703,7 +703,7 @@ class ChidonShipping
                         'name'  => '',
                         'id'    => $id,
                         'cat'   => $cat,
-                        'name'   => $row['first_he'] . ' ' . $row['last_he']
+                        'name'  => $item == 'medal' ? '' : ($row['first_he'] . ' ' . $row['last_he'])
                     ];
                 }
             }
