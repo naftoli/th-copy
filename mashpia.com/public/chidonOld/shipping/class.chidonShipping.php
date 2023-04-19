@@ -669,7 +669,6 @@ class ChidonShipping
             if ($school > 0) $sql .= " and u.school_id = " . $school;
             $sql .= " GROUP BY user_id";
         }
-//        echo $sql;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -770,7 +769,7 @@ class ChidonShipping
                         if ($highest_track == 'genius') $award = 'khk/iyun';
                         else $award = 'khk';
                     }
-                    else if (intval($child['ultimate_trip']) == 1) $award = 'havonah'; // if going on ultimate trip, gets medal / plaque
+                    else if (intval($child['ultimate_trip']) == 1) $award = strtolower($types[$highest_track]);
                 }
             }
         }
