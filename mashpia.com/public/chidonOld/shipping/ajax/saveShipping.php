@@ -10,10 +10,10 @@ $year = GlobalSettings::getChidonYear();
 
 $info = $_POST['info'];
 
-$sql = "INSERT IGNORE INTO school_shipping 
+$sql = "INSERT IGNORE INTO th_chidon_shipping
         SET 
             year = :year, 
-            school_id = :school, 
+            user_id = :user, 
             item_id = :item, 
             shipped = :shipped, 
             missing = :missing, 
@@ -54,7 +54,7 @@ foreach ($info as $row) {
     }
     $res = $stmt->execute([
         'year'      => $year,
-        'school'    => $row['school_id'],
+        'user'      => $row['user'],
         'item'      => $row['item'],
         'shipped'   => $shipped,
         'missing'   => $missing,
