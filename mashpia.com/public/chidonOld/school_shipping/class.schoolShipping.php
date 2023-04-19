@@ -3326,13 +3326,15 @@ class SchoolShipping
                     ];
                 } else {
                     foreach ($this->prize_info as $school_id => $more) {
-                        $qty = $more[$id];
-                        $info[$school_id][] = [
-                            'id'    => $id,
-                            'item'  => $prize,
-                            'cat'   => $type,
-                            'qty'   => $qty
-                        ];
+                        if (isset($more[$id])) {
+                            $qty = $more[$id];
+                            $info[$school_id][] = [
+                                'id' => $id,
+                                'item' => $prize,
+                                'cat' => $type,
+                                'qty' => $qty
+                            ];
+                        }
                     }
                 }
             }
