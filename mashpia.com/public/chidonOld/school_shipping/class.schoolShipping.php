@@ -8,208 +8,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 class SchoolShipping
 {
-    private $db, $year;
+    private $db, $year, $prize_info;
 
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
         $this->year = GlobalSettings::getChidonYear();
-    }
-
-    public function getCategories() {
-        $categories = [
-            'raffles'   => 'Raffles',
-        ];
-        return $categories;
-    }
-
-    public function getItems() {
-        $items = [
-            'Raffles'   => ['5M Raffle', 'Other Raffles']
-        ];
-        return $items;
-    }
-
-    public function getStatus() {
-        $info = [];
-        $sql = "select * from school_shipping where year = :year";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['year' => $this->year]);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            $info[$row['school_id']][$row['item_id']] = $row;
-        }
-        return $info;
-    }
-
-    public function getRaffles($school, $items) {
-        // get the prizes for the school
-        $info = [];
-        foreach ($items as $type) {
-            $prizes = $this->getPrizes('raffles', $type);
-            foreach ($prizes as $prize => $id) {
-                if ($school) {
-                    $qty = $this->getPrizeQtys($school, $id);
-                    $info[$school][] = [
-                        'id'    => $id,
-                        'item'  => $prize,
-                        'cat'   => $type,
-                        'qty'   => $qty
-                    ];
-                } else {
-                    $prize_qtys = $this->getPrizeQtys($school, $id);
-                    foreach ($prize_qtys as $school_id => $more) {
-                        foreach ($more as $id => $qty) {
-                            $info[$school_id][] = [
-                                'id'    => $id,
-                                'item'  => $prize,
-                                'cat'   => $type,
-                                'qty'   => $qty
-                            ];
-                        }
-                    }
-                }
-            }
-        }
-
-        return $info;
-    }
-
-    public function getPrizes($cat, $type) {
-        $item_ids = [
-            'raffles' => [
-                '5m raffle' => [
-                    "Tzivos Hashem Fidget Spinner Pen" => "TH14",
-                    "Tzivos Hashem Caps" => "TH16",
-                    "Weiss Shabbos Siddur" => "TH18",
-                    "Plaque of the Alter Rebbe" => "TH20",
-                    "Tishrei with the Rebbe Book" => "TH27",
-                    "Plaque of the Rebbe" => "TH32",
-                    "Rambam Book" => "TH36",
-                    "Tzivos Hashem Frisbee" => "TH43",
-                    "Plaque of Rebbetzin Chana" => "TH62",
-                    "Tzivos Hashem Wallet" => "TH63",
-                    "Lulov and Esrog Set" => "TH72",
-                    "Tzivos Hashem Machzor" => "TH73",
-                    "Tzivos Hashem Alef-Bais Watch" => "TH83",
-                    "Likkutei Sichos Set" => "TH84",
-                    "Tzivos Hashem Toss and Catch Game" => "TH84",
-                    "Weiss Pirkei Avos" => "TH88",
-                    "Tzivos Hashem Yoyo" => "TH89",
-                    "Weiss Haggadah" => "TH91",
-                    "Electric Key Board" => "TH92",
-                    "Tzivos Hashem Puzzle" => "TH92",
-                    "Tzivos Hashem Cups" => "TH96",
-                    "Tzivos Hashem Soccer Ball" => "TH97",
-                    "Tzivos Hashem Notebook" => "TH98",
-                    "The Weiss Tehillim" => "TH99",
-                    "Tzivos Hashem Football" => "TH100",
-                    "Tzivos Hashem Basket Ball" => "TH101",
-                    "Tzivos Hashem Drawstring Bag" => "TH102",
-                    "Tzivos Hashem Pencil Case" => "TH107",
-                    "Tzivos Hashem Pop-It toy" => "TH108",
-                    "Tzivos Hashem Baseball" => "TH109",
-                    "Tzivos Hashem Water Bottle" => "TH110",
-                    "Tzivos Hashem Bluetooth Speaker" => "TH111",
-                    "Tzivos Hashem Rubiks Cube" => "TH113",
-                    "Tzivos Hashem Backpack" => "TH114",
-                    "Roll Call Game" => "TH116",
-                    "Tzivos Hashem Frisbee Ball" => "TH117",
-                    "Tzivos Hashem Keychain" => "TH120",
-                    "Tzivos Hashem Yellow LED Fan" => "TH121",
-                    "Tzivos Hashem Flashlight" => "TH122",
-                    "Comic Book - Escape from Europe" => "TH123",
-                    "Tzivos Hashem Pencil Sharpener" => "TH124",
-                    "Tzivos Hashem Wall Clock" => "TH125",
-                    "Nissuei Hanosi Card Game" => "TH126"
-                ],
-                'other raffles' => [
-                    "Leather Tehillim" => "TH69",
-                    "Leather Siddur" => "TH75",
-                    "Alter Rebbe's Shulchon Aruch (Set)" => "TH77",
-                    "Gutnick Chumashim Set" => "TH81",
-                    "Mishnayus Kehati" => "TH129",
-                    "Electric Scooter" => "TH143",
-                    "Sefer Hasichos Set" => "TH147",
-                    "Menorah" => "TH150",
-                    "Digital Photo Frame" => "TH153",
-                    "Video Camera" => "TH154",
-                    "Razor Scooter" => "TH155",
-                    "Collection of 5 Board Games" => "TH159",
-                    "Silver Candle Stick by Elite Sterling" => "TH162",
-                    "Pocket size Likkutei Sichos" => "TH165",
-                    "Silver Becher by Elite Sterling" => "TH167",
-                    "Leather Megilas Esther" => "TH169",
-                    "Foosball Table" => "TH192",
-                    "Trampoline" => "TH196",
-                    "Popcorn Machine" => "TH197",
-                    "Remote Control Helicopter" => "TH198",
-                    "Unicycle" => "TH199",
-                    "Pogo Stick" => "TH200",
-                    "Air Hockey Table" => "TH203",
-                    "Tetherball" => "TH205",
-                    "Ping Pong Table" => "TH211",
-                    "Snow Cone Machine" => "TH214",
-                    "Ice Cream Maker" => "TH215",
-                    "Chocolate Fountain" => "TH217",
-                    "Tent" => "TH222",
-                    "Tennis Set" => "TH225",
-                    "Juggling rings, juggling balls, diabolo" => "TH249",
-                    "Electronic Basketball Bounce" => "TH253",
-                    "Soccer Set" => "TH255",
-                    "Baseball Set" => "TH257",
-                    "Electric Football Game" => "TH259",
-                    "Mikraos Gedolos Chumashim Set" => "TH301",
-                    "Rebbeim Biographies Set" => "TH306",
-                    "Earrings by Kirsch" => "TH308",
-                    "Judaica World $50 Gift Card" => "TH322",
-                    "Earrings by Tzfasman" => "TH323",
-                    "770 Album and Rebbe Pictures" => "TH324",
-                    "Kehos $50 Gift Card" => "TH326",
-                    "Little Midrash Says Nach (2 vols)" => "TH328",
-                    "Hayom Yom" => "TH335",
-                    "Walkie Talkies" => "TH348",
-                    "Pocket Size Rambam" => "TH350",
-                    "Rebbe Picture 16X24" => "TH357",
-                    "Diabolo" => "TH388",
-                    "Mountain Bike" => "TH397",
-                    "Nach Set" => "TH403",
-                    "Der Rebbe Redt Tzu Kinder Set" => "TH405",
-                    "Yahadus (set)" => "TH430",
-                    "Yahadus Book 5" => "TH431",
-                    "Set of 5 Chassidim books" => "TH439",
-                    "Set of 5 Hachai Books" => "TH440",
-                    "Video Drone" => "TH443",
-                    "Zakon's Toys $50 Gift Card" => "TH445",
-                    "Cotton Candy Machine" => "TH473",
-                    "Go Pro" => "TH474",
-                    "Instax Polaroid Camera" => "TH475",
-                    "Remote Control Car" => "TH477",
-                    "Sweet Expression Gift Card" => "TH478",
-                    "Doughnut Maker" => "TH482",
-                    "Settlers of Catan" => "TH483",
-                    "Set of 4 board games" => "TH484",
-                    "Sefer Hamaamarim Melukat Set" => "TH491",
-                    "Smoothie Maker" => "TH492",
-                    "Waffle Maker" => "TH493",
-                    "Pogo Ball" => "TH503",
-                    "Leather Tehillim Pink" => "TH504",
-                    "Leather Tehillim Blue" => "TH505",
-                    "Leather Siddur Blue" => "TH506",
-                    "Leather Chitas Blue" => "TH507",
-                    "Leather Chitas Pink" => "TH508",
-                    "Leather Sefer Hamitzvos Blue" => "TH509",
-                    "Leather Sefer Hamitzvos Pink" => "TH510",
-                    "Digital Camera" => "TH512"
-                ]
-            ]
-        ];
-
-        return $item_ids[$cat][$type];
-    }
-
-    public function getPrizeQtys($school, $prize) {
-        $data = [
+        $this->prize_info = [
             2 => [
                 'TH72' => 3,
                 'TH73' => 3,
@@ -3477,10 +3282,202 @@ class SchoolShipping
                 'TH43' => 1,
             ]
         ];
+    }
 
-        if ($school) {
-            if (isset($data[$school][$prize])) return $data[$school][$prize];
+    public function getCategories() {
+        $categories = [
+            'raffles'   => 'Raffles',
+        ];
+        return $categories;
+    }
+
+    public function getItems() {
+        $items = [
+            'Raffles'   => ['5M Raffle', 'Other Raffles']
+        ];
+        return $items;
+    }
+
+    public function getStatus() {
+        $info = [];
+        $sql = "select * from school_shipping where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['school_id']][$row['item_id']] = $row;
         }
-        else return $data;
+        return $info;
+    }
+
+    public function getRaffles($school, $items) {
+        // get the prizes for the school
+        $info = [];
+        foreach ($items as $type) {
+            $prizes = $this->getPrizes('raffles', $type);
+            foreach ($prizes as $prize => $id) {
+                if ($school) {
+                    $qty = $this->getPrizeQtys($school, $id);
+                    $info[$school][] = [
+                        'id'    => $id,
+                        'item'  => $prize,
+                        'cat'   => $type,
+                        'qty'   => $qty
+                    ];
+                } else {
+                    foreach ($this->prize_info as $school_id => $more) {
+                        $qty = $more[$id];
+                        $info[$school_id][] = [
+                            'id'    => $id,
+                            'item'  => $prize,
+                            'cat'   => $type,
+                            'qty'   => $qty
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $info;
+    }
+
+    public function getPrizes($cat, $type) {
+        $item_ids = [
+            'raffles' => [
+                '5m raffle' => [
+                    "Tzivos Hashem Fidget Spinner Pen" => "TH14",
+                    "Tzivos Hashem Caps" => "TH16",
+                    "Weiss Shabbos Siddur" => "TH18",
+                    "Plaque of the Alter Rebbe" => "TH20",
+                    "Tishrei with the Rebbe Book" => "TH27",
+                    "Plaque of the Rebbe" => "TH32",
+                    "Rambam Book" => "TH36",
+                    "Tzivos Hashem Frisbee" => "TH43",
+                    "Plaque of Rebbetzin Chana" => "TH62",
+                    "Tzivos Hashem Wallet" => "TH63",
+                    "Lulov and Esrog Set" => "TH72",
+                    "Tzivos Hashem Machzor" => "TH73",
+                    "Tzivos Hashem Alef-Bais Watch" => "TH83",
+                    "Likkutei Sichos Set" => "TH84",
+                    "Tzivos Hashem Toss and Catch Game" => "TH84",
+                    "Weiss Pirkei Avos" => "TH88",
+                    "Tzivos Hashem Yoyo" => "TH89",
+                    "Weiss Haggadah" => "TH91",
+                    "Electric Key Board" => "TH92",
+                    "Tzivos Hashem Puzzle" => "TH92",
+                    "Tzivos Hashem Cups" => "TH96",
+                    "Tzivos Hashem Soccer Ball" => "TH97",
+                    "Tzivos Hashem Notebook" => "TH98",
+                    "The Weiss Tehillim" => "TH99",
+                    "Tzivos Hashem Football" => "TH100",
+                    "Tzivos Hashem Basket Ball" => "TH101",
+                    "Tzivos Hashem Drawstring Bag" => "TH102",
+                    "Tzivos Hashem Pencil Case" => "TH107",
+                    "Tzivos Hashem Pop-It toy" => "TH108",
+                    "Tzivos Hashem Baseball" => "TH109",
+                    "Tzivos Hashem Water Bottle" => "TH110",
+                    "Tzivos Hashem Bluetooth Speaker" => "TH111",
+                    "Tzivos Hashem Rubiks Cube" => "TH113",
+                    "Tzivos Hashem Backpack" => "TH114",
+                    "Roll Call Game" => "TH116",
+                    "Tzivos Hashem Frisbee Ball" => "TH117",
+                    "Tzivos Hashem Keychain" => "TH120",
+                    "Tzivos Hashem Yellow LED Fan" => "TH121",
+                    "Tzivos Hashem Flashlight" => "TH122",
+                    "Comic Book - Escape from Europe" => "TH123",
+                    "Tzivos Hashem Pencil Sharpener" => "TH124",
+                    "Tzivos Hashem Wall Clock" => "TH125",
+                    "Nissuei Hanosi Card Game" => "TH126"
+                ],
+                'other raffles' => [
+                    "Leather Tehillim" => "TH69",
+                    "Leather Siddur" => "TH75",
+                    "Alter Rebbe's Shulchon Aruch (Set)" => "TH77",
+                    "Gutnick Chumashim Set" => "TH81",
+                    "Mishnayus Kehati" => "TH129",
+                    "Electric Scooter" => "TH143",
+                    "Sefer Hasichos Set" => "TH147",
+                    "Menorah" => "TH150",
+                    "Digital Photo Frame" => "TH153",
+                    "Video Camera" => "TH154",
+                    "Razor Scooter" => "TH155",
+                    "Collection of 5 Board Games" => "TH159",
+                    "Silver Candle Stick by Elite Sterling" => "TH162",
+                    "Pocket size Likkutei Sichos" => "TH165",
+                    "Silver Becher by Elite Sterling" => "TH167",
+                    "Leather Megilas Esther" => "TH169",
+                    "Foosball Table" => "TH192",
+                    "Trampoline" => "TH196",
+                    "Popcorn Machine" => "TH197",
+                    "Remote Control Helicopter" => "TH198",
+                    "Unicycle" => "TH199",
+                    "Pogo Stick" => "TH200",
+                    "Air Hockey Table" => "TH203",
+                    "Tetherball" => "TH205",
+                    "Ping Pong Table" => "TH211",
+                    "Snow Cone Machine" => "TH214",
+                    "Ice Cream Maker" => "TH215",
+                    "Chocolate Fountain" => "TH217",
+                    "Tent" => "TH222",
+                    "Tennis Set" => "TH225",
+                    "Juggling rings, juggling balls, diabolo" => "TH249",
+                    "Electronic Basketball Bounce" => "TH253",
+                    "Soccer Set" => "TH255",
+                    "Baseball Set" => "TH257",
+                    "Electric Football Game" => "TH259",
+                    "Mikraos Gedolos Chumashim Set" => "TH301",
+                    "Rebbeim Biographies Set" => "TH306",
+                    "Earrings by Kirsch" => "TH308",
+                    "Judaica World $50 Gift Card" => "TH322",
+                    "Earrings by Tzfasman" => "TH323",
+                    "770 Album and Rebbe Pictures" => "TH324",
+                    "Kehos $50 Gift Card" => "TH326",
+                    "Little Midrash Says Nach (2 vols)" => "TH328",
+                    "Hayom Yom" => "TH335",
+                    "Walkie Talkies" => "TH348",
+                    "Pocket Size Rambam" => "TH350",
+                    "Rebbe Picture 16X24" => "TH357",
+                    "Diabolo" => "TH388",
+                    "Mountain Bike" => "TH397",
+                    "Nach Set" => "TH403",
+                    "Der Rebbe Redt Tzu Kinder Set" => "TH405",
+                    "Yahadus (set)" => "TH430",
+                    "Yahadus Book 5" => "TH431",
+                    "Set of 5 Chassidim books" => "TH439",
+                    "Set of 5 Hachai Books" => "TH440",
+                    "Video Drone" => "TH443",
+                    "Zakon's Toys $50 Gift Card" => "TH445",
+                    "Cotton Candy Machine" => "TH473",
+                    "Go Pro" => "TH474",
+                    "Instax Polaroid Camera" => "TH475",
+                    "Remote Control Car" => "TH477",
+                    "Sweet Expression Gift Card" => "TH478",
+                    "Doughnut Maker" => "TH482",
+                    "Settlers of Catan" => "TH483",
+                    "Set of 4 board games" => "TH484",
+                    "Sefer Hamaamarim Melukat Set" => "TH491",
+                    "Smoothie Maker" => "TH492",
+                    "Waffle Maker" => "TH493",
+                    "Pogo Ball" => "TH503",
+                    "Leather Tehillim Pink" => "TH504",
+                    "Leather Tehillim Blue" => "TH505",
+                    "Leather Siddur Blue" => "TH506",
+                    "Leather Chitas Blue" => "TH507",
+                    "Leather Chitas Pink" => "TH508",
+                    "Leather Sefer Hamitzvos Blue" => "TH509",
+                    "Leather Sefer Hamitzvos Pink" => "TH510",
+                    "Digital Camera" => "TH512"
+                ]
+            ]
+        ];
+
+        return $item_ids[$cat][$type];
+    }
+
+    public function getPrizeQtys($school, $prize) {
+        if ($school) {
+            if (isset($this->prize_info[$school][$prize])) return $this->prize_info[$school][$prize];
+        }
+        else return $this->prize_info;
     }
 }
