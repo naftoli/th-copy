@@ -10,10 +10,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-require 'class.chidonShipping.php';
+require 'class.schoolShipping.php';
 require 'data.php';
 
-$cs = new ChidonShipping();
+$cs = new SchoolShipping();
 $categories = $cs->getCategories();
 $items = $cs->getItems();
 ?>
@@ -65,12 +65,6 @@ $items = $cs->getItems();
 
     <fieldset>
       <legend style="margin-bottom: -5px;">Limit To</legend>
-      <h4>Gender</h4>
-      <select name="gender">
-        <option value="0">All</option>
-        <option value="m">Boys</option>
-        <option value="f">Girls</option>
-      </select><br />
       <h4>School</h4>
       <select name="school">
           <?php if ($super) echo '<option value="0">All Schools</option>'; ?>
@@ -95,10 +89,7 @@ $items = $cs->getItems();
         <option value="all">Summary and Details</option>
         <option value="summary">Summary Only</option>
         <option value="details">Details Only</option>
-        <?php if ($super) echo "<option value='file'>CSV File</option>"; ?>
       </select><br />
-      <?php if ($super) echo '<input type="checkbox" name="grand_summary" value="1" /> Include Grand Summary at the End of the Report'; ?>
-      <br />
       <br />
       <button id="create">Create Report</button>
     </fieldset>
