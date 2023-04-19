@@ -349,7 +349,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     </div>
   <?php endforeach; ?>
     <?php
-    if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == 'on') {
+    if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == '1') {
       ksort($grand_summary);
       echo "<h2>Grand Totals</h2>";
       foreach ($grand_summary as $item => $more) {
