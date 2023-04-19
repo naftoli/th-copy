@@ -111,7 +111,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   <?php if ($super) : ?>
     <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
   <?php endif; ?>
-  <?php foreach ($resultsBySchool as $school => $more) : ?>
+  <?php foreach ($resultsBySchool as $school => $row) : ?>
     <div class="header" id="<?=$school?>">
       <?php
       if (! isset($schools[$school])) continue;
@@ -125,10 +125,10 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
         switch ($field) {
           case 's.shipping_first':
           case 's.shipping_last':
-            $address .= $more[$desc] . ' ';
+            $address .= $row[$desc] . ' ';
             break;
           case 's.shipping_phone':
-            $address = "Contact Phone Number: " . $more[$desc] . "<br />";
+            $address = "Contact Phone Number: " . $row[$desc] . "<br />";
             break;
           case 's.shipping_address1':
           case 's.shipping_address2':
@@ -136,10 +136,10 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
           case 's.shipping_state':
           case 's.shipping_postal':
           case 's.shipping_country':
-            $address .= $more[$desc] . ' ';
+            $address .= $row[$desc] . ' ';
             break;
           case 's.shipping_requests':
-            $address .= "<br />Shipping Requests: " . $more[$desc];
+            $address .= "<br />Shipping Requests: " . $row[$desc];
             break;
         }
       }
@@ -197,6 +197,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
             echo "<th>Item</th>";
             if ($item_details_chosen && count($item_details_chosen)) {
                 foreach ($item_details_chosen as $field) {
+                    if ($field == 'item') continue;
                     if ($field == 'cat') $field = 'category';
                     else if ($field == 'id') $field = 'Item ID';
                     echo "<th>" . ucwords($field) . "</th>";
@@ -208,11 +209,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
           </tr>
         </thead>
         <tbody>
-          <?php
-          foreach ($more as $row) {
-            createHtmlForItem($school, $row);
-          }
-          ?>
+          <?php createHtmlForItem($school, $row); ?>
         </tbody>
       </table>
       <p class="no-print"></p>
@@ -236,9 +233,9 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
-    const user = ids[1]
+    const school = ids[1]
     // get description
-    info.push({ action, item, user, desc })
+    info.push({ action, item, school, desc })
   }
 
   function save(reload = true) {

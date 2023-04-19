@@ -19,7 +19,7 @@ $fields = [
 $item_details = [
     'id'        => 'Item ID',
     'qty'       => 'Quantity',
-    'name'      => 'Prize Name',
+    'item'      => 'Prize Name',
     'cat'       => 'Category'
 ];
 
@@ -91,9 +91,9 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td>" . $item['item'];
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
+                                if ($field == 'item') continue;
                                 echo "</td><td>";
-                                if ($field == 'cat') echo $cat;
-                                else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                                if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
                                 else if (isset($item[$field])) echo $item[$field];
                             }
                         }
@@ -146,8 +146,6 @@ function addToSummary($item, $school) {
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (is_array($key)) print_r($key);
-
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
     if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;

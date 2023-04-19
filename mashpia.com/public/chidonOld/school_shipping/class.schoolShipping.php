@@ -51,20 +51,20 @@ class SchoolShipping
                 if ($school) {
                     $qty = $this->getPrizeQtys($school, $id);
                     $info[$school][] = [
-                        'id' => $id,
-                        'name' => $prize,
-                        'type' => $type,
-                        'qty' => $qty
+                        'id'    => $id,
+                        'item'  => $prize,
+                        'cat'   => $type,
+                        'qty'   => $qty
                     ];
                 } else {
                     $prize_qtys = $this->getPrizeQtys($school, $id);
                     foreach ($prize_qtys as $school_id => $more) {
                         foreach ($more as $id => $qty) {
                             $info[$school_id][] = [
-                                'id' => $id,
-                                'name' => $prize,
-                                'type' => $type,
-                                'qty' => $qty
+                                'id'    => $id,
+                                'item'  => $prize,
+                                'cat'   => $type,
+                                'qty'   => $qty
                             ];
                         }
                     }
@@ -3478,7 +3478,9 @@ class SchoolShipping
             ]
         ];
 
-        if ($school) return $data[$school][$prize];
+        if ($school) {
+            if (isset($data[$school][$prize])) return $data[$school][$prize];
+        }
         else return $data;
     }
 }
