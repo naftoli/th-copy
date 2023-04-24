@@ -54,7 +54,7 @@ foreach ($info as $row) {
     }
     $res = $stmt->execute([
         'year'      => $year,
-        'school'    => $row['school_id'],
+        'school'    => $row['school'],
         'item'      => $row['item'],
         'shipped'   => $shipped,
         'missing'   => $missing,
