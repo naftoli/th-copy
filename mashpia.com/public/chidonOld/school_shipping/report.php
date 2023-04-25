@@ -14,6 +14,8 @@ $schools = $as->getSchools();
 require 'class.schoolShipping.php';
 require 'data.php';
 
+$updated = getUpdatedSchools($schools);
+
 $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
@@ -145,11 +147,11 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       }
       if (! empty($address)) echo "<br />" . $address . "<br />";
       ?>
-<!--      <p>-->
-<!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
-<!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
-<!--        /> I have reviewed and updated the shipping status for the entire school.-->
-<!--      </p>-->
+      <p>
+        <input type='checkbox' class='updated' value='<?= $updated[$school] ?>'
+        <?php if (intval($updated[$school]) == 1) echo "checked"; ?>
+        /> I have reviewed and updated the shipping status for the entire school.
+      </p>
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
@@ -204,7 +206,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
                 }
             }
             echo "<th class='no-print'>Status</th>";
-            echo "<th class='no-print'>Explain the damage</th>"
+            echo "<th class='no-print'>Number of Missing Items</th>"
             ?>
           </tr>
         </thead>
@@ -229,13 +231,13 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action, desc = '') {
+  function update(elem, action, qty = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const school = ids[1]
     // get description
-    info.push({ action, item, school, desc })
+    info.push({ action, item, school, qty })
   }
 
   function save(reload = true) {
@@ -267,15 +269,15 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     if (!super_admin && action == 0) {
       alert('You cannot change this to not yet shipped, it will not be saved.')
       return false
-    } else if (!super_admin && action == 3) {
-      alert('You must explain the damage before it can be saved.')
+    } else if (!super_admin && action == 2) {
+      alert('You must enter the number of missing items before it can be saved.')
       return false
     }
     update(this, action)
     save(false)
   })
 
-  $(".description").blur( function() {
+  $(".qty").blur( function() {
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())

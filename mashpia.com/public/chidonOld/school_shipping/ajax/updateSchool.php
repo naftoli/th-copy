@@ -7,7 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $school_id = mysql_real_escape_string($_POST['school_id']);
 $checked = mysql_real_escape_string($_POST['checked']);
 
-$sql = "update schools set chidon_5783_updated_shipping = $checked where school_id = $school_id";
+$sql = "update schools set prizes_updated_shipping = $checked where school_id = $school_id";
 if (mysql_query($sql)) {
     echo json_encode([
         'success' => true

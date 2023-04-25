@@ -17,13 +17,11 @@ $sql = "INSERT IGNORE INTO school_shipping
             item_id = :item, 
             shipped = :shipped, 
             missing = :missing, 
-            damaged = :damaged, 
-            description = :desc
+            qty = :qty
         ON DUPLICATE KEY UPDATE 
             shipped = :shipped, 
             missing = :missing, 
-            damaged = :damaged, 
-            description = :desc";
+            qty = :qty";
 $stmt = $MASHPIA_DB->prepare($sql);
 
 $MASHPIA_DB->beginTransaction();
@@ -34,22 +32,14 @@ foreach ($info as $row) {
         case 0:
             $shipped = 0;
             $missing = 0;
-            $damaged = 0;
             break;
         case 1:
             $shipped = 1;
             $missing = 0;
-            $damaged = 0;
             break;
         case 2:
             $shipped = 1;
             $missing = 1;
-            $damaged = 0;
-            break;
-        case 3:
-            $shipped = 1;
-            $missing = 0;
-            $damaged = 1;
             break;
     }
     $res = $stmt->execute([
@@ -58,8 +48,7 @@ foreach ($info as $row) {
         'item'      => $row['item'],
         'shipped'   => $shipped,
         'missing'   => $missing,
-        'damaged'   => $damaged,
-        'desc'      => $row['desc']
+        'qty'       => $row['qty']
     ]);
     if (! $res) {
 //        $stmt->debugDumpParams();

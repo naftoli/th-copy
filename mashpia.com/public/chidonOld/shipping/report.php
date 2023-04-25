@@ -179,6 +179,7 @@ foreach ($resultsBySchool as $school => $more) {
 
 // sort summary
 foreach ($summary as $school => $more) ksort($summary[$school]);
+ksort($grand_summary);
 ?>
 <!DOCTYPE html>
 <html>
@@ -224,9 +225,6 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   </style>
 </head>
 <body>
-  <?php if ($super) : ?>
-    <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
-  <?php endif; ?>
   <?php foreach ($resultsBySchool as $school => $more) : ?>
     <div class="header" id="<?=$school?>">
       <?php
@@ -348,44 +346,6 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       <?php endif; ?>
     </div>
   <?php endforeach; ?>
-    <?php
-    if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == '1') {
-      ksort($grand_summary);
-      echo "<h2>Grand Totals</h2>";
-      foreach ($grand_summary as $item => $more) {
-        $grand_total = 0;
-        $item_details = $summary_items[$item];
-        $desc = "($item)";
-        foreach (['item', 'size', 'color'] as $attr) {
-          if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
-        }
-        echo "<br />";
-        echo "<h2>" . ucwords($desc) . " Totals</h2>";
-        ?>
-        <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
-          <thead>
-            <tr>
-              <th>School</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-          foreach ($more as $school_id => $total) {
-            echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
-            $grand_total += intval($total);
-          }
-          ?>
-          </tbody>
-          <tfoot>
-            <tr><th>Grand Total:</th><th><?= $grand_total; ?></th></tr>
-          </tfoot>
-        </table>
-        <div style="page-break-after: always;"></div>
-    <?php
-      }
-    }
-    ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -415,13 +375,6 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       else alert(res.error)
     })
   }
-
-  $("#saveAll").click( function () {
-    $(".shipping").each( function () {
-      update(this, 1)
-    })
-    save()
-  })
 
   $(".saveSchool").click( function() {
     $(this).parent().find('.shipping').each( function () {
@@ -459,11 +412,5 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       if (!res.success) alert(res.error)
     })
   })
-
-  <?php if (!$super) : ?>
-    $("input").attr('disabled', true)
-    $("select").attr('disabled', true)
-    $("textarea").attr('disabled', true)
-  <?php endif; ?>
 </script>
 </html>

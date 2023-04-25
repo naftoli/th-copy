@@ -130,7 +130,14 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                             echo ">" . $val . "</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
+                        echo "</select></td>";
+                        echo "<select class='qty'>";
+                        $total = 10;
+                        if (isset($item['qty'])) $total = intval($item['qty']);
+                        for ($i = 1; $i <= $total; $i++) {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                        echo "</select></td></tr>";
                     }
 
                     // update summary
@@ -150,4 +157,16 @@ function addToSummary($item, $school) {
 
     if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
     else $summary[$school][$key] = $qty;
+}
+
+function getUpdatedSchools($schools) {
+    global $MASHPIA_DB;
+    $sql = "select * from schools where school_id in (" . implode(',', array_keys($schools)) . ")";
+    $result = $MASHPIA_DB->query($sql);
+    $rows = $result->fetchAll();
+    $schools = [];
+    foreach ($rows as $row) {
+        $schools[$row['school_id']] = $row['prizes_updated_shipping'];
+    }
+    return $schools;
 }

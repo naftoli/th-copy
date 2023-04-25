@@ -3293,7 +3293,7 @@ class SchoolShipping
 
     public function getItems() {
         $items = [
-            'Raffles'   => ['5M Raffle', 'Other Raffles']
+            'Raffles'   => ['5M Raffle', '60M Raffle']
         ];
         return $items;
     }
@@ -3365,7 +3365,6 @@ class SchoolShipping
                     "Weiss Pirkei Avos" => "TH88",
                     "Tzivos Hashem Yoyo" => "TH89",
                     "Weiss Haggadah" => "TH91",
-                    "Electric Key Board" => "TH92",
                     "Tzivos Hashem Puzzle" => "TH92",
                     "Tzivos Hashem Cups" => "TH96",
                     "Tzivos Hashem Soccer Ball" => "TH97",
@@ -3391,7 +3390,8 @@ class SchoolShipping
                     "Tzivos Hashem Wall Clock" => "TH125",
                     "Nissuei Hanosi Card Game" => "TH126"
                 ],
-                'other raffles' => [
+                '60m raffle' => [
+                    "Electric Key Board" => "TH92",
                     "Leather Tehillim" => "TH69",
                     "Leather Siddur" => "TH75",
                     "Alter Rebbe's Shulchon Aruch (Set)" => "TH77",
