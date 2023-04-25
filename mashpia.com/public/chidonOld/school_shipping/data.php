@@ -131,7 +131,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             echo ">" . $val . "</option>";
                         }
                         echo "</select></td>";
-                        echo "<select class='qty'>";
+                        echo "<td><select class='qty'>";
                         $total = 10;
                         if (isset($item['qty'])) $total = intval($item['qty']);
                         for ($i = 1; $i <= $total; $i++) {
