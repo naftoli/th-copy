@@ -459,5 +459,11 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       if (!res.success) alert(res.error)
     })
   })
+
+  <?php if (!$super) : ?>
+    $("input").attr('disabled', true)
+    $("select").attr('disabled', true)
+    $("textarea").attr('disabled', true)
+  <?php endif; ?>
 </script>
 </html>
