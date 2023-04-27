@@ -10,7 +10,7 @@ $year = GlobalSettings::getCurrentYear();
 
 // **************** FUNCTIONS **************** //
 function purchaseItems() {
-    global $total, $admin_id, $year, $cc_info;
+    global $total, $admin_id, $year, $cc_info, $type;
 
     $amount = $total; // the authorize script expects a variable called amount
     $card_num = $cc_info->num;
@@ -22,7 +22,7 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = "Hei Teves purchase ($year) - Admin ID: " . $admin_id;
+    $description = $type . " purchase ($year) - Admin ID: " . $admin_id;
 
     if ($total > 0) {
         chdir('../../../');
@@ -75,6 +75,7 @@ $info = json_decode($_POST['info']);
 $list = $info->purchases;
 $total = $info->total;
 $cc_info = $info->cc;
+$type = $info->type;
 $admin_id = encrypt_decrypt('decrypt', $info->admin);
 $response_array = [];
 
