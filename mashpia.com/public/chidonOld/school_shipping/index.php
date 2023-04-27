@@ -75,7 +75,6 @@ $items = $cs->getItems();
         <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
         <input type="checkbox" name="status[]" value="1" /> Shipped<br />
         <input type="checkbox" name="status[]" value="2" /> Missing<br />
-        <input type="checkbox" name="status[]" value="3" /> Damaged<br />
       </p>
     </fieldset>
 
