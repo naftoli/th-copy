@@ -133,6 +133,12 @@ $items = $cs->getItems();
       return false
     }
     $("form").submit()
-  })
+  }
+
+  let super = <?= $super ? 1 : 0 ?>;
+  if (!super) {
+    $("select").attr('disabled', true)
+    $("textarea").attr('disabled', true)
+  }
 </script>
 </html>
