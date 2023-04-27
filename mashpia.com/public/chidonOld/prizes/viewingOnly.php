@@ -37,7 +37,8 @@
         <th>Size</th>
     </tr>
 
-    <?
+    <?php
+    require "../../db.php";
     $sql = 'SELECT * FROM chidon_prizes WHERE year = 5783';
     $query = mysql_query($sql);
     while($row = mysql_fetch_assoc($query)) { ?>
