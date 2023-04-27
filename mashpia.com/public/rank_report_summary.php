@@ -2,6 +2,13 @@
 $admin_auth = array('school');
 require('header.php');
 
+$ranks = [];
+$sql = "select rank_ord, rank_name from ranks";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $ranks[$row['rank_ord']] = $row['rank_name'];
+}
+
 function getMedals( $user, $rank ) {
     //find out total number of medals earned
     $sql = "select count(*) as total from medal_marks where user_id = " . $user;
@@ -273,9 +280,10 @@ foreach( $users as $school => $info ) {
     ksort( $totals );
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
-    echo "<tr><th>Rank</th><th>Total</th></tr>";
-    foreach ( $totals as $rank => $total ) {
-        echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+    echo "<tr><th>School</th><th>Rank</th><th>Total</th></tr>";
+    foreach ($ranks as $ord => $rank) {
+        $total = isset( $totals[$ord] ) ? $totals[$ord] : 0;
+        echo "<tr><td>" . $school . "</td><td>" . $rank . "</td><td>" . $total . "</td></tr>";
     }
     echo "</table>";
     echo "<div class='page-break'></div>";
