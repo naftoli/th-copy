@@ -3360,7 +3360,6 @@ class SchoolShipping
                     "Lulov and Esrog Set" => "TH72",
                     "Tzivos Hashem Machzor" => "TH73",
                     "Tzivos Hashem Alef-Bais Watch" => "TH83",
-                    "Likkutei Sichos Set" => "TH84",
                     "Tzivos Hashem Toss and Catch Game" => "TH84",
                     "Weiss Pirkei Avos" => "TH88",
                     "Tzivos Hashem Yoyo" => "TH89",
@@ -3391,6 +3390,7 @@ class SchoolShipping
                     "Nissuei Hanosi Card Game" => "TH126"
                 ],
                 '60m raffle' => [
+                    "Likkutei Sichos Set" => "TH84",
                     "Electric Key Board" => "TH92",
                     "Leather Tehillim" => "TH69",
                     "Leather Siddur" => "TH75",

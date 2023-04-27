@@ -102,7 +102,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td class='no-print'>";
                         echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'";
                         // figure out if it should be disabled or not
-                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
+                        if (intval($status['shipped']) == 0) echo " disabled";
                         echo ">";
                         $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
