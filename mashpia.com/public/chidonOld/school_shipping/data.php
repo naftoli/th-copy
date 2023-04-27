@@ -100,10 +100,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "</td>";
                         // add column for shipping info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'";
-                        // figure out if it should be disabled or not
-                        if (intval($status['shipped']) == 0) echo " disabled";
-                        echo ">";
+                        echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'>";
                         $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
