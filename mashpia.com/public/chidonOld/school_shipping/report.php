@@ -231,7 +231,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action, qty = '') {
+  function update(elem, action, qty = 1) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
@@ -269,11 +269,9 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     if (!super_admin && action == 0) {
       alert('You cannot change this to not yet shipped, it will not be saved.')
       return false
-    } else if (!super_admin && action == 2) {
-      alert('You must enter the number of missing items before it can be saved.')
-      return false
     }
-    update(this, action)
+    qty = $(this).parent().parent().find('.qty').val()
+    update(this, action, qty)
     save(false)
   })
 
