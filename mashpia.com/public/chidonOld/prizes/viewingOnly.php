@@ -4,7 +4,6 @@
 <HEAD>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Chidon Prizes</title>
-    <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
     <style type='text/css'>
       table {
         font-size: 12px;
@@ -19,11 +18,7 @@
 </HEAD>
 
 <BODY>
-<? include('../../admin_header.php'); ?>
 <h1>Chidon Prizes</h1>
-<p style="margin: 20px 10px">
-    <a href="./new.php" class="button">New Prize</a>
-</p>
 
 <table>
     <tr>
@@ -38,7 +33,7 @@
     </tr>
 
     <?php
-    require "../../db.php";
+    require_once '../../db.php';
     $sql = 'SELECT * FROM chidon_prizes WHERE year = 5783';
     $query = mysql_query($sql);
     while($row = mysql_fetch_assoc($query)) { ?>
@@ -46,7 +41,7 @@
             <td><?= $row['prize_id'] ?></td>
             <td>
                 <? if ($row['prize_picture']) { ?>
-                    <img src="<?= $row['prize_picture'] ?>" width="50" />
+                    <img src="../..<?= $row['prize_picture'] ?>" width="50" />
                 <? } ?>
             </td>
             <td><?= $row['prize_name'] ?></td>
