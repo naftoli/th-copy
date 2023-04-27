@@ -101,7 +101,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         // add column for shipping info
                         echo "<td class='no-print'>";
                         echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'>";
-                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        $options = ['Not Yet Shipped', 'Shipped', 'Missing'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*
@@ -120,9 +120,6 @@ function createHtmlForItem($school, $row, $output = true) {
                                     break;
                                 case 2:
                                     if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
-                                    break;
-                                case 3:
-                                    if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
                                     break;
                             }
                             echo ">" . $val . "</option>";
