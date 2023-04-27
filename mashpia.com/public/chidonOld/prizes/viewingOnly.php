@@ -27,7 +27,8 @@
 
 <table>
     <tr>
-        <th>picture</th>
+        <th>Prize ID</th>
+        <th>Picture</th>
         <th>name</th>
         <th>Quantity</th>
         <th>Made Possible By</th>
@@ -41,6 +42,7 @@
     $query = mysql_query($sql);
     while($row = mysql_fetch_assoc($query)) { ?>
         <tr>
+            <td><?= $row['prize_id'] ?></td>
             <td>
                 <? if ($row['prize_picture']) { ?>
                     <img src="<?= $row['prize_picture'] ?>" width="50" />
