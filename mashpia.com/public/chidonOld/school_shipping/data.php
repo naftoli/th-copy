@@ -56,7 +56,7 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super, $limit_to_status;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status;
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$school])) {
             $items = $info[$cat][$school];
@@ -66,14 +66,13 @@ function createHtmlForItem($school, $row, $output = true) {
                 $status = isset($info['status'][$school][$item['id']]) ? $info['status'][$school][$item['id']] : [];
                 $statusDesc = [
                     1   => 'shipped',
-                    2   => 'missing',
-                    3   => 'damaged'
+                    2   => 'missing'
                 ];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
                         if ($idx == 0) {
-                            if (empty($status) || ($status['shipped'] == 0 && $status['missing'] == 0 && $status['damaged'] == 0)) $show_item = true;
+                            if (empty($status) || ($status['shipped'] == 0 && $status['missing'] == 0)) $show_item = true;
                         }
                         else if ($idx && !empty($status) && intval($status[$statusDesc[$idx]]) == 1) $show_item = true;
                     }
@@ -108,7 +107,6 @@ function createHtmlForItem($school, $row, $output = true) {
                              * 0 = not yet shipped
                              * 1 = shipped
                              * 2 = missing
-                             * 3 = damaged
                              */
                             switch ($i) {
                                 case 0:
