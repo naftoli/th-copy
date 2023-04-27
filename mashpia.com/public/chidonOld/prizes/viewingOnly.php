@@ -6,7 +6,8 @@
     <title>Chidon Prizes</title>
     <style type='text/css'>
       table {
-        font-size: 12px;
+        font-size: 14px;
+        font-family: "Arial", sans-serif;
       }
       th, td {
         padding: 3px 10px;
@@ -25,9 +26,6 @@
         <th>Prize ID</th>
         <th>Picture</th>
         <th>name</th>
-        <th>Quantity</th>
-        <th>Made Possible By</th>
-        <th>Personalization</th>
         <th>Color</th>
         <th>Size</th>
     </tr>
@@ -45,9 +43,6 @@
                 <? } ?>
             </td>
             <td><?= $row['prize_name'] ?></td>
-            <td><?= $row['quantity'] ?></td>
-            <td><?= $row['made_possible_by'] ?></td>
-            <td><?= $row['personalization'] ?></td>
             <td><?= $row['color'] ?></td>
             <td><?= $row['size'] ?></td>
         </tr>
