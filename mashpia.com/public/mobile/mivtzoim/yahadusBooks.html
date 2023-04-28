@@ -89,6 +89,12 @@
         max-width: 65px;
       }
     }
+
+    .btn-info {
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body class="page-goals">
@@ -146,7 +152,6 @@
 
       <div class="row">
         <h2>Total: $<span id="amount">0</span></h2>
-        <div style="font-style: italic">**Minimum order $5 (for CC to work)</div>
         <input type="hidden" id="total" />
       </div>
       <hr />
@@ -186,7 +191,7 @@
           </div>
         </div>
         <div class="row" style="padding: 20px !important; text-align: center;">
-          <button id="purchase" class="btn btn-primray">Purchase</button>
+          <button id="purchase" class="btn btn-info">Purchase</button>
         </div>
       </form>
     </div>
