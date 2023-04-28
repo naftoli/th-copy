@@ -347,10 +347,11 @@
           var children = data.children;
 
           var children_to_show = {}
+          var exceptions = [612, 61, 269, 66, 112, 55, 110, 180, 427, 709, 3, 265, 432]
 
           for (var c in children) {
             var child = children[c];
-            if (child.school_country == 'USA') children_to_show[c] = child;
+            if (exceptions.includes(child.school_id)) continue;
           }
 
           // Grab the template script
