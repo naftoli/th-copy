@@ -351,7 +351,7 @@
 
           for (var c in children) {
             var child = children[c];
-            if (exceptions.includes(child.school_id)) continue;
+            if (exceptions.includes(parseInt(child.school_id))) continue;
           }
 
           // Grab the template script
