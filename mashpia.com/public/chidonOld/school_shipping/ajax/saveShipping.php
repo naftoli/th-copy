@@ -18,11 +18,13 @@ $sql = "INSERT IGNORE INTO school_shipping
             shipped = :shipped, 
             missing = :missing, 
             qty = :qty, 
+            damaged = :damaged, 
             desc_of_damage = :desc
         ON DUPLICATE KEY UPDATE 
             shipped = :shipped, 
             missing = :missing, 
             qty = :qty, 
+            damaged = :damaged, 
             desc_of_damage = :desc";
 $stmt = $MASHPIA_DB->prepare($sql);
 
@@ -58,6 +60,7 @@ foreach ($info as $row) {
         'item'      => $row['item'],
         'shipped'   => $shipped,
         'missing'   => $missing,
+        'damaged'   => $damaged,
         'qty'       => $row['qty'],
         'desc'      => $row['desc']
     ]);
