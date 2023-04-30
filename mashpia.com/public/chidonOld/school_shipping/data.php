@@ -126,7 +126,9 @@ function createHtmlForItem($school, $row, $output = true) {
                         $total = 10;
                         if (isset($item['qty'])) $total = intval($item['qty']);
                         for ($i = 1; $i <= $total; $i++) {
-                            echo "<option value='$i'>$i</option>";
+                            echo "<option value='$i'";
+                            if ($status['qty'] == $i) echo " selected ";
+                            echo ">$i</option>";
                         }
                         echo "</select></td></tr>";
                     }

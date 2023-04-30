@@ -252,7 +252,8 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $("#saveAll").click( function () {
     $(".shipping").each( function () {
-      update(this, 1)
+      let qty = $(this).parent().parent().find('td:eq(3)').text()
+      update(this, 1, qty)
     })
     save()
   })
