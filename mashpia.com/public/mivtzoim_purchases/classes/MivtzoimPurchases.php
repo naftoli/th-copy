@@ -254,9 +254,70 @@ class MivtzoimPurchases {
     /**
      * send email to admin with list of purchases done for specific year / item
      */
-    public function sendEmail($info, $details) {
-         $to = $this->getEmail($info['admin']);
-         $subject = "Yahadus Book Purchase(s)";
+    public function sendEmail($info, $details, $cc) {
+        $to = $this->getEmail($info['admin']);
+        $subject = "Yahadus Order Confirmation";
+        $message = $this->getMessage($info['amount'], $details, $cc);
+        // To send HTML mail, the Content-type header must be set
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        // Additional headers
+        $headers[] = 'From: admin@mashpia.com';
+        // Mail it
+        $success = mail($to, $subject, $message, implode("\r\n", $headers));
+        return $success;
+    }
 
+    private function getEmail($admin_id) {
+        $stmt = $this->pdo->prepare("
+            SELECT admin_email FROM users WHERE id = :admin
+        ");
+        $stmt->execute(['admin' => $admin_id]);
+        $row = $stmt->fetch();
+        return $row['admin_email'];
+    }
+
+    private function getMessage($amount, $details, $ccInfo) {
+        // get items info
+        $items_all = $this->getItemsByType('Yahadus Book Sale');
+        $itemInfo = [];
+        foreach ($items_all as $item) {
+            $itemInfo[$item['mivtzoim_item_id']] = $item;
+        }
+
+        $message = '
+            <b>Thank you for your order!</b>
+            <br /><br />
+            We will start shipping all books to your school <b>after</b> the sale is over, 
+            with the goal for them to arrive before the end of the school year so you can start learning over the summer! 
+            Please be patient.
+            <br /><br />
+            <b>Items</b>
+        ';
+        foreach ($details as $items) {
+            foreach ($items as $item => $qty) {
+                $message .= $itemInfo[$item] . " - $" . ($qty * 40) . "<br />";
+            }
+        }
+        $message .= "<br /><b>Total: $" . $amount . "</b>";
+
+        $name = $ccInfo['first'] . ' ' . $ccInfo['last'];
+        $number = $ccInfo['num'];
+        $digits = substr($number, -4);
+
+        $message .= "
+            <b>Billing Information</b>
+            <br />
+            Name on Card: $name<br />
+            Last 4 digits: $digits<br />
+            <br />
+            If you have any questions about your order, please contact your school’s Chidon Coordinator. 
+            All transactions are non refundable. Hatzlocha with the learning!
+            <br /><br />
+            P.S. Ordering a book is <b>NOT</b> considered enrollment for next year's Chidon, enrollment will be at a later date.
+            <br />
+        ";
+
+        return $message;
     }
 }

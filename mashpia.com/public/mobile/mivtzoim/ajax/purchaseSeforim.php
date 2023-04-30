@@ -46,7 +46,7 @@ function purchaseItems() {
 }
 
 function saveToDb($info) {
-    global $list, $response_array;
+    global $list, $response_array, $cc_info;
 
     $details = [];
     foreach ($list as $item) {
@@ -59,7 +59,7 @@ function saveToDb($info) {
     $m = new MivtzoimPurchases();
     if ( $m->createPurchase( $info, $details ) ) {
         // send email
-        $m->sendEmail($info, $details);
+        $m->sendEmail($info, $details, $cc_info);
         echo json_encode([
             'success'   => true
         ]);
