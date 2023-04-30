@@ -131,10 +131,10 @@ function createHtmlForItem($school, $row, $output = true) {
                             echo ">$i</option>";
                         }
                         echo "</select></td></tr>";
+                    } else {
+                        // update summary
+                        addToSummary($item, $school);
                     }
-
-                    // update summary
-                    addToSummary($item, $school);
                 }
             }
         }
