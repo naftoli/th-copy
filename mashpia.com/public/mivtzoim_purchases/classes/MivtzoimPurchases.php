@@ -250,4 +250,13 @@ class MivtzoimPurchases {
         $rows = $stmt->fetchAll();
         return $rows;
     }
+
+    /**
+     * send email to admin with list of purchases done for specific year / item
+     */
+    public function sendEmail($info, $details) {
+         $to = $this->getEmail($info['admin']);
+         $subject = "Yahadus Book Purchase(s)";
+
+    }
 }

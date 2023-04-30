@@ -22,7 +22,7 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = $type . " purchase ($year) - Admin ID: " . $admin_id;
+    $description = "Yahadus - $($amount), Admin ID: " . $admin_id;
 
     if ($total > 0) {
         chdir('../../../');
@@ -58,6 +58,8 @@ function saveToDb($info) {
 
     $m = new MivtzoimPurchases();
     if ( $m->createPurchase( $info, $details ) ) {
+        // send email
+        $m->sendEmail($info, $details);
         echo json_encode([
             'success'   => true
         ]);
