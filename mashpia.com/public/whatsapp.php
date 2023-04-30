@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
     $goal = $sm->getClassResults();
     $done = $sm->getClassDoneResults();
     $totalUsers = $sm->getTotalUsers();
-    
+    echo "<pre>"; print_r($done); echo "</pre>"; exit;
     $grades = array_keys($totalUsers);
     foreach ($grades as $class_id) {
         $sm->setWhatsappStudentResults($class_id);

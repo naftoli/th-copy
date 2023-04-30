@@ -967,7 +967,7 @@ class ShabbosMevorchim
                       AND tb.user_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
 
-        $cahed = []; // add ability to cache results
+        $cached = []; // add ability to cache results
 
         foreach ($this->rDates as $month => $date) {
 
@@ -1202,8 +1202,10 @@ class ShabbosMevorchim
                             $total = $rowBackup['total'] > 0 ? $rowBackup['total'] : 0;
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'] > 0 ? $rowBackup['total'] : 0;
                         } else {
-                            if (isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
-                                $this->studentResults[$date][$class][$user['user_id']][$key] > 0) {
+                            if (
+                                isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
+                                $this->studentResults[$date][$class][$user['user_id']][$key] > 0
+                            ) {
                                 $stmt2->execute(array($user['user_id'], $date, $date, $task));
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
                                 $total = $row2['total'];
