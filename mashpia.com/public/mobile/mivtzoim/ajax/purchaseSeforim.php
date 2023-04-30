@@ -8,41 +8,77 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPu
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 
+//*************** LOAD AUTHORIZE FUNCTIONS *********************/
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+use classes\authorize\CustomerProfile;
+
 // **************** FUNCTIONS **************** //
 function purchaseItems() {
-    global $total, $admin_id, $year, $cc_info, $type;
+    global $total, $admin_id, $cc_info;
 
     $amount = $total; // the authorize script expects a variable called amount
-    $card_num = $cc_info->num;
-    $exp_date = $cc_info->exp;
-    $cvv = $cc_info->cvv;
-    $first_name = $cc_info->first;
-    $last_name = $cc_info->last;
-    $zip = $cc_info->zip;
     $address = "";
     $state = "";
 
     $description = "Yahadus - $($amount), Admin ID: " . $admin_id;
 
     if ($total > 0) {
-        chdir('../../../');
-        require_once 'authorize.php';
-        chdir('/mobile/reg/ajax/');
-
-        if ($response_array[0] == 1) { // success
-            $strResponse = $response_array[3] . ':' .
-                            $response_array[4] . ':' .
-                            $response_array[6] . ':' .
-                            $response_array[9];
-            return $strResponse;
+        // figure out if we are charging a credit card on file or a new one
+        if (intval($cc_info->on_file) == 1) {
+            $customer_id = getCustomerID($admin_id);
+            if (!$customer_id || empty($customer_id)) {
+                echo json_encode([
+                    'success' => false,
+                    'msg' => 'You do not have a credit card on file, please enter a new credit card and try again.'
+                ]);
+                exit;
+            }
+            // charge credit card on file
+            $cp = new CustomerProfile( $customer_id );
+            $response = $cp->chargeCard( $total, null, null, null, $description );
+            if (! is_array($response)) {
+                echo json_encode([
+                    'success'   => false,
+                    'error'     => $response
+                ]);
+                exit;
+            }
+            else return json_encode($response);
         } else {
-            echo json_encode([
-                'success'   => false,
-                'error'     => $response_array[3]
-            ]);
-            exit;
-        }
+            // get the credit card info and charge it
+            $card_num = $cc_info->num;
+            $exp_date = $cc_info->exp;
+            $cvv = $cc_info->cvv;
+            $first_name = $cc_info->first;
+            $last_name = $cc_info->last;
+            $zip = $cc_info->zip;
+
+            chdir('../../../');
+            require_once 'authorize.php';
+            chdir('/mobile/reg/ajax/');
+
+            if ($response_array[0] == 1) { // success
+                $strResponse = $response_array[3] . ':' .
+                    $response_array[4] . ':' .
+                    $response_array[6] . ':' .
+                    $response_array[9];
+                return $strResponse;
+            } else {
+                echo json_encode([
+                    'success'   => false,
+                    'error'     => $response_array[3]
+                ]);
+                exit;
+            }
+        }       
     }
+}
+
+function getCustomerID($admin_id) {
+    $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    return $row['authorize_customer_profile_id'];
 }
 
 function saveToDb($info) {

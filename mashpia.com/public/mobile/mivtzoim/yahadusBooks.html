@@ -166,34 +166,40 @@
         <div class="row">
           <h2>Checkout</h2>
           <div class="form-group">
-            <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-            <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
-            <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+            <input type="radio" name="on_file" class="on_file" value="1" /> Use card on file<br />
+            <input type="radio" name="on_file" class="on_file" value="0" /> Use new card
           </div>
-          <div class="form-group">
-            <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-            <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
-            <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-          </div>
-          <div class="form-group">
-            <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
-            <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
-            <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-          </div>
-          <div class="form-group">
-            <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
-            <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
-            <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
-          </div>
-          <label for="x_card_code" class="control-label mb-1">Security code</label>
-          <div class="form-group">
-            <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
-            <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
-          </div>
-          <div class="form-group">
-            <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
-            <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
-            <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
+          <div id="newCard" style="display: none;">
+            <div class="form-group">
+              <label for="cc-first" class="control-label mb-1">First Name on Card</label>
+              <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
+              <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+            </div>
+            <div class="form-group">
+              <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
+              <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+              <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+            </div>
+            <div class="form-group">
+              <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
+              <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
+              <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+            </div>
+            <div class="form-group">
+              <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
+              <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+              <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
+            </div>
+            <label for="x_card_code" class="control-label mb-1">Security code</label>
+            <div class="form-group">
+              <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+              <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
+            </div>
+            <div class="form-group">
+              <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+              <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
+              <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
+            </div>
           </div>
         </div>
         <div class="row">
@@ -280,21 +286,31 @@
     e.preventDefault()
     const total = parseInt($("#total").val())
     if ( total > 0 ) {
-      const first = $("#cc-first").val().trim();
-      const last = $("#cc-last").val().trim();
-      const num = $("#cc-number").val().trim();
-      const exp = $("#cc-exp").val().trim();
-      const zip = $("#zip").val().trim();
-      const cvv = $("#x_card_code").val().trim();
-
-      if ( !first || !last || !num || !exp || !zip || !cvv ) {
-        alert("You must fill in all fields.");
+      // check if we are using credit card on file or new card
+      let cc_type = parseInt($(".on_file:checked").val())
+      if (!cc_type) {
+        alert("Please select a payment method.");
         return false;
       }
 
-      if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
-        alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-        return false;
+      if (cc_type == 1) {
+        // check that all fields are filled in
+        const first = $("#cc-first").val().trim();
+        const last = $("#cc-last").val().trim();
+        const num = $("#cc-number").val().trim();
+        const exp = $("#cc-exp").val().trim();
+        const zip = $("#zip").val().trim();
+        const cvv = $("#x_card_code").val().trim();
+
+        if (!first || !last || !num || !exp || !zip || !cvv) {
+          alert("You must fill in all fields.");
+          return false;
+        }
+
+        if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
+          alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+          return false;
+        }
       }
 
       // check that amounts do not exceed max
@@ -319,12 +335,15 @@
         // build data
         let info = {};
         info.cc = {};
-        info.cc.first = first;
-        info.cc.last = last;
-        info.cc.num = num;
-        info.cc.exp = exp;
-        info.cc.cvv = cvv;
-        info.cc.zip = zip;
+        info.cc.on_file = cc_type;
+        if (cc_type == 0) {
+          info.cc.first = first;
+          info.cc.last = last;
+          info.cc.num = num;
+          info.cc.exp = exp;
+          info.cc.cvv = cvv;
+          info.cc.zip = zip;
+        }
         info.admin = admin;
         info.total = total;
         info.type = type;
@@ -393,6 +412,12 @@
     $(document).on('change', '.qty', calcTotal)
     $(document).on('blur', '.qty', calcTotal)
     $(document).on('click', '#purchase', purchaseSets);
+
+    $(".on_file").click( function() {
+      let val = parseInt($(this).val())
+      if (val == 0) $("#newCard").show()
+      else $("#newCard").hide()
+    })
   });
 </script>
 </html>
