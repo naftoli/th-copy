@@ -10,6 +10,7 @@ $year = GlobalSettings::getCurrentYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT']. '/chidonOld/chidon_drive/ajax/authorize.php';
 use classes\authorize\CustomerProfile;
 
 // **************** FUNCTIONS **************** //
@@ -43,7 +44,7 @@ function purchaseItems() {
                 ]);
                 exit;
             }
-            else return json_encode($response);
+            else return parseResponse($response);
         } else {
             // get the credit card info and charge it
             $card_num = $cc_info->num;
