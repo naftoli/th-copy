@@ -142,7 +142,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         }
                         echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
                     }
-
+                } else {
                     // update summary
                     addToSummary($item, $school);
                 }
@@ -156,7 +156,7 @@ function addToSummary($item, $school) {
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (is_array($key)) print_r($key);
+//    if (is_array($key)) print_r($key);
 
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
