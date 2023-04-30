@@ -152,7 +152,7 @@ function createHtmlForItem($school, $row, $output = true) {
 }
 
 function addToSummary($item, $school) {
-    global $summary, $summary_items;
+    global $summary, $summary_items, $grand_summary;
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
@@ -162,6 +162,9 @@ function addToSummary($item, $school) {
 
     if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
     else $summary[$school][$key] = $qty;
+
+    if (isset($grand_summary[$key])) $grand_summary[$key] += $qty;
+    else $grand_summary[$key] = $qty;
 }
 
 function checkShippingStatus($admin_id) {
