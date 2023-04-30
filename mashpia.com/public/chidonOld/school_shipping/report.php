@@ -206,7 +206,8 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
                 }
             }
             echo "<th class='no-print'>Status</th>";
-            echo "<th class='no-print'>Number of Missing Items</th>"
+            echo "<th class='no-print'>Number of Missing Items</th>";
+            echo "<th class='no-print'>Explain the damage</th>";
             ?>
           </tr>
         </thead>
@@ -231,13 +232,13 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action, qty = 1) {
+  function update(elem, action, qty = 1, desc = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const school = ids[1]
     // get description
-    info.push({ action, item, school, qty })
+    info.push({ action, item, school, qty, desc })
   }
 
   function save(reload = true) {
@@ -270,6 +271,9 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     if (!super_admin && action == 0) {
       alert('You cannot change this to not yet shipped, it will not be saved.')
       return false
+    } else if (!super_admin && action == 3) {
+      alert('You must explain the damage before it can be saved.')
+      return false
     }
     qty = $(this).parent().parent().find('.qty').val()
     update(this, action, qty)
@@ -281,6 +285,15 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     update(elem, action, val)
+    save(false)
+  })
+
+  $(".description").blur( function() {
+    const val = $(this).val()
+    const elem = $(this).parent().parent().find('.shipping')
+    const action = parseInt($(elem).val())
+    const qty = $(this).parent().parent().find('.qty').val()
+    update(elem, action, qty, val)
     save(false)
   })
 
