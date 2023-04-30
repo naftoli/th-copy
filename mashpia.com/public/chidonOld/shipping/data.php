@@ -163,8 +163,8 @@ function addToSummary($item, $school) {
     if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
     else $summary[$school][$key] = $qty;
 
-    if (isset($grand_summary[$key])) $grand_summary[$key] += $qty;
-    else $grand_summary[$key] = $qty;
+    if (isset($grand_summary[$key][$school])) $grand_summary[$key][$school] += $qty;
+    else $grand_summary[$key][$school] = $qty;
 }
 
 function checkShippingStatus($admin_id) {
