@@ -29,7 +29,7 @@ function purchaseItems() {
             if (!$customer_id || empty($customer_id)) {
                 echo json_encode([
                     'success' => false,
-                    'msg' => 'You do not have a credit card on file, please enter a new credit card and try again.'
+                    'msg' => 'You do not have a valid credit card on file, please enter a new credit card and try again.'
                 ]);
                 exit;
             }
