@@ -112,7 +112,7 @@ $items = $cs->getItems();
     let info = id.split('_')
     let elem = '.' + info[1].substring(0, info[1].length - 1)
     let checked = $(this).is(":checked")
-    console.log( { elem, checked })
+    console.log({ elem, checked })
     $(elem).each( function () {
       this.checked = checked
     })
@@ -133,7 +133,7 @@ $items = $cs->getItems();
       return false
     }
     $("form").submit()
-  }
+  })
 
   let super = <?= $super ? 1 : 0 ?>;
   if (!super) {
