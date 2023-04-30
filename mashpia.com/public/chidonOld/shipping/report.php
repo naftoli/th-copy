@@ -289,18 +289,7 @@ ksort($grand_summary);
                      if (isset($item[$attr])) echo $item[$attr];
                      echo "</td>";
                   }
-                  // add column for shipping info
-  //                echo "<td>
-  //                        <select id='" . $item['id'] . ':' . $school . "' class='shipping'>
-  //                          <option value='0'>Not Yet Shipped</option>
-  //                          <option value='1'>Shipped</option>
-  //                          <option value='2'>Missing</option>
-  //                        </select>
-  //                      </td>";
                   echo "</tr>";
-//                  // add to grand total
-//                  if (isset($grand_summary[$id][$school])) $grand_summary[$id][$school] += $qty;
-//                  else $grand_summary[$id][$school] = $qty;
               }
           }
           ?>
@@ -347,7 +336,7 @@ ksort($grand_summary);
     </div>
   <?php endforeach; ?>
     <?php
-    if ($admin_user['auth'] == 'super' && $_POST['grand_summary'] == 'on') {
+    if ($admin_user['auth'] == 'super' && $_POST['grand_summary'] == 1) {
       foreach ($grand_summary as $item => $more) {
         $grand_total = 0;
         $item_details = $summary_items[$item];
