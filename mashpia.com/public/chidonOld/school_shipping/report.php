@@ -59,7 +59,7 @@ $summary_items = []; // mapping of item ID to item info
 
 // go through it once so that we can have totals
 foreach ($resultsBySchool as $school => $row) {
-    if (! isset($schools[$school])) continue;
+    if (!isset($schools[$school])) continue;
     createHtmlForItem($school, $row, false);
 }
 

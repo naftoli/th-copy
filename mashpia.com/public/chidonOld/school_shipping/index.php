@@ -87,7 +87,7 @@ $items = $cs->getItems();
       <select name="report_type">
         <option value="all">Summary and Details</option>
         <option value="summary">Summary Only</option>
-        <option value="details">Details Only</option>
+        <option value="details" selected>Details Only</option>
       </select><br />
       <br />
       <button id="create">Create Report</button>
@@ -124,5 +124,8 @@ $items = $cs->getItems();
     }
     $("form").submit()
   })
+
+  checkAll($("#all_items"))
+  checkAll($("#all_details"))
 </script>
 </html>
