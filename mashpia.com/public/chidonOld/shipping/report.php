@@ -298,9 +298,9 @@ ksort($grand_summary);
   //                        </select>
   //                      </td>";
                   echo "</tr>";
-                  // add to grand total
-                  if (isset($grand_summary[$id][$school])) $grand_summary[$id][$school] += $qty;
-                  else $grand_summary[$id][$school] = $qty;
+//                  // add to grand total
+//                  if (isset($grand_summary[$id][$school])) $grand_summary[$id][$school] += $qty;
+//                  else $grand_summary[$id][$school] = $qty;
               }
           }
           ?>
