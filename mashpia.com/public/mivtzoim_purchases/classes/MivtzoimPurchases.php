@@ -301,15 +301,29 @@ class MivtzoimPurchases {
         }
         $message .= "<br /><b>Total: $" . $amount . "</b>";
 
-        $name = $ccInfo['first'] . ' ' . $ccInfo['last'];
-        $number = $ccInfo['num'];
-        $digits = substr($number, -4);
+        if ($ccInfo['on_file'] == 0) {
+            $name = $ccInfo['first'] . ' ' . $ccInfo['last'];
+            $number = $ccInfo['num'];
+            $digits = substr($number, -4);
+        } else {
+            $name = '';
+            $digits = '';
+        }
 
         $message .= "
             <b>Billing Information</b>
-            <br />
-            Name on Card: $name<br />
-            Last 4 digits: $digits<br />
+            <br />";
+
+        if ($name) {
+            $message .= "
+                Name on Card: $name<br />
+                Last 4 digits: $digits<br />
+            ";
+        } else {
+            $message .= "Used Credit Card on File<br />";
+        }
+
+        $message .= "
             <br />
             If you have any questions about your order, please contact your school’s Chidon Coordinator. 
             All transactions are non refundable. Hatzlocha with the learning!
