@@ -379,7 +379,7 @@ else
 						
 						<br>
 						<br>
-						
+
 						<? if ($no_of_schools == 1) : ?>
 						<INPUT class="submit" data="1" type="button" value="Go">
 						<? endif; ?>
@@ -453,6 +453,7 @@ else
 									<!-- ********** MEDALS ********** -->
 									<? foreach ($report_user->medals as $medal) : ?>
 										<tr>
+											<td></td>
 											<td></td>
 											<td></td>
 											<td>
